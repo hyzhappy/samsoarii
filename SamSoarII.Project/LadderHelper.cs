@@ -14,8 +14,6 @@ namespace SamSoarII.Project
         {
             switch(viewmodel.Type)
             {
-
-
                 case ElementType.Output:
                     return new ExpGraphOutputENode(viewmodel.Model);
                 case ElementType.Input:
