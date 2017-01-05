@@ -1,0 +1,18 @@
+﻿<Window x:Class="SamSoarII.UserInterface.NewProjectDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        mc:Ignorable="d"
+        Title="New Project" Height="360" Width="600">
+    <Canvas>
+        <Label Canvas.Top="85" Canvas.Left="89">工程名字</Label>
+        <Label Canvas.Left="100" Canvas.Top="165">路径</Label>
+        <TextBox x:Name="NameTextBox" Width="121" Height="25" Canvas.Left="193" Canvas.Top="87"></TextBox>
+        <TextBox x:Name="PathTextBox" Width="200" Height="25" Canvas.Left="193" Canvas.Top="165"></TextBox>
+        <Button x:Name="EnsureButton" Content="确定" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
+        <Button x:Name="CancelButton" Content="取消" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
+        <Button x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="429" Canvas.Top="165"></Button>
+    </Canvas>
+</Window>

@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="SamSoarII.AppMain.UI.ProjectTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+             xmlns:commd="clr-namespace:SamSoarII.AppMain.Command"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ContextMenu x:Key="ContextMenu1">
+            <MenuItem Header="添加主程序"></MenuItem>
+        </ContextMenu>
+        <ContextMenu x:Key="ContextMenu2">
+            <MenuItem Header="添加子程序" Command="{x:Static commd:MyAppCommands.NewSubRoutineCommand}"></MenuItem>
+        </ContextMenu>
+        <ContextMenu x:Key="ContextMenu3" >
+            <MenuItem Header="添加函数功能块" Command="{x:Static commd:MyAppCommands.NewFuncBlockCommand}"></MenuItem>
+        </ContextMenu>
+        <ContextMenu x:Key="ContextMenu4">
+            <MenuItem Header="打开" Click="OnOpenRoutineMenuItemClick"></MenuItem>
+            <MenuItem Header="重命名" Click="OnRenameRoutineMenuItemClick"></MenuItem>
+            <MenuItem Header="删除" Click="OnRemoveRoutineMenuItemClick"></MenuItem>
+        </ContextMenu>
+    </UserControl.Resources>
+    <Grid>
+        <TreeView>
+            <TreeViewItem x:Name="ProjectRootItem" Header="空工程">
+                <TreeViewItem x:Name="MainRoutineRootTreeViewItem" Header="主程序" ContextMenu="{StaticResource ContextMenu1}"></TreeViewItem>
+                <TreeViewItem x:Name="SubRoutineRootTreeViewItem" Header="子程序" ContextMenu="{StaticResource ContextMenu2}"></TreeViewItem>
+                <TreeViewItem x:Name="FuncBlockRootTreeViewItem" Header="函数功能块" ContextMenu="{StaticResource ContextMenu3}"></TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem x:Name="InstructionRootItem" Header="指令">
+                
+            </TreeViewItem>
+        </TreeView>
+    </Grid> 
+</UserControl>
