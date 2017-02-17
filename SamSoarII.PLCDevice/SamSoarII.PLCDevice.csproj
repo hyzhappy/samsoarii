@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDevice.cs" />
+    <Compile Include="DeviceArchitecture.cs" />
     <Compile Include="FGs16Device.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

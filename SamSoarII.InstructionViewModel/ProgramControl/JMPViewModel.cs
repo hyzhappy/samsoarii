@@ -39,10 +39,10 @@ namespace SamSoarII.InstructionViewModel
                 LBLIndex = _model.LBLIndex;
             }
         }
-
+        public override string InstructionName { get { return "JMP"; } }
         public JMPViewModel()
         {
-            TopTextBlock.Text = "JMP";
+            TopTextBlock.Text = InstructionName;
             Model = new JMPModel();
         }
 
@@ -79,7 +79,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "JMP";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("LBL");
             dialog.EnsureButtonClick += (sender, e) =>
             {

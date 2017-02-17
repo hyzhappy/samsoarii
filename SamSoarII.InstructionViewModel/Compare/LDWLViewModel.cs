@@ -52,6 +52,7 @@ namespace SamSoarII.InstructionViewModel
             }
 
         }
+        public override string InstructionName { get { return "LDWL"; } }
         public LDWLViewModel()
         {
             CenterTextBlock.Text = "W<";
@@ -60,7 +61,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "LDWL";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("W1");
             dialog.ShowLine5("W2");
             dialog.EnsureButtonClick += (sender, e) =>

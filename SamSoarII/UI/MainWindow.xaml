@@ -4,16 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
-        xmlns:commd="clr-namespace:SamSoarII.AppMain.Command"
+        xmlns:app="clr-namespace:SamSoarII.AppMain"
         mc:Ignorable="d"
         Title="SamSoarII" Height="350" Width="525" WindowState="Maximized">
     <Window.CommandBindings>
         <!--File Commands-->
-        <CommandBinding Command="ApplicationCommands.New" Executed="NewProject"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveProject" CanExecute="SaveCommandCanExecute"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Open" Executed="OpenProject"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="SaveAsProject"  CanExecute="SaveCommandCanExecute"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Close" Executed="ProcessExit"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.New" Executed="OnNewProjectExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="OnSaveProjectExecute" CanExecute="SaveCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="OnOpenProjectExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="OnSaveAsProjectExecute"  CanExecute="SaveCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="OnProcessExitExecute"></CommandBinding>
         <!--Edit Commands-->
         <CommandBinding Command="ApplicationCommands.Undo"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Redo"></CommandBinding>
@@ -22,9 +22,12 @@
         <CommandBinding Command="ApplicationCommands.Paste"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Delete"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.SelectAll"></CommandBinding>
+        <!--View Command-->
+        <CommandBinding Command="{x:Static app:GlobalCommand.ZoomInCommand}" Executed="OnZoomInCommandExecute" CanExecute="ZoomInCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ZoomOutCommand}" Executed="OnZoomOutCommandExecute" CanExecute="ZoomOutCommandCanExecute"></CommandBinding>
         <!--Project Command-->
-        <CommandBinding Command="{x:Static commd:MyAppCommands.NewSubRoutineCommand}" Executed="AddNewRoutineCommandExecute" CanExecute="AddNewRoutineCommandCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static commd:MyAppCommands.NewFuncBlockCommand}" Executed="AddFuncBlockCommandExecute" CanExecute="AddFuncBlockCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Properties"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
@@ -35,6 +38,22 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="TabItemCloseButtonTemplate">
+            <Canvas Name="ButtonCanvas" Width="15" Height="15" Opacity="0.3" Background="Transparent">
+                <Line Name="Line1" X1="4" Y1="4" X2="11" Y2="11" Stroke="Black" StrokeThickness="1"></Line>
+                <Line Name="Line2" X1="11" Y1="4" X2="4" Y2="11" Stroke="Black" StrokeThickness="1"></Line>
+            </Canvas>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.8"></Setter>
+                    <Setter TargetName="Line1" Property="StrokeThickness" Value="2"></Setter>
+                    <Setter TargetName="Line2" Property="StrokeThickness" Value="2"></Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.3"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Height="30" FontSize="14" Padding="6" FontFamily="Consolas">
@@ -62,9 +81,13 @@
                 <Separator/>
                 <MenuItem Header="查找和替换"></MenuItem>
             </MenuItem>
+            <MenuItem Header="视图(_V)">
+                <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
+                <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
+            </MenuItem>
             <MenuItem Header="工程(_P)">
-                <MenuItem Header="添加子程序" Command="{x:Static commd:MyAppCommands.NewSubRoutineCommand}"></MenuItem>
-                <MenuItem Header="添加函数功能块" Command="{x:Static commd:MyAppCommands.NewFuncBlockCommand}"></MenuItem>
+                <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
+                <MenuItem Header="添加函数功能块" Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="属性" Command="ApplicationCommands.Properties"></MenuItem>
             </MenuItem>
@@ -77,12 +100,11 @@
                 <MenuItem Header="仿真"></MenuItem>
                 <MenuItem Header="监视"></MenuItem>
             </MenuItem>
-            <MenuItem Header="语言(_L)">
-                <MenuItem Header="中文"></MenuItem>
-                <MenuItem Header="English"></MenuItem>
-            </MenuItem>
             <MenuItem Header="帮助(_H)">
-    
+                <MenuItem Header="查看帮助"></MenuItem>
+                <MenuItem Header="在线升级"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="关于"></MenuItem>
             </MenuItem>
         </Menu>
         <ToolBarTray DockPanel.Dock="Top" Height="35">
@@ -116,9 +138,12 @@
                     <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
+        </ToolBarTray>
+        <ToolBarTray DockPanel.Dock="Top" Height="35">
             <ToolBar>
-                <Button Content="+" Click="OnZoomIn"></Button>
-                <Button Content="-" Click="OnZoomOut"></Button>
+                <Button Height="35">200</Button>
+                <Button Height="35">201</Button>
+                <Button Height="35">202</Button>
             </ToolBar>
         </ToolBarTray>
         <Grid Name="MainGrid">
@@ -131,11 +156,42 @@
                 <RowDefinition Height="1*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-                
-            </Grid>
-            <local:LadderTabControl Grid.Column="1" Grid.Row="0" x:Name="LDTabControl" Background="WhiteSmoke">
 
-            </local:LadderTabControl>
+            </Grid>
+            <ScrollViewer x:Name="MyScrollViewer" Grid.Column="1" Grid.Row="0"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False" IsTabStop="False">
+                <local:MainTabControl x:Name="MainTab" Background="WhiteSmoke">
+                    <local:MainTabControl.Resources>
+                        <Style TargetType="{x:Type TabItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TabItem}">
+                                        <Grid MouseDown="OnTabItemHeaderMouseDown">
+                                            <Border Name="Border" BorderBrush="Black" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" Background="Transparent">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <ContentPresenter Name="ContentSite" ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"></ContentPresenter>
+                                                    <Button Grid.Column="1" Template="{StaticResource TabItemCloseButtonTemplate}" Click="OnTabItemHeaderCancelButtonClick"></Button>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="SkyBlue"></Setter>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="MinWidth" Value="100"></Setter>
+                        </Style>
+                    </local:MainTabControl.Resources>
+                </local:MainTabControl>
+            </ScrollViewer>
+
             <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
                 <StatusBar>
                 </StatusBar>

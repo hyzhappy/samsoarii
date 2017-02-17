@@ -52,10 +52,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "DECD"; } }
         public DECDViewModel()
         {
-            TopTextBlock.Text = "DECD";
+            TopTextBlock.Text = InstructionName;
             Model = new DECDModel();
         }
 
@@ -101,7 +101,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "DECD";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
             dialog.EnsureButtonClick += (sender, e) =>

@@ -51,7 +51,13 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
+        public override string InstructionName { get { return "TRUNC"; } }
+        public TRUNCViewModel()
+        {
+            TopTextBlock.Text = InstructionName;
+            Model = new TRUNCModel();
 
+        }
         public override BaseViewModel Clone()
         {
             return new TRUNCViewModel();

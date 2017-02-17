@@ -64,10 +64,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "XORW"; } }
         public XORWViewModel()
         {
-            TopTextBlock.Text = "XORW";
+            TopTextBlock.Text = InstructionName;
             Model = new XORWModel();
         }
 
@@ -122,7 +122,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "XORW";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

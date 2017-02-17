@@ -66,10 +66,10 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
-
+        public override string InstructionName { get { return "SHRD"; } }
         public SHRDViewModel()
         {
-            TopTextBlock.Text = "SHRD";
+            TopTextBlock.Text = InstructionName;
             Model = new SHRDModel();
         }
 
@@ -84,7 +84,6 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
@@ -124,7 +123,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "SHRD";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

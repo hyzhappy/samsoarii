@@ -52,10 +52,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "INC"; } }
         public INCViewModel()
         {
-            TopTextBlock.Text = "INC";
+            TopTextBlock.Text = InstructionName;
             Model = new INCModel();
         }
 
@@ -101,7 +101,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "INC";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
             dialog.EnsureButtonClick += (sender, e) =>

@@ -20,7 +20,7 @@ namespace SamSoarII.InstructionViewModel
                 throw new NotImplementedException();
             }
         }
-
+        public override string InstructionName { get { throw new NotImplementedException(); } }
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
             throw new NotImplementedException();

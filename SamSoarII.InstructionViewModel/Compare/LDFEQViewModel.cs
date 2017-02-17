@@ -51,6 +51,7 @@ namespace SamSoarII.InstructionViewModel
                 Value2 = _model.Value2;
             }
         }
+        public override string InstructionName { get { return "LDFEQ"; } }
         public LDFEQViewModel()
         {
             CenterTextBlock.Text = "F==";
@@ -98,7 +99,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "LDFEQ";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("FW1");
             dialog.ShowLine5("FW2");
             dialog.EnsureButtonClick += (sender, e) =>

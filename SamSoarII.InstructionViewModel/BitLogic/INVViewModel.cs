@@ -24,6 +24,7 @@ namespace SamSoarII.InstructionViewModel
                 _model = value as INVModel;
             }
         }
+        public override string InstructionName { get { return "INV"; } }
         public INVViewModel()
         {
             Model = new INVModel();
@@ -53,6 +54,7 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
+
 
         public override void ParseValue(List<string> valueStrings)
         {

@@ -22,7 +22,7 @@ namespace SamSoarII.InstructionViewModel
                 _model = value as NEXTModel;
             }
         }
-
+        public override string InstructionName { get { return "NEXT"; } }
         public override BaseViewModel Clone()
         {
             return new NEXTViewModel();

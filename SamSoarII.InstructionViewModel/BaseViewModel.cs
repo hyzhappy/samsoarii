@@ -31,6 +31,7 @@ namespace SamSoarII.InstructionViewModel
                 Canvas.SetTop(this, Y * 300);
             }
         }
+        public abstract string InstructionName { get; }
         public abstract BaseModel Model { get; protected set; }
         public List<BaseViewModel> NextElemnets = new List<BaseViewModel>();
         public bool IsSearched { get; set; }
@@ -52,6 +53,7 @@ namespace SamSoarII.InstructionViewModel
         public void BeginShowPropertyDialog()
         {
             ElementPropertyDialog dialog = new ElementPropertyDialog();
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             ShowPropertyDialog(dialog);       
         }
 

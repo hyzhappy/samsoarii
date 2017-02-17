@@ -23,7 +23,7 @@ namespace SamSoarII.InstructionViewModel
                 throw new NotImplementedException();
             }
         }
-
+        public override string InstructionName { get { return "CALLM"; } }
         public override BaseViewModel Clone()
         {
             throw new NotImplementedException();

@@ -24,6 +24,7 @@ namespace SamSoarII.InstructionViewModel
                 _model = value as MEFModel;     
             }
         }
+        public override string InstructionName { get { return "MEF"; } }
         public MEFViewModel()
         {
             Model = new MEFModel();

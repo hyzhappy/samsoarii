@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.InstructionViewModel.Shift
+namespace SamSoarII.InstructionViewModel
 {
     class SHRBViewModel
     {

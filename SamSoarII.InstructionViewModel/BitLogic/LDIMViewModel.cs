@@ -37,6 +37,7 @@ namespace SamSoarII.InstructionViewModel
                 Value = _model.Value;
             }
         }
+        public override string InstructionName { get { return "LDIM"; } }
         public LDIMViewModel()
         {
             Model = new LDIMModel();
@@ -53,7 +54,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "LDIM";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {
@@ -83,7 +84,7 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
+ 
         public override void ParseValue(List<string> valueStrings)
         {
             try

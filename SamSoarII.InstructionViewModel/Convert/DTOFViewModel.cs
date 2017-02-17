@@ -52,9 +52,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
+        public override string InstructionName { get { return "DTOF"; } }
         public DTOFViewModel()
         {
-            TopTextBlock.Text = "DTOF";
+            TopTextBlock.Text = InstructionName;
             Model = new DTOFModel();
         }
 
@@ -101,7 +102,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "DTOF";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
             dialog.EnsureButtonClick += (sender, e) =>

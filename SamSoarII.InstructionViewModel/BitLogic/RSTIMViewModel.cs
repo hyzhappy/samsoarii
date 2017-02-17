@@ -55,6 +55,7 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
+        public override string InstructionName { get { return "RSTIM"; } }
         public RSTIMViewModel()
         {
             Model = new RSTIMModel();
@@ -63,7 +64,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "RSTIM";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {
@@ -93,7 +94,7 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
+ 
         public override void ParseValue(List<string> valueStrings)
         {
             try

@@ -64,10 +64,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "SUBD"; } }
         public SUBDViewModel()
         {
-            TopTextBlock.Text = "SUBD";
+            TopTextBlock.Text = InstructionName;
             _model = new SUBDModel();
         }
 
@@ -123,7 +123,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "SUBD";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

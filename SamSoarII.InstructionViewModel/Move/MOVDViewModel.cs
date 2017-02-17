@@ -51,15 +51,16 @@ namespace SamSoarII.InstructionViewModel
                 DestinationValue = _model.DestinationValue;
             }
         }
+        public override string InstructionName { get { return "MOVD"; } }
         public MOVDViewModel()
         {
-            TopTextBlock.Text = "MOVD";
+            TopTextBlock.Text = InstructionName;
             Model = new MOVDModel();
         }
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "MOVD";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("S");
             dialog.ShowLine5("D");
             dialog.EnsureButtonClick += (sender, e) =>

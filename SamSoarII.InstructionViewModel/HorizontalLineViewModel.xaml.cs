@@ -40,6 +40,8 @@ namespace SamSoarII.InstructionViewModel
             }
         }
 
+        public override string InstructionName { get { return "HLine"; } }
+
         public HorizontalLineViewModel()
         {
             InitializeComponent();

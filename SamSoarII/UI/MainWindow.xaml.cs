@@ -13,189 +13,224 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SamSoarII.Project;
+using SamSoarII.AppMain.Project;
 using SamSoarII.UserInterface;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Configuration;
+using SamSoarII.InstructionViewModel;
+
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-
-        private ProjectModel _currentProject = null;
-        private ProjectModel CurrentProject
-        {
-            get
-            {
-                return _currentProject;
-            }
-            set
-            {
-                _currentProject = value;
-                if(_currentProject != null)
-                {
-                    HasProject = true;
-                }
-                else
-                {
-                    HasProject = false;
-                }
-            }
-        }
-        private bool _hasProject = false;
-        public bool HasProject
-        {
-            get
-            {
-                return _hasProject;
-            }
-            set
-            {
-                _hasProject = value;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("HasProject"));
-                }
-            }
-        }
-
-        private string projectFullFileName;
-        private ScaleTransform _scaleTransform = new ScaleTransform();
-        private ProjectTreeView _projcetTreeView;
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        private InteractionFacade _interactionFacade;
 
         public MainWindow()
         {
             InitializeComponent();
-            SizeChanged += MainWindow_SizeChanged;
-            LDTabControl.Scale = _scaleTransform;
-            LDTabControl.SelectionChanged += (sender, args) =>
+            _interactionFacade = new InteractionFacade(this);
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        public void SetProjectTreeView(ProjectTreeView treeview)
+        {
+            TreeViewGrid.Children.Clear();
+            TreeViewGrid.Children.Add(treeview);
+        }
+
+        #region Event handler
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(!GlobalSetting.LoadLadderScaleSuccess())
             {
-                var selectedTab = LDTabControl.SelectedItem as BaseTabItem;
-                if(selectedTab != null)
+                GlobalSetting.LadderOriginScaleX = MainTab.ActualWidth / 3100;
+                GlobalSetting.LadderOriginScaleY = MainTab.ActualWidth / 3100;
+            }
+        }
+
+
+        private void OnTabItemHeaderCancelButtonClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if(button != null)
+            {
+                TabItem tabitem = button.TemplatedParent as TabItem;
+                if(tabitem != null)
                 {
-                    selectedTab.OnItemSelected();
+                    _interactionFacade.CloseTabItem(tabitem);
                 }
-            };          
-        }
-
-        private void SaveCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = HasProject;
-        }
-
-        private void AddNewRoutineCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = HasProject;
-        }
-
-        private void AddNewRoutineCommandExecute(object sender, RoutedEventArgs e)
-        {
-            AddNewRoutineWindow window;
-            using (window = new AddNewRoutineWindow())
-            {
-                window.EnsureButtonClick += (sender1, e1) =>
-                {
-                    AddSubRoutine(window.NameContent);
-                    window.Close();
-                };
-                window.ShowDialog();
             }
         }
 
-        private void AddFuncBlockCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void OnTabItemHeaderMouseDown(object sender, MouseButtonEventArgs e)
         {
-            e.CanExecute = HasProject;
-        }
-
-        private void AddFuncBlockCommandExecute(object sender, RoutedEventArgs e)
-        {
-            AddNewRoutineWindow window;
-            using (window = new AddNewRoutineWindow())
+            if(e.MiddleButton == MouseButtonState.Pressed)
             {
-                window.EnsureButtonClick += (sender1, e1) =>
+                Grid grid = sender as Grid;
+                if (grid != null)
                 {
-                    AddFuncBlock(window.NameContent);
-                    window.Close();
-                };
-                window.ShowDialog();
+                    TabItem tabitem = grid.TemplatedParent as TabItem;
+                    if (tabitem != null)
+                    {
+                        _interactionFacade.CloseTabItem(tabitem);
+                    }
+                }
             }
         }
+
+        #endregion
+
+
+
 
         private void CutCommandExecute(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("cut");
         }
 
-        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            _scaleTransform.ScaleX = LDTabControl.ActualWidth / 3000;
-            _scaleTransform.ScaleY = LDTabControl.ActualWidth / 3000;         
-        }
-
         private void AddSubRoutine(string name)
         {
-            LadderDiagramModel ldmodel = new LadderDiagramModel(name);
-            CurrentProject.AddSubRoutine(ldmodel);
-            _projcetTreeView.AddSubRoutineTreeViewItem(ldmodel);
-            LDTabControl.ShowItem(ldmodel);
+
         }
 
         private void AddFuncBlock(string name)
         {
-            FuncBlockModel fbmodel = new FuncBlockModel(name);
-            CurrentProject.AddFuncBlock(fbmodel);
-            _projcetTreeView.AddFuncBlockTreeViewItem(fbmodel);
-            LDTabControl.ShowItem(fbmodel);
+
         }
 
         private void CreateMainRoutine(string name)
         {
-            LadderDiagramModel ldmodel = new LadderDiagramModel(name);
-            CurrentProject.SetMainRoutine(ldmodel);
-            LDTabControl.CurrentProject = CurrentProject;
-            LDTabControl.ShowItem(ldmodel);
+
         }
 
-        private void CreateProject(string name)
+        private void CreateProject(string name, string fullFileName)
         {
-            //复位TabControl
-            LDTabControl.Items.Clear();
-            //创建工程模型
-            CurrentProject = new ProjectModel(name);
-            CreateMainRoutine("Main");
-            CurrentProject.Save(projectFullFileName);
-            //创建工程树形视图
-            _projcetTreeView = new ProjectTreeView(CurrentProject, LDTabControl);
-            TreeViewGrid.Children.Add(_projcetTreeView);
+            _interactionFacade.CreateProject(name, fullFileName);
+            _interactionFacade.SaveProject();
         }
 
-        private void OpenProject(string fullFileName)
+        private bool OpenProject(string fullFileName)
         {
-            //复位TabControl
-            LDTabControl.Items.Clear();
-            //创建新的工程
-            CurrentProject = new ProjectModel();
-            CurrentProject.Open(fullFileName);
-            projectFullFileName = fullFileName;
-            //创建工程树形视图
-            _projcetTreeView = new ProjectTreeView(CurrentProject, LDTabControl);
-            TreeViewGrid.Children.Add(_projcetTreeView);
-            //清除当前所有TabItem
-            LDTabControl.Items.Clear();
-            //为LDTabControl设置当前工程上下文
-            LDTabControl.CurrentProject = CurrentProject;
-            //显示主程序
-            LDTabControl.ShowItem(CurrentProject.MainRoutine);
+            return _interactionFacade.LoadProject(fullFileName);
         }
 
-        private void NewProject(object sender, RoutedEventArgs e)
+        private void CompileProject(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+
+        #region Command can Execute
+        private void SaveCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        private void AddNewSubRouteinCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void AddNewFuncBlockCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void ZoomInCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void ZoomOutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        #endregion
+
+        #region Command Execute
+
+        private void OnZoomInCommandExecute(object sender, RoutedEventArgs e)
+        {
+            GlobalSetting.LadderScaleX += 0.1;
+            GlobalSetting.LadderScaleY += 0.1;
+        }
+
+        private void OnZoomOutCommandExecute(object sender, RoutedEventArgs e)
+        {
+            GlobalSetting.LadderScaleX -= 0.1;
+            GlobalSetting.LadderScaleY -= 0.1;
+        }
+
+        private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddNewRoutineWindow window = new AddNewRoutineWindow();
+            window.EnsureButtonClick += (sender1, e1) =>
+            {
+                if(!_interactionFacade.AddNewSubRoutine(window.NameContent))
+                {
+                    MessageBox.Show("已存在同名的子程序或函数功能块");
+                }
+                window.Close();
+            };
+            window.ShowDialog();
+        }
+
+        private void OnAddNewFuncBlockCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddNewRoutineWindow window = new AddNewRoutineWindow();
+            window.EnsureButtonClick += (sender1, e1) =>
+            {
+                if (!_interactionFacade.AddNewFuncBlock(window.NameContent))
+                {
+                    MessageBox.Show("已存在同名的子程序或函数功能块");
+                }
+                window.Close();
+            };
+            window.ShowDialog();
+        }
+
+        private void OnNewProjectExecute(object sender, RoutedEventArgs e)
         {
             NewProjectDialog newProjectDialog;
             using (newProjectDialog = new NewProjectDialog())
@@ -215,93 +250,41 @@ namespace SamSoarII.AppMain.UI
                         MessageBox.Show("指定路径已存在同名文件");
                         return;
                     }
-                    projectFullFileName = fullFileName;
-                    CreateProject(name);
+                    CreateProject(name, fullFileName);
                     newProjectDialog.Close();
                 };
                 newProjectDialog.ShowDialog();
             }
-
         }
 
-        private void OpenProject(object sender, RoutedEventArgs e)
+        private void OnOpenProjectExecute(object sender, RoutedEventArgs e)
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "ssp文件|*.ssp";
-            if(openFileDialog.ShowDialog() == true)
-            {
-                try
+            if (openFileDialog.ShowDialog() == true)
+            {            
+                if(!OpenProject(openFileDialog.FileName))
                 {
-                    OpenProject(openFileDialog.FileName);
-                }
-                catch (Exception exception)
-                {
-                    //MessageBox.Show(exception.Message);
                     MessageBox.Show("不正确的工程文件，工程文件已损坏!");
                 }
             }
         }
 
-        private void SaveProject(object sender, RoutedEventArgs e)
+        private void OnSaveProjectExecute(object sender, RoutedEventArgs e)
         {
-            CurrentProject.Save(projectFullFileName);
+            _interactionFacade.SaveProject();
         }
 
-        private void SaveAsProject(object sender, RoutedEventArgs e)
+        private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
 
         }
-
-        private void CompileProject(object sender, RoutedEventArgs e)
-        {
-            //var stream = File.Open(@"\SamSoar\hardware\FGs-16\src\PLCLadder.c", FileMode.OpenOrCreate);
-            string code = string.Format("#include<stdint.h>\r\n void RunLadder()\r\n{{\r\n {0} \r\n}}\r\n", CurrentProject.MainRoutine.GenerateCode());
-            //File.WriteAllText(@"hardware\FGs-16\src\PLCLadder.c", code);
-            // Step 1, write a code file
-            string makeDir = Directory.GetCurrentDirectory() + @"\hardware\FGs-16";
-            string codeDir = Directory.GetCurrentDirectory() + @"\hardware\FGs-16\src";
-            string codeFileName = codeDir + @"\PLCLadder.c";
-            if (!File.Exists(codeFileName))
-            {
-                File.Create(codeFileName);
-            }
-            File.WriteAllText(codeFileName, code);
-            // step 2, compile
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "make";
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.Arguments = string.Format(" -C {0}", makeDir);
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.RedirectStandardError = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.Start();
-            cmd.WaitForExit();
-            if(cmd.ExitCode == 0)
-            {
-                MessageBox.Show("编译成功");
-            }
-            else
-            {
-                MessageBox.Show("编译失败");
-            }
-        }
-
-        private void ProcessExit(object sender, RoutedEventArgs e)
+        private void OnProcessExitExecute(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
-        private void OnZoomIn(object sender, RoutedEventArgs e)
-        {
-            _scaleTransform.ScaleX *= 1.1;
-            _scaleTransform.ScaleY *= 1.1;
-        }
-
-        private void OnZoomOut(object sender, RoutedEventArgs e)
-        {
-            _scaleTransform.ScaleX /= 1.1;
-            _scaleTransform.ScaleY /= 1.1;
-        }
+        #endregion
     }
 }

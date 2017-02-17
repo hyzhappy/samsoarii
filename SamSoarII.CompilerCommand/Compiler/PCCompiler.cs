@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.CompilerCommand
 {
-    class LinkTask
+    public class PCCompiler : BaseCompiler
     {
+        public PCCompiler()
+        {
+            _compileBehavior = new PCBehavior(this);
+        }
     }
 }

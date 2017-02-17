@@ -65,15 +65,16 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
+        public override string InstructionName { get { return "MVBLK"; } }
         public MVBLKViewModel()
         {
-            TopTextBlock.Text = "MVBLK";
+            TopTextBlock.Text = InstructionName;
             Model = new MVBLKModel();
         }
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "MVBLK";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("S");
             dialog.ShowLine4("D");
             dialog.ShowLine6("N");

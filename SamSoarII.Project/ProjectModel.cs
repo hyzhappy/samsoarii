@@ -9,30 +9,30 @@ using System.ComponentModel;
 using SamSoarII.InstructionViewModel;
 namespace SamSoarII.Project
 {
-    public class ProjectModel : INotifyPropertyChanged
+    public class ProjectModel
     {
 
-        public string Name { get; set; }
+        public string ProjectName { get; set; }
 
-        public List<LadderDiagramModel> SubRoutines = new List<LadderDiagramModel>();
+        public List<LadderDiagramViewModel> SubRoutines = new List<LadderDiagramViewModel>();
 
-        public LadderDiagramModel MainRoutine;
+        public LadderDiagramViewModel MainRoutine;
 
         public List<FuncBlockModel> FuncBlocks = new List<FuncBlockModel>();
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ProjectModel()
+        private ProjectModel()
         {
-            
+
         }
 
-        public ProjectModel(string name)
-        {          
-            Name = name;
+        public ProjectModel(string projectname)
+        {
+            ProjectName = projectname;
+            MainRoutine = new LadderDiagramViewModel("Main");
+            MainRoutine.IsMainLadder = true;
         }
 
-        public void SetMainRoutine(LadderDiagramModel ldmodel)
+        public void SetMainRoutine(LadderDiagramViewModel ldmodel)
         { 
             ldmodel.IsMainLadder = true;
             MainRoutine = ldmodel;
@@ -43,16 +43,16 @@ namespace SamSoarII.Project
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public LadderDiagramModel GetRoutineByName(string Name)
+        public LadderDiagramViewModel GetRoutineByName(string name)
         {
             if(MainRoutine != null)
             {
-                if(MainRoutine.Name == Name)
+                if(MainRoutine.LadderName == name)
                     return MainRoutine;
             }
             foreach(var routine in SubRoutines)
             {
-                if(routine.Name == Name)
+                if(routine.LadderName == name)
                 {
                     return routine;
                 }
@@ -80,28 +80,28 @@ namespace SamSoarII.Project
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public bool ContainSubRoutine(string Name)
+        public bool ContainSubRoutine(string name)
         {
-            if(MainRoutine.Name == Name)
+            if(MainRoutine.LadderName == name)
             {
                 return true;
             }
-            return SubRoutines.Any(x => { return x.Name == Name; });
+            return SubRoutines.Any(x => { return x.LadderName == name; });
         }
         /// <summary>
         /// Find if any FunctionBlock has the name Name
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        public bool ContainFuncBlock(string Name)
+        public bool ContainFuncBlock(string name)
         {
-            return FuncBlocks.Any(x => { return x.Name == Name; });
+            return FuncBlocks.Any(x => { return x.Name == name; });
         }
         /// <summary>
         /// Add SubRoutine 
         /// </summary>
         /// <param name="ldmodel"></param>
-        public void AddSubRoutine(LadderDiagramModel ldmodel)
+        public void AddSubRoutine(LadderDiagramViewModel ldmodel)
         {           
             SubRoutines.Add(ldmodel);
         }
@@ -114,9 +114,9 @@ namespace SamSoarII.Project
             FuncBlocks.Add(fbmodel);
         }
 
-        public void RemoveSubRoutineByName(string Name)
+        public void RemoveSubRoutineByName(string name)
         {
-            var routine = GetRoutineByName(Name);
+            var routine = GetRoutineByName(name);
             if(routine != null)
             {
                 SubRoutines.Remove(routine);
@@ -124,12 +124,13 @@ namespace SamSoarII.Project
         }
         public void RemoveFuncBlockByName(string name)
         {
-            var fbmodel = GetFuncBlockByName(Name);
+            var fbmodel = GetFuncBlockByName(name);
             if (fbmodel != null)
             {
                 FuncBlocks.Remove(fbmodel);
             }
         }
+
         /// <summary>
         /// Save the ProjectModel to a xml format file
         /// </summary>
@@ -138,11 +139,11 @@ namespace SamSoarII.Project
         {
             XmlDocument xmldoc = new XmlDocument();
             // Declaration
-            var dec = xmldoc.CreateXmlDeclaration("1.0", string.Empty, string.Empty);
+            var dec = xmldoc.CreateXmlDeclaration("1.0", "utf-8", string.Empty);
             xmldoc.AppendChild(dec);
             // Root Node 
             var root = xmldoc.CreateElement("Project");
-            root.SetAttribute("Name", this.Name);
+            root.SetAttribute("Name", this.ProjectName);
             xmldoc.AppendChild(root);
             // Configuartion node 
             var settingNode = xmldoc.CreateElement("Setting");
@@ -159,53 +160,91 @@ namespace SamSoarII.Project
             }
             xmldoc.Save(filepath);
         }
-
-        public void Open(string filepath)
+   
+        public bool Open(string filepath)
         {
-            XmlDocument xmldoc = new XmlDocument();
-            xmldoc.Load(filepath);          
-            var rootNode = xmldoc.SelectSingleNode("Project");
-            Name = rootNode.Attributes["Name"].Value;
-            // Open Ladder Model
-            var ldnodes = xmldoc.GetElementsByTagName("LadderModel");
-            SubRoutines.Clear();
-            foreach (XmlNode ldnode in ldnodes)
-            {
-                var ldmodel = OpenLadder(ldnode);
-                if(ldmodel.IsMainLadder)
+            //try
+            //{
+                XmlDocument xmldoc = new XmlDocument();
+                xmldoc.Load(filepath);
+                var rootNode = xmldoc.SelectSingleNode("Project");
+                ProjectName = rootNode.Attributes["Name"].Value;
+                // Open Ladder Model
+                SubRoutines.Clear();
+                FuncBlocks.Clear();
+                var ldnodes = rootNode.SelectNodes("Ladder");
+                foreach (XmlNode ldnode in ldnodes)
                 {
-                    MainRoutine = ldmodel;
+                    var ldmodel = OpenLadder(ldnode);
+                    if (ldmodel.IsMainLadder)
+                    {
+                        MainRoutine = ldmodel;
+                    }
+                    else
+                    {
+                        SubRoutines.Add(ldmodel);
+                    }
                 }
-                else
+                // Open FunctionBlock
+                var fbnodes = rootNode.SelectNodes("FuncBlock");
+                foreach (XmlNode fbnode in fbnodes)
                 {
-                    SubRoutines.Add(ldmodel);
-                }     
-            }
-            // Open FunctionBlock
-            var fbnodes = xmldoc.GetElementsByTagName("FuncBlock");
-            FuncBlocks.Clear();
-            foreach (XmlNode fbnode in fbnodes)
-            {
-                var fbmodel = OpenFuncBlock(fbnode);
-                FuncBlocks.Add(fbmodel);
-            }
+                    var fbmodel = OpenFuncBlock(fbnode);
+                    FuncBlocks.Add(fbmodel);
+                }
+                return true;
+            //}
+            //catch(Exception exception)
+            //{
+            //    return false;
+            //}      
         }
 
-        private XmlNode SaveLadder(XmlDocument xmldoc, LadderDiagramModel ldmodel)
+        #region Static Save and Open method
+        public static ProjectModel Load(string filepath)
         {
-            var node = xmldoc.CreateElement("LadderModel");
-            node.SetAttribute("Name", ldmodel.Name);
+            ProjectModel model = new ProjectModel();
+            if (model.Open(filepath))
+            {
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        private static XmlNode SaveLadder(XmlDocument xmldoc, LadderDiagramViewModel ldmodel)
+        {
+            var node = xmldoc.CreateElement("Ladder");
+            node.SetAttribute("Name", ldmodel.LadderName);
             if (ldmodel.IsMainLadder)
             {
                 node.SetAttribute("IsMain", "True");
             }
-            foreach (var viewmodel in ldmodel.GetElements())
+            foreach (var network in ldmodel.GetNetworks())
             {
-                var enode = xmldoc.CreateElement("ViewModel");
-                enode.SetAttribute("X", viewmodel.X.ToString());
-                enode.SetAttribute("Y", viewmodel.Y.ToString());
-                enode.SetAttribute("CatalogID", viewmodel.GetCatalogID().ToString());
-                foreach (string str in viewmodel.GetValueString())
+                var networkNode = SaveNetwork(xmldoc, network);
+                node.AppendChild(networkNode);
+            }
+            return node;
+        }
+        private static XmlNode SaveNetwork(XmlDocument xmldoc, LadderNetworkViewModel network)
+        {
+            var node = xmldoc.CreateElement("Network");
+            node.SetAttribute("Number", network.NetworkNumber.ToString());
+            var briefNode = xmldoc.CreateElement("Brief");
+            var descriptionNode = xmldoc.CreateElement("Description");
+            briefNode.InnerText = network.NetworkBrief;
+            node.AppendChild(briefNode);
+            descriptionNode.InnerText = network.NetworkDescription;
+            node.AppendChild(descriptionNode);
+            foreach (var instEle in network.GetElements())
+            {
+                var enode = xmldoc.CreateElement("InstEle");
+                enode.SetAttribute("X", instEle.X.ToString());
+                enode.SetAttribute("Y", instEle.Y.ToString());
+                enode.SetAttribute("CatalogID", instEle.GetCatalogID().ToString());
+                foreach (string str in instEle.GetValueString())
                 {
                     var valuenode = xmldoc.CreateElement("Value");
                     valuenode.InnerText = str;
@@ -213,7 +252,8 @@ namespace SamSoarII.Project
                 }
                 node.AppendChild(enode);
             }
-            foreach (var vline in ldmodel.GetVerticalLines())
+
+            foreach (var vline in network.GetVerticalLines())
             {
                 var vnode = xmldoc.CreateElement("VerticalLine");
                 vnode.SetAttribute("X", vline.X.ToString());
@@ -223,18 +263,16 @@ namespace SamSoarII.Project
             }
             return node;
         }
-
-        private XmlNode SaveFuncBlock(XmlDocument xmldoc, FuncBlockModel fbmodel)
+        private static XmlNode SaveFuncBlock(XmlDocument xmldoc, FuncBlockModel fbmodel)
         {
             var node = xmldoc.CreateElement("FuncBlock");
             node.SetAttribute("Name", fbmodel.Name);
             node.InnerText = fbmodel.Code;
             return node;
         }
-
-        private LadderDiagramModel OpenLadder(XmlNode ldnode)
+        private static LadderDiagramViewModel OpenLadder(XmlNode ldnode)
         {
-            var ldmodel = new LadderDiagramModel(ldnode.Attributes["Name"].Value);
+            var ldmodel = new LadderDiagramViewModel(ldnode.Attributes["Name"].Value);
             if (ldnode.Attributes != null && ldnode.Attributes["IsMain"] != null && ldnode.Attributes["IsMain"].Value == "True")
             {
                 ldmodel.IsMainLadder = true;
@@ -243,44 +281,55 @@ namespace SamSoarII.Project
             {
                 ldmodel.IsMainLadder = false;
             }
-            foreach (XmlNode vmnode in ldnode.SelectNodes("ViewModel"))
+            ldmodel.RemoveAllNetworks();
+            foreach (XmlNode netNode in ldnode.SelectNodes("Network"))
             {
-                int catalogId = int.Parse(vmnode.Attributes["CatalogID"].Value);
+                var network = OpenNetwrok(netNode, ldmodel);
+                ldmodel.AppendNetwork(network);
+            }
+            return ldmodel;
+        }
+        private static LadderNetworkViewModel OpenNetwrok(XmlNode networkNode, LadderDiagramViewModel ldmodel)
+        {
+            int number = int.Parse(networkNode.Attributes["Number"].Value);
+            var network = new LadderNetworkViewModel(ldmodel, number);
+            network.NetworkBrief = networkNode.SelectSingleNode("Brief").InnerText;
+            network.NetworkDescription = networkNode.SelectSingleNode("Description").InnerText;
+            foreach (XmlNode instEleNode in networkNode.SelectNodes("InstEle"))
+            {
+                int catalogId = int.Parse(instEleNode.Attributes["CatalogID"].Value);
                 var viewmodel = InstructionViewModelPrototype.Clone(catalogId);
-                int x = int.Parse(vmnode.Attributes["X"].Value);
-                int y = int.Parse(vmnode.Attributes["Y"].Value);
+                int x = int.Parse(instEleNode.Attributes["X"].Value);
+                int y = int.Parse(instEleNode.Attributes["Y"].Value);
                 viewmodel.X = x;
                 viewmodel.Y = y;
                 List<string> valueStrings = new List<string>();
-                foreach (XmlNode valuenode in vmnode.ChildNodes)
+                foreach (XmlNode valuenode in instEleNode.SelectNodes("Value"))
                 {
                     valueStrings.Add(valuenode.InnerText);
                 }
                 viewmodel.ParseValue(valueStrings);
-                ldmodel.AddElement(viewmodel);
+                network.ReplaceElement(viewmodel);
             }
-            foreach (XmlNode vlinenode in ldnode.SelectNodes("VerticalLine"))
+            foreach (XmlNode vlineNode in networkNode.SelectNodes("VerticalLine"))
             {
                 var vline = new VerticalLineViewModel();
-                int x = int.Parse(vlinenode.Attributes["X"].Value);
-                int y = int.Parse(vlinenode.Attributes["Y"].Value);
-                vline.X = x;
-                vline.Y = y;
-                ldmodel.AddVerticalLine(vline);
+                vline.X = int.Parse(vlineNode.Attributes["X"].Value);
+                vline.Y = int.Parse(vlineNode.Attributes["Y"].Value);
+                network.AddVerticalLine(vline);
             }
-            return ldmodel;
+            return network;
         }
-
-        private FuncBlockModel OpenFuncBlock(XmlNode fbnode)
+        private static FuncBlockModel OpenFuncBlock(XmlNode fbnode)
         {
             var fbmodel = new FuncBlockModel(fbnode.Attributes["Name"].Value);
             fbmodel.Code = fbnode.InnerText;
             return fbmodel;
         }
+        #endregion
 
         public void Compile()
         {
-            
 
         }
 

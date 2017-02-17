@@ -54,17 +54,16 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
+        public override string InstructionName { get { return "RST"; } }
         public RSTViewModel()
         {
             Model = new RSTModel();
-            //ValueTextBlock.Text = _model.Value.ToString();
-            //CountTextBlock.Text = _model.Count.ToString();
             CenterTextBlock.Text = "R";
         }
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "RST";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {

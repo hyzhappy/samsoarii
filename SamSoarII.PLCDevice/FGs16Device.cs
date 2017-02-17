@@ -8,6 +8,9 @@ namespace SamSoarII.PLCDevice
 {
     public class FGs16Device : BaseDevice
     {
+        public FGs16Device()
+        {
 
+        }
     }
 }

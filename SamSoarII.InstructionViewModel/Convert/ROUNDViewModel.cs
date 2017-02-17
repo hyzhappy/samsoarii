@@ -51,10 +51,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "ROUND"; } }
         public ROUNDViewModel()
         {
-            TopTextBlock.Text = "ROUND";
+            TopTextBlock.Text = InstructionName;
             _model = new ROUNDModel();
         }
 
@@ -69,7 +69,6 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
@@ -100,7 +99,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "ROUND";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
             dialog.EnsureButtonClick += (sender, e) =>

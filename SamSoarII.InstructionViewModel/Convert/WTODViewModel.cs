@@ -52,9 +52,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
+        public override string InstructionName { get { return "WTOD"; } }
         public WTODViewModel()
         {
-            TopTextBlock.Text = "WTOD";
+            TopTextBlock.Text = InstructionName;
             Model = new WTODModel();
         }
         public override BaseViewModel Clone()
@@ -99,7 +100,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "WTOD";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
             dialog.EnsureButtonClick += (sender, e) =>

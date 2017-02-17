@@ -36,10 +36,10 @@ namespace SamSoarII.InstructionViewModel
                 FunctionName = _model.FunctionName;
             }
         }
-
+        public override string InstructionName { get { return "CALL"; } }
         public CALLViewModel()
         {
-            TopTextBlock.Text = "CALL";
+            TopTextBlock.Text = InstructionName;
             Model = new CALLModel();
         }
 
@@ -54,7 +54,6 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
@@ -69,7 +68,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "CALL";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Func");
             dialog.EnsureButtonClick += (sender, e) =>
             {

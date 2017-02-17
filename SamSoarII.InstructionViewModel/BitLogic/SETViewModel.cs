@@ -54,6 +54,7 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
+        public override string InstructionName { get { return "SET"; } }
         public SETViewModel()
         {
             Model = new SETModel();
@@ -62,7 +63,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "SET";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {

@@ -7,6 +7,12 @@
         mc:Ignorable="d"
         Title="工程设置" Height="600" Width="800">
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="7*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ListBox>
+            <ListBoxItem Content="设备型号" Height="40" FontSize="20"></ListBoxItem>
+        </ListBox>
     </Grid>
 </Window>

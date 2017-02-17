@@ -64,10 +64,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "ANDW"; } }
         public ANDWViewModel()
         {
-            TopTextBlock.Text = "ANDW";
+            TopTextBlock.Text = InstructionName;
             Model = new ANDWModel();
         }
 
@@ -82,7 +82,6 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
@@ -122,7 +121,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "ANDW";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

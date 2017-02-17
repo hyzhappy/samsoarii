@@ -39,10 +39,10 @@ namespace SamSoarII.InstructionViewModel
                 LBLIndex = _model.LBLIndex;
             }
         }
-
+        public override string InstructionName { get { return "LBL"; } }
         public LBLViewModel()
         {
-            TopTextBlock.Text = "LBL";
+            TopTextBlock.Text = InstructionName;
             Model = new LBLModel();
         }
 
@@ -79,7 +79,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "LBL";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("LBL");
             dialog.EnsureButtonClick += (sender, e) =>
             {

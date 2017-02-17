@@ -22,6 +22,7 @@ namespace SamSoarII.InstructionViewModel
                 throw new NotImplementedException();
             }
         }
+        public override string InstructionName { get { return "TON"; } }
 
         public override BaseViewModel Clone()
         {

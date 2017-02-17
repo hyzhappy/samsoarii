@@ -54,6 +54,7 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
+        public override string InstructionName { get { return "SETIM"; } }
         public SETIMViewModel()
         {
             Model = new SETIMModel();
@@ -64,7 +65,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "SETIM";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {

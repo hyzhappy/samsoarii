@@ -8,6 +8,6 @@ namespace SamSoarII.PLCDevice
 {
     public abstract class BaseDevice
     {
-
+        protected DeviceArchitecture Arch { get; set; }
     }
 }

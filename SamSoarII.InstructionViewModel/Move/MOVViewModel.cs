@@ -52,15 +52,16 @@ namespace SamSoarII.InstructionViewModel
                 DestinationValue = _model.DestinationValue;
             }
         }
+        public override string InstructionName { get { return "MOV"; } }
         public MOVViewModel()
         {
-            TopTextBlock.Text = "MOV";
+            TopTextBlock.Text = InstructionName;
             Model = new MOVModel();
         }
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "MOV";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("S");
             dialog.ShowLine5("D");
             dialog.EnsureButtonClick += (sender, e) =>

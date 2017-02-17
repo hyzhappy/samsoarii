@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.PLCCompiler", "Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.UserInterface", "SamSoarII.UserInterface\SamSoarII.UserInterface.csproj", "{76F2627D-B161-4E88-AE31-043DC7C8DA61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.Project", "SamSoarII.Project\SamSoarII.Project.csproj", "{C427C721-A848-4F46-88F5-30744BFBBC6F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.PLCDevice", "SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj", "{6DDBBAC0-A051-43AC-BE0D-D70227D61687}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.CompilerCommand", "SamSoarII.CompilerCommand\SamSoarII.CompilerCommand.csproj", "{EF0C04A4-33E3-4F65-843A-AA7AE6EC63B2}"
@@ -57,10 +55,6 @@ Global
 		{76F2627D-B161-4E88-AE31-043DC7C8DA61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76F2627D-B161-4E88-AE31-043DC7C8DA61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76F2627D-B161-4E88-AE31-043DC7C8DA61}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C427C721-A848-4F46-88F5-30744BFBBC6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C427C721-A848-4F46-88F5-30744BFBBC6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C427C721-A848-4F46-88F5-30744BFBBC6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C427C721-A848-4F46-88F5-30744BFBBC6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DDBBAC0-A051-43AC-BE0D-D70227D61687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DDBBAC0-A051-43AC-BE0D-D70227D61687}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DDBBAC0-A051-43AC-BE0D-D70227D61687}.Release|Any CPU.ActiveCfg = Release|Any CPU

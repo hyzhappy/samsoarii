@@ -51,7 +51,7 @@ namespace SamSoarII.InstructionViewModel
                 Value2 = _model.Value2;
             }
         }
-
+        public override string InstructionName { get { return "LDDEQ"; } }
         public LDDEQViewModel()
         {
             CenterTextBlock.Text = "D==";
@@ -100,7 +100,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "LDDEQ";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("DW1");
             dialog.ShowLine5("DW2");
             dialog.EnsureButtonClick += (sender, e) =>

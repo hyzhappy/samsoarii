@@ -39,10 +39,10 @@ namespace SamSoarII.InstructionViewModel
                 StartValue = _model.StartValue;
             }
         }
-
+        public override string InstructionName { get { return "TWR"; } }
         public TWRViewModel()
         {
-            TopTextBlock.Text = "TWR";
+            TopTextBlock.Text = InstructionName;
             Model = new TWRModel();
         }
 
@@ -79,7 +79,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "TWR";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("T");
             dialog.EnsureButtonClick += (sender, e) =>
             {

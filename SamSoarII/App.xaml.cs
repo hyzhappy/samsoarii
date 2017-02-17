@@ -13,5 +13,15 @@ namespace SamSoarII.AppMain
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            GlobalSetting.Load();
+            this.Exit += App_Exit;
+        }
+
+        private void App_Exit(object sender, ExitEventArgs e)
+        {
+            GlobalSetting.Save();
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace SamSoarII.InstructionViewModel
                 _model = value as MEPModel;
             }
         }
+        public override string InstructionName { get { return "MEP"; } }
         public MEPViewModel()
         {
             Model = new MEPModel();

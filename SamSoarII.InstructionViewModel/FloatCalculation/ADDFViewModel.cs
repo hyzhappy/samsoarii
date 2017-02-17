@@ -64,10 +64,11 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
+        public override string InstructionName { get { return "ADDF"; } }
 
         public ADDFViewModel()
         {
-            TopTextBlock.Text = "ADDF";
+            TopTextBlock.Text = InstructionName;
             _model = new ADDFModel();
         }
 
@@ -78,7 +79,6 @@ namespace SamSoarII.InstructionViewModel
         }
 
         private static int CatalogID { get { return 700; } }
-
         public override int GetCatalogID()
         {
             return CatalogID;
@@ -123,7 +123,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "ADDF";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

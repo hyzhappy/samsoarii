@@ -64,7 +64,7 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "ANDD"; } }
         public ANDDViewModel()
         {
             TopTextBlock.Text = "ANDD";

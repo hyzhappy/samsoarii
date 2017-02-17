@@ -66,10 +66,10 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
-
+        public override string InstructionName { get { return "SHL"; } }
         public SHLViewModel()
         {
-            TopTextBlock.Text = "SHL";
+            TopTextBlock.Text = InstructionName;
             Model = new SHLModel();
         }
 
@@ -124,7 +124,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "SHL";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

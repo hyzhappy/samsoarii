@@ -39,6 +39,7 @@ namespace SamSoarII.InstructionViewModel
                 Value = _model.Value;
             }
         }
+        public override string InstructionName { get { return "OUTIM"; } }
         public OUTIMViewModel()
         {
             Model = new OUTIMModel();
@@ -56,7 +57,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "OUTIM";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {

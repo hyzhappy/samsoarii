@@ -65,9 +65,10 @@ namespace SamSoarII.InstructionViewModel
             }
         }
 
+        public override string InstructionName { get { return "ADD"; } }
         public ADDViewModel()
         {
-            TopTextBlock.Text = "ADD";
+            TopTextBlock.Text = InstructionName;
             _model = new ADDModel();
         }
 
@@ -123,7 +124,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "ADD";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

@@ -75,6 +75,7 @@ namespace SamSoarII.UserInterface
             label1.Visibility = Visibility.Visible;
             textBox1.Visibility = Visibility.Visible;
             label1.Content = labelContent;
+            textBox1.Focus();
         }
 
         public void ShowLine2(string labelContent)
@@ -82,6 +83,7 @@ namespace SamSoarII.UserInterface
             label2.Visibility = Visibility.Visible;
             textBox2.Visibility = Visibility.Visible;
             label2.Content = labelContent;
+            textBox2.Focus();
         }
 
         public void ShowLine3(string labelContent)
@@ -89,6 +91,7 @@ namespace SamSoarII.UserInterface
             label3.Visibility = Visibility.Visible;
             textBox3.Visibility = Visibility.Visible;
             label3.Content = labelContent;
+            textBox3.Focus();
         }
 
         public void ShowLine4(string labelContent)
@@ -96,6 +99,7 @@ namespace SamSoarII.UserInterface
             label4.Visibility = Visibility.Visible;
             textBox4.Visibility = Visibility.Visible;
             label4.Content = labelContent;
+            textBox4.Focus();
         }
 
         public void ShowLine5(string labelContent)
@@ -103,6 +107,7 @@ namespace SamSoarII.UserInterface
             label5.Visibility = Visibility.Visible;
             textBox5.Visibility = Visibility.Visible;
             label5.Content = labelContent;
+            textBox5.Focus();
         }
 
         public void ShowLine6(string labelContent)
@@ -110,6 +115,7 @@ namespace SamSoarII.UserInterface
             label6.Visibility = Visibility.Visible;
             textBox6.Visibility = Visibility.Visible;
             label6.Content = labelContent;
+            textBox6.Focus();
         }
 
         public void ShowLine7(string labelContent)
@@ -117,6 +123,7 @@ namespace SamSoarII.UserInterface
             label7.Visibility = Visibility.Visible;
             textBox7.Visibility = Visibility.Visible;
             label7.Content = labelContent;
+            textBox7.Focus();
         }
 
         private void EnsureButton_Click(object sender, RoutedEventArgs e)

@@ -56,6 +56,15 @@
     <Compile Include="ElementPropertyDialog.xaml.cs">
       <DependentUpon>ElementPropertyDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InstructionInputDialog.xaml.cs">
+      <DependentUpon>InstructionInputDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LadderDiagramCommentEditDialog.xaml.cs">
+      <DependentUpon>LadderDiagramCommentEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NetworkCommentEditDialog.xaml.cs">
+      <DependentUpon>NetworkCommentEditDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewProjectDialog.xaml.cs">
       <DependentUpon>NewProjectDialog.xaml</DependentUpon>
     </Compile>
@@ -93,6 +102,18 @@
     <Page Include="ElementPropertyDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="InstructionInputDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LadderDiagramCommentEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NetworkCommentEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NewProjectDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

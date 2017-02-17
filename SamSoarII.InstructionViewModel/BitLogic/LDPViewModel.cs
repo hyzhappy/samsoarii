@@ -39,6 +39,7 @@ namespace SamSoarII.InstructionViewModel
                 Value = _model.Value;
             }
         }
+        public override string InstructionName { get { return "LDP"; } }
         public LDPViewModel()
         {
             Model = new LDPModel();
@@ -73,7 +74,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "LDP";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {

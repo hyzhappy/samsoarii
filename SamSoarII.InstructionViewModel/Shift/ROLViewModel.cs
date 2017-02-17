@@ -66,10 +66,10 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
-
+        public override string InstructionName { get { return "ROL"; } }
         public ROLViewModel()
         {
-            TopTextBlock.Text = "ROL";
+            TopTextBlock.Text = InstructionName;
             Model = new ROLModel();
         }
 
@@ -124,7 +124,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "ROL";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

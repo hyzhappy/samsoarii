@@ -10,6 +10,8 @@ namespace SamSoarII.InstructionViewModel
     {
         private static Dictionary<int, BaseViewModel> _elementCatalog = new Dictionary<int, BaseViewModel>();
 
+        private static Dictionary<string, BaseViewModel> _elementName = new Dictionary<string, BaseViewModel>();
+
         static InstructionViewModelPrototype()
         {
             Initialize();
@@ -131,6 +133,7 @@ namespace SamSoarII.InstructionViewModel
         private static void Add(BaseViewModel viewmodel)
         {
             _elementCatalog.Add(viewmodel.GetCatalogID(), viewmodel);
+            _elementName.Add(viewmodel.InstructionName, viewmodel);
         }
 
         public static IEnumerable<BaseViewModel> GetElementViewModels()
@@ -143,6 +146,10 @@ namespace SamSoarII.InstructionViewModel
             return _elementCatalog[id].Clone();
         }
 
+        public static BaseViewModel Clone(string instName)
+        {
+            return _elementName[instName].Clone();
+        }
 
     }
 }

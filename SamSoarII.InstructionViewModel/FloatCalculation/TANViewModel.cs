@@ -52,10 +52,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "TAN"; } }
         public TANViewModel()
         {
-            TopTextBlock.Text = "TAN";
+            TopTextBlock.Text = InstructionName;
             Model = new TANModel();
         }
 
@@ -101,7 +101,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "TAN";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
             dialog.EnsureButtonClick += (sender, e) =>

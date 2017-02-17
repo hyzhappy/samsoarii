@@ -37,10 +37,10 @@ namespace SamSoarII.InstructionViewModel
                 Value = _model.Value;
             }
         }
-
+        public override string InstructionName { get { return "ALTP"; } }
         public ALTPViewModel()
         {
-            TopTextBlock.Text = "ALTP";
+            TopTextBlock.Text = InstructionName;
             Model = new ALTPModel();
         }
 
@@ -50,12 +50,10 @@ namespace SamSoarII.InstructionViewModel
         }
 
         private int CatalogID { get { return 216; } }
-
         public override int GetCatalogID()
         {
             return CatalogID;
         }
-
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
@@ -77,7 +75,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "ALTP";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {
@@ -94,25 +92,6 @@ namespace SamSoarII.InstructionViewModel
                 }
             };
             dialog.ShowDialog();
-            //dialog.Title = "ALTP";
-            //dialog.label4.Visibility = Visibility.Visible;
-            //dialog.label4.Content = "Bit";
-            //dialog.textBox4.Visibility = Visibility.Visible;
-            //dialog.EnsureButton.Click += (sender, e) =>
-            //{
-            //    try
-            //    {
-            //        List<string> valuelist = new List<string>();
-            //        valuelist.Add(dialog.textBox4.Text);
-            //        ParseValue(valuelist);
-            //        dialog.Close();
-            //    }
-            //    catch (Exception exception)
-            //    {
-            //        MessageBox.Show(exception.Message);
-            //    }
-            //};
-            //dialog.ShowDialog();
         }
 
     }

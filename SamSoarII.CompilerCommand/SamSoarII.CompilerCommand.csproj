@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SamSoarII.CompilerCommand</RootNamespace>
-    <AssemblyName>SamSoarII.CompilerCommand</AssemblyName>
+    <AssemblyName>plcc</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\Samkoon\SamSoarII\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,14 +43,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompileTask.cs" />
-    <Compile Include="LinkTask.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ApplicationMain.cs" />
+    <Compile Include="CompilerBehavior\PCBehavior.cs" />
+    <Compile Include="Compiler\BaseCompiler.cs" />
+    <Compile Include="CompilerBehavior\BaseBehavior.cs" />
+    <Compile Include="CompilerBehavior\CortexMBehavior.cs" />
+    <Compile Include="CompilerUtility.cs" />
+    <Compile Include="Compiler\FGs16MRCompiler.cs" />
+    <Compile Include="Compiler\FGs16MTCompiler.cs" />
+    <Compile Include="Compiler\FGs32MRCompiler.cs" />
+    <Compile Include="Compiler\FGs32MTCompiler.cs" />
+    <Compile Include="Compiler\FGs64MRCompiler.cs" />
+    <Compile Include="Compiler\FGs64MTCompiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Compiler\PCCompiler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
+      <Project>{aafb923a-b366-4d7d-ab40-81f7d71a1f30}</Project>
+      <Name>SamSoarII.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

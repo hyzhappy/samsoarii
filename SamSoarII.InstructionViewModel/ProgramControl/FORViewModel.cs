@@ -38,10 +38,10 @@ namespace SamSoarII.InstructionViewModel
                 Count = _model.Count;
             }
         }
-
+        public override string InstructionName { get { return "FOR"; } }
         public FORViewModel()
         {
-            TopTextBlock.Text = "FOR";
+            TopTextBlock.Text = InstructionName;
             Model = new FORModel();
         }
 
@@ -78,7 +78,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "FOR";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("N");
             dialog.EnsureButtonClick += (sender, e) =>
             {

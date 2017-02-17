@@ -64,10 +64,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "MULF"; } }
         public MULFViewModel()
         {
-            TopTextBlock.Text = "MULF";
+            TopTextBlock.Text = InstructionName;
             _model = new MULFModel();
         }
 
@@ -83,6 +83,7 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
+
 
         public override IEnumerable<string> GetValueString()
         {
@@ -123,7 +124,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "MULF";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

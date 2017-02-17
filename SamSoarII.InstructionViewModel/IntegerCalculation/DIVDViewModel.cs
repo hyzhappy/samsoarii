@@ -64,10 +64,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
-
+        public override string InstructionName { get { return "DIVD"; } }
         public DIVDViewModel()
         {
-            TopTextBlock.Text = "DIVD";
+            TopTextBlock.Text = InstructionName;
             _model = new DIVDModel();
         }
 
@@ -83,7 +83,6 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
@@ -123,7 +122,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "DIVD";
+            dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");

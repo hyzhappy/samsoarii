@@ -36,7 +36,7 @@ namespace SamSoarII.InstructionViewModel
                 Value = _model.Value;
             }
         }
-
+        public override string InstructionName { get { return "ALT"; } }
         public ALTViewModel()
         {
             TopTextBlock.Text = "ALT";

@@ -37,15 +37,15 @@ namespace SamSoarII.InstructionViewModel
                 Value = _model.Value;
             }
         }
+        public override string InstructionName { get { return "OUT"; } }
         public OUTViewModel()
         {
             Model = new OUTModel();
-            //ValueTextBlock.Text = _model.Value.ToString();
         }
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "OUT";
+            dialog.Title = InstructionName;
             dialog.ShowLine4("Bit");
             dialog.EnsureButtonClick += (sender, e) =>
             {

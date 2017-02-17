@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.CompilerCommand
 {
-    class CompileTask
+    class FGs16MTCompiler : BaseCompiler
     {
+        public FGs16MTCompiler()
+        {
+            _compileBehavior = new CortexMBehavior(this);
+        }
     }
 }

@@ -53,9 +53,10 @@ namespace SamSoarII.InstructionViewModel
                 OutputValue = _model.OutputValue;
             }
         }
+        public override string InstructionName { get { return "BCD"; } }
         public BCDViewModel()
         {
-            TopTextBlock.Text = "BCD";
+            TopTextBlock.Text = InstructionName;
             Model = new BCDModel();
         }
 
@@ -70,7 +71,6 @@ namespace SamSoarII.InstructionViewModel
         {
             return CatalogID;
         }
-
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
@@ -102,7 +102,7 @@ namespace SamSoarII.InstructionViewModel
 
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
-            dialog.Title = "BCD";
+            dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
             dialog.EnsureButtonClick += (sender, e) =>

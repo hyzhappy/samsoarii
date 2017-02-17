@@ -67,6 +67,7 @@ namespace SamSoarII.InstructionViewModel
                 throw new NotImplementedException();
             }
         }
+        public override string InstructionName { get { return "VLine"; } }
 
         public VerticalLineViewModel()
         {
