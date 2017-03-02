@@ -29,42 +29,72 @@
     </UserControl.Resources>
     <Grid>
         <TreeView FontSize="14">
-            <TreeView.Resources>
-                <Style TargetType="{x:Type local:InstrucionTreeItem}">
-                    <EventSetter Event="MouseDoubleClick" Handler="OnInstructionTreeItemDoubleClick"></EventSetter>
-                </Style>
-            </TreeView.Resources>
             <TreeViewItem x:Name="ProjectRootItem" Header="空工程" IsExpanded="True">
-                <TreeViewItem x:Name="MainRoutineRootTreeViewItem" Header="主程序" ContextMenu="{StaticResource ContextMenu1}" IsExpanded="True">
-                    <TreeViewItem.Resources>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
-                            <Setter Property="ContextMenu" Value="{StaticResource MainRoutineContextMenu}"></Setter>
-                        </Style>
-                    </TreeViewItem.Resources>
+                <TreeViewItem Header="程序" IsExpanded="True">
+                    <TreeViewItem x:Name="MainRoutineRootTreeViewItem" ContextMenu="{StaticResource ContextMenu1}" IsExpanded="True">
+                        <TreeViewItem.Resources>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
+                                <Setter Property="ContextMenu" Value="{StaticResource MainRoutineContextMenu}"></Setter>
+                            </Style>
+                        </TreeViewItem.Resources>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Image/TreeViewIcon/MainProgram.ico"></Image>
+                                <TextBlock Margin="6,0,0,0">主程序</TextBlock>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem x:Name="SubRoutineRootTreeViewItem" ContextMenu="{StaticResource ContextMenu2}" IsExpanded="True">
+                        <TreeViewItem.Resources>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
+                                <Setter Property="ContextMenu" Value="{StaticResource SubRoutineContextMenu}"></Setter>
+                            </Style>
+                        </TreeViewItem.Resources>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Image/TreeViewIcon/SubProgram.ico"></Image>
+                                <TextBlock Margin="6,0,0,0">子程序</TextBlock>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem x:Name="FuncBlockRootTreeViewItem" ContextMenu="{StaticResource ContextMenu3}" IsExpanded="True">
+                        <TreeViewItem.Resources>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
+                                <Setter Property="ContextMenu" Value="{StaticResource SubRoutineContextMenu}"></Setter>
+                            </Style>
+                        </TreeViewItem.Resources>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Image/TreeViewIcon/FuncBlock.ico"></Image>
+                                <TextBlock Margin="6,0,0,0">函数功能块</TextBlock>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem x:Name="SubRoutineRootTreeViewItem" Header="子程序" ContextMenu="{StaticResource ContextMenu2}" IsExpanded="True">
-                    <TreeViewItem.Resources>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
-                            <Setter Property="ContextMenu" Value="{StaticResource SubRoutineContextMenu}"></Setter>
-                        </Style>
-                    </TreeViewItem.Resources>
-                </TreeViewItem>
-                <TreeViewItem x:Name="FuncBlockRootTreeViewItem" Header="函数功能块" ContextMenu="{StaticResource ContextMenu3}" IsExpanded="True">
-                    <TreeViewItem.Resources>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
-                            <Setter Property="ContextMenu" Value="{StaticResource SubRoutineContextMenu}"></Setter>
-                        </Style>
-                    </TreeViewItem.Resources>
+                <TreeViewItem Header="元件浏览" IsExpanded="True">
+                    <TreeViewItem Header="元件注释表"/>
+                    <TreeViewItem Header="元件使用表"/>
+                    <TreeViewItem Header="元件变量表"/>
                 </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem x:Name="InstructionRootItem" Header="指令" IsExpanded="True">
+                <TreeViewItem.Resources>
+                    <Style TargetType="{x:Type local:InstrucionTreeItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="OnInstructionTreeItemDoubleClick"></EventSetter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="FontWeight" Value="Heavy"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeViewItem.Resources>
                 <TreeViewItem Header="位逻辑">
                     <local:InstrucionTreeItem InstructionIndex="200" Header="-|   |-(常开)"></local:InstrucionTreeItem>
-                    <local:InstrucionTreeItem InstructionIndex="201" Header="-| | |-(立即常开)"></local:InstrucionTreeItem>
-                    <local:InstrucionTreeItem InstructionIndex="202" Header="-| / |-(常闭)"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="201" Header="-| / |-(常闭)"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="202" Header="-| | |-(立即常开)"></local:InstrucionTreeItem>
                     <local:InstrucionTreeItem InstructionIndex="203" Header="-| /| |-(立即常闭)"></local:InstrucionTreeItem>
                     <local:InstrucionTreeItem InstructionIndex="204" Header="-| ↑ |-(上升沿)"></local:InstrucionTreeItem>
                     <local:InstrucionTreeItem InstructionIndex="205" Header="-| ↓ |-(下降沿)"></local:InstrucionTreeItem>

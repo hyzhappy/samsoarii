@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.ValueModel;
-namespace SamSoarII.InstructionModel
+namespace SamSoarII.LadderInstModel
 {
     public class LDModel : BaseModel
     {
@@ -21,7 +21,7 @@ namespace SamSoarII.InstructionModel
 
         public override string GenerateCode()
         {
-            return string.Format("PLC_BOOL {0} = {1};\r\n", ExportVaribleName, Value.GetBitValue());
+            return string.Format("plc_bool {0} = {1};\r\n", ExportVaribleName, Value.GetBitValue());
         }
     }
 }

@@ -14,12 +14,24 @@ namespace SamSoarII.AppMain
 
         public static RoutedUICommand ZoomInCommand { get; set; }
         public static RoutedUICommand ZoomOutCommand { get; set; }
+
+        public static RoutedUICommand CompileCommand { get; set; }
+
+        public static RoutedUICommand DownloadCommand { get; set; }
+
+        public static RoutedUICommand ShowPropertyDialogCommand { get; set; }
+
+        public static RoutedUICommand ShowOptionDialogCommand { get; set; }
         static GlobalCommand()
         {
             AddNewFuncBlockCommand = new RoutedUICommand();
             AddNewSubRoutineCommand = new RoutedUICommand();
             ZoomInCommand = new RoutedUICommand();
             ZoomOutCommand = new RoutedUICommand();
+            CompileCommand = new RoutedUICommand();
+            DownloadCommand = new RoutedUICommand();
+            ShowPropertyDialogCommand = new RoutedUICommand();
+            ShowOptionDialogCommand = new RoutedUICommand();
         }
     }
 }

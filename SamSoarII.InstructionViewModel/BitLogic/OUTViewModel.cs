@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-using SamSoarII.InstructionModel;
+using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using SamSoarII.UserInterface;
-namespace SamSoarII.InstructionViewModel
+namespace SamSoarII.LadderInstViewModel
 {
     public class OUTViewModel : OutputBaseViewModel
     {

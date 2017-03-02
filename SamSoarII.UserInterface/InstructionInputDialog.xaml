@@ -16,5 +16,26 @@
         </Grid.ColumnDefinitions>
         <TextBox x:Name="InstructionInputTextBox" MaxLines="1" Width="400" Height="24" FontSize="18" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="0,10,0,10"></TextBox>
         <Button x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Grid.Row="0" Click="OnEnsureButtonClick">确定</Button>
+        <Popup x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=InstructionInputTextBox}" Placement="Top" VerticalOffset="-80" HorizontalOffset="40" IsOpen="True" Width="400" Height="60" >
+            <Border BorderBrush="Orange" BorderThickness="3" CornerRadius="5">
+                <Grid Background="Wheat">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="16" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
+                        ADD -- 16位加法指令
+                    </TextBlock>
+                    <WrapPanel Grid.Row="1" Orientation="Horizontal">
+                        <WrapPanel.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="FontSize" Value="14"></Setter>
+                                <Setter Property="Margin" Value="20,0,20,0"></Setter>
+                            </Style>
+                        </WrapPanel.Resources>
+                    </WrapPanel>
+                </Grid>
+            </Border>
+        </Popup>   
     </Grid>
 </Window>

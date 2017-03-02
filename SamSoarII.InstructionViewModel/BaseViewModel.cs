@@ -6,9 +6,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using SamSoarII.UserInterface;
-using SamSoarII.InstructionModel;
-namespace SamSoarII.InstructionViewModel
+using SamSoarII.LadderInstModel;
+namespace SamSoarII.LadderInstViewModel
 {
+    /// <summary>
+    /// 梯形图元件基类，抽象类
+    /// </summary>
     public abstract class BaseViewModel : UserControl
     {
         protected int _x;
@@ -46,6 +49,7 @@ namespace SamSoarII.InstructionViewModel
         private void BaseViewModel_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             BeginShowPropertyDialog();
+            e.Handled = true;
         }
 
         public abstract void ShowPropertyDialog(ElementPropertyDialog dialog);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.ValueModel;
-namespace SamSoarII.InstructionModel
+namespace SamSoarII.LadderInstModel
 {
     public class LDDEQModel : BaseModel
     {

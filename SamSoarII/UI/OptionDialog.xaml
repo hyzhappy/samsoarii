@@ -5,18 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         mc:Ignorable="d"
-        Title="OptionDialog" Height="300" Width="300">
+        Title="OptionDialog" Height="600" Width="600">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TreeView Grid.Column="0">
-            <TreeViewItem Header="外观">
-                <TreeViewItem Header="字体"></TreeViewItem>
-                <TreeViewItem Header="颜色"></TreeViewItem>
-            </TreeViewItem>
-        </TreeView>
+        <ListBox x:Name="MyListBox" Grid.Column="0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel HorizontalAlignment="Center"></StackPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">字体</ListBoxItem>
+            <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">颜色</ListBoxItem>
+        </ListBox>
         <Grid Grid.Column="1"></Grid>
     </Grid>
 </Window>

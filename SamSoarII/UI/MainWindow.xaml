@@ -17,7 +17,7 @@
         <!--Edit Commands-->
         <CommandBinding Command="ApplicationCommands.Undo"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Redo"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Cut" Executed="CutCommandExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Cut"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Copy"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Paste"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Delete"></CommandBinding>
@@ -28,7 +28,12 @@
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Properties"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Executed="OnShowPropertyDialogCommandExecute" CanExecute="ShowPropertyDialogCommandCanExecute"></CommandBinding>
+        <!-- Build Command -->
+        <CommandBinding Command="{x:Static app:GlobalCommand.CompileCommand}" Executed="OnCompileCommandExecute" CanExecute="CompileCommandCanExecute"></CommandBinding>
+        <!-- Tool Command-->
+        <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <Style x:Key="ImageEnable" TargetType="Image">
@@ -89,22 +94,24 @@
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
                 <MenuItem Header="添加函数功能块" Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}"></MenuItem>
                 <Separator/>
-                <MenuItem Header="属性" Command="ApplicationCommands.Properties"></MenuItem>
+                <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="生成(_B)">
-                <MenuItem Header="编译" Click="CompileProject" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsEnabled="{Binding Path=HasProject, Mode=OneWay}"></MenuItem>
+                <MenuItem Header="编译" Click="CompileProject" Command="{x:Static app:GlobalCommand.CompileCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工具(_T)">
                 <MenuItem Header="上载"></MenuItem>
                 <MenuItem Header="下载"></MenuItem>
                 <MenuItem Header="仿真"></MenuItem>
                 <MenuItem Header="监视"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="帮助(_H)">
                 <MenuItem Header="查看帮助"></MenuItem>
                 <MenuItem Header="在线升级"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="关于"></MenuItem>
+                <MenuItem Header="关于" Click="OnShowAboutDialog"></MenuItem>
             </MenuItem>
         </Menu>
         <ToolBarTray DockPanel.Dock="Top" Height="35">
@@ -131,19 +138,28 @@
                 </Button>
             </ToolBar>
             <ToolBar>
-                <Button>
+                <Button ToolTip="编译" Command="{x:Static app:GlobalCommand.CompileCommand}">
                     <Image Source="/Resources/Image/Compile.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="下载">
+                <Button ToolTip="下载" Command="{x:Static app:GlobalCommand.DownloadCommand}">
                     <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Top" Height="35">
             <ToolBar>
-                <Button Height="35">200</Button>
-                <Button Height="35">201</Button>
-                <Button Height="35">202</Button>
+                <Button Height="35">
+                    <Image Source="/Resources/Image/InstructionToolbar/LD.ico"></Image>
+                </Button>
+                <Button Height="35">
+                    <Image Source="/Resources/Image/InstructionToolbar/OUT.ico"></Image>
+                </Button>
+                <Button Height="35">
+                    <Image Source="/Resources/Image/InstructionToolbar/HLine.ico"></Image>
+                </Button>
+                <Button Height="35">
+                    <Image Source="/Resources/Image/InstructionToolbar/VLine.ico"></Image>
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <Grid Name="MainGrid">
@@ -158,8 +174,8 @@
             <Grid x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
 
             </Grid>
-            <ScrollViewer x:Name="MyScrollViewer" Grid.Column="1" Grid.Row="0"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False" IsTabStop="False">
-                <local:MainTabControl x:Name="MainTab" Background="WhiteSmoke">
+            <!--<ScrollViewer x:Name="MyScrollViewer" Grid.Column="1" Grid.Row="0"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False" IsTabStop="False">-->
+                <local:MainTabControl x:Name="MainTab" Background="Transparent" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
                     <local:MainTabControl.Resources>
                         <Style TargetType="{x:Type TabItem}">
                             <Setter Property="Template">
@@ -177,25 +193,24 @@
                                                 </Grid>
                                             </Border>
                                         </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="Border" Property="Background" Value="SkyBlue"></Setter>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-
-                                    </ControlTemplate>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="SkyBlue"></Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="MinWidth" Value="100"></Setter>
                         </Style>
                     </local:MainTabControl.Resources>
                 </local:MainTabControl>
-            </ScrollViewer>
+            <!--</ScrollViewer>-->
 
-            <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
+            <!--<ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
                 <StatusBar>
                 </StatusBar>
-            </ScrollViewer>
+            </ScrollViewer>-->
         </Grid>
     </DockPanel>
 </Window>

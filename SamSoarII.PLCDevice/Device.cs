@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.PLCDevice
 {
-    public abstract class BaseDevice
+    public abstract class Device
     {
-        protected DeviceArchitecture Arch { get; set; }
+        public abstract string DeviceName { get; }
     }
 }

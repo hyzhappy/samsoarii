@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SamSoarII.InstructionModel;
+using SamSoarII.LadderInstModel;
 namespace SamSoarII.PLCCompiler
 {
     public class ExpTreeANDNode : ExpTreeNode
@@ -33,7 +33,7 @@ namespace SamSoarII.PLCCompiler
                 result += RightChild.GenerateCode();
             }
             ExportVaribleName = Tree.AssignVaribleName();
-            result += string.Format("uint32_t {0} = {1} & {2}; \r\n", ExportVaribleName, LeftChild.GetExportVaribleName(), RightChild.GetExportVaribleName());
+            result += string.Format("plc_bool {0} = {1} & {2}; \r\n", ExportVaribleName, LeftChild.GetExportVaribleName(), RightChild.GetExportVaribleName());
             return result;
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.InstructionViewModel
+namespace SamSoarII.LadderInstViewModel
 {
     class SHRBViewModel
     {

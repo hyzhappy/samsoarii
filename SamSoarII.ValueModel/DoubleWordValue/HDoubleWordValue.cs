@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
-{ 
+{
     public class HDoubleWordValue : DoubleWordValue
     {
+    
         private Int32 Value { get; set; }
         public HDoubleWordValue(Int32 value)
         {

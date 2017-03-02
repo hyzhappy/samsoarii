@@ -63,7 +63,7 @@ namespace SamSoarII.AppMain
 
         public bool LoadProject(string fullFileName)
         {         
-            _projectModel = ProjectModel.Load(fullFileName);
+            _projectModel = ProjectHelper.LoadProject(fullFileName);
             if (_projectModel != null)
             {
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
@@ -112,6 +112,11 @@ namespace SamSoarII.AppMain
                 _mainTabControl.ShowItem(fbmodel);
                 return true;
             }
+        }
+
+        public void CompileProject()
+        {
+            _projectModel.Compile();
         }
 
         public void DeleteSubRoutine()
@@ -164,7 +169,7 @@ namespace SamSoarII.AppMain
             {
                 if(CurrentLadder != null)
                 {
-                    CurrentLadder.ReplaceElement(instTreeItem.InstructionIndex);
+                    CurrentLadder.ReplaceSingleElement(instTreeItem.InstructionIndex);
                 }
             }
         }

@@ -10,18 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
-    /// SettingDialog.xaml 的交互逻辑
+    /// DeviceSelectionWidget.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingDialog : Window
+    public partial class DeviceSelectionWidget : UserControl
     {
-        public SettingDialog()
+        public DeviceSelectionWidget()
         {
             InitializeComponent();
+        }
+
+
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

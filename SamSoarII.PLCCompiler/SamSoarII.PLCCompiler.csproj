@@ -58,9 +58,9 @@
     <Compile Include="Utility\GraphHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.InstructionModel.csproj">
+    <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj">
       <Project>{69569578-5258-4aec-9e10-dde7234d78fb}</Project>
-      <Name>SamSoarII.InstructionModel</Name>
+      <Name>SamSoarII.LadderInstModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

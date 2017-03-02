@@ -24,7 +24,7 @@ namespace SamSoarII.ValueModel
             //{
             //    return string.Format("*((uint32_t*)0x{0} + {1})", Convert.ToString(AddressManager.MBaseAddress + Index * 4, 16), Offset.GetWordValue());
             //}
-            return string.Empty;
+            return string.Format("MBit[{0}{1}]", Index, string.Empty);
         }
 
         public override string GetInputImBitAddress()

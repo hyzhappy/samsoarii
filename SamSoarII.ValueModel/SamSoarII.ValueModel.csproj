@@ -73,6 +73,7 @@
     <Compile Include="WordValue\TVWordValue.cs" />
     <Compile Include="WordValue\VWordValue.cs" />
     <Compile Include="WordValue\WordValue.cs" />
+    <Compile Include="WordValue\ZWordValue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

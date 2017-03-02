@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.PLCDevice
 {
-    public class FGs16Device : BaseDevice
+    public class FGs16MTDevice : Device
     {
-        public FGs16Device()
+        public override string DeviceName
         {
-
+            get
+            {
+                return "FGs16MT";
+            }
         }
     }
 }

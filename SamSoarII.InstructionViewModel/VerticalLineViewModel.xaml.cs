@@ -11,15 +11,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SamSoarII.InstructionModel;
+using SamSoarII.LadderInstModel;
 using SamSoarII.Utility;
 using SamSoarII.UserInterface;
 
-namespace SamSoarII.InstructionViewModel
+namespace SamSoarII.LadderInstViewModel
 {
     /// <summary>
     /// VerticalLineViewModel.xaml 的交互逻辑
     /// </summary>
+    /// 
     public partial class VerticalLineViewModel : BaseViewModel
     {
         public override ElementType Type

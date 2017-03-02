@@ -11,9 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SamSoarII.InstructionModel;
+using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
-namespace SamSoarII.InstructionViewModel
+namespace SamSoarII.LadderInstViewModel
 {
     /// <summary>
     /// OutputBaseViewModel.xaml 的交互逻辑

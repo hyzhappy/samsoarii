@@ -1,10 +1,11 @@
-﻿using SamSoarII.InstructionModel;
-using SamSoarII.InstructionViewModel;
+﻿using SamSoarII.LadderInstModel;
+using SamSoarII.LadderInstViewModel;
 using SamSoarII.PLCCompiler;
 using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl
+    public partial class LadderNetworkViewModel : UserControl, IComparable
     {
 
         private int _rowCount;
@@ -80,12 +81,178 @@ namespace SamSoarII.AppMain.Project
                 NetworkDescriptionTextBlock.Text = value;
             }
         }
+
+        private bool _isMasked;
+        public bool IsMasked
+        {
+            get
+            {
+                return _isMasked;
+            }
+            set
+            {
+                
+                _isMasked = value;
+                if (_isMasked)
+                {
+                    CommentAreaExpander.Background = Brushes.LightGray;
+                    LadderCanvas.Background = Brushes.LightGray;
+                    CommentAreaExpander.Opacity = 0.4;
+                    LadderCanvas.Opacity = 0.4;
+                }
+                else
+                {
+                    CommentAreaExpander.Opacity = 1.0;
+                    LadderCanvas.Opacity = 1.0;
+                    CommentAreaExpander.Background = Brushes.LightCyan;
+                    LadderCanvas.Background = Brushes.Transparent;
+                }
+            }
+        }
         private SortedDictionary<IntPoint, BaseViewModel> _ladderElements = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines = new SortedDictionary<IntPoint, VerticalLineViewModel>();
 
+        #region Selection relative data
 
+        public int SelectAreaOriginX
+        {
+            get;set;
+        }
+        public int SelectAreaOriginY
+        {
+            get;set;
+        }
+        private int _selectAreaFirstX;
+        private int _selectAreaFirstY;
+        private int _selectAreaSecondX;
+        private int _selectAreaSecondY;
+        public int SelectAreaFirstX
+        {
+            get
+            {
+                return _selectAreaFirstX;
+            }
+            set
+            {
+                _selectAreaFirstX = value;
+                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * 300;
+                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * 300;
+                SelectArea.Width = width;
+                Canvas.SetLeft(SelectArea, left);
+            }
+        }
+        public int SelectAreaFirstY
+        {
+            get
+            {
+                return _selectAreaFirstY;
+            }
+            set
+            {
+                _selectAreaFirstY = value;
+                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * 300;
+                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * 300;
+                SelectArea.Height = height;
+                Canvas.SetTop(SelectArea, top);
+            }
+        }
+        public int SelectAreaSecondX
+        {
+            get
+            {
+                return _selectAreaSecondX;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                if (value > 9)
+                {
+                    value = 9;
+                }
+                _selectAreaSecondX = value;
+                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * 300;
+                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * 300;
+                SelectArea.Width = width;
+                Canvas.SetLeft(SelectArea, left);
+            }
+        }
+        public int SelectAreaSecondY
+        {
+            get
+            {
+                return _selectAreaSecondY;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                if (value > RowCount - 1)
+                {
+                    value = RowCount - 1;
+                }
+                _selectAreaSecondY = value;
+                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * 300;
+                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * 300;
+                SelectArea.Height = height;
+                Canvas.SetTop(SelectArea, top);
+            }
+        }
+        private bool _isSelectAreaMode;
+        public bool IsSelectAreaMode
+        {
+            get
+            {
+                return _isSelectAreaMode;
+            }
+            set
+            {
+                if (!_isSelectAreaMode & value)
+                {
+                    LadderCanvas.Children.Add(SelectArea);
+                }
+                if (!value & _isSelectAreaMode)
+                {
+                    LadderCanvas.Children.Remove(SelectArea);
+                }
+                _isSelectAreaMode = value;
+            }
+        }
+        private bool _isSelectAllMode;
+        public bool IsSelectAllMode
+        {
+            get
+            {
+                return _isSelectAllMode;
+            }
+            set
+            {
+                _isSelectAllMode = value;
+                if(_isSelectAllMode)
+                {
+                    IsSelectAreaMode = true;
+                    SelectAreaFirstY = 0;
+                    SelectAreaFirstX = 0;
+                    SelectAreaSecondX = 9;
+                    SelectAreaSecondY = RowCount - 1;
+                    CommentAreaGrid.Background = new SolidColorBrush(Colors.DarkBlue);
+                    CommentAreaGrid.Background.Opacity = 0.3;
+                }
+                else
+                {
+                    CommentAreaGrid.Background = Brushes.Transparent;
+                }
+            }
+        }
+        public Rectangle SelectArea { get; set; } = new Rectangle();
 
-        // as parent
+        #endregion
+
+        // parent ladder diagram
         private LadderDiagramViewModel _ladderDiagram;
 
         public LadderNetworkViewModel(LadderDiagramViewModel parent, int number)
@@ -94,6 +261,10 @@ namespace SamSoarII.AppMain.Project
             _ladderDiagram = parent;
             RowCount = 1;
             NetworkNumber = number;
+            SelectArea.Fill = new SolidColorBrush(Colors.DarkBlue);
+            SelectArea.Opacity = 0.2;
+            Canvas.SetZIndex(SelectArea, -1);
+            //SelectAll();
         }
 
         public IEnumerable<BaseViewModel> GetElements()
@@ -126,38 +297,71 @@ namespace SamSoarII.AppMain.Project
             return _ladderVerticalLines.Values;
         }
 
-        public void ReplaceElement(BaseViewModel element)
+        #region Ladder content modification methods
+        public BaseViewModel ReplaceElement(BaseViewModel element)
         {
+            BaseViewModel oldele = null;
+            bool flag = false;
             // Remove old element before
-            if(element.Type == ElementType.Output)
+            if (element.Type == ElementType.Output)
             {
                 element.X = 9;
+                if (element.Y >= 0 && element.Y < RowCount)
+                {
+                    flag = true;
+                }
             }
-            IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
-            if(_ladderElements.Keys.Contains(p))
+            else
             {
-                var oldele = _ladderElements[p];
-                _ladderElements.Remove(p);
-                LadderCanvas.Children.Remove(oldele);
+                if (element.X >= 0 && element.X < 9 && element.Y >= 0 && element.Y < RowCount)
+                {
+                    flag = true;
+                }
             }
-            _ladderElements.Add(p, element);
-            LadderCanvas.Children.Add(element);
+            if (flag)
+            {
+                IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
+                if (_ladderElements.Keys.Contains(p))
+                {
+                    oldele = _ladderElements[p];
+                    _ladderElements.Remove(p);
+                    LadderCanvas.Children.Remove(oldele);
+                }
+                _ladderElements.Add(p, element);
+                LadderCanvas.Children.Add(element);
+            }
+            return oldele;
         }
-
+        public VerticalLineViewModel ReplaceVerticalLine(VerticalLineViewModel vline)
+        {
+            IntPoint p = new IntPoint() { X = vline.X, Y = vline.Y };
+            if (!_ladderVerticalLines.ContainsKey(p))
+            {
+                _ladderVerticalLines.Add(p, vline);
+                LadderCanvas.Children.Add(vline);
+                return null;
+            }
+            return vline;
+        }
         public void RemoveElement(IntPoint pos)
         {
             if (_ladderElements.ContainsKey(pos))
             {
                 LadderCanvas.Children.Remove(_ladderElements[pos]);
-                _ladderElements.Remove(pos);            
+                _ladderElements.Remove(pos);
             }
         }
-
         public void RemoveElement(int x, int y)
         {
             RemoveElement(new IntPoint() { X = x, Y = y });
         }
-
+        public void RemoveElement(BaseViewModel element)
+        {
+            if (_ladderElements.ContainsValue(element))
+            {
+                RemoveElement(element.X, element.Y);
+            }
+        }
         public void RemoveVerticalLine(IntPoint pos)
         {
             if (_ladderVerticalLines.ContainsKey(pos))
@@ -166,196 +370,18 @@ namespace SamSoarII.AppMain.Project
                 _ladderVerticalLines.Remove(pos);
             }
         }
-
         public void RemoveVerticalLine(int x, int y)
         {
             RemoveVerticalLine(new IntPoint() { X = x, Y = y });
         }
-
-        public void AddVerticalLine(VerticalLineViewModel verticalLine)
+        public void RemoveVerticalLine(VerticalLineViewModel vline)
         {
-            IntPoint p = new IntPoint() { X = verticalLine.X, Y = verticalLine.Y };
-            if (!_ladderVerticalLines.ContainsKey(p))
+            if (_ladderVerticalLines.ContainsValue(vline))
             {
-                _ladderVerticalLines.Add(p, verticalLine);
-                LadderCanvas.Children.Add(verticalLine);
+                RemoveVerticalLine(vline.X, vline.Y);
             }
         }
-
-        public void RemoveAllElements()
-        {
-            _ladderElements.Clear();
-        }
-
-        public void RemoveAllVerticalLines()
-        {
-            _ladderVerticalLines.Clear();
-        }
-
-        public void RemoveAll()
-        {
-            RemoveAllElements();
-            RemoveAllVerticalLines();
-        }
-
-        private void AddNewRowBefore(int rowNumber)
-        {
-            RowCount += 1;
-            var modifyKeyValuePairForElement = new List<KeyValuePair<IntPoint, BaseViewModel>>();
-            var modifyKeyValuePairForVline = new List<KeyValuePair<IntPoint, VerticalLineViewModel>>();
-            // step 1: 收集所有需要改变Y坐标的元素
-            foreach (var pb in _ladderElements)
-            {
-                if (pb.Value.Y >= rowNumber)
-                {
-                    modifyKeyValuePairForElement.Add(pb);
-                }
-            }
-            foreach (var pv in _ladderVerticalLines)
-            {
-                if (pv.Value.Y >= rowNumber)
-                {
-                    modifyKeyValuePairForVline.Add(pv);
-                }
-            }
-            // step 2: 删除元素
-            foreach (var pb in modifyKeyValuePairForElement)
-            {
-                _ladderElements.Remove(pb.Key);
-            }
-            foreach (var pv in modifyKeyValuePairForVline)
-            {
-                _ladderVerticalLines.Remove(pv.Key);
-            }
-            // step 3: 重新加入
-            foreach (var pb in modifyKeyValuePairForElement)
-            {
-                pb.Value.Y += 1;
-                _ladderElements.Add(new IntPoint() { X = pb.Key.X, Y = pb.Key.Y + 1 }, pb.Value);
-            }
-            foreach (var pv in modifyKeyValuePairForVline)
-            {
-                pv.Value.Y += 1;
-                _ladderVerticalLines.Add(new IntPoint() { X = pv.Key.X, Y = pv.Key.Y + 1 }, pv.Value);
-            }
-        }
-
-        private void AddNewRowAfter(int rowNumber)
-        {
-            RowCount += 1;
-            var modifyKeyValuePairForElement = new List<KeyValuePair<IntPoint, BaseViewModel>>();
-            var modifyKeyValuePairForVline = new List<KeyValuePair<IntPoint, VerticalLineViewModel>>();
-            // step 1: 收集所有需要改变Y坐标的元素
-            foreach (var pb in _ladderElements)
-            {
-                if (pb.Value.Y > rowNumber)
-                {
-                    modifyKeyValuePairForElement.Add(pb);
-                }
-            }
-            foreach (var pv in _ladderVerticalLines)
-            {
-                if (pv.Value.Y > rowNumber)
-                {
-                    modifyKeyValuePairForVline.Add(pv);
-                }
-            }
-            // step 2: 删除元素
-            foreach (var pb in modifyKeyValuePairForElement)
-            {
-                _ladderElements.Remove(pb.Key);
-            }
-            foreach (var pv in modifyKeyValuePairForVline)
-            {
-                _ladderVerticalLines.Remove(pv.Key);
-            }
-            // step 3: 重新加入
-            foreach (var pb in modifyKeyValuePairForElement)
-            {
-                pb.Value.Y += 1;
-                _ladderElements.Add(new IntPoint() { X = pb.Key.X, Y = pb.Key.Y + 1 }, pb.Value);
-            }
-            foreach (var pv in modifyKeyValuePairForVline)
-            {
-                pv.Value.Y += 1;
-                _ladderVerticalLines.Add(new IntPoint() { X = pv.Key.X, Y = pv.Key.Y + 1 }, pv.Value);
-            }
-        }
-
-        private void DeleteRow(int rowNumber)
-        {
-            // step 1: 收集需要删除的元素
-            var deleteKeyValuePairForElement = new List<KeyValuePair<IntPoint, BaseViewModel>>();
-            var deleteKeyValuePairForVline = new List<KeyValuePair<IntPoint, VerticalLineViewModel>>();
-            
-            foreach (var pb in _ladderElements.Where(e => e.Key.Y == rowNumber))
-            {
-                deleteKeyValuePairForElement.Add(pb);
-            }
-            foreach (var pv in _ladderVerticalLines.Where(e => e.Key.Y == rowNumber))
-            {
-                deleteKeyValuePairForVline.Add(pv);
-            }
-            // step 2: 删除
-            foreach (var pb in deleteKeyValuePairForElement)
-            {
-                _ladderElements.Remove(pb.Key);
-                LadderCanvas.Children.Remove(pb.Value);
-            }
-            foreach (var pv in deleteKeyValuePairForVline)
-            {
-                _ladderVerticalLines.Remove(pv.Key);
-                LadderCanvas.Children.Remove(pv.Value);
-            }
-
-            // step 3: 收集所有需要改变Y坐标的元素
-            var modifyKeyValuePairForElement = new List<KeyValuePair<IntPoint, BaseViewModel>>();
-            var modifyKeyValuePairForVline = new List<KeyValuePair<IntPoint, VerticalLineViewModel>>();
-        
-            foreach (var pb in _ladderElements)
-            {
-                if (pb.Value.Y > rowNumber)
-                {
-                    modifyKeyValuePairForElement.Add(pb);
-                }
-            }
-            foreach (var pv in _ladderVerticalLines)
-            {
-                if (pv.Value.Y > rowNumber)
-                {
-                    modifyKeyValuePairForVline.Add(pv);
-                }
-            }   
-            
-            // step 4: 删除
-            foreach (var pb in modifyKeyValuePairForElement)
-            {
-                _ladderElements.Remove(pb.Key);
-            }
-            foreach (var pv in modifyKeyValuePairForVline)
-            {
-                _ladderVerticalLines.Remove(pv.Key);
-            }
-            // step 5: 重新加入
-            foreach (var pb in modifyKeyValuePairForElement)
-            {
-                pb.Value.Y -= 1;
-                _ladderElements.Add(new IntPoint() { X = pb.Key.X, Y = pb.Key.Y - 1 }, pb.Value);
-            }
-            foreach (var pv in modifyKeyValuePairForVline)
-            {
-                pv.Value.Y -= 1;
-                _ladderVerticalLines.Add(new IntPoint() { X = pv.Key.X, Y = pv.Key.Y - 1 }, pv.Value);
-            }
-            // step 6: 放置选择框
-            RowCount -= 1;
-
-        }
-
-        public void AppendNewRow()
-        {
-            RowCount += 1;
-        }
+        #endregion
 
         #region Compile relative
         public void ClearSearchedFlag()
@@ -387,15 +413,17 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
         public string GenerateCode()
         {
             PreCompile();
             var graph = ConvertToGraph();
             graph.Convert();
             var tree = graph.ConvertToTree();
-            tree.TreeName = "network1";
+            tree.TreeName = string.Format("network_{0}", NetworkNumber);
             return tree.GenerateCode();
         }
+
         private List<BaseViewModel> SearchFrom(BaseViewModel viewmodel)
         {
             if (viewmodel.IsSearched)
@@ -480,6 +508,11 @@ namespace SamSoarII.AppMain.Project
             return _ladderVerticalLines.Values.Any(l => { return (l.X == p.X) && (l.Y == p.Y); });
         }
 
+
+        /// <summary>
+        /// 判断网络是否有错误
+        /// </summary>
+        /// <returns>True 无错，False 有错</returns>
         public bool Assert()
         {
             return _ladderElements.Values.All(x => x.Assert());
@@ -490,37 +523,38 @@ namespace SamSoarII.AppMain.Project
 
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)
         {
-            if(IsSelected())
+            if(IsSingleSelected())
             {
-                AddNewRowBefore(_ladderDiagram.SelectionRect.Y);
+                _ladderDiagram.NetworkAddRow(this, _ladderDiagram.SelectionRect.Y);
             }
         }
         private void OnAddNewRowAfter(object sender, RoutedEventArgs e)
         {
-            if (IsSelected())
+            if (IsSingleSelected())
             {
-                AddNewRowAfter(_ladderDiagram.SelectionRect.Y);
+                _ladderDiagram.NetworkAddRow(this, _ladderDiagram.SelectionRect.Y + 1);
+                //AddNewRowAfter(_ladderDiagram.SelectionRect.Y);
             }
         }
         private void OnDeleteRow(object sender, RoutedEventArgs e)
         {
-            if (IsSelected())
+            if (IsSingleSelected())
             {
-                DeleteRow(_ladderDiagram.SelectionRect.Y);
+                _ladderDiagram.NetworkRemoveRow(this, _ladderDiagram.SelectionRect.Y);
             }
         }
-
         private void OnAppendNewRow(object sender, RoutedEventArgs e)
         {
-            if(IsSelected())
+            if(IsSingleSelected())
             {
-                AppendNewRow();
+                //AppendRow();
+                _ladderDiagram.NetworkAddRow(this, RowCount);
             }
         }
 
         private void OnAppendNewNetwork(object sender, RoutedEventArgs e)
         {
-            if(IsSelected())
+            if(IsSingleSelected())
             {
                 _ladderDiagram.AppendNewNetwork();
             }
@@ -528,7 +562,7 @@ namespace SamSoarII.AppMain.Project
 
         private void OnAddNewNetworkBefore(object sender, RoutedEventArgs e)
         {
-            if(IsSelected())
+            if(IsSingleSelected())
             {
                 _ladderDiagram.AddNewNetworkBefore(this);
             }
@@ -536,18 +570,18 @@ namespace SamSoarII.AppMain.Project
 
         private void OnAddNewNetworkAfter(object sender, RoutedEventArgs e)
         {
-            if (IsSelected())
+            if (IsSingleSelected())
             {
                 _ladderDiagram.AddNewNetworkAfter(this);
             }
             
         }
 
-        private void OnDeleteNetwork(object sender, RoutedEventArgs e)
+        private void OnRemoveNetwork(object sender, RoutedEventArgs e)
         {
-            if(IsSelected())
+            if(IsSingleSelected())
             {
-                _ladderDiagram.DeleteNetwork(this);
+                _ladderDiagram.RemoveSingleNetworkCommand(this);
             }
         }
 
@@ -566,28 +600,77 @@ namespace SamSoarII.AppMain.Project
             editDialog.ShowDialog();
         }
 
-        //private void OnCommentAreaDoubleClick(object sender, MouseButtonEventArgs e)
-        //{
-        //    NetworkCommentTextBox.SelectAll();
-        //}
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var pos = e.GetPosition(LadderCanvas);
-            var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, 300);
-            if(!IsSelected())
+            if(e.LeftButton == MouseButtonState.Pressed)
             {
-                AcquireSelectRect();
+                var pos = e.GetPosition(LadderCanvas);
+                var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, 300);
+                if (!IsSingleSelected())
+                {
+                    AcquireSelectRect();
+                }
+                _ladderDiagram.SelectionRect.X = intPoint.X;
+                _ladderDiagram.SelectionRect.Y = intPoint.Y;
             }
-            _ladderDiagram.SelectionRect.X = intPoint.X;
-            _ladderDiagram.SelectionRect.Y = intPoint.Y;    
         }
+
+        #endregion
+
+        #region Command execute
+        private void ElementsCutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if((_ladderDiagram.SelectionStatus == SelectStatus.SingleSelected) || (_ladderDiagram.SelectionStatus == SelectStatus.MultiSelected))
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        #endregion
+
+        #region Command can execute
+        private void OnElementsCutCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region IComparable interface implemention
+        // 按照NetworkNumber大小排序
+        public int CompareTo(object obj)
+        {
+            var net = obj as LadderNetworkViewModel;
+            if (net != null)
+            {
+                if (net.NetworkNumber > this.NetworkNumber)
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (net.NetworkNumber == this.NetworkNumber)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+            }
+            return -1;
+        }
+
         #endregion
 
         /// <summary>
         /// Be selected only if the network acquire SelecRect
         /// </summary>
         /// <returns></returns>
-        public bool IsSelected()
+        public bool IsSingleSelected()
         {
             return LadderCanvas.Children.Contains(_ladderDiagram.SelectionRect);
         }
@@ -604,7 +687,7 @@ namespace SamSoarII.AppMain.Project
 
         public void ReleaseSelectRect()
         {
-            if(IsSelected())
+            if(IsSingleSelected())
             {
                 LadderCanvas.Children.Remove(_ladderDiagram.SelectionRect);
             }
@@ -615,6 +698,66 @@ namespace SamSoarII.AppMain.Project
             _ladderDiagram.AcquireSelectRect(this);
             LadderCanvas.Children.Add(_ladderDiagram.SelectionRect);     
         }
+
+        public void SelectAll()
+        {
+
+        }
+
+        public List<BaseViewModel> GetSelectedElements()
+        {
+            List<BaseViewModel> result = new List<BaseViewModel>();
+            int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
+            int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
+            int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
+            int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
+            IntPoint p = new IntPoint();
+            for (int i = yBegin; i <= yEnd; i++)
+            {
+                for(int j = xBegin; j <= xEnd; j++)
+                {
+                    p.X = j;
+                    p.Y = i;
+                    try
+                    {
+                        result.Add(_ladderElements[p]);
+                    }
+                    catch(KeyNotFoundException exception)
+                    {
+                    } 
+                }
+            }
+            return result;
+        }
+
+        public List<VerticalLineViewModel> GetSelectedVerticalLines()
+        {
+            List<VerticalLineViewModel> result = new List<VerticalLineViewModel>();
+            int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
+            int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
+            int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
+            int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
+            IntPoint p = new IntPoint();
+            //最后一行的竖线不算进选择区域内
+            for (int i = yBegin; i < yEnd; i++)
+            {
+                for (int j = xBegin; j <= xEnd; j++)
+                {
+                    p.X = j;
+                    p.Y = i;
+                    try
+                    {
+                        result.Add(_ladderVerticalLines[p]);
+                    }
+                    catch (KeyNotFoundException exception)
+                    {
+                    }
+                }
+            }
+            return result;
+        }
+
+
 
     }
 }

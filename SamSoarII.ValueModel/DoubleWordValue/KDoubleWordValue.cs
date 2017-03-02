@@ -8,6 +8,7 @@ namespace SamSoarII.ValueModel
 {
     public class KDoubleWordValue : DoubleWordValue
     {
+    
         private Int32 Value { get; set; }
         public KDoubleWordValue(Int32 value)
         {

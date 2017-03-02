@@ -19,7 +19,7 @@ using Microsoft.Win32;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
-using SamSoarII.InstructionViewModel;
+using SamSoarII.LadderInstViewModel;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -29,6 +29,7 @@ namespace SamSoarII.AppMain.UI
     public partial class MainWindow : Window
     {
         private InteractionFacade _interactionFacade;
+
 
         public MainWindow()
         {
@@ -44,6 +45,18 @@ namespace SamSoarII.AppMain.UI
         }
 
         #region Event handler
+        private void OnShowAboutDialog(object sender, RoutedEventArgs e)
+        {
+            //List<BaseViewModel> list = new List<BaseViewModel>();
+            //list.Add(new LDViewModel() { X = 0, Y = 0 });
+            //list.Add(new LDIViewModel() { X = 0, Y = 1 });
+            //list.Add(new LDIMViewModel() { X = 0, Y = 2 });
+            //list.Add(new LDIIMViewModel() { X = 0, Y = 3 });
+            //Clipboard.SetData("aaa", list);
+            LDViewModel viewmodel = new LDViewModel() { X = 0, Y = 1 };
+            Clipboard.SetData("aaa", viewmodel);
+        }
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if(!GlobalSetting.LoadLadderScaleSuccess())
@@ -85,14 +98,6 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
-
-
-
-        private void CutCommandExecute(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("cut");
-        }
-
         private void AddSubRoutine(string name)
         {
 
@@ -121,7 +126,7 @@ namespace SamSoarII.AppMain.UI
 
         private void CompileProject(object sender, RoutedEventArgs e)
         {
-
+            
 
         }
 
@@ -149,7 +154,6 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
         private void AddNewFuncBlockCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -186,7 +190,42 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private void CompileCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void ShowPropertyDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void ShowOptionDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void DownloadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+
+        }
+
         #endregion
+
 
         #region Command Execute
 
@@ -280,6 +319,29 @@ namespace SamSoarII.AppMain.UI
         {
 
         }
+
+        private void OnCompileCommandExecute(object sender, RoutedEventArgs e)
+        {
+            _interactionFacade.CompileProject();
+        }
+
+        private void OnDownloadCommandExecute(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
+        {
+            //ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.pro);
+           // dialog.ShowDialog();
+        }
+
+        private void OnShowOptionDialogCommandExecute(object sender, RoutedEventArgs e)
+        {
+            OptionDialog dialog = new OptionDialog();
+            dialog.ShowDialog();
+        }
+
         private void OnProcessExitExecute(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();

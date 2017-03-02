@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SamSoarII.InstructionModel;
+using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using System.Windows.Shapes;
 using System.Windows.Media;
@@ -10,7 +10,7 @@ using SamSoarII.UserInterface;
 using System.Windows;
 
 
-namespace SamSoarII.InstructionViewModel
+namespace SamSoarII.LadderInstViewModel
 {
     public class LDPViewModel : InputBaseViewModel
     {

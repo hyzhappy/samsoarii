@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SamSoarII.InstructionModel;
-namespace SamSoarII.InstructionViewModel
+using SamSoarII.LadderInstModel;
+namespace SamSoarII.LadderInstViewModel
 {
-    public class InstructionViewModelPrototype
+    public class LadderInstViewModelPrototype
     {
         private static Dictionary<int, BaseViewModel> _elementCatalog = new Dictionary<int, BaseViewModel>();
 
         private static Dictionary<string, BaseViewModel> _elementName = new Dictionary<string, BaseViewModel>();
 
-        static InstructionViewModelPrototype()
+        static LadderInstViewModelPrototype()
         {
             Initialize();
         }

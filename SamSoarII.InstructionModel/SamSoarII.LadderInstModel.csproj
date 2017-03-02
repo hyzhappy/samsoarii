@@ -7,8 +7,8 @@
     <ProjectGuid>{69569578-5258-4AEC-9E10-DDE7234D78FB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SamSoarII.InstructionModel</RootNamespace>
-    <AssemblyName>SamSoarII.InstructionModel</AssemblyName>
+    <RootNamespace>SamSoarII.LadderInstModel</RootNamespace>
+    <AssemblyName>SamSoarII.LadderInstModel</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

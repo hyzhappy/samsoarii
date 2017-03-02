@@ -7,33 +7,42 @@
              xmlns:app="clr-namespace:SamSoarII.AppMain"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="3000" 
-             LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}" 
-             MouseWheel="OnLadderDiagramMouseWheel"
+             PreviewMouseWheel="OnLadderDiagramMouseWheel"
              Background="Transparent"
              Focusable="True"
-             PreviewKeyDown="OnLadderDiagramKeyDown"
-             MouseDown="OnLadderDiagramMouseDown">
-    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Background="Transparent">
-        <StackPanel.Resources>
-            <ContextMenu x:Key="CommentAreaContextMenu">
-                <MenuItem Header="编辑程序注释" Click="OnEditComment"></MenuItem>
-            </ContextMenu>
-        </StackPanel.Resources>
-        <Line Stroke="Black" StrokeThickness="10" X1="0" X2="0" Y1="0" Y2="{Binding ElementName=LadderDiagramStackPanel, Path=ActualHeight}"></Line>
-        <StackPanel x:Name="LadderDiagramStackPanel">
-            <Border BorderThickness="2" BorderBrush="Red" Width="1500" Margin="20,0,0,20" HorizontalAlignment="Left" Background="AntiqueWhite">
-                <Expander MouseDoubleClick="OnCommentAreaMouseDoubleClick" ContextMenu="{StaticResource CommentAreaContextMenu}" Focusable="False">
-                    <Expander.Header>
-                        <TextBlock MinHeight="48" FontSize="36">程序注释</TextBlock>
-                    </Expander.Header>
-                    <TextBlock x:Name="LadderCommentTextBlock" FontSize="28" Text="{Binding LadderComment, Mode=TwoWay}"></TextBlock>
-                </Expander>
-            </Border>
-            <StackPanel x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left">
+             PreviewKeyDown="OnLadderDiagramKeyDown"   
+             MouseUp="OnLadderDiagramMouseUp"
+             MouseMove="OnLadderDiagramMouseMove">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static ApplicationCommands.Cut}"   CanExecute="CutCopyCommandCanExecute" Executed="OnCutCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Copy}"  CanExecute="CutCopyCommandCanExecute" Executed="OnCopyCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Paste}" CanExecute="PasteCommandCanExecute" Executed="OnPasteCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Undo}" CanExecute="UndoCommandCanExecute" Executed="OnUndoCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCommandCanExecute" Executed="OnRedoCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
+    </UserControl.CommandBindings>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Background="Transparent" LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}"  PreviewMouseDown="OnLadderDiagramMouseDown" >
+            <StackPanel.Resources>
+                <ContextMenu x:Key="CommentAreaContextMenu">
+                    <MenuItem Header="编辑程序注释" Click="OnEditComment"></MenuItem>
+                </ContextMenu>
+            </StackPanel.Resources>
+            <Line Stroke="Black" StrokeThickness="10" X1="0" X2="0" Y1="0" Y2="{Binding ElementName=LadderDiagramStackPanel, Path=ActualHeight}"></Line>
+            <StackPanel x:Name="LadderDiagramStackPanel">
+                <Border BorderThickness="2" BorderBrush="Red" Width="1500" Margin="20,0,0,20" HorizontalAlignment="Left" Background="AntiqueWhite">
+                    <Expander MouseDoubleClick="OnCommentAreaMouseDoubleClick" ContextMenu="{StaticResource CommentAreaContextMenu}" Focusable="False">
+                        <Expander.Header>
+                            <TextBlock MinHeight="48" FontSize="36">程序注释</TextBlock>
+                        </Expander.Header>
+                        <TextBlock x:Name="LadderCommentTextBlock" FontSize="28" Text="{Binding LadderComment, Mode=TwoWay}"></TextBlock>
+                    </Expander>
+                </Border>
+                <StackPanel x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left">
 
+                </StackPanel>
             </StackPanel>
+            <Line Stroke="Black" StrokeThickness="10" X1="0" X2="0" Y1="0" Y2="{Binding ElementName=LadderDiagramStackPanel, Path=ActualHeight}"></Line>
         </StackPanel>
-        <Line Stroke="Black" StrokeThickness="10" X1="0" X2="0" Y1="0" Y2="{Binding ElementName=LadderDiagramStackPanel, Path=ActualHeight}"></Line>
-    </StackPanel>
-
+    </ScrollViewer>
 </UserControl>

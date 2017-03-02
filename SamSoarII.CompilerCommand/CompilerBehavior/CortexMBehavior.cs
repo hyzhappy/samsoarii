@@ -26,6 +26,7 @@ namespace SamSoarII.CompilerCommand
             cmd1.StartInfo.Arguments = string.Format(@"{0} {1} -o {2}", _compiler.CC_FLAGS, ladderFile, ladderObjectFile);
             cmd1.StartInfo.RedirectStandardError = true;
             cmd1.Start();
+            Debug.WriteLine(cmd1.StartInfo.Arguments);
 
             // it's necessary catch stdout and stderr when compiling funcBlockFile 
 
@@ -37,9 +38,11 @@ namespace SamSoarII.CompilerCommand
             cmd2.StartInfo.Arguments = string.Format(@"{0} {1} -o {2}",_compiler.CXX_FLAGS, funcBlockFile, funcBlockObjectFile);
             cmd2.StartInfo.RedirectStandardError = true;
             cmd2.Start();
+            Debug.WriteLine(cmd2.StartInfo.Arguments);
             // start compile two file together
             cmd1.WaitForExit();
             cmd2.WaitForExit();
+
             if (cmd1.ExitCode != 0)
             {
                 Console.WriteLine("Error on compiling Ladder Diagram !");

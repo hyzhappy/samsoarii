@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SamSoarII.InstructionModel;
+using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
-namespace SamSoarII.InstructionModel
+namespace SamSoarII.LadderInstModel
 {
     public class LDIModel : BaseModel
     {
         public BitValue Value { get; set; }
+
         public LDIModel()
         {
             Value = BitValue.Null;
         }
+
         public LDIModel(BitValue value)
         {
             Value = value;
@@ -21,7 +23,7 @@ namespace SamSoarII.InstructionModel
 
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Format("plc_bool {0} = !{1};\r\n", ExportVaribleName, Value.GetBitValue());
         }
     }
 }

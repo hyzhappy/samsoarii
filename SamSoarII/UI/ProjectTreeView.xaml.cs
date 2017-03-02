@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SamSoarII.AppMain.Project;
-using SamSoarII.InstructionViewModel;
+using SamSoarII.LadderInstViewModel;
 using SamSoarII.UserInterface;
 namespace SamSoarII.AppMain.UI
 {
@@ -79,20 +79,18 @@ namespace SamSoarII.AppMain.UI
             if (this.TabItemOpened != null)
             {
                 var menuitem = sender as MenuItem;
-                if(menuitem != null)
+                if (menuitem != null)
                 {
                     var contextmenu = menuitem.Parent as ContextMenu;
-                    if(contextmenu != null)
+                    if (contextmenu != null)
                     {
                         var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
-                        if(treeviewitem != null)
+                        if (treeviewitem != null)
                         {
                             TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(treeviewitem.Header.ToString()));
                         }
                     }
-
                 }
-
             }
         }
 

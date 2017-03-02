@@ -1,24 +1,23 @@
-﻿using SamSoarII.AppMain.Project;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.AppMain.Command
+namespace SamSoarII.ValueModel
 {
-    public class LadderDeleteRowCommand : IUndoableCommand
+    public class ZWordValue : WordValue
     {
-        private LadderNetworkViewModel _targetNetwork;
-
-        public void Redo()
+        public string GetVaribleValue()
         {
             throw new NotImplementedException();
         }
 
-        public void Undo()
+        public override string GetWordValue()
         {
             throw new NotImplementedException();
         }
+
     }
+
 }

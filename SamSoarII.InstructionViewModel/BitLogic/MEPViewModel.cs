@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.ValueModel;
-using SamSoarII.InstructionModel;
+using SamSoarII.LadderInstModel;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using SamSoarII.UserInterface;
-namespace SamSoarII.InstructionViewModel
+namespace SamSoarII.LadderInstViewModel
 {
     public class MEPViewModel : SpecialBaseViewModel
     {
