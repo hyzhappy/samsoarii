@@ -37,6 +37,7 @@ namespace SamSoarII.LadderInstViewModel
         public abstract string InstructionName { get; }
         public abstract BaseModel Model { get; protected set; }
         public List<BaseViewModel> NextElemnets = new List<BaseViewModel>();
+        public List<BaseViewModel> SubElements = new List<BaseViewModel>();
         public bool IsSearched { get; set; }
         public virtual ElementType Type { get; }
         public static NullViewModel Null { get { return _nullViewModel; } }
