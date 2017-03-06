@@ -3,11 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
-        Title="指令输入" Height="90" Width="600" KeyDown="OnWindowKeyDown">
+        Title="指令输入" Height="90" Width="600" KeyDown="OnWindowKeyDown" Closing="OnClosing" ResizeMode="NoResize" LocationChanged="OnLocationChanged">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <WindowsFormsHost x:Name="windowsFormsHost" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Width="400" Height="24" Margin="0,10,0,10">
+            <wf:TextBox x:Name="InstructionInputTextBox" Multiline="False" KeyUp="OnKeyUp"></wf:TextBox>
+        </WindowsFormsHost>
+        <!--<TextBox x:Name="InstructionInputTextBox" MaxLines="1" Width="400" Height="24" FontSize="18" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="0,10,0,10"></TextBox>-->
+        <Button x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Grid.Row="0" Click="OnEnsureButtonClick">确定</Button>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -24,7 +37,7 @@
                         <RowDefinition Height="1*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBlock FontSize="16" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
-                        ADD -- 16位加法指令
+                        
                     </TextBlock>
                     <WrapPanel Grid.Row="1" Orientation="Horizontal">
                         <WrapPanel.Resources>
@@ -36,6 +49,7 @@
                     </WrapPanel>
                 </Grid>
             </Border>
-        </Popup>   
+        </Popup>-->
+        
     </Grid>
 </Window>

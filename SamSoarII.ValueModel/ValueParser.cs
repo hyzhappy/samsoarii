@@ -131,7 +131,7 @@ namespace SamSoarII.ValueModel
                     Match match2 = Regex.Match(valueString, "^V[0-9]+$", RegexOptions.IgnoreCase);
                     if (match2.Success)
                     {
-                        string s = match1.Value.ToUpper();
+                        string s = match2.Value.ToUpper();
                         uint index = uint.Parse(s.Substring(1));
                         return new VWordValue(index);
                     }
@@ -200,13 +200,13 @@ namespace SamSoarII.ValueModel
                     Match match2 = Regex.Match(valueString, "^K[-+][0-9]+$", RegexOptions.IgnoreCase);
                     if (match2.Success)
                     {
-                        var s = match1.Value.ToUpper();
+                        var s = match2.Value.ToUpper();
                         return new KDoubleWordValue(int.Parse(s.Substring(1)));
                     }
                     Match match3 = Regex.Match(valueString, "^H[0-9A-F]+$", RegexOptions.IgnoreCase);  
                     if(match3.Success)
                     {
-                        var s = match1.Value.ToUpper();
+                        var s = match3.Value.ToUpper();
                         return new HDoubleWordValue(int.Parse(s.Substring(1), System.Globalization.NumberStyles.HexNumber));
                     }    
                 }

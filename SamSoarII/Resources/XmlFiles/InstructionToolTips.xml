@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ToolTips>
+  <HLine CatalogID="100" />
+  <VLine CatalogID="101" />
+  <LD CatalogID="200" InstructionToolTip="常开触点          LD&#xA;&#x9;&#xA;&#x9;操作数     X/Y/M/T/C/S" />
+  <LDI CatalogID="201" InstructionToolTip="常闭触点          LDI&#xA;&#x9;&#xA;&#x9;操作数     X/Y/M/T/C/S" />
+  <LDIM CatalogID="202" InstructionToolTip="立即常开触点          LDIM&#xA;&#x9;&#xA;&#x9;操作数     X/Y/M/T/C/S" />
+  <LDIIM CatalogID="203" InstructionToolTip="立即常闭触点          LDIIM&#xA;&#x9;&#xA;&#x9;操作数     X/Y/M/T/C/S" />
+  <LDP CatalogID="204" InstructionToolTip="上升沿脉冲          LDP&#xA;&#x9;&#xA;&#x9;操作数     X/Y/M/T/C/S" />
+  <LDF CatalogID="205" InstructionToolTip="下降沿脉冲          LDF&#xA;&#x9;&#xA;&#x9;操作数     X/Y/M/T/C/S" />
+  <MEP CatalogID="206" InstructionToolTip="结果上升沿          MEP&#xA;&#x9;&#xA;&#x9;操作数     None" />
+  <MEF CatalogID="207" InstructionToolTip="结果下降沿          MEF&#xA;&#x9;&#xA;&#x9;操作数     None" />
+  <INV CatalogID="208" InstructionToolTip="结果取反          INV&#xA;&#x9;&#xA;&#x9;操作数     None" />
+  <OUT CatalogID="209" InstructionToolTip="普通输出线圈          OUT&#xA;&#x9;&#xA;&#x9;操作数     Y/M/S" />
+  <OUTIM CatalogID="210" InstructionToolTip="立即输出线圈          OUTIM&#xA;&#x9;&#xA;&#x9;操作数     Y/M/S" />
+  <SET CatalogID="211" InstructionToolTip="置位输出线圈          SET&#xA;&#x9;&#xA;&#x9;操作数一   Y/M/S/T/C    操作数二   K/H" />
+  <SETIM CatalogID="212" InstructionToolTip="立即置位输出线圈          SETIM&#xA;&#x9;&#xA;&#x9;操作数一   Y/M/S/T/C    操作数二   K/H" />
+  <RST CatalogID="213" InstructionToolTip="复位输出线圈          RST&#xA;&#x9;&#xA;&#x9;操作数一   Y/M/S/T/C    操作数二   K/H" />
+  <RSTIM CatalogID="214" InstructionToolTip="立即复位输出线圈          RSTIM&#xA;&#x9;&#xA;&#x9;操作数一   Y/M/S/T/C    操作数二   K/H" />
+  <ALT CatalogID="215" InstructionToolTip="连续交替输出          ALT&#xA;&#x9;&#xA;&#x9;操作数     Y/M/S" />
+  <ALTP CatalogID="216" InstructionToolTip="脉冲交替输出          ALTP&#xA;&#x9;&#xA;&#x9;操作数     Y/M/S" />
+  <LDWEQ CatalogID="300" InstructionToolTip="BIN16位数比较          LDWEQ&#xA;&#x9;操作数一     K/H/D/CV/TV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/CV/TV/AI/AO/V/Z" />
+  <LDWNE CatalogID="301" InstructionToolTip="BIN16位数比较          LDWNE&#xA;&#x9;操作数一     K/H/D/CV/TV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/CV/TV/AI/AO/V/Z" />
+  <LDWGE CatalogID="302" InstructionToolTip="BIN16位数比较          LDWGE&#xA;&#x9;操作数一     K/H/D/CV/TV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/CV/TV/AI/AO/V/Z" />
+  <LDWLE CatalogID="303" InstructionToolTip="BIN16位数比较          LDWLE&#xA;&#x9;操作数一     K/H/D/CV/TV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/CV/TV/AI/AO/V/Z" />
+  <LDWG CatalogID="304" InstructionToolTip="BIN16位数比较          LDWG&#xA;&#x9;操作数一     K/H/D/CV/TV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/CV/TV/AI/AO/V/Z" />
+  <LDWL CatalogID="305" InstructionToolTip="BIN16位数比较          LDWL&#xA;&#x9;操作数一     K/H/D/CV/TV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/CV/TV/AI/AO/V/Z" />
+  <LDDEQ CatalogID="306" InstructionToolTip="BIN32位数比较          LDDEQ&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32" />
+  <LDDNE CatalogID="307" InstructionToolTip="BIN32位数比较          LDDNE&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32" />
+  <LDDGE CatalogID="308" InstructionToolTip="BIN32位数比较          LDDGE&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32" />
+  <LDDLE CatalogID="309" InstructionToolTip="BIN32位数比较          LDDLE&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32" />
+  <LDDG CatalogID="310" InstructionToolTip="BIN32位数比较          LDDG&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32" />
+  <LDDL CatalogID="311" InstructionToolTip="BIN32位数比较          LDDL&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32" />
+  <LDFEQ CatalogID="312" InstructionToolTip="实数比较          LDFEQ&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32" />
+  <LDFNE CatalogID="313" InstructionToolTip="实数比较          LDFNE&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32" />
+  <LDFGE CatalogID="314" InstructionToolTip="实数比较          LDFGE&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32" />
+  <LDFLE CatalogID="315" InstructionToolTip="实数比较          LDFLE&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32" />
+  <LDFG CatalogID="316" InstructionToolTip="实数比较          LDFG&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32" />
+  <LDFL CatalogID="317" InstructionToolTip="实数比较          LDFL&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32" />
+  <WTOD CatalogID="400" InstructionToolTip="BIN16位数→BIN32位数          WTOD&#xA;&#x9;操作数一     D/K/H/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D" />
+  <DTOW CatalogID="401" InstructionToolTip="BIN32位数→BIN16位数          DTOW&#xA;&#x9;操作数一     D/K/H&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z" />
+  <DTOF CatalogID="402" InstructionToolTip="BIN32位数→32位浮点数          DTOF&#xA;&#x9;操作数一     D/K/H&#xA;&#x9;操作数二     D" />
+  <BIN CatalogID="403" InstructionToolTip="BCD码→BIN16位数          BIN&#xA;&#x9;操作数一     D/K/H/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z" />
+  <BCD CatalogID="404" InstructionToolTip="BIN16位数→BCD码          BCD&#xA;&#x9;操作数一     D/K/H/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z" />
+  <ROUND CatalogID="405" InstructionToolTip="(取整)32位浮点数→BIN32位数          ROUND&#xA;&#x9;操作数一     D/K&#xA;&#x9;操作数二     D" />
+  <TRUNC CatalogID="406" InstructionToolTip="(截位)32位浮点数→BIN32位数          TRUNC&#xA;&#x9;操作数一     D/K&#xA;&#x9;操作数二     D" />
+  <INVW CatalogID="500" InstructionToolTip="BIN16位数取反得到BIN16位数          INVW&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z" />
+  <INVD CatalogID="501" InstructionToolTip="BIN32位数取反得到BIN32位数          INVD&#xA;&#x9;操作数一     K/H/D&#xA;&#x9;操作数二     D" />
+  <ANDW CatalogID="502" InstructionToolTip="BIN16位数相与得到BIN16位数          ANDW&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <ANDD CatalogID="503" InstructionToolTip="BIN32位数相与得到BIN32位数          ANDD&#xA;&#x9;操作数一     K/H/D&#xA;&#x9;操作数二     K/H/D&#xA;&#x9;操作数三     D" />
+  <ORW CatalogID="504" InstructionToolTip="BIN16位数相或得到BIN16位数          ORW&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <ORD CatalogID="505" InstructionToolTip="BIN32位数相或得到BIN32位数          ORD&#xA;&#x9;操作数一     K/H/D&#xA;&#x9;操作数二     K/H/D&#xA;&#x9;操作数三     D" />
+  <XORW CatalogID="506" InstructionToolTip="BIN16位数异或得到BIN16位数          XORW&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <XORD CatalogID="507" InstructionToolTip="BIN32位数异或得到BIN32位数          XORD&#xA;&#x9;操作数一     K/H/D&#xA;&#x9;操作数二     K/H/D&#xA;&#x9;操作数三     D" />
+  <MOVD CatalogID="601" InstructionToolTip="移动BIN32位数到新寄存器          MOVD&#xA;&#x9;操作数一     D/K/H/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <MOV CatalogID="600" InstructionToolTip="移动BIN16位数到新寄存器          MOV&#xA;&#x9;操作数一     D/TV/CV/K/H/AI/AO/V/Z&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z" />
+  <MOVF CatalogID="602" InstructionToolTip="移动32位浮点数到新寄存器          MOVF&#xA;&#x9;操作数一     D/K/AI/AO/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <MVBLK CatalogID="603" InstructionToolTip="成块移动BIN16位数          MVBLK&#xA;&#x9;操作数一     D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z&#xA;&#x9;操作数三     D/K/H" />
+  <MVDBLK CatalogID="604" InstructionToolTip="成块移动BIN32位数          MVDBLK&#xA;&#x9;操作数一     D&#xA;&#x9;操作数二     D&#xA;&#x9;操作数三     D/K/H" />
+  <ADDF CatalogID="700" InstructionToolTip="32位浮点数相加          ADDF&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <SUBF CatalogID="701" InstructionToolTip="32位浮点数相减          SUBF&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <MULF CatalogID="702" InstructionToolTip="32位浮点数相乘          MULF&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <DIVF CatalogID="703" InstructionToolTip="32位浮点数相除          DIVF&#xA;&#x9;操作数一     K/D/CV32&#xA;&#x9;操作数二     K/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <SQRT CatalogID="704" InstructionToolTip="对32位浮点数取平方根          SQRT&#xA;&#x9;操作数一     D/K/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <SIN CatalogID="705" InstructionToolTip="正弦计算(输入单位为角度)          SIN&#xA;&#x9;操作数一     D/K/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <COS CatalogID="706" InstructionToolTip="余弦计算(输入单位为角度)          COS&#xA;&#x9;操作数一     D/K/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <TAN CatalogID="707" InstructionToolTip="正切计算(输入单位为角度)          TAN&#xA;&#x9;操作数一     D/K/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <LN CatalogID="708" InstructionToolTip="自然对数计算          LN&#xA;&#x9;操作数一     D/K/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <EXP CatalogID="709" InstructionToolTip="自然指数计算          EXP&#xA;&#x9;操作数一     D/K/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <ADD CatalogID="800" InstructionToolTip="BIN16位数相加得到BIN16位数          ADD&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <ADDD CatalogID="801" InstructionToolTip="BIN32位数相加得到BIN32位数        ADDD&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <SUB CatalogID="802" InstructionToolTip="BIN16位数相减得到BIN16位数          SUB&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <SUBD CatalogID="803" InstructionToolTip="BIN32位数相减得到BIN32位数          SUBD&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <MUL CatalogID="804" InstructionToolTip="BIN16位数相乘得到BIN32位数          MUL&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D" />
+  <MULW CatalogID="805" InstructionToolTip="BIN16位数相乘得到BIN16位数          MULW&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <MULD CatalogID="806" InstructionToolTip="BIN32位数相乘得到BIN32位数          MULD&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <DIV CatalogID="807" InstructionToolTip="BIN16位数相除得到BIN32位数          DIV&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D" />
+  <DIVW CatalogID="808" InstructionToolTip="BIN16位数相除得到BIN16位数          DIVW&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <DIVD CatalogID="809" InstructionToolTip="BIN32位数相除得到BIN32位数          DIVD&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     K/H/D/CV32&#xA;&#x9;操作数三     D/CV32" />
+  <INC CatalogID="810" InstructionToolTip="BIN16位数加1得到BIN16位数          INC&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z" />
+  <INCD CatalogID="811" InstructionToolTip="BIN32位数加1得到BIN32位数          INCD&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <DEC CatalogID="812" InstructionToolTip="BIN16位数减1得到BIN16位数          DEC&#xA;&#x9;操作数一     K/H/D/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/TV/CV/AO/V/Z" />
+  <DECD CatalogID="813" InstructionToolTip="BIN32位数减1得到BIN32位数          DECD&#xA;&#x9;操作数一     K/H/D/CV32&#xA;&#x9;操作数二     D/CV32" />
+  <FOR CatalogID="1100" InstructionToolTip="FOR循环          FOR&#xA;&#x9;操作数     D/K/H" />
+  <NEXT CatalogID="1101" InstructionToolTip="与FOR指令一起使用          NEXT&#xA;&#x9;操作数     None" />
+  <JMP CatalogID="1102" InstructionToolTip="程序内部跳转          JMP&#xA;&#x9;操作数     K/H" />
+  <LBL CatalogID="1103" InstructionToolTip="程序内部标签          LBL&#xA;&#x9;操作数     K/H" />
+  <CALL CatalogID="1104" InstructionToolTip="调用子程序          CALL&#xA;&#x9;操作数     子程序ID" />
+  <SHL CatalogID="1200" InstructionToolTip="BIN16位数左移          SHL&#xA;&#x9;操作数一     D/K/H/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <SHLD CatalogID="1201" InstructionToolTip="BIN32位数左移          SHLD&#xA;&#x9;操作数一     D/K/H&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D" />
+  <SHR CatalogID="1202" InstructionToolTip="BIN16位数右移          SHR&#xA;&#x9;操作数一     D/K/H/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <SHRD CatalogID="1203" InstructionToolTip="BIN32位数右移          SHRD&#xA;&#x9;操作数一     D/K/H&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D" />
+  <ROL CatalogID="1206" InstructionToolTip="BIN16位数循环左移          ROL&#xA;&#x9;操作数一     D/K/H/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <ROLD CatalogID="1207" InstructionToolTip="BIN32位数循环左移          ROLD&#xA;&#x9;操作数一     D/K/H&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D" />
+  <ROR CatalogID="1208" InstructionToolTip="BIN16位数循环右移          ROR&#xA;&#x9;操作数一     D/K/H/TV/CV/AI/AO/V/Z&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D/TV/CV/AO/V/Z" />
+  <RORD CatalogID="1209" InstructionToolTip="BIN32位数循环右移          RORD&#xA;&#x9;操作数一     D/K/H&#xA;&#x9;操作数二     D/K/H&#xA;&#x9;操作数三     D" />
+  <TRD CatalogID="1400" InstructionToolTip="读实时时钟          TRD&#xA;&#x9;操作数     D" />
+  <TWR CatalogID="1401" InstructionToolTip="写实时时钟          TWR&#xA;&#x9;操作数     D" />
+</ToolTips>

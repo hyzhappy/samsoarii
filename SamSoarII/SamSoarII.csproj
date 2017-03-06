@@ -93,6 +93,7 @@
     <Compile Include="Global\GlobalSetting.cs" />
     <Compile Include="InteractionFacade.cs" />
     <Compile Include="LadderCommand\NetworkRowCountChangeCommand.cs" />
+    <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\FuncBlockViewModel.xaml.cs">
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
@@ -149,6 +150,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Project\CustomHighlighting.xshd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -161,6 +163,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
+      <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
+      <Name>ICSharpCode.AvalonEdit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj">
       <Project>{69569578-5258-4aec-9e10-dde7234d78fb}</Project>
       <Name>SamSoarII.LadderInstModel</Name>
@@ -266,7 +272,9 @@
     <Resource Include="Resources\Image\InstructionToolbar\HLine.ico" />
     <Resource Include="Resources\Image\InstructionToolbar\VLine.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\XmlFiles\InstructionToolTips.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
