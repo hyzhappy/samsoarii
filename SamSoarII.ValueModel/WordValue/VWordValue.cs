@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
 {
-    public class VWordValue : WordValue
+    public class VWordValue : WordValue, IVariableValueModel
     {
         public VWordValue(uint index)
         {
             Index = index;
+        }
+
+        public string GetVariableValue()
+        {
+            return GetWordValue();
         }
 
         public override string GetWordValue()

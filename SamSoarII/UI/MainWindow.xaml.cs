@@ -98,16 +98,6 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
-        private void AddSubRoutine(string name)
-        {
-
-        }
-
-        private void AddFuncBlock(string name)
-        {
-
-        }
-
         private void CreateMainRoutine(string name)
         {
 
@@ -122,12 +112,6 @@ namespace SamSoarII.AppMain.UI
         private bool OpenProject(string fullFileName)
         {
             return _interactionFacade.LoadProject(fullFileName);
-        }
-
-        private void CompileProject(object sender, RoutedEventArgs e)
-        {
-            
-
         }
 
 

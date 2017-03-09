@@ -8,9 +8,24 @@ namespace SamSoarII.ValueModel
 {
     public class ValueParser
     {
-        
+        public static IValueModel ParseValue(string valueString, LadderValueType type)
+        {
+            switch(type)
+            {
+                case LadderValueType.Bool:
+                    return ParseBitValue(valueString);
+                case LadderValueType.DoubleWord:
+                    return ParseDoubleWordValue(valueString);
+                case LadderValueType.Float:
+                    return ParseFloatValue(valueString);
+                case LadderValueType.Word:
+                    return ParseWordValue(valueString);
+                default:
+                    throw new ValueParseException();
+            }
+        }
         /// <summary>
-        /// Match (X|Y|M|C|T|S)[0-9]+(V[0-9]+)?
+        /// Match (X|Y|M|C|T|S)[0-9]+((V|Z)[0-9]+)?
         /// </summary>
         /// <param name="valueString"></param>
         /// <returns></returns>
@@ -55,7 +70,7 @@ namespace SamSoarII.ValueModel
             }
         }
         /// <summary>
-        /// Match (D|CV|TV|AI|AO)[0-9]+(V[0-9]+)?
+        /// Match (D|CV|TV|AI|AO)[0-9]+((V|Z)[0-9]+)?
         ///       (K[0-9]+)|(H[0-9A-F]+)
         ///       (V[0-9]+)
         /// </summary>
@@ -158,7 +173,7 @@ namespace SamSoarII.ValueModel
             }
         }
         /// <summary>
-        /// Match (D|CV)[0-9]+(V[0-9]+)?
+        /// Match (D|CV)[0-9]+((V|Z)[0-9]+)?
         ///       (K[0-9]+)|(H[0-9A-F]+)
         /// </summary>
         /// <returns></returns>
@@ -214,7 +229,7 @@ namespace SamSoarII.ValueModel
             }
         }
         /// <summary>
-        /// Match D[0-9]+(V[0-9]+)？
+        /// Match D[0-9]+((V|Z)[0-9]+)？
         ///       K[0-9]+(.[0-9]+)?
         /// </summary>
         /// <returns></returns>

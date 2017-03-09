@@ -41,9 +41,11 @@ namespace SamSoarII.AppMain
         public void CreateProject(string name, string fullFileName)
         {         
             _projectModel = new ProjectModel(name);
-            _projectTreeView = new ProjectTreeView();
+            _projectTreeView = new ProjectTreeView(name);
             _projectTreeView.LoadProject(_projectModel);
             _projectTreeView.TabItemOpened += OnTabOpened;
+            _projectTreeView.RoutineRemoved += OnRemoveRoutine;
+            _projectTreeView.RoutineRenamed += OnRenameRoutine;
             _mainTabControl.SelectionChanged += OnTabItemChanged;
             _mainTabControl.ShowItem(_projectModel.MainRoutine);        
             _mainWindow.SetProjectTreeView(_projectTreeView);
@@ -67,12 +69,15 @@ namespace SamSoarII.AppMain
             if (_projectModel != null)
             {
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
-                _projectTreeView = new ProjectTreeView();
+                _projectTreeView = new ProjectTreeView(_projectModel.ProjectName);
                 _projectTreeView.LoadProject(_projectModel);
                 _projectTreeView.TabItemOpened += OnTabOpened;
+                _projectTreeView.RoutineRemoved += OnRemoveRoutine;
+                _projectTreeView.RoutineRenamed += OnRenameRoutine;
                 _mainTabControl.Reset();
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
-                _mainTabControl.ShowItem(_projectModel.MainRoutine);               
+                _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                _mainTabControl.UpdateVariableCollection();        
                 _mainWindow.SetProjectTreeView(_projectTreeView);
                 ProjectFullFileName = fullFileName;
                 _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
@@ -135,25 +140,34 @@ namespace SamSoarII.AppMain
         #region Event handler
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
-            var ldmodel = _projectModel.GetRoutineByName(e.TabName);
-            if (ldmodel != null)
+            switch(e.Type)
             {
-                _mainTabControl.ShowItem(ldmodel);
-                return;
+                case TabType.Program:
+                    var ldmodel = _projectModel.GetRoutineByName(e.TabName);
+                    if (ldmodel != null)
+                    {
+                        _mainTabControl.ShowItem(ldmodel);
+                        return;
+                    }
+                    var fbmodel = _projectModel.GetFuncBlockByName(e.TabName);
+                    if (fbmodel != null)
+                    {
+                        _mainTabControl.ShowItem(fbmodel);
+                        return;
+                    }
+                    break;
+                case TabType.VariableList:
+                    _mainTabControl.ShowVariableList();
+                    break;
             }
-            var fbmodel = _projectModel.GetFuncBlockByName(e.TabName);
-            if(fbmodel != null)
-            {
-                _mainTabControl.ShowItem(fbmodel);
-                return;
-            }
+
         }
 
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
         {
             if(_mainTabControl.CurrentTab != null)
             {
-                CurrentLadder = _projectModel.GetRoutineByName(_mainTabControl.CurrentTab.Header.ToString());
+                CurrentLadder = _mainTabControl.CurrentTab.Content as LadderDiagramViewModel;     
             }
             else
             {
@@ -173,6 +187,54 @@ namespace SamSoarII.AppMain
                 }
             }
         }
+       
+        private void OnRenameRoutine(object sender, RoutineRenamedEventArgs e)
+        {
+            if(_projectModel.ContainFuncBlock(e.NewName) || _projectModel.ContainSubRoutine(e.NewName))
+            {
+                MessageBox.Show("已存在同名子程序");
+                var treeitem = sender as TreeViewItem;
+                if (treeitem != null)
+                {
+                    treeitem.Header = e.OldName;
+                }
+                return;
+            }
+            else
+            {
+                var ldmodel = _projectModel.GetRoutineByName(e.OldName);
+                if(ldmodel != null)
+                {
+                    ldmodel.LadderName = e.NewName;
+                }
+                else
+                {
+                    var fbmodel = _projectModel.GetFuncBlockByName(e.OldName);
+                    if(fbmodel != null)
+                    {
+                        fbmodel.FuncBlockName = e.NewName;
+                    }
+                }
+                var tab = _mainTabControl.GetTabByName(e.OldName);
+                if (tab != null)
+                {
+                    tab.Header = e.NewName;
+                }
+                var treeitem = sender as TreeViewItem;
+                if (treeitem != null)
+                {
+                    treeitem.Header = e.NewName;
+                }
+            }
+        }
+
+        private void OnRemoveRoutine(object sender, RoutineChangedEventArgs e)
+        {
+            _projectModel.RemoveRoutineByName(e.RoutineName);
+            _projectTreeView.RemoveRoutine(e.RoutineName);
+            _mainTabControl.CloseItem(e.RoutineName);
+        }
+        
         #endregion
 
     }

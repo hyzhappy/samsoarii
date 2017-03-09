@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
 {
-    public class NullWordValue : WordValue
+    public class NullWordValue : WordValue, IVariableValueModel
     {
         public override string GetWordValue()
         {
@@ -15,11 +15,16 @@ namespace SamSoarII.ValueModel
 
         public override string ToString()
         {
-            return "";
+            return string.Empty;
         }
         public override string ToShowString()
         {
             return "???";
+        }
+
+        public string GetVariableValue()
+        {
+            return string.Empty;
         }
     }
 }

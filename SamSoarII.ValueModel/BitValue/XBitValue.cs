@@ -8,23 +8,28 @@ namespace SamSoarII.ValueModel
 {
     public class XBitValue : BitValue
     {
-        public XBitValue(uint index, VWordValue offset = null)
+        public XBitValue(uint index)
+        {
+            Index = index;
+            Offset = WordValue.Null as NullWordValue;
+        }
+        public XBitValue(uint index, IVariableValueModel offset)
         {
             Index = index;
             Offset = offset;
+            
         }
 
         public override string GetBitValue()
         {
-            return string.Format("XBit[{0}{1}]", Index, string.Empty);
-            //if(Offset == null)
-            //{
-            //    return string.Format("*((uint32_t*)0x{0})", Convert.ToString(AddressManager.XBaseAddress + Index * 4, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((uint32_t*)0x{0} + {1})", Convert.ToString(AddressManager.XBaseAddress + Index * 4, 16), Offset.GetWordValue());
-            //}
+            if (Offset != WordValue.Null)
+            {
+                return string.Format("XBit[{0} + {1}]", Index, Offset.GetVariableValue());
+            }
+            else
+            {
+                return string.Format("XBit[{0}]", Index);
+            }
         }
 
         public override string GetInputImBitAddress()
@@ -38,14 +43,7 @@ namespace SamSoarII.ValueModel
         }
         public override string ToString()
         {
-            if (Offset == null)
-            {
-                return string.Format("X{0}", Index);
-            }
-            else
-            {
-                return string.Format("X{0}{1}", Index, Offset.ToString());
-            }
+            return string.Format("X{0}{1}", Index, Offset);
         }
     }
 }

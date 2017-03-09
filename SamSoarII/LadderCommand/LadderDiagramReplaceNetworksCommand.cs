@@ -38,6 +38,14 @@ namespace SamSoarII.AppMain.LadderCommand
             _removedNetworks = new SortedSet<LadderNetworkViewModel>();
             _index = index;
         }
+
+        public LadderDiagramReplaceNetworksCommand(LadderDiagramViewModel ld, LadderNetworkViewModel replacedNet, IEnumerable<LadderNetworkViewModel> removedNets, int index)
+        {
+            _ladderDiagram = ld;
+            _replacedNetworks = new SortedSet<LadderNetworkViewModel>() { replacedNet };
+            _removedNetworks = new SortedSet<LadderNetworkViewModel>(removedNets);
+            _index = index;
+        }
         public void Execute()
         {
             _ladderDiagram.AddNetwork(_replacedNetworks, _index);

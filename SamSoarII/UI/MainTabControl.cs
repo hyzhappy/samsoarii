@@ -12,6 +12,8 @@ namespace SamSoarII.AppMain.UI
 {
     public class MainTabControl : TabControl
     {
+        private TabItem _variableListTabItem;
+
         public TabItem CurrentTab
         {
             get
@@ -23,6 +25,9 @@ namespace SamSoarII.AppMain.UI
         public MainTabControl()
         {
             Focusable = true;
+            _variableListTabItem = new TabItem();
+            _variableListTabItem.Header = "元件变量表";
+            _variableListTabItem.Content = new VariableListControl();
         }
 
         public void Reset()
@@ -102,26 +107,21 @@ namespace SamSoarII.AppMain.UI
                 Items.Remove(tabItem);
             }
         }
-
-        private void RemoveTabItem(TabItem tabItem)
+        
+        public void ShowVariableList()
         {
-            //tabItem.MouseDown -= TabItem_MouseDown;
-            //tabItem.ClearElements();
-            //Items.Remove(tabItem);
+            if(!Items.Contains(_variableListTabItem))
+            {
+                Items.Add(_variableListTabItem);
+            }
+            this.SelectedItem = _variableListTabItem;
         }
 
-        #region Event handler
-        private void TabItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        public void UpdateVariableCollection()
         {
-            // close when middle mouse button down
-            //if (e.MiddleButton == System.Windows.Input.MouseButtonState.Pressed)
-            //{
-            //    var tabItem = sender as TabItem;
-            //    CloseItem(tabItem);
-            //}
+            var varlistcontrol = _variableListTabItem.Content as VariableListControl;
+            varlistcontrol.UpdateVariableCollection();
         }
-        #endregion
-
 
     }
 }

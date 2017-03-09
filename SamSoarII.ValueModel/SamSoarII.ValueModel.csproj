@@ -59,10 +59,13 @@
     <Compile Include="FloatValue\KFloatValue.cs" />
     <Compile Include="FloatValue\NullFloatValue.cs" />
     <Compile Include="InputImException.cs" />
+    <Compile Include="IValueModel.cs" />
+    <Compile Include="IVariableValueModel.cs" />
     <Compile Include="OutputImException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueParseException.cs" />
     <Compile Include="ValueParser.cs" />
+    <Compile Include="LadderValueType.cs" />
     <Compile Include="WordValue\AIWordValue.cs" />
     <Compile Include="WordValue\AOWordValue.cs" />
     <Compile Include="WordValue\CVWordValue.cs" />

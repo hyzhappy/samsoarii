@@ -97,7 +97,7 @@
                 <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="生成(_B)">
-                <MenuItem Header="编译" Click="CompileProject" Command="{x:Static app:GlobalCommand.CompileCommand}"></MenuItem>
+                <MenuItem Header="编译" Command="{x:Static app:GlobalCommand.CompileCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工具(_T)">
                 <MenuItem Header="上载"></MenuItem>
@@ -127,6 +127,12 @@
                 </Button>
             </ToolBar>
             <ToolBar>
+                <Button ToolTip="撤销" Command="{x:Static ApplicationCommands.Undo}">
+                    <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button ToolTip="重做" Command="{x:Static ApplicationCommands.Redo}">
+                    <Image Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
                 <Button ToolTip="剪切" Command="ApplicationCommands.Cut">
                     <Image Source="/Resources/Image/Cut.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>

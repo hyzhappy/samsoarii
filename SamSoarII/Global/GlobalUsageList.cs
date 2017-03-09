@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.AppMain
+namespace SamSoarII.AppMain.Global
 {
-    public delegate void ShowTabItemEventHandler(object sender, ShowTabItemEventArgs e);
+    public static class GlobalUsageList
+    {
+    }
 }

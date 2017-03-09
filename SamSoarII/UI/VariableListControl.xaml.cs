@@ -1,0 +1,139 @@
+﻿using SamSoarII.ValueModel;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace SamSoarII.AppMain.UI
+{
+    /// <summary>
+    /// VariableListControl.xaml 的交互逻辑
+    /// </summary>
+    public partial class VariableListControl : UserControl, INotifyPropertyChanged
+    {
+        public IEnumerable<LadderVariable> VariableCollection
+        {
+            get
+            {
+                int filterIndex = FilterCombobox.SelectedIndex - 1;
+                var temp = GlobalVariableList.VariableCollection.Where(x => (x.Name.StartsWith(SearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase) || x.ValueModel.ToString().StartsWith(SearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase)));
+                if (filterIndex >= 0)
+                {
+                    LadderValueType type = (LadderValueType)filterIndex;
+                    return temp.Where(y => y.ValueType == type);
+                }
+                return temp;
+            }
+        }
+
+
+        public VariableListControl()
+        {
+            InitializeComponent();
+            this.DataContext = this;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #region Event handler
+
+        private void OnSearchVariable(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void OnAddVariable(object sender, RoutedEventArgs e)
+        {
+            EditVariableDialog dialog = new EditVariableDialog();
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialog.EnsureButtonClick += (sender1, e1) =>
+            {
+                try
+                {
+                    dialog.Commit();
+                    UpdateVariableCollection();
+                    dialog.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            };
+            dialog.ShowDialog();
+        }
+
+        private void OnDeleteVariable(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        private void OnDeleteRows(object sender, ExecutedRoutedEventArgs e)
+        {
+            foreach(LadderVariable row in VariableGrid.SelectedItems)
+            {
+                GlobalVariableList.RemoveVariable(row);
+            }
+            UpdateVariableCollection();
+        }
+
+        private void DelectRowsCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if(VariableGrid?.SelectedItems != null)
+            {
+                e.CanExecute = VariableGrid.SelectedItems.Count > 0;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void OnRowMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            var variable = row.Item as LadderVariable;
+            EditVariableDialog dialog = new EditVariableDialog(variable);
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialog.EnsureButtonClick += (sender1, e1) =>
+            {
+                try
+                {
+                    dialog.Commit();
+                    UpdateVariableCollection();
+                    dialog.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            };
+            dialog.ShowDialog();
+        }
+
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateVariableCollection();
+        }
+
+        private void OnFilterTypeChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateVariableCollection();
+        }
+
+        public void UpdateVariableCollection()
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("VariableCollection"));
+        }
+    }
+}

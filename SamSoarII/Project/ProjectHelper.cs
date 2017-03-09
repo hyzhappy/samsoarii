@@ -1,4 +1,5 @@
 ﻿using SamSoarII.LadderInstViewModel;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -173,10 +174,29 @@ namespace SamSoarII.AppMain.Project
         public static FuncBlockViewModel CreateFuncBlockByXElement(XElement xEle)
         {
             FuncBlockViewModel result = new FuncBlockViewModel(xEle.Attribute("Name").Value);
-            result.Code = xEle.Element("Code").Value;
+            result.Code = xEle.Value;
             return result;
         }
 
+        public static XElement CreateXElementByLadderVariable(LadderVariable variable)
+        {
+            XElement result = new XElement("Variable");
+            result.SetAttributeValue("Name", variable.Name);
+            result.SetElementValue("Value", variable.ValueModel.ToString());
+            result.SetElementValue("ValueType", (int)variable.ValueType);
+            result.SetElementValue("Comment", variable.Comment);
+            return result;
+        }
+
+        public static LadderVariable CreateLadderVariableByXElement(XElement xEle)
+        {
+            string name = xEle.Attribute("Name").Value;
+            string valueString = xEle.Element("Value").Value;
+            LadderValueType valuetype = (LadderValueType)(int.Parse(xEle.Element("ValueType").Value));
+            string comment = xEle.Element("Comment").Value;
+            IValueModel valueModel = ValueParser.ParseValue(valueString, valuetype);
+            return new LadderVariable(name, valueModel, comment);
+        }
 
         public static ProjectModel LoadProject(string filepath)
         {
@@ -189,6 +209,28 @@ namespace SamSoarII.AppMain.Project
             {
                 return null;
             }
+        }
+
+        public static void LoadGlobalVariableListByXElement(XElement xEle)
+        {
+            if(xEle != null)
+            {
+                foreach (XElement xele in xEle.Elements("Variable"))
+                {
+                    var variable = CreateLadderVariableByXElement(xele);
+                    GlobalVariableList.AddVariable(variable);
+                }
+            }
+        }
+
+        public static XElement CreateXElementByGlobalVariableList()
+        {
+            XElement xEle = new XElement("GlobalVariableList");
+            foreach(var variable in GlobalVariableList.VariableCollection)
+            {
+                xEle.Add(CreateXElementByLadderVariable(variable));
+            }
+            return xEle;
         }
     }
 }

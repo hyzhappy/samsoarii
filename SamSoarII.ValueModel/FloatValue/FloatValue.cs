@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
 {
-    public abstract class FloatValue
+    public abstract class FloatValue : IValueModel
     {
+        public LadderValueType Type
+        {
+            get
+            {
+                return LadderValueType.Float;
+            }
+        }
         public uint Index { get; set; }
         public VWordValue Offset { get; set; }
         public abstract string GetFloatValue();
@@ -15,6 +22,12 @@ namespace SamSoarII.ValueModel
         {
             return ToString();
         }
+
+        public string GetValue()
+        {
+            return GetFloatValue();
+        }
+
         public static FloatValue Null { get { return _nullFloatValue; } }
         private static NullFloatValue _nullFloatValue = new NullFloatValue();
     }

@@ -136,7 +136,7 @@ namespace SamSoarII.AppMain.Project
                 Focus();
                 Keyboard.Focus(this);
             };
-            AppendNewNetwork();
+            AppendNetwork(new LadderNetworkViewModel(this, 0));
         }
 
         #region Network manipulation
@@ -735,8 +735,7 @@ namespace SamSoarII.AppMain.Project
                 catch(Exception exception)
                 {
                     
-                }
-                
+                }         
                 dialog.Close();
             };
             dialog.ShowDialog();
@@ -834,7 +833,7 @@ namespace SamSoarII.AppMain.Project
             }
             if(e.Key == Key.Delete)
             {
-                if(_selectRectOwner != null)
+                if(SelectionStatus == SelectStatus.SingleSelected)
                 {
                     var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
                     if (model != null)
@@ -847,9 +846,34 @@ namespace SamSoarII.AppMain.Project
                 }
                 else
                 {
-                    // TODO 多选删除
-                    if(_selectStartNetwork != null)
+                    // 多选删除
+                    if(SelectionStatus == SelectStatus.MultiSelected)
                     {
+                        if(CrossNetState == CrossNetworkState.NoCross)
+                        {
+                            // 图元多选
+                            _commandManager.Execute(new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines()));
+                        }
+                        else
+                        {
+                            // 网络多选
+                            if(_selectStartNetwork != null)
+                            {
+                                _selectAllNetworks.Add(_selectStartNetwork);
+                            }
+                            int index = _selectAllNetworks.ElementAt(0).NetworkNumber;
+                            if(_selectAllNetworks.Count == _ladderNetworks.Count)
+                            {
+                                //全选, 补回一个网络
+                                _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(this, new LadderNetworkViewModel(this, 0), _selectAllNetworks, index));
+                            }
+                            else
+                            {
+                                _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(this, _selectAllNetworks, index));
+                            }
+                           
+                        }
+
                     }
                 }
             }
@@ -1026,7 +1050,6 @@ namespace SamSoarII.AppMain.Project
                         {
                             if(!copy)
                             {
-                                //TODO 命令化
                                 removednets.Add(net);
                             }
                             xEle.Add(ProjectHelper.CreateXElemnetByLadderNetwork(net));
@@ -1034,8 +1057,16 @@ namespace SamSoarII.AppMain.Project
                         if(!copy)
                         {
                             int index = removednets[0].NetworkNumber;
-                            var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, removednets, index);
-                            _commandManager.Execute(command);
+                            if(removednets.Count == _ladderNetworks.Count)
+                            {
+                                //全选，补回一个空网络
+                                _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(this, new LadderNetworkViewModel(this, 0), removednets, index));
+                            }
+                            else
+                            {
+                                _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(this, removednets, index));
+                            }
+
                         }
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;

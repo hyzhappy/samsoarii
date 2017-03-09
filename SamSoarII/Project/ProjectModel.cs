@@ -118,20 +118,22 @@ namespace SamSoarII.AppMain.Project
             FuncBlocks.Add(fbmodel);
         }
 
-        public void RemoveSubRoutineByName(string name)
+
+        public void RemoveRoutineByName(string name)
         {
+
             var routine = GetRoutineByName(name);
             if(routine != null)
             {
                 SubRoutines.Remove(routine);
             }
-        }
-        public void RemoveFuncBlockByName(string name)
-        {
-            var fbmodel = GetFuncBlockByName(name);
-            if (fbmodel != null)
+            else
             {
-                FuncBlocks.Remove(fbmodel);
+                var funcblock = GetFuncBlockByName(name);
+                if(funcblock != null)
+                {
+                    FuncBlocks.Remove(funcblock);
+                }
             }
         }
 
@@ -149,6 +151,7 @@ namespace SamSoarII.AppMain.Project
             xdoc.Add(rootNode);
             var settingNode = new XElement("Setting");
             rootNode.Add(settingNode);
+            rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             foreach(var ldmodel in SubRoutines)
             {
@@ -171,6 +174,8 @@ namespace SamSoarII.AppMain.Project
                 // Open Ladder Model
                 SubRoutines.Clear();
                 FuncBlocks.Clear();
+                GlobalVariableList.Clear();
+                ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));
                 var ldnodes = rootNode.Elements("Ladder");
                 foreach (XElement ldnode in ldnodes)
                 {

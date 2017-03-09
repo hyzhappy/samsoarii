@@ -16,26 +16,11 @@ namespace SamSoarII.ValueModel
 
         public override string GetWordValue()
         {
-            //if(Offset == null)
-            //{
-            //    return string.Format("*((int16_t*)0x{0})", Convert.ToString(AddressManager.TVBaseAddress + Index, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((int16_t*)0x{0} + {1})", Convert.ToString(AddressManager.TVBaseAddress + Index, 16), Offset.GetWordValue());
-            //}
-            return string.Empty;
+            throw new NotImplementedException();
         }
         public override string ToString()
         {
-            if (Offset == null)
-            {
-                return string.Format("TV{0}", Index);
-            }
-            else
-            {
-                return string.Format("TV{0}{1}", Index, Offset.ToString());
-            }
+            return string.Format("TV{0}{1}", Index, Offset);
         }
     }
 }

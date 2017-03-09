@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
              mc:Ignorable="d" 
-             d:DesignHeight="1000" d:DesignWidth="300">
+             d:DesignHeight="1000" d:DesignWidth="300" Focusable="True">
     <UserControl.Resources>
         <ContextMenu x:Key="ContextMenu1">
             <MenuItem Header="添加主程序"></MenuItem>
@@ -19,19 +19,19 @@
         </ContextMenu>
         <ContextMenu x:Key="MainRoutineContextMenu">
             <MenuItem Header="打开" Click="OnOpenRoutine"></MenuItem>
-            <MenuItem Header="重命名"></MenuItem>
+            <MenuItem Header="重命名" Click="OnRenameRoutine"></MenuItem>
         </ContextMenu>
         <ContextMenu x:Key="SubRoutineContextMenu">
             <MenuItem Header="打开" Click="OnOpenRoutine"></MenuItem>
-            <MenuItem Header="重命名"></MenuItem>
-            <MenuItem Header="删除"></MenuItem>
+            <MenuItem Header="重命名" Click="OnRenameRoutine"></MenuItem>
+            <MenuItem Header="删除" Click="OnRemoveRoutine"></MenuItem>
         </ContextMenu>
     </UserControl.Resources>
     <Grid>
-        <TreeView FontSize="14">
-            <TreeViewItem x:Name="ProjectRootItem" Header="空工程" IsExpanded="True">
+        <TreeView x:Name="ProjectTree" FontSize="14">
+            <TreeViewItem x:Name="ProjectRootItem" IsExpanded="True">
                 <TreeViewItem Header="程序" IsExpanded="True">
-                    <TreeViewItem x:Name="MainRoutineRootTreeViewItem" ContextMenu="{StaticResource ContextMenu1}" IsExpanded="True">
+                    <TreeViewItem x:Name="MainRoutineRootTreeViewItem" ContextMenu="{x:Null}" IsExpanded="True">
                         <TreeViewItem.Resources>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
@@ -75,9 +75,9 @@
                     </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem Header="元件浏览" IsExpanded="True">
-                    <TreeViewItem Header="元件注释表"/>
-                    <TreeViewItem Header="元件使用表"/>
-                    <TreeViewItem Header="元件变量表"/>
+                    <TreeViewItem Header="元件注释表" MouseDoubleClick="OnShowCommentList"/>
+                    <TreeViewItem Header="元件使用表" MouseDoubleClick="OnShowUsageList"/>
+                    <TreeViewItem Header="元件变量表" MouseDoubleClick="OnShowVariableList"/>
                 </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem x:Name="InstructionRootItem" Header="指令" IsExpanded="True">

@@ -8,34 +8,25 @@ namespace SamSoarII.ValueModel
 {
     public class CV32DoubleWordValue : DoubleWordValue
     {
-        public CV32DoubleWordValue(uint index, VWordValue offset = null)
+        public CV32DoubleWordValue(uint index)
+        {
+            Index = index;
+            Offset = WordValue.Null as NullWordValue;
+        }
+
+        public CV32DoubleWordValue(uint index, IVariableValueModel offset)
         {
             Index = index;
             Offset = offset;
         }
         public override string GetDoubleWordValue()
         {
-            //if (Offset == null)
-            //{
-            //    return string.Format("*((int32_t*)0x{0})", Convert.ToString(AddressManager.CV32BaseAddress + Index, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((in32_t*)0x{0} + {1})", Convert.ToString(AddressManager.CV32BaseAddress + Index, 16), Offset.GetWordValue());
-            //}
             return string.Empty;
         }
 
         public override string ToString()
         {
-            if (Offset == null)
-            {
-                return string.Format("CV{0}D{1}", Index, Index + 1);
-            }
-            else
-            {
-                return string.Format("CV{0}D{1}{2}", Index, Index + 1, Offset.ToString());
-            }
+            return string.Format("CV{0}{1}", Index, Offset); 
         }
     }
 }

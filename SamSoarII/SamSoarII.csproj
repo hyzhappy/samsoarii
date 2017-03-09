@@ -79,6 +79,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\LadderValueToCommentConverter.cs" />
+    <Compile Include="Converter\LadderValueToStringConverter.cs" />
+    <Compile Include="Event\RoutineChangedEventArgs.cs" />
+    <Compile Include="Event\RoutineRenamedEventArgs.cs" />
+    <Compile Include="Event\TabType.cs" />
+    <Compile Include="Functionality\LadderVariable.cs" />
+    <Compile Include="Global\GlobalUsageList.cs" />
+    <Compile Include="Global\GlobalValueComment.cs" />
+    <Compile Include="Global\GlobalVariableList.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
@@ -88,7 +97,7 @@
     <Compile Include="LadderCommand\NetworkRemoveRowCommand.cs" />
     <Compile Include="LadderCommand\NetworkRemoveElementsCommand.cs" />
     <Compile Include="Event\ShowTabItemEventArgs.cs" />
-    <Compile Include="Event\ShowTabItemEventHandler.cs" />
+    <Compile Include="Event\EventHandler.cs" />
     <Compile Include="Global\GlobalCommand.cs" />
     <Compile Include="Global\GlobalSetting.cs" />
     <Compile Include="InteractionFacade.cs" />
@@ -109,6 +118,9 @@
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\ValueCommentManager.cs" />
+    <Compile Include="UI\EditVariableDialog.xaml.cs">
+      <DependentUpon>EditVariableDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\InstrucionTreeItem.cs" />
     <Compile Include="UI\MainTabControl.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
@@ -129,6 +141,10 @@
     <Compile Include="UI\ProjectPropertyDialog.xaml.cs">
       <DependentUpon>ProjectPropertyDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\VariableListControl.xaml.cs">
+      <DependentUpon>VariableListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Validation\VariableValidationRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -219,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\EditVariableDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -240,6 +260,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ProjectPropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\VariableListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -266,7 +290,13 @@
     <Resource Include="Resources\Image\InstructionToolbar\HLine.ico" />
     <Resource Include="Resources\Image\InstructionToolbar\VLine.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Image\Redo.png" />
+    <Resource Include="Resources\Image\Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Search.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
