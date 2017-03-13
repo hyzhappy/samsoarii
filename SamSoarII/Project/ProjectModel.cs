@@ -10,6 +10,9 @@ using SamSoarII.LadderInstViewModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Xml.Linq;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+
 namespace SamSoarII.AppMain.Project
 {
     public class ProjectModel
@@ -17,11 +20,11 @@ namespace SamSoarII.AppMain.Project
 
         public string ProjectName { get; set; }
 
-        public List<LadderDiagramViewModel> SubRoutines = new List<LadderDiagramViewModel>();
+        public LadderDiagramViewModel MainRoutine { get; set; }
 
-        public LadderDiagramViewModel MainRoutine;
+        public ObservableCollection<LadderDiagramViewModel> SubRoutines { get; set; } = new ObservableCollection<LadderDiagramViewModel>();
 
-        public List<FuncBlockViewModel> FuncBlocks = new List<FuncBlockViewModel>();
+        public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
 
         public PLCDevice.Device CurrentDevice { get; set; }
         public ProjectModel()
@@ -51,12 +54,12 @@ namespace SamSoarII.AppMain.Project
         {
             if(MainRoutine != null)
             {
-                if(MainRoutine.LadderName == name)
+                if(MainRoutine.ProgramName == name)
                     return MainRoutine;
             }
             foreach(var routine in SubRoutines)
             {
-                if(routine.LadderName == name)
+                if(routine.ProgramName == name)
                 {
                     return routine;
                 }
@@ -72,34 +75,18 @@ namespace SamSoarII.AppMain.Project
         {
             foreach(var funcb in FuncBlocks)
             {
-                if(funcb.FuncBlockName == name)
+                if(funcb.ProgramName == name)
                 {
                     return funcb;
                 }
             }
             return null;
         }
-        /// <summary>
-        /// Find if any Routine has the name Name
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <returns></returns>
-        public bool ContainSubRoutine(string name)
+
+
+        public bool ContainProgram(string name)
         {
-            if(MainRoutine.LadderName == name)
-            {
-                return true;
-            }
-            return SubRoutines.Any(x => { return x.LadderName == name; });
-        }
-        /// <summary>
-        /// Find if any FunctionBlock has the name Name
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <returns></returns>
-        public bool ContainFuncBlock(string name)
-        {
-            return FuncBlocks.Any(x => { return x.Name == name; });
+            return SubRoutines.Any(x => x.ProgramName == name) | FuncBlocks.Any(x => x.ProgramName == name);
         }
         /// <summary>
         /// Add SubRoutine 
@@ -118,23 +105,14 @@ namespace SamSoarII.AppMain.Project
             FuncBlocks.Add(fbmodel);
         }
 
-
-        public void RemoveRoutineByName(string name)
+        public void RemoveSubRoutine(LadderDiagramViewModel ldmodel)
         {
+            SubRoutines.Remove(ldmodel);
+        }
 
-            var routine = GetRoutineByName(name);
-            if(routine != null)
-            {
-                SubRoutines.Remove(routine);
-            }
-            else
-            {
-                var funcblock = GetFuncBlockByName(name);
-                if(funcblock != null)
-                {
-                    FuncBlocks.Remove(funcblock);
-                }
-            }
+        public void RemoveFuncBlock(FuncBlockViewModel fbmodel)
+        {
+            FuncBlocks.Remove(fbmodel);
         }
 
         /// <summary>
@@ -166,8 +144,8 @@ namespace SamSoarII.AppMain.Project
    
         public bool Open(string filepath)
         {
-            try
-            {
+            //try
+            //{
                 XDocument xmldoc = XDocument.Load(filepath);
                 XElement rootNode = xmldoc.Element("Project");
                 ProjectName = rootNode.Attribute("Name").Value;
@@ -197,11 +175,11 @@ namespace SamSoarII.AppMain.Project
                     FuncBlocks.Add(fbmodel);
                 }
                 return true;
-            }
-            catch (Exception exception)
-            {
-                return false;
-            }
+            //}
+            //catch (Exception exception)
+            //{
+            //    return false;
+            //}
         }
 
         public void Compile()
@@ -231,12 +209,12 @@ namespace SamSoarII.AppMain.Project
             code += MainRoutine.GenerateDeclarationCode("RunLadder");
             foreach(var sub in SubRoutines)
             {
-                code += sub.GenerateDeclarationCode(sub.LadderName);
+                code += sub.GenerateDeclarationCode(sub.ProgramName);
             }
             code += MainRoutine.GenerateCode("RunLadder");
             foreach(var sub in SubRoutines)
             {
-                code += sub.GenerateCode(sub.LadderName);
+                code += sub.GenerateCode(sub.ProgramName);
             }
             return code;
         }
@@ -244,7 +222,6 @@ namespace SamSoarII.AppMain.Project
         private string GenerateCodeFromFuncBlock()
         {
             string result = string.Empty;
-
             return result;
         }
 

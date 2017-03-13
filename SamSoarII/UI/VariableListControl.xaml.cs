@@ -14,13 +14,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using SamSoarII.AppMain.Project;
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
     /// VariableListControl.xaml 的交互逻辑
     /// </summary>
-    public partial class VariableListControl : UserControl, INotifyPropertyChanged
+    public partial class VariableListControl : UserControl, INotifyPropertyChanged, ITabItem
     {
         public IEnumerable<LadderVariable> VariableCollection
         {
@@ -37,6 +37,18 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        public string TabHeader
+        {
+            get
+            {
+                return "元件变量表";
+            }
+
+            set
+            {
+
+            }
+        }
 
         public VariableListControl()
         {

@@ -15,13 +15,36 @@ using System.Windows.Shapes;
 using SamSoarII.AppMain.Project;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.UserInterface;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
     /// ProjectTreeView.xaml 的交互逻辑
     /// </summary>
-    public partial class ProjectTreeView : UserControl
+    public partial class ProjectTreeView : UserControl, INotifyPropertyChanged
     {
+
+        private ProjectModel _projectModel;
+        public ProjectModel Project
+        {
+            get { return _projectModel; }
+        }
+
+        private string _oldname;
+
+        private object _renamedItem;
+
+        private bool _isInEditMode;
+        public bool IsInEditMode
+        {
+            get { return _isInEditMode; }
+            set
+            {
+                _isInEditMode = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsInEditMode"));
+            }
+        }
 
         public event MouseButtonEventHandler InstructionTreeItemDoubleClick = delegate { }; 
 
@@ -29,94 +52,16 @@ namespace SamSoarII.AppMain.UI
 
         public event RoutineRenamedEventHandler RoutineRenamed = delegate { };
 
-        public event RoutineChangedEventHandler RoutineRemoved = delegate { };
-        public ProjectTreeView(string projectname)
+        public event RoutedEventHandler RoutineRemoved = delegate { };
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        public ProjectTreeView(ProjectModel project)
         {
             InitializeComponent();
-            ProjectRootItem.Header = string.Format("Project - {0}", projectname);
+            _projectModel = project;
+            this.DataContext = Project;
         }
-
-        public void Reset()
-        {
-            MainRoutineRootTreeViewItem.Items.Clear();
-            SubRoutineRootTreeViewItem.Items.Clear();
-            FuncBlockRootTreeViewItem.Items.Clear();
-        }
-
-        /// <summary>
-        /// Load ProjectModel, add it's MainRoutine, SubRoutines and FuncBlocks to TreeView
-        /// </summary>
-        /// <param name="project"></param>
-        public void LoadProject(ProjectModel project)
-        {
-            Reset();
-            TreeViewItem mainRoutineItem = new TreeViewItem();
-            mainRoutineItem.Header = project.MainRoutine.LadderName;
-            MainRoutineRootTreeViewItem.Items.Add(mainRoutineItem);
-            foreach(LadderDiagramViewModel ldmodel in project.SubRoutines)
-            {
-                AddSubRoutine(ldmodel.LadderName);
-            }
-            foreach(FuncBlockViewModel fbmodel in project.FuncBlocks)
-            {
-                AddFuncBlock(fbmodel.FuncBlockName);
-            }
-        }
-
-        public void AddSubRoutine(string name)
-        {
-            TreeViewItem item = new TreeViewItem();
-            item.Header = name;
-            SubRoutineRootTreeViewItem.Items.Add(item);
-        }
-
-        public void AddFuncBlock(string name)
-        {
-            TreeViewItem item = new TreeViewItem();
-            item.Header = name;
-            FuncBlockRootTreeViewItem.Items.Add(item);
-        }
-
-        public TreeViewItem GetSubRoutineTreeViewItemByName(string name)
-        {
-            foreach(TreeViewItem item in SubRoutineRootTreeViewItem.Items)
-            {
-                if(item.Header.ToString() == name)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
-        public TreeViewItem GetFuncBlockTreeViewItemByName(string name)
-        {
-            foreach (TreeViewItem item in FuncBlockRootTreeViewItem.Items)
-            {
-                if (item.Header.ToString() == name)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
-
-        public void RemoveRoutine(string name)
-        {
-            var item = GetSubRoutineTreeViewItemByName(name);
-            if(item != null)
-            {
-                SubRoutineRootTreeViewItem.Items.Remove(item);
-            }
-            else
-            {
-                item = GetFuncBlockTreeViewItemByName(name);
-                if(item != null)
-                {
-                    FuncBlockRootTreeViewItem.Items.Remove(item);
-                }
-            }
-        }
-
 
         #region Event handler
         // 从ContextMenu打开子程序处理事件，直接调用双击事件
@@ -131,17 +76,23 @@ namespace SamSoarII.AppMain.UI
                     var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
                     if (treeviewitem != null)
                     {
-                        TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(treeviewitem.Header.ToString(), TabType.Program));
+                        TabItemOpened.Invoke(treeviewitem.Header, new ShowTabItemEventArgs(TabType.Program));
                     }
                 }
             }         
         }
+
+        // 每次双击会触发两次这个事件 ???
         private void OnRoutineTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var treeItem = sender as TreeViewItem;
             if(treeItem != null)
             {
-                TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(treeItem.Header.ToString(), TabType.Program));
+                IProgram prog = treeItem.Header as IProgram;
+                if(prog != null)
+                {
+                    TabItemOpened.Invoke(prog, new ShowTabItemEventArgs(TabType.Program));
+                }           
             }        
         }
         void OnInstructionTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
@@ -156,14 +107,29 @@ namespace SamSoarII.AppMain.UI
 
         }
 
+        private void OnShowCommentList(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void OnShowUsageList(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void OnShowUsageList(object sender, RoutedEventArgs e)
         {
 
         }
 
         private void OnShowVariableList(object sender, MouseButtonEventArgs e)
         {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs("变量表", TabType.VariableList));
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
+        }
+
+        private void OnShowVariableList(object sender, RoutedEventArgs e)
+        {
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
         }
 
         private void OnRenameRoutine(object sender, RoutedEventArgs e)
@@ -177,39 +143,13 @@ namespace SamSoarII.AppMain.UI
                     var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
                     if (treeviewitem != null)
                     {
-                        var oldname = treeviewitem.Header.ToString();
-                        var textBox = new TextBox();                 
-                        treeviewitem.Header = textBox;
-                        textBox.Loaded += (sender3, e3) =>
+                        var prog = treeviewitem.Header as IProgram;
+                        if(prog != null)
                         {
-                            textBox.Text = oldname;
-                            textBox.SelectAll();
-                            textBox.Focusable = true;
-                            textBox.Focus();
-                            Keyboard.Focus(textBox);
-                            textBox.TextAlignment = TextAlignment.Right;
-                            textBox.MinWidth = 100;
-                        };
-                        textBox.KeyDown += (sender2, e2) =>
-                        {
-                            if (e2.Key == Key.Enter)
-                            {
-                                textBox.Focusable = false;
-                                //textBox.RaiseEvent(new RoutedEventArgs(TextBox.LostFocusEvent));       
-                            }
-                        };
-                        textBox.LostFocus += (sender1, e1) =>
-                        {
-                            var newname = textBox.Text;
-                            if (oldname != newname)
-                            {
-                                RoutineRenamed.Invoke(treeviewitem, new RoutineRenamedEventArgs(oldname, newname));
-                            }
-                            else
-                            {
-                                treeviewitem.Header = newname;
-                            }
-                        };
+                            _oldname = prog.ProgramName;
+                            IsInEditMode = true;
+                        }
+
                     }
                 }
             }
@@ -225,19 +165,54 @@ namespace SamSoarII.AppMain.UI
                     var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
                     if (treeviewitem != null)
                     {
-                        var name = treeviewitem.Header.ToString();
                         var result = MessageBox.Show("删除后不能恢复，是否确定", "重要", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                         if(result == MessageBoxResult.Yes)
                         {
-                            RoutineRemoved.Invoke(treeviewitem, new RoutineChangedEventArgs(treeviewitem.Header.ToString()));
+                            RoutineRemoved.Invoke(treeviewitem.Header, new RoutedEventArgs());
                         }
                     }
                 }
             }
         }
 
+        private void OnEditTextBoxVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if(textBox.IsVisible)
+            {
+                textBox.Focus();
+                textBox.SelectAll();
+            }
+        }
+
+        private void OnEditTextBoxKeyDown(object sender, KeyEventArgs e )
+        {
+            if(e.Key == Key.Enter)
+            {
+                IsInEditMode = false;
+            }
+            if(e.Key == Key.Escape)
+            {
+                var textBox = sender as TextBox;
+                textBox.Text = _oldname;
+                IsInEditMode = false;
+            }
+        }
+
+        private void OnEditTextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+            IsInEditMode = false;
+            var textBox = sender as TextBox;
+            TreeViewItem item = FindTreeItem(sender as TextBox);
+            RoutineRenamed.Invoke(item.Header, new RoutineRenamedEventArgs(textBox.Text));
+        }
+
+        static TreeViewItem FindTreeItem(DependencyObject source)
+        {
+            while (source != null && !(source is TreeViewItem))
+                source = VisualTreeHelper.GetParent(source);
+            return source as TreeViewItem;
+        }
         #endregion
-
-
     }
 }

@@ -167,6 +167,29 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Counter\" />
+    <Folder Include="Interrupt\" />
+    <Folder Include="Pulse\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj">
+      <Project>{69569578-5258-4aec-9e10-dde7234d78fb}</Project>
+      <Name>SamSoarII.LadderInstModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.UserInterface\SamSoarII.UserInterface.csproj">
+      <Project>{76f2627d-b161-4e88-ae31-043dc7c8da61}</Project>
+      <Name>SamSoarII.UserInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
+      <Project>{aafb923a-b366-4d7d-ab40-81f7d71a1f30}</Project>
+      <Name>SamSoarII.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.ValueModel\SamSoarII.ValueModel.csproj">
+      <Project>{5357953a-adc8-40ee-a685-3165f1be99cc}</Project>
+      <Name>SamSoarII.ValueModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Page Include="HorizontalLineViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -191,29 +214,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Counter\" />
-    <Folder Include="Interrupt\" />
-    <Folder Include="Pulse\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj">
-      <Project>{69569578-5258-4aec-9e10-dde7234d78fb}</Project>
-      <Name>SamSoarII.LadderInstModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SamSoarII.UserInterface\SamSoarII.UserInterface.csproj">
-      <Project>{76f2627d-b161-4e88-ae31-043dc7c8da61}</Project>
-      <Name>SamSoarII.UserInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
-      <Project>{aafb923a-b366-4d7d-ab40-81f7d71a1f30}</Project>
-      <Name>SamSoarII.Utility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SamSoarII.ValueModel\SamSoarII.ValueModel.csproj">
-      <Project>{5357953a-adc8-40ee-a685-3165f1be99cc}</Project>
-      <Name>SamSoarII.ValueModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

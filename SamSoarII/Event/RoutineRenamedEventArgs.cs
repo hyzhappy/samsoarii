@@ -8,11 +8,10 @@ namespace SamSoarII.AppMain
 {
     public class RoutineRenamedEventArgs : EventArgs
     {
-        public string OldName { get; set; }
         public string NewName { get; set; }
-        public RoutineRenamedEventArgs(string oldname, string newname)
+
+        public RoutineRenamedEventArgs(string newname)
         {
-            OldName = oldname;
             NewName = newname;
         }
     }

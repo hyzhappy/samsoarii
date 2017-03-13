@@ -47,14 +47,7 @@ namespace SamSoarII.AppMain.UI
         #region Event handler
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            //List<BaseViewModel> list = new List<BaseViewModel>();
-            //list.Add(new LDViewModel() { X = 0, Y = 0 });
-            //list.Add(new LDIViewModel() { X = 0, Y = 1 });
-            //list.Add(new LDIMViewModel() { X = 0, Y = 2 });
-            //list.Add(new LDIIMViewModel() { X = 0, Y = 3 });
-            //Clipboard.SetData("aaa", list);
-            LDViewModel viewmodel = new LDViewModel() { X = 0, Y = 1 };
-            Clipboard.SetData("aaa", viewmodel);
+
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -75,11 +68,14 @@ namespace SamSoarII.AppMain.UI
                 TabItem tabitem = button.TemplatedParent as TabItem;
                 if(tabitem != null)
                 {
-                    _interactionFacade.CloseTabItem(tabitem);
+                    ITabItem tab = tabitem.Content as ITabItem;
+                    if (tab != null)
+                    {
+                        _interactionFacade.CloseTabItem(tab);
+                    }
                 }
             }
         }
-
         private void OnTabItemHeaderMouseDown(object sender, MouseButtonEventArgs e)
         {
             if(e.MiddleButton == MouseButtonState.Pressed)
@@ -90,7 +86,11 @@ namespace SamSoarII.AppMain.UI
                     TabItem tabitem = grid.TemplatedParent as TabItem;
                     if (tabitem != null)
                     {
-                        _interactionFacade.CloseTabItem(tabitem);
+                        ITabItem tab = tabitem.Content as ITabItem;
+                        if (tab != null)
+                        {
+                            _interactionFacade.CloseTabItem(tab);
+                        }
                     }
                 }
             }

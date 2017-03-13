@@ -11,7 +11,7 @@ namespace SamSoarII.ValueModel
         public YBitValue(uint index)
         {
             Index = index;
-            Offset = WordValue.Null as NullWordValue;
+            Offset = WordValue.Null as IVariableValueModel;
         }
         public YBitValue(uint index, IVariableValueModel offset)
         {

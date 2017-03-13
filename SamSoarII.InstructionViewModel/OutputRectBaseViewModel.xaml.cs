@@ -27,6 +27,64 @@ namespace SamSoarII.LadderInstViewModel
                 return ElementType.Output;
             }
         }
+
+        private int _x;
+        private int _y;
+        private bool _isCommentMode;
+        private bool _isMonitorMode;
+
+        public override int X
+        {
+            get
+            {
+                return _x;
+            }
+
+            set
+            {
+                _x = value;
+                Canvas.SetLeft(this, X * 300);
+            }
+        }
+
+        public override int Y
+        {
+            get
+            {
+                return _y;
+            }
+
+            set
+            {
+                _y = value;
+                Canvas.SetTop(this, Y * 300);
+            }
+        }
+
+        public override bool IsCommentMode
+        {
+            get
+            {
+                return _isCommentMode;
+            }
+            set
+            {
+                _isCommentMode = value;
+            }
+        }
+
+        public override bool IsMonitorMode
+        {
+            get
+            {
+                return _isMonitorMode;
+            }
+
+            set
+            {
+                _isMonitorMode = value;
+            }
+        }
         public OutputRectBaseViewModel()
         {
             InitializeComponent();

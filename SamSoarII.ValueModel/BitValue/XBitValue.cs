@@ -11,7 +11,7 @@ namespace SamSoarII.ValueModel
         public XBitValue(uint index)
         {
             Index = index;
-            Offset = WordValue.Null as NullWordValue;
+            Offset = WordValue.Null as IVariableValueModel;
         }
         public XBitValue(uint index, IVariableValueModel offset)
         {

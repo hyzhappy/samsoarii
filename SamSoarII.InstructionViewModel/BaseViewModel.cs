@@ -14,26 +14,32 @@ namespace SamSoarII.LadderInstViewModel
     /// </summary>
     public abstract class BaseViewModel : UserControl
     {
-        protected int _x;
-        protected int _y;
-        public virtual int X
-        {
-            get { return _x; }
-            set
-            {
-                _x = value;
-                Canvas.SetLeft(this, X * 300);
-            }
-        }
-        public virtual int Y
-        {
-            get { return _y; }
-            set
-            {
-                _y = value;
-                Canvas.SetTop(this, Y * 300);
-            }
-        }
+
+        public abstract int X { get; set; }
+        public abstract int Y { get; set; }
+        public abstract bool IsCommentMode { get; set; }
+        public abstract bool IsMonitorMode { get; set; }
+
+        //protected int _x;
+        //protected int _y;
+        //public virtual int X
+        //{
+        //    get { return _x; }
+        //    set
+        //    {
+        //        _x = value;
+        //        Canvas.SetLeft(this, X * 300);
+        //    }
+        //}
+        //public virtual int Y
+        //{
+        //    get { return _y; }
+        //    set
+        //    {
+        //        _y = value;
+        //        Canvas.SetTop(this, Y * 300);
+        //    }
+        //}
         public abstract string InstructionName { get; }
         public abstract BaseModel Model { get; protected set; }
         public List<BaseViewModel> NextElemnets = new List<BaseViewModel>();

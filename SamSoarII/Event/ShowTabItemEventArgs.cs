@@ -8,13 +8,10 @@ namespace SamSoarII.AppMain
 {
     public class ShowTabItemEventArgs : EventArgs
     {
-        public string TabName { get; set; }
-
         public TabType Type { get; set; }
 
-        public ShowTabItemEventArgs(string tabName, TabType type)
+        public ShowTabItemEventArgs(TabType type)
         {
-            TabName = tabName;
             Type = type;
         }
     }

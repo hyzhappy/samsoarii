@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,35 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// FuncBlockViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class FuncBlockViewModel : UserControl
+    public partial class FuncBlockViewModel : UserControl, IProgram
     {
-        public string FuncBlockName { get; set; }
+        private string _programName;
+        public string ProgramName
+        {
+            get
+            {
+                return _programName;
+            }
+            set
+            {
+                _programName = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ProgramName"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
+            }
+        }
+        public string TabHeader
+        {
+            get
+            {
+                return _programName;
+            }
+            set
+            {
+                _programName = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ProgramName"));
+            }
+        }
 
         public string Code
         {
@@ -35,11 +62,15 @@ namespace SamSoarII.AppMain.Project
 
         }
 
+
+
         public FuncBlockViewModel(string name)
         {
             InitializeComponent();
-            FuncBlockName = name;
+            ProgramName = name;
             CodeTextBox.DataContext = this;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }
 }

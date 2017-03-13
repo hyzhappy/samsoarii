@@ -13,7 +13,7 @@ namespace SamSoarII.AppMain.Project
         public static XElement CreateXElementByLadderDiagram(LadderDiagramViewModel ldmodel)
         {
             XElement result = new XElement("Ladder");
-            result.SetAttributeValue("Name", ldmodel.LadderName);
+            result.SetAttributeValue("Name", ldmodel.ProgramName);
             if(ldmodel.IsMainLadder)
             {
                 result.SetAttributeValue("IsMain", "True");
@@ -84,7 +84,7 @@ namespace SamSoarII.AppMain.Project
         public static XElement CreateXElementByFuncBlock(FuncBlockViewModel fbmodel)
         {
             XElement result = new XElement("FuncBlock");
-            result.SetAttributeValue("Name", fbmodel.FuncBlockName);
+            result.SetAttributeValue("Name", fbmodel.ProgramName);
             result.Value = fbmodel.Code;
             return result;
         }

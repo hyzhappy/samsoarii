@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using System.ComponentModel;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -39,9 +40,36 @@ namespace SamSoarII.AppMain.Project
         NoCross
     }
 
-    public partial class LadderDiagramViewModel : UserControl
+    public partial class LadderDiagramViewModel : UserControl, IProgram
     {
-        public string LadderName { get; set; }
+        private string _programName;
+        public string ProgramName
+        {
+            get
+            {
+                return _programName;
+            }
+            set
+            {
+                _programName = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ProgramName"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
+            }
+        }
+
+        public string TabHeader
+        {
+            get
+            {
+                return _programName;
+            }
+            set
+            {
+                _programName = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ProgramName"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
+            }
+        }
         public bool IsMainLadder { get; set; }
 
         public int NetworkCount
@@ -114,6 +142,8 @@ namespace SamSoarII.AppMain.Project
 
         private LadderCommand.CommandManager _commandManager = new LadderCommand.CommandManager();
 
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         private string LadderComment
         {
             get
@@ -126,10 +156,12 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+
+
         public LadderDiagramViewModel(string name)
         {
             InitializeComponent();
-            LadderName = name;
+            ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
             this.Loaded += (sender, e) =>
             {
@@ -415,7 +447,7 @@ namespace SamSoarII.AppMain.Project
         {
             LadderDiagramCommentEditDialog dialog = new LadderDiagramCommentEditDialog();
             dialog.LadderComment = this.LadderComment;
-            dialog.LadderName = this.LadderName;
+            dialog.LadderName = this.ProgramName;
             dialog.EnsureButtonClick += (sender, e) =>
             {
                 this.LadderComment = dialog.LadderComment;

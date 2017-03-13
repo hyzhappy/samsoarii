@@ -8,11 +8,15 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Input;
 using SamSoarII.AppMain.Project;
+using System.Collections.ObjectModel;
+
 namespace SamSoarII.AppMain.UI
 {
     public class MainTabControl : TabControl
     {
-        private TabItem _variableListTabItem;
+        private VariableListControl _varListControl = new VariableListControl();
+
+        public ObservableCollection<ITabItem> TabItemCollection { get; set; } = new ObservableCollection<ITabItem>();
 
         public TabItem CurrentTab
         {
@@ -22,105 +26,47 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+
         public MainTabControl()
         {
+            this.DataContext = this;
             Focusable = true;
-            _variableListTabItem = new TabItem();
-            _variableListTabItem.Header = "元件变量表";
-            _variableListTabItem.Content = new VariableListControl();
         }
 
         public void Reset()
         {
-            this.Items.Clear();
+            TabItemCollection.Clear();
         }
-        public TabItem GetTabByName(string name)
+
+        public void ShowItem(ITabItem item)
         {
-            foreach (var tab in Items.OfType<TabItem>())
+            if(!TabItemCollection.Contains(item))
             {
-                if(tab.Header.ToString() == name)
+                TabItemCollection.Add(item);
+            }
+            SelectedItem = item;
+        }
+
+        public void CloseItem(ITabItem item)
+        {
+            if(TabItemCollection.Contains(item))
+            {
+                if(item == SelectedItem)
                 {
-                    return tab;
+                    SelectedIndex = 0;
                 }
-            }
-            return null;
-        }
-
-        public void ShowItem(LadderDiagramViewModel ldmodel)
-        {
-            var tab = GetTabByName(ldmodel.LadderName);
-            if(tab == null)
-            {
-                tab = new TabItem();
-                tab.Content = ldmodel;
-                tab.Header = ldmodel.LadderName;
-                Items.Add(tab);
-                this.SelectedItem = tab;
-            }
-            else
-            {
-                if(SelectedItem != tab)
-                {
-                    SelectedItem = tab;
-                }
-            }
-        }
-
-        public void ShowItem(FuncBlockViewModel fbmodel)
-        {
-            var tab = GetTabByName(fbmodel.FuncBlockName);
-            if (tab == null)
-            {
-                tab = new TabItem();
-                tab.Content = fbmodel;
-                tab.Header = fbmodel.FuncBlockName;
-                Items.Add(tab);
-                this.SelectedItem = tab;
-            }
-            else
-            {
-                if (SelectedItem != tab)
-                {
-                    SelectedItem = tab;
-                }
-            }
-        }
-
-        public void CloseItem(string tabName)
-        {
-            var tab = GetTabByName(tabName);
-            if (tab != null)
-            {
-                CloseItem(tab);
-            }
-        }
-
-        public void CloseItem(TabItem tabItem)
-        {
-            if (tabItem == SelectedItem)
-            {
-                SelectedIndex = 0;
-                Items.Remove(tabItem);
-            }
-            else
-            {
-                Items.Remove(tabItem);
+                TabItemCollection.Remove(item);
             }
         }
         
         public void ShowVariableList()
         {
-            if(!Items.Contains(_variableListTabItem))
-            {
-                Items.Add(_variableListTabItem);
-            }
-            this.SelectedItem = _variableListTabItem;
+            ShowItem(_varListControl);
         }
 
         public void UpdateVariableCollection()
         {
-            var varlistcontrol = _variableListTabItem.Content as VariableListControl;
-            varlistcontrol.UpdateVariableCollection();
+            _varListControl.UpdateVariableCollection();
         }
 
     }
