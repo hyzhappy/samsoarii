@@ -15,21 +15,24 @@ namespace SamSoarII.ValueModel
                 return LadderValueType.Bool;
             }
         }
+
+        public abstract string ValueString { get; }
+        public abstract string ValueShowString { get; }
         protected uint Index { get; set; }
-        protected IVariableValueModel Offset { get; set; }
-        public abstract string GetBitValue();
-        public abstract string GetInputImBitAddress();
-        public abstract string GetOutputImBitAddress();
-        public virtual string ToShowString()
+        protected WordValue Offset { get; set; }
+        public abstract string GetValue();
+        public virtual string Comment
         {
-            return ToString();
+            get
+            {
+                return ValueCommentManager.GetComment(this);
+            }
+            set
+            {
+                ValueCommentManager.UpdateComment(this, value);
+            }
         }
-
-        public string GetValue()
-        {
-            return GetBitValue();
-        }
-
+        public virtual bool IsVariable { get { return false; } }
         public static BitValue Null { get { return _nullBitValue; } }
 
         private static NullBitValue _nullBitValue = new NullBitValue();

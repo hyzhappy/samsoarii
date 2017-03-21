@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
+
 namespace SamSoarII.LadderInstViewModel
 {
     /// <summary>
@@ -43,7 +45,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _x = value;
-                Canvas.SetLeft(this, X * 300);
+                UpdateLeftProperty();
             }
         }
 
@@ -57,7 +59,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _y = value;
-                Canvas.SetTop(this, Y * 300);
+                UpdateTopProperty();
             }
         }
 
@@ -70,6 +72,8 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _isCommentMode = value;
+                UpdateTopProperty();
+                UpdateHeightProperty();
             }
         }
 
@@ -89,11 +93,51 @@ namespace SamSoarII.LadderInstViewModel
         public SpecialBaseViewModel()
         {
             InitializeComponent();
+            IsCommentMode = false;
+        }
+        private void UpdateHeightProperty()
+        {
+            Height = _isCommentMode ? 500 : 300;
         }
 
+        private void UpdateTopProperty()
+        {
+            if (_isCommentMode)
+            {
+                Canvas.SetTop(this, _y * 500);
+            }
+            else
+            {
+                Canvas.SetTop(this, _y * 300);
+            }
+        }
+
+        private void UpdateLeftProperty()
+        {
+            Canvas.SetLeft(this, _x * 300);
+        }
         public override bool Assert()
         {
             return NextElemnets.All(x => { return x.Type == ElementType.Special || x.Type == ElementType.Input; }) & NextElemnets.Count > 0;
+        }
+
+        public override void ParseValue(IList<string> valueStrings)
+        {
+            
+        }
+
+        public override IEnumerable<string> GetValueString()
+        {
+            return new List<string>();
+        }
+
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+
+        }
+        public override void UpdateCommentContent()
+        {
+            // nothing to do
         }
     }
 }

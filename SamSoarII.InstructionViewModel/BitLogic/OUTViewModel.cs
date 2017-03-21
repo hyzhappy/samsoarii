@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
+using System.Windows.Controls;
 using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using SamSoarII.UserInterface;
@@ -22,9 +22,11 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value = value;
-                ValueTextBlock.Text = _model.Value.ToShowString();
+                ValueTextBlock.Text = _model.Value.ValueShowString;
             }
         }
+
+        public string ValueComment { get; set; }
         public override BaseModel Model
         {
             get
@@ -38,30 +40,21 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
         public override string InstructionName { get { return "OUT"; } }
+
+
+        private TextBlock _commentTextBlock1 = new TextBlock();
         public OUTViewModel()
         {
             Model = new OUTModel();
+            CommentArea.Children.Add(_commentTextBlock1);
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(1);
             dialog.Title = InstructionName;
-            dialog.ShowLine4("Bit");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            dialog.ShowLine4("Bit", Value);
+            return dialog;
         }
 
         public override BaseViewModel Clone()
@@ -76,7 +69,7 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -91,7 +84,7 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value.ToString());
+            result.Add(Value.ValueString);
             return result;
         }
     }

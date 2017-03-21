@@ -35,6 +35,7 @@
         <!-- Tool Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <Style x:Key="ImageEnable" TargetType="Image">
@@ -109,6 +110,8 @@
             <MenuItem Header="视图(_V)">
                 <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
                 <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="注释模式" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
@@ -170,6 +173,11 @@
                 <Button ToolTip="下载" Command="{x:Static app:GlobalCommand.DownloadCommand}">
                     <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
+            </ToolBar>
+            <ToolBar>
+                <ToggleButton x:Name="CommentModeToggleButton" ToolTip="注释模式" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}">
+                    <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </ToggleButton>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Top" Height="35">

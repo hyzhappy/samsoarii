@@ -40,14 +40,15 @@ namespace SamSoarII.LadderInstViewModel
             return new List<string>();
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             // Nothing to do
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
             // Nothing to do
+            return null;
         }
     }
 }

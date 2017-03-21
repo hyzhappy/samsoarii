@@ -8,6 +8,8 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Windows;
 using SamSoarII.UserInterface;
+using System.Windows.Controls;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class LDIIMViewModel : InputBaseViewModel
@@ -22,7 +24,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value = value;
-                ValueTextBlock.Text = _model.Value.ToShowString();
+                ValueTextBlock.Text = _model.Value.ValueShowString;
             }
         }
         public override BaseModel Model
@@ -37,49 +39,39 @@ namespace SamSoarII.LadderInstViewModel
                 Value = _model.Value;
             }
         }
+        private TextBlock _commentTextBlock = new TextBlock();
         public override string InstructionName { get { return "LDIIM"; } }
         public LDIIMViewModel()
         {
             Model = new LDIIMModel();
             // Draw shapes
             Line line1 = new Line();
-            line1.X1 = 75;
+            line1.X1 = 50;
+            line1.Y1 = 50;
             line1.X2 = 25;
-            line1.Y1 = 0;
-            line1.Y2 = 100;
+            line1.Y2 = 80;
             line1.StrokeThickness = 4;
             line1.Stroke = Brushes.Black;
 
             Line line2 = new Line();
             line2.X1 = 50;
+            line2.Y1 = 20;
             line2.X2 = 50;
-            line2.Y1 = 0;
-            line2.Y2 = 100;
+            line2.Y2 = 80;
             line2.StrokeThickness = 4;
             line2.Stroke = Brushes.Black;
             CenterCanvas.Children.Add(line1);
             CenterCanvas.Children.Add(line2);
+            // 
+            CommentArea.Children.Add(_commentTextBlock);
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(1);
             dialog.Title = InstructionName;
-            dialog.ShowLine4("Bit");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            dialog.ShowLine4("Bit", Value);
+            return dialog;
         }
 
         public override BaseViewModel Clone()
@@ -94,13 +86,13 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
  
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
                 Value = ValueParser.ParseBitValue(valueStrings[0]);
             }
-            catch (ValueParseException exception)
+            catch
             {
                 Value = BitValue.Null;
             }
@@ -109,7 +101,7 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value.ToString());
+            result.Add(Value.ValueString);
             return result;
         }
     }

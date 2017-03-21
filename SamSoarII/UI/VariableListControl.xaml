@@ -26,9 +26,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="0, 8, 0, 8" Grid.Row="0">
             <TextBox x:Name="SearchTextBox" Width="200" Height="24" Margin="20, 0, 0, 0" TextChanged="OnSearchTextChanged"></TextBox>
-            <Button Width="24" Height="24" Margin="0,0,0,0" Click="OnSearchVariable" Background="Transparent">
-                <Image Source="/Resources/Image/Search.png"></Image>
-            </Button>
+            <Image Source="/Resources/Image/Search.png"></Image>
             <TextBlock Margin="30,0,0,0" FontSize="16">类型过滤</TextBlock>
             <ComboBox x:Name="FilterCombobox" Width="120" Margin="20,0,0,0" SelectionChanged="OnFilterTypeChanged">
                 <ComboBox.Resources>
@@ -44,7 +42,6 @@
             </ComboBox>
             <Button Width="80" Height="24" Margin="50,0,0,0" Click="OnAddVariable">添加变量</Button>
             <Button Width="80" Height="24" Margin="50,0,0,0" Command="{x:Static ApplicationCommands.Delete}">删除变量</Button>
-
         </StackPanel>
         <DataGrid x:Name="VariableGrid" Grid.Row="1" AutoGenerateColumns="False" 
                   ItemsSource="{Binding VariableCollection}" 
@@ -61,14 +58,11 @@
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="OnRowMouseDoubleClick"></EventSetter>
                 </Style>
-                <app:LadderValueToStringConverter x:Key="ValueConverter"></app:LadderValueToStringConverter>
-                <app:LadderValueToCommentConverter x:Key="ValueCommentConverter"></app:LadderValueToCommentConverter>
-
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="变量名" Width="1*" Binding="{Binding Name, Mode=OneWay}"></DataGridTextColumn>
-                <DataGridTextColumn Header="值" Width="1*" Binding="{Binding ValueModel, Converter={StaticResource ValueConverter}, Mode=OneWay}"></DataGridTextColumn>
-                <DataGridComboBoxColumn Header="值类型" Width="1*" ItemsSource="{Binding Source={StaticResource ComboboxDataProvider}}" SelectedItemBinding="{Binding ValueType, Mode=OneWay}">
+                <DataGridTextColumn Header="变量名" Width="1*" Binding="{Binding VarName, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="值" Width="1*" Binding="{Binding MappedValue.ValueString, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridComboBoxColumn Header="值类型" Width="1*" ItemsSource="{Binding Source={StaticResource ComboboxDataProvider}}" SelectedItemBinding="{Binding Type, Mode=OneWay}">
                 </DataGridComboBoxColumn>
                 <DataGridTextColumn Header="注释" Width="1*" Binding="{Binding Comment, Mode=OneWay}"></DataGridTextColumn>
             </DataGrid.Columns>

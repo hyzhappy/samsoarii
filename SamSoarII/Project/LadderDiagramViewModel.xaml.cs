@@ -57,6 +57,25 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+        private bool _isCommentMode;
+        public bool IsCommendMode
+        {
+            get { return _isCommentMode; }
+            set
+            {
+                _isCommentMode = value;
+                foreach(var net in _ladderNetworks)
+                {
+                    net.IsCommentMode = _isCommentMode;
+                }
+                _selectRect.IsCommentMode = _isCommentMode;
+                SelectionStatus = SelectStatus.Idle;
+            }
+        }
+
+        private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
+        private int HeightUnit { get { return _isCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
+
         public string TabHeader
         {
             get
@@ -238,7 +257,7 @@ namespace SamSoarII.AppMain.Project
             var elements = new List<BaseViewModel>();
             elements.Add(element);
             var oldelements = new List<BaseViewModel>();
-            var oldele = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
+            var oldele = _selectRectOwner.SearchElement(element.X, element.Y);
             if (oldele != null)
             {
                 oldelements.Add(oldele);
@@ -273,7 +292,7 @@ namespace SamSoarII.AppMain.Project
             if (_selectRectOwner != null)
             {
                 var viewmodel = LadderInstViewModelPrototype.Clone(catalogId);
-                viewmodel.X = _selectRect.X;
+                viewmodel.X = (viewmodel.Type == LadderInstModel.ElementType.Output) ? GlobalSetting.LadderXCapacity - 1 : _selectRect.X;
                 viewmodel.Y = _selectRect.Y;
                 ReplaceSingleElement(_selectRectOwner, viewmodel);
             }
@@ -281,13 +300,19 @@ namespace SamSoarII.AppMain.Project
         public void ReplaceSingleVerticalLine(LadderNetworkViewModel network, VerticalLineViewModel vline)
         {
             var vlines = new List<VerticalLineViewModel>();
-            var oldvline = _selectRectOwner.SearchVerticalLine(_selectRect.X, _selectRect.Y);
+            var oldvline = _selectRectOwner.SearchVerticalLine(vline.X, vline.Y);
             if (oldvline == null)
             {
                 vlines.Add(vline);
-                var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, new List<BaseViewModel>(), vlines, new List<BaseViewModel>(), new List<VerticalLineViewModel>());
+                var command = new LadderCommand.NetworkReplaceElementsCommand(network, new List<BaseViewModel>(), vlines, new List<BaseViewModel>(), new List<VerticalLineViewModel>());
                 _commandManager.Execute(command);
             }
+        }
+        public void RemoveSingleVerticalLine(LadderNetworkViewModel network, VerticalLineViewModel vline)
+        {
+            var vlines = new List<VerticalLineViewModel>() { vline };
+            var command = new LadderCommand.NetworkRemoveElementsCommand(network, new List<BaseViewModel>(), vlines);
+            _commandManager.Execute(command);
         }
         public void NetworkRemoveRow(LadderNetworkViewModel network, int rowNumber)
         {
@@ -536,7 +561,7 @@ namespace SamSoarII.AppMain.Project
         {
             if (_selectRectOwner != null)
             {
-                if (_selectRect.X < 9)
+                if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
                 {
                     _selectRect.X++;
                 }
@@ -605,7 +630,7 @@ namespace SamSoarII.AppMain.Project
                         var vline = _selectRectOwner.SearchVerticalLine(x, y);
                         if (vline != null)
                         {
-                            _selectRectOwner.RemoveVerticalLine(x, y);
+                            RemoveSingleVerticalLine(_selectRectOwner, vline);
                         }
                         else
                         {
@@ -632,7 +657,7 @@ namespace SamSoarII.AppMain.Project
                     var vline = _selectRectOwner.SearchVerticalLine(x, y);
                     if (vline != null)
                     {
-                        _selectRectOwner.RemoveVerticalLine(x, y);
+                        RemoveSingleVerticalLine(_selectRectOwner, vline);
                     }
                     else
                     {
@@ -729,6 +754,7 @@ namespace SamSoarII.AppMain.Project
         private void ShowInstructionInputDialog(string initialString)
         {
             InstructionInputDialog dialog = new InstructionInputDialog(initialString);
+           
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.EnsureButtonClick += (sender, e) =>
             {
@@ -742,14 +768,14 @@ namespace SamSoarII.AppMain.Project
                         int y = _selectRect.Y;
                         var oldelements = _selectRectOwner.GetElements().Where(ele => ele.Y == y && ele.X >= x);
                         var elements = new List<BaseViewModel>();
-                        for (int i = x; i < 9; i++)
+                        for (int i = x; i < GlobalSetting.LadderXCapacity - 1; i++)
                         {
                             elements.Add(new HorizontalLineViewModel() { X = i, Y = y });          
                         }
-                        viewmodel.X = 9;
+                        viewmodel.X = GlobalSetting.LadderXCapacity - 1;
                         viewmodel.Y = _selectRect.Y;
                         elements.Add(viewmodel);
-                        _selectRect.X = 9;
+                        _selectRect.X = GlobalSetting.LadderXCapacity - 1;
                         var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
                         _commandManager.Execute(command);
                     }
@@ -758,7 +784,7 @@ namespace SamSoarII.AppMain.Project
                         viewmodel.X = _selectRect.X;
                         viewmodel.Y = _selectRect.Y;
                         ReplaceSingleElement(_selectRectOwner, viewmodel);
-                        if(_selectRect.X < 9)
+                        if(_selectRect.X < GlobalSetting.LadderXCapacity - 1)
                         {
                             _selectRect.X++;
                         }
@@ -772,8 +798,6 @@ namespace SamSoarII.AppMain.Project
             };
             dialog.ShowDialog();
         }
-
-
 
         #endregion
 
@@ -836,6 +860,7 @@ namespace SamSoarII.AppMain.Project
                     char c;
                     if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                     {
+
                         c = (char)((int)e.Key + 21);
                     }
                     else
@@ -954,7 +979,7 @@ namespace SamSoarII.AppMain.Project
                     if(_selectRectOwner != null)
                     {
                         var p = e.GetPosition(_selectRectOwner.LadderCanvas);
-                        var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, 300);
+                        var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
                         if((pp.X != _selectRect.X) || (pp.Y != _selectRect.Y))
                         {
                             _selectStartNetwork = _selectRectOwner;
@@ -983,7 +1008,7 @@ namespace SamSoarII.AppMain.Project
                                 net.IsSelectAllMode = false;
                             }
                             var p = e.GetPosition(_selectStartNetwork.LadderCanvas);
-                            var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, 300);
+                            var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
                             _selectStartNetwork.IsSelectAllMode = false;
                             _selectStartNetwork.SelectAreaFirstX = _selectStartNetwork.SelectAreaOriginX;
                             _selectStartNetwork.SelectAreaFirstY = _selectStartNetwork.SelectAreaOriginY;

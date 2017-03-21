@@ -178,24 +178,23 @@ namespace SamSoarII.AppMain.Project
             return result;
         }
 
-        public static XElement CreateXElementByLadderVariable(LadderVariable variable)
+        public static XElement CreateXElementByLadderVariable(IVariableValue variable)
         {
             XElement result = new XElement("Variable");
-            result.SetAttributeValue("Name", variable.Name);
-            result.SetElementValue("Value", variable.ValueModel.ToString());
-            result.SetElementValue("ValueType", (int)variable.ValueType);
+            result.SetAttributeValue("VarName", variable.VarName);
+            result.SetElementValue("Value", variable.MappedValue.ValueString);
+            result.SetElementValue("ValueType", (int)variable.Type);
             result.SetElementValue("Comment", variable.Comment);
             return result;
         }
 
-        public static LadderVariable CreateLadderVariableByXElement(XElement xEle)
+        public static IVariableValue CreateLadderVariableByXElement(XElement xEle)
         {
-            string name = xEle.Attribute("Name").Value;
+            string name = xEle.Attribute("VarName").Value;
             string valueString = xEle.Element("Value").Value;
             LadderValueType valuetype = (LadderValueType)(int.Parse(xEle.Element("ValueType").Value));
             string comment = xEle.Element("Comment").Value;
-            IValueModel valueModel = ValueParser.ParseValue(valueString, valuetype);
-            return new LadderVariable(name, valueModel, comment);
+            return ValueParser.CreateVariableValue(name, valueString, valuetype, comment);
         }
 
         public static ProjectModel LoadProject(string filepath)
@@ -218,7 +217,7 @@ namespace SamSoarII.AppMain.Project
                 foreach (XElement xele in xEle.Elements("Variable"))
                 {
                     var variable = CreateLadderVariableByXElement(xele);
-                    GlobalVariableList.AddVariable(variable);
+                    VariableManager.AddVariable(variable);
                 }
             }
         }
@@ -226,11 +225,38 @@ namespace SamSoarII.AppMain.Project
         public static XElement CreateXElementByGlobalVariableList()
         {
             XElement xEle = new XElement("GlobalVariableList");
-            foreach(var variable in GlobalVariableList.VariableCollection)
+            foreach(var variable in VariableManager.VariableCollection)
             {
                 xEle.Add(CreateXElementByLadderVariable(variable));
             }
             return xEle;
         }
+
+        public static XElement CreateXElementByValueComments()
+        {
+            XElement result = new XElement("ValueComments");
+            foreach(var kp in ValueCommentManager.ValueCommentDict)
+            {
+                var xele = new XElement("Comment");
+                xele.SetAttributeValue("Value", kp.Key);
+                xele.SetValue(kp.Value);
+                result.Add(xele);
+            }
+            return result;
+        }
+
+        public static void LoadValueCommentsByXElement(XElement xEle)
+        {
+            if(xEle != null)
+            {
+                foreach(XElement xele in xEle.Elements("Comment"))
+                {
+                    string valueString = xele.Attribute("Value").Value;
+                    string comment = xele.Value;
+                    ValueCommentManager.UpdateComment(valueString, comment);
+                }
+            }
+        }
+
     }
 }

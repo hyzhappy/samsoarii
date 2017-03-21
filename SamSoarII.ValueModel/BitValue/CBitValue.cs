@@ -8,42 +8,39 @@ namespace SamSoarII.ValueModel
 {
     public class CBitValue : BitValue
     {
+        public CBitValue(uint index, WordValue offset)
+        {
+            Index = index;
+            Offset = offset == null ? WordValue.Null : offset;
+        }
 
-        public CBitValue(uint index)
+        public override string ValueShowString
         {
-            Index = index;
-            Offset = WordValue.Null as NullWordValue;
+            get
+            {
+                return ValueString;
+            }
         }
-        public CBitValue(uint index, IVariableValueModel offset = null)
+
+        public override string ValueString
         {
-            Index = index;
-            Offset = offset;
+            get
+            {
+                return string.Format("C{0}{1}", Index, Offset.ValueString);
+            }
         }
-        public override string GetBitValue()
+
+        public override string GetValue()
         {
             if(Offset != WordValue.Null)
             {
-                return string.Format("CBit[{0} + {1}]", Index, Offset.GetVariableValue());
+                return string.Format("CBit[{0} + {1}]", Index, Offset.GetValue());
             }
             else
             {
                 return string.Format("CBit[{0}]", Index);
             }
         }
-
-        public override string GetInputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetOutputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string ToString()
-        {
-            return string.Format("C{0}{1}", Index, Offset);   
-        }
+        
     }
 }

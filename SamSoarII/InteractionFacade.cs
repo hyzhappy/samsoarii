@@ -13,6 +13,18 @@ namespace SamSoarII.AppMain
 {
     public class InteractionFacade
     {
+
+        private bool _isCommentMode;
+        public bool IsCommentMode
+        {
+            get { return _isCommentMode; }
+            set
+            {
+                _isCommentMode = value;
+                _projectModel.IsCommentMode = _isCommentMode;
+            }
+        }
+
         private ProjectModel _projectModel;
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
@@ -68,6 +80,7 @@ namespace SamSoarII.AppMain
             _projectModel = ProjectHelper.LoadProject(fullFileName);
             if (_projectModel != null)
             {
+                SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
                 _projectTreeView = new ProjectTreeView(_projectModel);
                 _projectTreeView.TabItemOpened += OnTabOpened;
@@ -77,6 +90,7 @@ namespace SamSoarII.AppMain
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowItem(_projectModel.MainRoutine);
                 _mainTabControl.UpdateVariableCollection();
+                _mainTabControl.UpdateCommentList();
                 _mainWindow.SetProjectTreeView(_projectTreeView);
                 ProjectFullFileName = fullFileName;
                 _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
@@ -138,20 +152,20 @@ namespace SamSoarII.AppMain
                 case TabType.VariableList:
                     _mainTabControl.ShowVariableList();
                     break;
+                case TabType.CommentList:
+                    _mainTabControl.ShowCommentList();
+                    break;
             }
 
         }
 
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (_mainTabControl.CurrentTab != null)
-            //{
-            //    CurrentLadder = _mainTabControl.CurrentTab.Content as LadderDiagramViewModel;
-            //}
-            //else
-            //{
-            //    CurrentLadder = null;
-            //}
+            var ldmodel = _mainTabControl.SelectedItem as LadderDiagramViewModel;
+            if (ldmodel != null)
+            {
+                CurrentLadder = ldmodel;
+            }
         }
 
         private void OnInstructionTreeItemDoubleClick(object sender, MouseButtonEventArgs e)

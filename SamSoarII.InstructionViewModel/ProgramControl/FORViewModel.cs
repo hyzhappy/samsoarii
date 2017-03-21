@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                BottomTextBlock.Text = string.Format("CNT : {0}", _model.Count.ToShowString());
+                BottomTextBlock.Text = string.Format("CNT : {0}", _model.Count.ValueShowString);
             }
         }
         public override BaseModel Model
@@ -60,11 +60,11 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Count.ToString());
+            result.Add(Count.ValueString);
             return result;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -76,25 +76,12 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(1);
             dialog.Title = InstructionName;
             dialog.ShowLine4("N");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            return dialog;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value = value;
-                ValueTextBlock.Text = _model.Value.ToShowString();
+                ValueTextBlock.Text = _model.Value.ValueShowString;
             }
         }
         public override BaseModel Model
@@ -43,37 +43,24 @@ namespace SamSoarII.LadderInstViewModel
         public OUTIMViewModel()
         {
             Model = new OUTIMModel();
-            //ValueTextBlock.Text = _model.Value.ToString();
+            //ValueTextBlock.Text = _model.Value.ValueString;
             // Draw shapes
             Line line = new Line();
             line.X1 = 50;
-            line.Y1 = 0;
+            line.Y1 = 20;
             line.X2 = 50;
-            line.Y2 = 100;
+            line.Y2 = 80;
             line.Stroke = Brushes.Black;
             line.StrokeThickness = 4;
             CenterCanvas.Children.Add(line);
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(1);
             dialog.Title = InstructionName;
-            dialog.ShowLine4("Bit");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            dialog.ShowLine4("Bit", Value);
+            return dialog;
         }
 
         public override BaseViewModel Clone()
@@ -83,12 +70,13 @@ namespace SamSoarII.LadderInstViewModel
 
         public static int CatalogID { get { return 210; } }
 
+
         public override int GetCatalogID()
         {
             return CatalogID;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -103,7 +91,7 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value.ToString());
+            result.Add(Value.ValueString);
             return result;
         }
     }

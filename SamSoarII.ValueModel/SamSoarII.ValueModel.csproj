@@ -46,6 +46,7 @@
     <Compile Include="BitValue\NullBitValue.cs" />
     <Compile Include="BitValue\SBitValue.cs" />
     <Compile Include="BitValue\TBitValue.cs" />
+    <Compile Include="BitValue\VariableBitValue.cs" />
     <Compile Include="BitValue\XBitValue.cs" />
     <Compile Include="BitValue\YBitValue.cs" />
     <Compile Include="DoubleWordValue\CV32DoubleWordValue.cs" />
@@ -54,18 +55,20 @@
     <Compile Include="DoubleWordValue\HDoubleWordValue.cs" />
     <Compile Include="DoubleWordValue\KDoubleWordValue.cs" />
     <Compile Include="DoubleWordValue\NullDoubleWordValue.cs" />
+    <Compile Include="Common.cs" />
+    <Compile Include="DoubleWordValue\VariableDoubleWordValue.cs" />
     <Compile Include="FloatValue\DFloatValue.cs" />
     <Compile Include="FloatValue\FloatValue.cs" />
     <Compile Include="FloatValue\KFloatValue.cs" />
     <Compile Include="FloatValue\NullFloatValue.cs" />
-    <Compile Include="InputImException.cs" />
+    <Compile Include="FloatValue\VariableFloatValue.cs" />
     <Compile Include="IValueModel.cs" />
-    <Compile Include="IVariableValueModel.cs" />
-    <Compile Include="OutputImException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValueParseException.cs" />
+    <Compile Include="ValueCommentManager.cs" />
     <Compile Include="ValueParser.cs" />
     <Compile Include="LadderValueType.cs" />
+    <Compile Include="Variable\VariableManager.cs" />
+    <Compile Include="Variable\IVariableValue.cs" />
     <Compile Include="WordValue\AIWordValue.cs" />
     <Compile Include="WordValue\AOWordValue.cs" />
     <Compile Include="WordValue\CVWordValue.cs" />
@@ -74,9 +77,20 @@
     <Compile Include="WordValue\KWordValue.cs" />
     <Compile Include="WordValue\NullWordValue.cs" />
     <Compile Include="WordValue\TVWordValue.cs" />
+    <Compile Include="WordValue\VariableWordValue.cs" />
     <Compile Include="WordValue\VWordValue.cs" />
     <Compile Include="WordValue\WordValue.cs" />
     <Compile Include="WordValue\ZWordValue.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj">
+      <Project>{6ddbbac0-a051-43ac-be0d-d70227d61687}</Project>
+      <Name>SamSoarII.PLCDevice</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
+      <Project>{AAFB923A-B366-4D7D-AB40-81F7D71A1F30}</Project>
+      <Name>SamSoarII.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

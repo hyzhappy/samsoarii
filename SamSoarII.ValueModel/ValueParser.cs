@@ -4,13 +4,68 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using SamSoarII.PLCDevice;
+
 namespace SamSoarII.ValueModel
 {
+    public class ValueParseException : Exception
+    {
+        private string _message;
+        public ValueParseException(string message)
+        {
+            _message = message;
+        }
+        public override string Message
+        {
+            get
+            {
+                return _message;
+            }
+        }
+    }
+
     public class ValueParser
     {
-        public static IValueModel ParseValue(string valueString, LadderValueType type)
+        private static Regex BitRegex = new Regex(@"^(X|Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex WordRegex = new Regex(@"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex DoubleWordRegex = new Regex(@"^(D|CV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex FloatRegex = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex VarWordRegex = new Regex(@"^(V|Z)([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex IntKValueRegex = new Regex(@"^K([-+]?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex IntHValueRegex = new Regex(@"^H([0-9A-F]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex FloatKValueRegex = new Regex(@"^K([-+]?([0-9]*[.])?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static Regex VariableRegex = new Regex(@"^{([0-9a-zA-Z]+)}$", RegexOptions.Compiled);
+        public static bool IsVariablePattern(string valueString)
+        {
+            return VariableRegex.IsMatch(valueString);
+        }
+        public static IValueModel ParseValue(string valueString, LadderValueType type, Device contextDevice)
         {
             switch(type)
+            {
+                case LadderValueType.Bool:
+                    return ParseBitValue(valueString, contextDevice);
+                case LadderValueType.DoubleWord:
+                    return ParseDoubleWordValue(valueString, contextDevice);
+                case LadderValueType.Float:
+                    return ParseFloatValue(valueString, contextDevice);
+                case LadderValueType.Word:
+                    return ParseWordValue(valueString, contextDevice);
+                default:
+                    throw new ValueParseException("Unexpected input");
+            }
+        }
+        public static IValueModel ParseValue(string valueString, LadderValueType type)
+        {
+            switch (type)
             {
                 case LadderValueType.Bool:
                     return ParseBitValue(valueString);
@@ -21,250 +76,613 @@ namespace SamSoarII.ValueModel
                 case LadderValueType.Word:
                     return ParseWordValue(valueString);
                 default:
-                    throw new ValueParseException();
+                    throw new ValueParseException("Unexpected input");
             }
         }
-        /// <summary>
-        /// Match (X|Y|M|C|T|S)[0-9]+((V|Z)[0-9]+)?
-        /// </summary>
-        /// <param name="valueString"></param>
-        /// <returns></returns>
         public static BitValue ParseBitValue(string valueString)
         {
-            if(valueString == string.Empty)
-            {
-                return BitValue.Null;
-            }     
-            Match match = Regex.Match(valueString, "^(X|Y|M|C|T|S)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            if(match.Success)
-            {
-                VWordValue offset = null;
-                string s = match.Value.ToUpper();
-                var ss = s.Split('V');
-                if(ss.Length == 2)
-                {
-                    offset = new VWordValue(uint.Parse(ss[1]));
-                }
-                uint index = uint.Parse(ss[0].Substring(1));
-                switch(ss[0][0])
-                {
-                    case 'X':
-                        return new XBitValue(index, offset);
-                    case 'Y':
-                        return new YBitValue(index, offset);
-                    case 'M':
-                        return new MBitValue(index, offset);
-                    case 'C':
-                        return new CBitValue(index, offset);
-                    case 'T':
-                        return new TBitValue(index, offset);
-                    case 'S':
-                        return new SBitValue(index, offset);
-                    default:
-                        throw new ValueParseException();
-                }
-            }
-            else
-            {
-                throw new ValueParseException();
-            }
+            return ParseBitValue(valueString, Device.DefaultDevice);
         }
-        /// <summary>
-        /// Match (D|CV|TV|AI|AO)[0-9]+((V|Z)[0-9]+)?
-        ///       (K[0-9]+)|(H[0-9A-F]+)
-        ///       (V[0-9]+)
-        /// </summary>
-        /// <param name="valueString"></param>
-        /// <returns></returns>
         public static WordValue ParseWordValue(string valueString)
         {
-            if(valueString == string.Empty)
+            return ParseWordValue(valueString, Device.DefaultDevice);
+        }
+        public static DoubleWordValue ParseDoubleWordValue(string valueString)
+        {
+            return ParseDoubleWordValue(valueString, Device.DefaultDevice);
+        }
+        public static FloatValue ParseFloatValue(string valueString)
+        {
+            return ParseFloatValue(valueString, Device.DefaultDevice);
+        }
+        public static BitValue ParseBitValue(string valueString, Device contextDevice)
+        {
+            Match match = BitRegex.Match(valueString);
+            if (match.Success)
             {
-                return WordValue.Null;
-            }
-            else
-            {               
-                Match match1 = Regex.Match(valueString, "^(D|CV|TV|AI|AO)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-                if(match1.Success)
+                uint index = uint.Parse(match.Groups[2].Value);
+                WordValue offset = null;
+                if(match.Groups[4].Success)
                 {
-                    VWordValue offset = null;
-                    string s = match1.Value.ToUpper();   
-                    if (s.StartsWith("D"))
+                    if (match.Groups[4].Value.ToUpper() == "V")
                     {
-                        var ss = s.Split('V');
-                        if (ss.Length == 2)
+                        uint vindex = uint.Parse(match.Groups[5].Value);
+                        if (contextDevice.VRange.AssertValue(vindex))
                         {
-                            offset = new VWordValue(uint.Parse(ss[1]));
+                            offset = new VWordValue(vindex);
                         }
-                        uint index = uint.Parse(ss[0].Substring(1));
-                        return new DWordValue(index, offset);
-                    }
-                    if(s.StartsWith("CV"))
-                    {
-                        var ss = s.Split('V');
-                        if (ss.Length == 3)
+                        else
                         {
-                            offset = new VWordValue(uint.Parse(ss[2]));
+                            throw new ValueParseException(string.Format("Current PLC Device do not support V{0} address", vindex));
                         }
-                        uint index = uint.Parse(ss[1]);
-                        return new CVWordValue(index, offset);
-                    }
-                    if (s.StartsWith("TV"))
-                    {
-                        var ss = s.Split('V');
-                        if (ss.Length == 3)
-                        {
-                            offset = new VWordValue(uint.Parse(ss[2]));
-                        }
-                        uint index = uint.Parse(ss[1]);
-                        return new TVWordValue(index, offset);
-                    }
-                    if (s.StartsWith("AI"))
-                    {
-                        var ss = s.Split('V');
-                        if (ss.Length == 2)
-                        {
-                            offset = new VWordValue(uint.Parse(ss[1]));
-                        }
-                        uint index = uint.Parse(ss[0].Substring(2));
-                        return new AIWordValue(index, offset);
-                    }
-                    if (s.StartsWith("AO"))
-                    {
-                        var ss = s.Split('V');
-                        if (ss.Length == 2)
-                        {
-                            offset = new VWordValue(uint.Parse(ss[1]));
-                        }
-                        uint index = uint.Parse(ss[0].Substring(2));
-                        return new AOWordValue(index, offset);
-                    }
-                    throw new ValueParseException();
-                }
-                else
-                {
-                    Match match2 = Regex.Match(valueString, "^V[0-9]+$", RegexOptions.IgnoreCase);
-                    if (match2.Success)
-                    {
-                        string s = match1.Value.ToUpper();
-                        uint index = uint.Parse(s.Substring(1));
-                        return new VWordValue(index);
                     }
                     else
                     {
-                        Match match3 = Regex.Match(valueString, "^K[-+]?[0-9]+$", RegexOptions.IgnoreCase);
-                        if(match3.Success)
+                        if (match.Groups[4].Value.ToUpper() == "Z")
                         {
-                            string s = match3.Value.ToUpper();                        
-                            short value = short.Parse(s.Substring(1));
-                            return new KWordValue(value);                        
+                            uint zindex = uint.Parse(match.Groups[5].Value);
+                            if (contextDevice.ZRange.AssertValue(zindex))
+                            {
+                                offset = new ZWordValue(zindex);
+                            }
+                            else
+                            {
+                                throw new ValueParseException(string.Format("Current PLC Device do not support Z{0} address", zindex));
+                            }
                         }
-                        Match match4 = Regex.Match(valueString, "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
-                        if(match4.Success)
-                        {
-                            string s = match4.Value.ToUpper();
-                            short value = short.Parse(s.Substring(1), System.Globalization.NumberStyles.HexNumber);
-                            return new HWordValue(value);
-                        }
-                        throw new ValueParseException();
                     }
                 }
-                throw new ValueParseException();
-            }
-        }
-        /// <summary>
-        /// Match (D|CV)[0-9]+((V|Z)[0-9]+)?
-        ///       (K[0-9]+)|(H[0-9A-F]+)
-        /// </summary>
-        /// <returns></returns>
-        public static DoubleWordValue ParseDoubleWordValue(string valueString)
-        {
-            if(valueString == string.Empty)
-            {
-                return DoubleWordValue.Null;
+                if(match.Groups[1].Value.ToUpper() == "X")
+                {
+                    if(contextDevice.XRange.AssertValue(index))
+                    {
+                        return new XBitValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support X{0} address", index));
+                    }              
+                }
+                if (match.Groups[1].Value.ToUpper() == "Y")
+                {
+                    if (contextDevice.YRange.AssertValue(index))
+                    {
+                        return new YBitValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support Y{0} address", index));
+                    }
+                }
+                if (match.Groups[1].Value.ToUpper() == "M")
+                {
+                    if (contextDevice.MRange.AssertValue(index))
+                    {
+                        return new MBitValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support M{0} address", index));
+                    }
+                }
+                if (match.Groups[1].Value.ToUpper() == "C")
+                {
+                    if (contextDevice.YRange.AssertValue(index))
+                    {
+                        return new CBitValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support C{0} address", index));
+                    }
+                }
+                if (match.Groups[1].Value.ToUpper() == "T")
+                {
+                    if (contextDevice.TRange.AssertValue(index))
+                    {
+                        return new TBitValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support T{0} address", index));
+                    }
+                }
+                if (match.Groups[1].Value.ToUpper() == "S")
+                {
+                    if (contextDevice.SRange.AssertValue(index))
+                    {
+                        return new SBitValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support S{0} address", index));
+                    }
+                }
             }
             else
             {
-                Match match1 = Regex.Match(valueString, "^(D|CV)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-                if(match1.Success)
+                // 变量
+                Match match2 = VariableRegex.Match(valueString);
+                if(match2.Success)
                 {
-                    VWordValue offset = null;
-                    var s = match1.Value.ToUpper();
-                    var ss = s.Split('V');
-                    if(s.StartsWith("D"))
+                    var name = match2.Groups[1].Value;
+                    try
                     {
-                        if(ss.Length == 2)
+                        var variable = VariableManager.GetVariableByName(name);
+                        VariableBitValue bitvalue = variable as VariableBitValue;
+                        if (bitvalue != null)
                         {
-                            offset = new VWordValue(uint.Parse(ss[1]));
+                            return bitvalue;
                         }
-                        uint index = uint.Parse(ss[0].Substring(1));
-                        return new DDoubleWordValue(index, offset);
                     }
-                    if(s.StartsWith("CV"))
+                    catch
                     {
-                        if(ss.Length == 3)
-                        {
-                            offset = new VWordValue(uint.Parse(ss[2]));
-                        }
-                        uint index = uint.Parse(ss[1]);
-                        return new CV32DoubleWordValue(index, offset);          
+                        throw new ValueParseException(string.Format("No Bit Value found for variable {0}", name));
                     }
+                    throw new ValueParseException(string.Format("Variable {0} is not a Bit Value", name));
+                }
+            }
+            throw new ValueParseException("Unexpected input");
+        }
+
+        public static WordValue ParseWordValue(string valueString, Device contextDevice)
+        {
+            Match match1 = WordRegex.Match(valueString);
+            if (match1.Success)
+            {
+                uint index = uint.Parse(match1.Groups[2].Value);
+                WordValue offset = null;
+                if (match1.Groups[4].Success)
+                {
+                    if (match1.Groups[4].Value.ToUpper() == "V")
+                    {
+                        uint vindex = uint.Parse(match1.Groups[5].Value);
+                        if (contextDevice.VRange.AssertValue(vindex))
+                        {
+                            offset = new VWordValue(vindex);
+                        }
+                        else
+                        {
+                            throw new ValueParseException(string.Format("Current PLC Device do not support V{0} address", vindex));
+                        }
+                    }
+                    else
+                    {
+                        if (match1.Groups[4].Value.ToUpper() == "Z")
+                        {
+                            uint zindex = uint.Parse(match1.Groups[5].Value);
+                            if (contextDevice.ZRange.AssertValue(zindex))
+                            {
+                                offset = new ZWordValue(zindex);
+                            }
+                            else
+                            {
+                                throw new ValueParseException(string.Format("Current PLC Device do not support Z{0} address", zindex));
+                            }
+                        }
+                    }
+                }
+                if (match1.Groups[1].Value.ToUpper() == "D")
+                {
+                    if (contextDevice.DRange.AssertValue(index))
+                    {
+                        return new DWordValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support D{0} address", index));
+                    }
+                }
+                if (match1.Groups[1].Value.ToUpper() == "CV")
+                {
+                    if (contextDevice.CVRange.AssertValue(index))
+                    {
+                        return new CVWordValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support CV{0} address", index));
+                    }
+                }
+                if (match1.Groups[1].Value.ToUpper() == "TV")
+                {
+                    if (contextDevice.TVRange.AssertValue(index))
+                    {
+                        return new TVWordValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support TV{0} address", index));
+                    }
+                }
+                if (match1.Groups[1].Value.ToUpper() == "AI")
+                {
+                    if (contextDevice.AIRange.AssertValue(index))
+                    {
+                        return new AIWordValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support AI{0} address", index));
+                    }
+                }
+                if (match1.Groups[1].Value.ToUpper() == "AO")
+                {
+                    if (contextDevice.AORange.AssertValue(index))
+                    {
+                        return new AOWordValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support AO{0} address", index));
+                    }
+                }
+            }
+            else
+            {
+                Match match2 = IntKValueRegex.Match(valueString);
+                if (match2.Success)
+                {
+                    short kvalue = short.Parse(match2.Groups[1].Value);
+                    return new KWordValue(kvalue);
                 }
                 else
                 {
-                    Match match2 = Regex.Match(valueString, "^K[-+][0-9]+$", RegexOptions.IgnoreCase);
-                    if (match2.Success)
-                    {
-                        var s = match1.Value.ToUpper();
-                        return new KDoubleWordValue(int.Parse(s.Substring(1)));
-                    }
-                    Match match3 = Regex.Match(valueString, "^H[0-9A-F]+$", RegexOptions.IgnoreCase);  
+                    var match3 = IntHValueRegex.Match(valueString);
                     if(match3.Success)
                     {
-                        var s = match1.Value.ToUpper();
-                        return new HDoubleWordValue(int.Parse(s.Substring(1), System.Globalization.NumberStyles.HexNumber));
-                    }    
+                        short hvalue = short.Parse(match3.Groups[1].Value, System.Globalization.NumberStyles.HexNumber);
+                        return new HWordValue(hvalue);
+                    }
+                    else
+                    {
+                        Match match4 = VarWordRegex.Match(valueString);
+                        if(match4.Success)
+                        {
+                            uint index = uint.Parse(match4.Groups[2].Value);
+                            if(match4.Groups[1].Value.ToUpper() == "V")
+                            {
+                                if(contextDevice.VRange.AssertValue(index))
+                                {
+                                    return new VWordValue(index);
+                                }
+                                else
+                                {
+                                    throw new ValueParseException(string.Format("Current PLC Device do not support V{0} address", index));
+                                }
+                            }
+                            else
+                            {
+                                if (match4.Groups[1].Value.ToUpper() == "Z")
+                                {
+                                    if (contextDevice.ZRange.AssertValue(index))
+                                    {
+                                        return new ZWordValue(index);
+                                    }
+                                    else
+                                    {
+                                        throw new ValueParseException(string.Format("Current PLC Device do not support Z{0} address", index));
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // 变量
+                            Match match5 = VariableRegex.Match(valueString);
+                            if (match5.Success)
+                            {
+                                var name = match5.Groups[1].Value;
+                                try
+                                {
+                                    var variable = VariableManager.GetVariableByName(name);
+                                    var wordvalue = variable as VariableWordValue;
+                                    if (wordvalue != null)
+                                    {
+                                        return wordvalue;
+                                    }
+                                }
+                                catch
+                                {
+                                    throw new ValueParseException(string.Format("No Bit Value found for variable {0}", name));
+                                }
+                                throw new ValueParseException(string.Format("Variable {0} is not a Word Value", name));
+                            }               
+                        }
+                    }
                 }
-                throw new ValueParseException();
             }
+            throw new ValueParseException("Unexpected input");
         }
-        /// <summary>
-        /// Match D[0-9]+((V|Z)[0-9]+)？
-        ///       K[0-9]+(.[0-9]+)?
-        /// </summary>
-        /// <returns></returns>
-        public static FloatValue ParseFloatValue(string valueString)
+
+        public static DoubleWordValue ParseDoubleWordValue(string valueString, Device contextDevice)
         {
-            if(valueString == string.Empty)
+            Match match1 = DoubleWordRegex.Match(valueString);
+            if (match1.Success)
             {
-                return FloatValue.Null;
+                uint index = uint.Parse(match1.Groups[2].Value);
+                WordValue offset = null;
+                if (match1.Groups[4].Success)
+                {
+                    if (match1.Groups[4].Value.ToUpper() == "V")
+                    {
+                        uint vindex = uint.Parse(match1.Groups[5].Value);
+                        if (contextDevice.VRange.AssertValue(vindex))
+                        {
+                            offset = new VWordValue(vindex);
+                        }
+                        else
+                        {
+                            throw new ValueParseException(string.Format("Current PLC Device do not support V{0} address", vindex));
+                        }
+                    }
+                    else
+                    {
+                        if (match1.Groups[4].Value.ToUpper() == "Z")
+                        {
+                            uint zindex = uint.Parse(match1.Groups[5].Value);
+                            if (contextDevice.ZRange.AssertValue(zindex))
+                            {
+                                offset = new ZWordValue(zindex);
+                            }
+                            else
+                            {
+                                throw new ValueParseException(string.Format("Current PLC Device do not support Z{0} address", zindex));
+                            }
+                        }
+                    }
+                }
+                if(match1.Groups[1].Value.ToUpper() == "D")
+                {
+                    if(contextDevice.DRange.AssertValue(index))
+                    {
+                        return new DDoubleWordValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support D{0} address", index));
+                    }
+                }
+                if(match1.Groups[1].Value.ToUpper() == "CV")
+                {
+                    if (contextDevice.CVRange.AssertValue(index))
+                    {
+                        return new CV32DoubleWordValue(index, offset);
+                    }
+                    else
+                    {
+                        throw new ValueParseException(string.Format("Current PLC Device do not support CV32{0} address", index));
+                    }
+                }
             }
             else
             {
-                var match1 = Regex.Match(valueString, "^D[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-                if (match1.Success)
+                Match match2 = IntKValueRegex.Match(valueString);
+                if (match2.Success)
                 {
-                    VWordValue offset = null;
-                    var s = match1.Value.ToUpper();
-                    var ss = s.Split('V');
-                    if (ss.Length == 2)
+                    return new KDoubleWordValue(int.Parse(match2.Groups[1].Value));
+                }
+                else
+                {
+                    var match3 = IntHValueRegex.Match(valueString);
+                    if (match3.Success)
                     {
-                        offset = new VWordValue(uint.Parse(ss[1]));
+                        return new HDoubleWordValue(int.Parse(match2.Groups[1].Value, System.Globalization.NumberStyles.HexNumber));
                     }
-                    uint index = uint.Parse(ss[0].Substring(1));
+                    else
+                    {
+                        // 变量
+                        Match match4 = VariableRegex.Match(valueString);
+                        if (match4.Success)
+                        {
+                            var name = match4.Groups[1].Value;
+                            try
+                            {
+                                var variable = VariableManager.GetVariableByName(name);
+                                var doublewordvalue = variable as VariableDoubleWordValue;
+                                if (doublewordvalue != null)
+                                {
+                                    return doublewordvalue;
+                                }
+                            }
+                            catch
+                            {
+                                throw new ValueParseException(string.Format("No DoubleWord Value found for variable {0}", name));
+                            }
+                            throw new ValueParseException(string.Format("Variable {0} is not a DoubleWord Value", name));
+                        }
+                    }
+                }
+            }
+            throw new ValueParseException("Unexpected input");
+        }
+
+        public static FloatValue ParseFloatValue(string valueString, Device contextDevice)
+        {
+            Match match1 = FloatRegex.Match(valueString);
+            if (match1.Success)
+            {
+                uint index = uint.Parse(match1.Groups[2].Value);
+                WordValue offset = null;
+                if (match1.Groups[4].Success)
+                {
+                    if (match1.Groups[4].Value.ToUpper() == "V")
+                    {
+                        uint vindex = uint.Parse(match1.Groups[5].Value);
+                        if(contextDevice.VRange.AssertValue(vindex))
+                        {
+                            offset = new VWordValue(vindex);
+                        }
+                        else
+                        {
+                            throw new ValueParseException(string.Format("Current PLC Device do not support V{0} address", vindex));
+                        }
+                    }
+                    else
+                    {            
+                        if (match1.Groups[4].Value.ToUpper() == "Z")
+                        {
+                            uint zindex = uint.Parse(match1.Groups[5].Value);
+                            if (contextDevice.ZRange.AssertValue(zindex))
+                            {
+                                offset = new ZWordValue(zindex);
+                            }
+                            else
+                            {
+                                throw new ValueParseException(string.Format("Current PLC Device do not support Z{0} address", zindex));
+                            }
+                        }
+                    }
+                }
+                if(contextDevice.DRange.AssertValue(index))
+                {
                     return new DFloatValue(index, offset);
                 }
                 else
                 {
-                    var match2 = Regex.Match(valueString, "^K[+-]?([0-9]*[.])?[0-9]+$", RegexOptions.IgnoreCase);
-                    if(match2.Success)
+                    throw new ValueParseException(string.Format("Current PLC Device do not support D{0} address", index));
+                }
+            }
+            else
+            {
+                Match match2 = FloatKValueRegex.Match(valueString);
+                if (match2.Success)
+                {
+                    return new KFloatValue(float.Parse(match2.Groups[1].Value));
+                }
+                else
+                {
+                    // 变量
+                    Match match3 = VariableRegex.Match(valueString);
+                    if (match3.Success)
                     {
-                        var s = match2.Value.ToUpper();
-                        float value = float.Parse(s.Substring(1));
-                        return new KFloatValue(value);
+                        var name = match3.Groups[1].Value;
+                        try
+                        {
+                            var variable = VariableManager.GetVariableByName(name);
+                            var floatvalue = variable as VariableFloatValue;
+                            if (floatvalue != null)
+                            {
+                                return floatvalue;
+                            }
+                        }
+                        catch
+                        {
+                            throw new ValueParseException(string.Format("No Float Value found for variable {0}", name));
+                        }
+                        throw new ValueParseException(string.Format("Variable {0} is not a Float Value", name));
                     }
                 }
-                throw new ValueParseException();
+            }
+            throw new ValueParseException("Unexpected input");
+        }
+
+        public static IVariableValue CreateVariableValue(string name, string mappedValuestring, LadderValueType type, string comment)
+        {
+
+            switch (type)
+            {
+                case LadderValueType.Bool:
+                    return CreateVariableBitValue(name, mappedValuestring, comment);
+                case LadderValueType.DoubleWord:
+                    return CreateVariableBitValue(name, mappedValuestring, comment);
+                case LadderValueType.Float:
+                    return CreateVariableBitValue(name, mappedValuestring, comment);
+                case LadderValueType.Word:
+                    return CreateVariableBitValue(name, mappedValuestring, comment);
+            }      
+            throw new ValueParseException("Unexpected input");
+        }
+        public static VariableBitValue CreateVariableBitValue(string name, string mappedValuestring, string comment)
+        {
+            // 匿名 
+            if (mappedValuestring == string.Empty)
+            {
+                VariableBitValue variable = new VariableBitValue(name, comment);
+                return variable;
+            }
+            else
+            {
+                // 非匿名
+                var value = ParseBitValue(mappedValuestring, PLCDevice.Device.DefaultDevice);
+                if(value.IsVariable)
+                {
+                    throw new ValueParseException("Can not map variable to variable");
+                }
+                else
+                {
+                    VariableBitValue variable = new VariableBitValue(name, value, comment);
+                    return variable;
+                }
+            }
+        }
+        public static VariableWordValue CreateVariableWordValue(string name, string mappedValuestring, string comment)
+        {
+            // 匿名 
+            if (mappedValuestring == string.Empty)
+            {
+                VariableWordValue variable = new VariableWordValue(name, comment);
+                return variable;
+            }
+            else
+            {
+                // 非匿名
+                var value = ParseWordValue(mappedValuestring, PLCDevice.Device.DefaultDevice);
+                if (value.IsVariable)
+                {
+                    throw new ValueParseException("Can not map variable to variable");
+                }
+                else
+                {
+                    VariableWordValue variable = new VariableWordValue(name, value, comment);
+                    return variable;
+                }
+            }
+        }
+        public static VariableFloatValue CreateVariableFloatValue(string name, string mappedValuestring, string comment)
+        {
+            // 匿名 
+            if (mappedValuestring == string.Empty)
+            {
+                VariableFloatValue variable = new VariableFloatValue(name, comment);
+                return variable;
+            }
+            else
+            {
+                // 非匿名
+                var value = ParseFloatValue(mappedValuestring, PLCDevice.Device.DefaultDevice);
+                if (value.IsVariable)
+                {
+                    throw new ValueParseException("Can not map variable to variable");
+                }
+                else
+                {
+                    VariableFloatValue variable = new VariableFloatValue(name, value, comment);
+                    return variable;
+                }
+            }
+        }
+        public static VariableDoubleWordValue CreateVariableDoubleWordValue(string name, string mappedValuestring, string comment)
+        {
+            // 匿名 
+            if (mappedValuestring == string.Empty)
+            {
+                VariableDoubleWordValue variable = new VariableDoubleWordValue(name, comment);
+                return variable;
+            }
+            else
+            {
+                // 非匿名
+                var value = ParseDoubleWordValue(mappedValuestring, PLCDevice.Device.DefaultDevice);
+                if (value.IsVariable)
+                {
+                    throw new ValueParseException("Can not map variable to variable");
+                }
+                else
+                {
+                    VariableDoubleWordValue variable = new VariableDoubleWordValue(name, value, comment);
+                    return variable;
+                }
             }
         }
     }

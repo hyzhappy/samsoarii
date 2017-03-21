@@ -9,17 +9,31 @@ namespace SamSoarII.ValueModel
     public class KFloatValue : FloatValue
     {
         private float Value { get; set; }
+
         public KFloatValue(float value)
         {
             Value = value;
         }
-        public override string GetFloatValue()
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("K{0}", Value);
+            }
+        }
+
+        public override string ValueShowString
+        {
+            get
+            {
+                return ValueString;
+            }
+        }
+
+        public override string GetValue()
         {
             return Convert.ToString(Value);
-        }
-        public override string ToString()
-        {
-            return string.Format("K{0}", Convert.ToString(Value));
         }
     }
 }

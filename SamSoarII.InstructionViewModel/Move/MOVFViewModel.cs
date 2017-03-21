@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock1.Text = _model.SourceValue.ToShowString();
+                MiddleTextBlock1.Text = _model.SourceValue.ValueShowString;
             }
         }
         private FloatValue DestinationValue
@@ -35,7 +35,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = _model.DestinationValue.ToShowString();
+                BottomTextBlock.Text = _model.DestinationValue.ValueShowString;
             }
         }
         public override BaseModel Model
@@ -69,38 +69,24 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
             dialog.ShowLine3("S");
             dialog.ShowLine5("D");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> temp = new List<string>();
-                    temp.Add(dialog.ValueString3);
-                    temp.Add(dialog.ValueString5);
-                    ParseValue(temp);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            return dialog;
         }
 
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(SourceValue.ToString());
-            result.Add(DestinationValue.ToString());
+            result.Add(SourceValue.ValueString);
+            result.Add(DestinationValue.ValueString);
             return result;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {

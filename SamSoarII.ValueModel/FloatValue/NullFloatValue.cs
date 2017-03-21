@@ -8,17 +8,26 @@ namespace SamSoarII.ValueModel
 {
     public class NullFloatValue : FloatValue
     {
-        public override string GetFloatValue()
+
+        public override string ValueShowString
+        {
+            get
+            {
+                return "???";
+            }
+        }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        public override string GetValue()
         {
             throw new NotImplementedException();
-        }
-        public override string ToString()
-        {
-            return "";
-        }
-        public override string ToShowString()
-        {
-            return "???";
         }
     }
 }

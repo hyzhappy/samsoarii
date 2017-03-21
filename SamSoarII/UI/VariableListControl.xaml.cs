@@ -17,21 +17,22 @@ using System.Windows.Shapes;
 using SamSoarII.AppMain.Project;
 namespace SamSoarII.AppMain.UI
 {
+
     /// <summary>
     /// VariableListControl.xaml 的交互逻辑
     /// </summary>
     public partial class VariableListControl : UserControl, INotifyPropertyChanged, ITabItem
     {
-        public IEnumerable<LadderVariable> VariableCollection
+        public IEnumerable<IVariableValue> VariableCollection
         {
             get
             {
                 int filterIndex = FilterCombobox.SelectedIndex - 1;
-                var temp = GlobalVariableList.VariableCollection.Where(x => (x.Name.StartsWith(SearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase) || x.ValueModel.ToString().StartsWith(SearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase)));
+                var temp = VariableManager.VariableCollection.Where(x => (x.VarName.StartsWith(SearchTextBox.Text, StringComparison.CurrentCultureIgnoreCase)));
                 if (filterIndex >= 0)
                 {
                     LadderValueType type = (LadderValueType)filterIndex;
-                    return temp.Where(y => y.ValueType == type);
+                    return temp.Where(y => y.Type == type);
                 }
                 return temp;
             }
@@ -43,7 +44,6 @@ namespace SamSoarII.AppMain.UI
             {
                 return "元件变量表";
             }
-
             set
             {
 
@@ -54,15 +54,15 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
             this.DataContext = this;
+            ValueCommentManager.ValueCommentChanged += (e) =>
+            {
+                UpdateVariableCollection();
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Event handler
-
-        private void OnSearchVariable(object sender, RoutedEventArgs e)
-        {
-        }
 
         private void OnAddVariable(object sender, RoutedEventArgs e)
         {
@@ -84,24 +84,18 @@ namespace SamSoarII.AppMain.UI
             dialog.ShowDialog();
         }
 
-        private void OnDeleteVariable(object sender, RoutedEventArgs e)
-        {
-
-        }
-        #endregion
-
         private void OnDeleteRows(object sender, ExecutedRoutedEventArgs e)
         {
-            foreach(LadderVariable row in VariableGrid.SelectedItems)
+            foreach (IVariableValue row in VariableGrid.SelectedItems)
             {
-                GlobalVariableList.RemoveVariable(row);
+                VariableManager.RemoveVariable(row);
             }
             UpdateVariableCollection();
         }
 
         private void DelectRowsCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if(VariableGrid?.SelectedItems != null)
+            if (VariableGrid?.SelectedItems != null)
             {
                 e.CanExecute = VariableGrid.SelectedItems.Count > 0;
             }
@@ -111,10 +105,12 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+
+
         private void OnRowMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
-            var variable = row.Item as LadderVariable;
+            var variable = row.Item as IVariableValue;
             EditVariableDialog dialog = new EditVariableDialog(variable);
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.EnsureButtonClick += (sender1, e1) =>
@@ -142,6 +138,9 @@ namespace SamSoarII.AppMain.UI
         {
             UpdateVariableCollection();
         }
+        #endregion
+
+
 
         public void UpdateVariableCollection()
         {

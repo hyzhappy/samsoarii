@@ -9,20 +9,31 @@ namespace SamSoarII.ValueModel
     public class DWordValue : WordValue
     {
 
-        public DWordValue(uint index, VWordValue offset = null)
+        public DWordValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = offset;
+            Offset = offset == null ? WordValue.Null : offset;
         }
 
-        public override string GetWordValue()
+        public override string ValueShowString
+        {
+            get
+            {
+                return ValueString;
+            }
+        }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("D{0}{1}", Index, Offset.ValueString);
+            }
+        }
+
+        public override string GetValue()
         {
             throw new NotImplementedException();
-        }
-
-        public override string ToString()
-        {
-            return string.Format("D{0}{1}", Index, Offset);     
         }
     }
 }

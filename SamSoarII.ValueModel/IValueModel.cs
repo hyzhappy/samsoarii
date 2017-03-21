@@ -9,6 +9,10 @@ namespace SamSoarII.ValueModel
     public interface IValueModel
     {
         LadderValueType Type { get; }
+        string ValueString { get; }
+        string ValueShowString { get; }
+        string Comment { get; set; }
+        bool IsVariable { get; }
         string GetValue();
     }
 }

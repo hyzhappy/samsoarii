@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue = value;
-                MiddleTextBlock1.Text = _model.InputValue.ToShowString();
+                MiddleTextBlock1.Text = _model.InputValue.ValueShowString;
             }
         }
         private DoubleWordValue OutputValue
@@ -35,7 +35,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.OutputValue = value;
-                BottomTextBlock.Text = _model.OutputValue.ToShowString();
+                BottomTextBlock.Text = _model.OutputValue.ValueShowString;
             }
         }
         public override BaseModel Model
@@ -73,12 +73,12 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(InputValue.ToString());
-            result.Add(OutputValue.ToString());
+            result.Add(InputValue.ValueString);
+            result.Add(OutputValue.ValueString);
             return result;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -98,29 +98,14 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> temp = new List<string>();
-                    temp.Add(dialog.ValueString2);
-                    temp.Add(dialog.ValueString4);
-                    temp.Add(dialog.ValueString6);
-                    ParseValue(temp);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            return dialog;
         }
     }
 }

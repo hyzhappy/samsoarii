@@ -59,6 +59,7 @@
     <Compile Include="InstructionInputDialog.xaml.cs">
       <DependentUpon>InstructionInputDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IPropertyDialog.cs" />
     <Compile Include="LadderDiagramCommentEditDialog.xaml.cs">
       <DependentUpon>LadderDiagramCommentEditDialog.xaml</DependentUpon>
     </Compile>
@@ -123,6 +124,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.ValueModel\SamSoarII.ValueModel.csproj">
+      <Project>{5357953a-adc8-40ee-a685-3165f1be99cc}</Project>
+      <Name>SamSoarII.ValueModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -42,10 +42,6 @@ namespace SamSoarII.UserInterface
             {
                 InstructionInputTextBox.Focus();
                 InstructionInputTextBox.Select(InstructionInputTextBox.Text.Length, 0);
-                this.LocationChanged += (sender1, e1) =>
-                {
-                   
-                };
             };
         }
 

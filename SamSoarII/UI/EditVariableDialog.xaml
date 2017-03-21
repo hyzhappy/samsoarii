@@ -10,8 +10,6 @@
         mc:Ignorable="d"
         Title="变量编辑" Height="400" Width="450" PreviewKeyDown="OnPreviewKeyDown">
     <Window.Resources>
-        <app:LadderValueToStringConverter x:Key="ValueConverter"></app:LadderValueToStringConverter>
-        <app:LadderValueToCommentConverter x:Key="ValueCommentConverter"></app:LadderValueToCommentConverter>
         <ObjectDataProvider x:Key="LadderValueTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="svm:LadderValueType"></x:Type>
@@ -45,9 +43,9 @@
         <TextBlock Grid.Column="0" Grid.Row="1">值</TextBlock>
         <TextBlock Grid.Column="0" Grid.Row="2">值类型</TextBlock>
         <TextBlock Grid.Column="0" Grid.Row="3">注释</TextBlock>
-        <TextBox x:Name="VariableNameTextBox" Grid.Column="1" Grid.Row="0" Height="24" Text="{Binding Name, Mode=TwoWay}"></TextBox>
-        <TextBox x:Name="VariableValueTextBox" Grid.Column="1" Grid.Row="1" Height="24" Text="{Binding ValueModel, Mode=OneTime, Converter={StaticResource ValueConverter}}"></TextBox>
-        <ComboBox x:Name="VariableValueTypeCombobox" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="24" ItemsSource="{Binding Source={StaticResource LadderValueTypeEnum}}" SelectedItem="{Binding ValueType, Mode=OneTime}">
+        <TextBox x:Name="VariableNameTextBox" Grid.Column="1" Grid.Row="0" Height="24" Text="{Binding VarName, Mode=OneTime}"></TextBox>
+        <TextBox x:Name="VariableValueTextBox" Grid.Column="1" Grid.Row="1" Height="24" Text="{Binding MappedValue.ValueString, Mode=OneTime}"></TextBox>
+        <ComboBox x:Name="VariableValueTypeCombobox" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="24" ItemsSource="{Binding Source={StaticResource LadderValueTypeEnum}}" SelectedItem="{Binding Type, Mode=OneTime}">
             
         </ComboBox>
         <TextBox x:Name="VariableCommentTextBox" Grid.Column="1" Grid.Row="3" Height="80" Text="{Binding Comment, Mode=OneTime}"></TextBox>

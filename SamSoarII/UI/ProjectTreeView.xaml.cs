@@ -104,12 +104,12 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnShowCommentList(object sender, MouseButtonEventArgs e)
         {
-
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
         }
 
         private void OnShowCommentList(object sender, RoutedEventArgs e)
         {
-
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
         }
 
         private void OnShowUsageList(object sender, MouseButtonEventArgs e)

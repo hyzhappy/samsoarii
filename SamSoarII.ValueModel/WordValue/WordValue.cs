@@ -15,19 +15,23 @@ namespace SamSoarII.ValueModel
                 return LadderValueType.Word;
             }
         }
+        public abstract string ValueString { get; }
+        public abstract string ValueShowString { get; }
         protected uint Index { get; set; }
-        protected IVariableValueModel Offset { get; set; }
-        public abstract string GetWordValue();
-        public virtual string ToShowString()
+        protected WordValue Offset { get; set; }
+        public string Comment
         {
-            return ToString();
+            get
+            {
+                return ValueCommentManager.GetComment(this);
+            }
+            set
+            {
+                ValueCommentManager.UpdateComment(this, value);
+            }
         }
-
-        public string GetValue()
-        {
-            return GetWordValue();
-        }
-
+        public virtual bool IsVariable { get { return false; } }
+        public abstract string GetValue();
         public static WordValue Null { get { return _nullWordValue; } }
         private static NullWordValue _nullWordValue = new NullWordValue();
     }

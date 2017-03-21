@@ -8,40 +8,38 @@ namespace SamSoarII.ValueModel
 {
     public class TBitValue : BitValue
     {
-        public TBitValue(uint index)
+        public TBitValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = WordValue.Null as NullWordValue;
+            Offset = offset == null ? WordValue.Null : offset;
         }
-        public TBitValue(uint index, IVariableValueModel offset)
+
+        public override string ValueShowString
         {
-            Index = index;
-            Offset = offset;
+            get
+            {
+                return ValueString;
+            }
         }
-        public override string GetBitValue()
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("T{0}{1}", Index, Offset.ValueString);
+            }
+        }
+
+        public override string GetValue()
         {
             if (Offset != WordValue.Null)
             {
-                return string.Format("TBit[{0} + {1}]", Index, Offset.GetVariableValue());
+                return string.Format("TBit[{0} + {1}]", Index, Offset.GetValue());
             }
             else
             {
                 return string.Format("TBit[{0}]", Index);
             }
-        }
-
-        public override string GetInputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetOutputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
-        public override string ToString()
-        {
-            return string.Format("T{0}{1}", Index, Offset);           
         }
     }
 }

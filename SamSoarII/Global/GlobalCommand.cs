@@ -18,7 +18,7 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand CompileCommand { get; set; }
 
         public static RoutedUICommand DownloadCommand { get; set; }
-
+        public static RoutedUICommand CommentModeToggleCommand { get; set; }
         public static RoutedUICommand ShowPropertyDialogCommand { get; set; }
 
         public static RoutedUICommand ShowOptionDialogCommand { get; set; }
@@ -32,6 +32,7 @@ namespace SamSoarII.AppMain
             DownloadCommand = new RoutedUICommand();
             ShowPropertyDialogCommand = new RoutedUICommand();
             ShowOptionDialogCommand = new RoutedUICommand();
+            CommentModeToggleCommand = new RoutedUICommand();
         }
     }
 }

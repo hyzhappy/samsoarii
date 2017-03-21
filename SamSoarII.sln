@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.PLCDevice", "SamS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.CompilerCommand", "SamSoarII.CompilerCommand\SamSoarII.CompilerCommand.csproj", "{EF0C04A4-33E3-4F65-843A-AA7AE6EC63B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.UnitTest", "SamSoarII.UnitTest\SamSoarII.UnitTest.csproj", "{58E34AF9-A4CF-4E1C-AF11-B616460F6125}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{EF0C04A4-33E3-4F65-843A-AA7AE6EC63B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF0C04A4-33E3-4F65-843A-AA7AE6EC63B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF0C04A4-33E3-4F65-843A-AA7AE6EC63B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E34AF9-A4CF-4E1C-AF11-B616460F6125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E34AF9-A4CF-4E1C-AF11-B616460F6125}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E34AF9-A4CF-4E1C-AF11-B616460F6125}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E34AF9-A4CF-4E1C-AF11-B616460F6125}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

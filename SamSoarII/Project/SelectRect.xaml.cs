@@ -20,8 +20,23 @@ namespace SamSoarII.AppMain.Project
     /// </summary>
     public partial class SelectRect : UserControl
     {
+
+        private bool _isCommentMode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return _isCommentMode;
+            }
+            set
+            {
+                _isCommentMode = value;
+                UpdateHeightProperty();
+                UpdateTopProperty();
+            }
+        }
         int _x;
-        
+
         public int X
         {
             get
@@ -31,7 +46,7 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _x = value;
-                Canvas.SetLeft(this, _x * 300);
+                UpdateLeftProperty();
             }
         }
         int _y;
@@ -45,12 +60,28 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _y = value;
-                Canvas.SetTop(this, _y * 300);
+                UpdateTopProperty();
             }
         }
         public SelectRect()
         {
             InitializeComponent();
+            IsCommentMode = false;
+        }
+
+        private void UpdateTopProperty()
+        {
+            Canvas.SetTop(this, (_isCommentMode ? 500 : 300) * _y);
+        }
+
+        private void UpdateLeftProperty()
+        {
+            Canvas.SetLeft(this, _x * 300);
+        }
+
+        private void UpdateHeightProperty()
+        {
+            Height = _isCommentMode ? 500 : 300;
         }
     }
 }

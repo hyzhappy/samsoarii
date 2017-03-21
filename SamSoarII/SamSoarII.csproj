@@ -80,15 +80,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converter\LadderValueToCommentConverter.cs" />
-    <Compile Include="Converter\LadderValueToStringConverter.cs" />
     <Compile Include="Event\RoutineChangedEventArgs.cs" />
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
     <Compile Include="Event\TabType.cs" />
     <Compile Include="Functionality\LadderVariable.cs" />
     <Compile Include="Global\GlobalUsageList.cs" />
-    <Compile Include="Global\GlobalValueComment.cs" />
-    <Compile Include="Global\GlobalVariableList.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
@@ -120,7 +116,9 @@
     <Compile Include="Project\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\ValueCommentManager.cs" />
+    <Compile Include="UI\CommentListControl.xaml.cs">
+      <DependentUpon>CommentListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\EditVariableDialog.xaml.cs">
       <DependentUpon>EditVariableDialog.xaml</DependentUpon>
     </Compile>
@@ -147,7 +145,6 @@
     <Compile Include="UI\VariableListControl.xaml.cs">
       <DependentUpon>VariableListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Validation\VariableValidationRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -238,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\CommentListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\EditVariableDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -299,6 +300,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Comment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Config.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

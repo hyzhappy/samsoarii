@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
+
 namespace SamSoarII.LadderInstViewModel
 {
     /// <summary>
@@ -43,7 +45,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _x = value;
-                Canvas.SetLeft(this, X * 300);
+                UpdateLeftProperty();
             }
         }
 
@@ -57,7 +59,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _y = value;
-                Canvas.SetTop(this, Y * 300);
+                UpdateTopProperty();
             }
         }
 
@@ -70,6 +72,9 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _isCommentMode = value;
+                UpdateTopProperty();
+                UpdateHeightProperty();
+                UpdateCommentAreaVisibility();
             }
         }
 
@@ -89,10 +94,49 @@ namespace SamSoarII.LadderInstViewModel
         public OutputBaseViewModel()
         {
             InitializeComponent();
+            IsCommentMode = false;
+            this.DataContext = this;
         }
+
+        private void UpdateHeightProperty()
+        {
+            Height = _isCommentMode ? 500 : 300;
+        }
+        private void UpdateTopProperty()
+        {
+            if (_isCommentMode)
+            {
+                Canvas.SetTop(this, _y * 500);
+            }
+            else
+            {
+                Canvas.SetTop(this, _y * 300);
+            }
+        }
+        private void UpdateLeftProperty()
+        {
+            Canvas.SetLeft(this, _x * 300);
+        }
+
+
         public override bool Assert()
         {
             return NextElemnets.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special); }) & NextElemnets.Count > 0;
         }
+
+        private void UpdateCommentAreaVisibility()
+        {
+            CommentArea.Visibility = _isCommentMode ? Visibility.Visible : Visibility.Hidden;
+        }
+        public override void UpdateCommentContent()
+        {
+            // nothing to do
+        }
+
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+
+        }
+
     }
 }

@@ -23,9 +23,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value = value;
-                ValueTextBlock.Text = _model.Value.ToShowString();
+                ValueTextBlock.Text = _model.Value.ValueShowString;
             }
         }
+
 
         public WordValue Count
         {
@@ -36,7 +37,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                CountTextBlock.Text = _model.Count.ToShowString();
+                CountTextBlock.Text = _model.Count.ValueShowString;
             }
         }
 
@@ -57,30 +58,18 @@ namespace SamSoarII.LadderInstViewModel
         public SETIMViewModel()
         {
             Model = new SETIMModel();
-            //ValueTextBlock.Text = _model.Value.ToString();
-            //CountTextBlock.Text = _model.Count.ToString();
+            //ValueTextBlock.Text = _model.Value.ValueString;
+            //CountTextBlock.Text = _model.Count.ValueString;
             CenterTextBlock.Text = "SI";
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
-            dialog.ShowLine4("Bit");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            dialog.ShowLine3("Bit", Value);
+            dialog.ShowLine5("Count", Count);
+            return dialog;
         }
 
         public override BaseViewModel Clone()
@@ -95,7 +84,7 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -118,8 +107,8 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value.ToString());
-            result.Add(Count.ToString());
+            result.Add(Value.ValueString);
+            result.Add(Count.ValueString);
             return result;
         }
     }

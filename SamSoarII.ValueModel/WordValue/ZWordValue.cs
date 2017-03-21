@@ -6,26 +6,32 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
 {
-    public class ZWordValue : WordValue, IVariableValueModel
+    public class ZWordValue : WordValue
     {
         public ZWordValue(uint index)
         {
             Index = index;
         }
 
-        public string GetVariableValue()
+        public override string ValueShowString
         {
-            return GetWordValue();
+            get
+            {
+                return ValueString;
+            }
         }
 
-        public override string GetWordValue()
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("Z{0}", Index);
+            }
+        }
+
+        public override string GetValue()
         {
             throw new NotImplementedException();
-        }
-
-        public override string ToString()
-        {
-            return string.Format("Z{0}", Index);
         }
 
     }

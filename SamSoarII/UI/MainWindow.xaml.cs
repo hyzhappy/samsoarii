@@ -30,7 +30,6 @@ namespace SamSoarII.AppMain.UI
     {
         private InteractionFacade _interactionFacade;
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -45,6 +44,11 @@ namespace SamSoarII.AppMain.UI
         }
 
         #region Event handler
+        private void OnCommentModeToggle(object sender, RoutedEventArgs e)
+        {
+            _interactionFacade.IsCommentMode = !_interactionFacade.IsCommentMode;
+        }
+
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
 
@@ -332,5 +336,25 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
+
+        private void OnCommentModeToggle(object sender, ExecutedRoutedEventArgs e)
+        {
+            if(CommentModeToggleButton.IsChecked.HasValue)
+            {
+                _interactionFacade.IsCommentMode = CommentModeToggleButton.IsChecked.Value;
+            }   
+        }
+
+        private void CommentModeCanToggle(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
     }
 }

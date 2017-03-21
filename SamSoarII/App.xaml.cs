@@ -15,6 +15,9 @@ namespace SamSoarII.AppMain
     {
         public App()
         {
+
+            SamSoarII.ValueModel.ValueCommentManager.Initialize();
+            SamSoarII.ValueModel.VariableManager.Initialize();
             GlobalSetting.Load();
             this.Exit += App_Exit;
         }

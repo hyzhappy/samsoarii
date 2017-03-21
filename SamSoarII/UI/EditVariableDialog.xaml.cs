@@ -1,4 +1,5 @@
-﻿using SamSoarII.ValueModel;
+﻿using SamSoarII.LadderInstViewModel;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace SamSoarII.AppMain.UI
 
         public event RoutedEventHandler EnsureButtonClick = delegate { };
 
+        private IVariableValue _variable;
+
         public string VariableName { get { return VariableNameTextBox.Text; } }
 
         public string VariableValueString { get { return VariableValueTextBox.Text; } }
@@ -54,63 +57,39 @@ namespace SamSoarII.AppMain.UI
             _editMode = EditingMode.Add;
         }
 
-        public EditVariableDialog(LadderVariable variable)
+        public EditVariableDialog(IVariableValue variable)
         {
             InitializeComponent();
             this.DataContext = variable;
-            _oldname = variable.Name;
+            _oldname = variable.VarName;
             _editMode = EditingMode.Modify;
+            _variable = variable;
         }
 
         public void Commit()
         {
             if(_editMode == EditingMode.Modify)
             {
-                if(_oldname == VariableName)
+                if(VariableName != _variable.VarName)
                 {
-                    try
+                    if (VariableManager.ContainVariable(VariableName))
                     {
-                        var newvalue = ValueParser.ParseValue(VariableValueString, VariableValueType);
-                        GlobalVariableList.ModifyVariable(VariableName, newvalue, VariableComment);
-                    }
-                        catch
-                    {
-                        throw new ArgumentException("非法的输入值");
+                        throw new ValueParseException(string.Format("Variable {0} is exist", VariableName));
                     }
                 }
-                else
-                {
-                    if (GlobalVariableList.ContainVariable(VariableName))
-                    {
-                        throw new ArgumentException("已经存在同名变量");
-                    }
-                    try
-                    {
-                        var newvalue = ValueParser.ParseValue(VariableValueString, VariableValueType);
-                        GlobalVariableList.ModifyVariable(_oldname, VariableName, newvalue, VariableComment);
-                    }
-                    catch
-                    {
-                        throw new ArgumentException("非法的输入值");
-                    }
-                }
-
+                var variable = ValueParser.CreateVariableValue(VariableName, VariableValueString, VariableValueType, VariableComment);
+                VariableManager.ReplactVarialbe(_variable, variable);
+                InstructionCommentManager.UpdateCommentContent(variable.ValueString);
             }
             else
             {
-                if (GlobalVariableList.ContainVariable(VariableName))
+                if (VariableManager.ContainVariable(VariableName))
                 {
-                    throw new ArgumentException("已经存在同名变量");
+                    throw new ValueParseException(string.Format("Variable {0} is exist", VariableName));
                 }
-                try
-                {
-                    var newvalue = ValueParser.ParseValue(VariableValueString, VariableValueType);
-                    GlobalVariableList.AddVariable(VariableName, newvalue, VariableComment);
-                }
-                catch
-                {
-                    throw new ArgumentException("非法的输入值");
-                }
+                var variable = ValueParser.CreateVariableValue(VariableName, VariableValueString, VariableValueType, VariableComment);
+                VariableManager.AddVariable(variable);
+                InstructionCommentManager.UpdateCommentContent(variable.ValueString);
             }
         }
 

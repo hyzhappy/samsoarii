@@ -6,26 +6,33 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
 {
-    public class VWordValue : WordValue, IVariableValueModel
+    public class VWordValue : WordValue
     {
         public VWordValue(uint index)
         {
             Index = index;
         }
 
-        public string GetVariableValue()
+
+        public override string ValueShowString
         {
-            return GetWordValue();
+            get
+            {
+                return ValueString;
+            }
         }
 
-        public override string GetWordValue()
+        public override string ValueString
         {
-            //return string.Format("*(int16_t*)(0x{0})", Convert.ToString(AddressManager.VBaseAddress + Index, 16));
-            return string.Empty;
+            get
+            {
+                return string.Format("V{0}", Index);
+            }
         }
-        public override string ToString()
+
+        public override string GetValue()
         {
-            return string.Format("V{0}", Index); ;
+            throw new NotImplementedException();
         }
     }
 }

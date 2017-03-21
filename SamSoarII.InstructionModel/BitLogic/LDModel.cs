@@ -21,7 +21,7 @@ namespace SamSoarII.LadderInstModel
 
         public override string GenerateCode()
         {
-            return string.Format("plc_bool {0} = {1};\r\n", ExportVaribleName, Value.GetBitValue());
+            return string.Format("plc_bool {0} = {1};\r\n", ExportVaribleName, Value.GetValue());
         }
     }
 }

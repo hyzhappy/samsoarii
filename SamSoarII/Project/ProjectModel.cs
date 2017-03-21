@@ -7,6 +7,7 @@ using System.Xml;
 using System.IO;
 using System.ComponentModel;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.ValueModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Xml.Linq;
@@ -17,7 +18,20 @@ namespace SamSoarII.AppMain.Project
 {
     public class ProjectModel
     {
-
+        private bool _isCommentMode;
+        public bool IsCommentMode
+        {
+            get { return _isCommentMode; }
+            set
+            {
+                _isCommentMode = value;
+                MainRoutine.IsCommendMode = _isCommentMode;
+                foreach(var ldmodel in SubRoutines)
+                {
+                    ldmodel.IsCommendMode = _isCommentMode;
+                }
+            }
+        }
         public string ProjectName { get; set; }
 
         public LadderDiagramViewModel MainRoutine { get; set; }
@@ -129,6 +143,7 @@ namespace SamSoarII.AppMain.Project
             xdoc.Add(rootNode);
             var settingNode = new XElement("Setting");
             rootNode.Add(settingNode);
+            rootNode.Add(ProjectHelper.CreateXElementByValueComments());
             rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             foreach(var ldmodel in SubRoutines)
@@ -144,16 +159,19 @@ namespace SamSoarII.AppMain.Project
    
         public bool Open(string filepath)
         {
-            //try
-            //{
+            try
+            {
                 XDocument xmldoc = XDocument.Load(filepath);
                 XElement rootNode = xmldoc.Element("Project");
                 ProjectName = rootNode.Attribute("Name").Value;
                 // Open Ladder Model
                 SubRoutines.Clear();
                 FuncBlocks.Clear();
-                GlobalVariableList.Clear();
-                ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));
+                VariableManager.Clear();
+                ValueCommentManager.Clear();
+                InstructionCommentManager.Clear();
+                ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
+                ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));   
                 var ldnodes = rootNode.Elements("Ladder");
                 foreach (XElement ldnode in ldnodes)
                 {
@@ -175,11 +193,11 @@ namespace SamSoarII.AppMain.Project
                     FuncBlocks.Add(fbmodel);
                 }
                 return true;
-            //}
-            //catch (Exception exception)
-            //{
-            //    return false;
-            //}
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
         }
 
         public void Compile()

@@ -6,25 +6,28 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
 {
-    public class NullWordValue : WordValue, IVariableValueModel
+    public class NullWordValue : WordValue
     {
-        public override string GetWordValue()
+
+        public override string ValueShowString
+        {
+            get
+            {
+                return "???";
+            }
+        }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        public override string GetValue()
         {
             throw new NotImplementedException();
-        }
-
-        public override string ToString()
-        {
-            return string.Empty;
-        }
-        public override string ToShowString()
-        {
-            return "???";
-        }
-
-        public string GetVariableValue()
-        {
-            return string.Empty;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using SamSoarII.UserInterface;
-
+using System.Windows.Controls;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value1 = value;
-                ValueTextBlock.Text = _model.Value1.ToShowString();
+                ValueTextBlock.Text = _model.Value1.ValueShowString;
             }
         }
         private WordValue Value2
@@ -35,7 +35,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value2 = value;
-                Value2TextBlock.Text = _model.Value2.ToShowString();
+                Value2TextBlock.Text = _model.Value2.ValueShowString;
             }
         }
         public override BaseModel Model
@@ -50,8 +50,8 @@ namespace SamSoarII.LadderInstViewModel
                 Value1 = _model.Value1;
                 Value2 = _model.Value2;
             }
-
         }
+        private TextBlock[] _commentTextBlocks = { new TextBlock(), new TextBlock() };
         public override string InstructionName { get { return "LDWL"; } }
         public LDWLViewModel()
         {
@@ -59,27 +59,13 @@ namespace SamSoarII.LadderInstViewModel
             Model = new LDWLModel();
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
             dialog.ShowLine3("W1");
             dialog.ShowLine5("W2");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> temp = new List<string>();
-                    temp.Add(dialog.ValueString3);
-                    temp.Add(dialog.ValueString5);
-                    ParseValue(temp);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            return dialog;
         }
 
         public override BaseViewModel Clone()
@@ -94,7 +80,7 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -117,8 +103,8 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value1.ToString());
-            result.Add(Value2.ToString());
+            result.Add(Value1.ValueString);
+            result.Add(Value2.ValueString);
             return result;
         }
     }

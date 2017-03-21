@@ -16,18 +16,22 @@ namespace SamSoarII.ValueModel
             }
         }
         protected uint Index { get; set; }
-        protected IVariableValueModel Offset { get; set; }
-        public abstract string GetDoubleWordValue();
-        public virtual string ToShowString()
+        protected WordValue Offset { get; set; }
+        public abstract string ValueString { get; }
+        public abstract string ValueShowString { get; }
+        public string Comment
         {
-            return ToString();
+            get
+            {
+                return ValueCommentManager.GetComment(this);
+            }
+            set
+            {
+                ValueCommentManager.UpdateComment(this, value);
+            }
         }
-
-        public string GetValue()
-        {
-            return GetDoubleWordValue();
-        }
-
+        public virtual bool IsVariable { get { return false; } }
+        public abstract string GetValue();
         public static DoubleWordValue Null { get { return _nullDoubleWordValue; } }
         private static NullDoubleWordValue _nullDoubleWordValue = new NullDoubleWordValue();
     }

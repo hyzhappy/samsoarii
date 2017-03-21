@@ -63,6 +63,7 @@
     <Compile Include="BitLogic\RSTViewModel.cs" />
     <Compile Include="BitLogic\SETIMViewModel.cs" />
     <Compile Include="BitLogic\SETViewModel.cs" />
+    <Compile Include="InstructionCommentManager.cs" />
     <Compile Include="Compare\LDDEQViewModel.cs" />
     <Compile Include="Compare\LDDGEViewModel.cs" />
     <Compile Include="Compare\LDDGViewModel.cs" />
@@ -175,6 +176,10 @@
     <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj">
       <Project>{69569578-5258-4aec-9e10-dde7234d78fb}</Project>
       <Name>SamSoarII.LadderInstModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj">
+      <Project>{6ddbbac0-a051-43ac-be0d-d70227d61687}</Project>
+      <Name>SamSoarII.PLCDevice</Name>
     </ProjectReference>
     <ProjectReference Include="..\SamSoarII.UserInterface\SamSoarII.UserInterface.csproj">
       <Project>{76f2627d-b161-4e88-ae31-043dc7c8da61}</Project>

@@ -13,12 +13,15 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
+using System.ComponentModel;
+using SamSoarII.PLCDevice;
+
 namespace SamSoarII.LadderInstViewModel
 {
     /// <summary>
     /// HorizontalLineViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class HorizontalLineViewModel : BaseViewModel
+    public partial class HorizontalLineViewModel : BaseViewModel, INotifyPropertyChanged
     {
         public override ElementType Type
         {
@@ -33,6 +36,8 @@ namespace SamSoarII.LadderInstViewModel
         private bool _isCommentMode;
         private bool _isMonitorMode;
 
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         public override int X
         {
             get
@@ -43,7 +48,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _x = value;
-                Canvas.SetLeft(this, X * 300);
+                UpdateLeftProperty();
             }
         }
 
@@ -57,7 +62,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _y = value;
-                Canvas.SetTop(this, Y * 300);
+                UpdateTopProperty();
             }
         }
 
@@ -70,6 +75,8 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _isCommentMode = value;
+                UpdateHeightProperty();
+                UpdateTopProperty();
             }
         }
 
@@ -91,11 +98,11 @@ namespace SamSoarII.LadderInstViewModel
         {
             get
             {
-                throw new NotImplementedException();
+                throw new InvalidOperationException();
             }
             protected set
             {
-                throw new NotImplementedException();
+                throw new InvalidOperationException();
             }
         }
 
@@ -104,11 +111,38 @@ namespace SamSoarII.LadderInstViewModel
         public HorizontalLineViewModel()
         {
             InitializeComponent();
+            IsCommentMode = false;
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        private void UpdateHeightProperty()
         {
-            
+            Height = _isCommentMode ? 500 : 300;
+        }
+
+        private void UpdateTopProperty()
+        {
+            if (_isCommentMode)
+            {
+                Canvas.SetTop(this, _y * 500);
+            }
+            else
+            {
+                Canvas.SetTop(this, _y * 300);
+            }
+        }
+
+        private void UpdateLeftProperty()
+        {
+            Canvas.SetLeft(this, _x * 300);
+        }
+
+        public override void UpdateCommentContent()
+        {
+            // nothing to do
+        }
+        public override IPropertyDialog PreparePropertyDialog()
+        {
+            return null;
         }
 
         public override bool Assert()
@@ -128,11 +162,14 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         { 
 
         }
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
 
+        }
         public override IEnumerable<string> GetValueString()
         {
             return new List<string>();

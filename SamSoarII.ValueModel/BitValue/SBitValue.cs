@@ -8,22 +8,33 @@ namespace SamSoarII.ValueModel
 {
     public class SBitValue : BitValue
     {
-        public SBitValue(uint index)
+        public SBitValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = WordValue.Null as NullWordValue;
-        }
-        public SBitValue(uint index, IVariableValueModel offset)
-        {
-            Index = index;
-            Offset = offset;
+            Offset = offset == null ? WordValue.Null : offset;
         }
 
-        public override string GetBitValue()
+        public override string ValueShowString
+        {
+            get
+            {
+                return ValueString;
+            }
+        }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("S{0}{1}", Index, Offset.ValueString);
+            }
+        }
+
+        public override string GetValue()
         {
             if (Offset != WordValue.Null)
             {
-                return string.Format("SBit[{0} + {1}]", Index, Offset.GetVariableValue());
+                return string.Format("SBit[{0} + {1}]", Index, Offset.GetValue());
             }
             else
             {
@@ -31,26 +42,6 @@ namespace SamSoarII.ValueModel
             }
         }
 
-        public override string GetInputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
 
-        public override string GetOutputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string ToString()
-        {
-            if (Offset == null)
-            {
-                return string.Format("S{0}", Index);
-            }
-            else
-            {
-                return string.Format("S{0}{1}", Index, Offset);
-            }
-        }
     }
 }

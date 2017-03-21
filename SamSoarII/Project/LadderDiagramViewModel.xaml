@@ -21,7 +21,7 @@
         <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCommandCanExecute" Executed="OnRedoCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
     </UserControl.CommandBindings>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Background="Transparent" LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}"  PreviewMouseDown="OnLadderDiagramMouseDown" >
             <StackPanel.Resources>
                 <ContextMenu x:Key="CommentAreaContextMenu">

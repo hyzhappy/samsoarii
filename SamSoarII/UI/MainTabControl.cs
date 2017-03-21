@@ -15,7 +15,7 @@ namespace SamSoarII.AppMain.UI
     public class MainTabControl : TabControl
     {
         private VariableListControl _varListControl = new VariableListControl();
-
+        private CommentListControl _commentListControl = new CommentListControl(); 
         public ObservableCollection<ITabItem> TabItemCollection { get; set; } = new ObservableCollection<ITabItem>();
 
         public TabItem CurrentTab
@@ -64,10 +64,20 @@ namespace SamSoarII.AppMain.UI
             ShowItem(_varListControl);
         }
 
+        public void ShowCommentList()
+        {
+            ShowItem(_commentListControl);
+        }
+
+
+        public void UpdateCommentList()
+        {
+            _commentListControl.UpdateComments();
+        }
+
         public void UpdateVariableCollection()
         {
             _varListControl.UpdateVariableCollection();
         }
-
     }
 }
