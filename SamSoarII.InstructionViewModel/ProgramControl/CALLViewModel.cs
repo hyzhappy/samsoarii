@@ -60,7 +60,10 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(FunctionName);
             return result;
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            throw new NotImplementedException();
+        }
         public override void ParseValue(List<string> valueStrings)
         {
             FunctionName = valueStrings[0];

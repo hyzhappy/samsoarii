@@ -8,6 +8,8 @@ using SamSoarII.ValueModel;
 using System.Windows.Controls;
 using System.Windows;
 using SamSoarII.UserInterface;
+using System.Text.RegularExpressions;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class SETViewModel : OutputBaseViewModel 
@@ -70,8 +72,15 @@ namespace SamSoarII.LadderInstViewModel
                 {
                     List<string> valuelist = new List<string>();
                     valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
+                    if (!CheckValueStrings(valuelist))
+                    {
+                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
+                    }
+                    else
+                    {
+                        ParseValue(valuelist);
+                        dialog.Close();
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -93,13 +102,23 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            Match match1 = Regex.Match(valueStrings[0], "^(Y|M|S|T|C)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
+            Match match2 = Regex.Match(valueStrings[1], "^K[-+]?[0-9]+$", RegexOptions.IgnoreCase);
+            if (!match2.Success)
+            {
+                match2 = Regex.Match(valueStrings[1], "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
+            }
+            return match1.Success && match2.Success;
+        }
         public override void ParseValue(List<string> valueStrings)
         {
             try
             {
                 Value = ValueParser.ParseBitValue(valueStrings[0]);
             }
-            catch(ValueParseException exception)
+            catch (ValueParseException exception)
             {
                 Value = BitValue.Null;
             }

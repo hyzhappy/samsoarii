@@ -13,7 +13,6 @@ namespace SamSoarII.ValueModel
             Index = index;
             Offset = offset;
         }
-
         public override string GetBitValue()
         {
             return string.Format("XBit[{0}{1}]", Index, string.Empty);
@@ -26,7 +25,6 @@ namespace SamSoarII.ValueModel
             //    return string.Format("*((uint32_t*)0x{0} + {1})", Convert.ToString(AddressManager.XBaseAddress + Index * 4, 16), Offset.GetWordValue());
             //}
         }
-
         public override string GetInputImBitAddress()
         {
             throw new InputImException();

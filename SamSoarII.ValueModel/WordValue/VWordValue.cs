@@ -20,7 +20,7 @@ namespace SamSoarII.ValueModel
         }
         public override string ToString()
         {
-            return string.Format("V{0}", Index); ;
+            return string.Format("V{0}", Index);
         }
     }
 }

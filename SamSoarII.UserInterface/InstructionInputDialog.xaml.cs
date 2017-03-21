@@ -23,9 +23,8 @@ namespace SamSoarII.UserInterface
     {
         public event RoutedEventHandler EnsureButtonClick = delegate { };
         private System.Windows.Forms.AutoCompleteStringCollection instructionNames = new System.Windows.Forms.AutoCompleteStringCollection();
-        private System.Windows.Forms.ToolTip toolTip = new System.Windows.Forms.ToolTip();
-        private Dictionary<string, string> instructionNameAndToolTips;
-        private string oldText;
+        private Dictionary<string, List<string>> instructionNameAndToolTips;
+        private string oldText = string.Empty;
         public string InstructionInput
         {
             get
@@ -38,7 +37,7 @@ namespace SamSoarII.UserInterface
             }
         }
 
-        public InstructionInputDialog(string initialString, Dictionary<string, string> instructionNameAndToolTips)
+        public InstructionInputDialog(string initialString,Dictionary<string,List<string>> instructionNameAndToolTips)
         {
             InitializeComponent();
             InstructionInput = initialString;
@@ -54,31 +53,10 @@ namespace SamSoarII.UserInterface
                 InstructionInputTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
                 InstructionInputTextBox.AutoCompleteCustomSource = instructionNames;
             };
-            toolTip.OwnerDraw = true;
-            toolTip.IsBalloon = false;
-            toolTip.Active = false;
-            toolTip.InitialDelay = 1000;
-            toolTip.ForeColor = System.Drawing.Color.Black;
-            toolTip.BackColor = ColorTranslator.FromHtml("#FFFFF0");
-            toolTip.Draw += ToolTip_Draw;
-            toolTip.Popup += ToolTip_Popup;
-        }
-        private void ToolTip_Popup(object sender, System.Windows.Forms.PopupEventArgs e)
-        {
-            e.ToolTipSize = System.Windows.Forms.TextRenderer.MeasureText(string.Format("HELLO    WORLD\nHELLO    WORLD"), new Font("Arial", 20.0f));
         }
 
-        private void ToolTip_Draw(object sender, System.Windows.Forms.DrawToolTipEventArgs e)
-        {
-            e.Graphics.FillRectangle(new SolidBrush(toolTip.BackColor), e.Graphics.ClipBounds);
-            e.Graphics.DrawLines(SystemPens.ActiveBorder, new System.Drawing.Point[] { new System.Drawing.Point(0, e.Bounds.Height - 1), new System.Drawing.Point(0, 0), new System.Drawing.Point(e.Bounds.Width - 1, 0), new System.Drawing.Point(e.Bounds.Width - 1, e.Bounds.Height - 1) });
-            //e.Graphics.DrawLines(SystemPens.ControlDarkDark, new System.Drawing.Point[] { new System.Drawing.Point(0, e.Bounds.Height - 1), new System.Drawing.Point(e.Bounds.Width - 1, e.Bounds.Height - 1), new System.Drawing.Point(e.Bounds.Width - 1, 0), new System.Drawing.Point(0, 0) });
-            System.Windows.Forms.TextFormatFlags sf = System.Windows.Forms.TextFormatFlags.Default | System.Windows.Forms.TextFormatFlags.LeftAndRightPadding;
-            e.DrawText(sf);
-        }
         public void OnEnsureButtonClick(object sender, RoutedEventArgs e)
         {
-            toolTip.Dispose();
             EnsureButtonClick.Invoke(sender, e);
         }
 
@@ -98,61 +76,93 @@ namespace SamSoarII.UserInterface
         {
             return instructionNames.Contains(InstructionName);
         }
-        private void OnInstructionTextBoxChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
 
-        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            toolTip.Dispose();
-        }
-        private void ShowToolTip(string instructionTooltip)
-        {
-            toolTip.Active = true;
-            toolTip.Show(instructionTooltip, InstructionInputTextBox, 200, -210);
-        }
         private void OnLocationChanged(object sender, EventArgs e)
         {
-            if (toolTip.Active)
+            if (TextBoxPopup.IsOpen)
             {
-                toolTip.Active = false;
-                toolTip.Hide(InstructionInputTextBox);
-                string instructionToolTip;
-                if (instructionNameAndToolTips.TryGetValue(oldText, out instructionToolTip))
-                {
-                    ShowToolTip(instructionToolTip);
-                }
+                TextBoxPopup.Placement = PlacementMode.Absolute;
+                TextBoxPopup.VerticalOffset = window.Top - 60;
+                TextBoxPopup.HorizontalOffset = window.Left + 128;
             }
         }
-
-        private void OnKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        private void OnTextChanged(object sender, EventArgs e)
         {
-            if (e.KeyCode == System.Windows.Forms.Keys.Space)
+            if (InstructionInputTextBox.Text.Length > oldText.Length && InstructionInputTextBox.Text.TrimEnd().Length == oldText.Length)
             {
-                string instructionName = InstructionInputTextBox.Text.Trim().ToUpper();
-                if (CheckInstructionName(instructionName))
+                List<string> InstructionInput = InstructionInputTextBox.Text.ToUpper().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (!TextBoxPopup.IsOpen)
                 {
-                    oldText = instructionName;
-                    string instructionToolTip;
-                    if (instructionNameAndToolTips.TryGetValue(instructionName, out instructionToolTip))
+                    if (CheckInstructionName(InstructionInput[0]))
                     {
-                        ShowToolTip(instructionToolTip);
+                        List<string> tempList = new List<string>();
+                        instructionNameAndToolTips.TryGetValue(InstructionInput[0], out tempList);
+                        textblock_name.Text = InstructionInput[0];
+                        textblock_describe.Text = tempList[0];
+                        textblock_1.Text = tempList[1];
+                        textblock_1.FontWeight = FontWeights.Heavy;
+                        textblock_2.Text = tempList[2];
+                        textblock_3.Text = tempList[3];
+                        TextBoxPopup.VerticalOffset = -29;
+                        TextBoxPopup.IsOpen = true;
+                    }
+                }
+                else
+                {
+                    if (InstructionInput.Count == 1)
+                    {
+                        textblock_1.FontWeight = FontWeights.Heavy;
+                    }
+                    else
+                    {
+                        if (InstructionInput.Count == 2)
+                        {
+                            textblock_2.FontWeight = FontWeights.Heavy;
+                        }
+                        else if (InstructionInput.Count == 3)
+                        {
+                            textblock_2.FontWeight = FontWeights.Light;
+                            textblock_3.FontWeight = FontWeights.Heavy;
+                        }
+                        else if (InstructionInput.Count == 4)
+                        {
+                            textblock_3.FontWeight = FontWeights.Light;
+                        }
+                        textblock_1.FontWeight = FontWeights.Light;
                     }
                 }
             }
-            else if (e.KeyCode == System.Windows.Forms.Keys.Delete)
+            else if(InstructionInputTextBox.Text.Length < oldText.Length)
             {
-                if (toolTip.Active)
+                List<string> InstructionInput = InstructionInputTextBox.Text.ToUpper().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (InstructionInputTextBox.Text == InstructionInputTextBox.Text.TrimEnd())
                 {
-                    string instructionName = InstructionInputTextBox.Text.Trim().ToUpper();
-                    if (!instructionName.Contains(oldText))
+                    switch (InstructionInput.Count)
                     {
-                        toolTip.Active = false;
-                        toolTip.Hide(InstructionInputTextBox);
+                        case 1:
+                            textblock_1.FontWeight = FontWeights.Light;
+                            TextBoxPopup.IsOpen = false;
+                            TextBoxPopup.Placement = PlacementMode.Top;
+                            TextBoxPopup.VerticalOffset = -2;
+                            TextBoxPopup.HorizontalOffset = 125;
+                            break;
+                        case 2:
+                            textblock_2.FontWeight = FontWeights.Light;
+                            textblock_1.FontWeight = FontWeights.Heavy;
+                            break;
+                        case 3:
+                            textblock_3.FontWeight = FontWeights.Light;
+                            textblock_2.FontWeight = FontWeights.Heavy;
+                            break;
+                        case 4:
+                            textblock_3.FontWeight = FontWeights.Heavy;
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
+            oldText = InstructionInputTextBox.Text;
         }
     }
 }

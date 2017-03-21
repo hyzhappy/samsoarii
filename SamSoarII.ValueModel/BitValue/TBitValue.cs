@@ -25,7 +25,6 @@ namespace SamSoarII.ValueModel
             //}
             return string.Format("TBit[{0}{1}]", Index, string.Empty);
         }
-
         public override string GetInputImBitAddress()
         {
             throw new NotImplementedException();

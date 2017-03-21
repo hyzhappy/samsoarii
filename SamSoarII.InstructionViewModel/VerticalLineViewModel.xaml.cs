@@ -56,7 +56,7 @@ namespace SamSoarII.LadderInstViewModel
                 Canvas.SetTop(this, _y * 300 + 100);
             }
         }
-
+        public int CountLevel { get; set; }
         public override BaseModel Model
         {
             get
@@ -111,7 +111,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            throw new NotImplementedException();
+        }
         public override IEnumerable<string> GetValueString()
         {
             return new List<string>();

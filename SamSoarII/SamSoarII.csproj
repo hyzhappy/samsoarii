@@ -273,7 +273,7 @@
     <Resource Include="Resources\Image\InstructionToolbar\VLine.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\XmlFiles\InstructionToolTips.xml" />
+    <EmbeddedResource Include="Resources\XmlFiles\InstructionPopup.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -45,7 +45,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             throw new NotImplementedException();
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            throw new NotImplementedException();
+        }
         public override ElementType Type
         {
             get

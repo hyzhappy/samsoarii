@@ -71,7 +71,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             return CatalogID;
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            throw new NotImplementedException();
+        }
         public override void ParseValue(List<string> valueStrings)
         {
             //Nothing to do

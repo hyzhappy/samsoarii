@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using SamSoarII.UserInterface;
+using System.Text.RegularExpressions;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class ALTViewModel : OutputRectBaseViewModel
@@ -61,7 +63,11 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(Value.ToString());
             return result;
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            Match match = Regex.Match(valueStrings[0], "^(Y|M|S)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
+            return match.Success;
+        }
         public override void ParseValue(List<string> valueStrings)
         {
             try
@@ -84,8 +90,15 @@ namespace SamSoarII.LadderInstViewModel
                 {
                     List<string> valuelist = new List<string>();
                     valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
+                    if (!CheckValueStrings(valuelist))
+                    {
+                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
+                    }
+                    else
+                    {
+                        ParseValue(valuelist);
+                        dialog.Close();
+                    }
                 }
                 catch (Exception exception)
                 {

@@ -226,7 +226,7 @@ namespace SamSoarII.ValueModel
             }
             else
             {
-                var match1 = Regex.Match(valueString, "^D[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
+                var match1 = Regex.Match(valueString, "^(D|CV)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
                 if (match1.Success)
                 {
                     VWordValue offset = null;

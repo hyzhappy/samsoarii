@@ -31,5 +31,9 @@ namespace SamSoarII.LadderInstViewModel
         {
             InitializeComponent();
         }
+        public override bool Assert()
+        {
+            return NextElemnets.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special); }) & NextElemnets.Count > 0;
+        }
     }
 }

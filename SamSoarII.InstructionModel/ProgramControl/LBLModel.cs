@@ -21,7 +21,7 @@ namespace SamSoarII.LadderInstModel
 
         public override string GenerateCode()
         {
-            return string.Format("{0}: \r\n");
+            return string.Format("{0}: \r\n",LBLIndex.ToString());
         }
     }
 }

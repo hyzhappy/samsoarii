@@ -22,7 +22,7 @@ namespace SamSoarII.ValueModel
             //}
             //else
             //{
-            //    return string.Format("*((in32_t*)((int16_t*)0x{0} + {1}))", Convert.ToString(AddressManager.DBaseAddress + Index, 16), Offset.GetWordValue());
+            //    return string.Format("*((int32_t*)((int16_t*)0x{0} + {1}))", Convert.ToString(AddressManager.DBaseAddress + Index, 16), Offset.GetWordValue());
             //}
             return string.Empty;
         }

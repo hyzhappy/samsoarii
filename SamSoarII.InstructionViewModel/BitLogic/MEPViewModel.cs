@@ -59,7 +59,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             // Nothing to do
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            throw new NotImplementedException();
+        }
         public override BaseViewModel Clone()
         {
             return new MEPViewModel();

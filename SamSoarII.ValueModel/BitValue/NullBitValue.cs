@@ -8,13 +8,11 @@ namespace SamSoarII.ValueModel
 {
     public class NullBitValue : BitValue
     {
-
-
+        
         public override string GetBitValue()
         {
             throw new NotImplementedException();
         }
-
         public override string GetInputImBitAddress()
         {
             throw new NotImplementedException();

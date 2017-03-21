@@ -51,7 +51,6 @@ namespace SamSoarII.LadderInstViewModel
         {
             
         }
-
         public override bool Assert()
         {
             return NextElemnets.All( x => { return (x.Type == ElementType.Null) | (x.Type == ElementType.Special) | (x.Type == ElementType.Input); }) & NextElemnets.Count > 0;
@@ -73,7 +72,10 @@ namespace SamSoarII.LadderInstViewModel
         { 
 
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            throw new NotImplementedException();
+        }
         public override IEnumerable<string> GetValueString()
         {
             return new List<string>();

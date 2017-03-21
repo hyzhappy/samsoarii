@@ -79,5 +79,6 @@ namespace SamSoarII.LadderInstViewModel
         public abstract void ParseValue(List<string> valueStrings);
 
         public abstract IEnumerable<string> GetValueString();
+        public abstract bool CheckValueStrings(List<string> valueStrings);
     }
 }

@@ -1,4 +1,5 @@
-﻿using SamSoarII.LadderInstViewModel;
+﻿using SamSoarII.LadderInstModel;
+using SamSoarII.LadderInstViewModel;
 using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using System;
@@ -45,7 +46,7 @@ namespace SamSoarII.AppMain.Project
     {
         public string LadderName { get; set; }
         public bool IsMainLadder { get; set; }
-        private Dictionary<string, string> InstrutionNameAndToolTips;
+        private Dictionary<string, List<string>> InstrutionNameAndToolTips;
         public int NetworkCount
         {
             get
@@ -145,8 +146,8 @@ namespace SamSoarII.AppMain.Project
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             Console.WriteLine(assembly.GetManifestResourceNames());
-            Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.XmlFiles.InstructionToolTips.xml");
-            Dictionary<string, string> tempDic = new Dictionary<string, string>();
+            Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.XmlFiles.InstructionPopup.xml");
+            Dictionary<string, List<string>> tempDic = new Dictionary<string, List<string>>();
             XDocument xDoc = XDocument.Load(stream);
             XElement rootNode = xDoc.Root;
             List<XElement> nodes = rootNode.Elements().ToList();
@@ -154,11 +155,54 @@ namespace SamSoarII.AppMain.Project
             {
                 if (node.Name != "HLine" && node.Name != "VLine")
                 {
-                    tempDic.Add(node.Name.ToString(), node.Attribute("InstructionToolTip").Value);
+                    List<string> tempList = new List<string>();
+                    tempList.Add(node.Attribute("Describe").Value);
+                    tempList.Add(node.Attribute("Text_1").Value);
+                    tempList.Add(node.Attribute("Text_2").Value);
+                    tempList.Add(node.Attribute("Text_3").Value);
+                    tempDic.Add(node.Name.ToString(),tempList);
                 }
             }
             InstrutionNameAndToolTips = tempDic;
         }
+        #region JMP,LBL,FOR,NEXT instructions check
+        public bool CheckProgramControlInstructions()
+        {
+            List<BaseViewModel> eles = GetProgramControlViewModels();
+            List<BaseViewModel> eles_for = eles.Where(x => { return x.GetType() == typeof(FORViewModel); }).ToList();
+            List<BaseViewModel> eles_next = eles.Where(x => { return x.GetType() == typeof(NEXTViewModel); }).ToList();
+            List<BaseViewModel> eles_jmp = eles.Where(x => { return x.GetType() == typeof(JMPViewModel); }).ToList();
+            List<BaseViewModel> eles_lbl = eles.Where(x => { return x.GetType() == typeof(LBLViewModel); }).ToList();
+            if (eles_for.Count != eles_next.Count || eles_jmp.Count != eles_lbl.Count)
+            {
+                return false;
+            }
+            else
+            {
+                foreach (var ele_jmp in eles_jmp)
+                {
+                    string lblindex = (ele_jmp.Model as JMPModel).LBLIndex.ToString();
+                    if (!eles_lbl.Exists(x => { return (x.Model as LBLModel).LBLIndex.ToString() == lblindex; }))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        private List<BaseViewModel> GetProgramControlViewModels()
+        {
+            List<BaseViewModel> eles = new List<BaseViewModel>();
+            foreach (var network in GetNetworks())
+            {
+                foreach (var model in network.GetElements().Where(x => { return x.GetType() == typeof(FORViewModel) || x.GetType() == typeof(NEXTViewModel) || x.GetType() == typeof(JMPViewModel) || x.GetType() == typeof(LBLViewModel); }))
+                {
+                    eles.Add(model);
+                }
+            }
+            return eles;
+        }
+        #endregion
         #region Network manipulation
         public LadderNetworkViewModel GetNetworkByNumber(int number)
         {
@@ -726,55 +770,54 @@ namespace SamSoarII.AppMain.Project
                     List<string> InstructionInput = dialog.InstructionInput.ToUpper().Trim().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
                     viewmodel = LadderInstViewModelPrototype.Clone(InstructionInput[0]);
                     InstructionInput.RemoveAt(0);
-                    List<string> valueStrings = new List<string>();
-                    foreach (var valueString in InstructionInput)
+                    List<string> valueStrings = new List<string>(InstructionInput);
+                    if ((valueStrings.Count == viewmodel.GetValueString().Count() && viewmodel.CheckValueStrings(valueStrings)) || valueStrings.Count == 0)
                     {
-                        valueStrings.Add(valueString.Trim());
-                    }
-                    if (valueStrings.Count == viewmodel.GetValueString().Count())
-                    {
-                        viewmodel.ParseValue(valueStrings);
-                    }
-                    if(viewmodel.Type == LadderInstModel.ElementType.Output)
-                    {
-                        int x = _selectRect.X;
-                        int y = _selectRect.Y;
-                        var oldelements = _selectRectOwner.GetElements().Where(ele => ele.Y == y && ele.X >= x);
-                        var elements = new List<BaseViewModel>();
-                        for (int i = x; i < 9; i++)
+                        if (valueStrings.Count != 0)
                         {
-                            elements.Add(new HorizontalLineViewModel() { X = i, Y = y });          
+                            viewmodel.ParseValue(valueStrings);
                         }
-                        viewmodel.X = 9;
-                        viewmodel.Y = _selectRect.Y;
-                        elements.Add(viewmodel);
-                        _selectRect.X = 9;
-                        var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
-                        _commandManager.Execute(command);
+                        if (viewmodel.Type == ElementType.Output)
+                        {
+                            int x = _selectRect.X;
+                            int y = _selectRect.Y;
+                            var oldelements = _selectRectOwner.GetElements().Where(ele => ele.Y == y && ele.X >= x);
+                            var elements = new List<BaseViewModel>();
+                            for (int i = x; i < 9; i++)
+                            {
+                                elements.Add(new HorizontalLineViewModel() { X = i, Y = y });
+                            }
+                            viewmodel.X = 9;
+                            viewmodel.Y = _selectRect.Y;
+                            elements.Add(viewmodel);
+                            _selectRect.X = 9;
+                            var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
+                            _commandManager.Execute(command);
+                        }
+                        else
+                        {
+                            viewmodel.X = _selectRect.X;
+                            viewmodel.Y = _selectRect.Y;
+                            ReplaceSingleElement(_selectRectOwner, viewmodel);
+                            if (_selectRect.X < 9)
+                            {
+                                _selectRect.X++;
+                            }
+                        }
+                        dialog.Close();
                     }
                     else
                     {
-                        viewmodel.X = _selectRect.X;
-                        viewmodel.Y = _selectRect.Y;
-                        ReplaceSingleElement(_selectRectOwner, viewmodel);
-                        if(_selectRect.X < 9)
-                        {
-                            _selectRect.X++;
-                        }
+                        MessageBox.Show(dialog,"参数输入错误,请重新输入!");
                     }
                 }
                 catch(Exception exception)
                 {
                     
                 }
-                
-                dialog.Close();
             };
             dialog.ShowDialog();
         }
-
-
-
         #endregion
 
         #region Event handler

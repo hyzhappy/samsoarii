@@ -37,7 +37,10 @@ namespace SamSoarII.LadderInstViewModel
             line.Stroke = Brushes.Black;
             CenterCanvas.Children.Add(line);
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            throw new NotImplementedException();
+        }
         public override void ShowPropertyDialog(ElementPropertyDialog dialog)
         {
             // Nothing to do

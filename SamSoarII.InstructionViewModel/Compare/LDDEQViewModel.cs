@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
-
+using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -69,7 +69,28 @@ namespace SamSoarII.LadderInstViewModel
         {
             return CatalogID;
         }
-
+        public override bool CheckValueStrings(List<string> valueStrings)
+        {
+            Match match1 = Regex.Match(valueStrings[0], "^(D|CV)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
+            Match match2 = Regex.Match(valueStrings[1], "^(D|CV)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
+            if (!match1.Success)
+            {
+                match1 = Regex.Match(valueStrings[0], "^K[-+][0-9]+$", RegexOptions.IgnoreCase);
+                if (!match1.Success)
+                {
+                    match1 = Regex.Match(valueStrings[0], "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
+                }
+            }
+            if (!match2.Success)
+            {
+                match2 = Regex.Match(valueStrings[1], "^K[-+][0-9]+$", RegexOptions.IgnoreCase);
+                if (!match2.Success)
+                {
+                    match2 = Regex.Match(valueStrings[1], "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
+                }
+            }
+            return match1.Success && match2.Success;
+        }
         public override void ParseValue(List<string> valueStrings)
         {
             try
@@ -110,8 +131,15 @@ namespace SamSoarII.LadderInstViewModel
                     List<string> temp = new List<string>();
                     temp.Add(dialog.ValueString3);
                     temp.Add(dialog.ValueString5);
-                    ParseValue(temp);
-                    dialog.Close();
+                    if (!CheckValueStrings(temp))
+                    {
+                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
+                    }
+                    else
+                    {
+                        ParseValue(temp);
+                        dialog.Close();
+                    }
                 }
                 catch (Exception exception)
                 {

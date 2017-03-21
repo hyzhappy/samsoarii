@@ -439,7 +439,16 @@ namespace SamSoarII.AppMain.Project
             {
                 return true;
             }
-            return IsLadderGraphOpen() || IsLadderGraphShort();
+            if(IsLadderGraphOpen() || IsLadderGraphShort())
+            {
+                return true;
+            }
+            else
+            {
+                VerticalScan();
+                HorizontalScan();
+                return false;
+            }
         }
         private bool IsLadderGraphShort()
         {
@@ -462,7 +471,7 @@ namespace SamSoarII.AppMain.Project
                     tempQueue.Enqueue(item);
                 }
             }
-            return !(IsAllLinkedToRoot() && CheckSpecialModel() && CheckSelfLoop() && CheckHybridLink());
+            return !(IsAllLinkedToRoot() && CheckSpecialModel() && CheckSelfLoop() && CheckHybridLink() && CheckElements());
         }
         //短路检测
         private bool CheckLadderGraphShort(BaseViewModel checkmodel)
@@ -624,6 +633,10 @@ namespace SamSoarII.AppMain.Project
                         var item2 = ele.NextElemnets.ElementAt(j);
                         var tempPublicEle = item1.SubElements.Intersect(item2.SubElements);
                         int cnt = tempPublicEle.Count();
+                        if (cnt == 1)
+                        {
+                            return false;
+                        }
                         //若交集元素大于0说明存在环
                         if (cnt > 0)
                         {
@@ -779,6 +792,43 @@ namespace SamSoarII.AppMain.Project
             }
             return tempList;
         }
+        private bool CheckElements()
+        {
+            var tempElements = _ladderElements.Values.ToList();
+            for (int i = 0; i <= GetMaxY(); i++)
+            {
+                var tempList = tempElements.Where(x => { return x.Y == i; }).ToList();
+                if (tempList.Count != 0 && tempList.Where(x => { return x.Type == ElementType.Output || x.X == 0; }).Count() == 0)
+                {
+                    tempList = tempElements.Where(x => { return x.Y == i && x.Type == ElementType.HLine; }).ToList();
+                    for (int j = 0; j < tempList.Count; j++)
+                    {
+                        if (!CheckHElement(tempList[j]))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        private bool CheckHElement(BaseViewModel model)
+        {
+            IntPoint p1 = new IntPoint();
+            IntPoint p2 = new IntPoint();
+            p1.X = model.X - 1;
+            p1.Y = model.Y;
+            p2.X = model.X - 1;
+            p2.Y = model.Y - 1;
+            if (_ladderVerticalLines.ContainsKey(p1) && !_ladderVerticalLines.ContainsKey(p2) && !_ladderElements.ContainsKey(p1))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         //在PreComplie()方法后执行
         private bool IsLadderGraphOpen()
         {
@@ -793,7 +843,6 @@ namespace SamSoarII.AppMain.Project
             int MinY = rootElements.First().Y;
             foreach (var ele in rootElements)
             {
-                ele.IsSearched = true;
                 if (ele.Y < MinY)
                 {
                     MinY = ele.Y;
@@ -819,32 +868,42 @@ namespace SamSoarII.AppMain.Project
             return false;
         }
         //检测VerticalLine，不允许上或下没有元素。
-        private bool CheckVerticalLines()
+        private bool CheckVerticalLines(IEnumerable<VerticalLineViewModel> VLines)
+        {
+            foreach (var VLine in VLines)
+            {
+                if (!CheckVerticalLine(VLine))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool CheckVerticalLine(VerticalLineViewModel VLine)
         {
             IntPoint pos = new IntPoint();
             IntPoint one = new IntPoint();
             IntPoint two = new IntPoint();
-            var tempQueue = new Queue<VerticalLineViewModel>(_ladderVerticalLines.Values);
-            while (tempQueue.Count > 0)
+            pos.X = VLine.X;
+            pos.Y = VLine.Y;
+            one.X = pos.X + 1;
+            one.Y = pos.Y;
+            two.X = pos.X;
+            two.Y = pos.Y - 1;
+            if (!_ladderElements.ContainsKey(one) && !_ladderVerticalLines.ContainsKey(two))
             {
-                var verticalLine = tempQueue.Dequeue();
-                pos.X = verticalLine.X;
-                pos.Y = verticalLine.Y;
-                one.X = pos.X + 1;
-                one.Y = pos.Y;
-                two.X = pos.X;
-                two.Y = pos.Y - 1;
-                if ((!_ladderElements.ContainsKey(pos)) && (!_ladderElements.ContainsKey(one)) && (!_ladderVerticalLines.ContainsKey(two)))
-                {
-                    return false;
-                }
-                pos.Y += 1;
-                one.Y += 1;
-                two.Y += 2;
-                if ((!_ladderElements.ContainsKey(pos)) && (!_ladderElements.ContainsKey(one)) && (!_ladderVerticalLines.ContainsKey(two)))
-                {
-                    return false;
-                }
+                return false;
+            }
+            if (!_ladderElements.ContainsKey(pos) && !_ladderVerticalLines.ContainsKey(two))
+            {
+                return false;
+            }
+            pos.Y += 1;
+            one.Y += 1;
+            two.Y += 2;
+            if (!_ladderElements.ContainsKey(pos) && !_ladderElements.ContainsKey(one) && !_ladderVerticalLines.ContainsKey(two))
+            {
+                return false;
             }
             return true;
         }
@@ -974,10 +1033,899 @@ namespace SamSoarII.AppMain.Project
         /// <returns>True 无错，False 有错</returns>
         public bool Assert()
         {
-            return _ladderElements.Values.All(x => x.Assert()) && CheckVerticalLines();
+            return _ladderElements.Values.All(x => x.Assert()) && CheckVerticalLines(_ladderVerticalLines.Values);
         }
         #endregion
-
+        #region Relocation Module
+        //如有空行，则整体上移
+        private void PreScan()
+        {
+            var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
+            int minY = rootElements.First().Y;
+            foreach (var rootElement in rootElements)
+            {
+                if (rootElement.Y < minY)
+                {
+                    minY = rootElement.Y;
+                }
+            }
+            if (minY > 0)
+            {
+                MoveAllElements(minY);
+            }
+        }
+        private void MoveAllElements(int index)
+        {
+            var allElements = new List<BaseViewModel>(_ladderElements.Values);
+            allElements.AddRange(_ladderVerticalLines.Values);
+            foreach (var ele in allElements)
+            {
+                if (ele.Type == ElementType.VLine)
+                {
+                    RemoveVerticalLine(ele as VerticalLineViewModel);
+                    IntPoint p = new IntPoint();
+                    ele.Y -= index;
+                    p.X = ele.X;
+                    p.Y = ele.Y;
+                    _ladderVerticalLines.Add(p,ele as VerticalLineViewModel);
+                }
+                else
+                {
+                    RemoveElement(ele);
+                    IntPoint p = new IntPoint();
+                    ele.Y -= index;
+                    p.X = ele.X;
+                    p.Y = ele.Y;
+                    _ladderElements.Add(p,ele);
+                }
+                LadderCanvas.Children.Add(ele);
+            }
+        }
+        private void MoveHorizontalLineEle(int index,List<BaseViewModel> models)
+        {
+            BaseViewModel model;
+            VerticalLineViewModel VLine;
+            int line = models[0].Y;
+            if (index != 0)
+            {
+                for (int i = 0; i < models.Count; i++)
+                {
+                    model = models[i];
+                    RemoveElement(model);
+                    model.Y -= index;
+                    ReplaceElement(model);
+                }
+                //对每一行，只保留其上一行的VLine(保持图的基本连通性)，并一起移动
+                var VLines = _ladderVerticalLines.Values.Where(x => { return x.Y == line - 1; }).ToList();
+                for (int i = 0; i < VLines.Count(); i++)
+                {
+                    VLine = VLines[i];
+                    RemoveVerticalLine(VLine);
+                    IntPoint p = new IntPoint();
+                    VLine.Y -= index;
+                    p.X = VLine.X;
+                    p.Y = VLine.Y;
+                    if (!_ladderVerticalLines.ContainsKey(p) && p.Y >= 0)
+                    {
+                        _ladderVerticalLines.Add(p, VLine);
+                        LadderCanvas.Children.Add(VLine);
+                    }
+                }
+            }
+        }
+        //对网络中的空行进行统计，并上移填补
+        private void VerticalScan()
+        {
+            PreScan();
+            int emptyLineCnt = 0;
+            int line = GetMaxY() + 1;
+            for (int i = 0; i < line; i++)
+            {
+                var tempList = _ladderElements.Values.Where(x => { return x.Y == i; }).ToList();
+                if (tempList.Count() == 0 || tempList.All(x => { return x.Type == ElementType.HLine; }))
+                {
+                    if (tempList.Count() != 0)
+                    {
+                        for (int j = 0; j < tempList.Count(); j++)
+                        {
+                            RemoveElement(tempList[j]);
+                        }
+                    }
+                    var VLines = _ladderVerticalLines.Values.Where(x => { return x.Y <= i - 1 && x.Y >= i - 1 - emptyLineCnt; }).ToList();
+                    for (int j = 0; j < VLines.Count(); j++)
+                    {
+                        RemoveVerticalLine(VLines[j]);
+                    }
+                    emptyLineCnt++;
+                }
+                else
+                {
+                    MoveHorizontalLineEle(emptyLineCnt,tempList);
+                }
+            }
+            ChangeBlock();
+            RemoveVLines();
+        }
+        //返回最后一行的Y坐标
+        private int GetMaxY()
+        {
+            int maxY = 0;
+            while (_ladderVerticalLines.Values.ToList().Exists(x => { return x.Y == maxY; }))
+            {
+                maxY++;
+            }
+            return maxY;
+        }
+        //移动相同层级的VLine
+        private void Movement(List<VerticalLineViewModel> VLines)
+        {
+            //移动之前先移动此层级和上一层级之间的元素
+            MoveElements(VLines[0].CountLevel);
+            //为确保相同层级的VLine的X坐标相同，计算同一层级中前面所需的最大元素间隔数量
+            int cnt = GetCount(VLines[0]);
+            for (int i = 1; i < VLines.Count; i++)
+            {
+                int temp = GetCount(VLines[i]);
+                if (cnt < temp)
+                {
+                    cnt = temp;
+                }
+            }
+            MoveVerticalLines(VLines,cnt);
+        }
+        //检查VLine周边元素的分布
+        private string CheckVLine(VerticalLineViewModel VLine)
+        {
+            IntPoint p = new IntPoint();
+            IntPoint p1 = new IntPoint();
+            IntPoint p2 = new IntPoint();
+            p.X = VLine.X;
+            p.Y = VLine.Y;
+            p1.X = VLine.X;
+            p1.Y = VLine.Y;
+            p2.X = VLine.X + 1;
+            p2.Y = VLine.Y;
+            /*
+             * Up_p:    
+             * direction:         <--     
+                     __________            ______________
+                    |              -->    |  
+                    |                     |
+             */
+            if (!_ladderElements.ContainsKey(p1) && _ladderElements.ContainsKey(p2))
+            {
+                return string.Format("Up_p");
+            }
+            /*
+             * Up_d:    
+             * direction:         <--     
+                     __________           ____
+                               |   -->        |    
+                               |              |
+             */
+            if (_ladderElements.ContainsKey(p1) && !_ladderElements.ContainsKey(p2))
+            {
+                return string.Format("Up_d");
+            }
+            p1.Y += 1;
+            p2.Y += 1;
+            /*
+             * Down_p:    
+             * direction:         <--    
+                                 
+                    |              -->    |  
+                    |__________           |______________
+             */
+            if (!_ladderElements.ContainsKey(p1) && _ladderElements.ContainsKey(p2))
+            {
+                return string.Format("Down_p");
+            }
+            /*
+             * Down_d:    
+             * direction:         <--     
+                                
+                               |   -->        |    
+                     __________|          ____|
+             */
+            if (_ladderElements.ContainsKey(p1) && !_ladderElements.ContainsKey(p2))
+            {
+                return string.Format("Down_d");
+            }
+            return string.Format("None");
+        }
+        private void MoveVerticalLines(List<VerticalLineViewModel> VLines,int cnt)
+        {
+            for (int j = 0; j < VLines.Count(); j++)
+            {
+                var tempVLine = VLines.ElementAt(j);
+                if (tempVLine.X != cnt - 1)
+                {
+                    IntPoint point = new IntPoint();
+                    //大于cnt - 1则表示向前移，小于则向后移
+                    if (tempVLine.X > cnt - 1)
+                    {
+                        //检查VLine周围元素的分布关系，判断是否在移动时需要添加或减少HLine
+                        string tag = CheckVLine(tempVLine);
+                        if (tag == "Down_p" || tag == "Up_p")
+                        {
+                            if (tag == "Down_p")
+                            {
+                                point.Y = tempVLine.Y + 1;
+                            }
+                            else if (tag == "Up_p")
+                            {
+                                point.Y = tempVLine.Y;
+                            }
+                            for (int k = cnt; k <= tempVLine.X; k++)
+                            {
+                                point.X = k;
+                                if (!_ladderElements.ContainsKey(point))
+                                {
+                                    HorizontalLineViewModel HLine = new HorizontalLineViewModel();
+                                    HLine.X = point.X;
+                                    HLine.Y = point.Y;
+                                    _ladderElements.Add(point, HLine);
+                                    LadderCanvas.Children.Add(HLine);
+                                }
+                            }
+                        }
+                        if (tag == "Down_d" || tag == "Up_d")
+                        {
+                            if (tag == "Down_d")
+                            {
+                                point.Y = tempVLine.Y + 1;
+                            }
+                            else
+                            {
+                                point.Y = tempVLine.Y;
+                            }
+                            for (int k = cnt; k <= tempVLine.X; k++)
+                            {
+                                point.X = k;
+                                RemoveElement(point);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int k = tempVLine.X + 1; k <= cnt - 1; k++)
+                        {
+                            point.X = k;
+                            point.Y = tempVLine.Y + 1;
+                            if (!_ladderElements.ContainsKey(point))
+                            {
+                                HorizontalLineViewModel HLine = new HorizontalLineViewModel();
+                                HLine.X = point.X;
+                                HLine.Y = point.Y;
+                                _ladderElements.Add(point, HLine);
+                                LadderCanvas.Children.Add(HLine);
+                            }
+                        }
+                    }
+                    RemoveVerticalLine(tempVLine);
+                    IntPoint p = new IntPoint();
+                    p.X = cnt - 1;
+                    p.Y = tempVLine.Y;
+                    tempVLine.X = cnt - 1;
+                    if (!_ladderVerticalLines.ContainsKey(p))
+                    {
+                        _ladderVerticalLines.Add(p, tempVLine);
+                        LadderCanvas.Children.Add(tempVLine);
+                    }
+                }
+            }
+        }
+        //移动相应层级之前的元素
+        private void MoveElements(int countlevel)
+        {
+            for (int i = 0; i <= GetMaxY(); i++)
+            {
+                var VLines = _ladderVerticalLines.Values.Where(x => { return x.CountLevel == countlevel && x.Y == i - 1; }).OrderBy(x => { return x.CountLevel; }).ToList();
+                if (VLines.Count == 0)
+                {
+                    VLines = _ladderVerticalLines.Values.Where(x => { return x.CountLevel == countlevel && x.Y == i; }).OrderBy(x => { return x.CountLevel; }).ToList();
+                }
+                if (VLines.Count != 0)
+                {
+                    var VLine = VLines.First();
+                    var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.CountLevel < countlevel && (x.Y == i || x.Y == i - 1); }).OrderBy(x => { return x.CountLevel; }).ToList();
+                    //若此层级VLine之前没有前一层级的VLine，则直接移动元素
+                    if (tempVLines.Count == 0)
+                    {
+                        var tempList = _ladderElements.Values.Where(x => { return x.Type != ElementType.HLine && x.Type != ElementType.Output && x.Y == i && x.X <= VLine.X; }).OrderBy(x => { return x.X; }).ToList();
+                        for (int j = 0; j < tempList.Count; j++)
+                        {
+                            if (tempList[j].X != j)
+                            {
+                                RemoveElement(tempList[j]);
+                                HorizontalLineViewModel HLine = new HorizontalLineViewModel();
+                                IntPoint p = new IntPoint();
+                                HLine.X = tempList[j].X;
+                                HLine.Y = tempList[j].Y;
+                                p.X = HLine.X;
+                                p.Y = HLine.Y;
+                                _ladderElements.Add(p, HLine);
+                                LadderCanvas.Children.Add(HLine);
+                                tempList[j].X = j;
+                                ReplaceElement(tempList[j]);
+                            }
+                        }
+                    }//否则，元素在两个层级VLine之间移动
+                    else
+                    {
+                        var tempVLine = tempVLines.Last();
+                        var tempList = _ladderElements.Values.Where(x => { return x.Type != ElementType.HLine && x.Type != ElementType.Output && x.Y == i && x.X <= VLine.X && x.X > tempVLine.X; }).OrderBy(x => { return x.X; }).ToList();
+                        for (int j = 0; j < tempList.Count; j++)
+                        {
+                            if (tempList[j].X != j + tempVLine.X + 1)
+                            {
+                                RemoveElement(tempList[j]);
+                                HorizontalLineViewModel HLine = new HorizontalLineViewModel();
+                                IntPoint p = new IntPoint();
+                                HLine.X = tempList[j].X;
+                                HLine.Y = tempList[j].Y;
+                                p.X = HLine.X;
+                                p.Y = HLine.Y;
+                                _ladderElements.Add(p, HLine);
+                                LadderCanvas.Children.Add(HLine);
+                                tempList[j].X = j + tempVLine.X + 1;
+                                ReplaceElement(tempList[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //得到此VLine前面的元素数量，若其前面还有前一层级VLine，则cnt为前一层级VLine的X坐标加上他们之间的元素个数
+        private int GetCount(VerticalLineViewModel VLine)
+        {
+            int cnt;
+            var tempEle = _ladderElements.Values.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine; });
+            //前一层级的VLine有三个方向，上，同一层，下
+            var tempList1 = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y - 1 && x.CountLevel < VLine.CountLevel; });
+            var tempList2 = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y && x.CountLevel < VLine.CountLevel; });
+            var tempList3 = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1&& x.CountLevel < VLine.CountLevel; });
+            cnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X; }).Count();
+            int tempCnt = 0;
+            tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; }).Count();
+            if (cnt < tempCnt)
+            {
+                cnt = tempCnt;
+            }
+            if (tempList1.Count() != 0)
+            {
+                var tempVLine1 = tempList1.OrderBy(x => { return x.CountLevel; }).Last();
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X && x.X > tempVLine1.X; }).Count() + tempVLine1.X + 1;
+                if (cnt < tempCnt)
+                {
+                    cnt = tempCnt;
+                }
+            }
+            if (tempList2.Count() != 0)
+            {
+                var tempVLine2 = tempList2.OrderBy(x => { return x.CountLevel; }).Last();
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X && x.X > tempVLine2.X; }).Count() + tempVLine2.X + 1;
+                if (cnt < tempCnt)
+                {
+                    cnt = tempCnt;
+                }
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine2.X; }).Count() + tempVLine2.X + 1;
+                if (cnt < tempCnt)
+                {
+                    cnt = tempCnt;
+                }
+            }
+            if(tempList3.Count() != 0)
+            {
+                var tempVLine3 = tempList3.OrderBy(x => { return x.CountLevel; }).Last();
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine3.X; }).Count() + tempVLine3.X + 1;
+                if (cnt < tempCnt)
+                {
+                    cnt = tempCnt;
+                }
+            }
+            return cnt;
+        }
+        private void Movement()
+        {
+            var tempList = _ladderElements.Values.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine; }).OrderBy(x => { return x.X; }).ToList();
+            for (int i = 0; i < tempList.Count; i++)
+            {
+                if (tempList[i].X != i)
+                {
+                    RemoveElement(tempList[i]);
+                    HorizontalLineViewModel HLine = new HorizontalLineViewModel();
+                    HLine.X = tempList[i].X;
+                    HLine.Y = tempList[i].Y;
+                    IntPoint p = new IntPoint();
+                    p.X = HLine.X;
+                    p.Y = HLine.Y;
+                    _ladderElements.Add(p,HLine);
+                    LadderCanvas.Children.Add(HLine);
+                    tempList[i].X = i;
+                    ReplaceElement(tempList[i]);
+                }
+            }
+        }
+        private void HorizontalScan()
+        {
+            InitializeCountLevel();
+            int MaxLine = GetMaxY() + 1;
+            if (_ladderVerticalLines.Values.Count == 0)
+            {
+                //TODO movement
+                Movement();
+            }
+            //针对每一层级的VLine进行移动
+            for (int level = 1; level < 10; level++)
+            {
+                var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.CountLevel == level; }).ToList();
+                if (tempVLines.Count() != 0)
+                {
+                    Movement(tempVLines);
+                }
+            }
+            MoveShortLine();
+            ChangeBlock();
+            MoveResidueEle();
+            RemoveHLines();
+            RemoveVLines();
+            RemoveEmptyLines();
+        }
+        //移动每行最大层级VLine之后的元素
+        private void MoveResidueEle()
+        {
+            for (int i = 0; i <= GetMaxY(); i++)
+            {
+                var VLines = _ladderVerticalLines.Values.Where(x => { return x.Y == i - 1 || x.Y == i; }).OrderBy(x => { return x.CountLevel; });
+                if (VLines.Count() > 0)
+                {
+                    var VLine = VLines.Last();
+                    var tempList = _ladderElements.Values.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine && x.Y == i && x.X > VLine.X; }).OrderBy(x => { return x.X; }).ToList();
+                    for (int j = 0; j < tempList.Count; j++)
+                    {
+                        if (tempList[j].X != j + VLine.X + 1)
+                        {
+                            RemoveElement(tempList[j]);
+                            HorizontalLineViewModel HLine = new HorizontalLineViewModel();
+                            IntPoint p = new IntPoint();
+                            HLine.X = tempList[j].X;
+                            HLine.Y = tempList[j].Y;
+                            p.X = HLine.X;
+                            p.Y = HLine.Y;
+                            _ladderElements.Add(p, HLine);
+                            LadderCanvas.Children.Add(HLine);
+                            tempList[j].X = j + VLine.X + 1;
+                            ReplaceElement(tempList[j]);
+                        }
+                    }
+                }
+            }
+        }
+        private void ChangeBlock(List<BaseViewModel> tempEles,List<VerticalLineViewModel> tempVLines,int cnt)
+        {
+            IntPoint p = new IntPoint();
+            for (int i = 0; i < tempEles.Count; i++)
+            {
+                var tempEle = tempEles[i];
+                RemoveElement(tempEle);
+                tempEle.Y -= cnt;
+                p.X = tempEle.X;
+                p.Y = tempEle.Y;
+                _ladderElements.Add(p,tempEle);
+                LadderCanvas.Children.Add(tempEle);
+            }
+            for (int i = 0; i < tempVLines.Count; i++)
+            {
+                var tempVLine = tempVLines[i];
+                RemoveVerticalLine(tempVLine);
+                tempVLine.Y -= cnt;
+                p.X = tempVLine.X;
+                p.Y = tempVLine.Y;
+                _ladderVerticalLines.Add(p, tempVLine);
+                LadderCanvas.Children.Add(tempVLine);
+            }
+        }
+        private void ChangeBlock(int Y)
+        {
+            var VLines = _ladderVerticalLines.Values.Where(x => { return x.Y == Y; }).OrderBy(x => { return x.X; }).ToList();
+            if (VLines.Count != 0)
+            {
+                for (int i = 0; i < VLines.Count - 1; i++)
+                {
+                    var VLine1 = VLines[i];
+                    var VLine2 = VLines[i + 1];
+                    if (_ladderElements.Values.Where(x => { return x.X > VLine1.X && x.X <= VLine2.X && x.Y == Y; }).Count() == 0)
+                    {
+                        var tempEles = _ladderElements.Values.Where(x => { return x.X > VLine1.X && x.X <= VLine2.X && x.Y > Y; }).OrderBy(x => { return x.Y; }).ToList();
+                        var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.X > VLine1.X && x.X < VLine2.X && x.Y > Y; }).OrderBy(x => { return x.Y; }).ToList();
+                        if (tempEles.Count != 0)
+                        {
+                            var tempEle = tempEles.First();
+                            /*排除以下情况
+                             * ____________________            ____________________
+                             * __________|      |       ×→   __________|______|
+                             * _________________|              __________       |
+                             * 
+                             */
+                            if (_ladderVerticalLines.Values.Where(x => { return (x.X == i || x.X == i + 1) && x.Y < tempEle.Y && x.Y > Y; }).Count() == 2 * (tempEle.Y - Y - 1))
+                            {
+                                ChangeBlock(tempEles, tempVLines, tempEle.Y - Y);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /*
+         * _______________________              _______________________
+         * _______| block  |______      →      _______|________|______
+         *        |________|
+         *            ↑
+         */
+        private void ChangeBlock()
+        {
+            for (int i = 1; i < GetMaxY(); i++)
+            {
+                ChangeBlock(i);
+            }
+        }
+        private void MoveShortLine(List<BaseViewModel> models,int cnt,VerticalLineViewModel VLine,List<VerticalLineViewModel> tempVLines)
+        {
+            if (cnt != 0)
+            {
+                BaseViewModel model;
+                for (int i = 0;i < models.Count; i++)
+                {
+                    model = models[i];
+                    RemoveElement(model);
+                    model.Y -= cnt;
+                    ReplaceElement(model);
+                }
+                IntPoint p = new IntPoint();
+                p.X = VLine.X;
+                p.Y = VLine.Y;
+                while (p.Y > VLine.Y - cnt)
+                {
+                    VerticalLineViewModel vline;
+                    if (_ladderVerticalLines.TryGetValue(p,out vline))
+                    {
+                        if (!CheckVerticalLine(vline))
+                        {
+                            RemoveVerticalLine(vline);
+                        }
+                    }
+                    p.Y--;
+                }
+                p.X = VLine.X;
+                p.Y = VLine.Y - cnt;
+                VerticalLineViewModel tempVLine = new VerticalLineViewModel();
+                tempVLine.X = p.X;
+                tempVLine.Y = p.Y;
+                if (!_ladderVerticalLines.ContainsKey(p))
+                {
+                    _ladderVerticalLines.Add(p, tempVLine);
+                    LadderCanvas.Children.Add(tempVLine);
+                }
+                for (int i = 0; i < tempVLines.Count; i++)
+                {
+                    p.X = tempVLines[i].X;
+                    for (int j = tempVLines[i].Y - cnt; j < tempVLines[i].Y; j++)
+                    {
+                        p.Y = j;
+                        tempVLine = new VerticalLineViewModel();
+                        tempVLine.X = p.X;
+                        tempVLine.Y = p.Y;
+                        if (!_ladderVerticalLines.ContainsKey(p))
+                        {
+                            _ladderVerticalLines.Add(p, tempVLine);
+                            LadderCanvas.Children.Add(tempVLine);
+                        }
+                    }
+                }
+            }
+        }
+        /*
+         * ___________________________
+         *               |____________
+         * ______________|
+         *        ↑ 
+         *   need move up
+         * ___________________________
+         * ______________|
+         *               |____________
+         *                     ↑
+         *                need move up  
+         */
+        private void MoveShortLine()
+        {
+            int cnt = 0;
+            int line = GetMaxY() + 1;
+            var tempList = _ladderVerticalLines.Values.OrderBy(x => { return x.CountLevel; });
+            if (tempList.Count() != 0)
+            {
+                if (line > 1)
+                {
+                    List<VerticalLineViewModel> VLines = new List<VerticalLineViewModel>();
+                    for (int i = 0; i < line - 1; i++)
+                    {
+                        VLines.Add(_ladderVerticalLines.Values.Where(x => { return x.Y == i; }).OrderBy(x => { return x.CountLevel; }).First());
+                    }
+                    VLines.OrderBy(x => { return x.Y; });
+                    for (int i = 0; i < VLines.Count; i++)
+                    {
+                        var VLine = VLines[i];
+                        if (!_ladderElements.Values.ToList().Exists(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; }))
+                        {
+                            cnt++;
+                        }
+                        else
+                        {
+                            var tempElements = _ladderElements.Values.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; }).ToList();
+                            var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; }).ToList();
+                            MoveShortLine(tempElements, cnt,VLine,tempVLines);
+                        }
+                    }
+                    VLines = new List<VerticalLineViewModel>();
+                    line = GetMaxY() + 1;
+                    for (int i = 0; i < line - 1; i++)
+                    {
+                        VLines.Add(_ladderVerticalLines.Values.Where(x => { return x.Y == i; }).OrderBy(x => { return x.CountLevel; }).Last());
+                    }
+                    VLines.OrderBy(x => { return x.Y; });
+                    cnt = 0;
+                    for (int i = 0; i < VLines.Count; i++)
+                    {
+                        var VLine = VLines[i];
+                        if (!_ladderElements.Values.ToList().Exists(x => { return x.Y == VLine.Y + 1 && x.X > VLine.X; }))
+                        {
+                            cnt++;
+                        }
+                        else
+                        {
+                            var tempElements = _ladderElements.Values.Where(x => { return x.Y == VLine.Y + 1 && x.X > VLine.X; }).ToList();
+                            var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1 && x.X > VLine.X; }).ToList();
+                            MoveShortLine(tempElements, cnt,VLine,tempVLines);
+                        }
+                    }
+                }
+            }
+        }
+        //重摆完成后，将空行删除
+        private void RemoveEmptyLines()
+        {
+            RowCount = GetMaxY() + 1;
+        }
+        //对网络中的VLine进行分层，即若两条VLine之间存在非HLine元素，则后者level是前者中最大的level加一
+        private void InitializeCountLevel()
+        {
+            var tempElements = _ladderElements.Values.Where(x => { return x.Type != ElementType.HLine; }).ToList();
+            for (int i = 0; i < 9; i++)
+            {
+                var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.X == i; }).OrderBy(x => { return x.Y; });//进行层级分配时，是从上到下扫描
+                if (i == 0)
+                {
+                    foreach (var VLine in tempVLines)
+                    {
+                        VLine.CountLevel = 1;//处在第一列的VLine其层级为1
+                    }
+                }
+                else
+                {
+                    foreach (var VLine in tempVLines)
+                    {
+                        int tempCountLevel = 0;
+                        int cnt = 1;
+                        var upVLines = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y - 1 && x.X <= VLine.X; });
+                        var downVLines = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; });
+                        var eqVLines = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y && x.X < VLine.X; });
+                        //由于扫描从上至下，故如下情况时，需移动downVLine
+                        /* _______________________
+                         *                  |_____
+                         *                  |
+                         * _________________|
+                         * ...
+                         */
+                        if (downVLines.Count() != 0)
+                        {
+                            var downVLine = downVLines.OrderBy(x => { return x.X; }).Last();
+                            var tempVLine = downVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                            //在向下移动时，需要记录经过的VLine中的最大层级数
+                            if (tempVLine.CountLevel > 0)
+                            {
+                                tempCountLevel = tempVLine.CountLevel + 1;
+                            }
+                            while (downVLine.CountLevel == 0 && downVLine.X == VLine.X)
+                            {
+                                downVLines = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1 + cnt && x.X <= VLine.X; });
+                                if (downVLines.Count() != 0)
+                                {
+                                    downVLine = downVLines.OrderBy(x => { return x.X; }).Last();
+                                    tempVLine = downVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                                    if (tempVLine.CountLevel > 0 && tempCountLevel < tempVLine.CountLevel + 1)
+                                    {
+                                        tempCountLevel = tempVLine.CountLevel + 1;
+                                    }
+                                    /*下面的判断条件为:
+                                     * _____________________
+                                     * ________________|
+                                     * __________|  |__|    ←   只能移动到这
+                                     * __________|          ←× 错误
+                                     * 
+                                     */
+                                    if (_ladderElements.Values.Where(x => { return x.Y == downVLine.Y && x.X > downVLine.X && x.X <= VLine.X; }).Count() == VLine.X - downVLine.X)
+                                    {
+                                        cnt++;
+                                    }
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        downVLines = _ladderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + cnt && x.X <= VLine.X; });
+                        if (upVLines.Count() == 0 && downVLines.Count() == 0 && eqVLines.Count() == 0)
+                        {
+                            VLine.CountLevel = 1;
+                        }
+                        else
+                        {
+                            if (upVLines.Count() != 0)
+                            {
+                                var upVLine = upVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                                if (tempElements.Exists(x => { return x.X > upVLine.X && x.X <= VLine.X && x.Y == VLine.Y; }))
+                                {
+                                    if (tempCountLevel < upVLine.CountLevel + 1)
+                                    {
+                                        tempCountLevel = upVLine.CountLevel + 1;
+                                    }
+                                }
+                                else
+                                {
+                                    if (tempCountLevel < upVLine.CountLevel)
+                                    {
+                                        tempCountLevel = upVLine.CountLevel;
+                                    }
+                                }
+                                if (downVLines.Count() != 0)
+                                {
+                                    var downVLine = downVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                                    if (tempElements.Exists(x => { return x.X > downVLine.X && x.X <= VLine.X && x.Y == downVLine.Y; }))
+                                    {
+                                        if (tempCountLevel < downVLine.CountLevel + 1)
+                                        {
+                                            tempCountLevel = downVLine.CountLevel + 1;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (tempCountLevel < downVLine.CountLevel)
+                                        {
+                                            tempCountLevel = downVLine.CountLevel;
+                                        }
+                                    }
+                                }
+                                if (eqVLines.Count() != 0)
+                                {
+                                    var eqVLine = eqVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                                    if (!tempElements.Exists(x => { return x.X > eqVLine.X && x.X <= VLine.X && (x.Y == VLine.Y || x.Y == VLine.Y + 1); }))
+                                    {
+                                        if (tempCountLevel < eqVLine.CountLevel)
+                                        {
+                                            tempCountLevel = eqVLine.CountLevel;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (tempCountLevel < eqVLine.CountLevel + 1)
+                                        {
+                                            tempCountLevel = eqVLine.CountLevel + 1;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (downVLines.Count() != 0)
+                            {
+                                var downVLine = downVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                                if (tempElements.Exists(x => { return x.X > downVLine.X && x.X <= VLine.X && x.Y == downVLine.Y; }))
+                                {
+                                    if (tempCountLevel < downVLine.CountLevel + 1)
+                                    {
+                                        tempCountLevel = downVLine.CountLevel + 1;
+                                    }
+                                }
+                                else
+                                {
+                                    if (tempCountLevel < downVLine.CountLevel)
+                                    {
+                                        tempCountLevel = downVLine.CountLevel;
+                                    }
+                                }
+                                if (eqVLines.Count() != 0)
+                                {
+                                    var eqVLine = eqVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                                    if (!tempElements.Exists(x => { return x.X > eqVLine.X && x.X <= VLine.X && (x.Y == VLine.Y || x.Y == VLine.Y + 1); }))
+                                    {
+                                        if (tempCountLevel < eqVLine.CountLevel)
+                                        {
+                                            tempCountLevel = eqVLine.CountLevel;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (tempCountLevel < eqVLine.CountLevel + 1)
+                                        {
+                                            tempCountLevel = eqVLine.CountLevel + 1;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (downVLine.CountLevel == 0)
+                                    {
+                                        tempCountLevel++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var eqVLine = eqVLines.OrderBy(x => { return x.CountLevel; }).Last();
+                                if (!tempElements.Exists(x => { return x.X > eqVLine.X && x.X <= VLine.X && (x.Y == VLine.Y || x.Y == VLine.Y + 1); }))
+                                {
+                                    if (tempCountLevel < eqVLine.CountLevel)
+                                    {
+                                        tempCountLevel = eqVLine.CountLevel;
+                                    }
+                                }
+                                else
+                                {
+                                    if (tempCountLevel < eqVLine.CountLevel + 1)
+                                    {
+                                        tempCountLevel = eqVLine.CountLevel + 1;
+                                    }
+                                }
+                            }
+                            VLine.CountLevel = tempCountLevel;
+                        }
+                    }
+                }
+            }
+        }
+        //移除重新排列后不合规则的VLine
+        private void RemoveVLines()
+        {
+            var tempVLines = new List<VerticalLineViewModel>(_ladderVerticalLines.Values).OrderBy(x => { return x.Y; }).Reverse();
+            foreach (var VLine in tempVLines)
+            {
+                if (!CheckVerticalLine(VLine))
+                {
+                    RemoveVerticalLine(VLine);
+                }
+            }
+        }
+        //移除重新排列后不合规则的HLine
+        private void RemoveHLines()
+        {
+            var tempList = new List<BaseViewModel>(_ladderElements.Values.Where(x => { return x.Type == ElementType.HLine; })).OrderBy(x => { return x.X; }).Reverse();
+            foreach (var HLine in tempList)
+            {
+                IntPoint up = new IntPoint();
+                IntPoint down = new IntPoint();
+                IntPoint fore = new IntPoint();
+                up.X = HLine.X;
+                up.Y = HLine.Y - 1;
+                down.X = HLine.X;
+                down.Y = HLine.Y;
+                fore.X = HLine.X + 1;
+                fore.Y = HLine.Y;
+                if (!_ladderVerticalLines.ContainsKey(up) && !_ladderVerticalLines.ContainsKey(down) && !_ladderElements.ContainsKey(fore))
+                {
+                    RemoveElement(HLine);
+                }
+            }
+        }
+        #endregion
         #region Event handlers
 
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)
@@ -1215,8 +2163,5 @@ namespace SamSoarII.AppMain.Project
             }
             return result;
         }
-
-
-
     }
 }
