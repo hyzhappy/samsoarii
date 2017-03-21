@@ -47,7 +47,6 @@ namespace SamSoarII.LadderInstViewModel
         {
             throw new InvalidOperationException();
         }
-
         public override ElementType Type
         {
             get
@@ -56,7 +55,6 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
-        
         public override int X
         {
             get;set;

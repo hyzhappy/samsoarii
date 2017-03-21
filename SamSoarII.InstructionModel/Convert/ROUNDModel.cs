@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Format("if({0})\r\n{{\r\nint32_t temp = (int32_t){1};\r\nif(temp + 0.5 > {1})\r\n{{\r\n{2} = temp;\r\n}}\r\nelse\r\n{{\r\n{2} = temp + 1;\r\n}}\r\n}}\r\n", ImportVaribleName,InputValue.GetValue(),OutputValue.GetValue());
         }
     }
 }

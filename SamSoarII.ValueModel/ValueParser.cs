@@ -585,11 +585,11 @@ namespace SamSoarII.ValueModel
                 case LadderValueType.Bool:
                     return CreateVariableBitValue(name, mappedValuestring, comment);
                 case LadderValueType.DoubleWord:
-                    return CreateVariableDoubleWordValue(name, mappedValuestring, comment);
+                    return CreateVariableBitValue(name, mappedValuestring, comment);
                 case LadderValueType.Float:
-                    return CreateVariableFloatValue(name, mappedValuestring, comment);
+                    return CreateVariableBitValue(name, mappedValuestring, comment);
                 case LadderValueType.Word:
-                    return CreateVariableWordValue(name, mappedValuestring, comment);
+                    return CreateVariableBitValue(name, mappedValuestring, comment);
             }      
             throw new ValueParseException("Unexpected input");
         }

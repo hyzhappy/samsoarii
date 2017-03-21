@@ -19,7 +19,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            return string.Empty;
+            return string.Format("if({0})\r\n{{\r\nfor(int i = 0;i < {1};i++)\r\n{{\r\n",ImportVaribleName,Count.GetValue());
         }
     }
 }

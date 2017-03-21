@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="SamSoarII.Simulation.UI.ProjectTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="300">
+    <UserControl.Resources>
+        
+    </UserControl.Resources>
+    <UserControl.Content>
+        <TreeView FontSize="14">
+        <TreeView.Items>
+            <TreeViewItem x:Name="ProjectRootItem" Header="当前工程" IsExpanded="True">
+            <TreeViewItem.Items>
+                <TreeViewItem Header="程序" IsExpanded="True">
+                <TreeViewItem.Items>
+                    <TreeViewItem x:Name="TVI_AllRoutine" IsExpanded="False">
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Image/TreeViewIcon/AllProgram.ico"></Image>
+                                <TextBlock Margin="6,0,0,0">所有程序</TextBlock>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem x:Name="TVI_MainRoutine" IsExpanded="True">
+                        <TreeViewItem.Resources>
+
+                        </TreeViewItem.Resources>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Image/TreeViewIcon/MainProgram.ico"></Image>
+                                <TextBlock Margin="6,0,0,0">主程序</TextBlock>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem x:Name="TVI_SubRoutines" IsExpanded="True">
+                        <TreeViewItem.Resources>
+
+                        </TreeViewItem.Resources>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Image/TreeViewIcon/SubProgram.ico"></Image>
+                                <TextBlock Margin="6,0,0,0">子程序</TextBlock>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem x:Name="TVI_FuncBlocks" IsExpanded="True">
+                        <TreeViewItem.Resources>
+
+                        </TreeViewItem.Resources>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Image/TreeViewIcon/FuncBlock.ico"></Image>
+                                <TextBlock Margin="6,0,0,0">函数功能块</TextBlock>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeViewItem.Items>
+                </TreeViewItem>
+                <TreeViewItem Header="元件" IsExpanded="True">
+
+                </TreeViewItem>
+            </TreeViewItem.Items>
+            </TreeViewItem>
+        </TreeView.Items>
+        </TreeView>
+    </UserControl.Content>
+</UserControl>

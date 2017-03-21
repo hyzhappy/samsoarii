@@ -159,8 +159,8 @@ namespace SamSoarII.AppMain.Project
    
         public bool Open(string filepath)
         {
-            try
-            {
+            //try
+            //{
                 XDocument xmldoc = XDocument.Load(filepath);
                 XElement rootNode = xmldoc.Element("Project");
                 ProjectName = rootNode.Attribute("Name").Value;
@@ -193,12 +193,11 @@ namespace SamSoarII.AppMain.Project
                     FuncBlocks.Add(fbmodel);
                 }
                 return true;
-
-             }
-            catch (Exception exception)
-            {
-                return false;
-            }
+            //}
+            //catch (Exception exception)
+            //{
+            //    return false;
+            //}
         }
 
         public void Compile()

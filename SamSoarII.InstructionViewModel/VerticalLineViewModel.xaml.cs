@@ -90,7 +90,7 @@ namespace SamSoarII.LadderInstViewModel
                 _isMonitorMode = value;
             }
         }
-
+        public int CountLevel { get; set; }
         public override BaseModel Model
         {
             get

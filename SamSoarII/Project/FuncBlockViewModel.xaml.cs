@@ -43,6 +43,7 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
             }
         }
+        public string FuncBlockName { get; set; }
         private CompletionWindow completionWindow;
         private FoldingManager foldingManager;
         private AbstractFoldingStrategy foldingStrategy;
@@ -93,7 +94,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             HighlightingManager.Instance.RegisterHighlighting("Custom Highlighting", new string[] { ".cool" }, customHighlighting);
-            ProgramName = name;
+            FuncBlockName = name;
             CodeTextBox.DataContext = this;
             CodeTextBox.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             DispatcherTimer foldingUpdateTimer = new DispatcherTimer();

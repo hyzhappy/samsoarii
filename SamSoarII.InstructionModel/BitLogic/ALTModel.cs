@@ -20,7 +20,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Format("if({0})\r\n{{\r\n{1} = !{1};\r\n}}\r\n",ImportVaribleName,Value.GetValue());
         }
     }
 }

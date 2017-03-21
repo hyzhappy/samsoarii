@@ -62,7 +62,6 @@ namespace SamSoarII.LadderInstViewModel
             // Nothing to do
             return null;
         }
-
         public override BaseViewModel Clone()
         {
             return new MEPViewModel();

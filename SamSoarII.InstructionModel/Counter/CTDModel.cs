@@ -10,7 +10,7 @@ namespace SamSoarII.LadderInstModel
     {
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Empty;
         }
     }
 }

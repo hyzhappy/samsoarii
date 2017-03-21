@@ -26,7 +26,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Format("if({0})\r\n{{\r\nint16_t count = {3} % 32;\r\nif(count == 0)\r\n{{\r\n{2} = {1};\r\n}}\r\nelse if(count > 0)\r\n{{\r\nint32_t temp1,temp2;\r\ntemp1 = ({1} << count) >> count;\r\ntemp2 = (({1} - temp1) >> (32 - count)) & (int32_t)(pow(2,count) - 1);\r\n{2} = (temp1 << count) + temp2;\r\n}}\r\nif({2} == 0)\r\n{{\r\nMBit[8167] = 1;\r\n}}\r\n}}\r\n", ImportVaribleName, SourceValue.GetValue(), DestinationValue.GetValue(), Count.GetValue());
         }
     }
 }

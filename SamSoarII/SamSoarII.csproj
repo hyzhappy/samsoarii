@@ -319,7 +319,7 @@
     <Resource Include="Resources\Image\Config.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\InstructionToolTips.xml">
+    <EmbeddedResource Include="Resources\InstructionPopup.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
