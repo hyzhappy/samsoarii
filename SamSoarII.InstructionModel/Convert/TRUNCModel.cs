@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Format("if({0})\r\n{{\r\n{2} = (int32_t){1};\r\n}}\r\n",ImportVaribleName,InputValue.GetFloatValue(),OutputValue.GetDoubleWordValue());
         }
     }
 }

@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9E2944C8-F460-4526-9E0E-7BC60BB946BD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SamSoarII.Simulation</RootNamespace>
+    <AssemblyName>SamSoarII.Simulation</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Event\VariableUnitChangeEventArgs.cs" />
+    <Compile Include="Core\FileHelper.cs" />
+    <Compile Include="Core\Global\GlobalCommand.cs" />
+    <Compile Include="Core\Global\GlobalSetting.cs" />
+    <Compile Include="Core\SimulateDllModel.cs" />
+    <Compile Include="Core\SimulateManager.cs" />
+    <Compile Include="Core\VariableModel\SimulateDoubleModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateVariableModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateDWordModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateFloatModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateBitModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateVInputModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateWordModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\SimulateExecModel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shell\CtrlHelper.cs" />
+    <Compile Include="Shell\Event\ShowTabItemEventArgs.cs" />
+    <Compile Include="Shell\Event\ShowTabItemEventHandler.cs" />
+    <Compile Include="Shell\IntPoint.cs" />
+    <Compile Include="Shell\ViewModel\SimuViewInputModel.xaml.cs">
+      <DependentUpon>SimuViewInputModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\ViewModel\SimuViewBaseModel.cs" />
+    <Compile Include="Shell\ViewModel\SimuViewOutBitModel.xaml.cs">
+      <DependentUpon>SimuViewOutBitModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\ViewModel\SimuViewHLineModel.xaml.cs">
+      <DependentUpon>SimuViewHLineModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\ViewModel\SimuViewOutRecModel.xaml.cs">
+      <DependentUpon>SimuViewOutRecModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\ViewModel\SimuViewVLineModel.xaml.cs">
+      <DependentUpon>SimuViewVLineModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SimulateModel.cs" />
+    <Compile Include="SimulateWindow.xaml.cs">
+      <DependentUpon>SimulateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Monitor\MonitorCloseButton.xaml.cs">
+      <DependentUpon>MonitorCloseButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Monitor\MonitorComboBox.cs" />
+    <Compile Include="UI\Monitor\MonitorLockButton.xaml.cs">
+      <DependentUpon>MonitorLockButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Monitor\MonitorTable.xaml.cs">
+      <DependentUpon>MonitorTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Monitor\MonitorTextBox.cs" />
+    <Compile Include="UI\SimulateReportViewModel.xaml.cs">
+      <DependentUpon>SimulateReportViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainTabControl.xaml.cs">
+      <DependentUpon>MainTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\PLCTopPhoto.xaml.cs">
+      <DependentUpon>PLCTopPhoto.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\PLCTop\LEDLight.xaml.cs">
+      <DependentUpon>LEDLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\PLCTop\StatusLight.xaml.cs">
+      <DependentUpon>StatusLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\PLCTop\Trigger.xaml.cs">
+      <DependentUpon>Trigger.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectTreeView.xaml.cs">
+      <DependentUpon>ProjectTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SelectRect.xaml.cs">
+      <DependentUpon>SelectRect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SimuViewAllDiaModel.xaml.cs">
+      <DependentUpon>SimuViewAllDiaModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SimuViewDiagramModel.xaml.cs">
+      <DependentUpon>SimuViewDiagramModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SimuViewFuncBlockModel.xaml.cs">
+      <DependentUpon>SimuViewFuncBlockModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SimuViewNetworkModel.xaml.cs">
+      <DependentUpon>SimuViewNetworkModel.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.Extend\SamSoarII.Extend.csproj">
+      <Project>{165052f6-7c49-4d44-bafe-a3575b2d1191}</Project>
+      <Name>SamSoarII.Extend</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Shell\ViewModel\SimuViewInputModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\ViewModel\SimuViewOutBitModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\ViewModel\SimuViewHLineModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\ViewModel\SimuViewOutRecModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\ViewModel\SimuViewVLineModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SimulateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Monitor\MonitorCloseButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Monitor\MonitorLockButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Monitor\MonitorTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SimulateReportViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\MainTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PLCTopPhoto.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PLCTop\LEDLight.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PLCTop\StatusLight.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PLCTop\Trigger.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SelectRect.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\SimuViewAllDiaModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SimuViewDiagramModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SimuViewFuncBlockModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SimuViewNetworkModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="simug\simug.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Image\Compile.png" />
+    <Content Include="Resources\Image\Copy.png" />
+    <Content Include="Resources\Image\Cut.png" />
+    <Content Include="Resources\Image\Download.png" />
+    <Content Include="Resources\Image\Lock\LockOff.png" />
+    <Content Include="Resources\Image\Lock\LockOn.png" />
+    <Content Include="Resources\Image\New.png" />
+    <Content Include="Resources\Image\Open.png" />
+    <Content Include="Resources\Image\Paste.png" />
+    <Content Include="Resources\Image\Save.png" />
+    <Content Include="Resources\Image\TreeViewIcon\ERROR.png" />
+    <Content Include="Resources\Image\TreeViewIcon\FINISH.png" />
+    <Content Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
+    <Content Include="Resources\Image\TreeViewIcon\MainProgram.ico" />
+    <Content Include="Resources\Image\TreeViewIcon\NOTRUN.png" />
+    <Content Include="Resources\Image\TreeViewIcon\Program.ico" />
+    <Content Include="Resources\Image\TreeViewIcon\RUNNING.png" />
+    <Content Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Format("if({0})\r\n{{\r\nif({1} > 0)\r\n{{\r\n{2} = log({1});\r\nif({2} == 0)\r\n{{\r\nMBit[8171] = 1;\r\n}}\r\nelse if({2} < 0)\r\n{{\r\nMBit[8170] = 1;\r\n}}\r\n}}\r\n}}\r\n", ImportVaribleName,InputValue.GetFloatValue(),OutputValue.GetFloatValue());
         }
     }
 }

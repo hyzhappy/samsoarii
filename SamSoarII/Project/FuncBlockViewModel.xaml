@@ -10,9 +10,8 @@
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
     <Border BorderBrush="Orange" BorderThickness="1">
         <Grid>
-            <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" FontFamily="Consolas" FontSize="12pt" ScrollViewer.IsDeferredScrollingEnabled="False"></Text:TextEditor>
+            <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" FontFamily="Consolas" FontSize="12pt" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"></Text:TextEditor>
             <!--<TextBox x:Name="CodeTextBox" FontSize="18" AcceptsReturn="True" AcceptsTab="True"/>-->
         </Grid>
     </Border>
-
 </UserControl>

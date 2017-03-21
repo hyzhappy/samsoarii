@@ -371,17 +371,24 @@ namespace SamSoarII.AppMain.UI
 
         private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
-            while (tempQueue.Count > 0)
+            if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
             {
-                var ladderNetworkViewModel = tempQueue.Dequeue();
-                if (ladderNetworkViewModel.IsNetworkError())
+                MessageBox.Show(string.Format("程序控制指令配对失败！"));
+            }
+            else
+            {
+                var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
+                while (tempQueue.Count > 0)
                 {
-                    MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
-                }
-                else
-                {
-                    MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
+                    var ladderNetworkViewModel = tempQueue.Dequeue();
+                    if (ladderNetworkViewModel.IsNetworkError())
+                    {
+                        MessageBox.Show(string.Format("网络{0}错误",ladderNetworkViewModel.NetworkNumber));
+                    }
+                    else
+                    {
+                        MessageBox.Show(string.Format("网络{0}正常，可以编译!",ladderNetworkViewModel.NetworkNumber));
+                    }
                 }
             }
         }

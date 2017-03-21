@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="SamSoarII.Simulation.UI.SimuViewNetworkModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="3000">
+    <StackPanel Margin="0,0,0,20">
+        <StackPanel.Resources>
+            <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
+                <MenuItem Header="编辑网络注释"></MenuItem>
+            </ContextMenu>
+        </StackPanel.Resources>
+        <Grid x:Name="CommentAreaGrid" Background="Transparent">
+            <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
+                <Expander x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
+                    <Expander.Header>
+                        <Grid Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label x:Name="NetworkNumberLabel" FontSize="32" Grid.Column="0" Grid.Row="0">Network</Label>
+                            <Label x:Name="NetworkStepCountLabel" FontSize="32" Grid.Column="1" Grid.Row="0">Step:</Label>
+                            <Label x:Name="NetworkBriefLabel" FontSize="32" Grid.Column="2" Grid.Row="0" Content=""></Label>
+                        </Grid>
+                    </Expander.Header>
+                    <TextBlock x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"></TextBlock>
+                </Expander>
+            </Border>
+        </Grid>
+        <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3000" Margin="0,20,0,0" Background="Transparent" MouseLeftButtonDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+            <Canvas.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="修改值"></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="添加监视"></MenuItem>
+                    <MenuItem Header="删除监视"></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="设置断点"></MenuItem>
+                    <MenuItem Header="启用断点"></MenuItem>
+                    <MenuItem Header="禁用断点"></MenuItem>
+                    <MenuItem Header="删除断点"></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="屏蔽网络"></MenuItem>
+                </ContextMenu>
+            </Canvas.ContextMenu>
+        </Canvas>
+    </StackPanel>
+</UserControl>
