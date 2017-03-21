@@ -99,6 +99,7 @@
     <Compile Include="Global\GlobalSetting.cs" />
     <Compile Include="InteractionFacade.cs" />
     <Compile Include="LadderCommand\NetworkRowCountChangeCommand.cs" />
+    <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\FuncBlockViewModel.xaml.cs">
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
@@ -165,6 +166,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Project\CustomHighlighting.xshd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -177,6 +181,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
+      <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
+      <Name>ICSharpCode.AvalonEdit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj">
       <Project>{69569578-5258-4aec-9e10-dde7234d78fb}</Project>
       <Name>SamSoarII.LadderInstModel</Name>
@@ -309,6 +317,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Config.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\InstructionToolTips.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

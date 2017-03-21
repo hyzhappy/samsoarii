@@ -1,4 +1,4 @@
-﻿using AvalonEdit.Sample;
+﻿
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -27,12 +27,6 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// FuncBlockViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class FuncBlockViewModel : UserControl
-    {
-        public string FuncBlockName { get; set; }
-        private CompletionWindow completionWindow;
-        private FoldingManager foldingManager;
-        private AbstractFoldingStrategy foldingStrategy;
     public partial class FuncBlockViewModel : UserControl, IProgram
     {
         private string _programName;
@@ -49,6 +43,9 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
             }
         }
+        private CompletionWindow completionWindow;
+        private FoldingManager foldingManager;
+        private AbstractFoldingStrategy foldingStrategy;
         public string TabHeader
         {
             get
@@ -96,7 +93,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             HighlightingManager.Instance.RegisterHighlighting("Custom Highlighting", new string[] { ".cool" }, customHighlighting);
-            FuncBlockName = name;
+            ProgramName = name;
             CodeTextBox.DataContext = this;
             CodeTextBox.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             DispatcherTimer foldingUpdateTimer = new DispatcherTimer();

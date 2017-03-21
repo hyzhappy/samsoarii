@@ -193,7 +193,8 @@ namespace SamSoarII.AppMain.Project
                     FuncBlocks.Add(fbmodel);
                 }
                 return true;
-            }
+
+             }
             catch (Exception exception)
             {
                 return false;

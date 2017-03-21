@@ -32,7 +32,4 @@
             </StackPanel.Resources>
         </StackPanel>
     </StackPanel>
-
-   
-
 </local:BaseViewModel>

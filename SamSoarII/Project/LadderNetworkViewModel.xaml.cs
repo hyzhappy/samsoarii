@@ -1022,7 +1022,7 @@ namespace SamSoarII.AppMain.Project
                 {
                     MessageBox.Show(ex.Message);
                 }
-        };
+             };
             dialog.ShowDialog();
         }
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)

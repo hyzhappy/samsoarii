@@ -56,30 +56,15 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
+        
         public override int X
         {
-            get
-            {
-                throw new InvalidOperationException();
-            }
-
-            set
-            {
-                throw new InvalidOperationException();
-            }
+            get;set;
         }
 
         public override int Y
         {
-            get
-            {
-                throw new InvalidOperationException();
-            }
-
-            set
-            {
-                throw new InvalidOperationException();
-            }
+            get;set;
         }
 
         public override bool IsCommentMode

@@ -196,7 +196,7 @@ namespace SamSoarII.AppMain.Project
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             Console.WriteLine(assembly.GetManifestResourceNames());
-            Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.XmlFiles.InstructionToolTips.xml");
+            Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.InstructionToolTips.xml");
             Dictionary<string, string> tempDic = new Dictionary<string, string>();
             XDocument xDoc = XDocument.Load(stream);
             XElement rootNode = xDoc.Root;
