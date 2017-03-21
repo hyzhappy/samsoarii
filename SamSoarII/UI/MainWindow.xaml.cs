@@ -356,5 +356,34 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
+
+        private void OnCheckNetworkErrorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
+            while (tempQueue.Count > 0)
+            {
+                var ladderNetworkViewModel = tempQueue.Dequeue();
+                if (ladderNetworkViewModel.IsNetworkError())
+                {
+                    MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
+                }
+            }
+        }
     }
 }

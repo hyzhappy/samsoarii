@@ -4,7 +4,9 @@ using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -90,7 +92,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         public bool IsMainLadder { get; set; }
-
+        private Dictionary<string, string> InstrutionNameAndToolTips;
         public int NetworkCount
         {
             get
@@ -180,6 +182,7 @@ namespace SamSoarII.AppMain.Project
         public LadderDiagramViewModel(string name)
         {
             InitializeComponent();
+            InitializeInstructionNameAndToolTips();
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
             this.Loaded += (sender, e) =>
@@ -189,7 +192,24 @@ namespace SamSoarII.AppMain.Project
             };
             AppendNetwork(new LadderNetworkViewModel(this, 0));
         }
-
+        private void InitializeInstructionNameAndToolTips()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Console.WriteLine(assembly.GetManifestResourceNames());
+            Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.XmlFiles.InstructionToolTips.xml");
+            Dictionary<string, string> tempDic = new Dictionary<string, string>();
+            XDocument xDoc = XDocument.Load(stream);
+            XElement rootNode = xDoc.Root;
+            List<XElement> nodes = rootNode.Elements().ToList();
+            foreach (var node in nodes)
+            {
+                if (node.Name != "HLine" && node.Name != "VLine")
+                {
+                    tempDic.Add(node.Name.ToString(), node.Attribute("InstructionToolTip").Value);
+                }
+            }
+            InstrutionNameAndToolTips = tempDic;
+        }
         #region Network manipulation
         public LadderNetworkViewModel GetNetworkByNumber(int number)
         {
@@ -753,15 +773,25 @@ namespace SamSoarII.AppMain.Project
         #region Instruction relative
         private void ShowInstructionInputDialog(string initialString)
         {
-            InstructionInputDialog dialog = new InstructionInputDialog(initialString);
-           
+            InstructionInputDialog dialog = new InstructionInputDialog(initialString, InstrutionNameAndToolTips);
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.EnsureButtonClick += (sender, e) =>
             {
                 BaseViewModel viewmodel;
                 try
                 {
-                    viewmodel = LadderInstViewModelPrototype.Clone(dialog.InstructionInput.ToUpper());
+                    List<string> InstructionInput = dialog.InstructionInput.ToUpper().Trim().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                    viewmodel = LadderInstViewModelPrototype.Clone(InstructionInput[0]);
+                    InstructionInput.RemoveAt(0);
+                    List<string> valueStrings = new List<string>();
+                    foreach (var valueString in InstructionInput)
+                    {
+                        valueStrings.Add(valueString.Trim());
+                    }
+                    if (valueStrings.Count == viewmodel.GetValueString().Count())
+                    {
+                        viewmodel.ParseValue(valueStrings);
+                    }
                     if(viewmodel.Type == LadderInstModel.ElementType.Output)
                     {
                         int x = _selectRect.X;

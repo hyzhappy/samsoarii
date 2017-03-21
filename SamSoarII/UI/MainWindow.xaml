@@ -33,6 +33,7 @@
         <!-- Build Command -->
         <CommandBinding Command="{x:Static app:GlobalCommand.CompileCommand}" Executed="OnCompileCommandExecute" CanExecute="CompileCommandCanExecute"></CommandBinding>
         <!-- Tool Command-->
+        <CommandBinding Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"  Executed="OnCheckNetworkErrorCommandExecute" CanExecute="OnCheckNetworkErrorCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
@@ -127,6 +128,7 @@
                 <MenuItem Header="下载"></MenuItem>
                 <MenuItem Header="仿真"></MenuItem>
                 <MenuItem Header="监视"></MenuItem>
+                <MenuItem Header="程序检测" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}"></MenuItem>
             </MenuItem>

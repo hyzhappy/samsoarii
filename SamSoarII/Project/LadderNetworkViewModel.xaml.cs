@@ -424,8 +424,16 @@ namespace SamSoarII.AppMain.Project
                 model.IsSearched = false;
             }
         }
+        private void ClearNextElements()
+        {
+            foreach (var ele in _ladderElements.Values)
+            {
+                ele.NextElemnets.Clear();
+            }
+        }
         public void PreCompile()
         {
+            ClearNextElements();
             ClearSearchedFlag();
             var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
             Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElements);
@@ -441,6 +449,7 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
             }
+            InitializeSubElements();
         }
 
         public string GenerateCode()
@@ -452,7 +461,422 @@ namespace SamSoarII.AppMain.Project
             tree.TreeName = string.Format("network_{0}", NetworkNumber);
             return tree.GenerateCode();
         }
-
+        public bool IsNetworkError()
+        {
+            PreCompile();
+            if (_ladderElements.Values.Count == 0 && _ladderVerticalLines.Values.Count == 0)
+            {
+                return true;
+            }
+            return IsLadderGraphOpen() || IsLadderGraphShort();
+        }
+        private bool IsLadderGraphShort()
+        {
+            ClearSearchedFlag();
+            var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
+            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElements);
+            while (tempQueue.Count > 0)
+            {
+                var ele = tempQueue.Dequeue();
+                if (!ele.IsSearched)
+                {
+                    ele.IsSearched = true;
+                    if (ele.Type != ElementType.Null && (!CheckLadderGraphShort(ele)))
+                    {
+                        return true;
+                    }
+                }
+                foreach (var item in ele.NextElemnets)
+                {
+                    tempQueue.Enqueue(item);
+                }
+            }
+            return !(IsAllLinkedToRoot() && CheckSpecialModel() && CheckSelfLoop() && CheckHybridLink());
+        }
+        //短路检测
+        private bool CheckLadderGraphShort(BaseViewModel checkmodel)
+        {
+            List<BaseViewModel> eles = checkmodel.NextElemnets;
+            if (eles.Count == 1)
+            {
+                return true;
+            }
+            if (eles.Exists(x => { return x.Type == ElementType.Null; }) && eles.Count > 1)
+            {
+                return false;
+            }
+            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(eles);
+            while (tempQueue.Count > 0)
+            {
+                var ele = tempQueue.Dequeue();
+                if (eles.Intersect(ele.NextElemnets).Count() > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    foreach (var item in ele.NextElemnets)
+                    {
+                        tempQueue.Enqueue(item);
+                    }
+                }
+            }
+            return true;
+        }
+        //自环检测
+        private bool CheckSelfLoop()
+        {
+            var notHLines = _ladderElements.Values.Where(x => { return x.Type != ElementType.HLine; });
+            //var needCheckElements = notHLines.Where(x => { return !(x.NextElemnets.Any(y => { return y.Type == ElementType.Null; })); });
+            IEnumerable<BaseViewModel> hLinesOfNeedCheckElement;
+            foreach (var needCheckElement in notHLines)
+            {
+                hLinesOfNeedCheckElement = GetHLines(needCheckElement);
+                if (!CheckHLines(hLinesOfNeedCheckElement))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        //判断集合中X坐标相同的直线，其NextElemnets集合是否完全相同
+        private bool CheckHLines(IEnumerable<BaseViewModel> hLines)
+        {
+            for (int x = 0; x < 10; x++)
+            {
+                var lines = hLines.Where(l => { return l.X == x; });
+                if (lines.Count() > 1)
+                {
+                    for (int j = 0; j < lines.Count(); j++)
+                    {
+                        for (int k = j + 1; k < lines.Count(); k++)
+                        {
+                            if (lines.ElementAt(j).NextElemnets.SequenceEqual(lines.ElementAt(k).NextElemnets))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        //得到与model直连的所有HLine
+        private IEnumerable<BaseViewModel> GetHLines(BaseViewModel model)
+        {
+            var hLines = _ladderElements.Values.Where(x => { return (x.Type == ElementType.HLine); });
+            var tempList = new List<BaseViewModel>();
+            foreach (var hLine in hLines)
+            {
+                if (IsRelativeToModel(model, hLine))
+                {
+                    tempList.Add(hLine);
+                }
+            }
+            return tempList;
+        }
+        private bool IsRelativeToModel(BaseViewModel model, BaseViewModel hLine)
+        {
+            var relativePoints = GetRightRelativePoint(hLine.X, hLine.Y);
+            //判断元素hLine是否与model相连
+            return CheckRelativePoints(relativePoints, model, "Right");
+        }
+        private bool CheckRelativePoints(IEnumerable<IntPoint> relativePoints, BaseViewModel model, string direction)
+        {
+            IntPoint p1 = new IntPoint();//right
+            IntPoint p2 = new IntPoint();//up
+            IntPoint p3 = new IntPoint();//down
+            bool right = false;
+            bool up = false;
+            bool down = false;
+            if (direction == "Right")
+            {
+                p1 = relativePoints.ElementAt(0);
+                p2 = relativePoints.ElementAt(1);
+                p3 = relativePoints.ElementAt(2);
+            }
+            else if (direction == "Up")
+            {
+                p2 = relativePoints.ElementAt(0);
+                p1 = relativePoints.ElementAt(1);
+            }
+            else
+            {
+                p3 = relativePoints.ElementAt(0);
+                p1 = relativePoints.ElementAt(1);
+            }
+            BaseViewModel element;
+            if (_ladderElements.TryGetValue(p1, out element))
+            {
+                if (element == model)
+                {
+                    return true;
+                }
+                if (element.Type == ElementType.HLine)
+                {
+                    right = CheckRelativePoints(GetRightRelativePoint(p1.X, p1.Y), model, "Right");
+                }
+            }
+            VerticalLineViewModel verticalLine;
+            if ((direction == "Up") || (direction == "Right"))
+            {
+                if (_ladderVerticalLines.TryGetValue(p2, out verticalLine))
+                {
+                    up = CheckRelativePoints(GetUpRelativePoint(p2.X, p2.Y), model, "Up");
+                }
+            }
+            if ((direction == "Down") || (direction == "Right"))
+            {
+                if (_ladderVerticalLines.TryGetValue(p3, out verticalLine))
+                {
+                    down = CheckRelativePoints(GetDownRelativePoint(p3.X, p3.Y), model, "Down");
+                }
+            }
+            //结果必须是三个方向的并
+            return right || up || down;
+        }
+        //混联模块检测
+        private bool CheckHybridLink()
+        {
+            bool result1 = true;
+            bool result2 = true;
+            //得到有多条支路的元素集合
+            var needCheckElements = _ladderElements.Values.Where(x => { return x.NextElemnets.Count > 1; });
+            foreach (var ele in needCheckElements)
+            {
+                for (int i = 0; i < ele.NextElemnets.Count; i++)
+                {
+                    for (int j = i + 1; j < ele.NextElemnets.Count; j++)
+                    {
+                        //取其中任意两条支路并得到其交集
+                        var item1 = ele.NextElemnets.ElementAt(i);
+                        var item2 = ele.NextElemnets.ElementAt(j);
+                        var tempPublicEle = item1.SubElements.Intersect(item2.SubElements);
+                        int cnt = tempPublicEle.Count();
+                        //若交集元素大于0说明存在环
+                        if (cnt > 0)
+                        {
+                            //得到环中的所有元素
+                            var tempHashSet = new HashSet<BaseViewModel>(item1.SubElements);
+                            tempHashSet.UnionWith(item2.SubElements);
+                            foreach (var item in tempPublicEle)
+                            {
+                                tempHashSet.Remove(item);
+                            }
+                            //对于环中的任一元素的子元素集合，其与两个支路交集(tempPublicEle)相交的元素个数小于两个支路交集的元素个数
+                            foreach (var item in tempHashSet)
+                            {
+                                if (item.SubElements.Intersect(tempPublicEle).Count() < cnt)
+                                {
+                                    result1 = false;
+                                }
+                            }
+                        }
+                        //得到除直线外，且除去ele子元素的集合。
+                        var tempList = new List<BaseViewModel>(_ladderElements.Values.Where(x => { return x.Type != ElementType.HLine; }));
+                        foreach (var item in ele.SubElements)
+                        {
+                            tempList.Remove(item);
+                        }
+                        //遍历该集合，计算任一元素的子元素集合与ele子元素的集合的交集元素个数
+                        foreach (var item in tempList)
+                        {
+                            int cnt1 = item.SubElements.Intersect(ele.SubElements).Count();
+                            if (cnt1 > cnt && cnt1 < ele.SubElements.Count - 1)
+                            {
+                                result2 = false;
+                            }
+                        }
+                    }
+                }
+            }
+            return result1 && result2;
+        }
+        //特殊模块检测
+        private bool CheckSpecialModel()
+        {
+            var allElements = _ladderElements.Values.Where(x => { return x.Type != ElementType.HLine; });
+            var allSpecialModels = _ladderElements.Values.Where(x => { return x.Type == ElementType.Special; });
+            foreach (var specialmodel in allSpecialModels)
+            {
+                //定义特殊模块的所有子元素及其自身为一个结果集
+                var subElementsOfSpecialModel = specialmodel.SubElements;
+                var tempList = new List<BaseViewModel>(allElements);
+                //得到除去结果集的元素集合
+                foreach (var ele in subElementsOfSpecialModel)
+                {
+                    if (tempList.Contains(ele))
+                    {
+                        tempList.Remove(ele);
+                    }
+                }
+                //得到包含特殊模块的所有父元素集合
+                var list = tempList.Where(x => { return x.SubElements.Contains(specialmodel); });
+                foreach (var ele in tempList)
+                {
+                    var subElementsOfEle = ele.SubElements;
+                    //结果集之外的任一元素与该结果集相交的元素集合
+                    int count = subElementsOfEle.Intersect(subElementsOfSpecialModel).Count();
+                    //其数量若大于0且小于整个结果集，且属于特殊模块的父元素的子元素
+                    if (count < subElementsOfSpecialModel.Count && count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            if (item.SubElements.Contains(ele))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        private void InitializeSubElements()
+        {
+            ClearSearchedFlag();
+            var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
+            foreach (var rootElement in rootElements)
+            {
+                GetSubElements(rootElement);
+            }
+        }
+        //得到所有子元素，包括自身和NULL元素。
+        private List<BaseViewModel> GetSubElements(BaseViewModel model)
+        {
+            if (model.IsSearched)
+            {
+                return model.SubElements;
+            }
+            List<BaseViewModel> result = new List<BaseViewModel>();
+            foreach (var ele in model.NextElemnets)
+            {
+                var tempList = GetSubElements(ele);
+                foreach (var item in tempList)
+                {
+                    if (!result.Contains(item))
+                    {
+                        result.Add(item);
+                    }
+                }
+            }
+            result.Add(model);
+            model.SubElements = result;
+            model.IsSearched = true;
+            return result;
+        }
+        //检测根元素的非NULL元素集合是否相交
+        private bool IsAllLinkedToRoot()
+        {
+            var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
+            var tempList = new List<BaseViewModel>();
+            tempList = GetRootLinkedEles(rootElements.ElementAt(0));
+            for (int x = 1; x < rootElements.Count(); x++)
+            {
+                tempList = tempList.Intersect(GetRootLinkedEles(rootElements.ElementAt(x))).ToList();
+                if (tempList.Count == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        //得到与根元素相关的最后一个非NULL元素集合
+        private List<BaseViewModel> GetRootLinkedEles(BaseViewModel rootElement)
+        {
+            ClearSearchedFlag();
+            List<BaseViewModel> tempList = new List<BaseViewModel>();
+            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElement.NextElemnets);
+            while (tempQueue.Count > 0)
+            {
+                var ele = tempQueue.Dequeue();
+                if (!ele.IsSearched)
+                {
+                    ele.IsSearched = true;
+                    if (ele.NextElemnets.Exists(x => { return x.Type == ElementType.Null; }))
+                    {
+                        tempList.Add(ele);
+                    }
+                    else
+                    {
+                        foreach (var item in ele.NextElemnets)
+                        {
+                            tempQueue.Enqueue(item);
+                        }
+                    }
+                }
+            }
+            return tempList;
+        }
+        //在PreComplie()方法后执行
+        private bool IsLadderGraphOpen()
+        {
+            ClearSearchedFlag();
+            //首先检查元素的基本性质
+            if (!Assert())
+            {
+                return true;
+            }
+            var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
+            //检查上并联错误
+            int MinY = rootElements.First().Y;
+            foreach (var ele in rootElements)
+            {
+                ele.IsSearched = true;
+                if (ele.Y < MinY)
+                {
+                    MinY = ele.Y;
+                }
+            }
+            var tempQueue = new Queue<BaseViewModel>(rootElements);
+            while (tempQueue.Count > 0)
+            {
+                var item = tempQueue.Dequeue();
+                if (!item.IsSearched)
+                {
+                    item.IsSearched = true;
+                    if (item.Y < MinY)
+                    {
+                        return true;
+                    }
+                    foreach (var ele in item.NextElemnets)
+                    {
+                        tempQueue.Enqueue(ele);
+                    }
+                }
+            }
+            return false;
+        }
+        //检测VerticalLine，不允许上或下没有元素。
+        private bool CheckVerticalLines()
+        {
+            IntPoint pos = new IntPoint();
+            IntPoint one = new IntPoint();
+            IntPoint two = new IntPoint();
+            var tempQueue = new Queue<VerticalLineViewModel>(_ladderVerticalLines.Values);
+            while (tempQueue.Count > 0)
+            {
+                var verticalLine = tempQueue.Dequeue();
+                pos.X = verticalLine.X;
+                pos.Y = verticalLine.Y;
+                one.X = pos.X + 1;
+                one.Y = pos.Y;
+                two.X = pos.X;
+                two.Y = pos.Y - 1;
+                if ((!_ladderElements.ContainsKey(pos)) && (!_ladderElements.ContainsKey(one)) && (!_ladderVerticalLines.ContainsKey(two)))
+                {
+                    return false;
+                }
+                pos.Y += 1;
+                one.Y += 1;
+                two.Y += 2;
+                if ((!_ladderElements.ContainsKey(pos)) && (!_ladderElements.ContainsKey(one)) && (!_ladderVerticalLines.ContainsKey(two)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         private List<BaseViewModel> SearchFrom(BaseViewModel viewmodel)
         {
             if (viewmodel.IsSearched)
@@ -463,7 +887,11 @@ namespace SamSoarII.AppMain.Project
             if (viewmodel.X == 0)
             {
                 viewmodel.IsSearched = true;
-                result.Add(BaseViewModel.Null);
+                NullViewModel nullModel = new NullViewModel();
+                nullModel.X = 0;
+                nullModel.Y = viewmodel.Y;
+                result.Add(nullModel);
+                //result.Add(BaseViewModel.Null);
                 viewmodel.NextElemnets = result;
                 return result;
             }
@@ -536,15 +964,46 @@ namespace SamSoarII.AppMain.Project
         {
             return _ladderVerticalLines.Values.Any(l => { return (l.X == p.X) && (l.Y == p.Y); });
         }
-
-
+        private IEnumerable<IntPoint> GetLeftRelativePoint(int x, int y)
+        {
+            List<IntPoint> tempList = new List<IntPoint>();
+            //添加顺序为左,上,下与左相同
+            tempList.Add(new IntPoint() { X = x - 1, Y = y });
+            tempList.Add(new IntPoint() { X = x - 1, Y = y - 1 });
+            return tempList;
+        }
+        private IEnumerable<IntPoint> GetUpRelativePoint(int x, int y)
+        {
+            List<IntPoint> tempList = new List<IntPoint>();
+            //添加顺序为上,右
+            tempList.Add(new IntPoint() { X = x, Y = y - 1 });
+            tempList.Add(new IntPoint() { X = x + 1, Y = y });
+            return tempList;
+        }
+        private IEnumerable<IntPoint> GetDownRelativePoint(int x, int y)
+        {
+            List<IntPoint> tempList = new List<IntPoint>();
+            //添加顺序为下，右
+            tempList.Add(new IntPoint() { X = x, Y = y + 1 });
+            tempList.Add(new IntPoint() { X = x + 1, Y = y + 1 });
+            return tempList;
+        }
+        private IEnumerable<IntPoint> GetRightRelativePoint(int x, int y)
+        {
+            List<IntPoint> tempList = new List<IntPoint>();
+            //添加顺序为右，上，下
+            tempList.Add(new IntPoint() { X = x + 1, Y = y });
+            tempList.Add(new IntPoint() { X = x, Y = y - 1 });
+            tempList.Add(new IntPoint() { X = x, Y = y });
+            return tempList;
+        }
         /// <summary>
         /// 判断网络是否有错误
         /// </summary>
         /// <returns>True 无错，False 有错</returns>
         public bool Assert()
         {
-            return _ladderElements.Values.All(x => x.Assert());
+            return _ladderElements.Values.All(x => x.Assert()) && CheckVerticalLines();
         }
         #endregion
 

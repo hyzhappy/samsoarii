@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
+             xmlns:Text="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
     <Border BorderBrush="Orange" BorderThickness="1">
         <Grid>
-            <TextBox x:Name="CodeTextBox" FontSize="16" AcceptsReturn="True" AcceptsTab="True"/>
+            <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" FontFamily="Consolas" FontSize="12pt" ScrollViewer.IsDeferredScrollingEnabled="False"></Text:TextEditor>
+            <!--<TextBox x:Name="CodeTextBox" FontSize="18" AcceptsReturn="True" AcceptsTab="True"/>-->
         </Grid>
     </Border>
 
