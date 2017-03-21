@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="SamSoarII.Simulation.UI.PLCTop.Trigger"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation.UI.PLCTop"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="120">
+    <UserControl.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+            <Grid.Children>
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Children>
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontSize="16">
+                            <TextBlock.Text>STOP</TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="16">
+                            <TextBlock.Text>RUN</TextBlock.Text>
+                        </TextBlock>
+                    </Grid.Children>
+                </Grid>
+                <Canvas Grid.Row="1" Grid.Column="0">
+                    <Canvas.Children>
+                        <Line X1="10" X2="110" Y1="15" Y2="15" StrokeThickness="4" Stroke="Black"></Line>
+                        <Border x:Name="StopRect" Canvas.Top="2" Canvas.Left="20" Width="26" Height="26" BorderThickness="2" BorderBrush="Black" Background="Gray"></Border>
+                        <Border x:Name="RunRect" Canvas.Top="2" Canvas.Left="75" Width="26" Height="26" BorderThickness="2" BorderBrush="Black" Background="Green"></Border>
+                    </Canvas.Children>
+                </Canvas>
+            </Grid.Children>
+        </Grid>
+    </UserControl.Content>
+</UserControl>
