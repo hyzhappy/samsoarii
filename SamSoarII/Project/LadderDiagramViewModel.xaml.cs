@@ -169,10 +169,10 @@ namespace SamSoarII.AppMain.Project
         public bool CheckProgramControlInstructions()
         {
             List<BaseViewModel> eles = GetProgramControlViewModels();
-            List<BaseViewModel> eles_for = eles.Where(x => { return x.GetType() == typeof(FORViewModel); }).ToList();
-            List<BaseViewModel> eles_next = eles.Where(x => { return x.GetType() == typeof(NEXTViewModel); }).ToList();
-            List<BaseViewModel> eles_jmp = eles.Where(x => { return x.GetType() == typeof(JMPViewModel); }).ToList();
-            List<BaseViewModel> eles_lbl = eles.Where(x => { return x.GetType() == typeof(LBLViewModel); }).ToList();
+            List<BaseViewModel> eles_for = new List<BaseViewModel>(eles.Where(x => { return x.GetType() == typeof(FORViewModel); }));
+            List<BaseViewModel> eles_next = new List<BaseViewModel>(eles.Where(x => { return x.GetType() == typeof(NEXTViewModel); }));
+            List<BaseViewModel> eles_jmp = new List<BaseViewModel>(eles.Where(x => { return x.GetType() == typeof(JMPViewModel); }));
+            List<BaseViewModel> eles_lbl = new List<BaseViewModel>(eles.Where(x => { return x.GetType() == typeof(LBLViewModel); }));
             if (eles_for.Count != eles_next.Count || eles_jmp.Count != eles_lbl.Count)
             {
                 return false;
@@ -813,7 +813,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 catch(Exception exception)
                 {
-                    
+                    MessageBox.Show(dialog, "指令不正确,请重新输入!");
                 }
             };
             dialog.ShowDialog();
@@ -906,7 +906,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }
-            if(e.Key == Key.Delete)
+            if(e.Key == Key.Back)
             {
                 if(_selectRectOwner != null)
                 {
