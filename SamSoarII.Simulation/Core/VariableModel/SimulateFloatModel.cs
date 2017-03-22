@@ -52,7 +52,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             string _name = Name;
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return String.Format("{0:s} = {1:d}", _name, value);
+            return String.Format("{0:s} = {1}", _name, value);
         }
         public override void Update(SimulateDllModel dllmodel)
         {

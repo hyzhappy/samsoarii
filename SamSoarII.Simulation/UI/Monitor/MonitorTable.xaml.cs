@@ -35,6 +35,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             public MonitorComboBox ComboBox_Type;
             public MonitorTextBox TextBox_Var;
             public MonitorTextBox TextBox_Value;
+            public MonitorBitButton Button_Value;
             public MonitorLockButton Button_Lock;
             public MonitorCloseButton Button_Close;
             
@@ -58,6 +59,29 @@ namespace SamSoarII.Simulation.UI.Monitor
                 ComboBox_Type.SVUnit = svunit;
                 TextBox_Var.SVUnit = svunit;
                 TextBox_Value.SVUnit = svunit;
+                Button_Value.SVUnit = svunit;
+                if (svunit is SimulateBitUnit)
+                {
+                    if (parent.MainGrid.Children.Contains(TextBox_Value))
+                    {
+                        parent.MainGrid.Children.Remove(TextBox_Value);
+                    }
+                    if (!parent.MainGrid.Children.Contains(Button_Value))
+                    {
+                        parent.MainGrid.Children.Add(Button_Value);
+                    }
+                }
+                else
+                {
+                    if (parent.MainGrid.Children.Contains(Button_Value))
+                    {
+                        parent.MainGrid.Children.Remove(Button_Value);
+                    }
+                    if (!parent.MainGrid.Children.Contains(TextBox_Value))
+                    {
+                        parent.MainGrid.Children.Add(TextBox_Value);
+                    }
+                }
                 settingup = false;
             }
 
@@ -65,7 +89,10 @@ namespace SamSoarII.Simulation.UI.Monitor
             {
                 settingup = true;
                 if (!Button_Lock.IsLocked)
+                {
                     TextBox_Value.SetText();
+                    Button_Value.SetText();
+                }
                 settingup = false;
             }
 
@@ -75,6 +102,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 ComboBox_Type = new MonitorComboBox(MonitorComboBox.TYPE_DATATYPE);
                 TextBox_Var = new MonitorTextBox(MonitorTextBox.TYPE_VAR);
                 TextBox_Value = new MonitorTextBox(MonitorTextBox.TYPE_VALUE);
+                Button_Value = new MonitorBitButton();
                 Button_Close = new MonitorCloseButton();
                 Button_Lock = new MonitorLockButton();
 
@@ -83,11 +111,15 @@ namespace SamSoarII.Simulation.UI.Monitor
                 TextBox_Var.ContextMenu = parent.RightClickMenu;
                 TextBox_Value.ContextMenu = parent.RightClickMenu;
                 TextBox_Value.IsReadOnly = true;
+                Button_Value.ContextMenu = parent.RightClickMenu;
+                Button_Value.IsReadOnly = true;
+               // Button_Value.Opacity = 0.0;
 
                 TextBox_Name.TextLegalChanged += OnTextLegalChanged;
                 ComboBox_Type.TextLegalChanged += OnTextLegalChanged;
                 TextBox_Var.TextLegalChanged += OnTextLegalChanged;
                 TextBox_Value.TextLegalChanged += OnTextLegalChanged;
+                Button_Value.TextLegalChanged += OnTextLegalChanged;
                 Button_Lock.MouseUp += OnLockButtonClicked;
                 Button_Close.MouseUp += OnCloseButtonClicked;
                 VariableUnitChanged += parent.OnVariableUnitChanged;
@@ -99,12 +131,14 @@ namespace SamSoarII.Simulation.UI.Monitor
                 Grid.SetRow(ComboBox_Type, id);
                 Grid.SetRow(TextBox_Var, id);
                 Grid.SetRow(TextBox_Value, id);
+                Grid.SetRow(Button_Value, id);
                 Grid.SetRow(Button_Lock, id);
                 Grid.SetRow(Button_Close, id);
                 Grid.SetColumn(TextBox_Name, 0);
                 Grid.SetColumn(ComboBox_Type, 1);
                 Grid.SetColumn(TextBox_Var, 2);
                 Grid.SetColumn(TextBox_Value, 3);
+                Grid.SetColumn(Button_Value, 3);
                 Grid.SetColumn(Button_Lock, 4);
                 Grid.SetColumn(Button_Close, 5);
                 currentRowDefinition = new RowDefinition();
@@ -114,6 +148,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 parent.MainGrid.Children.Add(ComboBox_Type);
                 parent.MainGrid.Children.Add(TextBox_Var);
                 parent.MainGrid.Children.Add(TextBox_Value);
+                //parent.MainGrid.Children.Add(Button_Value);
                 parent.MainGrid.Children.Add(Button_Lock);
                 parent.MainGrid.Children.Add(Button_Close);
             }
@@ -126,6 +161,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 parent.MainGrid.Children.Remove(ComboBox_Type);
                 parent.MainGrid.Children.Remove(TextBox_Var);
                 parent.MainGrid.Children.Remove(TextBox_Value);
+                parent.MainGrid.Children.Remove(Button_Value);
                 parent.MainGrid.Children.Remove(Button_Lock);
                 parent.MainGrid.Children.Remove(Button_Close);
                 parent.MainGrid.RowDefinitions.Remove(currentRowDefinition);
@@ -138,6 +174,21 @@ namespace SamSoarII.Simulation.UI.Monitor
             {
                 if (settingup)
                 {
+                    return;
+                }
+                if (sender == Button_Value && Button_Lock.IsLocked)
+                {
+                    switch (Button_Value.Status)
+                    {
+                        case MonitorBitButton.STATUS_ON:
+                            svunit.Value = 1;
+                            break;
+                        case MonitorBitButton.STATUS_OFF:
+                            svunit.Value = 0;
+                            break;
+                        case MonitorBitButton.STATUS_ERROR:
+                            break;
+                    }
                     return;
                 }
                 if (sender == TextBox_Value && Button_Lock.IsLocked)
@@ -203,6 +254,10 @@ namespace SamSoarII.Simulation.UI.Monitor
            
             private void OnCloseButtonClicked(object sender, RoutedEventArgs e)
             {
+                if (Button_Lock.IsLocked)
+                {
+                    return;
+                }
                 VariableUnitChangeEventArgs _e = new VariableUnitChangeEventArgs();
                 _e.Old = svunit;
                 _e.New = null;
@@ -225,7 +280,14 @@ namespace SamSoarII.Simulation.UI.Monitor
 
                 if (Button_Lock.IsLocked)
                 {
-                    TextBox_Value.IsReadOnly = false;
+                    if (svunit is SimulateBitUnit)
+                    {
+                        Button_Value.IsReadOnly = false;
+                    }
+                    else
+                    {
+                        TextBox_Value.IsReadOnly = false;
+                    }
                     if (VariableUnitLocked != null)
                     {
                         VariableUnitLocked(this, _e);
@@ -234,6 +296,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 else
                 {
                     TextBox_Value.IsReadOnly = true;
+                    Button_Value.IsReadOnly = true;
                     if (VariableUnitUnlocked != null)
                     {
                         VariableUnitUnlocked(this, _e);

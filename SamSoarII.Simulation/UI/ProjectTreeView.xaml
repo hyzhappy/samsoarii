@@ -59,9 +59,6 @@
                     </TreeViewItem>
                 </TreeViewItem.Items>
                 </TreeViewItem>
-                <TreeViewItem Header="元件" IsExpanded="True">
-
-                </TreeViewItem>
             </TreeViewItem.Items>
             </TreeViewItem>
         </TreeView.Items>

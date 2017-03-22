@@ -62,8 +62,11 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             set
             {
-                if (!_Check_Name(value)) return;
-                this.name = value;
+                Match matches = Regex.Match(value, @"\w\d+");
+                if (matches.Length == 0) return;
+                string _name = matches.Value;
+                if (!_Check_Name(_name)) return;
+                this.name = _name;
                 int i = 0;
                 while (char.IsLetter(name[i])) i++;
                 this.basename = this.name.Substring(0, i);

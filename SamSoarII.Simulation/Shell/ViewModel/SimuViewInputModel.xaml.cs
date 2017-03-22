@@ -51,8 +51,43 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             // 空格分隔，获得指令名称和参数集合
             string[] texts = text.Split(' ');
             Inst = texts[0];
-            // 输入元件的唯一参数为位参数
-            this._args1 = _parent.GetVariableUnit(texts[1], "BIT");
+            switch (Inst)
+            {
+                // (rW, rW)
+                case "LDWEQ":
+                case "LDWNE":
+                case "LDWGE":
+                case "LDWLE":
+                case "LDWG":
+                case "LDWL":
+                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
+                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
+                    break;
+                // (rD, rD)
+                case "LDDEQ":
+                case "LDDNE":
+                case "LDDGE":
+                case "LDDLE":
+                case "LDDG":
+                case "LDDL":
+                    this._args1 = _parent.GetVariableUnit(texts[1], "DWORD");
+                    this._args2 = _parent.GetVariableUnit(texts[2], "DWORD");
+                    break;
+                // (rF, rF)
+                case "LDFEQ":
+                case "LDFNE":
+                case "LDFGE":
+                case "LDFLE":
+                case "LDFG":
+                case "LDFL":
+                    this._args1 = _parent.GetVariableUnit(texts[1], "FLOAT");
+                    this._args2 = _parent.GetVariableUnit(texts[2], "FLOAT");
+                    break;
+                default:
+                    // 输入元件的唯一参数为位参数
+                    this._args1 = _parent.GetVariableUnit(texts[1], "BIT");
+                    break;
+            }
             // 更新画面就能显示出来
             Update();
         }
@@ -67,24 +102,119 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             Line line = null;
             Rectangle rect = null;
             CenterCanvas.Children.Clear();
-            // 涂个-[绿]-表示当前值为1
-            if ((int)(_args1.Value) == 1)
+            switch (Inst)
             {
-                rect = new Rectangle();
-                rect.Width = CenterCanvas.Width;
-                rect.Height = CenterCanvas.Height;
-                rect.Fill = Brushes.Green;
-                CenterCanvas.Children.Add(rect);
-            }
-            else
-            // 涂个-[红]-表示当前值非法
-            if ((int)(_args1.Value) != 0)
-            {
-                rect = new Rectangle();
-                rect.Width = CenterCanvas.Width;
-                rect.Height = CenterCanvas.Height;
-                rect.Fill = Brushes.Red;
-                CenterCanvas.Children.Add(rect);
+                case "LDWEQ":
+                    CenterTextBlock.Text = "W==";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDWNE":
+                    CenterTextBlock.Text = "W<>";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDWGE":
+                    CenterTextBlock.Text = "W>=";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDWLE":
+                    CenterTextBlock.Text = "W<=";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDWG":
+                    CenterTextBlock.Text = "W>";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDWL":
+                    CenterTextBlock.Text = "W<";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDDEQ":
+                    CenterTextBlock.Text = "D==";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDDNE":
+                    CenterTextBlock.Text = "D<>";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDDGE":
+                    CenterTextBlock.Text = "D>=";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDDLE":
+                    CenterTextBlock.Text = "D<=";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDDG":
+                    CenterTextBlock.Text = "D>";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDDL":
+                    CenterTextBlock.Text = "D<";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDFEQ":
+                    CenterTextBlock.Text = "F==";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDFNE":
+                    CenterTextBlock.Text = "F<>";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDFGE":
+                    CenterTextBlock.Text = "F>=";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDFLE":
+                    CenterTextBlock.Text = "F<=";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDFG":
+                    CenterTextBlock.Text = "F>";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                case "LDFL":
+                    CenterTextBlock.Text = "F<";
+                    ValueTextBlock.Text = _args1.ToString();
+                    Value2TextBlock.Text = _args2.ToString();
+                    break;
+                default:
+                    // 涂个-[绿]-表示当前值为1
+                    if ((int)(_args1.Value) == 1)
+                    {
+                        rect = new Rectangle();
+                        rect.Width = CenterCanvas.Width;
+                        rect.Height = CenterCanvas.Height;
+                        rect.Fill = Brushes.Green;
+                        CenterCanvas.Children.Add(rect);
+                    }
+                    else
+                    // 涂个-[红]-表示当前值非法
+                    if ((int)(_args1.Value) != 0)
+                    {
+                        rect = new Rectangle();
+                        rect.Width = CenterCanvas.Width;
+                        rect.Height = CenterCanvas.Height;
+                        rect.Fill = Brushes.Red;
+                        CenterCanvas.Children.Add(rect);
+                    }
+                    break;
             }
             // 画个-[/]-表示【取反】
             switch (Inst)
@@ -186,6 +316,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 default:
                     break;
             }
+            CenterCanvas.Children.Add(CenterTextBlock);
 
         }
     }

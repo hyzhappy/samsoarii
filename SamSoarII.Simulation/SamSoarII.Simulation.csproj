@@ -89,6 +89,9 @@
     <Compile Include="SimulateWindow.xaml.cs">
       <DependentUpon>SimulateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Monitor\MonitorBitButton.xaml.cs">
+      <DependentUpon>MonitorBitButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Monitor\MonitorCloseButton.xaml.cs">
       <DependentUpon>MonitorCloseButton.xaml</DependentUpon>
     </Compile>
@@ -165,6 +168,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SimulateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Monitor\MonitorBitButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

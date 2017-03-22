@@ -26,6 +26,14 @@ namespace SamSoarII.Simulation.UI.Monitor
             set
             {
                 this.svunit = value;
+                if (type == TYPE_VALUE && svunit is SimulateBitUnit)
+                {
+                    Opacity = 0.0;  
+                }
+                else
+                {
+                    Opacity = 1.0;
+                }
                 SetText();
             }
         }
