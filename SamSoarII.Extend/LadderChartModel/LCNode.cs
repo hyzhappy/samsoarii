@@ -19,6 +19,35 @@ namespace SamSoarII.Extend.LadderChartModel
 {
     public class LCNode
     {
+        static private List<string> StringList = new List<string>();
+        static private Dictionary<string, int> StringDict = new Dictionary<string, int>();
+
+        public int StringID(string s)
+        {
+            if (!StringDict.ContainsKey(s))
+            {
+                StringList.Add(s);
+                StringDict.Add(s, StringList.Count()-1);
+            }
+            return StringDict[s];
+        }
+        public string IDString(int flagid = 1)
+        {
+            switch (flagid)
+            {
+                case 1:
+                    return StringList[flag1];
+                case 2:
+                    return StringList[flag2];
+                case 3:
+                    return StringList[flag3];
+                case 4:
+                    return StringList[flag4];
+                default:
+                    return StringList[flagid-5];
+            }
+        }
+
         /// <summary>
         /// 内部成员变量
         /// </summary>
@@ -263,24 +292,20 @@ namespace SamSoarII.Extend.LadderChartModel
                 }
             }
         }
-
         /// <summary>
-        /// 生成该元件对应的指令
-        /// </summary> 
-        public void GenInst(List<PLCInstruction> insts, int flag=0)
+        /// 元件用PLC指令格式显示
+        /// </summary>
+        /// <param name="profix">指令前缀(/A/OR)</param>
+        /// <returns></returns>
+        public string ToShowString(string profix = "")
         {
-            string profix = "LD";
-            if ((flag & 0x04) != 0)
-                profix = "A";
-            if ((flag & 0x08) != 0)
-                profix = "OR";
             string text = "";
-            switch (type&0xFF)
+            switch (type & 0xFF)
             {
                 case InstHelper.LD: text = profix + " " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDI:text = profix + "I " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDIM:text = profix + "IM " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDIIM:text = profix + "IIM " + InstHelper.RegName(flag1); break;
+                case InstHelper.LDI: text = profix + "I " + InstHelper.RegName(flag1); break;
+                case InstHelper.LDIM: text = profix + "IM " + InstHelper.RegName(flag1); break;
+                case InstHelper.LDIIM: text = profix + "IIM " + InstHelper.RegName(flag1); break;
                 case InstHelper.LDP: text = profix + "P " + InstHelper.RegName(flag1); break;
                 case InstHelper.LDF: text = profix + "F " + InstHelper.RegName(flag1); break;
                 case InstHelper.MEP: text = "MEP"; break;
@@ -312,11 +337,11 @@ namespace SamSoarII.Extend.LadderChartModel
                 case InstHelper.GTW: text = profix + "WG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
                 case InstHelper.GTD: text = profix + "DG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
                 case InstHelper.GTF: text = profix + "FG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.WTOD: text = profix + "WTOD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DTOW: text = profix + "DTOW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DTOF: text = profix + "DTOF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.BIN: text = profix + "BIN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.BCD: text = profix + "BCD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.WTOD: text = "WTOD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.DTOW: text = "DTOW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.DTOF: text = "DTOF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.BIN: text = "BIN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.BCD: text = "BCD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
                 case InstHelper.ROUND: text = "ROUND " + InstHelper.RegName(flag1); break;
                 case InstHelper.TURNC: text = "TURNC " + InstHelper.RegName(flag1); break;
                 case InstHelper.INVW: text = "INVW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
@@ -327,9 +352,9 @@ namespace SamSoarII.Extend.LadderChartModel
                 case InstHelper.ORD: text = "ORD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
                 case InstHelper.XORW: text = "XORW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
                 case InstHelper.XORD: text = "XORD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.MOV: text = profix + "MOV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.MOVD: text = profix + "MOVD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.MOVF: text = profix + "MOVF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.MOV: text = "MOV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.MOVD: text = "MOVD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
+                case InstHelper.MOVF: text = "MOVF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
                 case InstHelper.MVBLK: text = "MVBLK " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
                 case InstHelper.MVDBLK: text = "MVDBLK " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
                 case InstHelper.ADDF: text = "ADDF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
@@ -366,8 +391,8 @@ namespace SamSoarII.Extend.LadderChartModel
                 case InstHelper.NEXT: text = "NEXT"; break;
                 case InstHelper.JMP: text = "JMP " + InstHelper.RegName(flag1); break;
                 case InstHelper.LBL: text = "LBL " + InstHelper.RegName(flag1); break;
-                case InstHelper.CALL: text = "CALL " + InstHelper.RegName(flag1); break;
-                case InstHelper.CALLM: text = "CALLM " + InstHelper.RegName(flag1); break;
+                case InstHelper.CALL: text = "CALL " + IDString(1); break;
+                case InstHelper.CALLM: text = "CALLM " + IDString(1); break;
                 case InstHelper.SHL: text = "SHL " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
                 case InstHelper.SHLD: text = "SHLD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
                 case InstHelper.SHR: text = "SHR " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
@@ -424,9 +449,22 @@ namespace SamSoarII.Extend.LadderChartModel
                 case InstHelper.SMOV: text = "SMOV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4) + " " + InstHelper.RegName(flag5); break;
                 case InstHelper.FMOV: text = "FMOV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
                 case InstHelper.FMOVD: text = "FMOVD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                default: text = "";break;    
+                default: text = ""; break;
             }
-            InstHelper.AddInst(insts, text);
+            return text;
+        }
+
+        /// <summary>
+        /// 生成该元件对应的指令
+        /// </summary> 
+        public void GenInst(List<PLCInstruction> insts, int flag=0)
+        {
+            string profix = "LD";
+            if ((flag & 0x04) != 0)
+                profix = "A";
+            if ((flag & 0x08) != 0)
+                profix = "OR";
+            InstHelper.AddInst(insts, ToShowString(profix));
         }
         
     }

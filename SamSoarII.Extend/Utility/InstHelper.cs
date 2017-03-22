@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// ClassName : LCNode
@@ -414,23 +415,41 @@ namespace SamSoarII.Extend.Utility
             if (inst.Equals("ALT")) return 0x11;
             if (inst.Equals("ALTP")) return 0x12;
 
+            if (inst.Equals("LDWEQ")) return 0x13;
             if (inst.Equals("EQW")) return 0x13;
+            if (inst.Equals("LDWNE")) return 0x14;
             if (inst.Equals("NEW")) return 0x14;
+            if (inst.Equals("LDWGE")) return 0x15;
             if (inst.Equals("GEW")) return 0x15;
+            if (inst.Equals("LDWLE")) return 0x16;
             if (inst.Equals("LEW")) return 0x16;
+            if (inst.Equals("LDWG")) return 0x17;
             if (inst.Equals("GTW")) return 0x17;
+            if (inst.Equals("LDWL")) return 0x18;
             if (inst.Equals("LTW")) return 0x18;
+            if (inst.Equals("LDDEQ")) return 0x19;
             if (inst.Equals("EQD")) return 0x19;
+            if (inst.Equals("LDDNE")) return 0x1A;
             if (inst.Equals("NED")) return 0x1A;
+            if (inst.Equals("LDDGE")) return 0x1B;
             if (inst.Equals("GED")) return 0x1B;
+            if (inst.Equals("LDDLE")) return 0x1C;
             if (inst.Equals("LED")) return 0x1C;
+            if (inst.Equals("LDDG")) return 0x1D;
             if (inst.Equals("GTD")) return 0x1D;
+            if (inst.Equals("LDDL")) return 0x1E;
             if (inst.Equals("LTD")) return 0x1E;
+            if (inst.Equals("LDFEQ")) return 0x1F;
             if (inst.Equals("EQF")) return 0x1F;
+            if (inst.Equals("LDFNE")) return 0x20;
             if (inst.Equals("NEF")) return 0x20;
+            if (inst.Equals("LDFGE")) return 0x21;
             if (inst.Equals("GEF")) return 0x21;
+            if (inst.Equals("LDFLE")) return 0x22;
             if (inst.Equals("LEF")) return 0x22;
+            if (inst.Equals("LDFG")) return 0x23;
             if (inst.Equals("GTF")) return 0x23;
+            if (inst.Equals("LDFL")) return 0x24;
             if (inst.Equals("LTF")) return 0x24;
 
             if (inst.Equals("WTOD")) return 0x25;
@@ -589,6 +608,9 @@ namespace SamSoarII.Extend.Utility
         /// <returns>记号</returns>
         static public int RegAddr(string name)
         {
+            Match matches = Regex.Match(name, @"\w\d+");
+            if (matches.Length == 0) return 0;
+            name = matches.Value;
             if (name[0] == 'K') return ADDRK + int.Parse(name.Substring(1));
             if (name[0] == 'T' && name[1] == 'V') return ADDRTV + int.Parse(name.Substring(2));
             if (name[0] == 'C' && name[1] == 'V') return ADDRCV + int.Parse(name.Substring(2));
@@ -641,11 +663,35 @@ namespace SamSoarII.Extend.Utility
             }
         }
         /// <summary>
-        /// 将给定的PLC代码转换为C语言代码并输出到文件
+        /// 将给定的PLC代码转换为仿真程序
+        /// </summary>
+        /// <param name="sw">文件输出流</param>
+        /// <param name="networks">PLC代码的NETWORK集</param>
+        static public void InstToSimuCode(StreamWriter sw, PLCInstNetwork[] networks)
+        {
+            sw.Write("#include <stdint.h>\r\n");
+            sw.Write("#include \"simulib.h\"\r\n");
+            sw.Write("#include \"simuf.h\"\r\n");
+            sw.Write("#include \"simuc.h\"\r\n\r\n");
+            _InstToCCode(sw, networks, true);
+        }
+        /// <summary>
+        /// 将给定的PLC代码转换为下位程序
         /// </summary>
         /// <param name="sw">文件输出流</param>
         /// <param name="networks">PLC代码的NETWORK集</param>
         static public void InstToCCode(StreamWriter sw, PLCInstNetwork[] networks)
+        {
+            sw.Write("#include \"lib.h\"\n");
+            sw.Write("#include \"main.h\"\n\n");
+            _InstToCCode(sw, networks, false);
+        }
+        /// <summary>
+        /// 将给定的PLC代码转换为C语言代码并输出到文件
+        /// </summary>
+        /// <param name="sw">文件输出流</param>
+        /// <param name="networks">PLC代码的NETWORK集</param>
+        static private void _InstToCCode(StreamWriter sw, PLCInstNetwork[] networks, bool simumode = false)
         {
             // 构建指令结构的列表
             List<PLCInstruction> insts = new List<PLCInstruction>();
@@ -712,8 +758,8 @@ namespace SamSoarII.Extend.Utility
                 }
             }
             // 建立C代码的全局环境
-            sw.Write("#include \"lib.h\"\n");
-            sw.Write("#include \"main.h\"\n\n");
+            //sw.Write("#include \"lib.h\"\n");
+            //sw.Write("#include \"main.h\"\n\n");
             //sw.Write("static uint16_t _stack[256];\n");         // 数据栈
             //sw.Write("static uint16_t _stacktop;\n");           // 数据栈的栈顶
             //sw.Write("static uint16_t _mstack[256];\n");        // 辅助栈
@@ -760,7 +806,7 @@ namespace SamSoarII.Extend.Utility
             foreach (PLCInstruction inst in insts)
             {
                 if (inst.Type.Equals("FUNC"))
-                    sw.Write("void {0:s}();", inst[1]);
+                    sw.Write("void _SBR_{0:s}();", inst[1]);
             }
             // 建立扫描的主函数
             sw.Write("void RunLadder()\n{\n");
@@ -778,7 +824,27 @@ namespace SamSoarII.Extend.Utility
             // 生成PLC对应的内容
             foreach (PLCInstruction inst in insts)
             {
-                InstToCCode(sw, inst);
+                switch (inst.Type)
+                {
+                    // 函数头部
+                    case "FUNC":
+                        sw.Write("}\n\n");
+                        sw.Write("void _SBR_{0:s}()", inst[1]);
+                        sw.Write("{\n");
+                        // 建立局部的栈和辅助栈
+                        for (int i = 1; i <= stackTotal; i++)
+                        {
+                            sw.Write("uint16_t _stack_{0:d};\n", i);
+                        }
+                        for (int i = 1; i <= mstackTotal; i++)
+                        {
+                            sw.Write("uint16_t _mstack_{0:d};\n", i);
+                        }
+                        break;
+                    default:
+                        InstToCCode(sw, inst, simumode);
+                        break;
+                }
             }
             sw.Write("}\n");
         }
@@ -787,17 +853,17 @@ namespace SamSoarII.Extend.Utility
         /// </summary>
         /// <param name="sw">输出的C文件</param>
         /// <param name="inst">指令结构</param>
-        static public void InstToCCode(StreamWriter sw, PLCInstruction inst)
+        /// <param name="simumode">是否是仿真模式</param>
+        static public void InstToCCode(StreamWriter sw, PLCInstruction inst, bool simumode = false)
         {
+            // 如果是仿真模式需要由写入使能作为条件
+            if (inst.EnBit != null)
+            {
+                sw.Write("if (!{0:s})", inst.EnBit);
+            }
             // 第一次判断指令类型
             switch (inst.Type)
             {
-                // 函数头部
-                case "FUNC":
-                    sw.Write("}\n\n");
-                    sw.Write("void {0:s}()", inst[1]);
-                    sw.Write("{\n");
-                    break;
                 // 一般的入栈和逻算
                 case "LD": case "LDIM":     sw.Write("_stack_{0:d} = {1:s};\n",   ++stackTop, inst[1]); break;
                 case "AND": case "ANDIM":   sw.Write("_stack_{0:d} &= {1:s};\n",    stackTop, inst[1]); break;
@@ -1000,7 +1066,7 @@ namespace SamSoarII.Extend.Utility
                     break;
                 // CALL指令，调用子函数
                 case "CALL":
-                    sw.Write("if (_stack_{0:d})) \n", stackTop);
+                    sw.Write("if (_stack_{0:d}) \n", stackTop);
                     sw.Write("_SBR_{0:s}();\n", inst[1]);
                     break;
                 // CALLM指令，调用用户实现的c语言宏指令
