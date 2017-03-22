@@ -73,11 +73,11 @@ namespace SamSoarII.AppMain.Project
                     lcn.Type = InstHelper.InstID(bvm.InstructionName);
                     if (bvm.Model is ALTModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((ALTModel)(bvm.Model)).Value.ToShowString());    
+                        lcn[1] = InstHelper.RegAddr(((ALTModel)(bvm.Model)).Value.ValueShowString);    
                     }
                     if (bvm.Model is ALTPModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((ALTPModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((ALTPModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is INVModel)
                     {
@@ -85,27 +85,27 @@ namespace SamSoarII.AppMain.Project
                     }
                     if (bvm.Model is LDFModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDFModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDFModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is LDIIMModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDIIMModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDIIMModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is LDIMModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDIMModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDIMModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is LDIModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDIModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDIModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is LDModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is LDPModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDPModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDPModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is MEFModel)
                     {
@@ -117,156 +117,156 @@ namespace SamSoarII.AppMain.Project
                     }
                     if (bvm.Model is OUTIMModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((OUTIMModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((OUTIMModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is OUTModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((OUTModel)(bvm.Model)).Value.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((OUTModel)(bvm.Model)).Value.ValueShowString);
                     }
                     if (bvm.Model is RSTIMModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((RSTIMModel)(bvm.Model)).Value.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((RSTIMModel)(bvm.Model)).Count.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((RSTIMModel)(bvm.Model)).Value.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((RSTIMModel)(bvm.Model)).Count.ValueShowString);
                     }
                     if (bvm.Model is RSTModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((RSTModel)(bvm.Model)).Value.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((RSTModel)(bvm.Model)).Count.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((RSTModel)(bvm.Model)).Value.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((RSTModel)(bvm.Model)).Count.ValueShowString);
                     }
                     if (bvm.Model is SETIMModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((SETIMModel)(bvm.Model)).Value.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((SETIMModel)(bvm.Model)).Count.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((SETIMModel)(bvm.Model)).Value.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((SETIMModel)(bvm.Model)).Count.ValueShowString);
                     }
                     if (bvm.Model is SETModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((SETModel)(bvm.Model)).Value.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((SETModel)(bvm.Model)).Count.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((SETModel)(bvm.Model)).Value.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((SETModel)(bvm.Model)).Count.ValueShowString);
                     }
                     if (bvm.Model is LDDEQModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDDEQModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDDEQModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDDEQModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDDEQModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDDNEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDDNEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDDNEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDDNEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDDNEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDDGEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDDGEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDDGEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDDGEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDDGEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDDLEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDDLEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDDLEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDDLEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDDLEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDDLModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDDLModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDDLModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDDLModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDDLModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDDGModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDDGModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDDGModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDDGModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDDGModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDFEQModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDFEQModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDFEQModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDFEQModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDFEQModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDFNEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDFNEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDFNEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDFNEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDFNEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDFGEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDFGEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDFGEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDFGEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDFGEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDFLEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDFLEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDFLEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDFLEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDFLEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDFLModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDFLModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDFLModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDFLModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDFLModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDFGModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDFGModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDFGModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDFGModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDFGModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDWEQModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDWEQModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDWEQModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDWEQModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDWEQModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDWNEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDWNEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDWNEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDWNEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDWNEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDWGEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDWGEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDWGEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDWGEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDWGEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDWLEModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDWLEModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDWLEModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDWLEModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDWLEModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDWLModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDWLModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDWLModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDWLModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDWLModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is LDWGModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((LDWGModel)(bvm.Model)).Value1.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((LDWGModel)(bvm.Model)).Value2.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((LDWGModel)(bvm.Model)).Value1.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((LDWGModel)(bvm.Model)).Value2.ValueShowString);
                     }
                     if (bvm.Model is BCDModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((BCDModel)(bvm.Model)).InputValue.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((BCDModel)(bvm.Model)).OutputValue.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((BCDModel)(bvm.Model)).InputValue.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((BCDModel)(bvm.Model)).OutputValue.ValueShowString);
                     }
                     if (bvm.Model is BINModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((BINModel)(bvm.Model)).InputValue.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((BINModel)(bvm.Model)).OutputValue.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((BINModel)(bvm.Model)).InputValue.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((BINModel)(bvm.Model)).OutputValue.ValueShowString);
                     }
                     if (bvm.Model is DTOFModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((DTOFModel)(bvm.Model)).InputValue.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((DTOFModel)(bvm.Model)).OutputValue.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((DTOFModel)(bvm.Model)).InputValue.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((DTOFModel)(bvm.Model)).OutputValue.ValueShowString);
                     }
                     if (bvm.Model is DTOWModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((DTOWModel)(bvm.Model)).InputValue.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((DTOWModel)(bvm.Model)).OutputValue.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((DTOWModel)(bvm.Model)).InputValue.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((DTOWModel)(bvm.Model)).OutputValue.ValueShowString);
                     }
                     if (bvm.Model is ROUNDModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((ROUNDModel)(bvm.Model)).InputValue.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((ROUNDModel)(bvm.Model)).OutputValue.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((ROUNDModel)(bvm.Model)).InputValue.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((ROUNDModel)(bvm.Model)).OutputValue.ValueShowString);
                     }
                     if (bvm.Model is TRUNCModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((TRUNCModel)(bvm.Model)).InputValue.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((TRUNCModel)(bvm.Model)).OutputValue.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((TRUNCModel)(bvm.Model)).InputValue.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((TRUNCModel)(bvm.Model)).OutputValue.ValueShowString);
                     }
                     if (bvm.Model is WTODModel)
                     {
-                        lcn[1] = InstHelper.RegAddr(((WTODModel)(bvm.Model)).InputValue.ToShowString());
-                        lcn[2] = InstHelper.RegAddr(((WTODModel)(bvm.Model)).OutputValue.ToShowString());
+                        lcn[1] = InstHelper.RegAddr(((WTODModel)(bvm.Model)).InputValue.ValueShowString);
+                        lcn[2] = InstHelper.RegAddr(((WTODModel)(bvm.Model)).OutputValue.ValueShowString);
                     }
                     lcn.HAccess = true;
                 }
