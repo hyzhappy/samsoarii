@@ -37,6 +37,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimulateCommand}" Executed="OnSimulateCommandExecute" CanExecute="SimulateCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <Style x:Key="ImageEnable" TargetType="Image">
@@ -126,7 +127,7 @@
             <MenuItem Header="工具(_T)">
                 <MenuItem Header="上载"></MenuItem>
                 <MenuItem Header="下载"></MenuItem>
-                <MenuItem Header="仿真"></MenuItem>
+                <MenuItem Header="仿真" Command="{x:Static app:GlobalCommand.SimulateCommand}"></MenuItem>
                 <MenuItem Header="监视"></MenuItem>
                 <MenuItem Header="程序检测" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
                 <Separator></Separator>

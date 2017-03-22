@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+
 namespace SamSoarII.AppMain
 {
     public class InteractionFacade
@@ -133,6 +134,11 @@ namespace SamSoarII.AppMain
         public void CompileProject()
         {
             _projectModel.Compile();
+        }
+
+        public void SimulateProject()
+        {
+            SimulateHelper.Simulate(_projectModel);
         }
 
         public void CloseTabItem(ITabItem tabItem)

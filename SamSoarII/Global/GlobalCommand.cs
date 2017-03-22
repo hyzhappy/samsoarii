@@ -23,6 +23,8 @@ namespace SamSoarII.AppMain
 
         public static RoutedUICommand ShowOptionDialogCommand { get; set; }
         public static RoutedUICommand CheckNetworkErrorCommand { get; set; }
+
+        public static RoutedUICommand SimulateCommand { get; set; }
         static GlobalCommand()
         {
             AddNewFuncBlockCommand = new RoutedUICommand();
@@ -35,6 +37,7 @@ namespace SamSoarII.AppMain
             ShowOptionDialogCommand = new RoutedUICommand();
             CommentModeToggleCommand = new RoutedUICommand();
             CheckNetworkErrorCommand = new RoutedUICommand();
+            SimulateCommand = new RoutedUICommand();
         }
     }
 }
