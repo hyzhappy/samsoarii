@@ -10,17 +10,34 @@ namespace SamSoarII.ValueModel
     {
     
         private Int32 Value { get; set; }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("H{0}", Value);
+            }
+        }
+
+        public override string ValueShowString
+        {
+            get
+            {
+                return ValueString;
+            }
+        }
+
         public HDoubleWordValue(Int32 value)
         {
             Value = value;
         }
-        public override string GetDoubleWordValue()
+
+
+
+
+        public override string GetValue()
         {
             return string.Format("0x{0}", Convert.ToString(Value, 16));
-        }
-        public override string ToString()
-        {
-            return string.Format("H{0}", Convert.ToString(Value, 16));
         }
     }
 }

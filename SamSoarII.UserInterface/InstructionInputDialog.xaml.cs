@@ -37,7 +37,7 @@ namespace SamSoarII.UserInterface
             }
         }
 
-        public InstructionInputDialog(string initialString,Dictionary<string,List<string>> instructionNameAndToolTips)
+        public InstructionInputDialog(string initialString, Dictionary<string,List<string>> instructionNameAndToolTips)
         {
             InitializeComponent();
             InstructionInput = initialString;

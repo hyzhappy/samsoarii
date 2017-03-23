@@ -8,15 +8,28 @@ using SamSoarII.AppMain.UI;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
-
+using System.Collections.ObjectModel;
 namespace SamSoarII.AppMain
 {
     public class InteractionFacade
     {
+
+        private bool _isCommentMode;
+        public bool IsCommentMode
+        {
+            get { return _isCommentMode; }
+            set
+            {
+                _isCommentMode = value;
+                _projectModel.IsCommentMode = _isCommentMode;
+            }
+        }
+
         private ProjectModel _projectModel;
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
         private MainWindow _mainWindow;
+
         public bool ProjectLoaded
         {
             get
@@ -41,11 +54,12 @@ namespace SamSoarII.AppMain
         public void CreateProject(string name, string fullFileName)
         {         
             _projectModel = new ProjectModel(name);
-            _projectTreeView = new ProjectTreeView();
-            _projectTreeView.LoadProject(_projectModel);
+            _projectTreeView = new ProjectTreeView(_projectModel);
             _projectTreeView.TabItemOpened += OnTabOpened;
+            _projectTreeView.RoutineRemoved += OnRemoveRoutine;
+            _projectTreeView.RoutineRenamed += OnRenameRoutine;
             _mainTabControl.SelectionChanged += OnTabItemChanged;
-            _mainTabControl.ShowItem(_projectModel.MainRoutine);        
+            _mainTabControl.ShowItem(_projectModel.MainRoutine);
             _mainWindow.SetProjectTreeView(_projectTreeView);
             ProjectFullFileName = fullFileName;
             _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
@@ -62,17 +76,21 @@ namespace SamSoarII.AppMain
         }
 
         public bool LoadProject(string fullFileName)
-        {         
+        {
             _projectModel = ProjectHelper.LoadProject(fullFileName);
             if (_projectModel != null)
             {
+                SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
-                _projectTreeView = new ProjectTreeView();
-                _projectTreeView.LoadProject(_projectModel);
+                _projectTreeView = new ProjectTreeView(_projectModel);
                 _projectTreeView.TabItemOpened += OnTabOpened;
+                _projectTreeView.RoutineRemoved += OnRemoveRoutine;
+                _projectTreeView.RoutineRenamed += OnRenameRoutine;
                 _mainTabControl.Reset();
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
-                _mainTabControl.ShowItem(_projectModel.MainRoutine);               
+                _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                _mainTabControl.UpdateVariableCollection();
+                _mainTabControl.UpdateCommentList();
                 _mainWindow.SetProjectTreeView(_projectTreeView);
                 ProjectFullFileName = fullFileName;
                 _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
@@ -84,7 +102,7 @@ namespace SamSoarII.AppMain
 
         public bool AddNewSubRoutine(string name)
         {
-            if(_projectModel.ContainSubRoutine(name) || _projectModel.ContainFuncBlock(name))
+            if(_projectModel.ContainProgram(name))
             {
                 return false;
             }
@@ -92,7 +110,6 @@ namespace SamSoarII.AppMain
             {
                 LadderDiagramViewModel ldmodel = new LadderDiagramViewModel(name);
                 _projectModel.AddSubRoutine(ldmodel);
-                _projectTreeView.AddSubRoutine(ldmodel.LadderName);
                 _mainTabControl.ShowItem(ldmodel);
                 return true;
             }
@@ -100,7 +117,7 @@ namespace SamSoarII.AppMain
 
         public bool AddNewFuncBlock(string name)
         {
-            if (_projectModel.ContainSubRoutine(name) || _projectModel.ContainFuncBlock(name))
+            if (_projectModel.ContainProgram(name))
             {
                 return false;
             }
@@ -108,7 +125,6 @@ namespace SamSoarII.AppMain
             {
                 FuncBlockViewModel fbmodel = new FuncBlockViewModel(name);
                 _projectModel.AddFuncBlock(fbmodel);
-                _projectTreeView.AddFuncBlock(fbmodel.FuncBlockName);
                 _mainTabControl.ShowItem(fbmodel);
                 return true;
             }
@@ -119,47 +135,37 @@ namespace SamSoarII.AppMain
             _projectModel.Compile();
         }
 
-        public void DeleteSubRoutine()
+        public void CloseTabItem(ITabItem tabItem)
         {
-
-        }
-
-        public void CloseTabItem(TabItem tabItem)
-        {
-            if(_mainTabControl.Items.Contains(tabItem))
-            {
-                _mainTabControl.Items.Remove(tabItem);
-            }
+            _mainTabControl.CloseItem(tabItem);
         }
 
         #region Event handler
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
-            var ldmodel = _projectModel.GetRoutineByName(e.TabName);
-            if (ldmodel != null)
+            switch (e.Type)
             {
-                _mainTabControl.ShowItem(ldmodel);
-                return;
+                case TabType.Program:
+                    IProgram prog = sender as IProgram;
+                    _mainTabControl.ShowItem(prog);
+                    break;
+                case TabType.VariableList:
+                    _mainTabControl.ShowVariableList();
+                    break;
+                case TabType.CommentList:
+                    _mainTabControl.ShowCommentList();
+                    break;
             }
-            var fbmodel = _projectModel.GetFuncBlockByName(e.TabName);
-            if(fbmodel != null)
-            {
-                _mainTabControl.ShowItem(fbmodel);
-                return;
-            }
+
         }
 
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(_mainTabControl.CurrentTab != null)
+            var ldmodel = _mainTabControl.SelectedItem as LadderDiagramViewModel;
+            if (ldmodel != null)
             {
-                CurrentLadder = _projectModel.GetRoutineByName(_mainTabControl.CurrentTab.Header.ToString());
+                CurrentLadder = ldmodel;
             }
-            else
-            {
-                CurrentLadder = null;
-            }
-            
         }
 
         private void OnInstructionTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
@@ -173,6 +179,48 @@ namespace SamSoarII.AppMain
                 }
             }
         }
+       
+        private void OnRenameRoutine(object sender, RoutineRenamedEventArgs e)
+        {
+            var progmodel = sender as IProgram;
+            if(progmodel != null)
+            {
+                if(progmodel.ProgramName != e.NewName)
+                {
+                    if(_projectModel.ContainProgram(e.NewName))
+                    {
+                        MessageBox.Show("已存在同名子程序");
+                        // 刷新TreeView中的Item
+                        progmodel.ProgramName = progmodel.ProgramName;
+                        return;
+                    }
+                    else
+                    {
+                        progmodel.ProgramName = e.NewName;   
+                    }
+                }
+            }
+        }
+
+        private void OnRemoveRoutine(object sender, RoutedEventArgs e)
+        {
+
+            LadderDiagramViewModel ldmodel = sender as LadderDiagramViewModel;
+            if (ldmodel != null)
+            {
+                _projectModel.RemoveSubRoutine(ldmodel);
+                _mainTabControl.CloseItem(ldmodel);
+            }
+            else
+            {
+                var fbmodel = sender as FuncBlockViewModel;
+                if (fbmodel != null)
+                {
+                    _projectModel.RemoveFuncBlock(fbmodel);
+                    _mainTabControl.CloseItem(fbmodel);
+                }
+            }
+        }   
         #endregion
 
     }

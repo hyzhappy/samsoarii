@@ -8,6 +8,8 @@ using SamSoarII.LadderInstModel;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class MEFViewModel : SpecialBaseViewModel
@@ -60,22 +62,26 @@ namespace SamSoarII.LadderInstViewModel
             return new MEFViewModel();
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
             //Nothing to do
+            return null;
         }
 
         public static int CatalogID { get { return 207; } }
+
 
         public override int GetCatalogID()
         {
             return CatalogID;
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
+
+        public override void ParseValue(IList<string> valueStrings)
         {
-            throw new NotImplementedException();
+            //Nothing to do
         }
-        public override void ParseValue(List<string> valueStrings)
+
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             //Nothing to do
         }

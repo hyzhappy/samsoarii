@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.ValueModel
+namespace SamSoarII.AppMain.Global
 {
-    public class OutputImException : Exception
+    public static class GlobalUsageList
     {
-
     }
 }

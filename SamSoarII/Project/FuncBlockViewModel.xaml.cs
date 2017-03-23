@@ -1,10 +1,11 @@
-﻿using AvalonEdit.Sample;
+﻿
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -26,12 +27,40 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// FuncBlockViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class FuncBlockViewModel : UserControl
+    public partial class FuncBlockViewModel : UserControl, IProgram
     {
+        private string _programName;
+        public string ProgramName
+        {
+            get
+            {
+                return _programName;
+            }
+            set
+            {
+                _programName = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ProgramName"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
+            }
+        }
         public string FuncBlockName { get; set; }
         private CompletionWindow completionWindow;
         private FoldingManager foldingManager;
         private AbstractFoldingStrategy foldingStrategy;
+        public string TabHeader
+        {
+            get
+            {
+                return _programName;
+            }
+            set
+            {
+                _programName = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ProgramName"));
+            }
+        }
+
         public string Code
         {
             get
@@ -45,9 +74,12 @@ namespace SamSoarII.AppMain.Project
 
         }
 
+
+
         public FuncBlockViewModel(string name)
         {
             InitializeComponent();
+            ProgramName = name;
             InitializeComponent();
             IHighlightingDefinition customHighlighting;
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -91,5 +123,7 @@ namespace SamSoarII.AppMain.Project
                 foldingStrategy.UpdateFoldings(foldingManager, CodeTextBox.Document);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }
 }

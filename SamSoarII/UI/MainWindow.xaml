@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         xmlns:app="clr-namespace:SamSoarII.AppMain"
+        xmlns:proj="clr-namespace:SamSoarII.AppMain.Project"
         mc:Ignorable="d"
         Title="SamSoarII" Height="350" Width="525" WindowState="Maximized">
     <Window.CommandBindings>
@@ -35,6 +36,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"  Executed="OnCheckNetworkErrorCommandExecute" CanExecute="OnCheckNetworkErrorCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <Style x:Key="ImageEnable" TargetType="Image">
@@ -57,6 +59,25 @@
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
                     <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.3"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="MainTabItemTemplate" TargetType="{x:Type TabItem}">
+            <Grid MouseDown="OnTabItemHeaderMouseDown">
+                <Border Name="Border" BorderBrush="Black" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" Background="Transparent">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter Name="ContentSite" Content="{Binding TabHeader}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"></ContentPresenter>
+                        <Button Grid.Column="1" Template="{StaticResource TabItemCloseButtonTemplate}" Click="OnTabItemHeaderCancelButtonClick"></Button>
+                    </Grid>
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="SkyBlue"></Setter>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -90,6 +111,8 @@
             <MenuItem Header="视图(_V)">
                 <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
                 <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="注释模式" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
@@ -98,7 +121,7 @@
                 <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="生成(_B)">
-                <MenuItem Header="编译" Click="CompileProject" Command="{x:Static app:GlobalCommand.CompileCommand}"></MenuItem>
+                <MenuItem Header="编译" Command="{x:Static app:GlobalCommand.CompileCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工具(_T)">
                 <MenuItem Header="上载"></MenuItem>
@@ -129,6 +152,12 @@
                 </Button>
             </ToolBar>
             <ToolBar>
+                <Button ToolTip="撤销" Command="{x:Static ApplicationCommands.Undo}">
+                    <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button ToolTip="重做" Command="{x:Static ApplicationCommands.Redo}">
+                    <Image Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
                 <Button ToolTip="剪切" Command="ApplicationCommands.Cut">
                     <Image Source="/Resources/Image/Cut.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
@@ -146,6 +175,11 @@
                 <Button ToolTip="下载" Command="{x:Static app:GlobalCommand.DownloadCommand}">
                     <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
+            </ToolBar>
+            <ToolBar>
+                <ToggleButton x:Name="CommentModeToggleButton" ToolTip="注释模式" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}">
+                    <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </ToggleButton>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Top" Height="35">
@@ -174,45 +208,15 @@
                 <RowDefinition Height="1*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-
             </Grid>
-            <!--<ScrollViewer x:Name="MyScrollViewer" Grid.Column="1" Grid.Row="0"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False" IsTabStop="False">-->
-                <local:MainTabControl x:Name="MainTab" Background="Transparent" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
-                    <local:MainTabControl.Resources>
-                        <Style TargetType="{x:Type TabItem}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type TabItem}">
-                                        <Grid MouseDown="OnTabItemHeaderMouseDown">
-                                            <Border Name="Border" BorderBrush="Black" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" Background="Transparent">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="5*"></ColumnDefinition>
-                                                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                                                    </Grid.ColumnDefinitions>
-                                                    <ContentPresenter Name="ContentSite" ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"></ContentPresenter>
-                                                    <Button Grid.Column="1" Template="{StaticResource TabItemCloseButtonTemplate}" Click="OnTabItemHeaderCancelButtonClick"></Button>
-                                                </Grid>
-                                            </Border>
-                                        </Grid>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="SkyBlue"></Setter>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="MinWidth" Value="100"></Setter>
-                        </Style>
-                    </local:MainTabControl.Resources>
-                </local:MainTabControl>
-            <!--</ScrollViewer>-->
-
-            <!--<ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
-                <StatusBar>
-                </StatusBar>
-            </ScrollViewer>-->
+            <local:MainTabControl x:Name="MainTab" Background="Transparent" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" ItemsSource="{Binding TabItemCollection}">
+                <TabControl.Resources>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="Template" Value="{StaticResource MainTabItemTemplate}"></Setter>
+                        <Setter Property="MinWidth" Value="100"></Setter>
+                    </Style>
+                </TabControl.Resources>
+            </local:MainTabControl>
         </Grid>
     </DockPanel>
 </Window>

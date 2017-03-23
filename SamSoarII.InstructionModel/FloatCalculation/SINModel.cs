@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            return string.Format("if({0})\r\n{{\r\n{2} = sin({1}*1.745329E-2);\r\nif({2} == 0)\r\n{{\r\nMBit[8171] = 1;\r\n}}\r\nelse if({2} < 0)\r\n{{\r\nMBit[8170] = 1;\r\n}}\r\n}}\r\n", ImportVaribleName,InputValue.GetFloatValue(),OutputValue.GetFloatValue());
+            return string.Format("if({0})\r\n{{\r\n{2} = sin({1}*1.745329E-2);\r\nif({2} == 0)\r\n{{\r\nMBit[8171] = 1;\r\n}}\r\nelse if({2} < 0)\r\n{{\r\nMBit[8170] = 1;\r\n}}\r\n}}\r\n", ImportVaribleName,InputValue.GetValue(),OutputValue.GetValue());
         }
     }
 }

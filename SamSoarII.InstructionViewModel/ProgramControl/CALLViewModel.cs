@@ -60,34 +60,18 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(FunctionName);
             return result;
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
-        {
-            throw new NotImplementedException();
-        }
-        public override void ParseValue(List<string> valueStrings)
+
+        public override void ParseValue(IList<string> valueStrings)
         {
             FunctionName = valueStrings[0];
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(1);
             dialog.Title = InstructionName;
             dialog.ShowLine4("Func");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    ParseValue(valuelist);
-                    dialog.Close();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            return dialog;
         }
     }
 }

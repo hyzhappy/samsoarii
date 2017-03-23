@@ -22,7 +22,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            return string.Format("sr_bool {0} = {1} <= {2};\r\n", ExportVaribleName, Value1.GetFloatValue(), Value2.GetFloatValue());
+            return string.Format("sr_bool {0} = {1} == {2};\r\n", ExportVaribleName, Value1.GetValue(), Value2.GetValue());
         }
     }
 }

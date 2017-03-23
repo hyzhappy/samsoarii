@@ -30,7 +30,6 @@ namespace SamSoarII.AppMain.UI
     {
         private InteractionFacade _interactionFacade;
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -45,16 +44,14 @@ namespace SamSoarII.AppMain.UI
         }
 
         #region Event handler
+        private void OnCommentModeToggle(object sender, RoutedEventArgs e)
+        {
+            _interactionFacade.IsCommentMode = !_interactionFacade.IsCommentMode;
+        }
+
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            //List<BaseViewModel> list = new List<BaseViewModel>();
-            //list.Add(new LDViewModel() { X = 0, Y = 0 });
-            //list.Add(new LDIViewModel() { X = 0, Y = 1 });
-            //list.Add(new LDIMViewModel() { X = 0, Y = 2 });
-            //list.Add(new LDIIMViewModel() { X = 0, Y = 3 });
-            //Clipboard.SetData("aaa", list);
-            LDViewModel viewmodel = new LDViewModel() { X = 0, Y = 1 };
-            Clipboard.SetData("aaa", viewmodel);
+
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -75,11 +72,14 @@ namespace SamSoarII.AppMain.UI
                 TabItem tabitem = button.TemplatedParent as TabItem;
                 if(tabitem != null)
                 {
-                    _interactionFacade.CloseTabItem(tabitem);
+                    ITabItem tab = tabitem.Content as ITabItem;
+                    if (tab != null)
+                    {
+                        _interactionFacade.CloseTabItem(tab);
+                    }
                 }
             }
         }
-
         private void OnTabItemHeaderMouseDown(object sender, MouseButtonEventArgs e)
         {
             if(e.MiddleButton == MouseButtonState.Pressed)
@@ -90,23 +90,17 @@ namespace SamSoarII.AppMain.UI
                     TabItem tabitem = grid.TemplatedParent as TabItem;
                     if (tabitem != null)
                     {
-                        _interactionFacade.CloseTabItem(tabitem);
+                        ITabItem tab = tabitem.Content as ITabItem;
+                        if (tab != null)
+                        {
+                            _interactionFacade.CloseTabItem(tab);
+                        }
                     }
                 }
             }
         }
 
         #endregion
-
-        private void AddSubRoutine(string name)
-        {
-
-        }
-
-        private void AddFuncBlock(string name)
-        {
-
-        }
 
         private void CreateMainRoutine(string name)
         {
@@ -122,12 +116,6 @@ namespace SamSoarII.AppMain.UI
         private bool OpenProject(string fullFileName)
         {
             return _interactionFacade.LoadProject(fullFileName);
-        }
-
-        private void CompileProject(object sender, RoutedEventArgs e)
-        {
-            
-
         }
 
 
@@ -349,6 +337,25 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
+        private void OnCommentModeToggle(object sender, ExecutedRoutedEventArgs e)
+        {
+            if(CommentModeToggleButton.IsChecked.HasValue)
+            {
+                _interactionFacade.IsCommentMode = CommentModeToggleButton.IsChecked.Value;
+            }   
+        }
+
+        private void CommentModeCanToggle(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void OnCheckNetworkErrorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -375,11 +382,11 @@ namespace SamSoarII.AppMain.UI
                     var ladderNetworkViewModel = tempQueue.Dequeue();
                     if (ladderNetworkViewModel.IsNetworkError())
                     {
-                        MessageBox.Show(string.Format("网络{0}错误",ladderNetworkViewModel.NetworkNumber));
+                        MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
                     }
                     else
                     {
-                        MessageBox.Show(string.Format("网络{0}正常，可以编译!",ladderNetworkViewModel.NetworkNumber));
+                        MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
                     }
                 }
             }

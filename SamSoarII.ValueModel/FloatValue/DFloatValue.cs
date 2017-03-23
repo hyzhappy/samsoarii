@@ -9,34 +9,31 @@ namespace SamSoarII.ValueModel
     public class DFloatValue : FloatValue
     {
         
-        public DFloatValue(uint index, VWordValue offset = null)
+        public DFloatValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = offset;
+            Offset = offset == null ? WordValue.Null : offset;
         }
 
-        public override string GetFloatValue()
+        public override string ValueShowString
         {
-            //if(Offset == null)
-            //{
-            //    return string.Format("*(float*)(0x{0})", Convert.ToString(AddressManager.DBaseAddress + Index, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((float*)((int16_t*)0x{0} + {1}))", Convert.ToString(AddressManager.DBaseAddress + Index, 16), Offset.GetWordValue());
-            //}
-            return string.Empty;
+            get
+            {
+                return ValueString;
+            }
         }
-        public override string ToString()
+
+        public override string ValueString
         {
-            if (Offset == null)
+            get
             {
-                return string.Format("D{0}D{1}", Index, Index + 1);
+                return string.Format("D{0}D{1}{2}", Index, Index + 1, Offset.ValueString);
             }
-            else
-            {
-                return string.Format("D{0}D{1}{2}", Index, Index + 1, Offset.ToString());
-            }
+        }
+
+        public override string GetValue()
+        {
+            throw new NotImplementedException();
         }
     }
 }

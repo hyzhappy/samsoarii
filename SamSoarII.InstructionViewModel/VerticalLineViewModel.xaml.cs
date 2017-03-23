@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using SamSoarII.LadderInstModel;
 using SamSoarII.Utility;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -30,6 +31,11 @@ namespace SamSoarII.LadderInstViewModel
                 return ElementType.VLine;
             }
         }
+
+        private int _x;
+        private int _y;
+        private bool _isCommentMode;
+        private bool _isMonitorMode;
         public override int X
         {
             get
@@ -40,7 +46,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _x = value;
-                Canvas.SetLeft(this, _x * 300 + 280);
+                UpdateLeftProperty();
             }
         }
         public override int Y
@@ -53,7 +59,35 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _y = value;
-                Canvas.SetTop(this, _y * 300 + 100);
+                UpdateTopProperty();
+            }
+        }
+
+        public override bool IsCommentMode
+        {
+            get
+            {
+                return _isCommentMode;
+            }
+
+            set
+            {
+                _isCommentMode = value;
+                UpdateHeightProperty();
+                UpdateTopProperty();
+            }
+        }
+
+        public override bool IsMonitorMode
+        {
+            get
+            {
+                return _isMonitorMode;
+            }
+
+            set
+            {
+                _isMonitorMode = value;
             }
         }
         public int CountLevel { get; set; }
@@ -73,26 +107,34 @@ namespace SamSoarII.LadderInstViewModel
         public VerticalLineViewModel()
         {
             InitializeComponent();
+            IsCommentMode = false;
         }
 
-        public IntPoint? GetLinkedPoint(int x, int y)
+        private void UpdateHeightProperty()
         {
-            if(this._x == x && this._y == y)
+            Height = _isCommentMode ? 500 : 300;
+        }
+
+        private void UpdateTopProperty()
+        {
+            if (_isCommentMode)
             {
-                return new IntPoint() { X = x, Y = y + 1};
+                Canvas.SetTop(this, _y * 500 + 100);
             }
             else
             {
-                if(this._x == x && this._y == y + 1)
-                {
-                    return new IntPoint() { X = x, Y = y };
-                }
-                return null;
+                Canvas.SetTop(this, _y * 300 + 100);
             }
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        private void UpdateLeftProperty()
         {
+            Canvas.SetLeft(this, _x * 300 + 280);
+        }
+
+        public override IPropertyDialog PreparePropertyDialog()
+        {
+            return null;
         }
 
         public override BaseViewModel Clone()
@@ -107,17 +149,22 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
-            throw new NotImplementedException();
+
         }
         public override IEnumerable<string> GetValueString()
         {
             return new List<string>();
+        }
+
+        public override void UpdateCommentContent()
+        {
+            // nothing to do
         }
     }
 }

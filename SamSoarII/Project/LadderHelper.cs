@@ -21,7 +21,7 @@ namespace SamSoarII.AppMain.Project
                 case ElementType.Special:
                     return new ExpGraphSpecialNode(viewmodel.Model);
                 default:
-                    throw new NotImplementedException();
+                    throw new ArgumentException();
             }
         }
         public static ExpGraph ConvertGraph(IEnumerable<BaseViewModel> viewModels)

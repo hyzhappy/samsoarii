@@ -8,10 +8,16 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Input;
 using SamSoarII.AppMain.Project;
+using System.Collections.ObjectModel;
+
 namespace SamSoarII.AppMain.UI
 {
     public class MainTabControl : TabControl
     {
+        private VariableListControl _varListControl = new VariableListControl();
+        private CommentListControl _commentListControl = new CommentListControl(); 
+        public ObservableCollection<ITabItem> TabItemCollection { get; set; } = new ObservableCollection<ITabItem>();
+
         public TabItem CurrentTab
         {
             get
@@ -20,108 +26,58 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+
         public MainTabControl()
         {
+            this.DataContext = this;
             Focusable = true;
         }
 
         public void Reset()
         {
-            this.Items.Clear();
+            TabItemCollection.Clear();
         }
-        public TabItem GetTabByName(string name)
+
+        public void ShowItem(ITabItem item)
         {
-            foreach (var tab in Items.OfType<TabItem>())
+            if(!TabItemCollection.Contains(item))
             {
-                if(tab.Header.ToString() == name)
+                TabItemCollection.Add(item);
+            }
+            SelectedItem = item;
+        }
+
+        public void CloseItem(ITabItem item)
+        {
+            if(TabItemCollection.Contains(item))
+            {
+                if(item == SelectedItem)
                 {
-                    return tab;
+                    SelectedIndex = 0;
                 }
+                TabItemCollection.Remove(item);
             }
-            return null;
         }
-
-        public void ShowItem(LadderDiagramViewModel ldmodel)
+        
+        public void ShowVariableList()
         {
-            var tab = GetTabByName(ldmodel.LadderName);
-            if(tab == null)
-            {
-                tab = new TabItem();
-                tab.Content = ldmodel;
-                tab.Header = ldmodel.LadderName;
-                Items.Add(tab);
-                this.SelectedItem = tab;
-            }
-            else
-            {
-                if(SelectedItem != tab)
-                {
-                    SelectedItem = tab;
-                }
-            }
+            ShowItem(_varListControl);
         }
 
-        public void ShowItem(FuncBlockViewModel fbmodel)
+        public void ShowCommentList()
         {
-            var tab = GetTabByName(fbmodel.FuncBlockName);
-            if (tab == null)
-            {
-                tab = new TabItem();
-                tab.Content = fbmodel;
-                tab.Header = fbmodel.FuncBlockName;
-                Items.Add(tab);
-                this.SelectedItem = tab;
-            }
-            else
-            {
-                if (SelectedItem != tab)
-                {
-                    SelectedItem = tab;
-                }
-            }
+            ShowItem(_commentListControl);
         }
 
-        public void CloseItem(string tabName)
+
+        public void UpdateCommentList()
         {
-            var tab = GetTabByName(tabName);
-            if (tab != null)
-            {
-                CloseItem(tab);
-            }
+            _commentListControl.UpdateComments();
         }
 
-        public void CloseItem(TabItem tabItem)
+        public void UpdateVariableCollection()
         {
-            if (tabItem == SelectedItem)
-            {
-                SelectedIndex = 0;
-                Items.Remove(tabItem);
-            }
-            else
-            {
-                Items.Remove(tabItem);
-            }
+            _varListControl.UpdateVariableCollection();
         }
-
-        private void RemoveTabItem(TabItem tabItem)
-        {
-            //tabItem.MouseDown -= TabItem_MouseDown;
-            //tabItem.ClearElements();
-            //Items.Remove(tabItem);
-        }
-
-        #region Event handler
-        private void TabItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            // close when middle mouse button down
-            //if (e.MiddleButton == System.Windows.Input.MouseButtonState.Pressed)
-            //{
-            //    var tabItem = sender as TabItem;
-            //    CloseItem(tabItem);
-            //}
-        }
-        #endregion
-
-
     }
 }

@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            return string.Format("if({0})\r\n{{\r\n{2} = exp({1});\r\n}}\r\n",ImportVaribleName,InputValue.GetFloatValue(),OutputValue.GetFloatValue());
+            return string.Format("if({0})\r\n{{\r\n{2} = exp({1});\r\n}}\r\n",ImportVaribleName,InputValue.GetValue(),OutputValue.GetValue());
         }
     }
 }

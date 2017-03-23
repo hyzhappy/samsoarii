@@ -20,7 +20,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            return string.Format("{0} = {1};\r\n", Value.GetBitValue(), ImportVaribleName);
+            return string.Format("{0} = {1};\r\n", Value.GetValue(), ImportVaribleName);
         }
     }
 }

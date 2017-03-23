@@ -13,14 +13,26 @@ namespace SamSoarII.ValueModel
             Index = index;
         }
 
-        public override string GetWordValue()
+
+        public override string ValueShowString
         {
-            //return string.Format("*(int16_t*)(0x{0})", Convert.ToString(AddressManager.VBaseAddress + Index, 16));
-            return string.Empty;
+            get
+            {
+                return ValueString;
+            }
         }
-        public override string ToString()
+
+        public override string ValueString
         {
-            return string.Format("V{0}", Index);
+            get
+            {
+                return string.Format("V{0}", Index);
+            }
+        }
+
+        public override string GetValue()
+        {
+            throw new NotImplementedException();
         }
     }
 }

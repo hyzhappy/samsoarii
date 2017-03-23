@@ -27,6 +27,10 @@ namespace SamSoarII.AppMain.Project
     public partial class LadderNetworkViewModel : UserControl, IComparable
     {
 
+        private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
+
+        private int HeightUnit { get { return IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
+
         private int _rowCount;
         public int RowCount
         {
@@ -39,7 +43,7 @@ namespace SamSoarII.AppMain.Project
                 if(value > 0)
                 {
                     _rowCount = value;
-                    LadderCanvas.Height = _rowCount * 300;
+                    LadderCanvas.Height = _rowCount * HeightUnit;
                 }
             }
         }
@@ -109,6 +113,26 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
+
+        private bool _isCommendMode;
+        public bool IsCommentMode
+        {
+            get { return _isCommendMode; }
+            set
+            {
+                _isCommendMode = value;
+                LadderCanvas.Height = _rowCount * HeightUnit;
+                foreach (var ele in _ladderElements.Values)
+                {
+                    ele.IsCommentMode = _isCommendMode;
+                }
+                foreach(var vline in _ladderVerticalLines.Values)
+                {
+                    vline.IsCommentMode = _isCommendMode;
+                }
+            }
+        }
         private SortedDictionary<IntPoint, BaseViewModel> _ladderElements = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines = new SortedDictionary<IntPoint, VerticalLineViewModel>();
 
@@ -135,8 +159,8 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _selectAreaFirstX = value;
-                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * 300;
-                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * 300;
+                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * WidthUnit;
+                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * WidthUnit;
                 SelectArea.Width = width;
                 Canvas.SetLeft(SelectArea, left);
             }
@@ -150,8 +174,8 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _selectAreaFirstY = value;
-                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * 300;
-                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * 300;
+                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
+                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
                 SelectArea.Height = height;
                 Canvas.SetTop(SelectArea, top);
             }
@@ -168,13 +192,13 @@ namespace SamSoarII.AppMain.Project
                 {
                     value = 0;
                 }
-                if (value > 9)
+                if (value > GlobalSetting.LadderXCapacity - 1)
                 {
-                    value = 9;
+                    value = GlobalSetting.LadderXCapacity - 1;
                 }
                 _selectAreaSecondX = value;
-                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * 300;
-                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * 300;
+                var left = Math.Min(_selectAreaFirstX, _selectAreaSecondX) * WidthUnit;
+                var width = (Math.Abs(_selectAreaFirstX - _selectAreaSecondX) + 1) * WidthUnit;
                 SelectArea.Width = width;
                 Canvas.SetLeft(SelectArea, left);
             }
@@ -196,8 +220,8 @@ namespace SamSoarII.AppMain.Project
                     value = RowCount - 1;
                 }
                 _selectAreaSecondY = value;
-                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * 300;
-                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * 300;
+                var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
+                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
                 SelectArea.Height = height;
                 Canvas.SetTop(SelectArea, top);
             }
@@ -237,7 +261,7 @@ namespace SamSoarII.AppMain.Project
                     IsSelectAreaMode = true;
                     SelectAreaFirstY = 0;
                     SelectAreaFirstX = 0;
-                    SelectAreaSecondX = 9;
+                    SelectAreaSecondX = GlobalSetting.LadderXCapacity - 1;
                     SelectAreaSecondY = RowCount - 1;
                     CommentAreaGrid.Background = new SolidColorBrush(Colors.DarkBlue);
                     CommentAreaGrid.Background.Opacity = 0.3;
@@ -264,7 +288,6 @@ namespace SamSoarII.AppMain.Project
             SelectArea.Fill = new SolidColorBrush(Colors.DarkBlue);
             SelectArea.Opacity = 0.2;
             Canvas.SetZIndex(SelectArea, -1);
-            //SelectAll();
         }
 
         public IEnumerable<BaseViewModel> GetElements()
@@ -298,14 +321,14 @@ namespace SamSoarII.AppMain.Project
         }
 
         #region Ladder content modification methods
-        public BaseViewModel ReplaceElement(BaseViewModel element)
+        public void ReplaceElement(BaseViewModel element)
         {
             BaseViewModel oldele = null;
             bool flag = false;
             // Remove old element before
             if (element.Type == ElementType.Output)
             {
-                element.X = 9;
+                element.X = GlobalSetting.LadderXCapacity - 1;
                 if (element.Y >= 0 && element.Y < RowCount)
                 {
                     flag = true;
@@ -313,7 +336,7 @@ namespace SamSoarII.AppMain.Project
             }
             else
             {
-                if (element.X >= 0 && element.X < 9 && element.Y >= 0 && element.Y < RowCount)
+                if (element.X >= 0 && element.X < GlobalSetting.LadderXCapacity - 1 && element.Y >= 0 && element.Y < RowCount)
                 {
                     flag = true;
                 }
@@ -324,31 +347,37 @@ namespace SamSoarII.AppMain.Project
                 if (_ladderElements.Keys.Contains(p))
                 {
                     oldele = _ladderElements[p];
+                    InstructionCommentManager.Unregister(oldele);
+                    oldele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
                     _ladderElements.Remove(p);
                     LadderCanvas.Children.Remove(oldele);
                 }
+                element.IsCommentMode = _isCommendMode;
                 _ladderElements.Add(p, element);
                 LadderCanvas.Children.Add(element);
+                element.ShowPropertyDialogEvent += OnShowPropertyDialog;
+                InstructionCommentManager.Register(element);
             }
-            return oldele;
         }
-        public VerticalLineViewModel ReplaceVerticalLine(VerticalLineViewModel vline)
+        public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
             IntPoint p = new IntPoint() { X = vline.X, Y = vline.Y };
             if (!_ladderVerticalLines.ContainsKey(p))
             {
+                vline.IsCommentMode = _isCommendMode;
                 _ladderVerticalLines.Add(p, vline);
                 LadderCanvas.Children.Add(vline);
-                return null;
             }
-            return vline;
         }
         public void RemoveElement(IntPoint pos)
         {
             if (_ladderElements.ContainsKey(pos))
             {
-                LadderCanvas.Children.Remove(_ladderElements[pos]);
+                var ele = _ladderElements[pos];
+                LadderCanvas.Children.Remove(ele);
                 _ladderElements.Remove(pos);
+                InstructionCommentManager.Unregister(ele);
+                ele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
             }
         }
         public void RemoveElement(int x, int y)
@@ -1927,7 +1956,23 @@ namespace SamSoarII.AppMain.Project
         }
         #endregion
         #region Event handlers
-
+        private void OnShowPropertyDialog(BaseViewModel sender, ShowPropertyDialogEventArgs e)
+        {
+            var dialog = e.Dialog;
+            dialog.Commit += (sender1, e1) =>
+            {
+                try
+                {
+                    sender.AcceptNewValues(dialog.PropertyStrings, SamSoarII.PLCDevice.Device.DefaultDevice);
+                    dialog.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+        };
+            dialog.ShowDialog();
+        }
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)
         {
             if(IsSingleSelected())
@@ -2012,7 +2057,7 @@ namespace SamSoarII.AppMain.Project
             if(e.LeftButton == MouseButtonState.Pressed)
             {
                 var pos = e.GetPosition(LadderCanvas);
-                var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, 300);
+                var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
                 if (!IsSingleSelected())
                 {
                     AcquireSelectRect();
@@ -2104,11 +2149,6 @@ namespace SamSoarII.AppMain.Project
         {
             _ladderDiagram.AcquireSelectRect(this);
             LadderCanvas.Children.Add(_ladderDiagram.SelectionRect);     
-        }
-
-        public void SelectAll()
-        {
-
         }
 
         public List<BaseViewModel> GetSelectedElements()

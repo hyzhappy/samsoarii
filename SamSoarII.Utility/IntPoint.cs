@@ -15,6 +15,13 @@ namespace SamSoarII.Utility
             int yy = ((int)y) / scale;
             return new IntPoint() { X = xx, Y = yy };
         }
+
+        public static IntPoint GetIntpointByDouble(double x, double y, int scalex, int scaley)
+        {
+            int xx = ((int)x) / scalex;
+            int yy = ((int)y) / scaley;
+            return new IntPoint() { X = xx, Y = yy };
+        }
         public int CompareTo(object obj)
         {
             var p = (IntPoint)obj;

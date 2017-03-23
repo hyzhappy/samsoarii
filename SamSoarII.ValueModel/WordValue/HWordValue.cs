@@ -13,14 +13,25 @@ namespace SamSoarII.ValueModel
         {
             Value = value;
         }
-        public override string GetWordValue()
+        public override string ValueString
         {
-            return string.Format("0x{0}", Convert.ToString(Value, 16));
+            get
+            {
+                return ValueString;
+            }
         }
 
-        public override string ToString()
+        public override string ValueShowString
         {
-            return string.Format("H{0}", Convert.ToString(Value, 16));
+            get
+            {
+                return string.Format("H{0}", Value);
+            }
+        }
+
+        public override string GetValue()
+        {
+            return string.Format("0x{0}", Convert.ToString(Value, 16));
         }
     }
 }

@@ -8,7 +8,6 @@ using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
 
 using System.Windows;
-using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -24,7 +23,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue = value;
-                MiddleTextBlock1.Text = _model.InputValue.ToShowString();
+                MiddleTextBlock1.Text = _model.InputValue.ValueShowString;
             }
         }
         public DoubleWordValue OutputValue
@@ -36,7 +35,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.OutputValue = value;
-                BottomTextBlock.Text = _model.OutputValue.ToShowString();
+                BottomTextBlock.Text = _model.OutputValue.ValueShowString;
             }
         }
         public override BaseModel Model
@@ -75,25 +74,12 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(InputValue.ToString());
-            result.Add(OutputValue.ToString());
+            result.Add(InputValue.ValueString);
+            result.Add(OutputValue.ValueString);
             return result;
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
-        {
-            Match match1 = Regex.Match(valueStrings[0], "^(D|CV)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            Match match2 = Regex.Match(valueStrings[1], "^(D|CV)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            if (!match1.Success)
-            {
-                match1 = Regex.Match(valueStrings[0], "^K[-+]?[0-9]+$", RegexOptions.IgnoreCase);
-                if (!match1.Success)
-                {
-                    match1 = Regex.Match(valueStrings[0], "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
-                }
-            }
-            return match1.Success && match2.Success;
-        }
-        public override void ParseValue(List<string> valueStrings)
+
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -113,34 +99,13 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
             dialog.ShowLine3("In");
             dialog.ShowLine5("Out");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> temp = new List<string>();
-                    temp.Add(dialog.ValueString3);
-                    temp.Add(dialog.ValueString5);
-                    if (!CheckValueStrings(temp))
-                    {
-                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
-                    }
-                    else
-                    {
-                        ParseValue(temp);
-                        dialog.Close();
-                    }
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            return dialog;
         }
     }
 }

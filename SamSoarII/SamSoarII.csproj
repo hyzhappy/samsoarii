@@ -54,6 +54,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -79,6 +80,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Event\RoutineChangedEventArgs.cs" />
+    <Compile Include="Event\RoutineRenamedEventArgs.cs" />
+    <Compile Include="Event\TabType.cs" />
+    <Compile Include="Functionality\LadderVariable.cs" />
+    <Compile Include="Global\GlobalUsageList.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
@@ -88,7 +94,7 @@
     <Compile Include="LadderCommand\NetworkRemoveRowCommand.cs" />
     <Compile Include="LadderCommand\NetworkRemoveElementsCommand.cs" />
     <Compile Include="Event\ShowTabItemEventArgs.cs" />
-    <Compile Include="Event\ShowTabItemEventHandler.cs" />
+    <Compile Include="Event\EventHandler.cs" />
     <Compile Include="Global\GlobalCommand.cs" />
     <Compile Include="Global\GlobalSetting.cs" />
     <Compile Include="InteractionFacade.cs" />
@@ -97,6 +103,8 @@
     <Compile Include="Project\FuncBlockViewModel.xaml.cs">
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Project\IProgram.cs" />
+    <Compile Include="Project\ITabItem.cs" />
     <Compile Include="Project\LadderDiagramViewModel.xaml.cs">
       <DependentUpon>LadderDiagramViewModel.xaml</DependentUpon>
     </Compile>
@@ -109,7 +117,12 @@
     <Compile Include="Project\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\ValueCommentManager.cs" />
+    <Compile Include="UI\CommentListControl.xaml.cs">
+      <DependentUpon>CommentListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditVariableDialog.xaml.cs">
+      <DependentUpon>EditVariableDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\InstrucionTreeItem.cs" />
     <Compile Include="UI\MainTabControl.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
@@ -129,6 +142,9 @@
     </Compile>
     <Compile Include="UI\ProjectPropertyDialog.xaml.cs">
       <DependentUpon>ProjectPropertyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\VariableListControl.xaml.cs">
+      <DependentUpon>VariableListControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +166,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Project\CustomHighlighting.xshd" />
+    <EmbeddedResource Include="Project\CustomHighlighting.xshd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -225,6 +243,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\CommentListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\EditVariableDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -246,6 +272,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ProjectPropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\VariableListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -273,7 +303,25 @@
     <Resource Include="Resources\Image\InstructionToolbar\VLine.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\XmlFiles\InstructionPopup.xml" />
+    <Resource Include="Resources\Image\Redo.png" />
+    <Resource Include="Resources\Image\Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Comment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Config.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\InstructionPopup.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

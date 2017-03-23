@@ -8,30 +8,27 @@ namespace SamSoarII.ValueModel
 {
     public class NullBitValue : BitValue
     {
+
+        public override string ValueShowString
+        {
+            get
+            {
+                return "???";
+            }
+        }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        public override string GetValue()
+        {
+            throw new InvalidOperationException();
+        }
         
-        public override string GetBitValue()
-        {
-            throw new NotImplementedException();
-        }
-        public override string GetInputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetOutputImBitAddress()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string ToString()
-        {
-            return "";
-        }
-
-        public override string ToShowString()
-        {
-            return "???";
-        }
-
     }
 }

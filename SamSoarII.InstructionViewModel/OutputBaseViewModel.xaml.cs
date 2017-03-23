@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
+
 namespace SamSoarII.LadderInstViewModel
 {
     /// <summary>
@@ -27,13 +29,114 @@ namespace SamSoarII.LadderInstViewModel
                 return ElementType.Output;
             }
         }
+
+        private int _x;
+        private int _y;
+        private bool _isCommentMode;
+        private bool _isMonitorMode;
+
+        public override int X
+        {
+            get
+            {
+                return _x;
+            }
+
+            set
+            {
+                _x = value;
+                UpdateLeftProperty();
+            }
+        }
+
+        public override int Y
+        {
+            get
+            {
+                return _y;
+            }
+
+            set
+            {
+                _y = value;
+                UpdateTopProperty();
+            }
+        }
+
+        public override bool IsCommentMode
+        {
+            get
+            {
+                return _isCommentMode;
+            }
+            set
+            {
+                _isCommentMode = value;
+                UpdateTopProperty();
+                UpdateHeightProperty();
+                UpdateCommentAreaVisibility();
+            }
+        }
+
+        public override bool IsMonitorMode
+        {
+            get
+            {
+                return _isMonitorMode;
+            }
+
+            set
+            {
+                _isMonitorMode = value;
+            }
+        }
+
         public OutputBaseViewModel()
         {
             InitializeComponent();
+            IsCommentMode = false;
+            this.DataContext = this;
         }
+
+        private void UpdateHeightProperty()
+        {
+            Height = _isCommentMode ? 500 : 300;
+        }
+        private void UpdateTopProperty()
+        {
+            if (_isCommentMode)
+            {
+                Canvas.SetTop(this, _y * 500);
+            }
+            else
+            {
+                Canvas.SetTop(this, _y * 300);
+            }
+        }
+        private void UpdateLeftProperty()
+        {
+            Canvas.SetLeft(this, _x * 300);
+        }
+
+
         public override bool Assert()
         {
             return NextElemnets.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special); }) & NextElemnets.Count > 0;
         }
+
+        private void UpdateCommentAreaVisibility()
+        {
+            CommentArea.Visibility = _isCommentMode ? Visibility.Visible : Visibility.Hidden;
+        }
+        public override void UpdateCommentContent()
+        {
+            // nothing to do
+        }
+
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+
+        }
+
     }
 }

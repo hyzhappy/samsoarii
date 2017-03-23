@@ -8,41 +8,38 @@ namespace SamSoarII.ValueModel
 {
     public class YBitValue : BitValue
     {
-        public YBitValue(uint index, VWordValue offset = null)
+        public YBitValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = offset;
-        }
-        public override string GetBitValue()
-        {
-            //if(Offset == null)
-            //{
-            //    return string.Format("*((uint32_t*)0x{0})", Convert.ToString(AddressManager.YBaseAddress + Index * 4, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((uint32_t*)0x{0} + {1})", Convert.ToString(AddressManager.YBaseAddress + Index * 4, 16), Offset.GetWordValue());
-            //}
-            return string.Format("YBit[{0}{1}]", Index, string.Empty);
-        }
-        public override string GetInputImBitAddress()
-        {
-            throw new InputImException();
+            Offset = offset == null ? WordValue.Null : offset;
         }
 
-        public override string GetOutputImBitAddress()
+
+        public override string ValueShowString
         {
-            throw new OutputImException();
-        }
-        public override string ToString()
-        {
-            if (Offset == null)
+            get
             {
-                return string.Format("Y{0}", Index);
+                return ValueString;
+            }
+        }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("Y{0}{1}", Index, Offset.ValueString);
+            }
+        }
+
+        public override string GetValue()
+        {
+            if (Offset != WordValue.Null)
+            {
+                return string.Format("YBit[{0} + {1}]", Index, Offset.GetValue());
             }
             else
             {
-                return string.Format("Y{0}{1}", Index, Offset.ToString());
+                return string.Format("YBit[{0}]", Index);
             }
         }
     }

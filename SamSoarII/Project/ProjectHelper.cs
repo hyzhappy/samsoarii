@@ -1,4 +1,5 @@
 ﻿using SamSoarII.LadderInstViewModel;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace SamSoarII.AppMain.Project
         public static XElement CreateXElementByLadderDiagram(LadderDiagramViewModel ldmodel)
         {
             XElement result = new XElement("Ladder");
-            result.SetAttributeValue("Name", ldmodel.LadderName);
+            result.SetAttributeValue("Name", ldmodel.ProgramName);
             if(ldmodel.IsMainLadder)
             {
                 result.SetAttributeValue("IsMain", "True");
@@ -83,7 +84,7 @@ namespace SamSoarII.AppMain.Project
         public static XElement CreateXElementByFuncBlock(FuncBlockViewModel fbmodel)
         {
             XElement result = new XElement("FuncBlock");
-            result.SetAttributeValue("Name", fbmodel.FuncBlockName);
+            result.SetAttributeValue("Name", fbmodel.ProgramName);
             result.Value = fbmodel.Code;
             return result;
         }
@@ -173,10 +174,28 @@ namespace SamSoarII.AppMain.Project
         public static FuncBlockViewModel CreateFuncBlockByXElement(XElement xEle)
         {
             FuncBlockViewModel result = new FuncBlockViewModel(xEle.Attribute("Name").Value);
-            result.Code = xEle.Element("Code").Value;
+            result.Code = xEle.Value;
             return result;
         }
 
+        public static XElement CreateXElementByLadderVariable(IVariableValue variable)
+        {
+            XElement result = new XElement("Variable");
+            result.SetAttributeValue("VarName", variable.VarName);
+            result.SetElementValue("Value", variable.MappedValue.ValueString);
+            result.SetElementValue("ValueType", (int)variable.Type);
+            result.SetElementValue("Comment", variable.Comment);
+            return result;
+        }
+
+        public static IVariableValue CreateLadderVariableByXElement(XElement xEle)
+        {
+            string name = xEle.Attribute("VarName").Value;
+            string valueString = xEle.Element("Value").Value;
+            LadderValueType valuetype = (LadderValueType)(int.Parse(xEle.Element("ValueType").Value));
+            string comment = xEle.Element("Comment").Value;
+            return ValueParser.CreateVariableValue(name, valueString, valuetype, comment);
+        }
 
         public static ProjectModel LoadProject(string filepath)
         {
@@ -190,5 +209,54 @@ namespace SamSoarII.AppMain.Project
                 return null;
             }
         }
+
+        public static void LoadGlobalVariableListByXElement(XElement xEle)
+        {
+            if(xEle != null)
+            {
+                foreach (XElement xele in xEle.Elements("Variable"))
+                {
+                    var variable = CreateLadderVariableByXElement(xele);
+                    VariableManager.AddVariable(variable);
+                }
+            }
+        }
+
+        public static XElement CreateXElementByGlobalVariableList()
+        {
+            XElement xEle = new XElement("GlobalVariableList");
+            foreach(var variable in VariableManager.VariableCollection)
+            {
+                xEle.Add(CreateXElementByLadderVariable(variable));
+            }
+            return xEle;
+        }
+
+        public static XElement CreateXElementByValueComments()
+        {
+            XElement result = new XElement("ValueComments");
+            foreach(var kp in ValueCommentManager.ValueCommentDict)
+            {
+                var xele = new XElement("Comment");
+                xele.SetAttributeValue("Value", kp.Key);
+                xele.SetValue(kp.Value);
+                result.Add(xele);
+            }
+            return result;
+        }
+
+        public static void LoadValueCommentsByXElement(XElement xEle)
+        {
+            if(xEle != null)
+            {
+                foreach(XElement xele in xEle.Elements("Comment"))
+                {
+                    string valueString = xele.Attribute("Value").Value;
+                    string comment = xele.Value;
+                    ValueCommentManager.UpdateComment(valueString, comment);
+                }
+            }
+        }
+
     }
 }

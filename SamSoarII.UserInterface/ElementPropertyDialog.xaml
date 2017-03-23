@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
-        Title="ElementPropertyDialog" Height="400" Width="400">
+        Title="ElementPropertyDialog" Height="400" Width="600" KeyDown="OnWindowKeyDown">
     <Grid>
         <Grid.Resources>
-            <Style TargetType="Label" x:Key="LabelStyle">
+            <Style TargetType="{x:Type Label}">
                 <Setter Property="HorizontalAlignment" Value="Right"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 <Setter Property="Visibility" Value="Hidden"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
             </Style>
-            <Style TargetType="TextBox" x:Key="TextBoxStyle">
+            <Style TargetType="{x:Type TextBox}">
                 <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 <Setter Property="Height" Value="25"></Setter>
@@ -37,24 +38,53 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label x:Name="label1" Style="{StaticResource LabelStyle}" Grid.Row="0" Grid.Column="1"/>
-        <Label x:Name="label2" Style="{StaticResource LabelStyle}" Grid.Row="1" Grid.Column="1"/>
-        <Label x:Name="label3" Style="{StaticResource LabelStyle}" Grid.Row="2" Grid.Column="1"/>
-        <Label x:Name="label4" Style="{StaticResource LabelStyle}"  Grid.Row="3" Grid.Column="1"/>
-        <Label x:Name="label5"  Style="{StaticResource LabelStyle}"   Grid.Row="4" Grid.Column="1"/>
-        <Label x:Name="label6" Style="{StaticResource LabelStyle}" Grid.Row="5" Grid.Column="1"/>
-        <Label x:Name="label7" Style="{StaticResource LabelStyle}" Grid.Row="6" Grid.Column="1"/>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5, 1" >
+                <GradientStop Color="#FFFFFF" Offset="0.0"></GradientStop>
+                <GradientStop Color="#E0FFFF" Offset="1.0"></GradientStop>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Label x:Name="label1" Grid.Row="0" Grid.Column="1"/>
+        <TextBox x:Name="ValueTextBox1" Grid.Column="2" Grid.Row="0" TextChanged="ValueTextBox1_TextChanged"/>
+        <Label x:Name="label1_c" Grid.Row="0" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Name="CommentTextBox1" Grid.Column="4" Grid.Row="0"/>
+       
+        <Label x:Name="label2" Grid.Row="1" Grid.Column="1"/>
+        <TextBox x:Name="ValueTextBox2" Grid.Column="2" Grid.Row="1" TextChanged="ValueTextBox2_TextChanged"/>
+        <Label x:Name="label2_c" Grid.Row="1" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Name="CommentTextBox2" Grid.Column="4" Grid.Row="1"/>
         
-        <TextBox x:Name="textBox1" Style="{StaticResource TextBoxStyle}" Grid.Column="2" Grid.Row="0"/>
-        <TextBox x:Name="textBox2" Style="{StaticResource TextBoxStyle}" Grid.Column="2" Grid.Row="1"/>
-        <TextBox x:Name="textBox3" Style="{StaticResource TextBoxStyle}"  Grid.Column="2" Grid.Row="2"/>
-        <TextBox x:Name="textBox4" Style="{StaticResource TextBoxStyle}"  Grid.Column="2" Grid.Row="3"/>
-        <TextBox x:Name="textBox5" Style="{StaticResource TextBoxStyle}"  Grid.Column="2" Grid.Row="4"/>
-        <TextBox x:Name="textBox6" Style="{StaticResource TextBoxStyle}"  Grid.Column="2" Grid.Row="5"/>
-        <TextBox x:Name="textBox7" Style="{StaticResource TextBoxStyle}"  Grid.Column="2" Grid.Row="6"/>
+        <Label x:Name="label3" Grid.Row="2" Grid.Column="1"/>
+        <TextBox x:Name="ValueTextBox3" Grid.Column="2" Grid.Row="2" TextChanged="ValueTextBox3_TextChanged"/>
+        <Label x:Name="label3_c" Grid.Row="2" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Name="CommentTextBox3" Grid.Column="4" Grid.Row="2"/>
 
-        <Button x:Name="EnsureButton" Content="确定" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right" Width="70" Height="25"></Button>
-     
+        <Label x:Name="label4" Grid.Row="3" Grid.Column="1"/>
+        <TextBox x:Name="ValueTextBox4" Grid.Column="2" Grid.Row="3" TextChanged="ValueTextBox4_TextChanged"/>
+        <Label x:Name="label4_c" Grid.Row="3" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Name="CommentTextBox4" Grid.Column="4" Grid.Row="3"/>
+
+        <Label x:Name="label5" Grid.Row="4" Grid.Column="1"/>
+        <TextBox x:Name="ValueTextBox5" Grid.Column="2" Grid.Row="4" TextChanged="ValueTextBox5_TextChanged"/>
+        <Label x:Name="label5_c" Grid.Row="4" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Name="CommentTextBox5" Grid.Column="4" Grid.Row="4"/>
+        
+        <Label x:Name="label6" Grid.Row="5" Grid.Column="1"/>
+        <TextBox x:Name="ValueTextBox6" Grid.Column="2" Grid.Row="5" TextChanged="ValueTextBox6_TextChanged"/>
+        <Label x:Name="label6_c" Grid.Row="5" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Name="CommentTextBox6" Grid.Column="4" Grid.Row="5"/>
+        
+        <Label x:Name="label7" Grid.Row="6" Grid.Column="1"/>
+        <TextBox x:Name="ValueTextBox7" Grid.Column="2" Grid.Row="6" TextChanged="ValueTextBox7_TextChanged"/>
+        <Label x:Name="label7_c" Grid.Row="6" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Name="CommentTextBox7" Grid.Column="4" Grid.Row="6"/>
+        
+        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
+            <Button x:Name="CancelButton" Content="取消" Width="70" Height="25" Margin="50,0,0,0" Click="OnCancelButtonClick"></Button>
+            <Button x:Name="EnsureButton" Content="确定" Width="70" Height="25" Margin="50,0,0,0" Click="OnEnsureButtonClick"></Button>
+        </StackPanel>
     </Grid>
 </Window>

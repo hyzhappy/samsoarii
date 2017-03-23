@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
+             xmlns:proj="clr-namespace:SamSoarII.AppMain.Project"
              mc:Ignorable="d" 
-             d:DesignHeight="1000" d:DesignWidth="300">
+             d:DesignHeight="1000" d:DesignWidth="300" Focusable="True" x:Name="ProjectTreeViewControl">
     <UserControl.Resources>
         <ContextMenu x:Key="ContextMenu1">
             <MenuItem Header="添加主程序"></MenuItem>
@@ -19,19 +20,51 @@
         </ContextMenu>
         <ContextMenu x:Key="MainRoutineContextMenu">
             <MenuItem Header="打开" Click="OnOpenRoutine"></MenuItem>
-            <MenuItem Header="重命名"></MenuItem>
+            <MenuItem Header="重命名" Click="OnRenameRoutine"></MenuItem>
         </ContextMenu>
         <ContextMenu x:Key="SubRoutineContextMenu">
             <MenuItem Header="打开" Click="OnOpenRoutine"></MenuItem>
-            <MenuItem Header="重命名"></MenuItem>
-            <MenuItem Header="删除"></MenuItem>
+            <MenuItem Header="重命名" Click="OnRenameRoutine"></MenuItem>
+            <MenuItem Header="删除" Click="OnRemoveRoutine"></MenuItem>
         </ContextMenu>
+        <DataTemplate x:Key="ProgramTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding ProgramName, Mode=OneWay}" MinWidth="100"></TextBlock>
+                <TextBox x:Name="EditTextBox" Text="{Binding ProgramName, Mode=OneWay}" 
+                                             Visibility="Hidden"
+                                             MinWidth="100"
+                                             KeyDown="OnEditTextBoxKeyDown"
+                                             LostFocus="OnEditTextBoxLostFocus"
+                                             IsVisibleChanged="OnEditTextBoxVisibleChanged"></TextBox>
+            </Grid>
+            <DataTemplate.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeViewItem}}}" Value="True"/>
+                        <Condition Binding="{Binding IsInEditMode, ElementName=ProjectTreeViewControl}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="EditTextBox" Property="Visibility" Value="Visible" />
+                </MultiDataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <TreeView FontSize="14">
-            <TreeViewItem x:Name="ProjectRootItem" Header="空工程" IsExpanded="True">
+        <TreeView x:Name="ProjectTree" FontSize="14">
+            <TreeViewItem x:Name="ProjectRootItem" IsExpanded="True" Header="{Binding ProjectName}">
+                <TreeViewItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>工程 - </TextBlock>
+                            <TextBlock Text="{Binding}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </TreeViewItem.HeaderTemplate>
                 <TreeViewItem Header="程序" IsExpanded="True">
-                    <TreeViewItem x:Name="MainRoutineRootTreeViewItem" ContextMenu="{StaticResource ContextMenu1}" IsExpanded="True">
+                    <TreeViewItem ContextMenu="{x:Null}" IsExpanded="True">
                         <TreeViewItem.Resources>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
@@ -44,8 +77,10 @@
                                 <TextBlock Margin="6,0,0,0">主程序</TextBlock>
                             </StackPanel>
                         </TreeViewItem.Header>
+                        <TreeViewItem Header="{Binding MainRoutine}" HeaderTemplate="{StaticResource ProgramTemplate}">
+                        </TreeViewItem>
                     </TreeViewItem>
-                    <TreeViewItem x:Name="SubRoutineRootTreeViewItem" ContextMenu="{StaticResource ContextMenu2}" IsExpanded="True">
+                    <TreeViewItem ContextMenu="{StaticResource ContextMenu2}" IsExpanded="True" ItemsSource="{Binding SubRoutines}" ItemTemplate="{StaticResource ProgramTemplate}">
                         <TreeViewItem.Resources>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
@@ -59,7 +94,7 @@
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-                    <TreeViewItem x:Name="FuncBlockRootTreeViewItem" ContextMenu="{StaticResource ContextMenu3}" IsExpanded="True">
+                    <TreeViewItem ContextMenu="{StaticResource ContextMenu3}" IsExpanded="True" ItemsSource="{Binding FuncBlocks}" ItemTemplate="{StaticResource ProgramTemplate}">
                         <TreeViewItem.Resources>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
@@ -75,9 +110,27 @@
                     </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem Header="元件浏览" IsExpanded="True">
-                    <TreeViewItem Header="元件注释表"/>
-                    <TreeViewItem Header="元件使用表"/>
-                    <TreeViewItem Header="元件变量表"/>
+                    <TreeViewItem Header="元件注释表" MouseDoubleClick="OnShowCommentList">
+                        <TreeViewItem.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="打开元件注释表" Click="OnShowCommentList"></MenuItem>
+                            </ContextMenu>
+                        </TreeViewItem.ContextMenu>
+                    </TreeViewItem>
+                    <TreeViewItem Header="元件使用表" MouseDoubleClick="OnShowUsageList">
+                        <TreeViewItem.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="打开元件使用表" Click="OnShowUsageList"></MenuItem>
+                            </ContextMenu>
+                        </TreeViewItem.ContextMenu>
+                    </TreeViewItem>
+                    <TreeViewItem Header="元件变量表" MouseDoubleClick="OnShowVariableList">
+                        <TreeViewItem.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="打开元件变量表" Click="OnShowVariableList"></MenuItem>
+                            </ContextMenu>
+                        </TreeViewItem.ContextMenu>
+                    </TreeViewItem>
                 </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem x:Name="InstructionRootItem" Header="指令" IsExpanded="True">

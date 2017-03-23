@@ -7,33 +7,30 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using SamSoarII.UserInterface;
 using SamSoarII.LadderInstModel;
+using SamSoarII.PLCDevice;
 namespace SamSoarII.LadderInstViewModel
 {
+    public class ShowPropertyDialogEventArgs : EventArgs
+    {
+        public IPropertyDialog Dialog { get; set; }
+
+        public ShowPropertyDialogEventArgs(IPropertyDialog dialog)
+        {
+            Dialog = dialog;
+        }
+    }
+    public delegate void ShowPropertyDialogHandler(BaseViewModel sender, ShowPropertyDialogEventArgs e);
+
     /// <summary>
     /// 梯形图元件基类，抽象类
     /// </summary>
     public abstract class BaseViewModel : UserControl
     {
-        protected int _x;
-        protected int _y;
-        public virtual int X
-        {
-            get { return _x; }
-            set
-            {
-                _x = value;
-                Canvas.SetLeft(this, X * 300);
-            }
-        }
-        public virtual int Y
-        {
-            get { return _y; }
-            set
-            {
-                _y = value;
-                Canvas.SetTop(this, Y * 300);
-            }
-        }
+        public event ShowPropertyDialogHandler ShowPropertyDialogEvent;
+        public abstract int X { get; set; }
+        public abstract int Y { get; set; }
+        public abstract bool IsCommentMode { get; set; }
+        public abstract bool IsMonitorMode { get; set; }
         public abstract string InstructionName { get; }
         public abstract BaseModel Model { get; protected set; }
         public List<BaseViewModel> NextElemnets = new List<BaseViewModel>();
@@ -53,13 +50,19 @@ namespace SamSoarII.LadderInstViewModel
             e.Handled = true;
         }
 
-        public abstract void ShowPropertyDialog(ElementPropertyDialog dialog);
+        public abstract IPropertyDialog PreparePropertyDialog();
 
         public void BeginShowPropertyDialog()
         {
-            ElementPropertyDialog dialog = new ElementPropertyDialog();
-            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            ShowPropertyDialog(dialog);       
+            var dialog = PreparePropertyDialog();
+            if (dialog != null)
+            {
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                if (ShowPropertyDialogEvent != null)
+                {
+                    ShowPropertyDialogEvent.Invoke(this, new ShowPropertyDialogEventArgs(dialog));
+                }
+            }
         }
 
         public virtual bool Assert()
@@ -75,10 +78,20 @@ namespace SamSoarII.LadderInstViewModel
         public abstract BaseViewModel Clone();
 
         public abstract int GetCatalogID();
-
-        public abstract void ParseValue(List<string> valueStrings);
+        /// <summary>
+        /// 不包含注释信息的value string, 用于打开工程时使用
+        /// </summary>
+        /// <param name="valueStrings"></param>
+        public abstract void ParseValue(IList<string> valueStrings);
+        /// <summary>
+        /// 包含注释信息的value string, 一个value，接着一个注释
+        /// </summary>
+        /// <param name="valueStrings"></param>
+        /// <param name="contextDevice"></param>
+        public abstract void AcceptNewValues(IList<string> valueStrings, Device contextDevice);
 
         public abstract IEnumerable<string> GetValueString();
-        public abstract bool CheckValueStrings(List<string> valueStrings);
+
+        public abstract void UpdateCommentContent();
     }
 }

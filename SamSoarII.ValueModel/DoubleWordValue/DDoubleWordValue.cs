@@ -8,35 +8,31 @@ namespace SamSoarII.ValueModel
 {
     public class DDoubleWordValue : DoubleWordValue
     {
-        public DDoubleWordValue(uint index, VWordValue offset)
+        public DDoubleWordValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = offset;
+            Offset = offset == null ? WordValue.Null : offset;
         }
 
-        public override string GetDoubleWordValue()
+        public override string ValueShowString
         {
-            //if (Offset == null)
-            //{
-            //    return string.Format("*((int32_t*)0x{0})", Convert.ToString(AddressManager.DBaseAddress + Index, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((int32_t*)((int16_t*)0x{0} + {1}))", Convert.ToString(AddressManager.DBaseAddress + Index, 16), Offset.GetWordValue());
-            //}
-            return string.Empty;
+            get
+            {
+                return string.Format("D{0}D{1}{2}", Index, Index + 1, Offset.ValueString);
+            }
         }
 
-        public override string ToString()
+        public override string ValueString
         {
-            if (Offset == null)
+            get
             {
-                return string.Format("D{0}D{1}", Index, Index + 1);
+                return string.Format("D{0}{1}", Index, Offset.ValueString);
             }
-            else
-            {
-                return string.Format("D{0}D{1}{2}", Index, Index + 1, Offset.ToString());
-            }
+        }
+
+        public override string GetValue()
+        {
+            throw new NotImplementedException();
         }
     }
 }

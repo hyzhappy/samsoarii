@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.ValueModel
 {
-    public class InputImException : Exception
+    public enum LadderValueType
     {
-        
+        Bool = 0,
+        DoubleWord = 1,
+        Word = 2,
+        Float = 3
     }
 }

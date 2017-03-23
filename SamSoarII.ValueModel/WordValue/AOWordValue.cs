@@ -8,35 +8,31 @@ namespace SamSoarII.ValueModel
 {
     public class AOWordValue : WordValue
     {
-        public AOWordValue(uint index, VWordValue offset = null)
+        public AOWordValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = offset;
+            Offset = offset == null ? WordValue.Null : offset;
         }
 
-        public override string GetWordValue()
+        public override string ValueShowString
         {
-            //if (Offset == null)
-            //{
-            //    return string.Format("*((int16_t*)0x{0})", Convert.ToString(AddressManager.AOBaseAddress + Index, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((int16_t*)0x{0} + {1})", Convert.ToString(AddressManager.AOBaseAddress + Index, 16), Offset.GetWordValue());
-            //}
-            return string.Empty;
+            get
+            {
+                return ValueString;
+            }
         }
 
-        public override string ToString()
+        public override string ValueString
         {
-            if (Offset == null)
+            get
             {
-                return string.Format("AO{0}", Index);
+                return string.Format("AO{0}{1}", Index, Offset.ValueString);
             }
-            else
-            {
-                return string.Format("AO{0}{1}", Index, Offset.ToString());
-            }
+        }
+
+        public override string GetValue()
+        {
+            throw new NotImplementedException();
         }
     }
 }

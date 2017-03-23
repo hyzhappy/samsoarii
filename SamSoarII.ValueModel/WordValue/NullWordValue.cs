@@ -8,18 +8,26 @@ namespace SamSoarII.ValueModel
 {
     public class NullWordValue : WordValue
     {
-        public override string GetWordValue()
+
+        public override string ValueShowString
         {
-            throw new NotImplementedException();
+            get
+            {
+                return "???";
+            }
         }
 
-        public override string ToString()
+        public override string ValueString
         {
-            return "";
+            get
+            {
+                return string.Empty;
+            }
         }
-        public override string ToShowString()
+
+        public override string GetValue()
         {
-            return "???";
+            throw new NotImplementedException();
         }
     }
 }

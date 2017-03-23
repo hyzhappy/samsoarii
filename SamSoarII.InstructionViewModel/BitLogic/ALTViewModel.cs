@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using SamSoarII.UserInterface;
-using System.Text.RegularExpressions;
-
 namespace SamSoarII.LadderInstViewModel
 {
     public class ALTViewModel : OutputRectBaseViewModel
@@ -23,7 +21,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value = value;
-                BottomTextBlock.Text = _model.Value.ToShowString();
+                BottomTextBlock.Text = _model.Value.ValueShowString;
             }
         }
         public override BaseModel Model
@@ -60,15 +58,11 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value.ToString());
+            result.Add(Value.ValueString);
             return result;
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
-        {
-            Match match = Regex.Match(valueStrings[0], "^(Y|M|S)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            return match.Success;
-        }
-        public override void ParseValue(List<string> valueStrings)
+
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -80,32 +74,12 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
-            dialog.Title = "ALT";
-            dialog.ShowLine4("Bit");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    if (!CheckValueStrings(valuelist))
-                    {
-                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
-                    }
-                    else
-                    {
-                        ParseValue(valuelist);
-                        dialog.Close();
-                    }
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            var dialog = new ElementPropertyDialog(1);
+            dialog.Title = InstructionName;
+            dialog.ShowLine4("Bit", Value);
+            return dialog;
         }
     }
 }

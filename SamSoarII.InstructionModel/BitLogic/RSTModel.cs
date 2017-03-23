@@ -26,9 +26,9 @@ namespace SamSoarII.LadderInstModel
         {
             if (Value.GetType() == typeof(TBitValue))
             {
-                Match match = Regex.Match(Value.GetBitValue(), "[0-9]+", RegexOptions.IgnoreCase);
+                Match match = Regex.Match(Value.GetValue(), "[0-9]+", RegexOptions.IgnoreCase);
                 uint index = uint.Parse(match.Value);
-                return string.Format("if({0})\r\n{{\r\nplc_bool* p = &{2};\r\nfor(int i = 0; i < {1}; i++)\r\n{{\r\n*p = 0;\r\nTV[{3}] = 0;\r\np++;\r\n}}\r\n}}\r\n", ImportVaribleName, Count.GetWordValue(), Value.GetBitValue(), index);
+                return string.Format("if({0})\r\n{{\r\nplc_bool* p = &{2};\r\nfor(int i = 0; i < {1}; i++)\r\n{{\r\n*p = 0;\r\nTV[{3}] = 0;\r\np++;\r\n}}\r\n}}\r\n", ImportVaribleName, Count.GetValue(), Value.GetValue(), index);
             }
             else if(Value.GetType() == typeof(CBitValue))
             {
@@ -36,7 +36,7 @@ namespace SamSoarII.LadderInstModel
             }
             else
             {
-                return string.Format("if({0})\r\n{{\r\nplc_bool* p = &{2};\r\nfor(int i = 0; i < {1}; i++)\r\n{{\r\n*p = 0;\r\np++;\r\n}}\r\n}}\r\n", ImportVaribleName, Count.GetWordValue(), Value.GetBitValue());
+                return string.Format("if({0})\r\n{{\r\nplc_bool* p = &{2};\r\nfor(int i = 0; i < {1}; i++)\r\n{{\r\n*p = 0;\r\np++;\r\n}}\r\n}}\r\n", ImportVaribleName, Count.GetValue(), Value.GetValue());
             }
         }
     }

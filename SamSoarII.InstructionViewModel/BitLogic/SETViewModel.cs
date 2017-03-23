@@ -8,7 +8,7 @@ using SamSoarII.ValueModel;
 using System.Windows.Controls;
 using System.Windows;
 using SamSoarII.UserInterface;
-using System.Text.RegularExpressions;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -25,7 +25,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value = value;
-                ValueTextBlock.Text = _model.Value.ToShowString();
+                ValueTextBlock.Text = _model.Value.ValueShowString;
             }
         }
 
@@ -38,7 +38,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                CountTextBlock.Text = _model.Count.ToShowString();
+                CountTextBlock.Text = _model.Count.ValueShowString;
             }
         }
 
@@ -55,39 +55,24 @@ namespace SamSoarII.LadderInstViewModel
                 Count = _model.Count;
             }
         }
+        private TextBlock _commentTextBlock1 = new TextBlock();
+        private TextBlock _commentTextBlock2 = new TextBlock();
         public override string InstructionName { get { return "SET"; } }
         public SETViewModel()
         {
             Model = new SETModel();
             CenterTextBlock.Text = "S";
+            CommentArea.Children.Add(_commentTextBlock1);
+            CommentArea.Children.Add(_commentTextBlock2);
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
-            dialog.ShowLine4("Bit");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    if (!CheckValueStrings(valuelist))
-                    {
-                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
-                    }
-                    else
-                    {
-                        ParseValue(valuelist);
-                        dialog.Close();
-                    }
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            dialog.ShowLine3("Bit", Value);
+            dialog.ShowLine5("Bit", Count);
+            return dialog;
         }
 
         public override BaseViewModel Clone()
@@ -102,23 +87,13 @@ namespace SamSoarII.LadderInstViewModel
             return CatalogID;
         }
 
-        public override bool CheckValueStrings(List<string> valueStrings)
-        {
-            Match match1 = Regex.Match(valueStrings[0], "^(Y|M|S|T|C)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            Match match2 = Regex.Match(valueStrings[1], "^K[-+]?[0-9]+$", RegexOptions.IgnoreCase);
-            if (!match2.Success)
-            {
-                match2 = Regex.Match(valueStrings[1], "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
-            }
-            return match1.Success && match2.Success;
-        }
-        public override void ParseValue(List<string> valueStrings)
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
                 Value = ValueParser.ParseBitValue(valueStrings[0]);
             }
-            catch (ValueParseException exception)
+            catch
             {
                 Value = BitValue.Null;
             }
@@ -126,18 +101,46 @@ namespace SamSoarII.LadderInstViewModel
             {
                 Count = ValueParser.ParseWordValue(valueStrings[1]);
             }
-            catch (ValueParseException exception)
+            catch
             {
                 Count = WordValue.Null;
             }
         }
 
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            Value = ValueParser.ParseBitValue(valueStrings[0]);
+            ValueCommentManager.UpdateComment(Value, valueStrings[1]);
+            Count = ValueParser.ParseWordValue(valueStrings[2]);
+            ValueCommentManager.UpdateComment(Count, valueStrings[3]);
+        }
+
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value.ToString());
-            result.Add(Count.ToString());
+            result.Add(Value.ValueString);
+            result.Add(Count.ValueString);
             return result;
+        }
+
+        public override void UpdateCommentContent()
+        {
+            if (Value != BitValue.Null)
+            {
+                _commentTextBlock1.Text = string.Format("{0}:{1}", Value.ValueString, Value.Comment);
+            }
+            else
+            {
+                _commentTextBlock1.Text = string.Empty;
+            }
+            if(Count != WordValue.Null)
+            {
+                _commentTextBlock2.Text = string.Format("{0}:{1}", Count.ValueString, Count.Comment);
+            }
+            else
+            {
+                _commentTextBlock2.Text = string.Empty;
+            }
         }
     }
 }

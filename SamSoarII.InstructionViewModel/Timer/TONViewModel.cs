@@ -38,16 +38,13 @@ namespace SamSoarII.LadderInstViewModel
         {
             throw new NotImplementedException();
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
-        {
-            throw new NotImplementedException();
-        }
-        public override void ParseValue(List<string> valueStrings)
+
+        public override void ParseValue(IList<string> valueStrings)
         {
             throw new NotImplementedException();
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
             throw new NotImplementedException();
         }

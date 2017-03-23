@@ -8,7 +8,6 @@ using SamSoarII.ValueModel;
 using System.Windows.Controls;
 using System.Windows;
 using SamSoarII.UserInterface;
-using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -25,7 +24,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Value = value;
-                ValueTextBlock.Text = _model.Value.ToShowString();
+                ValueTextBlock.Text = _model.Value.ValueShowString;
             }
         }
 
@@ -38,7 +37,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                CountTextBlock.Text = _model.Count.ToShowString();
+                CountTextBlock.Text = _model.Count.ValueShowString;
             }
         }
 
@@ -62,32 +61,13 @@ namespace SamSoarII.LadderInstViewModel
             CenterTextBlock.Text = "RI";
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
-            dialog.ShowLine4("Bit");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> valuelist = new List<string>();
-                    valuelist.Add(dialog.ValueString4);
-                    if (!CheckValueStrings(valuelist))
-                    {
-                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
-                    }
-                    else
-                    {
-                        ParseValue(valuelist);
-                        dialog.Close();
-                    }
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            dialog.ShowLine3("Bit", Value);
+            dialog.ShowLine5("Count", Count);
+            return dialog;
         }
 
         public override BaseViewModel Clone()
@@ -97,21 +77,13 @@ namespace SamSoarII.LadderInstViewModel
 
         public static int CatalogID { get { return 214; } }
 
+
         public override int GetCatalogID()
         {
             return CatalogID;
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
-        {
-            Match match1 = Regex.Match(valueStrings[0], "^(Y|M|S|T|C)[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            Match match2 = Regex.Match(valueStrings[1], "^K[-+]?[0-9]+$", RegexOptions.IgnoreCase);
-            if (!match2.Success)
-            {
-                match2 = Regex.Match(valueStrings[1], "^H[0-9A-F]+$",RegexOptions.IgnoreCase);
-            }
-            return match1.Success && match2.Success;
-        }
-        public override void ParseValue(List<string> valueStrings)
+ 
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -134,8 +106,8 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(Value.ToString());
-            result.Add(Count.ToString());
+            result.Add(Value.ValueString);
+            result.Add(Count.ValueString);
             return result;
         }
     }

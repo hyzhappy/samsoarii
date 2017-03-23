@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" Width="300" Height="300">
     <Canvas>
-        <Rectangle Width="300" Height="300" StrokeThickness="4" Stroke="YellowGreen"></Rectangle>
+        <Rectangle Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Height}" StrokeThickness="4" Stroke="YellowGreen"></Rectangle>
     </Canvas>
 </UserControl>

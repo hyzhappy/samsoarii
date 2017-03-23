@@ -26,7 +26,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            return string.Format("if({0})\r\n{{\r\nif({3} <= 1024 && {3} >= 1)\r\n{{\r\nint16_t* psrc = &{1},pdes = &{2};\r\nint16_t temp[{3}];\r\nfor(int i = 0;i < {3};i++)\r\n{{\r\ntemp[i] = *psrc;\r\npsrc++;\r\n}}\r\nfor(int i = 0;i < {3};i++)\r\n{{\r\n*pdes = temp[i];\r\npdes++;\r\n}}\r\n}}\r\n}}\r\n", ImportVaribleName,SourceValue.GetWordValue(),DestinationValue.GetWordValue(),Count.GetWordValue());
+            return string.Format("if({0})\r\n{{\r\nif({3} <= 1024 && {3} >= 1)\r\n{{\r\nint16_t* psrc = &{1},pdes = &{2};\r\nint16_t temp[{3}];\r\nfor(int i = 0;i < {3};i++)\r\n{{\r\ntemp[i] = *psrc;\r\npsrc++;\r\n}}\r\nfor(int i = 0;i < {3};i++)\r\n{{\r\n*pdes = temp[i];\r\npdes++;\r\n}}\r\n}}\r\n}}\r\n", ImportVaribleName,SourceValue.GetValue(),DestinationValue.GetValue(),Count.GetValue());
         }
     }
 }

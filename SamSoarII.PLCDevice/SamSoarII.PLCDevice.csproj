@@ -40,10 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BroadDevice.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="FGs16MRDevice.cs" />
-    <Compile Include="FGs16MTDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
+      <Project>{aafb923a-b366-4d7d-ab40-81f7d71a1f30}</Project>
+      <Name>SamSoarII.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

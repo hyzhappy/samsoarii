@@ -24,7 +24,7 @@ namespace SamSoarII.LadderInstModel
         }
         public override string GenerateCode()
         {
-            return string.Format("if({0})\r\n{{\r\n{1}({2},{3});\r\n}}\r\n",ImportVaribleName,FunctionName,Value1.GetWordValue(),Value2.GetBitValue());
+            return string.Format("if({0})\r\n{{\r\n{1}({2},{3});\r\n}}\r\n",ImportVaribleName,FunctionName,Value1.GetValue(),Value2.GetValue());
         }
     }
 }

@@ -6,5 +6,11 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.AppMain
 {
-    public delegate void ShowTabItemEventHandler(object sender, ShowTabItemEventArgs e);
+    public enum TabType
+    {
+        Program,
+        CommentList,
+        UsageList,
+        VariableList
+    }
 }

@@ -7,36 +7,32 @@ using System.Threading.Tasks;
 namespace SamSoarII.ValueModel
 {
     public class AIWordValue : WordValue
-    {
-        public AIWordValue(uint index, VWordValue offset = null)
+    { 
+        public AIWordValue(uint index, WordValue offset)
         {
             Index = index;
-            Offset = offset;
+            Offset = offset == null ? WordValue.Null : offset;
         }
 
-        public override string GetWordValue()
+        public override string ValueShowString
         {
-            //if (Offset == null)
-            //{
-            //    return string.Format("*((int16_t*)0x{0})", Convert.ToString(AddressManager.AIBaseAddress + Index, 16));
-            //}
-            //else
-            //{
-            //    return string.Format("*((int16_t*)0x{0} + {1})", Convert.ToString(AddressManager.AIBaseAddress + Index, 16), Offset.GetWordValue());
-            //}
-            return string.Empty;
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public override string ToString()
+        public override string ValueString
         {
-            if (Offset == null)
+            get
             {
-                return string.Format("AI{0}", Index);
+                throw new NotImplementedException();
             }
-            else
-            {
-                return string.Format("AI{0}{1}", Index, Offset.ToString());
-            }
+        }
+
+        public override string GetValue()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,12 +8,28 @@ namespace SamSoarII.ValueModel
 {
     public class ZWordValue : WordValue
     {
-        public string GetVaribleValue()
+        public ZWordValue(uint index)
         {
-            throw new NotImplementedException();
+            Index = index;
         }
 
-        public override string GetWordValue()
+        public override string ValueShowString
+        {
+            get
+            {
+                return ValueString;
+            }
+        }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("Z{0}", Index);
+            }
+        }
+
+        public override string GetValue()
         {
             throw new NotImplementedException();
         }

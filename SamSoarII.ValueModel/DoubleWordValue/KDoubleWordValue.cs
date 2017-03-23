@@ -10,18 +10,31 @@ namespace SamSoarII.ValueModel
     {
     
         private Int32 Value { get; set; }
+
+        public override string ValueString
+        {
+            get
+            {
+                return string.Format("K{0}", Value);
+            }
+        }
+
+        public override string ValueShowString
+        {
+            get
+            {
+                return ValueString;
+            }
+        }
+
         public KDoubleWordValue(Int32 value)
         {
             Value = value;
         }
 
-        public override string GetDoubleWordValue()
+        public override string GetValue()
         {
             return Convert.ToString(Value);
-        }
-        public override string ToString()
-        {
-            return string.Format("K{0}", Convert.ToString(Value));
         }
     }
 }

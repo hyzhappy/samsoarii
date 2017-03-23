@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
-using System.Text.RegularExpressions;
+
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -23,7 +23,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock2.Text = string.Format("S : {0}", _model.SourceValue.ToString());
+                MiddleTextBlock2.Text = string.Format("S : {0}", _model.SourceValue.ValueString);
             }
         }
         private WordValue Count
@@ -35,7 +35,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                MiddleTextBlock3.Text = string.Format("N : {0}", _model.Count.ToString());
+                MiddleTextBlock3.Text = string.Format("N : {0}", _model.Count.ValueString);
             }
         }
         private DoubleWordValue DestinationValue
@@ -47,7 +47,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = string.Format("D : {0}", _model.DestinationValue.ToString());
+                BottomTextBlock.Text = string.Format("D : {0}", _model.DestinationValue.ValueString);
             }
         }
 
@@ -88,35 +88,13 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(SourceValue.ToString());
-            result.Add(Count.ToString());
-            result.Add(DestinationValue.ToString());
+            result.Add(SourceValue.ValueString);
+            result.Add(Count.ValueString);
+            result.Add(DestinationValue.ValueString);
             return result;
         }
-        public override bool CheckValueStrings(List<string> valueStrings)
-        {
-            Match match1 = Regex.Match(valueStrings[0], "^D[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            Match match2 = Regex.Match(valueStrings[1], "^D[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            Match match3 = Regex.Match(valueStrings[2], "^D[0-9]+(V[0-9]+)?$", RegexOptions.IgnoreCase);
-            if (!match1.Success)
-            {
-                match1 = Regex.Match(valueStrings[0], "^K[-+]?[0-9]+$", RegexOptions.IgnoreCase);
-                if (!match1.Success)
-                {
-                    match1 = Regex.Match(valueStrings[0], "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
-                }
-            }
-            if (!match2.Success)
-            {
-                match2 = Regex.Match(valueStrings[1], "^K[-+]?[0-9]+$", RegexOptions.IgnoreCase);
-                if (!match2.Success)
-                {
-                    match2 = Regex.Match(valueStrings[1], "^H[0-9A-F]+$", RegexOptions.IgnoreCase);
-                }
-            }
-            return match1.Success && match2.Success && match3.Success;
-        }
-        public override void ParseValue(List<string> valueStrings)
+
+        public override void ParseValue(IList<string> valueStrings)
         {
             try
             {
@@ -144,36 +122,14 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
-        public override void ShowPropertyDialog(ElementPropertyDialog dialog)
+        public override IPropertyDialog PreparePropertyDialog()
         {
+            var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
             dialog.ShowLine2("In1");
             dialog.ShowLine4("In2");
             dialog.ShowLine6("Out");
-            dialog.EnsureButtonClick += (sender, e) =>
-            {
-                try
-                {
-                    List<string> temp = new List<string>();
-                    temp.Add(dialog.ValueString2);
-                    temp.Add(dialog.ValueString4);
-                    temp.Add(dialog.ValueString6);
-                    if (!CheckValueStrings(temp))
-                    {
-                        MessageBox.Show(dialog, "参数输入错误,请重新输入!");
-                    }
-                    else
-                    {
-                        ParseValue(temp);
-                        dialog.Close();
-                    }
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
-            };
-            dialog.ShowDialog();
+            return dialog;
         }
     }
 }
