@@ -30,6 +30,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             private RowDefinition currentRowDefinition;
             private int id;
             private bool settingup;
+            private int focus;
 
             public MonitorTextBox TextBox_Name;
             public MonitorComboBox ComboBox_Type;
@@ -39,7 +40,60 @@ namespace SamSoarII.Simulation.UI.Monitor
             public MonitorLockButton Button_Lock;
             public MonitorExpandButton Button_Expand;
             public MonitorCloseButton Button_Close;
-            
+
+            public int ID
+            {
+                get
+                {
+                    return this.id;
+                }
+                set
+                {
+                    this.id = value;
+                    Grid.SetRow(TextBox_Name, id);
+                    Grid.SetRow(ComboBox_Type, id);
+                    Grid.SetRow(TextBox_Var, id);
+                    Grid.SetRow(TextBox_Value, id);
+                    Grid.SetRow(Button_Value, id);
+                    Grid.SetRow(Button_Lock, id);
+                    Grid.SetRow(Button_Close, id);
+                    if (Button_Expand != null)
+                        Grid.SetRow(Button_Expand, id);
+                }
+            }
+
+            public const int FOCUS_NULL = 0x00;
+            public const int FOCUS_NAME = 0x01;
+            public const int FOCUS_TYPE = 0x02;
+            public const int FOCUS_VAR = 0x03;
+            public const int FOCUS_VALUE = 0x04;
+            public int Focus
+            {
+                get
+                {
+                    return this.focus;
+                }
+                set
+                {
+                    this.focus = value;
+                    switch (focus)
+                    {
+                        case FOCUS_NAME:
+                            TextBox_Name.Focus();
+                            break;
+                        case FOCUS_TYPE:
+                            ComboBox_Type.Focus();
+                            break;
+                        case FOCUS_VAR:
+                            TextBox_Var.Focus();
+                            break;
+                        case FOCUS_VALUE:
+                            TextBox_Value.Focus();
+                            break;
+                    }
+                }
+            }
+
             public RowElement(MonitorTable _parent, int _id, SimulateVariableUnit svunit = null)
             {
                 settingup = false;
@@ -151,12 +205,28 @@ namespace SamSoarII.Simulation.UI.Monitor
                 TextBox_Value.IsReadOnly = true;
                 Button_Value.ContextMenu = parent.RightClickMenu;
                 Button_Value.IsReadOnly = true;
-               // Button_Value.Opacity = 0.0;
 
                 TextBox_Name.TextLegalChanged += OnTextLegalChanged;
+                TextBox_Name.InsertRowElementBehindHere += OnInsertRowBehindHere;
+                TextBox_Name.GotFocus += OnChildrenGotFocus;
+                TextBox_Name.LostFocus += OnChildrenLostFocus;
+                TextBox_Name.FocusUp += OnFocusUp;
+                TextBox_Name.FocusDown += OnFocusDown;
                 ComboBox_Type.TextLegalChanged += OnTextLegalChanged;
+                ComboBox_Type.GotFocus += OnChildrenGotFocus;
+                ComboBox_Type.LostFocus += OnChildrenLostFocus;
+                ComboBox_Type.FocusUp += OnFocusUp;
+                ComboBox_Type.FocusDown += OnFocusDown;
                 TextBox_Var.TextLegalChanged += OnTextLegalChanged;
+                TextBox_Var.GotFocus += OnChildrenGotFocus;
+                TextBox_Var.LostFocus += OnChildrenLostFocus;
+                TextBox_Var.FocusUp += OnFocusUp;
+                TextBox_Var.FocusDown += OnFocusDown;
                 TextBox_Value.TextLegalChanged += OnTextLegalChanged;
+                TextBox_Value.GotFocus += OnChildrenGotFocus;
+                TextBox_Value.LostFocus += OnChildrenLostFocus;
+                TextBox_Value.FocusUp += OnFocusUp;
+                TextBox_Value.FocusDown += OnFocusDown;
                 Button_Value.TextLegalChanged += OnTextLegalChanged;
                 Button_Lock.MouseUp += OnLockButtonClicked;
                 Button_Close.MouseUp += OnCloseButtonClicked;
@@ -165,6 +235,9 @@ namespace SamSoarII.Simulation.UI.Monitor
                 VariableUnitLocked += parent.OnVariableUnitLocked;
                 VariableUnitUnlocked += parent.OnVariableUnitUnlocked;
                 VariableUnitExpanded += parent.OnVariableUnitExpanded;
+                InsertRowElementBehindHere += parent.OnInsertRowBehindHere;
+                FocusUp += parent.OnFocusUp;
+                FocusDown += parent.OnFocusDown;
 
                 Grid.SetRow(TextBox_Name, id);
                 Grid.SetRow(ComboBox_Type, id);
@@ -205,10 +278,9 @@ namespace SamSoarII.Simulation.UI.Monitor
                 parent.MainGrid.Children.Remove(Button_Close);
                 parent.MainGrid.RowDefinitions.Remove(currentRowDefinition);
             }
-
+            
             #region Event Handler
             public event VariableUnitChangeEventHandler VariableUnitChanged;
-            
             private void OnTextLegalChanged(object sender, RoutedEventArgs e)
             {
                 if (settingup)
@@ -308,7 +380,6 @@ namespace SamSoarII.Simulation.UI.Monitor
                 }
             }
             public event VariableUnitChangeEventHandler VariableUnitClosed;
-           
             private void OnCloseButtonClicked(object sender, RoutedEventArgs e)
             {
                 if (Button_Lock.IsLocked)
@@ -327,7 +398,6 @@ namespace SamSoarII.Simulation.UI.Monitor
             }
 
             public event RoutedEventHandler VariableUnitExpanded;
-
             private void OnExpandButtonClicked(object sender, RoutedEventArgs e)
             {
                 if (VariableUnitExpanded != null)
@@ -338,7 +408,6 @@ namespace SamSoarII.Simulation.UI.Monitor
 
             public event VariableUnitChangeEventHandler VariableUnitLocked;
             public event VariableUnitChangeEventHandler VariableUnitUnlocked;
-
             private void OnLockButtonClicked(object sender, RoutedEventArgs e)
             {
                 VariableUnitChangeEventArgs _e = new VariableUnitChangeEventArgs();
@@ -370,17 +439,92 @@ namespace SamSoarII.Simulation.UI.Monitor
                     }
                 }
             }
+            
+            private void OnChildrenGotFocus(object sender, RoutedEventArgs e)
+            {
+                if (sender == TextBox_Name)
+                {
+                    this.focus = FOCUS_NAME;
+                }
+                if (sender == ComboBox_Type)
+                {
+                    this.focus = FOCUS_TYPE;
+                }
+                if (sender == TextBox_Var)
+                {
+                    this.focus = FOCUS_VAR;
+                }
+                if (sender == TextBox_Value)
+                {
+                    this.focus = FOCUS_VALUE;
+                }
+            }
+
+            private void OnChildrenLostFocus(object sender, RoutedEventArgs e)
+            {
+                this.focus = FOCUS_NULL;
+            }
+
+            public event RoutedEventHandler InsertRowElementBehindHere;
+            private void OnInsertRowBehindHere(object sender, RoutedEventArgs e)
+            {
+                if (InsertRowElementBehindHere != null)
+                {
+                    InsertRowElementBehindHere(this, e);
+                }
+            }
+
+            public event RoutedEventHandler FocusUp;
+            private void OnFocusUp(object sender, RoutedEventArgs e)
+            {
+                if (FocusUp != null)
+                {
+                    FocusUp(this, e);
+                }
+            }
+            public event RoutedEventHandler FocusDown;
+            private void OnFocusDown(object sender, RoutedEventArgs e)
+            {
+                if (FocusDown != null)
+                {
+                    FocusDown(this, e);
+                }
+            }
+            public event RoutedEventHandler FocusLeft;
+            private void OnFocusLeft(object sender, RoutedEventArgs e)
+            {
+                if (this.focus > FOCUS_NAME)
+                {
+                    this.Focus--;
+                }
+                if (FocusLeft != null)
+                {
+                    FocusLeft(this, e);
+                }
+            }
+            public event RoutedEventHandler FocusRight;
+            private void OnFocusRight(object sender, RoutedEventArgs e)
+            {
+                if (this.Focus < FOCUS_VALUE)
+                {
+                    this.Focus++;
+                }
+                if (FocusRight != null)
+                {
+                    FocusRight(this, e);
+                }
+            }
             #endregion
         }
-
+        
         private List<SimulateVariableUnit> svunits;
 
-        private List<RowElement> reles;
+        private LinkedList<RowElement> reles;
         
         public MonitorTable()
         {
             InitializeComponent();
-            reles = new List<RowElement>();
+            reles = new LinkedList<RowElement>();
         }
 
         public List<SimulateVariableUnit> SVUnits
@@ -413,54 +557,64 @@ namespace SamSoarII.Simulation.UI.Monitor
         {
             lock (reles)
             {
+                System.Threading.Monitor.Enter(reles);
                 foreach (RowElement ele in reles)
                 {
                     ele.Update();
                 }
+                System.Threading.Monitor.Exit(reles);
             }
         }
 
         public void Update()
         {
-            IEnumerator<SimulateVariableUnit> iter1 = SVUnits.GetEnumerator();
-            IEnumerator<RowElement> iter2 = reles.GetEnumerator();
-            SimulateVariableUnit svunit = null;
-            RowElement rele = null;
-            int eoi = 0;
 
-            if (!iter1.MoveNext()) eoi |= 1;
-            if (!iter2.MoveNext()) eoi |= 2;
-            while (eoi == 0)
+            lock (reles)
             {
-                svunit = iter1.Current;
-                rele = iter2.Current;
-                //rele.Update();
-                rele.Setup(svunit);
+                System.Threading.Monitor.Enter(reles);
+
+                IEnumerator<SimulateVariableUnit> iter1 = SVUnits.GetEnumerator();
+                IEnumerator<RowElement> iter2 = reles.GetEnumerator();
+                SimulateVariableUnit svunit = null;
+                RowElement rele = null;
+                int eoi = 0;
+
                 if (!iter1.MoveNext()) eoi |= 1;
                 if (!iter2.MoveNext()) eoi |= 2;
-            }
-            while ((eoi & 1) == 0)
-            {
-                svunit = iter1.Current;
-                rele = new RowElement(this, reles.Count()+1, svunit);
-                //rele.Setup(svunit);
-                reles.Add(rele);
-                if (!iter1.MoveNext()) eoi |= 1;
-            }
-            List<RowElement> relesDel = new List<RowElement>();
-            while ((eoi & 2) == 0)
-            {
-                //svmodel = null;
-                rele = iter2.Current;
-                relesDel.Add(rele);
-                if (!iter2.MoveNext()) eoi |= 2;
-                //rele.Uninstall();
-                //reles.Remove(rele);
-            }
-            foreach (RowElement releDel in relesDel)
-            {
-                releDel.Uninstall();
-                reles.Remove(releDel);
+                while (eoi == 0)
+                {
+                    svunit = iter1.Current;
+                    rele = iter2.Current;
+                    //rele.Update();
+                    rele.Setup(svunit);
+                    if (!iter1.MoveNext()) eoi |= 1;
+                    if (!iter2.MoveNext()) eoi |= 2;
+                }
+                while ((eoi & 1) == 0)
+                {
+                    svunit = iter1.Current;
+                    rele = new RowElement(this, reles.Count() + 1, svunit);
+                    //rele.Setup(svunit);
+                    reles.AddLast(rele);
+                    if (!iter1.MoveNext()) eoi |= 1;
+                }
+                List<RowElement> relesDel = new List<RowElement>();
+                while ((eoi & 2) == 0)
+                {
+                    //svmodel = null;
+                    rele = iter2.Current;
+                    relesDel.Add(rele);
+                    if (!iter2.MoveNext()) eoi |= 2;
+                    //rele.Uninstall();
+                    //reles.Remove(rele);
+                }
+                foreach (RowElement releDel in relesDel)
+                {
+                    releDel.Uninstall();
+                    reles.Remove(releDel);
+                }
+                
+                System.Threading.Monitor.Exit(reles);
             }
         }
 
@@ -513,14 +667,75 @@ namespace SamSoarII.Simulation.UI.Monitor
                 VariableUnitExpanded(sender, e);
             }
         }
-        
+
+        private void OnInsertRowBehindHere(object sender, RoutedEventArgs e)
+        {
+            if (sender is RowElement)
+            {
+                RowElement rele = (RowElement)(sender);
+                if (reles.Contains(rele))
+                {
+                    //reles.Add(rele);
+                    SimulateVariableUnit _svunit = new SimulateVInputUnit();
+                    svunits.Add(_svunit);
+                    RowElement _rele = new RowElement(this, rele.ID + 1, _svunit);
+                    /*
+                    VariableUnitChangeEventArgs _e = new VariableUnitChangeEventArgs();
+                    _e.Old = null;
+                    _e.New = _svunit;
+                    VariableUnitChanged(this, _e);
+                    */
+                    LinkedListNode<RowElement> node = reles.Find(rele).Next;
+                    while (node != null)
+                    {
+                        node.Value.ID++;
+                        node = node.Next;
+                    }
+                    node = reles.Find(rele);
+                    reles.AddAfter(node, _rele);
+
+                    _rele.Focus = rele.Focus;
+                }
+            }
+        }
+
+        private void OnFocusUp(object sender, RoutedEventArgs e)
+        {
+            if (sender is RowElement)
+            {
+                RowElement rele = (RowElement)(sender);
+                LinkedListNode<RowElement> node = reles.Find(rele);
+                LinkedListNode<RowElement> nodep = node.Previous;
+                if (nodep != null)
+                {
+                    RowElement relep = nodep.Value;
+                    relep.Focus = rele.Focus;
+                }
+            }
+        }
+
+        private void OnFocusDown(object sender, RoutedEventArgs e)
+        {
+            if (sender is RowElement)
+            {
+                RowElement rele = (RowElement)(sender);
+                LinkedListNode<RowElement> node = reles.Find(rele);
+                LinkedListNode<RowElement> noden = node.Next;
+                if (noden != null)
+                {
+                    RowElement relen = noden.Value;
+                    relen.Focus = rele.Focus;
+                }
+            }
+        }
+
         private void MonitorAdd_Click(object sender, RoutedEventArgs e)
         {
             SimulateVInputUnit sviunit = new SimulateVInputUnit();
             svunits.Add(sviunit);
             RowElement rele = null;
             rele = new RowElement(this, reles.Count() + 1, sviunit);
-            reles.Add(rele);
+            reles.AddLast(rele);
         }
 
         private void MonitorDel_Click(object sender, RoutedEventArgs e)
@@ -532,6 +747,8 @@ namespace SamSoarII.Simulation.UI.Monitor
         {
 
         }
+
+
 
         #endregion
     }
