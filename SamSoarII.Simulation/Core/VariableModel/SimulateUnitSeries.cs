@@ -53,7 +53,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             get
             { 
-                if (IsExpand && model != null)
+                if (model != null)
                 {
                     return model.Values;
                 }

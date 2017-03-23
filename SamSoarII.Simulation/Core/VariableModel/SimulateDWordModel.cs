@@ -122,5 +122,24 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             dllmodel.SetValue_DWord(Name, Size, ivalues);
         }
+
+        static public new SimulateDWordModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateDWordUnit sdunit = (SimulateDWordUnit)(svunits.First());
+            SimulateDWordModel sdmodel = new SimulateDWordModel();
+            string _name = sdunit.Name;
+            int i = 0;
+            while (char.IsLetter(_name[i])) i++;
+            sdmodel.Base = _name.Substring(0, i);
+            sdmodel.Offset = int.Parse(_name.Substring(i));
+            sdmodel.size = svunits.Count();
+            sdmodel.values = new SimulateDWordUnit[sdmodel.size];
+            i = 0;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                sdmodel.values[i++] = (SimulateDWordUnit)(svunit);
+            }
+            return sdmodel;
+        }
     }
 }

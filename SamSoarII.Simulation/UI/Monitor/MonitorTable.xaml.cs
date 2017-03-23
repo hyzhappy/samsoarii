@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 using SamSoarII.Simulation.Core.Event;
 using SamSoarII.Simulation.Core.VariableModel;
+using System.Xml.Linq;
 
 namespace SamSoarII.Simulation.UI.Monitor
 {
@@ -543,9 +544,12 @@ namespace SamSoarII.Simulation.UI.Monitor
                     if (svunit is SimulateUnitSeries)
                     {
                         SimulateUnitSeries sus = svunit as SimulateUnitSeries;
-                        foreach (SimulateVariableUnit ssvunit in (SimulateVariableUnit[])(sus.Value))
+                        if (sus.IsExpand)
                         {
-                            ret.Add(ssvunit);
+                            foreach (SimulateVariableUnit ssvunit in (SimulateVariableUnit[])(sus.Value))
+                            {
+                                ret.Add(ssvunit);
+                            }
                         }
                     }
                 }
@@ -618,12 +622,195 @@ namespace SamSoarII.Simulation.UI.Monitor
             }
         }
 
+        public int Save(string fileName)
+        {
+            XDocument xdoc = new XDocument();
+            XElement node_Root = new XElement("Monitor");
+            XElement node_SVUnit = null;
+            XElement node_SSVUnit = null;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                node_SVUnit = new XElement("SimulateVariableUnit");
+
+                if (svunit is SimulateUnitSeries)
+                {
+                    SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
+                    node_SVUnit.SetAttributeValue("Inherited", "SimulateUnitSeries");
+                    node_SVUnit.SetAttributeValue("Name", ssunit.Name);
+                    node_SVUnit.SetAttributeValue("DataType", ssunit.DataType);
+                    foreach (SimulateVariableUnit ssvunit in (SimulateVariableUnit[])(ssunit.Value))
+                    {
+                        node_SSVUnit = new XElement("SimulateVariableUnit");
+                        SaveSVUnit(node_SSVUnit, ssvunit);
+                        node_SVUnit.Add(node_SSVUnit);
+                    }
+                }
+                else
+                {
+                    SaveSVUnit(node_SVUnit, svunit);
+                }
+
+                node_Root.Add(node_SVUnit);
+            }
+            xdoc.Add(node_Root);
+            xdoc.Save(fileName);
+
+            return 0;
+        }
+
+        private void SaveSVUnit(XElement node, SimulateVariableUnit svunit)
+        {
+            if (svunit is SimulateBitUnit)
+            {
+                node.SetAttributeValue("Inherited", "SimulateBitUnit");
+            }
+            if (svunit is SimulateWordUnit)
+            {
+                node.SetAttributeValue("Inherited", "SimulateWordUnit");
+            }
+            if (svunit is SimulateDWordUnit)
+            {
+                node.SetAttributeValue("Inherited", "SimulateDWordUnit");
+            }
+            if (svunit is SimulateFloatUnit)
+            {
+                node.SetAttributeValue("Inherited", "SimulateFloatUnit");
+            }
+            if (svunit is SimulateDoubleUnit)
+            {
+                node.SetAttributeValue("Inherited", "SimulateDoubleUnit");
+            }
+            if (svunit is SimulateVInputUnit)
+            {
+                node.SetAttributeValue("Inherited", "SimulateVInputUnit");
+                return;
+            }
+            node.SetAttributeValue("Name", svunit.Name);
+            node.SetAttributeValue("Var", svunit.Var);
+            node.SetAttributeValue("Value", svunit.Value);
+        }
+
+        public int Load(string fileName)
+        {
+            XDocument xdoc = XDocument.Load(fileName);
+            XElement node_Root = xdoc.Element("Monitor");
+            IEnumerable<XElement> nodes_SVUnit = node_Root.Elements("SimulateVariableUnit");
+            
+            Clear();
+            foreach (XElement node_SVUnit in nodes_SVUnit)
+            {
+                SimulateVariableUnit svunit = LoadSVUnit(node_SVUnit);
+                Add(svunit);
+            }
+            Update();
+
+            return 0;
+        }
+        
+        private SimulateVariableUnit LoadSVUnit(XElement node)
+        {
+            SimulateVariableUnit ret = null;
+            IEnumerable<XElement> snodes = null;
+            List<SimulateVariableUnit> ssvunits = null;
+            string inherited = node.Attribute("Inherited").Value as string;
+            switch (inherited)
+            {
+                case "SimulateBitUnit":
+                    ret = new SimulateBitUnit();
+                    break;
+                case "SimulateWordUnit":
+                    ret = new SimulateWordUnit();
+                    break;
+                case "SimulateDWordUnit":
+                    ret = new SimulateDWordUnit();
+                    break;
+                case "SimulateFloatUnit":
+                    ret = new SimulateFloatUnit();
+                    break;
+                case "SimulateDoubleUnit":
+                    ret = new SimulateDoubleUnit();
+                    break;
+                case "SimulateVInputUnit":
+                    ret = new SimulateVInputUnit();
+                    return ret;
+                case "SimulateUnitSeries":
+                    snodes = node.Elements("SimulateVariableUnit");
+                    ssvunits = new List<SimulateVariableUnit>();
+                    foreach (XElement snode in snodes)
+                    {
+                        ssvunits.Add(LoadSVUnit(snode));
+                    }
+                    ret = new SimulateUnitSeries(SimulateVariableModel.Create(ssvunits));
+                    //((SimulateUnitSeries)(ret)).DataType = node.Attribute("DataType").Value;
+                    ret.Name = node.Attribute("Name").Value;
+                    return ret;
+            }
+            ret.Name = node.Attribute("Name").Value;
+            ret.Var = node.Attribute("Var").Value;
+            return ret;
+        }
+
+        public void Add(SimulateVariableUnit svunit)
+        {
+            VariableUnitChangeEventArgs e = new VariableUnitChangeEventArgs();
+            e.Old = null;
+            e.New = svunit;
+            OnVariableUnitCreated(this, e);
+        }
+
+        public void Remove(SimulateVariableUnit svunit)
+        {
+            VariableUnitChangeEventArgs e = new VariableUnitChangeEventArgs();
+            e.Old = svunit;
+            e.New = null;
+            OnVariableUnitDeleted(this, e);
+        }
+
+        public void Clear()
+        {
+            VariableUnitChangeEventArgs e = new VariableUnitChangeEventArgs();   
+            e.New = null;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                e.Old = svunit;
+                if (VariableUnitChanged != null)
+                {
+                    VariableUnitChanged(this, e);
+                }
+            }
+            svunits.Clear();
+        }
+
+        public void Replace(SimulateVariableUnit svunit_old, SimulateVariableUnit svunit_new)
+        {
+            VariableUnitChangeEventArgs e = new VariableUnitChangeEventArgs();
+            e.Old = svunit_old;
+            e.New = svunit_new;
+            OnVariableUnitChanged(this, e);
+        }
+
         #region Event Handler
         public event VariableUnitChangeEventHandler VariableUnitChanged;
         private void OnVariableUnitChanged(object sender, VariableUnitChangeEventArgs e)
         {
             int id = svunits.IndexOf(e.Old);
             svunits[id] = e.New;
+            if (VariableUnitChanged != null)
+            {
+                VariableUnitChanged(sender, e);
+            }
+        }
+        private void OnVariableUnitCreated(object sender, VariableUnitChangeEventArgs e)
+        {
+            svunits.Add(e.New);
+            if (VariableUnitChanged != null)
+            {
+                VariableUnitChanged(sender, e);
+            }
+        }
+        private void OnVariableUnitDeleted(object sender, VariableUnitChangeEventArgs e)
+        {
+            svunits.Remove(e.Old);
             if (VariableUnitChanged != null)
             {
                 VariableUnitChanged(sender, e);

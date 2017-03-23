@@ -51,12 +51,12 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
     public abstract class SimulateVariableUnit
     {
-        protected string name;
-        protected string type;
-        protected string basename;
-        protected int offset;
-        protected string varname;
-        protected bool islocked;
+        protected string name = "";
+        protected string type = "";
+        protected string basename = "";
+        protected int offset = 0;
+        protected string varname = "";
+        protected bool islocked = false;
         protected SimulateManager manager = null;
        
         public string Name
@@ -175,9 +175,9 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
     public abstract class SimulateVariableModel
     {
-        protected string basename;
-        protected int offset;
-        protected int size;
+        protected string basename = "";
+        protected int offset = 0;
+        protected int size = 0;
         
         public string Base
         {
@@ -294,6 +294,32 @@ namespace SamSoarII.Simulation.Core.VariableModel
             svmodel.Offset = offset;
             svmodel.Size = size;
             return svmodel;
+        }
+
+        public static SimulateVariableModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateVariableUnit svunitf = svunits.First();
+            if (svunitf is SimulateBitUnit)
+            {
+                return SimulateBitModel.Create(svunits);
+            }
+            if (svunitf is SimulateWordUnit)
+            {
+                return SimulateWordModel.Create(svunits);
+            }
+            if (svunitf is SimulateDWordUnit)
+            {
+                return SimulateDWordModel.Create(svunits);
+            }
+            if (svunitf is SimulateFloatUnit)
+            {
+                return SimulateFloatModel.Create(svunits);
+            }
+            if (svunitf is SimulateDoubleUnit)
+            {
+                return SimulateDoubleModel.Create(svunits);
+            }
+            return null;
         }
         
         

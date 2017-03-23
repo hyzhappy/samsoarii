@@ -126,5 +126,25 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             dllmodel.SetValue_Bit(Name, Size, ivalues);
         }
+
+        static public new SimulateBitModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateBitUnit sbunit = (SimulateBitUnit)(svunits.First());
+            SimulateBitModel sbmodel = new SimulateBitModel();
+            string _name = sbunit.Name;
+            int i = 0;
+            while (char.IsLetter(_name[i])) i++;
+            sbmodel.Base = _name.Substring(0, i);
+            sbmodel.Offset = int.Parse(_name.Substring(i));
+            sbmodel.size = svunits.Count();
+            sbmodel.values = new SimulateBitUnit[sbmodel.size];
+            i = 0;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                sbmodel.values[i++] = (SimulateBitUnit)(svunit);
+            }
+            return sbmodel;
+        }
+
     }
 }

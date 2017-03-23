@@ -117,5 +117,24 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             dllmodel.SetValue_Float(Name, Size, fvalues);
         }
+
+        static public new SimulateFloatModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateFloatUnit sfunit = (SimulateFloatUnit)(svunits.First());
+            SimulateFloatModel sfmodel = new SimulateFloatModel();
+            string _name = sfunit.Name;
+            int i = 0;
+            while (char.IsLetter(_name[i])) i++;
+            sfmodel.Base = _name.Substring(0, i);
+            sfmodel.Offset = int.Parse(_name.Substring(i));
+            sfmodel.size = svunits.Count();
+            sfmodel.values = new SimulateFloatUnit[sfmodel.size];
+            i = 0;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                sfmodel.values[i++] = (SimulateFloatUnit)(svunit);
+            }
+            return sfmodel;
+        }
     }
 }
