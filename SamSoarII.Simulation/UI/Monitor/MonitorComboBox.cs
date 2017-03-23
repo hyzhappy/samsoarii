@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 
 using SamSoarII.Simulation.Core.VariableModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SamSoarII.Simulation.UI.Monitor
 {
@@ -58,9 +59,58 @@ namespace SamSoarII.Simulation.UI.Monitor
                         {
                             Text = "DOUBLE";
                         }
+                        if (svunit is SimulateUnitSeries)
+                        {
+                            SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
+                            switch (ssunit.DataType)
+                            {
+                                case "BIT":
+                                    Text = "BIT";
+                                    break;
+                                case "WORD":
+                                    Text = "WORD";
+                                    break;
+                                case "DWORD":
+                                    Text = "DWORD";
+                                    break;
+                                case "FLOAT":
+                                    Text = "FLOAT";
+                                    break;
+                                case "DOUBLE":
+                                    Text = "DOUBLE";
+                                    break;
+                            }
+                        }
                     }
                     else
                     {
+                        if (svunit is SimulateUnitSeries)
+                        {
+                            SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
+                            switch (ssunit.DataType)
+                            {
+                                case "BIT":
+                                    Items.Add("BIT");
+                                    Text = "BIT";
+                                    break;
+                                case "WORD":
+                                    Items.Add("WORD");
+                                    Text = "WORD";
+                                    break;
+                                case "DWORD":
+                                    Items.Add("DWORD");
+                                    Text = "DWORD";
+                                    break;
+                                case "FLOAT":
+                                    Items.Add("FLOAT");
+                                    Text = "FLOAT";
+                                    break;
+                                case "DOUBLE":
+                                    Items.Add("DOUBLE");
+                                    Text = "DOUBLE";
+                                    break;
+                            }
+                        }
                         if (svunit is SimulateBitUnit)
                         {
                             Items.Add("BIT");
@@ -102,6 +152,51 @@ namespace SamSoarII.Simulation.UI.Monitor
             if (TextLegalChanged != null)
             {
                 TextLegalChanged(this, new RoutedEventArgs());
+            }
+        }
+
+        public event RoutedEventHandler InsertRowElementBehindHere;
+        public event RoutedEventHandler FocusUp;
+        public event RoutedEventHandler FocusDown;
+        public event RoutedEventHandler FocusLeft;
+        public event RoutedEventHandler FocusRight;
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            if (e.Key == Key.Enter)
+            {
+                if (InsertRowElementBehindHere != null)
+                {
+                    InsertRowElementBehindHere(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Up)
+            {
+                if (FocusUp != null)
+                {
+                    FocusUp(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Down)
+            {
+                if (FocusDown != null)
+                {
+                    FocusDown(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Left)
+            {
+                if (FocusLeft != null)
+                {
+                    FocusUp(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Right)
+            {
+                if (FocusRight != null)
+                {
+                    FocusDown(this, new RoutedEventArgs());
+                }
             }
         }
     }

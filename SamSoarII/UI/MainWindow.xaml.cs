@@ -212,6 +212,18 @@ namespace SamSoarII.AppMain.UI
 
         }
 
+        private void SimulateCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
         #endregion
 
 
@@ -316,6 +328,11 @@ namespace SamSoarII.AppMain.UI
         private void OnDownloadCommandExecute(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void OnSimulateCommandExecute(object sender, RoutedEventArgs e)
+        {
+            _interactionFacade.SimulateProject();
         }
 
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)

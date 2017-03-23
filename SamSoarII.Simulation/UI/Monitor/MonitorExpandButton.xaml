@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="SamSoarII.Simulation.UI.Monitor.MonitorExpandButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Monitor"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="20">
+    <Viewbox>
+        <Grid>
+            <Image x:Name="Image_ExpandOff" Source="/Resources/Image/Expand/ExpandOff.png" Opacity="0.3"></Image>
+            <Image x:Name="Image_ExpandOn" Source="/Resources/Image/Expand/ExpandOn.png" Opacity="0.8"></Image>
+        </Grid>
+    </Viewbox>
+</UserControl>

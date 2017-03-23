@@ -24,6 +24,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 type1 = 4;
             if (unit1 is SimulateDoubleUnit)
                 type1 = 5;
+            if (unit1 is SimulateUnitSeries)
+                type1 = 6;
 
             if (unit2 is SimulateBitUnit)
                 type2 = 1;
@@ -35,6 +37,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 type2 = 4;
             if (unit2 is SimulateDoubleUnit)
                 type2 = 5;
+            if (unit2 is SimulateUnitSeries)
+                type2 = 6;
 
             if (type1 < type2)
                 return -1;
@@ -47,11 +51,12 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
     public abstract class SimulateVariableUnit
     {
-        protected string name;
-        protected string type;
-        protected string basename;
-        protected int offset;
-        protected string varname;
+        protected string name = "";
+        protected string type = "";
+        protected string basename = "";
+        protected int offset = 0;
+        protected string varname = "";
+        protected bool islocked = false;
         protected SimulateManager manager = null;
        
         public string Name
@@ -62,8 +67,20 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             set
             {
-                if (!_Check_Name(value)) return;
-                this.name = value;
+                Match m1 = Regex.Match(value, @"\w\d+");
+                Match m2 = Regex.Match(value, @"^\w+\[\d+\.\.\d+\]$");
+                if (m2.Success)
+                {
+                    this.name = value;
+                    return;
+                }
+                if (!m1.Success)
+                {
+                    return;
+                }
+                string _name = m1.Value;
+                if (!_Check_Name(_name)) return;
+                this.name = _name;
                 int i = 0;
                 while (char.IsLetter(name[i])) i++;
                 this.basename = this.name.Substring(0, i);
@@ -79,6 +96,17 @@ namespace SamSoarII.Simulation.Core.VariableModel
             set
             {
                 this.varname = value;
+            }
+        }
+        public bool Islocked
+        {
+            get
+            {
+                return this.islocked;
+            }
+            set
+            {
+                this.islocked = value;
             }
         }
         abstract public string Type
@@ -134,15 +162,22 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 sdfunit.Name = _name;
                 return sdfunit;
             }
+            SimulateUnitSeries ssunit = new SimulateUnitSeries();
+            if (ssunit._Check_Name(_name))
+            {
+                ssunit.Name = _name;
+                ssunit.CreateExpand();
+                return ssunit;
+            }
             return null;
         }
     }
 
     public abstract class SimulateVariableModel
     {
-        protected string basename;
-        protected int offset;
-        protected int size;
+        protected string basename = "";
+        protected int offset = 0;
+        protected int size = 0;
         
         public string Base
         {
@@ -172,6 +207,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
 
         abstract public void Update(SimulateDllModel dllmodel);
+
+        abstract public void Set(SimulateDllModel dllmodel);
     
         public static SimulateVariableModel Create(string name)
         {
@@ -199,6 +236,31 @@ namespace SamSoarII.Simulation.Core.VariableModel
             return Create(_name, offsethigh - offsetlow, type);
         }
 
+        public static SimulateVariableModel Create(string name, int size)
+        {
+            int i = 0;
+            while (char.IsLetter(name[i])) i++;
+            string bname = name.Substring(0, i);
+            int offset = int.Parse(name.Substring(i));
+            
+            switch (bname)
+            {
+                case "X": case "Y": case "C": case "T": case "S": case "M":
+                    return Create(name, size, "BIT");
+                case "D": case "CV":
+                    return Create(name, size, "WORD");
+                case "TV":
+                    if (offset < 200 && offset + size - 1 < 200)
+                        return Create(name, size, "WORD");
+                    if (offset > 200 && offset + size - 1 < 256)
+                        return Create(name, size / 2, "DWORD");
+                    break;
+                default:
+                    break;
+            }
+            return null;
+        }
+
         public static SimulateVariableModel Create(string name, int size, string type)
         {
             int i = 0;
@@ -209,6 +271,9 @@ namespace SamSoarII.Simulation.Core.VariableModel
             SimulateVariableModel svmodel = null;
             switch (type)
             {
+                case "BIT":
+                    svmodel = new SimulateBitModel();
+                    break;
                 case "WORD":
                     svmodel = new SimulateWordModel();
                     break;
@@ -227,8 +292,34 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
             svmodel.Base = bname;
             svmodel.Offset = offset;
-            svmodel.size = size;
+            svmodel.Size = size;
             return svmodel;
+        }
+
+        public static SimulateVariableModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateVariableUnit svunitf = svunits.First();
+            if (svunitf is SimulateBitUnit)
+            {
+                return SimulateBitModel.Create(svunits);
+            }
+            if (svunitf is SimulateWordUnit)
+            {
+                return SimulateWordModel.Create(svunits);
+            }
+            if (svunitf is SimulateDWordUnit)
+            {
+                return SimulateDWordModel.Create(svunits);
+            }
+            if (svunitf is SimulateFloatUnit)
+            {
+                return SimulateFloatModel.Create(svunits);
+            }
+            if (svunitf is SimulateDoubleUnit)
+            {
+                return SimulateDoubleModel.Create(svunits);
+            }
+            return null;
         }
         
         

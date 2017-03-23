@@ -265,8 +265,17 @@ namespace SamSoarII.Simulation
         private void BuildRouted()
         {
             MainWindow.Closed += OnMainWindowClosed;
-
+            
             ProjectTreeView ptview = MainWindow.PTView;
+            foreach (SimuViewDiagramModel svdmodel in SubRoutines)
+            {
+                ptview.AddTreeViewItem(svdmodel.Name, ProjectTreeView.ADDTVI_TYPE_SUBROUTINES);
+            }
+            foreach (SimuViewFuncBlockModel svfmodel in FuncBlocks)
+            {
+                ptview.AddTreeViewItem(svfmodel.Name, ProjectTreeView.ADDTVI_TYPE_FUNCBLOCKS);
+            }
+
             TreeViewItem tvi_arou = ptview.TVI_AllRoutine;
             TreeViewItem tvi_mrou = ptview.TVI_MainRoutine;
             TreeViewItem tvi_srou = ptview.TVI_SubRoutines;
@@ -491,16 +500,16 @@ namespace SamSoarII.Simulation
             int ret = 0;
             foreach (SimuViewNetworkModel svnmodel in svdmodel.GetNetworks())
             {
-                ret += MergeAll_Network(nets, svnmodel);
+                ret += MergeAll_Network(nets, svnmodel, svdmodel.Name);
             }
             return ret;
         }
 
-        private int MergeAll_Network(List<InstHelper.PLCInstNetwork> nets, SimuViewNetworkModel svnmodel)
+        private int MergeAll_Network(List<InstHelper.PLCInstNetwork> nets, SimuViewNetworkModel svnmodel, string name)
         {
             int ret = 0;
             InstHelper.PLCInstNetwork net = new InstHelper.PLCInstNetwork(
-                svnmodel.Name, svnmodel.PLCInsts.ToArray());
+                name, svnmodel.PLCInsts.ToArray());
             nets.Add(net);
             return ret;
         }

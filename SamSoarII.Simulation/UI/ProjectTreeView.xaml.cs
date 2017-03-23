@@ -20,11 +20,26 @@ namespace SamSoarII.Simulation.UI
     /// </summary>
     public partial class ProjectTreeView : UserControl
     {
-        
-
         public ProjectTreeView()
         {
             InitializeComponent();
+        }
+
+        public const int ADDTVI_TYPE_SUBROUTINES = 0x01;
+        public const int ADDTVI_TYPE_FUNCBLOCKS = 0x02;
+        public void AddTreeViewItem(string name, int type)
+        {
+            TreeViewItem tvitem = new TreeViewItem();
+            tvitem.Header = name;
+            switch (type)
+            {
+                case ADDTVI_TYPE_SUBROUTINES:
+                    TVI_SubRoutines.Items.Add(tvitem);
+                    break;
+                case ADDTVI_TYPE_FUNCBLOCKS:
+                    TVI_FuncBlocks.Items.Add(tvitem);
+                    break;
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ namespace SamSoarII.Simulation.UI
 
         public void GenerateCCode(StreamWriter sw)
         {
-            sw.Write("#include \"simuf.h\"");
+            sw.Write("#include \"simuf.h\"\r\n");
             sw.Write(Code);
         }
         

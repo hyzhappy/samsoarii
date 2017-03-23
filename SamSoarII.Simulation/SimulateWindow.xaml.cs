@@ -29,5 +29,31 @@ namespace SamSoarII.Simulation
         {
             InitializeComponent();
         }
+
+        private void OnSaveMonitorList(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "ssm文件|*.ssm";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                if (MTable.Save(saveFileDialog.FileName) != 0)
+                {
+                    MessageBox.Show("无法保存监视文件!");
+                }
+            }
+        }
+
+        private void OnLoadMonitorList(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "ssm文件|*.ssm";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                if (MTable.Load(openFileDialog.FileName) != 0)
+                {
+                    MessageBox.Show("不正确的监视文件，监视文件已损坏!");
+                }
+            }
+        }
     }
 }

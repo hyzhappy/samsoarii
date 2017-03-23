@@ -28,6 +28,7 @@ namespace SamSoarII.Extend.Utility
         private string flag3;
         private string flag4;
         private string flag5;
+        private string enbit;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -49,12 +50,14 @@ namespace SamSoarII.Extend.Utility
                 this.text = value;
                 string[] args = text.Split(' ');
                 this.type = args[0];
+                this.enbit = null;
                 // 根据指令类型的参数结构来分类，并转化参数的格式
                 /*
                  * 参数分为位(B)，字(W)，双字(D)和浮点(F)这四种数据类型
                  * 按照读写权限分为只读(r)，只写(w)和读写(rw)三种
                  * 将指令所有参数的类型和读写的简称括号起来表示
                  * 例如(rB,rW,rwD)表示第一个参数为只读位，第二个为只写字，第三个读写双字
+                 * 如果参数包括可写项，则附带支持仿真的写入使能
                  */
                 switch (this.type)
                 {
@@ -131,7 +134,7 @@ namespace SamSoarII.Extend.Utility
                         break;
                     // (rW, wW)
                     case "BIN": case "BCD":
-                    case "INVW": case "MOVW":
+                    case "INVW": case "MOV":
                     case "INC": case "DEC":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
                         this.flag2 = ToCStyle(args[2], "w", "WORD");
@@ -283,6 +286,13 @@ namespace SamSoarII.Extend.Utility
             }
         }
         /// <summary>
+        /// 输出写入使能（仿真模式下使用）
+        /// </summary>
+        public string EnBit
+        {
+            get { return this.enbit; }
+        }
+        /// <summary>
         /// 将常量/变量名称转变为c语言可识别的形式
         /// </summary>
         /// <param name="var">名称</param>
@@ -297,6 +307,11 @@ namespace SamSoarII.Extend.Utility
             // 确定前面的类型名称和后面的数值
             string name = var.Substring(0, i);
             int addr = int.Parse(var.Substring(i));
+            // 如果该参数可写，需要附带写入使能
+            if (mode.Equals("w") || mode.Equals("rw"))
+            {
+                this.enbit = String.Format("{0:s}Enable[{1:d}]", name, addr);
+            }
             switch (name)
             {
                 // 位线圈

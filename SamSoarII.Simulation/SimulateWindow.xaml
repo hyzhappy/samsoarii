@@ -24,10 +24,12 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" FontSize="12" Padding="6" FontFamily="微软雅黑">
                 <MenuItem Header="工具(_T)">
-                    <MenuItem Header="上载"></MenuItem>
-                    <MenuItem Header="下载"></MenuItem>
-                    <MenuItem Header="仿真"></MenuItem>
-                    <MenuItem Header="监视"></MenuItem>
+                    <MenuItem Header="监视">
+                        <MenuItem Header="添加监视"></MenuItem>
+                        <MenuItem Header="批量添加"></MenuItem>
+                        <MenuItem Header="保存列表" Click="OnSaveMonitorList"></MenuItem>
+                        <MenuItem Header="读取列表" Click="OnLoadMonitorList"></MenuItem>
+                    </MenuItem>
                     <Separator></Separator>
                     <MenuItem Header="选项"></MenuItem>
                 </MenuItem>

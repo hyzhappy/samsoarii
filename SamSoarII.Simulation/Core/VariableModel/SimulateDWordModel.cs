@@ -82,11 +82,11 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             set
             {
-                this.size = value;
-                this.values = new SimulateVariableUnit[size];
                 int factor = 1;
                 if (Base.Equals("D"))
                     factor = 2;
+                this.size = value/factor;
+                this.values = new SimulateVariableUnit[size];
                 for (int i = 0; i < size; i++)
                 {
                     this.values[i] = new SimulateDWordUnit();
@@ -111,6 +111,35 @@ namespace SamSoarII.Simulation.Core.VariableModel
             {
                 this.values[i].Value = ivalues[i];
             }
+        }
+
+        public override void Set(SimulateDllModel dllmodel)
+        {
+            int[] ivalues = new int[size];
+            for (int i = 0; i < size; i++)
+            {
+                ivalues[i] = (int)(this.values[i].Value);
+            }
+            dllmodel.SetValue_DWord(Name, Size, ivalues);
+        }
+
+        static public new SimulateDWordModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateDWordUnit sdunit = (SimulateDWordUnit)(svunits.First());
+            SimulateDWordModel sdmodel = new SimulateDWordModel();
+            string _name = sdunit.Name;
+            int i = 0;
+            while (char.IsLetter(_name[i])) i++;
+            sdmodel.Base = _name.Substring(0, i);
+            sdmodel.Offset = int.Parse(_name.Substring(i));
+            sdmodel.size = svunits.Count();
+            sdmodel.values = new SimulateDWordUnit[sdmodel.size];
+            i = 0;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                sdmodel.values[i++] = (SimulateDWordUnit)(svunit);
+            }
+            return sdmodel;
         }
     }
 }

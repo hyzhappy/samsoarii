@@ -106,5 +106,34 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 this.values[i].Value = dvalues[i];
             }
         }
+        
+        public override void Set(SimulateDllModel dllmodel)
+        {
+            double[] dvalues = new double[size];
+            for (int i = 0; i < size; i++)
+            {
+                dvalues[i] = (double)(this.values[i].Value);
+            }
+            dllmodel.SetValue_Double(Name, Size, dvalues);
+        }
+
+        static public new SimulateDoubleModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateDoubleUnit sdunit = (SimulateDoubleUnit)(svunits.First());
+            SimulateDoubleModel sdmodel = new SimulateDoubleModel();
+            string _name = sdunit.Name;
+            int i = 0;
+            while (char.IsLetter(_name[i])) i++;
+            sdmodel.Base = _name.Substring(0, i);
+            sdmodel.Offset = int.Parse(_name.Substring(i));
+            sdmodel.size = svunits.Count();
+            sdmodel.values = new SimulateDoubleUnit[sdmodel.size];
+            i = 0;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                sdmodel.values[i++] = (SimulateDoubleUnit)(svunit);
+            }
+            return sdmodel;
+        }
     }
 }

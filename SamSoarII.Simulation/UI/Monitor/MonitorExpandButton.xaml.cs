@@ -13,51 +13,58 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using SamSoarII.Simulation.Core.VariableModel;
+
 namespace SamSoarII.Simulation.UI.Monitor
 {
     /// <summary>
-    /// MonitorLockButton.xaml 的交互逻辑
+    /// MonitorExpandButton.xaml 的交互逻辑
     /// </summary>
-    public partial class MonitorLockButton : UserControl
+    public partial class MonitorExpandButton : UserControl
     {
-        public const int STATUS_LOCKOFF = 0x00;
-        public const int STATUS_LOCKON = 0x01;
-        
+        private SimulateUnitSeries ssunit;
+
+        public const int STATUS_EXPANDOFF = 0x00;
+        public const int STATUS_EXPANDON = 0x01;
         private int status;
-        public bool IsLocked
+        public bool IsExpanded
         {
             get
             {
-                return (status == 1);
+                return (status == STATUS_EXPANDON);
             }
             set
             {
                 if (value)
                 {
-                    status = 1;
+                    status = STATUS_EXPANDON;
                 }
                 else
                 {
-                    status = 0;
+                    status = STATUS_EXPANDOFF;
                 }
                 switch (status)
                 {
-                    case STATUS_LOCKOFF:
-                        Image_LockOff.Opacity = 0.3;
-                        Image_LockOn.Opacity = 0.0;
+                    case STATUS_EXPANDOFF:
+                        Image_ExpandOff.Opacity = 0.3;
+                        Image_ExpandOn.Opacity = 0.0;
+                        ssunit.IsExpand = false;
                         break;
-                    case STATUS_LOCKON:
-                        Image_LockOff.Opacity = 0.0;
-                        Image_LockOn.Opacity = 0.8;
+                    case STATUS_EXPANDON:
+                        Image_ExpandOff.Opacity = 0.0;
+                        Image_ExpandOn.Opacity = 0.8;
+                        ssunit.IsExpand = true;
                         break;
                 }
             }
         }
 
-        public MonitorLockButton()
+
+        public MonitorExpandButton(SimulateUnitSeries _ssunit)
         {
             InitializeComponent();
-            IsLocked = false;
+            ssunit = _ssunit;
+            //IsExpanded = false;
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)
@@ -65,11 +72,11 @@ namespace SamSoarII.Simulation.UI.Monitor
             base.OnMouseEnter(e);
             switch (status)
             {
-                case STATUS_LOCKOFF:
-                    Image_LockOff.Opacity = 0.8;
+                case STATUS_EXPANDOFF:
+                    Image_ExpandOff.Opacity = 0.8;
                     break;
-                case STATUS_LOCKON:
-                    Image_LockOn.Opacity = 0.3;
+                case STATUS_EXPANDON:
+                    Image_ExpandOn.Opacity = 0.3;
                     break;
             }
         }
@@ -79,11 +86,11 @@ namespace SamSoarII.Simulation.UI.Monitor
             base.OnMouseLeave(e);
             switch (status)
             {
-                case STATUS_LOCKOFF:
-                    Image_LockOff.Opacity = 0.3;
+                case STATUS_EXPANDOFF:
+                    Image_ExpandOff.Opacity = 0.3;
                     break;
-                case STATUS_LOCKON:
-                    Image_LockOn.Opacity = 0.8;
+                case STATUS_EXPANDON:
+                    Image_ExpandOn.Opacity = 0.8;
                     break;
             }
         }
@@ -93,14 +100,13 @@ namespace SamSoarII.Simulation.UI.Monitor
             base.OnMouseDown(e);
             switch (status)
             {
-                case STATUS_LOCKOFF:
-                    IsLocked = true;
+                case STATUS_EXPANDOFF:
+                    IsExpanded = true;
                     break;
-                case STATUS_LOCKON:
-                    IsLocked = false;
+                case STATUS_EXPANDON:
+                    IsExpanded = false;
                     break;
             }
         }
-        
     }
 }

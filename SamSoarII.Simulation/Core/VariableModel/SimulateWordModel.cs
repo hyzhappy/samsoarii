@@ -113,5 +113,35 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 this.values[i].Value = ivalues[i];
             }
         }
+
+
+        public override void Set(SimulateDllModel dllmodel)
+        {
+            int[] ivalues = new int[size];
+            for (int i = 0; i < size; i++)
+            {
+                ivalues[i] = (int)(this.values[i].Value);
+            }
+            dllmodel.SetValue_Word(Name, Size, ivalues);
+        }
+
+        static public new SimulateWordModel Create(IEnumerable<SimulateVariableUnit> svunits)
+        {
+            SimulateWordUnit swunit = (SimulateWordUnit)(svunits.First());
+            SimulateWordModel swmodel = new SimulateWordModel();
+            string _name = swunit.Name;
+            int i = 0;
+            while (char.IsLetter(_name[i])) i++;
+            swmodel.Base = _name.Substring(0, i);
+            swmodel.Offset = int.Parse(_name.Substring(i));
+            swmodel.size = svunits.Count();
+            swmodel.values = new SimulateWordUnit[swmodel.size];
+            i = 0;
+            foreach (SimulateVariableUnit svunit in svunits)
+            {
+                swmodel.values[i++] = (SimulateWordUnit)(svunit);
+            }
+            return swmodel;
+        }
     }
 }

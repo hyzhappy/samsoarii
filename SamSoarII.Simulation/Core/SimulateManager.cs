@@ -97,20 +97,41 @@ namespace SamSoarII.Simulation.Core
 
         public void Remove(SimulateVariableUnit svunit)
         {
-            if (svunit != null && udict.ContainsKey(svunit))
+            if (svunit != null)
             {
-                udict.Remove(svunit);
-                if (vndict.ContainsKey(svunit.Name))
+                if (udict.ContainsKey(svunit))
                 {
-                    vndict.Remove(svunit.Name);
+                    udict.Remove(svunit);
+                    if (vndict.ContainsKey(svunit.Name))
+                    {
+                        vndict.Remove(svunit.Name);
+                    }
+                }
+                if (ldict.ContainsKey(svunit))
+                {
+                    ldict.Remove(svunit);
+                    if (vndict.ContainsKey(svunit.Name))
+                    {
+                        vndict.Remove(svunit.Name);
+                    }
                 }
             }
+            
         }
 
         public void Replace(SimulateVariableUnit oldUnit, SimulateVariableUnit newUnit)
         {
-            Remove(oldUnit);
-            Add(newUnit);
+            if (oldUnit != null && ldict.ContainsKey(oldUnit))
+            {
+                Remove(oldUnit);
+                Add(newUnit);
+                Lock(newUnit);
+            }
+            else
+            {
+                Remove(oldUnit);
+                Add(newUnit);
+            }
         }
 
         public void Rename(string bname, string vname)
@@ -150,6 +171,10 @@ namespace SamSoarII.Simulation.Core
         
         public SimulateVariableUnit GetVariableUnit(SimulateVariableUnit unit)
         {
+            if (unit == null)
+            {
+                return null;
+            }
             if (udict.ContainsKey(unit))
             {
                 SimulateVariableUnit _unit = udict[unit];
@@ -169,6 +194,10 @@ namespace SamSoarII.Simulation.Core
         
         public string GetVariableName(SimulateVariableUnit svunit)
         {
+            if (svunit == null)
+            {
+                return String.Empty;
+            }
             if (vndict.ContainsKey(svunit.Name))
             {
                 return vndict[svunit.Name];
@@ -178,6 +207,10 @@ namespace SamSoarII.Simulation.Core
 
         public void Lock(SimulateVariableUnit svunit)
         {
+            if (svunit == null)
+            {
+                return;
+            }
             if (udict.ContainsKey(svunit))
             {
                 udict.Remove(svunit);
@@ -191,6 +224,10 @@ namespace SamSoarII.Simulation.Core
 
         public void Unlock(SimulateVariableUnit svunit)
         {
+            if (svunit == null)
+            {
+                return;
+            }
             if (ldict.ContainsKey(svunit))
             {
                 ldict.Remove(svunit);

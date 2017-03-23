@@ -55,6 +55,7 @@
     <Compile Include="Core\SimulateDllModel.cs" />
     <Compile Include="Core\SimulateManager.cs" />
     <Compile Include="Core\VariableModel\SimulateDoubleModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateUnitSeries.cs" />
     <Compile Include="Core\VariableModel\SimulateVariableModel.cs" />
     <Compile Include="Core\VariableModel\SimulateDWordModel.cs" />
     <Compile Include="Core\VariableModel\SimulateFloatModel.cs" />
@@ -89,10 +90,16 @@
     <Compile Include="SimulateWindow.xaml.cs">
       <DependentUpon>SimulateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Monitor\MonitorBitButton.xaml.cs">
+      <DependentUpon>MonitorBitButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Monitor\MonitorCloseButton.xaml.cs">
       <DependentUpon>MonitorCloseButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorComboBox.cs" />
+    <Compile Include="UI\Monitor\MonitorExpandButton.xaml.cs">
+      <DependentUpon>MonitorExpandButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Monitor\MonitorLockButton.xaml.cs">
       <DependentUpon>MonitorLockButton.xaml</DependentUpon>
     </Compile>
@@ -168,7 +175,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Monitor\MonitorBitButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Monitor\MonitorCloseButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Monitor\MonitorExpandButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -237,6 +252,8 @@
     <Content Include="Resources\Image\Copy.png" />
     <Content Include="Resources\Image\Cut.png" />
     <Content Include="Resources\Image\Download.png" />
+    <Content Include="Resources\Image\Expand\ExpandOff.png" />
+    <Content Include="Resources\Image\Expand\ExpandOn.png" />
     <Content Include="Resources\Image\Lock\LockOff.png" />
     <Content Include="Resources\Image\Lock\LockOn.png" />
     <Content Include="Resources\Image\New.png" />

@@ -9,6 +9,7 @@ using SamSoarII.Simulation.Core.VariableModel;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SamSoarII.Simulation.UI.Monitor
 {
@@ -26,6 +27,14 @@ namespace SamSoarII.Simulation.UI.Monitor
             set
             {
                 this.svunit = value;
+                if (type == TYPE_VALUE && svunit is SimulateBitUnit)
+                {
+                    Opacity = 0.0;  
+                }
+                else
+                {
+                    Opacity = 1.0;
+                }
                 SetText();
             }
         }
@@ -57,16 +66,17 @@ namespace SamSoarII.Simulation.UI.Monitor
         }
 
         public event RoutedEventHandler TextLegalChanged;
-
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
             try
             {
+                Match m1 = Regex.Match(Text, @"^\w+\d+$");
+                Match m2 = Regex.Match(Text, @"^\w+\[\d+\.\.\d+\]$");
                 switch (type)
                 {
                     case TYPE_NAME:
-                        if (Regex.Match(Text, @"^\w+\d+$").Length == 0)
+                        if (!m1.Success && !m2.Success)
                             return;
                         //svunit.Name = Text;
                         break;
@@ -116,5 +126,51 @@ namespace SamSoarII.Simulation.UI.Monitor
                 TextLegalChanged(this, new RoutedEventArgs());
             }
         }
+        
+        public event RoutedEventHandler InsertRowElementBehindHere;
+        public event RoutedEventHandler FocusUp;
+        public event RoutedEventHandler FocusDown;
+        public event RoutedEventHandler FocusLeft;
+        public event RoutedEventHandler FocusRight;
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            if (e.Key == Key.Enter)
+            {
+                if (InsertRowElementBehindHere != null)
+                {
+                    InsertRowElementBehindHere(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Up)
+            {
+                if (FocusUp != null)
+                {
+                    FocusUp(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Down)
+            {
+                if (FocusDown != null)
+                {
+                    FocusDown(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Left)
+            {
+                if (FocusLeft != null)
+                {
+                    FocusUp(this, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Right)
+            {
+                if (FocusRight != null)
+                {
+                    FocusDown(this, new RoutedEventArgs());
+                }
+            }
+        }
+
     }
 }
