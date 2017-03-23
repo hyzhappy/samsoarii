@@ -58,9 +58,58 @@ namespace SamSoarII.Simulation.UI.Monitor
                         {
                             Text = "DOUBLE";
                         }
+                        if (svunit is SimulateUnitSeries)
+                        {
+                            SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
+                            switch (ssunit.DataType)
+                            {
+                                case "BIT":
+                                    Text = "BIT";
+                                    break;
+                                case "WORD":
+                                    Text = "WORD";
+                                    break;
+                                case "DWORD":
+                                    Text = "DWORD";
+                                    break;
+                                case "FLOAT":
+                                    Text = "FLOAT";
+                                    break;
+                                case "DOUBLE":
+                                    Text = "DOUBLE";
+                                    break;
+                            }
+                        }
                     }
                     else
                     {
+                        if (svunit is SimulateUnitSeries)
+                        {
+                            SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
+                            switch (ssunit.DataType)
+                            {
+                                case "BIT":
+                                    Items.Add("BIT");
+                                    Text = "BIT";
+                                    break;
+                                case "WORD":
+                                    Items.Add("WORD");
+                                    Text = "WORD";
+                                    break;
+                                case "DWORD":
+                                    Items.Add("DWORD");
+                                    Text = "DWORD";
+                                    break;
+                                case "FLOAT":
+                                    Items.Add("FLOAT");
+                                    Text = "FLOAT";
+                                    break;
+                                case "DOUBLE":
+                                    Items.Add("DOUBLE");
+                                    Text = "DOUBLE";
+                                    break;
+                            }
+                        }
                         if (svunit is SimulateBitUnit)
                         {
                             Items.Add("BIT");

@@ -71,10 +71,12 @@ namespace SamSoarII.Simulation.UI.Monitor
             base.OnTextChanged(e);
             try
             {
+                Match m1 = Regex.Match(Text, @"^\w+\d+$");
+                Match m2 = Regex.Match(Text, @"^\w+\[\d+\.\.\d+\]$");
                 switch (type)
                 {
                     case TYPE_NAME:
-                        if (Regex.Match(Text, @"^\w+\d+$").Length == 0)
+                        if (!m1.Success && !m2.Success)
                             return;
                         //svunit.Name = Text;
                         break;

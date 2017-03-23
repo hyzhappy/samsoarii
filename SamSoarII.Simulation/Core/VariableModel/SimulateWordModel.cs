@@ -113,5 +113,16 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 this.values[i].Value = ivalues[i];
             }
         }
+
+
+        public override void Set(SimulateDllModel dllmodel)
+        {
+            int[] ivalues = new int[size];
+            for (int i = 0; i < size; i++)
+            {
+                ivalues[i] = (int)(this.values[i].Value);
+            }
+            dllmodel.SetValue_Word(Name, Size, ivalues);
+        }
     }
 }

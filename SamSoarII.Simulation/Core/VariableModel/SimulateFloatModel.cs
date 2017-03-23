@@ -63,8 +63,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             float[] fvalues = { this.value };
             dllmodel.SetValue_Float(Name, 1, fvalues);
-
         }
+
     }
 
     public class SimulateFloatModel : SimulateVariableModel
@@ -80,13 +80,13 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
             set
             {
-                this.size = value;
+                this.size = value/2;
                 this.values = new SimulateVariableUnit[size];
                 for (int i = 0; i < size; i++)
                 {
                     this.values[i] = new SimulateFloatUnit();
-                    this.values[i].Name = String.Format("{0:s}{1:d}", Base, Offset + i);
-                    this.values[i].Value = 0;
+                    this.values[i].Name = String.Format("{0:s}{1:d}", Base, Offset + i*2);
+                    this.values[i].Value = (float)(0.0);
                 }
             }
         }
@@ -106,6 +106,16 @@ namespace SamSoarII.Simulation.Core.VariableModel
             {
                 this.values[i].Value = fvalues[i];
             }
+        }
+        
+        public override void Set(SimulateDllModel dllmodel)
+        {
+            float[] fvalues = new float[size];
+            for (int i = 0; i < size; i++)
+            {
+                fvalues[i] = (float)(this.values[i].Value);
+            }
+            dllmodel.SetValue_Float(Name, Size, fvalues);
         }
     }
 }

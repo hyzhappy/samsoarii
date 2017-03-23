@@ -37,6 +37,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             public MonitorTextBox TextBox_Value;
             public MonitorBitButton Button_Value;
             public MonitorLockButton Button_Lock;
+            public MonitorExpandButton Button_Expand;
             public MonitorCloseButton Button_Close;
             
             public RowElement(MonitorTable _parent, int _id, SimulateVariableUnit svunit = null)
@@ -60,26 +61,63 @@ namespace SamSoarII.Simulation.UI.Monitor
                 TextBox_Var.SVUnit = svunit;
                 TextBox_Value.SVUnit = svunit;
                 Button_Value.SVUnit = svunit;
-                if (svunit is SimulateBitUnit)
+                if (svunit is SimulateUnitSeries)
                 {
-                    if (parent.MainGrid.Children.Contains(TextBox_Value))
+                    if (parent.MainGrid.Children.Contains(Button_Lock))
                     {
-                        parent.MainGrid.Children.Remove(TextBox_Value);
+                        parent.MainGrid.Children.Remove(Button_Lock);
                     }
-                    if (!parent.MainGrid.Children.Contains(Button_Value))
+                    if (Button_Expand != null)
                     {
-                        parent.MainGrid.Children.Add(Button_Value);
+                        if (parent.MainGrid.Children.Contains(Button_Expand))
+                        {
+                            parent.MainGrid.Children.Remove(Button_Expand);
+                        }
                     }
+                    SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
+                    Button_Expand = new MonitorExpandButton(ssunit);
+                    Button_Expand.IsExpanded = ssunit.IsExpand;
+                    Button_Expand.MouseUp += OnExpandButtonClicked;
+                    Grid.SetRow(Button_Expand, id);
+                    Grid.SetColumn(Button_Expand, 4);
+                    parent.MainGrid.Children.Add(Button_Expand);
                 }
                 else
                 {
-                    if (parent.MainGrid.Children.Contains(Button_Value))
+                    if (Button_Expand != null)
                     {
-                        parent.MainGrid.Children.Remove(Button_Value);
+                        if (parent.MainGrid.Children.Contains(Button_Expand))
+                        {
+                            parent.MainGrid.Children.Remove(Button_Expand);
+                        }
+                        Button_Expand = null;
                     }
-                    if (!parent.MainGrid.Children.Contains(TextBox_Value))
+                    if (!parent.MainGrid.Children.Contains(Button_Lock))
                     {
-                        parent.MainGrid.Children.Add(TextBox_Value);
+                        parent.MainGrid.Children.Add(Button_Lock);
+                    }
+                    Button_Lock.IsLocked = svunit.Islocked;
+                    if (svunit is SimulateBitUnit)
+                    {
+                        if (parent.MainGrid.Children.Contains(TextBox_Value))
+                        {
+                            parent.MainGrid.Children.Remove(TextBox_Value);
+                        }
+                        if (!parent.MainGrid.Children.Contains(Button_Value))
+                        {
+                            parent.MainGrid.Children.Add(Button_Value);
+                        }
+                    }
+                    else
+                    {
+                        if (parent.MainGrid.Children.Contains(Button_Value))
+                        {
+                            parent.MainGrid.Children.Remove(Button_Value);
+                        }
+                        if (!parent.MainGrid.Children.Contains(TextBox_Value))
+                        {
+                            parent.MainGrid.Children.Add(TextBox_Value);
+                        }
                     }
                 }
                 settingup = false;
@@ -126,6 +164,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 VariableUnitClosed += parent.OnVariableUnitClosed;
                 VariableUnitLocked += parent.OnVariableUnitLocked;
                 VariableUnitUnlocked += parent.OnVariableUnitUnlocked;
+                VariableUnitExpanded += parent.OnVariableUnitExpanded;
 
                 Grid.SetRow(TextBox_Name, id);
                 Grid.SetRow(ComboBox_Type, id);
@@ -176,6 +215,25 @@ namespace SamSoarII.Simulation.UI.Monitor
                 {
                     return;
                 }
+                VariableUnitChangeEventArgs _e = new VariableUnitChangeEventArgs();
+                if (svunit is SimulateUnitSeries)
+                {
+                    SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
+                    if (sender == ComboBox_Type)
+                    {
+                        _e.Old = svunit;
+                        _e.New = ssunit.ChangeDataType(ComboBox_Type.Text);
+
+                        Setup(_e.New);
+
+                        if (VariableUnitChanged != null)
+                        {
+                            VariableUnitChanged(this, _e);
+                        }
+
+                        return;
+                    }
+                }
                 if (sender == Button_Value && Button_Lock.IsLocked)
                 {
                     switch (Button_Value.Status)
@@ -208,7 +266,6 @@ namespace SamSoarII.Simulation.UI.Monitor
                     }
                     return;
                 }
-                VariableUnitChangeEventArgs _e = new VariableUnitChangeEventArgs();
                 _e.Old = svunit;
                 SimulateVariableUnit _svunit = null;
                 if (sender == TextBox_Name)
@@ -269,6 +326,16 @@ namespace SamSoarII.Simulation.UI.Monitor
                 }
             }
 
+            public event RoutedEventHandler VariableUnitExpanded;
+
+            private void OnExpandButtonClicked(object sender, RoutedEventArgs e)
+            {
+                if (VariableUnitExpanded != null)
+                {
+                    VariableUnitExpanded(this, e);
+                }
+            }
+
             public event VariableUnitChangeEventHandler VariableUnitLocked;
             public event VariableUnitChangeEventHandler VariableUnitUnlocked;
 
@@ -323,19 +390,39 @@ namespace SamSoarII.Simulation.UI.Monitor
                 this.svunits = value;
                 Update();
             }
+            get
+            {
+                List<SimulateVariableUnit> ret = new List<SimulateVariableUnit>();
+                foreach (SimulateVariableUnit svunit in svunits)
+                {
+                    ret.Add(svunit);
+                    if (svunit is SimulateUnitSeries)
+                    {
+                        SimulateUnitSeries sus = svunit as SimulateUnitSeries;
+                        foreach (SimulateVariableUnit ssvunit in (SimulateVariableUnit[])(sus.Value))
+                        {
+                            ret.Add(ssvunit);
+                        }
+                    }
+                }
+                return ret;
+            }
         }
         
         public void UpdateValue()
         {
-            foreach (RowElement ele in reles)
+            lock (reles)
             {
-                ele.Update();
+                foreach (RowElement ele in reles)
+                {
+                    ele.Update();
+                }
             }
         }
 
         public void Update()
         {
-            IEnumerator<SimulateVariableUnit> iter1 = svunits.GetEnumerator();
+            IEnumerator<SimulateVariableUnit> iter1 = SVUnits.GetEnumerator();
             IEnumerator<RowElement> iter2 = reles.GetEnumerator();
             SimulateVariableUnit svunit = null;
             RowElement rele = null;
@@ -360,13 +447,20 @@ namespace SamSoarII.Simulation.UI.Monitor
                 reles.Add(rele);
                 if (!iter1.MoveNext()) eoi |= 1;
             }
+            List<RowElement> relesDel = new List<RowElement>();
             while ((eoi & 2) == 0)
             {
                 //svmodel = null;
                 rele = iter2.Current;
+                relesDel.Add(rele);
                 if (!iter2.MoveNext()) eoi |= 2;
-                rele.Uninstall();
-                reles.Remove(rele);
+                //rele.Uninstall();
+                //reles.Remove(rele);
+            }
+            foreach (RowElement releDel in relesDel)
+            {
+                releDel.Uninstall();
+                reles.Remove(releDel);
             }
         }
 
@@ -407,6 +501,16 @@ namespace SamSoarII.Simulation.UI.Monitor
             if (VariableUnitUnlocked != null)
             {
                 VariableUnitUnlocked(sender, e);
+            }
+        }
+
+        public event RoutedEventHandler VariableUnitExpanded;
+        private void OnVariableUnitExpanded(object sender, RoutedEventArgs e)
+        {
+            Update();
+            if (VariableUnitExpanded != null)
+            {
+                VariableUnitExpanded(sender, e);
             }
         }
         
