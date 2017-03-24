@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="SamSoarII.Simulation.UI.Chart.SimulateDataViewModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Chart"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="200">
+    <UserControl.Content>
+        <Canvas x:Name="MainCanva" Background="Transparent">
+            <Border x:Name="Cursor" Canvas.Top="0" Canvas.Left="0" Width="{Binding ElementName=MainCanva, Path=ActualWidth}" Height="{Binding ElementName=MainCanva, Path=ActualHeight}" BorderBrush="AntiqueWhite" BorderThickness="1"/>
+            <TextBlock x:Name="NameTextBlock" Canvas.Top="4" Canvas.Left="4" FontSize="20" Foreground="AliceBlue"></TextBlock>
+            <TextBox x:Name="NameTextInput" Canvas.Top="4" Canvas.Left="4" Width="160" FontSize="16"></TextBox>
+            <Canvas Canvas.Top="4" Canvas.Left="162" Width="30" Height="30" MouseUp="OnCloseButtonClicked">
+                <Line X1="10" X2="30" Y1="5" Y2="25" Stroke="AliceBlue" StrokeThickness="2"/>
+                <Line X1="30" X2="10" Y1="5" Y2="25" Stroke="AliceBlue" StrokeThickness="2"/>
+            </Canvas>
+        </Canvas>
+    </UserControl.Content>
+</UserControl>

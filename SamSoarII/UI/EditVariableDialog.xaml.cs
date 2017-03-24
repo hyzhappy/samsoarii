@@ -68,28 +68,35 @@ namespace SamSoarII.AppMain.UI
 
         public void Commit()
         {
-            if(_editMode == EditingMode.Modify)
+            if (VariableName == string.Empty)
             {
-                if(VariableName != _variable.VarName)
+                throw new ValueParseException(string.Format("VariableName can not be empty!"));
+            }
+            else
+            {
+                if (_editMode == EditingMode.Modify)
+                {
+                    if (VariableName != _variable.VarName)
+                    {
+                        if (VariableManager.ContainVariable(VariableName))
+                        {
+                            throw new ValueParseException(string.Format("Variable {0} is exist", VariableName));
+                        }
+                    }
+                    var variable = ValueParser.CreateVariableValue(VariableName, VariableValueString, VariableValueType, VariableComment);
+                    VariableManager.ReplactVarialbe(_variable, variable);
+                    InstructionCommentManager.UpdateCommentContent(variable.ValueString);
+                }
+                else
                 {
                     if (VariableManager.ContainVariable(VariableName))
                     {
                         throw new ValueParseException(string.Format("Variable {0} is exist", VariableName));
                     }
+                    var variable = ValueParser.CreateVariableValue(VariableName, VariableValueString, VariableValueType, VariableComment);
+                    VariableManager.AddVariable(variable);
+                    InstructionCommentManager.UpdateCommentContent(variable.ValueString);
                 }
-                var variable = ValueParser.CreateVariableValue(VariableName, VariableValueString, VariableValueType, VariableComment);
-                VariableManager.ReplactVarialbe(_variable, variable);
-                InstructionCommentManager.UpdateCommentContent(variable.ValueString);
-            }
-            else
-            {
-                if (VariableManager.ContainVariable(VariableName))
-                {
-                    throw new ValueParseException(string.Format("Variable {0} is exist", VariableName));
-                }
-                var variable = ValueParser.CreateVariableValue(VariableName, VariableValueString, VariableValueType, VariableComment);
-                VariableManager.AddVariable(variable);
-                InstructionCommentManager.UpdateCommentContent(variable.ValueString);
             }
         }
 

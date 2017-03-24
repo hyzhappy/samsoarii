@@ -26,5 +26,7 @@ namespace SamSoarII.PLCDevice
         public abstract IntRange AORange { get; }
         public abstract IntRange VRange { get; }
         public abstract IntRange ZRange { get; }
+        public abstract IntRange CV16Range { get; }
+        public abstract IntRange CV32Range { get; }
     }
 }

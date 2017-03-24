@@ -43,6 +43,13 @@
     <Compile Include="BroadDevice.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="FGs16MRDevice.cs" />
+    <Compile Include="FGs16MTDevice.cs" />
+    <Compile Include="FGs32MRDevice.cs" />
+    <Compile Include="FGs32MTDevice.cs" />
+    <Compile Include="FGs64MRDevice.cs" />
+    <Compile Include="FGs64MTDevice.cs" />
+    <Compile Include="PLCDeviceManager.cs" />
+    <Compile Include="PLCDeviceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

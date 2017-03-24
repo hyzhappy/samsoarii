@@ -21,6 +21,7 @@ using System.Windows.Shapes;
 using System.Xml.Linq;
 using System.ComponentModel;
 using SamSoarII.LadderInstModel;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -59,7 +60,21 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
             }
         }
-
+        private class InstructionExecption : Exception
+        {
+            private string _message;
+            public override string Message
+            {
+                get
+                {
+                    return _message;
+                }
+            }
+            public InstructionExecption(string message)
+            {
+                _message = message;
+            }
+        }
         private bool _isCommentMode;
         public bool IsCommendMode
         {
@@ -825,14 +840,61 @@ namespace SamSoarII.AppMain.Project
                 try
                 {
                     List<string> InstructionInput = dialog.InstructionInput.ToUpper().Trim().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                    if (InstructionInput.Count == 0)
+                    {
+                        throw new InstructionExecption(string.Format("the input is empty"));
+                    }
+                    else
+                    {
+                        if (!LadderInstViewModelPrototype.CheckInstructionName(InstructionInput[0]))
+                        {
+                            throw new InstructionExecption(string.Format("the instructionName is not exist!"));
+                        }
+                    }
                     viewmodel = LadderInstViewModelPrototype.Clone(InstructionInput[0]);
                     InstructionInput.RemoveAt(0);
-
+                    List<string> valueStrings = new List<string>();
+                    foreach (var valueString in InstructionInput)
+                    {
+                        valueStrings.Add(valueString);
+                        valueStrings.Add(string.Empty);
+                    }
+                    if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
+                    {
+                        viewmodel.AcceptNewValues(valueStrings,PLCDeviceManager.SelectDevice);
+                    }
+                    if (viewmodel.Type == LadderInstModel.ElementType.Output)
+                    {
+                        int x = _selectRect.X;
+                        int y = _selectRect.Y;
+                        var oldelements = _selectRectOwner.GetElements().Where(ele => ele.Y == y && ele.X >= x);
+                        var elements = new List<BaseViewModel>();
+                        for (int i = x; i < GlobalSetting.LadderXCapacity - 1; i++)
+                        {
+                            elements.Add(new HorizontalLineViewModel() { X = i, Y = y });
+                        }
+                        viewmodel.X = GlobalSetting.LadderXCapacity - 1;
+                        viewmodel.Y = _selectRect.Y;
+                        elements.Add(viewmodel);
+                        _selectRect.X = GlobalSetting.LadderXCapacity - 1;
+                        var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
+                        _commandManager.Execute(command);
+                    }
+                    else
+                    {
+                        viewmodel.X = _selectRect.X;
+                        viewmodel.Y = _selectRect.Y;
+                        ReplaceSingleElement(_selectRectOwner, viewmodel);
+                        if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
+                        {
+                            _selectRect.X++;
+                        }
+                    }
                 }
-                catch(Exception exception)
+                catch (Exception exception)
                 {
-                    
-                }         
+                    MessageBox.Show(string.Format(exception.Message));
+                }
                 dialog.Close();
             };
             dialog.ShowDialog();

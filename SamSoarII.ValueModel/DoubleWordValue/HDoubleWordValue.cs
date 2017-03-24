@@ -15,7 +15,7 @@ namespace SamSoarII.ValueModel
         {
             get
             {
-                return string.Format("H{0}", Value);
+                return string.Format("H{0}", Convert.ToString(Value, 16).ToUpper());
             }
         }
 
@@ -37,7 +37,7 @@ namespace SamSoarII.ValueModel
 
         public override string GetValue()
         {
-            return string.Format("0x{0}", Convert.ToString(Value, 16));
+            return string.Format("0x{0}", Convert.ToString(Value, 16).ToUpper());
         }
     }
 }

@@ -118,7 +118,10 @@ namespace SamSoarII.AppMain.UI
                 case ValueModel.ValueChangedType.Add:
                     if (!ValueParser.IsVariablePattern(e.ValueString))
                     {
-                        _commentCollection.Add(new ValueComment(e.ValueString, e.Comment));
+                        if (!_commentCollection.Exists(x => { return x.ValueString == e.ValueString; }))
+                        {
+                            _commentCollection.Add(new ValueComment(e.ValueString, e.Comment));
+                        }
                     }
                     break;
                 case ValueModel.ValueChangedType.Clear:
@@ -158,7 +161,6 @@ namespace SamSoarII.AppMain.UI
 
         private void OnFilterTypeChanged(object sender, SelectionChangedEventArgs e)
         {
-            
             ComboBox combo = sender as ComboBox;
             _comboSearchHead = combo.SelectedItem as string;
             UpdateComments();
@@ -176,7 +178,7 @@ namespace SamSoarII.AppMain.UI
                 var textBox = e.EditingElement as TextBox;
                 if (comment != null && textBox != null)
                 {
-                    ValueCommentManager.UpdateComment(comment.ValueString, textBox.Text);
+                    ValueCommentManager.UpdateComment(comment.ValueString, textBox.Text,false,true);
                     InstructionCommentManager.UpdateCommentContent(comment.ValueString);
                 }
             }

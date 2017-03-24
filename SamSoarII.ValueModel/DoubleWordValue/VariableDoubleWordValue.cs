@@ -53,7 +53,14 @@ namespace SamSoarII.ValueModel
         {
             get
             {
-                return string.Format("{{{0}}}", VarName);
+                if (IsAnonymous)
+                {
+                    return string.Format("{{{0}}}", VarName);
+                }
+                else
+                {
+                    return MappedValue.ValueString;
+                }
             }
         }
 
@@ -64,7 +71,7 @@ namespace SamSoarII.ValueModel
 
         public override string GetValue()
         {
-            if (IsAnonymous)
+            if (!IsAnonymous)
             {
                 return MappedValue.GetValue();
             }

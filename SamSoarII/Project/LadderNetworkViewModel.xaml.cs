@@ -1963,7 +1963,7 @@ namespace SamSoarII.AppMain.Project
             {
                 try
                 {
-                    sender.AcceptNewValues(dialog.PropertyStrings, SamSoarII.PLCDevice.Device.DefaultDevice);
+                    sender.AcceptNewValues(dialog.PropertyStrings, SamSoarII.PLCDevice.PLCDeviceManager.SelectDevice);
                     dialog.Close();
                 }
                 catch (Exception ex)

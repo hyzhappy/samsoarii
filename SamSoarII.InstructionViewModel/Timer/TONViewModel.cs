@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
+using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
 
 namespace SamSoarII.LadderInstViewModel
@@ -47,6 +48,10 @@ namespace SamSoarII.LadderInstViewModel
         public override IPropertyDialog PreparePropertyDialog()
         {
             throw new NotImplementedException();
+        }
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            base.AcceptNewValues(valueStrings, contextDevice);
         }
     }
 }

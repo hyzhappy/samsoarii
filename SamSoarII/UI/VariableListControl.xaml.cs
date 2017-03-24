@@ -89,6 +89,10 @@ namespace SamSoarII.AppMain.UI
             foreach (IVariableValue row in VariableGrid.SelectedItems)
             {
                 VariableManager.RemoveVariable(row);
+                if (ValueCommentManager.CheckValueString(row.ValueString))
+                {
+                    ValueCommentManager.DeleteValueString(row.ValueString);
+                }
             }
             UpdateVariableCollection();
         }

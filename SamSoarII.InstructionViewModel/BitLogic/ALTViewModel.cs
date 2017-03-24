@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class ALTViewModel : OutputRectBaseViewModel
@@ -36,11 +40,13 @@ namespace SamSoarII.LadderInstViewModel
                 Value = _model.Value;
             }
         }
+        private TextBlock _commentTextBlock = new TextBlock();
         public override string InstructionName { get { return "ALT"; } }
         public ALTViewModel()
         {
             TopTextBlock.Text = "ALT";
             Model = new ALTModel();
+            CommentArea.Children.Add(_commentTextBlock);
         }
 
         public override BaseViewModel Clone()
@@ -80,6 +86,31 @@ namespace SamSoarII.LadderInstViewModel
             dialog.Title = InstructionName;
             dialog.ShowLine4("Bit", Value);
             return dialog;
+        }
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            var oldvaluestring = Value.ValueString;
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyBitRegex3 }))
+            {
+                Value = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring, Value.ValueString);
+                ValueCommentManager.UpdateComment(Value, valueStrings[1]);
+            }
+            else
+            {
+                throw new ValueParseException("Unexpected input");
+            }
+        }
+        public override void UpdateCommentContent()
+        {
+            if (Value != BitValue.Null)
+            {
+                _commentTextBlock.Text = string.Format("{0}:{1}", Value.ValueString, Value.Comment);
+            }
+            else
+            {
+                _commentTextBlock.Text = string.Empty;
+            }
         }
     }
 }

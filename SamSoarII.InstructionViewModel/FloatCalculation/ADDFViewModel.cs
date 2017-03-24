@@ -8,6 +8,9 @@ using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
 
 using System.Windows;
+using System.Text.RegularExpressions;
+using SamSoarII.PLCDevice;
+using System.Windows.Controls;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -64,12 +67,16 @@ namespace SamSoarII.LadderInstViewModel
                 OutputValue = _model.OutputValue;
             }
         }
+        private TextBlock[] _commentTextBlocks = new TextBlock[] { new TextBlock(), new TextBlock(),new TextBlock() };
         public override string InstructionName { get { return "ADDF"; } }
 
         public ADDFViewModel()
         {
             TopTextBlock.Text = InstructionName;
             _model = new ADDFModel();
+            CommentArea.Children.Add(_commentTextBlocks[0]);
+            CommentArea.Children.Add(_commentTextBlocks[1]);
+            CommentArea.Children.Add(_commentTextBlocks[2]);
         }
 
 
@@ -125,10 +132,59 @@ namespace SamSoarII.LadderInstViewModel
         {
             var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
-            dialog.ShowLine2("In1");
-            dialog.ShowLine4("In2");
-            dialog.ShowLine6("Out");
+            dialog.ShowLine2("In1",InputValue1);
+            dialog.ShowLine4("In2",InputValue2);
+            dialog.ShowLine6("Out",OutputValue);
             return dialog;
+        }
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            var oldvaluestring1 = InputValue1.ValueString;
+            var oldvaluestring2 = InputValue2.ValueString;
+            var oldvaluestring3 = OutputValue.ValueString;
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyFloatRegex, ValueParser.VerifyFloatKValueRegex }) && ValueParser.CheckValueString(valueStrings[2], new Regex[] { ValueParser.VerifyFloatRegex, ValueParser.VerifyFloatKValueRegex }) && ValueParser.CheckValueString(valueStrings[4], new Regex[] { ValueParser.VerifyFloatRegex }))
+            {
+                InputValue1 = ValueParser.ParseFloatValue(valueStrings[0], contextDevice);
+                InputValue2 = ValueParser.ParseFloatValue(valueStrings[2], contextDevice);
+                OutputValue = ValueParser.ParseFloatValue(valueStrings[4], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring1, InputValue1.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring2, InputValue2.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring3, OutputValue.ValueString);
+                ValueCommentManager.UpdateComment(InputValue1, valueStrings[1]);
+                ValueCommentManager.UpdateComment(InputValue2, valueStrings[3]);
+                ValueCommentManager.UpdateComment(OutputValue, valueStrings[5]);
+            }
+            else
+            {
+                throw new ValueParseException("Unexpected input");
+            }
+        }
+        public override void UpdateCommentContent()
+        {
+            if (InputValue1 != FloatValue.Null)
+            {
+                _commentTextBlocks[0].Text = string.Format("{0}:{1}", InputValue1.ValueString, InputValue1.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[0].Text = string.Empty;
+            }
+            if (InputValue2 != FloatValue.Null)
+            {
+                _commentTextBlocks[1].Text = string.Format("{0}:{1}", InputValue2.ValueString, InputValue2.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[1].Text = string.Empty;
+            }
+            if (OutputValue != FloatValue.Null)
+            {
+                _commentTextBlocks[2].Text = string.Format("{0}:{1}", OutputValue.ValueString, OutputValue.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[2].Text = string.Empty;
+            }
         }
     }
 }

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
-
+using SamSoarII.PLCDevice;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -66,11 +68,15 @@ namespace SamSoarII.LadderInstViewModel
                 Count = _model.Count;
             }
         }
+        private TextBlock[] _commentTextBlocks = new TextBlock[] { new TextBlock(), new TextBlock(), new TextBlock() };
         public override string InstructionName { get { return "SHLD"; } }
         public SHLDViewModel()
         {
             TopTextBlock.Text = InstructionName;
             Model = new SHLDModel();
+            CommentArea.Children.Add(_commentTextBlocks[0]);
+            CommentArea.Children.Add(_commentTextBlocks[1]);
+            CommentArea.Children.Add(_commentTextBlocks[2]);
         }
 
         public override BaseViewModel Clone()
@@ -126,10 +132,59 @@ namespace SamSoarII.LadderInstViewModel
         {
             var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
-            dialog.ShowLine2("In1");
-            dialog.ShowLine4("In2");
-            dialog.ShowLine6("Out");
+            dialog.ShowLine2("S", SourceValue);
+            dialog.ShowLine4("D", DestinationValue);
+            dialog.ShowLine6("N", Count);
             return dialog;
+        }
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            var oldvaluestring1 = SourceValue.ValueString;
+            var oldvaluestring2 = DestinationValue.ValueString;
+            var oldvaluestring3 = Count.ValueString;
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyDoubleWordRegex2, ValueParser.VerifyIntKHValueRegex }) && ValueParser.CheckValueString(valueStrings[2], new Regex[] { ValueParser.VerifyDoubleWordRegex2 }) && ValueParser.CheckValueString(valueStrings[4], new Regex[] { ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex }))
+            {
+                SourceValue = ValueParser.ParseDoubleWordValue(valueStrings[0], contextDevice);
+                DestinationValue = ValueParser.ParseDoubleWordValue(valueStrings[2], contextDevice);
+                Count = ValueParser.ParseWordValue(valueStrings[4], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring1, SourceValue.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring2, DestinationValue.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring3, Count.ValueString);
+                ValueCommentManager.UpdateComment(SourceValue, valueStrings[1]);
+                ValueCommentManager.UpdateComment(DestinationValue, valueStrings[3]);
+                ValueCommentManager.UpdateComment(Count, valueStrings[5]);
+            }
+            else
+            {
+                throw new ValueParseException("Unexpected input");
+            }
+        }
+        public override void UpdateCommentContent()
+        {
+            if (SourceValue != DoubleWordValue.Null)
+            {
+                _commentTextBlocks[0].Text = string.Format("{0}:{1}", SourceValue.ValueString, SourceValue.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[0].Text = string.Empty;
+            }
+            if (DestinationValue != DoubleWordValue.Null)
+            {
+                _commentTextBlocks[1].Text = string.Format("{0}:{1}", DestinationValue.ValueString, DestinationValue.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[1].Text = string.Empty;
+            }
+            if (Count != WordValue.Null)
+            {
+                _commentTextBlocks[2].Text = string.Format("{0}:{1}", Count.ValueString, Count.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[2].Text = string.Empty;
+            }
         }
     }
 }

@@ -253,7 +253,7 @@ namespace SamSoarII.AppMain.Project
                 {
                     string valueString = xele.Attribute("Value").Value;
                     string comment = xele.Value;
-                    ValueCommentManager.UpdateComment(valueString, comment);
+                    ValueCommentManager.UpdateComment(valueString, comment,false,true);
                 }
             }
         }

@@ -43,6 +43,39 @@ namespace SamSoarII.ValueModel
         private static Regex FloatKValueRegex = new Regex(@"^K([-+]?([0-9]*[.])?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static Regex VariableRegex = new Regex(@"^{([0-9a-zA-Z]+)}$", RegexOptions.Compiled);
+        #region VerifyRegex and Verify
+        public static bool CheckValueString(string valueString,Regex[] regexs)
+        {
+            foreach (var regex in regexs)
+            {
+                if (regex.IsMatch(valueString))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static Regex VerifyBitRegex1 = new Regex(@"^(X|Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyBitRegex2 = new Regex(@"^(Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyBitRegex3 = new Regex(@"^(Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyBitRegex4 = new Regex(@"^Y([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        public static Regex VerifyWordRegex1 = new Regex(@"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyWordRegex2 = new Regex(@"^(D|CV|TV|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyWordRegex3 = new Regex(@"^D([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyWordRegex4 = new Regex(@"^TV([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        public static Regex VerifyDoubleWordRegex1 = new Regex(@"^(D|CV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyDoubleWordRegex2 = new Regex(@"^D([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyDoubleWordRegex3 = new Regex(@"^CV([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        public static Regex VerifyFloatRegex = new Regex(@"^D([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        public static Regex VerifyIntKValueRegex = new Regex(@"^K([-+]?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyIntHValueRegex = new Regex(@"^H([0-9A-F]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyIntKHValueRegex = new Regex(@"^(H([0-9A-F]+)|K([-+]?[0-9]+))$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyFloatKValueRegex = new Regex(@"^K([-+]?([0-9]*[.])?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        #endregion
         public static bool IsVariablePattern(string valueString)
         {
             return VariableRegex.IsMatch(valueString);
@@ -275,7 +308,7 @@ namespace SamSoarII.ValueModel
                 }
                 if (match1.Groups[1].Value.ToUpper() == "CV")
                 {
-                    if (contextDevice.CVRange.AssertValue(index))
+                    if (contextDevice.CV16Range.AssertValue(index))
                     {
                         return new CVWordValue(index, offset);
                     }
@@ -445,7 +478,7 @@ namespace SamSoarII.ValueModel
                 }
                 if(match1.Groups[1].Value.ToUpper() == "CV")
                 {
-                    if (contextDevice.CVRange.AssertValue(index))
+                    if (contextDevice.CV32Range.AssertValue(index))
                     {
                         return new CV32DoubleWordValue(index, offset);
                     }
@@ -467,7 +500,7 @@ namespace SamSoarII.ValueModel
                     var match3 = IntHValueRegex.Match(valueString);
                     if (match3.Success)
                     {
-                        return new HDoubleWordValue(int.Parse(match2.Groups[1].Value, System.Globalization.NumberStyles.HexNumber));
+                        return new HDoubleWordValue(int.Parse(match3.Groups[1].Value, System.Globalization.NumberStyles.HexNumber));
                     }
                     else
                     {
@@ -585,11 +618,11 @@ namespace SamSoarII.ValueModel
                 case LadderValueType.Bool:
                     return CreateVariableBitValue(name, mappedValuestring, comment);
                 case LadderValueType.DoubleWord:
-                    return CreateVariableBitValue(name, mappedValuestring, comment);
+                    return CreateVariableDoubleWordValue(name, mappedValuestring, comment);
                 case LadderValueType.Float:
-                    return CreateVariableBitValue(name, mappedValuestring, comment);
+                    return CreateVariableFloatValue(name, mappedValuestring, comment);
                 case LadderValueType.Word:
-                    return CreateVariableBitValue(name, mappedValuestring, comment);
+                    return CreateVariableWordValue(name, mappedValuestring, comment);
             }      
             throw new ValueParseException("Unexpected input");
         }

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
 using SamSoarII.UserInterface;
-
+using SamSoarII.PLCDevice;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -51,22 +53,42 @@ namespace SamSoarII.LadderInstViewModel
                 DestinationValue = _model.DestinationValue;
             }
         }
+        private TextBlock[] _commentTextBlocks = new TextBlock[] { new TextBlock(), new TextBlock()};
         public override string InstructionName { get { return "MOVD"; } }
         public MOVDViewModel()
         {
             TopTextBlock.Text = InstructionName;
             Model = new MOVDModel();
+            CommentArea.Children.Add(_commentTextBlocks[0]);
+            CommentArea.Children.Add(_commentTextBlocks[1]);
         }
 
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
-            dialog.ShowLine3("S");
-            dialog.ShowLine5("D");
+            dialog.ShowLine3("S",SourceValue);
+            dialog.ShowLine5("D",DestinationValue);
             return dialog;
         }
-
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            var oldvaluestring1 = SourceValue.ValueString;
+            var oldvaluestring2 = DestinationValue.ValueString;
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyDoubleWordRegex1, ValueParser.VerifyIntKHValueRegex }) && ValueParser.CheckValueString(valueStrings[2], new Regex[] { ValueParser.VerifyDoubleWordRegex1 }))
+            {
+                SourceValue = ValueParser.ParseDoubleWordValue(valueStrings[0], contextDevice);
+                DestinationValue = ValueParser.ParseDoubleWordValue(valueStrings[2], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring1, SourceValue.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring2, DestinationValue.ValueString);
+                ValueCommentManager.UpdateComment(SourceValue, valueStrings[1]);
+                ValueCommentManager.UpdateComment(DestinationValue, valueStrings[3]);
+            }
+            else
+            {
+                throw new ValueParseException("Unexpected input");
+            }
+        }
         public override BaseViewModel Clone()
         {
             return new MOVDViewModel();
@@ -105,6 +127,25 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(SourceValue.ValueString);
             result.Add(DestinationValue.ValueString);
             return result;
+        }
+        public override void UpdateCommentContent()
+        {
+            if (SourceValue != DoubleWordValue.Null)
+            {
+                _commentTextBlocks[0].Text = string.Format("{0}:{1}", SourceValue.ValueString, SourceValue.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[0].Text = string.Empty;
+            }
+            if (DestinationValue != DoubleWordValue.Null)
+            {
+                _commentTextBlocks[1].Text = string.Format("{0}:{1}", DestinationValue.ValueString, DestinationValue.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[1].Text = string.Empty;
+            }
         }
     }
 }

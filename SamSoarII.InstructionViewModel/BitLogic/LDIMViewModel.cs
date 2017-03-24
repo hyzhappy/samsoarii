@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows;
 using SamSoarII.UserInterface;
 using System.Windows.Controls;
+using SamSoarII.PLCDevice;
+using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -94,6 +96,31 @@ namespace SamSoarII.LadderInstViewModel
             List<string> result = new List<string>();
             result.Add(Value.ValueString);
             return result;
+        }
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            var oldvaluestring = Value.ValueString;
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyBitRegex1 }))
+            {
+                Value = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring, Value.ValueString);
+                ValueCommentManager.UpdateComment(Value, valueStrings[1]);
+            }
+            else
+            {
+                throw new ValueParseException("Unexpected input");
+            }
+        }
+        public override void UpdateCommentContent()
+        {
+            if (Value != BitValue.Null)
+            {
+                _commentTextBlock.Text = string.Format("{0}:{1}", Value.ValueString, Value.Comment);
+            }
+            else
+            {
+                _commentTextBlock.Text = string.Empty;
+            }
         }
     }
 }

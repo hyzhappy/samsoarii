@@ -69,7 +69,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 1024);
+                return new IntRange(0, 1000);
             }
         }
 
@@ -118,6 +118,20 @@ namespace SamSoarII.PLCDevice
             get
             {
                 return new IntRange(0, 8);
+            }
+        }
+        public override IntRange CV16Range
+        {
+            get
+            {
+                return new IntRange(0, 200);
+            }
+        }
+        public override IntRange CV32Range
+        {
+            get
+            {
+                return new IntRange(200, 256);
             }
         }
     }

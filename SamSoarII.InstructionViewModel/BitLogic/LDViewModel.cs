@@ -8,6 +8,7 @@ using System.Windows;
 using SamSoarII.UserInterface;
 using System.Windows.Controls;
 using SamSoarII.PLCDevice;
+using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -85,9 +86,16 @@ namespace SamSoarII.LadderInstViewModel
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring = Value.ValueString;
-            Value = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
-            InstructionCommentManager.ModifyValue(this, oldvaluestring, Value.ValueString);
-            ValueCommentManager.UpdateComment(Value, valueStrings[1]);
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyBitRegex1 }))
+            {
+                Value = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring, Value.ValueString);
+                ValueCommentManager.UpdateComment(Value, valueStrings[1]);
+            }
+            else
+            {
+                throw new ValueParseException("Unexpected input");
+            }
         }
 
         public override IEnumerable<string> GetValueString()

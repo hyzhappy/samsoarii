@@ -124,5 +124,19 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(uint.MinValue, uint.MaxValue);
             }
         }
+        public override IntRange CV16Range
+        {
+            get
+            {
+                return new IntRange(uint.MinValue, uint.MaxValue);
+            }
+        }
+        public override IntRange CV32Range
+        {
+            get
+            {
+                return new IntRange(uint.MinValue, uint.MaxValue);
+            }
+        }
     }
 }

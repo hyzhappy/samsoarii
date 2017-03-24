@@ -8,6 +8,9 @@ using SamSoarII.ValueModel;
 using System.Windows.Controls;
 using System.Windows;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
+using System.Text.RegularExpressions;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class SETIMViewModel : OutputBaseViewModel
@@ -54,6 +57,7 @@ namespace SamSoarII.LadderInstViewModel
                 Count = _model.Count;
             }
         }
+        private TextBlock[] _commentTextBlocks = new TextBlock[] { new TextBlock(), new TextBlock() };
         public override string InstructionName { get { return "SETIM"; } }
         public SETIMViewModel()
         {
@@ -61,6 +65,8 @@ namespace SamSoarII.LadderInstViewModel
             //ValueTextBlock.Text = _model.Value.ValueString;
             //CountTextBlock.Text = _model.Count.ValueString;
             CenterTextBlock.Text = "SI";
+            CommentArea.Children.Add(_commentTextBlocks[0]);
+            CommentArea.Children.Add(_commentTextBlocks[1]);
         }
 
         public override IPropertyDialog PreparePropertyDialog()
@@ -110,6 +116,43 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(Value.ValueString);
             result.Add(Count.ValueString);
             return result;
+        }
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            var oldvaluestring1 = Value.ValueString;
+            var oldvaluestring2 = Count.ValueString;
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyBitRegex2 }) && ValueParser.CheckValueString(valueStrings[2], new Regex[] { ValueParser.VerifyIntKHValueRegex }))
+            {
+                Value = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
+                Count = ValueParser.ParseWordValue(valueStrings[2], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring1, Value.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring2, Count.ValueString);
+                ValueCommentManager.UpdateComment(Value, valueStrings[1]);
+                ValueCommentManager.UpdateComment(Count, valueStrings[3]);
+            }
+            else
+            {
+                throw new ValueParseException("Unexpected input");
+            }
+        }
+        public override void UpdateCommentContent()
+        {
+            if (Value != BitValue.Null)
+            {
+                _commentTextBlocks[0].Text = string.Format("{0}:{1}", Value.ValueString, Value.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[0].Text = string.Empty;
+            }
+            if (Count != WordValue.Null)
+            {
+                _commentTextBlocks[1].Text = string.Format("{0}:{1}", Count.ValueString, Count.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[1].Text = string.Empty;
+            }
         }
     }
 }

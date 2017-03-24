@@ -140,7 +140,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             return _elementCatalog.Values.Where(x => { return x.Type == ElementType.Input || x.Type == ElementType.Output || x.Type == ElementType.Special; });
         }
-
+        public static bool CheckInstructionName(string InstructionName)
+        {
+            return _elementName.Keys.Contains(InstructionName);
+        }
         public static BaseViewModel Clone(int id)
         {
             return _elementCatalog[id].Clone();

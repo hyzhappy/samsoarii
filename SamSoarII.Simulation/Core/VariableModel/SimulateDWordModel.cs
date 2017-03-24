@@ -16,10 +16,10 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
         public override string ToString()
         {
-            string _name = String.Format("{0:s}({1:s}{2:d}) = {3}", Name, basename, offset + 1);
+            string _name = String.Format("{0:s}({1:s}{2:d}) = {3}", Name, basename, offset + 1,value);
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return String.Format("{0:s} = {3:d}", _name, value);
+            return _name;
         }
         public override string Type
         {

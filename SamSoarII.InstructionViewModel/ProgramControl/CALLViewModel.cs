@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -65,7 +66,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             FunctionName = valueStrings[0];
         }
-
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            FunctionName = valueStrings[0];
+        }
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(1);
