@@ -47,8 +47,7 @@ namespace SamSoarII.Simulation.UI
         public void GenerateCHeader(StreamWriter sw)
         {
             sw.Write("#include<stdint.h>\r\n");
-            sw.Write("typedef uint16_t* WORD;\r\n");
-            sw.Write("typedef uint32_t* BIT;\r\n");
+            sw.Write("#include<minwindef.h>\r\n");
             string pattern = @"void \w+(WORD W, BIT B)";
             foreach (Match match in Regex.Matches(Code, pattern))
             {

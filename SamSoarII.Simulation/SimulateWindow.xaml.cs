@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
+using SamSoarII.Simulation.Shell.Event;
 
 namespace SamSoarII.Simulation
 {
@@ -53,6 +54,16 @@ namespace SamSoarII.Simulation
                 {
                     MessageBox.Show("不正确的监视文件，监视文件已损坏!");
                 }
+            }
+        }
+
+        public event ShowTabItemEventHandler OpenChart;
+        private void OnOpenChart(object sender, RoutedEventArgs e)
+        {
+            if (OpenChart != null)
+            {
+                ShowTabItemEventArgs _e = new ShowTabItemEventArgs("图表");
+                OpenChart(sender, _e);
             }
         }
     }

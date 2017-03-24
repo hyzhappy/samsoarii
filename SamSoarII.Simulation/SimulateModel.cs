@@ -14,6 +14,7 @@ using SamSoarII.Simulation.Shell;
 using SamSoarII.Simulation.Shell.ViewModel;
 using SamSoarII.Simulation.Shell.Event;
 using SamSoarII.Simulation.UI;
+using SamSoarII.Simulation.UI.Chart;
 using SamSoarII.Simulation.UI.Monitor;
 using SamSoarII.Simulation.UI.PLCTop;
 
@@ -52,6 +53,8 @@ namespace SamSoarII.Simulation
 
         public List<SimuViewFuncBlockModel> FuncBlocks;
 
+        public SimuViewChartModel Chart;
+
         public SimulateWindow MainWindow;
 
         public PLCTopPhoto plcTopPhoto;
@@ -71,6 +74,7 @@ namespace SamSoarII.Simulation
             SubRoutines = new List<SimuViewDiagramModel>();
             AllFuncs = null;
             FuncBlocks = new List<SimuViewFuncBlockModel>();
+            Chart = new SimuViewChartModel();
             LEDBit = new SimulateBitModel();
             LEDBit.Base = "Y0";
             LEDBit.Size = 8;
@@ -96,7 +100,7 @@ namespace SamSoarII.Simulation
                 plcTopPhoto.LEDLight_Y6.Status = Math.Min(2, ((int)(LEDBit.Values[6].Value)));
                 plcTopPhoto.LEDLight_Y7.Status = Math.Min(2, ((int)(LEDBit.Values[7].Value)));
                 mtable.UpdateValue();
-                Thread.Sleep(200);
+                Thread.Sleep(50);
             }
         }
 
@@ -178,7 +182,7 @@ namespace SamSoarII.Simulation
             }
             UpdateThread.Abort();
         }
-
+        
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
             if (e.TabName.Equals("所有程序"))
@@ -189,6 +193,11 @@ namespace SamSoarII.Simulation
             if (e.TabName.Equals("主程序"))
             {
                 ShowItem(MainRoutine, e.TabName);
+                return;
+            }
+            if (e.TabName.Equals("图表"))
+            {
+                ShowItem(Chart);
                 return;
             }
             foreach (SimuViewDiagramModel svdmodel in SubRoutines)
@@ -264,6 +273,7 @@ namespace SamSoarII.Simulation
         #region User Interface
         private void BuildRouted()
         {
+            MainWindow.OpenChart += OnTabOpened;
             MainWindow.Closed += OnMainWindowClosed;
             
             ProjectTreeView ptview = MainWindow.PTView;
@@ -329,8 +339,12 @@ namespace SamSoarII.Simulation
 
         public void ShowItem(SimuViewFuncBlockModel svdmodel, string name)
         {
-
             MainWindow.MainTab.ShowItem(svdmodel, name);
+        }
+
+        public void ShowItem(SimuViewChartModel svcmodel)
+        {
+            MainWindow.MainTab.ShowItem(svcmodel, "图表");
         }
         #endregion
 
