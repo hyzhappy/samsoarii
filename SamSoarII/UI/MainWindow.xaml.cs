@@ -337,8 +337,8 @@ namespace SamSoarII.AppMain.UI
 
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
         {
-            //ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.pro);
-           // dialog.ShowDialog();
+            ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel);
+            dialog.ShowDialog();
         }
 
         private void OnShowOptionDialogCommandExecute(object sender, RoutedEventArgs e)

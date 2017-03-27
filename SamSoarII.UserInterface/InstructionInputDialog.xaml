@@ -9,38 +9,17 @@
         Title="指令输入" Height="90" Width="600" KeyDown="OnWindowKeyDown" ResizeMode="NoResize" x:Name="window" LocationChanged="OnLocationChanged">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <WindowsFormsHost x:Name="windowsFormsHost" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Width="400" Height="24" Margin="0,10,0,10">
-            <wf:TextBox x:Name="InstructionInputTextBox" Multiline="False" TextChanged="OnTextChanged"></wf:TextBox>
+        <WindowsFormsHost x:Name="windowsFormsHost" Height="24" Width="400">
+            <wf:TextBox x:Name="InstructionInputTextBox" Multiline="False" TextChanged="OnTextChanged" KeyDown="OnKeyDown" MouseClick="OnMouseClick"></wf:TextBox>
         </WindowsFormsHost>
-        <!--<TextBox x:Name="InstructionInputTextBox" MaxLines="1" Width="400" Height="24" FontSize="18" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="0,10,0,10"></TextBox>-->
-        <Button x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Grid.Row="0" Click="OnEnsureButtonClick">确定</Button>
+        <Button x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Click="OnEnsureButtonClick">确定</Button>
         <Popup x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" HorizontalOffset="125" IsOpen="False">
-            <!--<Popup.ToolTip>
-                <ToolTip x:Name="Popup_ToolTip" IsOpen="False" IsEnabled="False" PlacementTarget="{Binding ElementName=TextBoxPopup}" Placement="Top" VerticalOffset="-90" HorizontalOffset="160">
-                    <ToolTip.Template>
-                        <ControlTemplate>
-                            <Border Width="250" Height="50">
-                                <Grid Background="Ivory">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="1" FontSize="12" FontWeight="{Binding ElementName=textblock_1,Path=FontWeight,Mode=TwoWay}"></TextBlock>
-                                    <TextBlock Text="2" Grid.Row="1" FontSize="12" FontWeight="{Binding ElementName=textblock_2,Path=FontWeight,Mode=TwoWay}"></TextBlock>
-                                    <TextBlock Text="3" Grid.Row="2" FontSize="12" FontWeight="{Binding ElementName=textblock_3,Path=FontWeight,Mode=TwoWay}"></TextBlock>
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </ToolTip.Template>
-                </ToolTip>
-            </Popup.ToolTip>-->
             <Border BorderBrush="Beige" BorderThickness="3" Width="350" Height="60">
                 <Grid Background="Ivory">
                     <Grid.Resources>
@@ -70,36 +49,40 @@
                 </Grid>
             </Border>
         </Popup>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="1*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <TextBox x:Name="InstructionInputTextBox" MaxLines="1" Width="400" Height="24" FontSize="18" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="0,10,0,10"></TextBox>
-        <Button x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Grid.Row="0" Click="OnEnsureButtonClick">确定</Button>
-        <Popup x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=InstructionInputTextBox}" Placement="Top" VerticalOffset="-80" HorizontalOffset="40" IsOpen="True" Width="400" Height="60" >
-            <Border BorderBrush="Orange" BorderThickness="3" CornerRadius="5">
-                <Grid Background="Wheat">
+        <Popup x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="40" VerticalOffset="-21" Width="300" IsOpen="True">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
+                <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
+                    <local:CollectionStackPanel.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="Height" Value="20"></Setter>
+                            <Setter Property="FontSize" Value="14"></Setter>
+                            <Setter Property="Padding" Value="0"></Setter>
+                            <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
+                            <EventSetter Event="MouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>
+                        </Style>
+                    </local:CollectionStackPanel.Resources>
+                </local:CollectionStackPanel>
+            </ScrollViewer>
+        </Popup>
+        <Popup MinWidth="130" Height="60" x:Name="ItemPopup" IsOpen="False" StaysOpen="True">
+            <Popup.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Height" Value="20"></Setter>
+                    <Setter Property="FontSize" Value="14"></Setter>
+                </Style>
+            </Popup.Resources>
+            <Border BorderBrush="Black" BorderThickness="0.3" Background="#FFFCFFC1">
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="3*"></RowDefinition>
-                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock FontSize="16" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
-                        
-                    </TextBlock>
-                    <WrapPanel Grid.Row="1" Orientation="Horizontal">
-                        <WrapPanel.Resources>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="FontSize" Value="14"></Setter>
-                                <Setter Property="Margin" Value="20,0,20,0"></Setter>
-                            </Style>
-                        </WrapPanel.Resources>
-                    </WrapPanel>
+                    <TextBlock x:Name="PopupTextblock1"></TextBlock>
+                    <TextBlock x:Name="PopupTextblock2" Grid.Row="1"></TextBlock>
+                    <TextBlock x:Name="PopupTextblock3" Grid.Row="2"></TextBlock>
                 </Grid>
             </Border>
-        </Popup>-->
-        
+        </Popup>
     </Grid>
 </Window>

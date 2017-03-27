@@ -30,5 +30,6 @@
             <ListBoxItem>FGs64MR</ListBoxItem>
             <ListBoxItem>FGs64MT</ListBoxItem>
         </ListBox>
+        <Grid Grid.Column="1" x:Name="ContentGrid"></Grid>
     </Grid>
 </UserControl>

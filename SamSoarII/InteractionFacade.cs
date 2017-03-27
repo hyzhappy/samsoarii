@@ -27,6 +27,13 @@ namespace SamSoarII.AppMain
         }
 
         private ProjectModel _projectModel;
+        public ProjectModel ProjectModel
+        {
+            get
+            {
+                return _projectModel;
+            }
+        }
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
         private MainWindow _mainWindow;

@@ -20,7 +20,6 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand DownloadCommand { get; set; }
         public static RoutedUICommand CommentModeToggleCommand { get; set; }
         public static RoutedUICommand ShowPropertyDialogCommand { get; set; }
-
         public static RoutedUICommand ShowOptionDialogCommand { get; set; }
         public static RoutedUICommand CheckNetworkErrorCommand { get; set; }
 

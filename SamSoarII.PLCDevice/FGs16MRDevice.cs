@@ -101,7 +101,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 128);
+                return new IntRange(0, 64);
             }
         }
 
@@ -109,7 +109,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 128);
+                return new IntRange(0, 64);
             }
         }
 
