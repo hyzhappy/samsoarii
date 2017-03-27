@@ -37,6 +37,23 @@ namespace SamSoarII.Simulation.Core
         public const int LOADDLL_CANNOT_FOUND_SETDWORD = 0x0A;
         public const int LOADDLL_CANNOT_FOUND_SETFLOAT = 0x0B;
         public const int LOADDLL_CANNOT_FOUND_SETDOUBLE = 0x0C;
+        public const int LOADDLL_CANNOT_FOUNF_SETENABLE = 0x0D;
+        public const int LOADDLL_CANNOT_FOUND_INITDATAPOINT = 0x0E;
+        public const int LOADDLL_CANNOT_FOUND_ADDBITDATAPOINT = 0x0F;
+        public const int LOADDLL_CANNOT_FOUND_ADDWORDDATAPOINT = 0x10;
+        public const int LOADDLL_CANNOT_FOUND_ADDDWORDDATAPOINT = 0x11;
+        public const int LOADDLL_CANNOT_FOUND_ADDFLOATDATAPOINT = 0x12;
+        public const int LOADDLL_CANNOT_FOUND_ADDDOUBLEATAPOINT = 0x13;
+        public const int LOADDLL_CANNOT_FOUND_REMOVEBITDATAPOINT = 0x14;
+        public const int LOADDLL_CANNOT_FOUND_REMOVEWORDDATAPOINT = 0x15;
+        public const int LOADDLL_CANNOT_FOUND_REMOVEDWORDDATAPOINT = 0x16;
+        public const int LOADDLL_CANNOT_FOUND_REMOVEFLOATDATAPOINT = 0x17;
+        public const int LOADDLL_CANNOT_FOUND_REMOVEDOUBLEATAPOINT = 0x18;
+        public const int LOADDLL_CANNOT_FOUND_ADDVIEWINPUT = 0x19;
+        public const int LOADDLL_CANNOT_FOUND_ADDVIEWOUTPUT = 0x1A;
+        public const int LOADDLL_CANNOT_FOUND_BEFORERUNLADDER = 0x1B;
+        public const int LOADDLL_CANNOT_FOUND_AFTERRUNLADDER = 0x1C;
+        public const int LOADDLL_CANNOT_FOUND_RUNDATA = 0x1D;
 
         [DllImport("simu.dll", EntryPoint = "LoadDll")]
         public static extern int LoadDll
@@ -157,6 +174,148 @@ namespace SamSoarII.Simulation.Core
             int value
         );
 
+        [DllImport("simu.dll", EntryPoint = "InitDataPoint")]
+        private static extern void InitDataPoint
+        (
+        );
+
+        [DllImport("simu.dll", EntryPoint = "AddBitDataPoint")]
+        private static extern void AddBitDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            UInt32 value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "AddWordDataPoint")]
+        private static extern void AddWordDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            UInt16 value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "AddDWordDataPoint")]
+        private static extern void AddDWordDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            UInt32 value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "AddFloatDataPoint")]
+        private static extern void AddFloatDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            float value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "AddDoubleDataPoint")]
+        private static extern void AddDoubleDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            double value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "RemoveBitDataPoint")]
+        private static extern void RemoveBitDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            UInt32 value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "RemoveWordDataPoint")]
+        private static extern void RemoveWordDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            UInt16 value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "RemoveDWordDataPoint")]
+        private static extern void RemoveDWordDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            UInt32 value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "RemoveFloatDataPoint")]
+        private static extern void RemoveFloatDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            float value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "RemoveDoubleDataPoint")]
+        private static extern void RemoveDoubleDataPoint
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int time,
+            double value
+        );
+
+        [DllImport("simu.dll", EntryPoint = "AddViewInput")]
+        private static extern void AddViewInput
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int type
+        );
+
+        [DllImport("simu.dll", EntryPoint = "AddViewOutput")]
+        private static extern void AddViewOutput
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int type
+        );
+
+        [DllImport("simu.dll", EntryPoint = "RemoveViewInput")]
+        private static extern void RemoveViewInput
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int type
+        );
+
+        [DllImport("simu.dll", EntryPoint = "RemoveViewOutput")]
+        private static extern void RemoveViewOutput
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int type
+        );
+
+        [DllImport("simu.dll", EntryPoint = "BeforeRunLadder")]
+        private static extern void BeforeRunLadder();
+
+        [DllImport("simu.dll", EntryPoint = "AfterRunLadder")]
+        private static extern void AfterRunLadder();
+
+        [DllImport("simu.dll", EntryPoint = "RunData")]
+        private static extern void RunData
+        (
+            int starttime,
+            int endtime,
+            [MarshalAs(UnmanagedType.LPStr)]
+            string outputFile
+        );
+        
         private bool simulateActive;
         private Thread simulateThread;
 
@@ -170,8 +329,9 @@ namespace SamSoarII.Simulation.Core
         {
             while (simulateActive)
             {
+                BeforeRunLadder();
                 RunLadder();
-                Thread.Sleep(20);
+                AfterRunLadder();
             }
         }
 
