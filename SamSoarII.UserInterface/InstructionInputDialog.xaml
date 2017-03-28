@@ -19,70 +19,72 @@
             <wf:TextBox x:Name="InstructionInputTextBox" Multiline="False" TextChanged="OnTextChanged" KeyDown="OnKeyDown" MouseClick="OnMouseClick"></wf:TextBox>
         </WindowsFormsHost>
         <Button x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Click="OnEnsureButtonClick">确定</Button>
-        <Popup x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" HorizontalOffset="125" IsOpen="False">
-            <Border BorderBrush="Beige" BorderThickness="3" Width="350" Height="60">
-                <Grid Background="Ivory">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontSize" Value="14"></Setter>
-                            <Setter Property="FontWeight" Value="Light"></Setter>
-                            <Setter Property="Margin" Value="0,5,0,0"></Setter>
-                            <Setter Property="TextAlignment" Value="Left"></Setter>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="4*"></RowDefinition>
-                        <RowDefinition Height="5*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="9*"></ColumnDefinition>
-                        <ColumnDefinition Width="9*"></ColumnDefinition>
-                        <ColumnDefinition Width="9*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.ColumnSpan="5" x:Name="textblock_describe" FontSize="16" FontWeight="Medium" Margin="0"></TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0" x:Name="textblock_name"></TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="2" x:Name="textblock_1"></TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="3" x:Name="textblock_2"></TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="4" x:Name="textblock_3"></TextBlock>
-                </Grid>
-            </Border>
-        </Popup>
-        <Popup x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="40" VerticalOffset="-21" Width="300" IsOpen="True">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
-                <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
-                    <local:CollectionStackPanel.Resources>
-                        <Style TargetType="Label">
-                            <Setter Property="Height" Value="20"></Setter>
-                            <Setter Property="FontSize" Value="14"></Setter>
-                            <Setter Property="Padding" Value="0"></Setter>
-                            <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
-                            <EventSetter Event="MouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>
-                        </Style>
-                    </local:CollectionStackPanel.Resources>
-                </local:CollectionStackPanel>
-            </ScrollViewer>
-        </Popup>
-        <Popup MinWidth="130" Height="60" x:Name="ItemPopup" IsOpen="False" StaysOpen="True">
-            <Popup.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Height" Value="20"></Setter>
-                    <Setter Property="FontSize" Value="14"></Setter>
-                </Style>
-            </Popup.Resources>
-            <Border BorderBrush="Black" BorderThickness="0.3" Background="#FFFCFFC1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <TextBlock x:Name="PopupTextblock1"></TextBlock>
-                    <TextBlock x:Name="PopupTextblock2" Grid.Row="1"></TextBlock>
-                    <TextBlock x:Name="PopupTextblock3" Grid.Row="2"></TextBlock>
-                </Grid>
-            </Border>
-        </Popup>
+        <Grid>
+            <local:PopupNotTop x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" HorizontalOffset="125" IsOpen="False" Topmost="False">
+                <Border BorderBrush="Beige" BorderThickness="3" Width="350" Height="60">
+                    <Grid Background="Ivory">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="14"></Setter>
+                                <Setter Property="FontWeight" Value="Light"></Setter>
+                                <Setter Property="Margin" Value="0,5,0,0"></Setter>
+                                <Setter Property="TextAlignment" Value="Left"></Setter>
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*"></RowDefinition>
+                            <RowDefinition Height="5*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="9*"></ColumnDefinition>
+                            <ColumnDefinition Width="9*"></ColumnDefinition>
+                            <ColumnDefinition Width="9*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="5" x:Name="textblock_describe" FontSize="16" FontWeight="Medium" Margin="0"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="textblock_name"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="textblock_1"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="3" x:Name="textblock_2"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="4" x:Name="textblock_3"></TextBlock>
+                    </Grid>
+                </Border>
+            </local:PopupNotTop>
+            <local:PopupNotTop x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="40" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
+                    <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
+                        <local:CollectionStackPanel.Resources>
+                            <Style TargetType="Label">
+                                <Setter Property="Height" Value="20"></Setter>
+                                <Setter Property="FontSize" Value="14"></Setter>
+                                <Setter Property="Padding" Value="0"></Setter>
+                                <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
+                                <EventSetter Event="MouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>
+                            </Style>
+                        </local:CollectionStackPanel.Resources>
+                    </local:CollectionStackPanel>
+                </ScrollViewer>
+            </local:PopupNotTop>
+            <local:PopupNotTop MinWidth="130" Height="60" x:Name="ItemPopup" IsOpen="False" StaysOpen="True" AllowsTransparency="True" PopupAnimation="Fade" Topmost="False">
+                <local:PopupNotTop.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Height" Value="20"></Setter>
+                        <Setter Property="FontSize" Value="14"></Setter>
+                    </Style>
+                </local:PopupNotTop.Resources>
+                <Border BorderBrush="Black" BorderThickness="0.3" Background="#FFFCFFC1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="PopupTextblock1"></TextBlock>
+                        <TextBlock x:Name="PopupTextblock2" Grid.Row="1"></TextBlock>
+                        <TextBlock x:Name="PopupTextblock3" Grid.Row="2"></TextBlock>
+                    </Grid>
+                </Border>
+            </local:PopupNotTop>
+        </Grid>
     </Grid>
 </Window>

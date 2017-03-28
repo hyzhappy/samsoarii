@@ -13,8 +13,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SamSoarII.UserInterface
 {
@@ -28,6 +30,7 @@ namespace SamSoarII.UserInterface
         private List<string> instructionNames = new List<string>();
         private Dictionary<string, List<string>> instructionNameAndToolTips;
         private List<Label> _collectionSource = new List<Label>();
+        private DispatcherTimer OpenTimer = new DispatcherTimer();
         private string oldText = string.Empty;
         private string currentText = string.Empty;
         public IEnumerable<Label> CollectionSource
@@ -43,10 +46,6 @@ namespace SamSoarII.UserInterface
                     return _collectionSource.Where(x => { return (x.Content as string).StartsWith(currentText.ToUpper()); });
                 }
             }
-            set
-            {
-                CollectionSource = value;
-            }
         }
         public string InstructionInput
         {
@@ -59,7 +58,6 @@ namespace SamSoarII.UserInterface
                 InstructionInputTextBox.Text = value;
             }
         }
-
         public InstructionInputDialog(string initialString, Dictionary<string,List<string>> instructionNameAndToolTips)
         {
             InitializeComponent();
@@ -67,6 +65,8 @@ namespace SamSoarII.UserInterface
             Font font = new Font("Arial", 12);
             InstructionInputTextBox.Font = font;
             DataContext = this;
+            OpenTimer.Interval = TimeSpan.FromSeconds(0.7);
+            OpenTimer.Tick += OpenTimer_Tick;
             Loaded += (sender, e) =>
             {
                 InstructionInputTextBox.Focus();
@@ -81,13 +81,16 @@ namespace SamSoarII.UserInterface
                 }
             };
         }
+        private void OpenTimer_Tick(object sender, EventArgs e)
+        {
+            PopupTextblock1.Text = CollectionStack.SelectItem.Content as string;
+            ItemPopup.IsOpen = true;
+        }
 
         public void OnEnsureButtonClick(object sender, RoutedEventArgs e)
         {
             EnsureButtonClick.Invoke(sender, e);
         }
-
-
         private void OnWindowKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -96,7 +99,7 @@ namespace SamSoarII.UserInterface
             }
             if(e.Key == Key.Enter)
             {
-                if (currentText != string.Empty)
+                if (CollectionSource.Count() != 0)
                 {
                     Label label = CollectionStack.SelectItem;
                     if (label != null)
@@ -125,6 +128,7 @@ namespace SamSoarII.UserInterface
 
         private void OnLocationChanged(object sender, EventArgs e)
         {
+            OpenTimer.Stop();
             if (TextBoxPopup.IsOpen)
             {
                 TextBoxPopup.Placement = PlacementMode.Absolute;
@@ -375,12 +379,17 @@ namespace SamSoarII.UserInterface
                 ItemPopup.Placement = PlacementMode.Absolute;
                 ItemPopup.HorizontalOffset = window.Left + 340;
                 ItemPopup.VerticalOffset = window.Top + 69 + interval * 20;
-                ItemPopup.IsOpen = true;
+                SetPopupOpen(label);
             }
+        }
+        private void SetPopupOpen(Label label)
+        {
+            OpenTimer.Start();
         }
         private void RemovePopup()
         {
             ItemPopup.IsOpen = false;
+            OpenTimer.Stop();
             ItemPopup.PlacementTarget = null;
         }
         private void OnScrollChanged(object sender, ScrollChangedEventArgs e)

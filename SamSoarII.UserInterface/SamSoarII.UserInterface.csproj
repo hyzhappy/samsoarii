@@ -88,6 +88,7 @@
       <DependentUpon>SelectDeviceDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CollectionStackPanel.cs" />
+    <Compile Include="UserControls\PopupNotTop.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
