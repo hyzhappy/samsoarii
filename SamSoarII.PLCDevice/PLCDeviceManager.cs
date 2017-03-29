@@ -9,7 +9,7 @@ namespace SamSoarII.PLCDevice
 {
     public class PLCDeviceManager
     {
-        private static  Device _selectDevice = Device.DefaultDevice;
+        private static Device _selectDevice = Device.DefaultDevice;
         public static Device SelectDevice
         {
             get

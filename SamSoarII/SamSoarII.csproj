@@ -120,11 +120,8 @@
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
-    <Compile Include="UI\CommentListControl.xaml.cs">
-      <DependentUpon>CommentListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\EditVariableDialog.xaml.cs">
-      <DependentUpon>EditVariableDialog.xaml</DependentUpon>
+    <Compile Include="UI\ElementList.xaml.cs">
+      <DependentUpon>ElementList.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\InstrucionTreeItem.cs" />
     <Compile Include="UI\MainTabControl.cs" />
@@ -145,9 +142,6 @@
     </Compile>
     <Compile Include="UI\ProjectPropertyDialog.xaml.cs">
       <DependentUpon>ProjectPropertyDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\VariableListControl.xaml.cs">
-      <DependentUpon>VariableListControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -254,13 +248,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\CommentListControl.xaml">
+    <Page Include="UI\ElementList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\EditVariableDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -283,10 +273,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ProjectPropertyDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\VariableListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

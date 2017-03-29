@@ -33,7 +33,6 @@ namespace SamSoarII.LadderInstViewModel
                     else
                     {
                         _valueRelatedModel.Add(str, new HashSet<BaseViewModel>() { viewmodel });
-                        ValueCommentManager.Add(str);
                     }
                 }
             }
@@ -51,7 +50,6 @@ namespace SamSoarII.LadderInstViewModel
                         hset.Remove(viewmodel);
                         if (hset.Count == 0)
                         {
-                            ValueCommentManager.Delete(str);
                             _valueRelatedModel.Remove(str);
                         }
                     }
@@ -69,7 +67,6 @@ namespace SamSoarII.LadderInstViewModel
                     hset.Remove(viewmodel);
                     if (hset.Count == 0)
                     {
-                        ValueCommentManager.Delete(oldvalueString);
                         _valueRelatedModel.Remove(oldvalueString);
                     }
                 }
@@ -116,7 +113,10 @@ namespace SamSoarII.LadderInstViewModel
                 model.UpdateCommentContent();
             }
         }
-
+        public static bool ContainValueString(string valueString)
+        {
+            return _valueRelatedModel.ContainsKey(valueString);
+        }
         public static void Clear()
         {
             _valueRelatedModel.Clear();

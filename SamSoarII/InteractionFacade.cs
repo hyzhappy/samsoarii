@@ -97,8 +97,6 @@ namespace SamSoarII.AppMain
                 _mainTabControl.Reset();
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowItem(_projectModel.MainRoutine);
-                _mainTabControl.UpdateVariableCollection();
-                _mainTabControl.UpdateCommentList();
                 _mainWindow.SetProjectTreeView(_projectTreeView);
                 ProjectFullFileName = fullFileName;
                 _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
@@ -162,14 +160,7 @@ namespace SamSoarII.AppMain
                     IProgram prog = sender as IProgram;
                     _mainTabControl.ShowItem(prog);
                     break;
-                case TabType.VariableList:
-                    _mainTabControl.ShowVariableList();
-                    break;
-                case TabType.CommentList:
-                    _mainTabControl.ShowCommentList();
-                    break;
             }
-
         }
 
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)

@@ -244,7 +244,18 @@ namespace SamSoarII.AppMain.Project
             }
             return result;
         }
-
+        public static XElement CreateXElementByValueAlias()
+        {
+            XElement result = new XElement("ValueAlias");
+            foreach (var kp in ValueAliasManager.ValueAliasDict)
+            {
+                var xele = new XElement("Alias");
+                xele.SetAttributeValue("Value", kp.Key);
+                xele.SetValue(kp.Value);
+                result.Add(xele);
+            }
+            return result;
+        }
         public static void LoadValueCommentsByXElement(XElement xEle)
         {
             if(xEle != null)
@@ -253,10 +264,21 @@ namespace SamSoarII.AppMain.Project
                 {
                     string valueString = xele.Attribute("Value").Value;
                     string comment = xele.Value;
-                    ValueCommentManager.UpdateComment(valueString, comment,false,true);
+                    ValueCommentManager.UpdateComment(valueString, comment);
                 }
             }
         }
-
+        public static void LoadValueAliasByXElement(XElement xEle)
+        {
+            if (xEle != null)
+            {
+                foreach (XElement xele in xEle.Elements("Alias"))
+                {
+                    string valueString = xele.Attribute("Value").Value;
+                    string alias = xele.Value;
+                    ValueAliasManager.UpdateAlias(valueString, alias);
+                }
+            }
+        }
     }
 }

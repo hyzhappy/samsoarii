@@ -19,7 +19,7 @@ namespace SamSoarII.AppMain
 
         public static int LadderCommentModeHeightUnit { get { return 500; } }
 
-        public static int LadderXCapacity { get { return 10; } }
+        public static int LadderXCapacity { get { return 12; } }
 
         private static double _ladderOriginScaleX;
         private static double _ladderOriginScaleY;

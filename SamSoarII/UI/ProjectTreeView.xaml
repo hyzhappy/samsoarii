@@ -110,27 +110,12 @@
                     </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem Header="元件浏览" IsExpanded="True">
-                    <TreeViewItem Header="元件注释表" MouseDoubleClick="OnShowCommentList">
-                        <TreeViewItem.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="打开元件注释表" Click="OnShowCommentList"></MenuItem>
-                            </ContextMenu>
-                        </TreeViewItem.ContextMenu>
-                    </TreeViewItem>
-                    <TreeViewItem Header="元件使用表" MouseDoubleClick="OnShowUsageList">
-                        <TreeViewItem.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="打开元件使用表" Click="OnShowUsageList"></MenuItem>
-                            </ContextMenu>
-                        </TreeViewItem.ContextMenu>
-                    </TreeViewItem>
-                    <TreeViewItem Header="元件变量表" MouseDoubleClick="OnShowVariableList">
-                        <TreeViewItem.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="打开元件变量表" Click="OnShowVariableList"></MenuItem>
-                            </ContextMenu>
-                        </TreeViewItem.ContextMenu>
-                    </TreeViewItem>
+                    <TreeViewItem.Resources>
+                        <ContextMenu x:Key="elementContextMenu">
+                            <MenuItem Header="打开软元件表" Click="OnElementListOpen"></MenuItem>
+                        </ContextMenu>
+                    </TreeViewItem.Resources>
+                    <TreeViewItem Header="软元件表" ContextMenu="{StaticResource elementContextMenu}" MouseDoubleClick="OnElementListOpenDoubleClick"></TreeViewItem>
                 </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem x:Name="InstructionRootItem" Header="指令" IsExpanded="True">

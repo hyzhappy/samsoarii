@@ -22,6 +22,7 @@ using System.Xml.Linq;
 using System.ComponentModel;
 using SamSoarII.LadderInstModel;
 using SamSoarII.PLCDevice;
+using SamSoarII.ValueModel;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -857,7 +858,14 @@ namespace SamSoarII.AppMain.Project
                     foreach (var valueString in InstructionInput)
                     {
                         valueStrings.Add(valueString);
-                        valueStrings.Add(string.Empty);
+                        if (ValueCommentManager.ContainValue(valueString))
+                        {
+                            valueStrings.Add(ValueCommentManager.GetComment(valueString));
+                        }
+                        else
+                        {
+                            valueStrings.Add(string.Empty);
+                        }
                     }
                     if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
                     {

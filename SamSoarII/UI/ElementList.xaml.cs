@@ -1,0 +1,417 @@
+﻿using SamSoarII.LadderInstViewModel;
+using SamSoarII.PLCDevice;
+using SamSoarII.ValueModel;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace SamSoarII.AppMain.UI
+{
+    /// <summary>
+    /// ElementList.xaml 的交互逻辑
+    /// </summary>
+    public partial class ElementList : Window, INotifyPropertyChanged
+    {
+        public class ValueCommentAlias : INotifyPropertyChanged
+        {
+            private string _name;
+            private string _comment;
+            private string _alias;
+            public string Name
+            {
+                get
+                {
+                    return _name;
+                }
+                set
+                {
+                    _name = value;
+                    PropertyChanged.Invoke(this,new PropertyChangedEventArgs("Name"));
+                }
+            }
+            public string Comment
+            {
+                get
+                {
+                    return _comment;
+                }
+                set
+                {
+                    _comment = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Comment"));
+                }
+            }
+            public string Alias
+            {
+                get
+                {
+                    return _alias;
+                }
+                set
+                {
+                    _alias = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Alias"));
+                }
+            }
+            private bool _hasComment = false;
+            private bool _hasAlias = false;
+            public bool HasComment { get { return _hasComment; } set { _hasComment = value; } }
+            public bool HasAlias { get { return _hasAlias; } set { _hasAlias = value; } }
+            public bool HasUsed { get; set; }
+            public ValueCommentAlias(string Name,string Comment,string Alias)
+            {
+                this.Name = Name;
+                this.Comment = Comment;
+                this.Alias = Alias;
+            }
+            public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        }
+        private bool _hasUsed = false;
+        private bool _hasComment = false;
+        private TextBlock _currentTextBlock;
+        private static List<ValueCommentAlias> _elementCollection = new List<ValueCommentAlias>();
+        public IEnumerable<ValueCommentAlias> ElementCollection
+        {
+            get
+            {
+                var tempList = new List<ValueCommentAlias>(_elementCollection);
+                if(_currentTextBlock != null)
+                {
+                    string tempstr = _currentTextBlock.Text;
+                    int index = stackpanel_textblock.Children.IndexOf(_currentTextBlock);
+                    switch (index)
+                    {
+                        case 0:case 1:case 2:case 3:case 6:case 7:case 8:
+                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0,1)); }).ToList();
+                            break;
+                        case 9:case 12:case 13:
+                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0,2)); }).ToList();
+                            break;
+                        case 4:case 5:
+                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 1)) && !x.Name.Contains("V"); }).ToList();
+                            break;
+                        case 10:
+                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 2)) && CheckValue(x.Name); }).ToList();
+                            break;
+                        case 11:
+                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 2)) && !CheckValue(x.Name); }).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (_hasUsed)
+                {
+                    tempList = tempList.Where(x => { return InstructionCommentManager.ContainValueString(x.Name); }).ToList();
+                }
+                if (_hasComment)
+                {
+                    tempList = tempList.Where(x => { return x.HasComment; }).ToList();
+                }
+                tempList = tempList.Where(x => { return x.Name.StartsWith(SearchTextBox.Text.ToUpper()); }).ToList();
+                return tempList;
+            }
+        }
+        private bool CheckValue(string valueString)
+        {
+            int value = int.Parse(valueString.Substring(2));
+            return value >= 0 && value < 200;//此处用Device类的CV范围代替
+        }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        #region InitializeElementCollection
+        public static void InitializeElementCollection()
+        {
+            Device device = new FGs16MRDevice();
+            for (uint i = device.XRange.Start; i < device.XRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("X{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.YRange.Start; i < device.YRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("Y{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.MRange.Start; i < device.MRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("M{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.SRange.Start; i < device.SRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("S{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.CRange.Start; i < device.CRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("C{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.TRange.Start; i < device.TRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("T{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.DRange.Start; i < device.DRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("D{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.CVRange.Start; i < device.CVRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("CV{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.TVRange.Start; i < device.TVRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("TV{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.VRange.Start; i < device.VRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("V{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.ZRange.Start; i < device.ZRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("Z{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.AIRange.Start; i < device.AIRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("AI{0}", i), string.Empty, string.Empty));
+            }
+            for (uint i = device.AORange.Start; i < device.AORange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("AO{0}", i), string.Empty, string.Empty));
+            }
+        }
+        #endregion
+        public ElementList()
+        {
+            InitializeComponent();
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            DataContext = this;
+        }
+        public static void ValueAliasManager_ValueAliasChanged(ValueAliasChangedEventArgs e)
+        {
+            if (e.Type == ValueChangedType.Clear)
+            {
+                foreach (var item in _elementCollection.Where(x => { return x.HasAlias; }))
+                {
+                    item.Alias = string.Empty;
+                    item.HasAlias = false;
+                }
+            }
+            else
+            {
+                foreach (var item in _elementCollection.Where(x => { return x.Name == e.ValueString; }))
+                {
+                    if (e.Type == ValueChangedType.Add)
+                    {
+                        item.HasAlias = true;
+                    }
+                    else if (e.Type == ValueChangedType.Remove)
+                    {
+                        item.HasAlias = false;
+                    }
+                    item.Alias = e.Alias;
+                }
+            }
+        }
+
+        public static void ValueCommentManager_ValueCommentChanged(ValueCommentChangedEventArgs e)
+        {
+            if (e.Type == ValueChangedType.Clear)
+            {
+                foreach (var item in _elementCollection.Where(x => { return x.HasComment; }))
+                {
+                    item.Comment = string.Empty;
+                    item.HasComment = false;
+                }
+            }
+            else
+            {
+                foreach (var item in _elementCollection.Where(x => { return x.Name == e.ValueString; }))
+                {
+                    if (e.Type == ValueChangedType.Add)
+                    {
+                        item.HasComment = true;
+                    }
+                    else if (e.Type == ValueChangedType.Remove)
+                    {
+                        item.HasComment = false;
+                    }
+                    item.Comment = e.Comment;
+                }
+            }
+        }
+        private void UpdateElementCollection()
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ElementCollection"));
+        }
+        private void OnTextBlockMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock textblock = sender as TextBlock;
+            if (_currentTextBlock == null)
+            {
+                _currentTextBlock = textblock;
+                SetTextBlockBackground(_currentTextBlock);
+            }
+            else if (_currentTextBlock == textblock)
+            {
+                ResetTextBlockBackground(_currentTextBlock);
+                _currentTextBlock = null;
+            }
+            else
+            {
+                ResetTextBlockBackground(_currentTextBlock);
+                _currentTextBlock = textblock;
+                SetTextBlockBackground(_currentTextBlock);
+            }
+            UpdateElementCollection();
+        }
+        #region set,reset
+        private void ResetTextBlockBackground(TextBlock textblock)
+        {
+            Color color = new Color();
+            color.A = 255;
+            color.R = 255;
+            color.G = 255;
+            color.B = 255;
+            textblock.Background = new SolidColorBrush(color);
+            color.A = 255;
+            color.R = 0;
+            color.G = 0;
+            color.B = 0;
+            textblock.Foreground = new SolidColorBrush(color);
+        }
+        private void SetTextBlockBackground(TextBlock textblock)
+        {
+            Color color = new Color();
+            color.A = 255;
+            color.R = 26;
+            color.G = 134;
+            color.B = 243;
+            textblock.Background = new SolidColorBrush(color);
+            color.A = 255;
+            color.R = 255;
+            color.G = 255;
+            color.B = 255;
+            textblock.Foreground = new SolidColorBrush(color);
+        }
+        private void SetButtonBackground(Button button)
+        {
+            Color color = new Color();
+            color.A = 255;
+            color.R = 211;
+            color.G = 211;
+            color.B = 211;
+            button.Background = new SolidColorBrush(color);
+        }
+        private void ResetButtonBackground(Button button)
+        {
+            Color color = new Color();
+            color.A = 255;
+            color.R = 255;
+            color.G = 255;
+            color.B = 191;
+            button.Background = new SolidColorBrush(color);
+        }
+        #endregion
+        private void OnButtonClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            switch (button.Name)
+            {
+                case "button1":
+                    _hasUsed = !_hasUsed;
+                    if (_hasUsed)
+                    {
+                        SetButtonBackground(button);
+                    }
+                    else
+                    {
+                        ResetButtonBackground(button);
+                    }
+                    UpdateElementCollection();
+                    break;
+                case "button2":
+                    _hasComment = !_hasComment;
+                    if (_hasComment)
+                    {
+                        SetButtonBackground(button);
+                    }
+                    else
+                    {
+                        ResetButtonBackground(button);
+                    }
+                    UpdateElementCollection();
+                    break;
+                case "button3":
+                    break;
+                case "button4":
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            ValueCommentAlias comment = e.Row.DataContext as ValueCommentAlias;
+            TextBox textBox = e.EditingElement as TextBox;
+            if (e.Column == elementComment)
+            {
+                if (comment != null && textBox != null)
+                {
+                    ValueCommentManager.UpdateComment(comment.Name,textBox.Text);
+                }
+            }
+            else if(e.Column == elementAlias)
+            {
+                if (comment != null && textBox != null)
+                {
+                    if (textBox.Text != string.Empty && !ValueAliasManager.CheckAlias(comment.Name,textBox.Text))
+                    {
+                        MessageBox.Show("alias is already exist");
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        ValueAliasManager.UpdateAlias(comment.Name, textBox.Text);
+                    }
+                }
+            }
+        }
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            Window window = sender as Window;
+            e.Cancel = true;
+            window.Hide();
+        }
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateElementCollection();
+        }
+        private void OnClearButtonClick(object sender, RoutedEventArgs e)
+        {
+            var selectedItems = ElementDataGrid.SelectedItems;
+            foreach (var item in selectedItems)
+            {
+                var tempitem = item as ValueCommentAlias;
+                if (tempitem.Comment != string.Empty)
+                {
+                    tempitem.Comment = string.Empty;
+                    tempitem.HasComment = false;
+                    ValueCommentManager.UpdateComment(tempitem.Name, tempitem.Comment);
+                }
+                if (tempitem.Alias != string.Empty)
+                {
+                    tempitem.Alias = string.Empty;
+                    tempitem.HasAlias = false;
+                    ValueAliasManager.UpdateAlias(tempitem.Name, tempitem.Alias);
+                }
+            }
+        }
+    }
+}

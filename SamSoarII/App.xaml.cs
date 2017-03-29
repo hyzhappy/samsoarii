@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SamSoarII.AppMain.UI;
+using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -15,9 +17,12 @@ namespace SamSoarII.AppMain
     {
         public App()
         {
-
-            SamSoarII.ValueModel.ValueCommentManager.Initialize();
-            SamSoarII.ValueModel.VariableManager.Initialize();
+            ValueCommentManager.Initialize();
+            VariableManager.Initialize();
+            ValueAliasManager.Initialize();
+            ElementList.InitializeElementCollection();
+            ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
+            ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
             GlobalSetting.Load();
             this.Exit += App_Exit;
         }
