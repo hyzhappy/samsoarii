@@ -562,19 +562,93 @@ namespace Xceed.Wpf.AvalonDock.Layout
                 {
                     case AnchorSide.Right:
                         root.RightSide.Children.Add(newAnchorGroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "RIGHT");
                         break;
                     case AnchorSide.Left:
                         root.LeftSide.Children.Add(newAnchorGroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "LEFT");
                         break;
                     case AnchorSide.Top:
                         root.TopSide.Children.Add(newAnchorGroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "TOP");
                         break;
                     case AnchorSide.Bottom:
                         root.BottomSide.Children.Add(newAnchorGroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "BOTTOM");
                         break;
                 }
             }
             #endregion
+        }
+        /*
+        public void RemoveSide()
+        {
+            if (Parent is LayoutAnchorGroup)
+            {
+                ILayoutRoot root = Root;
+                LayoutAnchorGroup lagroup = (LayoutAnchorGroup)(Parent);
+                if (root.RightSide.Children.Contains(lagroup))
+                {
+                    root.RightSide.Children.Remove(lagroup);
+                }
+                if (root.LeftSide.Children.Contains(lagroup))
+                {
+                    root.LeftSide.Children.Remove(lagroup);
+                }
+                if (root.TopSide.Children.Contains(lagroup))
+                {
+                    root.TopSide.Children.Remove(lagroup);
+                }
+                if (root.BottomSide.Children.Contains(lagroup))
+                {
+                    root.BottomSide.Children.Remove(lagroup);
+                }
+                lagroup.Parent = (ILayoutContainer)(root);
+            }
+        }
+        */
+        public void ReplaceSide(AnchorSide side)
+        {
+            if (Parent is LayoutAnchorGroup)
+            {
+                ILayoutRoot root = Root;
+                LayoutAnchorGroup lagroup = (LayoutAnchorGroup)(Parent);
+                if (root.RightSide.Children.Contains(lagroup))
+                {
+                    root.RightSide.Children.Remove(lagroup);
+                }
+                if (root.LeftSide.Children.Contains(lagroup))
+                {
+                    root.LeftSide.Children.Remove(lagroup);
+                }
+                if (root.TopSide.Children.Contains(lagroup))
+                {
+                    root.TopSide.Children.Remove(lagroup);
+                }
+                if (root.BottomSide.Children.Contains(lagroup))
+                {
+                    root.BottomSide.Children.Remove(lagroup);
+                }
+                switch (side)
+                {
+                    case AnchorSide.Right:
+                        root.RightSide.Children.Add(lagroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "RIGHT");
+                        break;
+                    case AnchorSide.Left:
+                        root.LeftSide.Children.Add(lagroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "LEFT");
+                        break;
+                    case AnchorSide.Top:
+                        root.TopSide.Children.Add(lagroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "TOP");
+                        break;
+                    case AnchorSide.Bottom:
+                        root.BottomSide.Children.Add(lagroup);
+                        LayoutSetting.AddDefaultSideAnchorable(Title, "BOTTOM");
+                        break;
+                }
+            }
         }
 
         #endregion

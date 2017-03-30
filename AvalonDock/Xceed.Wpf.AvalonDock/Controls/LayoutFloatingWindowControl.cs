@@ -288,8 +288,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         }
 
         public abstract ILayoutElement Model { get; }
-
-
+        
         #region IsDragging
 
         /// <summary>
@@ -339,9 +338,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         }
 
         #endregion
-
-
-
+        
         DragService _dragService = null;
 
         void UpdatePositionAndSizeOfPanes()
@@ -424,9 +421,6 @@ namespace Xceed.Wpf.AvalonDock.Controls
                     }
                     break;
             }
-
-
-
             return IntPtr.Zero;
         }
 

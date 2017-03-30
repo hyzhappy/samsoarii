@@ -48,7 +48,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         internal void Show(LayoutAnchorControl anchor)
         {
-            if (anchor.Model.Parent.Parent == null)
+            if (!(anchor.Model.Parent.Parent is LayoutAnchorSide))
             {
                 //var root = Root;
                 if (anchor.Model is LayoutAnchorable &&
@@ -453,6 +453,10 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
             IsResizing = false;
             InvalidateMeasure();
+
+            LayoutSetting.AddDefaultAutoHideWidthAnchorable(_model.Title, _model.AutoHideWidth.ToString());
+            LayoutSetting.AddDefaultAutoHideHeighAnchorable(_model.Title, _model.AutoHideHeight.ToString());
+
         }
 
         void OnResizerDragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
