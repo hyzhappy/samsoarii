@@ -283,6 +283,11 @@ namespace SamSoarII.AppMain.UI
                         MessageBox.Show("指定路径不存在");
                         return;
                     }
+                    if (name == string.Empty)
+                    {
+                        MessageBox.Show("文件名不能为空");
+                        return;
+                    }
                     string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
                     if (File.Exists(fullFileName))
                     {
@@ -298,7 +303,6 @@ namespace SamSoarII.AppMain.UI
 
         private void OnOpenProjectExecute(object sender, RoutedEventArgs e)
         {
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "ssp文件|*.ssp";
             if (openFileDialog.ShowDialog() == true)

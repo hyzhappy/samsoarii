@@ -55,6 +55,12 @@
     <Compile Include="AddNewRoutineWindow.xaml.cs">
       <DependentUpon>AddNewRoutineWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CSVExportDialog.xaml.cs">
+      <DependentUpon>CSVExportDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CSVImportDialog.xaml.cs">
+      <DependentUpon>CSVImportDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ElementPropertyDialog.xaml.cs">
       <DependentUpon>ElementPropertyDialog.xaml</DependentUpon>
     </Compile>
@@ -103,6 +109,14 @@
     <Page Include="AddNewRoutineWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CSVExportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CSVImportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ElementPropertyDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

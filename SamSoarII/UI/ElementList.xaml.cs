@@ -1,9 +1,11 @@
 ﻿using SamSoarII.LadderInstViewModel;
 using SamSoarII.PLCDevice;
+using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,62 +23,62 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// ElementList.xaml 的交互逻辑
     /// </summary>
+    public class ValueCommentAlias : INotifyPropertyChanged
+    {
+        private string _name;
+        private string _comment;
+        private string _alias;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Name"));
+            }
+        }
+        public string Comment
+        {
+            get
+            {
+                return _comment;
+            }
+            set
+            {
+                _comment = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Comment"));
+            }
+        }
+        public string Alias
+        {
+            get
+            {
+                return _alias;
+            }
+            set
+            {
+                _alias = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Alias"));
+            }
+        }
+        private bool _hasComment = false;
+        private bool _hasAlias = false;
+        public bool HasComment { get { return _hasComment; } set { _hasComment = value; } }
+        public bool HasAlias { get { return _hasAlias; } set { _hasAlias = value; } }
+        public bool HasUsed { get; set; }
+        public ValueCommentAlias(string Name, string Comment, string Alias)
+        {
+            this.Name = Name;
+            this.Comment = Comment;
+            this.Alias = Alias;
+        }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+    }
     public partial class ElementList : Window, INotifyPropertyChanged
     {
-        public class ValueCommentAlias : INotifyPropertyChanged
-        {
-            private string _name;
-            private string _comment;
-            private string _alias;
-            public string Name
-            {
-                get
-                {
-                    return _name;
-                }
-                set
-                {
-                    _name = value;
-                    PropertyChanged.Invoke(this,new PropertyChangedEventArgs("Name"));
-                }
-            }
-            public string Comment
-            {
-                get
-                {
-                    return _comment;
-                }
-                set
-                {
-                    _comment = value;
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Comment"));
-                }
-            }
-            public string Alias
-            {
-                get
-                {
-                    return _alias;
-                }
-                set
-                {
-                    _alias = value;
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Alias"));
-                }
-            }
-            private bool _hasComment = false;
-            private bool _hasAlias = false;
-            public bool HasComment { get { return _hasComment; } set { _hasComment = value; } }
-            public bool HasAlias { get { return _hasAlias; } set { _hasAlias = value; } }
-            public bool HasUsed { get; set; }
-            public ValueCommentAlias(string Name,string Comment,string Alias)
-            {
-                this.Name = Name;
-                this.Comment = Comment;
-                this.Alias = Alias;
-            }
-            public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        }
         private bool _hasUsed = false;
         private bool _hasComment = false;
         private TextBlock _currentTextBlock;
@@ -132,7 +134,7 @@ namespace SamSoarII.AppMain.UI
         #region InitializeElementCollection
         public static void InitializeElementCollection()
         {
-            Device device = new FGs16MRDevice();
+            Device device = new FGs16MRDevice();//此处应用用户选择的设备类型替代
             for (uint i = device.XRange.Start; i < device.XRange.End; i++)
             {
                 _elementCollection.Add(new ValueCommentAlias(string.Format("X{0}", i), string.Empty, string.Empty));
@@ -349,13 +351,52 @@ namespace SamSoarII.AppMain.UI
                     UpdateElementCollection();
                     break;
                 case "button3":
+                    CSVImportDialog dialogImport;
+                    using (dialogImport = new CSVImportDialog())
+                    {
+                        dialogImport.ImportButtonClick += (sender1, e1) =>
+                        {
+                            CSVFileHelper.ImportExcute(dialogImport.FileName,_elementCollection,dialogImport.Separator.Substring(0, 1));
+                            dialogImport.Close();
+                        };
+                        dialogImport.ShowDialog();
+                    }
                     break;
                 case "button4":
+                    CSVExportDialog dialogExport;
+                    using (dialogExport = new CSVExportDialog())
+                    {
+                        dialogExport.ExportButtonClick += (sender1, e1) =>
+                        {
+                            string name = dialogExport.FileName;
+                            string dir = dialogExport.Path;
+                            if (!Directory.Exists(dir))
+                            {
+                                MessageBox.Show("指定路径不存在");
+                                return;
+                            }
+                            if (name == string.Empty)
+                            {
+                                MessageBox.Show("文件名不能为空");
+                                return;
+                            }
+                            string fullFileName = string.Format(@"{0}\{1}.csv", dir, name);
+                            if (File.Exists(fullFileName))
+                            {
+                                MessageBox.Show("指定路径已存在同名文件");
+                                return;
+                            }
+                            CSVFileHelper.ExportExcute(fullFileName,ElementCollection,dialogExport.Separator.Substring(0,1));
+                            dialogExport.Close();
+                        };
+                        dialogExport.ShowDialog();
+                    }
                     break;
                 default:
                     break;
             }
         }
+
         private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             ValueCommentAlias comment = e.Row.DataContext as ValueCommentAlias;
