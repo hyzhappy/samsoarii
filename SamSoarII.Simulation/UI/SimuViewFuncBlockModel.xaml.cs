@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SamSoarII.Simulation.UI.Base;
 
 namespace SamSoarII.Simulation.UI
 {
     /// <summary>
     /// SimuViewFuncBlockModel.xaml 的交互逻辑
     /// </summary>
-    public partial class SimuViewFuncBlockModel : UserControl
+    public partial class SimuViewFuncBlockModel : SimuViewTabModel
     {
         public SimuViewFuncBlockModel(string name)
         {
@@ -47,18 +48,19 @@ namespace SamSoarII.Simulation.UI
         public void GenerateCHeader(StreamWriter sw)
         {
             sw.Write("#include<stdint.h>\r\n");
-            sw.Write("#include<minwindef.h>\r\n");
-            string pattern = @"void \w+(WORD W, BIT B)";
+            sw.Write("typedef uint32_t* _BIT;\r\n");
+            sw.Write("typedef uint16_t* _WORD;\r\n");
+            string pattern = @"void \w+\(WORD W, BIT B\)";
             foreach (Match match in Regex.Matches(Code, pattern))
             {
-                sw.Write("{0:s};\r\n", match.Value);
+                sw.Write("{0:s};\r\n", match.Value.Replace("WORD", "_WORD").Replace("BIT", "_BIT"));
             }
         }
 
         public void GenerateCCode(StreamWriter sw)
         {
             sw.Write("#include \"simuf.h\"\r\n");
-            sw.Write(Code);
+            sw.Write(Code.Replace("WORD", "_WORD").Replace("BIT", "_BIT"));
         }
         
     }

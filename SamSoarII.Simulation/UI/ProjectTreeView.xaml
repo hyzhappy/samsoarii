@@ -7,61 +7,62 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.Resources>
-        
+
     </UserControl.Resources>
     <UserControl.Content>
         <TreeView FontSize="14">
-        <TreeView.Items>
-            <TreeViewItem x:Name="ProjectRootItem" Header="当前工程" IsExpanded="True">
-            <TreeViewItem.Items>
-                <TreeViewItem Header="程序" IsExpanded="True">
-                <TreeViewItem.Items>
-                    <TreeViewItem x:Name="TVI_AllRoutine" IsExpanded="False">
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/Image/TreeViewIcon/AllProgram.ico"></Image>
-                                <TextBlock Margin="6,0,0,0">所有程序</TextBlock>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem x:Name="TVI_MainRoutine" IsExpanded="True">
-                        <TreeViewItem.Resources>
+            <TreeView.Items>
+                <TreeViewItem x:Name="ProjectRootItem" Header="当前工程" IsExpanded="True">
+                    <TreeViewItem.Items>
+                        <TreeViewItem Header="程序" IsExpanded="True">
+                            <TreeViewItem.Items>
+                                <TreeViewItem x:Name="TVI_AllRoutine" IsExpanded="False">
+                                    <TreeViewItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/Resources/Image/TreeViewIcon/AllProgram.ico"></Image>
+                                            <TextBlock Margin="6,0,0,0">所有程序</TextBlock>
+                                        </StackPanel>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem x:Name="TVI_MainRoutine" IsExpanded="True">
+                                    <TreeViewItem.Resources>
 
-                        </TreeViewItem.Resources>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/Image/TreeViewIcon/MainProgram.ico"></Image>
-                                <TextBlock Margin="6,0,0,0">主程序</TextBlock>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem x:Name="TVI_SubRoutines" IsExpanded="True">
-                        <TreeViewItem.Resources>
+                                    </TreeViewItem.Resources>
+                                    <TreeViewItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/Resources/Image/TreeViewIcon/MainProgram.ico"></Image>
+                                            <TextBlock Margin="6,0,0,0">主程序</TextBlock>
+                                        </StackPanel>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem x:Name="TVI_SubRoutines" IsExpanded="True">
+                                    <TreeViewItem.Resources>
 
-                        </TreeViewItem.Resources>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/Image/TreeViewIcon/SubProgram.ico"></Image>
-                                <TextBlock Margin="6,0,0,0">子程序</TextBlock>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem x:Name="TVI_FuncBlocks" IsExpanded="True">
-                        <TreeViewItem.Resources>
+                                    </TreeViewItem.Resources>
+                                    <TreeViewItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/Resources/Image/TreeViewIcon/SubProgram.ico"></Image>
+                                            <TextBlock Margin="6,0,0,0">子程序</TextBlock>
+                                        </StackPanel>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem x:Name="TVI_FuncBlocks" IsExpanded="True">
+                                    <TreeViewItem.Resources>
 
-                        </TreeViewItem.Resources>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/Image/TreeViewIcon/FuncBlock.ico"></Image>
-                                <TextBlock Margin="6,0,0,0">函数功能块</TextBlock>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                </TreeViewItem.Items>
+                                    </TreeViewItem.Resources>
+                                    <TreeViewItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/Resources/Image/TreeViewIcon/FuncBlock.ico"></Image>
+                                            <TextBlock Margin="6,0,0,0">函数功能块</TextBlock>
+                                        </StackPanel>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                            </TreeViewItem.Items>
+                        </TreeViewItem>
+                        <TreeViewItem x:Name="TVI_Chart" Header="图表"/>
+                    </TreeViewItem.Items>
                 </TreeViewItem>
-            </TreeViewItem.Items>
-            </TreeViewItem>
-        </TreeView.Items>
+            </TreeView.Items>
         </TreeView>
     </UserControl.Content>
 </UserControl>

@@ -9,5 +9,7 @@ namespace SamSoarII.AppMain.Project
     public interface ITabItem
     {
         string TabHeader { get; set; }
+        double ActualWidth { get; set; }
+        double ActualHeight { get; set; }
     }
 }

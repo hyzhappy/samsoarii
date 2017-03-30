@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using SamSoarII.Simulation.Core.Event;
 using SamSoarII.Simulation.Core.VariableModel;
 using System.Xml.Linq;
+using System.Threading;
 
 namespace SamSoarII.Simulation.UI.Monitor
 {
@@ -517,11 +518,15 @@ namespace SamSoarII.Simulation.UI.Monitor
             }
             #endregion
         }
-        
+       
         private List<SimulateVariableUnit> svunits;
 
         private LinkedList<RowElement> reles;
-        
+        private int relestatus;
+        private const int RELES_FREE = 0x00;
+        private const int RELES_FOR_UPDATE = 0x01;
+        private const int RELES_FOR_UPDATEVALUE = 0x02;
+         
         public MonitorTable()
         {
             InitializeComponent();
@@ -559,24 +564,26 @@ namespace SamSoarII.Simulation.UI.Monitor
         
         public void UpdateValue()
         {
-            lock (reles)
+            while (relestatus != RELES_FREE)
             {
-                System.Threading.Monitor.Enter(reles);
-                foreach (RowElement ele in reles)
-                {
-                    ele.Update();
-                }
-                System.Threading.Monitor.Exit(reles);
+                Thread.Sleep(10);
             }
+            relestatus = RELES_FOR_UPDATEVALUE;
+            foreach (RowElement ele in reles)
+            {
+                ele.Update();
+            }
+            relestatus = RELES_FREE;
+             
         }
 
         public void Update()
         {
-
-            lock (reles)
+            while (relestatus != RELES_FREE)
             {
-                System.Threading.Monitor.Enter(reles);
-
+                Thread.Sleep(10);
+            }
+            relestatus = RELES_FOR_UPDATE;
                 IEnumerator<SimulateVariableUnit> iter1 = SVUnits.GetEnumerator();
                 IEnumerator<RowElement> iter2 = reles.GetEnumerator();
                 SimulateVariableUnit svunit = null;
@@ -617,9 +624,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                     releDel.Uninstall();
                     reles.Remove(releDel);
                 }
-                
-                System.Threading.Monitor.Exit(reles);
-            }
+            relestatus = RELES_FREE;
         }
 
         public int Save(string fileName)
@@ -878,6 +883,10 @@ namespace SamSoarII.Simulation.UI.Monitor
                         node.Value.ID++;
                         node = node.Next;
                     }
+                    while (relestatus != RELES_FREE)
+                    {
+                        Thread.Sleep(10);
+                    }
                     node = reles.Find(rele);
                     reles.AddAfter(node, _rele);
 
@@ -922,6 +931,10 @@ namespace SamSoarII.Simulation.UI.Monitor
             svunits.Add(sviunit);
             RowElement rele = null;
             rele = new RowElement(this, reles.Count() + 1, sviunit);
+            while (relestatus != RELES_FREE)
+            {
+                Thread.Sleep(10);
+            }
             reles.AddLast(rele);
         }
 

@@ -14,15 +14,25 @@ using SamSoarII.Simulation.UI;
 using SamSoarII.LadderInstModel;
 using SamSoarII.Extend.LadderChartModel;
 using System.Windows.Forms;
+using SamSoarII.Simulation.Shell.Event;
+using System.ComponentModel;
+using SamSoarII.Simulation.UI.Base;
 
 namespace SamSoarII.AppMain.Project
 {
     public class SimulateHelper
     {
         static private SimulateModel smodel;
-        static private SimulateReportViewModel srmodel;
+        //static private SimulateReportViewModel srmodel;
+
+        static public SimulateModel SModel
+        {
+            get { return smodel; }
+        }
         
-        static public void Simulate(ProjectModel pmodel)
+        public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
+
+        static public int Simulate(ProjectModel pmodel)
         {
             smodel = new SimulateModel();
             SetupSimulateModel(pmodel);
@@ -34,6 +44,7 @@ namespace SamSoarII.AppMain.Project
             {
                 case SimulateDllModel.LOADDLL_OK:
                     smodel.ShowWindow();
+                    smodel.TabOpened += OnTabOpened;
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                     MessageBox.Show("Error : 找不到生成的dll文件\r\n");
@@ -72,6 +83,7 @@ namespace SamSoarII.AppMain.Project
                     MessageBox.Show("Error : 发生未知错误\r\n");
                     break;
             }
+            return checkresult;
         }
 
         #region Setup
@@ -742,7 +754,123 @@ namespace SamSoarII.AppMain.Project
             return svbmodel;
         }
         #endregion
-        
+
+        #region Event Handler
+
+        #region Simulation ViewModel transform to ITabItem
+        public class SimulateTabItem : System.Windows.Controls.UserControl, ITabItem
+        {
+            private string _programName;
+            private SimuViewTabModel svtmodel;
+            
+            public SimulateTabItem(SimuViewTabModel _svtmodel, string programName)
+            {
+                Content = _svtmodel;
+                svtmodel = _svtmodel;
+                _programName = programName;
+            }
+
+            public string TabHeader
+            {
+                get
+                {
+                    return _programName;
+                }
+
+                set
+                {
+                    _programName = value;
+                }
+            }
+
+            double ITabItem.ActualHeight
+            {
+                get
+                {
+                    return svtmodel.ActualHeight;
+                }
+
+                set
+                {
+                    svtmodel.ActualHeight = value;
+                }
+            }
+
+            double ITabItem.ActualWidth
+            {
+                get
+                {
+                    return svtmodel.ActualWidth;
+                }
+
+                set
+                {
+                    svtmodel.ActualWidth = value;
+                }
+            }
+        }
+
+        static public event ShowTabItemEventHandler TabOpen;
+        static private void OnTabOpened(object sender, Simulation.Shell.Event.ShowTabItemEventArgs e)
+        {
+            ShowTabItemEventArgs _e = null;
+            SimulateTabItem _stitem = null;
+            _e = new ShowTabItemEventArgs(TabType.Simulate);
+            if (e.TabName.Equals("所有程序"))
+            {
+                _stitem = new SimulateTabItem(smodel.AllRoutine, "所有程序");
+                if (TabOpen != null)
+                {
+                    TabOpen(_stitem, _e);
+                }            
+                return;
+            }
+            if (e.TabName.Equals("主程序"))
+            {
+                _stitem = new SimulateTabItem(smodel.MainRoutine, "主程序");
+                if (TabOpen != null)
+                {
+                    TabOpen(_stitem, _e);
+                }
+                return;
+            }
+            if (e.TabName.Equals("图表"))
+            {
+                _stitem = new SimulateTabItem(smodel.Chart, "图表");
+                if (TabOpen != null)
+                {
+                    TabOpen(_stitem, _e);
+                }
+                return;
+            }
+            foreach (SimuViewDiagramModel svdmodel in smodel.SubRoutines)
+            {
+                if (e.TabName.Equals(svdmodel.Name))
+                {
+                    _stitem = new SimulateTabItem(svdmodel, svdmodel.Name);
+                    if (TabOpen != null)
+                    {
+                        TabOpen(_stitem, _e);
+                    }
+                    return;
+                }
+            }
+            foreach (SimuViewFuncBlockModel svfmodel in smodel.FuncBlocks)
+            {
+                if (e.TabName.Equals(svfmodel.Name))
+                {
+                    _stitem = new SimulateTabItem(svfmodel, svfmodel.Name);
+                    if (TabOpen != null)
+                    {
+                        TabOpen(_stitem, _e);
+                    }
+                    return;
+                }
+            }
+        }
+        #endregion
+
+        #endregion
     }
 
 

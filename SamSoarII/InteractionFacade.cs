@@ -50,6 +50,8 @@ namespace SamSoarII.AppMain
         {
             this._mainWindow = mainwindow;
             _mainTabControl = _mainWindow.MainTab;
+
+            SimulateHelper.TabOpen += OnTabOpened;
         }
 
         public void CreateProject(string name, string fullFileName)
@@ -138,7 +140,16 @@ namespace SamSoarII.AppMain
 
         public void SimulateProject()
         {
-            SimulateHelper.Simulate(_projectModel);
+            int ret = SimulateHelper.Simulate(_projectModel);
+            switch (ret)
+            {
+                case SimulateHelper.SIMULATE_OK:
+                    _mainWindow.LASimuProj.Content = SimulateHelper.SModel.PTView;
+                    _mainWindow.LAMonitor.Content = SimulateHelper.SModel.MTable;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void CloseTabItem(ITabItem tabItem)
@@ -155,6 +166,10 @@ namespace SamSoarII.AppMain
                     IProgram prog = sender as IProgram;
                     _mainTabControl.ShowItem(prog);
                     break;
+                case TabType.Simulate:
+                    ITabItem tab = sender as ITabItem;
+                    _mainTabControl.ShowItem(tab);
+                    break;
                 case TabType.VariableList:
                     _mainTabControl.ShowVariableList();
                     break;
@@ -167,10 +182,13 @@ namespace SamSoarII.AppMain
 
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
         {
-            var ldmodel = _mainTabControl.SelectedItem as LadderDiagramViewModel;
-            if (ldmodel != null)
+            if (_mainTabControl.SelectedItem is LadderDiagramViewModel)
             {
-                CurrentLadder = ldmodel;
+                var ldmodel = _mainTabControl.SelectedItem as LadderDiagramViewModel;
+                if (ldmodel != null)
+                {
+                    CurrentLadder = ldmodel;
+                }
             }
         }
 

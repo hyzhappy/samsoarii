@@ -48,6 +48,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\DataModel\SimulateDataModel.cs" />
+    <Compile Include="Core\DataModel\ValueSegment.cs" />
     <Compile Include="Core\Event\VariableUnitChangeEventArgs.cs" />
     <Compile Include="Core\FileHelper.cs" />
     <Compile Include="Core\Global\GlobalCommand.cs" />
@@ -89,6 +91,26 @@
     <Compile Include="SimulateModel.cs" />
     <Compile Include="SimulateWindow.xaml.cs">
       <DependentUpon>SimulateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Base\SimuViewTabModel.cs" />
+    <Compile Include="UI\Chart\SimulateDataChartModel.xaml.cs">
+      <DependentUpon>SimulateDataChartModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\SimulateDataModelEventArgs.cs" />
+    <Compile Include="UI\Chart\SimulateDataViewModel.xaml.cs">
+      <DependentUpon>SimulateDataViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\SimuViewChartModel.xaml.cs">
+      <DependentUpon>SimuViewChartModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\TimeRuler.xaml.cs">
+      <DependentUpon>TimeRuler.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\ValueChart.xaml.cs">
+      <DependentUpon>ValueChart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\VariableList.xaml.cs">
+      <DependentUpon>VariableList.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorBitButton.xaml.cs">
       <DependentUpon>MonitorBitButton.xaml</DependentUpon>
@@ -172,6 +194,30 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SimulateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\SimulateDataChartModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\SimulateDataViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\SimuViewChartModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\TimeRuler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\ValueChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\VariableList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

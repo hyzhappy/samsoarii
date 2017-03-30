@@ -50,6 +50,34 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        protected double _actualWidth;
+        double ITabItem.ActualWidth
+        {
+            get
+            {
+                return this._actualWidth;
+            }
+
+            set
+            {
+                this._actualWidth = value;
+            }
+        }
+
+        protected double _actualHeight;
+        double ITabItem.ActualHeight
+        {
+            get
+            {
+                return this._actualHeight;
+            }
+
+            set
+            {
+                this._actualHeight = value;
+            }
+        }
+
         public VariableListControl()
         {
             InitializeComponent();

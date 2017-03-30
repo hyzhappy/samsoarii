@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SamSoarII.Simulation.Core.VariableModel;
+using SamSoarII.Simulation.Core.DataModel;
 
 namespace SamSoarII.Simulation.Core
 {
@@ -20,6 +21,10 @@ namespace SamSoarII.Simulation.Core
 
         private Dictionary<string, string> vndict;
 
+        private Dictionary<SimulateDataModel, SimulateDataModel> lddict;
+
+        private Dictionary<SimulateDataModel, SimulateDataModel> vddict;
+
         public SimulateManager()
         {
             dllmodel = new SimulateDllModel();
@@ -27,6 +32,8 @@ namespace SamSoarII.Simulation.Core
             udict = new Dictionary<SimulateVariableUnit, SimulateVariableUnit>();
             ldict = new Dictionary<SimulateVariableUnit, SimulateVariableUnit>();
             vndict = new Dictionary<string, string>();
+            lddict = new Dictionary<SimulateDataModel, SimulateDataModel>();
+            vddict = new Dictionary<SimulateDataModel, SimulateDataModel>();
         }
 
         public IEnumerable<SimulateVariableModel> Variables
@@ -237,6 +244,46 @@ namespace SamSoarII.Simulation.Core
                 udict.Add(svunit, svunit);
             }
             dllmodel.Unlock(svunit.Name);
+        }
+
+        public void Lock(SimulateDataModel sdmodel)
+        {
+            if (!lddict.ContainsKey(sdmodel))
+            {
+                lddict.Add(sdmodel, sdmodel);
+                sdmodel.IsLock = true;
+                dllmodel.Lock(sdmodel);
+            }
+        }
+        
+        public void View(SimulateDataModel sdmodel)
+        {
+            if (!vddict.ContainsKey(sdmodel))
+            {
+                vddict.Add(sdmodel, sdmodel);
+                sdmodel.IsView = true;
+                dllmodel.View(sdmodel);
+            }
+        }
+
+        public void Unlock(SimulateDataModel sdmodel)
+        {
+            if (lddict.ContainsKey(sdmodel))
+            {
+                lddict.Remove(sdmodel);
+                sdmodel.IsLock = false;
+                dllmodel.Unlock(sdmodel);
+            }
+        }
+        
+        public void Unview(SimulateDataModel sdmodel)
+        {
+            if (vddict.ContainsKey(sdmodel))
+            {
+                vddict.Remove(sdmodel);
+                sdmodel.IsView = false;
+                dllmodel.Unview(sdmodel);
+            }
         }
 
         public void Start()

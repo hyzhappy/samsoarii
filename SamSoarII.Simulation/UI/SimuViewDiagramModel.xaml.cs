@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using SamSoarII.Simulation.Core.Global;
+using SamSoarII.Simulation.UI.Base;
 
 namespace SamSoarII.Simulation.UI
 {
@@ -37,7 +38,7 @@ namespace SamSoarII.Simulation.UI
         NoCross
     }
     
-    public partial class SimuViewDiagramModel : UserControl
+    public partial class SimuViewDiagramModel : SimuViewTabModel
     {
         public string LadderName { get; set; }
         public bool IsMainLadder { get; set; }
@@ -521,6 +522,15 @@ namespace SamSoarII.Simulation.UI
             SelectionStatus = SelectStatus.Idle;
         }
 
+        #endregion
+
+        #region Resize
+        protected override void OnActualWidthChanged()
+        {
+            base.OnActualWidthChanged();
+            GlobalSetting.LadderOriginScaleX = _actualWidth / 3100;
+            GlobalSetting.LadderOriginScaleY = _actualWidth / 3100;
+        }
         #endregion
     }
 }

@@ -37,7 +37,7 @@ namespace SamSoarII.Simulation.UI
             {
                 this._rowcount = value;
                 LadderCanvas.Height = _rowcount * 300;
-                this.Height = LadderCanvas.Height + 60;
+                this.Height = LadderCanvas.Height + 150;
             }
         }
 

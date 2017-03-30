@@ -20,6 +20,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
 using SamSoarII.LadderInstViewModel;
+using Xceed.Wpf.AvalonDock.Themes;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock.Global;
+using Xceed.Wpf.AvalonDock.Controls;
+using System.Xml;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -30,11 +35,67 @@ namespace SamSoarII.AppMain.UI
     {
         private InteractionFacade _interactionFacade;
 
+        public LayoutAnchorControl LACProj;
+        public LayoutAnchorControl LACSimuProj;
+        public LayoutAnchorControl LACMonitor;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            InitializeAvalonDock();
+
             _interactionFacade = new InteractionFacade(this);
             this.Loaded += MainWindow_Loaded;
+        }
+
+        private void InitializeAvalonDock()
+        {
+            LayoutSetting.Load();
+
+            LACProj = LAProj.AnchorControl;
+            LACSimuProj = LASimuProj.AnchorControl;
+            LACMonitor = LAMonitor.AnchorControl;
+
+            AnchorSide side;
+            side = LayoutSetting.GetDefaultSideAnchorable(LAProj.Title);
+            LAProj.ReplaceSide(side);
+            side = LayoutSetting.GetDefaultSideAnchorable(LASimuProj.Title);
+            LASimuProj.ReplaceSide(side);
+            side = LayoutSetting.GetDefaultSideAnchorable(LAMonitor.Title);
+            LAMonitor.ReplaceSide(side);
+            LAProj.Hide();
+            LASimuProj.Hide();
+            LAMonitor.Hide();
+
+            double[] autohidesize;
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAProj.Title);
+            LAProj.AutoHideWidth = autohidesize[0];
+            LAProj.AutoHideHeight = autohidesize[1];
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LASimuProj.Title);
+            LASimuProj.AutoHideWidth = autohidesize[0];
+            LASimuProj.AutoHideHeight = autohidesize[1];
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMonitor.Title);
+            LAMonitor.AutoHideWidth = autohidesize[0];
+            LAMonitor.AutoHideHeight = autohidesize[1];
+
+            double[] floatsize;
+            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAProj.Title);
+            LAProj.FloatingWidth = floatsize[0];
+            LAProj.FloatingHeight = floatsize[1];
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LASimuProj.Title);
+            LASimuProj.FloatingWidth = floatsize[0];
+            LASimuProj.FloatingHeight = floatsize[1];
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMonitor.Title);
+            LAMonitor.FloatingWidth = floatsize[0];
+            LAMonitor.FloatingHeight = floatsize[1];
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            LayoutSetting.Save();
+
+            base.OnClosed(e);
         }
 
         public void SetProjectTreeView(ProjectTreeView treeview)
@@ -58,12 +119,12 @@ namespace SamSoarII.AppMain.UI
         {
             if(!GlobalSetting.LoadLadderScaleSuccess())
             {
-                GlobalSetting.LadderOriginScaleX = MainTab.ActualWidth / 3100;
-                GlobalSetting.LadderOriginScaleY = MainTab.ActualWidth / 3100;
+                ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(MainTab);
+                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 3100;
+                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 3100;
             }
         }
-
-
+        
         private void OnTabItemHeaderCancelButtonClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -111,11 +172,14 @@ namespace SamSoarII.AppMain.UI
         {
             _interactionFacade.CreateProject(name, fullFileName);
             _interactionFacade.SaveProject();
+            LACProj.Show();
         }
 
         private bool OpenProject(string fullFileName)
         {
-            return _interactionFacade.LoadProject(fullFileName);
+            bool ret = _interactionFacade.LoadProject(fullFileName);
+            LACProj.Show();
+            return ret;
         }
 
 
@@ -178,6 +242,44 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private void ShowProjectTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+
+        private void ShowSimulateTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+
+        private void ShowMonitorCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
         private void CompileCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -209,9 +311,14 @@ namespace SamSoarII.AppMain.UI
 
         private void DownloadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-
+            
         }
 
+        private void UploadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+
+        }
+        
         private void SimulateCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -239,6 +346,21 @@ namespace SamSoarII.AppMain.UI
         {
             GlobalSetting.LadderScaleX -= 0.1;
             GlobalSetting.LadderScaleY -= 0.1;
+        }
+
+        private void OnShowProjectTreeViewCommand(object sender, RoutedEventArgs e)
+        {
+            LACProj.Show();
+        }
+
+        private void OnShowSimulateTreeViewCommand(object sender, RoutedEventArgs e)
+        {
+            LACSimuProj.Show();
+        }
+
+        private void OnShowMonitorCommand(object sender, RoutedEventArgs e)
+        {
+            LACMonitor.Show();
         }
 
         private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -326,6 +448,11 @@ namespace SamSoarII.AppMain.UI
         }
 
         private void OnDownloadCommandExecute(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnUploadCommandExecute(object sender, RoutedEventArgs e)
         {
 
         }

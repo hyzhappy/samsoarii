@@ -52,12 +52,12 @@ namespace SamSoarII.Simulation.Core.Global
             }
             set
             {
-                if(value > ScaleMin && value < ScaleMax)
+                if (value > ScaleMin && value < ScaleMax)
                 {
                     _ladderScaleX = value;
                     LadderScaleTransform.ScaleX = _ladderScaleX * _ladderOriginScaleX;
                 }
-              
+
             }
         }
         public static double LadderScaleY
@@ -68,7 +68,7 @@ namespace SamSoarII.Simulation.Core.Global
             }
             set
             {
-                if(value > ScaleMin && value < ScaleMax)
+                if (value > ScaleMin && value < ScaleMax)
                 {
                     _ladderScaleY = value;
                     LadderScaleTransform.ScaleY = _ladderOriginScaleY * _ladderScaleY;
@@ -79,17 +79,33 @@ namespace SamSoarII.Simulation.Core.Global
 
         public static ScaleTransform LadderScaleTransform { get; private set; }
 
+        public static ScaleTransform RulerScaleTransform { get; private set; }
+
+        public static double RulerScaleX
+        {
+            get { return RulerScaleTransform.ScaleX; }
+            set { RulerScaleTransform.ScaleX = value; }
+        }
+        
+        public static double RulerScaleY
+        {
+            get { return RulerScaleTransform.ScaleY; }
+            set { RulerScaleTransform.ScaleY = value; }
+        }
+
         public static int FuncBlockFontSize { get; set; }
 
+        public static double TimeRulerIntevalWidth = 10;
+        
         static GlobalSetting()
         {
             LadderScaleTransform = new ScaleTransform();
-            double scale = 1024.0 * 749 / (267 + 749) / 3000 * 1.4;
-            LadderOriginScaleX = scale;
-            LadderOriginScaleY = scale;
+            RulerScaleTransform = new ScaleTransform();
+            //double scale = 1024.0 * 749 / (267 + 749) / 3000 * 1.4;
+            //LadderOriginScaleX = scale;
+            //LadderOriginScaleY = scale;
         }
-
-
+        
         public static void Save()
         {
             var cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+        xmlns:adock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:app="clr-namespace:SamSoarII.AppMain"
         xmlns:proj="clr-namespace:SamSoarII.AppMain.Project"
+        xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
         Title="SamSoarII" Height="350" Width="525" WindowState="Maximized">
     <Window.CommandBindings>
@@ -26,6 +28,9 @@
         <!--View Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.ZoomInCommand}" Executed="OnZoomInCommandExecute" CanExecute="ZoomInCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ZoomOutCommand}" Executed="OnZoomOutCommandExecute" CanExecute="ZoomOutCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}" Executed="OnShowSimulateTreeViewCommand" CanExecute="ShowSimulateTreeViewCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMonitorCommand}" Executed="OnShowMonitorCommand" CanExecute="ShowMonitorCanExecute"></CommandBinding>
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
@@ -35,11 +40,21 @@
         <!-- Tool Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"  Executed="OnCheckNetworkErrorCommandExecute" CanExecute="OnCheckNetworkErrorCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimulateCommand}" Executed="OnSimulateCommandExecute" CanExecute="SimulateCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
+        <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <ad:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+        <ad:AnchorSideToOrientationConverter x:Key="AnchorSideToOrientationConverter" />
+        <ad:AnchorSideToAngleConverter x:Key="AnchorSideToAngleConverter" />
+        <ad:NullToDoNothingConverter x:Key="NullToDoNothingConverter" />
+        <ad:LayoutItemFromLayoutModelConverter x:Key="LayoutItemFromLayoutModelConverter" />
+        <ad:ActivateCommandLayoutItemFromLayoutModelConverter x:Key="ActivateCommandLayoutItemFromLayoutModelConverter" />
+        <ad:BoolToSideBrushConverter x:Key="BoolToSideBrushConverter" />
+
         <Style x:Key="ImageEnable" TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -82,14 +97,54 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+        <ControlTemplate x:Key="SamSoarIIAnchorTemplate">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Name="SPanel" Orientation="{Binding Path=Model.Side,
+                                                                RelativeSource={RelativeSource AncestorType={x:Type ad:LayoutAnchorSide},
+                                                                                               Mode=FindAncestor},
+                                                                Converter={StaticResource AnchorSideToOrientationConverter}}">
+                    <TextBlock Name="TBlock" TextAlignment="Center" Foreground="{Binding Path=IsMouseOver,
+                                                                RelativeSource={RelativeSource AncestorType={x:Type StackPanel},
+                                                                                               Mode=FindAncestor},
+                                                                Converter={StaticResource BoolToSideBrushConverter}}"
+                                                                    Text="{Binding Path=Model.Title,
+                                                                RelativeSource={RelativeSource AncestorType={x:Type ad:LayoutAnchorControl},
+                                                                                               Mode=FindAncestor}}">
+                    </TextBlock>
+                    <Rectangle Name="Rect" Opacity="0.4" Height="6" Fill="{Binding Path=IsMouseOver,
+                                                                RelativeSource={RelativeSource AncestorType={x:Type StackPanel},
+                                                                                               Mode=FindAncestor},
+                                                                Converter={StaticResource BoolToSideBrushConverter}}"
+                                                                    Width="{Binding Path=ActualWidth,
+                                                                                    Source=TBlock}">
+                    </Rectangle>
+                </StackPanel>
+                <Rectangle Height="6" Width="12" Fill="Transparent"/>
+            </StackPanel>
+        </ControlTemplate>
+        <Style x:Key="DockManagerStyle" TargetType="{x:Type ad:DockingManager}">
+            <Setter Property="AnchorTemplate" Value="{StaticResource SamSoarIIAnchorTemplate}"/>
+        </Style>
     </Window.Resources>
-    <DockPanel>
-        <Menu DockPanel.Dock="Top" Height="30" FontSize="14" Padding="6" FontFamily="Consolas">
+    <DockPanel x:Name="MainDockPanel">
+        <Menu DockPanel.Dock="Top" Height="32" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
             <MenuItem Header="文件(_F)">
-                <MenuItem Header="新建工程" Command="ApplicationCommands.New"></MenuItem>
-                <MenuItem Header="打开工程" Command="ApplicationCommands.Open"></MenuItem>
+                <MenuItem Header="新建工程" Command="ApplicationCommands.New">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="打开工程" Command="ApplicationCommands.Open">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Open.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
-                <MenuItem Header="保存工程" Command="ApplicationCommands.Save"></MenuItem>
+                <MenuItem Header="保存工程" Command="ApplicationCommands.Save">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Save.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="工程另存为" Command="ApplicationCommands.SaveAs"></MenuItem>
                 <Separator/>
                 <MenuItem Header="最近工程"></MenuItem>
@@ -97,12 +152,32 @@
                 <MenuItem Header="退出" Command="ApplicationCommands.Close"></MenuItem>
             </MenuItem>
             <MenuItem Header="编辑(_E)">
-                <MenuItem Header="撤销" Command="ApplicationCommands.Undo"></MenuItem>
-                <MenuItem Header="重做" Command="ApplicationCommands.Redo"></MenuItem>
+                <MenuItem Header="撤销" Command="ApplicationCommands.Undo">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="重做" Command="ApplicationCommands.Redo">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="剪切" Command="ApplicationCommands.Cut"></MenuItem>
-                <MenuItem Header="复制" Command="ApplicationCommands.Copy"></MenuItem>
-                <MenuItem Header="粘贴" Command="ApplicationCommands.Paste"></MenuItem>
+                <MenuItem Header="剪切" Command="ApplicationCommands.Cut">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Cut.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="复制" Command="ApplicationCommands.Copy">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Copy.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="粘贴" Command="ApplicationCommands.Paste">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Paste.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="删除" Command="ApplicationCommands.Delete"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="全选" Command="ApplicationCommands.SelectAll"></MenuItem>
@@ -114,6 +189,10 @@
                 <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="注释模式" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="工程资源管理器" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}"></MenuItem>
+                <MenuItem Header="仿真资源管理器" Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}"></MenuItem>
+                <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowMonitorCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
@@ -122,16 +201,32 @@
                 <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="生成(_B)">
-                <MenuItem Header="编译" Command="{x:Static app:GlobalCommand.CompileCommand}"></MenuItem>
+                <MenuItem Header="编译" Command="{x:Static app:GlobalCommand.CompileCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Compile.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="工具(_T)">
-                <MenuItem Header="上载"></MenuItem>
-                <MenuItem Header="下载"></MenuItem>
+                <MenuItem Header="上载">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="下载">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="仿真" Command="{x:Static app:GlobalCommand.SimulateCommand}"></MenuItem>
                 <MenuItem Header="监视"></MenuItem>
                 <MenuItem Header="程序检测" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}"></MenuItem>
+                <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Config.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="帮助(_H)">
                 <MenuItem Header="查看帮助"></MenuItem>
@@ -140,7 +235,7 @@
                 <MenuItem Header="关于" Click="OnShowAboutDialog"></MenuItem>
             </MenuItem>
         </Menu>
-        <ToolBarTray DockPanel.Dock="Top" Height="35">
+        <ToolBarTray x:Name="ToolBar" DockPanel.Dock="Top" Height="38">
             <ToolBar>
                 <Button ToolTip="新建工程" Command="ApplicationCommands.New">
                     <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
@@ -176,6 +271,9 @@
                 <Button ToolTip="下载" Command="{x:Static app:GlobalCommand.DownloadCommand}">
                     <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
+                <Button ToolTip="上载" Command="{x:Static app:GlobalCommand.UploadCommand}">
+                    <Image Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
             </ToolBar>
             <ToolBar>
                 <ToggleButton x:Name="CommentModeToggleButton" ToolTip="注释模式" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}">
@@ -183,7 +281,7 @@
                 </ToggleButton>
             </ToolBar>
         </ToolBarTray>
-        <ToolBarTray DockPanel.Dock="Top" Height="35">
+        <ToolBarTray x:Name="LadderBar" DockPanel.Dock="Top" Height="35">
             <ToolBar>
                 <Button Height="35">
                     <Image Source="/Resources/Image/InstructionToolbar/LD.ico"></Image>
@@ -199,25 +297,31 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <Grid Name="MainGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
-                <ColumnDefinition Width="17*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="4*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-            </Grid>
-            <local:MainTabControl x:Name="MainTab" Background="Transparent" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" ItemsSource="{Binding TabItemCollection}">
-                <TabControl.Resources>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="Template" Value="{StaticResource MainTabItemTemplate}"></Setter>
-                        <Setter Property="MinWidth" Value="100"></Setter>
-                    </Style>
-                </TabControl.Resources>
-            </local:MainTabControl>
-        </Grid>
+        <ad:DockingManager Style="{StaticResource ResourceKey=DockManagerStyle}">
+            <ad:LayoutRoot>
+                <ad:LayoutPanel>
+                    <local:MainTabControl x:Name="MainTab">
+                    </local:MainTabControl>
+                </ad:LayoutPanel>
+                <ad:LayoutRoot.LeftSide>
+                    <ad:LayoutAnchorSide>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAProj" Title="工程资源管理器" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                                <Grid x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                                </Grid>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LASimuProj" Title="仿真资源管理器" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAMonitor" Title="仿真监视" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                    </ad:LayoutAnchorSide>
+                </ad:LayoutRoot.LeftSide>
+            </ad:LayoutRoot>
+        </ad:DockingManager>
     </DockPanel>
 </Window>
