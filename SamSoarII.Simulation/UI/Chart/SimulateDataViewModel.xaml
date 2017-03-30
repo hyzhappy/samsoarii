@@ -8,13 +8,25 @@
              d:DesignHeight="40" d:DesignWidth="200">
     <UserControl.Content>
         <Canvas x:Name="MainCanva" Background="Transparent">
-            <Border x:Name="Cursor" Canvas.Top="0" Canvas.Left="0" Width="{Binding ElementName=MainCanva, Path=ActualWidth}" Height="{Binding ElementName=MainCanva, Path=ActualHeight}" BorderBrush="AntiqueWhite" BorderThickness="1"/>
+            <Border x:Name="Border" Canvas.Top="0" Canvas.Left="0" Width="{Binding ElementName=MainCanva, Path=ActualWidth}" Height="{Binding ElementName=MainCanva, Path=ActualHeight}" BorderBrush="AntiqueWhite" BorderThickness="1"/>
+            <Image x:Name="LockFlag" Source="/Resources/Image/Lock/Lockon.png" Canvas.Top="2" Canvas.Left="130"/>
+            <Image x:Name="ViewFlag" Source="/Resources/Image/View.png" Canvas.Top="2" Canvas.Left="130"/>
             <TextBlock x:Name="NameTextBlock" Canvas.Top="4" Canvas.Left="4" FontSize="20" Foreground="AliceBlue"></TextBlock>
             <TextBox x:Name="NameTextInput" Canvas.Top="4" Canvas.Left="4" Width="160" FontSize="16"></TextBox>
-            <Canvas Canvas.Top="4" Canvas.Left="162" Width="30" Height="30" MouseUp="OnCloseButtonClicked">
+            <Canvas Canvas.Top="4" Canvas.Left="162" Width="30" Height="30" MouseEnter="OnCloseButtonEnter" MouseLeave="OnCloseButtonLeave" MouseUp="OnCloseButtonClick">
                 <Line X1="10" X2="30" Y1="5" Y2="25" Stroke="AliceBlue" StrokeThickness="2"/>
                 <Line X1="30" X2="10" Y1="5" Y2="25" Stroke="AliceBlue" StrokeThickness="2"/>
+                <Rectangle x:Name="CloseButtonCursor" Canvas.Top="3" Canvas.Left="8" Width="24" Height="24" Fill="White" Opacity="0.0"/>
             </Canvas>
         </Canvas>
     </UserControl.Content>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="编辑变量"></MenuItem>
+            <MenuItem Header="编辑值"></MenuItem>
+            <Separator/>
+            <MenuItem Header="锁定" x:Name="MI_LockButton" Click="MI_LockButton_Click"></MenuItem>
+            <MenuItem Header="监视" x:Name="MI_ViewButton" Click="MI_ViewButton_Click"></MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 </UserControl>

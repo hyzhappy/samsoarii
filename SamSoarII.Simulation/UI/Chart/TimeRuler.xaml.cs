@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Simulation.Core.Global;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,21 @@ namespace SamSoarII.Simulation.UI.Chart
     /// </summary>
     public partial class TimeRuler : UserControl
     {
+        private const double DesignWidth = 800;
+        private const double DesignHeight = 32;
+
+        private double actualwidth;
+        public new double ActualWidth
+        {
+            get { return this.actualwidth; }
+            set
+            {
+                this.actualwidth = value;
+                GlobalSetting.RulerScaleX = actualwidth / DesignWidth;
+                GlobalSetting.RulerScaleY = 1.0;
+            }
+        }
+
         private double timestart;
         private double timescale;
 
@@ -38,6 +54,16 @@ namespace SamSoarII.Simulation.UI.Chart
             set { this.timescale = value; }
         }
 
+        public double IntevalWidth
+        {
+            get { return DesignWidth / (DivideNumber * SubDivideNumber); }
+        }
+
+        public double TimeEnd
+        {
+            get { return this.timestart + DesignWidth * TimeScale; }
+        }
+
         public int DivideNumber
         {
             get { return this.divnum; }
@@ -53,6 +79,7 @@ namespace SamSoarII.Simulation.UI.Chart
         public TimeRuler()
         {
             InitializeComponent();
+            LayoutTransform = GlobalSetting.RulerScaleTransform;
             this.timestart = 0.0;
             this.timescale = 1.0;
             this.divnum = 20;
@@ -63,7 +90,8 @@ namespace SamSoarII.Simulation.UI.Chart
         private void Update()
         {
             MainCanva.Children.Clear();
-            int x = 0;
+            double x = 0;
+            double itv = IntevalWidth;
             for (int i = 0; i < DivideNumber; i++)
                 for (int j = 0; j < SubDivideNumber; j++)
                 {
@@ -73,7 +101,7 @@ namespace SamSoarII.Simulation.UI.Chart
                     line.Stroke = Brushes.AntiqueWhite;
                     if (j == 0)
                     {
-                        line.Y2 = 30;
+                        line.Y2 = DesignHeight;
                         line.StrokeThickness = 2;
                         TextBlock tblock = new TextBlock();
                         tblock.Text = String.Format("{0} ms", timestart + x * timescale);
@@ -85,16 +113,15 @@ namespace SamSoarII.Simulation.UI.Chart
                     }
                     else
                     {
-                        line.Y2 = 10;
+                        line.Y2 = DesignHeight/3;
                         line.StrokeThickness = 1;
                     }
                     MainCanva.Children.Add(line);
-                    x += 10;
+                    x += itv;
                 }
             MainCanva.Width = x;
             this.Width = MainCanva.Width;
         }
         
-
     }
 }

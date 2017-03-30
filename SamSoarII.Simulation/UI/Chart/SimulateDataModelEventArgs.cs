@@ -11,7 +11,17 @@ namespace SamSoarII.Simulation.UI.Chart
 
     public class SimulateDataModelEventArgs
     {
-        public SimulateDataModel SDModel
+        public int ID
+        {
+            get; set;
+        }
+
+        public SimulateDataModel SDModel_old
+        {
+            get; set;
+        }
+
+        public SimulateDataModel SDModel_new
         {
             get; set;
         }
@@ -28,7 +38,9 @@ namespace SamSoarII.Simulation.UI.Chart
 
         public SimulateDataModelEventArgs()
         {
-            SDModel = null;
+            ID = 0;
+            SDModel_old = null;
+            SDModel_new = null;
             SDVModel = null;
             SDCModel = null;
         }

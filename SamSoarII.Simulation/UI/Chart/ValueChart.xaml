@@ -5,10 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Chart"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Content>
-        <Canvas x:Name="MainCanva" Background="AliceBlue">
-            
-        </Canvas>
-    </UserControl.Content>
+             d:DesignHeight="300" d:DesignWidth="300"
+             Background="AliceBlue"
+             Focusable="True"
+             PreviewKeyDown="OnValueChartKeyDown">
+    <Canvas x:Name="MainCanva">
+        <Grid x:Name="MainGrid" Canvas.Top="0" Canvas.Left="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+        </Grid>
+        <Rectangle x:Name="Cursor" Canvas.Top="0" Canvas.Left="0" Width="0" Height="0" Fill="Aquamarine" Stroke="DarkBlue" Opacity="0.4"></Rectangle>
+    </Canvas>
 </UserControl>

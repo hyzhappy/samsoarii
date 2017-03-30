@@ -41,6 +41,16 @@ namespace SamSoarII.Simulation.UI.Chart
             InitializeComponent();
         }
 
+        public void BuildRouted(SimuViewChartModel svcmodel)
+        {
+            svcmodel.SDModelClose += OnSDModelClose;
+            svcmodel.SDModelSetup += OnSDModelSetup;
+            svcmodel.SDModelLock += OnSDModelLock;
+            svcmodel.SDModelView += OnSDModelView;
+            svcmodel.SDModelUnlock += OnSDModelUnlock;
+            svcmodel.SDModelUnview += OnSDModelUnview;
+        }
+
         public void Update()
         {
             MainGrid.Children.Clear();
@@ -64,6 +74,50 @@ namespace SamSoarII.Simulation.UI.Chart
             MainGrid.Children.Add(NewButton);
         }
 
+        #region SimulateDataModel Manipulation
+
+        public void Add(SimulateDataModel sdmodel, int id)
+        {
+            SimulateDataViewModel sdvmodel = new SimulateDataViewModel(sdmodel);
+            Add(sdvmodel, id);
+        }
+
+        public void Add(SimulateDataViewModel sdvmodel, int id)
+        {
+            if (id == sdvmodels.Count())
+            {
+                AddLast(sdvmodel);
+                return;
+            }
+            RowDefinition rdef = new RowDefinition();
+            rdef.Height = new GridLength(40);
+            MainGrid.RowDefinitions.Add(rdef);
+            SimulateDataViewModel _sdvmodel = sdvmodels.ElementAt(id);
+            LinkedListNode<SimulateDataViewModel> nodestart = sdvmodels.Find(_sdvmodel);
+            LinkedListNode<SimulateDataViewModel> node = nodestart;
+            while (node != null)
+            {
+                _sdvmodel = node.Value;
+                int row = Grid.GetRow(_sdvmodel);
+                Grid.SetRow(_sdvmodel, row + 1);
+                node = node.Next;
+            }
+            Grid.SetRow(sdvmodel, id);
+            sdvmodels.AddBefore(nodestart, sdvmodel);
+            MainGrid.Children.Add(sdvmodel);
+            sdvmodel.Closed += OnSDModelClose;
+            sdvmodel.SDModelLock += OnSDModelLock;
+            sdvmodel.SDModelView += OnSDModelView;
+            sdvmodel.SDModelUnlock += OnSDModelUnlock;
+            sdvmodel.SDModelUnview += OnSDModelUnview;
+        }
+
+        public void AddLast(SimulateDataModel sdmodel)
+        {
+            SimulateDataViewModel sdvmodel = new SimulateDataViewModel(sdmodel);
+            AddLast(sdvmodel);
+        }
+
         public void AddLast(SimulateDataViewModel sdvmodel)
         {
             RowDefinition rdef = new RowDefinition();
@@ -78,6 +132,11 @@ namespace SamSoarII.Simulation.UI.Chart
             SDVModels.AddLast(sdvmodel);
             MainGrid.Children.Add(sdvmodel);
             MainGrid.Children.Add(NewButton);
+            sdvmodel.Closed += OnSDModelClose;
+            sdvmodel.SDModelLock += OnSDModelLock;
+            sdvmodel.SDModelView += OnSDModelView;
+            sdvmodel.SDModelUnlock += OnSDModelUnlock;
+            sdvmodel.SDModelUnview += OnSDModelUnview;
         }
 
         public void Remove(SimulateDataViewModel sdvmodel)
@@ -95,7 +154,14 @@ namespace SamSoarII.Simulation.UI.Chart
             Grid.SetRow(NewButton, SDVModels.Count() - 1);
             SDVModels.Remove(sdvmodel);
             MainGrid.Children.Remove(sdvmodel);
+            sdvmodel.Closed -= OnSDModelClose;
+            sdvmodel.SDModelLock -= OnSDModelLock;
+            sdvmodel.SDModelView -= OnSDModelView;
+            sdvmodel.SDModelUnlock -= OnSDModelUnlock;
+            sdvmodel.SDModelUnview -= OnSDModelUnview;
         }
+
+        #endregion
 
         #region Event Handler
         private void OnNewButtonClicked(object sender, MouseEventArgs e)
@@ -109,9 +175,43 @@ namespace SamSoarII.Simulation.UI.Chart
         public event SimulateDataModelEventHandler SDModelSetup;
         private void OnSDModelSetup(object sender, SimulateDataModelEventArgs e)
         {
-            if (SDModelSetup != null)
+            if (e.SDVModel != null)
             {
-                SDModelSetup(sender, e);
+                return;
+            }
+            if (sender is SimulateDataViewModel)
+            {
+                SimulateDataViewModel sdvmodel = (SimulateDataViewModel)(sender);
+                e.SDVModel = sdvmodel;
+                e.ID = 0;
+                foreach (SimulateDataViewModel _sdvmodel in SDVModels)
+                {
+                    if (sdvmodel == _sdvmodel)
+                    {
+                        break;
+                    }
+                    e.ID++;
+                }
+                if (SDModelSetup != null)
+                {
+                    SDModelSetup(sender, e);
+                }
+            }
+            else if (sender is SimuViewChartModel)
+            {
+                foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                {
+                    if (sdvmodel.SDModel == e.SDModel_old)
+                    {
+                        sdvmodel.SDModel = e.SDModel_new;
+                        e.SDVModel = sdvmodel;
+                        break;
+                    }
+                }
+                if (e.SDVModel == null)
+                {
+                    Add(e.SDModel_new, e.ID);
+                }
             }
         }
 
@@ -124,10 +224,153 @@ namespace SamSoarII.Simulation.UI.Chart
                 if (SDModelClose != null)
                 {
                     SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
-                    _e.SDModel = sdvmodel.SDModel;
+                    _e.SDModel_old = sdvmodel.SDModel;
                     _e.SDVModel = sdvmodel;
                     SDModelClose(sender, _e);
                 }
+            }
+        }
+        private void OnSDModelClose(object sender, SimulateDataModelEventArgs e)
+        {
+            if (e.SDVModel != null)
+            {
+                return;
+            }
+            if (sender is SimuViewChartModel)
+            {
+                foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                {
+                    if (sdvmodel.SDModel == e.SDModel_old)
+                    {
+                        e.SDVModel = sdvmodel;
+                        Remove(sdvmodel);
+                        break;
+                    }
+                }
+                if (e.SDVModel == null)
+                {
+                    throw new ArgumentException();
+                }
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelLock;
+        private void OnSDModelLock(object sender, SimulateDataModelEventArgs e)
+        {
+            if (e.SDVModel != null)
+            {
+                return;
+            }
+            if (sender is SimulateDataViewModel)
+            {
+                e.SDVModel = (SimulateDataViewModel)(sender);
+                SDModelLock(this, e);
+            }
+            if (sender is SimuViewChartModel)
+            {
+                if (e.SDVModel == null)
+                {
+                    foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                    {
+                        if (sdvmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDVModel = sdvmodel;
+                        }
+                    }
+                }
+                if (e.SDVModel == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+                //e.SDVModel.ShowLockFlag();
+                e.SDVModel.LockFlag.Visibility = Visibility.Visible;
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelView;
+        private void OnSDModelView(object sender, SimulateDataModelEventArgs e)
+        {
+            if (sender is SimulateDataViewModel)
+            {
+                e.SDVModel = (SimulateDataViewModel)(sender);
+                SDModelView(this, e);
+            }
+            if (sender is SimuViewChartModel)
+            {
+                if (e.SDVModel == null)
+                {
+                    foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                    {
+                        if (sdvmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDVModel = sdvmodel;
+                        }
+                    }
+                }
+                if (e.SDVModel == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+                //e.SDVModel.ShowViewFlag();
+                e.SDVModel.ViewFlag.Visibility = Visibility.Visible;
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelUnlock;
+        private void OnSDModelUnlock(object sender, SimulateDataModelEventArgs e)
+        {
+            if (sender is SimulateDataViewModel)
+            {
+                e.SDVModel = (SimulateDataViewModel)(sender);
+                SDModelUnlock(this, e);
+            }
+            if (sender is SimuViewChartModel)
+            {
+                if (e.SDVModel == null)
+                {
+                    foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                    {
+                        if (sdvmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDVModel = sdvmodel;
+                        }
+                    }
+                }
+                if (e.SDVModel == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+                //e.SDVModel.HideLockFlag();
+                e.SDVModel.LockFlag.Visibility = Visibility.Hidden;
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelUnview;
+        private void OnSDModelUnview(object sender, SimulateDataModelEventArgs e)
+        {
+            if (sender is SimulateDataViewModel)
+            {
+                e.SDVModel = (SimulateDataViewModel)(sender);
+                SDModelUnview(this, e);
+            }
+            if (sender is SimuViewChartModel)
+            {
+                if (e.SDVModel == null)
+                {
+                    foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                    {
+                        if (sdvmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDVModel = sdvmodel;
+                        }
+                    }
+                }
+                if (e.SDVModel == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+                //e.SDVModel.HideViewFlag();
+                e.SDVModel.ViewFlag.Visibility = Visibility.Hidden;
             }
         }
         #endregion
