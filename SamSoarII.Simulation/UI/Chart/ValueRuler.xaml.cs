@@ -17,52 +17,52 @@ using System.Windows.Shapes;
 namespace SamSoarII.Simulation.UI.Chart
 {
     /// <summary>
-    /// TimeRuler.xaml 的交互逻辑
+    /// ValueRuler.xaml 的交互逻辑
     /// </summary>
-    public partial class TimeRuler : UserControl
+    public partial class ValueRuler : UserControl
     {
-        private const double DesignWidth = 800;
-        private const double DesignHeight = 32;
+        private const double DesignWidth = 32;
+        private const double DesignHeight = 600;
 
-        private double actualwidth;
-        public new double ActualWidth
+        private double actualheight;
+        public new double ActualHeight
         {
-            get { return this.actualwidth; }
+            get { return this.actualheight; }
             set
             {
-                this.actualwidth = value;
-                GlobalSetting.RulerScaleX = actualwidth / DesignWidth;
+                this.actualheight = value;
+                GlobalSetting.RulerScaleX = actualheight / DesignHeight;
                 GlobalSetting.RulerScaleY = 1.0;
             }
         }
 
-        private double timestart;
-        private double timescale;
+        private double valuestart;
+        private double valuescale;
 
         private int divnum;
         private int subdivnum;
 
-        public double TimeStart
+        public double ValueStart
         {
-            get { return this.timestart; }
-            set { this.timestart = value; }
+            get { return this.valuestart; }
+            set { this.valuestart = value; }
         }
 
-        public double TimeScale
+        public double ValueScale
         {
-            get { return this.timescale; }
-            set { this.timescale = value; }
+            get { return this.valuescale; }
+            set { this.valuescale = value; }
         }
 
-        public double IntevalWidth
+        public double IntevalHeight
         {
-            get { return DesignWidth / (DivideNumber * SubDivideNumber); }
+            get { return DesignHeight / (DivideNumber * SubDivideNumber); }
         }
 
-        public double TimeEnd
+        public double ValueEnd
         {
-            get { return this.timestart + DesignWidth * TimeScale; }
-            set { TimeScale = (value - TimeStart) / DesignWidth; }
+            get { return this.valuestart + DesignHeight * ValueScale; }
+            set { ValueScale = (value - ValueStart) / DesignHeight; }
         }
 
         public int DivideNumber
@@ -76,13 +76,13 @@ namespace SamSoarII.Simulation.UI.Chart
             get { return this.subdivnum; }
             set { this.subdivnum = value; }
         }
-        
-        public TimeRuler()
+
+        public ValueRuler()
         {
             InitializeComponent();
             LayoutTransform = GlobalSetting.RulerScaleTransform;
-            this.timestart = 0.0;
-            this.timescale = 1.0;
+            this.valuestart = 0.0;
+            this.valuescale = 1.0;
             this.divnum = 20;
             this.subdivnum = 5;
             Update();
@@ -91,38 +91,37 @@ namespace SamSoarII.Simulation.UI.Chart
         private void Update()
         {
             MainCanva.Children.Clear();
-            double x = 0;
-            double itv = IntevalWidth;
+            double y = 0;
+            double itv = IntevalHeight;
             for (int i = 0; i < DivideNumber; i++)
                 for (int j = 0; j < SubDivideNumber; j++)
                 {
                     Line line = new Line();
-                    line.X1 = line.X2 = x;
-                    line.Y1 = 0;
+                    line.Y1 = line.Y2 = y;
+                    line.X1 = 0;
                     line.Stroke = Brushes.AntiqueWhite;
                     if (j == 0)
                     {
-                        line.Y2 = DesignHeight;
+                        line.X2 = DesignWidth;
                         line.StrokeThickness = 2;
                         TextBlock tblock = new TextBlock();
-                        tblock.Text = String.Format("{0} ms", timestart + x * timescale);
+                        tblock.Text = String.Format("{0} ms", valuestart + x * valuescale);
                         tblock.FontSize = 10;
                         tblock.Foreground = Brushes.AntiqueWhite;
-                        Canvas.SetTop(tblock, 18);
-                        Canvas.SetLeft(tblock, x);
+                        Canvas.SetLeft(tblock, 0);
+                        Canvas.SetTop(tblock, y);
                         MainCanva.Children.Add(tblock);
                     }
                     else
                     {
-                        line.Y2 = DesignHeight/3;
+                        line.X2 = DesignWidth / 3;
                         line.StrokeThickness = 1;
                     }
                     MainCanva.Children.Add(line);
-                    x += itv;
+                    y += itv;
                 }
-            MainCanva.Width = x;
-            this.Width = MainCanva.Width;
+            MainCanva.Height = DesignHeight;
+            this.Height = MainCanva.Height;
         }
-        
     }
 }
