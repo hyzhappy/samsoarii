@@ -11,4 +11,12 @@
             
         </Canvas>
     </UserControl.Content>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem x:Name="MI_StartPoint" Header="放置起点" Click="MI_StartPoint_Click"/>
+            <MenuItem x:Name="MI_EndPoint" Header="放置终点" Click="MI_EndPoint_Click"/>
+            <Separator/>
+            <MenuItem x:Name="MI_Setting" Header="设置" Click="MI_Setting_Click"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 </UserControl>

@@ -1,13 +1,17 @@
 ﻿using SamSoarII.Simulation.Core.DataModel;
 using System;
+using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.ExceptionServices;
+using System.Security;
+using System.Windows;
+using SamSoarII.Simulation.UI.Chart;
 
 namespace SamSoarII.Simulation.Core
 {
@@ -179,7 +183,7 @@ namespace SamSoarII.Simulation.Core
         );
 
         [DllImport("simu.dll", EntryPoint = "InitDataPoint")]
-        private static extern void InitDataPoint
+        public static extern void InitDataPoint
         (
         );
 
@@ -320,10 +324,10 @@ namespace SamSoarII.Simulation.Core
         [DllImport("simu.dll", EntryPoint = "RunData")]
         private static extern void RunData
         (
-            int starttime,
-            int endtime,
             [MarshalAs(UnmanagedType.LPStr)]
-            string outputFile
+            string outputFile,
+            int starttime,
+            int endtime
         );
         #endregion
 
@@ -357,53 +361,27 @@ namespace SamSoarII.Simulation.Core
             simulateThread.Abort();
         }
 
-        public void StartData(int starttime, int endtime)
+        public void RunData(double starttime, double endtime)
         {
-            RunData(starttime, endtime, "simulog.log");
-
-            foreach (SimulateDataModel _sdmodel in viewsdmodels.Values)
+            RunData("simulog.log", (int)(starttime), (int)(endtime));
+            SimulateDataModelEventArgs e = new SimulateDataModelEventArgs();
+            e.TimeStart = starttime;
+            e.TimeEnd = endtime;
+            if (RunDataFinished != null)
             {
-                _sdmodel.Init(starttime);
+                RunDataFinished(this, e);
             }
+        }
 
-            StreamReader fin = new StreamReader("simulog.log");
-            SimulateDataModel sdmodel;
-            ValueSegment vs;
-            string text;
-            string[] args;
-            string name;
-            int time;
-            
-            while (!fin.EndOfStream)
+        public void RunDraw(double starttime, double endtime)
+        {
+            RunData("simulog.log", (int)(starttime), (int)(endtime));
+            SimulateDataModelEventArgs e = new SimulateDataModelEventArgs();
+            e.TimeStart = starttime;
+            e.TimeEnd = endtime;
+            if (RunDrawFinished != null)
             {
-                text = fin.ReadLine();
-                args = text.Split(' ');
-                name = args[0];
-                time = int.Parse(args[1]);
-                if (viewsdmodels.ContainsKey(name))
-                {
-                    sdmodel = viewsdmodels[name];
-                    switch (sdmodel.Type)
-                    {
-                        case "BIT": case "WORD": case "DWORD":
-                            vs = new IntSegment();
-                            vs.Value = int.Parse(args[2]);
-                            break;
-                        case "FLOAT":
-                            vs = new FloatSegment();
-                            vs.Value = float.Parse(args[2]);
-                            break;
-                        case "DOUBLE":
-                            vs = new DoubleSegment();
-                            vs.Value = double.Parse(args[2]);
-                            break;
-                        default:
-                            throw new ArgumentException();
-                    }
-                    vs.TimeStart = sdmodel.TimeEnd;
-                    vs.TimeEnd = time;
-                    sdmodel.Add(vs);
-                }
+                RunDrawFinished(this, e);
             }
         }
 
@@ -689,7 +667,7 @@ namespace SamSoarII.Simulation.Core
         }
         
         private List<SimulateDataModel> locksdmodels = new List<SimulateDataModel>();
-
+        
         public void Lock(SimulateDataModel sdmodel)
         {
             foreach (ValueSegment vs in sdmodel.Values)
@@ -714,7 +692,7 @@ namespace SamSoarII.Simulation.Core
                 }
             }
         }
-
+        
         public void Unlock(SimulateDataModel sdmodel)
         {
             /*
@@ -761,11 +739,11 @@ namespace SamSoarII.Simulation.Core
         }
         #endregion
 
-        #region View
+        #region View Value
 
         //private List<SimulateDataModel> viewsdmodels = new List<SimulateDataModel>();
         private Dictionary<string, SimulateDataModel> viewsdmodels = new Dictionary<string, SimulateDataModel>();
-
+        
         public void View(SimulateDataModel sdmodel)
         {
             switch (sdmodel.Type)
@@ -787,7 +765,7 @@ namespace SamSoarII.Simulation.Core
                     break;
             }
         }
-
+        
         public void Unview(SimulateDataModel sdmodel)
         {
             switch (sdmodel.Type)
@@ -810,6 +788,11 @@ namespace SamSoarII.Simulation.Core
             }
         }
 
+        #endregion
+
+        #region Event Handler
+        public event SimulateDataModelEventHandler RunDataFinished;
+        public event SimulateDataModelEventHandler RunDrawFinished;
         #endregion
 
     }

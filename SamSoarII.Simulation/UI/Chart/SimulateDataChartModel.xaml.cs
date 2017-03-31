@@ -65,10 +65,33 @@ namespace SamSoarII.Simulation.UI.Chart
             double rts = truler.TimeStart;
             double rte = truler.TimeEnd;
             Line hline, vline;
+            Rectangle rect;
             TextBlock vtext;
             int pbit = 0;
 
             MainCanva.Children.Clear();
+
+            if (SDModel.IsLock)
+            {
+                rect = new Rectangle();
+                Canvas.SetTop(rect, 0);
+                Canvas.SetLeft(rect, 0);
+                rect.Width = ActualWidth;
+                rect.Height = DesignHeight;
+                rect.Fill = Brushes.LightGreen;
+                MainCanva.Children.Add(rect);
+            }
+
+            if (SDModel.IsView)
+            {
+                rect = new Rectangle();
+                Canvas.SetTop(rect, 0);
+                Canvas.SetLeft(rect, 0);
+                rect.Width = ActualWidth;
+                rect.Height = DesignHeight;
+                rect.Fill = Brushes.LightCoral;
+                MainCanva.Children.Add(rect);
+            }
 
             foreach (ValueSegment vs in sdmodel.Values)
             {
@@ -143,6 +166,5 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
             }
         }
-        
     }
 }

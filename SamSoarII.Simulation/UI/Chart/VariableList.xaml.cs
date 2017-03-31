@@ -141,8 +141,9 @@ namespace SamSoarII.Simulation.UI.Chart
 
         public void Remove(SimulateDataViewModel sdvmodel)
         {
-            MainGrid.RowDefinitions.RemoveAt(0);
             LinkedListNode<SimulateDataViewModel> node = SDVModels.Find(sdvmodel);
+            if (node == null) return;
+            MainGrid.RowDefinitions.RemoveAt(0);
             node = node.Next;
             while (node != null)
             {
@@ -175,10 +176,6 @@ namespace SamSoarII.Simulation.UI.Chart
         public event SimulateDataModelEventHandler SDModelSetup;
         private void OnSDModelSetup(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDVModel != null)
-            {
-                return;
-            }
             if (sender is SimulateDataViewModel)
             {
                 SimulateDataViewModel sdvmodel = (SimulateDataViewModel)(sender);
@@ -197,20 +194,27 @@ namespace SamSoarII.Simulation.UI.Chart
                     SDModelSetup(sender, e);
                 }
             }
-            else if (sender is SimuViewChartModel)
+            if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                if (e.SDVModel == null)
                 {
-                    if (sdvmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataViewModel sdvmodel in SDVModels)
                     {
-                        sdvmodel.SDModel = e.SDModel_new;
-                        e.SDVModel = sdvmodel;
-                        break;
+                        if (sdvmodel.SDModel == e.SDModel_old)
+                        {
+                            sdvmodel.SDModel = e.SDModel_new;
+                            e.SDVModel = sdvmodel;
+                            break;
+                        }
                     }
                 }
                 if (e.SDVModel == null)
                 {
                     Add(e.SDModel_new, e.ID);
+                }
+                else
+                {
+                    e.SDVModel.SDModel = e.SDModel_new;
                 }
             }
         }
@@ -221,6 +225,10 @@ namespace SamSoarII.Simulation.UI.Chart
             if (sender is SimulateDataViewModel)
             {
                 SimulateDataViewModel sdvmodel = (SimulateDataViewModel)(sender);
+                if (!SDVModels.Contains(sdvmodel))
+                {
+                    return;
+                }
                 if (SDModelClose != null)
                 {
                     SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
@@ -230,41 +238,40 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
             }
         }
+
         private void OnSDModelClose(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDVModel != null)
-            {
-                return;
-            }
             if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataViewModel sdvmodel in SDVModels)
+                if (e.SDVModel == null)
                 {
-                    if (sdvmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataViewModel sdvmodel in SDVModels)
                     {
-                        e.SDVModel = sdvmodel;
-                        Remove(sdvmodel);
-                        break;
+                        if (sdvmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDVModel = sdvmodel;
+                            break;
+                        }
                     }
                 }
                 if (e.SDVModel == null)
                 {
                     throw new ArgumentException();
                 }
+                Remove(e.SDVModel);
             }
         }
 
         public event SimulateDataModelEventHandler SDModelLock;
         private void OnSDModelLock(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDVModel != null)
-            {
-                return;
-            }
             if (sender is SimulateDataViewModel)
             {
                 e.SDVModel = (SimulateDataViewModel)(sender);
-                SDModelLock(this, e);
+                if (SDModelLock != null)
+                {
+                    SDModelLock(this, e);
+                }
             }
             if (sender is SimuViewChartModel)
             {
@@ -277,23 +284,27 @@ namespace SamSoarII.Simulation.UI.Chart
                             e.SDVModel = sdvmodel;
                         }
                     }
-                }
+                }    
                 if (e.SDVModel == null)
                 {
                     throw new KeyNotFoundException();
                 }
                 //e.SDVModel.ShowLockFlag();
                 e.SDVModel.LockFlag.Visibility = Visibility.Visible;
+                e.SDVModel.MI_LockButton.Header = "取消锁定";
             }
         }
 
         public event SimulateDataModelEventHandler SDModelView;
         private void OnSDModelView(object sender, SimulateDataModelEventArgs e)
-        {
+        {   
             if (sender is SimulateDataViewModel)
             {
                 e.SDVModel = (SimulateDataViewModel)(sender);
-                SDModelView(this, e);
+                if (SDModelView != null)
+                {
+                    SDModelView(this, e);
+                }
             }
             if (sender is SimuViewChartModel)
             {
@@ -313,6 +324,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 //e.SDVModel.ShowViewFlag();
                 e.SDVModel.ViewFlag.Visibility = Visibility.Visible;
+                e.SDVModel.MI_ViewButton.Header = "取消监视";
             }
         }
 
@@ -322,7 +334,10 @@ namespace SamSoarII.Simulation.UI.Chart
             if (sender is SimulateDataViewModel)
             {
                 e.SDVModel = (SimulateDataViewModel)(sender);
-                SDModelUnlock(this, e);
+                if (SDModelUnlock != null)
+                {
+                    SDModelUnlock(this, e);
+                }
             }
             if (sender is SimuViewChartModel)
             {
@@ -342,6 +357,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 //e.SDVModel.HideLockFlag();
                 e.SDVModel.LockFlag.Visibility = Visibility.Hidden;
+                e.SDVModel.MI_LockButton.Header = "锁定";
             }
         }
 
@@ -351,7 +367,10 @@ namespace SamSoarII.Simulation.UI.Chart
             if (sender is SimulateDataViewModel)
             {
                 e.SDVModel = (SimulateDataViewModel)(sender);
-                SDModelUnview(this, e);
+                if (SDModelUnview != null)
+                {
+                    SDModelUnview(this, e);
+                }
             }
             if (sender is SimuViewChartModel)
             {
@@ -371,6 +390,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 //e.SDVModel.HideViewFlag();
                 e.SDVModel.ViewFlag.Visibility = Visibility.Hidden;
+                e.SDVModel.MI_ViewButton.Header = "监视";
             }
         }
         #endregion

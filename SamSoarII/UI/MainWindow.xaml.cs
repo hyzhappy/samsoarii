@@ -51,6 +51,8 @@ namespace SamSoarII.AppMain.UI
 
         private void InitializeAvalonDock()
         {
+            //DockManager.Theme = new VS2010Theme();
+
             LayoutSetting.Load();
 
             LACProj = LAProj.AnchorControl;
@@ -94,7 +96,7 @@ namespace SamSoarII.AppMain.UI
         protected override void OnClosed(EventArgs e)
         {
             LayoutSetting.Save();
-
+            
             base.OnClosed(e);
         }
 

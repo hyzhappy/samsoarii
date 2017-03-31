@@ -96,12 +96,18 @@
     <Compile Include="UI\Chart\SimulateDataChartModel.xaml.cs">
       <DependentUpon>SimulateDataChartModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Chart\SimulateDataModelEventArgs.cs" />
+    <Compile Include="Core\Event\SimulateDataModelEventArgs.cs" />
     <Compile Include="UI\Chart\SimulateDataViewModel.xaml.cs">
       <DependentUpon>SimulateDataViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Chart\SimulateDataXYModel.xaml.cs">
+      <DependentUpon>SimulateDataXYModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Chart\SimuViewChartModel.xaml.cs">
       <DependentUpon>SimuViewChartModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\SimuViewXYModel.xaml.cs">
+      <DependentUpon>SimuViewXYModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Chart\TimeRuler.xaml.cs">
       <DependentUpon>TimeRuler.xaml</DependentUpon>
@@ -109,8 +115,17 @@
     <Compile Include="UI\Chart\ValueChart.xaml.cs">
       <DependentUpon>ValueChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Chart\ValueRuler.xaml.cs">
+      <DependentUpon>ValueRuler.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Chart\VariableList.xaml.cs">
       <DependentUpon>VariableList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\Window\SettingWindow.xaml.cs">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\Window\TimePointWindow.xaml.cs">
+      <DependentUpon>TimePointWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorBitButton.xaml.cs">
       <DependentUpon>MonitorBitButton.xaml</DependentUpon>
@@ -205,7 +220,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Chart\SimulateDataXYModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Chart\SimuViewChartModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\SimuViewXYModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -217,7 +240,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Chart\ValueRuler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Chart\VariableList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\Window\SettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\Window\TimePointWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

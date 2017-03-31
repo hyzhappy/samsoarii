@@ -113,10 +113,31 @@ namespace SamSoarII.Simulation.Core.DataModel
         {
             values.Remove(vs);
         }
-
+        
         public void SortByTime()
         {
             values.Sort(new ValueSegmentTimeComparer());
+        }
+
+        public SimulateDataModel Clone()
+        {
+            SimulateDataModel sdmodel = new SimulateDataModel();
+            sdmodel.SVUnit = SVUnit;
+            foreach (ValueSegment vs in Values)
+            {
+                sdmodel.Add(vs.Clone());
+            }
+            return sdmodel;
+        }
+
+        public override string ToString()
+        {
+            string text = "";
+            foreach (ValueSegment vs in Values)
+            {
+                text += vs.ToString();
+            }
+            return text;
         }
 
         public static SimulateDataModel Create(string name)

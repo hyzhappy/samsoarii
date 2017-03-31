@@ -9,7 +9,7 @@
     <UserControl.Content>
         <Canvas x:Name="MainCanva" Background="Transparent">
             <Border x:Name="Border" Canvas.Top="0" Canvas.Left="0" Width="{Binding ElementName=MainCanva, Path=ActualWidth}" Height="{Binding ElementName=MainCanva, Path=ActualHeight}" BorderBrush="AntiqueWhite" BorderThickness="1"/>
-            <Image x:Name="LockFlag" Source="/Resources/Image/Lock/Lockon.png" Canvas.Top="2" Canvas.Left="130"/>
+            <Image x:Name="LockFlag" Source="/Resources/Image/Lock.png" Canvas.Top="2" Canvas.Left="130"/>
             <Image x:Name="ViewFlag" Source="/Resources/Image/View.png" Canvas.Top="2" Canvas.Left="130"/>
             <TextBlock x:Name="NameTextBlock" Canvas.Top="4" Canvas.Left="4" FontSize="20" Foreground="AliceBlue"></TextBlock>
             <TextBox x:Name="NameTextInput" Canvas.Top="4" Canvas.Left="4" Width="160" FontSize="16"></TextBox>

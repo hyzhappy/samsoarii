@@ -105,7 +105,7 @@ namespace SamSoarII.Simulation.UI.Chart
                         line.X2 = DesignWidth;
                         line.StrokeThickness = 2;
                         TextBlock tblock = new TextBlock();
-                        tblock.Text = String.Format("{0} ms", valuestart + x * valuescale);
+                        tblock.Text = String.Format("{0} ms", valuestart + y * valuescale);
                         tblock.FontSize = 10;
                         tblock.Foreground = Brushes.AntiqueWhite;
                         Canvas.SetLeft(tblock, 0);

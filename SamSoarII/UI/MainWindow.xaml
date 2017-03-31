@@ -122,6 +122,7 @@
                 <Rectangle Height="6" Width="12" Fill="Transparent"/>
             </StackPanel>
         </ControlTemplate>
+
         <Style x:Key="DockManagerStyle" TargetType="{x:Type ad:DockingManager}">
             <Setter Property="AnchorTemplate" Value="{StaticResource SamSoarIIAnchorTemplate}"/>
         </Style>
@@ -297,7 +298,7 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <ad:DockingManager Style="{StaticResource ResourceKey=DockManagerStyle}">
+        <ad:DockingManager x:Name="DockManager" Style="{StaticResource ResourceKey=DockManagerStyle}">
             <ad:LayoutRoot>
                 <ad:LayoutPanel>
                     <local:MainTabControl x:Name="MainTab">

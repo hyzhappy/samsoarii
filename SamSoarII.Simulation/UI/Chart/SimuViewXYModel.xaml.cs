@@ -25,51 +25,90 @@ namespace SamSoarII.Simulation.UI.Chart
         public const int CanvaWidth = 800;
         public const int CanvaHeight = 600;
 
-        private SimulateDataModel sdmodel;
+        private IEnumerable<SimulateDataModel> sdmodels;
+        private int timestart;
+        private int timeend;
 
+        private List<Brush> brushs;
+       
         public SimuViewXYModel()
         {
             InitializeComponent();
+            brushs = new List<Brush>();
+            brushs.Add(Brushes.Black);
+            brushs.Add(Brushes.BlanchedAlmond);
+            brushs.Add(Brushes.BlueViolet);
+            brushs.Add(Brushes.DarkRed);
+            brushs.Add(Brushes.DarkSalmon);
+            brushs.Add(Brushes.DarkSlateBlue);
+            brushs.Add(Brushes.DarkTurquoise);
+            brushs.Add(Brushes.Indigo);
         }
 
         public SimuViewXYModel(SimulateDataModel _sdmodel, int timestart, int timeend)
         {
-            Setup(sdmodel, timestart, timeend);
+            Setup(_sdmodel, timestart, timeend);
+        }
+        
+        public SimuViewXYModel(IEnumerable<SimulateDataModel> _sdmodels, int timestart, int timeend)
+        {
+            Setup(_sdmodels, timestart, timeend);
+        }
+
+        public void Setup(IEnumerable<SimulateDataModel> _sdmodels, int timestart, int timeend)
+        {
+            this.sdmodels = _sdmodels;
+            this.timestart = timestart;
+            this.timeend = timeend;
+            _Setup();
         }
 
         public void Setup(SimulateDataModel _sdmodel, int timestart, int timeend)
         {
-            this.sdmodel = _sdmodel;
-            sdmodel.SortByTime();
+            List<SimulateDataModel> _sdmodels = new List<SimulateDataModel>();
+            _sdmodels.Add(_sdmodel);
+            this.sdmodels = _sdmodels;
+            this.timestart = timestart;
+            this.timeend = timeend;
+            _Setup();
+        }
+
+        private void _Setup()
+        {
             double min = 1e50;
             double max = -1e50;
-            foreach (ValueSegment vs in sdmodel.Values)
+            foreach (SimulateDataModel sdmodel in sdmodels)
             {
-                int vts = vs.TimeStart;
-                int vte = vs.TimeEnd;
-                if (vts < timestart) vts = timestart;
-                if (vte > timeend) vte = timeend;
-                if (vts >= vte) continue;
-                if (vs is IntSegment)
+                sdmodel.SortByTime();
+                foreach (ValueSegment vs in sdmodel.Values)
                 {
-                    min = Math.Min(min, (double)((int)(vs.Value)));
-                    max = Math.Max(max, (double)((int)(vs.Value)));
-                }
-                if (vs is FloatSegment)
-                {
-                    min = Math.Min(min, (double)((float)(vs.Value)));
-                    max = Math.Max(max, (double)((float)(vs.Value)));
-                }
-                if (vs is DoubleSegment)
-                {
-                    min = Math.Min(min, (double)(vs.Value));
-                    max = Math.Max(max, (double)(vs.Value));
+                    int vts = vs.TimeStart;
+                    int vte = vs.TimeEnd;
+                    if (vts < timestart) vts = timestart;
+                    if (vte > timeend) vte = timeend;
+                    if (vts >= vte) continue;
+                    if (vs is IntSegment)
+                    {
+                        min = Math.Min(min, (double)((int)(vs.Value)));
+                        max = Math.Max(max, (double)((int)(vs.Value)));
+                    }
+                    if (vs is FloatSegment)
+                    {
+                        min = Math.Min(min, (double)((float)(vs.Value)));
+                        max = Math.Max(max, (double)((float)(vs.Value)));
+                    }
+                    if (vs is DoubleSegment)
+                    {
+                        min = Math.Min(min, (double)(vs.Value));
+                        max = Math.Max(max, (double)(vs.Value));
+                    }
                 }
             }
             XRuler.TimeStart = timestart;
             XRuler.TimeEnd = timeend;
             YRuler.ValueStart = min;
             YRuler.ValueEnd = max;
+            Update();
         }
 
         public void Update()
@@ -77,39 +116,44 @@ namespace SamSoarII.Simulation.UI.Chart
             double vts, vte;
             double v = 0, vp = YRuler.ValueStart;
             Line lineh, linev;
-            foreach (ValueSegment vs in sdmodel.Values)
+            int i = 0;
+            foreach (SimulateDataModel sdmodel in sdmodels)
             {
-                vts = vs.TimeStart;
-                vte = vs.TimeEnd;
-                if (vts < XRuler.TimeStart) vts = XRuler.TimeStart;
-                if (vte > XRuler.TimeEnd) vte = XRuler.TimeEnd;
-                if (vts >= vte) continue;
-                if (vs is IntSegment)
+                foreach (ValueSegment vs in sdmodel.Values)
                 {
-                    v = (double)((int)(vs.Value));
+                    vts = vs.TimeStart;
+                    vte = vs.TimeEnd;
+                    if (vts < XRuler.TimeStart) vts = XRuler.TimeStart;
+                    if (vte > XRuler.TimeEnd) vte = XRuler.TimeEnd;
+                    if (vts >= vte) continue;
+                    if (vs is IntSegment)
+                    {
+                        v = (double)((int)(vs.Value));
+                    }
+                    if (vs is FloatSegment)
+                    {
+                        v = (double)((float)(vs.Value));
+                    }
+                    if (vs is DoubleSegment)
+                    {
+                        v = (double)(vs.Value);
+                    }
+                    linev = new Line();
+                    linev.Y1 = CanvaHeight * (vp - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);
+                    linev.Y2 = CanvaHeight * (v - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);
+                    linev.X1 = linev.X2 = CanvaWidth * (vts - XRuler.TimeStart) / (XRuler.TimeEnd - XRuler.TimeStart);
+                    linev.Stroke = brushs[i];
+                    linev.StrokeThickness = 1;
+                    MainCanva.Children.Add(linev);
+                    lineh = new Line();
+                    lineh.X1 = linev.X1;
+                    lineh.X2 = CanvaWidth * (vts - XRuler.TimeStart) / (XRuler.TimeEnd - XRuler.TimeStart);
+                    lineh.Y1 = lineh.Y2 = linev.Y2;
+                    lineh.Stroke = brushs[i];
+                    lineh.StrokeThickness = 1;
+                    MainCanva.Children.Add(lineh);
                 }
-                if (vs is FloatSegment)
-                {
-                    v = (double)((float)(vs.Value));
-                }
-                if (vs is DoubleSegment)
-                {
-                    v = (double)(vs.Value);
-                }
-                linev = new Line();
-                linev.Y1 = CanvaHeight * (vp - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);
-                linev.Y2 = CanvaHeight * (v - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);
-                linev.X1 = linev.X2 = CanvaWidth * (vts - XRuler.TimeStart) / (XRuler.TimeEnd - XRuler.TimeStart);
-                linev.Stroke = Brushes.Black;
-                linev.StrokeThickness = 1;
-                MainCanva.Children.Add(linev);
-                lineh = new Line();
-                lineh.X1 = linev.X1;
-                lineh.X2 = CanvaWidth * (vts - XRuler.TimeStart) / (XRuler.TimeEnd - XRuler.TimeStart);
-                lineh.Y1 = lineh.Y2 = linev.Y2;
-                lineh.Stroke = Brushes.Black;
-                lineh.StrokeThickness = 1;
-                MainCanva.Children.Add(lineh);
+                i++;
             }
         }
 

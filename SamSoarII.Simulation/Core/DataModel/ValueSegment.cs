@@ -48,7 +48,12 @@ namespace SamSoarII.Simulation.Core.DataModel
             vseg.TimeEnd = TimeEnd;
             return vseg;
         }
-        
+
+        public override string ToString()
+        {
+            return String.Format("{0}[{1}..{2}]", Value, TimeStart, TimeEnd);
+        }
+
     }
 
     public class IntSegment : ValueSegment

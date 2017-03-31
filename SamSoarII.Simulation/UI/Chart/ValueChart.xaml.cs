@@ -21,6 +21,9 @@ namespace SamSoarII.Simulation.UI.Chart
     /// </summary>
     public partial class ValueChart : UserControl
     {
+        private const int DesignWidth = 800;
+        private const int DesignHeight = 600;
+
         private LinkedList<SimulateDataChartModel> sdcmodels;
         public LinkedList<SimulateDataChartModel> SDCModels
         {
@@ -47,8 +50,24 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
             }
         }
+        private double _actualHeight;
+        public new double ActualHeight
+        {
+            get { return this._actualHeight; }
+            set
+            {
+                this._actualHeight = value;
+                StartLine.Y2 = value;
+                EndLine.Y2 = value;
+            }
+        }
 
         private TimeRuler truler;
+        public TimeRuler TRuler
+        {
+            get { return this.truler; }
+            set { this.truler = value; }
+        }
 
         public ValueChart()
         {
@@ -63,7 +82,10 @@ namespace SamSoarII.Simulation.UI.Chart
             svcmodel.SDModelView += OnSDModelView;
             svcmodel.SDModelUnlock += OnSDModelUnlock;
             svcmodel.SDModelUnview += OnSDModelUnview;
+            svcmodel.RunDataFinished += OnRunDataFinished;
             truler = svcmodel.TRuler;
+            truler.StartLineChanged += OnStartLineChanged;
+            truler.EndLineChanged += OnEndLineChanged;
         }
 
         public void Update()
@@ -72,7 +94,7 @@ namespace SamSoarII.Simulation.UI.Chart
             MainGrid.RowDefinitions.Clear();
             RowDefinition rdef = null;
             int i = 0;
-            foreach (SimulateDataChartModel sdcmodel in sdcmodels)
+            foreach (SimulateDataChartModel sdcmodel in SDCModels)
             {
                 rdef = new RowDefinition();
                 rdef.Height = new GridLength(40);
@@ -80,6 +102,14 @@ namespace SamSoarII.Simulation.UI.Chart
                 Grid.SetRow(sdcmodel, i++);
                 Grid.SetColumn(sdcmodel, 0);
                 MainGrid.Children.Add(sdcmodel);
+            }
+        }
+
+        public void UpdateChart()
+        {
+            foreach (SimulateDataChartModel sdcmodel in SDCModels)
+            {
+                sdcmodel.Update();
             }
         }
 
@@ -134,9 +164,10 @@ namespace SamSoarII.Simulation.UI.Chart
         }
 
         public void Remove(SimulateDataChartModel sdcmodel)
-        {
-            MainGrid.RowDefinitions.RemoveAt(0);
+        { 
             LinkedListNode<SimulateDataChartModel> node = sdcmodels.Find(sdcmodel);
+            if (node == null) return;
+            MainGrid.RowDefinitions.RemoveAt(0);
             node = node.Next;
             while (node != null)
             {
@@ -152,7 +183,7 @@ namespace SamSoarII.Simulation.UI.Chart
         #endregion
 
         #region Event Handler
-        public event SimulateDataModelEventHandler SDModelClose;
+        //public event SimulateDataModelEventHandler SDModelClose;
         private void OnSDModelClose(object sender, SimulateDataModelEventArgs e)
         {
             if (e.SDCModel != null)
@@ -173,7 +204,7 @@ namespace SamSoarII.Simulation.UI.Chart
             }
         }
 
-        public event SimulateDataModelEventHandler SDModelSetup;
+        //public event SimulateDataModelEventHandler SDModelSetup;
         private void OnSDModelSetup(object sender, SimulateDataModelEventArgs e)
         {
             if (e.SDCModel != null)
@@ -200,99 +231,234 @@ namespace SamSoarII.Simulation.UI.Chart
 
         private void OnSDModelLock(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDCModel != null)
-            {
-                return;
-            }
             if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataChartModel sdcmodel in SDCModels)
+                if (e.SDCModel == null)
                 {
-                    if (sdcmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataChartModel sdcmodel in SDCModels)
                     {
-                        e.SDCModel = sdcmodel;
-                        break;
+                        if (sdcmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDCModel = sdcmodel;
+                            break;
+                        }
                     }
                 }
                 if (e.SDCModel == null)
                 {
                     throw new KeyNotFoundException();
                 }
-                e.SDCModel.MainCanva.Background = Brushes.Green;
+                e.SDCModel.Update();
             }
         }
 
         private void OnSDModelView(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDCModel != null)
-            {
-                return;
-            }
             if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataChartModel sdcmodel in SDCModels)
+                if (e.SDCModel == null)
                 {
-                    if (sdcmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataChartModel sdcmodel in SDCModels)
                     {
-                        e.SDCModel = sdcmodel;
-                        break;
+                        if (sdcmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDCModel = sdcmodel;
+                            break;
+                        }
                     }
                 }
                 if (e.SDCModel == null)
                 {
                     throw new KeyNotFoundException();
                 }
-                e.SDCModel.MainCanva.Background = Brushes.Beige;
+                e.SDCModel.Update();
             }
         }
 
         private void OnSDModelUnlock(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDCModel != null)
-            {
-                return;
-            }
             if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataChartModel sdcmodel in SDCModels)
+                if (e.SDCModel == null)
                 {
-                    if (sdcmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataChartModel sdcmodel in SDCModels)
                     {
-                        e.SDCModel = sdcmodel;
-                        break;
+                        if (sdcmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDCModel = sdcmodel;
+                            break;
+                        }
                     }
                 }
                 if (e.SDCModel == null)
                 {
                     throw new KeyNotFoundException();
                 }
-                e.SDCModel.MainCanva.Background = Brushes.Transparent;
+                e.SDCModel.Update();
             }
         }
 
         private void OnSDModelUnview(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDCModel != null)
-            {
-                return;
-            }
             if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataChartModel sdcmodel in SDCModels)
+                if (e.SDCModel == null)
                 {
-                    if (sdcmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataChartModel sdcmodel in SDCModels)
                     {
-                        e.SDCModel = sdcmodel;
-                        break;
+                        if (sdcmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDCModel = sdcmodel;
+                            break;
+                        }
                     }
                 }
                 if (e.SDCModel == null)
                 {
                     throw new KeyNotFoundException();
                 }
-                e.SDCModel.MainCanva.Background = Brushes.Transparent;
+                e.SDCModel.Update();
             }
         }
+
+        private void OnRunDataFinished(object sender, SimulateDataModelEventArgs e)
+        {
+            foreach (SimulateDataChartModel sdcmodel in SDCModels)
+            {
+                SimulateDataModel sdmodel = sdcmodel.SDModel;
+                if (sdmodel.IsView)
+                    sdcmodel.Update();
+            }
+        }
+
+        public event SimulateDataModelEventHandler XYModelCreate;
+        private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
+        {
+            List<SimulateDataModel> views = new List<SimulateDataModel>();
+            foreach (SimulateDataChartModel sdcmodel in SDCModels)
+            {
+                SimulateDataModel sdmodel = sdcmodel.SDModel;
+                if (sdmodel.IsView)
+                {
+                    views.Add(sdmodel);
+                }
+            }
+            e.SDModels = views;
+            if (XYModelCreate != null)
+            {
+                XYModelCreate(this, e);
+            }
+        }
+
+        private void OnStartLineChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is Line)
+            {
+                Line line = (Line)(sender);
+                StartLine.X1 = StartLine.X2 = line.X1 * ActualWidth / DesignWidth;
+                StartLine.Opacity = line.Opacity;
+            }
+        }
+        
+        private void OnEndLineChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is Line)
+            {
+                Line line = (Line)(sender);
+                EndLine.X1 = EndLine.X2 = line.X1 * ActualWidth / DesignWidth;
+                EndLine.Opacity = line.Opacity;
+            }
+        }
+
+        #region ContextMenu Event Handler
+
+        public event SimulateDataModelEventHandler SDModelRun;
+        private void MI_Run_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelRun != null)
+            {
+                SDModelRun(this, _e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelSelect;
+        private void MI_Select_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            if (SDModelSelect != null)
+            {
+                SDModelSelect(this, _e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelCut;
+        private void MI_Cut_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelCut != null)
+            {
+                SDModelCut(this, _e);
+            }
+            UpdateChart();
+        }
+
+        public event SimulateDataModelEventHandler SDModelCopy;
+        private void MI_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelCopy != null)
+            {
+                SDModelCopy(this, _e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelPaste;
+        private void MI_Paste_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            _e.ID = (int)(Math.Min(cssy, csey) / 40);
+            if (SDModelPaste != null)
+            {
+                SDModelPaste(this, _e);
+            }
+            UpdateChart();
+        }
+
+        public event SimulateDataModelEventHandler SDModelDelete;
+        private void MI_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelDelete != null)
+            {
+                SDModelDelete(this, _e);
+            }
+            UpdateChart();
+        }
+
+
+        public event SimulateDataModelEventHandler SDModelDraw;
+        private void MI_Draw_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelDraw != null)
+            {
+                SDModelDraw(this, _e);
+            }
+        }
+        #endregion
 
         #endregion
 
@@ -303,24 +469,47 @@ namespace SamSoarII.Simulation.UI.Chart
         private const int CURSOR_LOCK = 0x02;
         private int cstatus = CURSOR_FREE;
         private double cssx, cssy, csex, csey;
+        private bool isdoubleclick = false;
         
+        #region Cursor Handle
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
+            if (isdoubleclick)
+            {
+                isdoubleclick = false;
+                return;
+            }
+
             base.OnMouseDown(e);
+            
             cstatus = CURSOR_MOUSEDOWN;
 
             Point p = e.GetPosition(this);
             cssx = p.X;
             cssy = p.Y;
+            if (StartLine.Opacity > 0.0)
+            {
+                cssx = StartLine.X1;
+            }
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
+
+            if (cstatus == CURSOR_LOCK)
+            {
+                this.Focus();
+                return;
+            }
             
             Point p = e.GetPosition(this);
             csex = p.X;
             csey = p.Y;
+            if (EndLine.Opacity > 0.0)
+            {
+                csex = EndLine.X1;
+            }
 
             if (csex == cssx && csey == cssy)
             {
@@ -334,6 +523,38 @@ namespace SamSoarII.Simulation.UI.Chart
             }
         }
 
+        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            isdoubleclick = true;
+            cstatus = CURSOR_LOCK;
+            Cursor.Visibility = Visibility.Visible;
+            Point p = e.GetPosition(this);
+            cssx = 0;
+            cssy = p.Y;
+            csex = ActualWidth;
+            csey = p.Y;
+            if (StartLine.Opacity > 0.0)
+            {
+                cssx = StartLine.X1;
+            }
+            if (EndLine.Opacity > 0.0)
+            {
+                csex = EndLine.X1;
+            }
+            double x1 = Math.Min(cssx, csex);
+            double x2 = Math.Max(cssx, csex);
+            double y1 = Math.Min(cssy, csey);
+            double y2 = Math.Max(cssy, csey);
+            y1 = ((int)(y1)) / 40 * 40;
+            y2 = ((int)(y2 + 40)) / 40 * 40;
+            Canvas.SetTop(Cursor, y1);
+            Canvas.SetLeft(Cursor, x1);
+            Cursor.Width = x2 - x1;
+            Cursor.Height = y2 - y1;
+            this.Focus();
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -344,6 +565,10 @@ namespace SamSoarII.Simulation.UI.Chart
                     Point p = e.GetPosition(this);
                     csex = p.X;
                     csey = p.Y;
+                    if (EndLine.Opacity > 0.0)
+                    {
+                        csex = EndLine.X1;
+                    }
                     double x1 = Math.Min(cssx, csex);
                     double x2 = Math.Max(cssx, csex);
                     double y1 = Math.Min(cssy, csey);
@@ -363,6 +588,8 @@ namespace SamSoarII.Simulation.UI.Chart
                     break;
             }
         }
+
+        #endregion
 
         #region Cursor Write
 
@@ -404,9 +631,11 @@ namespace SamSoarII.Simulation.UI.Chart
                             {
                                 case Key.D0:
                                     CursorSetValue(sdmodel, 0);
+                                    sdmodel.SortByTime();
                                     break;
                                 case Key.D1:
                                     CursorSetValue(sdmodel, 1);
+                                    sdmodel.SortByTime();
                                     break;
                             }
                         }
@@ -452,7 +681,22 @@ namespace SamSoarII.Simulation.UI.Chart
             return node;
         }
 
-        private double CursorTimeStart()
+        private List<SimulateDataChartModel> extraSelectSDModels = new List<SimulateDataChartModel>();
+        public IEnumerable<SimulateDataChartModel> CursorCollection()
+        {
+            List<SimulateDataChartModel> col = new List<SimulateDataChartModel>();
+            LinkedListNode<SimulateDataChartModel> nodeb = CursorNodeBegin();
+            LinkedListNode<SimulateDataChartModel> nodee = CursorNodeEnd();
+            LinkedListNode<SimulateDataChartModel> node = nodeb;
+            for (;; node = node.Next)
+            {
+                col.Add(node.Value);
+                if (node == nodee) break;
+            }
+            return col.Union(extraSelectSDModels);
+        }
+
+        public double CursorTimeStart()
         {
             double rts = truler.TimeStart;
             double rte = truler.TimeEnd;
@@ -460,7 +704,7 @@ namespace SamSoarII.Simulation.UI.Chart
             return rts + (rte - rts) * cts / ActualWidth;
         }
         
-        private double CursorTimeEnd()
+        public double CursorTimeEnd()
         {
             double rts = truler.TimeStart;
             double rte = truler.TimeEnd;
@@ -468,47 +712,100 @@ namespace SamSoarII.Simulation.UI.Chart
             return rts + (rte - rts) * cte / ActualWidth;
         }
 
-        private void CursorSetValue(SimulateDataModel sdmodel, object value)
+        public void CursorSetValue(SimulateDataModel sdmodel, object value)
         {
+            int timestart = (int)(CursorTimeStart());
+            int timeend = (int)(CursorTimeEnd());
+            SetValue(sdmodel, value, timestart, timeend);
+        }
+
+        public void CursorRemoveValue(SimulateDataModel sdmodel)
+        {
+            int timestart = (int)(CursorTimeStart());
+            int timeend = (int)(CursorTimeEnd());
+            RemoveValue(sdmodel, timestart, timeend);
+        }
+
+        public void SetValue(SimulateDataModel sdmodel, object value, int timestart, int timeend)
+        {
+            RemoveValue(sdmodel, timestart, timeend);
+
             ValueSegment vseg;
             switch (sdmodel.Type)
             {
-                case "BIT": case "WORD": case "DWORD":
+                case "BIT":
+                case "WORD":
+                case "DWORD":
                     IntSegment iseg = new IntSegment();
-                    iseg.TimeStart = (int)(CursorTimeStart());
-                    iseg.TimeEnd = (int)(CursorTimeEnd());
                     iseg.Value = value;
                     vseg = iseg;
                     break;
                 case "FLOAT":
                     FloatSegment fseg = new FloatSegment();
-                    fseg.TimeStart = (int)(CursorTimeStart());
-                    fseg.TimeEnd = (int)(CursorTimeEnd());
                     fseg.Value = value;
                     vseg = fseg;
                     break;
                 case "DOUBLE":
                     DoubleSegment dseg = new DoubleSegment();
-                    dseg.TimeStart = (int)(CursorTimeStart());
-                    dseg.TimeEnd = (int)(CursorTimeEnd());
                     dseg.Value = value;
                     vseg = dseg;
                     break;
                 default:
                     throw new ArgumentException();
             }
+            vseg.TimeStart = timestart;
+            vseg.TimeEnd = timeend;
+            sdmodel.Add(vseg);
+        }
+
+        public void SetValue(SimulateDataModel sour, SimulateDataModel dest, int sourstart, int sourend, int deststart, int destend)
+        {
+            sour.SortByTime();
+            destend = deststart + (sourend - sourstart);
+            IEnumerator<ValueSegment> souriter = sour.Values.GetEnumerator();
+            souriter.MoveNext();
+            ValueSegment sourvseg = souriter.Current;
+            while (sourvseg != null && sourvseg.TimeEnd < sourstart)
+            {
+                if (!souriter.MoveNext()) break;
+                sourvseg = souriter.Current;
+            }
+            RemoveValue(dest, deststart, destend);
+            sourvseg = souriter.Current;
+            while (sourvseg != null && sourvseg.TimeStart < sourend)
+            {
+                int vsegstart = sourvseg.TimeStart;
+                int vsegend = sourvseg.TimeEnd;
+                if (vsegstart < sourstart)
+                    vsegstart = sourstart;
+                if (vsegend > sourend)
+                    vsegend = sourend;
+                if (vsegstart > vsegend)
+                    continue;
+                ValueSegment vseg = sourvseg.Clone();
+                vseg.TimeStart = vsegstart + (deststart - sourstart);
+                vseg.TimeEnd = vsegend + (deststart - sourstart);
+                dest.Add(vseg);
+
+                if (!souriter.MoveNext()) break;
+                sourvseg = souriter.Current;
+            }
+        }
+
+        public void RemoveValue(SimulateDataModel sdmodel, int timestart, int timeend)
+        {
             List<ValueSegment> delvss = new List<ValueSegment>();
             List<ValueSegment> addvss = new List<ValueSegment>();
             ValueSegment vs1, vs2;
             foreach (ValueSegment vs in sdmodel.Values)
             {
                 // [()]
-                if (vs.TimeStart <= vseg.TimeStart && vseg.TimeEnd <= vs.TimeEnd)
+                if (vs.TimeStart <= timestart && timeend <= vs.TimeEnd)
                 {
                     vs1 = vs.Clone();
                     vs2 = vs.Clone();
-                    vs1.TimeEnd = vseg.TimeStart;
-                    vs2.TimeStart = vseg.TimeEnd;
+                    vs1.TimeEnd = timestart;
+                    vs2.TimeStart = timeend;
                     delvss.Add(vs);
                     if (vs1.TimeStart < vs1.TimeEnd)
                         addvss.Add(vs1);
@@ -517,23 +814,23 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 else
                 // ([])
-                if (vseg.TimeStart <= vs.TimeStart && vs.TimeEnd <= vseg.TimeEnd)
+                if (timestart <= vs.TimeStart && vs.TimeEnd <= timeend)
                 {
                     delvss.Add(vs);
                 }
                 else
                 // ([)]
-                if (vseg.TimeStart <= vs.TimeStart && vs.TimeStart <= vseg.TimeEnd && vseg.TimeEnd <= vs.TimeEnd)
+                if (timestart <= vs.TimeStart && vs.TimeStart <= timeend && timeend <= vs.TimeEnd)
                 {
-                    vs.TimeStart = vseg.TimeEnd;
+                    vs.TimeStart = timeend;
                     if (vs.TimeStart >= vs.TimeEnd)
                         delvss.Add(vs);
                 }
                 else
                 // [(])
-                if (vs.TimeStart <= vseg.TimeStart && vseg.TimeStart <= vs.TimeEnd && vs.TimeEnd <= vseg.TimeEnd)
+                if (vs.TimeStart <= timestart && timestart <= vs.TimeEnd && vs.TimeEnd <= timeend)
                 {
-                    vs.TimeEnd = vseg.TimeStart;
+                    vs.TimeEnd = timestart;
                     if (vs.TimeStart >= vs.TimeEnd)
                         delvss.Add(vs);
                 }
@@ -547,13 +844,11 @@ namespace SamSoarII.Simulation.UI.Chart
             {
                 sdmodel.Add(vs);
             }
-            sdmodel.Add(vseg);
-            sdmodel.SortByTime();
+            //sdmodel.SortByTime();
         }
 
         #endregion
 
         #endregion
-
     }
 }

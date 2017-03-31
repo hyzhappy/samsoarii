@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.AppMain.Project;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -25,6 +26,8 @@ namespace SamSoarII.AppMain
         private void App_Exit(object sender, ExitEventArgs e)
         {
             GlobalSetting.Save();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }
