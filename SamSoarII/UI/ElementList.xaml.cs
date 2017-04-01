@@ -350,9 +350,9 @@ namespace SamSoarII.AppMain.UI
         {
             Color color = new Color();
             color.A = 255;
-            color.R = 255;
-            color.G = 255;
-            color.B = 255;
+            color.R = 249;
+            color.G = 249;
+            color.B = 243;
             textblock.Background = new SolidColorBrush(color);
             color.A = 255;
             color.R = 0;

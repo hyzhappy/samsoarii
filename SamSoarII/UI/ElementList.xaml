@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         mc:Ignorable="d"
         Title="ElementList" Height="650" Width="950" MinWidth="600" MinHeight="200" WindowStartupLocation="CenterScreen" Closing="OnClosing">
-    <Grid Background="#FFF9F9F3">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -106,7 +106,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <ScrollViewer Grid.Column="3" Grid.RowSpan="3" VerticalScrollBarVisibility="Auto" BorderBrush="Black" BorderThickness="1">
-            <Border CornerRadius="2" BorderBrush="Black" BorderThickness="1">
+            <Border CornerRadius="2" BorderBrush="Black" BorderThickness="1" Background="#FFF9F9F3">
                 <Canvas Height="520" Width="220">
                     <StackPanel Orientation="Vertical" Canvas.Top="10">
                         <StackPanel.Resources>
