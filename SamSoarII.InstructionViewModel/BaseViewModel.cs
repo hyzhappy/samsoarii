@@ -37,6 +37,10 @@ namespace SamSoarII.LadderInstViewModel
         public List<BaseViewModel> SubElements = new List<BaseViewModel>();
         public bool IsSearched { get; set; }
         public virtual ElementType Type { get; }
+        public virtual int NetWorkNum{ get { return _netWorkNum; } set { _netWorkNum = value; } }
+        private int _netWorkNum = -1;
+        private string _refLadderName = string.Empty;
+        public virtual string RefLadderName { get { return _refLadderName; } set { _refLadderName = value; } }
         public static NullViewModel Null { get { return _nullViewModel; } }
         private static NullViewModel _nullViewModel = new NullViewModel();
         public BaseViewModel()
@@ -93,5 +97,9 @@ namespace SamSoarII.LadderInstViewModel
         public abstract IEnumerable<string> GetValueString();
 
         public abstract void UpdateCommentContent();
+        public override string ToString()
+        {
+            return string.Format("InstructionName:{0}    RoutineName:{1}    NetworkNumber:{2}    X:{3}   Y:{4}", InstructionName,RefLadderName,NetWorkNum,X,Y);
+        }
     }
 }

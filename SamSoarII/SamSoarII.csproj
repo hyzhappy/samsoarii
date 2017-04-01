@@ -70,6 +70,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.AvalonDock.resources">
+      <HintPath>\\Mac\Home\Downloads\AvalonDock_2_0_2000\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -123,12 +126,14 @@
     <Compile Include="UI\ElementList.xaml.cs">
       <DependentUpon>ElementList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ElementListHelp\ELementStackPanel.cs" />
+    <Compile Include="UI\ElementListHelp\NavigateToNetworkEventArgs.cs" />
     <Compile Include="UI\InstrucionTreeItem.cs" />
     <Compile Include="UI\MainTabControl.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Util\CSVFileHelper.cs" />
+    <Compile Include="UI\ElementListHelp\CSVFileHelper.cs" />
     <Compile Include="UI\OptionDialog.xaml.cs">
       <DependentUpon>OptionDialog.xaml</DependentUpon>
     </Compile>

@@ -100,6 +100,5 @@ namespace SamSoarII.LadderInstViewModel
         {
 
         }
-
     }
 }

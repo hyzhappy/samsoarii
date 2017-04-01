@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +29,7 @@ namespace SamSoarII.AppMain.UI
         private string _name;
         private string _comment;
         private string _alias;
+        private List<TextBlock> _mappedModels;
         public string Name
         {
             get
@@ -64,6 +66,18 @@ namespace SamSoarII.AppMain.UI
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Alias"));
             }
         }
+        public List<TextBlock> MappedModels
+        {
+            get
+            {
+                return _mappedModels;
+            }
+            set
+            {
+                _mappedModels = value;
+                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("MappedModels"));
+            }
+        }
         private bool _hasComment = false;
         private bool _hasAlias = false;
         public bool HasComment { get { return _hasComment; } set { _hasComment = value; } }
@@ -74,6 +88,10 @@ namespace SamSoarII.AppMain.UI
             this.Name = Name;
             this.Comment = Comment;
             this.Alias = Alias;
+            _mappedModels = new List<TextBlock>();
+            TextBlock textblock = new TextBlock();
+            textblock.Text = (new VerticalLineViewModel()).ToString();
+            _mappedModels.Add(textblock);
         }
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }
@@ -81,6 +99,7 @@ namespace SamSoarII.AppMain.UI
     {
         private bool _hasUsed = false;
         private bool _hasComment = false;
+        private bool _showDetails = false;
         private TextBlock _currentTextBlock;
         private static List<ValueCommentAlias> _elementCollection = new List<ValueCommentAlias>();
         public IEnumerable<ValueCommentAlias> ElementCollection
@@ -130,6 +149,7 @@ namespace SamSoarII.AppMain.UI
             int value = int.Parse(valueString.Substring(2));
             return value >= 0 && value < 200;//此处用Device类的CV范围代替
         }
+        public static event NavigateToNetworkEventHandler NavigateToNetwork = delegate { };
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         #region InitializeElementCollection
         public static void InitializeElementCollection()
@@ -195,6 +215,58 @@ namespace SamSoarII.AppMain.UI
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             DataContext = this;
         }
+        public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
+        {
+            var valueCommentAlias = _elementCollection.Where(x => { return x.Name == e.ValueString; }).First();
+            List<TextBlock> mappedModels;
+            switch (e.Type)
+            {
+                case MappedMessageChangedType.Add:
+                    if (!valueCommentAlias.MappedModels.Exists(x => { return x.Text == e.MappedValueModel.ToString(); }))
+                    {
+                        mappedModels = new List<TextBlock>(valueCommentAlias.MappedModels);
+                        TextBlock textblock = new TextBlock();
+                        textblock.Text = e.MappedValueModel.ToString();
+                        mappedModels.Add(textblock);
+                        valueCommentAlias.MappedModels = mappedModels;
+                    }
+                    break;
+                case MappedMessageChangedType.AddFirst:
+                    valueCommentAlias.MappedModels.Clear();
+                    mappedModels = new List<TextBlock>(valueCommentAlias.MappedModels);
+                    TextBlock textblock1 = new TextBlock();
+                    textblock1.Text = (new HorizontalLineViewModel()).ToString();
+                    mappedModels.Add(textblock1);
+                    TextBlock textblock2 = new TextBlock();
+                    textblock2.Text = e.MappedValueModel.ToString();
+                    mappedModels.Add(textblock2);
+                    valueCommentAlias.MappedModels = mappedModels;
+                    break;
+                case MappedMessageChangedType.Remove:
+                    mappedModels = new List<TextBlock>(valueCommentAlias.MappedModels);
+                    foreach (var model in mappedModels)
+                    {
+                        if (model.Text == e.MappedValueModel.ToString())
+                        {
+                            mappedModels.Remove(model);
+                            break;
+                        }
+                    }
+                    valueCommentAlias.MappedModels = mappedModels;
+                    break;
+                case MappedMessageChangedType.RemoveLast:
+                    valueCommentAlias.MappedModels.Clear();
+                    mappedModels = new List<TextBlock>(valueCommentAlias.MappedModels);
+                    TextBlock textblock3 = new TextBlock();
+                    textblock3.Text = (new VerticalLineViewModel()).ToString();
+                    mappedModels.Add(textblock3);
+                    valueCommentAlias.MappedModels = mappedModels;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public static void ValueAliasManager_ValueAliasChanged(ValueAliasChangedEventArgs e)
         {
             if (e.Type == ValueChangedType.Clear)
@@ -356,7 +428,12 @@ namespace SamSoarII.AppMain.UI
                     {
                         dialogImport.ImportButtonClick += (sender1, e1) =>
                         {
-                            CSVFileHelper.ImportExcute(dialogImport.FileName,_elementCollection,dialogImport.Separator.Substring(0, 1));
+                            if (dialogImport.FileName == string.Empty)
+                            {
+                                MessageBox.Show("请选择文件");
+                                return;
+                            }
+                            CSVFileHelper.ImportExcute(dialogImport.FileName, _elementCollection, dialogImport.Separator.Substring(0, 1));
                             dialogImport.Close();
                         };
                         dialogImport.ShowDialog();
@@ -452,6 +529,47 @@ namespace SamSoarII.AppMain.UI
                     tempitem.HasAlias = false;
                     ValueAliasManager.UpdateAlias(tempitem.Name, tempitem.Alias);
                 }
+            }
+        }
+        private void NavigateMouseLeftButtonClick(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock textblock = sender as TextBlock;
+            string message = textblock.Text;
+            Regex regex = new Regex(".+RoutineName:(.+)NetworkNumber:([0-9]+)\\s+X:([0-9]+)\\s+Y:([0-9]+)", RegexOptions.IgnoreCase);
+            Match match = regex.Match(message);
+            if (match.Success)
+            {
+                string refLadderName = match.Groups[1].Value.TrimEnd();
+                int netWorkNum = int.Parse(match.Groups[2].Value);
+                int x = int.Parse(match.Groups[3].Value);
+                int y = int.Parse(match.Groups[4].Value);
+                NavigateToNetwork.Invoke(new NavigateToNetworkEventArgs(netWorkNum,refLadderName,x,y));
+            }
+        }
+        //private void ElementDataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (ElementDataGrid.SelectedItems.Count == 1)
+        //    {
+        //        ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
+        //    }
+        //}
+        //private void ElementDataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
+        //}
+
+        private void OnDetailShowClick(object sender, RoutedEventArgs e)
+        {
+            _showDetails = !_showDetails;
+            if (_showDetails)
+            {
+                SetButtonBackground(sender as Button);
+                ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
+            }
+            else
+            {
+                ResetButtonBackground(sender as Button);
+                ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
             }
         }
     }

@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace SamSoarII.UserInterface
 {
-    class CollectionStackPanel : StackPanel
+    public class CollectionStackPanel : StackPanel
     {
         public static readonly DependencyProperty ItemsSourceProperty;
         public static readonly DependencyProperty SelectItemProperty;

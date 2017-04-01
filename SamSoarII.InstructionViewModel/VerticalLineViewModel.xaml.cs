@@ -166,5 +166,9 @@ namespace SamSoarII.LadderInstViewModel
         {
             // nothing to do
         }
+        public override string ToString()
+        {
+            return string.Format("Has no Mapped Instructions");
+        }
     }
 }

@@ -20,7 +20,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
 using SamSoarII.LadderInstViewModel;
-
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
@@ -58,8 +57,8 @@ namespace SamSoarII.AppMain.UI
         {
             if(!GlobalSetting.LoadLadderScaleSuccess())
             {
-                GlobalSetting.LadderOriginScaleX = MainTab.ActualWidth / 3100;
-                GlobalSetting.LadderOriginScaleY = MainTab.ActualWidth / 3100;
+                GlobalSetting.LadderOriginScaleX = MainTab.ActualWidth / 3700;
+                GlobalSetting.LadderOriginScaleY = MainTab.ActualWidth / 3700;
             }
         }
 

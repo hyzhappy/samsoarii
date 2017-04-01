@@ -23,12 +23,11 @@ namespace SamSoarII.AppMain.UI
             {
                 line = stream.ReadLine();
                 string[] eles = line.Split(new string[] {separator },StringSplitOptions.None);
-                if (eles.Count() >= 3)
+                int last, first = line.IndexOf(separator);
+                string name = line.Substring(0, first);
+                string alias, comment;
+                if (QuotationOperation(ref line, out comment, out alias, out last, separator))
                 {
-                    int last, first = line.IndexOf(separator);
-                    string name = line.Substring(0, first);
-                    string alias, comment;
-                    QuotationOperation(ref line, out comment, out alias, out last, separator);
                     if (elementCollection.ToList().Exists(x => { return x.Name == name; }))
                     {
                         var valueCommentAlias = elementCollection.Where(x => { return x.Name == name; }).First();
@@ -82,10 +81,13 @@ namespace SamSoarII.AppMain.UI
             }
             stream.Close();
         }
-        private static void QuotationOperation(ref string line,out string comment,out string alias,out int last,string separator)
+        private static bool QuotationOperation(ref string line,out string comment,out string alias,out int last,string separator)
         {
             int first = line.IndexOf(separator);
-            last = GetLastIndexSeparator(line,out alias,separator);
+            GetNextIndexSeparator(line,line.Length,out alias,out last,separator);
+            int temp;
+            string tempstr;
+            GetNextIndexSeparator(line,last,out tempstr,out temp,separator);
             comment = line.Substring(first + 1, last - first - 1);
             if (comment.Contains(Quotation))
             {
@@ -99,6 +101,11 @@ namespace SamSoarII.AppMain.UI
             }
             comment = comment.Replace(DQuotation,Quotation);
             alias = alias.Replace(DQuotation,Quotation);
+            if (temp != first)
+            {
+                return false;
+            }
+            return true;
         }
         public static string ToSBC(string input)
         {
@@ -117,25 +124,24 @@ namespace SamSoarII.AppMain.UI
             }
             return new string(chars);
         }
-        private static int GetLastIndexSeparator(string line,out string alias,string separator)
+        private static void GetNextIndexSeparator(string line,int count,out string value,out int index,string separator)
         {
-            int last = line.LastIndexOf(separator);
-            if (last == line.Length - 1)
+            index = line.Substring(0, count).LastIndexOf(separator);
+            if (index == line.Length - 1)
             {
-                alias = string.Empty;
+                value = string.Empty;
             }
             else
             {
-                alias = line.Substring(last + 1);
-                string temp = alias.Replace(Quotation, string.Empty);
-                while ((alias.Count() - temp.Count()) % 2 != 0)
+                value = line.Substring(index + 1);
+                string temp = value.Replace(Quotation, string.Empty);
+                while ((value.Count() - temp.Count()) % 2 != 0)
                 {
-                    last = line.Substring(0, last).LastIndexOf(separator);
-                    alias = line.Substring(last + 1);
-                    temp = alias.Replace(Quotation, string.Empty);
+                    index = line.Substring(0, index).LastIndexOf(separator);
+                    value = line.Substring(index + 1);
+                    temp = value.Replace(Quotation, string.Empty);
                 }
             }
-            return last;
         }
     }
 }

@@ -323,6 +323,8 @@ namespace SamSoarII.AppMain.Project
         #region Ladder content modification methods
         public void ReplaceElement(BaseViewModel element)
         {
+            element.NetWorkNum = NetworkNumber;
+            element.RefLadderName = _ladderDiagram.ProgramName;
             BaseViewModel oldele = null;
             bool flag = false;
             // Remove old element before
