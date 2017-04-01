@@ -321,13 +321,13 @@ namespace SamSoarII.Simulation.UI.Chart
         private TimePointWindow TPW_StartPoint;
         private void MI_StartPoint_Click(object sender, RoutedEventArgs e)
         {
-            if ((PStatus & POINT_STARTSETTING) == 0)
-            {
-                PStatus |= POINT_STARTSETTING;
-            }
-            else if ((PStatus & POINT_STARTLOCK) != 0)
+            if ((PStatus & POINT_STARTLOCK) != 0)
             {
                 PStatus &= ~(POINT_STARTLOCK);
+            }
+            else if ((PStatus & POINT_STARTSETTING) == 0)
+            {
+                PStatus |= POINT_STARTSETTING;
             }
         }
         private void TPW_StartPoint_B_ok_Click(object sender, RoutedEventArgs e)
@@ -376,14 +376,15 @@ namespace SamSoarII.Simulation.UI.Chart
         private TimePointWindow TPW_EndPoint;
         private void MI_EndPoint_Click(object sender, RoutedEventArgs e)
         {
-            if ((PStatus & POINT_ENDSETTING) == 0)
-            {
-                PStatus |= POINT_ENDSETTING;
-            }
-            else if ((PStatus & POINT_ENDLOCK) != 0)
+            if ((PStatus & POINT_ENDLOCK) != 0)
             {
                 PStatus &= ~(POINT_ENDLOCK);
             }
+            else if ((PStatus & POINT_ENDSETTING) == 0)
+            {
+                PStatus |= POINT_ENDSETTING;
+            }
+            
         }
         private void TPW_EndPoint_B_ok_Click(object sender, RoutedEventArgs e)
         {

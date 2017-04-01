@@ -70,6 +70,11 @@ namespace SamSoarII.Simulation.Core
             string simudllPath
         );
 
+        [DllImport("simu.dll", EntryPoint = "FreeDll")]
+        public static extern void FreeDll
+        (
+        );
+
         [DllImport("simu.dll", EntryPoint = "RunLadder")]
         private static extern void RunLadder();
 

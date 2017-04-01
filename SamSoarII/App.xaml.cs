@@ -26,6 +26,11 @@ namespace SamSoarII.AppMain
         private void App_Exit(object sender, ExitEventArgs e)
         {
             GlobalSetting.Save();
+            if (SimulateHelper.SModel != null)
+            {
+                SimulateHelper.SModel.Dispose();
+            }
+            SamSoarII.Simulation.Core.SimulateDllModel.FreeDll();
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }

@@ -24,9 +24,20 @@ using System.IO;
 using SamSoarII.Simulation.Core.Event;
 using SamSoarII.Simulation.Core.DataModel;
 
+/// <summary>
+/// Namespace : SamSoarII.Simulation
+/// ClassName : SimulateModel
+/// Version   : 1.0
+/// Date      : 2017/3/31
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 
+/// </remarks>
+
 namespace SamSoarII.Simulation
 {
-    public class SimulateModel
+    public class SimulateModel : IDisposable
     {
         private SimulateManager smanager;
 
@@ -86,6 +97,16 @@ namespace SamSoarII.Simulation
             smanager.Add(LEDBit);
         }
         
+        public void Dispose()
+        {
+            if (UpdateThread != null && UpdateThread.IsAlive)
+            {
+                UpdateThread.Abort();
+                //GC.SuppressFinalize(UpdateThread);
+                UpdateThread = null;
+            }
+        }
+
         private void _Update_Thread()
         {
             while (true)
