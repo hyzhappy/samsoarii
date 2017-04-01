@@ -39,7 +39,21 @@ namespace SamSoarII.Simulation.Core.DataModel
         {
             get; set;
         }
-        
+
+        abstract public ValueSegment Clone();
+
+        protected ValueSegment _Clone(ValueSegment vseg)
+        {
+            vseg.TimeStart = TimeStart;
+            vseg.TimeEnd = TimeEnd;
+            return vseg;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}[{1}..{2}]", Value, TimeStart, TimeEnd);
+        }
+
     }
 
     public class IntSegment : ValueSegment
@@ -55,6 +69,12 @@ namespace SamSoarII.Simulation.Core.DataModel
             {
                 this.value = (int)(value);
             }
+        }
+        public override ValueSegment Clone()
+        {
+            IntSegment iseg = new IntSegment();
+            iseg.Value = Value;
+            return _Clone(iseg);
         }
     }
 
@@ -72,6 +92,12 @@ namespace SamSoarII.Simulation.Core.DataModel
                 this.value = (float)(value);
             }
         }
+        public override ValueSegment Clone()
+        {
+            FloatSegment fseg = new FloatSegment();
+            fseg.Value = Value;
+            return _Clone(fseg);
+        }
     }
 
     public class DoubleSegment : ValueSegment
@@ -87,6 +113,13 @@ namespace SamSoarII.Simulation.Core.DataModel
             {
                 this.value = (double)(value);
             }
+        }
+
+        public override ValueSegment Clone()
+        {
+            DoubleSegment dseg = new DoubleSegment();
+            dseg.Value = Value;
+            return _Clone(dseg);
         }
     }
 
@@ -104,5 +137,13 @@ namespace SamSoarII.Simulation.Core.DataModel
     {
 
     }
-    
+
+    public class ValueSegmentTimeComparer : IComparer<ValueSegment>
+    {
+        public int Compare(ValueSegment x, ValueSegment y)
+        {
+            return x.TimeStart.CompareTo(y.TimeStart);
+        }
+    }
+
 }

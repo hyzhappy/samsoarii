@@ -1,16 +1,24 @@
-﻿using System;
+﻿using SamSoarII.Simulation.Core.DataModel;
+using System;
+using System.Linq;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.ExceptionServices;
+using System.Security;
+using System.Windows;
+using SamSoarII.Simulation.UI.Chart;
 
 namespace SamSoarII.Simulation.Core
 {
     public class SimulateDllModel
     {
+        #region Import DLL
+
         [DllImport("simu.dll", EntryPoint = "CreateDll")]
         public static extern void CreateDll
         (
@@ -60,6 +68,11 @@ namespace SamSoarII.Simulation.Core
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string simudllPath
+        );
+
+        [DllImport("simu.dll", EntryPoint = "FreeDll")]
+        public static extern void FreeDll
+        (
         );
 
         [DllImport("simu.dll", EntryPoint = "RunLadder")]
@@ -175,7 +188,7 @@ namespace SamSoarII.Simulation.Core
         );
 
         [DllImport("simu.dll", EntryPoint = "InitDataPoint")]
-        private static extern void InitDataPoint
+        public static extern void InitDataPoint
         (
         );
 
@@ -269,6 +282,12 @@ namespace SamSoarII.Simulation.Core
             double value
         );
 
+        private const int DP_TYPE_BIT = 0x01;
+        private const int DP_TYPE_WORD = 0x02;
+        private const int DP_TYPE_DOUBLEWORD = 0x03;
+        private const int DP_TYPE_FLOAT = 0x04;
+        private const int DP_TYPE_DOUBLE = 0x05;
+
         [DllImport("simu.dll", EntryPoint = "AddViewInput")]
         private static extern void AddViewInput
         (
@@ -310,12 +329,13 @@ namespace SamSoarII.Simulation.Core
         [DllImport("simu.dll", EntryPoint = "RunData")]
         private static extern void RunData
         (
-            int starttime,
-            int endtime,
             [MarshalAs(UnmanagedType.LPStr)]
-            string outputFile
+            string outputFile,
+            int starttime,
+            int endtime
         );
-        
+        #endregion
+
         private bool simulateActive;
         private Thread simulateThread;
 
@@ -345,6 +365,32 @@ namespace SamSoarII.Simulation.Core
         {
             simulateThread.Abort();
         }
+
+        public void RunData(double starttime, double endtime)
+        {
+            RunData("simulog.log", (int)(starttime), (int)(endtime));
+            SimulateDataModelEventArgs e = new SimulateDataModelEventArgs();
+            e.TimeStart = starttime;
+            e.TimeEnd = endtime;
+            if (RunDataFinished != null)
+            {
+                RunDataFinished(this, e);
+            }
+        }
+
+        public void RunDraw(double starttime, double endtime)
+        {
+            RunData("simulog.log", (int)(starttime), (int)(endtime));
+            SimulateDataModelEventArgs e = new SimulateDataModelEventArgs();
+            e.TimeStart = starttime;
+            e.TimeEnd = endtime;
+            if (RunDrawFinished != null)
+            {
+                RunDrawFinished(this, e);
+            }
+        }
+
+        #region Get & Set Value
 
         public int[] GetValue_Bit(string var, int size)
         {
@@ -611,6 +657,10 @@ namespace SamSoarII.Simulation.Core
             }
         }
 
+        #endregion
+
+        #region Lock Value
+
         public void Lock(string var, int size = 1)
         {
             SetEnable(var, size, 1);
@@ -620,5 +670,135 @@ namespace SamSoarII.Simulation.Core
         {
             SetEnable(var, size, 0);
         }
+        
+        private List<SimulateDataModel> locksdmodels = new List<SimulateDataModel>();
+        
+        public void Lock(SimulateDataModel sdmodel)
+        {
+            foreach (ValueSegment vs in sdmodel.Values)
+            {
+                switch (sdmodel.Type)
+                {
+                    case "BIT":
+                        AddBitDataPoint(sdmodel.Name, vs.TimeStart, (uint)((int)(vs.Value)));
+                        break;
+                    case "WORD":
+                        AddWordDataPoint(sdmodel.Name, vs.TimeStart, (UInt16)((int)(vs.Value)));
+                        break;
+                    case "DWORD":
+                        AddDWordDataPoint(sdmodel.Name, vs.TimeStart, (uint)((int)(vs.Value)));
+                        break;
+                    case "FLOAT":
+                        AddFloatDataPoint(sdmodel.Name, vs.TimeStart, (float)(vs.Value));
+                        break;
+                    case "DOUBLE":
+                        AddDoubleDataPoint(sdmodel.Name, vs.TimeStart, (double)(vs.Value));
+                        break;
+                }
+            }
+        }
+        
+        public void Unlock(SimulateDataModel sdmodel)
+        {
+            /*
+            foreach (ValueSegment vs in sdmodel.Values)
+            {
+                switch (sdmodel.Type)
+                {
+                    case "BIT":
+                        RemoveBitDataPoint(sdmodel.Name, vs.TimeStart, (uint)(vs.Value));
+                        break;
+                    case "WORD":
+                        RemoveWordDataPoint(sdmodel.Name, vs.TimeStart, (UInt16)(vs.Value));
+                        break;
+                    case "DWORD":
+                        RemoveDWordDataPoint(sdmodel.Name, vs.TimeStart, (uint)(vs.Value));
+                        break;
+                    case "FLOAT":
+                        RemoveFloatDataPoint(sdmodel.Name, vs.TimeStart, (float)(vs.Value));
+                        break;
+                    case "DOUBLE":
+                        RemoveDoubleDataPoint(sdmodel.Name, vs.TimeStart, (double)(vs.Value));
+                        break;
+                }
+            }
+            */
+            switch (sdmodel.Type)
+            {
+                case "BIT":
+                    RemoveViewInput(sdmodel.Name, DP_TYPE_BIT);
+                    break;
+                case "WORD":
+                    RemoveViewInput(sdmodel.Name, DP_TYPE_WORD);
+                    break;
+                case "DWORD":
+                    RemoveViewInput(sdmodel.Name, DP_TYPE_DOUBLEWORD);
+                    break;
+                case "FLOAT":
+                    RemoveViewInput(sdmodel.Name, DP_TYPE_FLOAT);
+                    break;
+                case "DOUBLE":
+                    RemoveViewInput(sdmodel.Name, DP_TYPE_DOUBLE);
+                    break;
+            }
+        }
+        #endregion
+
+        #region View Value
+
+        //private List<SimulateDataModel> viewsdmodels = new List<SimulateDataModel>();
+        private Dictionary<string, SimulateDataModel> viewsdmodels = new Dictionary<string, SimulateDataModel>();
+        
+        public void View(SimulateDataModel sdmodel)
+        {
+            switch (sdmodel.Type)
+            {
+                case "BIT":
+                    AddViewOutput(sdmodel.Name, DP_TYPE_BIT);
+                    break;
+                case "WORD":
+                    AddViewOutput(sdmodel.Name, DP_TYPE_WORD);
+                    break;
+                case "DWORD":
+                    AddViewOutput(sdmodel.Name, DP_TYPE_DOUBLEWORD);
+                    break;
+                case "FLOAT":
+                    AddViewOutput(sdmodel.Name, DP_TYPE_FLOAT);
+                    break;
+                case "DOUBLE":
+                    AddViewOutput(sdmodel.Name, DP_TYPE_DOUBLE);
+                    break;
+            }
+        }
+        
+        public void Unview(SimulateDataModel sdmodel)
+        {
+            switch (sdmodel.Type)
+            {
+                case "BIT":
+                    RemoveViewOutput(sdmodel.Name, DP_TYPE_BIT);
+                    break;
+                case "WORD":
+                    RemoveViewOutput(sdmodel.Name, DP_TYPE_WORD);
+                    break;
+                case "DWORD":
+                    RemoveViewOutput(sdmodel.Name, DP_TYPE_DOUBLEWORD);
+                    break;
+                case "FLOAT":
+                    RemoveViewOutput(sdmodel.Name, DP_TYPE_FLOAT);
+                    break;
+                case "DOUBLE":
+                    RemoveViewOutput(sdmodel.Name, DP_TYPE_DOUBLE);
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region Event Handler
+        public event SimulateDataModelEventHandler RunDataFinished;
+        public event SimulateDataModelEventHandler RunDrawFinished;
+        #endregion
+
     }
 }

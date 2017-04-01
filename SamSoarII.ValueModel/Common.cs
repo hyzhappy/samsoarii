@@ -26,7 +26,19 @@ namespace SamSoarII.ValueModel
         }
     }
     public delegate void ValueCommentChangedEventHandler(ValueCommentChangedEventArgs e);
-
+    public class ValueAliasChangedEventArgs : EventArgs
+    {
+        public ValueChangedType Type { get; set; }
+        public string ValueString { get; set; }
+        public string Alias { get; set; }
+        public ValueAliasChangedEventArgs(ValueChangedType type, string valuestring, string alias)
+        {
+            Type = type;
+            ValueString = valuestring;
+            Alias = alias;
+        }
+    }
+    public delegate void ValueAliasChangedEventHandler(ValueAliasChangedEventArgs e);
     public class VariableChangedEventArgs : EventArgs
     {
         public ValueChangedType ChangedType { get; set; }

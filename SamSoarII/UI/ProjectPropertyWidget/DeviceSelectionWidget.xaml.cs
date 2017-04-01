@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.PLCDevice;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,13 @@ namespace SamSoarII.AppMain.UI
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            ListBox listbox = sender as ListBox;
+            showMessageDialog(listbox.SelectedIndex);
+        }
+        private void showMessageDialog(int index)
+        {
+            ContentGrid.Children.Clear();
+            ContentGrid.Children.Add(PLCDeviceManager.GetDeviceMessageDialog(index));
         }
     }
 }

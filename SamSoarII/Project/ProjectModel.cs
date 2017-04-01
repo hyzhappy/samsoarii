@@ -13,6 +13,7 @@ using System.Windows;
 using System.Xml.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using SamSoarII.AppMain.UI;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -33,9 +34,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         public string ProjectName { get; set; }
-
         public LadderDiagramViewModel MainRoutine { get; set; }
-
         public ObservableCollection<LadderDiagramViewModel> SubRoutines { get; set; } = new ObservableCollection<LadderDiagramViewModel>();
 
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
@@ -43,7 +42,6 @@ namespace SamSoarII.AppMain.Project
         public PLCDevice.Device CurrentDevice { get; set; }
         public ProjectModel()
         {
-
         }
 
         public ProjectModel(string projectname)
@@ -144,6 +142,7 @@ namespace SamSoarII.AppMain.Project
             var settingNode = new XElement("Setting");
             rootNode.Add(settingNode);
             rootNode.Add(ProjectHelper.CreateXElementByValueComments());
+            rootNode.Add(ProjectHelper.CreateXElementByValueAlias());
             rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             foreach(var ldmodel in SubRoutines)
@@ -168,9 +167,11 @@ namespace SamSoarII.AppMain.Project
                 SubRoutines.Clear();
                 FuncBlocks.Clear();
                 VariableManager.Clear();
+                ValueAliasManager.Clear();
                 ValueCommentManager.Clear();
                 InstructionCommentManager.Clear();
                 ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
+                ProjectHelper.LoadValueAliasByXElement(rootNode.Element("ValueAlias"));
                 ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));   
                 var ldnodes = rootNode.Elements("Ladder");
                 foreach (XElement ldnode in ldnodes)

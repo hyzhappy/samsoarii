@@ -8,12 +8,12 @@ namespace SamSoarII.PLCDevice
 {
     public enum PLCDeviceType
     {
-        Default,
         FGs16MR,
         FGs16MT,
         FGs32MR,
         FGs32MT,
         FGs64MR,
-        FGs64MT
+        FGs64MT,
+        Default
     }
 }

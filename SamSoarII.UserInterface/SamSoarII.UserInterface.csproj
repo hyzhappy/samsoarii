@@ -55,6 +55,12 @@
     <Compile Include="AddNewRoutineWindow.xaml.cs">
       <DependentUpon>AddNewRoutineWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CSVExportDialog.xaml.cs">
+      <DependentUpon>CSVExportDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CSVImportDialog.xaml.cs">
+      <DependentUpon>CSVImportDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ElementPropertyDialog.xaml.cs">
       <DependentUpon>ElementPropertyDialog.xaml</DependentUpon>
     </Compile>
@@ -87,6 +93,8 @@
     <Compile Include="SelectDeviceDialog.xaml.cs">
       <DependentUpon>SelectDeviceDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CollectionStackPanel.cs" />
+    <Compile Include="UserControls\PopupNotTop.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -101,6 +109,14 @@
     <Page Include="AddNewRoutineWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CSVExportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CSVImportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ElementPropertyDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +149,7 @@
       <Name>SamSoarII.ValueModel</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -74,7 +74,34 @@ namespace SamSoarII.AppMain.Project
 
         }
 
+        protected double _actualWidth;
+        protected double _actualHeight;
 
+        double ITabItem.ActualWidth
+        {
+            get
+            {
+                return this._actualWidth;
+            }
+
+            set
+            {
+                this._actualWidth = value;
+            }
+        }
+
+        double ITabItem.ActualHeight
+        {
+            get
+            {
+                return this._actualHeight;
+            }
+
+            set
+            {
+                this._actualHeight = value;
+            }
+        }
 
         public FuncBlockViewModel(string name)
         {

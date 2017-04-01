@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 using SamSoarII.Simulation.Core.VariableModel;
+using SamSoarII.Simulation.Core.DataModel;
+using SamSoarII.Simulation.UI.Chart;
 
 namespace SamSoarII.Simulation.Core
 {
@@ -20,6 +24,10 @@ namespace SamSoarII.Simulation.Core
 
         private Dictionary<string, string> vndict;
 
+        private Dictionary<string, SimulateDataModel> lddict;
+
+        private Dictionary<string, SimulateDataModel> vddict;
+
         public SimulateManager()
         {
             dllmodel = new SimulateDllModel();
@@ -27,6 +35,11 @@ namespace SamSoarII.Simulation.Core
             udict = new Dictionary<SimulateVariableUnit, SimulateVariableUnit>();
             ldict = new Dictionary<SimulateVariableUnit, SimulateVariableUnit>();
             vndict = new Dictionary<string, string>();
+            lddict = new Dictionary<string, SimulateDataModel>();
+            vddict = new Dictionary<string, SimulateDataModel>();
+
+            dllmodel.RunDataFinished += OnRunDataFinished;
+            dllmodel.RunDrawFinished += OnRunDrawFinished;
         }
 
         public IEnumerable<SimulateVariableModel> Variables
@@ -239,6 +252,46 @@ namespace SamSoarII.Simulation.Core
             dllmodel.Unlock(svunit.Name);
         }
 
+        public void Lock(SimulateDataModel sdmodel)
+        {
+            if (!lddict.ContainsKey(sdmodel.Name))
+            {
+                lddict.Add(sdmodel.Name, sdmodel);
+                //sdmodel.IsLock = true;
+                dllmodel.Lock(sdmodel);
+            }
+        }
+        
+        public void View(SimulateDataModel sdmodel)
+        {
+            if (!vddict.ContainsKey(sdmodel.Name))
+            {
+                vddict.Add(sdmodel.Name, sdmodel);
+                //sdmodel.IsView = true;
+                dllmodel.View(sdmodel);
+            }
+        }
+
+        public void Unlock(SimulateDataModel sdmodel)
+        {
+            if (lddict.ContainsKey(sdmodel.Name))
+            {
+                lddict.Remove(sdmodel.Name);
+                //sdmodel.IsLock = false;
+                dllmodel.Unlock(sdmodel);
+            }
+        }
+        
+        public void Unview(SimulateDataModel sdmodel)
+        {
+            if (vddict.ContainsKey(sdmodel.Name))
+            {
+                vddict.Remove(sdmodel.Name);
+                //sdmodel.IsView = false;
+                dllmodel.Unview(sdmodel);
+            }
+        }
+
         public void Start()
         {
             dllmodel.Start();
@@ -264,5 +317,89 @@ namespace SamSoarII.Simulation.Core
             dllmodel.SetValue_DWord("CV200", 56, emptyBuffer);
         }
         
+        public void RunData(double timestart, double timeend)
+        {
+            dllmodel.RunData(timestart, timeend);
+        }
+
+        public void RunDraw(double timestart, double timeend)
+        {
+            dllmodel.RunDraw(timestart, timeend);
+        }
+
+        public void UpdateView(double timestart, double timeend)
+        {
+            StreamReader fin = new StreamReader("simulog.log");
+            while (!fin.EndOfStream)
+            {
+                string text = fin.ReadLine();
+                string[] args = text.Split(' ');
+                string name = args[0];
+                int time = int.Parse(args[1]);
+                ValueSegment vs = null, vsp = null;
+                SimulateDataModel sdmodel = vddict[name];
+                switch (sdmodel.Type)
+                {
+                    case "BIT": case "WORD": case "DWORD":
+                        vs = new IntSegment();
+                        vs.Value = int.Parse(args[2]);
+                        break;
+                    case "FLOAT":
+                        vs = new FloatSegment();
+                        vs.Value = float.Parse(args[2]);
+                        break;
+                    case "DOUBLE":
+                        vs = new DoubleSegment();
+                        vs.Value = double.Parse(args[2]);
+                        break;
+                }
+                if (sdmodel.Values.Count() == 0)
+                {
+                    vsp = vs.Clone();
+                    vsp.Value = 0;
+                    vsp.TimeStart = (int)(timestart);
+                    vs.TimeStart = vsp.TimeEnd = time;
+                    sdmodel.Add(vsp);
+                    sdmodel.Add(vs);
+                }
+                else
+                {
+                    vsp = sdmodel.Values.Last();
+                    vs.TimeStart = vsp.TimeEnd = time;
+                    sdmodel.Add(vs);
+                }
+            }
+            foreach (SimulateDataModel sdmodel in vddict.Values)
+            {
+                if (sdmodel.Values.Count() > 0)
+                {
+                    sdmodel.Values.Last().TimeEnd = (int)(timeend);
+                }
+            }
+        }
+
+        #region Event Handler
+        public event SimulateDataModelEventHandler RunDataFinished;
+        private void OnRunDataFinished(object sender, SimulateDataModelEventArgs e)
+        {
+            UpdateView(e.TimeStart, e.TimeEnd);
+            if (RunDataFinished != null)
+            {
+                RunDataFinished(this, e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler RunDrawFinished;
+        private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
+        {
+            UpdateView(e.TimeStart, e.TimeEnd);
+            if (RunDrawFinished != null)
+            {
+                RunDrawFinished(this, e);
+            }
+        }
+
+        #endregion
+
     }
 }

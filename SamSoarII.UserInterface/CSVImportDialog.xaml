@@ -1,0 +1,22 @@
+﻿<Window x:Class="SamSoarII.UserInterface.CSVImportDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        mc:Ignorable="d"
+        Title="CSVImportDialog" Height="360" Width="600" ResizeMode="NoResize">
+    <Canvas>
+        <Label Canvas.Top="165" Canvas.Left="89">分隔符选择</Label>
+        <Label Canvas.Left="94" Canvas.Top="85">文件选择</Label>
+        <Label Canvas.Top="165" Canvas.Left="300" FontWeight="Heavy">分隔符不正确将导致解析错误</Label>
+        <ComboBox x:Name="SeparatorComboBox" Canvas.Left="193" Canvas.Top="165" Width="80" Height="25" IsEditable="False" SelectedIndex="0" Padding="4,4,0,0">
+            <ComboBoxItem>,(default)</ComboBoxItem>
+            <ComboBoxItem>;</ComboBoxItem>
+        </ComboBox>
+        <TextBox x:Name="FileTextBox" Width="200" Height="25" Canvas.Left="193" Canvas.Top="87" IsReadOnly="True"></TextBox>
+        <Button x:Name="ImportButton" Content="导入" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
+        <Button x:Name="CancelButton" Content="取消" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
+        <Button x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="429" Canvas.Top="87"></Button>
+    </Canvas>
+</Window>

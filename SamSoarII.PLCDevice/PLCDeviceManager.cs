@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.PLCDevice.DeviceDialog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace SamSoarII.PLCDevice
 {
     public class PLCDeviceManager
     {
-        private static  Device _selectDevice = Device.DefaultDevice;
+        private static Device _selectDevice = Device.DefaultDevice;
         public static Device SelectDevice
         {
             get
@@ -41,6 +42,26 @@ namespace SamSoarII.PLCDevice
                 default:
                     _selectDevice = new BroadDevice();
                     break;
+            }
+        }
+        public static BaseDeviceMessageDialog GetDeviceMessageDialog(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return new FGs16MRDeviceMessageDialog();
+                case 1:
+                    return new FGs16MTDeviceMessageDialog();
+                case 2:
+                    return new FGs32MRDeviceMessageDialog();
+                case 3:
+                    return new FGs32MTDeviceMessageDialog();
+                case 4:
+                    return new FGs64MRDeviceMessageDialog();
+                case 5:
+                    return new FGs64MTDeviceMessageDialog();
+                default:
+                    return null;
             }
         }
     }

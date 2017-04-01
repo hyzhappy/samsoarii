@@ -22,10 +22,22 @@ using SamSoarII.Extend.Utility;
 using System.Diagnostics;
 using System.IO;
 using SamSoarII.Simulation.Core.Event;
+using SamSoarII.Simulation.Core.DataModel;
+
+/// <summary>
+/// Namespace : SamSoarII.Simulation
+/// ClassName : SimulateModel
+/// Version   : 1.0
+/// Date      : 2017/3/31
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 
+/// </remarks>
 
 namespace SamSoarII.Simulation
 {
-    public class SimulateModel
+    public class SimulateModel : IDisposable
     {
         private SimulateManager smanager;
 
@@ -55,13 +67,17 @@ namespace SamSoarII.Simulation
 
         public SimuViewChartModel Chart;
 
-        public SimulateWindow MainWindow;
+        //public SimulateWindow MainWindow;
 
-        public PLCTopPhoto plcTopPhoto;
+        public ProjectTreeView PTView;
 
-        public MonitorTable mtable;
+        public PLCTopPhoto PLCTopPhoto;
+
+        public MonitorTable MTable;
 
         public SimulateBitModel LEDBit;
+
+        public List<SimuViewXYModel> XYCharts;
         
         public SimulateModel()
         {
@@ -74,13 +90,23 @@ namespace SamSoarII.Simulation
             SubRoutines = new List<SimuViewDiagramModel>();
             AllFuncs = null;
             FuncBlocks = new List<SimuViewFuncBlockModel>();
-            Chart = new SimuViewChartModel();
+            XYCharts = new List<SimuViewXYModel>();
             LEDBit = new SimulateBitModel();
             LEDBit.Base = "Y0";
             LEDBit.Size = 8;
             smanager.Add(LEDBit);
         }
         
+        public void Dispose()
+        {
+            if (UpdateThread != null && UpdateThread.IsAlive)
+            {
+                UpdateThread.Abort();
+                //GC.SuppressFinalize(UpdateThread);
+                UpdateThread = null;
+            }
+        }
+
         private void _Update_Thread()
         {
             while (true)
@@ -91,15 +117,15 @@ namespace SamSoarII.Simulation
                 {
                     svdmodel.Update();
                 }
-                plcTopPhoto.LEDLight_Y0.Status = Math.Min(2, ((int)(LEDBit.Values[0].Value)));
-                plcTopPhoto.LEDLight_Y1.Status = Math.Min(2, ((int)(LEDBit.Values[1].Value)));
-                plcTopPhoto.LEDLight_Y2.Status = Math.Min(2, ((int)(LEDBit.Values[2].Value)));
-                plcTopPhoto.LEDLight_Y3.Status = Math.Min(2, ((int)(LEDBit.Values[3].Value)));
-                plcTopPhoto.LEDLight_Y4.Status = Math.Min(2, ((int)(LEDBit.Values[4].Value)));
-                plcTopPhoto.LEDLight_Y5.Status = Math.Min(2, ((int)(LEDBit.Values[5].Value)));
-                plcTopPhoto.LEDLight_Y6.Status = Math.Min(2, ((int)(LEDBit.Values[6].Value)));
-                plcTopPhoto.LEDLight_Y7.Status = Math.Min(2, ((int)(LEDBit.Values[7].Value)));
-                mtable.UpdateValue();
+                PLCTopPhoto.LEDLight_Y0.Status = Math.Min(2, ((int)(LEDBit.Values[0].Value)));
+                PLCTopPhoto.LEDLight_Y1.Status = Math.Min(2, ((int)(LEDBit.Values[1].Value)));
+                PLCTopPhoto.LEDLight_Y2.Status = Math.Min(2, ((int)(LEDBit.Values[2].Value)));
+                PLCTopPhoto.LEDLight_Y3.Status = Math.Min(2, ((int)(LEDBit.Values[3].Value)));
+                PLCTopPhoto.LEDLight_Y4.Status = Math.Min(2, ((int)(LEDBit.Values[4].Value)));
+                PLCTopPhoto.LEDLight_Y5.Status = Math.Min(2, ((int)(LEDBit.Values[5].Value)));
+                PLCTopPhoto.LEDLight_Y6.Status = Math.Min(2, ((int)(LEDBit.Values[6].Value)));
+                PLCTopPhoto.LEDLight_Y7.Status = Math.Min(2, ((int)(LEDBit.Values[7].Value)));
+                MTable.UpdateValue();
                 Thread.Sleep(50);
             }
         }
@@ -176,15 +202,20 @@ namespace SamSoarII.Simulation
         private void OnMainWindowClosed(object sender, EventArgs e)
         {
 
-            if (plcTopPhoto.RunTrigger.Status == UI.PLCTop.Trigger.STATUS_RUN)
+            if (PLCTopPhoto.RunTrigger.Status == UI.PLCTop.Trigger.STATUS_RUN)
             {
                 smanager.Stop();
             }
             UpdateThread.Abort();
         }
-        
+
+        public event ShowTabItemEventHandler TabOpened;
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
+            if (TabOpened != null)
+            {
+                TabOpened(sender, e);
+            }
             if (e.TabName.Equals("所有程序"))
             {
                 ShowItem(AllRoutine, e.TabName);
@@ -217,9 +248,14 @@ namespace SamSoarII.Simulation
                 }
             }
         }
-        
+
+        public event SelectionChangedEventHandler TabItemChanged;
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (TabItemChanged != null)
+            {
+                TabItemChanged(sender, e);
+            }
         }
         
         private void OnProjectTreeDoubleClicked(object sender, MouseButtonEventArgs e)
@@ -227,12 +263,12 @@ namespace SamSoarII.Simulation
             if (sender is TreeViewItem)
             {
                 TreeViewItem tvi = sender as TreeViewItem;
-                if (tvi == MainWindow.PTView.TVI_AllRoutine)
+                if (tvi == PTView.TVI_AllRoutine)
                 {
                     OnTabOpened(sender, new ShowTabItemEventArgs("所有程序"));
                 }
                 else
-                if (tvi == MainWindow.PTView.TVI_MainRoutine)
+                if (tvi == PTView.TVI_MainRoutine)
                 {
                     OnTabOpened(sender, new ShowTabItemEventArgs("主程序"));
                 }
@@ -268,28 +304,119 @@ namespace SamSoarII.Simulation
             smanager.Unlock(e.Old);
         }
 
+        //public SimulateDataModelEventHandler SDModelLock;
+        private void OnSimulateDataModelLock(object sender, SimulateDataModelEventArgs e)
+        {
+            SimulateDataModel sdmodel = e.SDModel_new;
+            smanager.Lock(sdmodel);
+            /*
+            if (SDModelLock != null)
+            {
+                SDModelLock(this, e);
+            }
+            */
+        }
+
+        //public SimulateDataModelEventHandler SDModelView;
+        private void OnSimulateDataModelView(object sender, SimulateDataModelEventArgs e)
+        {
+            SimulateDataModel sdmodel = e.SDModel_new;
+            smanager.View(sdmodel);
+            /*
+            if (SDModelView != null)
+            {
+                SDModelView(this, e);
+            }
+            */
+        }
+
+        //public SimulateDataModelEventHandler SDModelUnlock;
+        private void OnSimulateDataModelUnlock(object sender, SimulateDataModelEventArgs e)
+        {
+            SimulateDataModel sdmodel = e.SDModel_new;
+            smanager.Unlock(sdmodel);
+            /*
+            if (SDModelUnlock != null)
+            {
+                SDModelUnlock(this, e);
+            }
+            */
+        }
+
+        //public SimulateDataModelEventHandler SDModelUnview;
+        private void OnSimulateDataModelUnview(object sender, SimulateDataModelEventArgs e)
+        {
+            SimulateDataModel sdmodel = e.SDModel_new;
+            smanager.Unview(sdmodel);
+            /*
+            if (SDModelUnview != null)
+            {
+                SDModelUnview(this, e);
+            }
+            */
+        }
+        
+        private void OnSimulateDataModelRun(object sender, SimulateDataModelEventArgs e)
+        {
+            double timestart = e.TimeStart;
+            double timeend = e.TimeEnd;
+            smanager.RunData(timestart, timeend);
+        }
+
+        private void OnSimulateDataModelDraw(object sender, SimulateDataModelEventArgs e)
+        {
+            double timestart = e.TimeStart;
+            double timeend = e.TimeEnd;
+            smanager.RunDraw(timestart, timeend);
+        }
+
+        public event SimulateDataModelEventHandler RunDrawFinished;        
+        private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
+        {
+            if (RunDrawFinished != null)
+            {
+                RunDrawFinished(this, e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler RunDataFinished;
+        private void OnRunDataFinished(object sender, SimulateDataModelEventArgs e)
+        {
+            if (RunDataFinished != null)
+            {
+                RunDataFinished(this, e);
+            }
+        }
+
+        private void OnSimuViewXYModelCreate(object sender, SimulateDataModelEventArgs e)
+        {
+            SimuViewXYModel xychart = new SimuViewXYModel(e.SDModels, (int)(e.TimeStart), (int)(e.TimeEnd));
+            XYCharts.Add(xychart);
+        }
+
         #endregion
 
         #region User Interface
         private void BuildRouted()
         {
-            MainWindow.OpenChart += OnTabOpened;
-            MainWindow.Closed += OnMainWindowClosed;
-            
-            ProjectTreeView ptview = MainWindow.PTView;
+            //MainWindow.OpenChart += OnTabOpened;
+            //MainWindow.Closed += OnMainWindowClosed;
+
+            PTView = new ProjectTreeView();
             foreach (SimuViewDiagramModel svdmodel in SubRoutines)
             {
-                ptview.AddTreeViewItem(svdmodel.Name, ProjectTreeView.ADDTVI_TYPE_SUBROUTINES);
+                PTView.AddTreeViewItem(svdmodel.Name, ProjectTreeView.ADDTVI_TYPE_SUBROUTINES);
             }
             foreach (SimuViewFuncBlockModel svfmodel in FuncBlocks)
             {
-                ptview.AddTreeViewItem(svfmodel.Name, ProjectTreeView.ADDTVI_TYPE_FUNCBLOCKS);
+                PTView.AddTreeViewItem(svfmodel.Name, ProjectTreeView.ADDTVI_TYPE_FUNCBLOCKS);
             }
 
-            TreeViewItem tvi_arou = ptview.TVI_AllRoutine;
-            TreeViewItem tvi_mrou = ptview.TVI_MainRoutine;
-            TreeViewItem tvi_srou = ptview.TVI_SubRoutines;
-            TreeViewItem tvi_fblo = ptview.TVI_FuncBlocks;
+            TreeViewItem tvi_arou = PTView.TVI_AllRoutine;
+            TreeViewItem tvi_mrou = PTView.TVI_MainRoutine;
+            TreeViewItem tvi_srou = PTView.TVI_SubRoutines;
+            TreeViewItem tvi_fblo = PTView.TVI_FuncBlocks;
+            TreeViewItem tvi_char = PTView.TVI_Chart;
             tvi_arou.MouseDoubleClick += OnProjectTreeDoubleClicked;
             tvi_mrou.MouseDoubleClick += OnProjectTreeDoubleClicked;
             foreach (TreeViewItem tvi in tvi_srou.Items)
@@ -300,51 +427,65 @@ namespace SamSoarII.Simulation
             {
                 tvi.MouseDoubleClick += OnProjectTreeDoubleClicked;
             }
+            tvi_char.MouseDoubleClick += OnProjectTreeDoubleClicked;
 
-            plcTopPhoto = MainWindow.PLCTopView;
-            plcTopPhoto.RunTrigger.Run += PLCTopPhotoTriggerRun;
-            plcTopPhoto.RunTrigger.Stop += PLCTopPhotoTriggerStop;
+            PLCTopPhoto = new PLCTopPhoto();
+            PLCTopPhoto.RunTrigger.Run += PLCTopPhotoTriggerRun;
+            PLCTopPhoto.RunTrigger.Stop += PLCTopPhotoTriggerStop;
             
             SimulateVInputUnit sviunit = new SimulateVInputUnit();
             smvars.Add(sviunit);
 
-            mtable = MainWindow.MTable;
-            mtable.VariableUnitChanged += OnVariableUnitChanged;
-            mtable.VariableUnitClosed += OnVariableUnitChanged;
-            mtable.VariableUnitLocked += OnVariableUnitLocked;
-            mtable.VariableUnitUnlocked += OnVariableUnitUnlocked;
-            mtable.SVUnits = smvars;
-            mtable.Update();
+            MTable = new MonitorTable();
+            MTable.VariableUnitChanged += OnVariableUnitChanged;
+            MTable.VariableUnitClosed += OnVariableUnitChanged;
+            MTable.VariableUnitLocked += OnVariableUnitLocked;
+            MTable.VariableUnitUnlocked += OnVariableUnitUnlocked;
+            MTable.SVUnits = smvars;
+            MTable.Update();
+
+            Chart = new SimuViewChartModel();
+            Chart.SDModelView += OnSimulateDataModelView;
+            Chart.SDModelLock += OnSimulateDataModelLock;
+            Chart.SDModelUnlock += OnSimulateDataModelUnlock;
+            Chart.SDModelUnview += OnSimulateDataModelUnview;
+            Chart.SDModelRun += OnSimulateDataModelRun;
+            Chart.SDModelDraw += OnSimulateDataModelDraw;
+            Chart.XYModelCreate += OnSimuViewXYModelCreate;
+            Chart.BuildRouted(this);
+
+            smanager.RunDataFinished += OnRunDataFinished;
+            smanager.RunDrawFinished += OnRunDrawFinished;
             
             UpdateThread = new Thread(_Update_Thread);
             UpdateThread.Start();
         }
-        
+       
         public void ShowWindow()
         {
-            MainWindow = new SimulateWindow();
+            //MainWindow = new SimulateWindow();
             BuildRouted();
-            MainWindow.Show();
+            //MainWindow.Show();
         }
 
         public void ShowItem(SimuViewAllDiaModel svdmodel, string name)
         {
-            MainWindow.MainTab.ShowItem(svdmodel, name);
+            //MainWindow.MainTab.ShowItem(svdmodel, name);
         }
 
         public void ShowItem(SimuViewDiagramModel svdmodel, string name)
         {
-            MainWindow.MainTab.ShowItem(svdmodel, name);
+            //MainWindow.MainTab.ShowItem(svdmodel, name);
         }
 
         public void ShowItem(SimuViewFuncBlockModel svdmodel, string name)
         {
-            MainWindow.MainTab.ShowItem(svdmodel, name);
+            //MainWindow.MainTab.ShowItem(svdmodel, name);
         }
 
         public void ShowItem(SimuViewChartModel svcmodel)
         {
-            MainWindow.MainTab.ShowItem(svcmodel, "图表");
+            //MainWindow.MainTab.ShowItem(svcmodel, "图表");
         }
         #endregion
 
@@ -355,15 +496,15 @@ namespace SamSoarII.Simulation
             smanager.Start();
             //UpdateThread = new Thread(_Update_Thread);
             //UpdateThread.Start();
-            plcTopPhoto.RunLight.Status = StatusLight.STATUS_LIGHT;
-            plcTopPhoto.StopLight.Status = StatusLight.STATUS_DARK;
+            PLCTopPhoto.RunLight.Status = StatusLight.STATUS_LIGHT;
+            PLCTopPhoto.StopLight.Status = StatusLight.STATUS_DARK;
         }
         
         public void Stop()
         {
             smanager.Stop();
-            plcTopPhoto.RunLight.Status = StatusLight.STATUS_DARK;
-            plcTopPhoto.StopLight.Status = StatusLight.STATUS_LIGHT;
+            PLCTopPhoto.RunLight.Status = StatusLight.STATUS_DARK;
+            PLCTopPhoto.StopLight.Status = StatusLight.STATUS_LIGHT;
         }
 
         #endregion
@@ -432,6 +573,7 @@ namespace SamSoarII.Simulation
                 switch (ret)
                 {
                     case SimulateDllModel.LOADDLL_OK:
+                        SimulateDllModel.InitDataPoint();
                         break;
                     case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                         report.Text += "error : 找不到生成的dll文件simuc.dll\r\n";

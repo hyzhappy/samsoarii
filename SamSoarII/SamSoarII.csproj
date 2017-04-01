@@ -120,17 +120,17 @@
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
-    <Compile Include="UI\CommentListControl.xaml.cs">
-      <DependentUpon>CommentListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\EditVariableDialog.xaml.cs">
-      <DependentUpon>EditVariableDialog.xaml</DependentUpon>
+    <Compile Include="UI\ElementList.xaml.cs">
+      <DependentUpon>ElementList.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\InstrucionTreeItem.cs" />
-    <Compile Include="UI\MainTabControl.cs" />
+    <Compile Include="UI\MainTabControl.xaml.cs">
+      <DependentUpon>MainTabControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Util\CSVFileHelper.cs" />
     <Compile Include="UI\OptionDialog.xaml.cs">
       <DependentUpon>OptionDialog.xaml</DependentUpon>
     </Compile>
@@ -145,9 +145,6 @@
     </Compile>
     <Compile Include="UI\ProjectPropertyDialog.xaml.cs">
       <DependentUpon>ProjectPropertyDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\VariableListControl.xaml.cs">
-      <DependentUpon>VariableListControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +181,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock.Themes.VS2010\Xceed.Wpf.AvalonDock.Themes.VS2010.csproj">
+      <Project>{b3fc3e21-5f2d-4581-aea2-59f671cffc21}</Project>
+      <Name>Xceed.Wpf.AvalonDock.Themes.VS2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
+      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
+      <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
       <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
       <Name>ICSharpCode.AvalonEdit</Name>
@@ -254,13 +259,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\CommentListControl.xaml">
+    <Page Include="UI\ElementList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\EditVariableDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="UI\MainTabControl.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -283,10 +288,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ProjectPropertyDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\VariableListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -341,6 +342,9 @@
   <ItemGroup>
     <Resource Include="Resources\Image\Expand\ExpandOff.png" />
     <Resource Include="Resources\Image\Expand\ExpandOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Upload.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

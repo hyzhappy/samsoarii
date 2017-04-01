@@ -18,7 +18,7 @@ namespace SamSoarII.ValueModel
         {
             get
             {
-                return string.Format("D{0}D{1}{2}", Index, Index + 1, Offset.ValueString);
+                return ValueString;
             }
         }
 

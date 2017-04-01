@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="3000" 
+             d:DesignHeight="300" d:DesignWidth="3600" 
              PreviewMouseWheel="OnLadderDiagramMouseWheel"
              Background="Transparent"
              Focusable="True"

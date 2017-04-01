@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="3000" x:Name="LadderNetworkUserControl">
+             d:DesignHeight="300" d:DesignWidth="3600" x:Name="LadderNetworkUserControl">
     <StackPanel Margin="0,0,0,20">
         <StackPanel.Resources>
             <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
@@ -33,7 +33,7 @@
                 </Expander>
             </Border>
         </Grid>
-        <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3000" Margin="0,20,0,0" Background="Transparent" PreviewMouseDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" PreviewMouseDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
             <Canvas.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                     <MenuItem Header="图元剪切"></MenuItem>

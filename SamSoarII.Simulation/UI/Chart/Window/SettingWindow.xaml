@@ -1,0 +1,258 @@
+﻿<Window x:Class="SamSoarII.Simulation.UI.Chart.Window.SettingWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Chart.Window"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="300"
+             Title="仿真设置">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.Children>
+            <TabControl>
+                <TabControl.Items>
+                    <TabItem Header="扫描">
+                    <TabItem.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Grid x:Name="G_ScanPeriod">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.7*"/>
+                                    <ColumnDefinition Width="1.8*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <CheckBox x:Name="CB_ScanPeriod" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center">扫描精度(常量)</TextBlock>
+                                    <TextBox x:Name="TB_ScanPeriod" Grid.Column="2"></TextBox>
+                                    <Button x:Name="B_ScanPeriodInc" Grid.Column="3">增加</Button>
+                                    <Button x:Name="B_ScanPeriodDec" Grid.Column="4">减少</Button>
+                                </Grid.Children>
+                            </Grid>
+                            <Grid x:Name="G_ScanRate">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.7*"/>
+                                    <ColumnDefinition Width="1.8*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <CheckBox x:Name="CB_ScanRate" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center">扫描精度(比例)</TextBlock>
+                                    <TextBox x:Name="TB_ScanRate" Grid.Column="2"></TextBox>
+                                    <Button x:Name="B_ScanRateInc" Grid.Column="3">增加</Button>
+                                    <Button x:Name="B_ScanRateDec" Grid.Column="4">减少</Button>
+                                </Grid.Children>
+                            </Grid>
+                            <Grid x:Name="G_DataLimit">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.7*"/>
+                                    <ColumnDefinition Width="3.8*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <CheckBox x:Name="CB_DataLimit" VerticalAlignment="Center" HorizontalAlignment="Center"></CheckBox>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">最大数据数</TextBlock>
+                                    <TextBox x:Name="TB_DataLimit" Grid.Column="2"></TextBox>
+                                </Grid.Children>
+                            </Grid>
+                            <Grid x:Name="G_LockLimit">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.7*"/>
+                                    <ColumnDefinition Width="1.8*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <CheckBox x:Name="CB_LockLimit" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center">最大锁定数</TextBlock>
+                                    <TextBox x:Name="TB_LockLimit" Grid.Column="2"></TextBox>
+                                    <Button x:Name="B_LockLimitInc" Grid.Column="3">增加</Button>
+                                    <Button x:Name="B_LockLimitDec" Grid.Column="4">减少</Button>
+                                </Grid.Children>
+                            </Grid>
+                            <Grid x:Name="G_ViewLimit">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.7*"/>
+                                    <ColumnDefinition Width="1.8*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <CheckBox x:Name="CB_ViewLimit" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center">最大监视数</TextBlock>
+                                    <TextBox x:Name="TB_ViewLimit" Grid.Column="2"></TextBox>
+                                    <Button x:Name="B_ViewLimitInc" Grid.Column="3">增加</Button>
+                                    <Button x:Name="B_ViewLimitDec" Grid.Column="4">减少</Button>
+                                </Grid.Children>
+                            </Grid>
+                        </StackPanel>        
+                    </TabItem.Content>
+                </TabItem>
+                    <TabItem Header="时间轴">
+                    <TabItem.Content>
+                        <StackPanel Orientation="Vertical">
+                            <Grid x:Name="G_Divide">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <TextBlock Grid.Column="0" VerticalAlignment="Center">主划分数量</TextBlock>
+                                    <TextBox x:Name="TB_Divide" Grid.Column="1"></TextBox>
+                                    <Button x:Name="B_DivideInc" Grid.Column="2">增加</Button>
+                                    <Button x:Name="B_DivideDec" Grid.Column="3">减少</Button>
+                                </Grid.Children>
+                            </Grid>
+                            <Grid x:Name="G_SubDivide">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <TextBlock Grid.Column="0" VerticalAlignment="Center">副划分数量</TextBlock>
+                                    <TextBox x:Name="TB_SubDivide" Grid.Column="1"></TextBox>
+                                    <Button x:Name="B_SubDivideInc" Grid.Column="2">增加</Button>
+                                    <Button x:Name="B_SubDivideDec" Grid.Column="3">减少</Button>
+                                </Grid.Children>
+                            </Grid>
+                            <Grid x:Name="G_TimeStart">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <TextBlock Grid.Column="0" VerticalAlignment="Center">起始时间</TextBlock>
+                                    <TextBox x:Name="TB_TimeStart" Grid.Column="1"></TextBox>
+                                    <ComboBox x:Name="CB_TimeStartUnit" Grid.Column="2" Text="ms">
+                                        <ComboBox.Items>
+                                            <TextBlock>ms</TextBlock>
+                                            <TextBlock>s</TextBlock>
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid.Children>
+                            </Grid>
+                            <Grid x:Name="G_TimeEnd">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Children>
+                                    <TextBlock Grid.Column="0" VerticalAlignment="Center">终止时间</TextBlock>
+                                    <TextBox x:Name="TB_TimeEnd" Grid.Column="1"></TextBox>
+                                    <ComboBox x:Name="CB_TimeEndUnit" Grid.Column="2" Text="ms">
+                                        <ComboBox.Items>
+                                            <TextBlock>ms</TextBlock>
+                                            <TextBlock>s</TextBlock>
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid.Children>
+                            </Grid>
+                        </StackPanel>
+                    </TabItem.Content>
+                </TabItem>
+                    <TabItem Header="绘图">
+                        <TabItem.Content>
+                            <StackPanel>
+                                <Grid x:Name="G_DrawLimit">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Children>
+                                        <TextBlock Grid.Column="0" VerticalAlignment="Center">最大曲线数</TextBlock>
+                                        <TextBox Grid.Column="1"></TextBox>
+                                        <Button x:Name="B_DrawLimitInc" Grid.Column="2">增加</Button>
+                                        <Button x:Name="B_DrawLimitDec" Grid.Column="3">减少</Button>
+                                    </Grid.Children>
+                                </Grid>
+                                <Grid x:Name="G_DrawBrushes">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Children>
+                                        <TextBlock Grid.Column="0" VerticalAlignment="Center">曲线颜色</TextBlock>
+                                        <Rectangle x:Name="Brush1" Grid.Column="1" Fill="Black"></Rectangle>
+                                        <Rectangle x:Name="Brush2" Grid.Column="2" Fill="DarkOrange"></Rectangle>
+                                        <Rectangle x:Name="Brush3" Grid.Column="3" Fill="DarkBlue"></Rectangle>
+                                        <Rectangle x:Name="Brush4" Grid.Column="4" Fill="BlueViolet"></Rectangle>
+                                        <Rectangle x:Name="Brush5" Grid.Column="5" Fill="DarkCyan"></Rectangle>
+                                        <Rectangle x:Name="Brush6" Grid.Column="6" Fill="DarkGray"></Rectangle>
+                                        <Rectangle x:Name="Brush7" Grid.Column="7" Fill="DarkGoldenrod"></Rectangle>
+                                        <Rectangle x:Name="Brush8" Grid.Column="8" Fill="DarkTurquoise"></Rectangle>
+                                    </Grid.Children>
+                                </Grid>
+                                <Grid x:Name="G_DrawAccurate">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Children>
+                                        <TextBlock Grid.Column="0" VerticalAlignment="Center">绘制精度</TextBlock>
+                                        <TextBox Grid.Column="1"></TextBox>
+                                    </Grid.Children>
+                                </Grid>
+                                <Grid x:Name="G_ValueDivide">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Children>
+                                        <TextBlock Grid.Column="0" VerticalAlignment="Center">主划分数量</TextBlock>
+                                        <TextBox x:Name="TB_ValueDivide" Grid.Column="1"></TextBox>
+                                        <Button x:Name="B_ValueDivideInc" Grid.Column="2">增加</Button>
+                                        <Button x:Name="B_ValueDivideDec" Grid.Column="3">减少</Button>
+                                    </Grid.Children>
+                                </Grid>
+                                <Grid x:Name="G_ValueSubDivide">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Children>
+                                        <TextBlock Grid.Column="0" VerticalAlignment="Center">副划分数量</TextBlock>
+                                        <TextBox x:Name="TB_ValueSubDivide" Grid.Column="1"></TextBox>
+                                        <Button x:Name="B_ValueSubDivideInc" Grid.Column="2">增加</Button>
+                                        <Button x:Name="B_ValueSubDivideDec" Grid.Column="3">减少</Button>
+                                    </Grid.Children>
+                                </Grid>
+                            </StackPanel>  
+                        </TabItem.Content>   
+                </TabItem>
+                </TabControl.Items>
+            </TabControl>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button x:Name="B_ok" Width="80">确定</Button>
+                <Button x:Name="B_cancel" Width="80">取消</Button>
+            </StackPanel>
+        </Grid.Children>
+    </Grid>
+</Window>
