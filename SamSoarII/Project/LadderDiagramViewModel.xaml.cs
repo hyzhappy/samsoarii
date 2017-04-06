@@ -248,6 +248,16 @@ namespace SamSoarII.AppMain.Project
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
         }
+        public void NavigateToNetworkByNum(int num)
+        {
+            double scale = GlobalSetting.LadderScaleX;
+            double offset = scale * (MainBorder.ActualHeight + 20) / 3;
+            foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < num; }))
+            {
+                offset += scale * (item.ActualHeight + 20) / 3;
+            }
+            MainScrollViewer.ScrollToVerticalOffset(offset);
+        }
         private void InitializeInstructionNameAndToolTips()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -913,11 +923,7 @@ namespace SamSoarII.AppMain.Project
                             valueStrings.Add(string.Empty);
                         }
                     }
-                    if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
-                    {
-                        viewmodel.AcceptNewValues(valueStrings,PLCDeviceManager.SelectDevice);
-                    }
-                    if (viewmodel.Type == LadderInstModel.ElementType.Output)
+                    if (viewmodel.Type == ElementType.Output)
                     {
                         int x = _selectRect.X;
                         int y = _selectRect.Y;
@@ -929,6 +935,10 @@ namespace SamSoarII.AppMain.Project
                         }
                         viewmodel.X = GlobalSetting.LadderXCapacity - 1;
                         viewmodel.Y = _selectRect.Y;
+                        if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
+                        {
+                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.SelectDevice);
+                        }
                         elements.Add(viewmodel);
                         _selectRect.X = GlobalSetting.LadderXCapacity - 1;
                         var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
@@ -938,6 +948,10 @@ namespace SamSoarII.AppMain.Project
                     {
                         viewmodel.X = _selectRect.X;
                         viewmodel.Y = _selectRect.Y;
+                        if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
+                        {
+                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.SelectDevice);
+                        }
                         ReplaceSingleElement(_selectRectOwner, viewmodel);
                         if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
                         {
@@ -948,6 +962,7 @@ namespace SamSoarII.AppMain.Project
                 catch (Exception exception)
                 {
                     MessageBox.Show(string.Format(exception.Message));
+                    return;
                 }
                 dialog.Close();
             };

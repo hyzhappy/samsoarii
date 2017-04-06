@@ -88,10 +88,31 @@ namespace SamSoarII.AppMain
         {
             this._mainWindow = mainwindow;
             _mainTabControl = _mainWindow.MainTab;
-
+            ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             SimulateHelper.TabOpen += OnTabOpened;
         }
-
+        private void ElementList_NavigateToNetwork(NavigateToNetworkEventArgs e)
+        {
+            LadderDiagramViewModel tempItem;
+            if (ProjectModel.MainRoutine.ProgramName == e.RefLadderName)
+            {
+                tempItem = ProjectModel.MainRoutine;
+            }
+            else
+            {
+                tempItem = ProjectModel.SubRoutines.Where(x => { return x.ProgramName == e.RefLadderName; }).First();
+            }
+            var network = tempItem.GetNetworkByNumber(e.NetworkNum);
+            tempItem.AcquireSelectRect(network);
+            tempItem.SelectionRect.X = e.X;
+            tempItem.SelectionRect.Y = e.Y;
+            if (!network.LadderCanvas.Children.Contains(tempItem.SelectionRect))
+            {
+                network.LadderCanvas.Children.Add(tempItem.SelectionRect);
+            }
+            tempItem.NavigateToNetworkByNum(e.NetworkNum);
+            _mainTabControl.ShowItem(tempItem);
+        }
         public void CreateProject(string name, string fullFileName)
         {         
             _projectModel = new ProjectModel(name);

@@ -6,15 +6,34 @@ using System.Threading.Tasks;
 using SamSoarII.ValueModel;
 namespace SamSoarII.LadderInstViewModel
 {
+    public enum MappedMessageChangedType
+    {
+        Add,
+        AddFirst,
+        Remove,
+        RemoveLast
+    }
+    public class MappedMessageChangedEventArgs : EventArgs
+    {
+        public MappedMessageChangedType Type { get; set; }
+        public string ValueString { get; set; }
+        public BaseViewModel MappedValueModel { get; set; }
+        public MappedMessageChangedEventArgs(MappedMessageChangedType type,string valueString ,BaseViewModel mappedValueModel)
+        {
+            Type = type;
+            ValueString = valueString;
+            MappedValueModel = mappedValueModel;
+        }
+    }
+    public delegate void MappedMessageChangedEventHandler(MappedMessageChangedEventArgs e);
     public static class InstructionCommentManager
     {
+        public static event MappedMessageChangedEventHandler MappedMessageChanged = delegate { };
         private static Dictionary<string, HashSet<BaseViewModel>> _valueRelatedModel = new Dictionary<string, HashSet<BaseViewModel>>();
-
         static InstructionCommentManager()
         {
             ValueCommentManager.ValueCommentChanged += ValueCommentManager_ValueCommentChanged;
         }
-
         private static void ValueCommentManager_ValueCommentChanged(ValueCommentChangedEventArgs e)
         {
             UpdateCommentContent(e.ValueString);
@@ -24,15 +43,18 @@ namespace SamSoarII.LadderInstViewModel
         {
             foreach (var str in viewmodel.GetValueString())
             {
-                if (!str.Equals(string.Empty))
+                if (!str.Equals(string.Empty) && viewmodel.NetWorkNum != -1)
                 {
+                    Dictionary<string, HashSet<BaseViewModel>> temp = new Dictionary<string, HashSet<BaseViewModel>>(_valueRelatedModel);
                     if (_valueRelatedModel.ContainsKey(str))
                     {
                         _valueRelatedModel[str].Add(viewmodel);
+                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Add, str, viewmodel));
                     }
                     else
                     {
                         _valueRelatedModel.Add(str, new HashSet<BaseViewModel>() { viewmodel });
+                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.AddFirst, str, viewmodel));
                     }
                 }
             }
@@ -51,6 +73,11 @@ namespace SamSoarII.LadderInstViewModel
                         if (hset.Count == 0)
                         {
                             _valueRelatedModel.Remove(str);
+                            MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.RemoveLast, str,viewmodel));
+                        }
+                        else
+                        {
+                            MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Remove,str ,viewmodel));
                         }
                     }
                 }
@@ -59,7 +86,7 @@ namespace SamSoarII.LadderInstViewModel
 
         public static void ModifyValue(BaseViewModel viewmodel, string oldvalueString, string newvalueString)
         {
-            if (oldvalueString != newvalueString)
+            if (oldvalueString != newvalueString && viewmodel.NetWorkNum != -1)
             {
                 if (_valueRelatedModel.ContainsKey(oldvalueString))
                 {
@@ -68,6 +95,11 @@ namespace SamSoarII.LadderInstViewModel
                     if (hset.Count == 0)
                     {
                         _valueRelatedModel.Remove(oldvalueString);
+                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.RemoveLast,oldvalueString, viewmodel));
+                    }
+                    else
+                    {
+                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Remove, oldvalueString, viewmodel));
                     }
                 }
                 if (newvalueString != string.Empty)
@@ -76,10 +108,12 @@ namespace SamSoarII.LadderInstViewModel
                     {
                         var hset = _valueRelatedModel[newvalueString];
                         hset.Add(viewmodel);
+                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Add, newvalueString, viewmodel));
                     }
                     else
                     {
                         _valueRelatedModel.Add(newvalueString, new HashSet<BaseViewModel>() { viewmodel });
+                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.AddFirst, newvalueString, viewmodel));
                     }
                 }
             }

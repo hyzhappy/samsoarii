@@ -114,6 +114,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+
         private bool _isCommendMode;
         public bool IsCommentMode
         {
@@ -345,6 +346,8 @@ namespace SamSoarII.AppMain.Project
         #region Ladder content modification methods
         public void ReplaceElement(BaseViewModel element)
         {
+            element.NetWorkNum = NetworkNumber;
+            element.RefLadderName = _ladderDiagram.ProgramName;
             BaseViewModel oldele = null;
             bool flag = false;
             // Remove old element before
@@ -589,7 +592,7 @@ namespace SamSoarII.AppMain.Project
         //判断集合中X坐标相同的直线，其NextElemnets集合是否完全相同
         private bool CheckHLines(IEnumerable<BaseViewModel> hLines)
         {
-            for (int x = 0; x < 10; x++)
+            for (int x = 0; x < GlobalSetting.LadderXCapacity; x++)
             {
                 var lines = hLines.Where(l => { return l.X == x; });
                 if (lines.Count() > 1)
@@ -1524,7 +1527,7 @@ namespace SamSoarII.AppMain.Project
                 Movement();
             }
             //针对每一层级的VLine进行移动
-            for (int level = 1; level < 10; level++)
+            for (int level = 1; level < GlobalSetting.LadderXCapacity; level++)
             {
                 var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.CountLevel == level; }).ToList();
                 if (tempVLines.Count() != 0)
@@ -1767,7 +1770,7 @@ namespace SamSoarII.AppMain.Project
         private void InitializeCountLevel()
         {
             var tempElements = _ladderElements.Values.Where(x => { return x.Type != ElementType.HLine; }).ToList();
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < GlobalSetting.LadderXCapacity - 1; i++)
             {
                 var tempVLines = _ladderVerticalLines.Values.Where(x => { return x.X == i; }).OrderBy(x => { return x.Y; });//进行层级分配时，是从上到下扫描
                 if (i == 0)

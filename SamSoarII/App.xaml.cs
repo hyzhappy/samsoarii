@@ -22,6 +22,7 @@ namespace SamSoarII.AppMain
             VariableManager.Initialize();
             ValueAliasManager.Initialize();
             ElementList.InitializeElementCollection();
+            InstructionCommentManager.MappedMessageChanged += ElementList.InstructionCommentManager_MappedMessageChanged;
             ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
             ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
             GlobalSetting.Load();

@@ -102,35 +102,6 @@ namespace SamSoarII.AppMain.UI
                 InstructionTreeItemDoubleClick.Invoke(sender, e);
             }
         }
-        private void OnShowCommentList(object sender, MouseButtonEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
-        }
-
-        private void OnShowCommentList(object sender, RoutedEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
-        }
-
-        private void OnShowUsageList(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void OnShowUsageList(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OnShowVariableList(object sender, MouseButtonEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
-        }
-
-        private void OnShowVariableList(object sender, RoutedEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
-        }
 
         private void OnRenameRoutine(object sender, RoutedEventArgs e)
         {
@@ -246,5 +217,6 @@ namespace SamSoarII.AppMain.UI
             }
         }
         #endregion
+
     }
 }
