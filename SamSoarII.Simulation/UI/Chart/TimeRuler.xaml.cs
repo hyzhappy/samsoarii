@@ -317,6 +317,8 @@ namespace SamSoarII.Simulation.UI.Chart
         #region Event Handler
         public event RoutedEventHandler StartLineChanged;
         public event RoutedEventHandler EndLineChanged;
+        public event RoutedEventHandler StartTimeChanged;
+        public event RoutedEventHandler EndTimeChanged;
 
         private TimePointWindow TPW_StartPoint;
         private void MI_StartPoint_Click(object sender, RoutedEventArgs e)
@@ -431,6 +433,30 @@ namespace SamSoarII.Simulation.UI.Chart
 
         private void MI_Setting_Click(object sender, RoutedEventArgs e)
         {
+            GlobalSetting.TimeRulerStart = (int)(TimeStart);
+            GlobalSetting.TimeRulerEnd = (int)(TimeEnd);
+            GlobalSetting.TimeRulerDivideNumber = DivideNumber;
+            GlobalSetting.TimeRulerSubDivideNumber = SubDivideNumber;
+            SettingWindow swin = new SettingWindow();
+            swin.EnsureButtonClick += W_Setting_Ensure_Click;
+            swin.Show();
+        }
+
+        private void W_Setting_Ensure_Click(object sender, RoutedEventArgs e)
+        {
+            DivideNumber = GlobalSetting.TimeRulerDivideNumber;
+            SubDivideNumber = GlobalSetting.TimeRulerSubDivideNumber;
+            TimeStart = (double)(GlobalSetting.TimeRulerStart);
+            TimeEnd = (double)(GlobalSetting.TimeRulerEnd);
+            Update();
+            if (StartTimeChanged != null)
+            {
+                StartTimeChanged(this, new RoutedEventArgs());
+            }
+            if (EndTimeChanged != null)
+            {
+                EndTimeChanged(this, new RoutedEventArgs());
+            }
         }
         #endregion
     }

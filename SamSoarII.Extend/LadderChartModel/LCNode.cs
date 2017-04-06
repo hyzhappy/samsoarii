@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.Extend.Utility;
+using SamSoarII.LadderInstViewModel;
 
 /// <summary>
 /// ClassName : LCNode
@@ -19,45 +20,18 @@ namespace SamSoarII.Extend.LadderChartModel
 {
     public class LCNode
     {
-        static private List<string> StringList = new List<string>();
-        static private Dictionary<string, int> StringDict = new Dictionary<string, int>();
-
-        public int StringID(string s)
-        {
-            if (!StringDict.ContainsKey(s))
-            {
-                StringList.Add(s);
-                StringDict.Add(s, StringList.Count()-1);
-            }
-            return StringDict[s];
-        }
-        public string IDString(int flagid = 1)
-        {
-            switch (flagid)
-            {
-                case 1:
-                    return StringList[flag1];
-                case 2:
-                    return StringList[flag2];
-                case 3:
-                    return StringList[flag3];
-                case 4:
-                    return StringList[flag4];
-                default:
-                    return StringList[flagid-5];
-            }
-        }
-
         /// <summary>
         /// 内部成员变量
         /// </summary>
+        private BaseViewModel prototype; 
+
         private bool enable;
 
         private int id;
-        private int type;
+        private string type;
         private bool isstart;
         private bool isterminate;
-        private int flag1, flag2, flag3, flag4, flag5;
+        private string flag1, flag2, flag3, flag4, flag5;
 
         private int x;
         private int y;
@@ -78,7 +52,14 @@ namespace SamSoarII.Extend.LadderChartModel
             this.enable = true;
             this.id = _id;
         }
-
+        /// <summary>
+        /// 原型
+        /// </summary>
+        public BaseViewModel Prototype
+        {
+            get { return this.prototype; }
+            set { this.prototype = value; }
+        }
         /// <summary>
         /// 这个图节点是否被占用
         /// </summary>
@@ -101,7 +82,7 @@ namespace SamSoarII.Extend.LadderChartModel
         /// 这个节点的PLC指令的类型
         /// 格式为0xAABB，A为指令种类的编号，B为指令详细功能的编号
         /// </summary>
-        public int Type
+        public string Type
         {
             get { return this.type;}
             set { this.type = value; }
@@ -130,7 +111,7 @@ namespace SamSoarII.Extend.LadderChartModel
         /// 0：指令类型
         /// 1,2,3,4：指令的操作数和信息
         /// </summary>
-        public int this[int index]
+        public string this[int index]
         {
             get
             {
@@ -142,7 +123,7 @@ namespace SamSoarII.Extend.LadderChartModel
                     case 3: return this.flag3;
                     case 4: return this.flag4;
                     case 5: return this.flag5;
-                    default:return 0;
+                    default:return String.Empty;
                 }
             }
             set
@@ -169,7 +150,7 @@ namespace SamSoarII.Extend.LadderChartModel
             {
                 this.x = value;
                 this.isstart = (this.x == 0);
-                this.isterminate = (this.x == 9);   
+                this.isterminate = (this.x == 11);   
             }
         }
         public int Y
@@ -259,35 +240,35 @@ namespace SamSoarII.Extend.LadderChartModel
         {
             get
             {
-                switch (Type&0xFF)
+                switch (Type)
                 {
-                    case InstHelper.LD: return InstHelper.RegName(flag1);
-                    case InstHelper.LDI: return "!" + InstHelper.RegName(flag1);
-                    case InstHelper.LDIM: return "im" + InstHelper.RegName(flag1);
-                    case InstHelper.LDIIM: return "!im" + InstHelper.RegName(flag1);
-                    case InstHelper.LDP: return "ue" + InstHelper.RegName(flag1);
-                    case InstHelper.LDF: return "de" + InstHelper.RegName(flag1);
-                    case InstHelper.MEP: return "de";
-                    case InstHelper.MEF: return "ue";
-                    case InstHelper.INV: return "!";
-                    case InstHelper.EQW: return InstHelper.RegName(flag1) + "w=" + InstHelper.RegName(flag2);
-                    case InstHelper.EQD: return InstHelper.RegName(flag1) + "d=" + InstHelper.RegName(flag2);
-                    case InstHelper.EQF: return InstHelper.RegName(flag1) + "f=" + InstHelper.RegName(flag2);
-                    case InstHelper.NEW: return InstHelper.RegName(flag1) + "w<>" + InstHelper.RegName(flag2);
-                    case InstHelper.NED: return InstHelper.RegName(flag1) + "d<>" + InstHelper.RegName(flag2);
-                    case InstHelper.NEF: return InstHelper.RegName(flag1) + "f<>" + InstHelper.RegName(flag2);
-                    case InstHelper.GEW: return InstHelper.RegName(flag1) + "w>=" + InstHelper.RegName(flag2);
-                    case InstHelper.GED: return InstHelper.RegName(flag1) + "d>=" + InstHelper.RegName(flag2);
-                    case InstHelper.GEF: return InstHelper.RegName(flag1) + "f>=" + InstHelper.RegName(flag2);
-                    case InstHelper.LEW: return InstHelper.RegName(flag1) + "w<=" + InstHelper.RegName(flag2);
-                    case InstHelper.LED: return InstHelper.RegName(flag1) + "d<=" + InstHelper.RegName(flag2);
-                    case InstHelper.LEF: return InstHelper.RegName(flag1) + "f<=" + InstHelper.RegName(flag2);
-                    case InstHelper.GTW: return InstHelper.RegName(flag1) + "w>" + InstHelper.RegName(flag2);
-                    case InstHelper.GTD: return InstHelper.RegName(flag1) + "d>" + InstHelper.RegName(flag2);
-                    case InstHelper.GTF: return InstHelper.RegName(flag1) + "f>" + InstHelper.RegName(flag2);
-                    case InstHelper.LTW: return InstHelper.RegName(flag1) + "w<" + InstHelper.RegName(flag2);
-                    case InstHelper.LTD: return InstHelper.RegName(flag1) + "d<" + InstHelper.RegName(flag2);
-                    case InstHelper.LTF: return InstHelper.RegName(flag1) + "f<" + InstHelper.RegName(flag2);
+                    case "LD": return flag1;
+                    case "LDI": return "!" + flag1;
+                    case "LDIM": return "im" + flag1;
+                    case "LDIIM": return "!im" + flag1;
+                    case "LDP": return "ue" + flag1;
+                    case "LDF": return "de" + flag1;
+                    case "MEP": return "de";
+                    case "MEF": return "ue";
+                    case "INV": return "!";
+                    case "EQW": return flag1 + "w=" + flag2;
+                    case "EQD": return flag1 + "d=" + flag2;
+                    case "EQF": return flag1 + "f=" + flag2;
+                    case "NEW": return flag1 + "w<>" + flag2;
+                    case "NED": return flag1 + "d<>" + flag2;
+                    case "NEF": return flag1 + "f<>" + flag2;
+                    case "GEW": return flag1 + "w>=" + flag2;
+                    case "GED": return flag1 + "d>=" + flag2;
+                    case "GEF": return flag1 + "f>=" + flag2;
+                    case "LEW": return flag1 + "w<=" + flag2;
+                    case "LED": return flag1 + "d<=" + flag2;
+                    case "LEF": return flag1 + "f<=" + flag2;
+                    case "GTW": return flag1 + "w>" + flag2;
+                    case "GTD": return flag1 + "d>" + flag2;
+                    case "GTF": return flag1 + "f>" + flag2;
+                    case "LTW": return flag1 + "w<" + flag2;
+                    case "LTD": return flag1 + "d<" + flag2;
+                    case "LTF": return flag1 + "f<" + flag2;
                     default: return "1";
                 }
             }
@@ -300,155 +281,155 @@ namespace SamSoarII.Extend.LadderChartModel
         public string ToShowString(string profix = "")
         {
             string text = "";
-            switch (type & 0xFF)
+            switch (type)
             {
-                case InstHelper.LD: text = profix + " " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDI: text = profix + "I " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDIM: text = profix + "IM " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDIIM: text = profix + "IIM " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDP: text = profix + "P " + InstHelper.RegName(flag1); break;
-                case InstHelper.LDF: text = profix + "F " + InstHelper.RegName(flag1); break;
-                case InstHelper.MEP: text = "MEP"; break;
-                case InstHelper.MEF: text = "MEF"; break;
-                case InstHelper.INV: text = "INV"; break;
-                case InstHelper.OUT: text = "OUT " + InstHelper.RegName(flag1); break;
-                case InstHelper.OUTIM: text = "OUTIM " + InstHelper.RegName(flag1); break;
-                case InstHelper.SET: text = "SET " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.SETIM: text = "SETIM " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.RST: text = "RST " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.RSTIM: text = "RSTIM " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.ALT: text = "ALT " + InstHelper.RegName(flag1); break;
-                case InstHelper.ALTP: text = "ALTP " + InstHelper.RegName(flag1); break;
-                case InstHelper.EQW: text = profix + "WEQ " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.EQD: text = profix + "DEQ " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.EQF: text = profix + "FEQ " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.NEW: text = profix + "WNE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.NED: text = profix + "DNE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.NEF: text = profix + "FNE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LEW: text = profix + "WLE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LED: text = profix + "DLE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LEF: text = profix + "FLE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.GEW: text = profix + "WGE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.GED: text = profix + "DGE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.GEF: text = profix + "FGE " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LTW: text = profix + "WL " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LTD: text = profix + "DL " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LTF: text = profix + "FL " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.GTW: text = profix + "WG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.GTD: text = profix + "DG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.GTF: text = profix + "FG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.WTOD: text = "WTOD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DTOW: text = "DTOW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DTOF: text = "DTOF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.BIN: text = "BIN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.BCD: text = "BCD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.ROUND: text = "ROUND " + InstHelper.RegName(flag1); break;
-                case InstHelper.TURNC: text = "TURNC " + InstHelper.RegName(flag1); break;
-                case InstHelper.INVW: text = "INVW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.INVD: text = "INVD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.ANDW: text = "ANDW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ANDD: text = "ANDD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ORW: text = "ORW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ORD: text = "ORD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.XORW: text = "XORW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.XORD: text = "XORD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.MOV: text = "MOV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.MOVD: text = "MOVD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.MOVF: text = "MOVF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.MVBLK: text = "MVBLK " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.MVDBLK: text = "MVDBLK " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ADDF: text = "ADDF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SUBF: text = "SUBF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.MULF: text = "MULF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DIVF: text = "DIVF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SQRT: text = "SQRT " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.SIN: text = "SIN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.COS: text = "COS " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.TAN: text = "TAN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LN: text = "LN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.EXP: text = "EXP " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.ADD: text = "ADD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ADDD: text = "ADDD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SUB: text = "SUB " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SUBD: text = "SUBD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.MUL: text = "MUL " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.MULD: text = "MULD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.MULW: text = "MULW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DIV: text = "DIV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DIVD: text = "DIVD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DIVW: text = "DIVW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.INC: text = "INC " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.INCD: text = "INCD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DEC: text = "DEC " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DECD: text = "DECD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.TON: text = "TON " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.TONR: text = "TONR " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.TOF: text = "TOF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.CTU: text = "CTU " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.CTUD: text = "CTUD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.CTD: text = "CTD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.FOR: text = "FOR " + InstHelper.RegName(flag1); break;
-                case InstHelper.NEXT: text = "NEXT"; break;
-                case InstHelper.JMP: text = "JMP " + InstHelper.RegName(flag1); break;
-                case InstHelper.LBL: text = "LBL " + InstHelper.RegName(flag1); break;
-                case InstHelper.CALL: text = "CALL " + IDString(1); break;
-                case InstHelper.CALLM: text = "CALLM " + IDString(1); break;
-                case InstHelper.SHL: text = "SHL " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SHLD: text = "SHLD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SHR: text = "SHR " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SHRD: text = "SHRD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SHLB: text = "SHLB " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.SHRB: text = "SHRB " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.ROL: text = "ROL " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ROLD: text = "ROLD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ROR: text = "ROR " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.RORD: text = "RORD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ATCH: text = "ATCH " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DECH: text = "DECH " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.EI: text = "EI "; break;
-                case InstHelper.DI: text = "DI "; break;
-                case InstHelper.TRD: text = "TRD " + InstHelper.RegName(flag1); break;
-                case InstHelper.TWR: text = "TWR " + InstHelper.RegName(flag1); break;
-                case InstHelper.MBUS: text = "MBUS " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.SEND: text = "SEND " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.REV: text = "REV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.PLSF: text = "PLSF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.DPLSF: text = "DPLSF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.PWM: text = "PWM " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DPWM: text = "DPWM " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.PLSY: text = "PLSY " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DPLSY: text = "DPLSY " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.PLSR: text = "PLSR " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DPLSR: text = "DPLSR " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.PLSRD: text = "PLSRD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.DPLSRD: text = "DPLSRD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.PLSNEXT: text = "PLSNEXT " + InstHelper.RegName(flag1); break;
-                case InstHelper.PLSSTOP: text = "PLSSTOP " + InstHelper.RegName(flag1); break;
-                case InstHelper.ZRN: text = "ZRN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.DZRN: text = "DZRN " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.PTO: text = "PTO " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.DRVI: text = "DRVI " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.DDRVI: text = "DRVI " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.HCNT: text = "DRVI " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.LOG: text = "LOG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.POW: text = "POW " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.FACT: text = "FACT " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.CMP: text = "CMP " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.CMPD: text = "CMPD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.CMPF: text = "CMPF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.ZCP: text = "ZCP " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.ZCPD: text = "ZCPD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.ZCPF: text = "ZCPF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4); break;
-                case InstHelper.NEG: text = "NEG " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.NEGD: text = "NEGD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.XCH: text = "XCH " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.XCHD: text = "XCHD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.XCHF: text = "XCHF " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.CML: text = "CML " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.CMLD: text = "CMLD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2); break;
-                case InstHelper.SMOV: text = "SMOV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3) + " " + InstHelper.RegName(flag4) + " " + InstHelper.RegName(flag5); break;
-                case InstHelper.FMOV: text = "FMOV " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
-                case InstHelper.FMOVD: text = "FMOVD " + InstHelper.RegName(flag1) + " " + InstHelper.RegName(flag2) + " " + InstHelper.RegName(flag3); break;
+                case "LD": text = profix + " " + flag1; break;
+                case "LDI": text = profix + "I " + flag1; break;
+                case "LDIM": text = profix + "IM " + flag1; break;
+                case "LDIIM": text = profix + "IIM " + flag1; break;
+                case "LDP": text = profix + "P " + flag1; break;
+                case "LDF": text = profix + "F " + flag1; break;
+                case "MEP": text = "MEP"; break;
+                case "MEF": text = "MEF"; break;
+                case "INV": text = "INV"; break;
+                case "OUT": text = "OUT " + flag1; break;
+                case "OUTIM": text = "OUTIM " + flag1; break;
+                case "SET": text = "SET " + flag1 + " " + flag2; break;
+                case "SETIM": text = "SETIM " + flag1 + " " + flag2; break;
+                case "RST": text = "RST " + flag1 + " " + flag2; break;
+                case "RSTIM": text = "RSTIM " + flag1 + " " + flag2; break;
+                case "ALT": text = "ALT " + flag1; break;
+                case "ALTP": text = "ALTP " + flag1; break;
+                case "LDWEQ": text = profix + "WEQ " + flag1 + " " + flag2; break;
+                case "LDDEQ": text = profix + "DEQ " + flag1 + " " + flag2; break;
+                case "LDFEQ": text = profix + "FEQ " + flag1 + " " + flag2; break;
+                case "LDWNE": text = profix + "WNE " + flag1 + " " + flag2; break;
+                case "LDDNE": text = profix + "DNE " + flag1 + " " + flag2; break;
+                case "LDFNE": text = profix + "FNE " + flag1 + " " + flag2; break;
+                case "LDWLE": text = profix + "WLE " + flag1 + " " + flag2; break;
+                case "LDDLE": text = profix + "DLE " + flag1 + " " + flag2; break;
+                case "LDFLE": text = profix + "FLE " + flag1 + " " + flag2; break;
+                case "LDWGE": text = profix + "WGE " + flag1 + " " + flag2; break;
+                case "LDDGE": text = profix + "DGE " + flag1 + " " + flag2; break;
+                case "LDFGE": text = profix + "FGE " + flag1 + " " + flag2; break;
+                case "LDWL": text = profix + "WL " + flag1 + " " + flag2; break;
+                case "LDDL": text = profix + "DL " + flag1 + " " + flag2; break;
+                case "LDFL": text = profix + "FL " + flag1 + " " + flag2; break;
+                case "LDWG": text = profix + "WG " + flag1 + " " + flag2; break;
+                case "LDDG": text = profix + "DG " + flag1 + " " + flag2; break;
+                case "LDFG": text = profix + "FG " + flag1 + " " + flag2; break;
+                case "WTOD": text = "WTOD " + flag1 + " " + flag2; break;
+                case "DTOW": text = "DTOW " + flag1 + " " + flag2; break;
+                case "DTOF": text = "DTOF " + flag1 + " " + flag2; break;
+                case "BIN": text = "BIN " + flag1 + " " + flag2; break;
+                case "BCD": text = "BCD " + flag1 + " " + flag2; break;
+                case "ROUND": text = "ROUND " + flag1; break;
+                case "TURNC": text = "TURNC " + flag1; break;
+                case "INVW": text = "INVW " + flag1 + " " + flag2; break;
+                case "INVD": text = "INVD " + flag1 + " " + flag2; break;
+                case "ANDW": text = "ANDW " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ANDD": text = "ANDD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ORW": text = "ORW " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ORD": text = "ORD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "XORW": text = "XORW " + flag1 + " " + flag2 + " " + flag3; break;
+                case "XORD": text = "XORD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "MOV": text = "MOV " + flag1 + " " + flag2; break;
+                case "MOVD": text = "MOVD " + flag1 + " " + flag2; break;
+                case "MOVF": text = "MOVF " + flag1 + " " + flag2; break;
+                case "MVBLK": text = "MVBLK " + flag1 + " " + flag2 + " " + flag3; break;
+                case "MVDBLK": text = "MVDBLK " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ADDF": text = "ADDF " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SUBF": text = "SUBF " + flag1 + " " + flag2 + " " + flag3; break;
+                case "MULF": text = "MULF " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DIVF": text = "DIVF " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SQRT": text = "SQRT " + flag1 + " " + flag2; break;
+                case "SIN": text = "SIN " + flag1 + " " + flag2; break;
+                case "COS": text = "COS " + flag1 + " " + flag2; break;
+                case "TAN": text = "TAN " + flag1 + " " + flag2; break;
+                case "LN": text = "LN " + flag1 + " " + flag2; break;
+                case "EXP": text = "EXP " + flag1 + " " + flag2; break;
+                case "ADD": text = "ADD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ADDD": text = "ADDD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SUB": text = "SUB " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SUBD": text = "SUBD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "MUL": text = "MUL " + flag1 + " " + flag2 + " " + flag3; break;
+                case "MULD": text = "MULD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "MULW": text = "MULW " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DIV": text = "DIV " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DIVD": text = "DIVD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DIVW": text = "DIVW " + flag1 + " " + flag2 + " " + flag3; break;
+                case "INC": text = "INC " + flag1 + " " + flag2; break;
+                case "INCD": text = "INCD " + flag1 + " " + flag2; break;
+                case "DEC": text = "DEC " + flag1 + " " + flag2; break;
+                case "DECD": text = "DECD " + flag1 + " " + flag2; break;
+                case "TON": text = "TON " + flag1 + " " + flag2; break;
+                case "TONR": text = "TONR " + flag1 + " " + flag2; break;
+                case "TOF": text = "TOF " + flag1 + " " + flag2; break;
+                case "CTU": text = "CTU " + flag1 + " " + flag2; break;
+                case "CTUD": text = "CTUD " + flag1 + " " + flag2; break;
+                case "CTD": text = "CTD " + flag1 + " " + flag2; break;
+                case "FOR": text = "FOR " + flag1; break;
+                case "NEXT": text = "NEXT"; break;
+                case "JMP": text = "JMP " + flag1; break;
+                case "LBL": text = "LBL " + flag1; break;
+                case "CALL": text = "CALL " + flag1; break;
+                case "CALLM": text = "CALLM " + flag1; break;
+                case "SHL": text = "SHL " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SHLD": text = "SHLD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SHR": text = "SHR " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SHRD": text = "SHRD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SHLB": text = "SHLB " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "SHRB": text = "SHRB " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "ROL": text = "ROL " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ROLD": text = "ROLD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ROR": text = "ROR " + flag1 + " " + flag2 + " " + flag3; break;
+                case "RORD": text = "RORD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ATCH": text = "ATCH " + flag1 + " " + flag2; break;
+                case "DECH": text = "DECH " + flag1 + " " + flag2; break;
+                case "EI": text = "EI "; break;
+                case "DI": text = "DI "; break;
+                case "TRD": text = "TRD " + flag1; break;
+                case "TWR": text = "TWR " + flag1; break;
+                case "MBUS": text = "MBUS " + flag1 + " " + flag2 + " " + flag3; break;
+                case "SEND": text = "SEND " + flag1 + " " + flag2 + " " + flag3; break;
+                case "REV": text = "REV " + flag1 + " " + flag2 + " " + flag3; break;
+                case "PLSF": text = "PLSF " + flag1 + " " + flag2; break;
+                case "DPLSF": text = "DPLSF " + flag1 + " " + flag2; break;
+                case "PWM": text = "PWM " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DPWM": text = "DPWM " + flag1 + " " + flag2 + " " + flag3; break;
+                case "PLSY": text = "PLSY " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DPLSY": text = "DPLSY " + flag1 + " " + flag2 + " " + flag3; break;
+                case "PLSR": text = "PLSR " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DPLSR": text = "DPLSR " + flag1 + " " + flag2 + " " + flag3; break;
+                case "PLSRD": text = "PLSRD " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "DPLSRD": text = "DPLSRD " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "PLSNEXT": text = "PLSNEXT " + flag1; break;
+                case "PLSSTOP": text = "PLSSTOP " + flag1; break;
+                case "ZRN": text = "ZRN " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "DZRN": text = "DZRN " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "PTO": text = "PTO " + flag1 + " " + flag2 + " " + flag3; break;
+                case "DRVI": text = "DRVI " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "DDRVI": text = "DRVI " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "HCNT": text = "DRVI " + flag1 + " " + flag2; break;
+                case "LOG": text = "LOG " + flag1 + " " + flag2; break;
+                case "POW": text = "POW " + flag1 + " " + flag2 + " " + flag3; break;
+                case "FACT": text = "FACT " + flag1 + " " + flag2; break;
+                case "CMP": text = "CMP " + flag1 + " " + flag2 + " " + flag3; break;
+                case "CMPD": text = "CMPD " + flag1 + " " + flag2 + " " + flag3; break;
+                case "CMPF": text = "CMPF " + flag1 + " " + flag2 + " " + flag3; break;
+                case "ZCP": text = "ZCP " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "ZCPD": text = "ZCPD " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "ZCPF": text = "ZCPF " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
+                case "NEG": text = "NEG " + flag1 + " " + flag2; break;
+                case "NEGD": text = "NEGD " + flag1 + " " + flag2; break;
+                case "XCH": text = "XCH " + flag1 + " " + flag2; break;
+                case "XCHD": text = "XCHD " + flag1 + " " + flag2; break;
+                case "XCHF": text = "XCHF " + flag1 + " " + flag2; break;
+                case "CML": text = "CML " + flag1 + " " + flag2; break;
+                case "CMLD": text = "CMLD " + flag1 + " " + flag2; break;
+                case "SMOV": text = "SMOV " + flag1 + " " + flag2 + " " + flag3 + " " + flag4 + " " + flag5; break;
+                case "FMOV": text = "FMOV " + flag1 + " " + flag2 + " " + flag3; break;
+                case "FMOVD": text = "FMOVD " + flag1 + " " + flag2 + " " + flag3; break;
                 default: text = ""; break;
             }
             return text;
@@ -464,7 +445,7 @@ namespace SamSoarII.Extend.LadderChartModel
                 profix = "A";
             if ((flag & 0x08) != 0)
                 profix = "OR";
-            InstHelper.AddInst(insts, ToShowString(profix));
+            insts.Add(new PLCInstruction(ToShowString(profix)));
         }
         
     }

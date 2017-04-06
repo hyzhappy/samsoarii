@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Chart.Window"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300"
+             Height="200" Width="300"
              Title="仿真设置">
     <Grid>
         <Grid.RowDefinitions>
@@ -27,11 +28,11 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.Children>
-                                    <CheckBox x:Name="CB_ScanPeriod" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="CB_ScanPeriod" HorizontalAlignment="Center" VerticalAlignment="Center" Click="CB_ScanPeriod_Click"></CheckBox>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center">扫描精度(常量)</TextBlock>
                                     <TextBox x:Name="TB_ScanPeriod" Grid.Column="2"></TextBox>
-                                    <Button x:Name="B_ScanPeriodInc" Grid.Column="3">增加</Button>
-                                    <Button x:Name="B_ScanPeriodDec" Grid.Column="4">减少</Button>
+                                    <Button x:Name="B_ScanPeriodInc" Grid.Column="3" Click="B_ScanPeriodInc_Click">增加</Button>
+                                    <Button x:Name="B_ScanPeriodDec" Grid.Column="4" Click="B_ScanPeriodDec_Click">减少</Button>
                                 </Grid.Children>
                             </Grid>
                             <Grid x:Name="G_ScanRate">
@@ -43,11 +44,11 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.Children>
-                                    <CheckBox x:Name="CB_ScanRate" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="CB_ScanRate" HorizontalAlignment="Center" VerticalAlignment="Center" Click="CB_ScanRate_Click"></CheckBox>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center">扫描精度(比例)</TextBlock>
                                     <TextBox x:Name="TB_ScanRate" Grid.Column="2"></TextBox>
-                                    <Button x:Name="B_ScanRateInc" Grid.Column="3">增加</Button>
-                                    <Button x:Name="B_ScanRateDec" Grid.Column="4">减少</Button>
+                                    <Button x:Name="B_ScanRateInc" Grid.Column="3" Click="B_ScanRateInc_Click">增加</Button>
+                                    <Button x:Name="B_ScanRateDec" Grid.Column="4" Click="B_ScanRateDec_Click">减少</Button>
                                 </Grid.Children>
                             </Grid>
                             <Grid x:Name="G_DataLimit">
@@ -57,7 +58,7 @@
                                     <ColumnDefinition Width="3.8*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.Children>
-                                    <CheckBox x:Name="CB_DataLimit" VerticalAlignment="Center" HorizontalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="CB_DataLimit" VerticalAlignment="Center" HorizontalAlignment="Center" Click="CB_DataLimit_Click"></CheckBox>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">最大数据数</TextBlock>
                                     <TextBox x:Name="TB_DataLimit" Grid.Column="2"></TextBox>
                                 </Grid.Children>
@@ -71,11 +72,11 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.Children>
-                                    <CheckBox x:Name="CB_LockLimit" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="CB_LockLimit" HorizontalAlignment="Center" VerticalAlignment="Center" Click="CB_LockLimit_Click"></CheckBox>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center">最大锁定数</TextBlock>
                                     <TextBox x:Name="TB_LockLimit" Grid.Column="2"></TextBox>
-                                    <Button x:Name="B_LockLimitInc" Grid.Column="3">增加</Button>
-                                    <Button x:Name="B_LockLimitDec" Grid.Column="4">减少</Button>
+                                    <Button x:Name="B_LockLimitInc" Grid.Column="3" Click="B_LockLimitInc_Click">增加</Button>
+                                    <Button x:Name="B_LockLimitDec" Grid.Column="4" Click="B_LockLimitDec_Click">减少</Button>
                                 </Grid.Children>
                             </Grid>
                             <Grid x:Name="G_ViewLimit">
@@ -87,17 +88,17 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.Children>
-                                    <CheckBox x:Name="CB_ViewLimit" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+                                    <CheckBox x:Name="CB_ViewLimit" HorizontalAlignment="Center" VerticalAlignment="Center" Click="CB_ViewLimit_Click"></CheckBox>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center">最大监视数</TextBlock>
                                     <TextBox x:Name="TB_ViewLimit" Grid.Column="2"></TextBox>
-                                    <Button x:Name="B_ViewLimitInc" Grid.Column="3">增加</Button>
-                                    <Button x:Name="B_ViewLimitDec" Grid.Column="4">减少</Button>
+                                    <Button x:Name="B_ViewLimitInc" Grid.Column="3" Click="B_ViewLimitInc_Click">增加</Button>
+                                    <Button x:Name="B_ViewLimitDec" Grid.Column="4" Click="B_ViewLimitDec_Click">减少</Button>
                                 </Grid.Children>
                             </Grid>
                         </StackPanel>        
                     </TabItem.Content>
                 </TabItem>
-                    <TabItem Header="时间轴">
+                    <TabItem Header="时间轴" Margin="-2,0,-2,-3">
                     <TabItem.Content>
                         <StackPanel Orientation="Vertical">
                             <Grid x:Name="G_Divide">
@@ -110,8 +111,8 @@
                                 <Grid.Children>
                                     <TextBlock Grid.Column="0" VerticalAlignment="Center">主划分数量</TextBlock>
                                     <TextBox x:Name="TB_Divide" Grid.Column="1"></TextBox>
-                                    <Button x:Name="B_DivideInc" Grid.Column="2">增加</Button>
-                                    <Button x:Name="B_DivideDec" Grid.Column="3">减少</Button>
+                                    <Button x:Name="B_DivideInc" Grid.Column="2" Click="B_DivideInc_Click">增加</Button>
+                                    <Button x:Name="B_DivideDec" Grid.Column="3" Click="B_DivideDec_Click">减少</Button>
                                 </Grid.Children>
                             </Grid>
                             <Grid x:Name="G_SubDivide">
@@ -124,8 +125,8 @@
                                 <Grid.Children>
                                     <TextBlock Grid.Column="0" VerticalAlignment="Center">副划分数量</TextBlock>
                                     <TextBox x:Name="TB_SubDivide" Grid.Column="1"></TextBox>
-                                    <Button x:Name="B_SubDivideInc" Grid.Column="2">增加</Button>
-                                    <Button x:Name="B_SubDivideDec" Grid.Column="3">减少</Button>
+                                    <Button x:Name="B_SubDivideInc" Grid.Column="2" Click="B_SubDivideInc_Click">增加</Button>
+                                    <Button x:Name="B_SubDivideDec" Grid.Column="3" Click="B_SubDivideDec_Click">减少</Button>
                                 </Grid.Children>
                             </Grid>
                             <Grid x:Name="G_TimeStart">
@@ -137,7 +138,7 @@
                                 <Grid.Children>
                                     <TextBlock Grid.Column="0" VerticalAlignment="Center">起始时间</TextBlock>
                                     <TextBox x:Name="TB_TimeStart" Grid.Column="1"></TextBox>
-                                    <ComboBox x:Name="CB_TimeStartUnit" Grid.Column="2" Text="ms">
+                                    <ComboBox x:Name="CB_TimeStartUnit" Grid.Column="2" SelectedIndex="0">
                                         <ComboBox.Items>
                                             <TextBlock>ms</TextBlock>
                                             <TextBlock>s</TextBlock>
@@ -154,7 +155,7 @@
                                 <Grid.Children>
                                     <TextBlock Grid.Column="0" VerticalAlignment="Center">终止时间</TextBlock>
                                     <TextBox x:Name="TB_TimeEnd" Grid.Column="1"></TextBox>
-                                    <ComboBox x:Name="CB_TimeEndUnit" Grid.Column="2" Text="ms">
+                                    <ComboBox x:Name="CB_TimeEndUnit" Grid.Column="2" SelectedIndex="0">
                                         <ComboBox.Items>
                                             <TextBlock>ms</TextBlock>
                                             <TextBlock>s</TextBlock>
@@ -177,9 +178,9 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.Children>
                                         <TextBlock Grid.Column="0" VerticalAlignment="Center">最大曲线数</TextBlock>
-                                        <TextBox Grid.Column="1"></TextBox>
-                                        <Button x:Name="B_DrawLimitInc" Grid.Column="2">增加</Button>
-                                        <Button x:Name="B_DrawLimitDec" Grid.Column="3">减少</Button>
+                                        <TextBox x:Name="TB_DrawLimit" Grid.Column="1"></TextBox>
+                                        <Button x:Name="B_DrawLimitInc" Grid.Column="2" Click="B_DrawLimitInc_Click">增加</Button>
+                                        <Button x:Name="B_DrawLimitDec" Grid.Column="3" Click="B_DrawLimitDec_Click">减少</Button>
                                     </Grid.Children>
                                 </Grid>
                                 <Grid x:Name="G_DrawBrushes">
@@ -213,7 +214,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.Children>
                                         <TextBlock Grid.Column="0" VerticalAlignment="Center">绘制精度</TextBlock>
-                                        <TextBox Grid.Column="1"></TextBox>
+                                        <TextBox x:Name="TB_DrawAccurate" Grid.Column="1"></TextBox>
                                     </Grid.Children>
                                 </Grid>
                                 <Grid x:Name="G_ValueDivide">
@@ -226,8 +227,8 @@
                                     <Grid.Children>
                                         <TextBlock Grid.Column="0" VerticalAlignment="Center">主划分数量</TextBlock>
                                         <TextBox x:Name="TB_ValueDivide" Grid.Column="1"></TextBox>
-                                        <Button x:Name="B_ValueDivideInc" Grid.Column="2">增加</Button>
-                                        <Button x:Name="B_ValueDivideDec" Grid.Column="3">减少</Button>
+                                        <Button x:Name="B_ValueDivideInc" Grid.Column="2" Click="B_ValueDivideInc_Click">增加</Button>
+                                        <Button x:Name="B_ValueDivideDec" Grid.Column="3" Click="B_ValueDivideDec_Click">减少</Button>
                                     </Grid.Children>
                                 </Grid>
                                 <Grid x:Name="G_ValueSubDivide">
@@ -240,8 +241,8 @@
                                     <Grid.Children>
                                         <TextBlock Grid.Column="0" VerticalAlignment="Center">副划分数量</TextBlock>
                                         <TextBox x:Name="TB_ValueSubDivide" Grid.Column="1"></TextBox>
-                                        <Button x:Name="B_ValueSubDivideInc" Grid.Column="2">增加</Button>
-                                        <Button x:Name="B_ValueSubDivideDec" Grid.Column="3">减少</Button>
+                                        <Button x:Name="B_ValueSubDivideInc" Grid.Column="2" Click="B_ValueSubDivideInc_Click">增加</Button>
+                                        <Button x:Name="B_ValueSubDivideDec" Grid.Column="3" Click="B_ValueSubDivideDec_Click">减少</Button>
                                     </Grid.Children>
                                 </Grid>
                             </StackPanel>  
@@ -250,8 +251,8 @@
                 </TabControl.Items>
             </TabControl>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Button x:Name="B_ok" Width="80">确定</Button>
-                <Button x:Name="B_cancel" Width="80">取消</Button>
+                <Button x:Name="B_ok" Width="80" Click="B_ok_Click">确定</Button>
+                <Button x:Name="B_cancel" Width="80" Click="B_cancel_Click">取消</Button>
             </StackPanel>
         </Grid.Children>
     </Grid>

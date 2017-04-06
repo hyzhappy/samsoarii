@@ -80,6 +80,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AvalonDockTest.xaml.cs">
+      <DependentUpon>AvalonDockTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Event\LadderElementChangedArgs.cs" />
     <Compile Include="Event\RoutineChangedEventArgs.cs" />
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
     <Compile Include="Event\TabType.cs" />
@@ -105,6 +109,12 @@
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\GenerateHelper.cs" />
+    <Compile Include="Project\InstructionDiagramViewModel.xaml.cs">
+      <DependentUpon>InstructionDiagramViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Project\InstructionNetworkViewModel.xaml.cs">
+      <DependentUpon>InstructionNetworkViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project\IProgram.cs" />
     <Compile Include="Project\ITabItem.cs" />
     <Compile Include="Project\LadderDiagramViewModel.xaml.cs">
@@ -116,6 +126,9 @@
     </Compile>
     <Compile Include="Project\ProjectHelper.cs" />
     <Compile Include="Project\ProjectModel.cs" />
+    <Compile Include="Project\ReportOutputModel.xaml.cs">
+      <DependentUpon>ReportOutputModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
@@ -126,6 +139,9 @@
     <Compile Include="UI\InstrucionTreeItem.cs" />
     <Compile Include="UI\MainTabControl.xaml.cs">
       <DependentUpon>MainTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainTabDiagramItem.xaml.cs">
+      <DependentUpon>MainTabDiagramItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -181,10 +197,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock.Themes.VS2010\Xceed.Wpf.AvalonDock.Themes.VS2010.csproj">
-      <Project>{b3fc3e21-5f2d-4581-aea2-59f671cffc21}</Project>
-      <Name>Xceed.Wpf.AvalonDock.Themes.VS2010</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
       <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
       <Name>Xceed.Wpf.AvalonDock</Name>
@@ -243,7 +255,19 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AvalonDockTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Project\FuncBlockViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Project\InstructionDiagramViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Project\InstructionNetworkViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -255,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Project\ReportOutputModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Project\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -264,6 +292,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\MainTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainTabDiagramItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -303,6 +335,7 @@
     <Resource Include="Resources\Image\Save.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Image\Simu.png" />
     <Resource Include="Resources\Image\TreeViewIcon\MainProgram.ico" />
     <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
     <Resource Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
@@ -345,6 +378,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Upload.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Inst.png" />
+    <Resource Include="Resources\Image\Ladder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

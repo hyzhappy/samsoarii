@@ -109,9 +109,11 @@ namespace SamSoarII.Simulation.Core.Global
         public static int TimeRulerStart { get; set; }
         public static int TimeRulerEnd { get; set; }
         
-        public static double DrawAccurate { get; set; }
+        public static int DrawAccurate { get; set; }
         public static int DrawMaximum { get; set; }
         public static Brush[] DrawBrushes { get; set; }
+        public static int DrawValueDivide { get; set; }
+        public static int DrawValueSubDivide { get; set; }
         public static int DrawValueStart { get; set; }
         public static int DrawValueEnd { get; set; }
         
@@ -120,6 +122,14 @@ namespace SamSoarII.Simulation.Core.Global
             LadderScaleTransform = new ScaleTransform();
             RulerScaleTransform = new ScaleTransform();
             DrawBrushes = new Brush[8];
+            DrawBrushes[0] = Brushes.Black;
+            DrawBrushes[1] = Brushes.DarkOrange;
+            DrawBrushes[2] = Brushes.DarkBlue;
+            DrawBrushes[3] = Brushes.BlueViolet;
+            DrawBrushes[4] = Brushes.DarkCyan;
+            DrawBrushes[5] = Brushes.DarkGray;
+            DrawBrushes[6] = Brushes.DarkGoldenrod;
+            DrawBrushes[7] = Brushes.DarkTurquoise;
             //double scale = 1024.0 * 749 / (267 + 749) / 3000 * 1.4;
             //LadderOriginScaleX = scale;
             //LadderOriginScaleY = scale;
@@ -147,9 +157,11 @@ namespace SamSoarII.Simulation.Core.Global
             cfa.AppSettings.Settings["DrawMaximum"].Value = DrawMaximum.ToString();
             cfa.AppSettings.Settings["DrawValueStart"].Value = DrawValueStart.ToString();
             cfa.AppSettings.Settings["DrawValueEnd"].Value = DrawValueEnd.ToString();
+            cfa.AppSettings.Settings["DrawValueDivide"].Value = DrawValueDivide.ToString();
+            cfa.AppSettings.Settings["DrawValueSubDivide"].Value = DrawValueSubDivide.ToString();
             for (int i = 0; i < 8; i++)
             {
-                cfa.AppSettings.Settings[String.Format("Brush{0:d}", i)].Value = DrawBrushes[i].ToString();
+                cfa.AppSettings.Settings[String.Format("Brush{0:d}", i+1)].Value = DrawBrushes[i].ToString();
             }
             cfa.Save();
         }
@@ -245,16 +257,20 @@ namespace SamSoarII.Simulation.Core.Global
             {
                 DrawValueStart = int.Parse(ConfigurationManager.AppSettings["DrawValueStart"]);
                 DrawValueEnd = int.Parse(ConfigurationManager.AppSettings["DrawValueEnd"]);
+                DrawValueDivide =int.Parse(ConfigurationManager.AppSettings["DrawValueDivide"]);
+                DrawValueSubDivide = int.Parse(ConfigurationManager.AppSettings["DrawValueSubDivide"]);
             }
             catch (Exception e)
             {
                 DrawValueStart = 0;
                 DrawValueEnd = 1000;
+                DrawValueDivide = 50;
+                DrawValueSubDivide = 2;
             }
 
             try
             {
-                DrawAccurate = double.Parse(ConfigurationManager.AppSettings["DrawAccurate"]);
+                DrawAccurate = int.Parse(ConfigurationManager.AppSettings["DrawAccurate"]);
             }
             catch (Exception e)
             {

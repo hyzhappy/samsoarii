@@ -171,6 +171,63 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             return null;
         }
+
+        public static SimulateVariableUnit Create(string _name, string type)
+        {
+            switch (type)
+            {
+                case "BIT":
+                    SimulateBitUnit sbunit = new SimulateBitUnit();
+                    if (sbunit._Check_Name(_name))
+                    {
+                        sbunit.Name = _name;
+                        return sbunit;
+                    }
+                    break;
+                case "WORD":
+                    SimulateWordUnit swunit = new SimulateWordUnit();
+                    if (swunit._Check_Name(_name))
+                    {
+                        swunit.Name = _name;
+                        return swunit;
+                    }
+                    break;
+                case "DWORD":
+                    SimulateDWordUnit sdwunit = new SimulateDWordUnit();
+                    if (sdwunit._Check_Name(_name))
+                    {
+                        sdwunit.Name = _name;
+                        return sdwunit;
+                    }
+                    break;
+                case "FLOAT":
+                    SimulateFloatUnit sfunit = new SimulateFloatUnit();
+                    if (sfunit._Check_Name(_name))
+                    {
+                        sfunit.Name = _name;
+                        return sfunit;
+                    }
+                    break;
+                case "DOUBLE":
+                    SimulateDoubleUnit sdfunit = new SimulateDoubleUnit();
+                    if (sdfunit._Check_Name(_name))
+                    {
+                        sdfunit.Name = _name;
+                        return sdfunit;
+                    }
+                    break;
+                default:
+                    SimulateUnitSeries ssunit = new SimulateUnitSeries();
+                    if (ssunit._Check_Name(_name))
+                    {
+                        ssunit.Name = _name;
+                        ssunit.CreateExpand();
+                        return ssunit;
+                    }
+                    break;
+            }
+            return null;
+        }
     }
 
     public abstract class SimulateVariableModel

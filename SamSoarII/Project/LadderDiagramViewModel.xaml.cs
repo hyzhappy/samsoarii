@@ -223,6 +223,17 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+        private InstructionDiagramViewModel idvmodel;
+        public InstructionDiagramViewModel IDVModel
+        {
+            get { return this.idvmodel; }
+            set
+            {
+                this.idvmodel = value;
+                idvmodel.Setup(this);
+            }
+        }
+
         public LadderDiagramViewModel(string name)
         {
             InitializeComponent();
@@ -234,6 +245,7 @@ namespace SamSoarII.AppMain.Project
                 Focus();
                 Keyboard.Focus(this);
             };
+            IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
         }
         private void InitializeInstructionNameAndToolTips()
@@ -310,6 +322,7 @@ namespace SamSoarII.AppMain.Project
         {
             LadderNetworkStackPanel.Children.Clear();
             _ladderNetworks.Clear();
+            IDVModel.Setup(this);
         }
 
         public void AcquireSelectRect(LadderNetworkViewModel network)
@@ -351,6 +364,7 @@ namespace SamSoarII.AppMain.Project
             network.NetworkNumber = _ladderNetworks.Count;
             _ladderNetworks.AddLast(network);
             LadderNetworkStackPanel.Children.Add(network);
+            IDVModel.Setup(this);
         }
 
         #region Network manipulation，undoable command form method
@@ -938,8 +952,24 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Event handler
+        
+        public bool IsPressingCtrl
+        {
+            get; private set;
+        }
+        private void OnLadderDiagramKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                IsPressingCtrl = false;
+            }
+        }
         private void OnLadderDiagramKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                IsPressingCtrl = true;
+            }
             if(e.Key == Key.Left)
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
@@ -1110,6 +1140,27 @@ namespace SamSoarII.AppMain.Project
         {
             if(_selectStatus == SelectStatus.SingleSelected)
             {
+                if (IsPressingCtrl)
+                {
+                    var p = e.GetPosition(_selectRectOwner.LadderCanvas);
+                    var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
+                    if ((pp.X == _selectRect.X - 1) && (pp.Y == _selectRect.Y))
+                    {
+                        SelectRectLeftWithLine();
+                    }
+                    if ((pp.X == _selectRect.X + 1) && (pp.Y == _selectRect.Y))
+                    {
+                        SelectRectRightWithLine();
+                    }
+                    if (pp.X == _selectRect.X && (pp.Y == _selectRect.Y - 1))
+                    {
+                        SelectRectUpWithLine();
+                    }
+                    if (pp.X == _selectRect.X && (pp.Y == _selectRect.Y + 1))
+                    {
+                        SelectRectDownWithLine();
+                    }
+                }
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     if(_selectRectOwner != null)

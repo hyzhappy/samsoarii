@@ -51,6 +51,12 @@ namespace SamSoarII.Simulation.UI.Chart
             svcmodel.SDModelUnview += OnSDModelUnview;
         }
 
+        public void Clear()
+        {
+            SDVModels.Clear();
+            Update();
+        }
+
         public void Update()
         {
             MainGrid.Children.Clear();

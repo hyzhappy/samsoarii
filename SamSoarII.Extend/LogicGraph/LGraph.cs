@@ -410,6 +410,11 @@ namespace SamSoarII.Extend.LogicGraph
         /// <returns>PLC指令列表</returns>
         public List<PLCInstruction> GenInst()
         {
+            // 终点为空的情况下，返回空的指令列表
+            if (terminates.Count() == 0)
+            {
+                return new List<PLCInstruction>();
+            }
             // 生成所有终点的表达式
             foreach (LGVertex lgv in terminates)
             {
@@ -423,7 +428,8 @@ namespace SamSoarII.Extend.LogicGraph
             };
             terminates.Sort(sortByExpr);
             // 调用方法
-            return ExprHelper.GenInst(terminates);
+            List<PLCInstruction> insts = ExprHelper.GenInst(terminates);
+            return insts;
         } 
     }
 }

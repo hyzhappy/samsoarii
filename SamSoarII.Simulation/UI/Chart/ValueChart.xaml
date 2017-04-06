@@ -48,6 +48,11 @@
             <Separator/>
             <MenuItem x:Name="MI_Run" Header="区间运行" Click="MI_Run_Click"/>
             <MenuItem x:Name="MI_Draw" Header="区间绘图" Click="MI_Draw_Click"/>
+            <Separator/>
+            <MenuItem x:Name="MI_Save" Header="区间保存" Click="MI_Save_Click"/>
+            <MenuItem x:Name="MI_Load" Header="区间读取" Click="MI_Load_Click"/>
+            <MenuItem x:Name="MI_SaveAll" Header="全部保存" Click="MI_SaveAll_Click"/>
+            <MenuItem x:Name="MI_LoadAll" Header="全部读取" Click="MI_LoadAll_Click"/>
         </ContextMenu>
     </UserControl.ContextMenu>
 </UserControl>

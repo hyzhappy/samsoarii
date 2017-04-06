@@ -528,8 +528,8 @@ namespace SamSoarII.Simulation.UI
         protected override void OnActualWidthChanged()
         {
             base.OnActualWidthChanged();
-            GlobalSetting.LadderOriginScaleX = _actualWidth / 3100;
-            GlobalSetting.LadderOriginScaleY = _actualWidth / 3100;
+            GlobalSetting.LadderOriginScaleX = _actualWidth / 3700;
+            GlobalSetting.LadderOriginScaleY = _actualWidth / 3700;
         }
         #endregion
     }

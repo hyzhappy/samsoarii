@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SamSoarII.PLCDevice.DeviceDialog
+namespace SamSoarII.AppMain.Project
 {
     /// <summary>
-    /// BaseDeviceDialog.xaml 的交互逻辑
+    /// ReportOutputModel.xaml 的交互逻辑
     /// </summary>
-    public partial class BaseDeviceMessageDialog : UserControl
+    public partial class ReportOutputModel : UserControl
     {
-        public BaseDeviceMessageDialog()
+        public ReportOutputModel()
         {
             InitializeComponent();
         }

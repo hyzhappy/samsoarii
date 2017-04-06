@@ -235,7 +235,7 @@ namespace SamSoarII.Extend.LadderChartModel
                 //Console.Write("{0:d} {1:d} {2:d} {3:d} {4:d} {5:d} {6:d}\n", 
                 //    node.X, node.Y, node.Type, node.HAccess, node.VAccess, node.LNodeID, node.RNodeID);
                 // 添加边时需要排除线路元件
-                if (node.Type != 0)
+                if (!node.Type.Equals(String.Empty))
                     lgraph.InsertEdge(node, node.LNodeID, node.RNodeID);
                 // 设置起点
                 if (node.IsStart)
@@ -260,7 +260,7 @@ namespace SamSoarII.Extend.LadderChartModel
                     return false;
                 node.RNodeID = value;
                 // 该元件水平方向可导通
-                if (node.Type == 0 && node.HAccess)
+                if (node.Type.Equals(String.Empty) && node.HAccess)
                     LGVSearch(node, Direction.Left, value);
                 // 存在右方相邻的元件
                 if (node.Right != null)
@@ -288,7 +288,7 @@ namespace SamSoarII.Extend.LadderChartModel
                     return false;
                 node.LNodeID = value;
                 // 该元件水平方向可导通
-                if (node.Type == 0 && node.HAccess)
+                if (node.Type.Equals(String.Empty) && node.HAccess)
                     LGVSearch(node, Direction.Right, value);
                 // 存在左方相邻的元件
                 if (node.Left != null)

@@ -22,6 +22,8 @@ namespace SamSoarII.AppMain
 
         public static RoutedUICommand DownloadCommand { get; set; }
         public static RoutedUICommand UploadCommand { get; set; }
+        public static RoutedUICommand LadderModeToggleCommand { get; set; }
+        public static RoutedUICommand InstModeToggleCommand { get; set; }
         public static RoutedUICommand CommentModeToggleCommand { get; set; }
         public static RoutedUICommand ShowPropertyDialogCommand { get; set; }
 
@@ -43,6 +45,8 @@ namespace SamSoarII.AppMain
             UploadCommand = new RoutedUICommand();
             ShowPropertyDialogCommand = new RoutedUICommand();
             ShowOptionDialogCommand = new RoutedUICommand();
+            LadderModeToggleCommand = new RoutedUICommand();
+            InstModeToggleCommand = new RoutedUICommand();
             CommentModeToggleCommand = new RoutedUICommand();
             CheckNetworkErrorCommand = new RoutedUICommand();
             SimulateCommand = new RoutedUICommand();

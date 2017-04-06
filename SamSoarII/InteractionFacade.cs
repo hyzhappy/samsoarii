@@ -14,7 +14,6 @@ namespace SamSoarII.AppMain
 {
     public class InteractionFacade
     {
-
         private bool _isCommentMode;
         public bool IsCommentMode
         {
@@ -25,7 +24,7 @@ namespace SamSoarII.AppMain
                 _projectModel.IsCommentMode = _isCommentMode;
             }
         }
-
+        
         private ProjectModel _projectModel;
         public ProjectModel ProjectModel
         {
@@ -37,6 +36,38 @@ namespace SamSoarII.AppMain
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
         private MainWindow _mainWindow;
+
+        public bool IsLadderMode
+        {
+            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0; }
+            set
+            {
+                if (value == true)
+                {
+                    _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_LADDER;
+                }
+                if (value == false)
+                {
+                    _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_LADDER;
+                }
+            }
+        }
+
+        public bool IsInstMode
+        {
+            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_INST) != 0; }
+            set
+            {
+                if (value == true)
+                {
+                    _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_INST;
+                }
+                if (value == false)
+                {
+                    _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_INST;
+                }
+            }
+        }
 
         public bool ProjectLoaded
         {
@@ -105,7 +136,6 @@ namespace SamSoarII.AppMain
                 return true;
             }
             return false;
-
         }
 
         public bool AddNewSubRoutine(string name)
@@ -143,9 +173,9 @@ namespace SamSoarII.AppMain
             _projectModel.Compile();
         }
 
-        public void SimulateProject()
+        public int SimulateProject()
         {
-            int ret = SimulateHelper.Simulate(_projectModel);
+            int ret = SimulateHelper.Simulate(_projectModel, _mainWindow.OutputModel);
             switch (ret)
             {
                 case SimulateHelper.SIMULATE_OK:
@@ -155,6 +185,7 @@ namespace SamSoarII.AppMain
                 default:
                     break;
             }
+            return ret;
         }
 
         public void CloseTabItem(ITabItem tabItem)

@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Simulation.Core.DataModel;
+using SamSoarII.Simulation.Core.Global;
 using SamSoarII.Simulation.UI.Base;
 using System;
 using System.Collections.Generic;
@@ -29,20 +30,12 @@ namespace SamSoarII.Simulation.UI.Chart
         private int timestart;
         private int timeend;
 
-        private List<Brush> brushs;
-       
+        private Brush[] brushes;
+        
         public SimuViewXYModel()
         {
             InitializeComponent();
-            brushs = new List<Brush>();
-            brushs.Add(Brushes.Black);
-            brushs.Add(Brushes.BlanchedAlmond);
-            brushs.Add(Brushes.BlueViolet);
-            brushs.Add(Brushes.DarkRed);
-            brushs.Add(Brushes.DarkSalmon);
-            brushs.Add(Brushes.DarkSlateBlue);
-            brushs.Add(Brushes.DarkTurquoise);
-            brushs.Add(Brushes.Indigo);
+            brushes = GlobalSetting.DrawBrushes;
         }
 
         public SimuViewXYModel(SimulateDataModel _sdmodel, int timestart, int timeend)
@@ -142,14 +135,14 @@ namespace SamSoarII.Simulation.UI.Chart
                     linev.Y1 = CanvaHeight * (vp - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);
                     linev.Y2 = CanvaHeight * (v - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);
                     linev.X1 = linev.X2 = CanvaWidth * (vts - XRuler.TimeStart) / (XRuler.TimeEnd - XRuler.TimeStart);
-                    linev.Stroke = brushs[i];
+                    linev.Stroke = brushes[i];
                     linev.StrokeThickness = 1;
                     MainCanva.Children.Add(linev);
                     lineh = new Line();
                     lineh.X1 = linev.X1;
                     lineh.X2 = CanvaWidth * (vts - XRuler.TimeStart) / (XRuler.TimeEnd - XRuler.TimeStart);
                     lineh.Y1 = lineh.Y2 = linev.Y2;
-                    lineh.Stroke = brushs[i];
+                    lineh.Stroke = brushes[i];
                     lineh.StrokeThickness = 1;
                     MainCanva.Children.Add(lineh);
                 }

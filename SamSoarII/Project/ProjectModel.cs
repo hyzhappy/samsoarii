@@ -36,10 +36,10 @@ namespace SamSoarII.AppMain.Project
         public string ProjectName { get; set; }
         public LadderDiagramViewModel MainRoutine { get; set; }
         public ObservableCollection<LadderDiagramViewModel> SubRoutines { get; set; } = new ObservableCollection<LadderDiagramViewModel>();
-
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
-
         public PLCDevice.Device CurrentDevice { get; set; }
+        public InstructionDiagramViewModel IDVModel { get; set; }
+
         public ProjectModel()
         {
         }
@@ -49,6 +49,7 @@ namespace SamSoarII.AppMain.Project
             ProjectName = projectname;
             MainRoutine = new LadderDiagramViewModel("Main");
             MainRoutine.IsMainLadder = true;
+            IDVModel = new InstructionDiagramViewModel();
         }
 
         public void SetMainRoutine(LadderDiagramViewModel ldmodel)

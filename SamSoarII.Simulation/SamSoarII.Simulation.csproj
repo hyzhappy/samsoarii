@@ -100,9 +100,6 @@
     <Compile Include="UI\Chart\SimulateDataViewModel.xaml.cs">
       <DependentUpon>SimulateDataViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Chart\SimulateDataXYModel.xaml.cs">
-      <DependentUpon>SimulateDataXYModel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\Chart\SimuViewChartModel.xaml.cs">
       <DependentUpon>SimuViewChartModel.xaml</DependentUpon>
     </Compile>
@@ -217,10 +214,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Chart\SimulateDataViewModel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Chart\SimulateDataXYModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

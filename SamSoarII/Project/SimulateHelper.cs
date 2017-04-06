@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using SamSoarII.Simulation.Shell.Event;
 using System.ComponentModel;
 using SamSoarII.Simulation.UI.Base;
+using SamSoarII.Simulation.UI.Chart;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -32,13 +33,11 @@ namespace SamSoarII.AppMain.Project
         
         public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
 
-        static public int Simulate(ProjectModel pmodel)
+        static public int Simulate(ProjectModel pmodel, ReportOutputModel omodel)
         {
             smodel = new SimulateModel();
             SetupSimulateModel(pmodel);
-            //srmodel = new SimulateReportViewModel();
-            //smodel.ReportTextBox = srmodel.Report;
-            smodel.ReportTextBox = new System.Windows.Controls.TextBox();
+            smodel.ReportTextBox = omodel.Report;
             int checkresult = smodel.Check();
             switch (checkresult)
             {
@@ -79,12 +78,75 @@ namespace SamSoarII.AppMain.Project
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETDOUBLE:
                     MessageBox.Show("Error : 找不到入口SetDouble\r\n");
                     break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDBITDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddBitDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDOUBLEATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddDoubleDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDFLOATDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddFloatDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddDWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEBITDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveBitDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDOUBLEATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveDoubleDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEFLOATDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveFloatDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveDWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_AFTERRUNLADDER:
+                    MessageBox.Show("Error : 找不到入口AfterRunLadder\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_BEFORERUNLADDER:
+                    MessageBox.Show("Error : 找不到入口BeforeRunLadder\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWINPUT:
+                    MessageBox.Show("Error : 找不到入口AddViewInput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWOUTPUT:
+                    MessageBox.Show("Error : 找不到入口AddViewOutput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEVIEWINPUT:
+                    MessageBox.Show("Error : 找不到入口RemoveViewInput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUNd_REMOVEVIEWOUTPUT:
+                    MessageBox.Show("Error : 找不到入口RemoveViewOutput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_RUNDATA:
+                    MessageBox.Show("Error : 找不到入口RunData\r\n");
+                    break;
                 default:
                     MessageBox.Show("Error : 发生未知错误\r\n");
                     break;
             }
             return checkresult;
         }
+
+        #region Save & Load GlobalSetting
+        public static void SaveGlobalSetting()
+        {
+            SamSoarII.Simulation.Core.Global.GlobalSetting.Save();
+        }
+
+        public static void LoadGlobalSetting()
+        {
+            SamSoarII.Simulation.Core.Global.GlobalSetting.Load();
+        }
+        #endregion
 
         #region Setup
         static public void Setup(SimulateModel _smodel)
@@ -836,7 +898,7 @@ namespace SamSoarII.AppMain.Project
             }
             if (e.TabName.Equals("图表"))
             {
-                _stitem = new SimulateTabItem(smodel.Chart, "图表");
+                _stitem = new SimulateTabItem(smodel.MainChart, "图表");
                 if (TabOpen != null)
                 {
                     TabOpen(_stitem, _e);
@@ -860,6 +922,18 @@ namespace SamSoarII.AppMain.Project
                 if (e.TabName.Equals(svfmodel.Name))
                 {
                     _stitem = new SimulateTabItem(svfmodel, svfmodel.Name);
+                    if (TabOpen != null)
+                    {
+                        TabOpen(_stitem, _e);
+                    }
+                    return;
+                }
+            }
+            foreach (SimuViewXYModel svxmodel in smodel.SubCharts)
+            {
+                if (e.TabName.Equals(svxmodel.Name))
+                {
+                    _stitem = new SimulateTabItem(svxmodel, svxmodel.Name);
                     if (TabOpen != null)
                     {
                         TabOpen(_stitem, _e);

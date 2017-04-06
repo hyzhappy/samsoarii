@@ -29,12 +29,43 @@ namespace SamSoarII.Simulation.UI.Chart
         private const double DesignWidth = 800;
         private const double DesignHeight = 40;
 
-        public new double ActualWidth { get; set; }
+
+        private double actualwidth;
+        public new double ActualWidth
+        {
+            get { return this.actualwidth; }
+            set
+            {
+                if (this.actualwidth != value)
+                {
+                    this.actualwidth = value;
+                    Update();
+                }
+            }
+        }
 
         public SimulateDataModel SDModel
         {
             get { return this.sdmodel; }
             set { Setup(value); }
+        }
+
+        public TimeRuler TRuler
+        {
+            get { return this.truler; }
+            set
+            {
+                if (this.truler != null)
+                {
+                    this.truler.StartTimeChanged -= OnTimeRulerChanged;
+                    this.truler.EndTimeChanged -= OnTimeRulerChanged;
+                }
+            }
+        }
+
+        private void OnTimeRulerChanged(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public SimulateDataChartModel()
@@ -46,8 +77,8 @@ namespace SamSoarII.Simulation.UI.Chart
         public SimulateDataChartModel(SimulateDataModel _sdmodel, TimeRuler _truler)
         {
             InitializeComponent();
-            Setup(_sdmodel);
             truler = _truler;
+            Setup(_sdmodel);
         }
         
         public void Setup(SimulateDataModel _sdmodel)
@@ -136,9 +167,7 @@ namespace SamSoarII.Simulation.UI.Chart
                         default:
                             break;
                      }
-
                      MainCanva.Children.Add(hline);
-                    
                 }
                 else
                 {

@@ -1,6 +1,7 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.AppMain.UI;
-using SamSoarII.ValueModel;using System;
+using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -24,12 +25,14 @@ namespace SamSoarII.AppMain
             ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
             ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
             GlobalSetting.Load();
+            SimulateHelper.LoadGlobalSetting();
             this.Exit += App_Exit;
         }
 
         private void App_Exit(object sender, ExitEventArgs e)
         {
             GlobalSetting.Save();
+            SimulateHelper.SaveGlobalSetting();
             if (SimulateHelper.SModel != null)
             {
                 SimulateHelper.SModel.Dispose();

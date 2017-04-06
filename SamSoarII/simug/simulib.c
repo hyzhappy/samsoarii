@@ -91,7 +91,7 @@ void _ton(uint16_t* tval, uint32_t* tbit, uint16_t cod, uint16_t sv, uint32_t* o
 	if (cod)
 	{
 		// get the new time
-		ntim = currenttimems;
+		ntim = counttimems;
 		// get the inteval from old to new
 		itv = (ntim - *otim) / 100;
 		// increase the counter value and old time
@@ -125,7 +125,7 @@ void _tonr(uint16_t* tval, uint32_t* tbit, uint16_t cod, uint16_t sv, uint32_t* 
 	if (cod)
 	{
 		// get the new time
-		ntim = currenttimems;
+		ntim = counttimems;
 		// get the inteval from old to new
 		itv = (ntim - *otim) / 100;
 		// increase the counter value and old time
@@ -310,13 +310,13 @@ void _interrupt_timer_create(uint16_t code, uint16_t t1, uint16_t t2)
 {
 	if (code == 6)
 	{
-		itr_timer1_s = GetTickCount();
+		itr_timer1_s = counttimems;
 		itr_timer1_t = itr_timer1_t + t1;
 		itr_timer1_e = 1;
 	}
 	if (code == 7)
 	{
-		itr_timer2_s = GetTickCount();
+		itr_timer2_s = counttimems;
 		itr_timer2_t = itr_timer2_s + t2;
 		itr_timer2_e = 1;
 	}

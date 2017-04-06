@@ -1,0 +1,32 @@
+﻿<Window x:Class="SamSoarII.AppMain.AvalonDockTest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.AppMain"
+        xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        mc:Ignorable="d"
+        Title="AvalonDockTest" Height="300" Width="300">
+    <ad:DockingManager>
+        <ad:LayoutRoot>
+            <ad:LayoutPanel>
+                <ad:LayoutDocumentPane>
+                    <ad:LayoutDocument>
+                        <ad:DockingManager>
+                            <ad:LayoutRoot>
+                                <ad:LayoutPanel Orientation="Vertical">
+                                    <ad:LayoutAnchorablePane>
+                                        <ad:LayoutAnchorable CanFloat="False" CanAutoHide="False" CanClose="False" CanHide="False"></ad:LayoutAnchorable>
+                                    </ad:LayoutAnchorablePane>
+                                    <ad:LayoutAnchorablePane>
+                                        <ad:LayoutAnchorable CanFloat="False" CanAutoHide="False" CanClose="False" CanHide="False"></ad:LayoutAnchorable>
+                                    </ad:LayoutAnchorablePane>
+                                </ad:LayoutPanel>
+                            </ad:LayoutRoot>
+                        </ad:DockingManager>
+                    </ad:LayoutDocument>
+                </ad:LayoutDocumentPane>
+            </ad:LayoutPanel>
+        </ad:LayoutRoot>
+    </ad:DockingManager>
+</Window>

@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Base;
+using System.Xml.Linq;
+using Microsoft.Win32;
 
 namespace SamSoarII.Simulation.UI.Chart
 {
@@ -61,15 +63,15 @@ namespace SamSoarII.Simulation.UI.Chart
         {
             VList.SDVModels = sdvmodels;
             VChart.SDCModels = sdcmodels;
-            
+
             BuildRouted();
         }
-        
+
         #region Actual Size
         protected override void OnActualWidthChanged()
         {
             base.OnActualWidthChanged();
-            
+
             TRuler.ActualWidth = ActualWidth - 200;
             VChart.ActualWidth = ActualWidth - 200;
         }
@@ -81,7 +83,7 @@ namespace SamSoarII.Simulation.UI.Chart
             VChart.ActualHeight = ActualHeight - 32;
         }
         #endregion
-        
+
         #region Event Handler
 
         public void BuildRouted()
@@ -102,6 +104,10 @@ namespace SamSoarII.Simulation.UI.Chart
             VChart.SDModelDelete += OnSDModelDelete;
             VChart.SDModelDraw += OnSDModelDraw;
             VChart.XYModelCreate += OnXYModelCreate;
+            VChart.SDModelSave += OnSDModelSave;
+            VChart.SDModelLoad += OnSDModelLoad;
+            VChart.SDModelSaveAll += OnSDModelSaveAll;
+            VChart.SDModelLoadAll += OnSDModelLoadAll;
             VChart.BuildRouted(this);
         }
 
@@ -142,6 +148,19 @@ namespace SamSoarII.Simulation.UI.Chart
         public event SimulateDataModelEventHandler SDModelClose;
         private void OnSDModelClose(object sender, SimulateDataModelEventArgs e)
         {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.SDCModel = e.SDCModel;
+            _e.SDVModel = e.SDVModel;
+            if (SDModelUnlock != null && e.SDModel_old.IsLock)
+            {
+                _e.SDModel_old = _e.SDModel_new = e.SDModel_old; 
+                SDModelUnlock(this, _e);
+            }
+            if (SDModelUnview != null && e.SDModel_old.IsView)
+            {
+                _e.SDModel_old = _e.SDModel_new = e.SDModel_old;
+                SDModelUnview(this, _e);
+            }
             if (SDModelClose != null)
             {
                 SDModelClose(this, e);
@@ -212,7 +231,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 SDModelRun(this, e);
             }
         }
-        
+
         private void OnSDModelCut(object sender, SimulateDataModelEventArgs e)
         {
             copysdmodels.Clear();
@@ -279,6 +298,183 @@ namespace SamSoarII.Simulation.UI.Chart
             }
         }
 
+        private void OnSDModelSave(object sender, SimulateDataModelEventArgs e)
+        {
+            SaveFileDialog sfdialog = new SaveFileDialog();
+            sfdialog.Filter = "SimuWave文件|*.siw";
+            sfdialog.Title = "保存仿真波形文件";
+            if (sfdialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string filename = sfdialog.FileName;
+                    SaveXml(filename, (int)(e.TimeStart), (int)(e.TimeEnd));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("保存波形文件失败!");
+                }
+            }
+        }
+
+        private void OnSDModelLoad(object sender, SimulateDataModelEventArgs e)
+        {
+            OpenFileDialog ofdialog = new OpenFileDialog();
+            ofdialog.Filter = "SimuWave文件|*.siw";
+            ofdialog.Title = "读取仿真波形文件";
+            if (ofdialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string filename = ofdialog.FileName;
+                    LoadXml(filename, (int)(e.TimeStart), (int)(e.TimeEnd));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("读取波形文件失败!");
+                }
+            }
+        }
+
+        private void OnSDModelSaveAll(object sender, SimulateDataModelEventArgs e)
+        {
+            SaveFileDialog sfdialog = new SaveFileDialog();
+            sfdialog.Filter = "SimuWave文件|*.siw";
+            sfdialog.Title = "保存仿真波形文件";
+            if (sfdialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string filename = sfdialog.FileName;
+                    SaveXml(filename);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("保存波形文件失败!");
+                }
+            }
+        }
+
+        private void OnSDModelLoadAll(object sender, SimulateDataModelEventArgs e)
+        {
+            OpenFileDialog ofdialog = new OpenFileDialog();
+            ofdialog.Filter = "SimuWave文件|*.siw";
+            ofdialog.Title = "读取仿真波形文件";
+            if (ofdialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string filename = ofdialog.FileName;
+                    LoadXml(filename);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("读取波形文件失败!");
+                }
+            }
+        }
+
+        #endregion
+
+        #region Save & Load
+        private void SaveXml(string filename, int timestart, int timeend)
+        {
+            XDocument xdoc = new XDocument();
+            XElement node_Root = new XElement("SimuDatas");
+            XElement node_SDModel = null;
+            foreach (SimulateDataChartModel sdcmodel in VChart.CursorCollection())
+            {
+                SimulateDataModel sdmodel = sdcmodel.SDModel;
+                node_SDModel = new XElement("SimuDataNode");
+                sdmodel.SaveXml(node_SDModel, timestart, timeend);
+                node_Root.Add(node_SDModel);
+            }
+            xdoc.Add(node_Root);
+            xdoc.Save(filename);
+        }
+
+        private void LoadXml(string filename, int timestart, int timeend)
+        {
+            XDocument xdoc = XDocument.Load(filename);
+            XElement node_Root = xdoc.Element("SimuDatas");
+            IEnumerable<XElement> node_SDModels = node_Root.Elements("SimuDataNode");
+            foreach (XElement node_SDModel in node_SDModels)
+            {
+                string name = (string)(node_SDModel.Element("Name"));
+                foreach (SimulateDataChartModel sdcmodel in VChart.SDCModels)
+                {
+                    SimulateDataModel sdmodel = sdcmodel.SDModel;
+                    if (sdmodel.Name.Equals(name))
+                    {
+                        VChart.RemoveValue(sdmodel, timestart, timeend);
+                        sdmodel.LoadXml(node_SDModel, timestart, timeend);
+                        break;
+                    }
+                }
+            }
+            VChart.UpdateChart();
+        }
+
+        private void SaveXml(string filename)
+        {
+            XDocument xdoc = new XDocument();
+            XElement node_Root = new XElement("SimuDatas");
+            XElement node_SDModel = null;
+            foreach (SimulateDataChartModel sdcmodel in VChart.SDCModels)
+            {
+                SimulateDataModel sdmodel = sdcmodel.SDModel;
+                node_SDModel = new XElement("SimuDataNode");
+                sdmodel.SaveXml(node_SDModel);
+                node_Root.Add(node_SDModel);
+            }
+            xdoc.Add(node_Root);
+            xdoc.Save(filename);
+        }
+
+        private void LoadXml(string filename)
+        {
+            XDocument xdoc = XDocument.Load(filename);
+            XElement node_Root = xdoc.Element("SimuDatas");
+            IEnumerable<XElement> node_SDModels = node_Root.Elements("SimuDataNode");
+            SimulateDataModelEventArgs e;
+            foreach (SimulateDataChartModel sdcmodel in VChart.SDCModels)
+            {
+                SimulateDataModel sdmodel = sdcmodel.SDModel;
+                e = new SimulateDataModelEventArgs();
+                e.SDModel_old = sdmodel;
+                e.SDModel_new = null;
+                OnSDModelClose(this, e);
+            }
+            //VList.Clear();
+            //VChart.Clear();
+            int id = 0;
+            foreach (XElement node_SDModel in node_SDModels)
+            {
+                SimulateDataModel sdmodel = new SimulateDataModel();
+                sdmodel.LoadXml(node_SDModel);
+                e = new SimulateDataModelEventArgs();
+                e.SDModel_new = sdmodel;
+                e.ID = id++;
+                if (SDModelSetup != null)
+                {
+                    SDModelSetup(this, e);
+                }
+            }
+            foreach (SimulateDataChartModel sdcmodel in VChart.SDCModels)
+            {
+                SimulateDataModel sdmodel = sdcmodel.SDModel;
+                e = new SimulateDataModelEventArgs();
+                e.SDModel_new = sdmodel;
+                if (sdmodel.IsLock && SDModelLock != null)
+                {
+                    SDModelLock(this, e);
+                }
+                if (sdmodel.IsView && SDModelView != null)
+                {
+                    SDModelView(this, e);
+                }
+            }
+        }
         #endregion
 
     }

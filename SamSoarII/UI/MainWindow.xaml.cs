@@ -38,7 +38,8 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACProj;
         public LayoutAnchorControl LACSimuProj;
         public LayoutAnchorControl LACMonitor;
-
+        public LayoutAnchorControl LACOutput;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -58,6 +59,7 @@ namespace SamSoarII.AppMain.UI
             LACProj = LAProj.AnchorControl;
             LACSimuProj = LASimuProj.AnchorControl;
             LACMonitor = LAMonitor.AnchorControl;
+            LACOutput = LAOutput.AnchorControl;
 
             AnchorSide side;
             side = LayoutSetting.GetDefaultSideAnchorable(LAProj.Title);
@@ -66,9 +68,11 @@ namespace SamSoarII.AppMain.UI
             LASimuProj.ReplaceSide(side);
             side = LayoutSetting.GetDefaultSideAnchorable(LAMonitor.Title);
             LAMonitor.ReplaceSide(side);
+            side = LayoutSetting.GetDefaultSideAnchorable(LAOutput.Title);
             LAProj.Hide();
             LASimuProj.Hide();
             LAMonitor.Hide();
+            LAOutput.Hide();
 
             double[] autohidesize;
             autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAProj.Title);
@@ -80,17 +84,23 @@ namespace SamSoarII.AppMain.UI
             autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMonitor.Title);
             LAMonitor.AutoHideWidth = autohidesize[0];
             LAMonitor.AutoHideHeight = autohidesize[1];
-
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAOutput.Title);
+            LAOutput.AutoHideWidth = autohidesize[0];
+            LAOutput.AutoHideHeight = autohidesize[1];
+            
             double[] floatsize;
             floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAProj.Title);
             LAProj.FloatingWidth = floatsize[0];
             LAProj.FloatingHeight = floatsize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LASimuProj.Title);
+            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LASimuProj.Title);
             LASimuProj.FloatingWidth = floatsize[0];
             LASimuProj.FloatingHeight = floatsize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMonitor.Title);
+            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAMonitor.Title);
             LAMonitor.FloatingWidth = floatsize[0];
             LAMonitor.FloatingHeight = floatsize[1];
+            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAOutput.Title);
+            LAOutput.FloatingWidth = floatsize[0];
+            LAOutput.FloatingHeight = floatsize[1];
         }
 
         protected override void OnClosed(EventArgs e)
@@ -98,6 +108,7 @@ namespace SamSoarII.AppMain.UI
             LayoutSetting.Save();
             
             base.OnClosed(e);
+            Application.Current.Shutdown();
         }
 
         public void SetProjectTreeView(ProjectTreeView treeview)
@@ -174,12 +185,16 @@ namespace SamSoarII.AppMain.UI
         {
             _interactionFacade.CreateProject(name, fullFileName);
             _interactionFacade.SaveProject();
+            LadderModeButton.IsChecked = true;
+            InstModeButton.IsChecked = false;
             LACProj.Show();
         }
 
         private bool OpenProject(string fullFileName)
         {
             bool ret = _interactionFacade.LoadProject(fullFileName);
+            LadderModeButton.IsChecked = true;
+            InstModeButton.IsChecked = false;
             LACProj.Show();
             return ret;
         }
@@ -427,7 +442,6 @@ namespace SamSoarII.AppMain.UI
 
         private void OnOpenProjectExecute(object sender, RoutedEventArgs e)
         {
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "ssp文件|*.ssp";
             if (openFileDialog.ShowDialog() == true)
@@ -466,7 +480,13 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSimulateCommandExecute(object sender, RoutedEventArgs e)
         {
-            _interactionFacade.SimulateProject();
+            LACOutput.Show();
+            int ret = _interactionFacade.SimulateProject();
+            if (ret == SimulateHelper.SIMULATE_OK)
+            {
+                LAOutput.Hide();
+                LACSimuProj.Show();
+            }
         }
 
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
@@ -497,6 +517,46 @@ namespace SamSoarII.AppMain.UI
         }
 
         private void CommentModeCanToggle(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void OnLadderModeToggle(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (LadderModeButton.IsChecked.HasValue)
+            {
+                _interactionFacade.IsLadderMode = LadderModeButton.IsChecked.Value;
+            }
+        }
+
+        private void LadderModeCanToggle(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void OnInstModeToggle(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (InstModeButton.IsChecked.HasValue)
+            {
+                _interactionFacade.IsInstMode = InstModeButton.IsChecked.Value;
+            }
+        }
+
+        private void InstModeCanToggle(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
@@ -542,5 +602,6 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+        
     }
 }

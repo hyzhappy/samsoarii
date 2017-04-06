@@ -15,7 +15,25 @@ namespace SamSoarII.AppMain.UI
 {
     public partial class MainTabControl : LayoutDocumentPane
     {
+        public const int VIEWMODE_LADDER = 0x01;
+        public const int VIEWMODE_INST = 0x02;
+        private int viewmode;
+        public int ViewMode
+        {
+            get { return this.viewmode; }
+            set
+            {
+                this.viewmode = value;
+                foreach (MainTabDiagramItem mtditem in DiagramCollection)
+                {
+                    mtditem.ViewMode = value;
+                }
+                //ShowItem(CurrentTab);
+            }
+        }
+        
         public ObservableCollection<ITabItem> TabItemCollection { get; set; } = new ObservableCollection<ITabItem>();
+        public ObservableCollection<MainTabDiagramItem> DiagramCollection { get; set; } = new ObservableCollection<MainTabDiagramItem>();
         private Dictionary<ITabItem, LayoutDocument> _lDocDict = new Dictionary<ITabItem, LayoutDocument>();
         public ITabItem SelectedItem = null;
 
@@ -29,6 +47,7 @@ namespace SamSoarII.AppMain.UI
 
         public MainTabControl()
         {
+            ViewMode = VIEWMODE_LADDER;
         }
 
         public void Reset()
@@ -44,7 +63,16 @@ namespace SamSoarII.AppMain.UI
                 TabItemCollection.Add(item);
                 ldoc = new LayoutDocument();
                 ldoc.Title = item.TabHeader;
-                ldoc.Content = item;
+                if (item is LadderDiagramViewModel)
+                {
+                    MainTabDiagramItem mtditem = new MainTabDiagramItem((IProgram)item, ViewMode);
+                    DiagramCollection.Add(mtditem);
+                    ldoc.Content = mtditem;
+                }
+                else
+                {
+                    ldoc.Content = item;
+                }
                 ldoc.IsActiveChanged += OnActiveChanged;
                 Children.Add(ldoc);
                 _lDocDict.Add(item, ldoc);
@@ -90,8 +118,10 @@ namespace SamSoarII.AppMain.UI
         {
             base.OnActualWidthChanged();
             ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(this);
-            GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 3100;
-            GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 3100;
+            int unitwidth = GlobalSetting.LadderWidthUnit;
+            int unitnumber = GlobalSetting.LadderXCapacity;
+            GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / (unitwidth * unitnumber);
+            GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / (unitwidth * unitnumber);
             foreach (ITabItem tab in TabItemCollection)
             {
                 tab.ActualWidth = _maintab.ActualWidth;
@@ -124,7 +154,5 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
-
     }
 }

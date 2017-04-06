@@ -59,9 +59,11 @@ namespace SamSoarII.Simulation.Core
         public const int LOADDLL_CANNOT_FOUND_REMOVEDOUBLEATAPOINT = 0x18;
         public const int LOADDLL_CANNOT_FOUND_ADDVIEWINPUT = 0x19;
         public const int LOADDLL_CANNOT_FOUND_ADDVIEWOUTPUT = 0x1A;
-        public const int LOADDLL_CANNOT_FOUND_BEFORERUNLADDER = 0x1B;
-        public const int LOADDLL_CANNOT_FOUND_AFTERRUNLADDER = 0x1C;
-        public const int LOADDLL_CANNOT_FOUND_RUNDATA = 0x1D;
+        public const int LOADDLL_CANNOT_FOUND_REMOVEVIEWINPUT = 0x1B;
+        public const int LOADDLL_CANNOT_FOUNd_REMOVEVIEWOUTPUT = 0x1C;
+        public const int LOADDLL_CANNOT_FOUND_BEFORERUNLADDER = 0x1D;
+        public const int LOADDLL_CANNOT_FOUND_AFTERRUNLADDER = 0x1E;
+        public const int LOADDLL_CANNOT_FOUND_RUNDATA = 0x1F;
 
         [DllImport("simu.dll", EntryPoint = "LoadDll")]
         public static extern int LoadDll

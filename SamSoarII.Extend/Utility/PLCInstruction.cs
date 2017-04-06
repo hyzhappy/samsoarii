@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,14 +22,20 @@ namespace SamSoarII.Extend.Utility
         /// <summary>
         /// 私有成员
         /// </summary>
-        private string text;
-        private string type;
-        private string flag1;
-        private string flag2;
-        private string flag3;
-        private string flag4;
-        private string flag5;
-        private string enbit;
+        protected BaseViewModel prototype = null;
+        protected string text = String.Empty;
+        protected string type = String.Empty;
+        protected string flag1 = String.Empty;
+        protected string flag2 = String.Empty;
+        protected string flag3 = String.Empty;
+        protected string flag4 = String.Empty;
+        protected string flag5 = String.Empty;
+        protected string oflag1 = String.Empty;
+        protected string oflag2 = String.Empty;
+        protected string oflag3 = String.Empty;
+        protected string oflag4 = String.Empty;
+        protected string oflag5 = String.Empty;
+        protected string enbit = String.Empty;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -37,6 +44,14 @@ namespace SamSoarII.Extend.Utility
         {
             Text = text;
             
+        }
+        /// <summary>
+        /// 原型
+        /// </summary>
+        public BaseViewModel Prototype
+        {
+            get { return this.prototype; }
+            set { this.prototype = value; }
         }
         /// <summary>
         /// 指令文本
@@ -51,6 +66,11 @@ namespace SamSoarII.Extend.Utility
                 string[] args = text.Split(' ');
                 this.type = args[0];
                 this.enbit = null;
+                if (args.Length > 1) this.oflag1 = args[1];
+                if (args.Length > 2) this.oflag2 = args[2];
+                if (args.Length > 3) this.oflag3 = args[3];
+                if (args.Length > 4) this.oflag4 = args[4];
+                if (args.Length > 5) this.oflag5 = args[5];
                 // 根据指令类型的参数结构来分类，并转化参数的格式
                 /*
                  * 参数分为位(B)，字(W)，双字(D)和浮点(F)这四种数据类型
@@ -257,6 +277,7 @@ namespace SamSoarII.Extend.Utility
                 }
             }
         }
+        
         /// <summary>
         /// 指令类型
         /// </summary>
@@ -299,7 +320,7 @@ namespace SamSoarII.Extend.Utility
         /// <param name="mode">访问变量的权限（r：读，w：写，rw：读写）</param>
         /// <param name="ctype">要转换成的c语言类型</param>
         /// <returns>c语言格式</returns>
-        private string ToCStyle(string var, string mode="rw", string ctype="int")
+        private string ToCStyle(string var, string mode="rw", string ctype="WORD")
         {
             // 找到最后一个字母
             int i = 0;
@@ -316,7 +337,11 @@ namespace SamSoarII.Extend.Utility
             {
                 // 位线圈
                 case "X": case "Y": case "M": case "C": case "T": case "B":
-                    return String.Format("{0:s}Bit[{1:d}]", name, addr);
+                    switch (ctype)
+                    {
+                        case "BIT": return String.Format("{0:s}Bit[{1:d}]", name, addr);
+                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
+                    }
                 // 16位寄存器
                 case "D": case "CV": case "TV":
                     /*
@@ -330,8 +355,8 @@ namespace SamSoarII.Extend.Utility
                         case "WORD": return String.Format("{0:s}Word[{1:d}]", name, addr);
                         case "DWORD": return String.Format("(*((uint32_t*)({0:s}Word+{1:d})))", name, addr);
                         case "FLOAT": return String.Format("(*((float*)({0:s}Word+{1:d})))", name, addr);
-                        default: return var;
-                     }
+                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
+                    }
                 // 32位寄存器
                 case "CV32":
                     switch (ctype)
@@ -339,7 +364,7 @@ namespace SamSoarII.Extend.Utility
                         case "WORD": return String.Format("(*((uint16_t*)({0:s}CVDoubleWord+{1:d})))", name, addr);
                         case "DWORD": return String.Format("{0:s}CVDoubleWords[{1:d}]", name, addr);
                         case "FLOAT": return String.Format("(*((float*)({0:s}CVDoubleWord+{1:d})))", name, addr);
-                        default: return var;
+                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                     }
                 case "K": case "F":
                     if (mode.Equals("r"))
@@ -355,5 +380,257 @@ namespace SamSoarII.Extend.Utility
                     return var;
             }
         }
+        
+        public PLCOriginInst ToOrigin()
+        {
+            return new PLCOriginInst(text);
+        }
+
+        public PLCInstruction ReplaceFlag(int id, string flag)
+        {
+            PLCOriginInst oinst = ToOrigin();
+            string _text = String.Empty;
+            for (int i = 0; i < 6; i++)
+            {
+                _text += String.Format("{0:s} ", i == id ? flag : oinst[i]);
+            }
+            return new PLCInstruction(_text);
+        }
+
+
+        public static int FlagNumber(string text)
+        {
+            switch (text)
+            {
+                // (rB)
+                case "LD":
+                case "AND":
+                case "OR":
+                case "LDI":
+                case "ANDI":
+                case "ORI":
+                case "LDIM":
+                case "ANDIM":
+                case "ORIM":
+                case "LDIIM":
+                case "ANDIIM":
+                case "ORIIM":
+                case "LDP":
+                case "ANDP":
+                case "ORP":
+                case "LDF":
+                case "ANDF":
+                case "ORF":
+                    return 1;
+                // (wB)
+                case "OUT":
+                case "OUTIM":
+                case "ALT":
+                case "ALTP":
+                    return 1;
+                // (rW)
+                case "DTCH":
+                    return 1;
+                // (wB, rW)
+                case "SET":
+                case "SETIM":
+                case "RST":
+                case "RSTIM":
+                    return 2;
+                // (rW, rW)
+                case "LDWEQ":
+                case "LDWNE":
+                case "LDWGE":
+                case "LDWLE":
+                case "LDWG":
+                case "LDWL":
+                case "AWEQ":
+                case "AWNE":
+                case "AWGE":
+                case "AWLE":
+                case "AWG":
+                case "AWL":
+                case "ORWEQ":
+                case "ORWNE":
+                case "ORWGE":
+                case "ORWLE":
+                case "ORWG":
+                case "ORWL":
+                case "ATCH":
+                    return 2;
+                // (rD, rD)
+                case "LDDEQ":
+                case "LDDNE":
+                case "LDDGE":
+                case "LDDLE":
+                case "LDDG":
+                case "LDDL":
+                case "ADEQ":
+                case "ADNE":
+                case "ADGE":
+                case "ADLE":
+                case "ADG":
+                case "ADL":
+                case "ORDEQ":
+                case "ORDNE":
+                case "ORDGE":
+                case "ORDLE":
+                case "ORDG":
+                case "ORDL":
+                    return 2;
+                // (rF, rF)
+                case "LDFEQ":
+                case "LDFNE":
+                case "LDFGE":
+                case "LDFLE":
+                case "LDFG":
+                case "LDFL":
+                case "AFEQ":
+                case "AFNE":
+                case "AFGE":
+                case "AFLE":
+                case "AFG":
+                case "AFL":
+                case "ORFEQ":
+                case "ORFNE":
+                case "ORFGE":
+                case "ORFLE":
+                case "ORFG":
+                case "ORFL":
+                    return 2;
+                // (rW, wD)
+                case "WTOD":
+                    return 2;
+                // (rD, wF)
+                case "DTOW":
+                    return 2;
+                // (rD, wF)
+                case "DTOF":
+                    return 2;
+                // (rD, wD)
+                /*
+                case "BIN": case "BCD":
+                    this.flag1 = ToCStyle(args[1], "r", "DWORD");
+                    this.flag2 = ToCStyle(args[2], "w", "DWORD");
+                    break;
+                */
+                // (rF, wD)
+                case "ROUND":
+                case "TURNC":
+                    return 2;
+                // (rW, wW)
+                case "BIN":
+                case "BCD":
+                case "INVW":
+                case "MOV":
+                case "INC":
+                case "DEC":
+                    return 2;
+                // (rD, wD)
+                case "INVD":
+                case "MOVD":
+                case "INCD":
+                case "DECD":
+                    return 2;
+                // (rF, wF)
+                case "MOVF":
+                case "SQRT":
+                case "SIN":
+                case "COS":
+                case "TAN":
+                case "LN":
+                case "EXP":
+                    return 2;
+                // (rW, rW, wW)
+                case "ADD":
+                case "SUB":
+                case "MULW":
+                case "DIVW":
+                case "ANDW":
+                case "ORW":
+                case "XORW":
+                case "SHL":
+                case "SHR":
+                case "ROL":
+                case "ROR":
+                    return 3;
+                // (rD, rD, wD)
+                case "ADDD":
+                case "SUBD":
+                case "MULD":
+                case "DIVD":
+                case "ANDD":
+                case "ORD":
+                case "XORD":
+                case "SHLD":
+                case "SHRD":
+                case "ROLD":
+                case "RORD":
+                    return 3;
+                // (rW, rW, wD)
+                case "MUL":
+                case "DIV":
+                    return 3;
+                // (rF, rF, wF)
+                case "ADDF":
+                case "SUBF":
+                case "MULF":
+                case "DIVF":
+                    return 3;
+                // (rW, wW, rW)
+                case "MVBLK":
+                case "FMOV":
+                    return 3;
+                // (rD, wD, rD)
+                case "MVDBLK":
+                case "FMOVD":
+                    return 3;
+                // (rwW, rW, rwB)
+                /*
+                 * TON, TONR, TOF这三个计时器比较特殊
+                 * 首先，TV这个计时寄存器必须是可读可写的
+                 * 计时目标是可读的，除此之外，还要有计时开关位T来当第三个参数
+                 * 但是参数省略了T，可以通过TV的编号来得到T的编号
+                 */
+                case "TON":
+                case "TONR":
+                case "TOF":
+                /*
+                 * CTU, CTD, CTUD三个计数器和计数器的结构大致相同
+                 * 可放在一块处理
+                 */
+                case "CTU":
+                case "CTD":
+                case "CTUD":
+                    return 3;
+                // (rW)
+                case "FOR":
+                case "JMP":
+                case "LBL":
+                case "CALL":
+                    return 1;
+                // ()
+                case "NEXT":
+                case "EI":
+                case "DI":
+                    break;
+                // (rS, rwW, rwB)
+                /*
+                 * 调用c程序比较特殊，因为要指定c程序的名称
+                 * 所以第一个参数为名称，剩下两个分别为D参数和M参数
+                 */
+                case "CALLM":
+                    return 3;
+                // (rW, rW, rW, wW, rW)
+                case "SMOV":
+                    return 5;
+                // (rS)
+                case "FUNC":
+                    return 1;
+            }
+            return 0;
+        }
+
+        
     }
 }

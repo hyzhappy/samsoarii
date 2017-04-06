@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SamSoarII.PLCDevice.DeviceDialog
+namespace SamSoarII.AppMain
 {
     /// <summary>
-    /// BaseDeviceDialog.xaml 的交互逻辑
+    /// AvalonDockTest.xaml 的交互逻辑
     /// </summary>
-    public partial class BaseDeviceMessageDialog : UserControl
+    public partial class AvalonDockTest : Window
     {
-        public BaseDeviceMessageDialog()
+        public AvalonDockTest()
         {
             InitializeComponent();
         }

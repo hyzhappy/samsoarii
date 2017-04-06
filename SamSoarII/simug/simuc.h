@@ -809,7 +809,7 @@ EXPORT void RemoveViewInput(char* name, int type)
 		if (strcmp(dpis[i].name, name) ||
 			dpis[i].type != type)
 		{
-			memcpy(dpis[j++], dpis[i], sizeof(struct DataPoint));
+			memcpy(dpis+(j++), dpis+i, sizeof(struct DataPoint));
 		}
 	}
 	dpic = j;

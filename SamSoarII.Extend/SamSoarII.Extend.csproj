@@ -49,6 +49,7 @@
     <Compile Include="Utility\ExprHelper.cs" />
     <Compile Include="Utility\InstHelper.cs" />
     <Compile Include="Utility\PLCInstruction.cs" />
+    <Compile Include="Utility\PLCOriginInst.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

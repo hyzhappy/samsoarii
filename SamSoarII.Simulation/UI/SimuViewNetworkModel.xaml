@@ -32,7 +32,7 @@
                 </Expander>
             </Border>
         </Grid>
-        <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3000" Margin="0,20,0,0" Background="Transparent" MouseLeftButtonDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" MouseLeftButtonDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
             <Canvas.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="修改值"></MenuItem>

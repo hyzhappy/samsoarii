@@ -73,6 +73,12 @@ namespace SamSoarII.Simulation.UI.Chart
         {
             InitializeComponent();
         }
+
+        public void Clear()
+        {
+            SDCModels.Clear();
+            Update();
+        }
         
         public void BuildRouted(SimuViewChartModel svcmodel)
         {
@@ -127,6 +133,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 AddLast(sdcmodel);
                 return;
             }
+            sdcmodel.ActualWidth = ActualWidth;
             RowDefinition rdef = new RowDefinition();
             rdef.Height = new GridLength(40);
             MainGrid.RowDefinitions.Add(rdef);
@@ -153,6 +160,7 @@ namespace SamSoarII.Simulation.UI.Chart
 
         public void AddLast(SimulateDataChartModel sdcmodel)
         {
+            sdcmodel.ActualWidth = ActualWidth;
             RowDefinition rdef = new RowDefinition();
             rdef.Height = new GridLength(40);
             MainGrid.RowDefinitions.Add(rdef);
@@ -186,45 +194,50 @@ namespace SamSoarII.Simulation.UI.Chart
         //public event SimulateDataModelEventHandler SDModelClose;
         private void OnSDModelClose(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDCModel != null)
-            {
-                return;
-            }
             if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataChartModel sdcmodel in SDCModels)
+                if (e.SDCModel == null)
                 {
-                    if (sdcmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataChartModel sdcmodel in SDCModels)
                     {
-                        e.SDCModel = sdcmodel;
-                        Remove(sdcmodel);
-                        break;
+                        if (sdcmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDCModel = sdcmodel;
+                            break;
+                        }
                     }
                 }
+                if (e.SDCModel == null)
+                {
+                    throw new ArgumentException();
+                }
+                Remove(e.SDCModel);
             }
         }
 
         //public event SimulateDataModelEventHandler SDModelSetup;
         private void OnSDModelSetup(object sender, SimulateDataModelEventArgs e)
         {
-            if (e.SDCModel != null)
-            {
-                return;
-            }
             if (sender is SimuViewChartModel)
             {
-                foreach (SimulateDataChartModel sdcmodel in SDCModels)
+                if (e.SDCModel == null)
                 {
-                    if (sdcmodel.SDModel == e.SDModel_old)
+                    foreach (SimulateDataChartModel sdcmodel in SDCModels)
                     {
-                        sdcmodel.SDModel = e.SDModel_new;
-                        e.SDCModel = sdcmodel;
-                        break;
+                        if (sdcmodel.SDModel == e.SDModel_old)
+                        {
+                            e.SDCModel = sdcmodel;
+                            break;
+                        }
                     }
                 }
                 if (e.SDCModel == null)
                 {
                     Add(e.SDModel_new, e.ID);
+                }
+                else
+                {
+                    e.SDCModel.Setup(e.SDModel_new);
                 }
             }
         }
@@ -458,6 +471,54 @@ namespace SamSoarII.Simulation.UI.Chart
                 SDModelDraw(this, _e);
             }
         }
+
+        public event SimulateDataModelEventHandler SDModelSave;
+        private void MI_Save_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelSave != null)
+            {
+                SDModelSave(this, _e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelLoad;
+        private void MI_Load_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelLoad != null)
+            {
+                SDModelLoad(this, _e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelSaveAll;
+        private void MI_SaveAll_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelSaveAll != null)
+            {
+                SDModelSaveAll(this, _e);
+            }
+        }
+
+        public event SimulateDataModelEventHandler SDModelLoadAll;
+        private void MI_LoadAll_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.TimeStart = CursorTimeStart();
+            _e.TimeEnd = CursorTimeEnd();
+            if (SDModelLoadAll != null)
+            {
+                SDModelLoadAll(this, _e);
+            }
+        }
         #endregion
 
         #endregion
@@ -546,8 +607,8 @@ namespace SamSoarII.Simulation.UI.Chart
             double x2 = Math.Max(cssx, csex);
             double y1 = Math.Min(cssy, csey);
             double y2 = Math.Max(cssy, csey);
-            y1 = ((int)(y1)) / 40 * 40;
-            y2 = ((int)(y2 + 40)) / 40 * 40;
+            y1 = Math.Max(((int)(y1)) / 40, 0) * 40;
+            y2 = Math.Min(((int)(y2 + 40)) / 40, SDCModels.Count()) * 40;
             Canvas.SetTop(Cursor, y1);
             Canvas.SetLeft(Cursor, x1);
             Cursor.Width = x2 - x1;
@@ -573,8 +634,8 @@ namespace SamSoarII.Simulation.UI.Chart
                     double x2 = Math.Max(cssx, csex);
                     double y1 = Math.Min(cssy, csey);
                     double y2 = Math.Max(cssy, csey);
-                    y1 = ((int)(y1)) / 40 * 40;
-                    y2 = ((int)(y2+40)) / 40 * 40;
+                    y1 = Math.Max(((int)(y1)) / 40, 0) * 40;
+                    y2 = Math.Min(((int)(y2 + 40)) / 40, SDCModels.Count()) * 40;
                     Canvas.SetTop(Cursor, y1);
                     Canvas.SetLeft(Cursor, x1);
                     Cursor.Width = x2 - x1;
@@ -665,7 +726,7 @@ namespace SamSoarII.Simulation.UI.Chart
         private LinkedListNode<SimulateDataChartModel> CursorNodeBegin()
         {
             int id = (int)(Math.Min(cssy, csey) / 40);
-            if (id >= SDCModels.Count()) return null;
+            if (id >= SDCModels.Count()) id = SDCModels.Count() - 1;
             SimulateDataChartModel sdcmodel = SDCModels.ElementAt(id);
             LinkedListNode<SimulateDataChartModel> node = SDCModels.Find(sdcmodel);
             return node;
@@ -675,7 +736,7 @@ namespace SamSoarII.Simulation.UI.Chart
         {
 
             int id = (int)(Math.Max(cssy, csey) / 40);
-            if (id >= SDCModels.Count()) return null;
+            if (id >= SDCModels.Count()) id = SDCModels.Count() - 1;
             SimulateDataChartModel sdcmodel = SDCModels.ElementAt(id);
             LinkedListNode<SimulateDataChartModel> node = SDCModels.Find(sdcmodel);
             return node;

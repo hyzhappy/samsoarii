@@ -135,6 +135,17 @@ namespace SamSoarII.AppMain.Project
         }
         void textEditor_TextArea_TextEntering(object sender, TextCompositionEventArgs e)
         {
+            if (e.Text.Length > 0)
+            {
+                if (e.Text[0] == '{')
+                {
+                    CodeTextBox.Text += "\n}";
+                }
+                else if (e.Text[0] == '(')
+                {
+                    CodeTextBox.Text += ")";
+                }
+            }
             if (e.Text.Length > 0 && completionWindow != null)
             {
                 if (!char.IsLetterOrDigit(e.Text[0]))
