@@ -429,6 +429,18 @@ namespace SamSoarII.Extend.LogicGraph
             terminates.Sort(sortByExpr);
             // 调用方法
             List<PLCInstruction> insts = ExprHelper.GenInst(terminates);
+            // 获得指令的原型
+            int instend = insts.Count() - 1;
+            for (int i = terminates.Count() - 1; i >= 0; i--)
+            {
+                while (insts[instend].Type.Equals("MPP") ||
+                       insts[instend].Type.Equals("MPB"))
+                {
+                    instend--;
+                }
+                terminates[i].GetInstPrototype(insts, ref instend);
+            }
+
             return insts;
         } 
     }

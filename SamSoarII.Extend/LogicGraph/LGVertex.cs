@@ -161,7 +161,7 @@ namespace SamSoarII.Extend.LogicGraph
             }
             // 生成所有子项表达式
             List<String> subexprs = new List<String>();
-            foreach (LGEdge lge in pedges)
+            foreach (LGEdge lge in BackEdges)
             {
                 LGVertex pv = lge.Source;
                 // 若前向边指向的节点未访问（表达式为"null"），则生成表达式
@@ -170,23 +170,31 @@ namespace SamSoarII.Extend.LogicGraph
                 string uexpr = lge.PLCInfo.Expr;
                 // 若与运算两边的表达式其中为“1”，则忽略这个“1”
                 if (uexpr.Equals("1"))
-                    subexprs.Add(pv.Expr);
+                    lge.Expr = pv.Expr;
                 else if (pv.Expr.Equals("1"))
-                    subexprs.Add(uexpr);
+                    lge.Expr = uexpr;
                 else
-                    subexprs.Add(String.Format("{0:s}&&{1:s}", pv.Expr, uexpr));
+                    lge.Expr = String.Format("{0:s}&&{1:s}", pv.Expr, uexpr);
             }
             // 如果有多个表达式需要或运算
-            if (subexprs.Count > 1)
+            if (BackEdges.Count > 1)
             {
-                // 排序，为后续合并工作做准备
-                subexprs.Sort();
+                // 按照ASCII码来排序，为后续合并工作做准备
+                Comparison<LGEdge> sortByExpr = delegate (LGEdge v1, LGEdge v2)
+                {
+                    return v1.Expr.CompareTo(v2.Expr);
+                };
+                BackEdges.Sort(sortByExpr);
+                foreach (LGEdge lge in BackEdges)
+                {
+                    subexprs.Add(lge.Expr);
+                }
                 // 表达式合并
                 this.Expr = "(" + ExprHelper.Merge(subexprs, 0, subexprs.Count - 1) + ")";
             } 
             else
             {
-                this.Expr = subexprs[0];
+                this.Expr = BackEdges[0].Expr;
             }
             //Console.Write("expr end {0:d}, {1:s}\n", Id, Expr);
         }
@@ -204,9 +212,9 @@ namespace SamSoarII.Extend.LogicGraph
             // 找到所有指向的结果节点，忽略掉辅助栈的操作
             // 剩下的节点数量若不大于一，表示不存在分支，也不需要辅助栈来维护
             int ncount = 0;
-            for (int i = 0; i < nedges.Count; i++)
+            for (int i = 0; i < Edges.Count; i++)
             {
-                LGEdge lge = nedges[i];
+                LGEdge lge = Edges[i];
                 if (lge.Destination.IsTerminate)
                     continue;
                 ncount++;
@@ -256,6 +264,58 @@ namespace SamSoarII.Extend.LogicGraph
                     lge.Destination.GenInst(insts, flags);
                 }
             }
+        }
+
+        public void GetInstPrototype(List<PLCInstruction> insts, ref int instend)
+        {
+            LGEdge lge;
+            if (instend < 0) return;
+            int _instend = instend;
+            while (insts[_instend].Type.Equals("MPS") ||
+                   insts[_instend].Type.Equals("ORB") ||
+                   insts[_instend].Type.Equals("ANDB"))
+            {
+                _instend--;
+                if (_instend < 0) return;
+            }
+            if (IsTerminate)
+            {
+                lge = BackEdges[0];
+                if (insts[_instend].IsPrototype(lge.PLCInfo.Prototype))
+                {
+                    insts[_instend--].ProtoType = lge.PLCInfo.Prototype;
+                }
+                else
+                {
+                    return;
+                }
+                lge.Source.GetInstPrototype(insts, ref _instend);
+            }
+            else
+            {
+                for (int i = BackEdges.Count() - 1; i >= 0; i--)
+                {
+                    if (_instend < 0) return;
+                    while (insts[_instend].Type.Equals("MPS") ||
+                           insts[_instend].Type.Equals("ORB") ||
+                           insts[_instend].Type.Equals("ANDB"))
+                    {
+                        _instend--;
+                        if (_instend < 0) return;
+                    }
+                    lge = BackEdges[i];
+                    if (insts[_instend].IsPrototype(lge.PLCInfo.Prototype))
+                    {
+                        insts[_instend--].ProtoType = lge.PLCInfo.Prototype;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    lge.Source.GetInstPrototype(insts, ref _instend);
+                }
+            }
+            instend = _instend;
         }
     }
 }

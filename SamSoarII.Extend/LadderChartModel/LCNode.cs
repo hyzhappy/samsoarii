@@ -248,8 +248,8 @@ namespace SamSoarII.Extend.LadderChartModel
                     case "LDIIM": return "!im" + flag1;
                     case "LDP": return "ue" + flag1;
                     case "LDF": return "de" + flag1;
-                    case "MEP": return "de";
-                    case "MEF": return "ue";
+                    case "MEP": return "ue";
+                    case "MEF": return "de";
                     case "INV": return "!";
                     case "EQW": return flag1 + "w=" + flag2;
                     case "EQD": return flag1 + "d=" + flag2;

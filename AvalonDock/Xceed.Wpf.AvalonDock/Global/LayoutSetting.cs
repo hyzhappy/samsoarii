@@ -19,6 +19,7 @@ namespace Xceed.Wpf.AvalonDock.Global
         static private Dictionary<string, string> _defaultDockHeighAnchorable = new Dictionary<string, string>();
         static public void AddDefaultDockWidthAnchorable(string titlename, string dockwidth)
         {
+            if (titlename == null) return;
             if (!_defaultDockWidthAnchorable.ContainsKey(titlename))
             {
                 _defaultDockWidthAnchorable.Add(titlename, dockwidth);
@@ -30,6 +31,7 @@ namespace Xceed.Wpf.AvalonDock.Global
         }
         static public void AddDefaultDockHeighAnchorable(string titlename, string dockwidth)
         {
+            if (titlename == null) return;
             if (!_defaultDockHeighAnchorable.ContainsKey(titlename))
             {
                 _defaultDockHeighAnchorable.Add(titlename, dockwidth);
@@ -41,6 +43,13 @@ namespace Xceed.Wpf.AvalonDock.Global
         }
         static public GridLength[] GetDefaultDockAnchorable(string titlename)
         {
+            GridLength[] ret = new GridLength[2];
+            if (titlename == null)
+            {
+                ret[0] = new GridLength(1, GridUnitType.Star);
+                ret[1] = new GridLength(1, GridUnitType.Star);
+                return ret;
+            }
             string widthst = "*";
             string heighst = "*";
             if (_defaultDockWidthAnchorable.ContainsKey(titlename))
@@ -51,9 +60,8 @@ namespace Xceed.Wpf.AvalonDock.Global
             {
                 heighst = _defaultDockHeighAnchorable[titlename];
             }
-            GridLength widthgl = ParseGridLength(widthst);
-            GridLength heighgl = ParseGridLength(heighst); 
-            GridLength[] ret = { widthgl, heighgl};
+            ret[0] = ParseGridLength(widthst);
+            ret[1] = ParseGridLength(heighst); 
             return ret; 
         }
         static private GridLength ParseGridLength(string st)

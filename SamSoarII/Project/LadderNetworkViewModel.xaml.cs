@@ -2185,13 +2185,15 @@ namespace SamSoarII.AppMain.Project
             if(IsSingleSelected())
             {
                 LadderCanvas.Children.Remove(_ladderDiagram.SelectionRect);
+                _ladderDiagram.SelectionRect.NetworkParent = null;
             }
         }
 
         public void AcquireSelectRect()
         {
             _ladderDiagram.AcquireSelectRect(this);
-            LadderCanvas.Children.Add(_ladderDiagram.SelectionRect);     
+            LadderCanvas.Children.Add(_ladderDiagram.SelectionRect);
+            _ladderDiagram.SelectionRect.NetworkParent = this;
         }
 
         public List<BaseViewModel> GetSelectedElements()

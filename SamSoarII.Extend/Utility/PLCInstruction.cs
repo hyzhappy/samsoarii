@@ -43,15 +43,132 @@ namespace SamSoarII.Extend.Utility
         public PLCInstruction(string text)
         {
             Text = text;
-            
+        }
+        /// <summary>
+        /// 转为字符串格式
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Text;
         }
         /// <summary>
         /// 原型
         /// </summary>
-        public BaseViewModel Prototype
+        public BaseViewModel ProtoType
         {
             get { return this.prototype; }
             set { this.prototype = value; }
+        }
+        /// <summary>
+        /// 判断是否为这条指令的原型
+        /// </summary>
+        /// <param name="bvmodel">元件的显示模型</param>
+        /// <returns></returns>
+        public bool IsPrototype(BaseViewModel bvmodel)
+        {
+            switch (Type)
+            {
+                // (rB)
+                case "LD":
+                case "AND":
+                case "OR":
+                    return bvmodel.InstructionName.Equals("LD");
+                case "LDI":
+                case "ANDI":
+                case "ORI":
+                    return bvmodel.InstructionName.Equals("LDI");
+                case "LDIM":
+                case "ANDIM":
+                case "ORIM":
+                    return bvmodel.InstructionName.Equals("LDIM");
+                case "LDIIM":
+                case "ANDIIM":
+                case "ORIIM":
+                    return bvmodel.InstructionName.Equals("LDIIM");
+                case "LDP":
+                case "ANDP":
+                case "ORP":
+                    return bvmodel.InstructionName.Equals("LDP");
+                case "LDF":
+                case "ANDF":
+                case "ORF":
+                    return bvmodel.InstructionName.Equals("LDF");
+                case "LDWEQ":
+                case "AWEQ":
+                case "ORWEQ":
+                    return bvmodel.InstructionName.Equals("WEQ");
+                case "LDDEQ":
+                case "ADEQ":
+                case "ORDEQ":
+                    return bvmodel.InstructionName.Equals("DEQ");
+                case "LDFEQ":
+                case "AFEQ":
+                case "ORFEQ":
+                    return bvmodel.InstructionName.Equals("FEQ");
+                case "LDWNE":
+                case "AWNE":
+                case "ORWNE":
+                    return bvmodel.InstructionName.Equals("WNE");
+                case "LDDNE":
+                case "ADNE":
+                case "ORDNE":
+                    return bvmodel.InstructionName.Equals("DNE");
+                case "LDFNE":
+                case "AFNE":
+                case "ORFNE":
+                    return bvmodel.InstructionName.Equals("FNE");
+                case "LDWGE":
+                case "AWGE":
+                case "ORWGE":
+                    return bvmodel.InstructionName.Equals("WGE");
+                case "LDDGE":
+                case "ADGE":
+                case "ORDGE":
+                    return bvmodel.InstructionName.Equals("DGE");
+                case "LDFGE":
+                case "AFGE":
+                case "ORFGE":
+                    return bvmodel.InstructionName.Equals("FGE");
+                case "LDWLE":
+                case "AWLE":
+                case "ORWLE":
+                    return bvmodel.InstructionName.Equals("WLE");
+                case "LDDLE":
+                case "ADLE":
+                case "ORDLE":
+                    return bvmodel.InstructionName.Equals("DLE");
+                case "LDFLE":
+                case "AFLE":
+                case "ORFLE":
+                    return bvmodel.InstructionName.Equals("FLE");
+                case "LDWG":
+                case "AWG":
+                case "ORWG":
+                    return bvmodel.InstructionName.Equals("WG");
+                case "LDDG":
+                case "ADG":
+                case "ORDG":
+                    return bvmodel.InstructionName.Equals("DG");
+                case "LDFG":
+                case "AFG":
+                case "ORFG":
+                    return bvmodel.InstructionName.Equals("FG");
+                case "LDWL":
+                case "AWL":
+                case "ORWL":
+                    return bvmodel.InstructionName.Equals("WL");
+                case "LDDL":
+                case "ADL":
+                case "ORDL":
+                    return bvmodel.InstructionName.Equals("DL");
+                case "LDFL":
+                case "AFL":
+                case "ORFL":
+                    return bvmodel.InstructionName.Equals("FL");
+                default:
+                    return bvmodel.InstructionName.Equals(Type);
+            }
         }
         /// <summary>
         /// 指令文本
@@ -383,7 +500,9 @@ namespace SamSoarII.Extend.Utility
         
         public PLCOriginInst ToOrigin()
         {
-            return new PLCOriginInst(text);
+            PLCOriginInst ret = new PLCOriginInst(text);
+            ret.ProtoType = ProtoType;
+            return ret;
         }
 
         public PLCInstruction ReplaceFlag(int id, string flag)
@@ -394,10 +513,11 @@ namespace SamSoarII.Extend.Utility
             {
                 _text += String.Format("{0:s} ", i == id ? flag : oinst[i]);
             }
-            return new PLCInstruction(_text);
+            PLCInstruction ret = new PLCInstruction(_text);
+            ret.ProtoType = ProtoType;
+            return ret;
         }
-
-
+        
         public static int FlagNumber(string text)
         {
             switch (text)
@@ -630,7 +750,7 @@ namespace SamSoarII.Extend.Utility
             }
             return 0;
         }
-
+        
         
     }
 }

@@ -28,6 +28,7 @@
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Rectangle x:Name="Cursor" Grid.Column="0" Grid.ColumnSpan="7" Stroke="Black" Visibility="Hidden"></Rectangle>
         </Grid>
     </Grid>
 </UserControl>

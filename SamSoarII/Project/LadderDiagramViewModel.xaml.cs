@@ -372,6 +372,7 @@ namespace SamSoarII.AppMain.Project
         {
             var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
             _commandManager.Execute(command);
+            IDVModel.Setup(this);
         }
         public void ReplaceSingleElement(LadderNetworkViewModel network, BaseViewModel element)
         {
@@ -385,24 +386,28 @@ namespace SamSoarII.AppMain.Project
             }
             var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
             _commandManager.Execute(command);
+            IDVModel.Setup(this);
         }
         public void AddNewNetworkBefore(LadderNetworkViewModel network)
         {
             var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
             _commandManager.Execute(command);
+            IDVModel.Setup(this);
         }
         public void AddNewNetworkAfter(LadderNetworkViewModel network)
         {
             var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber + 1);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
             _commandManager.Execute(command);
+            IDVModel.Setup(this);
         }
         public void AppendNewNetwork()
         {
             var network = new LadderNetworkViewModel(this, _ladderNetworks.Count);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
             _commandManager.Execute(command);
+            IDVModel.Setup(this);
         }
         /// <summary>
         /// 放置一个新的元素在选择框内

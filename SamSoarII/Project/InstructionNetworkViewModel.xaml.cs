@@ -36,7 +36,9 @@ namespace SamSoarII.AppMain.Project
         {
             get
             {
-                return this.actualheight;
+                //return this.actualheight;
+                if (insts == null) return 20;
+                return 20 + 20 * insts.Count();
             }
 
             set
@@ -142,6 +144,7 @@ namespace SamSoarII.AppMain.Project
                 G_Inst.RowDefinitions.Add(rdef);
                 TextBlock tb = new TextBlock();
                 tb.Text = rowid.ToString();
+                tb.Foreground = inst.ProtoType != null ? Brushes.Black : Brushes.Gray;
                 tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
                 Grid.SetRow(tb, rowid);
                 Grid.SetColumn(tb, 0);
@@ -150,6 +153,7 @@ namespace SamSoarII.AppMain.Project
                 {
                     tb = new TextBlock();
                     tb.Text = inst[colid-1];
+                    tb.Foreground = inst.ProtoType != null ? Brushes.Black : Brushes.Gray;
                     tb.Background = (rowid&1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
                     Grid.SetRow(tb, rowid);
                     Grid.SetColumn(tb, colid);
@@ -164,6 +168,7 @@ namespace SamSoarII.AppMain.Project
             rdef = new RowDefinition();
             rdef.Height = new GridLength(1, GridUnitType.Star);
             G_Inst.RowDefinitions.Add(rdef);
+            G_Inst.Children.Add(Cursor);
             G_Inst.Children.Add(inputbox);
         }
 
@@ -268,6 +273,8 @@ namespace SamSoarII.AppMain.Project
                 colid >= 1 && colid <= 6)
             {
                 PLCOriginInst inst = insts[rowid];
+                if (inst.ProtoType == null)
+                    return;
                 if (inst[colid].Equals(String.Empty))
                     return;
                 InputStatus = INPUTSTATUS_INPUT;
@@ -275,6 +282,7 @@ namespace SamSoarII.AppMain.Project
                 InputColumn = colid;
             }
         }
+
         private void OnInputBoxKeyUp(object sender, KeyEventArgs e)
         {
             if (InputStatus == INPUTSTATUS_INPUT)
@@ -300,6 +308,7 @@ namespace SamSoarII.AppMain.Project
                         try
                         {
                             insts[InputRow] = insts[InputRow].ReplaceFlag(InputColumn - 1, text).ToOrigin();
+                            insts[InputRow].UpdatePrototype();
                         }
                         catch (Exception exc)
                         {
@@ -321,7 +330,10 @@ namespace SamSoarII.AppMain.Project
                     {
                         try
                         {
-                            insts[InputRow] = new PLCOriginInst(inputtext);
+                            PLCOriginInst _inst = new PLCOriginInst(inputtext);
+                            _inst.ProtoType = insts[InputRow].ProtoType;
+                            insts[InputRow] = _inst;
+                            _inst.UpdatePrototype();
                         }
                         catch (Exception exc)
                         {
@@ -340,8 +352,29 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        
+        #endregion
 
-
+        #region Cursor
+        public bool CatchCursor(BaseViewModel bvmodel)
+        {
+            if (insts == null)
+                return false;
+            Cursor.Visibility = Visibility.Hidden;
+            int rowid = 0;
+            foreach (PLCOriginInst inst in insts)
+            {
+                if (inst.ProtoType == bvmodel)
+                {
+                    Grid.SetRow(Cursor, rowid);
+                    Cursor.Visibility = Visibility.Visible;
+                    return true;
+                }
+                rowid++;
+            }
+            return false;
+        }
+        
         #endregion
     }
 }
