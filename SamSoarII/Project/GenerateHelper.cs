@@ -537,7 +537,6 @@ namespace SamSoarII.AppMain.Project
                         lcn[2] = ((SHLModel)(bvm.Model)).DestinationValue.ValueShowString;
                         lcn[3] = ((SHLModel)(bvm.Model)).Count.ValueShowString;
                     }
-
                     if (bvm.Model is SHRDModel)
                     {
                         lcn[1] = ((SHRDModel)(bvm.Model)).SourceValue.ValueShowString;

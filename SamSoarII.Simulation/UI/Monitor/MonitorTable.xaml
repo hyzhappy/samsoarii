@@ -5,8 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Monitor"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="320">
     <UserControl.Resources>
+        <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="IsReadOnly" Value="True">
+                    <Setter Property="Background" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <ControlTemplate TargetType="{x:Type Button}" x:Key="MonitorItemCloseButtonTemplate">
             <Canvas Name="ButtonCanvas" Width="24" Height="24" Opacity="0.3" Background="Transparent">
                 <Line Name="Line1" X1="4" Y1="4" X2="20" Y2="20" Stroke="Black" StrokeThickness="1"></Line>

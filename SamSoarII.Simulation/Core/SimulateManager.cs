@@ -9,6 +9,7 @@ using System.Windows;
 using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Chart;
+using System.Threading;
 
 namespace SamSoarII.Simulation.Core
 {
@@ -18,9 +19,9 @@ namespace SamSoarII.Simulation.Core
 
         private LinkedList<SimulateVariableModel> vlist;
         
-        private Dictionary<SimulateVariableUnit, SimulateVariableUnit> udict;
+        private Dictionary<string, List<SimulateVariableUnit> > udict;
 
-        private Dictionary<SimulateVariableUnit, SimulateVariableUnit> ldict;
+        private Dictionary<string, List<SimulateVariableUnit> > ldict;
 
         private Dictionary<string, string> vndict;
 
@@ -32,16 +33,19 @@ namespace SamSoarII.Simulation.Core
         {
             dllmodel = new SimulateDllModel();
             vlist = new LinkedList<SimulateVariableModel>();
-            udict = new Dictionary<SimulateVariableUnit, SimulateVariableUnit>();
-            ldict = new Dictionary<SimulateVariableUnit, SimulateVariableUnit>();
+            udict = new Dictionary<string, List<SimulateVariableUnit> >();
+            ldict = new Dictionary<string, List<SimulateVariableUnit> >();
             vndict = new Dictionary<string, string>();
             lddict = new Dictionary<string, SimulateDataModel>();
             vddict = new Dictionary<string, SimulateDataModel>();
 
             dllmodel.RunDataFinished += OnRunDataFinished;
             dllmodel.RunDrawFinished += OnRunDrawFinished;
-        }
 
+            updateactive = false;
+            updatethread = null;
+        }
+        
         public IEnumerable<SimulateVariableModel> Variables
         {
             get { return this.vlist; }
@@ -60,22 +64,146 @@ namespace SamSoarII.Simulation.Core
             }
         }
 
+        #region Update Thread
+        private Thread updatethread;
+        private bool updateactive;
+
+        private void Update()
+        {
+            while (updateactive)
+            {
+                foreach (SimulateVariableModel svmodel in Variables)
+                {
+                    svmodel.Update(dllmodel);
+                }
+                foreach (List<SimulateVariableUnit> svulist in udict.Values)
+                {
+                    foreach (SimulateVariableUnit svunit in svulist)
+                    {
+                        svunit.Update(dllmodel);
+                    }
+                }
+                foreach (List<SimulateVariableUnit> svulist in ldict.Values)
+                {
+                    foreach (SimulateVariableUnit svunit in svulist)
+                    {
+                        svunit.Set(dllmodel);
+                    }
+                }
+                Thread.Sleep(50);
+            }
+        }
+
+        private void UpdateStart()
+        {
+            if (SimuStatus != SIMU_RUNNING)
+                return;
+            if (updatethread == null)
+            {
+                updateactive = true;
+                updatethread = new Thread(Update);
+                updatethread.Start();
+            }
+        }
+
+        private void UpdateStop()
+        {
+            if (updatethread != null)
+            {
+                updateactive = false;
+                updatethread.Abort();
+                updatethread = null;
+            }
+        }
+        #endregion
+
+        #region Simulation Control
+        private const int SIMU_STOP = 0x00;
+        private const int SIMU_RUNNING = 0x01;
+        private const int SIMU_PAUSE = 0x02;
+        private int simustatus;
+        private int SimuStatus
+        {
+            get { return this.simustatus; }
+            set { this.simustatus = value; }
+        }
+
+        public void Start()
+        {
+            if (SimuStatus == SIMU_RUNNING)
+                return;
+            SimuStatus = SIMU_RUNNING;
+            dllmodel.Start();
+            UpdateStart();
+        }
+
+        public void Pause()
+        {
+            if (SimuStatus == SIMU_PAUSE || SimuStatus == SIMU_STOP)
+                return;
+            SimuStatus = SIMU_PAUSE;
+            dllmodel.Pause();
+            UpdateStop();
+        }
+
+        public void Stop()
+        {
+            if (SimuStatus == SIMU_STOP)
+                return;
+            SimuStatus = SIMU_STOP;
+            dllmodel.Abort();
+            UpdateStop();
+            int[] emptyBuffer = new int[8192];
+            for (int i = 0; i < emptyBuffer.Length; i++)
+            {
+                emptyBuffer[i] = 0;
+            }
+            dllmodel.SetValue_Bit("X0", 128, emptyBuffer);
+            dllmodel.SetValue_Bit("Y0", 128, emptyBuffer);
+            dllmodel.SetValue_Bit("M0", 256 << 5, emptyBuffer);
+            dllmodel.SetValue_Bit("C0", 256, emptyBuffer);
+            dllmodel.SetValue_Bit("T0", 256, emptyBuffer);
+            dllmodel.SetValue_Bit("S0", 32 << 5, emptyBuffer);
+            dllmodel.SetValue_Word("D0", 8192, emptyBuffer);
+            dllmodel.SetValue_Word("TV0", 256, emptyBuffer);
+            dllmodel.SetValue_Word("CV0", 200, emptyBuffer);
+            dllmodel.SetValue_DWord("CV200", 56, emptyBuffer);
+        }
+        #endregion
+
+        #region Variable Manipulation
         public void Add(string name, int size, string type)
         {
+            UpdateStop();
             SimulateVariableModel svmodel = SimulateVariableModel.Create(name, size, type);
             vlist.AddLast(svmodel);
+            UpdateStart();
         }
 
         public void Add(SimulateVariableModel svmodel)
         {
+            UpdateStop();
             vlist.AddLast(svmodel);
+            UpdateStart();
         }
 
         public void Add(SimulateVariableUnit svunit)
         {
-            if (svunit != null && !udict.ContainsKey(svunit))
+            UpdateStop();
+            if (svunit != null)
             {
-                udict.Add(svunit, svunit);
+                List<SimulateVariableUnit> svulist = null;
+                if (!udict.ContainsKey(svunit.Name))
+                {
+                    svulist = new List<SimulateVariableUnit>();
+                    svulist.Add(svunit);
+                    udict.Add(svunit.Name, svulist);
+                }
+                else
+                {
+                    svulist = udict[svunit.Name];
+                    svulist.Add(svunit);
+                }
                 if (vndict.ContainsKey(svunit.Name))
                 {
                     vndict.Remove(svunit.Name);
@@ -86,10 +214,12 @@ namespace SamSoarII.Simulation.Core
                 }
                 svunit.Setup(this);
             }
+            UpdateStart();
         }
         
         public void Remove(string name, int size)
         {
+            UpdateStop();
             foreach (SimulateVariableModel svmodel in vlist)
             {
                 if (svmodel.Name.Equals(name) && svmodel.Size == size)
@@ -98,43 +228,53 @@ namespace SamSoarII.Simulation.Core
                     break;
                 }
             }
+            UpdateStart();
         }
 
         public void Remove(SimulateVariableModel svmodel)
         {
+            UpdateStop();
             if (svmodel != null)
             {
                 Remove(svmodel.Name, svmodel.Size);
             }
+            UpdateStart();
         }
 
         public void Remove(SimulateVariableUnit svunit)
         {
+            UpdateStop();
             if (svunit != null)
             {
-                if (udict.ContainsKey(svunit))
+                List<SimulateVariableUnit> svulist = null;
+                if (udict.ContainsKey(svunit.Name))
                 {
-                    udict.Remove(svunit);
+                    svulist = udict[svunit.Name];
+                    if (svulist.Contains(svunit))
+                        svulist.Remove(svunit);
                     if (vndict.ContainsKey(svunit.Name))
                     {
                         vndict.Remove(svunit.Name);
                     }
                 }
-                if (ldict.ContainsKey(svunit))
+                if (ldict.ContainsKey(svunit.Name))
                 {
-                    ldict.Remove(svunit);
+                    svulist = udict[svunit.Name];
+                    if (svulist.Contains(svunit))
+                        svulist.Remove(svunit);
                     if (vndict.ContainsKey(svunit.Name))
                     {
                         vndict.Remove(svunit.Name);
                     }
                 }
             }
-            
+            UpdateStart();
         }
 
         public void Replace(SimulateVariableUnit oldUnit, SimulateVariableUnit newUnit)
         {
-            if (oldUnit != null && ldict.ContainsKey(oldUnit))
+            UpdateStop();
+            if (oldUnit != null && ldict.ContainsKey(oldUnit.Name))
             {
                 Remove(oldUnit);
                 Add(newUnit);
@@ -145,10 +285,12 @@ namespace SamSoarII.Simulation.Core
                 Remove(oldUnit);
                 Add(newUnit);
             }
+            UpdateStart();
         }
 
         public void Rename(string bname, string vname)
         {
+            UpdateStop();
             if (vname.Equals(""))
             {
                 if (vndict.ContainsKey(bname))
@@ -164,39 +306,27 @@ namespace SamSoarII.Simulation.Core
                 }
                 vndict.Add(bname, vname);
             }
+            UpdateStart();
         }
+        #endregion
 
-        public void Update()
-        {
-            foreach (SimulateVariableModel svmodel in Variables)
-            {
-                svmodel.Update(dllmodel);
-            }
-            foreach (SimulateVariableUnit svunit in udict.Values)
-            {
-                svunit.Update(dllmodel);
-            }
-            foreach (SimulateVariableUnit svunit in ldict.Values)
-            {
-                svunit.Set(dllmodel);
-            }
-        }
-        
         public SimulateVariableUnit GetVariableUnit(SimulateVariableUnit unit)
         {
             if (unit == null)
             {
                 return null;
             }
-            if (udict.ContainsKey(unit))
+            if (udict.ContainsKey(unit.Name))
             {
-                SimulateVariableUnit _unit = udict[unit];
-                return _unit;
+                List<SimulateVariableUnit> svulist = udict[unit.Name];
+                if (svulist.Count() == 0) return null;
+                return svulist.First();
             }
-            else if (ldict.ContainsKey(unit))
+            else if (ldict.ContainsKey(unit.Name))
             {
-                SimulateVariableUnit _unit = ldict[unit];
-                return _unit;
+                List<SimulateVariableUnit> svulist = ldict[unit.Name];
+                if (svulist.Count() == 0) return null;
+                return svulist.First();
             }
             else
             {
@@ -218,105 +348,139 @@ namespace SamSoarII.Simulation.Core
             return svunit.Name;
         }
 
+        #region Lock & View
         public void Lock(SimulateVariableUnit svunit)
         {
+            UpdateStop();
             if (svunit == null)
             {
+                UpdateStart();
                 return;
             }
-            if (udict.ContainsKey(svunit))
+            List<SimulateVariableUnit> ulist;
+            List<SimulateVariableUnit> llist;
+            if (udict.ContainsKey(svunit.Name))
             {
-                udict.Remove(svunit);
+                ulist = udict[svunit.Name];
+                if (!ulist.Contains(svunit))
+                    ulist.Add(svunit);
+                udict.Remove(svunit.Name);
             }
-            if (!ldict.ContainsKey(svunit))
+            else
             {
-                ldict.Add(svunit, svunit);
+                ulist = new List<SimulateVariableUnit>();
+                ulist.Add(svunit);
+            }
+            if (ldict.ContainsKey(svunit.Name))
+            {
+                llist = ldict[svunit.Name];
+                llist = llist.Union(ulist).ToList();
+                ldict[svunit.Name] = llist;
+            }
+            else
+            {
+                llist = ulist;
+                ldict.Add(svunit.Name, llist);
+            }
+            foreach (SimulateVariableUnit _svunit in llist)
+            {
+                _svunit.Value = svunit.Value;
+                _svunit.Islocked = true;
             }
             dllmodel.Lock(svunit.Name);
+            UpdateStart();
         }
 
         public void Unlock(SimulateVariableUnit svunit)
         {
+            UpdateStop();
             if (svunit == null)
             {
+                UpdateStart();
                 return;
             }
-            if (ldict.ContainsKey(svunit))
+            List<SimulateVariableUnit> llist;
+            List<SimulateVariableUnit> ulist;
+            if (ldict.ContainsKey(svunit.Name))
             {
-                ldict.Remove(svunit);
+                llist = ldict[svunit.Name];
+                if (!llist.Contains(svunit))
+                    llist.Add(svunit);
+                ldict.Remove(svunit.Name);
             }
-            if (!udict.ContainsKey(svunit))
+            else
             {
-                udict.Add(svunit, svunit);
+                llist = new List<SimulateVariableUnit>();
+                llist.Add(svunit);
+            }
+            if (udict.ContainsKey(svunit.Name))
+            {
+                ulist = udict[svunit.Name];
+                ulist = ulist.Union(llist).ToList();
+                udict[svunit.Name] = ulist;
+            }
+            else
+            {
+                ulist = llist;
+                udict.Add(svunit.Name, ulist);
+            }
+            foreach (SimulateVariableUnit _svunit in llist)
+            {
+                _svunit.Islocked = false;
             }
             dllmodel.Unlock(svunit.Name);
+            UpdateStart();
         }
 
         public void Lock(SimulateDataModel sdmodel)
         {
+            UpdateStop();
             if (!lddict.ContainsKey(sdmodel.Name))
             {
                 lddict.Add(sdmodel.Name, sdmodel);
                 //sdmodel.IsLock = true;
                 dllmodel.Lock(sdmodel);
             }
+            UpdateStart();
         }
         
         public void View(SimulateDataModel sdmodel)
         {
+            UpdateStop();
             if (!vddict.ContainsKey(sdmodel.Name))
             {
                 vddict.Add(sdmodel.Name, sdmodel);
                 //sdmodel.IsView = true;
                 dllmodel.View(sdmodel);
             }
+            UpdateStart();
         }
 
         public void Unlock(SimulateDataModel sdmodel)
         {
+            UpdateStop();
             if (lddict.ContainsKey(sdmodel.Name))
             {
                 lddict.Remove(sdmodel.Name);
                 //sdmodel.IsLock = false;
                 dllmodel.Unlock(sdmodel);
             }
+            UpdateStart();
         }
         
         public void Unview(SimulateDataModel sdmodel)
         {
+            UpdateStop();
             if (vddict.ContainsKey(sdmodel.Name))
             {
                 vddict.Remove(sdmodel.Name);
                 //sdmodel.IsView = false;
                 dllmodel.Unview(sdmodel);
             }
+            UpdateStart();
         }
+        #endregion
 
-        public void Start()
-        {
-            dllmodel.Start();
-        }
-
-        public void Stop()
-        {
-            dllmodel.Abort();
-            int[] emptyBuffer = new int[8192];
-            for (int i = 0; i < emptyBuffer.Length; i++)
-            {
-                emptyBuffer[i] = 0;
-            }
-            dllmodel.SetValue_Bit("X0", 128, emptyBuffer);
-            dllmodel.SetValue_Bit("Y0", 128, emptyBuffer);
-            dllmodel.SetValue_Bit("M0", 256<<5, emptyBuffer);
-            dllmodel.SetValue_Bit("C0", 256, emptyBuffer);
-            dllmodel.SetValue_Bit("T0", 256, emptyBuffer);
-            dllmodel.SetValue_Bit("S0", 32<<5, emptyBuffer);
-            dllmodel.SetValue_Word("D0", 8192, emptyBuffer);
-            dllmodel.SetValue_Word("TV0", 256, emptyBuffer);
-            dllmodel.SetValue_Word("CV0", 200, emptyBuffer);
-            dllmodel.SetValue_DWord("CV200", 56, emptyBuffer);
-        }
-        
         public void RunData(double timestart, double timeend)
         {
             dllmodel.RunData(timestart, timeend);

@@ -438,13 +438,18 @@ namespace SamSoarII.Extend.Utility
             if ((flag&FLAG_CALAND) != 0)
                 profix = "AND";
             // 对表达式进行解析
+            // 识别开始的元件ID标记
+            int idend = start + 1;
+            while (expr[idend] != ']') idend++;
+            int id = int.Parse(expr.Substring(start + 1, idend - start - 1));
+            start = idend + 1;
             // 识别开始的非符号
             if (expr[start] == '!')
             {
                 // 如果是取反运算( ! )
                 if (end == start)
                 {
-                    InstHelper.AddInst(insts, "INV");
+                    InstHelper.AddInst(insts, "INV", id);
                     // 前面要或运算，所以要用栈的或合并
                     if ((flag & FLAG_CALOR) != 0)
                         InstHelper.AddInst(insts, "ORB");
@@ -456,11 +461,11 @@ namespace SamSoarII.Extend.Utility
                 // 识别非符号后面的立即符号( !imM0 )
                 if (expr[start+1] == 'i' && expr[start+2] == 'm')
                 {
-                    InstHelper.AddInst(insts, profix + "IIM " + expr.Substring(start + 3, end - start - 2));
+                    InstHelper.AddInst(insts, profix + "IIM " + expr.Substring(start + 3, end - start - 2), id);
                     return;
                 }
                 // 一般的非符号( !M0 )
-                InstHelper.AddInst(insts, profix + "I " + expr.Substring(start + 1, end - start));
+                InstHelper.AddInst(insts, profix + "I " + expr.Substring(start + 1, end - start), id);
                 return;
             }
             // 识别上升沿符号（ueM0）
@@ -469,7 +474,7 @@ namespace SamSoarII.Extend.Utility
                 // 如果是取上升沿运算( ue )
                 if (end == start + 1)
                 {
-                    InstHelper.AddInst(insts, "MEP");
+                    InstHelper.AddInst(insts, "MEP", id);
                     // 前面要或运算，所以要用栈的或合并
                     if ((flag & FLAG_CALOR) != 0)
                         InstHelper.AddInst(insts, "ORB");
@@ -478,7 +483,7 @@ namespace SamSoarII.Extend.Utility
                         InstHelper.AddInst(insts, "ANDB");
                     return;
                 }
-                InstHelper.AddInst(insts, profix + "P " + expr.Substring(start + 2, end - start - 1));
+                InstHelper.AddInst(insts, profix + "P " + expr.Substring(start + 2, end - start - 1), id);
                 return;
             }
             // 识别下降沿符号（deM0）
@@ -487,7 +492,7 @@ namespace SamSoarII.Extend.Utility
                 // 如果是取下降沿运算( de )
                 if (end == start + 1)
                 {
-                    InstHelper.AddInst(insts, "MEF");
+                    InstHelper.AddInst(insts, "MEF", id);
                     // 前面要或运算，所以要用栈的或合并
                     if ((flag & FLAG_CALOR) != 0)
                         InstHelper.AddInst(insts, "ORB");
@@ -496,13 +501,13 @@ namespace SamSoarII.Extend.Utility
                         InstHelper.AddInst(insts, "ANDB");
                     return;
                 }
-                InstHelper.AddInst(insts, profix + "F " + expr.Substring(start + 2, end - start - 1));
+                InstHelper.AddInst(insts, profix + "F " + expr.Substring(start + 2, end - start - 1), id);
                 return;
             }
             // 识别立即符号（imM0）
             if (expr[start] == 'i' && expr[start+1] == 'm')
             {
-                InstHelper.AddInst(insts, profix + "IM " + expr.Substring(start + 2, end - start - 1));
+                InstHelper.AddInst(insts, profix + "IM " + expr.Substring(start + 2, end - start - 1), id);
                 return;
             }
             // 比较表达式的长度都不小于6
@@ -523,44 +528,44 @@ namespace SamSoarII.Extend.Utility
                 // 等比较（M0w=M1）
                 if (expr[op] == '=')
                 {
-                    InstHelper.AddInst(insts, profix + "EQ " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op));
+                    InstHelper.AddInst(insts, profix + "EQ " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
                     return;
                 }
                 // 不等比较（M0w<>M1）
                 if (expr[op] == '<' && expr[op+1] == '>')
                 {
-                    InstHelper.AddInst(insts, profix + "NE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1));
+                    InstHelper.AddInst(insts, profix + "NE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
                     return;
                 }
                 // 小等比较（M0w<=M1）
                 if (expr[op] == '<' && expr[op+1] == '=')
                 {
-                    InstHelper.AddInst(insts, profix + "LE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1));
+                    InstHelper.AddInst(insts, profix + "LE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
                     return;
                 }
                 // 大等比较（M0w>=M1）
                 if (expr[op] == '>' && expr[op+1] == '=')
                 {
-                    InstHelper.AddInst(insts, profix + "GE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1));
+                    InstHelper.AddInst(insts, profix + "GE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
                     return;
                 }
                 // 小于比较（M0w<M1）
                 if (expr[op] == '<')
                 {
-                    InstHelper.AddInst(insts, profix + "L " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op));
+                    InstHelper.AddInst(insts, profix + "L " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
                     return;
                 }
                 // 大于比较（M0w>M1）
                 if (expr[op] == '>')
                 {
-                    InstHelper.AddInst(insts, profix + "G " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op));
+                    InstHelper.AddInst(insts, profix + "G " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
                     return;
                 }
             }
             // 单一的位寄存器（M0）
             string _expr = expr.Substring(start, end - start + 1);
             if (_expr.Equals("1")) return;
-            InstHelper.AddInst(insts, profix + " " + _expr);
+            InstHelper.AddInst(insts, profix + " " + _expr, id);
         }
         /// <summary>
         /// 暂存在类中的静态的PLC指令列表

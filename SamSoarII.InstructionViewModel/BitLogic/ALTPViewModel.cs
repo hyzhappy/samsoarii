@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class ALTPViewModel : OutputRectBaseViewModel
     {
         private ALTPModel _model;
-        private BitValue Value
+        public BitValue Value
         {
             get
             {

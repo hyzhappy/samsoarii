@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
@@ -98,6 +99,9 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 this.varname = value;
             }
         }
+
+        public event RoutedEventHandler LockChanged = delegate { };
+
         public bool Islocked
         {
             get
@@ -107,6 +111,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             set
             {
                 this.islocked = value;
+                LockChanged(this, new RoutedEventArgs());
             }
         }
         abstract public string Type
@@ -120,16 +125,18 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
 
         abstract protected bool _Check_Name(string _name);
+        
+        abstract public event RoutedEventHandler ValueChanged;
 
         abstract public void Update(SimulateDllModel dllmodel);
-
+        
         abstract public void Set(SimulateDllModel dllmodel);
 
         public void Setup(SimulateManager _manager)
         {
             manager = _manager;
         }
-
+        
         static public SimulateVariableUnit Create(string _name)
         {
             SimulateBitUnit sbunit = new SimulateBitUnit();

@@ -629,9 +629,11 @@ namespace SamSoarII.Extend.Utility
         /// </summary>
         /// <param name="insts">指令列表</param>
         /// <param name="inst">指令文本</param>
-        static public void AddInst(List<PLCInstruction> insts, string inst)
+        static public void AddInst(List<PLCInstruction> insts, string text, int id = -1)
         {
-            insts.Add(new PLCInstruction(inst));
+            PLCInstruction inst = new PLCInstruction(text);
+            inst.PrototypeID = id;
+            insts.Add(inst);
         }
         /// <summary>
         /// 将指令转换为表达式
@@ -646,10 +648,12 @@ namespace SamSoarII.Extend.Utility
         static private int globalCount = 0;
         /// <summary>当前栈顶</summary>
         static private int stackTop = 0;
-
+        /// <summary>辅助栈栈顶</summary>
         static private int mstackTop = 0;
         /// <summary>所有计数器的预设值sv</summary>
         static private int[] ctsv = new int[256];
+        /// <summary>栈中元素与前一元素的合并方式（INV，MEP，MEF）</summary>
+        static private string[] stackcalcs = new string[256];
         /// <summary>表示PLC的NETWORK channel的类型结构</summary>
         public class PLCInstNetwork
         {
@@ -722,13 +726,28 @@ namespace SamSoarII.Extend.Utility
             int stackTotal = 0;
             int mstackTotal = 0;
             int globalTotal = 0;
+            Stack<PLCInstruction> stackinsts = new Stack<PLCInstruction>();
             foreach (PLCInstruction inst in insts)
             {
                 // 计算普通栈和辅助栈的栈顶
                 if (inst.Type.Length > 1 && inst.Type.Substring(0, 2) == "LD")
+                {
                     stackTop++;
-                if (inst.Type.Equals("ANB") || inst.Type.Equals("ORB") || inst.Type.Equals("POP"))
+                    stackinsts.Push(inst);
+                }
+                switch (inst.Type)
+                {
+                    case "INV": case "MEP": case "MEF":
+                        stackTop++;
+                        stackinsts.Push(inst);
+                        break;
+                }
+                if (inst.Type.Equals("ANDB") || inst.Type.Equals("ORB") || inst.Type.Equals("POP"))
+                {
                     stackTop--;
+                    PLCInstruction topinst = stackinsts.Pop();
+                    topinst.StackCalc = inst.Type;
+                }
                 if (inst.Type.Equals("MPS"))
                     mstackTop++;
                 if (inst.Type.Equals("MPP"))
@@ -741,12 +760,14 @@ namespace SamSoarII.Extend.Utility
                 // 统计所有需要全局变量的指令的总数
                 switch (inst.Type)
                 {
-                    case "LDP": case "LDF": case "ANDP": case "ANDF": case "ORP": case "ORF": case "MEP": case "MEF":
+                    case "LDP": case "LDF": case "ANDP": case "ANDF": case "ORP": case "ORF":
                     case "ALTP":
                     case "CTU": case "CTD": case "CTUD":
                     case "FOR":
+                    case "INV":
                         globalTotal++;
-                        break;   
+                        break;
+                    case "MEP": case "MEF":  
                     case "TON": case "TOF": case "TONR":
                         globalTotal += 2;
                         break;
@@ -822,6 +843,9 @@ namespace SamSoarII.Extend.Utility
                 sw.Write("uint16_t _mstack_{0:d};\n", i);
             }
             // 生成PLC对应的内容
+            // 初始化栈顶
+            stackTop = 0;
+            mstackTop = 0;
             foreach (PLCInstruction inst in insts)
             {
                 switch (inst.Type)
@@ -840,6 +864,9 @@ namespace SamSoarII.Extend.Utility
                         {
                             sw.Write("uint16_t _mstack_{0:d};\n", i);
                         }
+                        // 初始化栈顶
+                        stackTop = 0;
+                        mstackTop = 0;
                         break;
                     default:
                         InstToCCode(sw, inst, simumode);
@@ -859,7 +886,12 @@ namespace SamSoarII.Extend.Utility
             // 如果是仿真模式需要由写入使能作为条件
             if (inst.EnBit != null)
             {
-                sw.Write("if (!{0:s})", inst.EnBit);
+                sw.Write("if (!{0:s}) \n{{\n", inst.EnBit);
+            }
+            // 当前指令为LD类指令，记录栈内当前位置的合并方式
+            if (inst.StackCalc != null)
+            {
+                stackcalcs[stackTop] = inst.StackCalc;
             }
             // 第一次判断指令类型
             switch (inst.Type)
@@ -871,7 +903,6 @@ namespace SamSoarII.Extend.Utility
                 case "LDI": case "LDIIM":   sw.Write("_stack_{0:d} = !{1:s};\n",  ++stackTop, inst[1]); break;
                 case "ANDI": case "ANDIIM": sw.Write("_stack_{0:d} &= !{1:s};\n",   stackTop, inst[1]); break;
                 case "ORI": case "ORIIM":   sw.Write("_stack_{0:d} |= !{1:s};\n",   stackTop, inst[1]); break;
-                case "INV": sw.Write("_stack_{0:d} ^= 1;\n", stackTop); break;
                 // 上升沿和下降沿
                 /*
                  * 这里需要将上一次扫描的当前值记录下来，保存到全局变量中
@@ -902,20 +933,26 @@ namespace SamSoarII.Extend.Utility
                     sw.Write("_stack_{0:d} &= (_global[{1:d}]==1&&{2:s}==0);\n",  stackTop, globalCount, inst[1]);
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
+                case "INV":
+                    _CalcSignal(sw);
+                    sw.Write("_stack_{0:d} = _global[{1:d}]^1;\n", ++stackTop, globalCount - 1);
+                    break;
                 case "MEP":
-                    sw.Write("temp = _stack_{0:d};\n", stackTop);
-                    sw.Write("_stack_{0:d} = (_global[{1:d}]==0&&temp==1);\n", stackTop, globalCount);
-                    sw.Write("_global[{0:d}] = temp;\n", globalCount++);
+                    _CalcSignal(sw);
+                    sw.Write("_stack_{0:d} = (_global[{1:d}]==0&&_global[{2:d}]==1);\n", ++stackTop, globalCount, globalCount - 1);
+                    sw.Write("_global[{0:d}] = _global[{1:d}];\n", globalCount, globalCount - 1);
+                    globalCount++;
                     break;
                 case "MEF":
-                    sw.Write("temp = _stack_{0:d};\n", stackTop);
-                    sw.Write("_stack_{0:d} = (_global[{1:d}]==1&&temp==0);\n", stackTop, globalCount);
-                    sw.Write("_global[{0:d}] = temp;\n", globalCount++);
+                    _CalcSignal(sw);
+                    sw.Write("_stack_{0:d} = (_global[{1:d}]==1&&_global[{2:d}]==0);\n", ++stackTop, globalCount, globalCount - 1);
+                    sw.Write("_global[{0:d}] = _global[{1:d}];\n", globalCount, globalCount - 1);
+                    globalCount++;
                     break;
                 // 出栈
                 case "POP": stackTop--; break;
                 // 栈合并
-                case "ANB":
+                case "ANDB":
                     sw.Write("_stack_{0:d} &= _stack_{1:d};\n", stackTop-1, stackTop);
                     stackTop--;
                     break;
@@ -1165,8 +1202,7 @@ namespace SamSoarII.Extend.Utility
                             break;
                         case "DTCH":
                             sw.Write("_interrupt[{0:s}] = null;\n", inst[1]);
-                            
-                            sw.Write("_interrupt_timer_cancel({0:s})", inst[1]);
+                            sw.Write("_interrupt_timer_cancel({0:s});\n", inst[1]);
                             break;
                         case "EI": sw.Write("_interrupt_enable = 1;\n");break;
                         case "DI": sw.Write("_interrupt_enable = 0;\n");break;
@@ -1185,8 +1221,35 @@ namespace SamSoarII.Extend.Utility
                     }
                 break; 
             }
+            // 如果是仿真模式需要对写入使能条件判断语句结尾
+            if (inst.EnBit != null)
+            {
+                sw.Write("}\n");
+            }
         }
-        
+        /// <summary>
+        /// 通过栈记录计算当前信号
+        /// </summary>
+        /// <param name="sw">文件输出流</param>
+        static private void _CalcSignal(StreamWriter sw)
+        {
+            sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount, stackTop);
+            for (int i = stackTop; i > 0; i--)
+            {
+                if (stackcalcs[i-1] == "POP") break;
+                switch (stackcalcs[i-1])
+                {
+                    case "ANDB":
+                        sw.Write("_global[{0:d}] &= _stack_{1:d};\n", globalCount, stackTop - 1);
+                        break;
+                    case "ORB":
+                        //sw.Write("_global[{0:d}] |= _stack_{1:d};\n", globalCount, stackTop - 1);
+                        break;
+                }
+            }
+            globalCount++;
+        }
+
         static private string _GetBit(string flag)
         {
             string[] flags = flag.Split(' ');

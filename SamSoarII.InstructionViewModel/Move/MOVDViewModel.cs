@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class MOVDViewModel : OutputRectBaseViewModel
     {
         private MOVDModel _model;
-        private DoubleWordValue SourceValue
+        public DoubleWordValue SourceValue
         {
             get
             {
@@ -28,7 +28,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock1.Text = _model.SourceValue.ValueShowString;
             }
         }
-        private DoubleWordValue DestinationValue
+        public DoubleWordValue DestinationValue
         {
             get
             {

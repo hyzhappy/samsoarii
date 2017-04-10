@@ -174,9 +174,5 @@ namespace SamSoarII.LadderInstViewModel
         {
             return new List<string>();
         }
-        public override string ToString()
-        {
-            return string.Format("The Mapped Instructions:(Click corresponding item! and Navigate to belonging network)");
-        }
     }
 }

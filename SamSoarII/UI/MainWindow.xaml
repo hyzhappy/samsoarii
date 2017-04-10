@@ -46,6 +46,9 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.LadderModeToggleCommand}" Executed="OnLadderModeToggle" CanExecute="LadderModeCanToggle"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.InstModeToggleCommand}" Executed="OnInstModeToggle" CanExecute="InstModeCanToggle"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimulateCommand}" Executed="OnSimulateCommandExecute" CanExecute="SimulateCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimuStartCommand}" Executed="OnSimuStartCommandExecute" CanExecute="SimuStartCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Executed="OnSimuPauseCommandExecute" CanExecute="SimuPauseCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimuStopCommand}" Executed="OnSimuStopCommandExecute" CanExecute="SimuStopCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -64,22 +67,22 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <ControlTemplate TargetType="{x:Type Button}" x:Key="TabItemCloseButtonTemplate">
-            <Canvas Name="ButtonCanvas" Width="15" Height="15" Opacity="0.3" Background="Transparent">
-                <Line Name="Line1" X1="4" Y1="4" X2="11" Y2="11" Stroke="Black" StrokeThickness="1"></Line>
-                <Line Name="Line2" X1="11" Y1="4" X2="4" Y2="11" Stroke="Black" StrokeThickness="1"></Line>
-            </Canvas>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.8"></Setter>
-                    <Setter TargetName="Line1" Property="StrokeThickness" Value="2"></Setter>
-                    <Setter TargetName="Line2" Property="StrokeThickness" Value="2"></Setter>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.3"></Setter>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
+        <Style x:Key="{x:Type ToolBar}" TargetType="{x:Type ToolBar}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToolBar}">
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="4" Fill="Transparent"/>
+                            <ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="True"/>
+                            <Rectangle Width="4" Fill="Transparent"/>
+                            <Line Y1="0" Y2="32" Stroke="Black" StrokeThickness="1"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <ControlTemplate x:Key="MainTabItemTemplate" TargetType="{x:Type TabItem}">
             <Grid MouseDown="OnTabItemHeaderMouseDown">
                 <Border Name="Border" BorderBrush="Black" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" Background="Transparent">
@@ -89,7 +92,7 @@
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <ContentPresenter Name="ContentSite" Content="{Binding TabHeader}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"></ContentPresenter>
-                        <Button Grid.Column="1" Template="{StaticResource TabItemCloseButtonTemplate}" Click="OnTabItemHeaderCancelButtonClick"></Button>
+                        <Button Grid.Column="1" Click="OnTabItemHeaderCancelButtonClick"></Button>
                     </Grid>
                 </Border>
             </Grid>
@@ -124,7 +127,6 @@
                 <Rectangle Height="6" Width="12" Fill="Transparent"/>
             </StackPanel>
         </ControlTemplate>
-
         <Style x:Key="DockManagerStyle" TargetType="{x:Type ad:DockingManager}">
             <Setter Property="AnchorTemplate" Value="{StaticResource SamSoarIIAnchorTemplate}"/>
         </Style>
@@ -191,11 +193,18 @@
                 <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
                 <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="注释模式" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}"></MenuItem>
-                <Separator></Separator>
                 <MenuItem Header="工程资源管理器" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}"></MenuItem>
                 <MenuItem Header="仿真资源管理器" Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="注释模式" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="错误列表"></MenuItem>
+                <MenuItem Header="输出"></MenuItem>
                 <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowMonitorCommand}"></MenuItem>
+                <MenuItem Header="仿真图表"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)" Margin="0,-4,0,0">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
@@ -281,9 +290,9 @@
                 <Button ToolTip="上载" Command="{x:Static app:GlobalCommand.UploadCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="仿真" Command="{x:Static app:GlobalCommand.SimulateCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="仿真" x:Name="SimulateModeButton" Command="{x:Static app:GlobalCommand.SimulateCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
-                </Button>
+                </ToggleButton>
             </ToolBar>
             <ToolBar>
                 <ToggleButton ToolTip="梯形图模式" x:Name="LadderModeButton" Command="{x:Static app:GlobalCommand.LadderModeToggleCommand}" Height="24" Width="24" Margin="0,0,0,16">
@@ -295,6 +304,33 @@
                 <ToggleButton ToolTip="注释模式" x:Name="CommentModeToggleButton" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
+            </ToolBar>
+        </ToolBarTray>
+        <ToolBarTray x:Name="SimuToolBarTray" DockPanel.Dock="Top" Height="28" Visibility="Collapsed">
+            <ToolBar>
+                <ToggleButton ToolTip="仿真运行" x:Name="SimuStartButton" Command="{x:Static app:GlobalCommand.SimuStartCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                    <Image Source="/Resources/Image/Start.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </ToggleButton>
+                <ToggleButton ToolTip="仿真暂停" x:Name="SimuPauseButton" Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Height="24" Width="24" Margin="0,0,0,14">
+                    <Image Source="/Resources/Image/Pause.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </ToggleButton>
+                <ToggleButton ToolTip="仿真停止" x:Name="SimuStopButton" Command="{x:Static app:GlobalCommand.SimuStopCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                    <Image Source="/Resources/Image/Stop.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </ToggleButton>
+            </ToolBar>
+            <ToolBar>
+                <ComboBox SelectedIndex="0" Margin="0, -12, 0, 0" Width="80" Height="24" 
+                          HorizontalAlignment="Left" HorizontalContentAlignment="Left">
+                    <TextBlock>Simulate</TextBlock>
+                </ComboBox>
+                <ComboBox x:Name="TBCB_Device" SelectedIndex="0" Margin="0, -12, 0, 0" Width="120" Height="24"  
+                          HorizontalAlignment="Left" HorizontalContentAlignment="Left">
+                    <TextBlock>FGs_16MT_A</TextBlock>
+                </ComboBox>
+                <ComboBox x:Name="TBCB_ProjectName" SelectedIndex="0" Margin="0, -12, 0, 0" Width="150" Height="24" 
+                          HorizontalAlignment="Left" HorizontalContentAlignment="Left">
+                    <TextBlock>ProjectName</TextBlock>
+                </ComboBox>
             </ToolBar>
         </ToolBarTray>
         <ad:DockingManager x:Name="DockManager" Style="{StaticResource ResourceKey=DockManagerStyle}">

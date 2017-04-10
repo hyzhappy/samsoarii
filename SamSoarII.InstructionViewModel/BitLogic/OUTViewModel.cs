@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class OUTViewModel : OutputBaseViewModel
     {
         private OUTModel _model = new OUTModel();
-        private BitValue Value
+        public BitValue Value
         {
             get
             {

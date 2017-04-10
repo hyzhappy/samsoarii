@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class MOVViewModel : OutputRectBaseViewModel
     {
         private MOVModel _model = new MOVModel();
-        private WordValue SourceValue
+        public WordValue SourceValue
         {
             get
             {
@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock2.Text = string.Format("S : {0}", _model.SourceValue.ValueShowString);
             }
         }
-        private WordValue DestinationValue
+        public WordValue DestinationValue
         {
             get
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
@@ -78,6 +79,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             return true;
         }
+
+        public override event RoutedEventHandler ValueChanged = delegate { };
 
         public override void Set(SimulateDllModel dllmodel)
         {

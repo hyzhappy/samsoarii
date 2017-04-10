@@ -242,34 +242,34 @@ namespace SamSoarII.Extend.LadderChartModel
             {
                 switch (Type)
                 {
-                    case "LD": return flag1;
-                    case "LDI": return "!" + flag1;
-                    case "LDIM": return "im" + flag1;
-                    case "LDIIM": return "!im" + flag1;
-                    case "LDP": return "ue" + flag1;
-                    case "LDF": return "de" + flag1;
-                    case "MEP": return "ue";
-                    case "MEF": return "de";
-                    case "INV": return "!";
-                    case "EQW": return flag1 + "w=" + flag2;
-                    case "EQD": return flag1 + "d=" + flag2;
-                    case "EQF": return flag1 + "f=" + flag2;
-                    case "NEW": return flag1 + "w<>" + flag2;
-                    case "NED": return flag1 + "d<>" + flag2;
-                    case "NEF": return flag1 + "f<>" + flag2;
-                    case "GEW": return flag1 + "w>=" + flag2;
-                    case "GED": return flag1 + "d>=" + flag2;
-                    case "GEF": return flag1 + "f>=" + flag2;
-                    case "LEW": return flag1 + "w<=" + flag2;
-                    case "LED": return flag1 + "d<=" + flag2;
-                    case "LEF": return flag1 + "f<=" + flag2;
-                    case "GTW": return flag1 + "w>" + flag2;
-                    case "GTD": return flag1 + "d>" + flag2;
-                    case "GTF": return flag1 + "f>" + flag2;
-                    case "LTW": return flag1 + "w<" + flag2;
-                    case "LTD": return flag1 + "d<" + flag2;
-                    case "LTF": return flag1 + "f<" + flag2;
-                    default: return "1";
+                    case "LD": return String.Format("[{0:d}]{1:s}", Id, flag1);
+                    case "LDI": return String.Format("[{0:d}]!{1:s}", Id, flag1);
+                    case "LDIM": return String.Format("[{0:d}]im{1:s}", Id, flag1);
+                    case "LDIIM": return String.Format("[{0:d}]!im{1:s}", Id, flag1);
+                    case "LDP": return String.Format("[{0:d}]ue{1:s}", Id, flag1);
+                    case "LDF": return String.Format("[{0:d}]de{1:s}", Id, flag1);
+                    case "MEP": return String.Format("[{0:d}]ue", Id);
+                    case "MEF": return String.Format("[{0:d}]de", Id);
+                    case "INV": return String.Format("[{0:d}]!", Id);
+                    case "EQW": return String.Format("[{0:d}]{1:s}w={2:s}", Id, flag1, flag2);
+                    case "EQD": return String.Format("[{0:d}]{1:s}d={2:s}", Id, flag1, flag2);
+                    case "EQF": return String.Format("[{0:d}]{1:s}f={2:s}", Id, flag1, flag2);
+                    case "NEW": return String.Format("[{0:d}]{1:s}w<>{2:s}", Id, flag1, flag2);
+                    case "NED": return String.Format("[{0:d}]{1:s}d<>{2:s}", Id, flag1, flag2);
+                    case "NEF": return String.Format("[{0:d}]{1:s}f<>{2:s}", Id, flag1, flag2);
+                    case "GEW": return String.Format("[{0:d}]{1:s}w>={2:s}", Id, flag1, flag2);
+                    case "GED": return String.Format("[{0:d}]{1:s}d>={2:s}", Id, flag1, flag2);
+                    case "GEF": return String.Format("[{0:d}]{1:s}f>={2:s}", Id, flag1, flag2);
+                    case "LEW": return String.Format("[{0:d}]{1:s}w<={2:s}", Id, flag1, flag2);
+                    case "LED": return String.Format("[{0:d}]{1:s}d<={2:s}", Id, flag1, flag2);
+                    case "LEF": return String.Format("[{0:d}]{1:s}f>={2:s}", Id, flag1, flag2);
+                    case "GTW": return String.Format("[{0:d}]{1:s}w>{2:s}", Id, flag1, flag2);
+                    case "GTD": return String.Format("[{0:d}]{1:s}d>{2:s}", Id, flag1, flag2);
+                    case "GTF": return String.Format("[{0:d}]{1:s}f>{2:s}", Id, flag1, flag2);
+                    case "LTW": return String.Format("[{0:d}]{1:s}w<{2:s}", Id, flag1, flag2);
+                    case "LTD": return String.Format("[{0:d}]{1:s}d<{2:s}", Id, flag1, flag2);
+                    case "LTF": return String.Format("[{0:d}]{1:s}f<{2:s}", Id, flag1, flag2);
+                    default: return String.Format("[{0:d}]1", Id);
                 }
             }
         }
@@ -445,7 +445,10 @@ namespace SamSoarII.Extend.LadderChartModel
                 profix = "A";
             if ((flag & 0x08) != 0)
                 profix = "OR";
-            insts.Add(new PLCInstruction(ToShowString(profix)));
+            PLCInstruction inst = new PLCInstruction(ToShowString(profix));
+            inst.PrototypeID = Id;
+            inst.ProtoType = Prototype;
+            insts.Add(inst);
         }
         
     }

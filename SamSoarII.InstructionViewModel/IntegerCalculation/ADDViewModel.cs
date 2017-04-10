@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class ADDViewModel : OutputRectBaseViewModel
     {
         private ADDModel _model;
-        private WordValue InputValue1
+        public WordValue InputValue1
         {
             get
             {
@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock1.Text = string.Format("IN1:{0}", _model.InputValue1.ValueShowString);
             }
         }
-        private WordValue InputValue2
+        public WordValue InputValue2
         {
             get
             {
@@ -41,7 +41,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock2.Text = string.Format("IN2:{0}", _model.InputValue2.ValueShowString);
             }
         }
-        private WordValue OutputValue
+        public WordValue OutputValue
         {
             get
             {

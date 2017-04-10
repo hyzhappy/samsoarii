@@ -17,11 +17,12 @@ namespace SamSoarII.LadderInstViewModel
         {
             get
             {
-                throw new NotImplementedException();
+                return this._model;
             }
             protected set
             {
-                throw new NotImplementedException();
+                if (value is CALLMModel)
+                this._model = (CALLMModel)(value);
             }
         }
         public override string InstructionName { get { return "CALLM"; } }

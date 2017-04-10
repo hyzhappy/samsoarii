@@ -382,7 +382,7 @@ namespace SamSoarII.Simulation.UI
             // Remove old element before
             if (element is SimuViewOutBitModel || element is SimuViewOutRecModel)
             {
-                element.X = 9;
+                element.X = 11;
                 if (element.Y >= 0 && element.Y < RowCount)
                 {
                     flag = true;
@@ -390,7 +390,7 @@ namespace SamSoarII.Simulation.UI
             }
             else
             {
-                if (element.X >= 0 && element.X < 9 && element.Y >= 0 && element.Y < RowCount)
+                if (element.X >= 0 && element.X < 11 && element.Y >= 0 && element.Y < RowCount)
                 {
                     flag = true;
                 }

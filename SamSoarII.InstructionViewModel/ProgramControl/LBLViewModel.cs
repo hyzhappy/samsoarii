@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class LBLViewModel : OutputRectBaseViewModel
     {
         private LBLModel _model;
-        private WordValue LBLIndex
+        public WordValue LBLIndex
         {
             get
             {

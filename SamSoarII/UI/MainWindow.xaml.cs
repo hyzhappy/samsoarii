@@ -261,7 +261,7 @@ namespace SamSoarII.AppMain.UI
 
         private void ShowProjectTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (_interactionFacade != null)
+            if (_interactionFacade != null && SimulateHelper.SModel == null)
             {
                 e.CanExecute = _interactionFacade.ProjectLoaded;
             }
@@ -274,7 +274,7 @@ namespace SamSoarII.AppMain.UI
 
         private void ShowSimulateTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (_interactionFacade != null)
+            if (_interactionFacade != null && SimulateHelper.SModel != null)
             {
                 e.CanExecute = _interactionFacade.ProjectLoaded;
             }
@@ -287,7 +287,7 @@ namespace SamSoarII.AppMain.UI
 
         private void ShowMonitorCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (_interactionFacade != null)
+            if (_interactionFacade != null && SimulateHelper.SModel != null)
             {
                 e.CanExecute = _interactionFacade.ProjectLoaded;
             }
@@ -345,6 +345,50 @@ namespace SamSoarII.AppMain.UI
             else
             {
                 e.CanExecute = false;
+            }
+        }
+
+        private void SimuStartCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel == null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = true;
+            }
+        }
+
+        private void SimuPauseCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel == null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                if (SimuStartButton.IsChecked == true ||
+                    SimuPauseButton.IsChecked == true)
+                {
+                    e.CanExecute = true;
+                }
+                else
+                {
+                    e.CanExecute = false;
+                }
+            }
+        }
+
+        private void SimuStopCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel == null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = true;
             }
         }
 
@@ -480,12 +524,96 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSimulateCommandExecute(object sender, RoutedEventArgs e)
         {
-            LACOutput.Show();
-            int ret = _interactionFacade.SimulateProject();
-            if (ret == SimulateHelper.SIMULATE_OK)
+            if (SimulateModeButton.IsChecked == true)
             {
-                LAOutput.Hide();
-                LACSimuProj.Show();
+                LACOutput.Show();
+                int ret = _interactionFacade.SimulateProject();
+                if (ret == SimulateHelper.SIMULATE_OK)
+                {
+                    LAOutput.Hide();
+                    LAProj.Hide();
+                    LACSimuProj.Show();
+                    SimuToolBarTray.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SimulateModeButton.IsChecked = false;
+                }
+            }
+            else if (SimulateModeButton.IsChecked == false)
+            {
+                if (SimulateHelper.Close() == SimulateHelper.CLOSE_OK)
+                {
+                    LASimuProj.Hide();
+                    LAMonitor.Hide();
+                    LACOutput.Show();
+                    SimuToolBarTray.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    SimulateModeButton.IsChecked = true;
+                }
+            }
+        }
+
+        private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
+        {
+            if (SimuStartButton.IsChecked == true)
+            {
+                if (SimuPauseButton.IsChecked == true)
+                {
+                    SimuPauseButton.IsChecked = false;
+                }
+                if (SimuStopButton.IsChecked == true)
+                {
+                    SimuStopButton.IsChecked = false;
+                }
+                SimulateHelper.SModel.Start();
+            }
+            else
+            {
+                SimuStartButton.IsChecked = true;
+            }
+        }
+
+        private void OnSimuPauseCommandExecute(object sender, RoutedEventArgs e)
+        {
+            if (SimuPauseButton.IsChecked == true)
+            {
+                if (SimuStartButton.IsChecked == true)
+                {
+                    SimuStartButton.IsChecked = false;
+                }
+                if (SimuStopButton.IsChecked == true)
+                {
+                    SimuStopButton.IsChecked = false;
+                }
+                SimulateHelper.SModel.Pause();
+            }
+            else
+            {
+                SimuPauseButton.IsChecked = true;
+            }
+        }
+
+        private void OnSimuStopCommandExecute(object sender, RoutedEventArgs e)
+        {
+
+            if (SimuStopButton.IsChecked == true)
+            {
+                if (SimuStartButton.IsChecked == true)
+                {
+                    SimuStartButton.IsChecked = false;
+                }
+                if (SimuPauseButton.IsChecked == true)
+                {
+                    SimuPauseButton.IsChecked = false;
+                }
+                SimulateHelper.SModel.Stop();
+            }
+            else
+            {
+                SimuStopButton.IsChecked = true;
             }
         }
 

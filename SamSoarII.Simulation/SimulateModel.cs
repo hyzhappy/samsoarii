@@ -147,42 +147,8 @@ namespace SamSoarII.Simulation
         /// </summary>
         public void Dispose()
         {
-            // 如果还在活动状态，则关闭更新线程
-            if (UpdateThread != null && (UpdateThreadIsAlive || UpdateThread.IsAlive))
-            {
-                UpdateThreadIsAlive = false;
-                UpdateThread.Abort();
-                UpdateThread = null;
-            }
-        }
-        /// <summary>
-        /// 界面更新线程的活动开关
-        /// </summary>
-        private bool UpdateThreadIsAlive;
-        /// <summary>
-        /// 界面更新线程定时循环运行的更新函数
-        /// </summary>
-        private void _Update_Thread()
-        {
-            while (UpdateThreadIsAlive)
-            {
-                smanager.Update();
-                MainRoutine.Update();
-                foreach (SimuViewDiagramModel svdmodel in SubRoutines)
-                {
-                    svdmodel.Update();
-                }
-                PLCTopPhoto.LEDLight_Y0.Status = Math.Min(2, ((int)(LEDBit.Values[0].Value)));
-                PLCTopPhoto.LEDLight_Y1.Status = Math.Min(2, ((int)(LEDBit.Values[1].Value)));
-                PLCTopPhoto.LEDLight_Y2.Status = Math.Min(2, ((int)(LEDBit.Values[2].Value)));
-                PLCTopPhoto.LEDLight_Y3.Status = Math.Min(2, ((int)(LEDBit.Values[3].Value)));
-                PLCTopPhoto.LEDLight_Y4.Status = Math.Min(2, ((int)(LEDBit.Values[4].Value)));
-                PLCTopPhoto.LEDLight_Y5.Status = Math.Min(2, ((int)(LEDBit.Values[5].Value)));
-                PLCTopPhoto.LEDLight_Y6.Status = Math.Min(2, ((int)(LEDBit.Values[6].Value)));
-                PLCTopPhoto.LEDLight_Y7.Status = Math.Min(2, ((int)(LEDBit.Values[7].Value)));
-                MTable.UpdateValue();
-                Thread.Sleep(50);
-            }
+            smanager.Stop();
+            SimulateDllModel.FreeDll();
         }
         /// <summary>
         /// 给定名称和类型获得变量单元
@@ -546,9 +512,12 @@ namespace SamSoarII.Simulation
             // 仿真管理器
             smanager.RunDataFinished += OnRunDataFinished;
             smanager.RunDrawFinished += OnRunDrawFinished;
-            // 界面更新线程
-            UpdateThread = new Thread(_Update_Thread);
-            UpdateThread.Start();
+        }
+
+        public void BuildRouted(SimuViewBaseModel svbmodel)
+        {
+            svbmodel.VariableUnitLocked += OnVariableUnitLocked;
+            svbmodel.VariableUnitUnlocked += OnVariableUnitUnlocked;
         }
         /// <summary>
         /// 显示主窗口，主窗口已经弃用，主要用来建立Route
@@ -579,8 +548,8 @@ namespace SamSoarII.Simulation
             smanager.Start();
             //UpdateThread = new Thread(_Update_Thread);
             //UpdateThread.Start();
-            PLCTopPhoto.RunLight.Status = StatusLight.STATUS_LIGHT;
-            PLCTopPhoto.StopLight.Status = StatusLight.STATUS_DARK;
+            //PLCTopPhoto.RunLight.Status = StatusLight.STATUS_LIGHT;
+            //PLCTopPhoto.StopLight.Status = StatusLight.STATUS_DARK;
         }
         /// <summary>
         /// PLC终止运行
@@ -588,8 +557,15 @@ namespace SamSoarII.Simulation
         public void Stop()
         {
             smanager.Stop();
-            PLCTopPhoto.RunLight.Status = StatusLight.STATUS_DARK;
-            PLCTopPhoto.StopLight.Status = StatusLight.STATUS_LIGHT;
+            //PLCTopPhoto.RunLight.Status = StatusLight.STATUS_DARK;
+            //PLCTopPhoto.StopLight.Status = StatusLight.STATUS_LIGHT;
+        }
+        /// <summary>
+        /// PLC暂停运行
+        /// </summary>
+        public void Pause()
+        {
+            smanager.Pause();
         }
         #endregion
 

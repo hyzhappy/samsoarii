@@ -32,6 +32,7 @@ namespace SamSoarII.AppMain.Project
         }
         
         public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
+        public const int CLOSE_OK = 0x00;
 
         static public int Simulate(ProjectModel pmodel, ReportOutputModel omodel)
         {
@@ -134,6 +135,16 @@ namespace SamSoarII.AppMain.Project
                     break;
             }
             return checkresult;
+        }
+
+        static public int Close()
+        {
+            if (smodel != null)
+            {
+                smodel.Dispose();
+                smodel = null;   
+            }
+            return CLOSE_OK;
         }
 
         #region Save & Load GlobalSetting
@@ -247,6 +258,10 @@ namespace SamSoarII.AppMain.Project
             if (bvmodel is OutputRectBaseViewModel)
             {
                 svbmodel = new SimuViewOutRecModel(smodel);
+            }
+            if (bvmodel is SpecialBaseViewModel)
+            {
+                svbmodel = new SimuViewSpecialModel(smodel);
             }
             if (bvmodel is ALTViewModel)
             {

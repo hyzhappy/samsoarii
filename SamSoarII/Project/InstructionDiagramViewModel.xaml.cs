@@ -26,6 +26,8 @@ namespace SamSoarII.AppMain.Project
         protected List<InstructionNetworkViewModel> invmodels;
 
         protected Dictionary<LadderNetworkViewModel, InstructionNetworkViewModel> invmodeldict;
+
+        protected InstructionNetworkViewModel invmodelcursor;
         
         public InstructionDiagramViewModel()
         {
@@ -66,6 +68,8 @@ namespace SamSoarII.AppMain.Project
                 else
                 {
                     invmodel = new InstructionNetworkViewModel();
+                    invmodel.CursorChanged += OnNetworkCursorChanged;
+                    invmodel.CursorEdit += OnNetworkCursorEdit;
                     invmodel.Setup(lnvmodel);
                     invmodeldict.Add(lnvmodel, invmodel);
                 }
@@ -102,6 +106,71 @@ namespace SamSoarII.AppMain.Project
                         Scroll.ScrollToVerticalOffset(Math.Max(0, currenty + cursory - Scroll.ViewportHeight / 2));
                     }
                     currenty += invmodel.ActualHeight;
+                }
+            }
+        }
+
+        public event RoutedEventHandler CursorChanged = delegate { };
+        private void OnNetworkCursorChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is InstructionNetworkViewModel)
+            {
+                if (invmodelcursor != null && invmodelcursor != sender)
+                {
+                    invmodelcursor.Cursor.Visibility = Visibility.Hidden;
+                }
+                invmodelcursor = (InstructionNetworkViewModel)(sender);
+                CursorChanged(sender, e);
+            }
+        }
+
+        public event RoutedEventHandler CursorEdit = delegate { };
+        private void OnNetworkCursorEdit(object sender, RoutedEventArgs e)
+        {
+            if (sender is InstructionNetworkViewModel)
+            {
+                CursorEdit(sender, e);
+            }
+        }
+        
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up && invmodelcursor != null)
+            {
+                if (invmodelcursor.CursorUp())
+                {
+                    CursorChanged(invmodelcursor, new RoutedEventArgs());
+                    return;
+                }
+                int cursorpos = invmodels.IndexOf(invmodelcursor);
+                while (cursorpos > 0 && !invmodels[cursorpos - 1].CatchCursorBottom())
+                {
+                    cursorpos--;
+                }
+                if (cursorpos > 0)
+                {
+                    invmodelcursor.Cursor.Visibility = Visibility.Hidden;
+                    invmodelcursor = invmodels[cursorpos - 1];
+                    CursorChanged(invmodelcursor, new RoutedEventArgs());
+                }
+            }
+            if (e.Key == Key.Down && invmodelcursor != null)
+            {
+                if (invmodelcursor.CursorDown())
+                {
+                    CursorChanged(invmodelcursor, new RoutedEventArgs());
+                    return;
+                }
+                int cursorpos = invmodels.IndexOf(invmodelcursor);
+                while (cursorpos < invmodels.Count()-1 && !invmodels[cursorpos + 1].CatchCursorTop())
+                {
+                    cursorpos++;
+                }
+                if (cursorpos < invmodels.Count()-1)
+                {
+                    invmodelcursor.Cursor.Visibility = Visibility.Hidden;
+                    invmodelcursor = invmodels[cursorpos + 1];
+                    CursorChanged(invmodelcursor, new RoutedEventArgs());
                 }
             }
         }

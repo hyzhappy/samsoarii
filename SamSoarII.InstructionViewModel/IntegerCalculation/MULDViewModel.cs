@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class MULDViewModel : OutputRectBaseViewModel
     {
         private MULDModel _model;
-        private DoubleWordValue InputValue1
+        public DoubleWordValue InputValue1
         {
             get
             {
@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock1.Text = _model.InputValue1.ValueShowString;
             }
         }
-        private DoubleWordValue InputValue2
+        public DoubleWordValue InputValue2
         {
             get
             {
@@ -41,7 +41,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock2.Text = _model.InputValue2.ValueShowString;
             }
         }
-        private DoubleWordValue OutputValue
+        public DoubleWordValue OutputValue
         {
             get
             {

@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class FORViewModel : OutputRectBaseViewModel
     {
         private FORModel _model;
-        private WordValue Count
+        public WordValue Count
         {
             get
             {

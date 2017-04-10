@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class LDDLEViewModel : InputBaseViewModel
     {
         private LDDLEModel _model;
-        private DoubleWordValue Value1
+        public DoubleWordValue Value1
         {
             get
             {
@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
                 ValueTextBlock.Text = _model.Value1.ValueShowString;
             }
         }
-        private DoubleWordValue Value2
+        public DoubleWordValue Value2
         {
             get
             {

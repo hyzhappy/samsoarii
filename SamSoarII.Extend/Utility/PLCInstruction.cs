@@ -1,4 +1,6 @@
-﻿using SamSoarII.LadderInstViewModel;
+﻿using SamSoarII.LadderInstModel;
+using SamSoarII.LadderInstViewModel;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,7 @@ namespace SamSoarII.Extend.Utility
         /// 私有成员
         /// </summary>
         protected BaseViewModel prototype = null;
+        protected int prototypeid = -1;
         protected string text = String.Empty;
         protected string type = String.Empty;
         protected string flag1 = String.Empty;
@@ -36,6 +39,7 @@ namespace SamSoarII.Extend.Utility
         protected string oflag4 = String.Empty;
         protected string oflag5 = String.Empty;
         protected string enbit = String.Empty;
+        protected string stackcalc = String.Empty;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -59,6 +63,24 @@ namespace SamSoarII.Extend.Utility
         {
             get { return this.prototype; }
             set { this.prototype = value; }
+        }
+        /// <summary>
+        /// 原型的ID
+        /// </summary>
+        public int PrototypeID
+        {
+            get { return this.prototypeid; }
+            set { this.prototypeid = value; }
+        }
+        /// <summary>
+        /// 当这个指令把元素加入栈中时（LD类指令），需要知道这个元素是如何与上一个元素计算合并的
+        /// 已知的合并方式有三种，分别为ANDB，ORB和POP
+        /// 这里用于线路转换指令（INV, MEP, MEF）的当前信号的计算
+        /// </summary>
+        public string StackCalc
+        {
+            get { return this.stackcalc; }
+            set { this.stackcalc = value; }
         }
         /// <summary>
         /// 判断是否为这条指令的原型
@@ -750,7 +772,527 @@ namespace SamSoarII.Extend.Utility
             }
             return 0;
         }
+
+        public void UpdatePrototype()
+        {
+            if (ProtoType == null)
+                return;
+            if ((Type == "LD" || Type == "AND" || Type == "OR") && ProtoType is LDViewModel)
+            {
+                ((LDViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if ((Type == "LDI" || Type == "ANDI" || Type == "ORI") && ProtoType is LDIViewModel)
+            {
+                ((LDIViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if ((Type == "LDIM" || Type == "ANDIM" || Type == "ORIM") && ProtoType is LDIMViewModel)
+            {
+                ((LDIMViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if ((Type == "LDIIM" || Type == "ANDIIM" || Type == "ORIIM") && ProtoType is LDIIMViewModel)
+            {
+                ((LDIIMViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if ((Type == "LDP" || Type == "ANDP" || Type == "ORP") && ProtoType is LDPViewModel)
+            {
+                ((LDPViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if ((Type == "LDF" || Type == "ANDF" || Type == "ORF") && ProtoType is LDFViewModel)
+            {
+                ((LDFViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if (Type == "OUT" && ProtoType is OUTViewModel)
+            {
+                ((OUTViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if (Type == "OUTIM" && ProtoType is OUTIMViewModel)
+            {
+                ((OUTIMViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if (Type == "ALTP" && ProtoType is ALTPViewModel)
+            {
+                ((ALTPViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if (Type == "ALT" && ProtoType is ALTViewModel)
+            {
+                ((ALTViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+            }
+            else if (Type == "SET" && ProtoType is SETViewModel)
+            {
+                ((SETViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+                ((SETViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "SETIM" && ProtoType is SETIMViewModel)
+            {
+                ((SETIMViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+                ((SETIMViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "RST" && ProtoType is RSTViewModel)
+            {
+                ((RSTViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+                ((RSTViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "RSTIM" && ProtoType is RSTIMViewModel)
+            {
+                ((RSTIMViewModel)(ProtoType)).Value = (BitValue)(CreateValueModel(oflag1, "BIT"));
+                ((RSTIMViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "INV" && ProtoType is INVViewModel)
+            {
+
+            }
+            else if (Type == "MEP" && ProtoType is MEPViewModel)
+            {
+
+            }
+            else if (Type == "MEF" && ProtoType is MEFViewModel)
+            {
+
+            }
+            else if ((Type == "LDWEQ" || Type == "AWEQ" || Type == "ORWEQ") && ProtoType is LDWEQViewModel)
+            {
+                ((LDWEQViewModel)(ProtoType)).Value1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((LDWEQViewModel)(ProtoType)).Value2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if ((Type == "LDFEQ" || Type == "AFEQ" || Type == "ORFEQ") && ProtoType is LDFEQViewModel)
+            {
+                ((LDFEQViewModel)(ProtoType)).Value1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((LDFEQViewModel)(ProtoType)).Value2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if ((Type == "LDDEQ" || Type == "ADEQ" || Type == "ORDEQ") && ProtoType is LDDEQViewModel)
+            {
+                ((LDDEQViewModel)(ProtoType)).Value1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((LDDEQViewModel)(ProtoType)).Value2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if ((Type == "LDWNE" || Type == "AWNE" || Type == "ORWNE") && ProtoType is LDWNEViewModel)
+            {
+                ((LDWNEViewModel)(ProtoType)).Value1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((LDWNEViewModel)(ProtoType)).Value2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if ((Type == "LDFNE" || Type == "AFNE" || Type == "ORFNE") && ProtoType is LDFNEViewModel)
+            {
+                ((LDFNEViewModel)(ProtoType)).Value1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((LDFNEViewModel)(ProtoType)).Value2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if ((Type == "LDDNE" || Type == "ADNE" || Type == "ORDNE") && ProtoType is LDDNEViewModel)
+            {
+                ((LDDNEViewModel)(ProtoType)).Value1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((LDDNEViewModel)(ProtoType)).Value2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if ((Type == "LDWLE" || Type == "AWLE" || Type == "ORWLE") && ProtoType is LDWLEViewModel)
+            {
+                ((LDWLEViewModel)(ProtoType)).Value1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((LDWLEViewModel)(ProtoType)).Value2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if ((Type == "LDFLE" || Type == "AFLE" || Type == "ORFLE") && ProtoType is LDFLEViewModel)
+            {
+                ((LDFLEViewModel)(ProtoType)).Value1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((LDFLEViewModel)(ProtoType)).Value2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if ((Type == "LDDLE" || Type == "ADLE" || Type == "ORDLE") && ProtoType is LDDLEViewModel)
+            {
+                ((LDDLEViewModel)(ProtoType)).Value1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((LDDLEViewModel)(ProtoType)).Value2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if ((Type == "LDWGE" || Type == "AWGE" || Type == "ORWGE") && ProtoType is LDWGEViewModel)
+            {
+                ((LDWGEViewModel)(ProtoType)).Value1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((LDWGEViewModel)(ProtoType)).Value2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if ((Type == "LDFGE" || Type == "AFGE" || Type == "ORFGE") && ProtoType is LDFGEViewModel)
+            {
+                ((LDFGEViewModel)(ProtoType)).Value1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((LDFGEViewModel)(ProtoType)).Value2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if ((Type == "LDDGE" || Type == "ADGE" || Type == "ORDGE") && ProtoType is LDDGEViewModel)
+            {
+                ((LDDGEViewModel)(ProtoType)).Value1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((LDDGEViewModel)(ProtoType)).Value2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if ((Type == "LDWL" || Type == "AWL" || Type == "ORWL") && ProtoType is LDWLViewModel)
+            {
+                ((LDWLViewModel)(ProtoType)).Value1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((LDWLViewModel)(ProtoType)).Value2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if ((Type == "LDFL" || Type == "AFL" || Type == "ORFL") && ProtoType is LDFLViewModel)
+            {
+                ((LDFLViewModel)(ProtoType)).Value1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((LDFLViewModel)(ProtoType)).Value2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if ((Type == "LDDL" || Type == "ADL" || Type == "ORDL") && ProtoType is LDDLViewModel)
+            {
+                ((LDDLViewModel)(ProtoType)).Value1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((LDDLViewModel)(ProtoType)).Value2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if ((Type == "LDWG" || Type == "AWG" || Type == "ORWG") && ProtoType is LDWGViewModel)
+            {
+                ((LDWGViewModel)(ProtoType)).Value1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((LDWGViewModel)(ProtoType)).Value2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if ((Type == "LDFG" || Type == "AFG" || Type == "ORFG") && ProtoType is LDFGViewModel)
+            {
+                ((LDFGViewModel)(ProtoType)).Value1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((LDFGViewModel)(ProtoType)).Value2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if ((Type == "LDDG" || Type == "ADG" || Type == "ORDG") && ProtoType is LDDGViewModel)
+            {
+                ((LDDGViewModel)(ProtoType)).Value1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((LDDGViewModel)(ProtoType)).Value2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if (Type == "BCD" && ProtoType is BCDViewModel)
+            {
+                ((BCDViewModel)(ProtoType)).InputValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((BCDViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "BIN" && ProtoType is BINViewModel)
+            {
+                ((BINViewModel)(ProtoType)).InputValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((BINViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "DTOF" && ProtoType is DTOFViewModel)
+            {
+                ((DTOFViewModel)(ProtoType)).InputValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((DTOFViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "DTOW" && ProtoType is DTOWViewModel)
+            {
+                ((DTOWViewModel)(ProtoType)).InputValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((DTOWViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "ROUND" && ProtoType is ROUNDViewModel)
+            {
+                ((ROUNDViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((ROUNDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if (Type == "TRUNC" && ProtoType is TRUNCViewModel)
+            {
+                ((TRUNCViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((TRUNCViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            /*
+            else if (Type == "CTD" && ProtoType is CTDViewModel)
+            {
+
+            }
+            else if (Type == "CTU" && ProtoType is CTUDViewModel)
+            {
+
+            }
+            else if (Type == "CTUD" && ProtoType is CTUDViewModel)
+            {
+
+            }
+            */
+            else if (Type == "ADDF" && ProtoType is ADDFViewModel)
+            {
+                ((ADDFViewModel)(ProtoType)).InputValue1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((ADDFViewModel)(ProtoType)).InputValue2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+                ((ADDFViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag3, "FLOAT"));
+            }
+            else if (Type == "SUBF" && ProtoType is SUBFViewModel)
+            {
+                ((SUBFViewModel)(ProtoType)).InputValue1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((SUBFViewModel)(ProtoType)).InputValue2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+                ((SUBFViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag3, "FLOAT"));
+            }
+            else if (Type == "MULF" && ProtoType is MULFViewModel)
+            {
+                ((MULFViewModel)(ProtoType)).InputValue1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((MULFViewModel)(ProtoType)).InputValue2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+                ((MULFViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag3, "FLOAT"));
+            }
+            else if (Type == "DIVF" && ProtoType is DIVFViewModel)
+            {
+                ((DIVFViewModel)(ProtoType)).InputValue1 = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((DIVFViewModel)(ProtoType)).InputValue2 = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+                ((DIVFViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag3, "FLOAT"));
+            }
+            else if (Type == "SIN" && ProtoType is SINViewModel)
+            {
+                ((SINViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((SINViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "COS" && ProtoType is COSViewModel)
+            {
+                ((COSViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((COSViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "TAN" && ProtoType is TANViewModel)
+            {
+                ((TANViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((TANViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "LN" && ProtoType is LNViewModel)
+            {
+                ((LNViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((LNViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "EXP" && ProtoType is EXPViewModel)
+            {
+                ((EXPViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((EXPViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "SQRT" && ProtoType is SQRTViewModel)
+            {
+                ((SQRTViewModel)(ProtoType)).InputValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((SQRTViewModel)(ProtoType)).OutputValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "ADD" && ProtoType is ADDViewModel)
+            {
+                ((ADDViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((ADDViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((ADDViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "ADDD" && ProtoType is ADDDViewModel)
+            {
+                ((ADDDViewModel)(ProtoType)).InputValue1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((ADDDViewModel)(ProtoType)).InputValue2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((ADDDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "SUB" && ProtoType is SUBViewModel)
+            {
+                ((SUBViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((SUBViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((SUBViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "SUBD" && ProtoType is SUBDViewModel)
+            {
+                ((SUBDViewModel)(ProtoType)).InputValue1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((SUBDViewModel)(ProtoType)).InputValue2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((SUBDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "MUL" && ProtoType is MULViewModel)
+            {
+                ((MULViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((MULViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((MULViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "MULD" && ProtoType is MULDViewModel)
+            {
+                ((MULDViewModel)(ProtoType)).InputValue1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((MULDViewModel)(ProtoType)).InputValue2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((MULDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "MULW" && ProtoType is MULWViewModel)
+            {
+                ((MULWViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((MULWViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((MULWViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "DIV" && ProtoType is DIVViewModel)
+            {
+                ((DIVViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((DIVViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((DIVViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "DIVD" && ProtoType is DIVDViewModel)
+            {
+                ((SUBDViewModel)(ProtoType)).InputValue1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((SUBDViewModel)(ProtoType)).InputValue2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((SUBDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "INC" && ProtoType is INCViewModel)
+            {
+                ((INCViewModel)(ProtoType)).InputValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((INCViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "INCD" && ProtoType is INCDViewModel)
+            {
+                ((INCDViewModel)(ProtoType)).InputValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((INCDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if (Type == "DEC" && ProtoType is DECViewModel)
+            {
+                ((DECViewModel)(ProtoType)).InputValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((DECViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "DECD" && ProtoType is DECDViewModel)
+            {
+                ((DECDViewModel)(ProtoType)).InputValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((DECDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if (Type == "ANDW" && ProtoType is ANDWViewModel)
+            {
+                ((ANDWViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((ANDWViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((ANDWViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "ANDD" && ProtoType is ANDDViewModel)
+            {
+                ((ANDDViewModel)(ProtoType)).InputValue1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((ANDDViewModel)(ProtoType)).InputValue2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((ANDDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "ORW" && ProtoType is ORWViewModel)
+            {
+                ((ORWViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((ORWViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((ORWViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "ORD" && ProtoType is ORDViewModel)
+            {
+                ((ORDViewModel)(ProtoType)).InputValue1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((ORDViewModel)(ProtoType)).InputValue2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((ORDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "XORW" && ProtoType is XORWViewModel)
+            {
+                ((XORWViewModel)(ProtoType)).InputValue1 = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((XORWViewModel)(ProtoType)).InputValue2 = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((XORWViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "XORD" && ProtoType is XORDViewModel)
+            {
+                ((XORDViewModel)(ProtoType)).InputValue1 = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((XORDViewModel)(ProtoType)).InputValue2 = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((XORDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag3, "DWORD"));
+            }
+            else if (Type == "INVW" && ProtoType is INVWViewModel)
+            {
+                ((INVWViewModel)(ProtoType)).InputValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((INVWViewModel)(ProtoType)).OutputValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "INVD" && ProtoType is INVDViewModel)
+            {
+                ((INVDViewModel)(ProtoType)).InputValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((INVDViewModel)(ProtoType)).OutputValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if (Type == "MOV" && ProtoType is MOVViewModel)
+            {
+                ((MOVViewModel)(ProtoType)).SourceValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((MOVViewModel)(ProtoType)).DestinationValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+            }
+            else if (Type == "MOVD" && ProtoType is MOVDViewModel)
+            {
+                ((MOVDViewModel)(ProtoType)).SourceValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((MOVDViewModel)(ProtoType)).DestinationValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+            }
+            else if (Type == "MOVF" && ProtoType is MOVFViewModel)
+            {
+                ((MOVFViewModel)(ProtoType)).SourceValue = (FloatValue)(CreateValueModel(oflag1, "FLOAT"));
+                ((MOVFViewModel)(ProtoType)).DestinationValue = (FloatValue)(CreateValueModel(oflag2, "FLOAT"));
+            }
+            else if (Type == "MVBLK" && ProtoType is MVBLKViewModel)
+            {
+                ((MVBLKViewModel)(ProtoType)).SourceValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((MVBLKViewModel)(ProtoType)).DestinationValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((MVBLKViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "MVDBLK" && ProtoType is MVBLKViewModel)
+            {
+                ((MVDBLKViewModel)(ProtoType)).SourceValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((MVDBLKViewModel)(ProtoType)).DestinationValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((MVDBLKViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "CALL" && ProtoType is CALLViewModel)
+            {
+                //((CALLViewModel)(ProtoType)).FunctionName = flag1;
+            }
+            else if (Type == "CALLM" && ProtoType is CALLViewModel)
+            {
+                //((CALLMViewModel)(ProtoType)).FunctionName = flag1;
+            }
+            else if (Type == "FOR" && ProtoType is FORViewModel)
+            {
+                ((FORViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag1, "WORD"));
+            }
+            else if (Type == "JMP" && ProtoType is JMPViewModel)
+            {
+                ((JMPViewModel)(ProtoType)).LBLIndex = (WordValue)(CreateValueModel(oflag1, "WORD"));
+            }
+            else if (Type == "LBL" && ProtoType is LBLViewModel)
+            {
+                ((LBLViewModel)(ProtoType)).LBLIndex = (WordValue)(CreateValueModel(oflag1, "WORD"));
+            }
+            else if (Type == "NEXT" && ProtoType is NEXTViewModel)
+            {
+
+            }
+            else if (Type == "TRD" && ProtoType is TRDViewModel)
+            {
+                ((TRDViewModel)(ProtoType)).StartValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+            }
+            else if (Type == "TWR" && ProtoType is TWRViewModel)
+            {
+                ((TWRViewModel)(ProtoType)).StartValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+            }
+            else if (Type == "ROL" && ProtoType is ROLViewModel)
+            {
+                ((ROLViewModel)(ProtoType)).SourceValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((ROLViewModel)(ProtoType)).DestinationValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((ROLViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "ROLD" && ProtoType is ROLDViewModel)
+            {
+                ((ROLDViewModel)(ProtoType)).SourceValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((ROLDViewModel)(ProtoType)).DestinationValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((ROLDViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "ROR" && ProtoType is RORViewModel)
+            {
+                ((RORViewModel)(ProtoType)).SourceValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((RORViewModel)(ProtoType)).DestinationValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((RORViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "RORD" && ProtoType is RORDViewModel)
+            {
+                ((RORDViewModel)(ProtoType)).SourceValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((RORDViewModel)(ProtoType)).DestinationValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((RORDViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "SHL" && ProtoType is SHLViewModel)
+            {
+                ((SHLViewModel)(ProtoType)).SourceValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((SHLViewModel)(ProtoType)).DestinationValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((SHLViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "SHLD" && ProtoType is SHLDViewModel)
+            {
+                ((SHLDViewModel)(ProtoType)).SourceValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((SHLDViewModel)(ProtoType)).DestinationValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((SHLDViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "SHR" && ProtoType is SHRViewModel)
+            {
+                ((SHRViewModel)(ProtoType)).SourceValue = (WordValue)(CreateValueModel(oflag1, "WORD"));
+                ((SHRViewModel)(ProtoType)).DestinationValue = (WordValue)(CreateValueModel(oflag2, "WORD"));
+                ((SHRViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else if (Type == "SHRD" && ProtoType is SHRDViewModel)
+            {
+                ((SHRDViewModel)(ProtoType)).SourceValue = (DoubleWordValue)(CreateValueModel(oflag1, "DWORD"));
+                ((SHRDViewModel)(ProtoType)).DestinationValue = (DoubleWordValue)(CreateValueModel(oflag2, "DWORD"));
+                ((SHRDViewModel)(ProtoType)).Count = (WordValue)(CreateValueModel(oflag3, "WORD"));
+            }
+            else
+            {
+                PrototypeOutOfDateException exc = new PrototypeOutOfDateException();
+                exc.Prototype_old = ProtoType;
+                exc.Prototype_new = LadderInstViewModelPrototype.Clone(Type);
+                exc.Prototype_new.X = exc.Prototype_old.X;
+                exc.Prototype_new.Y = exc.Prototype_old.Y;
+                throw exc;
+            }
+            //ProtoType.Model = model;
+        }
+
+        public IValueModel CreateValueModel(string name, string type)
+        {
+            switch (type)
+            {
+                case "BIT": return ValueParser.ParseBitValue(name);
+                case "WORD": return ValueParser.ParseWordValue(name);
+                case "DWORD": return ValueParser.ParseDoubleWordValue(name);
+                case "FLOAT": return ValueParser.ParseFloatValue(name);
+                default: return null;
+            }
+        }
         
-        
+    }
+    
+    public class PrototypeOutOfDateException : Exception
+    {
+        public BaseViewModel Prototype_old { get; set; }
+        public BaseViewModel Prototype_new { get; set; }
     }
 }

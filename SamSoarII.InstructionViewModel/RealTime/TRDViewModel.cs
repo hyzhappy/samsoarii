@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class TRDViewModel : OutputRectBaseViewModel
     {
         private TRDModel _model;
-        private WordValue StartValue
+        public WordValue StartValue
         {
             get
             {

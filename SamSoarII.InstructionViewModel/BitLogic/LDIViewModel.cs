@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class LDIViewModel : InputBaseViewModel
     {
         private LDIModel _model;
-        private BitValue Value
+        public BitValue Value
         {
             get
             {

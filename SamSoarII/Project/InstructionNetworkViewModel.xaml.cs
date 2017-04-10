@@ -68,15 +68,31 @@ namespace SamSoarII.AppMain.Project
         private Dictionary<LadderNetworkViewModel, List<PLCInstruction>> networkInstsDict;
         private Dictionary<IntPoint, TextBlock> instTextDict;
 
+        public LadderNetworkViewModel LadderNetwork
+        {
+            get { return this.lnvmodel; }
+        }
+
+        public BaseViewModel CurrentViewModel
+        {
+            get
+            {
+                if (Cursor.Visibility == Visibility.Hidden)
+                    return null;
+                int rowid = Grid.GetRow(Cursor);
+                if (rowid < 0 || rowid >= insts.Count())
+                    return null;
+                PLCOriginInst inst = insts[rowid];
+                return inst.ProtoType;
+            }
+        }
+
         public InstructionNetworkViewModel()
         {
             InitializeComponent();
             lnvmodel = null;
             networkInstsDict = new Dictionary<LadderNetworkViewModel, List<PLCInstruction>>();
-            inputbox = new TextBox();
-            inputbox.KeyUp += OnInputBoxKeyUp;
             instTextDict = new Dictionary<IntPoint, TextBlock>();
-            InputStatus = INPUTSTATUS_FREE;
         }
         
         public void Setup(LadderNetworkViewModel _lnvmodel)
@@ -169,7 +185,6 @@ namespace SamSoarII.AppMain.Project
             rdef.Height = new GridLength(1, GridUnitType.Star);
             G_Inst.RowDefinitions.Add(rdef);
             G_Inst.Children.Add(Cursor);
-            G_Inst.Children.Add(inputbox);
         }
 
         private void OnElementChanged(object sender, LadderElementChangedArgs e)
@@ -181,180 +196,7 @@ namespace SamSoarII.AppMain.Project
         {
             Update();
         }
-
-        #region Instruction Modification
-
-        private const int INPUTSTATUS_FREE = 0x00;
-        private const int INPUTSTATUS_INPUT = 0x01;
-        private const int INPUTSTATUS_INPUTALL = 0x02;
-        private int inputstatus;
-        private TextBox inputbox;
-        private int inputrow;
-        private int inputcolumn;
-        private string inputtext;
-        private int inputnumber;
-
-        private int InputStatus
-        {
-            get { return this.inputstatus; }
-            set
-            {
-                if (insts != null)
-                {
-                    if (value != INPUTSTATUS_INPUTALL)
-                    {
-                        PLCOriginInst inst = insts[InputRow];
-                        int rowid = InputRow;
-                        int colid = 1;
-                        for (; colid <= 6; colid++)
-                        {
-                            IntPoint ip = new IntPoint();
-                            ip.X = colid;
-                            ip.Y = rowid;
-                            TextBlock tb = instTextDict[ip];
-                            tb.Text = inst[colid - 1];
-                            tb.Foreground = Brushes.Black;
-                        }
-                    }
-                    else
-                    {
-                        IntPoint ip = new IntPoint();
-                        ip.Y = InputRow;
-                        ip.X = InputColumn;
-                        TextBlock tb = instTextDict[ip];
-                        tb.Text = inputbox.Text;
-                        tb.Foreground = Brushes.Blue;
-                    }
-                }
-                this.inputstatus = value;
-                switch (value)
-                {
-                    case INPUTSTATUS_FREE:
-                        inputbox.Visibility = Visibility.Hidden;
-                        break;
-                    default:
-                        inputbox.Visibility = Visibility.Visible;
-                        inputbox.Text = String.Empty;
-                        inputbox.Focus();
-                        break;
-                }
-            }
-        }
-        private int InputRow
-        {
-            get { return this.inputrow; }
-            set
-            {
-                this.inputrow = value;
-                Grid.SetRow(inputbox, value);
-            }
-        }
-        private int InputColumn
-        {
-            get { return this.inputcolumn; }
-            set
-            {
-                this.inputcolumn = value;
-                Grid.SetColumn(inputbox, value);
-            }
-        }
         
-        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
-        {
-            base.OnMouseDoubleClick(e);
-            Point p = e.GetPosition(this);
-            int rowid = (int)((p.Y - 20) / 20);
-            int colid = (int)((p.X - 40) / 80) + 1;
-            if (insts == null)
-            {
-                return;
-            }
-            if (rowid >= 0 && rowid < insts.Count() &&
-                colid >= 1 && colid <= 6)
-            {
-                PLCOriginInst inst = insts[rowid];
-                if (inst.ProtoType == null)
-                    return;
-                if (inst[colid].Equals(String.Empty))
-                    return;
-                InputStatus = INPUTSTATUS_INPUT;
-                InputRow = rowid;
-                InputColumn = colid;
-            }
-        }
-
-        private void OnInputBoxKeyUp(object sender, KeyEventArgs e)
-        {
-            if (InputStatus == INPUTSTATUS_INPUT)
-            {
-                if (e.Key == Key.Enter || e.Key == Key.Space)
-                {
-                    string text = inputbox.Text;
-                    if (InputColumn == 1)
-                    {
-                        if (!LadderInstViewModelPrototype.CheckInstructionName(text))
-                        {
-                            MessageBox.Show("输入的指令不存在!");
-                            InputStatus = INPUTSTATUS_INPUT;
-                            return;
-                        }
-                        inputtext = text;
-                        inputnumber = PLCInstruction.FlagNumber(text);
-                        InputStatus = INPUTSTATUS_INPUTALL;
-                        InputColumn++;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            insts[InputRow] = insts[InputRow].ReplaceFlag(InputColumn - 1, text).ToOrigin();
-                            insts[InputRow].UpdatePrototype();
-                        }
-                        catch (Exception exc)
-                        {
-                            MessageBox.Show(exc.Message);
-                            InputStatus = INPUTSTATUS_INPUT;
-                            return;
-                        }
-                        InputStatus = INPUTSTATUS_FREE;
-                    }
-                }
-            }
-            else if (InputStatus == INPUTSTATUS_INPUTALL)
-            {
-                if (e.Key == Key.Enter || e.Key == Key.Space)
-                {
-                    string text = inputbox.Text;
-                    inputtext += String.Format(" {0:s}", text);
-                    if (InputColumn - 1 == inputnumber)
-                    {
-                        try
-                        {
-                            PLCOriginInst _inst = new PLCOriginInst(inputtext);
-                            _inst.ProtoType = insts[InputRow].ProtoType;
-                            insts[InputRow] = _inst;
-                            _inst.UpdatePrototype();
-                        }
-                        catch (Exception exc)
-                        {
-                            MessageBox.Show(exc.Message);
-                            InputStatus = INPUTSTATUS_INPUT;
-                            InputColumn = 1;
-                            return;
-                        }
-                        InputStatus = INPUTSTATUS_FREE;
-                    }
-                    else
-                    {
-                        InputStatus = INPUTSTATUS_INPUTALL;
-                        InputColumn++;
-                    }
-                }
-            }
-        }
-        
-        #endregion
-
         #region Cursor
         public bool CatchCursor(BaseViewModel bvmodel)
         {
@@ -374,7 +216,106 @@ namespace SamSoarII.AppMain.Project
             }
             return false;
         }
+
+        public bool CatchCursorTop()
+        {
+            if (insts == null)
+                return false;
+            for (int rowid = 0; rowid < insts.Count(); rowid++)
+            {
+                PLCOriginInst inst = insts[rowid];
+                if (inst.ProtoType != null)
+                {
+                    Grid.SetRow(Cursor, rowid);
+                    Cursor.Visibility = Visibility.Visible;
+                    return true;
+                }
+            }
+            return false;
+        }
         
+        public bool CatchCursorBottom()
+        {
+            if (insts == null)
+                return false;
+            for (int rowid = insts.Count()-1; rowid >= 0; rowid--)
+            {
+                PLCOriginInst inst = insts[rowid];
+                if (inst.ProtoType != null)
+                {
+                    Grid.SetRow(Cursor, rowid);
+                    Cursor.Visibility = Visibility.Visible;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CursorUp()
+        {
+            if (insts == null)
+                return false;
+            for (int rowid = Grid.GetRow(Cursor)-1; rowid >= 0; rowid--)
+            {
+                PLCOriginInst inst = insts[rowid];
+                if (inst.ProtoType != null)
+                {
+                    Grid.SetRow(Cursor, rowid);
+                    Cursor.Visibility = Visibility.Visible;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CursorDown()
+        {
+            if (insts == null)
+                return false;
+            for (int rowid = Grid.GetRow(Cursor)+1; rowid < insts.Count(); rowid++)
+            {
+                PLCOriginInst inst = insts[rowid];
+                if (inst.ProtoType != null)
+                {
+                    Grid.SetRow(Cursor, rowid);
+                    Cursor.Visibility = Visibility.Visible;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public event RoutedEventHandler CursorChanged = delegate { };
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            Point p = e.GetPosition(this);
+            int rowid = (int)((p.Y - 20) / 20);
+            int colid = (int)((p.X - 40) / 80) + 1;
+            if (insts == null)
+            {
+                return;
+            }
+            if (rowid >= 0 && rowid < insts.Count() &&
+                colid >= 1 && colid <= 6)
+            {
+                PLCOriginInst inst = insts[rowid];
+                if (inst.ProtoType == null)
+                    return;
+                Grid.SetRow(Cursor, rowid);
+                Cursor.Visibility = Visibility.Visible;
+                CursorChanged(this, new RoutedEventArgs());
+            }
+        }
+
+        
+
+        public event RoutedEventHandler CursorEdit = delegate { };
+        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            CursorEdit(this, new RoutedEventArgs());
+        }
         #endregion
     }
 }

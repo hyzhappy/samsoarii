@@ -111,7 +111,13 @@ namespace SamSoarII.Simulation.UI.Monitor
             public void Setup(SimulateVariableUnit _svunit)
             {
                 settingup = true;
+                if (svunit != null)
+                {
+                    svunit.ValueChanged -= OnValueChanged;
+                    svunit = null;
+                }
                 svunit = _svunit;
+                svunit.ValueChanged += OnValueChanged;
                 TextBox_Name.SVUnit = svunit;
                 ComboBox_Type.SVUnit = svunit;
                 TextBox_Var.SVUnit = svunit;
@@ -269,7 +275,38 @@ namespace SamSoarII.Simulation.UI.Monitor
             
             public void Uninstall()
             {
+                TextBox_Name.TextLegalChanged -= OnTextLegalChanged;
+                TextBox_Name.InsertRowElementBehindHere -= OnInsertRowBehindHere;
+                TextBox_Name.GotFocus -= OnChildrenGotFocus;
+                TextBox_Name.LostFocus -= OnChildrenLostFocus;
+                TextBox_Name.FocusUp -= OnFocusUp;
+                TextBox_Name.FocusDown -= OnFocusDown;
+                ComboBox_Type.TextLegalChanged -= OnTextLegalChanged;
+                ComboBox_Type.GotFocus -= OnChildrenGotFocus;
+                ComboBox_Type.LostFocus -= OnChildrenLostFocus;
+                ComboBox_Type.FocusUp -= OnFocusUp;
+                ComboBox_Type.FocusDown -= OnFocusDown;
+                TextBox_Var.TextLegalChanged -= OnTextLegalChanged;
+                TextBox_Var.GotFocus -= OnChildrenGotFocus;
+                TextBox_Var.LostFocus -= OnChildrenLostFocus;
+                TextBox_Var.FocusUp -= OnFocusUp;
+                TextBox_Var.FocusDown -= OnFocusDown;
+                TextBox_Value.TextLegalChanged -= OnTextLegalChanged;
+                TextBox_Value.GotFocus -= OnChildrenGotFocus;
+                TextBox_Value.LostFocus -= OnChildrenLostFocus;
+                TextBox_Value.FocusUp -= OnFocusUp;
+                TextBox_Value.FocusDown -= OnFocusDown;
+                Button_Value.TextLegalChanged -= OnTextLegalChanged;
+                Button_Lock.MouseUp -= OnLockButtonClicked;
+                Button_Close.MouseUp -= OnCloseButtonClicked;
                 VariableUnitChanged -= parent.OnVariableUnitChanged;
+                VariableUnitClosed -= parent.OnVariableUnitClosed;
+                VariableUnitLocked -= parent.OnVariableUnitLocked;
+                VariableUnitUnlocked -= parent.OnVariableUnitUnlocked;
+                VariableUnitExpanded -= parent.OnVariableUnitExpanded;
+                InsertRowElementBehindHere -= parent.OnInsertRowBehindHere;
+                FocusUp -= parent.OnFocusUp;
+                FocusDown -= parent.OnFocusDown;
 
                 parent.MainGrid.Children.Remove(TextBox_Name);
                 parent.MainGrid.Children.Remove(ComboBox_Type);
@@ -461,7 +498,6 @@ namespace SamSoarII.Simulation.UI.Monitor
                     this.focus = FOCUS_VALUE;
                 }
             }
-
             private void OnChildrenLostFocus(object sender, RoutedEventArgs e)
             {
                 this.focus = FOCUS_NULL;
@@ -516,16 +552,20 @@ namespace SamSoarII.Simulation.UI.Monitor
                     FocusRight(this, e);
                 }
             }
+
+            private void OnValueChanged(object sender, RoutedEventArgs e)
+            {
+                if (sender is SimulateVariableUnit)
+                {
+                    Update();
+                }
+            }
             #endregion
         }
        
         private List<SimulateVariableUnit> svunits;
 
         private LinkedList<RowElement> reles;
-        private int relestatus;
-        private const int RELES_FREE = 0x00;
-        private const int RELES_FOR_UPDATE = 0x01;
-        private const int RELES_FOR_UPDATEVALUE = 0x02;
          
         public MonitorTable()
         {
@@ -562,69 +602,48 @@ namespace SamSoarII.Simulation.UI.Monitor
             }
         }
         
-        public void UpdateValue()
-        {
-            while (relestatus != RELES_FREE)
-            {
-                Thread.Sleep(10);
-            }
-            relestatus = RELES_FOR_UPDATEVALUE;
-            foreach (RowElement ele in reles)
-            {
-                ele.Update();
-            }
-            relestatus = RELES_FREE;
-             
-        }
-
         public void Update()
         {
-            while (relestatus != RELES_FREE)
-            {
-                Thread.Sleep(10);
-            }
-            relestatus = RELES_FOR_UPDATE;
-                IEnumerator<SimulateVariableUnit> iter1 = SVUnits.GetEnumerator();
-                IEnumerator<RowElement> iter2 = reles.GetEnumerator();
-                SimulateVariableUnit svunit = null;
-                RowElement rele = null;
-                int eoi = 0;
+            IEnumerator<SimulateVariableUnit> iter1 = SVUnits.GetEnumerator();
+            IEnumerator<RowElement> iter2 = reles.GetEnumerator();
+            SimulateVariableUnit svunit = null;
+            RowElement rele = null;
+            int eoi = 0;
 
+            if (!iter1.MoveNext()) eoi |= 1;
+            if (!iter2.MoveNext()) eoi |= 2;
+            while (eoi == 0)
+            {
+                svunit = iter1.Current;
+                rele = iter2.Current;
+                //rele.Update();
+                rele.Setup(svunit);
                 if (!iter1.MoveNext()) eoi |= 1;
                 if (!iter2.MoveNext()) eoi |= 2;
-                while (eoi == 0)
-                {
-                    svunit = iter1.Current;
-                    rele = iter2.Current;
-                    //rele.Update();
-                    rele.Setup(svunit);
-                    if (!iter1.MoveNext()) eoi |= 1;
-                    if (!iter2.MoveNext()) eoi |= 2;
-                }
-                while ((eoi & 1) == 0)
-                {
-                    svunit = iter1.Current;
-                    rele = new RowElement(this, reles.Count() + 1, svunit);
-                    //rele.Setup(svunit);
-                    reles.AddLast(rele);
-                    if (!iter1.MoveNext()) eoi |= 1;
-                }
-                List<RowElement> relesDel = new List<RowElement>();
-                while ((eoi & 2) == 0)
-                {
-                    //svmodel = null;
-                    rele = iter2.Current;
-                    relesDel.Add(rele);
-                    if (!iter2.MoveNext()) eoi |= 2;
-                    //rele.Uninstall();
-                    //reles.Remove(rele);
-                }
-                foreach (RowElement releDel in relesDel)
-                {
-                    releDel.Uninstall();
-                    reles.Remove(releDel);
-                }
-            relestatus = RELES_FREE;
+            }
+            while ((eoi & 1) == 0)
+            {
+                svunit = iter1.Current;
+                rele = new RowElement(this, reles.Count() + 1, svunit);
+                //rele.Setup(svunit);
+                reles.AddLast(rele);
+                if (!iter1.MoveNext()) eoi |= 1;
+            }
+            List<RowElement> relesDel = new List<RowElement>();
+            while ((eoi & 2) == 0)
+            {
+                //svmodel = null;
+                rele = iter2.Current;
+                relesDel.Add(rele);
+                if (!iter2.MoveNext()) eoi |= 2;
+                //rele.Uninstall();
+                //reles.Remove(rele);
+            }
+            foreach (RowElement releDel in relesDel)
+            {
+                releDel.Uninstall();
+                reles.Remove(releDel);
+            }
         }
 
         public int Save(string fileName)
@@ -883,13 +902,8 @@ namespace SamSoarII.Simulation.UI.Monitor
                         node.Value.ID++;
                         node = node.Next;
                     }
-                    while (relestatus != RELES_FREE)
-                    {
-                        Thread.Sleep(10);
-                    }
                     node = reles.Find(rele);
                     reles.AddAfter(node, _rele);
-
                     _rele.Focus = rele.Focus;
                 }
             }
@@ -931,10 +945,6 @@ namespace SamSoarII.Simulation.UI.Monitor
             svunits.Add(sviunit);
             RowElement rele = null;
             rele = new RowElement(this, reles.Count() + 1, sviunit);
-            while (relestatus != RELES_FREE)
-            {
-                Thread.Sleep(10);
-            }
             reles.AddLast(rele);
         }
 

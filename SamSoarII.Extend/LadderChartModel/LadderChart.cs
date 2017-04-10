@@ -77,7 +77,7 @@ namespace SamSoarII.Extend.LadderChartModel
             // 节点已经存在的话
             foreach (LCNode node in nodes)
             {
-                if (node.Id == newnode.Id)
+                if (node.X == newnode.X && node.Y == newnode.Y)
                     return false;
             }
             // 链接相邻节点
@@ -204,11 +204,14 @@ namespace SamSoarII.Extend.LadderChartModel
         /// </summary>
         public LGraph Generate()
         {
-            // 初始化元件的相邻线路的信息
+            // 初始化元件的ID和相邻线路的信息
+            int nodeid = 0;
             foreach (LCNode node in nodes)
             {
+                node.Id = nodeid;
                 node.LNodeID = 0;
                 node.RNodeID = 0;
+                nodeid++;
             }
             // 开始生成线路对应的逻辑图节点编号
             int LGVCount = 0;

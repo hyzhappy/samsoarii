@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class ADDFViewModel : OutputRectBaseViewModel
     {
         private ADDFModel _model;
-        private FloatValue InputValue1
+        public FloatValue InputValue1
         {
             get
             {
@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock1.Text = _model.InputValue1.ValueShowString;
             }
         }
-        private FloatValue InputValue2
+        public FloatValue InputValue2
         {
             get
             {
@@ -41,7 +41,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock2.Text = _model.InputValue2.ValueShowString;
             }
         }
-        private FloatValue OutputValue
+        public FloatValue OutputValue
         {
             get
             {

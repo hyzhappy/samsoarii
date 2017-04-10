@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class TRUNCViewModel : OutputRectBaseViewModel
     {
         private TRUNCModel _model;
-        private FloatValue InputValue
+        public FloatValue InputValue
         {
             get
             {
@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock1.Text = _model.InputValue.ValueShowString;
             }
         }
-        private DoubleWordValue OutputValue
+        public DoubleWordValue OutputValue
         {
             get
             {

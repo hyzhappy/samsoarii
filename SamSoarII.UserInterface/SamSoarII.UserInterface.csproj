@@ -93,6 +93,9 @@
     <Compile Include="SelectDeviceDialog.xaml.cs">
       <DependentUpon>SelectDeviceDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SimuArgsDialog.xaml.cs">
+      <DependentUpon>SimuArgsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CollectionStackPanel.cs" />
     <Compile Include="UserControls\PopupNotTop.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -141,6 +144,10 @@
     <Page Include="SelectDeviceDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SimuArgsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -229,7 +229,14 @@ namespace SamSoarII.AppMain.Project
             get { return this.idvmodel; }
             set
             {
+                if (idvmodel != null)
+                {
+                    idvmodel.CursorChanged -= OnInstructionCursorChanged;
+                    idvmodel.CursorEdit -= OnInstructionCursorEdit;
+                }
                 this.idvmodel = value;
+                idvmodel.CursorChanged += OnInstructionCursorChanged;
+                idvmodel.CursorEdit += OnInstructionCursorEdit;
                 idvmodel.Setup(this);
             }
         }
@@ -923,7 +930,11 @@ namespace SamSoarII.AppMain.Project
                             valueStrings.Add(string.Empty);
                         }
                     }
-                    if (viewmodel.Type == ElementType.Output)
+                    if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
+                    {
+                        viewmodel.AcceptNewValues(valueStrings,PLCDeviceManager.SelectDevice);
+                    }
+                    if (viewmodel.Type == LadderInstModel.ElementType.Output)
                     {
                         int x = _selectRect.X;
                         int y = _selectRect.Y;
@@ -1270,6 +1281,31 @@ namespace SamSoarII.AppMain.Project
             SelectionStatus = SelectStatus.Idle;
         }
 
+        private void OnInstructionCursorChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is InstructionNetworkViewModel)
+            {
+                InstructionNetworkViewModel invmodel = (InstructionNetworkViewModel)(sender);
+                BaseViewModel viewmodel = invmodel.CurrentViewModel;
+                LadderNetworkViewModel lvnmodel = invmodel.LadderNetwork;
+                if (lvnmodel.GetElements().Contains(viewmodel))
+                {
+                    if (_selectRect.NetworkParent != null)
+                        _selectRect.NetworkParent.ReleaseSelectRect();
+                    _selectRect.X = viewmodel.X;
+                    _selectRect.Y = viewmodel.Y;
+                    lvnmodel.AcquireSelectRect();
+                }
+            }
+        }
+
+        private void OnInstructionCursorEdit(object sender, RoutedEventArgs e)
+        {
+            if (sender is InstructionNetworkViewModel)
+            {
+                ShowInstructionInputDialog("");
+            }
+        } 
         #endregion
 
         #region Command execute

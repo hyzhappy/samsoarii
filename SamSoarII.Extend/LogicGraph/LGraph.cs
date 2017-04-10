@@ -430,17 +430,13 @@ namespace SamSoarII.Extend.LogicGraph
             // 调用方法
             List<PLCInstruction> insts = ExprHelper.GenInst(terminates);
             // 获得指令的原型
-            int instend = insts.Count() - 1;
-            for (int i = terminates.Count() - 1; i >= 0; i--)
+            foreach (PLCInstruction inst in insts)
             {
-                while (insts[instend].Type.Equals("MPP") ||
-                       insts[instend].Type.Equals("MPB"))
+                if (inst.PrototypeID != -1)
                 {
-                    instend--;
+                    inst.ProtoType = lchart.Nodes[inst.PrototypeID].Prototype;
                 }
-                terminates[i].GetInstPrototype(insts, ref instend);
             }
-
             return insts;
         } 
     }

@@ -339,7 +339,31 @@ namespace SamSoarII.Simulation.Core
         #endregion
 
         private bool simulateActive;
+        private bool simulateRunning;
         private Thread simulateThread;
+
+        public const int SIMULATE_STOP = 0x00;
+        public const int SIMULATE_RUNNING = 0x01;
+        public const int SIMULATE_PAUSE = 0x02;
+
+        public int SimulateStatus
+        {
+            get
+            {
+                if (simulateThread == null || !simulateActive) return SIMULATE_STOP;
+                if (!simulateRunning) return SIMULATE_PAUSE;
+                return SIMULATE_RUNNING;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case SIMULATE_STOP: Abort(); break;
+                    case SIMULATE_PAUSE: Pause(); break;
+                    case SIMULATE_RUNNING: Start(); break;
+                }
+            }
+        }
 
         public SimulateDllModel()
         {
@@ -351,6 +375,12 @@ namespace SamSoarII.Simulation.Core
         {
             while (simulateActive)
             {
+                while (!simulateRunning)
+                {
+                    if (!simulateActive) break;
+                    Thread.Sleep(10);
+                }
+                if (!simulateActive) break;
                 BeforeRunLadder();
                 RunLadder();
                 AfterRunLadder();
@@ -359,13 +389,29 @@ namespace SamSoarII.Simulation.Core
 
         public void Start()
         {
-            simulateThread = new Thread(_SimulateThread);
-            simulateThread.Start();
+            simulateActive = true;
+            simulateRunning = true;
+            if (simulateThread == null)
+            {
+                simulateThread = new Thread(_SimulateThread);
+                simulateThread.Start();
+            } 
+        }
+
+        public void Pause()
+        {
+            simulateRunning = false;
         }
         
         public void Abort()
         {
-            simulateThread.Abort();
+            simulateActive = false;
+            simulateRunning = false;
+            if (simulateThread != null)
+            {
+                simulateThread.Abort();
+                simulateThread = null;
+            }
         }
 
         public void RunData(double starttime, double endtime)

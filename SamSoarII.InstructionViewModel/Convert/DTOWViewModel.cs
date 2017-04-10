@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class DTOWViewModel : OutputRectBaseViewModel
     {
         private DTOWModel _model;
-        private DoubleWordValue InputValue
+        public DoubleWordValue InputValue
         {
             get
             {
@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock1.Text = _model.InputValue.ValueShowString;
             }
         }
-        private WordValue OutputValue
+        public WordValue OutputValue
         {
             get
             {
