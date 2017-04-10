@@ -936,25 +936,96 @@ namespace ICSharpCode.AvalonEdit.Editing
 			get { return (IIndentationStrategy)GetValue(IndentationStrategyProperty); }
 			set { SetValue(IndentationStrategyProperty, value); }
 		}
-		#endregion
-		
-		#region OnKeyDown/OnKeyUp
-		/// <inheritdoc/>
-		protected override void OnPreviewKeyDown(KeyEventArgs e)
+        #endregion
+
+        #region OnKeyDown/OnKeyUp
+        private const int CCMODE_KEYUP = 0x01;
+        private const int CCMODE_KEYDOWN = 0x02;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected int isccmode;
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsCodeCompleteMode
+        {
+            get
+            {
+                return (this.isccmode != 0);
+            }
+            set
+            {
+                if (value)
+                {
+                    this.isccmode = CCMODE_KEYUP | CCMODE_KEYDOWN;
+                }
+                else
+                {
+                    this.isccmode = 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public event KeyEventHandler CodeCompleteKeyDown = delegate { };
+        /// <summary>
+        /// 
+        /// </summary>
+        public event KeyEventHandler CodeCompleteKeyUp = delegate { };
+        /// <inheritdoc/>
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
 		{
-			base.OnPreviewKeyDown(e);
-			foreach (TextAreaStackedInputHandler h in stackedInputHandlers) {
-				if (e.Handled)
-					break;
-				h.OnPreviewKeyDown(e);
-			}
+            if ((isccmode & CCMODE_KEYDOWN) != 0)
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        CodeCompleteKeyDown(this, e);
+                        isccmode &= (~CCMODE_KEYDOWN);
+                        return;
+                    case Key.Left:
+                    case Key.Right:
+                        CodeCompleteKeyDown(this, e);
+                        break;
+                    case Key.Down:
+                    case Key.Up:
+                        CodeCompleteKeyDown(this, e);
+                        return;
+                }
+            }
+            base.OnPreviewKeyDown(e);
+            foreach (TextAreaStackedInputHandler h in stackedInputHandlers)
+            {
+                if (e.Handled)
+                    break;
+                h.OnPreviewKeyDown(e);
+            }	
 		}
-		
 		/// <inheritdoc/>
 		protected override void OnPreviewKeyUp(KeyEventArgs e)
 		{
-			base.OnPreviewKeyUp(e);
-			foreach (TextAreaStackedInputHandler h in stackedInputHandlers) {
+            if ((isccmode & CCMODE_KEYUP) != 0)
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        CodeCompleteKeyUp(this, e);
+                        isccmode &= (~CCMODE_KEYUP);
+                        return;
+                    case Key.Left:
+                    case Key.Right:
+                        CodeCompleteKeyUp(this, e);
+                        break;
+                    case Key.Down:
+                    case Key.Up:
+                        CodeCompleteKeyUp(this, e);
+                        return;
+                }
+            }
+            base.OnPreviewKeyUp(e);
+            foreach (TextAreaStackedInputHandler h in stackedInputHandlers) {
 				if (e.Handled)
 					break;
 				h.OnPreviewKeyUp(e);

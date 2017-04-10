@@ -85,7 +85,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 				}
 			}
 		}
-		
+    
 		/// <summary>
 		/// Gets the caret position without validating it.
 		/// </summary>
@@ -161,7 +161,11 @@ namespace ICSharpCode.AvalonEdit.Editing
 			storedCaretOffset = this.Offset;
 			InvalidateVisualColumn();
 		}
-		
+        /// <summary>
+        /// It occurs when document was changed.
+        /// </summary>
+        public event DocumentChangeEventHandler DocumentChanged = delegate { };
+
 		internal void OnDocumentChanged(DocumentChangeEventArgs e)
 		{
 			InvalidateVisualColumn();
@@ -174,6 +178,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 				}
 			}
 			storedCaretOffset = -1;
+            DocumentChanged(this, e);
 		}
 		
 		/// <summary>
@@ -189,7 +194,8 @@ namespace ICSharpCode.AvalonEdit.Editing
 					return document.GetOffset(position.Location);
 				}
 			}
-			set {
+			set
+            {
 				TextDocument document = textArea.Document;
 				if (document != null) {
 					this.Position = new TextViewPosition(document.GetLocation(value));

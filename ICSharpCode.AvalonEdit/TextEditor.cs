@@ -55,22 +55,24 @@ namespace ICSharpCode.AvalonEdit
 			if (textArea == null)
 				throw new ArgumentNullException("textArea");
 			this.textArea = textArea;
+            textArea.Caret.PositionChanged += OnCaretPositionChanged;
+            textArea.Caret.DocumentChanged += OnDocumentChanged_Detail;
 			textArea.TextView.Services.AddService(typeof(TextEditor), this);
 			
 			SetCurrentValue(OptionsProperty, textArea.Options);
 			SetCurrentValue(DocumentProperty, new TextDocument());
 		}
-		
-		#if !DOTNET4
+        
+        #if !DOTNET4
 		void SetCurrentValue(DependencyProperty property, object value)
 		{
 			SetValue(property, value);
 		}
-		#endif
-		#endregion
-		
-		/// <inheritdoc/>
-		protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer()
+        #endif
+        #endregion
+
+        /// <inheritdoc/>
+        protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer()
 		{
 			return new TextEditorAutomationPeer(this);
 		}
@@ -117,8 +119,26 @@ namespace ICSharpCode.AvalonEdit
 				DocumentChanged(this, e);
 			}
 		}
-		
-		static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// Occurs when the document property has changed.
+        /// </summary>
+        public event DocumentChangeEventHandler DocumentChanged_Detail = delegate { };
+        /// <summary>
+        /// Raises the <see cref="DocumentChanged"/> event.
+        /// </summary>
+        protected virtual void OnDocumentChanged_Detail(object sender, DocumentChangeEventArgs e)
+        {
+            if (isChangedByUser)
+            {
+                isChangedByUser = false;
+            }
+            else
+            {
+                DocumentChanged_Detail(this, e);
+            }
+        }
+
+        static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
 		{
 			((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
 		}
@@ -205,9 +225,11 @@ namespace ICSharpCode.AvalonEdit
 		{
 			return ReceiveWeakEvent(managerType, sender, e);
 		}
-		#endregion
-		
-		#region Text property
+        #endregion
+
+        #region Text property
+        private bool isChangedByUser = false;
+
 		/// <summary>
 		/// Gets/Sets the text of the current document.
 		/// </summary>
@@ -218,12 +240,14 @@ namespace ICSharpCode.AvalonEdit
 				return document != null ? document.Text : string.Empty;
 			}
 			set {
+                isChangedByUser = true;
 				TextDocument document = GetDocument();
-				document.Text = value ?? string.Empty;
-				// after replacing the full text, the caret is positioned at the end of the document
-				// - reset it to the beginning.
-				this.CaretOffset = 0;
-				document.UndoStack.ClearAll();
+                int offset = CaretOffset;
+                document.Text = value ?? string.Empty;
+                // After replacing the full text, be sure that the caret is positioned inside the the document
+                // - reset it to the ending or remain its origin position.
+                CaretOffset = Math.Min(value.Length, offset);
+                document.UndoStack.ClearAll();
 			}
 		}
 		
@@ -853,11 +877,23 @@ namespace ICSharpCode.AvalonEdit
 					textArea.Caret.Offset = value;
 			}
 		}
-		
-		/// <summary>
-		/// Gets/sets the start position of the selection.
-		/// </summary>
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        /// <summary>
+        /// Occurs when the cursor of textarea was moved 
+        /// </summary>
+        public event RoutedEventHandler CaretChanged = delegate { };
+        /// <summary>
+        /// It happened when the cursor of textarea was changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnCaretPositionChanged(object sender, EventArgs e)
+        {
+            CaretChanged(this, new RoutedEventArgs());
+        }
+        /// <summary>
+        /// Gets/sets the start position of the selection.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int SelectionStart {
 			get {
 				TextArea textArea = this.TextArea;
