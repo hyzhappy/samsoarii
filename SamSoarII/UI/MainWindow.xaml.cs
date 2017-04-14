@@ -20,6 +20,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.AppMain.UI.HelpDocComponet;
+using System.Windows.Media.Animation;
+
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
@@ -28,12 +31,26 @@ namespace SamSoarII.AppMain.UI
     public partial class MainWindow : Window
     {
         private InteractionFacade _interactionFacade;
-
+        private CanAnimationScroll MainScroll;
         public MainWindow()
         {
             InitializeComponent();
             _interactionFacade = new InteractionFacade(this);
             this.Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.Name == "elementList")
+                {
+                    window.Closing -= ((ElementList)window).OnClosing;
+                    window.Close();
+                    break;
+                }
+            }
         }
 
         public void SetProjectTreeView(ProjectTreeView treeview)
@@ -60,8 +77,12 @@ namespace SamSoarII.AppMain.UI
                 GlobalSetting.LadderOriginScaleX = MainTab.ActualWidth / 3700;
                 GlobalSetting.LadderOriginScaleY = MainTab.ActualWidth / 3700;
             }
+            MainScroll = GetMainScroll();
         }
-
+        private CanAnimationScroll GetMainScroll()
+        {
+            return (CanAnimationScroll)MainTab.Template.FindName("MainTabScroll", MainTab);
+        }
 
         private void OnTabItemHeaderCancelButtonClick(object sender, RoutedEventArgs e)
         {
@@ -119,6 +140,32 @@ namespace SamSoarII.AppMain.UI
 
 
         #region Command can Execute
+        private void ClosePageCanExecuteCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = MainTab.SelectedItem != null;
+        }
+        private void ScrollToRightCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (MainScroll == null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = MainScroll.ScrollableWidth != 0;
+            }
+        }
+        private void ScrollToLeftCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (MainScroll == null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = MainScroll.HorizontalOffset != 0;
+            }
+        }
         private void SaveCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -203,7 +250,14 @@ namespace SamSoarII.AppMain.UI
 
         private void ShowOptionDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
 
         private void DownloadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -227,7 +281,18 @@ namespace SamSoarII.AppMain.UI
 
 
         #region Command Execute
-
+        private void ClosePageExecuteCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainTab.CloseItem(MainTab.SelectedItem as ITabItem);
+        }
+        private void ScrollToLeftCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ScrollExecute(ScrollDirection.Left);
+        }
+        private void ScrollToRightCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ScrollExecute(ScrollDirection.Right);
+        }
         private void OnZoomInCommandExecute(object sender, RoutedEventArgs e)
         {
             GlobalSetting.LadderScaleX += 0.1;
@@ -343,7 +408,11 @@ namespace SamSoarII.AppMain.UI
             ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel);
             dialog.ShowDialog();
         }
-
+        private void OnShowHelpDocWindow(object sender, RoutedEventArgs e)
+        {
+            HelpDocWindow helpDocWindow = new HelpDocWindow();
+            helpDocWindow.Show();
+        }
         private void OnShowOptionDialogCommandExecute(object sender, RoutedEventArgs e)
         {
             OptionDialog dialog = new OptionDialog();
@@ -409,6 +478,36 @@ namespace SamSoarII.AppMain.UI
                         MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
                     }
                 }
+            }
+        }
+        private void ScrollToLeftAnimation()
+        {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = MainScroll.CanChangeHorizontalOffset;
+            animation.To = Math.Max(0, MainScroll.CanChangeHorizontalOffset - 70);
+            animation.Duration = new Duration(new TimeSpan(1500000));
+            MainScroll.BeginAnimation(CanAnimationScroll.CanChangeHorizontalOffsetProperty, animation);
+        }
+        private void ScrollToRightAnimation()
+        {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = MainScroll.CanChangeHorizontalOffset;
+            animation.To = MainScroll.CanChangeHorizontalOffset + Math.Min(70, MainScroll.ScrollableWidth);
+            animation.Duration = new Duration(new TimeSpan(1500000));
+            MainScroll.BeginAnimation(CanAnimationScroll.CanChangeHorizontalOffsetProperty, animation);
+        }
+        private void ScrollExecute(ScrollDirection direction)
+        {
+            switch (direction)
+            {
+                case ScrollDirection.Left:
+                    ScrollToLeftAnimation();
+                    break;
+                case ScrollDirection.Right:
+                    ScrollToRightAnimation();
+                    break;
+                default:
+                    break;
             }
         }
     }

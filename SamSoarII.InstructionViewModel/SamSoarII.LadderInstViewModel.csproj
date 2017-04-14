@@ -34,6 +34,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -63,6 +64,8 @@
     <Compile Include="BitLogic\RSTViewModel.cs" />
     <Compile Include="BitLogic\SETIMViewModel.cs" />
     <Compile Include="BitLogic\SETViewModel.cs" />
+    <Compile Include="ColorManager.cs" />
+    <Compile Include="FontManager.cs" />
     <Compile Include="InstructionCommentManager.cs" />
     <Compile Include="Compare\LDDEQViewModel.cs" />
     <Compile Include="Compare\LDDGEViewModel.cs" />

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         mc:Ignorable="d"
-        Title="ElementList" Height="650" Width="950" MinWidth="600" MinHeight="200" WindowStartupLocation="CenterScreen" Closing="OnClosing">
+        Title="ElementList" x:Name="elementList" Height="650" Width="950" MinWidth="300" MinHeight="200" WindowStartupLocation="CenterScreen" Closing="OnClosing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>

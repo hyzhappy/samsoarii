@@ -5,21 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         mc:Ignorable="d"
-        Title="OptionDialog" Height="600" Width="600">
+        Title="OptionDialog" Height="600" Width="600" PreviewKeyDown="Window_PreviewKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="4*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="MyListBox" Grid.Column="0">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel HorizontalAlignment="Center"></StackPanel>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">字体</ListBoxItem>
-            <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">颜色</ListBoxItem>
-        </ListBox>
-        <Grid Grid.Column="1"></Grid>
+        <Border BorderBrush="LightSteelBlue" BorderThickness="6,6,3,6" Grid.Column="0">
+            <ListBox x:Name="MyListBox" SelectionChanged="OnSelectionChanged">
+                <ListBox.Resources>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="FontWeight" Value="Heavy"></Setter>
+                                <Setter Property="FontSize" Value="20"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Height" Value="36"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel HorizontalAlignment="Center"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">字体</ListBoxItem>
+                <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">颜色</ListBoxItem>
+            </ListBox>
+        </Border>
+        <Border BorderBrush="LightSteelBlue" BorderThickness="3,6,6,6" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="9*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid x:Name="ContentGrid" Grid.Row="0">
+
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="EnsureButton" Width="100" Height="30" Content="确定" Grid.Column="1" Click="OnEnsureButtonClick"></Button>
+                    <Button x:Name="CancelButton" Width="100" Height="30" Content="取消" Grid.Column="2" Click="OnCancelButtonClick"></Button>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

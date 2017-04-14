@@ -212,7 +212,6 @@ namespace SamSoarII.AppMain.UI
         public ElementList()
         {
             InitializeComponent();
-            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             DataContext = this;
         }
         public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
@@ -501,7 +500,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        private void OnClosing(object sender, CancelEventArgs e)
+        public void OnClosing(object sender, CancelEventArgs e)
         {
             Window window = sender as Window;
             e.Cancel = true;
@@ -546,18 +545,6 @@ namespace SamSoarII.AppMain.UI
                 NavigateToNetwork.Invoke(new NavigateToNetworkEventArgs(netWorkNum,refLadderName,x,y));
             }
         }
-        //private void ElementDataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (ElementDataGrid.SelectedItems.Count == 1)
-        //    {
-        //        ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
-        //    }
-        //}
-        //private void ElementDataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
-        //}
-
         private void OnDetailShowClick(object sender, RoutedEventArgs e)
         {
             _showDetails = !_showDetails;

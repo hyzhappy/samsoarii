@@ -50,9 +50,9 @@
                     </Grid>
                 </Border>
             </local:PopupNotTop>
-            <local:PopupNotTop x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="40" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
-                    <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
+            <local:PopupNotTop x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="42" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True" Background="Transparent">
+                    <local:CollectionStackPanel x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}" Background="White">
                         <local:CollectionStackPanel.Resources>
                             <Style TargetType="Label">
                                 <Setter Property="Height" Value="20"></Setter>

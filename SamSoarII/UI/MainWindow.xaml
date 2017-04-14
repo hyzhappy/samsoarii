@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         xmlns:app="clr-namespace:SamSoarII.AppMain"
         xmlns:proj="clr-namespace:SamSoarII.AppMain.Project"
+        xmlns:hdoc="clr-namespace:SamSoarII.AppMain.UI.HelpDocComponet"
         mc:Ignorable="d"
         Title="SamSoarII" Height="350" Width="525" WindowState="Maximized">
     <Window.CommandBindings>
@@ -38,6 +39,9 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimulateCommand}" Executed="OnSimulateCommandExecute" CanExecute="SimulateCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ClosePage}" Executed="ClosePageExecuteCommand" CanExecute="ClosePageCanExecuteCommand"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}" Executed="ScrollToLeftCommandExecute" CanExecute="ScrollToLeftCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}" Executed="ScrollToRightCommandExecute" CanExecute="ScrollToRightCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <Style x:Key="ImageEnable" TargetType="Image">
@@ -81,6 +85,48 @@
                     <Setter TargetName="Border" Property="Background" Value="SkyBlue"></Setter>
                 </Trigger>
             </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="TabControlTemplate" TargetType="{x:Type local:MainTabControl}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="18"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="5"></ColumnDefinition>
+                        <ColumnDefinition Width="60"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <hdoc:CanAnimationScroll x:Name="MainTabScroll"
+                                  HorizontalScrollBarVisibility="Hidden" 
+                                  VerticalScrollBarVisibility="Disabled" >
+                        <TabPanel x:Name="HeaderPanel"
+                          Panel.ZIndex ="1"
+                          KeyboardNavigation.TabIndex="1"
+                          Grid.Column="0"
+                          Grid.Row="0"
+                          Margin="2,2,2,0"
+                          IsItemsHost="true"/>
+                    </hdoc:CanAnimationScroll>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <Button x:Name="LeftButton" Template="{StaticResource ScrollToLeft}" Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}"></Button>
+                        <Button x:Name="RightButton" Template="{StaticResource ScrollToRight}" Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}"></Button>
+                        <ComboBox x:Name="MainCombox" Width="15" Template="{StaticResource ComboxTemplate}" ItemsSource="{Binding Path=ItemsSource,Mode=OneWay,RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding Path=SelectedItem,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
+                            <ComboBox.Resources>
+                                <Style TargetType="{x:Type ComboBoxItem}">
+                                    <Setter Property="Template" Value="{StaticResource ComboxItemTemplate}"></Setter>
+                                </Style>
+                            </ComboBox.Resources>
+                        </ComboBox>
+                        <Button Template="{StaticResource CloseButton}" Command="{x:Static hdoc:HelpDocCommand.ClosePage}"></Button>
+                    </StackPanel>
+                </Grid>
+                <ContentPresenter x:Name="PART_SelectedContentHost"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                      Margin="{TemplateBinding Padding}"
+                                      ContentSource="SelectedContent" Grid.Row="1"/>
+            </Grid>
         </ControlTemplate>
     </Window.Resources>
     <DockPanel>
@@ -134,7 +180,7 @@
                 <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="帮助(_H)">
-                <MenuItem Header="查看帮助"></MenuItem>
+                <MenuItem Header="查看帮助" Click="OnShowHelpDocWindow"></MenuItem>
                 <MenuItem Header="在线升级"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="关于" Click="OnShowAboutDialog"></MenuItem>
@@ -210,7 +256,7 @@
             </Grid.RowDefinitions>
             <Grid x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
             </Grid>
-            <local:MainTabControl x:Name="MainTab" Background="Transparent" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" ItemsSource="{Binding TabItemCollection}">
+            <local:MainTabControl x:Name="MainTab" Background="Transparent" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" ItemsSource="{Binding TabItemCollection}" Template="{StaticResource TabControlTemplate}">
                 <TabControl.Resources>
                     <Style TargetType="{x:Type TabItem}">
                         <Setter Property="Template" Value="{StaticResource MainTabItemTemplate}"></Setter>

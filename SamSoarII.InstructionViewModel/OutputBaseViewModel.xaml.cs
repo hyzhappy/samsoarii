@@ -34,7 +34,6 @@ namespace SamSoarII.LadderInstViewModel
         private int _y;
         private bool _isCommentMode;
         private bool _isMonitorMode;
-
         public override int X
         {
             get
@@ -95,7 +94,7 @@ namespace SamSoarII.LadderInstViewModel
         {
             InitializeComponent();
             IsCommentMode = false;
-            this.DataContext = this;
+            DataContext = this;
         }
 
         private void UpdateHeightProperty()

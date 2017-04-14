@@ -24,7 +24,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl, IComparable
+    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
     {
 
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
@@ -71,6 +71,7 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 NetworkBriefLabel.Content = value;
+                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("NetworkBrief"));
             }
         }
 
@@ -278,6 +279,8 @@ namespace SamSoarII.AppMain.Project
 
         // parent ladder diagram
         private LadderDiagramViewModel _ladderDiagram;
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public LadderNetworkViewModel(LadderDiagramViewModel parent, int number)
         {

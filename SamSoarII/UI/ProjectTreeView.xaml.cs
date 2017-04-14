@@ -24,13 +24,11 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class ProjectTreeView : UserControl, INotifyPropertyChanged
     {
-
         private ProjectModel _projectModel;
         public ProjectModel Project
         {
             get { return _projectModel; }
         }
-
         private string _oldname;
 
         private object _renamedItem;
@@ -56,13 +54,65 @@ namespace SamSoarII.AppMain.UI
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        public event NavigateToNetworkEventHandler NavigatedToNetwork = delegate { };
+
         public ProjectTreeView(ProjectModel project)
         {
             InitializeComponent();
             _projectModel = project;
-            this.DataContext = Project;
+            DataContext = Project;
+            Project.RefNetworksBriefChanged += Project_RefNetworksBriefChanged;
         }
-
+        private void Project_RefNetworksBriefChanged(RefNetworksBriefChangedEventArgs e)
+        {
+            switch (e.Type)
+            {
+                case ChangeType.Add:
+                    if (e.Routine.IsMainLadder)
+                    {
+                        MainRoutineTreeItem.ItemsSource = Project.RefNetworksBrief[e.Routine];
+                    }
+                    else
+                    {
+                        foreach (var item in SubRoutineTreeItems.ItemsSource)
+                        {
+                            if (((TreeViewItem)item).Header == e.Routine)
+                            {
+                                ((TreeViewItem)item).ContextMenu = (ContextMenu)FindResource("SubRoutineContextMenu");
+                                ((TreeViewItem)item).MouseDoubleClick += OnRoutineTreeItemDoubleClick;
+                                ((TreeViewItem)item).HeaderTemplate = (DataTemplate)FindResource("ProgramTemplate");
+                                ((TreeViewItem)item).IsExpanded = true;
+                                ((TreeViewItem)item).Selected -= OnSelected;
+                                ((TreeViewItem)item).ItemsSource = Project.RefNetworksBrief[e.Routine];
+                            }
+                        }
+                    }
+                    break;
+                case ChangeType.Remove:
+                    break;
+                case ChangeType.Modify:
+                    if (MainRoutineTreeItem.Header == e.Routine)
+                    {
+                        MainRoutineTreeItem.ItemsSource = Project.RefNetworksBrief[e.Routine];
+                    }
+                    else
+                    {
+                        foreach (var item in SubRoutineTreeItems.ItemsSource)
+                        {
+                            if (((TreeViewItem)item).Header == e.Routine)
+                            {
+                                ((TreeViewItem)item).ItemsSource = Project.RefNetworksBrief[e.Routine];
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case ChangeType.Clear:
+                    break;
+                default:
+                    break;
+            }
+        }
         #region Event handler
         // 从ContextMenu打开子程序处理事件，直接调用双击事件
         void OnOpenRoutine(object sender, RoutedEventArgs e)
@@ -177,7 +227,6 @@ namespace SamSoarII.AppMain.UI
             TreeViewItem item = FindTreeItem(sender as TextBox);
             RoutineRenamed.Invoke(item.Header, new RoutineRenamedEventArgs(textBox.Text));
         }
-
         static TreeViewItem FindTreeItem(DependencyObject source)
         {
             while (source != null && !(source is TreeViewItem))
@@ -218,5 +267,30 @@ namespace SamSoarII.AppMain.UI
         }
         #endregion
 
+        private void OnSelected(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = sender as TreeViewItem;
+            if (item.Header.GetType() == typeof(string))
+            {
+                var parent = VisualTreeHelper.GetParent(item);
+                while (parent.GetType() != typeof(TreeViewItem))
+                {
+                    parent = VisualTreeHelper.GetParent(parent);
+                }
+                int networkNum = int.Parse(item.Header.ToString().Substring(0,1));
+                LadderDiagramViewModel model = (parent as TreeViewItem).Header as LadderDiagramViewModel;
+                NavigatedToNetwork.Invoke(new NavigateToNetworkEventArgs(networkNum,model.ProgramName,0,0));
+            }
+            e.Handled = true;
+        }
+
+        private void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem item = sender as TreeViewItem;
+            if (item.Header is string)
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

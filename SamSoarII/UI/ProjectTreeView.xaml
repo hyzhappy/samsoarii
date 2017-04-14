@@ -64,35 +64,35 @@
                     </DataTemplate>
                 </TreeViewItem.HeaderTemplate>
                 <TreeViewItem Header="程序" IsExpanded="True">
-                    <TreeViewItem ContextMenu="{x:Null}" IsExpanded="True">
-                        <TreeViewItem.Resources>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
-                                <Setter Property="ContextMenu" Value="{StaticResource MainRoutineContextMenu}"></Setter>
-                            </Style>
-                        </TreeViewItem.Resources>
+                    <TreeViewItem IsExpanded="True">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="/Resources/Image/TreeViewIcon/MainProgram.ico"></Image>
                                 <TextBlock Margin="6,0,0,0">主程序</TextBlock>
                             </StackPanel>
                         </TreeViewItem.Header>
-                        <TreeViewItem Header="{Binding MainRoutine}" HeaderTemplate="{StaticResource ProgramTemplate}">
+                        <TreeViewItem x:Name="MainRoutineTreeItem" Header="{Binding MainRoutine}" HeaderTemplate="{StaticResource ProgramTemplate}" IsExpanded="True" MouseDoubleClick="OnRoutineTreeItemDoubleClick" ContextMenu="{StaticResource MainRoutineContextMenu}">
+                            <TreeViewItem.Resources>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <EventSetter Event="Selected" Handler="OnSelected"></EventSetter>
+                                    <EventSetter Event="MouseRightButtonUp" Handler="OnMouseRightButtonUp"></EventSetter>
+                                </Style>
+                            </TreeViewItem.Resources>
                         </TreeViewItem>
                     </TreeViewItem>
-                    <TreeViewItem ContextMenu="{StaticResource ContextMenu2}" IsExpanded="True" ItemsSource="{Binding SubRoutines}" ItemTemplate="{StaticResource ProgramTemplate}">
-                        <TreeViewItem.Resources>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
-                                <Setter Property="ContextMenu" Value="{StaticResource SubRoutineContextMenu}"></Setter>
-                            </Style>
-                        </TreeViewItem.Resources>
+                    <TreeViewItem x:Name="SubRoutineTreeItems" ContextMenu="{StaticResource ContextMenu2}" IsExpanded="True" ItemsSource="{Binding SubRoutineTreeViewItems}">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="/Resources/Image/TreeViewIcon/SubProgram.ico"></Image>
                                 <TextBlock Margin="6,0,0,0">子程序</TextBlock>
                             </StackPanel>
                         </TreeViewItem.Header>
+                        <TreeViewItem.Resources>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <EventSetter Event="Selected" Handler="OnSelected"></EventSetter>
+                                <EventSetter Event="MouseRightButtonUp" Handler="OnMouseRightButtonUp"></EventSetter>
+                            </Style>
+                        </TreeViewItem.Resources>
                     </TreeViewItem>
                     <TreeViewItem ContextMenu="{StaticResource ContextMenu3}" IsExpanded="True" ItemsSource="{Binding FuncBlocks}" ItemTemplate="{StaticResource ProgramTemplate}">
                         <TreeViewItem.Resources>

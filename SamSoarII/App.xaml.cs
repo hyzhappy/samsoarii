@@ -1,4 +1,7 @@
 ﻿using SamSoarII.AppMain.UI;
+using SamSoarII.AppMain.UI.HelpDocComponet;
+using SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages;
+using SamSoarII.AppMain.UI.HelpDocComponet.UserSetting;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
 using System;
@@ -26,12 +29,13 @@ namespace SamSoarII.AppMain
             ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
             ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
             GlobalSetting.Load();
+            SettingManager.Load(PageManager.PageCollection);
             this.Exit += App_Exit;
         }
-
         private void App_Exit(object sender, ExitEventArgs e)
         {
             GlobalSetting.Save();
+            SettingManager.Save();
         }
     }
 }

@@ -37,7 +37,6 @@ namespace SamSoarII.AppMain
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
         private MainWindow _mainWindow;
-
         public bool ProjectLoaded
         {
             get
@@ -89,11 +88,14 @@ namespace SamSoarII.AppMain
             _projectTreeView.TabItemOpened += OnTabOpened;
             _projectTreeView.RoutineRemoved += OnRemoveRoutine;
             _projectTreeView.RoutineRenamed += OnRenameRoutine;
+            _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
             _mainTabControl.SelectionChanged += OnTabItemChanged;
             _mainTabControl.ShowItem(_projectModel.MainRoutine);
             _mainWindow.SetProjectTreeView(_projectTreeView);
             ProjectFullFileName = fullFileName;
             _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
+            _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+            UpdateRefNetworksBrief(_projectModel);
         }
 
         public void SaveProject()
@@ -117,18 +119,28 @@ namespace SamSoarII.AppMain
                 _projectTreeView.TabItemOpened += OnTabOpened;
                 _projectTreeView.RoutineRemoved += OnRemoveRoutine;
                 _projectTreeView.RoutineRenamed += OnRenameRoutine;
+                _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
                 _mainTabControl.Reset();
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowItem(_projectModel.MainRoutine);
                 _mainWindow.SetProjectTreeView(_projectTreeView);
                 ProjectFullFileName = fullFileName;
                 _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
+                _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+                _projectTreeView.SubRoutineTreeItems.ItemsSource = _projectModel.SubRoutineTreeViewItems;
+                UpdateRefNetworksBrief(_projectModel);
                 return true;
             }
             return false;
-
         }
-
+        private void UpdateRefNetworksBrief(ProjectModel projectModel)
+        {
+            projectModel.UpdateNetworkBriefs(projectModel.MainRoutine,ChangeType.Add);
+            foreach (var item in projectModel.SubRoutines)
+            {
+                projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
+            }
+        }
         public bool AddNewSubRoutine(string name)
         {
             if(_projectModel.ContainProgram(name))

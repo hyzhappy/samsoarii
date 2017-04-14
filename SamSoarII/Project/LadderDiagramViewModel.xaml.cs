@@ -44,7 +44,6 @@ namespace SamSoarII.AppMain.Project
         CrossDown,
         NoCross
     }
-
     public partial class LadderDiagramViewModel : UserControl, IProgram
     {
         private string _programName;
@@ -119,7 +118,18 @@ namespace SamSoarII.AppMain.Project
         }
 
         private LinkedList<LadderNetworkViewModel> _ladderNetworks = new LinkedList<LadderNetworkViewModel>();
-
+        public LinkedList<LadderNetworkViewModel> LadderNetworks
+        {
+            get
+            {
+                return _ladderNetworks;
+            }
+            set
+            {
+                _ladderNetworks = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+            }
+        }
         private SelectRect _selectRect = new SelectRect();
 
         private LadderNetworkViewModel _selectStartNetwork;
@@ -193,9 +203,6 @@ namespace SamSoarII.AppMain.Project
                 LadderCommentTextBlock.Text = value;
             }
         }
-
-
-
         public LadderDiagramViewModel(string name)
         {
             InitializeComponent();
@@ -212,17 +219,16 @@ namespace SamSoarII.AppMain.Project
         public void NavigateToNetworkByNum(int num)
         {
             double scale = GlobalSetting.LadderScaleX;
-            double offset = scale * (MainBorder.ActualHeight + 20) / 3;
+            double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
             foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < num; }))
             {
-                offset += scale * (item.ActualHeight + 20) / 3;
+                offset += scale * (item.ActualHeight + 20) / 3.57;
             }
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
         private void InitializeInstructionNameAndToolTips()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Console.WriteLine(assembly.GetManifestResourceNames());
             Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.InstructionPopup.xml");
             Dictionary<string, List<string>> tempDic = new Dictionary<string, List<string>>();
             XDocument xDoc = XDocument.Load(stream);
@@ -268,7 +274,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         private List<BaseViewModel> GetProgramControlViewModels()
-            {
+        {
             List<BaseViewModel> eles = new List<BaseViewModel>();
             foreach (var network in GetNetworks())
             {
@@ -292,7 +298,12 @@ namespace SamSoarII.AppMain.Project
         public void InitNetworks()
         {
             LadderNetworkStackPanel.Children.Clear();
+            foreach (var network in _ladderNetworks)
+            {
+                network.PropertyChanged -= Network_PropertyChanged;
+            }
             _ladderNetworks.Clear();
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         public void AcquireSelectRect(LadderNetworkViewModel network)
@@ -334,6 +345,16 @@ namespace SamSoarII.AppMain.Project
             network.NetworkNumber = _ladderNetworks.Count;
             _ladderNetworks.AddLast(network);
             LadderNetworkStackPanel.Children.Add(network);
+            network.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+        }
+
+        private void Network_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "NetworkBrief")
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+            }
         }
 
         #region Network manipulation，undoable command form method
@@ -341,6 +362,8 @@ namespace SamSoarII.AppMain.Project
         {
             var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
             _commandManager.Execute(command);
+            network.PropertyChanged -= Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
         public void ReplaceSingleElement(LadderNetworkViewModel network, BaseViewModel element)
         {
@@ -360,18 +383,24 @@ namespace SamSoarII.AppMain.Project
             var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
             _commandManager.Execute(command);
+            newnetwork.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
         public void AddNewNetworkAfter(LadderNetworkViewModel network)
         {
             var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber + 1);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
             _commandManager.Execute(command);
+            newnetwork.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
         public void AppendNewNetwork()
         {
             var network = new LadderNetworkViewModel(this, _ladderNetworks.Count);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
             _commandManager.Execute(command);
+            network.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
         /// <summary>
         /// 放置一个新的元素在选择框内
@@ -479,6 +508,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         LinkedListNode<LadderNetworkViewModel> newnode = new LinkedListNode<LadderNetworkViewModel>(net);
                         _ladderNetworks.AddFirst(newnode);
+                        newnode.Value.PropertyChanged += Network_PropertyChanged;
                     }
                     var node = _ladderNetworks.First;
                     int n = 0;
@@ -506,6 +536,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         net.NetworkNumber = n;
                         _ladderNetworks.AddAfter(node, net);
+                        net.PropertyChanged += Network_PropertyChanged;
                         n++;
                         node = node.Next;
                     }
@@ -525,11 +556,12 @@ namespace SamSoarII.AppMain.Project
                 {
                     net.NetworkNumber = n;
                     _ladderNetworks.AddLast(net);
+                    net.PropertyChanged += Network_PropertyChanged;
                     n++;
                 }
             }
-     
             ReloadNetworksToStackPanel();
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         public void RemoveNetwork(LadderNetworkViewModel network)
@@ -547,9 +579,11 @@ namespace SamSoarII.AppMain.Project
                         node = node.Next;
                     }
                     _ladderNetworks.Remove(network);
+                    network.PropertyChanged -= Network_PropertyChanged;
                     LadderNetworkStackPanel.Children.Remove(network);
                 }
             }
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         #endregion
