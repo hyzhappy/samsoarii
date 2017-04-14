@@ -804,10 +804,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BetterTab\BetterTab.csproj">
-      <Project>{933fd590-0743-49e1-b1b6-cf7b2a7f1a3f}</Project>
-      <Name>BetterTab</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ColorPicker\ColorPicker.csproj">
       <Project>{827f8c33-8118-48c7-ab3c-4864298396ad}</Project>
       <Name>ColorPicker</Name>
