@@ -358,6 +358,7 @@ namespace SamSoarII.AppMain.UI
                         MessageBox.Show("指定路径已存在同名文件");
                         return;
                     }
+                    PLCDevice.PLCDeviceManager.SetSelectDeviceType(newProjectDialog.Type);
                     CreateProject(name, fullFileName);
                     newProjectDialog.Close();
                 };

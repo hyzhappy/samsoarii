@@ -10,7 +10,6 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet
     public static class HelpDocCommand
     {
         public static RoutedUICommand HideOrShowCommand { get; set; }
-        public static RoutedUICommand NavigateToSelectPage { get; set; }
         public static RoutedUICommand HistoryBack { get; set; }
         public static RoutedUICommand HistoryAhead { get; set; }
         public static RoutedUICommand DeletePage { get; set; }
@@ -23,7 +22,6 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet
         static HelpDocCommand()
         {
             HideOrShowCommand = new RoutedUICommand();
-            NavigateToSelectPage = new RoutedUICommand();
             HistoryBack = new RoutedUICommand();
             HistoryAhead = new RoutedUICommand();
             DeletePage = new RoutedUICommand();

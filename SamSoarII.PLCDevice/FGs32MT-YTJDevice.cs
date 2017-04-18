@@ -7,10 +7,10 @@ using SamSoarII.Utility;
 
 namespace SamSoarII.PLCDevice
 {
-    class FGs32MRDevice : Device
+    public class FGs32MT_YTJDevice : Device
     {
-        public FGs32MRDevice() { }
-        public FGs32MRDevice(PLCDeviceType type)
+        public FGs32MT_YTJDevice() { }
+        public FGs32MT_YTJDevice(PLCDeviceType type)
         {
             _type = type;
         }
@@ -18,7 +18,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 16);
+                return new IntRange(0, 32);
             }
         }
 
@@ -26,7 +26,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 16);
+                return new IntRange(0, 32);
             }
         }
 
@@ -66,7 +66,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return "FGs32MR";
+                return "FGs32MT-YTJ";
             }
         }
 

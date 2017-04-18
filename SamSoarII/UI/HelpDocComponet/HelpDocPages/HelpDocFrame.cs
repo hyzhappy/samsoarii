@@ -9,19 +9,26 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
 {
     public class HelpDocFrame :Frame
     {
-        private IPageItem _item;
+        private IPageItem _page;
+        public IPageItem Page
+        {
+            get
+            {
+                return _page;
+            }
+        }
         public string TabHeader
         {
             get
             {
-                return _item.TabHeader;
+                return _page.TabHeader;
             }
         }
         public int PageIndex
         {
             get
             {
-                return _item.PageIndex;
+                return _page.PageIndex;
             }
         }
         private bool _isUsed = false;
@@ -36,10 +43,10 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
                 _isUsed = value;
             }
         }
-        public HelpDocFrame(IPageItem item)
+        public HelpDocFrame(IPageItem page)
         {
-            _item = item;
-            Navigate(_item);
+            _page = page;
+            Navigate(_page);
         }
     }
 }

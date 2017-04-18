@@ -8,8 +8,14 @@
              d:DesignHeight="1000" d:DesignWidth="300">
     <UserControl.CommandBindings>
         <CommandBinding x:Name="OpenCommand" Command="{x:Static local:HelpDocCommand.OpenPage}"></CommandBinding>
+        <CommandBinding x:Name="CollectCommand" Command="{x:Static local:HelpDocCommand.CollectPage}"></CommandBinding>
     </UserControl.CommandBindings>
     <UserControl.Resources>
+        <ContextMenu x:Key="ItemContext">
+            <MenuItem Header="打开" Command="{x:Static local:HelpDocCommand.OpenPage}"></MenuItem>
+            <MenuItem Header="打印"></MenuItem>
+            <MenuItem Header="搜藏" Command="{x:Static local:HelpDocCommand.CollectPage}"></MenuItem>
+        </ContextMenu>
         <ControlTemplate x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
             <Grid>
                 <Border x:Name="Border">
@@ -24,8 +30,11 @@
                 </Border>
             </Grid>
             <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="LightBlue"></Setter>
+                </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter TargetName="Border" Property="Background" Value="SkyBlue"></Setter>
+                    <Setter TargetName="Border" Property="Background" Value="#FF72CBE8"></Setter>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -72,7 +81,8 @@
                     <ListBox.Resources>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="Template" Value="{StaticResource ListBoxItemTempalte}"></Setter>
-                            <!--<Setter Property="MinWidth" Value="100"></Setter>-->
+                            <Setter Property="ContextMenu" Value="{StaticResource ItemContext}"></Setter>
+                            <EventSetter Event="MouseDoubleClick" Handler="OnItemDoubleClick"></EventSetter>
                         </Style>
                     </ListBox.Resources>
                 </ListBox>

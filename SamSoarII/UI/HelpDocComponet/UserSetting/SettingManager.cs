@@ -27,7 +27,7 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.UserSetting
                 xDoc.Save(File.Create(path));
             }
         }
-        public static void Load(Dictionary<int, HelpDocFrame> PageCollection)
+        public static void Load()
         {
             XDocument xDoc = XDocument.Load(dir + @"\FavoritePages.xml");
             XElement rootNode = xDoc.Root;
@@ -35,7 +35,7 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.UserSetting
             foreach (var ele in rootNode.Elements())
             {
                 pageindex = int.Parse(ele.Attribute("PageIndex").Value);
-                FavoriteManager.TabItemCollection.Add(PageCollection[pageindex]);
+                FavoriteManager.TabItemCollection.Add(PageManager.PageCollection[pageindex]);
             }
         }
         public static void Save()

@@ -28,6 +28,7 @@ namespace SamSoarII.AppMain.UI
             InitializeComponent();
             _widget.Add(new FontSelectionWidget());
             _widget.Add(new ColorSelectionWidget());
+            ShowWidget(0);
         }
         private void ShowWidget(int index)
         {

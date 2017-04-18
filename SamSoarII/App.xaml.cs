@@ -29,7 +29,7 @@ namespace SamSoarII.AppMain
             ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
             ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
             GlobalSetting.Load();
-            SettingManager.Load(PageManager.PageCollection);
+            SettingManager.Load();
             this.Exit += App_Exit;
         }
         private void App_Exit(object sender, ExitEventArgs e)

@@ -61,6 +61,9 @@
     <Compile Include="CSVImportDialog.xaml.cs">
       <DependentUpon>CSVImportDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DefaultValueDialog.xaml.cs">
+      <DependentUpon>DefaultValueDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ElementPropertyDialog.xaml.cs">
       <DependentUpon>ElementPropertyDialog.xaml</DependentUpon>
     </Compile>
@@ -90,9 +93,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SelectDeviceDialog.xaml.cs">
-      <DependentUpon>SelectDeviceDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\CollectionStackPanel.cs" />
     <Compile Include="UserControls\PopupNotTop.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -118,6 +118,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DefaultValueDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ElementPropertyDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -138,12 +142,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SelectDeviceDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj">
+      <Project>{6ddbbac0-a051-43ac-be0d-d70227d61687}</Project>
+      <Name>SamSoarII.PLCDevice</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.ValueModel\SamSoarII.ValueModel.csproj">
       <Project>{5357953a-adc8-40ee-a685-3165f1be99cc}</Project>
       <Name>SamSoarII.ValueModel</Name>

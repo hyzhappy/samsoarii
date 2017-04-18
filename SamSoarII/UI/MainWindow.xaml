@@ -110,8 +110,8 @@
                           IsItemsHost="true"/>
                     </hdoc:CanAnimationScroll>
                     <StackPanel Orientation="Horizontal" Grid.Column="2">
-                        <Button x:Name="LeftButton" Template="{StaticResource ScrollToLeft}" Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}"></Button>
-                        <Button x:Name="RightButton" Template="{StaticResource ScrollToRight}" Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}"></Button>
+                        <RepeatButton x:Name="LeftButton" Template="{StaticResource ScrollToLeft}" Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}"></RepeatButton>
+                        <RepeatButton x:Name="RightButton" Template="{StaticResource ScrollToRight}" Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}"></RepeatButton>
                         <ComboBox x:Name="MainCombox" Width="15" Template="{StaticResource ComboxTemplate}" ItemsSource="{Binding Path=ItemsSource,Mode=OneWay,RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding Path=SelectedItem,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
                             <ComboBox.Resources>
                                 <Style TargetType="{x:Type ComboBoxItem}">

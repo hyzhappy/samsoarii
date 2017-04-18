@@ -13,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SamSoarII.AppMain.UI.HelpDocComponet
+namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
 {
     /// <summary>
-    /// HelpDocFavorite.xaml 的交互逻辑
+    /// AnalogQuantitySettingWidget.xaml 的交互逻辑
     /// </summary>
-    public partial class HelpDocFavorite : UserControl
+    public partial class AnalogQuantitySettingWidget : UserControl
     {
-        public HelpDocFavorite()
+        public AnalogQuantitySettingWidget()
         {
             InitializeComponent();
-            DataContext = FavoriteManager.TabItemCollection;
-        }
-        public event MouseButtonEventHandler ItemDoubleClick = delegate { };
-        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            ItemDoubleClick.Invoke(sender,e);
         }
     }
 }

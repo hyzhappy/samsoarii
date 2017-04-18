@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.Project;
+using SamSoarII.AppMain.UI.ProjectPropertyWidget;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,14 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
             _widget.Add(new DeviceSelectionWidget());
+            _widget.Add(new CommunicationSettingWidget());
+            _widget.Add(new PasswordSettingWidget());
+            _widget.Add(new AnalogQuantitySettingWidget());
+            _widget.Add(new FilterSettingWidget());
+            _widget.Add(new HoldingSectionSettingWidget());
+            _widget.Add(new ExpansionModuleSettingWidget());
             _projectModel = projectModel;
+            ShowWidget(0);
         }
 
 

@@ -35,7 +35,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Navigation;
 #endregion
 namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
 {
@@ -57,6 +59,7 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
         }
         public PageManager(HelpDocWindow window)
         {
+            InitializeNavigateEvent();
             _helpDocWindow = window;
             _helpDocWindow.BackCommand.Executed += BackCommand_Executed;
             _helpDocWindow.AheadCommand.Executed += AheadCommand_Executed;
@@ -79,22 +82,53 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
             _helpDocFavorite.DeleteAllCommand.CanExecute += DeleteAllCommand_CanExecute;
             _helpDocFavorite.OpenCommand.Executed += OpenCommand_Executed;
             _helpDocFavorite.OpenCommand.CanExecute += OpenCommand_CanExecute;
+            _helpDocFavorite.ItemDoubleClick += _helpDocFavorite_ItemDoubleClick;
             _helpDocSearch.OpenCommand.Executed += OpenCommand_Executed1;
             _helpDocSearch.OpenCommand.CanExecute += OpenCommand_CanExecute1;
+            _helpDocSearch.ItemDoubleClick += _helpDocSearch_ItemDoubleClick;
+            _helpDocSearch.CollectCommand.Executed += CollectCommand_Executed2;
+            _helpDocSearch.CollectCommand.CanExecute += CollectCommand_CanExecute2;
             _browsingHistoryManager = new BrowsingHistoryManager();
             _helpDocWindow.Loaded += _helpDocWindow_Loaded;
             _helpDocWindow.FuncGrid.SizeChanged += FuncGrid_SizeChanged;
         }
+        private void CollectCommand_CanExecute2(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = _helpDocSearch.CollectList.SelectedItem != null;
+        }
+
+        private void CollectCommand_Executed2(object sender, ExecutedRoutedEventArgs e)
+        {
+            HelpDocFrame page = GetFrameByPageIndex((_helpDocSearch.CollectList.SelectedItem as HelpDocFrame).PageIndex);
+            FavoriteManager.CollectPage(page);
+        }
+        private void _helpDocFavorite_ItemDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                ShowPage(((sender as ListBoxItem).Content as HelpDocFrame).PageIndex);
+            }
+        }
+        private void _helpDocSearch_ItemDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                ShowPage(((sender as ListBoxItem).Content as HelpDocFrame).PageIndex);
+            }
+        }
+
         private void OpenCommand_CanExecute1(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _helpDocSearch.CollectList.SelectedItems.Count == 1;
         }
-
+        private void NavigateToPage(NavigateToPageEventArgs e)
+        {
+            ShowPage(e.PageIndex);
+        }
         private void OpenCommand_Executed1(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
             ShowPage((_helpDocSearch.CollectList.SelectedItem as HelpDocFrame).PageIndex);
         }
-
         private void OpenCommand_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _helpDocFavorite.CollectList.SelectedItems.Count == 1;
@@ -188,18 +222,14 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
         private void _helpDocWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             _helpDocWindow.ShowView(0);
-            _helpDocSearch.CollectList.Height = _helpDocWindow.FuncGrid.ActualHeight - 75;
-            _helpDocFavorite.CollectList.Height = _helpDocWindow.FuncGrid.ActualHeight - 75;
-            _helpDocSearch.CollectList.Width = _helpDocWindow.FuncGrid.ActualWidth;
-            _helpDocFavorite.CollectList.Width = _helpDocWindow.FuncGrid.ActualWidth;
             _pageTabControl.InitializeTabItemCollection(GetFrameByPageIndex(1000));
         }
         private void FuncGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _helpDocSearch.CollectList.Height = _helpDocWindow.FuncGrid.ActualHeight - 75;
-            _helpDocFavorite.CollectList.Height = _helpDocWindow.FuncGrid.ActualHeight - 75;
-            _helpDocSearch.CollectList.Width = _helpDocWindow.FuncGrid.ActualWidth;
-            _helpDocFavorite.CollectList.Width = _helpDocWindow.FuncGrid.ActualWidth;
+            _helpDocSearch.CollectList.Height = e.NewSize.Height - 75;
+            _helpDocFavorite.CollectList.Height = e.NewSize.Height - 75;
+            _helpDocSearch.CollectList.Width = e.NewSize.Width;
+            _helpDocFavorite.CollectList.Width = e.NewSize.Width;
         }
         #region Initialize pageCollection
         static PageManager()
@@ -405,6 +435,16 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
         private static void Add(IPageItem page)
         {
             _pageCollection.Add(page.PageIndex, new HelpDocFrame(page));
+        }
+        private void InitializeNavigateEvent()
+        {
+            foreach (var item in _pageCollection.Values)
+            {
+                if (item.Page is NavigatePage)
+                {
+                    (item.Page as NavigatePage).NavigateToPage += NavigateToPage;
+                }
+            }
         }
         #endregion
         public HelpDocFrame GetFrameByPageIndex(int pageIndex)

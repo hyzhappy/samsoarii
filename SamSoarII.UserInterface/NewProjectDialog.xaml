@@ -4,15 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:dev="clr-namespace:SamSoarII.PLCDevice;assembly=SamSoarII.PLCDevice"
         mc:Ignorable="d"
         Title="New Project" Height="360" Width="600">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="PLCTypeList" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dev:PLCDeviceType"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Canvas>
-        <Label Canvas.Top="85" Canvas.Left="89">工程名字</Label>
-        <Label Canvas.Left="100" Canvas.Top="165">路径</Label>
-        <TextBox x:Name="NameTextBox" Width="121" Height="25" Canvas.Left="193" Canvas.Top="87"></TextBox>
-        <TextBox x:Name="PathTextBox" Width="200" Height="25" Canvas.Left="193" Canvas.Top="165"></TextBox>
+        <Label Canvas.Top="40" Canvas.Left="89">PLC型号</Label>
+        <Label Canvas.Top="115" Canvas.Left="89">工程名字</Label>
+        <Label Canvas.Left="100" Canvas.Top="185">路径</Label>
+        <TextBox x:Name="NameTextBox" Width="121" Height="25" Canvas.Left="193" Canvas.Top="115"></TextBox>
+        <TextBox x:Name="PathTextBox" Width="200" Height="25" Canvas.Left="193" Canvas.Top="185"></TextBox>
+        <ComboBox x:Name="PLCTypeComboBox" Width="120" Height="25" Canvas.Left="193" Canvas.Top="40" ItemsSource="{Binding Source={StaticResource PLCTypeList}}" SelectedIndex="0"></ComboBox>
         <Button x:Name="EnsureButton" Content="确定" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
         <Button x:Name="CancelButton" Content="取消" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
-        <Button x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="429" Canvas.Top="165"></Button>
+        <Button x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="429" Canvas.Top="185"></Button>
     </Canvas>
 </Window>

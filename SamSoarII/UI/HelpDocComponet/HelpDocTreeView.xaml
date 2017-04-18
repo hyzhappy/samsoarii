@@ -11,8 +11,12 @@
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <ContextMenu x:Key="TreeItemContext">
-            <MenuItem Header="全部打开" Click="OnOpenAll"></MenuItem>
-            <MenuItem Header="全部关闭" Click="OnCloseAll"></MenuItem>
+            <MenuItem Header="操作">
+                <MenuItem Header="打开" Click="OnOpen"></MenuItem>
+                <MenuItem Header="关闭" Click="OnClose"></MenuItem>
+                <MenuItem Header="全部打开" Click="OnOpenAll"></MenuItem>
+                <MenuItem Header="全部关闭" Click="OnCloseAll"></MenuItem>
+            </MenuItem>
             <MenuItem Header="打印"></MenuItem>
             <MenuItem Header="搜藏" Command="{x:Static local:HelpDocCommand.CollectPage}"></MenuItem>
         </ContextMenu>
@@ -35,9 +39,12 @@
             </StackPanel>
         </DataTemplate>
         <Style TargetType="local:HelpDocTreeItem" x:Key="ContextStyle">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightBlue"></Setter>
+                </Trigger>
+            </Style.Triggers>
             <Setter Property="ContextMenu" Value="{StaticResource TreeItemContext}"></Setter>
-            <!--<EventSetter Event="Selected" Handler="OnSelect"></EventSetter>-->
-            <!--<EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>-->
             <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
         </Style>
         <Style x:Key="ChangeStyle" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">

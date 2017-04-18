@@ -41,7 +41,7 @@
                  PopupAnimation="Slide">
                 <Grid x:Name="DropDown"
                   SnapsToDevicePixels="True"
-                  MinWidth="{TemplateBinding ActualWidth}"
+                  MinWidth="100"
                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
                     <Border x:Name="DropDownBorder" Background="White" BorderBrush="Black"
                       BorderThickness="1" CornerRadius="2">
@@ -91,7 +91,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <ControlTemplate x:Key="ScrollToLeft" TargetType="Button">
+    <ControlTemplate x:Key="ScrollToLeft" TargetType="RepeatButton">
         <Border x:Name="Border">
             <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/left.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
@@ -108,9 +108,43 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <ControlTemplate x:Key="ScrollToRight" TargetType="Button">
+    <ControlTemplate x:Key="ScrollToRight" TargetType="RepeatButton">
         <Border x:Name="Border">
             <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/right.png" Width="14" Height="14" Opacity="0.8"></Image>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Image" Property="Opacity" Value="2"></Setter>
+                <Setter TargetName="Border" Property="Background" Value="LightBlue"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="#FF72CBE8"></Setter>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter TargetName="Image" Property="Opacity" Value="0.4"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate TargetType="RepeatButton" x:Key="UpButton">
+        <Border x:Name="Border">
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/up.png" Width="14" Height="14" Opacity="0.8"></Image>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Image" Property="Opacity" Value="2"></Setter>
+                <Setter TargetName="Border" Property="Background" Value="LightBlue"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="#FF72CBE8"></Setter>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter TargetName="Image" Property="Opacity" Value="0.4"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate TargetType="RepeatButton" x:Key="DownButton">
+        <Border x:Name="Border">
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/down.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

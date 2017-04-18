@@ -76,5 +76,21 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet
                 item.IsExpanded = !item.IsExpanded;
             }
         }
+        private void OnOpen(object sender, RoutedEventArgs e)
+        {
+            if (HelpDocTree.SelectedItem != null)
+            {
+                HelpDocTreeItem item = HelpDocTree.SelectedItem as HelpDocTreeItem;
+                item.IsExpanded = true;
+            }
+        }
+        private void OnClose(object sender, RoutedEventArgs e)
+        {
+            if (HelpDocTree.SelectedItem != null)
+            {
+                HelpDocTreeItem item = HelpDocTree.SelectedItem as HelpDocTreeItem;
+                item.IsExpanded = false;
+            }
+        }
     }
 }

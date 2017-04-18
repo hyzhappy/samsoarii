@@ -7,10 +7,10 @@ using SamSoarII.Utility;
 
 namespace SamSoarII.PLCDevice
 {
-    class FGs32MRDevice : Device
+    class FGs20MR_BYKDevice : Device
     {
-        public FGs32MRDevice() { }
-        public FGs32MRDevice(PLCDeviceType type)
+        public FGs20MR_BYKDevice() { }
+        public FGs20MR_BYKDevice(PLCDeviceType type)
         {
             _type = type;
         }
@@ -18,7 +18,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 16);
+                return new IntRange(0, 32);
             }
         }
 
@@ -26,7 +26,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 16);
+                return new IntRange(0, 32);
             }
         }
 
@@ -66,7 +66,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return "FGs32MR";
+                return "FGs20MR-BYK";
             }
         }
 
@@ -109,6 +109,14 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(0, 256);
             }
         }
+        private PLCDeviceType _type;
+        public override PLCDeviceType Type
+        {
+            get
+            {
+                return _type;
+            }
+        }
 
         public override IntRange VRange
         {
@@ -122,7 +130,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 128);
+                return new IntRange(0, 64);
             }
         }
 
@@ -130,7 +138,7 @@ namespace SamSoarII.PLCDevice
         {
             get
             {
-                return new IntRange(0, 128);
+                return new IntRange(0, 96);
             }
         }
 
@@ -139,14 +147,6 @@ namespace SamSoarII.PLCDevice
             get
             {
                 return new IntRange(0, 8);
-            }
-        }
-        private PLCDeviceType _type;
-        public override PLCDeviceType Type
-        {
-            get
-            {
-                return _type;
             }
         }
     }

@@ -18,7 +18,7 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
     /// <summary>
     /// MainPage.xaml 的交互逻辑
     /// </summary>
-    public partial class MainPage : Page , IPageItem
+    public partial class MainPage : NavigatePage, IPageItem
     {
         public MainPage()
         {
@@ -37,6 +37,13 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages
             {
                 return string.Format("MainPage");
             }
+        }
+        public override event NavigateToPageEventHandler NavigateToPage = delegate { };
+
+        private void OnClick(object sender, RoutedEventArgs e)
+        {
+            Hyperlink link = sender as Hyperlink;
+            NavigateToPage.Invoke(new NavigateToPageEventArgs(int.Parse((string)link.Tag)));
         }
     }
 }
