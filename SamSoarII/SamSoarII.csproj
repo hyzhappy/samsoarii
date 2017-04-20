@@ -117,8 +117,10 @@
     <Compile Include="Project\LadderNetworkViewModel.xaml.cs">
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Project\ProjectFileManager.cs" />
     <Compile Include="Project\ProjectHelper.cs" />
     <Compile Include="Project\ProjectModel.cs" />
+    <Compile Include="Project\ProjectRecentUseTime.cs" />
     <Compile Include="Project\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
@@ -740,7 +742,7 @@
     </Compile>
     <Compile Include="UI\HelpDocComponet\HelpDocTreeItem.cs" />
     <Compile Include="UI\HelpDocComponet\PageTabControl.cs" />
-    <Compile Include="UI\HelpDocComponet\UserSetting\SettingManager.cs" />
+    <Compile Include="UserSetting\SettingManager.cs" />
     <Compile Include="UI\HelpDocWindow.xaml.cs">
       <DependentUpon>HelpDocWindow.xaml</DependentUpon>
     </Compile>
@@ -759,6 +761,14 @@
     <Compile Include="UI\OptionWidget\FontSelectionWidget.xaml.cs">
       <DependentUpon>FontSelectionWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ProjectPropertyManager.cs" />
+    <Compile Include="UI\ProjectPropertyParams\AnalogQuantityParams.cs" />
+    <Compile Include="UI\ProjectPropertyParams\CommunicationInterfaceParams.cs" />
+    <Compile Include="UI\ProjectPropertyParams\ExpansionModuleParams.cs" />
+    <Compile Include="UI\ProjectPropertyParams\FilterParams.cs" />
+    <Compile Include="UI\ProjectPropertyParams\HoldingSectionParams.cs" />
+    <Compile Include="UI\ProjectPropertyParams\IXEleCreateOrLoad.cs" />
+    <Compile Include="UI\ProjectPropertyParams\PasswordParams.cs" />
     <Compile Include="UI\ProjectPropertyWidget\AnalogQuantitySettingWidget.xaml.cs">
       <DependentUpon>AnalogQuantitySettingWidget.xaml</DependentUpon>
     </Compile>
@@ -782,6 +792,8 @@
     <Compile Include="UI\ProjectPropertyWidget\HoldingSectionSettingWidget.xaml.cs">
       <DependentUpon>HoldingSectionSettingWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\ISaveDialog.cs" />
+    <Compile Include="UI\ProjectPropertyWidget\KeyInputHelper.cs" />
     <Compile Include="UI\ProjectPropertyWidget\PasswordSettingWidget.xaml.cs">
       <DependentUpon>PasswordSettingWidget.xaml</DependentUpon>
     </Compile>

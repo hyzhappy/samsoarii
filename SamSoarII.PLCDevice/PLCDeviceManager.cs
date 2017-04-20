@@ -1,24 +1,33 @@
 ﻿using SamSoarII.PLCDevice.DeviceDialog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SamSoarII.PLCDevice
 {
-    public static class PLCDeviceManager
+    public class PLCDeviceManager : INotifyPropertyChanged
     {
-        private static Device _selectDevice = Device.DefaultDevice;
-        private static List<BaseDeviceMessageDialog> DeviceDialogs;
-        public static int SelectIndex
+        private static PLCDeviceManager _PLCDeviceManager = new PLCDeviceManager();
+        private Device _selectDevice = Device.DefaultDevice;
+        private List<BaseDeviceMessageDialog> DeviceDialogs;
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        public int SelectIndex
         {
             get
             {
-                return GetValue(_selectDevice.Type);
+                return GetIndexValue(_selectDevice.Type);
             }
         }
-        static PLCDeviceManager()
+        public static PLCDeviceManager GetPLCDeviceManager()
+        {
+            return _PLCDeviceManager;
+        }
+        public PLCDeviceManager()
         {
             DeviceDialogs = new List<BaseDeviceMessageDialog>();
             DeviceDialogs.Add(new FGs16MRDeviceMessageDialog());
@@ -31,14 +40,14 @@ namespace SamSoarII.PLCDevice
             DeviceDialogs.Add(new FGs32MTYTJDeviceMessageDialog());
             DeviceDialogs.Add(new FGs20MRBYKDeviceMessageDialog());
         }
-        public static Device SelectDevice
+        public Device SelectDevice
         {
             get
             {
                 return _selectDevice;
             }
         }
-        public static int GetValue(PLCDeviceType type)
+        public static int GetIndexValue(PLCDeviceType type)
         {
             switch (type)
             {
@@ -76,7 +85,7 @@ namespace SamSoarII.PLCDevice
                     return -1;
             }
         }
-        public static void SetSelectDeviceType(PLCDeviceType type)
+        public void SetSelectDeviceType(PLCDeviceType type)
         {
             switch (type)
             {
@@ -117,8 +126,9 @@ namespace SamSoarII.PLCDevice
                     _selectDevice = Device.DefaultDevice;
                     break;
             }
+            PropertyChanged.Invoke(_PLCDeviceManager, new PropertyChangedEventArgs("SelectIndex"));
         }
-        public static List<BaseDeviceMessageDialog> GetDeviceMessageDialogs()
+        public List<BaseDeviceMessageDialog> GetDeviceMessageDialogs()
         {
             return DeviceDialogs;
         }

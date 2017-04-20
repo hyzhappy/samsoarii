@@ -7,6 +7,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-            
+        <StackPanel Orientation="Vertical">
+            <Label FontSize="16" Margin="20,20,0,0">滤波设置</Label>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="CheckBox" Margin="25,5,0,0" Height="20" IsChecked="{Binding IsChecked}"></CheckBox>
+                <Label FontSize="16">使用滤波时间</Label>
+                <ComboBox x:Name="ComboBox" Width="80" Height="20" IsEditable="False" SelectedIndex="{Binding FilterTimeIndex}" IsEnabled="{Binding ElementName=CheckBox,Path=IsChecked}">
+                    <ComboBoxItem>0.2</ComboBoxItem>
+                    <ComboBoxItem>0.4</ComboBoxItem>
+                    <ComboBoxItem>0.8</ComboBoxItem>
+                    <ComboBoxItem>1.6</ComboBoxItem>
+                    <ComboBoxItem>3.2</ComboBoxItem>
+                    <ComboBoxItem>6.4</ComboBoxItem>
+                    <ComboBoxItem>12.8</ComboBoxItem>
+                    <ComboBoxItem>25.6</ComboBoxItem>
+                    <ComboBoxItem>51.2</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

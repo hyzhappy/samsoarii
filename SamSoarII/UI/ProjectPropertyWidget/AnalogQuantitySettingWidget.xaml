@@ -7,6 +7,89 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-            
+        <Grid.Resources>
+            <Style TargetType="StackPanel">
+                <Setter Property="Margin" Value="20,5,0,0"></Setter>
+                <Setter Property="Orientation" Value="Horizontal"></Setter>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="16"></Setter>
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Height" Value="20"></Setter>
+                <Setter Property="IsEditable" Value="False"></Setter>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="Height" Value="20"></Setter>
+            </Style>
+        </Grid.Resources>
+        <StackPanel Style="{x:Null}">
+            <StackPanel Style="{x:Null}">
+                <StackPanel>
+                    <Label>输入</Label>
+                </StackPanel>
+                <StackPanel>
+                    <Label>通道:</Label>
+                    <ComboBox x:Name="InputCombox1" Width="70" SelectedIndex="{Binding InputPassIndex}">
+                        <ComboBoxItem>AI0</ComboBoxItem>
+                        <ComboBoxItem>AI1</ComboBoxItem>
+                        <ComboBoxItem>AI2</ComboBoxItem>
+                        <ComboBoxItem>AI3</ComboBoxItem>
+                    </ComboBox>
+                    <CheckBox x:Name="checkbox" Margin="20,2,0,0" VerticalAlignment="Center" Height="15" IsChecked="{Binding IsUsed}"></CheckBox>
+                    <Label>启用</Label>
+                    <Label Margin="20,0,0,0">模式:</Label>
+                    <ComboBox x:Name="InputCombox2" Width="85" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectedIndex="{Binding InputModeIndex}">
+                        <ComboBoxItem>0-5V</ComboBoxItem>
+                        <ComboBoxItem>4-20mA</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel>
+                    <Label>平均采样次数:</Label>
+                    <ComboBox x:Name="InputCombox3" Width="50" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectedIndex="{Binding SamplingtimesIndex}">
+                        <ComboBoxItem>4</ComboBoxItem>
+                        <ComboBoxItem>8</ComboBoxItem>
+                        <ComboBoxItem>16</ComboBoxItem>
+                        <ComboBoxItem>32</ComboBoxItem>
+                    </ComboBox>
+                    <Label Margin="20,0,0,0">采样当前值:</Label>
+                    <TextBox Width="20" IsReadOnly="True">D</TextBox>
+                    <TextBox x:Name="InputTextbox1" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" Margin="5,0,0,0" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" Text="{Binding SamplingValue}"></TextBox>
+                    <Label>(0 - 8191)</Label>
+                </StackPanel>
+                <StackPanel>
+                    <Label>数字量范围:</Label>
+                    <TextBox x:Name="InputTextbox2" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" Text="{Binding InputStartRange}"></TextBox>
+                    <Label Margin="10,0,10,0">—</Label>
+                    <TextBox x:Name="InputTextbox3" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" Text="{Binding InputEndRange}"></TextBox>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Style="{x:Null}" Margin="0,30,0,0">
+                <StackPanel>
+                    <Label>输出</Label>
+                </StackPanel>
+                <StackPanel>
+                    <Label>通道:</Label>
+                    <ComboBox Width="70" x:Name="OutputComboBox1" SelectedIndex="{Binding OutputPassIndex}">
+                        <ComboBoxItem>AO0</ComboBoxItem>
+                        <ComboBoxItem>AO1</ComboBoxItem>
+                        <ComboBoxItem>AO2</ComboBoxItem>
+                        <ComboBoxItem>AO3</ComboBoxItem>
+                    </ComboBox>
+                    <Label Margin="40,0,0,0">模式:</Label>
+                    <ComboBox Width="85" x:Name="OutputComboBox2" SelectedIndex="{Binding OutputModeIndex}">
+                        <ComboBoxItem>0-5V</ComboBoxItem>
+                        <ComboBoxItem>4-20mA</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel>
+                    <Label>数字量范围:</Label>
+                    <TextBox x:Name="OutputTextBox1" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" Text="{Binding OutputStartRange}"></TextBox>
+                    <Label Margin="10,0,10,0">—</Label>
+                    <TextBox x:Name="OutputTextBox2" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" Text="{Binding OutputEndRange}"></TextBox>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -34,6 +34,7 @@
         <!-- Build Command -->
         <CommandBinding Command="{x:Static app:GlobalCommand.CompileCommand}" Executed="OnCompileCommandExecute" CanExecute="CompileCommandCanExecute"></CommandBinding>
         <!-- Tool Command-->
+        <CommandBinding Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"  Executed="OnCheckNetworkErrorCommandExecute" CanExecute="OnCheckNetworkErrorCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
@@ -138,9 +139,17 @@
                 <MenuItem Header="保存工程" Command="ApplicationCommands.Save"></MenuItem>
                 <MenuItem Header="工程另存为" Command="ApplicationCommands.SaveAs"></MenuItem>
                 <Separator/>
-                <MenuItem Header="最近工程"></MenuItem>
+                <MenuItem x:Name="RecentFileMenu" Style="{x:Null}" Header="最近工程" ItemsSource="{Binding ProjectUsedTimeMessage}">
+                    <MenuItem.Resources>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="MaxWidth" Value="350"></Setter>
+                            <EventSetter Event="Click" Handler="OnRecentProjectOpen"></EventSetter>
+                        </Style>
+                    </MenuItem.Resources>
+                </MenuItem>
                 <Separator/>
-                <MenuItem Header="退出" Command="ApplicationCommands.Close"></MenuItem>
+                <MenuItem Header="关闭当前工程" Command="{x:Static app:GlobalCommand.CloseProjectCommand}"></MenuItem>
+                <MenuItem Header="退出程序" Command="ApplicationCommands.Close"></MenuItem>
             </MenuItem>
             <MenuItem Header="编辑(_E)">
                 <MenuItem Header="撤销" Command="ApplicationCommands.Undo"></MenuItem>

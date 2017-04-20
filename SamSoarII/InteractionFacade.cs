@@ -14,7 +14,6 @@ namespace SamSoarII.AppMain
 {
     public class InteractionFacade
     {
-
         private bool _isCommentMode;
         public bool IsCommentMode
         {
@@ -25,7 +24,7 @@ namespace SamSoarII.AppMain
                 _projectModel.IsCommentMode = _isCommentMode;
             }
         }
-
+        
         private ProjectModel _projectModel;
         public ProjectModel ProjectModel
         {
@@ -34,6 +33,7 @@ namespace SamSoarII.AppMain
                 return _projectModel;
             }
         }
+        
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
         private MainWindow _mainWindow;
@@ -51,7 +51,6 @@ namespace SamSoarII.AppMain
             get;
             private set;
         }
-
         public InteractionFacade(MainWindow mainwindow)
         {
             this._mainWindow = mainwindow;
@@ -84,33 +83,48 @@ namespace SamSoarII.AppMain
         public void CreateProject(string name, string fullFileName)
         {         
             _projectModel = new ProjectModel(name);
+            ProjectFileManager.Add(name, fullFileName);
             _projectTreeView = new ProjectTreeView(_projectModel);
             _projectTreeView.TabItemOpened += OnTabOpened;
             _projectTreeView.RoutineRemoved += OnRemoveRoutine;
             _projectTreeView.RoutineRenamed += OnRenameRoutine;
             _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+            _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
             _mainTabControl.SelectionChanged += OnTabItemChanged;
+            _mainTabControl.Reset();
             _mainTabControl.ShowItem(_projectModel.MainRoutine);
             _mainWindow.SetProjectTreeView(_projectTreeView);
             ProjectFullFileName = fullFileName;
-            _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
             _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
             UpdateRefNetworksBrief(_projectModel);
         }
-
+        public void CloseCurrentProject()
+        {
+            _projectTreeView.TabItemOpened -= OnTabOpened;
+            _projectTreeView.RoutineRemoved -= OnRemoveRoutine;
+            _projectTreeView.RoutineRenamed -= OnRenameRoutine;
+            _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
+            _projectTreeView.InstructionTreeItemDoubleClick -= OnInstructionTreeItemDoubleClick;
+            _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
+            ProjectFullFileName = string.Empty;
+            _mainTabControl.SelectionChanged -= OnTabItemChanged;
+            _mainWindow.ClearProjectTreeView();
+            _mainTabControl.Reset();
+            _projectTreeView = null;
+            _projectModel = null;
+        }
         public void SaveProject()
         {
             _projectModel.Save(ProjectFullFileName);
         }
-
         public void SaveAsProject(string fullFileName)
         {
             _projectModel.Save(fullFileName);
         }
-
         public bool LoadProject(string fullFileName)
         {
             _projectModel = ProjectHelper.LoadProject(fullFileName);
+            ProjectFileManager.Update(_projectModel.ProjectName,fullFileName);
             if (_projectModel != null)
             {
                 SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
@@ -155,7 +169,6 @@ namespace SamSoarII.AppMain
                 return true;
             }
         }
-
         public bool AddNewFuncBlock(string name)
         {
             if (_projectModel.ContainProgram(name))

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace SamSoarII.Utility
 {
     public class StringHelper
     {
+        public static readonly int MaxCapacity = 26;
         public static int Compare(string str,int index)
         {
             int temp = 0;
@@ -29,6 +31,72 @@ namespace SamSoarII.Utility
                 }
             }
             return chars1.Length - chars2.Length;
+        }
+        public static string Trunc(string value)
+        {
+            int count = value.Count();
+            count += ChineseCharCount(value) % 2 == 0 ? ChineseCharCount(value) / 2 : ChineseCharCount(value) / 2 + 1;
+            if (count > MaxCapacity)
+            {
+                int TruncNum = count - MaxCapacity + 3;
+                List<string> segments = value.Split(new char[] { Path.DirectorySeparatorChar },StringSplitOptions.RemoveEmptyEntries).ToList();
+                string first = segments.First();
+                string last = segments.Last();
+                if (segments.Count == 2)
+                {
+                    if (last.Length > TruncNum)
+                    {
+                        last = "..." + last.Substring(TruncNum);
+                    }
+                    else
+                    {
+                        first = first.Substring(0, 3) + "..." + first.Substring(3 + TruncNum);
+                    }
+                    value = string.Format("{0}{1}{2}", first, Path.DirectorySeparatorChar, last);
+                }
+                else
+                {
+                    if (first.Length + last.Length + 5 > MaxCapacity)
+                    {
+                        TruncNum = first.Length + last.Length + 5 - MaxCapacity + 3;
+                        if (last.Length > TruncNum)
+                        {
+                            last = "..." + last.Substring(TruncNum);
+                        }
+                        else
+                        {
+                            first = first.Substring(0, 3) + "..." + first.Substring(3 + TruncNum);
+                        }
+                    }
+                    else
+                    {
+                        int index = segments.Count - 2;
+                        while (first.Length + last.Length + 5 + segments.ElementAt(index).Length + 1 <= MaxCapacity)
+                        {
+                            if (index == 0)
+                            {
+                                break;
+                            }
+                            last = segments.ElementAt(index) + Path.DirectorySeparatorChar.ToString() + last;
+                            index--;
+                        }
+                    }
+                    value = string.Format("{0}{1}{3}{1}{2}", first, Path.DirectorySeparatorChar, last, "...");
+                }
+            }
+            return value;
+        }
+        private static int ChineseCharCount(string value)
+        {
+            int cnt = 0;
+            foreach (var c in value)
+            {
+                if (c >= 0x4e00 && c <= 0x9fbb)
+                {
+                    cnt++;
+                }
+            }
+            return cnt;
         }
     }
 }

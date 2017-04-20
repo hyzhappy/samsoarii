@@ -1,4 +1,5 @@
-﻿using SamSoarII.PLCDevice;
+﻿using SamSoarII.AppMain.UI.ProjectPropertyWidget;
+using SamSoarII.PLCDevice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +20,17 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// DeviceSelectionWidget.xaml 的交互逻辑
     /// </summary>
-    public partial class DeviceSelectionWidget : UserControl
+    public partial class DeviceSelectionWidget : UserControl,ISaveDialog
     {
-        private List<UserControl> _widget;
+        private static List<UserControl> _widget;
         public DeviceSelectionWidget()
         {
             InitializeComponent();
-            _widget = new List<UserControl>(PLCDeviceManager.GetDeviceMessageDialogs());
-            showMessageDialog(0);
+            DataContext = PLCDeviceManager.GetPLCDeviceManager();
+        }
+        static DeviceSelectionWidget()
+        {
+            _widget = new List<UserControl>(PLCDeviceManager.GetPLCDeviceManager().GetDeviceMessageDialogs());
         }
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -36,7 +40,10 @@ namespace SamSoarII.AppMain.UI
         private void showMessageDialog(int index)
         {
             ContentGrid.Children.Clear();
-            ContentGrid.Children.Add(_widget[index]);
+            if (_widget[index].Parent == null)
+            {
+                ContentGrid.Children.Add(_widget[index]);
+            }
         }
         private int GetDialogIndex(int selectindex)
         {
@@ -69,6 +76,11 @@ namespace SamSoarII.AppMain.UI
                 default:
                     return -1;
             }
-        } 
+        }
+
+        public void Save()
+        {
+            PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType((PLCDeviceType)Enum.ToObject(typeof(PLCDeviceType),MainList.SelectedIndex));
+        }
     }
 }

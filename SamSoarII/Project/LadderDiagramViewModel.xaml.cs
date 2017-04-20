@@ -925,7 +925,7 @@ namespace SamSoarII.AppMain.Project
                         viewmodel.Y = _selectRect.Y;
                         if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
                         {
-                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.SelectDevice);
+                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                         }
                         elements.Add(viewmodel);
                         _selectRect.X = GlobalSetting.LadderXCapacity - 1;
@@ -938,7 +938,7 @@ namespace SamSoarII.AppMain.Project
                         viewmodel.Y = _selectRect.Y;
                         if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
                         {
-                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.SelectDevice);
+                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                         }
                         ReplaceSingleElement(_selectRectOwner, viewmodel);
                         if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)

@@ -26,7 +26,7 @@ namespace SamSoarII.AppMain.UI
 
         private ProjectModel _projectModel;
 
-        private List<UserControl> _widget = new List<UserControl>();
+        private List<ISaveDialog> _widget = new List<ISaveDialog>();
 
         public ProjectPropertyDialog(ProjectModel projectModel)
         {
@@ -41,12 +41,18 @@ namespace SamSoarII.AppMain.UI
             _projectModel = projectModel;
             ShowWidget(0);
         }
-
+        public void Save()
+        {
+            foreach (var item in _widget)
+            {
+                item.Save();
+            }
+        }
 
         private void ShowWidget(int index)
         {
             ContentGrid.Children.Clear();
-            ContentGrid.Children.Add(_widget[index]);
+            ContentGrid.Children.Add((UserControl)_widget[index]);
         }
 
         #region Event handler
@@ -54,7 +60,6 @@ namespace SamSoarII.AppMain.UI
         {
             EnsureButtonClick.Invoke(sender, e);
         }
-
         private void OnCancelButtonClick(object sender, RoutedEventArgs e)
         {
             Close();

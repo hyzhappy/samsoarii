@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface"
+             xmlns:ui="clr-namespace:SamSoarII.AppMain.UI"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="ParamsData" ObjectType="{x:Type ui:ProjectPropertyManager}" MethodName="GetProjectPropertyManager">
+        </ObjectDataProvider>
+    </UserControl.Resources>
     <Grid>
         <Grid.Resources>
             <Style TargetType="StackPanel">
@@ -27,7 +32,7 @@
         <Canvas>
             <StackPanel Canvas.Top="10">
                 <TextBlock Text="波特率:" FontSize="16"></TextBlock>
-                <ComboBox x:Name="Combox1" Margin="10,0,0,0" IsEditable="False" Width="80" SelectedIndex="1">
+                <ComboBox x:Name="Combox1" Margin="10,0,0,0" IsEditable="False" Width="80" SelectedIndex="{Binding BaudRateIndex}">
                     <ComboBoxItem>4800</ComboBoxItem>
                     <ComboBoxItem>9600</ComboBoxItem>
                     <ComboBoxItem>19200</ComboBoxItem>
@@ -38,20 +43,20 @@
             </StackPanel>
             <StackPanel Canvas.Top="50">
                 <TextBlock Text="数据位:" FontSize="16"></TextBlock>
-                <ComboBox Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="0">
+                <ComboBox Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding DataBitIndex}">
                     <ComboBoxItem>8</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
             <StackPanel Canvas.Top="90">
                 <TextBlock Text="停止位:" FontSize="16"></TextBlock>
-                <ComboBox x:Name="Combox3" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="0">
+                <ComboBox x:Name="Combox3" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding StopBitIndex}">
                     <ComboBoxItem>1</ComboBoxItem>
                     <ComboBoxItem>2</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
             <StackPanel Canvas.Top="130">
                 <TextBlock Text="校验码:" FontSize="16"></TextBlock>
-                <ComboBox x:Name="Combox4" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="0">
+                <ComboBox x:Name="Combox4" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding CheckCodeIndex}">
                     <ComboBoxItem>NONE</ComboBoxItem>
                     <ComboBoxItem>EVEN</ComboBoxItem>
                     <ComboBoxItem>ODD</ComboBoxItem>
@@ -59,7 +64,7 @@
             </StackPanel>
             <StackPanel Canvas.Top="170" IsEnabled="{Binding ElementName=FreeButton,Path=IsChecked}">
                 <TextBlock Text="缓冲位:" FontSize="16"></TextBlock>
-                <ComboBox Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="0">
+                <ComboBox x:Name="Combox5" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding BufferBitIndex}">
                     <ComboBoxItem>8</ComboBoxItem>
                     <ComboBoxItem>16</ComboBoxItem>
                 </ComboBox>
@@ -67,23 +72,23 @@
         </Canvas>
         <Canvas Grid.Row="1">
             <StackPanel Canvas.Top="10">
-                <RadioButton x:Name="Master" GroupName="1" Margin="0,2,5,0" IsChecked="True"></RadioButton>
+                <RadioButton x:Name="Master" Margin="0,2,5,0"></RadioButton>
                 <TextBlock Text="MODBUS 主站" FontSize="16"></TextBlock>
             </StackPanel>
             <StackPanel Canvas.Top="55">
-                <RadioButton x:Name="FreeButton" GroupName="1" Margin="0,2,5,0"></RadioButton>
+                <RadioButton x:Name="FreeButton" Margin="0,2,5,0"></RadioButton>
                 <TextBlock Text="自由口通信" FontSize="16"></TextBlock>
             </StackPanel>
             <StackPanel Canvas.Top="10" Canvas.Left="190">
-                <RadioButton x:Name="Slave" GroupName="1" Margin="0,2,5,0"></RadioButton>
+                <RadioButton x:Name="Slave" Margin="0,2,5,0"></RadioButton>
                 <TextBlock Text="MODBUS 从站" FontSize="16"></TextBlock>
             </StackPanel>
         </Canvas>
         <Canvas Grid.Row="2">
             <StackPanel Canvas.Top="10">
                 <TextBlock FontSize="16" Text="站号设置"></TextBlock>
-                <TextBox x:Name="NTextBox" Margin="5,0,0,0" FontSize="16" Width="60" PreviewKeyDown="OnPreviewKeyDown" Text="2" TextChanged="OnTextChanged"></TextBox>
-                <StackPanel Orientation="Vertical" Width="15">
+                <TextBox x:Name="NTextBox" Margin="5,0,0,0" FontSize="16" Width="60" PreviewKeyDown="OnPreviewKeyDown" Text="{Binding StationNum}" TextChanged="OnTextChanged"></TextBox>
+                <StackPanel x:Name="stackpaneldata1" Orientation="Vertical" Width="15">
                     <RepeatButton x:Name="NUpButton" Height="12" Template="{StaticResource UpButton}" Click="UpClick" IsEnabled="{Binding NCanUp}"></RepeatButton>
                     <RepeatButton x:Name="NDownButton" Height="12" Template="{StaticResource DownButton}" Click="DownClick" IsEnabled="{Binding NCanDown}"></RepeatButton>
                 </StackPanel>
@@ -91,8 +96,8 @@
             </StackPanel>
             <StackPanel Canvas.Top="50">
                 <TextBlock FontSize="16" Text="超时时间"></TextBlock>
-                <TextBox x:Name="TTextBox" Margin="5,0,0,0" FontSize="16" Width="60" PreviewKeyDown="OnPreviewKeyDown" Text="20" TextChanged="OnTextChanged"></TextBox>
-                <StackPanel Orientation="Vertical" Width="15">
+                <TextBox x:Name="TTextBox" Margin="5,0,0,0" FontSize="16" Width="60" PreviewKeyDown="OnPreviewKeyDown" Text="{Binding Timeout}" TextChanged="OnTextChanged"></TextBox>
+                <StackPanel x:Name="stackpaneldata2" Orientation="Vertical" Width="15">
                     <RepeatButton x:Name="TUpButton" Height="12" Template="{StaticResource UpButton}" Click="UpClick" IsEnabled="{Binding TCanUp}"></RepeatButton>
                     <RepeatButton x:Name="TDownButton" Height="12" Template="{StaticResource DownButton}" Click="DownClick" IsEnabled="{Binding TCanDown}"></RepeatButton>
                 </StackPanel>

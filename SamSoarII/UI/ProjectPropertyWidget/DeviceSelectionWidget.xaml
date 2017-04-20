@@ -21,7 +21,7 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="1" x:Name="ContentGrid"></Grid>
-        <ListBox Grid.Column="0" ItemsSource="{Binding Source={StaticResource PLCTypeProvider}}" SelectionChanged="ListBox_SelectionChanged">
+        <ListBox x:Name="MainList" Grid.Column="0" ItemsSource="{Binding Source={StaticResource PLCTypeProvider}}" SelectionChanged="ListBox_SelectionChanged" SelectedIndex="{Binding SelectIndex,Mode=OneWay}">
             <ListBox.Resources>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Style.Triggers>

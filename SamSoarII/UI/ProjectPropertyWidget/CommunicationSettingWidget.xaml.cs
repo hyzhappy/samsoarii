@@ -19,7 +19,7 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
     /// <summary>
     /// CommunicationSettingWidget.xaml 的交互逻辑
     /// </summary>
-    public partial class CommunicationSettingWidget : UserControl
+    public partial class CommunicationSettingWidget : UserControl,ISaveDialog
     {
         private List<BaseCommunicationInterface> _widget = new List<BaseCommunicationInterface>();
         public CommunicationSettingWidget()
@@ -41,6 +41,14 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
             if (listBox != null)
             {
                 ShowWidget(listBox.SelectedIndex);
+            }
+        }
+
+        public void Save()
+        {
+            foreach (var item in _widget)
+            {
+                item.Save();
             }
         }
     }

@@ -18,11 +18,16 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
     /// <summary>
     /// PasswordSettingWidget.xaml 的交互逻辑
     /// </summary>
-    public partial class PasswordSettingWidget : UserControl
+    public partial class PasswordSettingWidget : UserControl,ISaveDialog
     {
         public PasswordSettingWidget()
         {
             InitializeComponent();
+        }
+
+        public void Save()
+        {
+            
         }
     }
 }

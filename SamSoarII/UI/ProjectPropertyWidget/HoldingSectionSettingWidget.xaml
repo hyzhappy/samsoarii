@@ -7,6 +7,82 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-            
+        <Grid.Resources>
+            <Style TargetType="StackPanel">
+                <Setter Property="Margin" Value="20,5,0,5"></Setter>
+                <Setter Property="Orientation" Value="Horizontal"></Setter>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="16"></Setter>
+            </Style>
+        </Grid.Resources>
+        <StackPanel Style="{x:Null}">
+            <StackPanel>
+                <Label FontSize="16">断电保持区设置</Label>
+            </StackPanel>
+            <StackPanel>
+                <Label>数据起始地址</Label>
+                <Label Margin="30,0,0,0">长度</Label>
+            </StackPanel>
+            <StackPanel>
+                <Label>M</Label>
+                <TextBox x:Name="MTextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="10,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding MStartAddr}"></TextBox>
+                <StackPanel x:Name="MStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="MButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding M1CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="MButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding M2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Name="MTextbox2" TextChanged="OnTextChanged" PreviewKeyDown="OnPreviewKeyDown" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding MLength}"></TextBox>
+                <StackPanel x:Name="MStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="MButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding M3CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="MButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding M4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <Label>D</Label>
+                <TextBox x:Name="DTextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="13,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding DStartAddr}"></TextBox>
+                <StackPanel x:Name="DStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="DButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding D1CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="DButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding D2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Name="DTextbox2" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding DLength}"></TextBox>
+                <StackPanel x:Name="DStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="DButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding D3CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="DButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding D4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <Label>S</Label>
+                <TextBox x:Name="STextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="16,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding SStartAddr}"></TextBox>
+                <StackPanel x:Name="SStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="SButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding S1CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="SButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding S2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Name="STextbox2" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding SLength}"></TextBox>
+                <StackPanel x:Name="SStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="SButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding S3CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="SButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding S4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <Label>CV</Label>
+                <TextBox x:Name="CVTextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="4,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding CVStartAddr}"></TextBox>
+                <StackPanel x:Name="CVStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="CVButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding CV1CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="CVButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding CV2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Name="CVTextbox2" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding CVLength}"></TextBox>
+                <StackPanel x:Name="CVStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Name="CVButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding CV3CanUp}"></RepeatButton>
+                    <RepeatButton x:Name="CVButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding CV4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <CheckBox x:Name="CheckBox1" Margin="8,0,0,0" VerticalAlignment="Center" IsChecked="{Binding NotClear}"></CheckBox>
+                <Label>下载时不清除</Label>
+            </StackPanel>
+            <StackPanel>
+                <Button Width="70" Height="24" Margin="135,0,0,0" FontSize="16" Click="DefaultButtonClick">默认值</Button>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

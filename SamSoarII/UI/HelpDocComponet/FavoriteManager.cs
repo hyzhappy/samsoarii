@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Xml.Linq;
 
 namespace SamSoarII.AppMain.UI.HelpDocComponet
 {
@@ -41,6 +42,24 @@ namespace SamSoarII.AppMain.UI.HelpDocComponet
         public static void DeleteAllPages()
         {
             TabItemCollection.Clear();
+        }
+        public static void LoadFavoritePagesByXElement(XElement rootNode)
+        {
+            int pageindex;
+            foreach (var ele in rootNode.Elements())
+            {
+                pageindex = int.Parse(ele.Value);
+                TabItemCollection.Add(PageManager.PageCollection[pageindex]);
+            }
+        }
+        public static XElement CreateXElementByPageIndex()
+        {
+            XElement rootNode = new XElement("FavoritePages");
+            foreach (var item in TabItemCollection)
+            {
+                rootNode.Add(new XElement("Page",item.PageIndex));
+            }
+            return rootNode;
         }
     }
 }

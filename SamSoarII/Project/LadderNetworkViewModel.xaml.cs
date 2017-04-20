@@ -1,6 +1,7 @@
 ﻿using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.PLCCompiler;
+using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using System;
@@ -1968,7 +1969,7 @@ namespace SamSoarII.AppMain.Project
             {
                 try
                 {
-                    sender.AcceptNewValues(dialog.PropertyStrings, SamSoarII.PLCDevice.PLCDeviceManager.SelectDevice);
+                    sender.AcceptNewValues(dialog.PropertyStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                     dialog.Close();
                 }
                 catch (Exception ex)

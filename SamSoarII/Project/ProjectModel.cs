@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using SamSoarII.AppMain.UI;
 using System.Windows.Controls;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -61,7 +62,7 @@ namespace SamSoarII.AppMain.Project
         public Dictionary<LadderDiagramViewModel, ObservableCollection<string>> RefNetworksBrief { get; set; } = new Dictionary<LadderDiagramViewModel, ObservableCollection<string>>();
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
 
-        public PLCDevice.Device CurrentDevice { get; set; }
+        public Device CurrentDevice { get { return PLCDeviceManager.GetPLCDeviceManager().SelectDevice; } }
         
         public void UpdateNetworkBriefs(LadderDiagramViewModel Routine,ChangeType Type)
         {
@@ -216,12 +217,14 @@ namespace SamSoarII.AppMain.Project
             //xdoc.Add(decNode);
             var rootNode = new XElement("Project");
             rootNode.SetAttributeValue("Name", this.ProjectName);
+            rootNode.SetAttributeValue("DeviceType",CurrentDevice.Type);
             xdoc.Add(rootNode);
             var settingNode = new XElement("Setting");
             rootNode.Add(settingNode);
             rootNode.Add(ProjectHelper.CreateXElementByValueComments());
             rootNode.Add(ProjectHelper.CreateXElementByValueAlias());
-            rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
+            //rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
+            rootNode.Add(ProjectPropertyManager.CreateProjectPropertyXElement());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             foreach(var ldmodel in SubRoutines)
             {
@@ -241,6 +244,9 @@ namespace SamSoarII.AppMain.Project
                 XDocument xmldoc = XDocument.Load(filepath);
                 XElement rootNode = xmldoc.Element("Project");
                 ProjectName = rootNode.Attribute("Name").Value;
+                string DeviceTypeName = rootNode.Attribute("DeviceType").Value;
+                PLCDeviceType type = (PLCDeviceType)Enum.Parse(typeof(PLCDeviceType), DeviceTypeName);
+                PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(type);
             // Open Ladder Model
                 foreach (var item in SubRoutines)
                 {
@@ -250,13 +256,14 @@ namespace SamSoarII.AppMain.Project
                 SubRoutineTreeViewItems.Clear();
                 UpdateNetworkBriefs(null, ChangeType.Clear);
                 FuncBlocks.Clear();
-                VariableManager.Clear();
+                //VariableManager.Clear();
                 ValueAliasManager.Clear();
                 ValueCommentManager.Clear();
                 InstructionCommentManager.Clear();
                 ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
                 ProjectHelper.LoadValueAliasByXElement(rootNode.Element("ValueAlias"));
-                ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));   
+                ProjectPropertyManager.LoadProjectPropertyByXElement(rootNode.Element("ProjectPropertyParams"));
+                //ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));   
                 var ldnodes = rootNode.Elements("Ladder");
                 foreach (XElement ldnode in ldnodes)
                 {

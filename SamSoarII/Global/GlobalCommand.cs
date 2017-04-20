@@ -22,7 +22,7 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand ShowPropertyDialogCommand { get; set; }
         public static RoutedUICommand ShowOptionDialogCommand { get; set; }
         public static RoutedUICommand CheckNetworkErrorCommand { get; set; }
-
+        public static RoutedUICommand CloseProjectCommand { get; set; }
         public static RoutedUICommand SimulateCommand { get; set; }
         static GlobalCommand()
         {
@@ -36,6 +36,7 @@ namespace SamSoarII.AppMain
             ShowOptionDialogCommand = new RoutedUICommand();
             CommentModeToggleCommand = new RoutedUICommand();
             CheckNetworkErrorCommand = new RoutedUICommand();
+            CloseProjectCommand = new RoutedUICommand();
             SimulateCommand = new RoutedUICommand();
         }
     }

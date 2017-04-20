@@ -22,6 +22,7 @@ using System.Configuration;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.AppMain.UI.HelpDocComponet;
 using System.Windows.Media.Animation;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -38,6 +39,7 @@ namespace SamSoarII.AppMain.UI
             _interactionFacade = new InteractionFacade(this);
             this.Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
+            RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -58,7 +60,10 @@ namespace SamSoarII.AppMain.UI
             TreeViewGrid.Children.Clear();
             TreeViewGrid.Children.Add(treeview);
         }
-
+        public void ClearProjectTreeView()
+        {
+            TreeViewGrid.Children.Clear();
+        }
         #region Event handler
         private void OnCommentModeToggle(object sender, RoutedEventArgs e)
         {
@@ -119,7 +124,47 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
+        private void OnRecentProjectOpen(object sender, RoutedEventArgs e)
+        {
+            int index = GetMenuItemIndex((sender as MenuItem).Header as string);
+            var projectMessage = ProjectFileManager.RecentUsedProjectMessages.ElementAt(index);
+            if (!_interactionFacade.ProjectLoaded)
+            {
+                if (!File.Exists(projectMessage.Value.Item2))
+                {
+                    MessageBox.Show(string.Format("file has been removed or deleted"));
+                    ProjectFileManager.Delete(index);
+                }
+                else
+                {
+                    _interactionFacade.LoadProject(projectMessage.Value.Item2);
+                }
+            }
+            else
+            {
+                if (projectMessage.Value.Item1 == _interactionFacade.ProjectModel.ProjectName)
+                {
+                    MessageBox.Show(string.Format("the opening project is current project"));
+                }
+                else
+                {
+                    if (!File.Exists(projectMessage.Value.Item2))
+                    {
+                        MessageBox.Show(string.Format("file has been removed or deleted"));
+                        ProjectFileManager.Delete(index);
+                    }
+                    else
+                    {
+                        _interactionFacade.LoadProject(projectMessage.Value.Item2);
+                    }
+                }
+            }
+            e.Handled = true;
+        }
+        private int GetMenuItemIndex(string item)
+        {
+            return RecentFileMenu.Items.IndexOf(item);
+        }
         #endregion
 
         private void CreateMainRoutine(string name)
@@ -132,13 +177,10 @@ namespace SamSoarII.AppMain.UI
             _interactionFacade.CreateProject(name, fullFileName);
             _interactionFacade.SaveProject();
         }
-
         private bool OpenProject(string fullFileName)
         {
             return _interactionFacade.LoadProject(fullFileName);
         }
-
-
         #region Command can Execute
         private void ClosePageCanExecuteCommand(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -358,7 +400,7 @@ namespace SamSoarII.AppMain.UI
                         MessageBox.Show("指定路径已存在同名文件");
                         return;
                     }
-                    PLCDevice.PLCDeviceManager.SetSelectDeviceType(newProjectDialog.Type);
+                    PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
                     CreateProject(name, fullFileName);
                     newProjectDialog.Close();
                 };
@@ -383,7 +425,10 @@ namespace SamSoarII.AppMain.UI
         {
             _interactionFacade.SaveProject();
         }
-
+        private void OnCloseProjectCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            _interactionFacade.CloseCurrentProject();
+        }
         private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
 
@@ -407,6 +452,11 @@ namespace SamSoarII.AppMain.UI
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
         {
             ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel);
+            dialog.EnsureButtonClick += (sender1, e1) =>
+            {
+                dialog.Save();
+                dialog.Close();
+            };
             dialog.ShowDialog();
         }
         private void OnShowHelpDocWindow(object sender, RoutedEventArgs e)
@@ -434,7 +484,17 @@ namespace SamSoarII.AppMain.UI
                 _interactionFacade.IsCommentMode = CommentModeToggleButton.IsChecked.Value;
             }   
         }
-
+        private void OnCloseProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void CommentModeCanToggle(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)

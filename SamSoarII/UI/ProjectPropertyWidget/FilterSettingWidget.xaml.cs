@@ -18,11 +18,20 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
     /// <summary>
     /// FilterSettingWidget.xaml 的交互逻辑
     /// </summary>
-    public partial class FilterSettingWidget : UserControl
+    public partial class FilterSettingWidget : UserControl,ISaveDialog
     {
+        private FilterParams FilterParams;
         public FilterSettingWidget()
         {
             InitializeComponent();
+            FilterParams = (FilterParams)ProjectPropertyManager.ParamsDic["FilterParams"];
+            DataContext = FilterParams;
+        }
+
+        public void Save()
+        {
+            FilterParams.IsChecked = (bool)CheckBox.IsChecked;
+            FilterParams.FilterTimeIndex = ComboBox.SelectedIndex;
         }
     }
 }

@@ -1,7 +1,4 @@
 ﻿using SamSoarII.AppMain.UI;
-using SamSoarII.AppMain.UI.HelpDocComponet;
-using SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages;
-using SamSoarII.AppMain.UI.HelpDocComponet.UserSetting;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
 using System;
