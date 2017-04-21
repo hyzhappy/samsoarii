@@ -99,30 +99,7 @@ namespace SamSoarII.Simulation.Core.DataModel
             return _Clone(fseg);
         }
     }
-
-    public class DoubleSegment : ValueSegment
-    {
-        protected double value;
-        override public object Value
-        {
-            get
-            {
-                return this.value;
-            }
-            set
-            {
-                this.value = (double)(value);
-            }
-        }
-
-        public override ValueSegment Clone()
-        {
-            DoubleSegment dseg = new DoubleSegment();
-            dseg.Value = Value;
-            return _Clone(dseg);
-        }
-    }
-
+    
     public class BitSegment : IntSegment
     {
 

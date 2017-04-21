@@ -28,11 +28,20 @@ namespace SamSoarII.UserInterface
         public event RoutedEventHandler EnsureButtonClick = delegate { };
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private List<string> instructionNames = new List<string>();
+        private List<string> subdiagramNames = new List<string>();
+        private List<string[]> functionMessages = new List<string[]>();
+        private List<string> modbusNames = new List<string>();
         private Dictionary<string, List<string>> instructionNameAndToolTips;
         private List<Label> _collectionSource = new List<Label>();
+        private List<Label> _subdiagramSource = new List<Label>();
+        private List<Label> _functionSource = new List<Label>();
+        private List<Label> _modbusSource = new List<Label>();
         private DispatcherTimer OpenTimer = new DispatcherTimer();
         private string oldText = string.Empty;
         private string currentText = string.Empty;
+        private TextBlock[] TB_Args;
+        private TextBlock[] TBD_Args;
+        
         public IEnumerable<Label> CollectionSource
         {
             get
@@ -43,10 +52,46 @@ namespace SamSoarII.UserInterface
                 }
                 else
                 {
-                    return _collectionSource.Where(x => { return (x.Content as string).StartsWith(currentText.ToUpper()); });
+                    string[] words = currentText.Split(' ');
+                    if (words.Length == 1)
+                    {
+                        return _collectionSource.Where(x => { return (x.Content as string).StartsWith(words[0].ToUpper()); });
+                    }
+                    else if (words.Length > 1)
+                    {
+                        switch (words[0])
+                        {
+                            case "CALL":
+                                if (words.Length == 2)
+                                {
+                                   return _subdiagramSource.Where(x => { return (x.Content as string).StartsWith(words[1]); });
+                                }
+                                break;
+                            case "ATCH":
+                                if (words.Length == 3)
+                                {
+                                    return _subdiagramSource.Where(x => { return (x.Content as string).StartsWith(words[2]); });
+                                }
+                                break;
+                            case "CALLM":
+                                if (words.Length == 2)
+                                {
+                                    return _functionSource.Where(x => { return (x.Content as string).StartsWith(words[1]); });
+                                }
+                                break;
+                            case "MBUS":
+                                if (words.Length == 3)
+                                {
+                                    return _modbusSource.Where(x => { return (x.Content as string).StartsWith(words[2]); });
+                                }
+                                break;
+                        }
+                    }
+                    return new List<Label>();
                 }
             }
         }
+
         public string InstructionInput
         {
             get
@@ -58,9 +103,30 @@ namespace SamSoarII.UserInterface
                 InstructionInputTextBox.Text = value;
             }
         }
-        public InstructionInputDialog(string initialString, Dictionary<string,List<string>> instructionNameAndToolTips)
+
+        public InstructionInputDialog(
+            string initialString, 
+            Dictionary<string,List<string>> instructionNameAndToolTips,
+            IEnumerable<string> _subdiagramNames,
+            IEnumerable<string[]> _functionMessages,
+            IEnumerable<string> _modbusNames)
         {
             InitializeComponent();
+
+            TB_Args = new TextBlock[6];
+            TBD_Args = new TextBlock[6];
+            for (int i = 0; i < 6; i++)
+            {
+                TB_Args[i] = new TextBlock();
+                Grid.SetRow(TB_Args[i], i);
+                Grid.SetColumn(TB_Args[i], 0);
+                TBPGrid.Children.Add(TB_Args[i]);
+                TBD_Args[i] = new TextBlock();
+                Grid.SetRow(TBD_Args[i], i);
+                Grid.SetColumn(TBD_Args[i], 1);
+                TBPGrid.Children.Add(TBD_Args[i]);
+            }
+
             InstructionInput = initialString;
             Font font = new Font("Arial", 12);
             InstructionInputTextBox.Font = font;
@@ -73,11 +139,32 @@ namespace SamSoarII.UserInterface
                 InstructionInputTextBox.Select(InstructionInputTextBox.Text.Length, 0);
                 this.instructionNameAndToolTips = instructionNameAndToolTips;
                 instructionNames.AddRange(this.instructionNameAndToolTips.Keys.ToArray());
+                subdiagramNames = _subdiagramNames.ToList();
+                functionMessages = _functionMessages.ToList();
+                modbusNames = _modbusNames.ToList();
                 foreach (var name in instructionNames)
                 {
                     Label temp = new Label();
                     temp.Content = name;
                     _collectionSource.Add(temp);
+                }
+                foreach (var name in subdiagramNames)
+                {
+                    Label temp = new Label();
+                    temp.Content = name;
+                    _subdiagramSource.Add(temp);
+                }
+                foreach (var msgs in functionMessages)
+                {
+                    Label temp = new Label();
+                    temp.Content = msgs[0];
+                    _functionSource.Add(temp);
+                }
+                foreach (var name in modbusNames)
+                {
+                    Label temp = new Label();
+                    temp.Content = name;
+                    _modbusSource.Add(temp);
                 }
             };
         }
@@ -107,7 +194,15 @@ namespace SamSoarII.UserInterface
                         if (label.Content as string != oldText)
                         {
                             InstructionInputTextBox.Tag = "true";
-                            InstructionInputTextBox.Text = label.Content as string;
+                            string[] words = InstructionInputTextBox.Text.Split(' ');
+                            words[words.Length - 1] = label.Content as string;
+                            InstructionInputTextBox.Text = words[0];
+                            for (int i = 1; i < words.Length; i++)
+                            {
+                                InstructionInputTextBox.Text += " " + words[i];
+                            }
+                            InstructionInputTextBox.SelectionStart = InstructionInputTextBox.Text.Length;
+                            //InstructionInputTextBox.Text = label.Content as string;
                         }
                         else
                         {
@@ -140,6 +235,7 @@ namespace SamSoarII.UserInterface
             SelectCollectionPopup.HorizontalOffset = window.Left + 40;
             ItemPopup.IsOpen = false;
         }
+        
         private void OnTextChanged(object sender, EventArgs e)
         {
             StyleChange(CollectionStack.SelectItem);
@@ -165,78 +261,96 @@ namespace SamSoarII.UserInterface
                 {
                     CollectionStack.SelectItem = null;
                 }
-                if (currentText.Length > oldText.Length && currentText.TrimEnd().Length == oldText.Length)
+                List<string> InstructionInput = currentText.ToUpper().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (InstructionInput.Count() > 0 && CheckInstructionName(InstructionInput[0]))
                 {
-                    List<string> InstructionInput = currentText.ToUpper().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                    if (!TextBoxPopup.IsOpen)
+                    List<string> tempList = new List<string>();
+                    instructionNameAndToolTips.TryGetValue(InstructionInput[0], out tempList);
+                    if (InstructionInput[0].Equals("CALLM") && InstructionInput.Count() > 1)
                     {
-                        if (CheckInstructionName(InstructionInput[0]))
+                        IEnumerable<string[]> fit = functionMessages.Where(
+                            (string[] msgs) => { return msgs[0].Equals(InstructionInput[1]); });
+                        if (fit.Count() > 0)
                         {
-                            List<string> tempList = new List<string>();
-                            instructionNameAndToolTips.TryGetValue(InstructionInput[0], out tempList);
-                            textblock_name.Text = InstructionInput[0];
-                            textblock_describe.Text = tempList[0];
-                            textblock_1.Text = tempList[1];
-                            textblock_1.FontWeight = FontWeights.Heavy;
-                            textblock_2.Text = tempList[2];
-                            textblock_3.Text = tempList[3];
-                            TextBoxPopup.VerticalOffset = -29;
-                            TextBoxPopup.IsOpen = true;
+                            List<string> _tempList = new List<string>();
+                            _tempList.Add(tempList[0]);
+                            _tempList.Add(tempList[1]);
+                            string[] msgs = fit.First();
+                            for (int i = 0; i < (msgs.Length-1)/2; i++)
+                            {
+                                string argtype = msgs[i * 2 + 1];
+                                string argname = msgs[i * 2 + 2];
+                                switch (argtype)
+                                {
+                                    case "BIT":
+                                        _tempList.Add(String.Format("[位]{0:s}(X/Y/M/C/T/S)", argname));
+                                        break;
+                                    case "WORD":
+                                        _tempList.Add(String.Format("[单字]{0:s}(D/CV/TV)", argname));
+                                        break;
+                                    case "DWORD":
+                                        _tempList.Add(String.Format("[双字]{0:s}(D)", argname));
+                                        break;
+                                    default:
+                                        _tempList.Add(String.Format("[{1:s}]{0:s}", argname, argtype));
+                                        break;
+                                }
+                            }
+                            while (_tempList.Count() < 6)
+                                _tempList.Add(String.Empty);
+                            _tempList.Add(tempList[6]);
+                            tempList = _tempList;
                         }
                     }
-                    else
+                    if (InstructionInput.Count() > 5)
                     {
-                        if (InstructionInput.Count == 1)
+                        TextBoxPopup.IsOpen = false;
+                    }
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (i < InstructionInput.Count())
                         {
-                            textblock_1.FontWeight = FontWeights.Heavy;
+                            TB_Args[i].Text = InstructionInput[i];
                         }
                         else
                         {
-                            if (InstructionInput.Count == 2)
-                            {
-                                textblock_2.FontWeight = FontWeights.Heavy;
-                            }
-                            else if (InstructionInput.Count == 3)
-                            {
-                                textblock_2.FontWeight = FontWeights.Light;
-                                textblock_3.FontWeight = FontWeights.Heavy;
-                            }
-                            else if (InstructionInput.Count == 4)
-                            {
-                                textblock_3.FontWeight = FontWeights.Light;
-                            }
-                            textblock_1.FontWeight = FontWeights.Light;
+                            TB_Args[i].Text = String.Empty;
                         }
+                        if (i < tempList.Count())
+                        {
+                            TBD_Args[i].Text = tempList[i];
+                        }
+                        else
+                        {
+                            TBD_Args[i].Text = String.Empty;
+                        }
+                        if (TB_Args[i].Text.Length > 0 && TBD_Args[i].Text.Length == 0)
+                        {
+                            TextBoxPopup.IsOpen = false;
+                        }
+                        if (InstructionInput.Count() - 1 == i)
+                        {
+                            TB_Args[i].FontWeight = FontWeights.Heavy;
+                            TBD_Args[i].FontWeight = FontWeights.Heavy;
+                        }
+                        else
+                        {
+                            TB_Args[i].FontWeight = FontWeights.Light;
+                            TBD_Args[i].FontWeight = FontWeights.Light;
+                        }
+                        TB_Detail.Text = tempList[6];
+                    }
+                    if (!TextBoxPopup.IsOpen)
+                    {
+                        TextBoxPopup.VerticalOffset = -29;
+                        TextBoxPopup.IsOpen = true;
                     }
                 }
-                else if (currentText.Length < oldText.Length)
+                else
                 {
-                    List<string> InstructionInput = currentText.ToUpper().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                    if (currentText == currentText.TrimEnd())
+                    if (TextBoxPopup.IsOpen)
                     {
-                        switch (InstructionInput.Count)
-                        {
-                            case 1:
-                                textblock_1.FontWeight = FontWeights.Light;
-                                TextBoxPopup.IsOpen = false;
-                                TextBoxPopup.Placement = PlacementMode.Top;
-                                TextBoxPopup.VerticalOffset = -2;
-                                TextBoxPopup.HorizontalOffset = 125;
-                                break;
-                            case 2:
-                                textblock_2.FontWeight = FontWeights.Light;
-                                textblock_1.FontWeight = FontWeights.Heavy;
-                                break;
-                            case 3:
-                                textblock_3.FontWeight = FontWeights.Light;
-                                textblock_2.FontWeight = FontWeights.Heavy;
-                                break;
-                            case 4:
-                                textblock_3.FontWeight = FontWeights.Heavy;
-                                break;
-                            default:
-                                break;
-                        }
+                        TextBoxPopup.IsOpen = false;
                     }
                 }
                 oldText = currentText;
@@ -248,7 +362,14 @@ namespace SamSoarII.UserInterface
             InstructionInputTextBox.Tag = "true";
             if (label.Content as string != oldText)
             {
-                InstructionInputTextBox.Text = label.Content as string;
+                string[] words = InstructionInputTextBox.Text.Split(' ');
+                words[words.Length - 1] = label.Content as string;
+                InstructionInputTextBox.Text = words[0];
+                for (int i = 1; i < words.Length; i++)
+                {
+                    InstructionInputTextBox.Text += " " + words[i];
+                }
+                InstructionInputTextBox.SelectionStart = InstructionInputTextBox.Text.Length;
             }
             else
             {

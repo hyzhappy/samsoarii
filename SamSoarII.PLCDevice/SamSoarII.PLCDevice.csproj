@@ -51,13 +51,19 @@
     </Compile>
     <Compile Include="DeviceDialog\FGs16MRDeviceMessageDialog.cs" />
     <Compile Include="DeviceDialog\FGs16MTDeviceMessageDialog.cs" />
+    <Compile Include="DeviceDialog\FGs20MRBYKDeviceMessageDialog.cs" />
     <Compile Include="DeviceDialog\FGs32MRDeviceMessageDialog.cs" />
+    <Compile Include="DeviceDialog\FGs32MRYTJDeviceMessageDialog.cs" />
     <Compile Include="DeviceDialog\FGs32MTDeviceMessageDialog.cs" />
+    <Compile Include="DeviceDialog\FGs32MTYTJDeviceMessageDialog.cs" />
     <Compile Include="DeviceDialog\FGs64MRDeviceMessageDialog.cs" />
     <Compile Include="DeviceDialog\FGs64MTDeviceMessageDialog.cs" />
     <Compile Include="FGs16MRDevice.cs" />
     <Compile Include="FGs16MTDevice.cs" />
+    <Compile Include="FGs20MR-BYKDevice.cs" />
+    <Compile Include="FGs32MR-YTJDevice.cs" />
     <Compile Include="FGs32MRDevice.cs" />
+    <Compile Include="FGs32MT-YTJDevice.cs" />
     <Compile Include="FGs32MTDevice.cs" />
     <Compile Include="FGs64MRDevice.cs" />
     <Compile Include="FGs64MTDevice.cs" />

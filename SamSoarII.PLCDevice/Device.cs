@@ -9,7 +9,7 @@ namespace SamSoarII.PLCDevice
     public abstract class Device
     {
         public abstract string DeviceName { get; }
-
+        public abstract PLCDeviceType Type { get; }
         private static BroadDevice _defaultDevice = new BroadDevice();
         public static Device DefaultDevice { get { return _defaultDevice; } }
         

@@ -182,20 +182,32 @@ namespace SamSoarII.Extend.LogicGraph
             {
                 solveCount++;
                 LGVertex lgv = queue.Dequeue();
-                //Console.Write("solve : {0:d}\n", lgv.Id);
                 foreach (LGEdge lge in lgv.Edges)
                 {
-                    //Console.Write("next => {0:d} {1:d}\n", lge.Destination.Id, lge.Destination[4]);
                     if ((--lge.Destination[4]) == 0)
                     {
                         queue.Enqueue(lge.Destination);
                     }
                 }
             }
-            //Console.Write("c1={0:d} c2={1:d}\n", solveCount, vertexs.Count);
             // 若存在节点未被排序，则在环中
             if (solveCount < vertexs.Count)
                 return true;
+            // 还存在一种短路情况，分支后面出现线路指令（INV,MEP,MEF）时
+            foreach (LGVertex lgv in vertexs)
+            {
+                if (lgv.Edges.Count() > 1)
+                {
+                    foreach (LGEdge lge in lgv.Edges)
+                    {
+                        switch (lge.PLCInfo.Type)
+                        {
+                            case "INV": case "MEP": case "MEF":
+                                return true;
+                        }
+                    }
+                }
+            }
             return false;
         }
         /// <summary>

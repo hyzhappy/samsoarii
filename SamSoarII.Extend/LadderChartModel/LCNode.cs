@@ -373,7 +373,7 @@ namespace SamSoarII.Extend.LadderChartModel
                 case "JMP": text = "JMP " + flag1; break;
                 case "LBL": text = "LBL " + flag1; break;
                 case "CALL": text = "CALL " + flag1; break;
-                case "CALLM": text = "CALLM " + flag1; break;
+                case "CALLM": text = "CALLM " + flag1 + " " + flag2 + " " + flag3 + " " + flag4 + " " + flag5; break;
                 case "SHL": text = "SHL " + flag1 + " " + flag2 + " " + flag3; break;
                 case "SHLD": text = "SHLD " + flag1 + " " + flag2 + " " + flag3; break;
                 case "SHR": text = "SHR " + flag1 + " " + flag2 + " " + flag3; break;

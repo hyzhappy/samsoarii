@@ -42,8 +42,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     return "DWORD";
                 if (model is SimulateFloatModel)
                     return "FLOAT";
-                if (model is SimulateDoubleModel)
-                    return "DOUBLE";
                 return String.Empty;
             }
         }
@@ -117,8 +115,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                         factor = 2;
                     if (model is SimulateFloatModel)
                         factor = 2;
-                    if (model is SimulateDoubleModel)
-                        factor = 4;
                     break;
                 default:
                     factor = 1;

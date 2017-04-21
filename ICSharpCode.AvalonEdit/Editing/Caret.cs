@@ -261,7 +261,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		{
 			if (raisePositionChangedOnUpdateFinished) {
 				if (PositionChanged != null) {
-					PositionChanged(this, EventArgs.Empty);
+					//PositionChanged(this, EventArgs.Empty);
 				}
 			}
 		}

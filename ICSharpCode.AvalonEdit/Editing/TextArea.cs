@@ -987,6 +987,8 @@ namespace ICSharpCode.AvalonEdit.Editing
                         return;
                     case Key.Left:
                     case Key.Right:
+                    case Key.Back:
+                    case Key.Delete:
                         CodeCompleteKeyDown(this, e);
                         break;
                     case Key.Down:
@@ -1016,6 +1018,8 @@ namespace ICSharpCode.AvalonEdit.Editing
                         return;
                     case Key.Left:
                     case Key.Right:
+                    case Key.Back:
+                    case Key.Delete:
                         CodeCompleteKeyUp(this, e);
                         break;
                     case Key.Down:

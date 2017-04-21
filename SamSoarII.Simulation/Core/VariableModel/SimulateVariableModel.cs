@@ -23,8 +23,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 type1 = 3;
             if (unit1 is SimulateFloatUnit)
                 type1 = 4;
-            if (unit1 is SimulateDoubleUnit)
-                type1 = 5;
             if (unit1 is SimulateUnitSeries)
                 type1 = 6;
 
@@ -36,8 +34,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 type2 = 3;
             if (unit2 is SimulateFloatUnit)
                 type2 = 4;
-            if (unit2 is SimulateDoubleUnit)
-                type2 = 5;
             if (unit2 is SimulateUnitSeries)
                 type2 = 6;
 
@@ -163,12 +159,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 sfunit.Name = _name;
                 return sfunit;
             }
-            SimulateDoubleUnit sdfunit = new SimulateDoubleUnit();
-            if (sdfunit._Check_Name(_name))
-            {
-                sdfunit.Name = _name;
-                return sdfunit;
-            }
             SimulateUnitSeries ssunit = new SimulateUnitSeries();
             if (ssunit._Check_Name(_name))
             {
@@ -213,14 +203,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     {
                         sfunit.Name = _name;
                         return sfunit;
-                    }
-                    break;
-                case "DOUBLE":
-                    SimulateDoubleUnit sdfunit = new SimulateDoubleUnit();
-                    if (sdfunit._Check_Name(_name))
-                    {
-                        sdfunit.Name = _name;
-                        return sdfunit;
                     }
                     break;
                 default:
@@ -347,9 +329,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 case "FLOAT":
                     svmodel = new SimulateFloatModel();
                     break;
-                case "DOUBLE":
-                    svmodel = new SimulateDoubleModel();
-                    break;
                 default:
                     return svmodel;
             }
@@ -378,10 +357,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
             if (svunitf is SimulateFloatUnit)
             {
                 return SimulateFloatModel.Create(svunits);
-            }
-            if (svunitf is SimulateDoubleUnit)
-            {
-                return SimulateDoubleModel.Create(svunits);
             }
             return null;
         }

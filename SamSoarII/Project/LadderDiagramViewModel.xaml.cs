@@ -23,6 +23,8 @@ using System.ComponentModel;
 using SamSoarII.LadderInstModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.ValueModel;
+using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.Extend.FuncBlockModel;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -47,6 +49,13 @@ namespace SamSoarII.AppMain.Project
 
     public partial class LadderDiagramViewModel : UserControl, IProgram
     {
+        private ProjectModel _projectModel;
+
+        public ProjectModel ProjectModel
+        {
+            get { return this._projectModel; }
+        }
+        
         private string _programName;
         public string ProgramName
         {
@@ -119,7 +128,18 @@ namespace SamSoarII.AppMain.Project
         }
 
         private LinkedList<LadderNetworkViewModel> _ladderNetworks = new LinkedList<LadderNetworkViewModel>();
-
+        public LinkedList<LadderNetworkViewModel> LadderNetworks
+        {
+            get
+            {
+                return _ladderNetworks;
+            }
+            set
+            {
+                _ladderNetworks = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+            }
+        }
         private SelectRect _selectRect = new SelectRect();
 
         private LadderNetworkViewModel _selectStartNetwork;
@@ -178,7 +198,20 @@ namespace SamSoarII.AppMain.Project
             get; set; 
         }
 
+        #region About CommandManager
         private LadderCommand.CommandManager _commandManager = new LadderCommand.CommandManager();
+        
+        public bool IsModify
+        {
+            get { return _commandManager.IsModify; }
+            set { _commandManager.IsModify = value; }
+        }
+
+        public void CommandExecute(IUndoableCommand command)
+        {
+            _commandManager.Execute(command);
+        }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -241,10 +274,11 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        public LadderDiagramViewModel(string name)
+        public LadderDiagramViewModel(string name, ProjectModel _parent)
         {
             InitializeComponent();
             InitializeInstructionNameAndToolTips();
+            _projectModel = _parent;
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
             this.Loaded += (sender, e) =>
@@ -258,10 +292,10 @@ namespace SamSoarII.AppMain.Project
         public void NavigateToNetworkByNum(int num)
         {
             double scale = GlobalSetting.LadderScaleX;
-            double offset = scale * (MainBorder.ActualHeight + 20) / 3;
+            double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
             foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < num; }))
             {
-                offset += scale * (item.ActualHeight + 20) / 3;
+                offset += scale * (item.ActualHeight + 20) / 3.57;
             }
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
@@ -283,6 +317,9 @@ namespace SamSoarII.AppMain.Project
                     tempList.Add(node.Attribute("Text_1").Value);
                     tempList.Add(node.Attribute("Text_2").Value);
                     tempList.Add(node.Attribute("Text_3").Value);
+                    tempList.Add(node.Attribute("Text_4").Value);
+                    tempList.Add(node.Attribute("Text_5").Value);
+                    tempList.Add(node.Attribute("Detail").Value);
                     tempDic.Add(node.Name.ToString(), tempList);
                 }
             }
@@ -338,8 +375,13 @@ namespace SamSoarII.AppMain.Project
         public void InitNetworks()
         {
             LadderNetworkStackPanel.Children.Clear();
+            foreach (var network in _ladderNetworks)
+            {
+                network.PropertyChanged -= Network_PropertyChanged;
+            }
             _ladderNetworks.Clear();
             IDVModel.Setup(this);
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         public void AcquireSelectRect(LadderNetworkViewModel network)
@@ -381,7 +423,17 @@ namespace SamSoarII.AppMain.Project
             network.NetworkNumber = _ladderNetworks.Count;
             _ladderNetworks.AddLast(network);
             LadderNetworkStackPanel.Children.Add(network);
+            network.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
+        }
+
+        private void Network_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "NetworkBrief")
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+            }
         }
 
         #region Network manipulation，undoable command form method
@@ -389,6 +441,8 @@ namespace SamSoarII.AppMain.Project
         {
             var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
             _commandManager.Execute(command);
+            network.PropertyChanged -= Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
         public void ReplaceSingleElement(LadderNetworkViewModel network, BaseViewModel element)
@@ -410,6 +464,8 @@ namespace SamSoarII.AppMain.Project
             var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
             _commandManager.Execute(command);
+            newnetwork.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
         public void AddNewNetworkAfter(LadderNetworkViewModel network)
@@ -417,6 +473,8 @@ namespace SamSoarII.AppMain.Project
             var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber + 1);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
             _commandManager.Execute(command);
+            newnetwork.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
         public void AppendNewNetwork()
@@ -424,6 +482,8 @@ namespace SamSoarII.AppMain.Project
             var network = new LadderNetworkViewModel(this, _ladderNetworks.Count);
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
             _commandManager.Execute(command);
+            network.PropertyChanged += Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
         /// <summary>
@@ -532,6 +592,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         LinkedListNode<LadderNetworkViewModel> newnode = new LinkedListNode<LadderNetworkViewModel>(net);
                         _ladderNetworks.AddFirst(newnode);
+                        newnode.Value.PropertyChanged += Network_PropertyChanged;
                     }
                     var node = _ladderNetworks.First;
                     int n = 0;
@@ -559,6 +620,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         net.NetworkNumber = n;
                         _ladderNetworks.AddAfter(node, net);
+                        net.PropertyChanged += Network_PropertyChanged;
                         n++;
                         node = node.Next;
                     }
@@ -578,11 +640,12 @@ namespace SamSoarII.AppMain.Project
                 {
                     net.NetworkNumber = n;
                     _ladderNetworks.AddLast(net);
+                    net.PropertyChanged += Network_PropertyChanged;
                     n++;
                 }
             }
-     
             ReloadNetworksToStackPanel();
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         public void RemoveNetwork(LadderNetworkViewModel network)
@@ -600,9 +663,11 @@ namespace SamSoarII.AppMain.Project
                         node = node.Next;
                     }
                     _ladderNetworks.Remove(network);
+                    network.PropertyChanged -= Network_PropertyChanged;
                     LadderNetworkStackPanel.Children.Remove(network);
                 }
             }
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         #endregion
@@ -646,6 +711,20 @@ namespace SamSoarII.AppMain.Project
 
         #region Selection Rectangle Relative
 
+        private void ScrollToRect(int num, int row)
+        {
+            double scale = GlobalSetting.LadderScaleX;
+            double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
+            foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < num; }))
+            {
+                offset += scale * (item.ActualHeight + 20) / 2.65;
+            }
+            offset += scale * (_selectRect.ActualHeight * row + 20) / 3.2;
+            offset -= MainScrollViewer.ViewportHeight / 2;
+            offset = Math.Max(0, offset);
+            MainScrollViewer.ScrollToVerticalOffset(offset);
+        }
+
         private void SelectRectUp()
         {
             if (_selectRectOwner != null)
@@ -665,6 +744,7 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
             }
+            ScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
         }
 
         private void SelectRectDown()
@@ -687,6 +767,7 @@ namespace SamSoarII.AppMain.Project
 
                 }
             }
+            ScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
         }
 
         private void SelectRectLeft()
@@ -896,14 +977,49 @@ namespace SamSoarII.AppMain.Project
         #region Instruction relative
         private void ShowInstructionInputDialog(string initialString)
         {
-            InstructionInputDialog dialog = new InstructionInputDialog(initialString, InstrutionNameAndToolTips);
+            IEnumerable<string> subdiagramNames = _projectModel.SubRoutines.Select(
+                (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName; });
+            IEnumerable<string[]> functionMessages = _projectModel.Funcs.Select(
+                (FuncModel fmodel) => 
+                {
+                    int argcount = 0;
+                    for (; argcount < 4; argcount++)
+                    {
+                        if (fmodel.GetArgName(argcount).Equals(String.Empty))
+                        {
+                            break;
+                        }
+                    }
+                    string[] result = new string[argcount*2+1];
+                    result[0] = fmodel.Name;
+                    for (int i = 0; i < argcount; i++)
+                    {
+                        result[i * 2 + 1] = fmodel.GetArgType(i);
+                        result[i * 2 + 2] = fmodel.GetArgName(i);
+                    }
+                    return result;
+                }
+            );
+            IEnumerable<string> modbusNames = _projectModel.MTVModel.Models.Select(
+                (ModbusTableModel mtmodel) => { return mtmodel.Name; });
+            InstructionInputDialog dialog = new InstructionInputDialog(
+                initialString, 
+                InstrutionNameAndToolTips,
+                subdiagramNames,
+                functionMessages,
+                modbusNames);
+            LadderDiagramViewModel selectedSubdiagram = null;
+            FuncModel selectedFunction = null;
+            ModbusTableModel selectedModbus = null;
+            List<string> InstructionInput = null;
+
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.EnsureButtonClick += (sender, e) =>
             {
                 BaseViewModel viewmodel;
                 try
                 {
-                    List<string> InstructionInput = dialog.InstructionInput.ToUpper().Trim().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                    InstructionInput = dialog.InstructionInput.ToUpper().Trim().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
                     if (InstructionInput.Count == 0)
                     {
                         throw new InstructionExecption(string.Format("the input is empty"));
@@ -915,20 +1031,90 @@ namespace SamSoarII.AppMain.Project
                             throw new InstructionExecption(string.Format("the instructionName is not exist!"));
                         }
                     }
-                    viewmodel = LadderInstViewModelPrototype.Clone(InstructionInput[0]);
-                    InstructionInput.RemoveAt(0);
-                    List<string> valueStrings = new List<string>();
-                    foreach (var valueString in InstructionInput)
+                    switch (InstructionInput[0])
                     {
+                        case "CALL":
+                            if (InstructionInput.Count() < 2)
+                            {
+                                throw new FormatException("必须输入子程序名称。");
+                            }
+                            selectedSubdiagram = _projectModel.SubRoutines.Where(
+                                (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName.Equals(InstructionInput[1]); }).First();
+                            break;
+                        case "ATCH":
+                            if (InstructionInput.Count() < 3)
+                            {
+                                throw new FormatException("必须输入子程序名称。");
+                            }
+                            selectedSubdiagram = _projectModel.SubRoutines.Where(
+                                (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName.Equals(InstructionInput[2]); }).First();
+                            break;
+                        case "CALLM":
+                            if (InstructionInput.Count() < 2)
+                            {
+                                throw new FormatException("必须输入函数名称。");
+                            }
+                            selectedFunction = _projectModel.Funcs.Where(
+                                (FuncModel fmodel) => { return fmodel.Name.Equals(InstructionInput[1]); }).First();
+                            break;
+                        case "MBUS":
+                            if (InstructionInput.Count() < 3)
+                            {
+                                throw new FormatException("必须输入MODBUS表格。");
+                            }
+                            selectedModbus = _projectModel.MTVModel.Models.Where(
+                                (ModbusTableModel mtmodel) => { return mtmodel.Name.Equals(InstructionInput[2]); }).First();
+                            break;
+                    }
+                    viewmodel = LadderInstViewModelPrototype.Clone(InstructionInput[0]);
+                    //InstructionInput.RemoveAt(0);
+                    List<string> valueStrings = new List<string>();
+                    for (int i = 1; i < InstructionInput.Count(); i++)
+                    {
+                        string valueString = InstructionInput[i];
                         valueStrings.Add(valueString);
-                        if (ValueCommentManager.ContainValue(valueString))
+                        if (selectedFunction != null)
                         {
-                            valueStrings.Add(ValueCommentManager.GetComment(valueString));
+                            if (i == 1)
+                            {
+                                valueStrings.Add(string.Empty);
+                            }
+                            else
+                            {
+                                if (ValueCommentManager.ContainValue(valueString))
+                                {
+                                    valueStrings.Add(ValueCommentManager.GetComment(valueString));
+                                }
+                                else
+                                {
+                                    valueStrings.Add(string.Empty);
+                                }
+                                valueStrings.Add(selectedFunction.GetArgType(i - 2));
+                                valueStrings.Add(selectedFunction.GetArgName(i - 2));
+                            }
                         }
                         else
                         {
-                            valueStrings.Add(string.Empty);
+                            if (ValueCommentManager.ContainValue(valueString))
+                            {
+                                valueStrings.Add(ValueCommentManager.GetComment(valueString));
+                            }
+                            else
+                            {
+                                valueStrings.Add(string.Empty);
+                            }
                         }
+                    }
+                    if (selectedFunction != null)
+                    {
+                        for (int i = InstructionInput.Count() - 2; i < 4; i++)
+                        {
+                            valueStrings.Add(String.Empty); // Value
+                            valueStrings.Add(String.Empty); // Comment
+                            valueStrings.Add(String.Empty); // ArgType
+                            valueStrings.Add(String.Empty); // ArgName
+                        }
+                        viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.SelectDevice);
                     }
                     if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
                     {
@@ -946,10 +1132,6 @@ namespace SamSoarII.AppMain.Project
                         }
                         viewmodel.X = GlobalSetting.LadderXCapacity - 1;
                         viewmodel.Y = _selectRect.Y;
-                        if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
-                        {
-                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.SelectDevice);
-                        }
                         elements.Add(viewmodel);
                         _selectRect.X = GlobalSetting.LadderXCapacity - 1;
                         var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
@@ -959,23 +1141,43 @@ namespace SamSoarII.AppMain.Project
                     {
                         viewmodel.X = _selectRect.X;
                         viewmodel.Y = _selectRect.Y;
-                        if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
-                        {
-                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.SelectDevice);
-                        }
                         ReplaceSingleElement(_selectRectOwner, viewmodel);
                         if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
                         {
                             _selectRect.X++;
                         }
                     }
+                    dialog.Close();
                 }
-                catch (Exception exception)
+                catch (FormatException exce1)
                 {
-                    MessageBox.Show(string.Format(exception.Message));
-                    return;
+                    MessageBox.Show(string.Format(exce1.Message));
                 }
-                dialog.Close();
+                catch (ValueParseException exce2)
+                {
+                    MessageBox.Show(string.Format(exce2.Message));
+                }
+                catch (InstructionExecption exce3)
+                {
+                    MessageBox.Show(string.Format(exce3.Message));
+                }
+                /*
+                catch (InvalidOperationException exce4)
+                {
+                    switch (InstructionInput[0])
+                    {
+                        case "CALL":
+                            MessageBox.Show(String.Format("找不到子程序{0:s}", InstructionInput[1]));
+                            break;
+                        case "CALLM":
+                            MessageBox.Show(String.Format("找不到函数{0:s}", InstructionInput[1]));
+                            break;
+                        case "MBUS":
+                            MessageBox.Show(String.Format("找不到Modbus表格{0:s}", InstructionInput[2]));
+                            break;
+                    }
+                }
+                */
             };
             dialog.ShowDialog();
         }

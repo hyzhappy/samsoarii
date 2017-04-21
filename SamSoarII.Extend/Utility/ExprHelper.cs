@@ -450,12 +450,6 @@ namespace SamSoarII.Extend.Utility
                 if (end == start)
                 {
                     InstHelper.AddInst(insts, "INV", id);
-                    // 前面要或运算，所以要用栈的或合并
-                    if ((flag & FLAG_CALOR) != 0)
-                        InstHelper.AddInst(insts, "ORB");
-                    // 前面要与运算，所以要用栈的与合并
-                    if ((flag & FLAG_CALAND) != 0)
-                        InstHelper.AddInst(insts, "ANDB");
                     return;
                 }
                 // 识别非符号后面的立即符号( !imM0 )
@@ -475,12 +469,6 @@ namespace SamSoarII.Extend.Utility
                 if (end == start + 1)
                 {
                     InstHelper.AddInst(insts, "MEP", id);
-                    // 前面要或运算，所以要用栈的或合并
-                    if ((flag & FLAG_CALOR) != 0)
-                        InstHelper.AddInst(insts, "ORB");
-                    // 前面要与运算，所以要用栈的与合并
-                    if ((flag & FLAG_CALAND) != 0)
-                        InstHelper.AddInst(insts, "ANDB");
                     return;
                 }
                 InstHelper.AddInst(insts, profix + "P " + expr.Substring(start + 2, end - start - 1), id);
@@ -493,12 +481,6 @@ namespace SamSoarII.Extend.Utility
                 if (end == start + 1)
                 {
                     InstHelper.AddInst(insts, "MEF", id);
-                    // 前面要或运算，所以要用栈的或合并
-                    if ((flag & FLAG_CALOR) != 0)
-                        InstHelper.AddInst(insts, "ORB");
-                    // 前面要与运算，所以要用栈的与合并
-                    if ((flag & FLAG_CALAND) != 0)
-                        InstHelper.AddInst(insts, "ANDB");
                     return;
                 }
                 InstHelper.AddInst(insts, profix + "F " + expr.Substring(start + 2, end - start - 1), id);

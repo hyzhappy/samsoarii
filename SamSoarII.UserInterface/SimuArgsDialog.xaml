@@ -1,0 +1,111 @@
+﻿<Window x:Class="SamSoarII.UserInterface.SimuArgsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        mc:Ignorable="d"
+        Title="数值锁定" Height="180" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="LB_Arg1" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
+                   Grid.Row="0" Grid.Column="1">
+            Argument1
+        </TextBlock>
+        <TextBlock x:Name="LB_Arg2" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
+                   Grid.Row="1" Grid.Column="1">
+            Argument2
+        </TextBlock>
+        <TextBlock x:Name="LB_Arg3" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
+                   Grid.Row="2" Grid.Column="1">
+            Argument3
+        </TextBlock>
+        <TextBlock x:Name="LB_Arg4" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
+                   Grid.Row="3" Grid.Column="1">
+            Argument4
+        </TextBlock>
+        <TextBlock x:Name="LB_Arg5" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
+                   Grid.Row="4" Grid.Column="1">
+            Argument5
+        </TextBlock>
+        <TextBlock x:Name="LE_Arg1"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Grid.Row="0" Grid.Column="2">
+            =
+        </TextBlock>
+        <TextBlock x:Name="LE_Arg2"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Grid.Row="1" Grid.Column="2">
+            =
+        </TextBlock>
+        <TextBlock x:Name="LE_Arg3"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Grid.Row="2" Grid.Column="2">
+            =
+        </TextBlock>
+        <TextBlock x:Name="LE_Arg4"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Grid.Row="3" Grid.Column="2">
+            =
+        </TextBlock>
+        <TextBlock x:Name="LE_Arg5"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Grid.Row="4" Grid.Column="2">
+            =
+        </TextBlock>
+        <TextBox x:Name="TB_Arg1" TextChanged="TB_Arg1_TextChanged"
+                 VerticalAlignment="Center"
+                 Grid.Row="0" Grid.Column="3">
+            0
+        </TextBox>
+        <TextBox x:Name="TB_Arg2" TextChanged="TB_Arg2_TextChanged"
+                 VerticalAlignment="Center"
+                 Grid.Row="1" Grid.Column="3">
+            0
+        </TextBox>
+        <TextBox x:Name="TB_Arg3" TextChanged="TB_Arg3_TextChanged"
+                 VerticalAlignment="Center"
+                 Grid.Row="2" Grid.Column="3">
+            0
+        </TextBox>
+        <TextBox x:Name="TB_Arg4" TextChanged="TB_Arg4_TextChanged"
+                 VerticalAlignment="Center"
+                 Grid.Row="3" Grid.Column="3">
+            0
+        </TextBox>
+        <TextBox x:Name="TB_Arg5" TextChanged="TB_Arg5_TextChanged"
+                 VerticalAlignment="Center"
+                 Grid.Row="4" Grid.Column="3">
+            0
+        </TextBox>
+        <Button x:Name="B_OK" Width="80" Click="B_OK_Click"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Grid.Row="5" Grid.Column="1">
+            确定
+        </Button>
+        <Button x:Name="B_Cancel" Width="80" Click="B_Cancel_Click"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Grid.Row="5" Grid.Column="3">
+            取消
+        </Button>
+    </Grid>
+</Window>

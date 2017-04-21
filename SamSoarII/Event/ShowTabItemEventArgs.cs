@@ -10,9 +10,12 @@ namespace SamSoarII.AppMain
     {
         public TabType Type { get; set; }
 
+        public string Header { get; set; }
+
         public ShowTabItemEventArgs(TabType type)
         {
             Type = type;
         }
+        
     }
 }

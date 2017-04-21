@@ -193,11 +193,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     {
                         if (!(e.Values[i] is SimuArgsDialogUnlockValue))
                         {
-                            this[i + 1].Value = e.Values[i];
-                        }
-                        if (!(e.Values[i] is SimuArgsDialogUnlockValue) && !this[i + 1].Islocked)
-                        {
                             this[i + 1].Islocked = true;
+                            this[i + 1].Value = e.Values[i];
                             _e.Old = _e.New = this[i + 1];
                             VariableUnitLocked(this, _e);
                             Update();
@@ -213,6 +210,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 }
                 dialog.Close();
                 dialog = null;
+                Update();
             }
         }
 

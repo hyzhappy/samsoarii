@@ -138,5 +138,12 @@ namespace SamSoarII.PLCDevice
                 return new IntRange(uint.MinValue, uint.MaxValue);
             }
         }
+        public override PLCDeviceType Type
+        {
+            get
+            {
+                return PLCDeviceType.FGs_16MR_A;
+            }
+        }
     }
 }

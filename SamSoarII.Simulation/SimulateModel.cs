@@ -17,7 +17,6 @@ using SamSoarII.Simulation.UI;
 using SamSoarII.Simulation.UI.Chart;
 using SamSoarII.Simulation.UI.Monitor;
 using SamSoarII.Simulation.UI.PLCTop;
-
 using SamSoarII.Extend.Utility;
 using System.Diagnostics;
 using System.IO;
@@ -42,6 +41,7 @@ namespace SamSoarII.Simulation
 {
     public class SimulateModel : IDisposable
     {
+        #region Numbers
         /// <summary>
         /// 仿真管理器
         /// </summary>
@@ -67,7 +67,12 @@ namespace SamSoarII.Simulation
         /// </summary>
         public TextBox ReportTextBox
         {
-            set { this.report = value; }
+            private get { return this.report; }
+            set
+            {
+                this.report = value;
+                report.Clear();
+            }
         }
         /// <summary>
         /// 定时更新界面的线程
@@ -121,35 +126,8 @@ namespace SamSoarII.Simulation
         /// LED灯显示的变量组模型
         /// </summary>
         public SimulateBitModel LEDBit;
-        /// <summary>
-        /// 初始化构造函数
-        /// </summary>
-        public SimulateModel()
-        {
-            smanager = new SimulateManager();
-            //svmodels = new List<SimuViewBaseModel>();
-            //suvars = new SortedSet<SimulateVariableUnit>(new SimulateVariableUintComparer());
-            smvars = new List<SimulateVariableUnit>();
-            AllRoutine = null;
-            MainRoutine = null;
-            SubRoutines = new List<SimuViewDiagramModel>();
-            AllFuncs = null;
-            FuncBlocks = new List<SimuViewFuncBlockModel>();
-            SubCharts = new List<SimuViewTabModel>();
-            //XYCharts = new List<SimuViewXYModel>();
-            LEDBit = new SimulateBitModel();
-            LEDBit.Base = "Y0";
-            LEDBit.Size = 8;
-            smanager.Add(LEDBit);
-        }
-        /// <summary>
-        /// 终止析构函数
-        /// </summary>
-        public void Dispose()
-        {
-            smanager.Stop();
-            SimulateDllModel.FreeDll();
-        }
+        #endregion
+
         /// <summary>
         /// 给定名称和类型获得变量单元
         /// </summary>
@@ -158,6 +136,7 @@ namespace SamSoarII.Simulation
         /// <returns></returns>
         public SimulateVariableUnit GetVariableUnit(string name, string type)
         {
+            // 如果是常量的头
             switch (name[0])
             {
                 case 'K':
@@ -167,7 +146,15 @@ namespace SamSoarII.Simulation
                 default:
                     break;
             }
+            // 剩下的是变量的头
+            // 在管理器中查找
             SimulateVariableUnit unit = null;
+            unit = smanager.Find(name, type);
+            if (unit != null)
+            {
+                return unit;
+            }
+            // 不存在则新建
             switch (type)
             {
                 case "BIT":
@@ -189,8 +176,11 @@ namespace SamSoarII.Simulation
                     return unit;
             }
             unit.Name = name;
-            return smanager.GetVariableUnit(unit);
+            // 注册到管理器中
+            smanager.Add(unit);
+            return unit;
         }
+
         /// <summary>
         /// 给定名称和类型获得常量单元
         /// </summary>
@@ -228,8 +218,46 @@ namespace SamSoarII.Simulation
             unit.Name = name;
             return unit;
         }
+        
+        /// <summary>
+        /// 初始化构造函数
+        /// </summary>
+        public SimulateModel()
+        {
+            smanager = new SimulateManager();
+            //svmodels = new List<SimuViewBaseModel>();
+            //suvars = new SortedSet<SimulateVariableUnit>(new SimulateVariableUintComparer());
+            smvars = new List<SimulateVariableUnit>();
+            AllRoutine = null;
+            MainRoutine = null;
+            SubRoutines = new List<SimuViewDiagramModel>();
+            AllFuncs = null;
+            FuncBlocks = new List<SimuViewFuncBlockModel>();
+            SubCharts = new List<SimuViewTabModel>();
+            //XYCharts = new List<SimuViewXYModel>();
+            LEDBit = new SimulateBitModel();
+            LEDBit.Base = "Y0";
+            LEDBit.Size = 8;
+            smanager.Add(LEDBit);
+        }
+
+        /// <summary>
+        /// 终止析构函数
+        /// </summary>
+        public void Dispose()
+        {
+            // 仿真停止
+            smanager.Stop();
+            // 释放外部的dll资源
+            SimulateDllModel.FreeDll();
+        }
 
         #region Event handler
+        /// <summary>
+        /// 关闭主窗口时发生（已弃用）
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnMainWindowClosed(object sender, EventArgs e)
         {
 
@@ -240,9 +268,14 @@ namespace SamSoarII.Simulation
             UpdateThread.Abort();
         }
         /// <summary>
-        /// 将要打开tab子界面时发生
+        /// 将要打开tab子界面时触发的事件代理
         /// </summary>
         public event ShowTabItemEventHandler TabOpened;
+        /// <summary>
+        /// 将要打开tab子界面时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
             if (TabOpened != null)
@@ -290,9 +323,14 @@ namespace SamSoarII.Simulation
             }
         }
         /// <summary>
-        /// 当前活动的tab子界面更改时发生
+        /// 当前活动的tab子界面更改时触发的事件代理
         /// </summary>
         public event SelectionChangedEventHandler TabItemChanged;
+        /// <summary>
+        /// 当前活动的tab子界面更改时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TabItemChanged != null)
@@ -300,7 +338,11 @@ namespace SamSoarII.Simulation
                 TabItemChanged(sender, e);
             }
         }
-        
+        /// <summary>
+        /// 工程树内双击菜单项发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnProjectTreeDoubleClicked(object sender, MouseButtonEventArgs e)
         {
             if (sender is TreeViewItem)
@@ -321,91 +363,107 @@ namespace SamSoarII.Simulation
                 }
             }
         }
-        
+        /// <summary>
+        /// PLC仿真控制器停止时发生（已弃用）
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void PLCTopPhotoTriggerStop(object sender, RoutedEventArgs e)
         {
             Stop();
         }
-
+        /// <summary>
+        /// PLC仿真控制器运行时发生（已弃用）
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void PLCTopPhotoTriggerRun(object sender, RoutedEventArgs e)
         {
             Start();
         }
-        
+        /// <summary>
+        /// 监视变量改变时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnVariableUnitChanged(object sender, VariableUnitChangeEventArgs e)
         {
             smanager.Replace(e.Old, e.New);
         }
-
+        /// <summary>
+        /// 监视变量锁定时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnVariableUnitLocked(object sender, VariableUnitChangeEventArgs e)
         {
             smanager.Lock(e.Old);
         }
-
+        /// <summary>
+        /// 监视变量解锁时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnVariableUnitUnlocked(object sender, VariableUnitChangeEventArgs e)
         {
             smanager.Unlock(e.Old);
         }
-
-        //public SimulateDataModelEventHandler SDModelLock;
+        /// <summary>
+        /// 变量数据模型锁定时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnSimulateDataModelLock(object sender, SimulateDataModelEventArgs e)
         {
             SimulateDataModel sdmodel = e.SDModel_new;
             smanager.Lock(sdmodel);
-            /*
-            if (SDModelLock != null)
-            {
-                SDModelLock(this, e);
-            }
-            */
         }
-
-        //public SimulateDataModelEventHandler SDModelView;
+        /// <summary>
+        /// 变量数据模型监视时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnSimulateDataModelView(object sender, SimulateDataModelEventArgs e)
         {
             SimulateDataModel sdmodel = e.SDModel_new;
             smanager.View(sdmodel);
-            /*
-            if (SDModelView != null)
-            {
-                SDModelView(this, e);
-            }
-            */
         }
-
-        //public SimulateDataModelEventHandler SDModelUnlock;
+        /// <summary>
+        /// 变量数据模型解除锁定时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnSimulateDataModelUnlock(object sender, SimulateDataModelEventArgs e)
         {
             SimulateDataModel sdmodel = e.SDModel_new;
             smanager.Unlock(sdmodel);
-            /*
-            if (SDModelUnlock != null)
-            {
-                SDModelUnlock(this, e);
-            }
-            */
         }
-
-        //public SimulateDataModelEventHandler SDModelUnview;
+        /// <summary>
+        /// 变量数据模型解除监视时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnSimulateDataModelUnview(object sender, SimulateDataModelEventArgs e)
         {
             SimulateDataModel sdmodel = e.SDModel_new;
             smanager.Unview(sdmodel);
-            /*
-            if (SDModelUnview != null)
-            {
-                SDModelUnview(this, e);
-            }
-            */
         }
-        
+        /// <summary>
+        /// 进行获得数据的一次运行时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnSimulateDataModelRun(object sender, SimulateDataModelEventArgs e)
         {
             double timestart = e.TimeStart;
             double timeend = e.TimeEnd;
             smanager.RunData(timestart, timeend);
         }
-
+        /// <summary>
+        /// 进行获得图表的一次运行时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnSimulateDataModelDraw(object sender, SimulateDataModelEventArgs e)
         {
             double timestart = e.TimeStart;
@@ -415,7 +473,12 @@ namespace SamSoarII.Simulation
         /// <summary>
         /// 当仿真dll的RunDraw方法完成时发生，用于绘制图像
         /// </summary>
-        public event SimulateDataModelEventHandler RunDrawFinished;        
+        public event SimulateDataModelEventHandler RunDrawFinished;
+        /// <summary>
+        /// 当仿真dll的RunDraw方法完成时发生，用于绘制图像
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
         {
             if (RunDrawFinished != null)
@@ -427,6 +490,11 @@ namespace SamSoarII.Simulation
         /// 当仿真dll的RunData方法完成时发生，用于绘制波形
         /// </summary>
         public event SimulateDataModelEventHandler RunDataFinished;
+        /// <summary>
+        /// 当仿真dll的RunData方法完成时发生，用于绘制波形
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void OnRunDataFinished(object sender, SimulateDataModelEventArgs e)
         {
             if (RunDataFinished != null)
@@ -434,7 +502,11 @@ namespace SamSoarII.Simulation
                 RunDataFinished(this, e);
             }
         }
-
+        /// <summary>
+        /// 当创建新的XY坐标图表时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSimuViewXYModelCreate(object sender, SimulateDataModelEventArgs e)
         {
             SimuViewXYModel xychart = new SimuViewXYModel(e.SDModels, (int)(e.TimeStart), (int)(e.TimeEnd));
@@ -446,7 +518,6 @@ namespace SamSoarII.Simulation
             TreeViewItem TVI_Chart = PTView.TVI_Chart;
             TVI_Chart.Items.Add(tvitem);
         }
-
         #endregion
 
         #region User Interface
@@ -494,7 +565,6 @@ namespace SamSoarII.Simulation
             // 监视列表
             MTable = new MonitorTable();
             MTable.VariableUnitChanged += OnVariableUnitChanged;
-            MTable.VariableUnitClosed += OnVariableUnitChanged;
             MTable.VariableUnitLocked += OnVariableUnitLocked;
             MTable.VariableUnitUnlocked += OnVariableUnitUnlocked;
             MTable.SVUnits = smvars;
@@ -513,7 +583,10 @@ namespace SamSoarII.Simulation
             smanager.RunDataFinished += OnRunDataFinished;
             smanager.RunDrawFinished += OnRunDrawFinished;
         }
-
+        /// <summary>
+        /// 建立与元件显示模型的事件连接
+        /// </summary>
+        /// <param name="svbmodel"></param>
         public void BuildRouted(SimuViewBaseModel svbmodel)
         {
             svbmodel.VariableUnitLocked += OnVariableUnitLocked;
@@ -577,8 +650,10 @@ namespace SamSoarII.Simulation
         /// <returns>检查结果</returns>
         public int Check()
         {
+            // 错误个数
             int ret = 0;
-            report.Dispatcher.Invoke(() => { report.Text += "-----> 开始检查线路合法... <-----\r\n"; });
+            // 开始检查线路合法
+            report.Dispatcher.Invoke(() => { report.Text = "-----> 开始检查线路合法... <-----\r\n"; });
             ret += CheckCircuit_Diagram(MainRoutine);
             foreach (SimuViewDiagramModel svdmodel in SubRoutines)
             {
@@ -589,6 +664,7 @@ namespace SamSoarII.Simulation
                 report.Dispatcher.Invoke(() => { report.Text += String.Format("总共 {0:d} 处错误，仿真初始化失败！", ret); });
                 return ret;
             }
+            // 开始生成PLC指令
             report.Dispatcher.Invoke(() => { report.Text += "-----> 开始生成PLC指令... <-----\r\n"; });
             ret += GenPLCInst_Diagram(MainRoutine);
             foreach (SimuViewDiagramModel svdmodel in SubRoutines)
@@ -600,6 +676,7 @@ namespace SamSoarII.Simulation
                 report.Dispatcher.Invoke(() => { report.Text += String.Format("总共 {0:d} 处错误，仿真初始化失败！", ret); });
                 return ret;
             }
+            // 生成仿真支持文件
             report.Dispatcher.Invoke(() => { report.Text += "-----> 生成仿真支持文件... <-----\r\n"; });
             List<InstHelper.PLCInstNetwork> nets = new List<InstHelper.PLCInstNetwork>();
             ret += MergeAll_Diagram(nets, MainRoutine);
@@ -632,13 +709,18 @@ namespace SamSoarII.Simulation
             // 生成仿真dll
             SimulateDllModel.CreateDll(ladderCFile, funcBlockCFile, outputDllFile, outputAFile);
             ret = SimulateDllModel.LoadDll(outputDllFile);
+            // 各种情况
             report.Dispatcher.Invoke(() =>
             {
                 switch (ret)
                 {
+                    // 没问题
                     case SimulateDllModel.LOADDLL_OK:
+                        // 初始化所有的数据点
                         SimulateDllModel.InitDataPoint();
                         break;
+                    // 各种错误
+                    // 包括找不到dll，以及缺少函数入口
                     case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                         report.Text += "Error : 找不到生成的dll文件simuc.dll\r\n";
                         break;
@@ -727,27 +809,41 @@ namespace SamSoarII.Simulation
             });
             return ret;
         }
-        
+        /// <summary>
+        /// 检查程序的连线情况
+        /// </summary>
+        /// <param name="svdmodel">SimuView程序模型</param>
+        /// <returns></returns>
         private int CheckCircuit_Diagram(SimuViewDiagramModel svdmodel)
         {
             int ret = 0;
+            // 检查所有网络
             foreach (SimuViewNetworkModel svnmodel in svdmodel.GetNetworks())
             {
                 ret += CheckCircuit_Network(svnmodel);
             }
             return ret;
         }
-
+        /// <summary>
+        /// 检查网络的连线情况
+        /// </summary>
+        /// <param name="svnmodel">SimuView网络模型</param>
+        /// <returns></returns>
         private int CheckCircuit_Network(SimuViewNetworkModel svnmodel)
         {
             int ret = 0;
             ret += svnmodel.CheckCircuit(report);
             return ret;
         }
-        
+        /// <summary>
+        /// 生成程序的PLC代码
+        /// </summary>
+        /// <param name="svdmodel">SimuView程序模型</param>
+        /// <returns></returns>
         private int GenPLCInst_Diagram(SimuViewDiagramModel svdmodel)
         {
             int ret = 0;
+            // 检查所有网络
             foreach (SimuViewNetworkModel svnmodel in svdmodel.GetNetworks())
             {
                 ret += GenPLCInst_Network(svnmodel);
@@ -755,23 +851,39 @@ namespace SamSoarII.Simulation
             return ret;
         }
 
+        /// <summary>
+        /// 生成网络的PLC代码
+        /// </summary>
+        /// <param name="svdmodel">SimuView网络模型</param>
+        /// <returns></returns>
         private int GenPLCInst_Network(SimuViewNetworkModel svnmodel)
         {
             int ret = 0;
             ret += svnmodel.GenPLCInst(report);
             return ret;
         }
-        
+        /// <summary>
+        /// 将程序的PLC代码合并到代码表中
+        /// </summary>
+        /// <param name="nets">PLC代码表</param>
+        /// <param name="svdmodel">SimuView程序模型</param>
+        /// <returns></returns>
         private int MergeAll_Diagram(List<InstHelper.PLCInstNetwork> nets, SimuViewDiagramModel svdmodel)
         {
             int ret = 0;
+            // 检查所有网络
             foreach (SimuViewNetworkModel svnmodel in svdmodel.GetNetworks())
             {
                 ret += MergeAll_Network(nets, svnmodel, svdmodel.Name);
             }
             return ret;
         }
-
+        /// <summary>
+        /// 将网络的PLC代码合并到代码表中
+        /// </summary>
+        /// <param name="nets">PLC代码表</param>
+        /// <param name="svdmodel">SimuView网络模型</param>
+        /// <returns></returns>
         private int MergeAll_Network(List<InstHelper.PLCInstNetwork> nets, SimuViewNetworkModel svnmodel, string name)
         {
             int ret = 0;
@@ -781,7 +893,5 @@ namespace SamSoarII.Simulation
             return ret;
         }
         #endregion
-
-
     }
 }

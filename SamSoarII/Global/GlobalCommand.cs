@@ -17,6 +17,7 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand ShowProjectTreeViewCommand { get; set; }
         public static RoutedUICommand ShowSimulateTreeViewCommand { get; set; }
         public static RoutedUICommand ShowMonitorCommand { get; set; }
+        public static RoutedUICommand ShowOutputCommand { get; set; }
 
         public static RoutedUICommand CompileCommand { get; set; }
 
@@ -31,6 +32,9 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand CheckNetworkErrorCommand { get; set; }
 
         public static RoutedUICommand SimulateCommand { get; set; }
+        public static RoutedUICommand SimuStartCommand { get; set; }
+        public static RoutedUICommand SimuPauseCommand { get; set; }
+        public static RoutedUICommand SimuStopCommand { get; set; }
         static GlobalCommand()
         {
             AddNewFuncBlockCommand = new RoutedUICommand();
@@ -40,6 +44,7 @@ namespace SamSoarII.AppMain
             ShowProjectTreeViewCommand = new RoutedUICommand();
             ShowSimulateTreeViewCommand = new RoutedUICommand();
             ShowMonitorCommand = new RoutedUICommand();
+            ShowOutputCommand = new RoutedUICommand();
             CompileCommand = new RoutedUICommand();
             DownloadCommand = new RoutedUICommand();
             UploadCommand = new RoutedUICommand();
@@ -50,6 +55,9 @@ namespace SamSoarII.AppMain
             CommentModeToggleCommand = new RoutedUICommand();
             CheckNetworkErrorCommand = new RoutedUICommand();
             SimulateCommand = new RoutedUICommand();
+            SimuStartCommand = new RoutedUICommand();
+            SimuStopCommand = new RoutedUICommand();
+            SimuPauseCommand = new RoutedUICommand();
         }
     }
 }

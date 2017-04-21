@@ -9,6 +9,11 @@ namespace SamSoarII.PLCDevice
 {
     class FGs16MTDevice : Device
     {
+        public FGs16MTDevice() { }
+        public FGs16MTDevice(PLCDeviceType type)
+        {
+            _type = type;
+        }
         public override IntRange AIRange
         {
             get
@@ -102,6 +107,14 @@ namespace SamSoarII.PLCDevice
             get
             {
                 return new IntRange(0, 256);
+            }
+        }
+        private PLCDeviceType _type;
+        public override PLCDeviceType Type
+        {
+            get
+            {
+                return _type;
             }
         }
 

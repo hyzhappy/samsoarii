@@ -735,13 +735,6 @@ namespace SamSoarII.Extend.Utility
                     stackTop++;
                     stackinsts.Push(inst);
                 }
-                switch (inst.Type)
-                {
-                    case "INV": case "MEP": case "MEF":
-                        stackTop++;
-                        stackinsts.Push(inst);
-                        break;
-                }
                 if (inst.Type.Equals("ANDB") || inst.Type.Equals("ORB") || inst.Type.Equals("POP"))
                 {
                     stackTop--;
@@ -764,10 +757,10 @@ namespace SamSoarII.Extend.Utility
                     case "ALTP":
                     case "CTU": case "CTD": case "CTUD":
                     case "FOR":
-                    case "INV":
+                    case "INV": 
                         globalTotal++;
                         break;
-                    case "MEP": case "MEF":  
+                    case "MEP": case "MEF":
                     case "TON": case "TOF": case "TONR":
                         globalTotal += 2;
                         break;
@@ -884,7 +877,7 @@ namespace SamSoarII.Extend.Utility
         static public void InstToCCode(StreamWriter sw, PLCInstruction inst, bool simumode = false)
         {
             // 如果是仿真模式需要由写入使能作为条件
-            if (inst.EnBit != null)
+            if (inst.EnBit != null && inst.EnBit.Length > 0)
             {
                 sw.Write("if (!{0:s}) \n{{\n", inst.EnBit);
             }
@@ -935,17 +928,17 @@ namespace SamSoarII.Extend.Utility
                     break;
                 case "INV":
                     _CalcSignal(sw);
-                    sw.Write("_stack_{0:d} = _global[{1:d}]^1;\n", ++stackTop, globalCount - 1);
+                    sw.Write("_stack_{0:d} = _global[{1:d}]^1;\n", stackTop, globalCount - 1);
                     break;
                 case "MEP":
                     _CalcSignal(sw);
-                    sw.Write("_stack_{0:d} = (_global[{1:d}]==0&&_global[{2:d}]==1);\n", ++stackTop, globalCount, globalCount - 1);
+                    sw.Write("_stack_{0:d} = (_global[{1:d}]==0&&_global[{2:d}]==1);\n", stackTop, globalCount, globalCount - 1);
                     sw.Write("_global[{0:d}] = _global[{1:d}];\n", globalCount, globalCount - 1);
                     globalCount++;
                     break;
                 case "MEF":
                     _CalcSignal(sw);
-                    sw.Write("_stack_{0:d} = (_global[{1:d}]==1&&_global[{2:d}]==0);\n", ++stackTop, globalCount, globalCount - 1);
+                    sw.Write("_stack_{0:d} = (_global[{1:d}]==1&&_global[{2:d}]==0);\n", stackTop, globalCount, globalCount - 1);
                     sw.Write("_global[{0:d}] = _global[{1:d}];\n", globalCount, globalCount - 1);
                     globalCount++;
                     break;
@@ -1012,9 +1005,9 @@ namespace SamSoarII.Extend.Utility
                  * 需要用if来判断栈顶是否为1
                  */
                 case "SET": case "SETIM":
-                    sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, {2:s});\n", stackTop, inst[1], inst[2]); break;
+                    sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit); break;
                 case "RST": case "RSTIM":
-                    sw.Write("if (_stack_{0:d}) \n{{\n_bitrst(&{1:s}, {2:s});\n", stackTop, inst[1], inst[2]);
+                    sw.Write("if (_stack_{0:d}) \n{{\n_bitrst(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit);
                     /*
                      * 注意如果复位的是计数器位，那么计数器值也要跟着复原
                      * 考虑到向下计数器(CTD)复原时需要载入预设值
@@ -1026,16 +1019,16 @@ namespace SamSoarII.Extend.Utility
                         int begin = int.Parse(inst[3]);
                         int end = begin + int.Parse(inst[4]);
                         for (int i = begin; i < end; i++)
-                            sw.Write("CVWord[{0:d}] = {1:d}", i, ctsv[i]);
+                            sw.Write("CVWord[{0:d}] = {1:d};", i, ctsv[i]);
                     }
                     sw.Write("}\n");
-                break;
+                    break;
                 // 交替
                 case "ALT": sw.Write("if (_stack_{0:d}) {1:s}^=1;\n", stackTop, inst[1]); break;
                 // 上升沿交替
                 case "ALTP":
                     sw.Write("if (_global[{0:d}]==0&&_stack_{1:d}==1) ", globalCount, stackTop);
-                    sw.Write("_global[{0:d}] = {1:s}\n", globalCount++, inst[1]);
+                    sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 // 当栈顶为1时运行的计时器
                 case "TON":
@@ -1222,7 +1215,7 @@ namespace SamSoarII.Extend.Utility
                 break; 
             }
             // 如果是仿真模式需要对写入使能条件判断语句结尾
-            if (inst.EnBit != null)
+            if (inst.EnBit != null && inst.EnBit.Length > 0)
             {
                 sw.Write("}\n");
             }

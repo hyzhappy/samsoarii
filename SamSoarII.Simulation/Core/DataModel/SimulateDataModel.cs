@@ -90,11 +90,7 @@ namespace SamSoarII.Simulation.Core.DataModel
                     break;
                 case "FLOAT":
                     vs = new FloatSegment();
-                    vs.Value = 0;
-                    break;
-                case "DOUBLE":
-                    vs = new DoubleSegment();
-                    vs.Value = 0;
+                    vs.Value = 0.0;
                     break;
                 default:
                     throw new ArgumentException();
@@ -210,9 +206,6 @@ namespace SamSoarII.Simulation.Core.DataModel
                     case "FLOAT":
                         vs = new FloatSegment();
                         break;
-                    case "DOUBLE":
-                        vs = new DoubleSegment();
-                        break;
                     default:
                         throw new FormatException();
                 }
@@ -248,10 +241,6 @@ namespace SamSoarII.Simulation.Core.DataModel
                     case "FLOAT":
                         vs = new FloatSegment();
                         vs.Value = (float)(node_VS.Attribute("Value"));
-                        break;
-                    case "DOUBLE":
-                        vs = new DoubleSegment();
-                        vs.Value = (double)(node_VS.Attribute("Value"));
                         break;
                     default:
                         throw new FormatException();

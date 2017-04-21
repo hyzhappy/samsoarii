@@ -35,6 +35,11 @@ namespace SamSoarII.AppMain
         }
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
+        public MainTabControl MainTabControl
+        {
+            get { return this._mainTabControl; }
+        }
+
         private MainWindow _mainWindow;
 
         public bool IsLadderMode
@@ -91,6 +96,14 @@ namespace SamSoarII.AppMain
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             SimulateHelper.TabOpen += OnTabOpened;
         }
+
+        public MessageBoxResult ShowSaveYesNoCancelDialog()
+        {
+            string title = "确认保存";
+            string text = String.Format("{0:s}已经更改，是否保存？", _projectModel.ProjectName);
+            return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+        }
+
         private void ElementList_NavigateToNetwork(NavigateToNetworkEventArgs e)
         {
             LadderDiagramViewModel tempItem;
@@ -113,18 +126,46 @@ namespace SamSoarII.AppMain
             tempItem.NavigateToNetworkByNum(e.NetworkNum);
             _mainTabControl.ShowItem(tempItem);
         }
+
         public void CreateProject(string name, string fullFileName)
-        {         
-            _projectModel = new ProjectModel(name);
-            _projectTreeView = new ProjectTreeView(_projectModel);
-            _projectTreeView.TabItemOpened += OnTabOpened;
-            _projectTreeView.RoutineRemoved += OnRemoveRoutine;
-            _projectTreeView.RoutineRenamed += OnRenameRoutine;
-            _mainTabControl.SelectionChanged += OnTabItemChanged;
-            _mainTabControl.ShowItem(_projectModel.MainRoutine);
-            _mainWindow.SetProjectTreeView(_projectTreeView);
-            ProjectFullFileName = fullFileName;
-            _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
+        {
+            if (_projectModel != null && _projectModel.IsModify)
+            {
+                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                switch (mbret)
+                {
+                    case MessageBoxResult.Yes:
+                        SaveProject();
+                        _projectModel.IsModify = false;
+                        CreateProject(name, fullFileName);
+                        return;
+                    case MessageBoxResult.No:
+                        _projectModel.IsModify = false;
+                        CreateProject(name, fullFileName);
+                        return;
+                    case MessageBoxResult.Cancel:
+                    default:
+                        return;
+                }
+            }
+            else
+            {
+                _projectModel = new ProjectModel(name, _mainWindow.OutputModel);
+                _projectTreeView = new ProjectTreeView(_projectModel);
+                _projectTreeView.TabItemOpened += OnTabOpened;
+                _projectTreeView.RoutineRemoved += OnRemoveRoutine;
+                _projectTreeView.RoutineRenamed += OnRenameRoutine;
+                _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+                _projectTreeView.RoutineCompile += OnCompileRoutine;
+                _mainTabControl.SelectionChanged += OnTabItemChanged;
+                _mainTabControl.ShowEditItem += OnTabOpened;
+                _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                _mainWindow.SetProjectTreeView(_projectTreeView);
+                ProjectFullFileName = fullFileName;
+                _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
+                _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+                UpdateRefNetworksBrief(_projectModel);
+            }
         }
 
         public void SaveProject()
@@ -139,26 +180,59 @@ namespace SamSoarII.AppMain
 
         public bool LoadProject(string fullFileName)
         {
-            _projectModel = ProjectHelper.LoadProject(fullFileName);
+            _projectModel = ProjectHelper.LoadProject(fullFileName, new ProjectModel(String.Empty, _mainWindow.OutputModel));
             if (_projectModel != null)
             {
-                SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
-                _mainTabControl.SelectionChanged -= OnTabItemChanged;
-                _projectTreeView = new ProjectTreeView(_projectModel);
-                _projectTreeView.TabItemOpened += OnTabOpened;
-                _projectTreeView.RoutineRemoved += OnRemoveRoutine;
-                _projectTreeView.RoutineRenamed += OnRenameRoutine;
-                _mainTabControl.Reset();
-                _mainTabControl.SelectionChanged += OnTabItemChanged;
-                _mainTabControl.ShowItem(_projectModel.MainRoutine);
-                _mainWindow.SetProjectTreeView(_projectTreeView);
-                ProjectFullFileName = fullFileName;
-                _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
-                return true;
+                if (_projectModel.IsModify)
+                {
+                    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                    switch (mbret)
+                    {
+                        case MessageBoxResult.Yes:
+                            SaveProject();
+                            _projectModel.IsModify = false;
+                            return LoadProject(fullFileName);
+                        case MessageBoxResult.No:
+                            _projectModel.IsModify = false;
+                            return LoadProject(fullFileName);
+                        case MessageBoxResult.Cancel:
+                        default:
+                            return false;
+                    }
+                }
+                else
+                {
+                    SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
+                    _mainTabControl.SelectionChanged -= OnTabItemChanged;
+                    _mainTabControl.ShowEditItem -= OnTabOpened;
+                    _projectTreeView = new ProjectTreeView(_projectModel);
+                    _projectTreeView.TabItemOpened += OnTabOpened;
+                    _projectTreeView.RoutineRemoved += OnRemoveRoutine;
+                    _projectTreeView.RoutineRenamed += OnRenameRoutine;
+                    _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+                    _projectTreeView.RoutineCompile += OnCompileRoutine;
+                    _mainTabControl.Reset();
+                    _mainTabControl.SelectionChanged += OnTabItemChanged;
+                    _mainTabControl.ShowEditItem += OnTabOpened;
+                    _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                    _mainWindow.SetProjectTreeView(_projectTreeView);
+                    ProjectFullFileName = fullFileName;
+                    _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
+                    _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+                    _projectTreeView.SubRoutineTreeItems.ItemsSource = _projectModel.SubRoutineTreeViewItems;
+                    UpdateRefNetworksBrief(_projectModel);                    return true;
+                } 
             }
             return false;
         }
-
+        private void UpdateRefNetworksBrief(ProjectModel projectModel)
+        {
+            projectModel.UpdateNetworkBriefs(projectModel.MainRoutine,ChangeType.Add);
+            foreach (var item in projectModel.SubRoutines)
+            {
+                projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
+            }
+        }
         public bool AddNewSubRoutine(string name)
         {
             if(_projectModel.ContainProgram(name))
@@ -167,7 +241,7 @@ namespace SamSoarII.AppMain
             }
             else
             {
-                LadderDiagramViewModel ldmodel = new LadderDiagramViewModel(name);
+                LadderDiagramViewModel ldmodel = new LadderDiagramViewModel(name, _projectModel);
                 _projectModel.AddSubRoutine(ldmodel);
                 _mainTabControl.ShowItem(ldmodel);
                 return true;
@@ -196,16 +270,17 @@ namespace SamSoarII.AppMain
 
         public int SimulateProject()
         {
-            int ret = SimulateHelper.Simulate(_projectModel, _mainWindow.OutputModel);
+            int ret = SimulateHelper.Simulate(this, _mainWindow.OutputModel);
             switch (ret)
             {
                 case SimulateHelper.SIMULATE_OK:
-                    _mainWindow.LASimuProj.Content = SimulateHelper.SModel.PTView;
-                    _mainWindow.LAMonitor.Content = SimulateHelper.SModel.MTable;
                     break;
                 default:
-                    break;
+                    return ret;
             }
+            _mainWindow.LASimuProj.Content = SimulateHelper.SModel.PTView;
+            _mainWindow.LAMonitor.Content = SimulateHelper.SModel.MTable;
+            _mainTabControl.ReplaceAllTabsToSimulate();
             return ret;
         }
 
@@ -215,6 +290,11 @@ namespace SamSoarII.AppMain
         }
 
         #region Event handler
+        private void OnEditTabOpened(object sender, ShowTabItemEventArgs e)
+        {
+            
+        }
+
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
             switch (e.Type)
@@ -223,12 +303,39 @@ namespace SamSoarII.AppMain
                     IProgram prog = sender as IProgram;
                     _mainTabControl.ShowItem(prog);
                     break;
+                case TabType.Modbus:
+                    ITabItem itab = _projectModel.MTVModel;
+                    _mainTabControl.ShowItem(itab);
+                    break;
                 case TabType.Simulate:
                     ITabItem tab = sender as ITabItem;
                     _mainTabControl.ShowItem(tab);
                     break;
+                case TabType.SimuToEdit:
+                    string header = e.Header;
+                    if (header.Equals("主程序") || header.Equals("main"))
+                    {
+                        _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                        break;
+                    }
+                    foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
+                    {
+                        if (header.Equals(ldvmodel.ProgramName))
+                        {
+                            _mainTabControl.ShowItem(ldvmodel);
+                            break;
+                        }
+                    }
+                    foreach (FuncBlockViewModel fbvmodel in _projectModel.FuncBlocks)
+                    {
+                        if (header.Equals(fbvmodel.ProgramName))
+                        {
+                            _mainTabControl.ShowItem(fbvmodel);
+                            break;
+                        }
+                    }
+                    break;
             }
-
         }
 
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
@@ -279,7 +386,6 @@ namespace SamSoarII.AppMain
 
         private void OnRemoveRoutine(object sender, RoutedEventArgs e)
         {
-
             LadderDiagramViewModel ldmodel = sender as LadderDiagramViewModel;
             if (ldmodel != null)
             {
@@ -295,7 +401,14 @@ namespace SamSoarII.AppMain
                     _mainTabControl.CloseItem(fbmodel);
                 }
             }
-        }   
+        }
+
+        private void OnCompileRoutine(object sender, RoutedEventArgs e)
+        {
+            var progmodel = sender as IProgram;
+            _projectModel.CompileFuncBlock(progmodel.ProgramName);
+            _mainWindow.LACOutput.Show();
+        }
         #endregion
 
     }

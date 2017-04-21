@@ -56,7 +56,7 @@
     <Compile Include="Core\Global\GlobalSetting.cs" />
     <Compile Include="Core\SimulateDllModel.cs" />
     <Compile Include="Core\SimulateManager.cs" />
-    <Compile Include="Core\VariableModel\SimulateDoubleModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateSpecialModel.cs" />
     <Compile Include="Core\VariableModel\SimulateUnitSeries.cs" />
     <Compile Include="Core\VariableModel\SimulateVariableModel.cs" />
     <Compile Include="Core\VariableModel\SimulateDWordModel.cs" />
@@ -330,21 +330,18 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="simug\gen_simu.bat" />
+    <None Include="simug\simuc.h" />
+    <None Include="simug\simuf.h" />
     <None Include="simug\simug.c" />
+    <None Include="simug\simulib.c" />
+    <None Include="simug\simulib.h" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Image\Compile.png" />
-    <Content Include="Resources\Image\Copy.png" />
-    <Content Include="Resources\Image\Cut.png" />
-    <Content Include="Resources\Image\Download.png" />
     <Content Include="Resources\Image\Expand\ExpandOff.png" />
     <Content Include="Resources\Image\Expand\ExpandOn.png" />
     <Content Include="Resources\Image\Lock\LockOff.png" />
     <Content Include="Resources\Image\Lock\LockOn.png" />
-    <Content Include="Resources\Image\New.png" />
-    <Content Include="Resources\Image\Open.png" />
-    <Content Include="Resources\Image\Paste.png" />
-    <Content Include="Resources\Image\Save.png" />
     <Content Include="Resources\Image\TreeViewIcon\ERROR.png" />
     <Content Include="Resources\Image\TreeViewIcon\FINISH.png" />
     <Content Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
@@ -353,6 +350,8 @@
     <Content Include="Resources\Image\TreeViewIcon\Program.ico" />
     <Content Include="Resources\Image\TreeViewIcon\RUNNING.png" />
     <Content Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
+    <Content Include="Resources\simu.dll" />
+    <Content Include="simug\simu.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

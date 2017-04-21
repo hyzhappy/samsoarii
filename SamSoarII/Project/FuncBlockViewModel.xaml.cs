@@ -25,6 +25,19 @@ using System.Xml;
 using SamSoarII.Extend.FuncBlockModel;
 using ICSharpCode.AvalonEdit.Document;
 using System.Text.RegularExpressions;
+using ICSharpCode.AvalonEdit;
+
+/// <summary>
+/// Namespace : SamSoarII.Simulation
+/// ClassName : SimulateModel
+/// Version   : 2.0
+/// Date      : 2017/4/11
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 显示用户自定义的函数功能块的窗口
+/// 支持修改功能，自带缩进和补全等Feature
+/// </remarks>
 
 namespace SamSoarII.AppMain.Project
 {
@@ -33,9 +46,19 @@ namespace SamSoarII.AppMain.Project
     /// </summary>
     public partial class FuncBlockViewModel : UserControl, IProgram
     {
-        private FuncBlockModel model;
+        #region Numbers
 
+        /// <summary>
+        /// 函数块的逻辑模型
+        /// </summary>
+        private FuncBlockModel model;
+        /// <summary>
+        /// 工程的名称
+        /// </summary>
         private string _programName;
+        /// <summary>
+        /// 工程的名称
+        /// </summary>
         public string ProgramName
         {
             get
@@ -49,10 +72,25 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
             }
         }
+        /// <summary>
+        /// 函数块的名称
+        /// </summary>
         public string FuncBlockName { get; set; }
+        /// <summary>
+        /// Avalon库自带的函数补全窗口，已弃用
+        /// </summary>
         private CompletionWindow completionWindow;
+        /// <summary>
+        /// 代码高亮的管理器
+        /// </summary>
         private FoldingManager foldingManager;
+        /// <summary>
+        /// 代码高亮的策略
+        /// </summary>
         private AbstractFoldingStrategy foldingStrategy;
+        /// <summary>
+        /// 窗口名称
+        /// </summary>
         public string TabHeader
         {
             get
@@ -66,7 +104,9 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ProgramName"));
             }
         }
-
+        /// <summary>
+        /// 函数代码
+        /// </summary>
         public string Code
         {
             get
@@ -79,10 +119,36 @@ namespace SamSoarII.AppMain.Project
                 model = new FuncBlockModel(value);
             }
         }
-
+        /// <summary>
+        /// 所有函数的模型
+        /// </summary>
+        public IEnumerable<FuncModel> Funcs
+        {
+            get
+            {
+                List<FuncModel> result = new List<FuncModel>();
+                foreach (FuncBlock fb in model.Root.Childrens)
+                {
+                    if (fb is FuncBlock_FuncHeader)
+                    {
+                        FuncBlock_FuncHeader fbfh = (FuncBlock_FuncHeader)(fb);
+                        result.Add(fbfh.Model);
+                    }
+                }
+                return result;
+            }
+        }
+        /// <summary>
+        /// 控件的实际宽度
+        /// </summary>
         protected double _actualWidth;
+        /// <summary>
+        /// 控件的实际高度
+        /// </summary>
         protected double _actualHeight;
-
+        /// <summary>
+        /// 控件的实际宽度
+        /// </summary>
         double ITabItem.ActualWidth
         {
             get
@@ -93,10 +159,11 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 this._actualWidth = value;
-                CodeTextBox.Width = value - 10;
             }
         }
-
+        /// <summary>
+        /// 控件的实际高度
+        /// </summary>
         double ITabItem.ActualHeight
         {
             get
@@ -107,10 +174,19 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 this._actualHeight = value;
-                CodeTextBox.Height = value - 32;
             }
         }
+        /// <summary>
+        /// 用于输出调试信息的输出模型
+        /// </summary>
+        public ReportOutputModel OModel { get; set; }
 
+        #endregion
+
+        /// <summary>
+        /// 初始化构造函数
+        /// </summary>
+        /// <param name="name">函数块名称</param>
         public FuncBlockViewModel(string name)
         {
             InitializeComponent();
@@ -161,7 +237,14 @@ namespace SamSoarII.AppMain.Project
             }
 
         }
+
+        #region TextEditer Events
         
+        /// <summary>
+        /// 当用户键入字符前发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         void textEditor_TextArea_TextEntering(object sender, TextCompositionEventArgs e)
         {
             if (e.Text.Length > 0 && completionWindow != null)
@@ -172,70 +255,173 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        
-        private void textEditer_DocumentChanged(object sender, DocumentChangeEventArgs e)
-        {
-            if ((e.InsertionLength == 1 || e.InsertionLength == 2 && e.InsertedText[0] >= 128) && e.RemovalLength == 0)
+        /// <summary>
+        /// 当代码内容改变时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void textEditer_DocumentChanged(object sender, DocumentChangeEventArgs e)
+       {
+            int offset = e.InsertionLength - e.RemovalLength;
+            //model.Move(e.Offset);
+            Regex localRegex = new Regex(@"[\{\}]");
+            Regex stmtRegex = new Regex(@";");
+            Regex blankRegex = new Regex(@"^\s*$");
+            Match insertMatch1 = localRegex.Match(e.InsertedText);
+            Match removeMatch1 = localRegex.Match(e.RemovedText);
+            Match insertMatch2 = stmtRegex.Match(e.InsertedText);
+            Match removeMatch2 = stmtRegex.Match(e.RemovedText);
+            Match insertMatch3 = blankRegex.Match(e.InsertedText);
+            Match removeMatch3 = blankRegex.Match(e.RemovedText);
+            int start = 0;
+            int end = 0;
+            if (model.Current is FuncBlock_Comment)
             {
-                model.Current.InnerOffset += e.InsertionLength;
+                FuncBlock _parent = model.Current.Parent;
+                start = _parent.IndexStart;
+                end = _parent.IndexEnd - 1;
+                _parent.Build(CodeTextBox.Text, start, end, offset);
             }
-            else if ((e.RemovalLength < model.Current.IndexEnd - model.Current.IndexStart + 1) && e.InsertionLength == 0)
+            else if (insertMatch3.Success && removeMatch3.Success)
             {
-                model.Current.InnerOffset -= e.RemovalLength;
-                if (model.Current is FuncBlock_Assignment)
+                model.Current.InnerOffset += offset;
+            }
+            else if (insertMatch1.Success || removeMatch1.Success)
+            {
+                model = new FuncBlockModel(CodeTextBox.Text);
+                model.Move(e.Offset);
+            }
+            else
+            {
+                if (model.Current is FuncBlock_Root)
                 {
-                    string statement = CodeTextBox.Text.Substring(model.Current.IndexStart, model.Current.IndexEnd - model.Current.IndexStart + 1);
-                    if (FuncBlock_Assignment.TextSuit(statement))
+                    FuncBlock prev = null;
+                    FuncBlock next = null;
+                    if (model.Current.Current != null)
                     {
-                        ((FuncBlock_Assignment)(model.Current)).AnalyzeText(statement);
+                        prev = model.Current.Current.Value;
+                        if (model.Current.Current.Next != null)
+                        {
+                            next = model.Current.Current.Next.Value;
+                        }
+                    }
+                    if (next == null && prev != null &&
+                        prev.IndexStart > e.Offset)
+                    {
+                        next = prev;
+                        prev = model.Current.Current.Previous?.Value;
+                    }
+                    if (next != null)
+                    {
+                        if (e.Offset + e.RemovalLength >= next.IndexStart)
+                        {
+                            if (prev != null) start = prev.IndexEnd + 1;
+                            end = next.IndexEnd;
+                            model.Root.Build(CodeTextBox.Text, start, end, offset);
+                        }
+                    }
+                }
+                else if (insertMatch2.Success || removeMatch2.Success)
+                {
+                    start = model.Current.IndexStart;
+                    if (model.Current is FuncBlock_Local)
+                    {
+                        end = model.Current.IndexEnd;
+                        model.Current.Build(CodeTextBox.Text, start, end - 1, offset);
+                    }
+                    else if (model.Current.Parent is FuncBlock_Local)
+                    {
+                        end = model.Current.Parent.IndexEnd;
+                        model.Current.Parent.Build(CodeTextBox.Text, start, end - 1, offset);
                     }
                     else
                     {
-                        ((FuncBlock_Assignment)(model.Current)).Name = String.Empty;
+                        throw new Exception(String.Format("Code Structure Error : {0:s} in {1:s}", 
+                            model.Current.ToString(), model.Current.Parent.ToString()));
                     }
                 }
-                if (CCSProfix.Length > 0)
+                else
                 {
-                    CCSProfix = CCSProfix.Remove(CCSProfix.Length - 1);
+                    if (model.Current is FuncBlock_Local)
+                    {
+                        start = model.Current.IndexStart;
+                        end = model.Current.IndexEnd - 1;
+                        model.Current.Build(CodeTextBox.Text, start, end, offset);
+                    }
+                    else
+                    {
+                        start = model.Current.IndexStart;
+                        end = model.Current.IndexEnd;
+                        model.Current.Parent.Build(CodeTextBox.Text, start, end, offset);
+                    }
+                }
+            }
+            model.Move(e.Offset);
+            if (e.InsertionLength == 1 && e.RemovalLength == 0)
+            {
+                if (char.IsLetterOrDigit(e.InsertedText[0]))
+                {
+                    int wordend = CodeTextBox.CaretOffset - 1;
+                    int wordstart = wordend;
+                    while (wordstart >= 0 &&
+                        Char.IsLetterOrDigit(CodeTextBox.Text[wordstart]))
+                    {
+                        wordstart--;
+                    }
+                    while (wordend < CodeTextBox.Text.Length &&
+                        Char.IsLetterOrDigit(CodeTextBox.Text[wordend]))
+                    {
+                        wordend++;
+                    }
+                    wordstart++;
+                    wordend--;
+                    CCSOffset = wordstart;
+                    CCSProfix = CodeTextBox.Text.Substring(wordstart, wordend - wordstart + 1);
+                    CCSProfixCursor = CodeTextBox.CaretOffset - wordstart;
+                }
+                else if (e.InsertedText[0] != '\n')
+                {
+                    CCSProfix = String.Empty;
+                }
+            }
+            else if (e.InsertionLength == 0 && e.RemovalLength == 1)
+            {
+                if (CCSProfix.Length > 0 && CCSProfixCursor > 0)
+                {
+                    CCSProfix = CCSProfix.Remove(CCSProfixCursor - 1, 1);
                 }
             }
             else
             {
-                Match alltab = Regex.Match(e.InsertedText, @"^\t+$");
-                if (alltab.Success && e.RemovalLength == 0)
-                {
-                    model.Current.InnerOffset += e.InsertionLength;
-                }
-                else
-                {
-                    model = new FuncBlockModel(CodeTextBox.Text);
-                }
+                CCSProfix = String.Empty;
             }
+            OutputDebug();
         }
-        
+        /// <summary>
+        /// 当用户键入字符后发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         void textEditer_TextArea_TextEntered(object sender, TextCompositionEventArgs e)
         {
             int tabhigh = 0;
             int start, end;
             string inserttext = String.Empty;
             string currentline = String.Empty;
-            if (e.Text.Length < 2)
+            if (e.Text.Length == 1)
             {
-                if (Char.IsLetterOrDigit(e.Text[0]))
+                if (model.Current is FuncBlock_Comment)
                 {
-                    CCSProfix += e.Text[0];
+                    return;
                 }
                 switch (e.Text[0])
                 {
                     case '{':
-                        tabhigh = model.Current.Height;
+                        tabhigh = model.Current.Height - 1;
                         inserttext = new string('\t', tabhigh);
                         inserttext = "\n" + inserttext + "\t\n" + inserttext + "}";
-                        start = CodeTextBox.CaretOffset - 1;
-                        end = start + inserttext.Length;
                         CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
-                        model.Current.InnerOffset += inserttext.Length;
-                        model.Look(CodeTextBox.Text, start, end);
+                        model = new FuncBlockModel(CodeTextBox.Text);
                         CodeTextBox.CaretOffset += tabhigh + 2;
                         break;
                     case '(':
@@ -248,64 +434,82 @@ namespace SamSoarII.AppMain.Project
                     case '}':
                         break;
                     case ';':
+                        break;
+                    case '/': case '*':
                         end = CodeTextBox.CaretOffset - 1;
                         start = end - 1;
-                        while (start >= 0 && CodeTextBox.Text[start] != ';' && CodeTextBox.Text[start] != '{') start--;
-                        start++;
-                        model.Look(CodeTextBox.Text, start, end);
+                        if (start >= 0 && CodeTextBox.Text[start] == '/' && CodeTextBox.Text[end] == '/')
+                        {
+                            model = new FuncBlockModel(CodeTextBox.Text);
+                            model.Move(CodeTextBox.CaretOffset);
+                            break;
+                        }
+                        if (start >= 0 && CodeTextBox.Text[start] == '/' && CodeTextBox.Text[end] == '*')
+                        {
+                            tabhigh = model.Current.Height;
+                            inserttext = new string('\t', tabhigh);
+                            inserttext = "\n" + inserttext + " *\n" + inserttext + " */";
+                            CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
+                            CodeTextBox.CaretOffset += tabhigh + 3;
+                            model = new FuncBlockModel(CodeTextBox.Text);
+                            model.Move(CodeTextBox.CaretOffset);
+                        }
                         break;
                     case '\n':
-                        if (CCSProfix.Length > 0 && CCSIsSelected)
+                        if (model.Current is FuncBlock_CommentParagraph)
                         {
-                            end = CodeTextBox.CaretOffset;
-                            start = end - 1;
-                            while (start > 0 && (CodeTextBox.Text[start] == '\t' || CodeTextBox.Text[start] == '\n'))
-                                start--;
-                            start++;
-                            CodeTextBox.Text = CodeTextBox.Text.Remove(start, end-start);
-                            model.Current.InnerOffset -= end - start;
-                            CodeTextBox.CaretOffset -= end - start;
-                            CCSProfix = String.Empty;
+                            tabhigh = model.Current.Height;
+                            inserttext = new string('\t', tabhigh);
+                            inserttext += " *";
+                            CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
+                            CodeTextBox.CaretOffset += inserttext.Length;
                         }
                         break;
                     default:
-                        if (!Char.IsLetterOrDigit(e.Text[0]))
-                        {
-                            CCSProfix = String.Empty;
-                        }
                         break;
                 }
             }
         }
-
+        /// <summary>
+        /// 当文本光标移动后发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         void textEditer_CaretChanged(object sender, RoutedEventArgs e)
         {
             model.Move(CodeTextBox.CaretOffset);
+            if (CCSProfix.Length > 0)
+            {
+                CCSProfixCursor = CodeTextBox.CaretOffset - CCSOffset;
+            }
+            OutputDebug();
         }
 
-        void textEditer_TextArea_TextDeleted(object sender, TextCompositionEventArgs e)
+        #endregion
+
+        /// <summary>
+        /// 将当前函数块信息输出到输出模型中
+        /// </summary>
+        private void OutputDebug()
         {
-            if (e.Text.Length > 0)
+            if (OModel == null)
             {
-                switch (e.Text[0])
-                {
-                    case '{':
-                        break;
-                    case '(':
-                        break;
-                    case ')':
-                        break;
-                    case '}':
-                        break;
-                    case ';':
-                        break;
-                    default:
-                        break;
-                }
+                return;
+            }
+            OModel.Clear(OModel.Report_Debug);
+            OModel.AppendLine(OModel.Report_Debug, String.Format("Index = {0:d}", model.CurrentIndex));
+            OModel.AppendLine(OModel.Report_Debug, model.Current.ToString());
+            foreach (FuncBlock fb in model.Current.Childrens)
+            {
+                OModel.AppendLine(OModel.Report_Debug, fb.ToString());
             }
         }
-        
 
+        /// <summary>
+        /// 代码高亮更新的触发时钟
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void foldingUpdateTimer_Tick(object sender, EventArgs e)
         {
             if (foldingStrategy != null)
@@ -313,18 +517,51 @@ namespace SamSoarII.AppMain.Project
                 foldingStrategy.UpdateFoldings(foldingManager, CodeTextBox.Document);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Code Completion
 
         #region Selected List
+        /// <summary>
+        /// 代码补全的词语列表
+        /// </summary>
         private List<string> ccslist;
+        /// <summary>
+        /// 代码补全的窗口列表
+        /// </summary>
         private TextBlock[] ccstblocks;
-
+        /// <summary>
+        /// 当前窗口视点
+        /// </summary>
         private int ccsviewpoint;
-        private string ccsprofix;
+        /// <summary>
+        /// 当前窗口视点
+        /// </summary>
+        private int CCSViewPoint
+        {
+            get { return this.ccsviewpoint; }
+            set
+            {
+                if (ccslist == null)
+                    return;
+                if (value < 0 || value > Math.Max(0, ccslist.Count() - 9))
+                    return;
+                this.ccsviewpoint = value;
+                ScrollHeight = Math.Min(162, 162 * 9 / ccslist.Count());
+                Canvas.SetTop(Scroll, (162 - ScrollHeight) * ccsviewpoint / (ccslist.Count() - 9));
+                CCSUpdate();
+            }
+        }
+        /// <summary>
+        /// 是否已经开始选择词语
+        /// </summary>
         private bool ccsisselected;
+        /// <summary>
+        /// 是否已经开始选择词语
+        /// </summary>
         private bool CCSIsSelected
         {
             get { return this.ccsisselected; }
@@ -347,6 +584,13 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        /// <summary>
+        /// 已输入的词语前缀
+        /// </summary>
+        private string ccsprofix;
+        /// <summary>
+        /// 已输入的词语前缀
+        /// </summary>
         private string CCSProfix
         {
             get { return this.ccsprofix; }
@@ -358,6 +602,7 @@ namespace SamSoarII.AppMain.Project
                 {
                     CodeCompletePanel.Visibility = Visibility.Collapsed;
                     CCSIsSelected = false;
+                    CodeTextBox.TextArea.IsCodeCompleteMode = false;
                 }
                 else
                 {
@@ -368,33 +613,117 @@ namespace SamSoarII.AppMain.Project
                         return;
                     }
                     CodeCompletePanel.Visibility = Visibility.Visible;
-                    ccsviewpoint = 0;
+                    CCSViewPoint = 0;
                     CCSCursor = 0;
-                    CCSUpdate();
                     CCSIsSelected = false;
                     CodeTextBox.TextArea.IsCodeCompleteMode = true;
+                    CCSUpdate();
                 }
             }
         }
-
+        /// <summary>
+        /// 已输入的词语前缀的光标
+        /// </summary>
+        private int ccsprofixcursor;
+        /// <summary>
+        /// 已输入的词语前缀的光标
+        /// </summary>
+        private int CCSProfixCursor
+        {
+            get { return this.ccsprofixcursor; }
+            set
+            {
+                if (value < 0 || value > CCSProfix.Length)
+                {
+                    CCSProfix = String.Empty;
+                }
+                else
+                {
+                    this.ccsprofixcursor = value;
+                    ProfixCursor.X1 = value * 9 + 1;
+                    ProfixCursor.X2 = ProfixCursor.X1;
+                }
+            }
+        }
+        /// <summary>
+        /// 补全窗口的标号顶坐标
+        /// </summary>
+        private int ccstop;
+        /// <summary>
+        /// 补全窗口的标号顶坐标
+        /// </summary>
+        private int CCSTop
+        {
+            get { return this.ccstop; }
+            set
+            {
+                this.ccstop = value;
+                double top = ccstop * 19 - 17 - CodeTextBox.VerticalOffset;
+                if (top + 200 > ActualHeight)
+                {
+                    top -= 220;
+                }
+                Canvas.SetTop(CodeCompletePanel, top);
+            }
+        }
+        /// <summary>
+        /// 补全窗口的标号左坐标
+        /// </summary>
+        private int ccsleft;
+        /// <summary>
+        /// 补全窗口的标号左坐标
+        /// </summary>
+        private int CCSLeft
+        {
+            get { return this.ccsleft; }
+            set
+            {
+                this.ccsleft = value;
+                Canvas.SetLeft(CodeCompletePanel, ccsleft * 10 - CodeTextBox.HorizontalOffset);
+            }
+        }
+        /// <summary>
+        /// 补全窗口对应的代码坐标
+        /// </summary>
+        private int ccsoffset;
+        /// <summary>
+        /// 补全窗口对应的代码坐标
+        /// </summary>
+        private int CCSOffset
+        {
+            get { return this.ccsoffset; }
+            set
+            {
+                this.ccsoffset = value;
+                TextDocument tdoc = CodeTextBox.TextArea.Document;
+                TextLocation tloc = tdoc.GetLocation(value);
+                CCSTop = tloc.Line + 1;
+                CCSLeft = tloc.Column;
+            }
+        }
+        /// <summary>
+        /// 更新补全窗口
+        /// </summary>
         private void CCSUpdate()
         {
             for (int i = 0; i < ccstblocks.Length; i++)
             {
-                if (i + ccsviewpoint >= ccslist.Count())
+                if (i + CCSViewPoint >= ccslist.Count())
                 {
                     ccstblocks[i].Text = String.Empty;
                 }
                 else
                 {
-                    ccstblocks[i].Text = ccslist[i + ccsviewpoint];
+                    ccstblocks[i].Text = ccslist[i + CCSViewPoint];
                 }
             }
         }
-
         #endregion
 
         #region Selected Cursor
+        /// <summary>
+        /// 选择词语的光标
+        /// </summary>
         public int CCSCursor
         {
             get
@@ -407,14 +736,44 @@ namespace SamSoarII.AppMain.Project
                 {
                     Grid.SetRow(Cursor, value + 1);
                 }
+                else if (value < 0)
+                {
+                    CCSViewPoint += value;
+                    Grid.SetRow(Cursor, 1);
+                }
+                else if (value >= 9)
+                {
+                    CCSViewPoint += value - 8;
+                    Grid.SetRow(Cursor, 9);
+                }
             }
         }
-
+        /// <summary>
+        /// 当用户对补全窗口控制按键松开时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void textEditer_TextArea_CodeCompleteKeyUp(object sender, KeyEventArgs e)
         {
-            
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    if (CCSProfix.Length > 0)
+                    {
+                        int plen = CCSProfix.Length;
+                        string inserttext = ccstblocks[CCSCursor].Text;
+                        inserttext = inserttext.Substring(plen);
+                        CodeTextBox.CaretOffset += inserttext.Length;
+                        CCSProfix = String.Empty;
+                    }
+                    break;
+            }
         }
-
+        /// <summary>
+        /// 当用户对补全窗口控制按键按下时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void textEditer_TextArea_CodeCompleteKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -427,7 +786,12 @@ namespace SamSoarII.AppMain.Project
                         inserttext = inserttext.Substring(plen);
                         CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
                         model.Current.InnerOffset += inserttext.Length;
-                        CodeTextBox.CaretOffset += inserttext.Length;
+                        //CCSProfix = String.Empty;
+                        //CodeTextBox.CaretOffset += inserttext.Length;
+                    }
+                    else
+                    {
+                        CCSProfix = String.Empty;
                     }
                     break;
                 case Key.Up:
@@ -442,26 +806,106 @@ namespace SamSoarII.AppMain.Project
                     else
                         CCSCursor += 1;
                     break;
+                /*
+                case Key.Left:
+                case Key.Back:
+                    CCSProfixCursor -= 1;
+                    break;
+                case Key.Right:
+                    CCSProfixCursor += 1;
+                    break;
+                */
             }
         }
-
+        /// <summary>
+        /// 当用户在补全窗口内进行鼠标移动时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void CodeCompletePanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point p = e.GetPosition(CodeCompletePanel);
+            int id = (int)((p.Y - 20) / 18);
+            if (p.X >= 0 && p.X < 188 && id >= 0 && id < 9)
+            {
+                CCSIsSelected = true;
+                CCSCursor = id;
+            }
+        }
+        /// <summary>
+        /// 当用户点击补全窗口时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void CodeCompletePanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Point p = e.GetPosition(CodeCompletePanel);
+            int id = (int)((p.Y - 20) / 18);
+            if (p.X >= 0 && p.X < 188 && id >= 0 && id < 9)
+            {
+                int plen = CCSProfix.Length;
+                string inserttext = ccstblocks[CCSCursor].Text;
+                inserttext = inserttext.Substring(plen);
+                CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
+                model.Current.InnerOffset += inserttext.Length;
+                CodeTextBox.CaretOffset += inserttext.Length;
+                CCSProfix = String.Empty;
+            }
+        }
         #endregion
 
         #region Scroll
+        /// <summary>
+        /// 是否已经鼠标左键按下滚动条
+        /// </summary>
         private bool scroll_ispressed;
+        /// <summary>
+        /// 鼠标相对于滚动条的X坐标
+        /// </summary>
         private double scroll_x;
+        /// <summary>
+        /// 鼠标相对于滚动条的Y坐标
+        /// </summary>
         private double scroll_y;
-
+        /// <summary>
+        /// 滚动条的高度
+        /// </summary>
+        private double scroll_height;
+        /// <summary>
+        /// 滚动条的高度
+        /// </summary>
+        public double ScrollHeight
+        {
+            get { return scroll_height; }
+            set
+            {
+                scroll_height = value;
+                Scroll.Height = value;
+            }
+        }
+        /// <summary>
+        /// 鼠标进入滚动条内发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void Scroll_MouseLeave(object sender, MouseEventArgs e)
         {
             Scroll.Opacity = 0.6;
         }
-
+        /// <summary>
+        /// 鼠标离开滚动条内发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void Scroll_MouseEnter(object sender, MouseEventArgs e)
         {
             Scroll.Opacity = 1.0;
         }
-
+        /// <summary>
+        /// 鼠标左键按下滚动条时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void Scroll_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             scroll_ispressed = true;
@@ -469,21 +913,46 @@ namespace SamSoarII.AppMain.Project
             scroll_x = p.X;
             scroll_y = p.Y;
         }
-
+        /// <summary>
+        /// 鼠标左键松开滚动条时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
         private void Scroll_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             scroll_ispressed = false;
         }
-
-
+        /// <summary>
+        /// 鼠标移动时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Scroll_MouseMove(object sender, MouseEventArgs e)
         {
-            Point p = e.GetPosition(this);
-
+            if (scroll_ispressed)
+            {
+                if (ccslist.Count() <= 9)
+                    return;
+                double step = (162 - ScrollHeight) / (ccslist.Count() - 9);
+                Point p = e.GetPosition(this);
+                while (scroll_y + step < p.Y && CCSViewPoint < ccslist.Count() - 9)
+                {
+                    scroll_y += step;
+                    CCSViewPoint += 1;
+                }
+                while (scroll_y - step > p.Y && CCSViewPoint > 0)
+                {
+                    scroll_y -= step;
+                    CCSViewPoint -= 1;
+                }
+            }
         }
         #endregion
 
         #endregion
+        
+        
     }
+    
 
 }

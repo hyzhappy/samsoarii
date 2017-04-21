@@ -166,7 +166,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.EnsureClick += OnDialogEnsureClicked;
             dialog.CancelClick += OnDialogCancelClicked;
-            dialog.Show();
+            dialog.ShowDialog();
         }
     }
 }

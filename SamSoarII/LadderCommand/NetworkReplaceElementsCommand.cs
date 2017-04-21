@@ -10,7 +10,6 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkReplaceElementsCommand : IUndoableCommand
     {
-
         private LadderNetworkViewModel _network;
         private HashSet<BaseViewModel> _elements;
         private HashSet<VerticalLineViewModel> _vlines;

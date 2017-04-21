@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.PLCDevice;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,47 @@ namespace SamSoarII.UserInterface
     public partial class NewProjectDialog : Window, IDisposable
     {
         public event RoutedEventHandler EnsureButtonClick;
-
+        public PLCDeviceType Type
+        {
+            get
+            {
+                switch (PLCTypeComboBox.SelectedIndex)
+                {
+                    case 0:
+                        return PLCDeviceType.FGs_16MR_A;
+                    case 1:
+                        return PLCDeviceType.FGs_16MR_D;
+                    case 2:
+                        return PLCDeviceType.FGs_16MT_A;
+                    case 3:
+                        return PLCDeviceType.FGs_16MT_D;
+                    case 4:
+                        return PLCDeviceType.FGs_32MR_A;
+                    case 5:
+                        return PLCDeviceType.FGs_32MR_D;
+                    case 6:
+                        return PLCDeviceType.FGs_32MT_A;
+                    case 7:
+                        return PLCDeviceType.FGs_32MT_D;
+                    case 8:
+                        return PLCDeviceType.FGs_64MR_A;
+                    case 9:
+                        return PLCDeviceType.FGs_64MR_D;
+                    case 10:
+                        return PLCDeviceType.FGs_64MT_A;
+                    case 11:
+                        return PLCDeviceType.FGs_64MT_D;
+                    case 12:
+                        return PLCDeviceType.FGs_32MR_YTJ;
+                    case 13:
+                        return PLCDeviceType.FGs_32MT_YTJ;
+                    case 14:
+                        return PLCDeviceType.FGs_20MR_BYK;
+                    default:
+                        return PLCDeviceType.FGs_16MR_A;
+                }
+            }
+        }
         public string NameContent
         {
             get { return NameTextBox.Text; }

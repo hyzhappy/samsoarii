@@ -12,6 +12,11 @@ using SamSoarII.LadderInstViewModel;
 using SamSoarII.Extend.LadderChartModel;
 using SamSoarII.Extend.LogicGraph;
 using SamSoarII.Extend.Utility;
+using SamSoarII.LadderInstModel.Interrupt;
+using SamSoarII.LadderInstModel.Communication;
+using SamSoarII.LadderInstModel.Pulse;
+using SamSoarII.LadderInstModel.HighCount;
+using SamSoarII.LadderInstModel.Auxiliar;
 //using SamSoarII.GenerateModel;
 
 namespace SamSoarII.AppMain.Project
@@ -469,9 +474,43 @@ namespace SamSoarII.AppMain.Project
                         lcn[2] = ((MVDBLKModel)(bvm.Model)).DestinationValue.ValueShowString;
                         lcn[3] = ((MVDBLKModel)(bvm.Model)).Count.ValueShowString;
                     }
+                    if (bvm.Model is TONModel)
+                    {
+                        lcn[1] = ((TONModel)(bvm.Model)).TimerValue.ValueShowString;
+                        lcn[2] = ((TONModel)(bvm.Model)).EndValue.ValueShowString;
+                    }
+                    if (bvm.Model is TOFModel)
+                    {
+                        lcn[1] = ((TOFModel)(bvm.Model)).TimerValue.ValueShowString;
+                        lcn[2] = ((TOFModel)(bvm.Model)).EndValue.ValueShowString;
+                    }
+                    if (bvm.Model is TONRModel)
+                    {
+                        lcn[1] = ((TONRModel)(bvm.Model)).TimerValue.ValueShowString;
+                        lcn[2] = ((TONRModel)(bvm.Model)).EndValue.ValueShowString;
+                    }
+                    if (bvm.Model is CTUModel)
+                    {
+                        lcn[1] = ((CTUModel)(bvm.Model)).CountValue.ValueShowString;
+                        lcn[2] = ((CTUModel)(bvm.Model)).EndValue.ValueShowString;
+                    }
+                    if (bvm.Model is CTDModel)
+                    {
+                        lcn[1] = ((CTDModel)(bvm.Model)).CountValue.ValueShowString;
+                        lcn[2] = ((CTDModel)(bvm.Model)).StartValue.ValueShowString;
+                    }
+                    if (bvm.Model is CTUDModel)
+                    {
+                        lcn[1] = ((CTUDModel)(bvm.Model)).CountValue.ValueShowString;
+                        lcn[2] = ((CTUDModel)(bvm.Model)).EndValue.ValueShowString;
+                    }
                     if (bvm.Model is CALLMModel)
                     {
                         lcn[1] = ((CALLMModel)(bvm.Model)).FunctionName;
+                        lcn[2] = ((CALLMModel)(bvm.Model)).Value1.ValueShowString;
+                        lcn[3] = ((CALLMModel)(bvm.Model)).Value2.ValueShowString;
+                        lcn[4] = ((CALLMModel)(bvm.Model)).Value3.ValueShowString;
+                        lcn[5] = ((CALLMModel)(bvm.Model)).Value4.ValueShowString;
                     }
                     if (bvm.Model is CALLModel)
                     {
@@ -548,6 +587,256 @@ namespace SamSoarII.AppMain.Project
                         lcn[1] = ((SHRModel)(bvm.Model)).SourceValue.ValueShowString;
                         lcn[2] = ((SHRModel)(bvm.Model)).DestinationValue.ValueShowString;
                         lcn[3] = ((SHRModel)(bvm.Model)).Count.ValueShowString;
+                    }
+                    if (bvm.Model is ATCHModel)
+                    {
+                        lcn[1] = ((ATCHModel)(bvm.Model)).FuncName;
+                        lcn[2] = ((ATCHModel)(bvm.Model)).IDValue.ValueShowString;                   
+                    }
+                    if (bvm.Model is DTCHModel)
+                    {
+                        lcn[1] = ((DTCHModel)(bvm.Model)).IDValue.ValueShowString;
+                    }
+                    if (bvm.Model is EIModel)
+                    {
+                        // NOTHING TO DO
+                    }
+                    if (bvm.Model is DIModel)
+                    {
+                        // NOTHING TO DO
+                    }
+                    if (bvm.Model is MBUSModel)
+                    {
+                        lcn[1] = ((MBUSModel)(bvm.Model)).COMPort.ValueShowString;
+                        lcn[2] = ((MBUSModel)(bvm.Model)).Table;
+                        lcn[3] = ((MBUSModel)(bvm.Model)).Message.ValueShowString;
+                    }
+                    if (bvm.Model is SENDModel)
+                    {
+                        lcn[1] = ((SENDModel)(bvm.Model)).COMPort.ValueShowString;
+                        lcn[2] = ((SENDModel)(bvm.Model)).BaseValue.ValueShowString;
+                        lcn[3] = ((SENDModel)(bvm.Model)).CountValue.ValueShowString;
+                    }
+                    if (bvm.Model is REVModel)
+                    {
+                        lcn[1] = ((REVModel)(bvm.Model)).COMPort.ValueShowString;
+                        lcn[2] = ((REVModel)(bvm.Model)).BaseValue.ValueShowString;
+                        lcn[3] = ((REVModel)(bvm.Model)).CountValue.ValueShowString;
+                    }
+                    if (bvm.Model is PLSFModel)
+                    {
+                        lcn[1] = ((PLSFModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((PLSFModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is DPLSFModel)
+                    {
+                        lcn[1] = ((DPLSFModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((DPLSFModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is PWMModel)
+                    {
+                        lcn[1] = ((PWMModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((PWMModel)(bvm.Model)).DutyCycleValue.ValueShowString;
+                        lcn[3] = ((PWMModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is DPWMModel)
+                    {
+                        lcn[1] = ((DPWMModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((DPWMModel)(bvm.Model)).DutyCycleValue.ValueShowString;
+                        lcn[3] = ((DPWMModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is PLSYModel)
+                    {
+                        lcn[1] = ((PLSYModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((PLSYModel)(bvm.Model)).PulseValue.ValueShowString;
+                        lcn[3] = ((PLSYModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is DPLSYModel)
+                    {
+                        lcn[1] = ((DPLSYModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((DPLSYModel)(bvm.Model)).PulseValue.ValueShowString;
+                        lcn[3] = ((DPLSYModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is PLSRModel)
+                    {
+                        lcn[1] = ((PLSRModel)(bvm.Model)).ArgumentValue.ValueShowString;
+                        lcn[2] = ((PLSRModel)(bvm.Model)).VelocityValue.ValueShowString;
+                        lcn[3] = ((PLSRModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is DPLSRModel)
+                    {
+                        lcn[1] = ((DPLSRModel)(bvm.Model)).ArgumentValue.ValueShowString;
+                        lcn[2] = ((DPLSRModel)(bvm.Model)).VelocityValue.ValueShowString;
+                        lcn[3] = ((DPLSRModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is PLSRDModel)
+                    {
+                        lcn[1] = ((PLSRDModel)(bvm.Model)).ArgumentValue.ValueShowString;
+                        lcn[2] = ((PLSRDModel)(bvm.Model)).VelocityValue.ValueShowString;
+                        lcn[3] = ((PLSRDModel)(bvm.Model)).OutputValue1.ValueShowString;
+                        lcn[4] = ((PLSRDModel)(bvm.Model)).OutputValue2.ValueShowString;
+                    }
+                    if (bvm.Model is DPLSRDModel)
+                    {
+                        lcn[1] = ((DPLSRDModel)(bvm.Model)).ArgumentValue.ValueShowString;
+                        lcn[2] = ((DPLSRDModel)(bvm.Model)).VelocityValue.ValueShowString;
+                        lcn[3] = ((DPLSRDModel)(bvm.Model)).OutputValue1.ValueShowString;
+                        lcn[4] = ((DPLSRDModel)(bvm.Model)).OutputValue2.ValueShowString;
+                    }
+                    if (bvm.Model is PLSNEXTModel)
+                    {
+                        lcn[1] = ((PLSNEXTModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is PLSSTOPModel)
+                    {
+                        lcn[1] = ((PLSSTOPModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is ZRNModel)
+                    {
+                        lcn[1] = ((ZRNModel)(bvm.Model)).BackValue.ValueShowString;
+                        lcn[2] = ((ZRNModel)(bvm.Model)).CrawValue.ValueShowString;
+                        lcn[3] = ((ZRNModel)(bvm.Model)).SignalValue.ValueShowString;
+                        lcn[4] = ((ZRNModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is DZRNModel)
+                    {
+                        lcn[1] = ((DZRNModel)(bvm.Model)).BackValue.ValueShowString;
+                        lcn[2] = ((DZRNModel)(bvm.Model)).CrawValue.ValueShowString;
+                        lcn[3] = ((DZRNModel)(bvm.Model)).SignalValue.ValueShowString;
+                        lcn[4] = ((DZRNModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is PTOModel)
+                    {
+                        lcn[1] = ((PTOModel)(bvm.Model)).ArgumentValue.ValueShowString;
+                        lcn[2] = ((PTOModel)(bvm.Model)).OutputValue1.ValueShowString;
+                        lcn[3] = ((PTOModel)(bvm.Model)).OutputValue2.ValueShowString;
+                    }
+                    if (bvm.Model is DRVIModel)
+                    {
+                        lcn[1] = ((DRVIModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((DRVIModel)(bvm.Model)).PulseValue.ValueShowString;
+                        lcn[3] = ((DRVIModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is DDRVIModel)
+                    {
+                        lcn[1] = ((DDRVIModel)(bvm.Model)).FreqValue.ValueShowString;
+                        lcn[2] = ((DDRVIModel)(bvm.Model)).PulseValue.ValueShowString;
+                        lcn[3] = ((DDRVIModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is HCNTModel)
+                    {
+                        lcn[1] = ((HCNTModel)(bvm.Model)).CountValue.ValueShowString;
+                        lcn[2] = ((HCNTModel)(bvm.Model)).DefineValue.ValueShowString;
+                    }
+                    if (bvm.Model is LOGModel)
+                    {
+                        lcn[1] = ((LOGModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((LOGModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is POWModel)
+                    {
+                        lcn[1] = ((POWModel)(bvm.Model)).InputValue1.ValueShowString;
+                        lcn[2] = ((POWModel)(bvm.Model)).InputValue2.ValueShowString;
+                        lcn[3] = ((POWModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is FACTModel)
+                    {
+                        lcn[1] = ((FACTModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((FACTModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is CMPModel)
+                    {
+                        lcn[1] = ((CMPModel)(bvm.Model)).InputValue1.ValueShowString;
+                        lcn[2] = ((CMPModel)(bvm.Model)).InputValue2.ValueShowString;
+                        lcn[3] = ((CMPModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is CMPFModel)
+                    {
+                        lcn[1] = ((CMPFModel)(bvm.Model)).InputValue1.ValueShowString;
+                        lcn[2] = ((CMPFModel)(bvm.Model)).InputValue2.ValueShowString;
+                        lcn[3] = ((CMPFModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is CMPDModel)
+                    {
+                        lcn[1] = ((CMPDModel)(bvm.Model)).InputValue1.ValueShowString;
+                        lcn[2] = ((CMPDModel)(bvm.Model)).InputValue2.ValueShowString;
+                        lcn[3] = ((CMPDModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is ZCPModel)
+                    {
+                        lcn[1] = ((ZCPModel)(bvm.Model)).InputValue1.ValueShowString;
+                        lcn[2] = ((ZCPModel)(bvm.Model)).InputValue2.ValueShowString;
+                        lcn[2] = ((ZCPModel)(bvm.Model)).InputValue3.ValueShowString;
+                        lcn[3] = ((ZCPModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is ZCPFModel)
+                    {
+                        lcn[1] = ((ZCPFModel)(bvm.Model)).InputValue1.ValueShowString;
+                        lcn[2] = ((ZCPFModel)(bvm.Model)).InputValue2.ValueShowString;
+                        lcn[2] = ((ZCPFModel)(bvm.Model)).InputValue3.ValueShowString;
+                        lcn[3] = ((ZCPFModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is ZCPDModel)
+                    {
+                        lcn[1] = ((ZCPDModel)(bvm.Model)).InputValue1.ValueShowString;
+                        lcn[2] = ((ZCPDModel)(bvm.Model)).InputValue2.ValueShowString;
+                        lcn[2] = ((ZCPDModel)(bvm.Model)).InputValue3.ValueShowString;
+                        lcn[3] = ((ZCPDModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is NEGModel)
+                    {
+                        lcn[1] = ((NEGModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((NEGModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is NEGDModel)
+                    {
+                        lcn[1] = ((NEGDModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((NEGDModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is XCHModel)
+                    {
+                        lcn[1] = ((XCHModel)(bvm.Model)).LeftValue.ValueShowString;
+                        lcn[2] = ((XCHModel)(bvm.Model)).RightValue.ValueShowString;
+                    }
+                    if (bvm.Model is XCHDModel)
+                    {
+                        lcn[1] = ((XCHDModel)(bvm.Model)).LeftValue.ValueShowString;
+                        lcn[2] = ((XCHDModel)(bvm.Model)).RightValue.ValueShowString;
+                    }
+                    if (bvm.Model is XCHFModel)
+                    {
+                        lcn[1] = ((XCHFModel)(bvm.Model)).LeftValue.ValueShowString;
+                        lcn[2] = ((XCHFModel)(bvm.Model)).RightValue.ValueShowString;
+                    }
+                    if (bvm.Model is CMLModel)
+                    {
+                        lcn[1] = ((CMLModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((CMLModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is CMLDModel)
+                    {
+                        lcn[1] = ((CMLDModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((CMLDModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is SMOVModel)
+                    {
+                        lcn[1] = ((SMOVModel)(bvm.Model)).SoruceValue.ValueShowString;
+                        lcn[2] = ((SMOVModel)(bvm.Model)).SourceStart.ValueShowString;
+                        lcn[3] = ((SMOVModel)(bvm.Model)).SourceCount.ValueShowString;
+                        lcn[4] = ((SMOVModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[5] = ((SMOVModel)(bvm.Model)).DestinationStart.ValueShowString;
+                    }
+                    if (bvm.Model is FMOVModel)
+                    {
+                        lcn[1] = ((FMOVModel)(bvm.Model)).SourceValue.ValueShowString;
+                        lcn[2] = ((FMOVModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[3] = ((FMOVModel)(bvm.Model)).CountValue.ValueShowString;
+                    }
+                    if (bvm.Model is FMOVDModel)
+                    {
+                        lcn[1] = ((FMOVDModel)(bvm.Model)).SourceValue.ValueShowString;
+                        lcn[2] = ((FMOVDModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[3] = ((FMOVDModel)(bvm.Model)).CountValue.ValueShowString;
                     }
                     lcn.HAccess = true;
                 }

@@ -10,8 +10,10 @@ namespace SamSoarII.AppMain
     {
         Program,
         Simulate,
+        SimuToEdit,
         CommentList,
         UsageList,
-        VariableList
+        VariableList,
+        Modbus
     }
 }

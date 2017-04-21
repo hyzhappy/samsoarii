@@ -47,35 +47,29 @@
                 </Grid.ColumnDefinitions>
                 <Grid.Children>
                     <Canvas x:Name="TopBar1" Grid.Row="0" Grid.Column="0">
-                        <Rectangle Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Height="{Binding ElementName=TopBar1, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">寄存器</TextBlock>
                     </Canvas>
                     <Canvas x:Name="TopBar2" Grid.Row="0" Grid.Column="1">
-                        <Rectangle Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Height="{Binding ElementName=TopBar2, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">类型</TextBlock>
                     </Canvas>
                     <Canvas x:Name="TopBar3" Grid.Row="0" Grid.Column="2">
-                        <Rectangle Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Height="{Binding ElementName=TopBar3, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">变量名称</TextBlock>
                     </Canvas>
                     <Canvas x:Name="TopBar4" Grid.Row="0" Grid.Column="3">
-                        <Rectangle Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Height="{Binding ElementName=TopBar4, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">数值</TextBlock>
                     </Canvas>
                 </Grid.Children>
                 <Grid.ContextMenu>
                     <ContextMenu x:Name="RightClickMenu">
-                        <MenuItem Header="添加监视" Click="MonitorAdd_Click"></MenuItem>
-                        <MenuItem Header="删除监视" Click="MonitorDel_Click"></MenuItem>
-                        <MenuItem Header="批量添加" Click="MonitorMulAdd_Click"></MenuItem>
+                        
                     </ContextMenu>
                 </Grid.ContextMenu>
             </Grid>
