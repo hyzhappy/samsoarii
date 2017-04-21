@@ -5,22 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.LadderInstModel
+namespace SamSoarII.LadderInstModel.Pulse
 {
-    public class PWMModel : BaseModel
+    public class DPWMModel : BaseModel
     {
-        public WordValue FreqValue { get; set; }
-        public WordValue DutyCycleValue { get; set; }
+        public DoubleWordValue FreqValue { get; set; }
+        public DoubleWordValue DutyCycleValue { get; set; }
         public BitValue OutputValue { get; set; }
-        
-        public PWMModel()
+
+        public DPWMModel()
         {
-            FreqValue = WordValue.Null;
-            DutyCycleValue = WordValue.Null;
+            FreqValue = DoubleWordValue.Null;
+            DutyCycleValue = DoubleWordValue.Null;
             OutputValue = BitValue.Null;
         }
 
-        public PWMModel(WordValue _FreqValue, WordValue _DutyCycleValue, BitValue _OutputValue)
+        public DPWMModel(DoubleWordValue _FreqValue, DoubleWordValue _DutyCycleValue, BitValue _OutputValue)
         {
             FreqValue = _FreqValue;
             DutyCycleValue = _DutyCycleValue;

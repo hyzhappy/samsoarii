@@ -10,6 +10,7 @@ namespace SamSoarII.LadderInstModel
     public class ALTModel : BaseModel
     {
         public BitValue Value { get; set; }
+
         public ALTModel()
         {
             Value = BitValue.Null;
@@ -18,6 +19,7 @@ namespace SamSoarII.LadderInstModel
         {
             Value = value;
         }
+
         public override string GenerateCode()
         {
             return string.Format("if({0})\r\n{{\r\n{1} = !{1};\r\n}}\r\n",ImportVaribleName,Value.GetValue());

@@ -5,23 +5,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.LadderInstModel
+namespace SamSoarII.LadderInstModel.Pulse
 {
-    public class PLSFModel : BaseModel
+    public class DPLSYModel : BaseModel
     {
-        public WordValue FreqValue { get; set; }
+        public DoubleWordValue FreqValue { get; set; }
+        public DoubleWordValue PulseValue { get; set; }
         public BitValue OutputValue { get; set; }
-        public PLSFModel()
+
+        public DPLSYModel()
         {
-            FreqValue = WordValue.Null;
+            FreqValue = DoubleWordValue.Null;
+            PulseValue = DoubleWordValue.Null;
             OutputValue = BitValue.Null;
         }
 
-        public PLSFModel(WordValue _FreqValue, BitValue _OutputValue)
+        public DPLSYModel(DoubleWordValue _FreqValue, DoubleWordValue _PulseValue, BitValue _OutputValue)
         {
             FreqValue = _FreqValue;
+            PulseValue = _PulseValue;
             OutputValue = _OutputValue;
         }
+
         public override string GenerateCode()
         {
             return String.Empty;
