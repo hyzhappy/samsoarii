@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,27 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
     /// </summary>
     public partial class CommunicationSettingWidget : UserControl
     {
+        private List<BaseCommunicationInterface> _widget = new List<BaseCommunicationInterface>();
         public CommunicationSettingWidget()
         {
             InitializeComponent();
+            _widget.Add(new COM232());
+            _widget.Add(new COM485());
+            ShowWidget(0);
+        }
+        private void ShowWidget(int index)
+        {
+            ContentGrid.Children.Clear();
+            ContentGrid.Children.Add(_widget[index]);
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+            if (listBox != null)
+            {
+                ShowWidget(listBox.SelectedIndex);
+            }
         }
     }
 }

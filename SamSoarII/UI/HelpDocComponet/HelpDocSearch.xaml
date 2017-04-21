@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="SamSoarII.AppMain.UI.HelpDocComponet.HelpDocSearch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.AppMain.UI.HelpDocComponet"
+             mc:Ignorable="d" 
+             d:DesignHeight="1000" d:DesignWidth="300">
+    <UserControl.CommandBindings>
+        <CommandBinding x:Name="OpenCommand" Command="{x:Static local:HelpDocCommand.OpenPage}"></CommandBinding>
+        <CommandBinding x:Name="CollectCommand" Command="{x:Static local:HelpDocCommand.CollectPage}"></CommandBinding>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <ContextMenu x:Key="ItemContext">
+            <MenuItem Header="打开" Command="{x:Static local:HelpDocCommand.OpenPage}"></MenuItem>
+            <MenuItem Header="打印"></MenuItem>
+            <MenuItem Header="搜藏" Command="{x:Static local:HelpDocCommand.CollectPage}"></MenuItem>
+        </ContextMenu>
+        <ControlTemplate x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
+            <Grid>
+                <Border x:Name="Border">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="Resources/Images/page.png" Width="14"></Image>
+                        <ContentPresenter HorizontalAlignment="Left" Name="ContentSite" Content="{Binding TabHeader}" VerticalAlignment="Center" Grid.Column="1"></ContentPresenter>
+                    </Grid>
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="LightBlue"></Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="#FF72CBE8"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="3,3,0,0">
+            <TextBlock TextAlignment="Left" FontSize="20">搜索</TextBlock>
+        </Border>
+        <StackPanel Grid.Row="1">
+            <StackPanel>
+                <Button Margin="0,1,3,0" Command="{x:Static local:HelpDocCommand.OpenPage}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <StackPanel x:Name="StackPanel" Orientation="Horizontal" Margin="0,3,0,0">
+                                <Image x:Name="image" Source="Resources/Images/open.png" Height="17"></Image>
+                                <TextBlock x:Name="textblock" FontSize="14">打开</TextBlock>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="StackPanel" Property="Background" Value="#FF1D98FF"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter TargetName="image" Property="Opacity" Value="0.5"></Setter>
+                                    <Setter TargetName="textblock" Property="Opacity" Value="0.5"></Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0,2,0,0" Width="40" Height="22" TextAlignment="Center" FontSize="16">搜索</TextBlock>
+                <TextBox x:Name="SearchTextBox" Width="100" Height="22" BorderBrush="#FF282912" BorderThickness="1" MaxLines="1" TextChanged="OnSearchTextChanged" FontSize="16" FontFamily="Arial" Padding="0,2,0,0"></TextBox>
+                <Label Height="25">
+                    <Image Source="/Resources/Image/Search.png"></Image>
+                </Label>
+            </StackPanel>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" BorderThickness="0">
+                <ListBox x:Name="CollectList" BorderThickness="0" ItemsSource="{Binding PageCollection}">
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Template" Value="{StaticResource ListBoxItemTempalte}"></Setter>
+                            <Setter Property="ContextMenu" Value="{StaticResource ItemContext}"></Setter>
+                            <EventSetter Event="MouseDoubleClick" Handler="OnItemDoubleClick"></EventSetter>
+                        </Style>
+                    </ListBox.Resources>
+                </ListBox>
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
+</UserControl>

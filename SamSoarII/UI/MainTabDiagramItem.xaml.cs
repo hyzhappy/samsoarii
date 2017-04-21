@@ -22,6 +22,9 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class MainTabDiagramItem : DockingManager, ITabItem
     {
+        #region Numbers
+
+        #region View Mode
         public const int VIEWMODE_LADDER = 0x01;
         public const int VIEWMODE_INST = 0x02;
 
@@ -50,7 +53,9 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+        #endregion
 
+        #region ITabItem Interfaces
         public string TabHeader
         {
             get; set;
@@ -83,6 +88,9 @@ namespace SamSoarII.AppMain.UI
                 this.actualheight = value;       
             }
         }
+        #endregion
+
+        #endregion
 
         public MainTabDiagramItem()
         {
@@ -104,7 +112,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (!LAPGroup.Children.Contains(LAP_Ladder))
             {
-                LAPGroup.Children.Add(LAP_Ladder);
+                LAPGroup.InsertChildAt(LAPGroup.Children.Count, LAP_Ladder);
             }
         }
 
@@ -112,7 +120,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (LAPGroup.Children.Contains(LAP_Ladder))
             {
-                LAPGroup.Children.Remove(LAP_Ladder);
+                LAPGroup.RemoveChild(LAP_Ladder);
             }
         }
 
@@ -120,7 +128,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (!LAPGroup.Children.Contains(LAP_Inst))
             {
-                LAPGroup.Children.Add(LAP_Inst);
+                LAPGroup.InsertChildAt(LAPGroup.Children.Count, LAP_Inst);
             }
         }
 
@@ -128,7 +136,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (LAPGroup.Children.Contains(LAP_Inst))
             {
-                LAPGroup.Children.Remove(LAP_Inst);
+                LAPGroup.RemoveChild(LAP_Inst);
             }
         }
         

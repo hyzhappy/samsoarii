@@ -15,21 +15,21 @@
         </Grid.RowDefinitions>
         <ToolBarTray Grid.Row="0">
             <ToolBar>
-                <TextBlock>显示输出来源：</TextBlock>
-                <ComboBox x:Name="CB_Source" Width="120" SelectedIndex="0">
+                <TextBlock VerticalAlignment="Center">显示输出来源：</TextBlock>
+                <ComboBox x:Name="CB_Source" Width="120" SelectedIndex="0"
+                          SelectionChanged="CB_Source_SelectionChanged">
                     <TextBlock>所有来源</TextBlock>
                     <TextBlock>仿真</TextBlock>
                     <TextBlock>生成</TextBlock>
+                    <TextBlock>函数块编译</TextBlock>
+                    <TextBlock>#DEBUG</TextBlock>
                 </ComboBox>
             </ToolBar>
             <ToolBar>
-                <Button x:Name="B_ClearAll" Width="20" Height="20"></Button>
+                <Button x:Name="B_ClearAll" Width="20" Height="20" Click="B_ClearAll_Click"></Button>
             </ToolBar>
         </ToolBarTray>
         <ScrollViewer x:Name="ReportScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <TextBox x:Name="Report" IsReadOnly="True">
-
-            </TextBox>
         </ScrollViewer>
     </Grid>
 </UserControl>

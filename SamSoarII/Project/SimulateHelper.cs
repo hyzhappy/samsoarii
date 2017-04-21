@@ -34,17 +34,20 @@ namespace SamSoarII.AppMain.Project
         public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
         public const int CLOSE_OK = 0x00;
 
-        static public int Simulate(ProjectModel pmodel, ReportOutputModel omodel)
+        static public int Simulate(InteractionFacade ifacade, ReportOutputModel omodel)
         {
+            ProjectModel pmodel = ifacade.ProjectModel;
+            AppMain.UI.MainTabControl mtctrl = ifacade.MainTabControl;
             smodel = new SimulateModel();
             SetupSimulateModel(pmodel);
-            smodel.ReportTextBox = omodel.Report;
+            smodel.ReportTextBox = omodel.Report_Simulate;
             int checkresult = smodel.Check();
             switch (checkresult)
             {
                 case SimulateDllModel.LOADDLL_OK:
                     smodel.ShowWindow();
                     smodel.TabOpened += OnTabOpened;
+                    mtctrl.ShowSimulateItem += OnTabOpened;
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                     MessageBox.Show("Error : 找不到生成的dll文件\r\n");
@@ -134,11 +137,15 @@ namespace SamSoarII.AppMain.Project
                     MessageBox.Show("Error : 发生未知错误\r\n");
                     break;
             }
+            omodel.Append(omodel.Report_All, omodel.Report_Simulate.Text);
             return checkresult;
         }
 
-        static public int Close()
+        static public int Close(InteractionFacade ifacade)
         {
+            AppMain.UI.MainTabControl mtctrl = ifacade.MainTabControl;
+            mtctrl.ShowSimulateItem -= OnTabOpened;
+            mtctrl.ReplaceAllTabsToEdit();
             if (smodel != null)
             {
                 smodel.Dispose();
@@ -902,7 +909,7 @@ namespace SamSoarII.AppMain.Project
                 }            
                 return;
             }
-            if (e.TabName.Equals("主程序"))
+            if (e.TabName.Equals("主程序") || e.TabName.Equals("Main"))
             {
                 _stitem = new SimulateTabItem(smodel.MainRoutine, "主程序");
                 if (TabOpen != null)

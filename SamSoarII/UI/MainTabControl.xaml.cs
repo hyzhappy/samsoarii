@@ -10,11 +10,18 @@ using System.Windows.Input;
 using SamSoarII.AppMain.Project;
 using System.Collections.ObjectModel;
 using Xceed.Wpf.AvalonDock.Layout;
+using SamSoarII.Simulation.UI;
+using SamSoarII.Simulation.UI.Chart;
+using SamSoarII.AppMain.UI.HelpDocComponet;
 
 namespace SamSoarII.AppMain.UI
 {
     public partial class MainTabControl : LayoutDocumentPane
     {
+
+        #region Numbers
+
+        #region View Mode
         public const int VIEWMODE_LADDER = 0x01;
         public const int VIEWMODE_INST = 0x02;
         private int viewmode;
@@ -31,12 +38,18 @@ namespace SamSoarII.AppMain.UI
                 //ShowItem(CurrentTab);
             }
         }
-        
+        #endregion
+
+        #region Collections
+
         public ObservableCollection<ITabItem> TabItemCollection { get; set; } = new ObservableCollection<ITabItem>();
         public ObservableCollection<MainTabDiagramItem> DiagramCollection { get; set; } = new ObservableCollection<MainTabDiagramItem>();
         private Dictionary<ITabItem, LayoutDocument> _lDocDict = new Dictionary<ITabItem, LayoutDocument>();
-        public ITabItem SelectedItem = null;
 
+        #endregion
+
+        #region Current
+        public ITabItem SelectedItem = null;
         public ITabItem CurrentTab
         {
             get
@@ -44,6 +57,20 @@ namespace SamSoarII.AppMain.UI
                 return SelectedItem;
             }
         }
+        #endregion
+
+        #region Inner Scroll
+
+        private CanAnimationScroll innerscroll = new CanAnimationScroll();
+
+        public CanAnimationScroll InnerScroll
+        {
+            get { return innerscroll; }
+        }
+
+        #endregion
+
+        #endregion
 
         public MainTabControl()
         {
@@ -53,8 +80,11 @@ namespace SamSoarII.AppMain.UI
         public void Reset()
         {
             TabItemCollection.Clear();
+            DiagramCollection.Clear();
+            _lDocDict.Clear();
+            Children.Clear();
         }
-
+        
         public void ShowItem(ITabItem item)
         {
             LayoutDocument ldoc = null;
@@ -88,13 +118,102 @@ namespace SamSoarII.AppMain.UI
 
         public void CloseItem(ITabItem item)
         {
-            LayoutDocument ldoc = _lDocDict[item];
-            Children.Remove(ldoc);
-            _lDocDict.Remove(item);
-            TabItemCollection.Remove(item);
+            if (_lDocDict.ContainsKey(item))
+            {
+                LayoutDocument ldoc = _lDocDict[item];
+                Children.Remove(ldoc);
+                _lDocDict.Remove(item);
+                TabItemCollection.Remove(item);
+                if (item is LadderDiagramViewModel)
+                {
+                    MainTabDiagramItem[] fit = DiagramCollection.Where(
+                        (MainTabDiagramItem mtditem) => { return mtditem.LA_Ladder.Content == item; }).ToArray();
+                    foreach (MainTabDiagramItem mtditem in fit)
+                    {
+                        DiagramCollection.Remove(mtditem);
+                    }
+                }
+            }
         }
-        
-        public SelectionChangedEventHandler SelectionChanged;
+
+        public void ReplaceAllTabsToSimulate()
+        {
+            IEnumerable<ITabItem> ntabs = TabItemCollection.Where(
+                (tab) => { return (tab is LadderDiagramViewModel || tab is FuncBlockViewModel); });
+            ntabs = ntabs.ToArray();
+            Simulation.Shell.Event.ShowTabItemEventArgs e = null;
+            foreach (ITabItem tab in ntabs)
+            {
+                if (tab is LadderDiagramViewModel)
+                {
+                    CloseItem(tab);
+                    e = new Simulation.Shell.Event.ShowTabItemEventArgs(tab.TabHeader);
+                    ShowSimulateItem(this, e);
+                }
+                if (tab is FuncBlockViewModel)
+                {
+                    CloseItem(tab);
+                    e = new Simulation.Shell.Event.ShowTabItemEventArgs(tab.TabHeader);
+                    ShowSimulateItem(this, e);
+                }
+            }
+            if (ntabs.Contains(SelectedItem))
+            {
+                IEnumerable<ITabItem> selecttab = TabItemCollection.Where(
+                    (ITabItem tab) => 
+                    {
+                        bool b1 = tab.TabHeader.Equals(SelectedItem.TabHeader);
+                        bool b2 = tab.TabHeader.Equals("main") || tab.TabHeader.Equals("主程序");
+                        bool b3 = SelectedItem.TabHeader.Equals("main") || SelectedItem.TabHeader.Equals("主程序");
+                        return b1 || (b2 && b3);
+                    }
+                );
+                if (selecttab.First() != null)
+                {
+                    ShowItem(selecttab.First());
+                }
+            }
+        }
+
+        public void ReplaceAllTabsToEdit()
+        {
+            IEnumerable<ITabItem> ntabs = TabItemCollection.Where(
+                (tab) => { return (tab is SimulateHelper.SimulateTabItem); });
+            ntabs = ntabs.ToArray();
+            ShowTabItemEventArgs e = null;
+            foreach (ITabItem tab in ntabs)
+            {
+                CloseItem(tab);
+                e = new ShowTabItemEventArgs(TabType.SimuToEdit);
+                e.Header = tab.TabHeader;
+                ShowEditItem(this, e);        
+            }
+            if (ntabs.Contains(SelectedItem))
+            {
+                IEnumerable<ITabItem> selecttab = TabItemCollection.Where(
+                    (ITabItem tab) =>
+                    {
+                        bool b1 = tab.TabHeader.Equals(SelectedItem.TabHeader);
+                        bool b2 = tab.TabHeader.Equals("main") || tab.TabHeader.Equals("主程序");
+                        bool b3 = SelectedItem.TabHeader.Equals("main") || SelectedItem.TabHeader.Equals("主程序");
+                        return b1 || (b2 && b3);
+                    }
+                );
+                if (selecttab.First() != null)
+                {
+                    ShowItem(selecttab.First());
+                }
+            }
+        }
+
+        #region Event Handler
+
+        public event Simulation.Shell.Event.ShowTabItemEventHandler ShowSimulateItem = delegate { };
+
+        public event ShowTabItemEventHandler ShowEditItem = delegate { };
+
+        public event SelectionChangedEventHandler SelectionChanged = delegate { };
+
         private void OnActiveChanged(object sender, EventArgs e)
         {
             if (sender is LayoutDocument)
@@ -113,15 +232,15 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
+        
         protected override void OnActualWidthChanged()
         {
             base.OnActualWidthChanged();
             ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(this);
             int unitwidth = GlobalSetting.LadderWidthUnit;
             int unitnumber = GlobalSetting.LadderXCapacity;
-            GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / (unitwidth * unitnumber);
-            GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / (unitwidth * unitnumber);
+            //GlobalSetting.LadderOriginScaleX = (_maintab.ActualWidth - 40) / (unitwidth * unitnumber);
+            //GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / (unitwidth * unitnumber);
             foreach (ITabItem tab in TabItemCollection)
             {
                 tab.ActualWidth = _maintab.ActualWidth;
@@ -138,7 +257,7 @@ namespace SamSoarII.AppMain.UI
                 tab.ActualHeight = _maintab.ActualHeight;
             }
         }
-
+        
         protected override void OnChildrenCollectionChanged()
         {
             base.OnChildrenCollectionChanged();
@@ -154,5 +273,6 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+        #endregion
     }
 }

@@ -1,4 +1,6 @@
-﻿using SamSoarII.LadderInstModel;
+﻿using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.Extend.FuncBlockModel;
+using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.PLCCompiler;
 using SamSoarII.UserInterface;
@@ -24,7 +26,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl, IComparable
+    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
     {
 
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
@@ -71,6 +73,7 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 NetworkBriefLabel.Content = value;
+                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("NetworkBrief"));
             }
         }
 
@@ -301,6 +304,8 @@ namespace SamSoarII.AppMain.Project
 
         // parent ladder diagram
         private LadderDiagramViewModel _ladderDiagram;
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public LadderNetworkViewModel(LadderDiagramViewModel parent, int number)
         {
@@ -2005,18 +2010,71 @@ namespace SamSoarII.AppMain.Project
         private void OnShowPropertyDialog(BaseViewModel sender, ShowPropertyDialogEventArgs e)
         {
             var dialog = e.Dialog;
+            ElementPropertyDialog epdialog = (ElementPropertyDialog)(dialog);
+            switch (epdialog.InstMode)
+            {
+                case ElementPropertyDialog.INST_CALL:
+                case ElementPropertyDialog.INST_ATCH:
+                    epdialog.SubRoutines = _ladderDiagram.ProjectModel.SubRoutines.Select(
+                        (LadderDiagramViewModel ldvmodel) =>
+                        {
+                            return ldvmodel.ProgramName;
+                        }
+                    );
+                    break;
+                case ElementPropertyDialog.INST_CALLM:
+                    epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Select(
+                        (FuncModel fmodel) =>
+                        {
+                            int argcount = 0;
+                            for (; argcount < 4; argcount++)
+                            {
+                                if (fmodel.GetArgName(argcount).Equals(String.Empty))
+                                {
+                                    break;
+                                }
+                            }
+                            string[] result = new string[argcount * 2 + 1];
+                            result[0] = fmodel.Name;
+                            for (int i = 0; i < argcount; i++)
+                            {
+                                result[i * 2 + 1] = fmodel.GetArgType(i);
+                                result[i * 2 + 2] = fmodel.GetArgName(i);
+                            }
+                            return result;
+                        }
+                    );
+                    break;
+                case ElementPropertyDialog.INST_MBUS:
+                    epdialog.ModbusTables = _ladderDiagram.ProjectModel.MTVModel.Models.Select(
+                        (ModbusTableModel mtmodel) =>
+                        {
+                            return mtmodel.Name;
+                        }
+                    );
+                    break;
+            }
             dialog.Commit += (sender1, e1) =>
             {
                 try
                 {
-                    sender.AcceptNewValues(dialog.PropertyStrings, SamSoarII.PLCDevice.PLCDeviceManager.SelectDevice);
+                    if (dialog is ElementPropertyDialog)
+                    {
+                        ElementReplaceArgumentCommand eracommand = new ElementReplaceArgumentCommand(
+                            sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
+                        _ladderDiagram.CommandExecute(eracommand);
+                    }
+                    else
+                    {
+                        sender.AcceptNewValues(dialog.PropertyStrings, SamSoarII.PLCDevice.PLCDeviceManager.SelectDevice);
+                    }
                     dialog.Close();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-        };
+            };
             dialog.ShowDialog();
         }
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)

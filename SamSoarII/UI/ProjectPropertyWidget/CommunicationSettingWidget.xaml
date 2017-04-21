@@ -5,8 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.ProjectPropertyWidget"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             d:DesignHeight="600" d:DesignWidth="600">
+    <Grid Margin="30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox Grid.Column="0" SelectionChanged="ListBox_SelectionChanged">
+            <ListBox.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="FontWeight" Value="Heavy"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="FontSize" Value="16"></Setter>
+                    <Setter Property="Height" Value="30"></Setter>
+                </Style>
+            </ListBox.Resources>
+            <ListBoxItem>COM0(232)</ListBoxItem>
+            <ListBoxItem>COM1(485)</ListBoxItem>
+        </ListBox>
+        <Grid Grid.Column="1" x:Name="ContentGrid"></Grid>
     </Grid>
 </UserControl>

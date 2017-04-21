@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="SamSoarII.AppMain.Project.ModbusTableViewModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800"
+             Background="Transparent">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="120"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ListBox x:Name="LB_Tables"
+                     Grid.Row="0" Grid.Column="0"
+                     SelectionChanged="LB_Tables_SelectionChanged">
+            </ListBox>
+        </ScrollViewer>
+        <DataGrid x:Name="DG_Table" ItemsSource="{Binding Tables}"
+                  Grid.Row="0" Grid.Column="1"
+                  AutoGenerateColumns="False" CanUserResizeColumns="False"
+                  SelectionChanged="DG_Table_SelectionChanged" CellEditEnding="DG_Table_CellEditEnding">
+            <DataGrid.Resources>
+                <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type local:ModbusTableComboBoxItems}" MethodName="SelectedHandleCodes">
+                </ObjectDataProvider>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="DGTC_SlaveID" Header="从站号" Width="*"
+                                    IsReadOnly="False" Binding="{Binding SlaveID}">
+                </DataGridTextColumn>
+                <DataGridComboBoxColumn x:Name="DGCBC_HandleCode" Header="功能码" Width="*"
+                                    IsReadOnly="False" TextBinding="{Binding HandleCode}" ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn x:Name="DGTC_SlaveRegister" Header="从站寄存器" Width="*"
+                                    IsReadOnly="False" Binding="{Binding SlaveRegister}">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGTC_SlaveCount" Header="从站长度" Width="*"
+                                    IsReadOnly="False" Binding="{Binding SlaveCount}">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGTC_MasterRegister" Header="主站寄存器" Width="*"
+                                    IsReadOnly="False" Binding="{Binding MasteRegister}">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid x:Name="G_Tools"
+              Grid.Row="0" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="B_Insert"
+                    Grid.Row="0" Grid.Column="0"
+                    Click="B_Insert_Click">
+                插入行
+            </Button>
+            <Button x:Name="B_Remove"
+                    Grid.Row="1" Grid.Column="0"
+                    Click="B_Remove_Click">
+                删除行
+            </Button>
+            <Button x:Name="B_Up"
+                    Grid.Row="2" Grid.Column="0"
+                    Click="B_Up_Click">
+                当前行上移
+            </Button>
+            <Button x:Name="B_Down"
+                    Grid.Row="3" Grid.Column="0"
+                    Click="B_Down_Click">
+                当前行下移
+            </Button>
+            <Button x:Name="B_AddModel"
+                    Grid.Row="4" Grid.Column="0"
+                    Click="B_AddModel_Click">
+                新建表格
+            </Button>
+            <Button x:Name="B_RemoveModel"
+                    Grid.Row="5" Grid.Column="0"
+                    Click="B_RemoveModel_Click">
+                删除表格
+            </Button>
+            <Button x:Name="B_ModelUp"
+                    Grid.Row="6" Grid.Column="0"
+                    Click="B_ModelUp_Click">
+                当前表格上移
+            </Button>
+            <Button x:Name="B_ModelDown"
+                    Grid.Row="7" Grid.Column="0"
+                    Click="B_ModelDown_Click">
+                当前表格下移
+            </Button>
+            <Button x:Name="B_Close"
+                    Grid.Row="8" Grid.Column="0"
+                    Click="B_Close_Click">
+                关闭
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

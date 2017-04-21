@@ -89,9 +89,9 @@ namespace SamSoarII.AppMain.Project
             return result;
         }
 
-        public static LadderDiagramViewModel CreateLadderDiagramByXElement(XElement xEle)
+        public static LadderDiagramViewModel CreateLadderDiagramByXElement(XElement xEle, ProjectModel _projectmodel)
         {
-            LadderDiagramViewModel result = new LadderDiagramViewModel(xEle.Attribute("Name").Value);
+            LadderDiagramViewModel result = new LadderDiagramViewModel(xEle.Attribute("Name").Value, _projectmodel);
             if(xEle.Attribute("IsMain") != null && xEle.Attribute("IsMain").Value == "True")
             {
                 result.IsMainLadder = true;
@@ -197,9 +197,9 @@ namespace SamSoarII.AppMain.Project
             return ValueParser.CreateVariableValue(name, valueString, valuetype, comment);
         }
 
-        public static ProjectModel LoadProject(string filepath)
+        public static ProjectModel LoadProject(string filepath, ProjectModel model)
         {
-            ProjectModel model = new ProjectModel();
+            //ProjectModel model = new ProjectModel();
             if (model.Open(filepath))
             {
                 return model;

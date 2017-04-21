@@ -14,6 +14,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -70,9 +70,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.AvalonDock.resources">
-      <HintPath>\\Mac\Home\Downloads\AvalonDock_2_0_2000\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -92,6 +89,7 @@
     <Compile Include="Event\TabType.cs" />
     <Compile Include="Functionality\LadderVariable.cs" />
     <Compile Include="Global\GlobalUsageList.cs" />
+    <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
@@ -127,6 +125,9 @@
     <Compile Include="Project\LadderNetworkViewModel.xaml.cs">
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Project\ModbusTableViewModel.xaml.cs">
+      <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project\ProjectHelper.cs" />
     <Compile Include="Project\ProjectModel.cs" />
     <Compile Include="Project\ReportOutputModel.xaml.cs">
@@ -136,30 +137,675 @@
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="UI\ElementList.xaml.cs">
       <DependentUpon>ElementList.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ElementListHelp\ELementStackPanel.cs" />
     <Compile Include="UI\ElementListHelp\NavigateToNetworkEventArgs.cs" />
-    <Compile Include="UI\InstrucionTreeItem.cs" />
+    <Compile Include="UI\HelpDocComponet\BrowsingHistoryManager.cs" />
+    <Compile Include="UI\HelpDocComponet\Controls\CanAnimationScroll.cs" />
+    <Compile Include="UI\HelpDocComponet\FavoriteManager.cs" />
+    <Compile Include="UI\HelpDocComponet\HelpDocCommand.cs" />
+    <Compile Include="UI\HelpDocComponet\HelpDocFavorite.xaml.cs">
+      <DependentUpon>HelpDocFavorite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\NavigatePage.cs" />
     <Compile Include="UI\MainTabControl.xaml.cs">
       <DependentUpon>MainTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MainTabDiagramItem.xaml.cs">
       <DependentUpon>MainTabDiagramItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Communication Protocol\Page8200.xaml.cs">
+      <DependentUpon>Page8200.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Contact Information\Page8500.xaml.cs">
+      <DependentUpon>Page8500.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4000.xaml.cs">
+      <DependentUpon>Page4000.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4100.xaml.cs">
+      <DependentUpon>Page4100.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7200.xaml.cs">
+      <DependentUpon>Page7200.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7201.xaml.cs">
+      <DependentUpon>Page7201.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7202.xaml.cs">
+      <DependentUpon>Page7202.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7203.xaml.cs">
+      <DependentUpon>Page7203.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7204.xaml.cs">
+      <DependentUpon>Page7204.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7205.xaml.cs">
+      <DependentUpon>Page7205.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7206.xaml.cs">
+      <DependentUpon>Page7206.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7207.xaml.cs">
+      <DependentUpon>Page7207.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7208.xaml.cs">
+      <DependentUpon>Page7208.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7100.xaml.cs">
+      <DependentUpon>Page7100.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7101.xaml.cs">
+      <DependentUpon>Page7101.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7102.xaml.cs">
+      <DependentUpon>Page7102.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7103.xaml.cs">
+      <DependentUpon>Page7103.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7104.xaml.cs">
+      <DependentUpon>Page7104.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7105.xaml.cs">
+      <DependentUpon>Page7105.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Page7000.xaml.cs">
+      <DependentUpon>Page7000.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Page7300.xaml.cs">
+      <DependentUpon>Page7300.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Page7400.xaml.cs">
+      <DependentUpon>Page7400.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Hardware Manual\Page8300.xaml.cs">
+      <DependentUpon>Page8300.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\HelpDocFrame.cs" />
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\IPageItem.cs" />
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\NavigateToPageEventArgs.cs" />
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6700.xaml.cs">
+      <DependentUpon>Page6700.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6701.xaml.cs">
+      <DependentUpon>Page6701.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6702.xaml.cs">
+      <DependentUpon>Page6702.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6703.xaml.cs">
+      <DependentUpon>Page6703.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6704.xaml.cs">
+      <DependentUpon>Page6704.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6705.xaml.cs">
+      <DependentUpon>Page6705.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6706.xaml.cs">
+      <DependentUpon>Page6706.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6707.xaml.cs">
+      <DependentUpon>Page6707.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6708.xaml.cs">
+      <DependentUpon>Page6708.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6709.xaml.cs">
+      <DependentUpon>Page6709.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6710.xaml.cs">
+      <DependentUpon>Page6710.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6711.xaml.cs">
+      <DependentUpon>Page6711.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6712.xaml.cs">
+      <DependentUpon>Page6712.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6713.xaml.cs">
+      <DependentUpon>Page6713.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6714.xaml.cs">
+      <DependentUpon>Page6714.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6715.xaml.cs">
+      <DependentUpon>Page6715.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6716.xaml.cs">
+      <DependentUpon>Page6716.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6717.xaml.cs">
+      <DependentUpon>Page6717.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6718.xaml.cs">
+      <DependentUpon>Page6718.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6719.xaml.cs">
+      <DependentUpon>Page6719.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5112.xaml.cs">
+      <DependentUpon>Page5112.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5113.xaml.cs">
+      <DependentUpon>Page5113.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5114.xaml.cs">
+      <DependentUpon>Page5114.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5115.xaml.cs">
+      <DependentUpon>Page5115.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5116.xaml.cs">
+      <DependentUpon>Page5116.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5117.xaml.cs">
+      <DependentUpon>Page5117.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6400.xaml.cs">
+      <DependentUpon>Page6400.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6401.xaml.cs">
+      <DependentUpon>Page6401.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6402.xaml.cs">
+      <DependentUpon>Page6402.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6403.xaml.cs">
+      <DependentUpon>Page6403.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5200.xaml.cs">
+      <DependentUpon>Page5200.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5201.xaml.cs">
+      <DependentUpon>Page5201.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5202.xaml.cs">
+      <DependentUpon>Page5202.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5203.xaml.cs">
+      <DependentUpon>Page5203.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5204.xaml.cs">
+      <DependentUpon>Page5204.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5205.xaml.cs">
+      <DependentUpon>Page5205.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5206.xaml.cs">
+      <DependentUpon>Page5206.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5300.xaml.cs">
+      <DependentUpon>Page5300.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5301.xaml.cs">
+      <DependentUpon>Page5301.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5302.xaml.cs">
+      <DependentUpon>Page5302.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5303.xaml.cs">
+      <DependentUpon>Page5303.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5304.xaml.cs">
+      <DependentUpon>Page5304.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5305.xaml.cs">
+      <DependentUpon>Page5305.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5306.xaml.cs">
+      <DependentUpon>Page5306.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5307.xaml.cs">
+      <DependentUpon>Page5307.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5900.xaml.cs">
+      <DependentUpon>Page5900.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5901.xaml.cs">
+      <DependentUpon>Page5901.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5902.xaml.cs">
+      <DependentUpon>Page5902.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5903.xaml.cs">
+      <DependentUpon>Page5903.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5600.xaml.cs">
+      <DependentUpon>Page5600.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5601.xaml.cs">
+      <DependentUpon>Page5601.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5602.xaml.cs">
+      <DependentUpon>Page5602.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5603.xaml.cs">
+      <DependentUpon>Page5603.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5604.xaml.cs">
+      <DependentUpon>Page5604.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5605.xaml.cs">
+      <DependentUpon>Page5605.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5606.xaml.cs">
+      <DependentUpon>Page5606.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5607.xaml.cs">
+      <DependentUpon>Page5607.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5608.xaml.cs">
+      <DependentUpon>Page5608.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5609.xaml.cs">
+      <DependentUpon>Page5609.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5610.xaml.cs">
+      <DependentUpon>Page5610.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6600.xaml.cs">
+      <DependentUpon>Page6600.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6601.xaml.cs">
+      <DependentUpon>Page6601.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5714.xaml.cs">
+      <DependentUpon>Page5714.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5713.xaml.cs">
+      <DependentUpon>Page5713.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5703.xaml.cs">
+      <DependentUpon>Page5703.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5704.xaml.cs">
+      <DependentUpon>Page5704.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5705.xaml.cs">
+      <DependentUpon>Page5705.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5706.xaml.cs">
+      <DependentUpon>Page5706.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5707.xaml.cs">
+      <DependentUpon>Page5707.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5708.xaml.cs">
+      <DependentUpon>Page5708.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5709.xaml.cs">
+      <DependentUpon>Page5709.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5710.xaml.cs">
+      <DependentUpon>Page5710.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5711.xaml.cs">
+      <DependentUpon>Page5711.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5712.xaml.cs">
+      <DependentUpon>Page5712.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5700.xaml.cs">
+      <DependentUpon>Page5700.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5701.xaml.cs">
+      <DependentUpon>Page5701.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5702.xaml.cs">
+      <DependentUpon>Page5702.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6200.xaml.cs">
+      <DependentUpon>Page6200.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6201.xaml.cs">
+      <DependentUpon>Page6201.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6202.xaml.cs">
+      <DependentUpon>Page6202.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6203.xaml.cs">
+      <DependentUpon>Page6203.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6204.xaml.cs">
+      <DependentUpon>Page6204.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5400.xaml.cs">
+      <DependentUpon>Page5400.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5401.xaml.cs">
+      <DependentUpon>Page5401.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5402.xaml.cs">
+      <DependentUpon>Page5402.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5403.xaml.cs">
+      <DependentUpon>Page5403.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5404.xaml.cs">
+      <DependentUpon>Page5404.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5405.xaml.cs">
+      <DependentUpon>Page5405.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5406.xaml.cs">
+      <DependentUpon>Page5406.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5407.xaml.cs">
+      <DependentUpon>Page5407.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5408.xaml.cs">
+      <DependentUpon>Page5408.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5500.xaml.cs">
+      <DependentUpon>Page5500.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5501.xaml.cs">
+      <DependentUpon>Page5501.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5502.xaml.cs">
+      <DependentUpon>Page5502.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5503.xaml.cs">
+      <DependentUpon>Page5503.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5504.xaml.cs">
+      <DependentUpon>Page5504.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5505.xaml.cs">
+      <DependentUpon>Page5505.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Page5000.xaml.cs">
+      <DependentUpon>Page5000.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5100.xaml.cs">
+      <DependentUpon>Page5100.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5101.xaml.cs">
+      <DependentUpon>Page5101.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5102.xaml.cs">
+      <DependentUpon>Page5102.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5103.xaml.cs">
+      <DependentUpon>Page5103.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5104.xaml.cs">
+      <DependentUpon>Page5104.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5105.xaml.cs">
+      <DependentUpon>Page5105.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5106.xaml.cs">
+      <DependentUpon>Page5106.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5107.xaml.cs">
+      <DependentUpon>Page5107.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5108.xaml.cs">
+      <DependentUpon>Page5108.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5109.xaml.cs">
+      <DependentUpon>Page5109.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5110.xaml.cs">
+      <DependentUpon>Page5110.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5111.xaml.cs">
+      <DependentUpon>Page5111.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\PID\Page6800.xaml.cs">
+      <DependentUpon>Page6800.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6000.xaml.cs">
+      <DependentUpon>Page6000.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6001.xaml.cs">
+      <DependentUpon>Page6001.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6002.xaml.cs">
+      <DependentUpon>Page6002.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6003.xaml.cs">
+      <DependentUpon>Page6003.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6004.xaml.cs">
+      <DependentUpon>Page6004.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6005.xaml.cs">
+      <DependentUpon>Page6005.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6006.xaml.cs">
+      <DependentUpon>Page6006.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6500.xaml.cs">
+      <DependentUpon>Page6500.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6501.xaml.cs">
+      <DependentUpon>Page6501.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6502.xaml.cs">
+      <DependentUpon>Page6502.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6503.xaml.cs">
+      <DependentUpon>Page6503.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6504.xaml.cs">
+      <DependentUpon>Page6504.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6505.xaml.cs">
+      <DependentUpon>Page6505.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6506.xaml.cs">
+      <DependentUpon>Page6506.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6507.xaml.cs">
+      <DependentUpon>Page6507.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6508.xaml.cs">
+      <DependentUpon>Page6508.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6509.xaml.cs">
+      <DependentUpon>Page6509.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6510.xaml.cs">
+      <DependentUpon>Page6510.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6511.xaml.cs">
+      <DependentUpon>Page6511.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6512.xaml.cs">
+      <DependentUpon>Page6512.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6513.xaml.cs">
+      <DependentUpon>Page6513.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6514.xaml.cs">
+      <DependentUpon>Page6514.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6515.xaml.cs">
+      <DependentUpon>Page6515.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6516.xaml.cs">
+      <DependentUpon>Page6516.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6517.xaml.cs">
+      <DependentUpon>Page6517.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6300.xaml.cs">
+      <DependentUpon>Page6300.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6301.xaml.cs">
+      <DependentUpon>Page6301.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6302.xaml.cs">
+      <DependentUpon>Page6302.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6100.xaml.cs">
+      <DependentUpon>Page6100.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6101.xaml.cs">
+      <DependentUpon>Page6101.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6102.xaml.cs">
+      <DependentUpon>Page6102.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6103.xaml.cs">
+      <DependentUpon>Page6103.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6104.xaml.cs">
+      <DependentUpon>Page6104.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6105.xaml.cs">
+      <DependentUpon>Page6105.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6106.xaml.cs">
+      <DependentUpon>Page6106.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6107.xaml.cs">
+      <DependentUpon>Page6107.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6108.xaml.cs">
+      <DependentUpon>Page6108.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6109.xaml.cs">
+      <DependentUpon>Page6109.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6110.xaml.cs">
+      <DependentUpon>Page6110.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5800.xaml.cs">
+      <DependentUpon>Page5800.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5801.xaml.cs">
+      <DependentUpon>Page5801.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5802.xaml.cs">
+      <DependentUpon>Page5802.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5803.xaml.cs">
+      <DependentUpon>Page5803.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PLC Parameter Setting\Page8000.xaml.cs">
+      <DependentUpon>Page8000.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2000.xaml.cs">
+      <DependentUpon>Page2000.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2100.xaml.cs">
+      <DependentUpon>Page2100.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2200.xaml.cs">
+      <DependentUpon>Page2200.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2300.xaml.cs">
+      <DependentUpon>Page2300.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2400.xaml.cs">
+      <DependentUpon>Page2400.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2500.xaml.cs">
+      <DependentUpon>Page2500.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2501.xaml.cs">
+      <DependentUpon>Page2501.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\Page3000.xaml.cs">
+      <DependentUpon>Page3000.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\Page3100.xaml.cs">
+      <DependentUpon>Page3100.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3200.xaml.cs">
+      <DependentUpon>Page3200.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3201.xaml.cs">
+      <DependentUpon>Page3201.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3202.xaml.cs">
+      <DependentUpon>Page3202.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3203.xaml.cs">
+      <DependentUpon>Page3203.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3204.xaml.cs">
+      <DependentUpon>Page3204.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3205.xaml.cs">
+      <DependentUpon>Page3205.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3206.xaml.cs">
+      <DependentUpon>Page3206.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\PageManager.cs" />
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\Register\Page8100.xaml.cs">
+      <DependentUpon>Page8100.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocPages\System Settings\Page8400.xaml.cs">
+      <DependentUpon>Page8400.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocSearch.xaml.cs">
+      <DependentUpon>HelpDocSearch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocTreeView.xaml.cs">
+      <DependentUpon>HelpDocTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\HelpDocComponet\HelpDocTreeItem.cs" />
+    <Compile Include="UI\HelpDocComponet\PageTabControl.cs" />
+    <Compile Include="UI\HelpDocComponet\UserSetting\SettingManager.cs" />
+    <Compile Include="UI\HelpDocWindow.xaml.cs">
+      <DependentUpon>HelpDocWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\InstrucionTreeItem.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ModbusTableDialog.xaml.cs">
+      <DependentUpon>ModbusTableDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ElementListHelp\CSVFileHelper.cs" />
     <Compile Include="UI\OptionDialog.xaml.cs">
       <DependentUpon>OptionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\OptionWidget\ColorSelectionWidget.xaml.cs">
+      <DependentUpon>ColorSelectionWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OptionWidget\FontSelectionWidget.xaml.cs">
+      <DependentUpon>FontSelectionWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\AnalogQuantitySettingWidget.xaml.cs">
+      <DependentUpon>AnalogQuantitySettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\CommunicationInterface\BaseCommunicationInterface.xaml.cs">
+      <DependentUpon>BaseCommunicationInterface.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\CommunicationInterface\COM232.cs" />
+    <Compile Include="UI\ProjectPropertyWidget\CommunicationInterface\COM485.cs" />
     <Compile Include="UI\ProjectPropertyWidget\CommunicationSettingWidget.xaml.cs">
       <DependentUpon>CommunicationSettingWidget.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ProjectPropertyWidget\DeviceSelectionWidget.xaml.cs">
       <DependentUpon>DeviceSelectionWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\ExpansionModuleSettingWidget.xaml.cs">
+      <DependentUpon>ExpansionModuleSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\FilterSettingWidget.xaml.cs">
+      <DependentUpon>FilterSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\HoldingSectionSettingWidget.xaml.cs">
+      <DependentUpon>HoldingSectionSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectPropertyWidget\PasswordSettingWidget.xaml.cs">
+      <DependentUpon>PasswordSettingWidget.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ProjectTreeView.xaml.cs">
       <DependentUpon>ProjectTreeView.xaml</DependentUpon>
@@ -202,6 +848,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ColorPicker\ColorPicker.csproj">
+      <Project>{827f8c33-8118-48c7-ab3c-4864298396ad}</Project>
+      <Name>ColorPicker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
       <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
       <Name>Xceed.Wpf.AvalonDock</Name>
@@ -284,6 +934,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Project\ModbusTableViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Project\ReportOutputModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -291,6 +945,10 @@
     <Page Include="Project\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ResourceDictionary\TabControlDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ElementList.xaml">
       <SubType>Designer</SubType>
@@ -308,7 +966,831 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\ModbusTableDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocFavorite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Communication Protocol\Page8200.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Contact Information\Page8500.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4000.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4100.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7200.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7201.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7202.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7203.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7204.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7205.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7206.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7207.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7208.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7100.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7101.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7102.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7103.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7104.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7105.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Page7000.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Page7300.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Function Features Block\Page7400.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Hardware Manual\Page8300.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6700.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6701.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6702.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6703.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6704.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6705.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6706.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6707.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6708.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6709.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6710.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6711.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6712.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6713.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6714.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6715.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6716.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6717.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6718.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6719.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5112.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5113.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5114.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5115.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5116.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5117.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6400.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6401.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6402.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6403.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5200.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5201.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5202.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5203.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5204.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5205.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5206.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5300.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5301.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5302.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5303.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5304.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5305.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5306.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5307.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5900.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5901.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5902.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5903.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5600.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5601.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5602.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5603.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5604.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5605.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5606.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5607.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5608.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5609.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5610.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6600.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6601.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5714.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5713.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5703.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5704.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5705.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5706.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5707.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5708.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5709.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5710.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5711.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5712.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5700.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5701.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5702.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6200.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6201.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6202.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6203.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6204.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5400.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5401.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5402.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5403.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5404.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5405.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5406.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5407.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5408.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5500.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5501.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5502.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5503.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5504.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5505.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Page5000.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5100.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5101.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5102.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5103.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5104.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5105.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5106.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5107.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5108.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5109.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5110.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5111.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\PID\Page6800.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6000.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6001.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6002.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6003.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6004.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6005.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6006.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6500.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6501.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6502.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6503.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6504.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6505.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6506.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6507.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6508.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6509.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6510.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6511.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6512.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6513.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6514.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6515.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6516.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6517.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6300.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6301.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6302.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6100.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6101.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6102.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6103.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6104.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6105.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6106.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6107.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6108.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6109.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6110.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5800.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5801.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5802.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5803.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\PLC Parameter Setting\Page8000.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2000.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2100.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2200.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2300.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Page2400.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2500.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2501.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\Page3000.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\Page3100.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3200.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3201.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3202.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3203.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3204.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3205.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3206.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\Register\Page8100.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocPages\System Settings\Page8400.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocSearch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocComponet\HelpDocTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\HelpDocWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\OptionDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\ColorSelectionWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\FontSelectionWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectPropertyWidget\AnalogQuantitySettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectPropertyWidget\CommunicationInterface\BaseCommunicationInterface.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -317,6 +1799,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ProjectPropertyWidget\DeviceSelectionWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectPropertyWidget\ExpansionModuleSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectPropertyWidget\FilterSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectPropertyWidget\HoldingSectionSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectPropertyWidget\PasswordSettingWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -371,6 +1869,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\InstructionPopup.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +1884,50 @@
     <Resource Include="Resources\Image\Upload.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Back.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\category.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Doc.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\DocClose.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\DocOpen.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Func.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Hide.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Show.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\ahead.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Favorite.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Menu.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\Search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\page.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\delete.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\deleteall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\left.png" />
+    <Resource Include="UI\HelpDocComponet\Resources\Images\right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\HelpDocComponet\Resources\Images\up.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Image\Inst.png" />
     <Resource Include="Resources\Image\Ladder.png" />
   </ItemGroup>
@@ -396,6 +1939,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\SpecialRegisters.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         mc:Ignorable="d"
-        Title="ElementList" Height="650" Width="950" MinWidth="600" MinHeight="200" WindowStartupLocation="CenterScreen" Closing="OnClosing">
+        Title="ElementList" x:Name="elementList" Height="650" Width="950" MinWidth="300" MinHeight="200" WindowStartupLocation="CenterScreen" Closing="OnClosing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
@@ -117,11 +117,8 @@
                                 <Setter Property="Padding" Value="0"></Setter>
                             </Style>
                         </StackPanel.Resources>
-                        <Label Margin="20,10,0,0">蓝色为选中区</Label>
-                        <Label>灰色为已编辑区</Label>
-                        <Label>白色为未编辑区</Label>
                     </StackPanel>
-                    <Border Canvas.Top="100" Margin="20,20,10,0" CornerRadius="2" BorderThickness="1" BorderBrush="Black">
+                    <Border Canvas.Top="20" Margin="20,10,10,0" CornerRadius="2" BorderThickness="1" BorderBrush="Black">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"></RowDefinition>

@@ -7,6 +7,7 @@
         xmlns:adock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:app="clr-namespace:SamSoarII.AppMain"
         xmlns:proj="clr-namespace:SamSoarII.AppMain.Project"
+        xmlns:hdoc="clr-namespace:SamSoarII.AppMain.UI.HelpDocComponet"
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
         Title="SamSoarII" Height="350" Width="525" WindowState="Maximized">
@@ -31,6 +32,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}" Executed="OnShowSimulateTreeViewCommand" CanExecute="ShowSimulateTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowMonitorCommand}" Executed="OnShowMonitorCommand" CanExecute="ShowMonitorCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowOutputCommand}" Executed="OnShowOutputCommand" CanExecute="ShowOutputCanExecute"></CommandBinding>
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
@@ -49,6 +51,9 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuStartCommand}" Executed="OnSimuStartCommandExecute" CanExecute="SimuStartCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Executed="OnSimuPauseCommandExecute" CanExecute="SimuPauseCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuStopCommand}" Executed="OnSimuStopCommandExecute" CanExecute="SimuStopCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ClosePage}" Executed="ClosePageExecuteCommand" CanExecute="ClosePageCanExecuteCommand"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}" Executed="ScrollToLeftCommandExecute" CanExecute="ScrollToLeftCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}" Executed="ScrollToRightCommandExecute" CanExecute="ScrollToRightCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -202,7 +207,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="错误列表"></MenuItem>
-                <MenuItem Header="输出"></MenuItem>
+                <MenuItem Header="输出" Command="{x:Static app:GlobalCommand.ShowOutputCommand}"></MenuItem>
                 <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowMonitorCommand}"></MenuItem>
                 <MenuItem Header="仿真图表"></MenuItem>
             </MenuItem>
@@ -245,7 +250,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="帮助(_H)" Margin="0,-4,0,0">
-                <MenuItem Header="查看帮助"></MenuItem>
+                <MenuItem Header="查看帮助" Click="OnShowHelpDocWindow"></MenuItem>
                 <MenuItem Header="在线升级"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="关于" Click="OnShowAboutDialog"></MenuItem>
@@ -361,10 +366,6 @@
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="LAOutput" Title="输出" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
                                 <proj:ReportOutputModel x:Name="OutputModel"/>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAInst" Title="输出" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>

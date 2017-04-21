@@ -20,6 +20,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.AppMain.UI.HelpDocComponet;
+using System.Windows.Media.Animation;
 using Xceed.Wpf.AvalonDock.Themes;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Global;
@@ -34,7 +36,7 @@ namespace SamSoarII.AppMain.UI
     public partial class MainWindow : Window
     {
         private InteractionFacade _interactionFacade;
-
+        private CanAnimationScroll MainScroll;
         public LayoutAnchorControl LACProj;
         public LayoutAnchorControl LACSimuProj;
         public LayoutAnchorControl LACMonitor;
@@ -48,6 +50,20 @@ namespace SamSoarII.AppMain.UI
 
             _interactionFacade = new InteractionFacade(this);
             this.Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.Name == "elementList")
+                {
+                    window.Closing -= ((ElementList)window).OnClosing;
+                    window.Close();
+                    break;
+                }
+            }
         }
 
         private void InitializeAvalonDock()
@@ -69,6 +85,7 @@ namespace SamSoarII.AppMain.UI
             side = LayoutSetting.GetDefaultSideAnchorable(LAMonitor.Title);
             LAMonitor.ReplaceSide(side);
             side = LayoutSetting.GetDefaultSideAnchorable(LAOutput.Title);
+            LAOutput.ReplaceSide(side);
             LAProj.Hide();
             LASimuProj.Hide();
             LAMonitor.Hide();
@@ -116,7 +133,7 @@ namespace SamSoarII.AppMain.UI
             TreeViewGrid.Children.Clear();
             TreeViewGrid.Children.Add(treeview);
         }
-
+        
         #region Event handler
         private void OnCommentModeToggle(object sender, RoutedEventArgs e)
         {
@@ -133,11 +150,17 @@ namespace SamSoarII.AppMain.UI
             if(!GlobalSetting.LoadLadderScaleSuccess())
             {
                 ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(MainTab);
-                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 3100;
-                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 3100;
+                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 3700;
+                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 3700;
             }
+            MainScroll = GetMainScroll();
         }
-        
+
+        private CanAnimationScroll GetMainScroll()
+        {
+            return MainTab.InnerScroll;
+        }
+
         private void OnTabItemHeaderCancelButtonClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -199,8 +222,40 @@ namespace SamSoarII.AppMain.UI
             return ret;
         }
 
+        public MessageBoxResult ShowSaveYesNoCancelDialog()
+        {
+            string title = "确认保存";
+            string text = String.Format("{0:s}已经更改，是否保存？", _interactionFacade.ProjectModel.ProjectName);
+            return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+        }
 
         #region Command can Execute
+        private void ClosePageCanExecuteCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = MainTab.SelectedItem != null;
+        }
+        private void ScrollToRightCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (MainScroll == null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = MainScroll.ScrollableWidth != 0;
+            }
+        }
+        private void ScrollToLeftCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (MainScroll == null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = MainScroll.HorizontalOffset != 0;
+            }
+        }
         private void SaveCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -259,6 +314,8 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+
+
         private void ShowProjectTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null && SimulateHelper.SModel == null)
@@ -295,6 +352,11 @@ namespace SamSoarII.AppMain.UI
             {
                 e.CanExecute = false;
             }
+        }
+
+        private void ShowOutputCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
 
         private void CompileCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -393,10 +455,20 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
-
-
+        
         #region Command Execute
-
+        private void ClosePageExecuteCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainTab.CloseItem(MainTab.SelectedItem as ITabItem);
+        }
+        private void ScrollToLeftCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ScrollExecute(ScrollDirection.Left);
+        }
+        private void ScrollToRightCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ScrollExecute(ScrollDirection.Right);
+        }
         private void OnZoomInCommandExecute(object sender, RoutedEventArgs e)
         {
             GlobalSetting.LadderScaleX += 0.1;
@@ -422,6 +494,11 @@ namespace SamSoarII.AppMain.UI
         private void OnShowMonitorCommand(object sender, RoutedEventArgs e)
         {
             LACMonitor.Show();
+        }
+
+        private void OnShowOutputCommand(object sender, RoutedEventArgs e)
+        {
+            LACOutput.Show();
         }
 
         private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -454,6 +531,26 @@ namespace SamSoarII.AppMain.UI
 
         private void OnNewProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (_interactionFacade.ProjectModel != null 
+             && _interactionFacade.ProjectModel.IsModify)
+            {
+                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                switch (mbret)
+                {
+                    case MessageBoxResult.Yes:
+                        OnSaveProjectExecute(sender, e);
+                        _interactionFacade.ProjectModel.IsModify = false;
+                        OnNewProjectExecute(sender, e);
+                        return;
+                    case MessageBoxResult.No:
+                        _interactionFacade.ProjectModel.IsModify = false;
+                        OnNewProjectExecute(sender, e);
+                        return;
+                    case MessageBoxResult.Cancel:
+                    default:
+                        return;
+                }
+            }
             NewProjectDialog newProjectDialog;
             using (newProjectDialog = new NewProjectDialog())
             {
@@ -477,6 +574,7 @@ namespace SamSoarII.AppMain.UI
                         MessageBox.Show("指定路径已存在同名文件");
                         return;
                     }
+                    PLCDevice.PLCDeviceManager.SetSelectDeviceType(newProjectDialog.Type);
                     CreateProject(name, fullFileName);
                     newProjectDialog.Close();
                 };
@@ -486,6 +584,26 @@ namespace SamSoarII.AppMain.UI
 
         private void OnOpenProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (_interactionFacade.ProjectModel != null
+             && _interactionFacade.ProjectModel.IsModify)
+            {
+                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                switch (mbret)
+                {
+                    case MessageBoxResult.Yes:
+                        OnSaveProjectExecute(sender, e);
+                        _interactionFacade.ProjectModel.IsModify = false;
+                        OnOpenProjectExecute(sender, e);
+                        return;
+                    case MessageBoxResult.No:
+                        _interactionFacade.ProjectModel.IsModify = false;
+                        OnOpenProjectExecute(sender, e);
+                        return;
+                    case MessageBoxResult.Cancel:
+                    default:
+                        return;
+                }
+            }
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "ssp文件|*.ssp";
             if (openFileDialog.ShowDialog() == true)
@@ -542,11 +660,11 @@ namespace SamSoarII.AppMain.UI
             }
             else if (SimulateModeButton.IsChecked == false)
             {
-                if (SimulateHelper.Close() == SimulateHelper.CLOSE_OK)
+                if (SimulateHelper.Close(_interactionFacade) == SimulateHelper.CLOSE_OK)
                 {
                     LASimuProj.Hide();
                     LAMonitor.Hide();
-                    LACOutput.Show();
+                    LACProj.Show();
                     SimuToolBarTray.Visibility = Visibility.Collapsed;
                 }
                 else
@@ -621,6 +739,11 @@ namespace SamSoarII.AppMain.UI
         {
             ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel);
             dialog.ShowDialog();
+        }
+        private void OnShowHelpDocWindow(object sender, RoutedEventArgs e)
+        {
+            HelpDocWindow helpDocWindow = new HelpDocWindow();
+            helpDocWindow.Show();
         }
 
         private void OnShowOptionDialogCommandExecute(object sender, RoutedEventArgs e)
@@ -730,6 +853,35 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        
+        private void ScrollToLeftAnimation()
+        {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = MainScroll.CanChangeHorizontalOffset;
+            animation.To = Math.Max(0, MainScroll.CanChangeHorizontalOffset - 70);
+            animation.Duration = new Duration(new TimeSpan(1500000));
+            MainScroll.BeginAnimation(CanAnimationScroll.CanChangeHorizontalOffsetProperty, animation);
+        }
+        private void ScrollToRightAnimation()
+        {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = MainScroll.CanChangeHorizontalOffset;
+            animation.To = MainScroll.CanChangeHorizontalOffset + Math.Min(70, MainScroll.ScrollableWidth);
+            animation.Duration = new Duration(new TimeSpan(1500000));
+            MainScroll.BeginAnimation(CanAnimationScroll.CanChangeHorizontalOffsetProperty, animation);
+        }
+        private void ScrollExecute(ScrollDirection direction)
+        {
+            switch (direction)
+            {
+                case ScrollDirection.Left:
+                    ScrollToLeftAnimation();
+                    break;
+                case ScrollDirection.Right:
+                    ScrollToRightAnimation();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

@@ -4,14 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:dev="clr-namespace:SamSoarII.PLCDevice;assembly=SamSoarII.PLCDevice"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="PLCTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dev:PLCDeviceType"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
     <Grid Margin="30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" SelectionChanged="ListBox_SelectionChanged">
+        <Grid Grid.Column="1" x:Name="ContentGrid"></Grid>
+        <ListBox Grid.Column="0" ItemsSource="{Binding Source={StaticResource PLCTypeProvider}}" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.Resources>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Style.Triggers>
@@ -23,13 +33,6 @@
                     <Setter Property="Height" Value="30"></Setter>
                 </Style>
             </ListBox.Resources>
-            <ListBoxItem>FGs16MR</ListBoxItem>
-            <ListBoxItem>FGs16MT</ListBoxItem>
-            <ListBoxItem>FGs32MR</ListBoxItem>
-            <ListBoxItem>FGs32MT</ListBoxItem>
-            <ListBoxItem>FGs64MR</ListBoxItem>
-            <ListBoxItem>FGs64MT</ListBoxItem>
         </ListBox>
-        <Grid Grid.Column="1" x:Name="ContentGrid"></Grid>
     </Grid>
 </UserControl>

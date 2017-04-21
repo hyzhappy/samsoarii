@@ -1,4 +1,5 @@
-﻿using SamSoarII.LadderInstViewModel;
+﻿using SamSoarII.AppMain.Project;
+using SamSoarII.LadderInstViewModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
@@ -114,10 +115,10 @@ namespace SamSoarII.AppMain.UI
                     switch (index)
                     {
                         case 0:case 1:case 2:case 3:case 6:case 7:case 8:
-                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0,1)); }).ToList();
+                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 1)); }).ToList();
                             break;
                         case 9:case 12:case 13:
-                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0,2)); }).ToList();
+                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 2)); }).ToList();
                             break;
                         case 4:case 5:
                             tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 1)) && !x.Name.Contains("V"); }).ToList();
@@ -212,12 +213,16 @@ namespace SamSoarII.AppMain.UI
         public ElementList()
         {
             InitializeComponent();
-            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             DataContext = this;
         }
         public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
         {
-            var valueCommentAlias = _elementCollection.Where(x => { return x.Name == e.ValueString; }).First();
+            IEnumerable<ValueCommentAlias> fit = _elementCollection.Where(x => { return x.Name == e.ValueString; });
+            if (fit.Count() == 0)
+            {
+                return;
+            }
+            var valueCommentAlias = fit.First();
             List<TextBlock> mappedModels;
             switch (e.Type)
             {
@@ -501,7 +506,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        private void OnClosing(object sender, CancelEventArgs e)
+        public void OnClosing(object sender, CancelEventArgs e)
         {
             Window window = sender as Window;
             e.Cancel = true;
@@ -546,18 +551,6 @@ namespace SamSoarII.AppMain.UI
                 NavigateToNetwork.Invoke(new NavigateToNetworkEventArgs(netWorkNum,refLadderName,x,y));
             }
         }
-        //private void ElementDataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (ElementDataGrid.SelectedItems.Count == 1)
-        //    {
-        //        ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
-        //    }
-        //}
-        //private void ElementDataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    ElementDataGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
-        //}
-
         private void OnDetailShowClick(object sender, RoutedEventArgs e)
         {
             _showDetails = !_showDetails;

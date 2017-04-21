@@ -32,9 +32,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         private string _oldname;
-
-        private object _renamedItem;
-
+        
         private bool _isInEditMode;
         public bool IsInEditMode
         {
@@ -50,17 +48,75 @@ namespace SamSoarII.AppMain.UI
 
         public event ShowTabItemEventHandler TabItemOpened = delegate { };
 
+        public event RoutedEventHandler RoutineCompile = delegate { };
+
         public event RoutineRenamedEventHandler RoutineRenamed = delegate { };
 
         public event RoutedEventHandler RoutineRemoved = delegate { };
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        public event NavigateToNetworkEventHandler NavigatedToNetwork = delegate { };
+
         public ProjectTreeView(ProjectModel project)
         {
             InitializeComponent();
             _projectModel = project;
-            this.DataContext = Project;
+            DataContext = Project;
+            Project.RefNetworksBriefChanged += Project_RefNetworksBriefChanged;
+            Project.MTVModel.ModelChanged += OnModbusChanged;
+            OnModbusChanged(this, new RoutedEventArgs());
+        }
+
+        private void Project_RefNetworksBriefChanged(RefNetworksBriefChangedEventArgs e)
+        {
+            switch (e.Type)
+            {
+                case ChangeType.Add:
+                    if (e.Routine.IsMainLadder)
+                    {
+                        MainRoutineTreeItem.ItemsSource = Project.RefNetworksBrief[e.Routine];
+                    }
+                    else
+                    {
+                        foreach (var item in SubRoutineTreeItems.ItemsSource)
+                        {
+                            if (((TreeViewItem)item).Header == e.Routine)
+                            {
+                                ((TreeViewItem)item).ContextMenu = (ContextMenu)FindResource("SubRoutineContextMenu");
+                                ((TreeViewItem)item).MouseDoubleClick += OnRoutineTreeItemDoubleClick;
+                                ((TreeViewItem)item).HeaderTemplate = (DataTemplate)FindResource("ProgramTemplate");
+                                ((TreeViewItem)item).IsExpanded = true;
+                                ((TreeViewItem)item).Selected -= OnSelected;
+                                ((TreeViewItem)item).ItemsSource = Project.RefNetworksBrief[e.Routine];
+                            }
+                        }
+                    }
+                    break;
+                case ChangeType.Remove:
+                    break;
+                case ChangeType.Modify:
+                    if (MainRoutineTreeItem.Header == e.Routine)
+                    {
+                        MainRoutineTreeItem.ItemsSource = Project.RefNetworksBrief[e.Routine];
+                    }
+                    else
+                    {
+                        foreach (var item in SubRoutineTreeItems.ItemsSource)
+                        {
+                            if (((TreeViewItem)item).Header == e.Routine)
+                            {
+                                ((TreeViewItem)item).ItemsSource = Project.RefNetworksBrief[e.Routine];
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case ChangeType.Clear:
+                    break;
+                default:
+                    break;
+            }
         }
 
         #region Event handler
@@ -154,6 +210,24 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+
+        private void OnCompileRoutine(object sender, RoutedEventArgs e)
+        {
+            var menuitem = sender as MenuItem;
+            if (menuitem != null)
+            {
+                var contextmenu = menuitem.Parent as ContextMenu;
+                if (contextmenu != null)
+                {
+                    var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
+                    if (treeviewitem != null)
+                    {
+                        RoutineCompile.Invoke(treeviewitem.Header, new RoutedEventArgs());
+                    }
+                }
+            }
+        }
+
         private void OnRemoveRoutine(object sender, RoutedEventArgs e)
         {
             var menuitem = sender as MenuItem;
@@ -245,7 +319,128 @@ namespace SamSoarII.AppMain.UI
                 _elementList.Show();
             }
         }
+        private void OnSelected(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = sender as TreeViewItem;
+            if (item.Header.GetType() == typeof(string))
+            {
+                var parent = VisualTreeHelper.GetParent(item);
+                while (parent.GetType() != typeof(TreeViewItem))
+                {
+                    parent = VisualTreeHelper.GetParent(parent);
+                }
+                int networkNum = int.Parse(item.Header.ToString().Substring(0,1));
+                LadderDiagramViewModel model = (parent as TreeViewItem).Header as LadderDiagramViewModel;
+                NavigatedToNetwork.Invoke(new NavigateToNetworkEventArgs(networkNum,model.ProgramName,0,0));
+            }
+            e.Handled = true;
+        }
+
+        private void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem item = sender as TreeViewItem;
+            if (item.Header is string)
+            {
+                e.Handled = true;
+            }
+        }
+        #region Modbus
+        private TreeViewItem _GetTVItemFromMItem(MenuItem mitem)
+        {
+            if (mitem.Parent is ContextMenu)
+            {
+                ContextMenu cmenu = (ContextMenu)(mitem.Parent);
+                if (cmenu.PlacementTarget is TreeViewItem)
+                {
+                    TreeViewItem tvitem = (TreeViewItem)(cmenu.PlacementTarget);
+                    return tvitem;
+                }
+            }
+            return null;
+        }
+
+        private void OnModbusChanged(object sender, RoutedEventArgs e)
+        {
+            TVI_Modbus.Items.Clear();
+            foreach (ModbusTableModel model in Project.MTVModel.Models)
+            {
+                TreeViewItem tvitem = new TreeViewItem();
+                tvitem.Header = model.Name;
+                TVI_Modbus.Items.Add(tvitem);
+            }
+        }
+
+        private void OnModbusCreated(object sender, RoutedEventArgs e)
+        {
+            TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
+            Project.MTVModel.AddModel();
+        }
+
+        private void OnModbusDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == TVI_Modbus)
+            {
+                TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
+            }
+            else if (sender is TreeViewItem)
+            {
+                OnModbusOpened(sender, new RoutedEventArgs());
+            }
+        }
+        
+        private void OnModbusOpened(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+            {
+                MenuItem mitem = (MenuItem)(sender);
+                sender = _GetTVItemFromMItem(mitem);
+            }
+            if (sender is TreeViewItem)
+            {
+                string header = ((TreeViewItem)(sender)).Header.ToString();
+                IEnumerable<ModbusTableModel> fit = Project.MTVModel.Models.Where(
+                    (ModbusTableModel model) => { return model.Name.Equals(header); });
+                if (fit.Count() > 0)
+                    Project.MTVModel.Current = fit.First();
+                if (Project.MTVModel.Current != null)
+                    TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
+                else
+                    MessageBox.Show(String.Format("错误：找不到{0:s}。", header));
+            }
+        }
+
+        private void OnModbusRenamed(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+            {
+                MenuItem mitem = (MenuItem)(sender);
+                sender = _GetTVItemFromMItem(mitem);
+            }
+            if (sender is TreeViewItem)
+            {
+                OnModbusOpened(sender, e);
+                if (Project.MTVModel.Current != null)
+                    Project.MTVModel.RenameModel();
+            }
+        }
+
+        private void OnModbusRemoved(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+            {
+                MenuItem mitem = (MenuItem)(sender);
+                sender = _GetTVItemFromMItem(mitem);
+            }
+            if (sender is TreeViewItem)
+            {
+                OnModbusOpened(sender, e);
+                if (Project.MTVModel.Current != null)
+                    Project.MTVModel.RemoveModel();
+            }
+        }
+
         #endregion
 
+        #endregion
     }
 }
