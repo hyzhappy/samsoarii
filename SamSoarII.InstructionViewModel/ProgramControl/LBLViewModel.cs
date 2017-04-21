@@ -25,7 +25,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.LBLIndex = value;
-                BottomTextBlock.Text = string.Format("L : {0}", _model.LBLIndex.ValueShowString);
+                BottomTextBlock.Text = string.Format("L:{0}", _model.LBLIndex.ValueShowString);
             }
         }
         public override BaseModel Model

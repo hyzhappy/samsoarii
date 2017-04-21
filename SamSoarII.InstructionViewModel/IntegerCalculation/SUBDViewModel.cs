@@ -26,7 +26,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue1 = value;
-                MiddleTextBlock1.Text = _model.InputValue1.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("IN:{0:s}", _model.InputValue1.ValueShowString);
             }
         }
         public DoubleWordValue InputValue2
@@ -38,7 +38,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue2 = value;
-                MiddleTextBlock2.Text = _model.InputValue2.ValueShowString;
+                MiddleTextBlock2.Text = String.Format("OUT:{0:s}", _model.InputValue2.ValueShowString);
             }
         }
         public DoubleWordValue OutputValue

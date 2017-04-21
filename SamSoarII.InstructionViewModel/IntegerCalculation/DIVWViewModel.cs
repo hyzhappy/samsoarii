@@ -26,7 +26,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue1 = value;
-                MiddleTextBlock1.Text = _model.InputValue1.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("IN1:{0:s}", _model.InputValue1.ValueShowString);
             }
         }
         public WordValue InputValue2
@@ -38,7 +38,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue2 = value;
-                MiddleTextBlock2.Text = _model.InputValue2.ValueShowString;
+                MiddleTextBlock2.Text = String.Format("IN2:{0:s}", _model.InputValue2.ValueShowString);
             }
         }
         public WordValue OutputValue
@@ -50,7 +50,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.OutputValue = value;
-                BottomTextBlock.Text = _model.OutputValue.ValueShowString;
+                BottomTextBlock.Text = String.Format("OUT:{0:s}", _model.OutputValue.ValueShowString);
             }
         }
         public override BaseModel Model

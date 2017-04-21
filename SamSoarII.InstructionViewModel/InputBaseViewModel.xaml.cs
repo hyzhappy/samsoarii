@@ -94,6 +94,7 @@ namespace SamSoarII.LadderInstViewModel
         {
             InitializeComponent();
             IsCommentMode = false;
+            DataContext = this;
         }
 
         private void UpdateHeightProperty()

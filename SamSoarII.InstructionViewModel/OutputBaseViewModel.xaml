@@ -6,27 +6,34 @@
              xmlns:local="clr-namespace:SamSoarII.LadderInstViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Width="300" Height="300" Background="Transparent">
+    <local:BaseViewModel.Resources>
+        <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type local:FontManager}" MethodName="GetFontDataProvider">
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="ColorData" ObjectType="{x:Type local:ColorManager}" MethodName="GetColorDataProvider">
+        </ObjectDataProvider>
+    </local:BaseViewModel.Resources>
     <StackPanel>
         <Canvas Width="300" Height="300">
             <Line X1="0" Y1="100" X2="72" Y2="100" Stroke="Black" StrokeThickness="4"></Line>
             <Line X1="228" Y1="100" X2="300" Y2="100" Stroke="Black" StrokeThickness="4"></Line>
             <Path Stroke="Black" StrokeThickness="4" Data="M100,50 A60,60 0 0 0 100,150"></Path>
             <Path Stroke="Black" StrokeThickness="4" Data="M200,50 A60,60 0 0 1 200,150"></Path>
-            <TextBlock x:Name="ValueTextBlock"  Canvas.Top="10" Canvas.Left="0" Height="40" Width="300" TextAlignment="Center" FontSize="40" Foreground="BlueViolet"></TextBlock>
+            <TextBlock x:Name="ValueTextBlock"  Canvas.Top="0" Canvas.Left="0" Height="50" Width="300" TextAlignment="Center" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}"></TextBlock>
             <Canvas Name="CenterCanvas" Width="100" Height="100" Canvas.Top="50" Canvas.Left="100">
                 <Rectangle Width="60" Height="60" Canvas.Top="20" Canvas.Left="20" Fill="Blue" Visibility="Hidden" Opacity="0.5"></Rectangle>
-                <TextBlock x:Name="CenterTextBlock" Width="100" Canvas.Top="20" FontSize="50" TextAlignment="Center">
+                <TextBlock x:Name="CenterTextBlock" Width="100" Canvas.Top="20" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" TextAlignment="Center" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}">
                 </TextBlock>
             </Canvas>
-            <TextBlock x:Name="CountTextBlock" Canvas.Left="0" Canvas.Top="150" Width="300" Height="40" TextAlignment="Center" FontSize="40" Foreground="BlueViolet">
+            <TextBlock x:Name="CountTextBlock" Canvas.Left="0" Canvas.Top="150" Width="300" Height="50" TextAlignment="Center" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}">
 
             </TextBlock>
         </Canvas>
         <StackPanel x:Name="CommentArea"  Width="300" Height="200">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="FontSize" Value="32"></Setter>
-                    <Setter Property="Foreground" Value="Green"></Setter>
+                    <Setter Property="FontSize" Value="{Binding Source={StaticResource FontData},Path=SelectFontSize}"></Setter>
+                    <Setter Property="FontFamily" Value="{Binding Source={StaticResource FontData},Path=SelectFontFamily}"></Setter>
+                    <Setter Property="Foreground" Value="{Binding Source={StaticResource ColorData},Path=SelectColor}"></Setter>
                     <Setter Property="TextWrapping" Value="Wrap"></Setter>
                     <Setter Property="Margin" Value="20, 20, 0, 0"></Setter>
                 </Style>

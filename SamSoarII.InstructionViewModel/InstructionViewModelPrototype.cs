@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
+using SamSoarII.LadderInstViewModel.Counter;
+using SamSoarII.LadderInstViewModel.Interrupt;
+using SamSoarII.LadderInstViewModel;
+using SamSoarII.LadderInstViewModel.Pulse;
+using SamSoarII.LadderInstViewModel.Auxiliar;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class LadderInstViewModelPrototype
@@ -111,11 +117,20 @@ namespace SamSoarII.LadderInstViewModel
             Add(new DECViewModel());
             Add(new DECDViewModel());
             //
+            Add(new TONViewModel());
+            Add(new TOFViewModel());
+            Add(new TONRViewModel());
+            //
+            Add(new CTUViewModel());
+            Add(new CTDViewModel());
+            Add(new CTUDViewModel());
+            //
             Add(new FORViewModel());
             Add(new NEXTViewModel());
             Add(new JMPViewModel());
             Add(new LBLViewModel());
             Add(new CALLViewModel());
+            Add(new CALLMViewModel());
             //
             Add(new SHLViewModel());
             Add(new SHLDViewModel());
@@ -126,14 +141,80 @@ namespace SamSoarII.LadderInstViewModel
             Add(new RORViewModel());
             Add(new RORDViewModel());
             //
+            Add(new ATCHViewModel());
+            Add(new DTCHViewModel());
+            Add(new EIViewModel());
+            Add(new DIViewModel());
+            //
             Add(new TRDViewModel());
             Add(new TWRViewModel());
+            //
+            Add(new MBUSViewModel());
+            Add(new SENDViewModel());
+            Add(new REVViewModel());
+            //
+            Add(new PLSFViewModel());
+            Add(new DPLSFViewModel());
+            Add(new PWMViewModel());
+            Add(new DPWMViewModel());
+            Add(new PLSYViewModel());
+            Add(new DPLSYViewModel());
+            Add(new PLSRViewModel());
+            Add(new DPLSRViewModel());
+            Add(new PLSRDViewModel());
+            Add(new DPLSRDViewModel());
+            Add(new PLSNEXTViewModel());
+            Add(new PLSSTOPViewModel());
+            Add(new ZRNViewModel());
+            Add(new DZRNViewModel());
+            Add(new PTOViewModel());
+            Add(new DRVIViewModel());
+            Add(new DDRVIViewModel());
+            //
+            Add(new HCNTViewModel());
+            //
+            Add(new LOGViewModel());
+            Add(new POWViewModel());
+            Add(new FACTViewModel());
+            Add(new CMPViewModel());
+            Add(new CMPDViewModel());
+            Add(new CMPFViewModel());
+            Add(new ZCPViewModel());
+            Add(new ZCPDViewModel());
+            Add(new ZCPFViewModel());
+            Add(new NEGViewModel());
+            Add(new NEGDViewModel());
+            Add(new XCHViewModel());
+            Add(new XCHDViewModel());
+            Add(new XCHFViewModel());
+            Add(new CMLViewModel());
+            Add(new CMLDViewModel());
+            Add(new SMOVViewModel());
+            Add(new FMOVViewModel());
+            Add(new FMOVDViewModel());
         }
 
         private static void Add(BaseViewModel viewmodel)
         {
-            _elementCatalog.Add(viewmodel.GetCatalogID(), viewmodel);
-            _elementName.Add(viewmodel.InstructionName, viewmodel);
+            if (_elementCatalog.ContainsKey(viewmodel.GetCatalogID()))
+            {
+                Console.Write("Already contain catalogID {0:d} {1:s}\n",
+                    viewmodel.GetCatalogID(), viewmodel.ToString());
+            }
+            else
+            {
+                _elementCatalog.Add(viewmodel.GetCatalogID(), viewmodel);
+            }
+            if (_elementName.ContainsKey(viewmodel.InstructionName))
+            {
+
+                Console.Write("Already contain Name {0:s} {1:s}\n",
+                     viewmodel.InstructionName, viewmodel.ToString());
+            }
+            else
+            {
+                _elementName.Add(viewmodel.InstructionName, viewmodel);
+            }
         }
 
         public static IEnumerable<BaseViewModel> GetElementViewModels()

@@ -137,6 +137,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine6("Out", OutputValue);
             return dialog;
         }
+
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = InputValue1.ValueString;
@@ -159,6 +160,7 @@ namespace SamSoarII.LadderInstViewModel
                 throw new ValueParseException("Unexpected input");
             }
         }
+
         public override void UpdateCommentContent()
         {
             if (InputValue1 != WordValue.Null)

@@ -26,7 +26,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock1.Text = _model.SourceValue.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("S:{0:s}", _model.SourceValue.ValueShowString);
             }
         }
         public FloatValue DestinationValue
@@ -38,7 +38,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = _model.DestinationValue.ValueShowString;
+                BottomTextBlock.Text = String.Format("D:{0:s}", _model.DestinationValue.ValueShowString);
             }
         }
         public override BaseModel Model

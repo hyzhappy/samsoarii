@@ -25,7 +25,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock2.Text = string.Format("S : {0}", _model.SourceValue.ValueString);
+                MiddleTextBlock2.Text = string.Format("S:{0}", _model.SourceValue.ValueString);
             }
         }
         public WordValue Count
@@ -37,7 +37,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                MiddleTextBlock3.Text = string.Format("N : {0}", _model.Count.ValueString);
+                MiddleTextBlock3.Text = string.Format("N:{0}", _model.Count.ValueString);
             }
         }
         public DoubleWordValue DestinationValue
@@ -49,7 +49,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = string.Format("D : {0}", _model.DestinationValue.ValueString);
+                BottomTextBlock.Text = string.Format("D:{0}", _model.DestinationValue.ValueString);
             }
         }
 

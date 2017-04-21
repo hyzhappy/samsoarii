@@ -25,7 +25,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                BottomTextBlock.Text = string.Format("CNT : {0}", _model.Count.ValueShowString);
+                BottomTextBlock.Text = string.Format("CNT:{0}", _model.Count.ValueShowString);
             }
         }
         public override BaseModel Model
