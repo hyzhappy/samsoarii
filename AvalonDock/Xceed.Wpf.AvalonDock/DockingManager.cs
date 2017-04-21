@@ -1280,6 +1280,14 @@ namespace Xceed.Wpf.AvalonDock
             if (_logicalChildren.Select(ch => ch.GetValueOrDefault<object>()).Contains(element))
                 return;
 
+
+            if (element is UserControl)
+            {
+                UserControl userctrl = (UserControl)(element);
+                if (userctrl.Parent != null)
+                    return;
+            }
+
             _logicalChildren.Add(new WeakReference(element));
             AddLogicalChild(element);
         }
