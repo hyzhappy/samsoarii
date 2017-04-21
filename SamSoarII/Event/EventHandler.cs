@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.AppMain
 {
+    public delegate void LadderElementChangedHandler(object sender, LadderElementChangedArgs e);
     public delegate void RoutineRenamedEventHandler(object sender, RoutineRenamedEventArgs e);
     public delegate void RoutineChangedEventHandler(object sender, RoutineChangedEventArgs e);
     public delegate void ShowTabItemEventHandler(object sender, ShowTabItemEventArgs e);

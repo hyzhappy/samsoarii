@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.UserInterface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,18 +35,18 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             {
                 // (rW, wD)
                 case "WTOD":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "DWORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "DWORD");
                     break;
                 // (rD, wF)
                 case "DTOW":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "DWORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "DWORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
                     break;
                 // (rD, wF)
                 case "DTOF":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "DWORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "FLOAT");
+                    this[1] = _parent.GetVariableUnit(texts[1], "DWORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "FLOAT");
                     break;
                 // (rD, wD)
                 /*
@@ -57,8 +58,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 // (rF, wD)
                 case "ROUND":
                 case "TURNC":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "FLOAT");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "DWORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "FLOAT");
+                    this[2] = _parent.GetVariableUnit(texts[2], "DWORD");
                     break;
                 // (rW, wW)
                 case "BIN":
@@ -67,16 +68,16 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "MOV":
                 case "INC":
                 case "DEC":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
                     break;
                 // (rD, wD)
                 case "INVD":
                 case "MOVD":
                 case "INCD":
                 case "DECD":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "DWORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "DWORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "DWORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "DWORD");
                     break;
                 // (rF, wF)
                 case "MOVF":
@@ -86,8 +87,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "TAN":
                 case "LN":
                 case "EXP":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "FLOAT");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "FLOAT");
+                    this[1] = _parent.GetVariableUnit(texts[1], "FLOAT");
+                    this[2] = _parent.GetVariableUnit(texts[2], "FLOAT");
                     break;
                 // (rW, rW, wW)
                 case "ADD":
@@ -101,9 +102,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "SHR":
                 case "ROL":
                 case "ROR":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
-                    this._args3 = _parent.GetVariableUnit(texts[3], "WORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[3] = _parent.GetVariableUnit(texts[3], "WORD");
                     break;
                 // (rD, rD, wD)
                 case "ADDD":
@@ -117,39 +118,39 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "SHRD":
                 case "ROLD":
                 case "RORD":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "DWORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "DWORD");
-                    this._args3 = _parent.GetVariableUnit(texts[3], "DWORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "DWORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "DWORD");
+                    this[3] = _parent.GetVariableUnit(texts[3], "DWORD");
                     break;
                 // (rW, rW, wD)
                 case "MUL":
                 case "DIV":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
-                    this._args3 = _parent.GetVariableUnit(texts[3], "DWORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[3] = _parent.GetVariableUnit(texts[3], "DWORD");
                     break;
                 // (rF, rF, wF)
                 case "ADDF":
                 case "SUBF":
                 case "MULF":
                 case "DIVF":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "FLOAT");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "FLOAT");
-                    this._args3 = _parent.GetVariableUnit(texts[3], "FLOAT");
+                    this[1] = _parent.GetVariableUnit(texts[1], "FLOAT");
+                    this[2] = _parent.GetVariableUnit(texts[2], "FLOAT");
+                    this[3] = _parent.GetVariableUnit(texts[3], "FLOAT");
                     break;
                 // (rW, wW, rW)
                 case "MVBLK":
                 case "FMOV":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
-                    this._args3 = _parent.GetVariableUnit(texts[3], "WORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[3] = _parent.GetVariableUnit(texts[3], "WORD");
                     break;
                 // (rD, wD, rD)
                 case "MVDBLK":
                 case "FMOVD":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "DWORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "DWORD");
-                    this._args3 = _parent.GetVariableUnit(texts[3], "DWORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "DWORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "DWORD");
+                    this[3] = _parent.GetVariableUnit(texts[3], "DWORD");
                     break;
                 // (rwW, rW, rwB)
                 /*
@@ -168,10 +169,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "CTU":
                 case "CTD":
                 case "CTUD":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
                     // T/C + 地址
-                    this._args3 = _parent.GetVariableUnit(texts[1][0] + texts[1].Substring(2), "BIT");
+                    this[3] = _parent.GetVariableUnit(texts[1][0] + texts[1].Substring(2), "BIT");
                     break;
                 // (rW)
                 case "FOR":
@@ -199,11 +200,11 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 // (rW, rW, rW, wW, rW)
                 case "SMOV":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
-                    this._args3 = _parent.GetVariableUnit(texts[3], "WORD");
-                    this._args4 = _parent.GetVariableUnit(texts[4], "WORD");
-                    this._args5 = _parent.GetVariableUnit(texts[5], "WORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[3] = _parent.GetVariableUnit(texts[3], "WORD");
+                    this[4] = _parent.GetVariableUnit(texts[4], "WORD");
+                    this[5] = _parent.GetVariableUnit(texts[5], "WORD");
                     break;
                 // (rS)
                 case "FUNC":
@@ -215,28 +216,171 @@ namespace SamSoarII.Simulation.Shell.ViewModel
 
         public override void Update()
         {
+            Dispatcher.Invoke(_Update);
+        }
+
+        private void _Update()
+        {
             TopTextBlock.Text = Inst;
-            if (_args1 != null)
+            if (this[1] != null)
             {
-                MiddleTextBlock1.Text = _args1.ToString();
+                MiddleTextBlock1.Text = this[1].ToString();
             }
-            if (_args2 != null)
+            if (this[2] != null)
             {
-                MiddleTextBlock2.Text = _args2.ToString();
+                MiddleTextBlock2.Text = this[2].ToString();
             }
-            if (_args3 != null)
+            if (this[3] != null)
             {
-                MiddleTextBlock3.Text = _args3.ToString();
+                MiddleTextBlock3.Text = this[3].ToString();
             }
-            if (_args4 != null)
+            if (this[4] != null)
             {
-                MiddleTextBlock4.Text = _args4.ToString();
+                MiddleTextBlock4.Text = this[4].ToString();
             }
-            if (_args5 != null)
+            if (this[5] != null)
             {
-                MiddleTextBlock1.Text = _args5.ToString();
+                MiddleTextBlock1.Text = this[5].ToString();
             }
-            
+        }
+
+        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            if (dialog != null)
+            {
+                return;
+            }
+            string[] labels = null;
+            string[] values = null;
+            string[] types = null;
+            switch (Inst)
+            {
+                // (InputValue, OutputValue)
+                case "WTOD":
+                case "DTOW":
+                case "DTOF":
+                case "ROUND":
+                case "TURNC":
+                case "BIN":
+                case "BCD":
+                case "INVW":
+                case "MOV":
+                case "INC":
+                case "DEC":
+                case "INVD":
+                case "MOVD":
+                case "INCD":
+                case "DECD":
+                case "MOVF":
+                case "SQRT":
+                case "SIN":
+                case "COS":
+                case "TAN":
+                case "LN":
+                case "EXP":
+                    labels = new string[2];
+                    values = new string[2];
+                    types = new string[2];
+                    labels[0] = String.Format("{0:s}(InputValue)", this[1].Name);
+                    labels[1] = String.Format("{0:s}(OutputValue)", this[2].Name);
+                    values[0] = String.Empty;
+                    values[1] = String.Empty;
+                    types[0] = this[1].Type;
+                    types[1] = this[2].Type;
+                    if (this[1].Islocked)
+                        values[0] = this[1].Value.ToString();
+                    if (this[2].Islocked)
+                        values[1] = this[2].Value.ToString();
+                    break;
+                // (InputValue1, InputValue2, OutputValue)
+                case "ADD":
+                case "SUB":
+                case "MULW":
+                case "DIVW":
+                case "ANDW":
+                case "ORW":
+                case "XORW":
+                case "SHL":
+                case "SHR":
+                case "ROL":
+                case "ROR":
+                case "ADDD":
+                case "SUBD":
+                case "MULD":
+                case "DIVD":
+                case "ANDD":
+                case "ORD":
+                case "XORD":
+                case "SHLD":
+                case "SHRD":
+                case "ROLD":
+                case "RORD":
+                case "MUL":
+                case "DIV":
+                case "ADDF":
+                case "SUBF":
+                case "MULF":
+                case "DIVF":
+                    labels = new string[3];
+                    values = new string[3];
+                    types = new string[3];
+                    labels[0] = String.Format("{0:s}(InputValue1)", this[1].Name);
+                    labels[1] = String.Format("{0:s}(InputValue2)", this[2].Name);
+                    labels[2] = String.Format("{0:s}(OutputValue)", this[3].Name);
+                    values[0] = String.Empty;
+                    values[1] = String.Empty;
+                    values[2] = String.Empty;
+                    types[0] = this[1].Type;
+                    types[1] = this[2].Type;
+                    types[2] = this[3].Type;
+                    if (this[1].Islocked)
+                        values[0] = this[1].Value.ToString();
+                    if (this[2].Islocked)
+                        values[1] = this[2].Value.ToString();
+                    if (this[3].Islocked)
+                        values[2] = this[3].Value.ToString();
+                    break;
+                // (SourceValue, DestinationValue, Count)
+                case "MVBLK":
+                case "FMOV":
+                case "MVDBLK":
+                case "FMOVD":
+                    labels = new string[3];
+                    values = new string[3];
+                    types = new string[3];
+                    labels[0] = String.Format("{0:s}(SourceValue)", this[1].Name);
+                    labels[1] = String.Format("{0:s}(DestinationValue)", this[2].Name);
+                    labels[2] = String.Format("{0:s}(Count)", this[3].Name);
+                    values[0] = String.Empty;
+                    values[1] = String.Empty;
+                    values[2] = String.Empty;
+                    types[0] = this[1].Type;
+                    types[1] = this[2].Type;
+                    types[2] = this[3].Type;
+                    if (this[1].Islocked)
+                        values[0] = this[1].Value.ToString();
+                    if (this[2].Islocked)
+                        values[1] = this[2].Value.ToString();
+                    if (this[3].Islocked)
+                        values[2] = this[3].Value.ToString();
+                    break;
+                // (rwW, rW, rwB)
+                case "TON":
+                case "TONR":
+                case "TOF":
+                case "CTU":
+                case "CTD":
+                case "CTUD":
+                    return;
+                default:
+                    return;
+            }
+            dialog = new SimuArgsDialog(labels, values, types);
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialog.EnsureClick += OnDialogEnsureClicked;
+            dialog.CancelClick += OnDialogCancelClicked;
+            dialog.ShowDialog();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class XORWViewModel : OutputRectBaseViewModel
     {
         private XORWModel _model;
-        private WordValue InputValue1
+        public WordValue InputValue1
         {
             get
             {
@@ -26,10 +26,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue1 = value;
-                MiddleTextBlock1.Text = _model.InputValue1.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("IN1:{0:s}", _model.InputValue1.ValueShowString);
             }
         }
-        private WordValue InputValue2
+        public WordValue InputValue2
         {
             get
             {
@@ -38,10 +38,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue2 = value;
-                MiddleTextBlock2.Text = _model.InputValue2.ValueShowString;
+                MiddleTextBlock2.Text = String.Format("IN2:{0:s}", _model.InputValue2.ValueShowString);
             }
         }
-        private WordValue OutputValue
+        public WordValue OutputValue
         {
             get
             {
@@ -50,7 +50,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.OutputValue = value;
-                BottomTextBlock.Text = _model.OutputValue.ValueShowString;
+                BottomTextBlock.Text = String.Format("OUT:{0:s}", _model.OutputValue.ValueShowString);
             }
         }
         public override BaseModel Model

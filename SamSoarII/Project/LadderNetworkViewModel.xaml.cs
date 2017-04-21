@@ -1,4 +1,6 @@
-﻿using SamSoarII.LadderInstModel;
+﻿using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.Extend.FuncBlockModel;
+using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.PLCCompiler;
 using SamSoarII.PLCDevice;
@@ -135,9 +137,32 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        
         private SortedDictionary<IntPoint, BaseViewModel> _ladderElements = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines = new SortedDictionary<IntPoint, VerticalLineViewModel>();
-
+        public BaseViewModel GetElementByPosition(int X, int Y)
+        {
+            IntPoint ip = new IntPoint();
+            ip.X = X;
+            ip.Y = Y;
+            if (_ladderElements.ContainsKey(ip))
+            {
+                return _ladderElements[ip];
+            }
+            return null;
+        }
+        public VerticalLineViewModel GetVerticalLineByPosition(int X, int Y)
+        {
+            IntPoint ip = new IntPoint();
+            ip.X = X;
+            ip.Y = Y;
+            if (_ladderVerticalLines.ContainsKey(ip))
+            {
+                return _ladderVerticalLines[ip];
+            }
+            return null;
+        }
+        
         #region Selection relative data
 
         public int SelectAreaOriginX
@@ -364,6 +389,10 @@ namespace SamSoarII.AppMain.Project
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
             }
+            LadderElementChangedArgs e = new LadderElementChangedArgs();
+            e.BVModel_old = oldele;
+            e.BVModel_new = element;
+            ElementChanged(this, e);
         }
         public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
@@ -373,6 +402,10 @@ namespace SamSoarII.AppMain.Project
                 vline.IsCommentMode = _isCommendMode;
                 _ladderVerticalLines.Add(p, vline);
                 LadderCanvas.Children.Add(vline);
+                LadderElementChangedArgs e = new LadderElementChangedArgs();
+                e.BVModel_old = null;
+                e.BVModel_new = vline;
+                VerticalLineChanged(this, e);
             }
         }
         public void RemoveElement(IntPoint pos)
@@ -384,6 +417,10 @@ namespace SamSoarII.AppMain.Project
                 _ladderElements.Remove(pos);
                 InstructionCommentManager.Unregister(ele);
                 ele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
+                LadderElementChangedArgs e = new LadderElementChangedArgs();
+                e.BVModel_old = ele;
+                e.BVModel_new = null;
+                ElementChanged(this, e);
             }
         }
         public void RemoveElement(int x, int y)
@@ -401,8 +438,12 @@ namespace SamSoarII.AppMain.Project
         {
             if (_ladderVerticalLines.ContainsKey(pos))
             {
+                LadderElementChangedArgs e = new LadderElementChangedArgs();
+                e.BVModel_old = _ladderVerticalLines[pos];
+                e.BVModel_new = null;
                 LadderCanvas.Children.Remove(_ladderVerticalLines[pos]);
                 _ladderVerticalLines.Remove(pos);
+                VerticalLineChanged(this, e);
             }
         }
         public void RemoveVerticalLine(int x, int y)
@@ -1962,21 +2003,79 @@ namespace SamSoarII.AppMain.Project
         }
         #endregion
         #region Event handlers
+        #region Relative to Element changed
+        public event LadderElementChangedHandler ElementChanged = delegate { };
+        public event LadderElementChangedHandler VerticalLineChanged = delegate { };
+        #endregion
+
         private void OnShowPropertyDialog(BaseViewModel sender, ShowPropertyDialogEventArgs e)
         {
             var dialog = e.Dialog;
+            ElementPropertyDialog epdialog = (ElementPropertyDialog)(dialog);
+            switch (epdialog.InstMode)
+            {
+                case ElementPropertyDialog.INST_CALL:
+                case ElementPropertyDialog.INST_ATCH:
+                    epdialog.SubRoutines = _ladderDiagram.ProjectModel.SubRoutines.Select(
+                        (LadderDiagramViewModel ldvmodel) =>
+                        {
+                            return ldvmodel.ProgramName;
+                        }
+                    );
+                    break;
+                case ElementPropertyDialog.INST_CALLM:
+                    epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Select(
+                        (FuncModel fmodel) =>
+                        {
+                            int argcount = 0;
+                            for (; argcount < 4; argcount++)
+                            {
+                                if (fmodel.GetArgName(argcount).Equals(String.Empty))
+                                {
+                                    break;
+                                }
+                            }
+                            string[] result = new string[argcount * 2 + 1];
+                            result[0] = fmodel.Name;
+                            for (int i = 0; i < argcount; i++)
+                            {
+                                result[i * 2 + 1] = fmodel.GetArgType(i);
+                                result[i * 2 + 2] = fmodel.GetArgName(i);
+                            }
+                            return result;
+                        }
+                    );
+                    break;
+                case ElementPropertyDialog.INST_MBUS:
+                    epdialog.ModbusTables = _ladderDiagram.ProjectModel.MTVModel.Models.Select(
+                        (ModbusTableModel mtmodel) =>
+                        {
+                            return mtmodel.Name;
+                        }
+                    );
+                    break;
+            }
             dialog.Commit += (sender1, e1) =>
             {
                 try
                 {
-                    sender.AcceptNewValues(dialog.PropertyStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    if (dialog is ElementPropertyDialog)
+                    {
+                        ElementReplaceArgumentCommand eracommand = new ElementReplaceArgumentCommand(
+                            sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
+                        _ladderDiagram.CommandExecute(eracommand);
+                    }
+                    else
+                    {
+                        sender.AcceptNewValues(dialog.PropertyStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    }
                     dialog.Close();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-        };
+            };
             dialog.ShowDialog();
         }
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)
@@ -2148,13 +2247,15 @@ namespace SamSoarII.AppMain.Project
             if(IsSingleSelected())
             {
                 LadderCanvas.Children.Remove(_ladderDiagram.SelectionRect);
+                _ladderDiagram.SelectionRect.NetworkParent = null;
             }
         }
 
         public void AcquireSelectRect()
         {
             _ladderDiagram.AcquireSelectRect(this);
-            LadderCanvas.Children.Add(_ladderDiagram.SelectionRect);     
+            LadderCanvas.Children.Add(_ladderDiagram.SelectionRect);
+            _ladderDiagram.SelectionRect.NetworkParent = this;
         }
 
         public List<BaseViewModel> GetSelectedElements()

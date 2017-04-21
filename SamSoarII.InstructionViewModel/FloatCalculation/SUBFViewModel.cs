@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class SUBFViewModel : OutputRectBaseViewModel
     {
         private SUBFModel _model;
-        private FloatValue InputValue1
+        public FloatValue InputValue1
         {
             get
             {
@@ -26,10 +26,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue1 = value;
-                MiddleTextBlock1.Text = _model.InputValue1.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("IN1:{0:s}", _model.InputValue1.ValueShowString);
             }
         }
-        private FloatValue InputValue2
+        public FloatValue InputValue2
         {
             get
             {
@@ -38,10 +38,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue2 = value;
-                MiddleTextBlock2.Text = _model.InputValue2.ValueShowString;
+                MiddleTextBlock2.Text = String.Format("IN2:{0:s}", _model.InputValue2.ValueShowString);
             }
         }
-        private FloatValue OutputValue
+        public FloatValue OutputValue
         {
             get
             {
@@ -50,7 +50,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.OutputValue = value;
-                BottomTextBlock.Text = _model.OutputValue.ValueShowString;
+                BottomTextBlock.Text = String.Format("OUT:{0:s}", _model.OutputValue.ValueShowString);
             }
         }
         public override BaseModel Model

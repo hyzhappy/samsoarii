@@ -216,7 +216,12 @@ namespace SamSoarII.AppMain.UI
         }
         public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
         {
-            var valueCommentAlias = _elementCollection.Where(x => { return x.Name == e.ValueString; }).First();
+            IEnumerable<ValueCommentAlias> fit = _elementCollection.Where(x => { return x.Name == e.ValueString; });
+            if (fit.Count() == 0)
+            {
+                return;
+            }
+            var valueCommentAlias = fit.First();
             List<TextBlock> mappedModels;
             switch (e.Type)
             {

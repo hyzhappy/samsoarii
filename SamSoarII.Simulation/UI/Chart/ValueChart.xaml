@@ -5,10 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Chart"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Content>
-        <Canvas x:Name="MainCanva" Background="AliceBlue">
-            
-        </Canvas>
-    </UserControl.Content>
+             d:DesignHeight="300" d:DesignWidth="300"
+             Background="AliceBlue"
+             Focusable="True"
+             PreviewKeyDown="OnValueChartKeyDown">
+    <Canvas x:Name="MainCanva">
+        <Grid x:Name="MainGrid" Canvas.Top="0" Canvas.Left="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+        </Grid>
+        <Rectangle x:Name="Cursor" Canvas.Top="0" Canvas.Left="0" Width="0" Height="0" Fill="Aquamarine" Stroke="DarkBlue" Opacity="0.4"></Rectangle>
+        <Line x:Name="StartLine" 
+              Y1="0" 
+              Y2="0" 
+              X1="0"
+              X2="0" 
+              Opacity="0.0" 
+              Stroke="Black" 
+              StrokeThickness="1"
+            />
+        <Line x:Name="EndLine" 
+              Y1="0" 
+              Y2="0" 
+              X1="0" 
+              X2="0" 
+              Opacity="0.0" 
+              Stroke="Black" 
+              StrokeThickness="1"
+            />
+    </Canvas>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem x:Name="MI_Select" Header="区间选择" Click="MI_Select_Click"/>
+            <MenuItem x:Name="MI_Cut" Header="区间剪切" Click="MI_Cut_Click"/>
+            <MenuItem x:Name="MI_Copy" Header="区间复制" Click="MI_Copy_Click"/>
+            <MenuItem x:Name="MI_Paste" Header="区间粘贴" Click="MI_Paste_Click"/>
+            <MenuItem x:Name="MI_Delete" Header="区间清除" Click="MI_Delete_Click"/>
+            <Separator/>
+            <MenuItem x:Name="MI_Run" Header="区间运行" Click="MI_Run_Click"/>
+            <MenuItem x:Name="MI_Draw" Header="区间绘图" Click="MI_Draw_Click"/>
+            <Separator/>
+            <MenuItem x:Name="MI_Save" Header="区间保存" Click="MI_Save_Click"/>
+            <MenuItem x:Name="MI_Load" Header="区间读取" Click="MI_Load_Click"/>
+            <MenuItem x:Name="MI_SaveAll" Header="全部保存" Click="MI_SaveAll_Click"/>
+            <MenuItem x:Name="MI_LoadAll" Header="全部读取" Click="MI_LoadAll_Click"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 </UserControl>

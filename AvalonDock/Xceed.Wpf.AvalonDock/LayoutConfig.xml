@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LayoutSetting>
+  <DockWidth>
+    <KeyValuePair Key="工程资源管理器" Value="240"/>
+    <KeyValuePair Key="仿真资源管理器" Value="240"/>
+    <KeyValuePair Key="仿真监视" Value="240"/>
+  </DockWidth>
+  <DockHeight>
+    <KeyValuePair Key="工程资源管理器" Value="*"/>
+    <KeyValuePair Key="仿真资源管理器" Value="*"/>
+    <KeyValuePair Key="仿真监视" Value="*"/>
+  </DockHeight>
+  <Side>
+    <KeyValuePair Key="工程资源管理器" Value="LEFT"/>
+    <KeyValuePair Key="仿真资源管理器" Value="LEFT"/>
+    <KeyValuePair Key="仿真监视" Value="LEFT"/>
+  </Side>
+  <FloatWidth>
+    <KeyValuePair Key="工程资源管理器" Value="240"/>
+    <KeyValuePair Key="仿真资源管理器" Value="240"/>
+    <KeyValuePair Key="仿真监视" Value="240"/>
+  </FloatWidth>
+  <FloatHeight>
+    <KeyValuePair Key="工程资源管理器" Value="600"/>
+    <KeyValuePair Key="仿真资源管理器" Value="600"/>
+    <KeyValuePair Key="仿真监视" Value="600"/>
+  </FloatHeight>
+  <AutoHideWidth>
+    <KeyValuePair Key="工程资源管理器" Value="240"/>
+    <KeyValuePair Key="仿真资源管理器" Value="240"/>
+    <KeyValuePair Key="仿真监视" Value="240"/>
+  </AutoHideWidth>
+  <AutoHideHeight>
+    <KeyValuePair Key="工程资源管理器" Value="600"/>
+    <KeyValuePair Key="仿真资源管理器" Value="600"/>
+    <KeyValuePair Key="仿真监视" Value="600"/>
+  </AutoHideHeight>
+</LayoutSetting>

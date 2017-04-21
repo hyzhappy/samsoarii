@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class MOVFViewModel : OutputRectBaseViewModel
     {
         private MOVFModel _model;
-        private FloatValue SourceValue
+        public FloatValue SourceValue
         {
             get
             {
@@ -26,10 +26,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock1.Text = _model.SourceValue.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("S:{0:s}", _model.SourceValue.ValueShowString);
             }
         }
-        private FloatValue DestinationValue
+        public FloatValue DestinationValue
         {
             get
             {
@@ -38,7 +38,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = _model.DestinationValue.ValueShowString;
+                BottomTextBlock.Text = String.Format("D:{0:s}", _model.DestinationValue.ValueShowString);
             }
         }
         public override BaseModel Model

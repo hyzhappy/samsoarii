@@ -1,4 +1,4 @@
-﻿using SamSoarII.LadderInstViewModel;
+﻿﻿using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
@@ -14,11 +14,11 @@ namespace SamSoarII.AppMain.Project
         {
             XElement result = new XElement("Ladder");
             result.SetAttributeValue("Name", ldmodel.ProgramName);
-            if(ldmodel.IsMainLadder)
+            if (ldmodel.IsMainLadder)
             {
                 result.SetAttributeValue("IsMain", "True");
             }
-            foreach(var net in ldmodel.GetNetworks())
+            foreach (var net in ldmodel.GetNetworks())
             {
                 var netEle = CreateXElemnetByLadderNetwork(net);
                 result.Add(netEle);
@@ -89,10 +89,10 @@ namespace SamSoarII.AppMain.Project
             return result;
         }
 
-        public static LadderDiagramViewModel CreateLadderDiagramByXElement(XElement xEle)
+        public static LadderDiagramViewModel CreateLadderDiagramByXElement(XElement xEle, ProjectModel _projectmodel)
         {
-            LadderDiagramViewModel result = new LadderDiagramViewModel(xEle.Attribute("Name").Value);
-            if(xEle.Attribute("IsMain") != null && xEle.Attribute("IsMain").Value == "True")
+            LadderDiagramViewModel result = new LadderDiagramViewModel(xEle.Attribute("Name").Value, _projectmodel);
+            if (xEle.Attribute("IsMain") != null && xEle.Attribute("IsMain").Value == "True")
             {
                 result.IsMainLadder = true;
             }
@@ -107,13 +107,13 @@ namespace SamSoarII.AppMain.Project
                 result.AppendNetwork(net);
             }
             return result;
-        } 
+        }
 
         public static LadderNetworkViewModel CreateLadderNetworkByXElement(XElement xEle, LadderDiagramViewModel parent)
         {
             LadderNetworkViewModel result = new LadderNetworkViewModel(parent, int.Parse(xEle.Attribute("Number").Value));
             result.RowCount = int.Parse(xEle.Attribute("RowCount").Value);
-            if(xEle.Attribute("IsMasked") != null)
+            if (xEle.Attribute("IsMasked") != null)
             {
                 result.IsMasked = bool.Parse(xEle.Attribute("IsMasked").Value);
             }
@@ -123,10 +123,10 @@ namespace SamSoarII.AppMain.Project
             }
             result.NetworkBrief = xEle.Element("Brief").Value;
             result.NetworkDescription = xEle.Element("Description").Value;
-           
+
             XElement contentNode = xEle.Element("LadderContent");
             foreach (var instEle in CreateLadderElementsByXElement(contentNode))
-            { 
+            {
                 result.ReplaceElement(instEle);
             }
             foreach (var vline in CreateLadderVertialLineByXElement(contentNode))
@@ -139,7 +139,7 @@ namespace SamSoarII.AppMain.Project
         public static IEnumerable<BaseViewModel> CreateLadderElementsByXElement(XElement xEle)
         {
             List<BaseViewModel> result = new List<BaseViewModel>();
-            foreach(XElement instNode in xEle.Elements("InstEle"))
+            foreach (XElement instNode in xEle.Elements("InstEle"))
             {
                 int catalogId = int.Parse(instNode.Attribute("CatalogID").Value);
                 var viewmodel = LadderInstViewModelPrototype.Clone(catalogId);
@@ -178,28 +178,28 @@ namespace SamSoarII.AppMain.Project
             return result;
         }
 
-        //public static XElement CreateXElementByLadderVariable(IVariableValue variable)
-        //{
-        //    XElement result = new XElement("Variable");
-        //    result.SetAttributeValue("VarName", variable.VarName);
-        //    result.SetElementValue("Value", variable.MappedValue.ValueString);
-        //    result.SetElementValue("ValueType", (int)variable.Type);
-        //    result.SetElementValue("Comment", variable.Comment);
-        //    return result;
-        //}
-
-        //public static IVariableValue CreateLadderVariableByXElement(XElement xEle)
-        //{
-        //    string name = xEle.Attribute("VarName").Value;
-        //    string valueString = xEle.Element("Value").Value;
-        //    LadderValueType valuetype = (LadderValueType)(int.Parse(xEle.Element("ValueType").Value));
-        //    string comment = xEle.Element("Comment").Value;
-        //    return ValueParser.CreateVariableValue(name, valueString, valuetype, comment);
-        //}
-
-        public static ProjectModel LoadProject(string filepath)
+        public static XElement CreateXElementByLadderVariable(IVariableValue variable)
         {
-            ProjectModel model = new ProjectModel();
+            XElement result = new XElement("Variable");
+            result.SetAttributeValue("VarName", variable.VarName);
+            result.SetElementValue("Value", variable.MappedValue.ValueString);
+            result.SetElementValue("ValueType", (int)variable.Type);
+            result.SetElementValue("Comment", variable.Comment);
+            return result;
+        }
+
+        public static IVariableValue CreateLadderVariableByXElement(XElement xEle)
+        {
+            string name = xEle.Attribute("VarName").Value;
+            string valueString = xEle.Element("Value").Value;
+            LadderValueType valuetype = (LadderValueType)(int.Parse(xEle.Element("ValueType").Value));
+            string comment = xEle.Element("Comment").Value;
+            return ValueParser.CreateVariableValue(name, valueString, valuetype, comment);
+        }
+
+        public static ProjectModel LoadProject(string filepath, ProjectModel model)
+        {
+            //ProjectModel model = new ProjectModel();
             if (model.Open(filepath))
             {
                 return model;
@@ -210,32 +210,32 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        //public static void LoadGlobalVariableListByXElement(XElement xEle)
-        //{
-        //    if(xEle != null)
-        //    {
-        //        foreach (XElement xele in xEle.Elements("Variable"))
-        //        {
-        //            var variable = CreateLadderVariableByXElement(xele);
-        //            VariableManager.AddVariable(variable);
-        //        }
-        //    }
-        //}
+        public static void LoadGlobalVariableListByXElement(XElement xEle)
+        {
+            if (xEle != null)
+            {
+                foreach (XElement xele in xEle.Elements("Variable"))
+                {
+                    var variable = CreateLadderVariableByXElement(xele);
+                    VariableManager.AddVariable(variable);
+                }
+            }
+        }
 
-        //public static XElement CreateXElementByGlobalVariableList()
-        //{
-        //    XElement xEle = new XElement("GlobalVariableList");
-        //    foreach(var variable in VariableManager.VariableCollection)
-        //    {
-        //        xEle.Add(CreateXElementByLadderVariable(variable));
-        //    }
-        //    return xEle;
-        //}
+        public static XElement CreateXElementByGlobalVariableList()
+        {
+            XElement xEle = new XElement("GlobalVariableList");
+            foreach (var variable in VariableManager.VariableCollection)
+            {
+                xEle.Add(CreateXElementByLadderVariable(variable));
+            }
+            return xEle;
+        }
 
         public static XElement CreateXElementByValueComments()
         {
             XElement result = new XElement("ValueComments");
-            foreach(var kp in ValueCommentManager.ValueCommentDict)
+            foreach (var kp in ValueCommentManager.ValueCommentDict)
             {
                 var xele = new XElement("Comment");
                 xele.SetAttributeValue("Value", kp.Key);
@@ -258,9 +258,9 @@ namespace SamSoarII.AppMain.Project
         }
         public static void LoadValueCommentsByXElement(XElement xEle)
         {
-            if(xEle != null)
+            if (xEle != null)
             {
-                foreach(XElement xele in xEle.Elements("Comment"))
+                foreach (XElement xele in xEle.Elements("Comment"))
                 {
                     string valueString = xele.Attribute("Value").Value;
                     string comment = xele.Value;
@@ -282,3 +282,4 @@ namespace SamSoarII.AppMain.Project
         }
     }
 }
+

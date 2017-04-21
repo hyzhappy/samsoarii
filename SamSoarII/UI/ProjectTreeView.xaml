@@ -27,6 +27,17 @@
             <MenuItem Header="重命名" Click="OnRenameRoutine"></MenuItem>
             <MenuItem Header="删除" Click="OnRemoveRoutine"></MenuItem>
         </ContextMenu>
+        <ContextMenu x:Key="FuncBlockContextMenu">
+            <MenuItem Header="打开" Click="OnOpenRoutine"></MenuItem>
+            <MenuItem Header="重命名" Click="OnRenameRoutine"></MenuItem>
+            <MenuItem Header="编译" Click="OnCompileRoutine"></MenuItem>
+            <MenuItem Header="删除" Click="OnRemoveRoutine"></MenuItem>
+        </ContextMenu>
+        <ContextMenu x:Key="ModbusContextMenu">
+            <MenuItem Header="打开" Click="OnModbusOpened"></MenuItem>
+            <MenuItem Header="重命名" Click="OnModbusRenamed"></MenuItem>
+            <MenuItem Header="删除" Click="OnModbusRemoved"></MenuItem>
+        </ContextMenu>
         <DataTemplate x:Key="ProgramTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -71,13 +82,13 @@
                                 <TextBlock Margin="6,0,0,0">主程序</TextBlock>
                             </StackPanel>
                         </TreeViewItem.Header>
-                        <TreeViewItem x:Name="MainRoutineTreeItem" Header="{Binding MainRoutine}" HeaderTemplate="{StaticResource ProgramTemplate}" IsExpanded="True" MouseDoubleClick="OnRoutineTreeItemDoubleClick" ContextMenu="{StaticResource MainRoutineContextMenu}">
+                        <TreeViewItem x:Name="MainRoutineTreeItem" Header="{Binding MainRoutine}" HeaderTemplate="{StaticResource ProgramTemplate}">
                             <TreeViewItem.Resources>
                                 <Style TargetType="{x:Type TreeViewItem}">
                                     <EventSetter Event="Selected" Handler="OnSelected"></EventSetter>
                                     <EventSetter Event="MouseRightButtonUp" Handler="OnMouseRightButtonUp"></EventSetter>
                                 </Style>
-                            </TreeViewItem.Resources>
+                            </TreeViewItem.Resources>                        
                         </TreeViewItem>
                     </TreeViewItem>
                     <TreeViewItem x:Name="SubRoutineTreeItems" ContextMenu="{StaticResource ContextMenu2}" IsExpanded="True" ItemsSource="{Binding SubRoutineTreeViewItems}">
@@ -98,7 +109,7 @@
                         <TreeViewItem.Resources>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <EventSetter Event="MouseDoubleClick" Handler="OnRoutineTreeItemDoubleClick"></EventSetter>
-                                <Setter Property="ContextMenu" Value="{StaticResource SubRoutineContextMenu}"></Setter>
+                                <Setter Property="ContextMenu" Value="{StaticResource FuncBlockContextMenu}"></Setter>
                             </Style>
                         </TreeViewItem.Resources>
                         <TreeViewItem.Header>
@@ -108,6 +119,7 @@
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
+                    
                 </TreeViewItem>
                 <TreeViewItem Header="元件浏览" IsExpanded="True">
                     <TreeViewItem.Resources>
@@ -116,6 +128,19 @@
                         </ContextMenu>
                     </TreeViewItem.Resources>
                     <TreeViewItem Header="软元件表" ContextMenu="{StaticResource elementContextMenu}" MouseDoubleClick="OnElementListOpenDoubleClick"></TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem x:Name="TVI_Modbus" Header="Modbus表格" IsExpanded="True" MouseDoubleClick="OnModbusDoubleClick">
+                    <TreeViewItem.Resources>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <EventSetter Event="MouseDoubleClick" Handler="OnModbusDoubleClick"></EventSetter>
+                            <Setter Property="ContextMenu" Value="{StaticResource ModbusContextMenu}"></Setter>
+                        </Style>
+                    </TreeViewItem.Resources>
+                    <TreeViewItem.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="新建" Click="OnModbusCreated"></MenuItem>
+                        </ContextMenu>
+                    </TreeViewItem.ContextMenu>
                 </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem x:Name="InstructionRootItem" Header="指令" IsExpanded="True">

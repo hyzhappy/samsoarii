@@ -35,6 +35,8 @@ namespace SamSoarII.Simulation.UI.Chart
             InitializeComponent();
             sdmodel = null;
             MainCanva.Children.Remove(NameTextBlock);
+            LockFlag.Visibility = Visibility.Hidden;
+            ViewFlag.Visibility = Visibility.Hidden;
             NameTextInput.KeyUp += OnInputKeyUp;
         }
         
@@ -56,8 +58,25 @@ namespace SamSoarII.Simulation.UI.Chart
             }
             sdmodel = _sdmodel;
             NameTextBlock.Text = String.Format("{0:s}({1:s})", sdmodel.Name, sdmodel.Var);
+            if (sdmodel.IsLock)
+            {
+                LockFlag.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LockFlag.Visibility = Visibility.Hidden;
+            }
+            if (sdmodel.IsView)
+            {
+                ViewFlag.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ViewFlag.Visibility = Visibility.Hidden;
+            }
         }
 
+        #region Event Handler
         public event SimulateDataModelEventHandler SDModelSetup;
         private void OnInputKeyUp(object sender, KeyEventArgs e)
         {
@@ -65,31 +84,36 @@ namespace SamSoarII.Simulation.UI.Chart
             {
                 string name = NameTextInput.Text;
                 Match m1 = Regex.Match(name, @"^\w+\d+$");
-                Match m2 = Regex.Match(name, @"^\w+\[\d+\.\.\d+\]$");
+                //Match m2 = Regex.Match(name, @"^\w+\[\d+\.\.\d+\]$");
+                //Match m3 = Regex.Match(name, @"^\w+\b\w+\d+$");
+                //Match m4 = Regex.Match(name, @"^\w+\b\w+\[\d+\.\.\d+\]$");
                 if (m1.Success)
                 {
                     SimulateDataModel _sdmodel = SimulateDataModel.Create(name);
                     if (_sdmodel != null && SDModelSetup != null)
                     {
                         SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
-                        _e.SDModel = _sdmodel;
+                        _e.SDModel_new = _sdmodel;
+                        //_e.SDVModel = this;
                         Setup(_sdmodel);
                         SDModelSetup(this, _e);
                     }
                 }
-                else if (m2.Success)
-                {
-
-                }
-                else
-                {
-
-                }
             }
         }
 
+        private void OnCloseButtonEnter(object sender, MouseEventArgs e)
+        {
+            CloseButtonCursor.Opacity = 0.25;
+        }
+
+        private void OnCloseButtonLeave(object sender, MouseEventArgs e)
+        {
+            CloseButtonCursor.Opacity = 0.0;
+        }
+
         public event RoutedEventHandler Closed;
-        private void OnCloseButtonClicked(object sender, MouseButtonEventArgs e)
+        private void OnCloseButtonClick(object sender, MouseButtonEventArgs e)
         {
             if (Closed != null)
             {
@@ -97,6 +121,50 @@ namespace SamSoarII.Simulation.UI.Chart
             }
         }
 
+        public event SimulateDataModelEventHandler SDModelLock;
+        public event SimulateDataModelEventHandler SDModelUnlock;
+        private void MI_LockButton_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.SDModel_old = _e.SDModel_new = SDModel;
+            if (!SDModel.IsLock)
+            {
+                if (SDModelLock != null)
+                {
+                    SDModelLock(this, _e);
+                }
+            }
+            else
+            {
+                if (SDModelUnlock != null)
+                {
+                    SDModelUnlock(this, _e);
+                }    
+            }
+        }
 
+        public event SimulateDataModelEventHandler SDModelView;
+        public event SimulateDataModelEventHandler SDModelUnview;
+        private void MI_ViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            SimulateDataModelEventArgs _e = new SimulateDataModelEventArgs();
+            _e.SDModel_old = _e.SDModel_new = SDModel;
+            if (!SDModel.IsView)
+            {
+                if (SDModelView != null)
+                {
+                    SDModelView(this, _e);
+                }
+            }
+            else
+            {
+                if (SDModelUnview != null)
+                {
+                    SDModelUnview(this, _e);
+                }
+            }
+        }
+        #endregion
+        
     }
 }

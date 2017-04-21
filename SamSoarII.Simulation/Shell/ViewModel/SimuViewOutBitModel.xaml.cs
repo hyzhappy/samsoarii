@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.UserInterface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,11 +50,11 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             string[] texts = text.Split(' ');
             Inst = texts[0];
             // 位输出元件的第一个参数为位参数
-            this._args1 = _parent.GetVariableUnit(texts[1], "BIT");
+            this[1] = _parent.GetVariableUnit(texts[1], "BIT");
             // 如果存在第二个参数，表示连续操作的位的数量
             if (texts.Length > 2)
             {
-                this._args2 = _parent.GetConstantUnit(texts[2], "WORD");
+                this[2] = _parent.GetConstantUnit(texts[2], "WORD");
             }
             // 更新画面就能显示出来
             Update();
@@ -63,19 +64,26 @@ namespace SamSoarII.Simulation.Shell.ViewModel
         /// </summary>
         public override void Update()
         {
+            Dispatcher.Invoke(_Update);
+        }
+        /// <summary>
+        /// 更新画面（内部的线程版本）
+        /// </summary>
+        private void _Update()
+        { 
             // 显示位参数的名称和值
-            ValueTextBlock.Text = _args1.ToString();
+            ValueTextBlock.Text = this[1].ToString();
             // 显示连续操作的总数
-            if (_args2 != null)
+            if (this[2] != null)
             {
-                CountTextBlock.Text = _args2.ToString();
+                CountTextBlock.Text = this[2].ToString();
             }
             // 开始画画
             //Line line = null;
             Rectangle rect = null;
             CenterCanvas.Children.Clear();
             // 涂个-[绿]-表示当前值为1
-            if ((int)(_args1.Value) == 1)
+            if ((int)(this[1].Value) == 1)
             {
                 rect = new Rectangle();
                 rect.Width = CenterCanvas.Width;
@@ -85,7 +93,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             }
             else
             // 涂个-[红]-表示当前值非法
-            if ((int)(_args1.Value) != 0)
+            if ((int)(this[1].Value) != 0)
             {
                 rect = new Rectangle();
                 rect.Width = CenterCanvas.Width;
@@ -113,7 +121,52 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             }
 
             CenterCanvas.Children.Add(CenterTextBlock);
+        }
 
+        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            if (dialog != null)
+            {
+                return;
+            }
+            string[] labels = null;
+            string[] values = null;
+            string[] types = null;
+            switch (Inst)
+            {
+                // (Value, Count)
+                case "SET": case "SETIM": case "RST": case "RSTIM":
+                    labels = new string[2];
+                    values = new string[2];
+                    types = new string[2];
+                    labels[0] = String.Format("{0:s}(Value)", this[1].Name);
+                    labels[1] = String.Format("{0:s}(Count)", this[2].Name);
+                    values[0] = String.Empty;
+                    values[1] = String.Empty;
+                    types[0] = this[1].Type;
+                    types[1] = this[2].Type;
+                    if (this[1].Islocked)
+                        values[0] = this[1].Value.ToString();
+                    if (this[2].Islocked)
+                        values[1] = this[2].Value.ToString();
+                    break;
+                default:
+                    labels = new string[1];
+                    values = new string[1];
+                    types = new string[1];
+                    values[0] = String.Empty;
+                    labels[0] = String.Format("{0:s}(Value)", this[1].Name);
+                    types[0] = this[1].Type;
+                    if (this[1].Islocked)
+                        values[0] = this[1].Value.ToString();
+                    break;
+            }
+            dialog = new SimuArgsDialog(labels, values, types);
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialog.EnsureClick += OnDialogEnsureClicked;
+            dialog.CancelClick += OnDialogCancelClicked;
+            dialog.ShowDialog();
         }
     }
 }

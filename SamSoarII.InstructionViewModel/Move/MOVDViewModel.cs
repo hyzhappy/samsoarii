@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class MOVDViewModel : OutputRectBaseViewModel
     {
         private MOVDModel _model;
-        private DoubleWordValue SourceValue
+        public DoubleWordValue SourceValue
         {
             get
             {
@@ -25,10 +25,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock1.Text = _model.SourceValue.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("S:{0:s}", _model.SourceValue.ValueShowString);
             }
         }
-        private DoubleWordValue DestinationValue
+        public DoubleWordValue DestinationValue
         {
             get
             {
@@ -37,7 +37,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = _model.DestinationValue.ValueShowString;
+                BottomTextBlock.Text = String.Format("D:{0:s}", _model.DestinationValue.ValueShowString);
             }
         }
         public override BaseModel Model
@@ -65,7 +65,7 @@ namespace SamSoarII.LadderInstViewModel
 
         public override IPropertyDialog PreparePropertyDialog()
         {
-            var dialog = new ElementPropertyDialog(3);
+            var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
             dialog.ShowLine3("S",SourceValue);
             dialog.ShowLine5("D",DestinationValue);

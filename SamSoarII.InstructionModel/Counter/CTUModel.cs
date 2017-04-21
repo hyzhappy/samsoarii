@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,25 @@ namespace SamSoarII.LadderInstModel
 {
     public class CTUModel : BaseModel
     {
+        public IValueModel CountValue { get; set; }
+
+        public IValueModel EndValue { get; set; }
+
+        public CTUModel()
+        {
+            CountValue = WordValue.Null;
+            EndValue = WordValue.Null;
+        }
+
+        public CTUModel(IValueModel _CountValue, IValueModel _EndValue)
+        {
+            CountValue = _CountValue;
+            EndValue = _EndValue;
+        }
+
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return string.Empty;
         }
     }
 }

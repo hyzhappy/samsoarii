@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
@@ -19,7 +20,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             string _name = Name;
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return String.Format("{0:s} = {1:d}", _name, value);
+            return String.Format("{0:s}={1:d}{2:d}", _name, value, Islocked ? "(Lock)" : String.Empty);
         }
         public override string Type
         {
@@ -64,11 +65,21 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     return false;
             }
         }
+
+        override public event RoutedEventHandler ValueChanged = delegate { };
+        
         public override void Update(SimulateDllModel dllmodel)
         {
+            if (Islocked) return;
             int[] ivalues = dllmodel.GetValue_Bit(Name, 1);
+            int value_old = value;
             this.value = ivalues[0];
+            if (value_old != value)
+            {
+                ValueChanged(this, new RoutedEventArgs());
+            }
         }
+
         public override void Set(SimulateDllModel dllmodel)
         {
             int[] ivalues = { this.value };

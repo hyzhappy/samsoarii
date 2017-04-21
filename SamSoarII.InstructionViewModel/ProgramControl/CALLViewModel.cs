@@ -72,9 +72,10 @@ namespace SamSoarII.LadderInstViewModel
         }
         public override IPropertyDialog PreparePropertyDialog()
         {
-            var dialog = new ElementPropertyDialog(1);
+            var dialog = new ElementPropertyDialog(1, ElementPropertyDialog.INST_CALL);
             dialog.Title = InstructionName;
             dialog.ShowLine4("Func");
+            dialog.ValueString4 = FunctionName;
             return dialog;
         }
     }

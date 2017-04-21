@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
     public class SimulateFloatUnit : SimulateVariableUnit
     {
-        protected float value;
+        protected double value;
         override public Object Value
         {
             get { return (Object)(this.value); }
-            set { this.value = (float)(value); }
+            set { this.value = (double)(value); }
         }
         public override string Type
         {
@@ -52,16 +53,25 @@ namespace SamSoarII.Simulation.Core.VariableModel
             string _name = Name;
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return String.Format("{0:s} = {1}", _name, value);
+            return String.Format("{0:s}({1:s}{2:d})={3}{4:d}", Name, basename, offset + 1, value, Islocked ? "(Lock)" : String.Empty);
         }
+
+        public override event RoutedEventHandler ValueChanged = delegate { };
+
         public override void Update(SimulateDllModel dllmodel)
         {
-            float[] fvalues = dllmodel.GetValue_Float(Name, 1);
+            double[] fvalues = dllmodel.GetValue_Float(Name, 1);
+            double value_old = value;
             this.value = fvalues[0];
+            if (value_old != value)
+            {
+                ValueChanged(this, new RoutedEventArgs());
+            }
         }
+
         public override void Set(SimulateDllModel dllmodel)
         {
-            float[] fvalues = { this.value };
+            double[] fvalues = { this.value };
             dllmodel.SetValue_Float(Name, 1, fvalues);
         }
 
@@ -101,7 +111,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override void Update(SimulateDllModel dllmodel)
         {
-            float[] fvalues = dllmodel.GetValue_Float(Name, size);
+            double[] fvalues = dllmodel.GetValue_Float(Name, size);
             for (int i = 0; i < size; i++)
             {
                 this.values[i].Value = fvalues[i];
@@ -110,10 +120,10 @@ namespace SamSoarII.Simulation.Core.VariableModel
         
         public override void Set(SimulateDllModel dllmodel)
         {
-            float[] fvalues = new float[size];
+            double[] fvalues = new double[size];
             for (int i = 0; i < size; i++)
             {
-                fvalues[i] = (float)(this.values[i].Value);
+                fvalues[i] = (double)(this.values[i].Value);
             }
             dllmodel.SetValue_Float(Name, Size, fvalues);
         }

@@ -14,11 +14,17 @@ namespace SamSoarII.LadderInstModel
         public PLSFModel()
         {
             FreqValue = WordValue.Null;
-            
+            OutputValue = BitValue.Null;
+        }
+
+        public PLSFModel(WordValue _FreqValue, BitValue _OutputValue)
+        {
+            FreqValue = _FreqValue;
+            OutputValue = _OutputValue;
         }
         public override string GenerateCode()
         {
-            throw new NotImplementedException();
+            return String.Empty;
         }
     }
 }

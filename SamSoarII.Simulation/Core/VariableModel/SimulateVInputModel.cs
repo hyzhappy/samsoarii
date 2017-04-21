@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
     public class SimulateVInputUnit : SimulateVariableUnit
     {
         private string _value = "";
-        
+
+        public override event RoutedEventHandler ValueChanged = delegate { };
+
         public override void Update(SimulateDllModel dllmodel)
         {
         }

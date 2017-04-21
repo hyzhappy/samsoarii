@@ -9,8 +9,11 @@ namespace SamSoarII.AppMain
     public enum TabType
     {
         Program,
+        Simulate,
+        SimuToEdit,
         CommentList,
         UsageList,
-        VariableList
+        VariableList,
+        Modbus
     }
 }

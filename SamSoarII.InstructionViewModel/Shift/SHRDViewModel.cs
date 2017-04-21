@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class SHRDViewModel : OutputRectBaseViewModel
     {
         private SHRDModel _model;
-        private DoubleWordValue SourceValue
+        public DoubleWordValue SourceValue
         {
             get
             {
@@ -25,10 +25,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock2.Text = string.Format("S : {0}", _model.SourceValue.ValueShowString);
+                MiddleTextBlock2.Text = string.Format("S:{0}", _model.SourceValue.ValueShowString);
             }
         }
-        private WordValue Count
+        public WordValue Count
         {
             get
             {
@@ -37,10 +37,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                MiddleTextBlock3.Text = string.Format("N : {0}", _model.Count.ValueShowString);
+                MiddleTextBlock3.Text = string.Format("N:{0}", _model.Count.ValueShowString);
             }
         }
-        private DoubleWordValue DestinationValue
+        public DoubleWordValue DestinationValue
         {
             get
             {
@@ -49,7 +49,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = string.Format("D : {0}", _model.DestinationValue.ValueShowString);
+                BottomTextBlock.Text = string.Format("D:{0}", _model.DestinationValue.ValueShowString);
             }
         }
 

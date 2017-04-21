@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class SUBDViewModel : OutputRectBaseViewModel
     {
         private SUBDModel _model;
-        private DoubleWordValue InputValue1
+        public DoubleWordValue InputValue1
         {
             get
             {
@@ -26,10 +26,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue1 = value;
-                MiddleTextBlock1.Text = _model.InputValue1.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("IN:{0:s}", _model.InputValue1.ValueShowString);
             }
         }
-        private DoubleWordValue InputValue2
+        public DoubleWordValue InputValue2
         {
             get
             {
@@ -38,10 +38,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue2 = value;
-                MiddleTextBlock2.Text = _model.InputValue2.ValueShowString;
+                MiddleTextBlock2.Text = String.Format("OUT:{0:s}", _model.InputValue2.ValueShowString);
             }
         }
-        private DoubleWordValue OutputValue
+        public DoubleWordValue OutputValue
         {
             get
             {

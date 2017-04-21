@@ -16,7 +16,7 @@ namespace SamSoarII.LadderInstViewModel
     public class FORViewModel : OutputRectBaseViewModel
     {
         private FORModel _model;
-        private WordValue Count
+        public WordValue Count
         {
             get
             {
@@ -25,7 +25,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                BottomTextBlock.Text = string.Format("CNT : {0}", _model.Count.ValueShowString);
+                BottomTextBlock.Text = string.Format("CNT:{0}", _model.Count.ValueShowString);
             }
         }
         public override BaseModel Model

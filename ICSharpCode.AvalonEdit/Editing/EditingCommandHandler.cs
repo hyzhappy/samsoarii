@@ -170,6 +170,10 @@ namespace ICSharpCode.AvalonEdit.Editing
 		static void OnEnter(object target, ExecutedRoutedEventArgs args)
 		{
 			TextArea textArea = GetTextArea(target);
+            if (textArea.IsCodeCompleteMode)
+            {
+                return;
+            }
 			if (textArea != null && textArea.IsKeyboardFocused) {
 				textArea.PerformTextInput("\n");
 				args.Handled = true;

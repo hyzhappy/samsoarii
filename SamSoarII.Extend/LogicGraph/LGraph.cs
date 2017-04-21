@@ -182,20 +182,32 @@ namespace SamSoarII.Extend.LogicGraph
             {
                 solveCount++;
                 LGVertex lgv = queue.Dequeue();
-                //Console.Write("solve : {0:d}\n", lgv.Id);
                 foreach (LGEdge lge in lgv.Edges)
                 {
-                    //Console.Write("next => {0:d} {1:d}\n", lge.Destination.Id, lge.Destination[4]);
                     if ((--lge.Destination[4]) == 0)
                     {
                         queue.Enqueue(lge.Destination);
                     }
                 }
             }
-            //Console.Write("c1={0:d} c2={1:d}\n", solveCount, vertexs.Count);
             // 若存在节点未被排序，则在环中
             if (solveCount < vertexs.Count)
                 return true;
+            // 还存在一种短路情况，分支后面出现线路指令（INV,MEP,MEF）时
+            foreach (LGVertex lgv in vertexs)
+            {
+                if (lgv.Edges.Count() > 1)
+                {
+                    foreach (LGEdge lge in lgv.Edges)
+                    {
+                        switch (lge.PLCInfo.Type)
+                        {
+                            case "INV": case "MEP": case "MEF":
+                                return true;
+                        }
+                    }
+                }
+            }
             return false;
         }
         /// <summary>
@@ -410,6 +422,11 @@ namespace SamSoarII.Extend.LogicGraph
         /// <returns>PLC指令列表</returns>
         public List<PLCInstruction> GenInst()
         {
+            // 终点为空的情况下，返回空的指令列表
+            if (terminates.Count() == 0)
+            {
+                return new List<PLCInstruction>();
+            }
             // 生成所有终点的表达式
             foreach (LGVertex lgv in terminates)
             {
@@ -423,7 +440,16 @@ namespace SamSoarII.Extend.LogicGraph
             };
             terminates.Sort(sortByExpr);
             // 调用方法
-            return ExprHelper.GenInst(terminates);
+            List<PLCInstruction> insts = ExprHelper.GenInst(terminates);
+            // 获得指令的原型
+            foreach (PLCInstruction inst in insts)
+            {
+                if (inst.PrototypeID != -1)
+                {
+                    inst.ProtoType = lchart.Nodes[inst.PrototypeID].Prototype;
+                }
+            }
+            return insts;
         } 
     }
 }

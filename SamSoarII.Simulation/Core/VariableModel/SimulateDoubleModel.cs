@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
@@ -54,10 +55,18 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     return false;
             }
         }
+
+        public override event RoutedEventHandler ValueChanged = delegate { };
+
         public override void Update(SimulateDllModel dllmodel)
         {
             double[] dvalues = dllmodel.GetValue_Double(Name, 1);
+            double value_old = value;
             this.value = dvalues[0];
+            if (value_old != value)
+            {
+                ValueChanged(this, new RoutedEventArgs());
+            }
         }
         public override void Set(SimulateDllModel dllmodel)
         {

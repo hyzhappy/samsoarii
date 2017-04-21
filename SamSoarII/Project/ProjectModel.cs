@@ -15,7 +15,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using SamSoarII.AppMain.UI;
 using System.Windows.Controls;
-using SamSoarII.PLCDevice;
+using SamSoarII.Extend.FuncBlockModel;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -39,6 +39,28 @@ namespace SamSoarII.AppMain.Project
     public delegate void RefNetworksBriefChangedEventHandler(RefNetworksBriefChangedEventArgs e);
     public class ProjectModel
     {
+        public bool IsModify
+        {
+            get
+            {
+                bool ret = false;
+                ret |= MainRoutine.IsModify;
+                foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
+                {
+                    ret |= ldvmodel.IsModify;
+                }
+                return ret;
+            }
+            set
+            {
+                MainRoutine.IsModify = value;
+                foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
+                {
+                    ldvmodel.IsModify = value;
+                }
+            }
+        }
+
         private bool _isCommentMode;
         public event RefNetworksBriefChangedEventHandler RefNetworksBriefChanged = delegate { };
 
@@ -49,7 +71,7 @@ namespace SamSoarII.AppMain.Project
             {
                 _isCommentMode = value;
                 MainRoutine.IsCommendMode = _isCommentMode;
-                foreach(var ldmodel in SubRoutines)
+                foreach (var ldmodel in SubRoutines)
                 {
                     ldmodel.IsCommendMode = _isCommentMode;
                 }
@@ -61,10 +83,35 @@ namespace SamSoarII.AppMain.Project
         public ObservableCollection<TreeViewItem> SubRoutineTreeViewItems { get; set; } = new ObservableCollection<TreeViewItem>();
         public Dictionary<LadderDiagramViewModel, ObservableCollection<string>> RefNetworksBrief { get; set; } = new Dictionary<LadderDiagramViewModel, ObservableCollection<string>>();
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
+        public ModbusTableViewModel MTVModel { get; set; }
+        public ReportOutputModel OModel { get; set; }
 
-        public Device CurrentDevice { get { return PLCDeviceManager.GetPLCDeviceManager().SelectDevice; } }
-        
-        public void UpdateNetworkBriefs(LadderDiagramViewModel Routine,ChangeType Type)
+        private PLCDevice.Device currentDevice;
+        public PLCDevice.Device CurrentDevice
+        {
+            get { return this.currentDevice; }
+            set
+            {
+                this.currentDevice = value;
+                if (MTVModel != null)
+                    MTVModel.PLCDevice = value;
+            }
+        }
+
+        public IEnumerable<FuncModel> Funcs
+        {
+            get
+            {
+                List<FuncModel> result = new List<FuncModel>();
+                foreach (FuncBlockViewModel fbvmodel in FuncBlocks)
+                {
+                    result.AddRange(fbvmodel.Funcs);
+                }
+                return result;
+            }
+        }
+
+        public void UpdateNetworkBriefs(LadderDiagramViewModel Routine, ChangeType Type)
         {
             switch (Type)
             {
@@ -72,9 +119,9 @@ namespace SamSoarII.AppMain.Project
                     ObservableCollection<string> networksBrief = new ObservableCollection<string>();
                     foreach (var network in Routine.LadderNetworks.OrderBy(x => { return x.NetworkNumber; }))
                     {
-                        networksBrief.Add(string.Format("{0}-{1}",network.NetworkNumber,network.NetworkBrief));
+                        networksBrief.Add(string.Format("{0}-{1}", network.NetworkNumber, network.NetworkBrief));
                     }
-                    RefNetworksBrief.Add(Routine,networksBrief);
+                    RefNetworksBrief.Add(Routine, networksBrief);
                     break;
                 case ChangeType.Remove:
                     RefNetworksBrief.Remove(Routine);
@@ -93,18 +140,21 @@ namespace SamSoarII.AppMain.Project
                 default:
                     break;
             }
-            RefNetworksBriefChanged.Invoke(new RefNetworksBriefChangedEventArgs(Type,Routine));
-        }
-        public ProjectModel()
-        {
-            
+            RefNetworksBriefChanged.Invoke(new RefNetworksBriefChangedEventArgs(Type, Routine));
         }
 
-        public ProjectModel(string projectname)
+        public ProjectModel()
+        {
+        }
+
+        public ProjectModel(string projectname, ReportOutputModel _outputmodel)
         {
             ProjectName = projectname;
-            MainRoutine = new LadderDiagramViewModel("Main");
+            MainRoutine = new LadderDiagramViewModel("Main", this);
             MainRoutine.IsMainLadder = true;
+            MTVModel = new ModbusTableViewModel();
+            MTVModel.PLCDevice = CurrentDevice;
+            OModel = _outputmodel;
         }
 
         public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -116,7 +166,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         public void SetMainRoutine(LadderDiagramViewModel ldmodel)
-        { 
+        {
             ldmodel.IsMainLadder = true;
             MainRoutine = ldmodel;
         }
@@ -128,14 +178,14 @@ namespace SamSoarII.AppMain.Project
         /// <returns></returns>
         public LadderDiagramViewModel GetRoutineByName(string name)
         {
-            if(MainRoutine != null)
+            if (MainRoutine != null)
             {
-                if(MainRoutine.ProgramName == name)
+                if (MainRoutine.ProgramName == name)
                     return MainRoutine;
             }
-            foreach(var routine in SubRoutines)
+            foreach (var routine in SubRoutines)
             {
-                if(routine.ProgramName == name)
+                if (routine.ProgramName == name)
                 {
                     return routine;
                 }
@@ -149,9 +199,9 @@ namespace SamSoarII.AppMain.Project
         /// <returns></returns>
         public FuncBlockViewModel GetFuncBlockByName(string name)
         {
-            foreach(var funcb in FuncBlocks)
+            foreach (var funcb in FuncBlocks)
             {
-                if(funcb.ProgramName == name)
+                if (funcb.ProgramName == name)
                 {
                     return funcb;
                 }
@@ -169,12 +219,12 @@ namespace SamSoarII.AppMain.Project
         /// </summary>
         /// <param name="ldmodel"></param>
         public void AddSubRoutine(LadderDiagramViewModel ldmodel)
-        {           
+        {
             SubRoutines.Add(ldmodel);
             TreeViewItem item = new TreeViewItem();
             item.Header = ldmodel;
             SubRoutineTreeViewItems.Add(item);
-            UpdateNetworkBriefs(ldmodel,ChangeType.Add);
+            UpdateNetworkBriefs(ldmodel, ChangeType.Add);
             ldmodel.PropertyChanged += MainRoutine_PropertyChanged;
         }
         /// <summary>
@@ -183,6 +233,7 @@ namespace SamSoarII.AppMain.Project
         /// <param name="fbmodel"></param>
         public void AddFuncBlock(FuncBlockViewModel fbmodel)
         {
+            fbmodel.OModel = OModel;
             FuncBlocks.Add(fbmodel);
         }
 
@@ -217,78 +268,82 @@ namespace SamSoarII.AppMain.Project
             //xdoc.Add(decNode);
             var rootNode = new XElement("Project");
             rootNode.SetAttributeValue("Name", this.ProjectName);
-            rootNode.SetAttributeValue("DeviceType",CurrentDevice.Type);
             xdoc.Add(rootNode);
             var settingNode = new XElement("Setting");
             rootNode.Add(settingNode);
             rootNode.Add(ProjectHelper.CreateXElementByValueComments());
             rootNode.Add(ProjectHelper.CreateXElementByValueAlias());
-            //rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
             rootNode.Add(ProjectPropertyManager.CreateProjectPropertyXElement());
+            //rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
-            foreach(var ldmodel in SubRoutines)
+            foreach (var ldmodel in SubRoutines)
             {
                 rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(ldmodel));
             }
-            foreach(var fbmodel in FuncBlocks)
+            foreach (var fbmodel in FuncBlocks)
             {
                 rootNode.Add(ProjectHelper.CreateXElementByFuncBlock(fbmodel));
             }
+            var mtnode = new XElement("Modbus");
+            MTVModel.Save(mtnode);
+            rootNode.Add(mtnode);
             xdoc.Save(filepath);
         }
-   
+
         public bool Open(string filepath)
         {
             //try
             //{
-                XDocument xmldoc = XDocument.Load(filepath);
-                XElement rootNode = xmldoc.Element("Project");
-                ProjectName = rootNode.Attribute("Name").Value;
-                string DeviceTypeName = rootNode.Attribute("DeviceType").Value;
-                PLCDeviceType type = (PLCDeviceType)Enum.Parse(typeof(PLCDeviceType), DeviceTypeName);
-                PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(type);
+            XDocument xmldoc = XDocument.Load(filepath);
+            XElement rootNode = xmldoc.Element("Project");
+            ProjectName = rootNode.Attribute("Name").Value;
             // Open Ladder Model
-                foreach (var item in SubRoutines)
+            foreach (var item in SubRoutines)
+            {
+                item.PropertyChanged -= MainRoutine_PropertyChanged;
+            }
+            SubRoutines.Clear();
+            SubRoutineTreeViewItems.Clear();
+            UpdateNetworkBriefs(null, ChangeType.Clear);
+            FuncBlocks.Clear();
+            //VariableManager.Clear();
+            ValueAliasManager.Clear();
+            ValueCommentManager.Clear();
+            InstructionCommentManager.Clear();
+            ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
+            ProjectHelper.LoadValueAliasByXElement(rootNode.Element("ValueAlias"));
+            ProjectPropertyManager.LoadProjectPropertyByXElement(rootNode.Element("ProjectPropertyParams"));
+            //ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));
+            var ldnodes = rootNode.Elements("Ladder");
+            foreach (XElement ldnode in ldnodes)
+            {
+                var ldmodel = ProjectHelper.CreateLadderDiagramByXElement(ldnode, this);
+                if (ldmodel.IsMainLadder)
                 {
-                    item.PropertyChanged -= MainRoutine_PropertyChanged;
+                    MainRoutine = ldmodel;
                 }
-                SubRoutines.Clear();
-                SubRoutineTreeViewItems.Clear();
-                UpdateNetworkBriefs(null, ChangeType.Clear);
-                FuncBlocks.Clear();
-                //VariableManager.Clear();
-                ValueAliasManager.Clear();
-                ValueCommentManager.Clear();
-                InstructionCommentManager.Clear();
-                ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
-                ProjectHelper.LoadValueAliasByXElement(rootNode.Element("ValueAlias"));
-                ProjectPropertyManager.LoadProjectPropertyByXElement(rootNode.Element("ProjectPropertyParams"));
-                //ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));   
-                var ldnodes = rootNode.Elements("Ladder");
-                foreach (XElement ldnode in ldnodes)
+                else
                 {
-                    var ldmodel = ProjectHelper.CreateLadderDiagramByXElement(ldnode);
-                    if (ldmodel.IsMainLadder)
-                    {
-                        MainRoutine = ldmodel;
-                    }
-                    else
-                    {
-                        SubRoutines.Add(ldmodel);
-                        TreeViewItem item = new TreeViewItem();
-                        item.Header = ldmodel;
-                        SubRoutineTreeViewItems.Add(item);
-                        ldmodel.PropertyChanged += MainRoutine_PropertyChanged;
-                    }
+                    SubRoutines.Add(ldmodel);
+                    TreeViewItem item = new TreeViewItem();
+                    item.Header = ldmodel;
+                    SubRoutineTreeViewItems.Add(item);
+                    ldmodel.PropertyChanged += MainRoutine_PropertyChanged;
                 }
-                // Open FunctionBlock
-                var fbnodes = rootNode.Elements("FuncBlock");
-                foreach (XElement fbnode in fbnodes)
-                {
-                    var fbmodel = ProjectHelper.CreateFuncBlockByXElement(fbnode);
-                    FuncBlocks.Add(fbmodel);
-                }
-                return true;
+            }
+            // Open FunctionBlock
+            var fbnodes = rootNode.Elements("FuncBlock");
+            foreach (XElement fbnode in fbnodes)
+            {
+                var fbmodel = ProjectHelper.CreateFuncBlockByXElement(fbnode);
+                fbmodel.OModel = OModel;
+                FuncBlocks.Add(fbmodel);
+            }
+            var mtnodes = rootNode.Element("Modbus");
+            var mtmodel = new ModbusTableViewModel();
+            mtmodel.Load(mtnodes);
+            MTVModel = mtmodel;
+            return true;
             //}
             //catch (Exception exception)
             //{
@@ -312,8 +367,42 @@ namespace SamSoarII.AppMain.Project
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
-            string s = string.Format("stdout : {0}\r\nstderr: {1}\r\n",cmd.StandardOutput.ReadToEnd(), cmd.StandardError.ReadToEnd());
-            MessageBox.Show(s);
+            string s = string.Format("stdout : {0}\r\nstderr: {1}\r\n", cmd.StandardOutput.ReadToEnd(), cmd.StandardError.ReadToEnd());
+            OModel.Write(OModel.Report_Complie, s);
+            //MessageBox.Show(s);
+        }
+
+        public void CompileFuncBlock(string name)
+        {
+            FuncBlockViewModel fbvmodel = null;
+            foreach (FuncBlockViewModel _fbvmodel in FuncBlocks)
+            {
+                if (_fbvmodel.ProgramName.Equals(name))
+                {
+                    fbvmodel = _fbvmodel;
+                    break;
+                }
+            }
+            if (fbvmodel == null)
+            {
+                return;
+            }
+
+            string fbfile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
+            string oofile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
+            File.WriteAllText(fbfile, fbvmodel.Code);
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = "i686-w64-mingw32-gcc";
+            cmd.StartInfo.Arguments = string.Format("{0} -o {1}", fbfile, oofile);
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            string s = string.Format("stdout : {0}\r\nstderr: {1}\r\n", cmd.StandardOutput.ReadToEnd(), cmd.StandardError.ReadToEnd());
+            OModel.Write(OModel.Report_Complie, s);
+            //MessageBox.Show(s);
         }
 
         private string GenerateCodeFromLadder()
@@ -321,12 +410,12 @@ namespace SamSoarII.AppMain.Project
             string code = string.Empty;
             code += string.Format("#include \"plc.h\"\r\n");
             code += MainRoutine.GenerateDeclarationCode("RunLadder");
-            foreach(var sub in SubRoutines)
+            foreach (var sub in SubRoutines)
             {
                 code += sub.GenerateDeclarationCode(sub.ProgramName);
             }
             code += MainRoutine.GenerateCode("RunLadder");
-            foreach(var sub in SubRoutines)
+            foreach (var sub in SubRoutines)
             {
                 code += sub.GenerateCode(sub.ProgramName);
             }
@@ -338,5 +427,8 @@ namespace SamSoarII.AppMain.Project
             string result = string.Empty;
             return result;
         }
+
+
     }
 }
+

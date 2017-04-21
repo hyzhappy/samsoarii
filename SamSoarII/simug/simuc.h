@@ -1,3 +1,7 @@
+/*
+	The header file for simulate program of user PLC Device
+   */
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +25,7 @@
 #define EXPORT DLL_EXPORT __stdcall
 #endif
 
+// Register Memorys
 uint32_t XBit[128];
 uint32_t YBit[128];
 uint32_t MBit[256<<5];
@@ -31,7 +36,9 @@ uint16_t DWord[8192];
 uint16_t CVWord[200];
 uint32_t CVDoubleWord[56];
 uint16_t TVWord[256];
-
+// Register writeable
+// Set 1 if you want to modify the value of register
+// othervise, Set 0 to lock the register and make it constant
 uint32_t XEnable[128];
 uint32_t YEnable[128];
 uint32_t MEnable[256<<5];
@@ -70,6 +77,7 @@ EXPORT void AfterRunLadder();
 
 //EXPORT void SetEnable(char* name, int size, int value);
 
+// Get the BIT value from targeted bit register (X/Y/M/C/T/S) 
 EXPORT void GetBit(char* name, int size, uint32_t* output)
 {
 	int addr = 0;
@@ -98,7 +106,7 @@ EXPORT void GetBit(char* name, int size, uint32_t* output)
 		break;
 	}
 }
-
+// Get the WORD value from targeted register (D/CV/TV)
 EXPORT void GetWord(char* name, int size, uint16_t* output)
 {
 	int addr = 0;
@@ -120,7 +128,7 @@ EXPORT void GetWord(char* name, int size, uint16_t* output)
 		break;
 	}
 }
-
+// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
 EXPORT void GetDoubleWord(char* name, int size, uint32_t* output)
 {
 	int addr = 0;
@@ -138,7 +146,7 @@ EXPORT void GetDoubleWord(char* name, int size, uint32_t* output)
 		break;
 	}
 }
-
+// Get the FLOAT value from targeted register (D)
 EXPORT void GetFloat(char* name, int size, float* output)
 {
 	int addr = 0;
@@ -152,7 +160,7 @@ EXPORT void GetFloat(char* name, int size, float* output)
 		break;
 	}
 }
-
+// Get the DOUBLE value from targeted register (D)
 EXPORT void GetDouble(char* name, int size, double* output)
 {
 	int addr = 0;
@@ -166,7 +174,7 @@ EXPORT void GetDouble(char* name, int size, double* output)
 		break;
 	}
 }
-
+// Set the Bit value to targeted bit register (X/Y/M/C/T/S)
 EXPORT void SetBit(char* name, int size, uint32_t* input)
 {
 	int addr = 0;
@@ -195,7 +203,7 @@ EXPORT void SetBit(char* name, int size, uint32_t* input)
 		break;
 	}
 }
-
+// Set the WORD value to targeted register (D/CV/TV)
 EXPORT void SetWord(char* name, int size, uint16_t* input)
 {
 	int addr = 0;
@@ -217,7 +225,7 @@ EXPORT void SetWord(char* name, int size, uint16_t* input)
 		break;
 	}
 }
-
+// Set the DWORD value to targeted register (D)
 EXPORT void SetDoubleWord(char* name, int size, uint32_t* input)
 {
 	int addr = 0;
@@ -235,7 +243,7 @@ EXPORT void SetDoubleWord(char* name, int size, uint32_t* input)
 		break;
 	}
 }
-
+// Set the FLOAT value to targeted register (D)
 EXPORT void SetFloat(char* name, int size, float* input)
 {
 	int addr = 0;
@@ -249,7 +257,7 @@ EXPORT void SetFloat(char* name, int size, float* input)
 		break;
 	}
 }
-
+// Set the DOUBLE value to targeted register (D)
 EXPORT void SetDouble(char* name, int size, double* input)
 {
 	int addr = 0;
@@ -263,7 +271,7 @@ EXPORT void SetDouble(char* name, int size, double* input)
 		break;
 	}
 }
-
+// Set the writeable enable value of targeted register
 EXPORT void SetEnable(char* name, int size, int value)
 {
 	int addr = 0;
@@ -317,16 +325,33 @@ EXPORT void SetEnable(char* name, int size, int value)
 		break;
 	}
 }
+/* 
+	The manipulation of lock registers and view registers
+	Here is the behaviors
+	1. Add an lock event to change the value of the targeted register at a specific time
+	2. Delete the event above (unuse now)
+	3. Add the view register
+	4. Remove the lock register by remove all of its lock events
+	5. Remove the view rigister
+   */
 
+// the ID of value type
 #define DP_TYPE_BIT 0x01
 #define DP_TYPE_WORD 0x02
 #define DP_TYPE_DOUBLEWORD 0x03
 #define DP_TYPE_FLOAT 0x04
 #define DP_TYPE_DOUBLE 0x05
+// convert the struct DataPoint and get the value of specific type
 #define WORDVALUE(dp) *((uint16_t*)(&(dp).rsv1))
 #define FLOATVALUE(dp) *((float*)(&(dp).rsv1))
 #define DOUBLEVALUE(dp) *((double*)(&(dp).rsv1))
-
+/*
+   DataPoint struct :
+		type : value type
+		name : register name
+		time : value changed time
+		rsv1, rsv2 : reserve memory, commonly used to store the value 
+	*/
 struct DataPoint
 {
 	int type;
@@ -370,12 +395,20 @@ struct DoubleDataPoint
 	double value;
 };
 */
-
+// DataPointInput
 static int dpic;
 static struct DataPoint dpis[65536];
+// DataPointOutput
 static int dpoc;
 static struct DataPoint dpos[65536];
 
+/*
+   the struct to illustrate the view register
+	type : register value type
+	name : register name
+	dp : the start DataPoint
+	dpend : the ending DataPoint
+	*/
 struct DataInputView
 {
 	int type;
@@ -383,12 +416,15 @@ struct DataInputView
 	struct DataPoint* dp;
 	struct DataPoint* dpend;
 };
-
+// DataViewInput
 static int dvic;
 static struct DataInputView dvis[1024];
+// DataViewOutput
 static int dvoc;
 static struct DataPoint dvos[1024];
-
+/*	The memory to store register names
+	In order to avoid the dynamic allocation and memory expose
+	*/
 static char nmem[65536];
 static char* _nmem;
 static char* XName[128];
@@ -400,20 +436,14 @@ static char* SName[32 << 5];
 static char* DName[8192];
 static char* CVName[256];
 static char* TVName[256];
-
+// Initialize the name memory
 EXPORT void InitDataPoint()
 {
-
-	//printf("Init Begin\n");
-
 	int i;
-	_nmem = &nmem[0];
-	
+	_nmem = &nmem[0];	
 	for (i = 0; i < 65536; i++)
 		nmem[i] = 0;
 
-	//printf("Init\n");
-	
 	for (i = 0; i < 128; i++)
 		XName[i] = 0;
 	for (i = 0; i < 128; i++)
@@ -433,14 +463,11 @@ EXPORT void InitDataPoint()
 	for (i = 0; i < 256; i++)
 		TVName[i] = 0;
 
-	//printf("Init end\n");
-	
 	dpic = 0;
 }
-
+// clone the targeted name to the name memory
 char* _CloneName(char* name)
 {
-	//printf("CloneName %s\n", name);
 	int offset = 0;
 	switch (name[0])
 	{
@@ -498,7 +525,6 @@ char* _CloneName(char* name)
 			DName[offset] = _nmem;
 			_nmem = _nmem + (strlen(_nmem) + 1);
 		}
-		//printf("D offset=%d Name=%s\n", offset, DName[offset]);
 		return DName[offset];
 	case 'X':
 		sscanf(name + 1, "%d", &offset);
@@ -540,9 +566,11 @@ char* _CloneName(char* name)
 		return NULL;
 	}
 }
-
+// Add a DataPoint of BIT value
 EXPORT void AddBitDataPoint(char* name, int time, uint32_t value)
 {
+	// Ignore the equivalance
+	/*
 	int i;
 	for (i = 0; i < dpic; i++)
 	{
@@ -554,15 +582,17 @@ EXPORT void AddBitDataPoint(char* name, int time, uint32_t value)
 			return;
 		}
 	}
+	*/
 	dpis[dpic].type = DP_TYPE_BIT;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
 	dpis[dpic].rsv1 = value;
 	dpic++;
 }
-
+// Add a DataPoint of WORD value
 EXPORT void AddWordDataPoint(char* name, int time, uint16_t value)
 {
+	/*
 	int i;
 	for (i = 0; i < dpic; i++)
 	{
@@ -574,15 +604,17 @@ EXPORT void AddWordDataPoint(char* name, int time, uint16_t value)
 			return;
 		}
 	}
+	*/
 	dpis[dpic].type = DP_TYPE_WORD;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
 	WORDVALUE(dpis[dpic]) = value;
 	dpic++;
 }
-
+// Add a DataPoint of DOUBLE value
 EXPORT void AddDoubleWordDataPoint(char* name, int time, uint32_t value)
 {
+	/*
 	int i;
 	for (i = 0; i < dpic; i++)
 	{
@@ -594,15 +626,17 @@ EXPORT void AddDoubleWordDataPoint(char* name, int time, uint32_t value)
 			return;
 		}
 	}
+	*/
 	dpis[dpic].type = DP_TYPE_DOUBLEWORD;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
 	dpis[dpic].rsv1 = value;
 	dpic++;
 }
-
+// Add a DataPoint of FLOAT value
 EXPORT void AddFloatDataPoint(char* name, int time, float value)
 {
+	/*
 	int i;
 	for (i = 0; i < dpic; i++)
 	{
@@ -614,15 +648,17 @@ EXPORT void AddFloatDataPoint(char* name, int time, float value)
 			return;
 		}
 	}
+	*/
 	dpis[dpic].type = DP_TYPE_FLOAT;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
 	FLOATVALUE(dpis[dpic]) = value;
 	dpic++;
 }
-
+// Add a DataPoint of DOUBLE value
 EXPORT void AddDoubleDataPoint(char* name, int time, double value)
 {
+	/*
 	int i;
 	for (i = 0; i < dpic; i++)
 	{
@@ -634,6 +670,7 @@ EXPORT void AddDoubleDataPoint(char* name, int time, double value)
 			return;
 		}
 	}
+	*/
 	dpis[dpic].type = DP_TYPE_DOUBLE;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
@@ -766,7 +803,16 @@ void _RemoveViewPoint(int id)
 
 EXPORT void RemoveViewInput(char* name, int type)
 {
-
+	int i = 0, j = 0;
+	for (; i < dpic ; i++)
+	{
+		if (strcmp(dpis[i].name, name) ||
+			dpis[i].type != type)
+		{
+			memcpy(dpis+(j++), dpis+i, sizeof(struct DataPoint));
+		}
+	}
+	dpic = j;
 }
 
 EXPORT void RemoveViewOutput(char* name, int type)

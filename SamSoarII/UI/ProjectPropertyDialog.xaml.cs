@@ -48,7 +48,6 @@ namespace SamSoarII.AppMain.UI
                 item.Save();
             }
         }
-
         private void ShowWidget(int index)
         {
             ContentGrid.Children.Clear();

@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class INVDViewModel : OutputRectBaseViewModel
     {
         private INVDModel _model;
-        private DoubleWordValue InputValue
+        public DoubleWordValue InputValue
         {
             get
             {
@@ -26,10 +26,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.InputValue = value;
-                MiddleTextBlock1.Text = _model.InputValue.ValueShowString;
+                MiddleTextBlock1.Text = String.Format("IN:{0:s}", _model.InputValue.ValueShowString);
             }
         }
-        private DoubleWordValue OutputValue
+        public DoubleWordValue OutputValue
         {
             get
             {
@@ -38,7 +38,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.OutputValue = value;
-                BottomTextBlock.Text = _model.OutputValue.ValueShowString;
+                BottomTextBlock.Text = String.Format("OUT:{0:s}", _model.OutputValue.ValueShowString);
             }
         }
         public override BaseModel Model

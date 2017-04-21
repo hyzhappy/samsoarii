@@ -1,7 +1,6 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.AppMain.Properties;
 using SamSoarII.AppMain.UI.HelpDocComponet;
-using SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,6 +23,10 @@ namespace SamSoarII.AppMain.UI
             {
                 XDocument xDoc = new XDocument();
                 var rootNode = new XElement("UserSetting");
+                rootNode.Add(new XElement("FavoritePages"));
+                rootNode.Add(new XElement("RecentUsedProjectMessages"));
+                rootNode.Add(new XElement("SystemSetting"));
+                rootNode.Add(new XElement("SimulateSetting"));
                 xDoc.Add(rootNode);
                 Directory.CreateDirectory(dir);
                 xDoc.Save(File.Create(path));
@@ -37,6 +40,8 @@ namespace SamSoarII.AppMain.UI
             {
                 FavoriteManager.LoadFavoritePagesByXElement(rootNode.Element("FavoritePages"));
                 ProjectFileManager.LoadRecentUsedProjectsByXElement(rootNode.Element("RecentUsedProjectMessages"));
+                GlobalSetting.LoadSystemSettingByXELement(rootNode.Element("SystemSetting"));
+                Simulation.Core.Global.GlobalSetting.LoadSystemSettingByXELement(rootNode.Element("SimulateSetting"), rootNode.Element("SystemSetting"));
             }
         }
         public static void Save()
@@ -45,6 +50,8 @@ namespace SamSoarII.AppMain.UI
             XElement rootNode = new XElement("UserSetting");
             rootNode.Add(FavoriteManager.CreateXElementByPageIndex());
             rootNode.Add(ProjectFileManager.CreateXElementByRecentUsedProjects());
+            rootNode.Add(GlobalSetting.CreateXELementBySetting());
+            rootNode.Add(Simulation.Core.Global.GlobalSetting.CreateXELementBySetting());
             xDoc.Add(rootNode);
             xDoc.Save(dir + @"\UserSetting.xml");
         }

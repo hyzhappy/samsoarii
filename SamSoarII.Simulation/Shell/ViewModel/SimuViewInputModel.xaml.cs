@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using SamSoarII.Simulation.Core.VariableModel;
+using SamSoarII.UserInterface;
 
 /// <summary>
 /// ClassName : SimuViewInputModel
@@ -59,8 +60,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "LDWLE":
                 case "LDWG":
                 case "LDWL":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "WORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "WORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "WORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "WORD");
                     break;
                 // (rD, rD)
                 case "LDDEQ":
@@ -69,8 +70,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "LDDLE":
                 case "LDDG":
                 case "LDDL":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "DWORD");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "DWORD");
+                    this[1] = _parent.GetVariableUnit(texts[1], "DWORD");
+                    this[2] = _parent.GetVariableUnit(texts[2], "DWORD");
                     break;
                 // (rF, rF)
                 case "LDFEQ":
@@ -79,12 +80,12 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 case "LDFLE":
                 case "LDFG":
                 case "LDFL":
-                    this._args1 = _parent.GetVariableUnit(texts[1], "FLOAT");
-                    this._args2 = _parent.GetVariableUnit(texts[2], "FLOAT");
+                    this[1] = _parent.GetVariableUnit(texts[1], "FLOAT");
+                    this[2] = _parent.GetVariableUnit(texts[2], "FLOAT");
                     break;
                 default:
                     // 输入元件的唯一参数为位参数
-                    this._args1 = _parent.GetVariableUnit(texts[1], "BIT");
+                    this[1] = _parent.GetVariableUnit(texts[1], "BIT");
                     break;
             }
             // 更新画面就能显示出来
@@ -95,8 +96,13 @@ namespace SamSoarII.Simulation.Shell.ViewModel
         /// </summary>
         public override void Update()
         {
+            Dispatcher.Invoke(_Update);
+        } 
+
+        private void _Update()
+        {
             // 显示位参数的名称和值
-            ValueTextBlock.Text = _args1.ToString();
+            ValueTextBlock.Text = this[1].ToString();
             // 开始画画
             Line line = null;
             //Rectangle rect = null;
@@ -107,10 +113,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             {
                 case "LDWEQ":
                     CenterTextBlock.Text = "W==";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 == i2)
                     {
                         FillGreen();
@@ -118,10 +124,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDWNE":
                     CenterTextBlock.Text = "W<>";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 != i2)
                     {
                         FillGreen();
@@ -129,10 +135,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDWGE":
                     CenterTextBlock.Text = "W>=";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 >= i2)
                     {
                         FillGreen();
@@ -140,10 +146,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDWLE":
                     CenterTextBlock.Text = "W<=";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 <= i2)
                     {
                         FillGreen();
@@ -151,10 +157,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDWG":
                     CenterTextBlock.Text = "W>";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 > i2)
                     {
                         FillGreen();
@@ -162,10 +168,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDWL":
                     CenterTextBlock.Text = "W<";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 < i2)
                     {
                         FillGreen();
@@ -173,10 +179,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDDEQ":
                     CenterTextBlock.Text = "D==";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 == i2)
                     {
                         FillGreen();
@@ -184,10 +190,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDDNE":
                     CenterTextBlock.Text = "D<>";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 != i2)
                     {
                         FillGreen();
@@ -195,10 +201,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDDGE":
                     CenterTextBlock.Text = "D>=";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 >= i2)
                     {
                         FillGreen();
@@ -206,10 +212,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDDLE":
                     CenterTextBlock.Text = "D<=";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 <= i2)
                     {
                         FillGreen();
@@ -217,10 +223,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDDG":
                     CenterTextBlock.Text = "D>";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 > i2)
                     {
                         FillGreen();
@@ -228,10 +234,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDDL":
                     CenterTextBlock.Text = "D<";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    i1 = (int)(_args1.Value);
-                    i2 = (int)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    i1 = (int)(this[1].Value);
+                    i2 = (int)(this[2].Value);
                     if (i1 < i2)
                     {
                         FillGreen();
@@ -239,10 +245,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDFEQ":
                     CenterTextBlock.Text = "F==";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    f1 = (float)(_args1.Value);
-                    f2 = (float)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    f1 = (float)(this[1].Value);
+                    f2 = (float)(this[2].Value);
                     if (f1 == f2)
                     {
                         FillGreen();
@@ -250,10 +256,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDFNE":
                     CenterTextBlock.Text = "F<>";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    f1 = (float)(_args1.Value);
-                    f2 = (float)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    f1 = (float)(this[1].Value);
+                    f2 = (float)(this[2].Value);
                     if (f1 != f2)
                     {
                         FillGreen();
@@ -261,10 +267,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDFGE":
                     CenterTextBlock.Text = "F>=";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    f1 = (float)(_args1.Value);
-                    f2 = (float)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    f1 = (float)(this[1].Value);
+                    f2 = (float)(this[2].Value);
                     if (f1 >= f2)
                     {
                         FillGreen();
@@ -272,10 +278,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDFLE":
                     CenterTextBlock.Text = "F<=";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    f1 = (float)(_args1.Value);
-                    f2 = (float)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    f1 = (float)(this[1].Value);
+                    f2 = (float)(this[2].Value);
                     if (f1 <= f2)
                     {
                         FillGreen();
@@ -283,10 +289,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDFG":
                     CenterTextBlock.Text = "F>";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    f1 = (float)(_args1.Value);
-                    f2 = (float)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    f1 = (float)(this[1].Value);
+                    f2 = (float)(this[2].Value);
                     if (f1 > f2)
                     {
                         FillGreen();
@@ -294,10 +300,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 case "LDFL":
                     CenterTextBlock.Text = "F<";
-                    ValueTextBlock.Text = _args1.ToString();
-                    Value2TextBlock.Text = _args2.ToString();
-                    f1 = (float)(_args1.Value);
-                    f2 = (float)(_args2.Value);
+                    ValueTextBlock.Text = this[1].ToString();
+                    Value2TextBlock.Text = this[2].ToString();
+                    f1 = (float)(this[1].Value);
+                    f2 = (float)(this[2].Value);
                     if (f1 < f2)
                     {
                         FillGreen();
@@ -305,13 +311,13 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 default:
                     // 涂个-[绿]-表示当前值为1
-                    if ((int)(_args1.Value) == 1)
+                    if ((int)(this[1].Value) == 1)
                     {
                         FillGreen();
                     }
                     else
                     // 涂个-[红]-表示当前值非法
-                    if ((int)(_args1.Value) != 0)
+                    if ((int)(this[1].Value) != 0)
                     {
                         FillRed();
                     }
@@ -418,7 +424,6 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
             }
             CenterCanvas.Children.Add(CenterTextBlock);
-
         }
 
         private void FillGreen()
@@ -437,6 +442,70 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             rect.Height = CenterCanvas.Height;
             rect.Fill = Brushes.Green;
             CenterCanvas.Children.Add(rect);
+        }
+
+        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            if (dialog != null)
+            {
+                return;
+            }
+            string[] labels = null;
+            string[] values = null;
+            string[] types = null;
+            switch (Inst)
+            { 
+                // (Value1, Value2)
+                case "LDWEQ":
+                case "LDWNE":
+                case "LDWGE":
+                case "LDWLE":
+                case "LDWG":
+                case "LDWL":
+                case "LDDEQ":
+                case "LDDNE":
+                case "LDDGE":
+                case "LDDLE":
+                case "LDDG":
+                case "LDDL":
+                case "LDFEQ":
+                case "LDFNE":
+                case "LDFGE":
+                case "LDFLE":
+                case "LDFG":
+                case "LDFL":
+                    labels = new string[2];
+                    values = new string[2];
+                    types = new string[2];
+                    labels[0] = String.Format("{0:s}(Value1)", this[1].Name);
+                    labels[1] = String.Format("{0:s}(Value2)", this[2].Name);
+                    values[0] = String.Empty;
+                    values[1] = String.Empty;
+                    types[0] = this[1].Type;
+                    types[1] = this[2].Type;
+                    if (this[1].Islocked)
+                        values[0] = this[1].Value.ToString();
+                    if (this[2].Islocked)
+                        values[1] = this[2].Value.ToString();
+                    break;
+                // (Value)
+                default:
+                    labels = new string[1];
+                    values = new string[1];
+                    types = new string[1];
+                    labels[0] = String.Format("{0:s}(Value)", this[1].Name);
+                    values[0] = String.Empty;
+                    types[0] = this[1].Type;
+                    if (this[1].Islocked)
+                        values[0] = this[1].Value.ToString();
+                    break;
+            }
+            dialog = new SimuArgsDialog(labels, values, types);
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialog.EnsureClick += OnDialogEnsureClicked;
+            dialog.CancelClick += OnDialogCancelClicked;
+            dialog.ShowDialog();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,26 @@ namespace SamSoarII.AppMain.Project
     /// </summary>
     public partial class SelectRect : UserControl
     {
-
+        protected LadderNetworkViewModel parent;
+        public event RoutedEventHandler NetworkParentChanged = delegate { };
+        public LadderNetworkViewModel NetworkParent
+        {
+            get { return this.parent; }
+            set
+            {
+                this.parent = value;
+                NetworkParentChanged(this, new RoutedEventArgs());
+            }
+        }
+        public BaseViewModel CurrentElement
+        {
+            get
+            {
+                if (parent == null) return null;
+                return parent.GetElementByPosition(X, Y);
+            }
+        }
+        
         private bool _isCommentMode;
         public bool IsCommentMode
         {
@@ -37,6 +57,7 @@ namespace SamSoarII.AppMain.Project
         }
         int _x;
 
+        public event RoutedEventHandler XChanged = delegate { };
         public int X
         {
             get
@@ -47,10 +68,12 @@ namespace SamSoarII.AppMain.Project
             {
                 _x = value;
                 UpdateLeftProperty();
+                XChanged(this, new RoutedEventArgs());
             }
         }
         int _y;
 
+        public event RoutedEventHandler YChanged = delegate { };
         public int Y
         {
             get
@@ -61,6 +84,7 @@ namespace SamSoarII.AppMain.Project
             {
                 _y = value;
                 UpdateTopProperty();
+                YChanged(this, new RoutedEventArgs());
             }
         }
         public SelectRect()

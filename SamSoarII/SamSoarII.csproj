@@ -83,11 +83,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AvalonDockTest.xaml.cs">
+      <DependentUpon>AvalonDockTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Event\LadderElementChangedArgs.cs" />
     <Compile Include="Event\RoutineChangedEventArgs.cs" />
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
     <Compile Include="Event\TabType.cs" />
     <Compile Include="Functionality\LadderVariable.cs" />
     <Compile Include="Global\GlobalUsageList.cs" />
+    <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
@@ -108,6 +113,12 @@
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\GenerateHelper.cs" />
+    <Compile Include="Project\InstructionDiagramViewModel.xaml.cs">
+      <DependentUpon>InstructionDiagramViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Project\InstructionNetworkViewModel.xaml.cs">
+      <DependentUpon>InstructionNetworkViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project\IProgram.cs" />
     <Compile Include="Project\ITabItem.cs" />
     <Compile Include="Project\LadderDiagramViewModel.xaml.cs">
@@ -118,9 +129,15 @@
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\ProjectFileManager.cs" />
+    <Compile Include="Project\ModbusTableViewModel.xaml.cs">
+      <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project\ProjectHelper.cs" />
     <Compile Include="Project\ProjectModel.cs" />
     <Compile Include="Project\ProjectRecentUseTime.cs" />
+    <Compile Include="Project\ReportOutputModel.xaml.cs">
+      <DependentUpon>ReportOutputModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
@@ -139,6 +156,12 @@
       <DependentUpon>HelpDocFavorite.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\HelpDocComponet\HelpDocPages\NavigatePage.cs" />
+    <Compile Include="UI\MainTabControl.xaml.cs">
+      <DependentUpon>MainTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainTabDiagramItem.xaml.cs">
+      <DependentUpon>MainTabDiagramItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\HelpDocComponet\HelpDocPages\Communication Protocol\Page8200.xaml.cs">
       <DependentUpon>Page8200.xaml</DependentUpon>
     </Compile>
@@ -742,14 +765,16 @@
     </Compile>
     <Compile Include="UI\HelpDocComponet\HelpDocTreeItem.cs" />
     <Compile Include="UI\HelpDocComponet\PageTabControl.cs" />
+    <Compile Include="UI\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserSetting\SettingManager.cs" />
     <Compile Include="UI\HelpDocWindow.xaml.cs">
       <DependentUpon>HelpDocWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\InstrucionTreeItem.cs" />
-    <Compile Include="UI\MainTabControl.cs" />
-    <Compile Include="UI\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="UI\ModbusTableDialog.xaml.cs">
+      <DependentUpon>ModbusTableDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ElementListHelp\CSVFileHelper.cs" />
     <Compile Include="UI\OptionDialog.xaml.cs">
@@ -842,6 +867,10 @@
       <Project>{827f8c33-8118-48c7-ab3c-4864298396ad}</Project>
       <Name>ColorPicker</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
+      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
+      <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
       <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
       <Name>ICSharpCode.AvalonEdit</Name>
@@ -896,7 +925,19 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AvalonDockTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Project\FuncBlockViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Project\InstructionDiagramViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Project\InstructionNetworkViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -908,6 +949,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Project\ModbusTableViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Project\ReportOutputModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Project\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -917,6 +966,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ElementList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainTabDiagramItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ModbusTableDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1724,10 +1789,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UI\OptionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1792,6 +1853,7 @@
     <Resource Include="Resources\Image\Save.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Image\Simu.png" />
     <Resource Include="Resources\Image\TreeViewIcon\MainProgram.ico" />
     <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
     <Resource Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
@@ -1822,6 +1884,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\InstructionPopup.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -1831,6 +1894,9 @@
   <ItemGroup>
     <Resource Include="Resources\Image\Expand\ExpandOff.png" />
     <Resource Include="Resources\Image\Expand\ExpandOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Upload.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\HelpDocComponet\Resources\Images\Back.png" />
@@ -1875,6 +1941,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\HelpDocComponet\Resources\Images\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Inst.png" />
+    <Resource Include="Resources\Image\Ladder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\SpecialRegisters.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

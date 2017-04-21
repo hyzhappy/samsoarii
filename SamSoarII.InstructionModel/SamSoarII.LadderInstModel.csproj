@@ -40,6 +40,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auxiliar\CMLDModel.cs" />
+    <Compile Include="Auxiliar\CMLModel.cs" />
+    <Compile Include="Auxiliar\CMPDModel.cs" />
+    <Compile Include="Auxiliar\CMPFModel.cs" />
+    <Compile Include="Auxiliar\CMPModel.cs" />
+    <Compile Include="Auxiliar\FACTModel.cs" />
+    <Compile Include="Auxiliar\FMOVModel.cs" />
+    <Compile Include="Auxiliar\LOGModel.cs" />
+    <Compile Include="Auxiliar\NEGDModel.cs" />
+    <Compile Include="Auxiliar\NEGModel.cs" />
+    <Compile Include="Auxiliar\POWModel.cs" />
+    <Compile Include="Auxiliar\SMOVModel.cs" />
+    <Compile Include="Auxiliar\XCHDModel.cs" />
+    <Compile Include="Auxiliar\XCHFModel.cs" />
+    <Compile Include="Auxiliar\XCHModel.cs" />
+    <Compile Include="Auxiliar\ZCPDModel.cs" />
+    <Compile Include="Auxiliar\ZCPFModel.cs" />
+    <Compile Include="Auxiliar\ZCPModel.cs" />
     <Compile Include="BaseModel.cs" />
     <Compile Include="BitLogic\ALTModel.cs" />
     <Compile Include="BitLogic\ALTPModel.cs" />
@@ -58,6 +76,9 @@
     <Compile Include="BitLogic\RSTModel.cs" />
     <Compile Include="BitLogic\SETIMModel.cs" />
     <Compile Include="BitLogic\SETModel.cs" />
+    <Compile Include="Communication\MBUSModel.cs" />
+    <Compile Include="Communication\REVModel.cs" />
+    <Compile Include="Communication\SENDModel.cs" />
     <Compile Include="Compare\LDDEQModel.cs" />
     <Compile Include="Compare\LDDGEModel.cs" />
     <Compile Include="Compare\LDDGModel.cs" />
@@ -97,6 +118,7 @@
     <Compile Include="FloatCalculation\SQRTModel.cs" />
     <Compile Include="FloatCalculation\SUBFModel.cs" />
     <Compile Include="FloatCalculation\TANModel.cs" />
+    <Compile Include="HighCount\HCNTModel.cs" />
     <Compile Include="IntegerCalculation\ADDDModel.cs" />
     <Compile Include="IntegerCalculation\ADDModel.cs" />
     <Compile Include="IntegerCalculation\DECDModel.cs" />
@@ -111,6 +133,10 @@
     <Compile Include="IntegerCalculation\MULWModel.cs" />
     <Compile Include="IntegerCalculation\SUBDModel.cs" />
     <Compile Include="IntegerCalculation\SUBModel.cs" />
+    <Compile Include="Interrupt\ATCHModel.cs" />
+    <Compile Include="Interrupt\DIModel.cs" />
+    <Compile Include="Interrupt\DTCHModel.cs" />
+    <Compile Include="Interrupt\EIModel.cs" />
     <Compile Include="LogicOperation\ANDDModel.cs" />
     <Compile Include="LogicOperation\ANDWModel.cs" />
     <Compile Include="LogicOperation\INVDModel.cs" />
@@ -131,8 +157,23 @@
     <Compile Include="ProgramControl\LBLModel.cs" />
     <Compile Include="ProgramControl\NEXTModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pulse\DDRVIModel.cs" />
+    <Compile Include="Pulse\DPLSFModel.cs" />
+    <Compile Include="Pulse\DPLSRDModel.cs" />
+    <Compile Include="Pulse\DPLSRModel.cs" />
+    <Compile Include="Pulse\DPLSYModel.cs" />
+    <Compile Include="Pulse\DPWMModel.cs" />
+    <Compile Include="Pulse\DRVIModel.cs" />
+    <Compile Include="Pulse\DZRNModel.cs" />
     <Compile Include="Pulse\PLSFModel.cs" />
+    <Compile Include="Pulse\PLSNEXTModel.cs" />
+    <Compile Include="Pulse\PLSRDModel.cs" />
+    <Compile Include="Pulse\PLSRModel.cs" />
+    <Compile Include="Pulse\PLSSTOPModel.cs" />
+    <Compile Include="Pulse\PLSYModel.cs" />
+    <Compile Include="Pulse\PTOModel.cs" />
     <Compile Include="Pulse\PWMModel.cs" />
+    <Compile Include="Pulse\ZRNModel.cs" />
     <Compile Include="RealTime\TRDModel.cs" />
     <Compile Include="RealTime\TWRModel.cs" />
     <Compile Include="Shift\ROLDModel.cs" />
@@ -150,7 +191,7 @@
     <Compile Include="Timer\TONRModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interrupt\" />
+    <Compile Include="Auxiliar\FMOVDModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SamSoarII.ValueModel\SamSoarII.ValueModel.csproj">

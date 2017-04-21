@@ -86,5 +86,22 @@
             <Button x:Name="CancelButton" Content="取消" Width="70" Height="25" Margin="50,0,0,0" Click="OnCancelButtonClick"></Button>
             <Button x:Name="EnsureButton" Content="确定" Width="70" Height="25" Margin="50,0,0,0" Click="OnEnsureButtonClick"></Button>
         </StackPanel>
+        
+        <local:PopupNotTop x:Name="SelectCollectionPopup" Placement="Bottom" HorizontalOffset="0" VerticalOffset="0" Width="300" IsOpen="True" Topmost="False">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" CanContentScroll="True">
+                <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
+                    <local:CollectionStackPanel.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="Height" Value="20"></Setter>
+                            <Setter Property="FontSize" Value="14"></Setter>
+                            <Setter Property="Padding" Value="0"></Setter>
+                            <EventSetter Event="MouseLeftButtonDown" Handler="OnLeftDown"></EventSetter>
+                            <EventSetter Event="MouseEnter" Handler="OnMouseEnter"></EventSetter>
+                            <EventSetter Event="MouseLeave" Handler="OnMouseLeave"></EventSetter>
+                        </Style>
+                    </local:CollectionStackPanel.Resources>
+                </local:CollectionStackPanel>
+            </ScrollViewer>
+        </local:PopupNotTop>
     </Grid>
 </Window>

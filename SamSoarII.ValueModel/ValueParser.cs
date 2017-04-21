@@ -59,6 +59,7 @@ namespace SamSoarII.ValueModel
         public static Regex VerifyBitRegex2 = new Regex(@"^(Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public static Regex VerifyBitRegex3 = new Regex(@"^(Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public static Regex VerifyBitRegex4 = new Regex(@"^Y([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex VerifyBitRegex5 = new Regex(@"^(X|M)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static Regex VerifyWordRegex1 = new Regex(@"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public static Regex VerifyWordRegex2 = new Regex(@"^(D|CV|TV|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);

@@ -8,7 +8,6 @@ namespace SamSoarII.ValueModel
 {
     public class DWordValue : WordValue
     {
-
         public DWordValue(uint index, WordValue offset)
         {
             Index = index;
@@ -33,7 +32,7 @@ namespace SamSoarII.ValueModel
 
         public override string GetValue()
         {
-            throw new NotImplementedException();
+            return Index.ToString();
         }
     }
 }

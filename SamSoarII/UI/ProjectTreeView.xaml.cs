@@ -24,15 +24,15 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class ProjectTreeView : UserControl, INotifyPropertyChanged
     {
+
         private ProjectModel _projectModel;
         public ProjectModel Project
         {
             get { return _projectModel; }
         }
+
         private string _oldname;
-
-        private object _renamedItem;
-
+        
         private bool _isInEditMode;
         public bool IsInEditMode
         {
@@ -48,6 +48,8 @@ namespace SamSoarII.AppMain.UI
 
         public event ShowTabItemEventHandler TabItemOpened = delegate { };
 
+        public event RoutedEventHandler RoutineCompile = delegate { };
+
         public event RoutineRenamedEventHandler RoutineRenamed = delegate { };
 
         public event RoutedEventHandler RoutineRemoved = delegate { };
@@ -62,7 +64,10 @@ namespace SamSoarII.AppMain.UI
             _projectModel = project;
             DataContext = Project;
             Project.RefNetworksBriefChanged += Project_RefNetworksBriefChanged;
+            Project.MTVModel.ModelChanged += OnModbusChanged;
+            OnModbusChanged(this, new RoutedEventArgs());
         }
+
         private void Project_RefNetworksBriefChanged(RefNetworksBriefChangedEventArgs e)
         {
             switch (e.Type)
@@ -113,6 +118,7 @@ namespace SamSoarII.AppMain.UI
                     break;
             }
         }
+
         #region Event handler
         // 从ContextMenu打开子程序处理事件，直接调用双击事件
         void OnOpenRoutine(object sender, RoutedEventArgs e)
@@ -152,6 +158,35 @@ namespace SamSoarII.AppMain.UI
                 InstructionTreeItemDoubleClick.Invoke(sender, e);
             }
         }
+        private void OnShowCommentList(object sender, MouseButtonEventArgs e)
+        {
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
+        }
+
+        private void OnShowCommentList(object sender, RoutedEventArgs e)
+        {
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
+        }
+
+        private void OnShowUsageList(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void OnShowUsageList(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnShowVariableList(object sender, MouseButtonEventArgs e)
+        {
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
+        }
+
+        private void OnShowVariableList(object sender, RoutedEventArgs e)
+        {
+            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
+        }
 
         private void OnRenameRoutine(object sender, RoutedEventArgs e)
         {
@@ -175,6 +210,24 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+
+        private void OnCompileRoutine(object sender, RoutedEventArgs e)
+        {
+            var menuitem = sender as MenuItem;
+            if (menuitem != null)
+            {
+                var contextmenu = menuitem.Parent as ContextMenu;
+                if (contextmenu != null)
+                {
+                    var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
+                    if (treeviewitem != null)
+                    {
+                        RoutineCompile.Invoke(treeviewitem.Header, new RoutedEventArgs());
+                    }
+                }
+            }
+        }
+
         private void OnRemoveRoutine(object sender, RoutedEventArgs e)
         {
             var menuitem = sender as MenuItem;
@@ -227,6 +280,7 @@ namespace SamSoarII.AppMain.UI
             TreeViewItem item = FindTreeItem(sender as TextBox);
             RoutineRenamed.Invoke(item.Header, new RoutineRenamedEventArgs(textBox.Text));
         }
+
         static TreeViewItem FindTreeItem(DependencyObject source)
         {
             while (source != null && !(source is TreeViewItem))
@@ -265,8 +319,6 @@ namespace SamSoarII.AppMain.UI
                 _elementList.Show();
             }
         }
-        #endregion
-
         private void OnSelected(object sender, RoutedEventArgs e)
         {
             TreeViewItem item = sender as TreeViewItem;
@@ -292,5 +344,103 @@ namespace SamSoarII.AppMain.UI
                 e.Handled = true;
             }
         }
+        #region Modbus
+        private TreeViewItem _GetTVItemFromMItem(MenuItem mitem)
+        {
+            if (mitem.Parent is ContextMenu)
+            {
+                ContextMenu cmenu = (ContextMenu)(mitem.Parent);
+                if (cmenu.PlacementTarget is TreeViewItem)
+                {
+                    TreeViewItem tvitem = (TreeViewItem)(cmenu.PlacementTarget);
+                    return tvitem;
+                }
+            }
+            return null;
+        }
+
+        private void OnModbusChanged(object sender, RoutedEventArgs e)
+        {
+            TVI_Modbus.Items.Clear();
+            foreach (ModbusTableModel model in Project.MTVModel.Models)
+            {
+                TreeViewItem tvitem = new TreeViewItem();
+                tvitem.Header = model.Name;
+                TVI_Modbus.Items.Add(tvitem);
+            }
+        }
+
+        private void OnModbusCreated(object sender, RoutedEventArgs e)
+        {
+            TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
+            Project.MTVModel.AddModel();
+        }
+
+        private void OnModbusDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == TVI_Modbus)
+            {
+                TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
+            }
+            else if (sender is TreeViewItem)
+            {
+                OnModbusOpened(sender, new RoutedEventArgs());
+            }
+        }
+        
+        private void OnModbusOpened(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+            {
+                MenuItem mitem = (MenuItem)(sender);
+                sender = _GetTVItemFromMItem(mitem);
+            }
+            if (sender is TreeViewItem)
+            {
+                string header = ((TreeViewItem)(sender)).Header.ToString();
+                IEnumerable<ModbusTableModel> fit = Project.MTVModel.Models.Where(
+                    (ModbusTableModel model) => { return model.Name.Equals(header); });
+                if (fit.Count() > 0)
+                    Project.MTVModel.Current = fit.First();
+                if (Project.MTVModel.Current != null)
+                    TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
+                else
+                    MessageBox.Show(String.Format("错误：找不到{0:s}。", header));
+            }
+        }
+
+        private void OnModbusRenamed(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+            {
+                MenuItem mitem = (MenuItem)(sender);
+                sender = _GetTVItemFromMItem(mitem);
+            }
+            if (sender is TreeViewItem)
+            {
+                OnModbusOpened(sender, e);
+                if (Project.MTVModel.Current != null)
+                    Project.MTVModel.RenameModel();
+            }
+        }
+
+        private void OnModbusRemoved(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+            {
+                MenuItem mitem = (MenuItem)(sender);
+                sender = _GetTVItemFromMItem(mitem);
+            }
+            if (sender is TreeViewItem)
+            {
+                OnModbusOpened(sender, e);
+                if (Project.MTVModel.Current != null)
+                    Project.MTVModel.RemoveModel();
+            }
+        }
+
+        #endregion
+
+        #endregion
     }
 }

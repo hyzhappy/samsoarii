@@ -117,33 +117,54 @@ namespace ICSharpCode.AvalonEdit.Editing
 			DocumentStart,
 			DocumentEnd
 		}
-		
+        
+
 		static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType direction)
 		{
-			return (target, args) => {
-				TextArea textArea = GetTextArea(target);
-				if (textArea != null && textArea.Document != null) {
-					args.Handled = true;
-					textArea.ClearSelection();
-					MoveCaret(textArea, direction);
-					textArea.Caret.BringCaretToView();
-				}
-			};
+            return (target, args) =>
+            {
+                TextArea textArea = GetTextArea(target);
+                if (textArea != null && textArea.Document != null)
+                {
+                    switch (direction)
+                    {
+                        case CaretMovementType.LineUp:
+                        case CaretMovementType.LineDown:
+                            if (textArea.IsCodeCompleteMode)
+                                return;
+                            break;
+                    }
+                    args.Handled = true;
+                    textArea.ClearSelection();
+                    MoveCaret(textArea, direction);
+                    textArea.Caret.BringCaretToView();
+                }
+            };
 		}
 		
 		static ExecutedRoutedEventHandler OnMoveCaretExtendSelection(CaretMovementType direction)
 		{
-			return (target, args) => {
-				TextArea textArea = GetTextArea(target);
-				if (textArea != null && textArea.Document != null) {
-					args.Handled = true;
-					TextViewPosition oldPosition = textArea.Caret.Position;
-					MoveCaret(textArea, direction);
-					textArea.Selection = textArea.Selection.StartSelectionOrSetEndpoint(oldPosition, textArea.Caret.Position);
-					if (!textArea.Document.IsInUpdate) // if we're inside a larger update (e.g. called by EditingCommandHandler.OnDelete()), avoid calculating the caret rectangle now
-						textArea.Caret.BringCaretToView();
-				}
-			};
+            return (target, args) =>
+            {
+                TextArea textArea = GetTextArea(target);
+                if (textArea != null && textArea.Document != null)
+                {
+                    switch (direction)
+                    {
+                        case CaretMovementType.LineUp:
+                        case CaretMovementType.LineDown:
+                            if (textArea.IsCodeCompleteMode)
+                                return;
+                            break;
+                    }
+                    args.Handled = true;
+                    TextViewPosition oldPosition = textArea.Caret.Position;
+                    MoveCaret(textArea, direction);
+                    textArea.Selection = textArea.Selection.StartSelectionOrSetEndpoint(oldPosition, textArea.Caret.Position);
+                    if (!textArea.Document.IsInUpdate) // if we're inside a larger update (e.g. called by EditingCommandHandler.OnDelete()), avoid calculating the caret rectangle now
+                        textArea.Caret.BringCaretToView();
+                }
+            };
 		}
 		
 		static ExecutedRoutedEventHandler OnMoveCaretBoxSelection(CaretMovementType direction)

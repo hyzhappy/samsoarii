@@ -1,0 +1,57 @@
+﻿<Window x:Class="SamSoarII.AppMain.UI.EditVariableDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+        xmlns:app="clr-namespace:SamSoarII.AppMain"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:svm="clr-namespace:SamSoarII.ValueModel;assembly=SamSoarII.ValueModel"
+        mc:Ignorable="d"
+        Title="变量编辑" Height="400" Width="450" PreviewKeyDown="OnPreviewKeyDown">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="LadderValueTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="svm:LadderValueType"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Width" Value="200"></Setter>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0">变量名</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="1">值</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="2">值类型</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="3">注释</TextBlock>
+        <TextBox x:Name="VariableNameTextBox" Grid.Column="1" Grid.Row="0" Height="24" Text="{Binding VarName, Mode=OneTime}"></TextBox>
+        <TextBox x:Name="VariableValueTextBox" Grid.Column="1" Grid.Row="1" Height="24" Text="{Binding MappedValue.ValueString, Mode=OneTime}"></TextBox>
+        <ComboBox x:Name="VariableValueTypeCombobox" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="24" ItemsSource="{Binding Source={StaticResource LadderValueTypeEnum}}" SelectedItem="{Binding Type, Mode=OneTime}">
+            
+        </ComboBox>
+        <TextBox x:Name="VariableCommentTextBox" Grid.Column="1" Grid.Row="3" Height="80" Text="{Binding Comment, Mode=OneTime}"></TextBox>
+        <Grid Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
+            <Button Width="80" Height="25" HorizontalAlignment="Right" Margin="0,0,200,0" Click="OnEnsureButtonClick">确定</Button>
+            <Button Width="80" Height="25" HorizontalAlignment="Right" Margin="0,0,80,0" Click="OnCancelButtonClick">取消</Button>
+        </Grid>
+    </Grid>
+</Window>

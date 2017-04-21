@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstViewModel
     public class MOVViewModel : OutputRectBaseViewModel
     {
         private MOVModel _model = new MOVModel();
-        private WordValue SourceValue
+        public WordValue SourceValue
         {
             get
             {
@@ -26,10 +26,10 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock2.Text = string.Format("S : {0}", _model.SourceValue.ValueShowString);
+                MiddleTextBlock2.Text = string.Format("S:{0}", _model.SourceValue.ValueShowString);
             }
         }
-        private WordValue DestinationValue
+        public WordValue DestinationValue
         {
             get
             {
@@ -38,7 +38,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = string.Format("D : {0}", _model.DestinationValue.ValueShowString);
+                BottomTextBlock.Text = string.Format("D:{0}", _model.DestinationValue.ValueShowString);
             }
         }
         public override BaseModel Model

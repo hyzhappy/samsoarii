@@ -10,17 +10,26 @@ namespace SamSoarII.LadderInstModel
     public class CALLMModel : BaseModel
     {
         public string FunctionName { get; set; }
-        public WordValue Value1 { get; set; }
-        public BitValue Value2 { get; set; }
+        public IValueModel Value1 { get; set; }
+        public IValueModel Value2 { get; set; }
+        public IValueModel Value3 { get; set; }
+        public IValueModel Value4 { get; set; }
+
         public CALLMModel()
         {
             FunctionName = string.Empty;
             Value1 = WordValue.Null;
-            Value2 = BitValue.Null;
+            Value2 = WordValue.Null;
+            Value3 = WordValue.Null;
+            Value4 = WordValue.Null;
         }
         public CALLMModel(string functionName)
         {
             FunctionName = functionName;
+            Value1 = WordValue.Null;
+            Value2 = WordValue.Null;
+            Value3 = WordValue.Null;
+            Value4 = WordValue.Null;
         }
         public override string GenerateCode()
         {

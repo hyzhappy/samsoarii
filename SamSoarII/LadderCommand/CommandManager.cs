@@ -8,6 +8,13 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class CommandManager
     {
+        private bool ismodify;
+        public bool IsModify
+        {
+            get { return this.ismodify; }
+            set { this.ismodify = value; }
+        }
+
         public Stack<IUndoableCommand> UndoStack = new Stack<IUndoableCommand>();
         public Stack<IUndoableCommand> RedoStack = new Stack<IUndoableCommand>();
 
@@ -25,6 +32,7 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             command.Execute();
             UndoStack.Push(command);
+            IsModify = true;
         }
 
         public void Undo()
@@ -34,6 +42,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 var command = UndoStack.Pop();
                 RedoStack.Push(command);
                 command.Undo();
+                IsModify = true;
             }
         }
 
@@ -44,6 +53,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 var command = RedoStack.Pop();
                 UndoStack.Push(command);
                 command.Redo();
+                IsModify = true;
             }
         }
     }

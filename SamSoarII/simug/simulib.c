@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include <math.h>
-#include <Windows.h>
+//#include <Windows.h>
 
+#include "simuc.h"
+#include "simuf.h"
 #include "simulib.h"
 
 /*
@@ -79,7 +81,6 @@ void _bitcpy(uint32_t* source_addr, uint32_t* target_addr, uint16_t size)
 
 // Time counter
 // tval : counter value
-// tblo : 32-bit block of the counter bit
 // tbit : the position of the counter bit in the block
 // cod  : input condition
 // sv   : reserve value
@@ -90,7 +91,7 @@ void _ton(uint16_t* tval, uint32_t* tbit, uint16_t cod, uint16_t sv, uint32_t* o
 	if (cod)
 	{
 		// get the new time
-		ntim = GetTickCount();
+		ntim = counttimems;
 		// get the inteval from old to new
 		itv = (ntim - *otim) / 100;
 		// increase the counter value and old time
@@ -114,7 +115,6 @@ void _ton(uint16_t* tval, uint32_t* tbit, uint16_t cod, uint16_t sv, uint32_t* o
 
 // Time counter (opened preservation)
 // tval : counter value
-// tblo : 32-bit block of the counter bit
 // tbit : the position of the counter bit in the block
 // cod  : input condition
 // sv   : reserve value
@@ -125,7 +125,7 @@ void _tonr(uint16_t* tval, uint32_t* tbit, uint16_t cod, uint16_t sv, uint32_t* 
 	if (cod)
 	{
 		// get the new time
-		ntim = GetTickCount();
+		ntim = counttimems;
 		// get the inteval from old to new
 		itv = (ntim - *otim) / 100;
 		// increase the counter value and old time
@@ -310,13 +310,13 @@ void _interrupt_timer_create(uint16_t code, uint16_t t1, uint16_t t2)
 {
 	if (code == 6)
 	{
-		itr_timer1_s = GetTickCount();
+		itr_timer1_s = counttimems;
 		itr_timer1_t = itr_timer1_t + t1;
 		itr_timer1_e = 1;
 	}
 	if (code == 7)
 	{
-		itr_timer2_s = GetTickCount();
+		itr_timer2_s = counttimems;
 		itr_timer2_t = itr_timer2_s + t2;
 		itr_timer2_e = 1;
 	}
@@ -384,4 +384,4 @@ void _smov(uint16_t source, uint16_t sb1, uint16_t sb2, uint16_t* target, uint16
 	*target = _BCD_to_WORD(*target);
 }
 
-
+  

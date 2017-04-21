@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SpecialRegisters>
+  <Register Name="D5952" Base="D" Offset="5952"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS1"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5953" Base="D" Offset="5953"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS2"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5954" Base="D" Offset="5954"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS3"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5955" Base="D" Offset="5955"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS4"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5956" Base="D" Offset="5956"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS5"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5957" Base="D" Offset="5957"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS6"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5958" Base="D" Offset="5958"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS7"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5959" Base="D" Offset="5959"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS8"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5960" Base="D" Offset="5960"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS9"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5961" Base="D" Offset="5961"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS10"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5962" Base="D" Offset="5962"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS11"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5963" Base="D" Offset="5963"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS12"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5964" Base="D" Offset="5964"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS13"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5965" Base="D" Offset="5965"             
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS14"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5966" Base="D" Offset="5966"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS15"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5967" Base="D" Offset="5967"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS16"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D8060" Base="D" Offset="8060"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT0"
+            Describe="X000滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8061" Base="D" Offset="8060"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT1"
+            Describe="X001滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8062" Base="D" Offset="8062"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT2"
+            Describe="X002滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8063" Base="D" Offset="8063"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT3"
+            Describe="X003滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8064" Base="D" Offset="8064"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT4"
+            Describe="X004滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8065" Base="D" Offset="8065"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT5"
+            Describe="X005滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8066" Base="D" Offset="8066"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT6"
+            Describe="X006滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8067" Base="D" Offset="8067"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT7"
+            Describe="X007滤波时间(0~32767ms)">
+  </Register>
+  
+</SpecialRegisters>

@@ -1,4 +1,7 @@
-﻿using SamSoarII.AppMain.UI;
+﻿using SamSoarII.AppMain.Project;
+using SamSoarII.AppMain.UI;
+using SamSoarII.AppMain.UI.HelpDocComponet;
+using SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
 using System;
@@ -19,20 +22,28 @@ namespace SamSoarII.AppMain
         public App()
         {
             ValueCommentManager.Initialize();
-            VariableManager.Initialize();
             ValueAliasManager.Initialize();
             ElementList.InitializeElementCollection();
             InstructionCommentManager.MappedMessageChanged += ElementList.InstructionCommentManager_MappedMessageChanged;
             ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
             ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
-            GlobalSetting.Load();
+            //GlobalSetting.Load();
             SettingManager.Load();
+            //SimulateHelper.LoadGlobalSetting();
             this.Exit += App_Exit;
         }
         private void App_Exit(object sender, ExitEventArgs e)
         {
-            GlobalSetting.Save();
+            //GlobalSetting.Save();
             SettingManager.Save();
+            //SimulateHelper.SaveGlobalSetting();
+            if (SimulateHelper.SModel != null)
+            {
+                SimulateHelper.SModel.Dispose();
+            }
+            SamSoarII.Simulation.Core.SimulateDllModel.FreeDll();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }

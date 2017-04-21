@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
@@ -22,8 +23,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 type1 = 3;
             if (unit1 is SimulateFloatUnit)
                 type1 = 4;
-            if (unit1 is SimulateDoubleUnit)
-                type1 = 5;
             if (unit1 is SimulateUnitSeries)
                 type1 = 6;
 
@@ -35,8 +34,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 type2 = 3;
             if (unit2 is SimulateFloatUnit)
                 type2 = 4;
-            if (unit2 is SimulateDoubleUnit)
-                type2 = 5;
             if (unit2 is SimulateUnitSeries)
                 type2 = 6;
 
@@ -98,6 +95,9 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 this.varname = value;
             }
         }
+
+        public event RoutedEventHandler LockChanged = delegate { };
+
         public bool Islocked
         {
             get
@@ -107,6 +107,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             set
             {
                 this.islocked = value;
+                LockChanged(this, new RoutedEventArgs());
             }
         }
         abstract public string Type
@@ -120,16 +121,18 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
 
         abstract protected bool _Check_Name(string _name);
+        
+        abstract public event RoutedEventHandler ValueChanged;
 
         abstract public void Update(SimulateDllModel dllmodel);
-
+        
         abstract public void Set(SimulateDllModel dllmodel);
 
         public void Setup(SimulateManager _manager)
         {
             manager = _manager;
         }
-
+        
         static public SimulateVariableUnit Create(string _name)
         {
             SimulateBitUnit sbunit = new SimulateBitUnit();
@@ -156,18 +159,61 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 sfunit.Name = _name;
                 return sfunit;
             }
-            SimulateDoubleUnit sdfunit = new SimulateDoubleUnit();
-            if (sdfunit._Check_Name(_name))
-            {
-                sdfunit.Name = _name;
-                return sdfunit;
-            }
             SimulateUnitSeries ssunit = new SimulateUnitSeries();
             if (ssunit._Check_Name(_name))
             {
                 ssunit.Name = _name;
                 ssunit.CreateExpand();
                 return ssunit;
+            }
+            return null;
+        }
+
+        public static SimulateVariableUnit Create(string _name, string type)
+        {
+            switch (type)
+            {
+                case "BIT":
+                    SimulateBitUnit sbunit = new SimulateBitUnit();
+                    if (sbunit._Check_Name(_name))
+                    {
+                        sbunit.Name = _name;
+                        return sbunit;
+                    }
+                    break;
+                case "WORD":
+                    SimulateWordUnit swunit = new SimulateWordUnit();
+                    if (swunit._Check_Name(_name))
+                    {
+                        swunit.Name = _name;
+                        return swunit;
+                    }
+                    break;
+                case "DWORD":
+                    SimulateDWordUnit sdwunit = new SimulateDWordUnit();
+                    if (sdwunit._Check_Name(_name))
+                    {
+                        sdwunit.Name = _name;
+                        return sdwunit;
+                    }
+                    break;
+                case "FLOAT":
+                    SimulateFloatUnit sfunit = new SimulateFloatUnit();
+                    if (sfunit._Check_Name(_name))
+                    {
+                        sfunit.Name = _name;
+                        return sfunit;
+                    }
+                    break;
+                default:
+                    SimulateUnitSeries ssunit = new SimulateUnitSeries();
+                    if (ssunit._Check_Name(_name))
+                    {
+                        ssunit.Name = _name;
+                        ssunit.CreateExpand();
+                        return ssunit;
+                    }
+                    break;
             }
             return null;
         }
@@ -283,9 +329,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 case "FLOAT":
                     svmodel = new SimulateFloatModel();
                     break;
-                case "DOUBLE":
-                    svmodel = new SimulateDoubleModel();
-                    break;
                 default:
                     return svmodel;
             }
@@ -314,10 +357,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
             if (svunitf is SimulateFloatUnit)
             {
                 return SimulateFloatModel.Create(svunits);
-            }
-            if (svunitf is SimulateDoubleUnit)
-            {
-                return SimulateDoubleModel.Create(svunits);
             }
             return null;
         }

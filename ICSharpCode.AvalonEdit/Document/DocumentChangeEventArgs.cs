@@ -6,6 +6,12 @@ using System;
 
 namespace ICSharpCode.AvalonEdit.Document
 {
+    /// <summary>
+    /// The handler of DocumentChargeEvent
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    public delegate void DocumentChangeEventHandler(object sender, DocumentChangeEventArgs e);
 	/// <summary>
 	/// Describes a change of the document text.
 	/// This class is thread-safe.

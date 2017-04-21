@@ -27,6 +27,8 @@ namespace SamSoarII.Extend.LogicGraph
         private LGVertex source;
         private LGVertex dest;
 
+        private string expr;
+
         public LGEdge(LCNode _info, LGVertex _s, LGVertex _d)
         {
             this.id = 0;
@@ -89,6 +91,12 @@ namespace SamSoarII.Extend.LogicGraph
                     case 4: this.flag4 = value; break;
                 }
             }
+        }
+
+        public string Expr
+        {
+            get { return this.expr; }
+            set { this.expr = value; }
         }
 
     }

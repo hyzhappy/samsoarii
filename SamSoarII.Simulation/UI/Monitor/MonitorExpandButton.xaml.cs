@@ -22,7 +22,25 @@ namespace SamSoarII.Simulation.UI.Monitor
     /// </summary>
     public partial class MonitorExpandButton : UserControl
     {
-        private SimulateUnitSeries ssunit;
+        private SimulateVariableUnit svunit;
+
+        public SimulateVariableUnit SVUnit
+        {
+            get { return this.svunit; }
+            set
+            {
+                this.svunit = value;
+                if (svunit == null)
+                {
+                    return;
+                }
+                if (svunit is SimulateUnitSeries)
+                {
+                    SimulateUnitSeries suseries = (SimulateUnitSeries)(svunit);
+                    IsExpanded = suseries.IsExpand;
+                }
+            }
+        }
 
         public const int STATUS_EXPANDOFF = 0x00;
         public const int STATUS_EXPANDON = 0x01;
@@ -48,23 +66,36 @@ namespace SamSoarII.Simulation.UI.Monitor
                     case STATUS_EXPANDOFF:
                         Image_ExpandOff.Opacity = 0.3;
                         Image_ExpandOn.Opacity = 0.0;
-                        ssunit.IsExpand = false;
+                        if (svunit is SimulateUnitSeries)
+                        {
+                            SimulateUnitSeries suseries = (SimulateUnitSeries)(svunit);
+                            if (suseries.IsExpand)
+                            {
+                                suseries.IsExpand = false;
+                            }
+                        }
                         break;
                     case STATUS_EXPANDON:
                         Image_ExpandOff.Opacity = 0.0;
                         Image_ExpandOn.Opacity = 0.8;
-                        ssunit.IsExpand = true;
+                        if (svunit is SimulateUnitSeries)
+                        {
+                            SimulateUnitSeries suseries = (SimulateUnitSeries)(svunit);
+                            if (!suseries.IsExpand)
+                            {
+                                suseries.IsExpand = true;
+                            }
+                        }
                         break;
                 }
             }
         }
 
 
-        public MonitorExpandButton(SimulateUnitSeries _ssunit)
+        public MonitorExpandButton()
         {
             InitializeComponent();
-            ssunit = _ssunit;
-            //IsExpanded = false;
+            IsExpanded = false;
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)

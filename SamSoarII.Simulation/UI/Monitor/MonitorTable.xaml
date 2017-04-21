@@ -5,8 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Monitor"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="320">
     <UserControl.Resources>
+        <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="IsReadOnly" Value="True">
+                    <Setter Property="Background" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <ControlTemplate TargetType="{x:Type Button}" x:Key="MonitorItemCloseButtonTemplate">
             <Canvas Name="ButtonCanvas" Width="24" Height="24" Opacity="0.3" Background="Transparent">
                 <Line Name="Line1" X1="4" Y1="4" X2="20" Y2="20" Stroke="Black" StrokeThickness="1"></Line>
@@ -40,35 +47,29 @@
                 </Grid.ColumnDefinitions>
                 <Grid.Children>
                     <Canvas x:Name="TopBar1" Grid.Row="0" Grid.Column="0">
-                        <Rectangle Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Height="{Binding ElementName=TopBar1, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">寄存器</TextBlock>
                     </Canvas>
                     <Canvas x:Name="TopBar2" Grid.Row="0" Grid.Column="1">
-                        <Rectangle Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Height="{Binding ElementName=TopBar2, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">类型</TextBlock>
                     </Canvas>
                     <Canvas x:Name="TopBar3" Grid.Row="0" Grid.Column="2">
-                        <Rectangle Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Height="{Binding ElementName=TopBar3, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">变量名称</TextBlock>
                     </Canvas>
                     <Canvas x:Name="TopBar4" Grid.Row="0" Grid.Column="3">
-                        <Rectangle Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Height="10" Fill="WhiteSmoke"></Rectangle>
-                        <Rectangle Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Canvas.Top="10" Height="14" Fill="AliceBlue"></Rectangle>
-                        <Border Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Height="{Binding ElementName=TopBar4, Path=ActualHeight}" BorderBrush="Gray" BorderThickness="2"></Border>
+                        <Rectangle Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                                   Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
                         <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">数值</TextBlock>
                     </Canvas>
                 </Grid.Children>
                 <Grid.ContextMenu>
                     <ContextMenu x:Name="RightClickMenu">
-                        <MenuItem Header="添加监视" Click="MonitorAdd_Click"></MenuItem>
-                        <MenuItem Header="删除监视" Click="MonitorDel_Click"></MenuItem>
-                        <MenuItem Header="批量添加" Click="MonitorMulAdd_Click"></MenuItem>
+                        
                     </ContextMenu>
                 </Grid.ContextMenu>
             </Grid>

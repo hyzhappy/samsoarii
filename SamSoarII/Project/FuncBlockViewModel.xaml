@@ -8,10 +8,69 @@
              xmlns:Text="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
-    <Border BorderBrush="Orange" BorderThickness="1">
-        <Grid>
-            <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" FontFamily="Consolas" FontSize="12pt" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"></Text:TextEditor>
-            <!--<TextBox x:Name="CodeTextBox" FontSize="18" AcceptsReturn="True" AcceptsTab="True"/>-->
-        </Grid>
-    </Border>
+    <UserControl.Content>
+        <Border BorderBrush="Orange" BorderThickness="1">
+            <Border.Child>
+                <Grid>
+                    <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" 
+                                         FontFamily="Consolas" FontSize="12pt" 
+                                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    </Text:TextEditor>
+                    <Canvas>
+                        <Canvas.Children>
+                            <!--<TextBox x:Name="CodeTextBox" FontSize="18" AcceptsReturn="True" AcceptsTab="True"/>-->
+                            <Grid x:Name="CodeCompletePanel" Canvas.Top="0" Canvas.Left="0" Width="200" Height="182" 
+                              Background="White" Visibility="Collapsed"
+                              MouseMove="CodeCompletePanel_MouseMove"
+                              MouseLeftButtonDown="CodeCompletePanel_MouseLeftButtonDown">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                    <RowDefinition Height="18"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Children>
+                                    <Border Grid.Row="1" Grid.RowSpan="10" Grid.ColumnSpan="1" 
+                                        BorderBrush="Black" BorderThickness="1"/>
+                                    <Border Grid.ColumnSpan="2"
+                                        BorderBrush="Black" BorderThickness="1" Background="White"/>
+                                    <Canvas Grid.Row="1" Grid.Column="1" Grid.RowSpan="10"
+                                        Background="CornflowerBlue">
+                                        <Canvas.Children>
+                                            <Rectangle x:Name="Scroll" Canvas.Top="0" Canvas.Left="0" Width="12" Height="80"
+                                                   Fill="Aquamarine" Opacity="0.6"
+                                                   MouseEnter="Scroll_MouseEnter"  
+                                                   MouseLeave="Scroll_MouseLeave"
+                                                   MouseLeftButtonDown="Scroll_MouseLeftButtonDown"
+                                                   MouseLeftButtonUp="Scroll_MouseLeftButtonUp"
+                                                   MouseMove="Scroll_MouseMove"/>
+                                        </Canvas.Children>
+                                    </Canvas>
+                                    <Border x:Name="Cursor" Grid.Row="1" Grid.Column="0"
+                                        Background="#8080F0" Opacity="0.4"
+                                        BorderBrush="#2020F0" BorderThickness="1"/>
+                                    <Canvas>
+                                        <Canvas.Children>
+                                            <TextBlock Canvas.Left="0" Canvas.Top="0" x:Name="Profix" FontFamily="Consolas" FontSize="16"/>
+                                            <Line x:Name="ProfixCursor" Y1="2" Y2="18" Stroke="Black" StrokeThickness="1"/>
+                                        </Canvas.Children>
+                                    </Canvas>
+                                </Grid.Children>
+                            </Grid>
+                        </Canvas.Children>
+                    </Canvas>
+                </Grid>
+            </Border.Child>
+        </Border>
+    </UserControl.Content>
 </UserControl>

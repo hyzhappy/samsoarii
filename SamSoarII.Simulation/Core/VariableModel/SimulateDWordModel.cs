@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
     public class SimulateDWordUnit : SimulateVariableUnit
     {
-        protected int value;
+        protected long value;
         override public Object Value
         {
             get { return (Object)(this.value); }
-            set { this.value = (int)(value); }
+            set { this.value = (long)(value); }
         }
         public override string ToString()
         {
-            string _name = String.Format("{0:s}({1:s}{2:d}) = {3}", Name, basename, offset + 1,value);
+            string _name = Name;
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return _name;
+            return String.Format("{0:s}({1:s}{2:d})={3}{4:d}", Name, basename, offset + 1, value, Islocked ? "(Lock)" : String.Empty);
         }
         public override string Type
         {
@@ -58,14 +59,21 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     return false;
             }
         }
+        public override event RoutedEventHandler ValueChanged = delegate { };
+
         public override void Update(SimulateDllModel dllmodel)
         {
-            int[] ivalues = dllmodel.GetValue_DWord(Name, 1);
+            long[] ivalues = dllmodel.GetValue_DWord(Name, 1);
+            long value_old = value;
             this.value = ivalues[0];
+            if (value_old != value)
+            {
+                ValueChanged(this, new RoutedEventArgs());
+            }
         }
         public override void Set(SimulateDllModel dllmodel)
         {
-            int[] ivalues = { this.value };
+            long[] ivalues = { this.value };
             dllmodel.SetValue_DWord(Name, 1, ivalues);
         }
     }
@@ -106,7 +114,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override void Update(SimulateDllModel dllmodel)
         {
-            int[] ivalues = dllmodel.GetValue_DWord(Name, Size);
+            long[] ivalues = dllmodel.GetValue_DWord(Name, Size);
             for (int i = 0; i < size; i++)
             {
                 this.values[i].Value = ivalues[i];
@@ -115,7 +123,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override void Set(SimulateDllModel dllmodel)
         {
-            int[] ivalues = new int[size];
+            long[] ivalues = new long[size];
             for (int i = 0; i < size; i++)
             {
                 ivalues[i] = (int)(this.values[i].Value);

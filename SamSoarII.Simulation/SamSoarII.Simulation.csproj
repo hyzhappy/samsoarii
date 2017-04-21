@@ -56,7 +56,7 @@
     <Compile Include="Core\Global\GlobalSetting.cs" />
     <Compile Include="Core\SimulateDllModel.cs" />
     <Compile Include="Core\SimulateManager.cs" />
-    <Compile Include="Core\VariableModel\SimulateDoubleModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateSpecialModel.cs" />
     <Compile Include="Core\VariableModel\SimulateUnitSeries.cs" />
     <Compile Include="Core\VariableModel\SimulateVariableModel.cs" />
     <Compile Include="Core\VariableModel\SimulateDWordModel.cs" />
@@ -88,19 +88,26 @@
     <Compile Include="Shell\ViewModel\SimuViewVLineModel.xaml.cs">
       <DependentUpon>SimuViewVLineModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\ViewModel\SpecialBaseViewModel.xaml.cs">
+      <DependentUpon>SpecialBaseViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SimulateModel.cs" />
     <Compile Include="SimulateWindow.xaml.cs">
       <DependentUpon>SimulateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Base\SimuViewTabModel.cs" />
     <Compile Include="UI\Chart\SimulateDataChartModel.xaml.cs">
       <DependentUpon>SimulateDataChartModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Chart\SimulateDataModelEventArgs.cs" />
+    <Compile Include="Core\Event\SimulateDataModelEventArgs.cs" />
     <Compile Include="UI\Chart\SimulateDataViewModel.xaml.cs">
       <DependentUpon>SimulateDataViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Chart\SimuViewChartModel.xaml.cs">
       <DependentUpon>SimuViewChartModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\SimuViewXYModel.xaml.cs">
+      <DependentUpon>SimuViewXYModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Chart\TimeRuler.xaml.cs">
       <DependentUpon>TimeRuler.xaml</DependentUpon>
@@ -108,8 +115,17 @@
     <Compile Include="UI\Chart\ValueChart.xaml.cs">
       <DependentUpon>ValueChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Chart\ValueRuler.xaml.cs">
+      <DependentUpon>ValueRuler.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Chart\VariableList.xaml.cs">
       <DependentUpon>VariableList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\Window\SettingWindow.xaml.cs">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Chart\Window\TimePointWindow.xaml.cs">
+      <DependentUpon>TimePointWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorBitButton.xaml.cs">
       <DependentUpon>MonitorBitButton.xaml</DependentUpon>
@@ -170,6 +186,10 @@
       <Project>{165052f6-7c49-4d44-bafe-a3575b2d1191}</Project>
       <Name>SamSoarII.Extend</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.UserInterface\SamSoarII.UserInterface.csproj">
+      <Project>{76F2627D-B161-4E88-AE31-043DC7C8DA61}</Project>
+      <Name>SamSoarII.UserInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Shell\ViewModel\SimuViewInputModel.xaml">
@@ -192,6 +212,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Shell\ViewModel\SpecialBaseViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SimulateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -208,6 +232,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Chart\SimuViewXYModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Chart\TimeRuler.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -216,7 +244,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Chart\ValueRuler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Chart\VariableList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\Window\SettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Chart\Window\TimePointWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -290,21 +330,18 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="simug\gen_simu.bat" />
+    <None Include="simug\simuc.h" />
+    <None Include="simug\simuf.h" />
     <None Include="simug\simug.c" />
+    <None Include="simug\simulib.c" />
+    <None Include="simug\simulib.h" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Image\Compile.png" />
-    <Content Include="Resources\Image\Copy.png" />
-    <Content Include="Resources\Image\Cut.png" />
-    <Content Include="Resources\Image\Download.png" />
     <Content Include="Resources\Image\Expand\ExpandOff.png" />
     <Content Include="Resources\Image\Expand\ExpandOn.png" />
     <Content Include="Resources\Image\Lock\LockOff.png" />
     <Content Include="Resources\Image\Lock\LockOn.png" />
-    <Content Include="Resources\Image\New.png" />
-    <Content Include="Resources\Image\Open.png" />
-    <Content Include="Resources\Image\Paste.png" />
-    <Content Include="Resources\Image\Save.png" />
     <Content Include="Resources\Image\TreeViewIcon\ERROR.png" />
     <Content Include="Resources\Image\TreeViewIcon\FINISH.png" />
     <Content Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
@@ -313,6 +350,8 @@
     <Content Include="Resources\Image\TreeViewIcon\Program.ico" />
     <Content Include="Resources\Image\TreeViewIcon\RUNNING.png" />
     <Content Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
+    <Content Include="Resources\simu.dll" />
+    <Content Include="simug\simu.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -46,7 +46,7 @@ namespace SamSoarII.Extend.Utility
         /// <summary>
         /// 是否已经检验过没有||了
         /// </summary>
-        public const int FLAG_HASOR  = 0x01;
+        public const int FLAG_HASOR = 0x01;
         /// <summary>
         /// 是否已经检验过没有&&了
         /// </summary>
@@ -54,7 +54,7 @@ namespace SamSoarII.Extend.Utility
         /// <summary>
         /// 是否要将所得的值和前面进行或运算
         /// </summary>
-        public const int FLAG_CALOR  = 0x04;
+        public const int FLAG_CALOR = 0x04;
         /// <summary>
         /// 是否要将所得的值和前面进行与运算
         /// </summary>
@@ -89,7 +89,7 @@ namespace SamSoarII.Extend.Utility
             int old_padding = padding;
             while (allequal)
             {
-                for (i = left+1; i <= right; i++)
+                for (i = left + 1; i <= right; i++)
                 {
                     if (exprs[i][padding] != exprs[left][padding])
                     {
@@ -116,7 +116,7 @@ namespace SamSoarII.Extend.Utility
                 return expr;
             }
             // CASE 2 : 找到新的公共前缀时，按照分配律，剩下的部分用括号括起来
-            expr = exprs[left].Substring(old_padding, padding-old_padding+1) + "(";
+            expr = exprs[left].Substring(old_padding, padding - old_padding + 1) + "(";
             expr += Merge(exprs, left, difpoint - 1, padding + 1);
             expr += "||";
             expr += Merge(exprs, difpoint, right, padding + 1);
@@ -150,7 +150,7 @@ namespace SamSoarII.Extend.Utility
             TPoint tpoint = new TPoint();                           // 这里构造第一个点 
             tpoint.enable = true;
             tpoint.PLCUnit = _terminates[0].BackEdges[0].PLCInfo;
-            tpoint.ExprIndex = _terminates[0].Expr.Length-1;
+            tpoint.ExprIndex = _terminates[0].Expr.Length - 1;
             term.TPoints.Add(tpoint);
             for (int i = 1; i < _terminates.Count; i++)
             {
@@ -196,7 +196,7 @@ namespace SamSoarII.Extend.Utility
         /// 不同的是，这里要解决的是辅助栈的分配问题，所以需要找到所有分歧点
         /// 然后根据数量来确定辅助栈的操作
         /// </detail>
-        static private void _GenInst(List<PLCInstruction> insts, List<Terminate> terminates, int left, int right, int padding=0, int flag=0)
+        static private void _GenInst(List<PLCInstruction> insts, List<Terminate> terminates, int left, int right, int padding = 0, int flag = 0)
         {
             int i, j;
             // 只有一个终点时，需要对这个终点单元进行解析
@@ -231,7 +231,7 @@ namespace SamSoarII.Extend.Utility
              */
             while (allequal)
             {
-                for (i = left+1; i <= right; i++)
+                for (i = left + 1; i <= right; i++)
                 {
                     string expr1 = terminates[i - 1].Expr;
                     string expr2 = terminates[i].Expr;
@@ -247,7 +247,7 @@ namespace SamSoarII.Extend.Utility
             // 向前修正前缀末尾为and计算符
             while (padding > old_padding && terminates[left].Expr[padding] != '&') padding--;
             // 然后向后查找所有的分歧点
-            for (i = left+1; i <= right; i++)
+            for (i = left + 1; i <= right; i++)
             {
                 string expr1 = terminates[i - 1].Expr;
                 string expr2 = terminates[i].Expr;
@@ -271,10 +271,10 @@ namespace SamSoarII.Extend.Utility
             if (old_padding >= padding)
             {
                 // 根据分歧点将所有终点进行划分，然后分别处理
-                _GenInst(insts, terminates, left, difpoints[0]-1, padding, flag);
-                for (i=1; i < difpoints.Count; i++)
+                _GenInst(insts, terminates, left, difpoints[0] - 1, padding, flag);
+                for (i = 1; i < difpoints.Count; i++)
                 {
-                    _GenInst(insts, terminates, difpoints[i-1], difpoints[i]-1, padding, flag);
+                    _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding, flag);
                 }
                 _GenInst(insts, terminates, difpoints[i - 1], right, padding, flag);
                 return;
@@ -351,37 +351,31 @@ namespace SamSoarII.Extend.Utility
         /// <param name="start">表达式的开始位置</param>
         /// <param name="end">表达式的结束位置</param>
         /// <param name="flag">标记</param>
-        static private void _GenInst(List<PLCInstruction> insts, string expr, int start, int end, int flag=0)
+        static private void _GenInst(List<PLCInstruction> insts, string expr, int start, int end, int flag = 0)
         {
             if (start > end) return;
-            //Console.WriteLine(expr.Substring(start, end - start + 1));
-            // 当前表达式被括号包围时拆掉括号
+            Console.WriteLine(expr.Substring(start, end - start + 1));
             int bracket = 0;
-            while (expr[start] == '(' && expr[end] == ')')
-            {
-                start++;
-                end--;
-            }
             // 当前单元的结尾
-            int uend = start;
+            int uend = end;
             // CASE 1：查询并处理表达式中的或运算符（优先级最高）
             if ((flag & FLAG_HASOR) == 0)
             {
                 bracket = 0;
-                while (uend <= end && (bracket > 0 || expr[uend] != '|'))
+                while (uend >= start && (bracket > 0 || expr[uend] != '|'))
                 {
-                    if (expr[uend] == '(') bracket++;
-                    if (expr[uend] == ')') bracket--;
-                    uend++;
+                    if (expr[uend] == '(') bracket--;
+                    if (expr[uend] == ')') bracket++;
+                    uend--;
                 }
-                if (uend <= end && expr[uend] == '|')
+                if (uend >= start && expr[uend] == '|')
                 {
                     // 先计算或运算符前的部分
-                    _GenInst(insts, expr, start, uend - 1, FLAG_HASOR);
-                    // 将或运算符后的部分和前面进行或运算
-                    _GenInst(insts, expr, uend + 2, end, FLAG_CALOR);
+                    _GenInst(insts, expr, start, uend - 2);
+                    // 将或运算符前的部分和后面进行或运算
+                    _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_CALOR);
                     // 需要和前面或运算时
-                    if ((flag&FLAG_CALOR) != 0)
+                    if ((flag & FLAG_CALOR) != 0)
                     {
                         InstHelper.AddInst(insts, "ORB");
                     }
@@ -397,19 +391,19 @@ namespace SamSoarII.Extend.Utility
             if ((flag & FLAG_HASAND) == 0)
             {
                 bracket = 0;
-                uend = start;
-                while (uend <= end && (bracket > 0 || expr[uend] != '&'))
+                uend = end;
+                while (uend >= start && (bracket > 0 || expr[uend] != '&'))
                 {
-                    if (expr[uend] == '(') bracket++;
-                    if (expr[uend] == ')') bracket--;
-                    uend++;
+                    if (expr[uend] == '(') bracket--;
+                    if (expr[uend] == ')') bracket++;
+                    uend--;
                 }
-                if (uend <= end && expr[uend] == '&')
+                if (uend >= start && expr[uend] == '&')
                 {
                     // 先计算与运算符前的部分
-                    _GenInst(insts, expr, start, uend - 1, FLAG_HASAND);
-                    // 将与运算符后的部分和前面进与或运算
-                    _GenInst(insts, expr, uend + 2, end, FLAG_CALAND);
+                    _GenInst(insts, expr, start, uend - 2, FLAG_HASOR);
+                    // 将与运算符前的部分和后面进行与运算
+                    _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_HASAND | FLAG_CALAND);
                     // 需要和前面或运算时
                     if ((flag & FLAG_CALOR) != 0)
                     {
@@ -424,47 +418,82 @@ namespace SamSoarII.Extend.Utility
                 }
             }
             // CASE 3：当前为单一单元
+            // 当前表达式被括号包围时拆掉括号
+            if (expr[start] == '(' && expr[end] == ')')
+            {
+                _GenInst(insts, expr, start + 1, end - 1);
+                // 前面要或运算，所以要用栈的或合并
+                if ((flag & FLAG_CALOR) != 0)
+                    InstHelper.AddInst(insts, "ORB");
+                // 前面要与运算，所以要用栈的与合并
+                if ((flag & FLAG_CALAND) != 0)
+                    InstHelper.AddInst(insts, "ANDB");
+                return;
+            }
             string profix = "LD";
             // 前面要或运算，所以用或前缀
-            if ((flag&FLAG_CALOR) != 0)
+            if ((flag & FLAG_CALOR) != 0)
                 profix = "OR";
             // 前面要与运算，所以用与前缀
-            if ((flag&FLAG_CALAND) != 0)
+            if ((flag & FLAG_CALAND) != 0)
                 profix = "AND";
             // 对表达式进行解析
+            // 识别开始的元件ID标记
+            int idend = start + 1;
+            while (expr[idend] != ']') idend++;
+            int id = int.Parse(expr.Substring(start + 1, idend - start - 1));
+            start = idend + 1;
             // 识别开始的非符号
             if (expr[start] == '!')
             {
-                // 识别非符号后面的立即符号( !imM0 )
-                if (expr[start+1] == 'i' && expr[start+2] == 'm')
+                // 如果是取反运算( ! )
+                if (end == start)
                 {
-                    InstHelper.AddInst(insts, profix + "IIM " + expr.Substring(start + 3, end - start - 2));
+                    InstHelper.AddInst(insts, "INV", id);
+                    return;
+                }
+                // 识别非符号后面的立即符号( !imM0 )
+                if (expr[start + 1] == 'i' && expr[start + 2] == 'm')
+                {
+                    InstHelper.AddInst(insts, profix + "IIM " + expr.Substring(start + 3, end - start - 2), id);
                     return;
                 }
                 // 一般的非符号( !M0 )
-                InstHelper.AddInst(insts, profix + "I " + expr.Substring(start + 1, end - start));
+                InstHelper.AddInst(insts, profix + "I " + expr.Substring(start + 1, end - start), id);
                 return;
             }
             // 识别上升沿符号（ueM0）
-            if (expr[start] == 'u' && expr[start+1] == 'e')
+            if (expr[start] == 'u' && expr[start + 1] == 'e')
             {
-                InstHelper.AddInst(insts, profix + "P " + expr.Substring(start + 2, end - start - 1));
+                // 如果是取上升沿运算( ue )
+                if (end == start + 1)
+                {
+                    InstHelper.AddInst(insts, "MEP", id);
+                    return;
+                }
+                InstHelper.AddInst(insts, profix + "P " + expr.Substring(start + 2, end - start - 1), id);
                 return;
             }
             // 识别下降沿符号（deM0）
-            if (expr[start] == 'd' && expr[start+1] == 'e')
+            if (expr[start] == 'd' && expr[start + 1] == 'e')
             {
-                InstHelper.AddInst(insts, profix + "F " + expr.Substring(start + 2, end - start - 1));
+                // 如果是取下降沿运算( de )
+                if (end == start + 1)
+                {
+                    InstHelper.AddInst(insts, "MEF", id);
+                    return;
+                }
+                InstHelper.AddInst(insts, profix + "F " + expr.Substring(start + 2, end - start - 1), id);
                 return;
             }
             // 识别立即符号（imM0）
-            if (expr[start] == 'i' && expr[start+1] == 'm')
+            if (expr[start] == 'i' && expr[start + 1] == 'm')
             {
-                InstHelper.AddInst(insts, profix + "IM " + expr.Substring(start + 2, end - start - 1));
+                InstHelper.AddInst(insts, profix + "IM " + expr.Substring(start + 2, end - start - 1), id);
                 return;
             }
             // 比较表达式的长度都不小于6
-            if (end-start > 4)
+            if (end - start > 4)
             {
                 if (profix.Equals("AND"))
                     profix = "A";
@@ -472,7 +501,7 @@ namespace SamSoarII.Extend.Utility
                 int op = start + 2;
                 while (expr[op] != '=' && expr[op] != '<' && expr[op] != '>') op++;
                 // 识别比较符前的数据类型
-                switch (expr[op-1])
+                switch (expr[op - 1])
                 {
                     case 'w': profix += 'W'; break;
                     case 'd': profix += 'D'; break;
@@ -481,42 +510,44 @@ namespace SamSoarII.Extend.Utility
                 // 等比较（M0w=M1）
                 if (expr[op] == '=')
                 {
-                    InstHelper.AddInst(insts, profix + "EQ " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op));
+                    InstHelper.AddInst(insts, profix + "EQ " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
                     return;
                 }
                 // 不等比较（M0w<>M1）
-                if (expr[op] == '<' && expr[op+1] == '>')
+                if (expr[op] == '<' && expr[op + 1] == '>')
                 {
-                    InstHelper.AddInst(insts, profix + "NE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1));
+                    InstHelper.AddInst(insts, profix + "NE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
                     return;
                 }
                 // 小等比较（M0w<=M1）
-                if (expr[op] == '<' && expr[op+1] == '=')
+                if (expr[op] == '<' && expr[op + 1] == '=')
                 {
-                    InstHelper.AddInst(insts, profix + "LE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1));
+                    InstHelper.AddInst(insts, profix + "LE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
                     return;
                 }
                 // 大等比较（M0w>=M1）
-                if (expr[op] == '>' && expr[op+1] == '=')
+                if (expr[op] == '>' && expr[op + 1] == '=')
                 {
-                    InstHelper.AddInst(insts, profix + "GE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1));
+                    InstHelper.AddInst(insts, profix + "GE " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 2, end - op - 1), id);
                     return;
                 }
                 // 小于比较（M0w<M1）
                 if (expr[op] == '<')
                 {
-                    InstHelper.AddInst(insts, profix + "L " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op));
+                    InstHelper.AddInst(insts, profix + "L " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
                     return;
                 }
                 // 大于比较（M0w>M1）
                 if (expr[op] == '>')
                 {
-                    InstHelper.AddInst(insts, profix + "G " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op));
+                    InstHelper.AddInst(insts, profix + "G " + expr.Substring(start, op - 1 - start) + " " + expr.Substring(op + 1, end - op), id);
                     return;
                 }
             }
             // 单一的位寄存器（M0）
-            InstHelper.AddInst(insts, profix + " " + expr.Substring(start, end - start + 1));
+            string _expr = expr.Substring(start, end - start + 1);
+            if (_expr.Equals("1")) return;
+            InstHelper.AddInst(insts, profix + " " + _expr, id);
         }
         /// <summary>
         /// 暂存在类中的静态的PLC指令列表
@@ -568,7 +599,7 @@ namespace SamSoarII.Extend.Utility
         /// <param name="right">区间右</param>
         /// <param name="stackTop">当前栈顶</param>
         /// <returns>表达式</returns>
-        private static string _InstToExpr(int left, int right,int stackTop = 1)
+        private static string _InstToExpr(int left, int right, int stackTop = 1)
         {
             // 表达式的前缀
             string profix = "";
@@ -631,7 +662,7 @@ namespace SamSoarII.Extend.Utility
             }
             sw.Write("}\n");
         }
-        
+
         /// <summary>
         /// 将内部的表达式转换为C语言可识别的格式
         /// </summary>
@@ -789,7 +820,7 @@ namespace SamSoarII.Extend.Utility
                         }
                         // 设置图1新的右上角
                         lg1.LChart.RiUpNode = lcn1;
-                    } 
+                    }
                     else
                     // 如果梯形图1的宽度大于梯形图2
                     /*
@@ -832,8 +863,8 @@ namespace SamSoarII.Extend.Utility
                      * --[]-----[]-----[]---
                      */
                     // 如果两个梯形图其中之一的右端元件非空
-                    if (lg1.LChart.RiUpNode.Type != 0x00 &&
-                        lg2.LChart.RiUpNode.Type != 0x00)
+                    if (!lg1.LChart.RiUpNode.Type.Equals(String.Empty) &&
+                        !lg2.LChart.RiUpNode.Type.Equals(String.Empty))
                     {
                         // 向右添加线路
                         lcn1 = lg1.LChart.RiUpNode;
@@ -945,17 +976,17 @@ namespace SamSoarII.Extend.Utility
                 string fname = expr.Substring(estart, ebstart - estart);
                 string[] fargs = expr.Substring(ebstart + 1, ebend - ebstart - 1).Split(',');
                 // 转换为LadderChart模式
-                lcn.Type = InstHelper.InstID(fname);
+                lcn.Type = fname;
                 if (fargs.Length > 1)
-                    lcn[1] = InstHelper.RegAddr(fargs[0]);
+                    lcn[1] = fargs[0];
                 if (fargs.Length > 2)
-                    lcn[2] = InstHelper.RegAddr(fargs[1]);
+                    lcn[2] = fargs[1];
                 if (fargs.Length > 3)
-                    lcn[3] = InstHelper.RegAddr(fargs[2]);
+                    lcn[3] = fargs[2];
                 if (fargs.Length > 4)
-                    lcn[4] = InstHelper.RegAddr(fargs[3]);
+                    lcn[4] = fargs[3];
                 if (fargs.Length > 5)
-                    lcn[5] = InstHelper.RegAddr(fargs[4]);
+                    lcn[5] = fargs[4];
                 return lgraph;
             }
             // 识别开始的非符号
@@ -964,34 +995,34 @@ namespace SamSoarII.Extend.Utility
                 // 识别非符号后面的立即符号( !imM0 )
                 if (expr[estart + 1] == 'i' && expr[estart + 2] == 'm')
                 {
-                    lcn.Type = InstHelper.LDIIM;
-                    lcn[1] = InstHelper.RegAddr(expr.Substring(estart + 3, eend - estart - 2));
+                    lcn.Type = "LDIIM";
+                    lcn[1] = expr.Substring(estart + 3, eend - estart - 2);
                     return lgraph;
                 }
                 // 一般的非符号( !M0 )
-                lcn.Type = InstHelper.LDI;
-                lcn[1] = InstHelper.RegAddr(expr.Substring(estart + 1, eend - estart));
+                lcn.Type = "LDI";
+                lcn[1] = expr.Substring(estart + 1, eend - estart);
                 return lgraph;
             }
             // 识别上升沿符号（ueM0）
             if (expr[estart] == 'u' && expr[estart + 1] == 'e')
             {
-                lcn.Type = InstHelper.LDP;
-                lcn[1] = InstHelper.RegAddr(expr.Substring(estart + 2, eend - estart - 1));
+                lcn.Type = "LDP";
+                lcn[1] = expr.Substring(estart + 2, eend - estart - 1);
                 return lgraph;
             }
             // 识别下降沿符号（deM0）
             if (expr[estart] == 'd' && expr[estart + 1] == 'e')
             {
-                lcn.Type = InstHelper.LDF;
-                lcn[1] = InstHelper.RegAddr(expr.Substring(estart + 2, eend - estart - 1));
+                lcn.Type = "LDF";
+                lcn[1] = expr.Substring(estart + 2, eend - estart - 1);
                 return lgraph;
             }
             // 识别立即符号（imM0）
             if (expr[estart] == 'i' && expr[estart + 1] == 'm')
             {
-                lcn.Type = InstHelper.LDIM;
-                lcn[1] = InstHelper.RegAddr(expr.Substring(estart + 2, eend - estart - 1));
+                lcn.Type = "LDIM";
+                lcn[1] = expr.Substring(estart + 2, eend - estart - 1);
                 return lgraph;
             }
             // 比较表达式的长度都不小于6
@@ -1015,12 +1046,12 @@ namespace SamSoarII.Extend.Utility
                 {
                     switch (expr[op - 1])
                     {
-                        case 'w': lcn.Type = InstHelper.EQW; break;
-                        case 'd': lcn.Type = InstHelper.EQD; break;
-                        case 'f': lcn.Type = InstHelper.EQF; break;
+                        case 'w': lcn.Type = "LDWEQ"; break;
+                        case 'd': lcn.Type = "LDDEQ"; break;
+                        case 'f': lcn.Type = "LDFEQ"; break;
                     }
-                    lcn[1] = InstHelper.RegAddr(expr.Substring(estart, op - 1 - estart));
-                    lcn[2] = InstHelper.RegAddr(expr.Substring(op + 1, eend - op));
+                    lcn[1] = expr.Substring(estart, op - 1 - estart);
+                    lcn[2] = expr.Substring(op + 1, eend - op);
                     return lgraph;
                 }
                 // 不等比较（M0w<>M1）
@@ -1028,12 +1059,12 @@ namespace SamSoarII.Extend.Utility
                 {
                     switch (expr[op - 1])
                     {
-                        case 'w': lcn.Type = InstHelper.NEW; break;
-                        case 'd': lcn.Type = InstHelper.NED; break;
-                        case 'f': lcn.Type = InstHelper.NEF; break;
+                        case 'w': lcn.Type = "LDWNE"; break;
+                        case 'd': lcn.Type = "LDDNE"; break;
+                        case 'f': lcn.Type = "LDFNE"; break;
                     }
-                    lcn[1] = InstHelper.RegAddr(expr.Substring(estart, op - 1 - estart));
-                    lcn[2] = InstHelper.RegAddr(expr.Substring(op + 2, eend - op - 1));
+                    lcn[1] = expr.Substring(estart, op - 1 - estart);
+                    lcn[2] = expr.Substring(op + 2, eend - op - 1);
                     return lgraph;
                 }
                 // 小等比较（M0w<=M1）
@@ -1043,12 +1074,12 @@ namespace SamSoarII.Extend.Utility
                     {
                         switch (expr[op - 1])
                         {
-                            case 'w': lcn.Type = InstHelper.LEW; break;
-                            case 'd': lcn.Type = InstHelper.LED; break;
-                            case 'f': lcn.Type = InstHelper.LEF; break;
+                            case 'w': lcn.Type = "LDWLE"; break;
+                            case 'd': lcn.Type = "LDDLE"; break;
+                            case 'f': lcn.Type = "LDFLE"; break;
                         }
-                        lcn[1] = InstHelper.RegAddr(expr.Substring(estart, op - 1 - estart));
-                        lcn[2] = InstHelper.RegAddr(expr.Substring(op + 2, eend - op - 1));
+                        lcn[1] = expr.Substring(estart, op - 1 - estart);
+                        lcn[2] = expr.Substring(op + 2, eend - op - 1);
                         return lgraph;
                     }
                     return lgraph;
@@ -1060,12 +1091,12 @@ namespace SamSoarII.Extend.Utility
                     {
                         switch (expr[op - 1])
                         {
-                            case 'w': lcn.Type = InstHelper.GEW; break;
-                            case 'd': lcn.Type = InstHelper.GED; break;
-                            case 'f': lcn.Type = InstHelper.GEF; break;
+                            case 'w': lcn.Type = "LDWGE"; break;
+                            case 'd': lcn.Type = "LDDGE"; break;
+                            case 'f': lcn.Type = "LDFGE"; break;
                         }
-                        lcn[1] = InstHelper.RegAddr(expr.Substring(estart, op - 1 - estart));
-                        lcn[2] = InstHelper.RegAddr(expr.Substring(op + 2, eend - op - 1));
+                        lcn[1] = expr.Substring(estart, op - 1 - estart);
+                        lcn[2] = expr.Substring(op + 2, eend - op - 1);
                         return lgraph;
                     }
                     return lgraph;
@@ -1075,12 +1106,12 @@ namespace SamSoarII.Extend.Utility
                 {
                     switch (expr[op - 1])
                     {
-                        case 'w': lcn.Type = InstHelper.LTW; break;
-                        case 'd': lcn.Type = InstHelper.LTD; break;
-                        case 'f': lcn.Type = InstHelper.LTF; break;
+                        case 'w': lcn.Type = "LDWL"; break;
+                        case 'd': lcn.Type = "LDDL"; break;
+                        case 'f': lcn.Type = "LDFL"; break;
                     }
-                    lcn[1] = InstHelper.RegAddr(expr.Substring(estart, op - 1 - estart));
-                    lcn[2] = InstHelper.RegAddr(expr.Substring(op + 1, eend - op));
+                    lcn[1] = expr.Substring(estart, op - 1 - estart);
+                    lcn[2] = expr.Substring(op + 1, eend - op);
                     return lgraph;
                 }
                 // 大于比较（M0w>M1）
@@ -1088,20 +1119,21 @@ namespace SamSoarII.Extend.Utility
                 {
                     switch (expr[op - 1])
                     {
-                        case 'w': lcn.Type = InstHelper.GTW; break;
-                        case 'd': lcn.Type = InstHelper.GTD; break;
-                        case 'f': lcn.Type = InstHelper.GTF; break;
+                        case 'w': lcn.Type = "LDWG"; break;
+                        case 'd': lcn.Type = "LDDG"; break;
+                        case 'f': lcn.Type = "LDFG"; break;
                     }
-                    lcn[1] = InstHelper.RegAddr(expr.Substring(estart, op - 1 - estart));
-                    lcn[2] = InstHelper.RegAddr(expr.Substring(op + 1, eend - op));
+                    lcn[1] = expr.Substring(estart, op - 1 - estart);
+                    lcn[2] = expr.Substring(op + 1, eend - op);
                     return lgraph;
                 }
             }
             // 读取位（M0）
-            lcn.Type = InstHelper.LD;
-            lcn[1] = InstHelper.RegAddr(expr.Substring(estart, eend - estart + 1));
+            lcn.Type = "LD";
+            lcn[1] = expr.Substring(estart, eend - estart + 1);
             return lgraph;
         }
-        
+
     }
 }
+

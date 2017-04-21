@@ -278,6 +278,11 @@ EXPORT int LoadDll(char* simudllPath)
 	return 0;
 }
 
+EXPORT void FreeDll()
+{
+	FreeLibrary(hdll);
+}
+
 EXPORT void RunLadder()
 {
 	dfRunLadder();

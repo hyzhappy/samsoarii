@@ -4,173 +4,375 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
-using SamSoarII.Simulation.Core.VariableModel;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Input;
 
+using SamSoarII.Simulation.Core.VariableModel;
+
+/// <summary>
+/// Namespace : SamSoarII.Simulation.UI.Monitor
+/// ClassName : MonitorTextBox
+/// Version   : 1.0
+/// Date      : 2017/4/11
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 监视变量列表中行元素的文本输入组件
+/// 可以显示和输入变量的名称，别名和数值
+/// </remarks>
+
 namespace SamSoarII.Simulation.UI.Monitor
 {
     public class MonitorTextBox : TextBox
     {
-        public const int TYPE_NAME = 0x01;
-        public const int TYPE_VAR = 0x03;
-        public const int TYPE_VALUE = 0x04;
+        #region Numbers & Numbers Interface
 
-        private int type;
+        #region Simulate Variable Unit
+
+        /// <summary>
+        /// 对应的变量单元
+        /// </summary>
         private SimulateVariableUnit svunit;
-
+        /// <summary>
+        /// 设置变量单元
+        /// </summary>
         public SimulateVariableUnit SVUnit
         {
             set
             {
+                if (svunit != null)
+                {
+                    svunit.ValueChanged -= OnValueChanged;
+                    svunit.LockChanged -= OnLockChanged;
+                }
                 this.svunit = value;
-                if (type == TYPE_VALUE && svunit is SimulateBitUnit)
+                if (svunit != null)
                 {
-                    Opacity = 0.0;  
+                    svunit.ValueChanged += OnValueChanged;
+                    svunit.LockChanged += OnLockChanged;
+                    SetText();
                 }
-                else
-                {
-                    Opacity = 1.0;
-                }
-                SetText();
+            }
+            protected get
+            {
+                return this.svunit;
             }
         }
 
+        private bool settingup = false;
+
+        #endregion
+
+        #region Type
+        /// <summary> 类型标志：名称</summary>
+        public const int TYPE_NAME = 0x01;
+        /// <summary> 类型标志：变量类型</summary>
+        public const int TYPE_TYPE = 0x02;
+        /// <summary> 类型标志：别名</summary>
+        public const int TYPE_VAR = 0x03;
+        /// <summary> 类型标志：数值</summary>
+        public const int TYPE_VALUE = 0x04;
+        /// <summary>
+        /// 类型
+        /// </summary>
+        private int type;
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public int Type
+        {
+            get
+            {
+                return this.type;
+            }
+            set
+            {
+                this.type = value;
+            }
+        }
+        #endregion
+
+        #endregion
+
+        /// <summary>
+        /// 初始化构造函数
+        /// </summary>
+        /// <param name="_type">类型</param>
         public MonitorTextBox(int _type)
         {
-            type = _type;
+            Type = _type;
         }
         
+        /// <summary>
+        /// 根据变量和类型设置文本
+        /// </summary>
         public void SetText()
         {
+            settingup = true;
+            // 如果没有变量则返回
+            if (SVUnit == null)
+            {
+                settingup = false;
+                return;
+            }
+            // 根据变量和类型设置文本
             this.Dispatcher.Invoke(() =>
             {
-                switch (type)
+                switch (Type)
                 {
                     case TYPE_NAME:
-                        Text = svunit.Name;
+                        if (Text == null || !Text.Equals(svunit.Name))
+                            Text = svunit.Name;
+                        break;
+                    case TYPE_TYPE:
+                        if (Text == null || !Text.Equals(svunit.Type))
+                            Text = svunit.Type;
                         break;
                     case TYPE_VAR:
-                        Text = svunit.Var;
+                        if (Text == null || !Text.Equals(svunit.Var))
+                            Text = svunit.Var;
                         break;
                     case TYPE_VALUE:
-                        Text = svunit.Value.ToString();
+                        if (Text == null || !Text.Equals(svunit.Value.ToString()))
+                            Text = svunit.Value.ToString();
                         break;
                     default:
+                        Text = String.Empty;
                         break;
                 }
             });
+            settingup = false;
         }
 
-        public event RoutedEventHandler TextLegalChanged;
+        #region Event Handler
+
+        #region Text
+
+        /// <summary>
+        /// 当文本发生合法修改时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler TextLegalChanged = delegate { };
+
+        /// <summary>
+        /// 当文本修改时发生
+        /// </summary>
+        /// <param name="e">事件</param>
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
+            if (settingup)
+            {
+                return;
+            }
+            // 判断文本是否合法
             try
             {
+                // 预设不合法的背景颜色（红色）
+                Background = Brushes.Red;
+                // 单个变量的名称（D0）
                 Match m1 = Regex.Match(Text, @"^\w+\d+$");
+                // 多个变量，即变量组的名称（D[0..100]）
                 Match m2 = Regex.Match(Text, @"^\w+\[\d+\.\.\d+\]$");
+                // 根据类型来判断
                 switch (type)
                 {
+                    // 检查名称是否合法
                     case TYPE_NAME:
+                        // 不合法就退出
                         if (!m1.Success && !m2.Success)
+                        {
                             return;
+                        }
                         //svunit.Name = Text;
                         break;
+                    // 检查别名是否合法
                     case TYPE_VAR:
+                        // 输入即合法
                         svunit.Var = Text;
                         break;
+                    // 检查数值是否合法
                     case TYPE_VALUE:
-                        this.Background = Brushes.Red;
+                        // 根据变量类型来判断
                         switch (svunit.Type)
                         {
+                            // 类型为位（BIT）
                             case "BIT":
-                                if (Regex.Match(Text, @"^[01]$").Length == 0)
+                                // 只有0和1才合法
+                                if (!Regex.Match(Text, @"^[01]$").Success)
                                     return;
+                                // 合法时修改值
                                 svunit.Value = int.Parse(Text);
                                 break;
+                            // 类型为字（WORD）
                             case "WORD":
-                            case "DWORD":
-                                if (Regex.Match(Text, @"^\d+$").Length == 0)
+                                // 只有整数才合法
+                                if (!Regex.Match(Text, @"^\d+$").Success)
                                     return;
                                 svunit.Value = int.Parse(Text);
+                                // 如果超过16位范围则非法
+                                if (((int)(svunit.Value) >> 16) != 0)
+                                    return;
+                                break;
+                            // 类型为双字（DWORD）
+                            case "DWORD":
+                                // 只有整数才合法
+                                if (!Regex.Match(Text, @"^\d+$").Success)
+                                    return;
+                                svunit.Value = int.Parse(Text);
+                                // 双字在int范围内，所以无需检查范围
                                 break;
                             case "FLOAT":
-                                if (Regex.Match(Text, @"\d+\.\d+").Length == 0)
+                                // 只有整数和浮点才合法
+                                if (!Regex.Match(Text, @"^\d+(\.\d+)?$").Success)
                                     return;
+                                // 能转换即合法
                                 svunit.Value = float.Parse(Text);
                                 break;
                             case "DOUBLE":
-                                if (Regex.Match(Text, @"\d+\.\d+").Length == 0)
+                                // 只有整数和浮点才合法
+                                if (!Regex.Match(Text, @"^\d+(\.\d+)?$").Success)
                                     return;
+                                // 能转换即合法
                                 svunit.Value = double.Parse(Text);
                                 break;
                             default:
                                 break;
                         }
-                        this.Background = Brushes.White;
                         break;
                     default:
                         break;
                 }
+                // 设置为合法的背景颜色（白色）
+                Background = Brushes.White;
             }
             catch (FormatException)
             {
                 return;
             }
-            if (TextLegalChanged != null)
+            // 发送合法文本修改的事件
+            // 数值需要等待Enter键键入才能发送
+            if (Type != TYPE_VALUE)
             {
                 TextLegalChanged(this, new RoutedEventArgs());
             }
+            // 当然是原谅她
+            else
+            {
+                Background = Brushes.LightGreen;
+            }
         }
-        
-        public event RoutedEventHandler InsertRowElementBehindHere;
-        public event RoutedEventHandler FocusUp;
-        public event RoutedEventHandler FocusDown;
-        public event RoutedEventHandler FocusLeft;
-        public event RoutedEventHandler FocusRight;
-        protected override void OnKeyUp(KeyEventArgs e)
+
+        #endregion
+
+        #region KeyBoard Control
+
+        /// <summary>
+        /// 当需要往前新建一个变量时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler InsertRowElementBeforeHere = delegate { };
+        /// <summary>
+        /// 当需要往后新建一个变量时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler InsertRowElementAfterHere = delegate { };
+        /// <summary>
+        /// 当焦点上移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusUp = delegate { };
+        /// <summary>
+        /// 当焦点下移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusDown = delegate { };
+        /// <summary>
+        /// 当焦点左移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusLeft = delegate { };
+        /// <summary>
+        /// 当焦点右移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusRight = delegate { };
+        /// <summary>
+        /// 当按下键盘时发生
+        /// </summary>
+        /// <param name="e">键盘事件</param>
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            base.OnKeyUp(e);
-            if (e.Key == Key.Enter)
+            base.OnPreviewKeyDown(e);
+            // 根据按键执行相应操作
+            switch (e.Key)
             {
-                if (InsertRowElementBehindHere != null)
-                {
-                    InsertRowElementBehindHere(this, new RoutedEventArgs());
-                }
-            }
-            if (e.Key == Key.Up)
-            {
-                if (FocusUp != null)
-                {
+                // 键入Enter时
+                case Key.Enter:
+                    switch (Type)
+                    {
+                        // 名称框向后新建新的变量
+                        case TYPE_NAME:
+                            InsertRowElementAfterHere(this, new RoutedEventArgs());
+                            break;
+                        // 数值框确认数值是否正确并发送
+                        case TYPE_VALUE:
+                            if (Background == Brushes.LightGreen)
+                            {
+                                TextLegalChanged(this, new RoutedEventArgs());
+                                Background = Brushes.White;
+                            }
+                            break;
+                    }
+                    break;
+                // 键入Up时焦点上移
+                case Key.Up:
                     FocusUp(this, new RoutedEventArgs());
-                }
-            }
-            if (e.Key == Key.Down)
-            {
-                if (FocusDown != null)
-                {
+                    break;
+                // 键入Down时焦点下移
+                case Key.Down:
                     FocusDown(this, new RoutedEventArgs());
-                }
-            }
-            if (e.Key == Key.Left)
-            {
-                if (FocusLeft != null)
-                {
-                    FocusUp(this, new RoutedEventArgs());
-                }
-            }
-            if (e.Key == Key.Right)
-            {
-                if (FocusRight != null)
-                {
-                    FocusDown(this, new RoutedEventArgs());
-                }
+                    break;
+                // 键入Left时焦点左移
+                case Key.Left:
+                    FocusLeft(this, new RoutedEventArgs());
+                    break;
+                // 键入Right时焦点右移
+                case Key.Right:
+                    FocusRight(this, new RoutedEventArgs());
+                    break;
             }
         }
+
+        #endregion
+
+        /// <summary>
+        /// 当变量值更改时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            switch (Type)
+            {
+                case TYPE_VALUE:
+                    SetText();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 当变量锁定更改时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void OnLockChanged(object sender, RoutedEventArgs e)
+        {
+            switch (Type)
+            {
+                case TYPE_VALUE:
+                    IsReadOnly = (!SVUnit.Islocked);
+                    OnValueChanged(sender, e);
+                    break;
+            }
+        }
+
+        #endregion
 
     }
 }

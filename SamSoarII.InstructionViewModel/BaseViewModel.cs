@@ -59,6 +59,11 @@ namespace SamSoarII.LadderInstViewModel
         public void BeginShowPropertyDialog()
         {
             var dialog = PreparePropertyDialog();
+            if (dialog is ElementPropertyDialog)
+            {
+                ElementPropertyDialog epdialog = (ElementPropertyDialog)(dialog);
+                epdialog.SavePropertyString();
+            }
             if (dialog != null)
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;

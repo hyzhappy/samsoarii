@@ -14,7 +14,10 @@ namespace SamSoarII.Simulation.UI.Monitor
 {
     public class MonitorComboBox : ComboBox
     {
+        public const int TYPE_NAME = 0x01;
         public const int TYPE_DATATYPE = 0x02;
+        public const int TYPE_VAR = 0x03;
+        public const int TYPE_VALUE = 0x04;
 
         private int type;
         private SimulateVariableUnit svunit;
@@ -25,6 +28,12 @@ namespace SamSoarII.Simulation.UI.Monitor
         {
             set
             {
+                if (value == null)
+                {
+                    this.svunit = value;
+                    Items.Clear();
+                    return;
+                }
                 this.Dispatcher.Invoke(() =>
                 {
                     this.svunit = value;
@@ -54,10 +63,6 @@ namespace SamSoarII.Simulation.UI.Monitor
                         if (svunit is SimulateFloatUnit)
                         {
                             Text = "FLOAT";
-                        }
-                        if (svunit is SimulateDoubleUnit)
-                        {
-                            Text = "DOUBLE";
                         }
                         if (svunit is SimulateUnitSeries)
                         {
@@ -131,11 +136,6 @@ namespace SamSoarII.Simulation.UI.Monitor
                             Items.Add("FLOAT");
                             Text = "FLOAT";
                         }
-                        if (svunit is SimulateDoubleUnit)
-                        {
-                            Items.Add("DOUBLE");
-                            Text = "DOUBLE";
-                        }
                     }
                 });
             }
@@ -155,49 +155,68 @@ namespace SamSoarII.Simulation.UI.Monitor
             }
         }
 
-        public event RoutedEventHandler InsertRowElementBehindHere;
-        public event RoutedEventHandler FocusUp;
-        public event RoutedEventHandler FocusDown;
-        public event RoutedEventHandler FocusLeft;
-        public event RoutedEventHandler FocusRight;
-        protected override void OnKeyUp(KeyEventArgs e)
+        #region KeyBoard Control
+
+        /// <summary>
+        /// 当焦点上移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusUp = delegate { };
+        /// <summary>
+        /// 当焦点下移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusDown = delegate { };
+        /// <summary>
+        /// 当焦点左移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusLeft = delegate { };
+        /// <summary>
+        /// 当焦点右移时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler FocusRight = delegate { };
+        /// <summary>
+        /// 当按下键盘时发生
+        /// </summary>
+        /// <param name="e">键盘事件</param>
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            base.OnKeyUp(e);
-            if (e.Key == Key.Enter)
+            if (e.Key != Key.Left && e.Key != Key.Right)
             {
-                if (InsertRowElementBehindHere != null)
-                {
-                    InsertRowElementBehindHere(this, new RoutedEventArgs());
-                }
+                base.OnPreviewKeyDown(e);
             }
-            if (e.Key == Key.Up)
+            // 根据按键执行相应操作
+            switch (e.Key)
             {
-                if (FocusUp != null)
-                {
-                    FocusUp(this, new RoutedEventArgs());
-                }
-            }
-            if (e.Key == Key.Down)
-            {
-                if (FocusDown != null)
-                {
-                    FocusDown(this, new RoutedEventArgs());
-                }
-            }
-            if (e.Key == Key.Left)
-            {
-                if (FocusLeft != null)
-                {
-                    FocusUp(this, new RoutedEventArgs());
-                }
-            }
-            if (e.Key == Key.Right)
-            {
-                if (FocusRight != null)
-                {
-                    FocusDown(this, new RoutedEventArgs());
-                }
+                // 键入Enter时打开多选框
+                case Key.Enter:
+                    break;
+                // 键入Up时选择上移
+                case Key.Up:
+                    break;
+                // 键入Down时选择下移
+                case Key.Down:
+                    break;
+                // 键入Left时焦点左移
+                case Key.Left:
+                    FocusLeft(this, new RoutedEventArgs());
+                    break;
+                // 键入Right时焦点右移
+                case Key.Right:
+                    FocusRight(this, new RoutedEventArgs());
+                    break;
             }
         }
+        /// <summary>
+        /// 当松开键盘时发生
+        /// </summary>
+        /// <param name="e">键盘事件</param>
+        protected override void OnPreviewKeyUp(KeyEventArgs e)
+        {
+            if (e.Key != Key.Left && e.Key != Key.Right)
+            {
+                base.OnPreviewKeyUp(e);
+            }
+        }
+
+        #endregion
     }
 }

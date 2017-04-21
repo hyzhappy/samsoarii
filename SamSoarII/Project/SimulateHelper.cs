@@ -14,26 +14,40 @@ using SamSoarII.Simulation.UI;
 using SamSoarII.LadderInstModel;
 using SamSoarII.Extend.LadderChartModel;
 using System.Windows.Forms;
+using SamSoarII.Simulation.Shell.Event;
+using System.ComponentModel;
+using SamSoarII.Simulation.UI.Base;
+using SamSoarII.Simulation.UI.Chart;
 
 namespace SamSoarII.AppMain.Project
 {
     public class SimulateHelper
     {
         static private SimulateModel smodel;
-        static private SimulateReportViewModel srmodel;
-        
-        static public void Simulate(ProjectModel pmodel)
+        //static private SimulateReportViewModel srmodel;
+
+        static public SimulateModel SModel
         {
+            get { return smodel; }
+        }
+        
+        public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
+        public const int CLOSE_OK = 0x00;
+
+        static public int Simulate(InteractionFacade ifacade, ReportOutputModel omodel)
+        {
+            ProjectModel pmodel = ifacade.ProjectModel;
+            AppMain.UI.MainTabControl mtctrl = ifacade.MainTabControl;
             smodel = new SimulateModel();
             SetupSimulateModel(pmodel);
-            //srmodel = new SimulateReportViewModel();
-            //smodel.ReportTextBox = srmodel.Report;
-            smodel.ReportTextBox = new System.Windows.Controls.TextBox();
+            smodel.ReportTextBox = omodel.Report_Simulate;
             int checkresult = smodel.Check();
             switch (checkresult)
             {
                 case SimulateDllModel.LOADDLL_OK:
                     smodel.ShowWindow();
+                    smodel.TabOpened += OnTabOpened;
+                    mtctrl.ShowSimulateItem += OnTabOpened;
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                     MessageBox.Show("Error : 找不到生成的dll文件\r\n");
@@ -68,11 +82,89 @@ namespace SamSoarII.AppMain.Project
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETDOUBLE:
                     MessageBox.Show("Error : 找不到入口SetDouble\r\n");
                     break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDBITDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddBitDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDOUBLEATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddDoubleDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDFLOATDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddFloatDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口AddDWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEBITDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveBitDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDOUBLEATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveDoubleDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEFLOATDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveFloatDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDWORDDATAPOINT:
+                    MessageBox.Show("Error : 找不到入口RemoveDWordDataPoint\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_AFTERRUNLADDER:
+                    MessageBox.Show("Error : 找不到入口AfterRunLadder\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_BEFORERUNLADDER:
+                    MessageBox.Show("Error : 找不到入口BeforeRunLadder\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWINPUT:
+                    MessageBox.Show("Error : 找不到入口AddViewInput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWOUTPUT:
+                    MessageBox.Show("Error : 找不到入口AddViewOutput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEVIEWINPUT:
+                    MessageBox.Show("Error : 找不到入口RemoveViewInput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUNd_REMOVEVIEWOUTPUT:
+                    MessageBox.Show("Error : 找不到入口RemoveViewOutput\r\n");
+                    break;
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_RUNDATA:
+                    MessageBox.Show("Error : 找不到入口RunData\r\n");
+                    break;
                 default:
                     MessageBox.Show("Error : 发生未知错误\r\n");
                     break;
             }
+            omodel.Append(omodel.Report_All, omodel.Report_Simulate.Text);
+            return checkresult;
         }
+
+        static public int Close(InteractionFacade ifacade)
+        {
+            AppMain.UI.MainTabControl mtctrl = ifacade.MainTabControl;
+            mtctrl.ShowSimulateItem -= OnTabOpened;
+            mtctrl.ReplaceAllTabsToEdit();
+            if (smodel != null)
+            {
+                smodel.Dispose();
+                smodel = null;   
+            }
+            return CLOSE_OK;
+        }
+
+        #region Save & Load GlobalSetting
+        //public static void SaveGlobalSetting()
+        //{
+        //    SamSoarII.Simulation.Core.Global.GlobalSetting.Save();
+        //}
+
+        //public static void LoadGlobalSetting()
+        //{
+        //    SamSoarII.Simulation.Core.Global.GlobalSetting.Load();
+        //}
+        #endregion
 
         #region Setup
         static public void Setup(SimulateModel _smodel)
@@ -173,6 +265,10 @@ namespace SamSoarII.AppMain.Project
             if (bvmodel is OutputRectBaseViewModel)
             {
                 svbmodel = new SimuViewOutRecModel(smodel);
+            }
+            if (bvmodel is SpecialBaseViewModel)
+            {
+                svbmodel = new SimuViewSpecialModel(smodel);
             }
             if (bvmodel is ALTViewModel)
             {
@@ -742,7 +838,135 @@ namespace SamSoarII.AppMain.Project
             return svbmodel;
         }
         #endregion
-        
+
+        #region Event Handler
+
+        #region Simulation ViewModel transform to ITabItem
+        public class SimulateTabItem : System.Windows.Controls.UserControl, ITabItem
+        {
+            private string _programName;
+            private SimuViewTabModel svtmodel;
+            
+            public SimulateTabItem(SimuViewTabModel _svtmodel, string programName)
+            {
+                Content = _svtmodel;
+                svtmodel = _svtmodel;
+                _programName = programName;
+            }
+
+            public string TabHeader
+            {
+                get
+                {
+                    return _programName;
+                }
+
+                set
+                {
+                    _programName = value;
+                }
+            }
+
+            double ITabItem.ActualHeight
+            {
+                get
+                {
+                    return svtmodel.ActualHeight;
+                }
+
+                set
+                {
+                    svtmodel.ActualHeight = value;
+                }
+            }
+
+            double ITabItem.ActualWidth
+            {
+                get
+                {
+                    return svtmodel.ActualWidth;
+                }
+
+                set
+                {
+                    svtmodel.ActualWidth = value;
+                }
+            }
+        }
+
+        static public event ShowTabItemEventHandler TabOpen;
+        static private void OnTabOpened(object sender, Simulation.Shell.Event.ShowTabItemEventArgs e)
+        {
+            ShowTabItemEventArgs _e = null;
+            SimulateTabItem _stitem = null;
+            _e = new ShowTabItemEventArgs(TabType.Simulate);
+            if (e.TabName.Equals("所有程序"))
+            {
+                _stitem = new SimulateTabItem(smodel.AllRoutine, "所有程序");
+                if (TabOpen != null)
+                {
+                    TabOpen(_stitem, _e);
+                }            
+                return;
+            }
+            if (e.TabName.Equals("主程序") || e.TabName.Equals("Main"))
+            {
+                _stitem = new SimulateTabItem(smodel.MainRoutine, "主程序");
+                if (TabOpen != null)
+                {
+                    TabOpen(_stitem, _e);
+                }
+                return;
+            }
+            if (e.TabName.Equals("图表"))
+            {
+                _stitem = new SimulateTabItem(smodel.MainChart, "图表");
+                if (TabOpen != null)
+                {
+                    TabOpen(_stitem, _e);
+                }
+                return;
+            }
+            foreach (SimuViewDiagramModel svdmodel in smodel.SubRoutines)
+            {
+                if (e.TabName.Equals(svdmodel.Name))
+                {
+                    _stitem = new SimulateTabItem(svdmodel, svdmodel.Name);
+                    if (TabOpen != null)
+                    {
+                        TabOpen(_stitem, _e);
+                    }
+                    return;
+                }
+            }
+            foreach (SimuViewFuncBlockModel svfmodel in smodel.FuncBlocks)
+            {
+                if (e.TabName.Equals(svfmodel.Name))
+                {
+                    _stitem = new SimulateTabItem(svfmodel, svfmodel.Name);
+                    if (TabOpen != null)
+                    {
+                        TabOpen(_stitem, _e);
+                    }
+                    return;
+                }
+            }
+            foreach (SimuViewXYModel svxmodel in smodel.SubCharts)
+            {
+                if (e.TabName.Equals(svxmodel.Name))
+                {
+                    _stitem = new SimulateTabItem(svxmodel, svxmodel.Name);
+                    if (TabOpen != null)
+                    {
+                        TabOpen(_stitem, _e);
+                    }
+                    return;
+                }
+            }
+        }
+        #endregion
+
+        #endregion
     }
 
 

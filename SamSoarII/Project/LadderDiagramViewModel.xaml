@@ -11,6 +11,7 @@
              Background="Transparent"
              Focusable="True"
              PreviewKeyDown="OnLadderDiagramKeyDown"   
+             PreviewKeyUp="OnLadderDiagramKeyUp"
              MouseUp="OnLadderDiagramMouseUp"
              MouseMove="OnLadderDiagramMouseMove">
     <UserControl.CommandBindings>
@@ -22,7 +23,7 @@
         <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
     </UserControl.CommandBindings>
     <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Background="Transparent" LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}"  PreviewMouseDown="OnLadderDiagramMouseDown" >
+        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Background="Transparent" LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}"  PreviewMouseDown="OnLadderDiagramMouseDown">
             <StackPanel.Resources>
                 <ContextMenu x:Key="CommentAreaContextMenu">
                     <MenuItem Header="编辑程序注释" Click="OnEditComment"></MenuItem>
