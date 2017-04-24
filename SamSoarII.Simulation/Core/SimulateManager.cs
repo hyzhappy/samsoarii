@@ -632,7 +632,8 @@ namespace SamSoarII.Simulation.Core
             // 将锁定列表中的变量重设锁定
             foreach (SimulateVariableUnit _svunit in svllist)
             {
-                _svunit.Value = svunit.Value;
+                if (svunit.Type.Equals(_svunit.Type))
+                    _svunit.Value = svunit.Value;
                 _svunit.Islocked = true;
             }
             // 调用dll的锁定接口
@@ -775,10 +776,6 @@ namespace SamSoarII.Simulation.Core
                     case "FLOAT":
                         vs = new FloatSegment();
                         vs.Value = float.Parse(args[2]);
-                        break;
-                    case "DOUBLE":
-                        vs = new DoubleSegment();
-                        vs.Value = double.Parse(args[2]);
                         break;
                 }
                 if (sdmodel.Values.Count() == 0)

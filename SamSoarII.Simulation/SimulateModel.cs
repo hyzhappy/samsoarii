@@ -155,27 +155,7 @@ namespace SamSoarII.Simulation
                 return unit;
             }
             // 不存在则新建
-            switch (type)
-            {
-                case "BIT":
-                    unit = new SimulateBitUnit();
-                    break;
-                case "WORD":
-                    unit = new SimulateWordUnit();
-                    break;
-                case "DWORD":
-                    unit = new SimulateDWordUnit();
-                    break;
-                case "FLOAT":
-                    unit = new SimulateFloatUnit();
-                    break;
-                case "DOUBLE":
-                    unit = new SimulateDoubleUnit();
-                    break;
-                default:
-                    return unit;
-            }
-            unit.Name = name;
+            unit = SimulateVariableUnit.Create(name, type);
             // 注册到管理器中
             smanager.Add(unit);
             return unit;
@@ -194,22 +174,18 @@ namespace SamSoarII.Simulation
             {
                 case "BIT":
                     unit = new SimulateBitUnit();
-                    unit.Value = int.Parse(name.Substring(1));
+                    unit.Value = Int32.Parse(name.Substring(1));
                     break;
                 case "WORD":
                     unit = new SimulateWordUnit();
-                    unit.Value = int.Parse(name.Substring(1));
+                    unit.Value = Int32.Parse(name.Substring(1));
                     break;
                 case "DWORD":
                     unit = new SimulateDWordUnit();
-                    unit.Value = int.Parse(name.Substring(1));
+                    unit.Value = Int64.Parse(name.Substring(1));
                     break;
                 case "FLOAT":
                     unit = new SimulateFloatUnit();
-                    unit.Value = float.Parse(name.Substring(1));
-                    break;
-                case "DOUBLE":
-                    unit = new SimulateDoubleUnit();
                     unit.Value = double.Parse(name.Substring(1));
                     break;
                 default:

@@ -417,7 +417,7 @@ namespace SamSoarII.AppMain.Project
                 switch (e.Text[0])
                 {
                     case '{':
-                        tabhigh = model.Current.Height - 1;
+                        tabhigh = Math.Max(0, model.Current.Height - 1);
                         inserttext = new string('\t', tabhigh);
                         inserttext = "\n" + inserttext + "\t\n" + inserttext + "}";
                         CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);

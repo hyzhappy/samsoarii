@@ -101,6 +101,9 @@
       <DependentUpon>SimuArgsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CollectionStackPanel.cs" />
+    <Compile Include="UserControls\LabelWithDetail.xaml.cs">
+      <DependentUpon>LabelWithDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PopupNotTop.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -154,6 +157,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SimuArgsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\LabelWithDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -806,11 +806,6 @@ namespace SamSoarII.Simulation.UI.Chart
                     fseg.Value = value;
                     vseg = fseg;
                     break;
-                case "DOUBLE":
-                    DoubleSegment dseg = new DoubleSegment();
-                    dseg.Value = value;
-                    vseg = dseg;
-                    break;
                 default:
                     throw new ArgumentException();
             }

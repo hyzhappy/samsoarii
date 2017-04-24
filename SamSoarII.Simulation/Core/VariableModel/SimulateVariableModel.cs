@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,7 +57,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         protected bool islocked = false;
         protected SimulateManager manager = null;
        
-        public string Name
+        public virtual string Name
         {
             get
             {
@@ -84,7 +85,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 this.offset = int.Parse(this.name.Substring(i));
             }
         }
-        public string Var
+
+        public virtual string Var
         {
             get
             {
@@ -96,9 +98,13 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
         }
 
-        public event RoutedEventHandler LockChanged = delegate { };
+        public virtual bool CanLock { get; set; } = true;
 
-        public bool Islocked
+        public virtual bool CanClose { get; set; } = true;
+
+        public virtual event RoutedEventHandler LockChanged = delegate { };
+
+        public virtual bool Islocked
         {
             get
             {
@@ -106,10 +112,12 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             set
             {
+                if (!CanLock) return;
                 this.islocked = value;
                 LockChanged(this, new RoutedEventArgs());
             }
         }
+        
         abstract public string Type
         {
             get;
@@ -128,12 +136,40 @@ namespace SamSoarII.Simulation.Core.VariableModel
         
         abstract public void Set(SimulateDllModel dllmodel);
 
-        public void Setup(SimulateManager _manager)
+        public virtual void Setup(SimulateManager _manager)
         {
             manager = _manager;
         }
         
-        static public SimulateVariableUnit Create(string _name)
+        static public SimulateVariableUnit Create(string _name, string type = "")
+        {
+            SimulateVariableUnit result = null;
+            SpecialValue svalue = SpecialValueManager.ValueOfName(_name);
+            if (svalue != null)
+                type = svalue.Type;
+            if (type.Length == 0)
+            {
+                result = _Create(_name);
+            }
+            else
+            {
+                result = _Create(_name, type);
+            }
+            if (result == null)
+            {
+                return result;
+            }
+            if (svalue != null)
+            {
+                SimulateSpecialUnit ssunit = new SimulateSpecialUnit(
+                    result, svalue.CanRead, svalue.CanWrite);
+                ssunit.Var = svalue.NickName;
+                return ssunit;
+            }
+            return result;
+        }
+
+        static private SimulateVariableUnit _Create(string _name)
         {
             SimulateBitUnit sbunit = new SimulateBitUnit();
             if (sbunit._Check_Name(_name))
@@ -169,7 +205,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             return null;
         }
 
-        public static SimulateVariableUnit Create(string _name, string type)
+        static private SimulateVariableUnit _Create(string _name, string type)
         {
             switch (type)
             {
@@ -203,6 +239,14 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     {
                         sfunit.Name = _name;
                         return sfunit;
+                    }
+                    break;
+                case "PULSE":
+                    SimulatePulseUnit spunit = new SimulatePulseUnit();
+                    if (spunit._Check_Name(_name))
+                    {
+                        spunit.Name = _name;
+                        return spunit;
                     }
                     break;
                 default:
@@ -313,7 +357,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
             while (char.IsLetter(name[i])) i++;
             string bname = name.Substring(0, i);
             int offset = int.Parse(name.Substring(i));
-
             SimulateVariableModel svmodel = null;
             switch (type)
             {
@@ -332,7 +375,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 default:
                     return svmodel;
             }
-
             svmodel.Base = bname;
             svmodel.Offset = offset;
             svmodel.Size = size;

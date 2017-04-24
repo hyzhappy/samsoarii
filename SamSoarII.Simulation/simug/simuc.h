@@ -32,10 +32,10 @@ uint32_t MBit[256<<5];
 uint32_t CBit[256];
 uint32_t TBit[256];
 uint32_t SBit[32<<5];
-uint16_t DWord[8192];
-uint16_t CVWord[200];
-uint32_t CVDoubleWord[56];
-uint16_t TVWord[256];
+uint32_t DWord[8192];
+uint32_t CVWord[200];
+uint64_t CVDoubleWord[56];
+uint32_t TVWord[256];
 // Register writeable
 // Set 1 if you want to modify the value of register
 // othervise, Set 0 to lock the register and make it constant
@@ -48,6 +48,8 @@ uint32_t SEnable[32<<5];
 uint32_t DEnable[8192];
 uint32_t CVEnable[256];
 uint32_t TVEnable[256];
+// pulse signal frequency
+extern uint64_t YFeq[4];
 
 EXPORT void BeforeRunLadder();
 
@@ -107,29 +109,7 @@ EXPORT void GetBit(char* name, int size, uint32_t* output)
 	}
 }
 // Get the WORD value from targeted register (D/CV/TV)
-EXPORT void GetWord(char* name, int size, uint16_t* output)
-{
-	int addr = 0;
-	switch (name[0])
-	{
-	case 'D':
-		sscanf(name + 1, "%d", &addr);
-		memcpy(output, DWord + addr, size * sizeof(uint16_t));
-		break;
-	case 'C':
-		sscanf(name + 2, "%d", &addr);
-		memcpy(output, CVWord + addr, size * sizeof(uint16_t));
-		break;
-	case 'T':
-		sscanf(name + 2, "%d", &addr);
-		memcpy(output, TVWord + addr, size * sizeof(uint16_t));
-		break;
-	default:
-		break;
-	}
-}
-// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
-EXPORT void GetDoubleWord(char* name, int size, uint32_t* output)
+EXPORT void GetWord(char* name, int size, uint32_t* output)
 {
 	int addr = 0;
 	switch (name[0])
@@ -140,28 +120,36 @@ EXPORT void GetDoubleWord(char* name, int size, uint32_t* output)
 		break;
 	case 'C':
 		sscanf(name + 2, "%d", &addr);
-		memcpy(output, CVDoubleWord + (addr - 200), size * sizeof(uint32_t));
+		memcpy(output, CVWord + addr, size * sizeof(uint32_t));
+		break;
+	case 'T':
+		sscanf(name + 2, "%d", &addr);
+		memcpy(output, TVWord + addr, size * sizeof(uint32_t));
 		break;
 	default:
 		break;
 	}
 }
-// Get the FLOAT value from targeted register (D)
-EXPORT void GetFloat(char* name, int size, float* output)
+// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
+EXPORT void GetDoubleWord(char* name, int size, uint64_t* output)
 {
 	int addr = 0;
 	switch (name[0])
 	{
 	case 'D':
 		sscanf(name + 1, "%d", &addr);
-		memcpy(output, DWord + addr, size * sizeof(float));
+		memcpy(output, DWord + addr, size * sizeof(uint64_t));
+		break;
+	case 'C':
+		sscanf(name + 2, "%d", &addr);
+		memcpy(output, CVDoubleWord + (addr - 200), size * sizeof(uint64_t));
 		break;
 	default:
 		break;
 	}
 }
-// Get the DOUBLE value from targeted register (D)
-EXPORT void GetDouble(char* name, int size, double* output)
+// Get the FLOAT value from targeted register (D)
+EXPORT void GetFloat(char* name, int size, double* output)
 {
 	int addr = 0;
 	switch (name[0])
@@ -174,6 +162,22 @@ EXPORT void GetDouble(char* name, int size, double* output)
 		break;
 	}
 }
+
+// Get the signal frequency
+EXPORT void GetFeq(char* name, uint64_t* output)
+{
+	int addr = 0;
+	switch (name[0])
+	{
+	case 'Y':
+		sscanf(name + 1, "%d", &addr);
+		*output = YFeq[addr];
+		break;
+	default:
+		break;
+	}
+}
+
 // Set the Bit value to targeted bit register (X/Y/M/C/T/S)
 EXPORT void SetBit(char* name, int size, uint32_t* input)
 {
@@ -204,29 +208,7 @@ EXPORT void SetBit(char* name, int size, uint32_t* input)
 	}
 }
 // Set the WORD value to targeted register (D/CV/TV)
-EXPORT void SetWord(char* name, int size, uint16_t* input)
-{
-	int addr = 0;
-	switch (name[0])
-	{
-	case 'D':
-		sscanf(name + 1, "%d", &addr);
-		memcpy(DWord + addr, input, size * sizeof(uint16_t));
-		break;
-	case 'C':
-		sscanf(name + 2, "%d", &addr);
-		memcpy(CVWord + addr, input, size * sizeof(uint16_t));
-		break;
-	case 'T':
-		sscanf(name + 2, "%d", &addr);
-		memcpy(TVWord + addr, input, size * sizeof(uint16_t));
-		break;
-	default:
-		break;
-	}
-}
-// Set the DWORD value to targeted register (D)
-EXPORT void SetDoubleWord(char* name, int size, uint32_t* input)
+EXPORT void SetWord(char* name, int size, uint32_t* input)
 {
 	int addr = 0;
 	switch (name[0])
@@ -237,28 +219,36 @@ EXPORT void SetDoubleWord(char* name, int size, uint32_t* input)
 		break;
 	case 'C':
 		sscanf(name + 2, "%d", &addr);
-		memcpy(CVDoubleWord + (addr - 200), input, size * sizeof(uint32_t));
+		memcpy(CVWord + addr, input, size * sizeof(uint32_t));
+		break;
+	case 'T':
+		sscanf(name + 2, "%d", &addr);
+		memcpy(TVWord + addr, input, size * sizeof(uint32_t));
 		break;
 	default:
 		break;
 	}
 }
-// Set the FLOAT value to targeted register (D)
-EXPORT void SetFloat(char* name, int size, float* input)
+// Set the DWORD value to targeted register (D)
+EXPORT void SetDoubleWord(char* name, int size, uint64_t* input)
 {
 	int addr = 0;
 	switch (name[0])
 	{
 	case 'D':
 		sscanf(name + 1, "%d", &addr);
-		memcpy(DWord + addr, input, size * sizeof(float));
+		memcpy(DWord + addr, input, size * sizeof(uint64_t));
+		break;
+	case 'C':
+		sscanf(name + 2, "%d", &addr);
+		memcpy(CVDoubleWord + (addr - 200), input, size * sizeof(uint64_t));
 		break;
 	default:
 		break;
 	}
 }
-// Set the DOUBLE value to targeted register (D)
-EXPORT void SetDouble(char* name, int size, double* input)
+// Set the FLOAT value to targeted register (D)
+EXPORT void SetFloat(char* name, int size, double* input)
 {
 	int addr = 0;
 	switch (name[0])
@@ -271,6 +261,7 @@ EXPORT void SetDouble(char* name, int size, double* input)
 		break;
 	}
 }
+
 // Set the writeable enable value of targeted register
 EXPORT void SetEnable(char* name, int size, int value)
 {
@@ -340,9 +331,9 @@ EXPORT void SetEnable(char* name, int size, int value)
 #define DP_TYPE_WORD 0x02
 #define DP_TYPE_DOUBLEWORD 0x03
 #define DP_TYPE_FLOAT 0x04
-#define DP_TYPE_DOUBLE 0x05
 // convert the struct DataPoint and get the value of specific type
-#define WORDVALUE(dp) *((uint16_t*)(&(dp).rsv1))
+#define WORDVALUE(dp) *((uint32_t*)(&(dp).rsv1))
+#define DWORDVALUE(dp) *((uint64_t*)(&(dp).rsv1))
 #define FLOATVALUE(dp) *((float*)(&(dp).rsv1))
 #define DOUBLEVALUE(dp) *((double*)(&(dp).rsv1))
 /*
@@ -357,7 +348,7 @@ struct DataPoint
 	int type;
 	char* name;
 	int time;
-	int rsv1, rsv2;
+	int32_t rsv1, rsv2;
 };
 /*
 struct BitDataPoint
@@ -569,42 +560,15 @@ char* _CloneName(char* name)
 // Add a DataPoint of BIT value
 EXPORT void AddBitDataPoint(char* name, int time, uint32_t value)
 {
-	// Ignore the equivalance
-	/*
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_BIT &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			dpis[i].rsv1 = value;
-			return;
-		}
-	}
-	*/
 	dpis[dpic].type = DP_TYPE_BIT;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
-	dpis[dpic].rsv1 = value;
+	WORDVALUE(dpis[dpic]) = value;
 	dpic++;
 }
 // Add a DataPoint of WORD value
 EXPORT void AddWordDataPoint(char* name, int time, uint16_t value)
 {
-	/*
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_WORD &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			WORDVALUE(dpis[i]) = value;
-			return;
-		}
-	}
-	*/
 	dpis[dpic].type = DP_TYPE_WORD;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
@@ -614,67 +578,19 @@ EXPORT void AddWordDataPoint(char* name, int time, uint16_t value)
 // Add a DataPoint of DOUBLE value
 EXPORT void AddDoubleWordDataPoint(char* name, int time, uint32_t value)
 {
-	/*
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_DOUBLEWORD &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			dpis[i].rsv1 = value;
-			return;
-		}
-	}
-	*/
 	dpis[dpic].type = DP_TYPE_DOUBLEWORD;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
-	dpis[dpic].rsv1 = value;
+	DWORDVALUE(dpis[dpic]) = value;
 	dpic++;
 }
 // Add a DataPoint of FLOAT value
 EXPORT void AddFloatDataPoint(char* name, int time, float value)
 {
-	/*
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_FLOAT &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			FLOATVALUE(dpis[i]) = value;
-			return;
-		}
-	}
-	*/
 	dpis[dpic].type = DP_TYPE_FLOAT;
 	dpis[dpic].name = _CloneName(name);
 	dpis[dpic].time = time;
 	FLOATVALUE(dpis[dpic]) = value;
-	dpic++;
-}
-// Add a DataPoint of DOUBLE value
-EXPORT void AddDoubleDataPoint(char* name, int time, double value)
-{
-	/*
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_DOUBLE &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			DOUBLEVALUE(dpis[i]) = value;
-			return;
-		}
-	}
-	*/
-	dpis[dpic].type = DP_TYPE_DOUBLE;
-	dpis[dpic].name = _CloneName(name);
-	dpis[dpic].time = time;
-	DOUBLEVALUE(dpis[dpic]) = value;
 	dpic++;
 }
 
@@ -746,20 +662,6 @@ EXPORT void RemoveFloatDataPoint(char* name, int time, float value)
 	}
 }
 
-EXPORT void RemoveDoubleDataPoint(char* name, int time, double value)
-{
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_DOUBLE &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			_RemoveDataPoint(i);
-		}
-	}
-}
-
 EXPORT void AddViewInput(char* name, int type)
 {
 
@@ -772,17 +674,14 @@ EXPORT void AddViewOutput(char* name, int type)
 	switch (type)
 	{
 	case DP_TYPE_BIT:
-	case DP_TYPE_DOUBLEWORD:
-		dvos[dvoc].rsv1 = 0;
-		break;
 	case DP_TYPE_WORD:
 		WORDVALUE(dvos[dvoc]) = 0;
 		break;
+	case DP_TYPE_DOUBLEWORD:
+		DWORDVALUE(dvos[dvoc]) = 0;
+		break;
 	case DP_TYPE_FLOAT:
 		FLOATVALUE(dvos[dvoc]) = 0.0;
-		break;
-	case DP_TYPE_DOUBLE:
-		DOUBLEVALUE(dvos[dvoc]) = 0.0;
 		break;
 	}
 	dvoc++;
@@ -832,9 +731,15 @@ static int currenttime;
 static int beforetime;
 static int aftertime;
 static int deltatime;
-static int counttime;
+int counttime;
 int counttimems;
 static int scanperiod = 1000;
+
+EXPORT void InitClock()
+{
+	counttime = 0;
+	counttimems = 0;
+}
 
 void UpdateClock()
 {
@@ -851,6 +756,7 @@ EXPORT void BeforeRunLadder()
 	MBit[8158] = ((counttimems / 5) & 1);
 	MBit[8159] = ((counttimems / 50) & 1);
 	MBit[8160] = ((counttimems / 500) & 1);
+	MBit[8161] = ((counttimems / 30000) & 1);
 
 	//printf("counttime=%d counttimems=%d 10msclock=%d 100msclock=%d 1sclock=%d\n",
 	//	counttime, counttimems, MBit[8158], MBit[8159], MBit[8160]);
@@ -931,19 +837,19 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 				{
 				case 'X':
 					sscanf(dvis[i].name + 1, "%d", &offset);
-					XBit[offset] = dvis[i].dp->rsv1;
+					XBit[offset] = WORDVALUE(*dvis[i].dp);
 					break;
 				case 'Y':
 					sscanf(dvis[i].name + 1, "%d", &offset);
-					YBit[offset] = dvis[i].dp->rsv1;
+					YBit[offset] = WORDVALUE(*dvis[i].dp);
 					break;
 				case 'M':
 					sscanf(dvis[i].name + 1, "%d", &offset);
-					MBit[offset] = dvis[i].dp->rsv1;
+					MBit[offset] = WORDVALUE(*dvis[i].dp);
 					break;
 				case 'S':
 					sscanf(dvis[i].name + 1, "%d", &offset);
-					SBit[offset] = dvis[i].dp->rsv1;
+					SBit[offset] = WORDVALUE(*dvis[i].dp);
 					break;
 				case 'T':
 					switch (dvis[i].name[1])
@@ -954,7 +860,7 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 						break;
 					default:
 						sscanf(dvis[i].name + 1, "%d", &offset);
-						TBit[offset] = dvis[i].dp->rsv1;
+						TBit[offset] = WORDVALUE(*dvis[i].dp);
 						break;
 					}
 					break;
@@ -966,11 +872,11 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 						if (offset < 200)
 							CVWord[offset] = WORDVALUE(*dvis[i].dp);
 						else
-							CVDoubleWord[offset] = dvis[i].dp->rsv1;
+							CVDoubleWord[offset] = WORDVALUE(*dvis[i].dp);
 						break;
 					default:
 						sscanf(dvis[i].name + 1, "%d", &offset);
-						CBit[offset] = dvis[i].dp->rsv1;
+						CBit[offset] = WORDVALUE(*dvis[i].dp);
 						break;
 					}
 					break;
@@ -983,13 +889,10 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 						DWord[offset] = WORDVALUE(*dvis[i].dp);
 						break;
 					case DP_TYPE_DOUBLEWORD:
-						*((uint32_t*)(DWord + offset)) = dvis[i].dp->rsv1;
+						*((uint64_t*)(DWord + offset)) = WORDVALUE(*dvis[i].dp);
 						break;
 					case DP_TYPE_FLOAT:
-						*((float*)(DWord + offset)) = FLOATVALUE(*dvis[i].dp);
-						break;
-					case DP_TYPE_DOUBLE:
-						*((double*)(DWord + offset)) = DOUBLEVALUE(*dvis[i].dp);
+						*((double*)(DWord + offset)) = FLOATVALUE(*dvis[i].dp);
 						break;
 					default:
 						break;
@@ -1021,39 +924,39 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 		for (i = 0; i < dvoc; i++)
 		{
 			int offset;
-			int value;
-			float valuef;
-			double valued;
+			int32_t valuew;
+			int64_t valued;
+			double valuef;
 
 			dvos[i].time = counttimems;
 			switch (dvos[i].name[0])
 			{
 			case 'X':
 				sscanf(dvos[i].name + 1, "%d", &offset);
-				value = (int)(XBit[offset]);
+				valuew = XBit[offset];
 				break;
 			case 'Y':
 				sscanf(dvos[i].name + 1, "%d", &offset);
-				value = (int)(YBit[offset]);
+				valuew = YBit[offset];
 				break;
 			case 'M':
 				sscanf(dvos[i].name + 1, "%d", &offset);
-				value = (int)(MBit[offset]);
+				valuew = MBit[offset];
 				break;
 			case 'S':
 				sscanf(dvos[i].name + 1, "%d", &offset);
-				value = (int)(SBit[offset]);
+				valuew = SBit[offset];
 				break;
 			case 'T':
 				switch (dvos[i].name[1])
 				{
 				case 'V':
 					sscanf(dvos[i].name + 2, "%d", &offset);
-					value = (int)(TVWord[offset]);
+					valuew = TVWord[offset];
 					break;
 				default:
 					sscanf(dvos[i].name + 1, "%d", &offset);
-					value = (int)(TBit);
+					valuew = TBit[offset];
 					break;
 				}
 				break;
@@ -1063,13 +966,13 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 				case 'V':
 					sscanf(dvos[i].name + 2, "%d", &offset);
 					if (offset < 200)
-						value = (int)(CVWord[offset]);
+						valuew = CVWord[offset];
 					else
-						value = (int)(CVDoubleWord[offset]);
+						valued = CVDoubleWord[offset];
 					break;
 				default:
 					sscanf(dvos[i].name + 1, "%d", &offset);
-					value = (int)(CBit);
+					valuew = CBit[offset];
 					break;
 				}
 				break;
@@ -1078,16 +981,13 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 				switch (dvos[i].type)
 				{
 				case DP_TYPE_WORD:
-					value = (int)(DWord[offset]);
+					valuew = DWord[offset];
 					break;
 				case DP_TYPE_DOUBLEWORD:
-					value = (int)(*((uint32_t*)(DWord + offset)));
+					valued = *((int64_t*)(DWord + offset));
 					break;
 				case DP_TYPE_FLOAT:
-					valuef = *((float*)(DWord + offset));
-					break;
-				case DP_TYPE_DOUBLE:
-					valued = *((double*)(DWord + offset));
+					valuef = *((double*)(DWord + offset));
 					break;
 				default:
 					break;
@@ -1098,17 +998,17 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 			switch (dvos[i].type)
 			{
 			case DP_TYPE_BIT:
-			case DP_TYPE_DOUBLEWORD:
-				if (dvos[i].rsv1 != value)
+			case DP_TYPE_WORD:
+				if (WORDVALUE(dvos[i]) != valuew)
 				{
-					dvos[i].rsv1 = value;
+					WORDVALUE(dvos[i]) = valuew;
 					memcpy(dpos+(dpoc++), dvos+i, sizeof(struct DataPoint));
 				}
 				break;
-			case DP_TYPE_WORD:
-				if (WORDVALUE(dvos[i]) != value)
+			case DP_TYPE_DOUBLEWORD:
+				if (DWORDVALUE(dvos[i]) != valued)
 				{
-					WORDVALUE(dvos[i]) = value;
+					DWORDVALUE(dvos[i]) = valued;
 					memcpy(dpos+(dpoc++), dvos+i, sizeof(struct DataPoint));
 				}
 				break;
@@ -1116,13 +1016,6 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 				if (FLOATVALUE(dvos[i]) != valuef)
 				{
 					FLOATVALUE(dvos[i]) = valuef;
-					memcpy(dpos+(dpoc++), dvos+i, sizeof(struct DataPoint));
-				}
-				break;
-			case DP_TYPE_DOUBLE:
-				if (DOUBLEVALUE(dvos[i]) != valued)
-				{
-					DOUBLEVALUE(dvos[i]) = valued;
 					memcpy(dpos+(dpoc++), dvos+i, sizeof(struct DataPoint));
 				}
 				break;
@@ -1136,17 +1029,14 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 					switch (dpos[j].type)
 					{
 					case DP_TYPE_BIT:
-					case DP_TYPE_DOUBLEWORD:
-						fprintf(fout, " %d\n", dpos[j].rsv1);
-						break;
 					case DP_TYPE_WORD:
 						fprintf(fout, " %d\n", WORDVALUE(dpos[j]));
 						break;
-					case DP_TYPE_FLOAT:
-						fprintf(fout, " %f\n", FLOATVALUE(dpos[j]));
+					case DP_TYPE_DOUBLEWORD:
+						fprintf(fout, " %lld\n", DWORDVALUE(dpos[j]));
 						break;
-					case DP_TYPE_DOUBLE:
-						fprintf(fout, " %lf\n", DOUBLEVALUE(dpos[j]));
+					case DP_TYPE_FLOAT:
+						fprintf(fout, " %llf\n", FLOATVALUE(dpos[j]));
 						break;
 					}
 				}
@@ -1160,17 +1050,14 @@ EXPORT void RunData(char* outputFile, int starttime, int endtime)
 		switch (dpos[j].type)
 		{
 		case DP_TYPE_BIT:
-		case DP_TYPE_DOUBLEWORD:
-			fprintf(fout, " %d\n", dpos[j].rsv1);
-			break;
 		case DP_TYPE_WORD:
 			fprintf(fout, " %d\n", WORDVALUE(dpos[j]));
 			break;
-		case DP_TYPE_FLOAT:
-			fprintf(fout, " %f\n", FLOATVALUE(dpos[j]));
+		case DP_TYPE_DOUBLEWORD:
+			fprintf(fout, " %lld\n", DWORDVALUE(dpos[j]));
 			break;
-		case DP_TYPE_DOUBLE:
-			fprintf(fout, " %lf\n", DOUBLEVALUE(dpos[j]));
+		case DP_TYPE_FLOAT:
+			fprintf(fout, " %llf\n", FLOATVALUE(dpos[j]));
 			break;
 		}
 	}

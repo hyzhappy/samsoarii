@@ -109,32 +109,27 @@ namespace SamSoarII.UserInterface
             {
                 return new SimuArgsDialogUnlockValue();
             }
-            int valuei;
-            float valuef;
-            double valued;
+            Int32 valuew;
+            Int64 valued;
+            double valuef;
             try
             {
                 switch (type)
                 {
                     case "BIT":
-                        valuei = int.Parse(text);
-                        if (valuei < 0 || valuei > 1)
+                        valuew = int.Parse(text);
+                        if (valuew < 0 || valuew > 1)
                             return null;
-                        return valuei;
+                        return valuew;
                     case "WORD":
-                        valuei = int.Parse(text);
-                        if ((valuei >> 16) != 0)
-                            return null;
-                        return valuei;
+                        valuew = int.Parse(text);
+                        return valuew;
                     case "DWORD":
-                        valuei = int.Parse(text);
-                        return valuei;
+                        valued = int.Parse(text);
+                        return valued;
                     case "FLOAT":
                         valuef = float.Parse(text);
                         return valuef;
-                    case "DOUBLE":
-                        valued = double.Parse(text);
-                        return valued;
                     default:
                         return null;
                 }
@@ -152,8 +147,8 @@ namespace SamSoarII.UserInterface
             switch (type)
             {
                 case "BIT": msg2 = "有效范围为(0~1)。"; break;
-                case "WORD": msg2 = "有效范围为(-32768~32767)。"; break;
-                case "DWORD": msg2 = "有效范围为(-(2^31)~(2^31)-1)。"; break;
+                case "WORD": msg2 = "有效范围为(-(2^31)~(2^31)-1)。"; break;
+                case "DWORD": msg2 = "有效范围为(-(2^63)~(2^63)-1)。"; break;
                 default: break;
             }
             MessageBox.Show(msg1 + msg2);

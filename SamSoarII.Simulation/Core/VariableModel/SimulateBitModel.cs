@@ -107,6 +107,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     this.values[i] = new SimulateBitUnit();
                     this.values[i].Name = String.Format("{0:s}{1:d}", Base, Offset + i);
                     this.values[i].Value = 0;
+                    this.values[i].CanClose = false;
+                    this.values[i].CanLock = false;
                 }
             }
         }

@@ -42,32 +42,11 @@ namespace SamSoarII.Simulation.UI.Monitor
                     {
                         return;
                     }
-                    if (svunit.Name[0] == 'D')
+                    if (svunit.Name[0] == 'D' && !(svunit is SimulateSpecialUnit))
                     {
                         Items.Add("WORD");
                         Items.Add("DWORD");
                         Items.Add("FLOAT");
-                        Items.Add("DOUBLE");
-                        if (svunit is SimulateBitUnit)
-                        {
-                            throw new FormatException();
-                        }
-                        if (svunit is SimulateWordUnit)
-                        {
-                            Text = "WORD";
-                        }
-                        if (svunit is SimulateDWordUnit)
-                        {
-                            Text = "DWORD";
-                        }
-                        if (svunit is SimulateFloatUnit)
-                        {
-                            Text = "FLOAT";
-                        }
-                        if (svunit is SimulateDoubleUnit)
-                        {
-                            Text = "DOUBLE";
-                        }
                         if (svunit is SimulateUnitSeries)
                         {
                             SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
@@ -85,10 +64,11 @@ namespace SamSoarII.Simulation.UI.Monitor
                                 case "FLOAT":
                                     Text = "FLOAT";
                                     break;
-                                case "DOUBLE":
-                                    Text = "DOUBLE";
-                                    break;
                             }
+                        }
+                        else
+                        {
+                            Text = svunit.Type;
                         }
                     }
                     else
@@ -114,37 +94,10 @@ namespace SamSoarII.Simulation.UI.Monitor
                                     Items.Add("FLOAT");
                                     Text = "FLOAT";
                                     break;
-                                case "DOUBLE":
-                                    Items.Add("DOUBLE");
-                                    Text = "DOUBLE";
-                                    break;
                             }
                         }
-                        if (svunit is SimulateBitUnit)
-                        {
-                            Items.Add("BIT");
-                            Text = "BIT";
-                        }
-                        if (svunit is SimulateWordUnit)
-                        {
-                            Items.Add("WORD");
-                            Text = "WORD";
-                        }
-                        if (svunit is SimulateDWordUnit)
-                        {
-                            Items.Add("DWORD");
-                            Text = "DWORD";
-                        }
-                        if (svunit is SimulateFloatUnit)
-                        {
-                            Items.Add("FLOAT");
-                            Text = "FLOAT";
-                        }
-                        if (svunit is SimulateDoubleUnit)
-                        {
-                            Items.Add("DOUBLE");
-                            Text = "DOUBLE";
-                        }
+                        Items.Add(svunit.Type);
+                        Text = svunit.Type;
                     }
                 });
             }

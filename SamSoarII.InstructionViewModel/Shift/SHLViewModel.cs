@@ -25,7 +25,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.SourceValue = value;
-                MiddleTextBlock2.Text = string.Format("S:{0}", _model.SourceValue.ValueShowString);
+                MiddleTextBlock2.Text = string.Format("IN1:{0}", _model.SourceValue.ValueShowString);
             }
         }
         public WordValue Count
@@ -37,7 +37,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.Count = value;
-                MiddleTextBlock3.Text = string.Format("N:{0}", _model.Count.ValueShowString);
+                MiddleTextBlock3.Text = string.Format("IN2:{0}", _model.Count.ValueShowString);
             }
         }
         public WordValue DestinationValue
@@ -49,7 +49,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _model.DestinationValue = value;
-                BottomTextBlock.Text = string.Format("D:{0}", _model.DestinationValue.ValueShowString);
+                BottomTextBlock.Text = string.Format("OUT:{0}", _model.DestinationValue.ValueShowString);
             }
         }
 
@@ -132,9 +132,9 @@ namespace SamSoarII.LadderInstViewModel
         {
             var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
-            dialog.ShowLine2("S", SourceValue);
-            dialog.ShowLine4("D", DestinationValue);
-            dialog.ShowLine6("N", Count);
+            dialog.ShowLine2("IN1", SourceValue);
+            dialog.ShowLine6("IN2", Count);
+            dialog.ShowLine4("OUT", DestinationValue);
             return dialog;
         }
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
@@ -142,17 +142,17 @@ namespace SamSoarII.LadderInstViewModel
             var oldvaluestring1 = SourceValue.ValueString;
             var oldvaluestring2 = DestinationValue.ValueString;
             var oldvaluestring3 = Count.ValueString;
-            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyWordRegex1, ValueParser.VerifyIntKHValueRegex }) && ValueParser.CheckValueString(valueStrings[2], new Regex[] { ValueParser.VerifyWordRegex2 }) && ValueParser.CheckValueString(valueStrings[4], new Regex[] { ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex }))
+            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyWordRegex1, ValueParser.VerifyIntKHValueRegex }) && ValueParser.CheckValueString(valueStrings[4], new Regex[] { ValueParser.VerifyWordRegex2 }) && ValueParser.CheckValueString(valueStrings[2], new Regex[] { ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex }))
             {
                 SourceValue = ValueParser.ParseWordValue(valueStrings[0], contextDevice);
-                DestinationValue = ValueParser.ParseWordValue(valueStrings[2], contextDevice);
-                Count = ValueParser.ParseWordValue(valueStrings[4], contextDevice);
+                DestinationValue = ValueParser.ParseWordValue(valueStrings[4], contextDevice);
+                Count = ValueParser.ParseWordValue(valueStrings[2], contextDevice);
                 InstructionCommentManager.ModifyValue(this, oldvaluestring1, SourceValue.ValueString);
                 InstructionCommentManager.ModifyValue(this, oldvaluestring2, DestinationValue.ValueString);
                 InstructionCommentManager.ModifyValue(this, oldvaluestring3, Count.ValueString);
                 ValueCommentManager.UpdateComment(SourceValue, valueStrings[1]);
-                ValueCommentManager.UpdateComment(DestinationValue, valueStrings[3]);
-                ValueCommentManager.UpdateComment(Count, valueStrings[5]);
+                ValueCommentManager.UpdateComment(DestinationValue, valueStrings[5]);
+                ValueCommentManager.UpdateComment(Count, valueStrings[3]);
             }
             else
             {

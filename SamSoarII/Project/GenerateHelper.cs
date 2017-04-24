@@ -543,50 +543,64 @@ namespace SamSoarII.AppMain.Project
                     if (bvm.Model is ROLDModel)
                     {
                         lcn[1] = ((ROLDModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((ROLDModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((ROLDModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((ROLDModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((ROLDModel)(bvm.Model)).Count.ValueShowString;
                     }
                     if (bvm.Model is ROLModel)
                     {
                         lcn[1] = ((ROLModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((ROLModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((ROLModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((ROLModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((ROLModel)(bvm.Model)).Count.ValueShowString;
                     }
                     if (bvm.Model is RORDModel)
                     {
                         lcn[1] = ((RORDModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((RORDModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((RORDModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((RORDModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((RORDModel)(bvm.Model)).Count.ValueShowString;
                     }
                     if (bvm.Model is RORModel)
                     {
                         lcn[1] = ((RORModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((RORModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((RORModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((RORModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((RORModel)(bvm.Model)).Count.ValueShowString;
                     }
                     if (bvm.Model is SHLDModel)
                     {
                         lcn[1] = ((SHLDModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((SHLDModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((SHLDModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((SHLDModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((SHLDModel)(bvm.Model)).Count.ValueShowString;
                     }
                     if (bvm.Model is SHLModel)
                     {
                         lcn[1] = ((SHLModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((SHLModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((SHLModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((SHLModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((SHLModel)(bvm.Model)).Count.ValueShowString;
                     }
                     if (bvm.Model is SHRDModel)
                     {
                         lcn[1] = ((SHRDModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((SHRDModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((SHRDModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((SHRDModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((SHRDModel)(bvm.Model)).Count.ValueShowString;
                     }
                     if (bvm.Model is SHRModel)
                     {
                         lcn[1] = ((SHRModel)(bvm.Model)).SourceValue.ValueShowString;
-                        lcn[2] = ((SHRModel)(bvm.Model)).DestinationValue.ValueShowString;
-                        lcn[3] = ((SHRModel)(bvm.Model)).Count.ValueShowString;
+                        lcn[3] = ((SHRModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[2] = ((SHRModel)(bvm.Model)).Count.ValueShowString;
+                    }
+                    if (bvm.Model is SHLBModel)
+                    {
+                        lcn[1] = ((SHLBModel)(bvm.Model)).SourceValue.ValueShowString;
+                        lcn[2] = ((SHLBModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[3] = ((SHLBModel)(bvm.Model)).CountValue.ValueShowString;
+                        lcn[4] = ((SHLBModel)(bvm.Model)).MoveValue.ValueShowString;
+                    }
+                    if (bvm.Model is SHRBModel)
+                    {
+                        lcn[1] = ((SHRBModel)(bvm.Model)).SourceValue.ValueShowString;
+                        lcn[2] = ((SHRBModel)(bvm.Model)).DestinationValue.ValueShowString;
+                        lcn[3] = ((SHRBModel)(bvm.Model)).CountValue.ValueShowString;
+                        lcn[4] = ((SHRBModel)(bvm.Model)).MoveValue.ValueShowString;
                     }
                     if (bvm.Model is ATCHModel)
                     {

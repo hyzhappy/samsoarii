@@ -20,13 +20,13 @@ namespace SamSoarII.Simulation.Core.VariableModel
             string _name = Name;
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return String.Format("{0:s}({1:s}{2:d})={3}{4:d}", Name, basename, offset + 1, value, Islocked ? "(Lock)" : String.Empty);
+            return String.Format("{0:s}={3}{4:d}", Name, basename, offset + 1, value, Islocked ? "(Lock)" : String.Empty);
         }
         public override string Type
         {
             get
             {
-                return "WORD";
+                return "DWORD";
             }
         }
         protected override bool _Check_Name(string _name)
@@ -100,6 +100,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     this.values[i] = new SimulateDWordUnit();
                     this.values[i].Name = String.Format("{0:s}{1:d}", Base, Offset + i*factor);
                     this.values[i].Value = 0;
+                    this.values[i].CanClose = false;
+                    this.values[i].CanLock = false;
                 }
             }
         }

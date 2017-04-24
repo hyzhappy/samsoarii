@@ -205,6 +205,20 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPArray)]
             double[] output
         );
+
+        /// <summary>
+        /// 动态库接口：获取脉冲频率
+        /// </summary>
+        /// <param name="name">脉冲输出口</param>
+        /// <param name="output">写入结果的空间</param>
+        [DllImport("simu.dll", EntryPoint = "GetFeq")]
+        private static extern void GetFeq
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Int64[] output
+        );
         
         /// <summary>
         /// 动态库接口：写入位变量的值
@@ -815,6 +829,32 @@ namespace SamSoarII.Simulation.Core
         }
 
         /// <summary>
+        /// 获取脉冲信号的频率
+        /// </summary>
+        /// <param name="var">脉冲输出口</param>
+        /// <returns></returns>
+        public Int64 GetFeq(string var)
+        {
+            // 找到第一个非字母的字符
+            int i = 0;
+            while (char.IsLetter(var[i])) i++;
+            // 获得基名称和偏移地址
+            string name = var.Substring(0, i);
+            int addr = int.Parse(var.Substring(i));
+            // 设置返回的数组
+            Int64[] ret = new Int64[1];
+            switch (name)
+            {
+                // 基名称为浮点变量的名称
+                case "D":
+                    GetFeq(var, ret);
+                    return ret[0];
+                default:
+                    throw new ArgumentException("Unidentified variable {0:s}", var);
+            }
+        }
+
+        /// <summary>
         /// 设置一段位变量的值
         /// </summary>
         /// <param name="var">名称</param>
@@ -935,7 +975,7 @@ namespace SamSoarII.Simulation.Core
                     throw new ArgumentException("Unidentified variable {0:s}", var);
             }
         }
-        
+   
         #endregion
 
         #region Lock Value

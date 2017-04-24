@@ -59,7 +59,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 this.svunit = value;
                 if (svunit != null)
                 {
-                    IsLocked = svunit.Islocked;
+                    //IsLocked = svunit.Islocked;
                     svunit.LockChanged += OnLockChanged;
                 }
             }

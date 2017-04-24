@@ -169,6 +169,24 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             return svbmodel;
         }
 
+        protected void _SetDialogProperty(string[] labels, string[] values, string[] types)
+        {
+            for (int i = 0; i < labels.Length; i++)
+            {
+                labels[i] = String.Format("{0:s}:{1:s}",
+                    this[i + 1].Var.Length > 0 
+                        ? this[i + 1].Var 
+                        : this[i + 1].Name,
+                    labels[i]);
+                values[i] = (this[i + 1].Islocked || !this[i + 1].CanLock) 
+                    ? this[i + 1].Value.ToString() 
+                    : String.Empty;
+                types[i] = (this[i + 1].CanLock)
+                    ? this[i + 1].Type
+                    : "READONLY";
+            }
+        }
+
         #region Event Handler
         protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
         {

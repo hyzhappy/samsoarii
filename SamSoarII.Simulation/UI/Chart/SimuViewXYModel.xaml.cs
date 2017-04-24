@@ -90,11 +90,6 @@ namespace SamSoarII.Simulation.UI.Chart
                         min = Math.Min(min, (double)((float)(vs.Value)));
                         max = Math.Max(max, (double)((float)(vs.Value)));
                     }
-                    if (vs is DoubleSegment)
-                    {
-                        min = Math.Min(min, (double)(vs.Value));
-                        max = Math.Max(max, (double)(vs.Value));
-                    }
                 }
             }
             XRuler.TimeStart = timestart;
@@ -126,10 +121,6 @@ namespace SamSoarII.Simulation.UI.Chart
                     if (vs is FloatSegment)
                     {
                         v = (double)((float)(vs.Value));
-                    }
-                    if (vs is DoubleSegment)
-                    {
-                        v = (double)(vs.Value);
                     }
                     linev = new Line();
                     linev.Y1 = CanvaHeight * (vp - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);
