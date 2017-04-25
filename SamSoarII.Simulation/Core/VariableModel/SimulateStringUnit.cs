@@ -51,5 +51,10 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             return false;
         }
+
+        public override string ToString()
+        {
+            return value?.ToString();
+        }
     }
 }

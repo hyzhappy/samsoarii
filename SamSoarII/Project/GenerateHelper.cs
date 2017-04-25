@@ -62,24 +62,25 @@ namespace SamSoarII.AppMain.Project
                 if (bvm_X != lcn.X || bvm_Y != lcn.Y)
                 {
                     lcn = new LCNode(++lcnCount);
-                    lcn.Prototype = bvm;
+                    lcn.Type = String.Empty;
                     lcn.X = bvm_X;
                     lcn.Y = bvm_Y;
                     lchart.Insert(lcn);
                 }
                 if (bvm.Type == ElementType.VLine)
                 {
-                    lcn.Type = String.Empty;
+                    //lcn.Type = String.Empty;
                     lcn.VAccess = true;
                 }
                 else if (bvm.Type == ElementType.HLine)
                 {
-                    lcn.Type = String.Empty;
+                    //lcn.Type = String.Empty;
                     lcn.HAccess = true;
                 }
                 else
                 {
                     lcn.Type = bvm.InstructionName;
+                    lcn.Prototype = bvm;
                     if (bvm.Model is ALTModel)
                     {
                         lcn[1] = ((ALTModel)(bvm.Model)).Value.ValueShowString;
@@ -604,8 +605,8 @@ namespace SamSoarII.AppMain.Project
                     }
                     if (bvm.Model is ATCHModel)
                     {
-                        lcn[1] = ((ATCHModel)(bvm.Model)).FuncName;
-                        lcn[2] = ((ATCHModel)(bvm.Model)).IDValue.ValueShowString;                   
+                        lcn[1] = ((ATCHModel)(bvm.Model)).IDValue.ValueShowString;
+                        lcn[2] = ((ATCHModel)(bvm.Model)).FuncName;
                     }
                     if (bvm.Model is DTCHModel)
                     {

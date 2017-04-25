@@ -451,6 +451,19 @@ namespace SamSoarII.Simulation.Core
             UpdateStart();
         }
         /// <summary>
+        /// 修改变量的值
+        /// </summary>
+        /// <param name="svunit"></param>
+        public void Change(SimulateVariableUnit svunit)
+        {
+            if (svunit.Islocked)
+            {
+                svunit.Set(dllmodel);
+                svunit.Islocked = false;
+            }
+        }
+
+        /// <summary>
         /// 替换一个变量单元
         /// </summary>
         /// <param name="oldUnit">旧的变量单元</param>
@@ -527,6 +540,7 @@ namespace SamSoarII.Simulation.Core
             // 重启更新线程
             UpdateStart();
         }
+        
         /// <summary>
         /// 获得第一个符合参数条件的变量单元
         /// </summary>

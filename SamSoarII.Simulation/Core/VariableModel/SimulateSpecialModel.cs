@@ -160,7 +160,11 @@ namespace SamSoarII.Simulation.Core.VariableModel
             return true;
         }
 
-        
+        public override string ToString()
+        {
+            return Prototype?.ToString();
+        }
+
 
     }
 }

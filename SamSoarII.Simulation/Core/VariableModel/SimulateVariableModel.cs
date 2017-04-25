@@ -51,8 +51,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
     {
         protected string name = "";
         protected string type = "";
-        protected string basename = "";
-        protected int offset = 0;
+        //protected string basename = "";
+        //protected int offset = 0;
         protected string varname = "";
         protected bool islocked = false;
         protected SimulateManager manager = null;
@@ -65,24 +65,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             set
             {
-                Match m1 = Regex.Match(value, @"\w\d+");
-                Match m2 = Regex.Match(value, @"^\w+\[\d+\.\.\d+\]$");
-                if (m2.Success)
-                {
+                if (_Check_Name(value))
                     this.name = value;
-                    return;
-                }
-                if (!m1.Success)
-                {
-                    return;
-                }
-                string _name = m1.Value;
-                if (!_Check_Name(_name)) return;
-                this.name = _name;
-                int i = 0;
-                while (char.IsLetter(name[i])) i++;
-                this.basename = this.name.Substring(0, i);
-                this.offset = int.Parse(this.name.Substring(i));
             }
         }
 
@@ -215,7 +199,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     {
                         sbunit.Name = _name;
                         return sbunit;
-                    }
+                    }       
                     break;
                 case "WORD":
                     SimulateWordUnit swunit = new SimulateWordUnit();

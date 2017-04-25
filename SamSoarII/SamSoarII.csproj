@@ -1941,9 +1941,7 @@
     <Resource Include="Resources\Image\Start.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\SpecialRegisters.xml">
-      <SubType>Designer</SubType>
-    </Resource>
+    <Resource Include="Resources\LayoutConfig.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

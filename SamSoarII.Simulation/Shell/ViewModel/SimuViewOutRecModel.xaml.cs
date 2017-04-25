@@ -240,7 +240,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     this[1] = _parent.GetVariableUnit(texts[1], "WORD");
                     this[2] = _parent.GetVariableUnit(texts[2], "WORD");
                     // T/C + 地址
-                    this[3] = _parent.GetVariableUnit(texts[1][0] + texts[1].Substring(2), "BIT");
+                    //this[3] = _parent.GetVariableUnit(texts[1][0] + texts[1].Substring(2), "BIT");
                     break;
                 // (rS, rwW, rwB)
                 /*
@@ -373,7 +373,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             }
             if (this[5] != null)
             {
-                MiddleTextBlock1.Text = this[5].ToString();
+                MiddleTextBlock5.Text = this[5].ToString();
             }
         }
         
@@ -526,6 +526,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels[1] = "TV";
                     _SetDialogProperty(labels, values, types);
                     break;
+                // (FEQ, OUT)
                 case "PLSF":
                 case "DPLSF":
                     labels = new string[2];
@@ -535,6 +536,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels[1] = "OUT";
                     _SetDialogProperty(labels, values, types);
                     break;
+                // (FEQ, DF, OUT)
                 case "PWM":
                 case "DPWM":
                     labels = new string[3];
@@ -545,6 +547,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels[2] = "OUT";
                     _SetDialogProperty(labels, values, types);
                     break;
+                // (FEQ, PN, OUT)
                 case "PLSY":
                 case "DPLSY":
                     labels = new string[3];

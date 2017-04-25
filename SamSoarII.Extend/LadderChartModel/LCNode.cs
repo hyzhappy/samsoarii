@@ -450,7 +450,12 @@ namespace SamSoarII.Extend.LadderChartModel
             inst.ProtoType = Prototype;
             insts.Add(inst);
         }
-        
+
+        public override string ToString()
+        {
+            return String.Format("({0:d},{1:d},{3},{4}){2:s}", X, Y, Type, VAccess, HAccess);
+        }
+
     }
 
 }

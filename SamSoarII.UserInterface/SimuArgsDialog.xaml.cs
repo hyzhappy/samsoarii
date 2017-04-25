@@ -17,6 +17,7 @@ namespace SamSoarII.UserInterface
     public class SimuArgsDialogValuesArgs : EventArgs
     {
         public object[] Values { get; set; }
+        public bool[] IsLocks { get; set; }
     }
     public delegate void SimuArgsDialogValuesHandler(object sender, SimuArgsDialogValuesArgs e); 
 
@@ -37,8 +38,20 @@ namespace SamSoarII.UserInterface
 
         private string[] _types;
 
-        public SimuArgsDialog(string[] labels, string[] values, string[] types)
+        public SimuArgsDialog(
+            string[] labels, 
+            string[] values, 
+            string[] types)
         {
+            bool[] canlocks = null;
+            if (types != null)
+            {
+                canlocks = new bool[types.Length];
+                for (int i = 0; i < types.Length; i++)
+                {
+                    canlocks[i] = !types[i].Equals("READONLY");
+                }
+            }
             InitializeComponent();
             this._types = types;
             if (labels == null || labels.Length < 5)
@@ -47,11 +60,17 @@ namespace SamSoarII.UserInterface
                 LE_Arg5.Visibility = Visibility.Collapsed;
                 TB_Arg5.Visibility = Visibility.Collapsed;
                 TB_Arg5.Text = String.Empty;
+                CB_Lock5.Visibility = Visibility.Collapsed;
+                TB_Lock5.Visibility = Visibility.Collapsed;
             }
             else
             {
                 LB_Arg5.Text = labels[4];
                 TB_Arg5.Text = values[4];
+                TB_Arg5.IsEnabled = canlocks[4];
+                CB_Lock5.IsEnabled = canlocks[4];
+                CB_Lock5.IsChecked = canlocks[4];
+                CB_Lock5.IsChecked |= (values[4].Length > 0);
             }
             if (labels == null || labels.Length < 4)
             {
@@ -59,11 +78,17 @@ namespace SamSoarII.UserInterface
                 LE_Arg4.Visibility = Visibility.Collapsed;
                 TB_Arg4.Visibility = Visibility.Collapsed;
                 TB_Arg4.Text = String.Empty;
+                CB_Lock4.Visibility = Visibility.Collapsed;
+                TB_Lock4.Visibility = Visibility.Collapsed;
             }
             else
             {
                 LB_Arg4.Text = labels[3];
                 TB_Arg4.Text = values[3];
+                TB_Arg4.IsEnabled = canlocks[3];
+                CB_Lock4.IsEnabled = canlocks[3];
+                CB_Lock4.IsChecked = canlocks[3];
+                CB_Lock4.IsChecked |= (values[3].Length > 0);
             }
             if (labels == null || labels.Length < 3)
             {
@@ -71,11 +96,17 @@ namespace SamSoarII.UserInterface
                 LE_Arg3.Visibility = Visibility.Collapsed;
                 TB_Arg3.Visibility = Visibility.Collapsed;
                 TB_Arg3.Text = String.Empty;
+                CB_Lock3.Visibility = Visibility.Collapsed;
+                TB_Lock3.Visibility = Visibility.Collapsed;
             }
             else
             {
                 LB_Arg3.Text = labels[2];
                 TB_Arg3.Text = values[2];
+                TB_Arg3.IsEnabled = canlocks[2];
+                CB_Lock3.IsEnabled = canlocks[2];
+                CB_Lock3.IsChecked = canlocks[2];
+                CB_Lock3.IsChecked |= (values[2].Length > 0);
             }
             if (labels == null || labels.Length < 2)
             {
@@ -83,11 +114,17 @@ namespace SamSoarII.UserInterface
                 LE_Arg2.Visibility = Visibility.Collapsed;
                 TB_Arg2.Visibility = Visibility.Collapsed;
                 TB_Arg2.Text = String.Empty;
+                CB_Lock2.Visibility = Visibility.Collapsed;
+                TB_Lock2.Visibility = Visibility.Collapsed;
             }
             else
             {
                 LB_Arg2.Text = labels[1];
                 TB_Arg2.Text = values[1];
+                TB_Arg2.IsEnabled = canlocks[1];
+                CB_Lock2.IsEnabled = canlocks[1];
+                CB_Lock2.IsChecked = canlocks[1];
+                CB_Lock2.IsChecked |= (values[1].Length > 0);
             }
             if (labels == null || labels.Length < 1)
             {
@@ -95,11 +132,17 @@ namespace SamSoarII.UserInterface
                 LE_Arg1.Visibility = Visibility.Collapsed;
                 TB_Arg1.Visibility = Visibility.Collapsed;
                 TB_Arg1.Text = String.Empty;
+                CB_Lock1.Visibility = Visibility.Collapsed;
+                TB_Lock1.Visibility = Visibility.Collapsed;
             }
             else
             {
                 LB_Arg1.Text = labels[0];
                 TB_Arg1.Text = values[0];
+                TB_Arg1.IsEnabled = canlocks[0];
+                CB_Lock1.IsEnabled = canlocks[0];
+                CB_Lock1.IsChecked = canlocks[0];
+                CB_Lock1.IsChecked |= (values[0].Length > 0);
             }
         }
 
@@ -179,6 +222,7 @@ namespace SamSoarII.UserInterface
             }
             SimuArgsDialogValuesArgs _e = new SimuArgsDialogValuesArgs();
             _e.Values = new object[5];
+            _e.IsLocks = new bool[5];
             if (_types != null && _types.Length > 0)
                 _e.Values[0] = Parse(TB_Arg1.Text, _types[0]);
             if (_types != null && _types.Length > 1)
@@ -189,6 +233,11 @@ namespace SamSoarII.UserInterface
                 _e.Values[3] = Parse(TB_Arg4.Text, _types[3]);
             if (_types != null && _types.Length > 4)
                 _e.Values[4] = Parse(TB_Arg5.Text, _types[4]);
+            _e.IsLocks[0] = (CB_Lock1.IsChecked == true);
+            _e.IsLocks[1] = (CB_Lock1.IsChecked == true);
+            _e.IsLocks[2] = (CB_Lock1.IsChecked == true);
+            _e.IsLocks[3] = (CB_Lock1.IsChecked == true);
+            _e.IsLocks[4] = (CB_Lock1.IsChecked == true);
             EnsureClick(this, _e);
         }
 

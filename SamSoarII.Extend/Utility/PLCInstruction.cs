@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -585,14 +586,10 @@ namespace SamSoarII.Extend.Utility
         /// <returns>c语言格式</returns>
         private string ToCStyle(string var, string mode="rw", string ctype="WORD")
         {
-            if (var.Equals(String.Empty))
-                return String.Empty;
-            // 找到最后一个字母
-            int i = 0;
-            while (i < var.Length && Char.IsLetter(var[i])) i++;
-            // 确定前面的类型名称和后面的数值
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
+            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
+            if (!m1.Success) return var;
+            string name = m1.Groups[1].Value;
+            int addr = int.Parse(m1.Groups[2].Value);
             // 如果该参数可写，需要附带写入使能
             if (mode.Equals("w") || mode.Equals("rw"))
             {
@@ -602,7 +599,7 @@ namespace SamSoarII.Extend.Utility
                 }
                 else
                 {
-                    this.enbit += "&&" + String.Format("{0:s}Enable[{1:d}]", name, addr);
+                    this.enbit += "||" + String.Format("{0:s}Enable[{1:d}]", name, addr);
                 }
             }
             switch (name)
@@ -653,12 +650,12 @@ namespace SamSoarII.Extend.Utility
                     }
                 case "K": case "F":
                     if (mode.Equals("r"))
-                        return var.Substring(i);
+                        return addr.ToString();
                     else
                         throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
                 case "H":
                     if (mode.Equals("r"))
-                        return "0x" + var.Substring(i);
+                        return "0x" + addr.ToString();
                     else
                         throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
                 default:

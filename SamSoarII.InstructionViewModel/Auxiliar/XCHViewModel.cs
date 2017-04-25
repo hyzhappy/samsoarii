@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel.Auxiliar
 {
-    class XCHViewModel : OutputRectBaseViewModel
+    public class XCHViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {
@@ -73,7 +73,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                RightValue = ValueParser.ParseWordValue(valueStrings[2]);
+                RightValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {

@@ -778,7 +778,7 @@ namespace SamSoarII.Extend.Utility
             //sw.Write("static uint16_t _stacktop;\n");           // 数据栈的栈顶
             //sw.Write("static uint16_t _mstack[256];\n");        // 辅助栈
             //sw.Write("static uint16_t _mstacktop;\n");          // 辅助栈的栈顶
-            sw.Write("static uint16_t _global[{0:d}];\n", globalTotal); // 全局变量
+            sw.Write("static int32_t _global[{0:d}];\n", globalTotal); // 全局变量
             // 先声明所有的子函数
             foreach (PLCInstruction inst in insts)
             {
@@ -788,15 +788,14 @@ namespace SamSoarII.Extend.Utility
             // 建立扫描的主函数
             sw.Write("void RunLadder()\n{\n");
             sw.Write("_itr_invoke();\n");
-            sw.Write("uint16_t temp;\n");
             // 建立局部的栈和辅助栈
             for (int i = 1; i <= stackTotal; i++)
             {
-                sw.Write("uint16_t _stack_{0:d};\n", i);
+                sw.Write("uint32_t _stack_{0:d};\n", i);
             }
             for (int i = 1; i <= mstackTotal; i++)
             {
-                sw.Write("uint16_t _mstack_{0:d};\n", i);
+                sw.Write("uint32_t _mstack_{0:d};\n", i);
             }
             // 生成PLC对应的内容
             // 初始化栈顶
@@ -842,7 +841,7 @@ namespace SamSoarII.Extend.Utility
             // 如果是仿真模式需要由写入使能作为条件
             if (inst.EnBit != null && inst.EnBit.Length > 0)
             {
-                sw.Write("if (!{0:s}) \n{{\n", inst.EnBit);
+                sw.Write("if (!({0:s})) \n{{\n", inst.EnBit);
             }
             // 当前指令为LD类指令，记录栈内当前位置的合并方式
             if (inst.StackCalc != null)
@@ -1136,8 +1135,8 @@ namespace SamSoarII.Extend.Utility
                         case "XCHF": sw.Write("_xchf(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
                         case "CML": sw.Write("{1:d} = _cmlw({0:d});\n", inst[1], inst[2]); break;
                         case "CMLD": sw.Write("{1:d} = _cmld({0:d});\n", inst[1], inst[2]); break;
-                        case "FMOV": sw.Write("_fmovw({0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "FMOVD": sw.Write("_fmovd({0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "FMOV": sw.Write("_fmovw({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit); break;
+                        case "FMOVD": sw.Write("_fmovd({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit); break;
                         case "SMOV": sw.Write("_smov({0:s}, {1:s}, {2:s}, &{3:s}, {4:s});\n", inst[1], inst[2], inst[3], inst[4], inst[5]); break;
                         // CALL指令，调用子函数
                         case "CALL":
@@ -1164,10 +1163,10 @@ namespace SamSoarII.Extend.Utility
                             break;
                         // 中断
                         case "ATCH":
-                            sw.Write("_atch({0:s}, {1:s});\n", inst[1], inst[2]);
+                            sw.Write("_atch({0:s}, _SBR_{1:s});\n", inst[1], inst[2]);
                             break;
                         case "DTCH":
-                            sw.Write("_dtch({0:s}, {1:s});\n", inst[1], inst[2]);
+                            sw.Write("_dtch({0:s}, _SBR_{1:s});\n", inst[1], inst[2]);
                             break;
                         case "EI":
                             sw.Write("_ei();\n");
@@ -1212,16 +1211,16 @@ namespace SamSoarII.Extend.Utility
                             sw.Write("_dplsy({0:s}, &{1:s}, &{2:s};\n", inst[1], inst[2], inst[3]);
                             break;
                         case "PLSR":
-                            sw.Write("_plsr({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
+                            sw.Write("_plsr(&{0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
                             break;
                         case "DPLSR":
-                            sw.Write("_dplsr({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
+                            sw.Write("_dplsr(&{0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
                             break;
                         case "PLSRD":
-                            sw.Write("_plsrd({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
+                            sw.Write("_plsrd(&{0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
                             break;
                         case "DPLSRD":
-                            sw.Write("_dplsrd({0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
+                            sw.Write("_dplsrd(&{0:s}, {1:s}, &{2:s});\n", inst[1], inst[2], inst[3]);
                             break;
                         case "PLSNEXT":
                             sw.Write("_plsnext(&{0:s});\n", inst[1]);

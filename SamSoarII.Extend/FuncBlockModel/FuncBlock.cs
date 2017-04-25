@@ -321,6 +321,7 @@ namespace SamSoarII.Extend.FuncBlockModel
             if (fbl != null && fbfh != null)
             {
                 fbl.Header = fbfh;
+                fbfh.Block = fbl;
             }
         }
         /// <summary>
@@ -450,6 +451,19 @@ namespace SamSoarII.Extend.FuncBlockModel
                     }
                     foreach (LinkedListNode<FuncBlock> removenode in removenodes)
                     {
+                        FuncBlock fb = removenode.Value;
+                        // 需要删除变量赋值语句的信息
+                        if (fb is FuncBlock_Assignment)
+                        {
+                            FuncBlock_Assignment fba = (FuncBlock_Assignment)(fb);
+                            fba.Name = String.Empty;
+                        }
+                        // 需要删除函数头部的参数信息
+                        if (fb is FuncBlock_FuncHeader)
+                        {
+                            FuncBlock_FuncHeader fbf = (FuncBlock_FuncHeader)(fb);
+                            fbf.Block.Header = null;
+                        }
                         childrens.Remove(removenode);
                     }
                 }
@@ -665,7 +679,7 @@ namespace SamSoarII.Extend.FuncBlockModel
             // 如果出现括号缺省，视为括号在最后，将剩余部分视为区域来处理
             if (bracketcount > 0)
             {
-                bracketend = end;
+                bracketend = end + 1;
                 child = new FuncBlock_Local(model);
                 child.IndexStart = bracketstart;
                 child.IndexEnd = bracketend;
@@ -758,7 +772,7 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// <summary>
         /// 当前区域如果是函数区域，则设置函数参数对应的虚拟的声明变量元素
         /// </summary>
-        protected List<FuncBlock_Assignment> virtualassigns = new List<FuncBlock_Assignment>();
+        protected List<FuncBlock_Assignment> virtualassigns = new List<FuncBlock_Assignment>();        
         /// <summary>
         /// 当前区域如果是函数区域，则设置函数头部
         /// </summary>
@@ -774,6 +788,10 @@ namespace SamSoarII.Extend.FuncBlockModel
                 }
                 virtualassigns.Clear();
                 this.header = value;
+                if (value == null)
+                {
+                    return;
+                }
                 FuncModel fmodel = value.Model;
                 // 设置新的虚拟声明变量
                 for (int i = 0; i < 4; i++)
@@ -999,6 +1017,10 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// 对应的函数信息模型
         /// </summary>
         public FuncModel Model { get; set; }
+        /// <summary>
+        /// 对应的函数区域
+        /// </summary>
+        public FuncBlock_Local Block { get; set; }
         /// <summary>
         /// 初始化构造函数
         /// </summary>

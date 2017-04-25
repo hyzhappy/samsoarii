@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -33,6 +34,18 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
         }
 
+        public override bool CanLock
+        {
+            get
+            {
+                return false;
+            }
+
+            set
+            {
+            }
+        }
+
         public override event RoutedEventHandler ValueChanged = delegate { };
 
         public override void Set(SimulateDllModel dllmodel)
@@ -46,27 +59,18 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         protected override bool _Check_Name(string _name)
         {
-            int i = 0;
-            while (char.IsLetter(_name[i])) i++;
-            string _base = _name.Substring(0, i);
-            int offset = 0;
-            try
+            switch (_name)
             {
-                offset = int.Parse(_name.Substring(i));
-            }
-            catch (FormatException e)
-            {
-                return false;
-            }
-            switch (_base)
-            {
-                case "Y":
-                    if (offset < 0 || offset >= 4)
-                        return false;
+                case "Y0": case "Y1": case "Y2": case "Y3":
                     return true;
                 default:
                     return false;
             }
+        }
+
+        public override string ToString()
+        {
+            return String.Format("F{0:s}={1}", Name, value);
         }
     }
 

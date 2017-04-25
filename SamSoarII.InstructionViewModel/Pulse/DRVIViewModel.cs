@@ -73,7 +73,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                PulseValue = ValueParser.ParseWordValue(valueStrings[2]);
+                PulseValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -81,7 +81,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {

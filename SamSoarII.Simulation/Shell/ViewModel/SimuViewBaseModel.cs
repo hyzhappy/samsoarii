@@ -200,6 +200,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
 
         public event VariableUnitChangeEventHandler VariableUnitLocked = delegate { };
         public event VariableUnitChangeEventHandler VariableUnitUnlocked = delegate { };
+        public event VariableUnitChangeEventHandler VariableUnitValueChanged = delegate { };
+
         protected virtual void OnDialogEnsureClicked(object sender, SimuArgsDialogValuesArgs e)
         {
             if (sender == dialog)
@@ -214,8 +216,15 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                             this[i + 1].Islocked = true;
                             this[i + 1].Value = e.Values[i];
                             _e.Old = _e.New = this[i + 1];
-                            VariableUnitLocked(this, _e);
-                            Update();
+                            if (e.IsLocks[i])
+                            {
+                                VariableUnitLocked(this, _e);
+                            }
+                            else
+                            {
+                                VariableUnitValueChanged(this, _e);
+                            }
+                            Update();              
                         }
                         if (e.Values[i] is SimuArgsDialogUnlockValue && this[i + 1].Islocked)
                         {

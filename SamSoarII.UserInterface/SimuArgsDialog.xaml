@@ -12,6 +12,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="4"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -97,6 +99,56 @@
                  Grid.Row="4" Grid.Column="3">
             0
         </TextBox>
+        <CheckBox x:Name="CB_Lock1"
+                 Grid.Row="0" Grid.Column="4"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
+        </CheckBox>
+        <CheckBox x:Name="CB_Lock2"
+                 Grid.Row="1" Grid.Column="4"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
+        </CheckBox>
+        <CheckBox x:Name="CB_Lock3"
+                 Grid.Row="2" Grid.Column="4"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
+        </CheckBox>
+        <CheckBox x:Name="CB_Lock4"
+                 Grid.Row="3" Grid.Column="4"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
+        </CheckBox>
+        <CheckBox x:Name="CB_Lock5"
+                 Grid.Row="4" Grid.Column="4"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
+        </CheckBox>
+        <TextBlock x:Name="TB_Lock1" 
+                   Grid.Row="0" Grid.Column="5"
+                   VerticalAlignment="Center">
+            锁定
+        </TextBlock>
+        <TextBlock x:Name="TB_Lock2"
+                   Grid.Row="1" Grid.Column="5"
+                   VerticalAlignment="Center">
+            锁定
+        </TextBlock>
+        <TextBlock x:Name="TB_Lock3"
+                   Grid.Row="2" Grid.Column="5"
+                   VerticalAlignment="Center">
+            锁定
+        </TextBlock>
+        <TextBlock x:Name="TB_Lock4"
+                   Grid.Row="3" Grid.Column="5"
+                   VerticalAlignment="Center">
+            锁定
+        </TextBlock>
+        <TextBlock x:Name="TB_Lock5"
+                   Grid.Row="4" Grid.Column="5"
+                   VerticalAlignment="Center">
+            锁定
+        </TextBlock>
         <Button x:Name="B_OK" Width="80" Click="B_OK_Click"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Grid.Row="5" Grid.Column="1">

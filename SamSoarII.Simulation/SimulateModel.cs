@@ -384,6 +384,16 @@ namespace SamSoarII.Simulation
         {
             smanager.Unlock(e.Old);
         }
+
+        /// <summary>
+        /// 监视变量单次修改时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void OnVariableUnitValueChanged(object sender, VariableUnitChangeEventArgs e)
+        {
+            smanager.Change(e.Old);
+        }
         /// <summary>
         /// 变量数据模型锁定时发生
         /// </summary>
@@ -567,6 +577,7 @@ namespace SamSoarII.Simulation
         {
             svbmodel.VariableUnitLocked += OnVariableUnitLocked;
             svbmodel.VariableUnitUnlocked += OnVariableUnitUnlocked;
+            svbmodel.VariableUnitValueChanged += OnVariableUnitValueChanged;
         }
         /// <summary>
         /// 显示主窗口，主窗口已经弃用，主要用来建立Route

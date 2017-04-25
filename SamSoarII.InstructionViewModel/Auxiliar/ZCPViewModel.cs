@@ -75,7 +75,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                InputValue2 = ValueParser.ParseWordValue(valueStrings[2]);
+                InputValue2 = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -83,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                InputValue3 = ValueParser.ParseWordValue(valueStrings[4]);
+                InputValue3 = ValueParser.ParseWordValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -91,7 +91,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[6]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[3]);
             }
             catch (ValueParseException)
             {

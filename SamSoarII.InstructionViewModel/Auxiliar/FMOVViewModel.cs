@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel.Auxiliar
 {
-    class FMOVViewModel : OutputRectBaseViewModel
+    public class FMOVViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {
@@ -74,7 +74,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                DestinationValue = ValueParser.ParseWordValue(valueStrings[2]);
+                DestinationValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -82,7 +82,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                CountValue = ValueParser.ParseWordValue(valueStrings[4]);
+                CountValue = ValueParser.ParseWordValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {

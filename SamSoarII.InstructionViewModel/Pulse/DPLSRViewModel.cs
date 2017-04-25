@@ -57,6 +57,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
         {
             List<string> result = new List<string>();
             result.Add(ArgumentValue.ValueString);
+            result.Add(VelocityValue.ValueString);
             result.Add(OutputValue.ValueString);
             return result;
         }
@@ -73,7 +74,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                VelocityValue = ValueParser.ParseDoubleWordValue(valueStrings[2]);
+                VelocityValue = ValueParser.ParseDoubleWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -81,7 +82,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -127,11 +128,11 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             else if (!check2)
             {
-                throw new ValueParseException("V格式非法");
+                throw new ValueParseException("V格式非法！");
             }
             else if (!check3)
             {
-                throw new ValueParseException("OUT格式非法");
+                throw new ValueParseException("OUT格式非法！");
             }
         }
 

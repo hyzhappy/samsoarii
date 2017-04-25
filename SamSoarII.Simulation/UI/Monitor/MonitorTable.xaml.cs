@@ -636,24 +636,13 @@ namespace SamSoarII.Simulation.UI.Monitor
                 // 剩下的发送源默认是类型选择框
                 else
                 {
-                    switch (ComboBox_Type.Text)
+                    _svunit = SimulateVariableUnit.Create(
+                        TextBox_Name.Text,
+                        ComboBox_Type.Text);
+                    if (_svunit == null)
                     {
-                        case "BIT":
-                            _svunit = new SimulateBitUnit();
-                            break;
-                        case "WORD":
-                            _svunit = new SimulateWordUnit();
-                            break;
-                        case "DWORD":
-                            _svunit = new SimulateDWordUnit();
-                            break;
-                        case "FLOAT":
-                            _svunit = new SimulateFloatUnit();
-                            break;
-                        default:
-                            return;
+                        return;
                     }
-                    _svunit.Name = TextBox_Name.Text;
                 }
                 // 对新变量安装并发送事件
                 _e.New = _svunit;

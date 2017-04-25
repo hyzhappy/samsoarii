@@ -75,7 +75,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                VelocityValue = ValueParser.ParseWordValue(valueStrings[2]);
+                VelocityValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -83,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue1 = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue1 = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -91,7 +91,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue2 = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue2 = ValueParser.ParseBitValue(valueStrings[3]);
             }
             catch (ValueParseException)
             {

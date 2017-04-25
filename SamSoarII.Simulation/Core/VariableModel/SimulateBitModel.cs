@@ -1,7 +1,9 @@
-﻿using System;
+﻿using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -20,7 +22,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             string _name = Name;
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return String.Format("{0:s}={1:d}{2:d}", _name, value, Islocked ? "(Lock)" : String.Empty);
+            return String.Format("{0:s}={1:d}{2:s}", _name, value, Islocked ? "(Lock)" : String.Empty);
         }
         public override string Type
         {
@@ -31,38 +33,20 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
         protected override bool _Check_Name(string _name)
         {
-            int i = 0;
-            while (char.IsLetter(_name[i])) i++;
-            string _base = _name.Substring(0, i);
-            int offset = 0;
             try
             {
-                offset = int.Parse(_name.Substring(i));
+                if (ValueParser.ParseBitValue(_name) != BitValue.Null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            catch (FormatException e)
+            catch (ValueParseException e)
             {
                 return false;
-            }
-            switch (_base)
-            {
-                case "X": case "Y":
-                    if (offset < 0 || offset >= 128)
-                        return false;
-                    return true;
-                case "M":
-                    if (offset < 0 || offset >= 256 * 32)
-                        return false;
-                    return true;
-                case "C": case "T":
-                    if (offset < 0 || offset >= 256)
-                        return false;
-                    return true;
-                case "S":
-                    if (offset < 0 || offset >= 32 * 32)
-                        return false;
-                    return true;
-                default:
-                    return false;
             }
         }
 
@@ -71,8 +55,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
         public override void Update(SimulateDllModel dllmodel)
         {
             if (Islocked) return;
-            int[] ivalues = dllmodel.GetValue_Bit(Name, 1);
-            int value_old = value;
+            Int32[] ivalues = dllmodel.GetValue_Bit(Name, 1);
+            Int32 value_old = value;
             this.value = ivalues[0];
             if (value_old != value)
             {
@@ -82,7 +66,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override void Set(SimulateDllModel dllmodel)
         {
-            int[] ivalues = { this.value };
+            Int32[] ivalues = { this.value };
             dllmodel.SetValue_Bit(Name, 1, ivalues);
         }
     }

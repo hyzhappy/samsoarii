@@ -73,7 +73,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[2]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
