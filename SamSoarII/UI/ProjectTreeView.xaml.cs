@@ -62,6 +62,7 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
             _projectModel = project;
+            _elementList = new ElementList();
             DataContext = Project;
             Project.RefNetworksBriefChanged += Project_RefNetworksBriefChanged;
             Project.MTVModel.ModelChanged += OnModbusChanged;
@@ -289,35 +290,19 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnElementListOpenDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (_elementList == null)
-            {
-                _elementList = new ElementList();
-                _elementList.Show();
-            }
-            else
-            {
-                double workHeight = SystemParameters.WorkArea.Height;
-                double workWidth = SystemParameters.WorkArea.Width;
-                _elementList.Left = (workWidth - _elementList.Width) / 2;
-                _elementList.Top = (workHeight - _elementList.Height) / 2;
-                _elementList.Show();
-            }
+            double workHeight = SystemParameters.WorkArea.Height;
+            double workWidth = SystemParameters.WorkArea.Width;
+            _elementList.Left = (workWidth - _elementList.Width) / 2;
+            _elementList.Top = (workHeight - _elementList.Height) / 2;
+            _elementList.Show();
         }
         private void OnElementListOpen(object sender, RoutedEventArgs e)
         {
-            if (_elementList == null)
-            {
-                _elementList = new ElementList();
-                _elementList.Show();
-            }
-            else
-            {
-                double workHeight = SystemParameters.WorkArea.Height;
-                double workWidth = SystemParameters.WorkArea.Width;
-                _elementList.Left = (workWidth - _elementList.Width) / 2;
-                _elementList.Top = (workHeight - _elementList.Height) / 2;
-                _elementList.Show();
-            }
+            double workHeight = SystemParameters.WorkArea.Height;
+            double workWidth = SystemParameters.WorkArea.Width;
+            _elementList.Left = (workWidth - _elementList.Width) / 2;
+            _elementList.Top = (workHeight - _elementList.Height) / 2;
+            _elementList.Show();
         }
         private void OnSelected(object sender, RoutedEventArgs e)
         {
@@ -343,6 +328,11 @@ namespace SamSoarII.AppMain.UI
             {
                 e.Handled = true;
             }
+        }
+        public void CloseElementList()
+        {
+            _elementList.Closing -= _elementList.OnClosing;
+            _elementList.Close();
         }
         #region Modbus
         private TreeViewItem _GetTVItemFromMItem(MenuItem mitem)

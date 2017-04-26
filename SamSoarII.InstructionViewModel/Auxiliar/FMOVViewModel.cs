@@ -35,6 +35,9 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is FMOVModel)
                 {
                     this.model = (FMOVModel)(value);
+                    SourceValue = model.SourceValue;
+                    DestinationValue = model.DestinationValue;
+                    CountValue = model.CountValue;
                 }
                 else
                 {

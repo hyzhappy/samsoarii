@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+using SamSoarII.ValueModel;
+using SamSoarII.LadderInstViewModel;
 
 namespace SamSoarII.AppMain
 {
@@ -92,11 +94,122 @@ namespace SamSoarII.AppMain
         public InteractionFacade(MainWindow mainwindow)
         {
             this._mainWindow = mainwindow;
+            mainwindow.InstShortCutOpen += Mainwindow_InstShortCutOpen;
             _mainTabControl = _mainWindow.MainTab;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             SimulateHelper.TabOpen += OnTabOpened;
         }
-
+        private void Mainwindow_InstShortCutOpen(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            int catalogId = int.Parse(button.Tag as string);
+            switch (CurrentLadder.SelectionStatus)
+            {
+                case SelectStatus.Idle:
+                    break;
+                case SelectStatus.SingleSelected:
+                    ReplaceElementsExecute(catalogId);
+                    break;
+                case SelectStatus.MultiSelecting:
+                    break;
+                case SelectStatus.MultiSelected:
+                    if (catalogId == 10 || catalogId == 11)
+                    {
+                        if (catalogId == 10)
+                        {
+                            RemoveNetworkHLines(CurrentLadder.SelectStartNetwork);
+                            foreach (var network in CurrentLadder.SelectAllNetworks)
+                            {
+                                RemoveNetworkHLines(network);
+                            }
+                        }
+                        else
+                        {
+                            RemoveNetworkVLines(CurrentLadder.SelectStartNetwork);
+                            foreach (var network in CurrentLadder.SelectAllNetworks)
+                            {
+                                RemoveNetworkVLines(network);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        CurrentLadder.SelectionRect.X = CurrentLadder.SelectStartNetwork.SelectAreaFirstX;
+                        CurrentLadder.SelectionRect.Y = CurrentLadder.SelectStartNetwork.SelectAreaFirstY;
+                        CurrentLadder.SelectStartNetwork.AcquireSelectRect();
+                        ReplaceElementsExecute(catalogId);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void SelectionRectRight()
+        {
+            if (CurrentLadder.SelectionRect.X < GlobalSetting.LadderXCapacity - 1)
+            {
+                CurrentLadder.SelectionRect.X++;
+            }
+        }
+        private void SelectionRectDown()
+        {
+            if (CurrentLadder.SelectionRect.Y + 1 > CurrentLadder.SelectRectOwner.RowCount - 1)
+            {
+                CurrentLadder.SelectRectOwner.RowCount++;
+            }
+            CurrentLadder.SelectionRect.Y++;
+        }
+        private void ReplaceElementsExecute(int catalogId)
+        {
+            if (catalogId != 10 && catalogId != 11 && catalogId != 101)
+            {
+                CurrentLadder.ReplaceSingleElement(catalogId);
+                if (catalogId != 209 && catalogId != 210)
+                {
+                    SelectionRectRight();
+                }
+            }
+            else
+            {
+                if (catalogId == 101 && CurrentLadder.SelectionRect.X > 0)
+                {
+                    CurrentLadder.ReplaceSingleVerticalLine(CurrentLadder.SelectRectOwner, new VerticalLineViewModel() { X = CurrentLadder.SelectionRect.X - 1, Y = CurrentLadder.SelectionRect.Y });
+                    SelectionRectDown();
+                }
+                else if (catalogId == 10)
+                {
+                    if (CurrentLadder.SelectRectOwner.GetElementByPosition(CurrentLadder.SelectionRect.X, CurrentLadder.SelectionRect.Y) is HorizontalLineViewModel)
+                    {
+                        CurrentLadder.SelectRectOwner.RemoveElement(CurrentLadder.SelectionRect.X, CurrentLadder.SelectionRect.Y);
+                    }
+                    SelectionRectRight();
+                }
+                else
+                {
+                    if (CurrentLadder.SelectionRect.X > 0)
+                    {
+                        if (CurrentLadder.SelectRectOwner.RemoveVerticalLine(CurrentLadder.SelectionRect.X - 1, CurrentLadder.SelectionRect.Y))
+                        {
+                            SelectionRectDown();
+                        }
+                    }
+                }
+            }
+        }
+        public void RemoveNetworkHLines(LadderNetworkViewModel network)
+        {
+            foreach (var hline in network.GetSelectedHLines())
+            {
+                network.RemoveElement(hline.X,hline.Y);
+            }
+        }
+        public void RemoveNetworkVLines(LadderNetworkViewModel network)
+        {
+            foreach (var vline in network.GetSelectedVerticalLines())
+            {
+                network.RemoveVerticalLine(vline.X,vline.Y);
+            }
+        }
         public MessageBoxResult ShowSaveYesNoCancelDialog()
         {
             string title = "确认保存";
@@ -152,6 +265,9 @@ namespace SamSoarII.AppMain
             {
                 _projectModel = new ProjectModel(name, _mainWindow.OutputModel);
                 ProjectFileManager.Update(name,fullFileName);
+                ValueAliasManager.Clear();
+                ValueCommentManager.Clear();
+                InstructionCommentManager.Clear();
                 _projectTreeView = new ProjectTreeView(_projectModel);
                 _projectTreeView.TabItemOpened += OnTabOpened;
                 _projectTreeView.RoutineRemoved += OnRemoveRoutine;
@@ -160,7 +276,9 @@ namespace SamSoarII.AppMain
                 _projectTreeView.RoutineCompile += OnCompileRoutine;
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowEditItem += OnTabOpened;
+                _mainTabControl.Reset();
                 _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                CurrentLadder = _projectModel.MainRoutine;
                 _mainWindow.SetProjectTreeView(_projectTreeView);
                 ProjectFullFileName = fullFileName;
                 _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
@@ -178,6 +296,7 @@ namespace SamSoarII.AppMain
                     SaveProject();
                 }
             }
+            _projectTreeView.CloseElementList();
             _projectTreeView.TabItemOpened -= OnTabOpened;
             _projectTreeView.RoutineRemoved -= OnRemoveRoutine;
             _projectTreeView.RoutineRenamed -= OnRenameRoutine;
@@ -235,6 +354,10 @@ namespace SamSoarII.AppMain
                     SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
                     _mainTabControl.SelectionChanged -= OnTabItemChanged;
                     _mainTabControl.ShowEditItem -= OnTabOpened;
+                    if (_projectTreeView != null)
+                    {
+                        _projectTreeView.CloseElementList();
+                    }
                     _projectTreeView = new ProjectTreeView(_projectModel);
                     _projectTreeView.TabItemOpened += OnTabOpened;
                     _projectTreeView.RoutineRemoved += OnRemoveRoutine;
@@ -245,6 +368,7 @@ namespace SamSoarII.AppMain
                     _mainTabControl.SelectionChanged += OnTabItemChanged;
                     _mainTabControl.ShowEditItem += OnTabOpened;
                     _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                    CurrentLadder = _projectModel.MainRoutine;
                     _mainWindow.SetProjectTreeView(_projectTreeView);
                     ProjectFullFileName = fullFileName;
                     _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;

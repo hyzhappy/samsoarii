@@ -3,6 +3,7 @@ using SamSoarII.AppMain.UI;
 using SamSoarII.AppMain.UI.HelpDocComponet;
 using SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.Utility;
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
@@ -27,16 +28,12 @@ namespace SamSoarII.AppMain
             InstructionCommentManager.MappedMessageChanged += ElementList.InstructionCommentManager_MappedMessageChanged;
             ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
             ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
-            //GlobalSetting.Load();
             SettingManager.Load();
-            //SimulateHelper.LoadGlobalSetting();
             this.Exit += App_Exit;
         }
         private void App_Exit(object sender, ExitEventArgs e)
         {
-            //GlobalSetting.Save();
             SettingManager.Save();
-            //SimulateHelper.SaveGlobalSetting();
             if (SimulateHelper.SModel != null)
             {
                 SimulateHelper.SModel.Dispose();

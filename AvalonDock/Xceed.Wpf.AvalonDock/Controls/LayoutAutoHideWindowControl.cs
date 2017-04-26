@@ -552,6 +552,10 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 if (rectWindow.Contains(new Point(ptMouse.X, ptMouse.Y)))
                     return true;
 
+                if (Model == null)
+                {
+                    return true;
+                }
                 var manager = Model.Root.Manager;
                 var anchor = manager.FindVisualChildren<LayoutAnchorControl>().Where(c => c.Model == Model).FirstOrDefault();
 

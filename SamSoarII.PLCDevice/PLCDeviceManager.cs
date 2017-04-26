@@ -11,7 +11,7 @@ namespace SamSoarII.PLCDevice
     public class PLCDeviceManager : INotifyPropertyChanged
     {
         private static PLCDeviceManager _PLCDeviceManager = new PLCDeviceManager();
-        private Device _selectDevice = Device.DefaultDevice;
+        private Device _selectDevice = Device.MaxRangeDevice;
         private List<BaseDeviceMessageDialog> DeviceDialogs;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

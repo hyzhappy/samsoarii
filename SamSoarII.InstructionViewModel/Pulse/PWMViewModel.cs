@@ -34,6 +34,9 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is PWMModel)
                 {
                     this.model = (PWMModel)(value);
+                    FreqValue = model.FreqValue;
+                    DutyCycleValue = model.DutyCycleValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -56,6 +59,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
         {
             List<string> result = new List<string>();
             result.Add(FreqValue.ValueString);
+            result.Add(DutyCycleValue.ValueString);
             result.Add(OutputValue.ValueString);
             return result;
         }

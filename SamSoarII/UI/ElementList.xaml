@@ -77,17 +77,17 @@
                 <DataTemplate>
                     <Border Margin="5" Padding="5" BorderBrush="SteelBlue" BorderThickness="1.5" CornerRadius="2" Background="#FFF7EFE4" MaxHeight="90">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <local:ELementStackPanel ItemsSource="{Binding MappedModels}">
+                            <local:ELementStackPanel Grid.Row="1" ItemsSource="{Binding MappedModels}">
                                 <local:ELementStackPanel.Resources>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="FontWeight" Value="ExtraBlack"></Setter>
+                                                <Setter Property="FontWeight" Value="Heavy"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
                                         <Setter Property="FontSize" Value="14"></Setter>
-                                        <Setter Property="Margin" Value="2"></Setter>
-                                        <Setter Property="FontFamily" Value="Times New Roman"></Setter>
+                                        <Setter Property="Margin" Value="1"></Setter>
+                                        <Setter Property="FontFamily" Value="Arial"></Setter>
                                         <EventSetter Event="MouseLeftButtonDown" Handler="NavigateMouseLeftButtonClick"></EventSetter>
                                     </Style>
                                 </local:ELementStackPanel.Resources>
@@ -97,11 +97,13 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="elementName" CanUserSort="False" IsReadOnly="True" Width="2*" MinWidth="120" Header="软元件名称" Binding="{Binding Name}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Name="elementName" CanUserSort="False" IsReadOnly="True" Width="*" MinWidth="100" Header="软元件名称" Binding="{Binding Name}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="elementComment" CanUserSort="False" IsReadOnly="False" Width="3*" MinWidth="180" Header="软元件注释" Binding="{Binding Comment}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Name="elementComment" CanUserSort="False" IsReadOnly="False" Width="5*" MinWidth="120" Header="软元件注释" Binding="{Binding Comment}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
                 <DataGridTextColumn x:Name="elementAlias" CanUserSort="False" IsReadOnly="False" Width="2*" MinWidth="120" Header="软元件别名" Binding="{Binding Alias}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="elementDescribe" CanUserSort="False" IsReadOnly="True" Width="5*" MinWidth="120" Header="软元件描述" Binding="{Binding Describe}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
@@ -138,20 +140,20 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Resources>
-                                <TextBlock>X(Bit) - (0 127)</TextBlock>
-                                <TextBlock>Y(Bit) - (0 127)</TextBlock>
-                                <TextBlock>M(Bit) - (0 8191)</TextBlock>
-                                <TextBlock>S(Bit) - (0 999)</TextBlock>
-                                <TextBlock>C(Bit) - (0 255)</TextBlock>
-                                <TextBlock>T(Bit) - (0 255)</TextBlock>
-                                <TextBlock>D(Word) - (0 8191)</TextBlock>
-                                <TextBlock>V(Word) - (0 7)</TextBlock>
-                                <TextBlock>Z(Word) - (0 7)</TextBlock>
-                                <TextBlock>TV(Word) - (0 255)</TextBlock>
-                                <TextBlock>CV(Word) - (0 199)</TextBlock>
-                                <TextBlock>CV(DWord) - (200 255)</TextBlock>
-                                <TextBlock>AI(Word) - (0 127)</TextBlock>
-                                <TextBlock>AO(Word) - (0 127)</TextBlock>
+                                <TextBlock Text="{Binding XRange}"></TextBlock>
+                                <TextBlock Text="{Binding YRange}"></TextBlock>
+                                <TextBlock Text="{Binding MRange}"></TextBlock>
+                                <TextBlock Text="{Binding SRange}"></TextBlock>
+                                <TextBlock Text="{Binding CRange}"></TextBlock>
+                                <TextBlock Text="{Binding TRange}"></TextBlock>
+                                <TextBlock Text="{Binding DRange}"></TextBlock>
+                                <TextBlock Text="{Binding VRange}"></TextBlock>
+                                <TextBlock Text="{Binding ZRange}"></TextBlock>
+                                <TextBlock Text="{Binding TVRange}"></TextBlock>
+                                <TextBlock Text="{Binding CV16Range}"></TextBlock>
+                                <TextBlock Text="{Binding CV32Range}"></TextBlock>
+                                <TextBlock Text="{Binding AIRange}"></TextBlock>
+                                <TextBlock Text="{Binding AORange}"></TextBlock>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -167,16 +169,17 @@
                             <Setter Property="Width" Value="90"></Setter>
                             <Setter Property="Height" Value="30"></Setter>
                             <Setter Property="Background" Value="#FFFFFFBF"></Setter>
-                            <Setter Property="Margin" Value="30,20,30,0"></Setter>
+                            <Setter Property="Margin" Value="20,20,30,0"></Setter>
                             <Setter Property="Padding" Value="0,4,0,0"></Setter>
                             <EventSetter Event="Click" Handler="OnButtonClick"></EventSetter>
                             <Setter Property="Template" Value="{StaticResource ButtonTemplate}"></Setter>
                         </Style>
                     </WrapPanel.Resources>
-                    <Button x:Name="button1">已使用软元件</Button>
-                    <Button x:Name="button2">已注释软元件</Button>
-                    <Button x:Name="button3" Padding="14,4,0,0">导入CSV</Button>
-                    <Button x:Name="button4" Padding="14,4,0,0">导出CSV</Button>
+                    <Button x:Name="button1" Width="100">系统特殊寄存器</Button>
+                    <Button x:Name="button2">已使用软元件</Button>
+                    <Button x:Name="button3">已注释软元件</Button>
+                    <Button x:Name="button4" Padding="14,4,0,0">导入CSV</Button>
+                    <Button x:Name="button5" Padding="14,4,0,0">导出CSV</Button>
                 </WrapPanel>
             </Border>
         </ScrollViewer>

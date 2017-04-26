@@ -35,6 +35,9 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is PTOModel)
                 {
                     this.model = (PTOModel)(value);
+                    ArgumentValue = model.ArgumentValue;
+                    OutputValue1 = model.OutputValue1;
+                    OutputValue2 = model.OutputValue2;
                 }
                 else
                 {

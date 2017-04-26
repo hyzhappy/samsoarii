@@ -820,7 +820,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     if (bvm.Model is SMOVModel)
                     {
-                        lcn[1] = ((SMOVModel)(bvm.Model)).SoruceValue.ValueShowString;
+                        lcn[1] = ((SMOVModel)(bvm.Model)).SourceValue.ValueShowString;
                         lcn[2] = ((SMOVModel)(bvm.Model)).SourceStart.ValueShowString;
                         lcn[3] = ((SMOVModel)(bvm.Model)).SourceCount.ValueShowString;
                         lcn[4] = ((SMOVModel)(bvm.Model)).DestinationValue.ValueShowString;

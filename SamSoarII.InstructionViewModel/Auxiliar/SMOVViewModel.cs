@@ -35,6 +35,11 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is SMOVModel)
                 {
                     this.model = (SMOVModel)(value);
+                    SourceStart = model.SourceStart;
+                    SourceCount = model.SourceCount;
+                    SourceValue = model.SourceValue;
+                    DestinationStart = model.DestinationStart;
+                    DestinationValue = model.DestinationValue;
                 }
                 else
                 {
@@ -231,12 +236,12 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             get
             {
                 if (model == null) return WordValue.Null;
-                return model.SoruceValue;
+                return model.SourceValue;
             }
             set
             {
                 if (model == null) return;
-                model.SoruceValue = value;
+                model.SourceValue = value;
                 MiddleTextBlock1.Text = String.Format("SV:{0:s}", value.ValueShowString);
             }
         }

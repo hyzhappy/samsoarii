@@ -37,6 +37,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Executed="OnShowPropertyDialogCommandExecute" CanExecute="ShowPropertyDialogCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" CanExecute="OnInstShortCutOpenCommandCanExecute"></CommandBinding>
         <!-- Build Command -->
         <CommandBinding Command="{x:Static app:GlobalCommand.CompileCommand}" Executed="OnCompileCommandExecute" CanExecute="CompileCommandCanExecute"></CommandBinding>
         <!-- Tool Command-->
@@ -138,7 +139,7 @@
         </Style>
     </Window.Resources>
     <DockPanel x:Name="MainDockPanel">
-        <Menu DockPanel.Dock="Top" Height="28" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
+        <Menu DockPanel.Dock="Top" Height="27" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
             <MenuItem Header="文件(_F)" Margin="0,-4,0,0">
                 <MenuItem Header="新建工程" Command="ApplicationCommands.New">
                     <MenuItem.Icon>
@@ -266,7 +267,7 @@
                 <MenuItem Header="关于" Click="OnShowAboutDialog"></MenuItem>
             </MenuItem>
         </Menu>
-        <ToolBarTray x:Name="ToolBar" DockPanel.Dock="Top" Height="28">
+        <ToolBarTray x:Name="ToolBar" DockPanel.Dock="Top" Height="25">
             <ToolBar>
                 <Button ToolTip="新建工程" Command="ApplicationCommands.New" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
@@ -321,7 +322,26 @@
                 </ToggleButton>
             </ToolBar>
         </ToolBarTray>
-        <ToolBarTray x:Name="SimuToolBarTray" DockPanel.Dock="Top" Height="28" Visibility="Collapsed">
+        <ToolBarTray DockPanel.Dock="Top" Height="25">
+            <ToolBar Style="{x:Null}" x:Name="ShortCutToolBar">
+                <Button Tag="200" Click="OnClick" ToolTip="常开触点" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource OpenContact}"></Button>
+                <Button Tag="202" Click="OnClick" ToolTip="立即常开" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource OpenContactIM}"></Button>
+                <Button Tag="201" Click="OnClick" ToolTip="常闭" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource CloseContact}"></Button>
+                <Button Tag="203" Click="OnClick" ToolTip="立即常闭" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource CloseContactIM}"></Button>
+                <Button Tag="204" Click="OnClick" ToolTip="上升沿脉冲" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource UpPulse}"></Button>
+                <Button Tag="205" Click="OnClick" ToolTip="下降沿脉冲" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource DownPulse}"></Button>
+                <Button Tag="206" Click="OnClick" ToolTip="运算结果上升沿化" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource ResultUp}"></Button>
+                <Button Tag="207" Click="OnClick" ToolTip="运算结果下降沿化" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource ResultDown}"></Button>
+                <Button Tag="208" Click="OnClick" ToolTip="运算结果取反" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource ResultReverse}"></Button>
+                <Button Tag="209" Click="OnClick" ToolTip="线圈" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource Coil}"></Button>
+                <Button Tag="210" Click="OnClick" ToolTip="立即输出线圈" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource CoilIM}"></Button>
+                <Button Tag="100" Click="OnClick" ToolTip="横线" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource HLine}"></Button>
+                <Button Tag="101" Click="OnClick" ToolTip="竖线" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource VLine}"></Button>
+                <Button Tag="10" Click="OnClick" ToolTip="横线删除" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource HLineCancel}"></Button>
+                <Button Tag="11" Click="OnClick" ToolTip="竖线删除" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource VLineCancel}"></Button>
+            </ToolBar>
+        </ToolBarTray>
+        <ToolBarTray x:Name="SimuToolBarTray" DockPanel.Dock="Top" Height="25" Visibility="Collapsed">
             <ToolBar>
                 <ToggleButton ToolTip="仿真运行" x:Name="SimuStartButton" Command="{x:Static app:GlobalCommand.SimuStartCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Start.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>

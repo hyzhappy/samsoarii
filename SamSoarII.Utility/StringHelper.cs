@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace SamSoarII.Utility
 {
@@ -97,6 +99,24 @@ namespace SamSoarII.Utility
                 }
             }
             return cnt;
+        }
+        public static Color ColorParse(string value)
+        {
+            Regex regex = new Regex("^#([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})",RegexOptions.Compiled);
+            Match match = regex.Match(value);
+            if (match.Success)
+            {
+                Color color = new Color();
+                color.A = byte.Parse(match.Groups[1].Value, System.Globalization.NumberStyles.AllowHexSpecifier);
+                color.R = byte.Parse(match.Groups[2].Value, System.Globalization.NumberStyles.AllowHexSpecifier);
+                color.G = byte.Parse(match.Groups[3].Value, System.Globalization.NumberStyles.AllowHexSpecifier);
+                color.B = byte.Parse(match.Groups[4].Value, System.Globalization.NumberStyles.AllowHexSpecifier);
+                return color;
+            }
+            else
+            {
+                return Colors.Black;
+            }
         }
     }
 }

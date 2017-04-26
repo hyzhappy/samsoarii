@@ -34,6 +34,8 @@ namespace SamSoarII.LadderInstViewModel.Counter
                 if (value is CTUDModel)
                 {
                     this.model = (CTUDModel)(value);
+                    CountValue = model.CountValue;
+                    EndValue = model.EndValue;
                 }
                 else
                 {
@@ -49,7 +51,7 @@ namespace SamSoarII.LadderInstViewModel.Counter
 
         public override int GetCatalogID()
         {
-            return 1002;
+            return 1001;
         }
 
         public override IEnumerable<string> GetValueString()

@@ -16,6 +16,7 @@ using System.Collections.Specialized;
 using SamSoarII.AppMain.UI;
 using System.Windows.Controls;
 using SamSoarII.Extend.FuncBlockModel;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -85,14 +86,12 @@ namespace SamSoarII.AppMain.Project
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
         public ModbusTableViewModel MTVModel { get; set; }
         public ReportOutputModel OModel { get; set; }
-
-        private PLCDevice.Device currentDevice;
-        public PLCDevice.Device CurrentDevice
+        public Device CurrentDevice
         {
-            get { return this.currentDevice; }
+            get { return PLCDeviceManager.GetPLCDeviceManager().SelectDevice; }
             set
             {
-                this.currentDevice = value;
+                PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(value.Type);
                 if (MTVModel != null)
                     MTVModel.PLCDevice = value;
             }
@@ -145,6 +144,7 @@ namespace SamSoarII.AppMain.Project
 
         public ProjectModel()
         {
+
         }
 
         public ProjectModel(string projectname, ReportOutputModel _outputmodel)
@@ -267,7 +267,8 @@ namespace SamSoarII.AppMain.Project
             //XDeclaration decNode = new XDeclaration("1.0", "utf-8", null);
             //xdoc.Add(decNode);
             var rootNode = new XElement("Project");
-            rootNode.SetAttributeValue("Name", this.ProjectName);
+            rootNode.SetAttributeValue("Name", ProjectName);
+            rootNode.SetAttributeValue("DeviceType", CurrentDevice.Type);
             xdoc.Add(rootNode);
             var settingNode = new XElement("Setting");
             rootNode.Add(settingNode);
@@ -297,6 +298,7 @@ namespace SamSoarII.AppMain.Project
             XDocument xmldoc = XDocument.Load(filepath);
             XElement rootNode = xmldoc.Element("Project");
             ProjectName = rootNode.Attribute("Name").Value;
+            PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType((PLCDeviceType)Enum.Parse(typeof(PLCDeviceType),rootNode.Attribute("DeviceType").Value));
             // Open Ladder Model
             foreach (var item in SubRoutines)
             {

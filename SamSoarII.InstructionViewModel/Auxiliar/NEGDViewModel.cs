@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is NEGDModel)
                 {
                     this.model = (NEGDModel)(value);
+                    InputValue = model.InputValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

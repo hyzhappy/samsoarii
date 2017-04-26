@@ -30,7 +30,7 @@ namespace SamSoarII.Simulation.UI.Chart
         private int timestart;
         private int timeend;
 
-        private Brush[] brushes;
+        private SolidColorBrush[] brushes;
         
         public SimuViewXYModel()
         {

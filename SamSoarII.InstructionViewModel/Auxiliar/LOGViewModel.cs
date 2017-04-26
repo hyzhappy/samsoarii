@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is LOGModel)
                 {
                     this.model = (LOGModel)(value);
+                    InputValue = model.InputValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

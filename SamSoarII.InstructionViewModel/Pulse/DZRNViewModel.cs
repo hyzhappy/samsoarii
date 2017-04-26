@@ -35,6 +35,10 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DZRNModel)
                 {
                     this.model = (DZRNModel)(value);
+                    BackValue = model.BackValue;
+                    CrawValue = model.CrawValue;
+                    SignalValue = model.SignalValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

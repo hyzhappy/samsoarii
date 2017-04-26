@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is XCHFModel)
                 {
                     this.model = (XCHFModel)(value);
+                    LeftValue = model.LeftValue;
+                    RightValue = model.RightValue;
                 }
                 else
                 {

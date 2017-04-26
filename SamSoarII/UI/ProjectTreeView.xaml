@@ -292,6 +292,49 @@
                     <local:InstrucionTreeItem InstructionIndex="1501" Header="SEND()"></local:InstrucionTreeItem>
                     <local:InstrucionTreeItem InstructionIndex="1502" Header="REV()"></local:InstrucionTreeItem>
                 </TreeViewItem>
+                <TreeViewItem Header="脉冲输出指令">
+                    <local:InstrucionTreeItem InstructionIndex="1600" Header="PLSF()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1601" Header="DPLSF()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1602" Header="PWM()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1603" Header="DPWM()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1604" Header="PLSY()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1605" Header="DPLSY()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1606" Header="PLSR()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1607" Header="DPLSR()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1608" Header="PLSRD()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1609" Header="DPLSRD()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1610" Header="PLSNEXT()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1611" Header="PLSSTOP()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1612" Header="ZRN()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1613" Header="DZRN()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1614" Header="DRVI()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1615" Header="PTO()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1616" Header="DDRVI()"></local:InstrucionTreeItem>
+                </TreeViewItem>
+                <TreeViewItem Header="高速计数指令">
+                    <local:InstrucionTreeItem InstructionIndex="1700" Header="HCNT()"></local:InstrucionTreeItem>
+                </TreeViewItem>
+                <TreeViewItem Header="辅助功能指令">
+                    <local:InstrucionTreeItem InstructionIndex="1800" Header="LOG()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1801" Header="POW()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1802" Header="FACT()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1803" Header="CMP()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1804" Header="CMPD()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1805" Header="CMPF()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1806" Header="ZCP()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1807" Header="ZCPD()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1808" Header="ZCPF()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1809" Header="NEG()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1810" Header="NEGD()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1811" Header="XCH()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1812" Header="XCHD()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1813" Header="XCHF()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1814" Header="CML()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1815" Header="CMLD()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1816" Header="SMOV()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1817" Header="FMOV()"></local:InstrucionTreeItem>
+                    <local:InstrucionTreeItem InstructionIndex="1818" Header="FMOVD()"></local:InstrucionTreeItem>
+                </TreeViewItem>
             </TreeViewItem>
         </TreeView>
     </Grid> 

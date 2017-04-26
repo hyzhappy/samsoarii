@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is PLSRModel)
                 {
                     this.model = (PLSRModel)(value);
+                    ArgumentValue = model.ArgumentValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

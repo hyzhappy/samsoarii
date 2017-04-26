@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel
                 if (value is TONRModel)
                 {
                     this.model = (TONRModel)(value);
+                    TimerValue = model.TimerValue;
+                    EndValue = model.EndValue;
                 }
                 else
                 {

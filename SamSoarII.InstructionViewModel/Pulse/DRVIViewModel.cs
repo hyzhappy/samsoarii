@@ -35,6 +35,9 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DRVIModel)
                 {
                     this.model = (DRVIModel)(value);
+                    FreqValue = model.FreqValue;
+                    PulseValue = model.PulseValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -50,13 +53,14 @@ namespace SamSoarII.LadderInstViewModel.Pulse
 
         public override int GetCatalogID()
         {
-            return 1615;
+            return 1614;
         }
 
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
             result.Add(FreqValue.ValueString);
+            result.Add(PulseValue.ValueString);
             result.Add(OutputValue.ValueString);
             return result;
         }

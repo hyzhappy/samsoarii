@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is CMLDModel)
                 {
                     this.model = (CMLDModel)(value);
+                    InputValue = model.InputValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

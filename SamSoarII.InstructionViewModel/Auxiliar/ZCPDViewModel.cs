@@ -35,6 +35,10 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is ZCPDModel)
                 {
                     this.model = (ZCPDModel)(value);
+                    InputValue1 = model.InputValue1;
+                    InputValue2 = model.InputValue2;
+                    InputValue3 = model.InputValue3;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

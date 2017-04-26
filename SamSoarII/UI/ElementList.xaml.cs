@@ -26,20 +26,62 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public class ValueCommentAlias : INotifyPropertyChanged
     {
-        private string _name;
+        private bool _isSpecialRegister = false;
+        private string _describe = string.Empty;
+        private string _base;
+        private uint _offset;
         private string _comment;
         private string _alias;
         private List<TextBlock> _mappedModels;
+        public bool IsSpecialRegister
+        {
+            get
+            {
+                return _isSpecialRegister;
+            }
+            set
+            {
+                _isSpecialRegister = value;
+            }
+        }
+        public string Describe
+        {
+            get
+            {
+                return _describe;
+            }
+            set
+            {
+                _describe = value;
+            }
+        }
+        public string Base
+        {
+            get
+            {
+                return _base;
+            }
+            set
+            {
+                _base = value;
+            }
+        }
+        public uint Offset
+        {
+            get
+            {
+                return _offset;
+            }
+            set
+            {
+                _offset = value;
+            }
+        }
         public string Name
         {
             get
             {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Name"));
+                return Base + Offset;
             }
         }
         public string Comment
@@ -83,9 +125,10 @@ namespace SamSoarII.AppMain.UI
         public bool HasComment { get { return _hasComment; } set { _hasComment = value; } }
         public bool HasAlias { get { return _hasAlias; } set { _hasAlias = value; } }
         public bool HasUsed { get; set; }
-        public ValueCommentAlias(string Name, string Comment, string Alias)
+        public ValueCommentAlias(string Base,uint Offset ,string Comment, string Alias)
         {
-            this.Name = Name;
+            this.Base = Base;
+            this.Offset = Offset;
             this.Comment = Comment;
             this.Alias = Alias;
             _mappedModels = new List<TextBlock>();
@@ -97,40 +140,141 @@ namespace SamSoarII.AppMain.UI
     }
     public partial class ElementList : Window, INotifyPropertyChanged
     {
+        private bool _showSpecialRegister = false;
         private bool _hasUsed = false;
         private bool _hasComment = false;
         private bool _showDetails = false;
         private TextBlock _currentTextBlock;
+        public string XRange
+        {
+            get
+            {
+                return string.Format("X(Bit) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.XRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.XRange.End - 1);
+            }
+        }
+        public string YRange
+        {
+            get
+            {
+                return string.Format("Y(Bit) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.YRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.YRange.End - 1);
+            }
+        }
+        public string MRange
+        {
+            get
+            {
+                return string.Format("M(Bit) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.MRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.MRange.End - 1);
+            }
+        }
+        public string SRange
+        {
+            get
+            {
+                return string.Format("S(Bit) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.SRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.SRange.End - 1);
+            }
+        }
+        public string CRange
+        {
+            get
+            {
+                return string.Format("C(Bit) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CRange.End - 1);
+            }
+        }
+        public string TRange
+        {
+            get
+            {
+                return string.Format("T(Bit) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TRange.End - 1);
+            }
+        }
+        public string DRange
+        {
+            get
+            {
+                return string.Format("D(Word) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.DRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.DRange.End - 1);
+            }
+        }
+        public string VRange
+        {
+            get
+            {
+                return string.Format("V(Word) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.VRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.VRange.End - 1);
+            }
+        }
+        public string ZRange
+        {
+            get
+            {
+                return string.Format("Z(Word) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.ZRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.ZRange.End - 1);
+            }
+        }
+        public string TVRange
+        {
+            get
+            {
+                return string.Format("TV(Word) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TVRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TVRange.End - 1);
+            }
+        }
+        public string CV16Range
+        {
+            get
+            {
+                return string.Format("CV(Word) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV16Range.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV16Range.End - 1);
+            }
+        }
+        public string CV32Range
+        {
+            get
+            {
+                return string.Format("CV(DWord) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV32Range.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV32Range.End - 1);
+            }
+        }
+        public string AIRange
+        {
+            get
+            {
+                return string.Format("AI(Word) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AIRange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AORange.End - 1);
+            }
+        }
+        public string AORange
+        {
+            get
+            {
+                return string.Format("AO(Word) - ({0} {1})", PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AORange.Start, PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AORange.End - 1);
+            }
+        }
         private static List<ValueCommentAlias> _elementCollection = new List<ValueCommentAlias>();
+        private IEnumerable<ValueCommentAlias> _deviceType_elementCollection = new List<ValueCommentAlias>();
         public IEnumerable<ValueCommentAlias> ElementCollection
         {
             get
             {
-                var tempList = new List<ValueCommentAlias>(_elementCollection);
+                var tempList = _deviceType_elementCollection;
                 if(_currentTextBlock != null)
                 {
                     string tempstr = _currentTextBlock.Text;
                     int index = stackpanel_textblock.Children.IndexOf(_currentTextBlock);
                     switch (index)
                     {
-                        case 0:case 1:case 2:case 3:case 6:case 7:case 8:
-                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0,1)); }).ToList();
+                        case 0:case 1:case 2:case 3:case 4:case 5:case 6:case 7:case 8:
+                            tempList = tempList.Where(x => { return x.Base == tempstr.Substring(0,1); }).ToList();
                             break;
                         case 9:case 12:case 13:
-                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0,2)); }).ToList();
-                            break;
-                        case 4:case 5:
-                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 1)) && !x.Name.Contains("V"); }).ToList();
+                            tempList = tempList.Where(x => { return x.Base == tempstr.Substring(0,2); }).ToList();
                             break;
                         case 10:
-                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 2)) && CheckValue(x.Name); }).ToList();
+                            tempList = tempList.Where(x => { return x.Base == tempstr.Substring(0, 2) && x.Offset > 0 && x.Offset < 200; }).ToList();
                             break;
                         case 11:
-                            tempList = tempList.Where(x => { return x.Name.StartsWith(tempstr.Substring(0, 2)) && !CheckValue(x.Name); }).ToList();
+                            tempList = tempList.Where(x => { return x.Base == tempstr.Substring(0, 2) && x.Offset >= 200; }).ToList();
                             break;
                         default:
                             break;
                     }
+                }
+                if (_showSpecialRegister)
+                {
+                    tempList = tempList.Where(x => { return x.IsSpecialRegister; }).ToList();
                 }
                 if (_hasUsed)
                 {
@@ -144,84 +288,223 @@ namespace SamSoarII.AppMain.UI
                 return tempList;
             }
         }
-        private bool CheckValue(string valueString)
-        {
-            int value = int.Parse(valueString.Substring(2));
-            return value >= 0 && value < 200;//此处用Device类的CV范围代替
-        }
         public static event NavigateToNetworkEventHandler NavigateToNetwork = delegate { };
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         #region InitializeElementCollection
         public static void InitializeElementCollection()
         {
-            Device device = new FGs16MRDevice();//此处应用用户选择的设备类型替代
+            Device.InitializeSpecialRegisters();
+            Device device = Device.MaxRangeDevice;
             for (uint i = device.XRange.Start; i < device.XRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("X{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("X"),i ,string.Empty, string.Empty));
             }
             for (uint i = device.YRange.Start; i < device.YRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("Y{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("Y"),i ,string.Empty, string.Empty));
             }
             for (uint i = device.MRange.Start; i < device.MRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("M{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("M"), i, string.Empty, string.Empty));
             }
             for (uint i = device.SRange.Start; i < device.SRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("S{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("S"), i, string.Empty, string.Empty));
             }
             for (uint i = device.CRange.Start; i < device.CRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("C{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("C"), i, string.Empty, string.Empty));
             }
             for (uint i = device.TRange.Start; i < device.TRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("T{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("T"), i, string.Empty, string.Empty));
             }
             for (uint i = device.DRange.Start; i < device.DRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("D{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("D"), i, string.Empty, string.Empty));
             }
             for (uint i = device.CVRange.Start; i < device.CVRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("CV{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("CV"), i, string.Empty, string.Empty));
             }
             for (uint i = device.TVRange.Start; i < device.TVRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("TV{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("TV"), i, string.Empty, string.Empty));
             }
             for (uint i = device.VRange.Start; i < device.VRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("V{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("V"), i, string.Empty, string.Empty));
             }
             for (uint i = device.ZRange.Start; i < device.ZRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("Z{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("Z"), i, string.Empty, string.Empty));
             }
             for (uint i = device.AIRange.Start; i < device.AIRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("AI{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("AI"), i, string.Empty, string.Empty));
             }
             for (uint i = device.AORange.Start; i < device.AORange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("AO{0}", i), string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("AO"), i, string.Empty, string.Empty));
+            }
+            InitializeElementDescribe();
+        }
+        private static void InitializeElementDescribe()
+        {
+            foreach (var item in _elementCollection)
+            {
+                foreach (var register in Device.SpecialRegisters)
+                {
+                    if (item.Base == register.Base && item.Offset == register.Offset)
+                    {
+                        item.Describe = register.Describe;
+                        item.IsSpecialRegister = true;
+                        break;
+                    }
+                }
             }
         }
         #endregion
         public ElementList()
         {
             InitializeComponent();
+            PLCDeviceManager.GetPLCDeviceManager().PropertyChanged += PLCDeviceType_PropertyChanged;
             DataContext = this;
+            FilterCollectionByDeviceType(_elementCollection,PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+            RangePropertyChanged();
+            UpdateElementCollection();
         }
+        private void FilterCollectionByDeviceType(List<ValueCommentAlias> list,Device selectDevice)
+        {
+            _deviceType_elementCollection = list.Where(x => 
+            {
+                switch (x.Base)
+                {
+                    case "X":
+                        if (!selectDevice.XRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "Y":
+                        if (!selectDevice.YRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "M":
+                        if (!selectDevice.MRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "S":
+                        if (!selectDevice.SRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "C":
+                        if (!selectDevice.CRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "T":
+                        if (!selectDevice.TRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "D":
+                        if (!selectDevice.DRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "V":
+                        if (!selectDevice.VRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "Z":
+                        if (!selectDevice.ZRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "TV":
+                        if (!selectDevice.TVRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "CV":
+                        if (!selectDevice.CVRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "AI":
+                        if (!selectDevice.AIRange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "AO":
+                        if (!selectDevice.AORange.AssertValue(x.Offset))
+                        {
+                            return false;
+                        }
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
+            });
+        }
+        public void RangePropertyChanged()
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("XRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("YRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("MRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CRange")); 
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("DRange")); 
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("VRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ZRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("XRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TVRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CV16Range"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CV32Range"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("AIRange"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("AORange"));
+        }
+        private void PLCDeviceType_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            FilterCollectionByDeviceType(_elementCollection, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+            UpdateElementCollection();
+            RangePropertyChanged();
+        }
+
         public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
         {
             IEnumerable<ValueCommentAlias> fit = _elementCollection.Where(x => { return x.Name == e.ValueString; });
-            if (fit.Count() == 0)
+            if (fit.Count() == 0 && e.MappedValueModel != null)
             {
                 return;
             }
-            var valueCommentAlias = fit.First();
+            ValueCommentAlias valueCommentAlias;
+            if (e.Type != MappedMessageChangedType.Clear)
+            {
+                valueCommentAlias = fit.First();
+            }
+            else
+            {
+                valueCommentAlias = new ValueCommentAlias(string.Empty,0,string.Empty,string.Empty);
+            }
             List<TextBlock> mappedModels;
             switch (e.Type)
             {
@@ -266,11 +549,21 @@ namespace SamSoarII.AppMain.UI
                     mappedModels.Add(textblock3);
                     valueCommentAlias.MappedModels = mappedModels;
                     break;
+                case MappedMessageChangedType.Clear:
+                    foreach (var item in _elementCollection.Where(x => { return x.MappedModels.Count > 1; }))
+                    {
+                        item.MappedModels.Clear();
+                        mappedModels = new List<TextBlock>(item.MappedModels);
+                        TextBlock textblock4 = new TextBlock();
+                        textblock4.Text = (new VerticalLineViewModel()).ToString();
+                        mappedModels.Add(textblock4);
+                        item.MappedModels = mappedModels;
+                    }
+                    break;
                 default:
                     break;
             }
         }
-
         public static void ValueAliasManager_ValueAliasChanged(ValueAliasChangedEventArgs e)
         {
             if (e.Type == ValueChangedType.Clear)
@@ -403,6 +696,18 @@ namespace SamSoarII.AppMain.UI
             switch (button.Name)
             {
                 case "button1":
+                    _showSpecialRegister = !_showSpecialRegister;
+                    if (_showSpecialRegister)
+                    {
+                        SetButtonBackground(button);
+                    }
+                    else
+                    {
+                        ResetButtonBackground(button);
+                    }
+                    UpdateElementCollection();
+                    break;
+                case "button2":
                     _hasUsed = !_hasUsed;
                     if (_hasUsed)
                     {
@@ -414,7 +719,7 @@ namespace SamSoarII.AppMain.UI
                     }
                     UpdateElementCollection();
                     break;
-                case "button2":
+                case "button3":
                     _hasComment = !_hasComment;
                     if (_hasComment)
                     {
@@ -426,7 +731,7 @@ namespace SamSoarII.AppMain.UI
                     }
                     UpdateElementCollection();
                     break;
-                case "button3":
+                case "button4":
                     CSVImportDialog dialogImport;
                     using (dialogImport = new CSVImportDialog())
                     {
@@ -443,7 +748,7 @@ namespace SamSoarII.AppMain.UI
                         dialogImport.ShowDialog();
                     }
                     break;
-                case "button4":
+                case "button5":
                     CSVExportDialog dialogExport;
                     using (dialogExport = new CSVExportDialog())
                     {

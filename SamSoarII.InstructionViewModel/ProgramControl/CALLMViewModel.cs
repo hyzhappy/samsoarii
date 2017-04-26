@@ -25,22 +25,25 @@ namespace SamSoarII.LadderInstViewModel
             }
             protected set
             {
-                if (value is CALLMModel)
-                    this._model = (CALLMModel)(value);
+                this._model = (CALLMModel)(value);
+                FunctionName = _model.FunctionName;
+                Value1 = _model.Value1;
+                Value2 = _model.Value2;
+                Value3 = _model.Value3;
+                Value4 = _model.Value4;
             }
         }
 
-        public string FuncName
+        public string FunctionName
         {
             get
             {
-                if (_model == null) return null;
                 return _model.FunctionName;
             }
             set
             {
-                if (_model == null) return;
                 _model.FunctionName = value;
+                BottomTextBlock.Text = _model.FunctionName;
             }
         }
 
@@ -134,7 +137,7 @@ namespace SamSoarII.LadderInstViewModel
         public override IEnumerable<string> GetValueString()
         {
             List<string> result = new List<string>();
-            result.Add(FuncName);
+            result.Add(FunctionName);
             result.Add(Value1.ValueString);
             result.Add(Value2.ValueString);
             result.Add(Value3.ValueString);
@@ -177,7 +180,7 @@ namespace SamSoarII.LadderInstViewModel
 
         public override void ParseValue(IList<string> valueStrings)
         {
-            FuncName = valueStrings[0];
+            FunctionName = valueStrings[0];
             ArgType1 = valueStrings[4];
             ArgName1 = valueStrings[5];
             ArgType2 = valueStrings[8];
@@ -208,29 +211,29 @@ namespace SamSoarII.LadderInstViewModel
             {
                 case 1:
                     dialog.ShowLine1("FUNC:");
-                    dialog.ValueString1 = FuncName;
+                    dialog.ValueString1 = FunctionName;
                     break;
                 case 2:
                     dialog.ShowLine1("FUNC:");
-                    dialog.ValueString1 = FuncName;
+                    dialog.ValueString1 = FunctionName;
                     dialog.ShowLine2(ArgName1 + ":", Value1);
                     break;
                 case 3:
                     dialog.ShowLine1("FUNC:");
-                    dialog.ValueString1 = FuncName;
+                    dialog.ValueString1 = FunctionName;
                     dialog.ShowLine2(ArgName1 + ":", Value1);
                     dialog.ShowLine3(ArgName2 + ":", Value2);
                     break;
                 case 4:
                     dialog.ShowLine1("FUNC:");
-                    dialog.ValueString1 = FuncName;
+                    dialog.ValueString1 = FunctionName;
                     dialog.ShowLine2(ArgName1 + ":", Value1);
                     dialog.ShowLine3(ArgName2 + ":", Value2);
                     dialog.ShowLine4(ArgName3 + ":", Value3);
                     break;
                 case 5:
                     dialog.ShowLine1("FUNC:");
-                    dialog.ValueString1 = FuncName;
+                    dialog.ValueString1 = FunctionName;
                     dialog.ShowLine2(ArgName1 + ":", Value1);
                     dialog.ShowLine3(ArgName2 + ":", Value2);
                     dialog.ShowLine4(ArgName3 + ":", Value3);
@@ -265,7 +268,7 @@ namespace SamSoarII.LadderInstViewModel
 
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
-            var oldvaluestring1 = FuncName;
+            var oldvaluestring1 = FunctionName;
             var oldvaluestring2 = Value1.ValueString;
             var oldvaluestring3 = Value2.ValueString;
             var oldvaluestring4 = Value3.ValueString;
@@ -287,7 +290,7 @@ namespace SamSoarII.LadderInstViewModel
             
             if (check1 && check2 && check3 && check4)
             {
-                FuncName = valueStrings[0];
+                FunctionName = valueStrings[0];
                 ArgName1 = newargname1;
                 ArgType1 = newargtype1;
                 Value1 = _ParseValue(valueStrings[2], newargname1, newargtype1);
@@ -300,11 +303,11 @@ namespace SamSoarII.LadderInstViewModel
                 ArgName4 = newargname4;
                 ArgType4 = newargtype4;
                 Value4 = _ParseValue(valueStrings[14], newargname4, newargtype4);
-                InstructionCommentManager.ModifyValue(this, oldvaluestring1, FuncName);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring1, FunctionName);
                 InstructionCommentManager.ModifyValue(this, oldvaluestring2, Value1.ValueString);
                 InstructionCommentManager.ModifyValue(this, oldvaluestring3, Value1.ValueString);
-                InstructionCommentManager.ModifyValue(this, oldvaluestring4, FuncName);
-                InstructionCommentManager.ModifyValue(this, oldvaluestring5, FuncName);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring4, FunctionName);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring5, FunctionName);
                 ValueCommentManager.UpdateComment(Value1, valueStrings[3]);
                 ValueCommentManager.UpdateComment(Value2, valueStrings[7]);
                 ValueCommentManager.UpdateComment(Value3, valueStrings[11]);

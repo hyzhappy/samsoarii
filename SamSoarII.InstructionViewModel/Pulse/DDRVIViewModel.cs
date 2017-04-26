@@ -35,6 +35,9 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DDRVIModel)
                 {
                     this.model = (DDRVIModel)(value);
+                    FreqValue = model.FreqValue;
+                    PulseValue = model.PulseValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

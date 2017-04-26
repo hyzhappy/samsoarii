@@ -67,9 +67,11 @@
     <Compile Include="FGs32MTDevice.cs" />
     <Compile Include="FGs64MRDevice.cs" />
     <Compile Include="FGs64MTDevice.cs" />
+    <Compile Include="MaxRangeDevice.cs" />
     <Compile Include="PLCDeviceManager.cs" />
     <Compile Include="PLCDeviceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecialRegister.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">

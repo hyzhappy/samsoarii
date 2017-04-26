@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is CMLModel)
                 {
                     this.model = (CMLModel)(value);
+                    InputValue = model.InputValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

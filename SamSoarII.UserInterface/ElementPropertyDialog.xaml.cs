@@ -345,8 +345,6 @@ namespace SamSoarII.UserInterface
             InstMode = _InstModemode;
             ValueCount = valuecount;
         }
-        
-
         #region Show & Hide Lines
 
         #region Line1

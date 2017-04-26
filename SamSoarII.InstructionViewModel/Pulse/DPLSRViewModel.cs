@@ -35,6 +35,9 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DPLSRModel)
                 {
                     this.model = (DPLSRModel)(value);
+                    ArgumentValue = model.ArgumentValue;
+                    VelocityValue = model.VelocityValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -57,6 +60,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
         {
             List<string> result = new List<string>();
             result.Add(ArgumentValue.ValueString);
+            result.Add(VelocityValue.ValueString);
             result.Add(OutputValue.ValueString);
             return result;
         }

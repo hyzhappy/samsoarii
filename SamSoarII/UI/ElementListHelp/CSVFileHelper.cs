@@ -43,7 +43,7 @@ namespace SamSoarII.AppMain.UI
                             }
                             ValueCommentManager.UpdateComment(name, comment);
                         }
-                        if (valueCommentAlias.Alias != alias)
+                        if (valueCommentAlias.Alias != alias && !elementCollection.ToList().Exists(x => { return x.Name != name && x.Alias == alias && alias != string.Empty; }))
                         {
                             if (alias == string.Empty)
                             {

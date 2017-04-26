@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Configuration;
 using System.Xml.Linq;
+using SamSoarII.Utility;
 
 namespace SamSoarII.Simulation.Core.Global
 {
@@ -112,7 +113,7 @@ namespace SamSoarII.Simulation.Core.Global
         
         public static int DrawAccurate { get; set; }
         public static int DrawMaximum { get; set; }
-        public static Brush[] DrawBrushes { get; set; }
+        public static SolidColorBrush[] DrawBrushes { get; set; }
         public static int DrawValueDivide { get; set; }
         public static int DrawValueSubDivide { get; set; }
         public static int DrawValueStart { get; set; }
@@ -122,15 +123,15 @@ namespace SamSoarII.Simulation.Core.Global
         {
             LadderScaleTransform = new ScaleTransform();
             RulerScaleTransform = new ScaleTransform();
-            DrawBrushes = new Brush[8];
-            DrawBrushes[0] = Brushes.Black;
-            DrawBrushes[1] = Brushes.DarkOrange;
-            DrawBrushes[2] = Brushes.DarkBlue;
-            DrawBrushes[3] = Brushes.BlueViolet;
-            DrawBrushes[4] = Brushes.DarkCyan;
-            DrawBrushes[5] = Brushes.DarkGray;
-            DrawBrushes[6] = Brushes.DarkGoldenrod;
-            DrawBrushes[7] = Brushes.DarkTurquoise;
+            DrawBrushes = new SolidColorBrush[8];
+            DrawBrushes[0] = new SolidColorBrush(Colors.Black);
+            DrawBrushes[1] = new SolidColorBrush(Colors.DarkOrange);
+            DrawBrushes[2] = new SolidColorBrush(Colors.DarkBlue);
+            DrawBrushes[3] = new SolidColorBrush(Colors.BlueViolet);
+            DrawBrushes[4] = new SolidColorBrush(Colors.DarkCyan);
+            DrawBrushes[5] = new SolidColorBrush(Colors.DarkGray);
+            DrawBrushes[6] = new SolidColorBrush(Colors.DarkGoldenrod);
+            DrawBrushes[7] = new SolidColorBrush(Colors.DarkTurquoise);
             //double scale = 1024.0 * 749 / (267 + 749) / 3000 * 1.4;
             //LadderOriginScaleX = scale;
             //LadderOriginScaleY = scale;
@@ -214,7 +215,6 @@ namespace SamSoarII.Simulation.Core.Global
                 LadderScaleX = 1;
                 LadderScaleY = 1;
             }
-
             try
             {
                 FuncBlockFontSize = int.Parse(mainNode.Element("FuncBlockFontSize").Value);
@@ -305,12 +305,29 @@ namespace SamSoarII.Simulation.Core.Global
             {
                 DrawMaximum = 8;
             }
+            try
+            {
+                for (int i = 0; i < DrawBrushes.Count(); i++)
+                {
+                    DrawBrushes[i] = new SolidColorBrush(StringHelper.ColorParse(selfNode.Element(string.Format("Brush{0:d}", i + 1)).Value));
+                }
+            }
+            catch (Exception e)
+            {
+                DrawBrushes[0] = new SolidColorBrush(Colors.Black);
+                DrawBrushes[1] = new SolidColorBrush(Colors.DarkOrange);
+                DrawBrushes[2] = new SolidColorBrush(Colors.DarkBlue);
+                DrawBrushes[3] = new SolidColorBrush(Colors.BlueViolet);
+                DrawBrushes[4] = new SolidColorBrush(Colors.DarkCyan);
+                DrawBrushes[5] = new SolidColorBrush(Colors.DarkGray);
+                DrawBrushes[6] = new SolidColorBrush(Colors.DarkGoldenrod);
+                DrawBrushes[7] = new SolidColorBrush(Colors.DarkTurquoise);
+            }
         }
         public static bool LoadLadderScaleSuccess()
         {
             return _loadScaleSuccessFlag;
         }
-
         //public static void Load()
         //{
         //    try

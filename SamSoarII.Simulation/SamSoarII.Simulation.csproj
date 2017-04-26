@@ -190,6 +190,10 @@
       <Project>{76F2627D-B161-4E88-AE31-043DC7C8DA61}</Project>
       <Name>SamSoarII.UserInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
+      <Project>{AAFB923A-B366-4D7D-AB40-81F7D71A1F30}</Project>
+      <Name>SamSoarII.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Shell\ViewModel\SimuViewInputModel.xaml">

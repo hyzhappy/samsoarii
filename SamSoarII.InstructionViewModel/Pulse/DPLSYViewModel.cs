@@ -35,6 +35,9 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DPLSYModel)
                 {
                     this.model = (DPLSYModel)(value);
+                    FreqValue = model.FreqValue;
+                    PulseValue = model.PulseValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

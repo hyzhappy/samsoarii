@@ -35,6 +35,8 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DPWMModel)
                 {
                     this.model = (DPWMModel)(value);
+                    FreqValue = model.FreqValue;
+                    OutputValue = model.OutputValue;
                 }
                 else
                 {

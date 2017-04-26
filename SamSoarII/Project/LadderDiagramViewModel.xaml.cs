@@ -143,11 +143,29 @@ namespace SamSoarII.AppMain.Project
         private SelectRect _selectRect = new SelectRect();
 
         private LadderNetworkViewModel _selectStartNetwork;
-
+        public LadderNetworkViewModel SelectStartNetwork
+        {
+            get
+            {
+                return _selectStartNetwork;
+            }
+        }
         private SortedSet<LadderNetworkViewModel> _selectAllNetworks = new SortedSet<LadderNetworkViewModel>();
-
+        public SortedSet<LadderNetworkViewModel> SelectAllNetworks
+        {
+            get
+            {
+                return _selectAllNetworks;
+            }
+        }
         private SortedSet<LadderNetworkViewModel> _selectAllNetworkCache = new SortedSet<LadderNetworkViewModel>();
-
+        public SortedSet<LadderNetworkViewModel> SelectAllNetworkCache
+        {
+            get
+            {
+                return _selectAllNetworkCache;
+            }
+        }
         public SelectRect SelectionRect
         {
             get
@@ -161,7 +179,13 @@ namespace SamSoarII.AppMain.Project
         }
 
         private LadderNetworkViewModel _selectRectOwner = null;
-
+        public LadderNetworkViewModel SelectRectOwner
+        {
+            get
+            {
+                return _selectRectOwner;
+            }
+        }
         private SelectStatus _selectStatus = SelectStatus.Idle;
 
         public SelectStatus SelectionStatus
@@ -455,6 +479,16 @@ namespace SamSoarII.AppMain.Project
             {
                 oldelements.Add(oldele);
             }
+            if (element.Type == ElementType.Output)
+            {
+                for (int i = Math.Max(SelectionRect.X,1); i < GlobalSetting.LadderXCapacity - 1; i++)
+                {
+                    if (_selectRectOwner.SearchElement(i,SelectionRect.Y) == null)
+                    {
+                        elements.Add(new HorizontalLineViewModel() {X = i,Y = SelectionRect.Y });
+                    }
+                }
+            }
             var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
             _commandManager.Execute(command);
             IDVModel.Setup(this);
@@ -497,7 +531,14 @@ namespace SamSoarII.AppMain.Project
                 var viewmodel = LadderInstViewModelPrototype.Clone(catalogId);
                 viewmodel.X = (viewmodel.Type == LadderInstModel.ElementType.Output) ? GlobalSetting.LadderXCapacity - 1 : _selectRect.X;
                 viewmodel.Y = _selectRect.Y;
-                ReplaceSingleElement(_selectRectOwner, viewmodel);
+                if (viewmodel.X == GlobalSetting.LadderXCapacity - 1 && viewmodel.Type != ElementType.Output)
+                {
+                    return;
+                }
+                else
+                {
+                    ReplaceSingleElement(_selectRectOwner, viewmodel);
+                }
             }
         }
         public void ReplaceSingleVerticalLine(LadderNetworkViewModel network, VerticalLineViewModel vline)
@@ -1374,7 +1415,6 @@ namespace SamSoarII.AppMain.Project
             {           
                 SelectionStatus = SelectStatus.Idle;
             }
-
         }
 
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
@@ -1438,10 +1478,19 @@ namespace SamSoarII.AppMain.Project
                             var p = e.GetPosition(_selectStartNetwork.LadderCanvas);
                             var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
                             _selectStartNetwork.IsSelectAllMode = false;
-                            _selectStartNetwork.SelectAreaFirstX = _selectStartNetwork.SelectAreaOriginX;
-                            _selectStartNetwork.SelectAreaFirstY = _selectStartNetwork.SelectAreaOriginY;
-                            _selectStartNetwork.SelectAreaSecondX = pp.X;
-                            _selectStartNetwork.SelectAreaSecondY = pp.Y;
+                            if (pp.X == _selectStartNetwork.SelectAreaOriginX && pp.Y == _selectStartNetwork.SelectAreaOriginY)
+                            {
+                                SelectionRect.X = pp.X;
+                                SelectionRect.Y = pp.Y;
+                                _selectStartNetwork.AcquireSelectRect();
+                            }
+                            else
+                            {
+                                _selectStartNetwork.SelectAreaFirstX = _selectStartNetwork.SelectAreaOriginX;
+                                _selectStartNetwork.SelectAreaFirstY = _selectStartNetwork.SelectAreaOriginY;
+                                _selectStartNetwork.SelectAreaSecondX = pp.X;
+                                _selectStartNetwork.SelectAreaSecondY = pp.Y;
+                            }
                             break;
                         case CrossNetworkState.CrossUp:
                             CollectSelectAllNetworkUp();

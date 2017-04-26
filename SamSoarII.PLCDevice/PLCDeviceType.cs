@@ -22,6 +22,6 @@ namespace SamSoarII.PLCDevice
         FGs_64MT_D,
         FGs_32MR_YTJ,
         FGs_32MT_YTJ,
-        FGs_20MR_BYK,
+        FGs_20MR_BYK
     }
 }

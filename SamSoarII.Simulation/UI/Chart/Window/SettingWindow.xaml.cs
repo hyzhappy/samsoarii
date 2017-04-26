@@ -407,14 +407,14 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             GlobalSetting.ScanViewMaximum = _ScanViewMaximum;
             GlobalSetting.DrawMaximum = _DrawMaximum;
             GlobalSetting.DrawAccurate = _DrawAccurate;
-            GlobalSetting.DrawBrushes[0] = Brush1.Fill;
-            GlobalSetting.DrawBrushes[1] = Brush2.Fill;
-            GlobalSetting.DrawBrushes[2] = Brush3.Fill;
-            GlobalSetting.DrawBrushes[3] = Brush4.Fill;
-            GlobalSetting.DrawBrushes[4] = Brush5.Fill;
-            GlobalSetting.DrawBrushes[5] = Brush6.Fill;
-            GlobalSetting.DrawBrushes[6] = Brush7.Fill;
-            GlobalSetting.DrawBrushes[7] = Brush8.Fill;
+            GlobalSetting.DrawBrushes[0] = (SolidColorBrush)Brush1.Fill;
+            GlobalSetting.DrawBrushes[1] = (SolidColorBrush)Brush2.Fill;
+            GlobalSetting.DrawBrushes[2] = (SolidColorBrush)Brush3.Fill;
+            GlobalSetting.DrawBrushes[3] = (SolidColorBrush)Brush4.Fill;
+            GlobalSetting.DrawBrushes[4] = (SolidColorBrush)Brush5.Fill;
+            GlobalSetting.DrawBrushes[5] = (SolidColorBrush)Brush6.Fill;
+            GlobalSetting.DrawBrushes[6] = (SolidColorBrush)Brush7.Fill;
+            GlobalSetting.DrawBrushes[7] = (SolidColorBrush)Brush8.Fill;
             Close();
             if (EnsureButtonClick != null)
             {

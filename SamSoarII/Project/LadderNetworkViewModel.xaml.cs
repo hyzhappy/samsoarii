@@ -388,11 +388,11 @@ namespace SamSoarII.AppMain.Project
                 LadderCanvas.Children.Add(element);
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
+                LadderElementChangedArgs e = new LadderElementChangedArgs();
+                e.BVModel_old = oldele;
+                e.BVModel_new = element;
+                ElementChanged(this, e);
             }
-            LadderElementChangedArgs e = new LadderElementChangedArgs();
-            e.BVModel_old = oldele;
-            e.BVModel_new = element;
-            ElementChanged(this, e);
         }
         public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
@@ -434,7 +434,7 @@ namespace SamSoarII.AppMain.Project
                 RemoveElement(element.X, element.Y);
             }
         }
-        public void RemoveVerticalLine(IntPoint pos)
+        public bool RemoveVerticalLine(IntPoint pos)
         {
             if (_ladderVerticalLines.ContainsKey(pos))
             {
@@ -444,17 +444,26 @@ namespace SamSoarII.AppMain.Project
                 LadderCanvas.Children.Remove(_ladderVerticalLines[pos]);
                 _ladderVerticalLines.Remove(pos);
                 VerticalLineChanged(this, e);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
-        public void RemoveVerticalLine(int x, int y)
+        public bool RemoveVerticalLine(int x, int y)
         {
-            RemoveVerticalLine(new IntPoint() { X = x, Y = y });
+            return RemoveVerticalLine(new IntPoint() { X = x, Y = y });
         }
-        public void RemoveVerticalLine(VerticalLineViewModel vline)
+        public bool RemoveVerticalLine(VerticalLineViewModel vline)
         {
             if (_ladderVerticalLines.ContainsValue(vline))
             {
-                RemoveVerticalLine(vline.X, vline.Y);
+                return RemoveVerticalLine(vline.X, vline.Y);
+            }
+            else
+            {
+                return false;
             }
         }
         #endregion
@@ -2283,7 +2292,35 @@ namespace SamSoarII.AppMain.Project
             }
             return result;
         }
+        public List<BaseViewModel> GetSelectedHLines()
+        {
+            List<BaseViewModel> result = new List<BaseViewModel>();
+            int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
+            int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
+            int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
+            int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
+            IntPoint p = new IntPoint();
+            for (int i = yBegin; i <= yEnd; i++)
+            {
+                for (int j = xBegin; j <= xEnd; j++)
+                {
+                    p.X = j;
+                    p.Y = i;
+                    try
+                    {
+                        if (_ladderElements.ContainsKey(p) && _ladderElements[p].Type == ElementType.HLine)
+                        {
+                            result.Add(_ladderElements[p]);
+                        }
+                    }
+                    catch (KeyNotFoundException exception)
+                    {
 
+                    }
+                }
+            }
+            return result;
+        }
         public List<VerticalLineViewModel> GetSelectedVerticalLines()
         {
             List<VerticalLineViewModel> result = new List<VerticalLineViewModel>();

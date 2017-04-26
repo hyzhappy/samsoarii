@@ -41,13 +41,11 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACSimuProj;
         public LayoutAnchorControl LACMonitor;
         public LayoutAnchorControl LACOutput;
-
+        public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
         {
             InitializeComponent();
-
             InitializeAvalonDock();
-
             _interactionFacade = new InteractionFacade(this);
             this.Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
@@ -138,18 +136,19 @@ namespace SamSoarII.AppMain.UI
         {
             TreeViewGrid.Children.Clear();
         }
-
         #region Event handler
         private void OnCommentModeToggle(object sender, RoutedEventArgs e)
         {
             _interactionFacade.IsCommentMode = !_interactionFacade.IsCommentMode;
         }
-
+        private void OnClick(object sender, RoutedEventArgs e)
+        {
+            InstShortCutOpen.Invoke(sender, e);
+        }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (!GlobalSetting.LoadLadderScaleSuccess())
@@ -170,7 +169,7 @@ namespace SamSoarII.AppMain.UI
             var projectMessage = ProjectFileManager.RecentUsedProjectMessages.ElementAt(index);
             if (!File.Exists(projectMessage.Value.Item2))
             {
-                MessageBox.Show(string.Format("file has been removed or deleted"));
+                MessageBox.Show(string.Format("file has been moved or deleted"));
                 ProjectFileManager.Delete(index);
             }
             else
@@ -415,7 +414,17 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
+        private void OnInstShortCutOpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.CurrentLadder != null && _interactionFacade.CurrentLadder.SelectionStatus != SelectStatus.Idle;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void ShowOptionDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -493,7 +502,7 @@ namespace SamSoarII.AppMain.UI
         private void OnCloseProjectCommand(object sender, ExecutedRoutedEventArgs e)
         {
             _interactionFacade.CloseCurrentProject();
-            //LACProj.Hide();
+            LAProj.Hide();
         }
         private void ClosePageExecuteCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -885,23 +894,26 @@ namespace SamSoarII.AppMain.UI
 
         private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
+            if (_interactionFacade.CurrentLadder != null)
             {
-                MessageBox.Show(string.Format("程序控制指令配对失败！"));
-            }
-            else
-            {
-                var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
-                while (tempQueue.Count > 0)
+                if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
                 {
-                    var ladderNetworkViewModel = tempQueue.Dequeue();
-                    if (ladderNetworkViewModel.IsNetworkError())
+                    MessageBox.Show(string.Format("程序控制指令配对失败！"));
+                }
+                else
+                {
+                    var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
+                    while (tempQueue.Count > 0)
                     {
-                        MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
-                    }
-                    else
-                    {
-                        MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
+                        var ladderNetworkViewModel = tempQueue.Dequeue();
+                        if (ladderNetworkViewModel.IsNetworkError())
+                        {
+                            MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
+                        }
+                        else
+                        {
+                            MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
+                        }
                     }
                 }
             }

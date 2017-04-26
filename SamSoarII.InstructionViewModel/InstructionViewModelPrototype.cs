@@ -132,6 +132,8 @@ namespace SamSoarII.LadderInstViewModel
             Add(new CALLViewModel());
             Add(new CALLMViewModel());
             //
+            Add(new SHLBViewModel());
+            Add(new SHRBViewModel());
             Add(new SHLViewModel());
             Add(new SHLDViewModel());
             Add(new SHRViewModel());
