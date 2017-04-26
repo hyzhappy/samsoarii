@@ -752,7 +752,7 @@ namespace SamSoarII.AppMain.Project
 
         #region Selection Rectangle Relative
 
-        private void ScrollToRect(int num, int row)
+        private void VScrollToRect(int num, int row)
         {
             double scale = GlobalSetting.LadderScaleX;
             double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
@@ -765,7 +765,15 @@ namespace SamSoarII.AppMain.Project
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
-
+        private void HScrollToRect(int XIndex)
+        {
+            double scale = GlobalSetting.LadderScaleX;
+            double offset = 0;
+            offset += scale * GlobalSetting.LadderWidthUnit * (XIndex + 1) / 2.89;
+            offset -= (MainScrollViewer.ViewportWidth - 7 * scale);
+            offset = Math.Max(offset,0);
+            MainScrollViewer.ScrollToHorizontalOffset(offset);
+        }
         private void SelectRectUp()
         {
             if (_selectRectOwner != null)
@@ -784,8 +792,8 @@ namespace SamSoarII.AppMain.Project
                         _selectRectOwner.AcquireSelectRect();
                     }
                 }
+                VScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
             }
-            ScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
         }
 
         private void SelectRectDown()
@@ -807,8 +815,8 @@ namespace SamSoarII.AppMain.Project
                     }
 
                 }
+                VScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
             }
-            ScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
         }
 
         private void SelectRectLeft()
@@ -818,6 +826,7 @@ namespace SamSoarII.AppMain.Project
                 if (_selectRect.X > 0)
                 {
                     _selectRect.X--;
+                    HScrollToRect(_selectRect.X);
                 }
             }
         }
@@ -829,6 +838,7 @@ namespace SamSoarII.AppMain.Project
                 if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
                 {
                     _selectRect.X++;
+                    HScrollToRect(_selectRect.X);
                 }
             }
         }
@@ -989,7 +999,18 @@ namespace SamSoarII.AppMain.Project
             }
             
         }
-
+        private void CollectSelectAllNetworkUpByCount(int count)
+        {
+            _selectAllNetworks.Clear();
+            var node = _ladderNetworks.Find(_selectStartNetwork);
+            node = node.Previous;
+            while (node != null && count-- > 0)
+            {
+                _selectAllNetworks.Add(node.Value);
+                _selectAllNetworkCache.Add(node.Value);
+                node = node.Previous;
+            }
+        }
         /// <summary>
         /// 收集从起始网络(_selectStartNetwork)开始，鼠标向下掠过的网络，加入到_selectAllNetworks中（不包括_selectStartNetwork）
         /// </summary>
@@ -1012,7 +1033,18 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-
+        private void CollectSelectAllNetworkDownByCount(int count)
+        {
+            _selectAllNetworks.Clear();
+            var node = _ladderNetworks.Find(_selectStartNetwork);
+            node = node.Next;
+            while (node != null && count-- > 0)
+            {
+                _selectAllNetworks.Add(node.Value);
+                _selectAllNetworkCache.Add(node.Value);
+                node = node.Next;
+            }
+        }
         #endregion
 
         #region Instruction relative
@@ -1245,6 +1277,10 @@ namespace SamSoarII.AppMain.Project
             {
                 IsPressingCtrl = false;
             }
+            if (_selectStatus == SelectStatus.MultiSelecting)
+            {
+                SelectionStatus = SelectStatus.MultiSelected;
+            }
         }
         private void OnLadderDiagramKeyDown(object sender, KeyEventArgs e)
         {
@@ -1258,6 +1294,10 @@ namespace SamSoarII.AppMain.Project
                 {
                     SelectRectLeftWithLine();
                 }
+                else if((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    SelectionAreaChanged(e.Key);
+                }
                 else
                 {
                     SelectRectLeft();
@@ -1269,6 +1309,10 @@ namespace SamSoarII.AppMain.Project
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
                     SelectRectRightWithLine();
+                }
+                else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    SelectionAreaChanged(e.Key);
                 }
                 else
                 {
@@ -1282,6 +1326,10 @@ namespace SamSoarII.AppMain.Project
                 {
                     SelectRectDownWithLine();
                 }
+                else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    SelectionAreaChanged(e.Key);
+                }
                 else
                 {
                     SelectRectDown();
@@ -1294,6 +1342,10 @@ namespace SamSoarII.AppMain.Project
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
                     SelectRectUpWithLine();            
+                }
+                else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                {
+                    SelectionAreaChanged(e.Key);
                 }
                 else
                 {
@@ -1382,7 +1434,370 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
             }
-           
+        }
+        private void SelectionAreaChanged(Key key)
+        {
+            if (_selectStatus == SelectStatus.SingleSelected)
+            {
+                if (_selectRectOwner != null)
+                {
+                    _selectStartNetwork = _selectRectOwner;
+                }
+                if (SingleSelectionAreaCanChange(key))
+                {
+                    ChangeSingleSelectionArea(key);
+                }
+            }
+            else if(_selectStatus == SelectStatus.MultiSelected)
+            {
+                _selectStatus = SelectStatus.MultiSelecting;
+                if (MutiSelectionAreaCanChange(key))
+                {
+                    ChangeMutiSelectionArea(key);
+                }
+            }
+            else if(_selectStatus == SelectStatus.MultiSelecting)
+            {
+                if (MutiSelectionAreaCanChange(key))
+                {
+                    ChangeMutiSelectionArea(key);
+                }
+            }
+        }
+        private bool MutiSelectionAreaCanChange(Key key)
+        {
+            switch (key)
+            {
+                case Key.Left:
+                    return _selectStartNetwork.SelectAreaSecondX > 0;
+                case Key.Right:
+                    return _selectStartNetwork.SelectAreaSecondX < GlobalSetting.LadderXCapacity - 1;
+                case Key.Up:
+                    if (CrossNetState == CrossNetworkState.NoCross)
+                    {
+                        return _selectStartNetwork.NetworkNumber > 0 || _selectStartNetwork.SelectAreaSecondY > 0;
+                    }else if (CrossNetState == CrossNetworkState.CrossDown)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (_selectAllNetworks.ToList().Exists(x => { return x.NetworkNumber == 0; }))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                case Key.Down:
+                    if (CrossNetState == CrossNetworkState.NoCross)
+                    {
+                        return _selectStartNetwork.NetworkNumber < _ladderNetworks.Count - 1 || _selectStartNetwork.SelectAreaSecondY < _selectStartNetwork.RowCount - 1;
+                    }
+                    else if (CrossNetState == CrossNetworkState.CrossUp)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (_selectAllNetworks.ToList().Exists(x => { return x.NetworkNumber == _ladderNetworks.Count - 1; }))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                default:
+                    return false;
+            }
+        }
+        private bool SingleSelectionAreaCanChange(Key key)
+        {
+            switch (key)
+            {
+                case Key.Left:
+                    return SelectionRect.X > 0;
+                case Key.Right:
+                    return SelectionRect.X < GlobalSetting.LadderXCapacity - 1;
+                case Key.Up:
+                    return SelectStartNetwork.NetworkNumber > 0 || SelectionRect.Y > 0;
+                case Key.Down:
+                    return SelectStartNetwork.NetworkNumber < _ladderNetworks.Count - 1 || SelectionRect.Y < SelectStartNetwork.RowCount - 1;
+                default:
+                    return false;
+            }
+        }
+        private void ChangeMutiSelectionArea(Key key)
+        {
+            switch (key)
+            {
+                case Key.Left:
+                    if (CrossNetState == CrossNetworkState.NoCross)
+                    {
+                        if (_selectStartNetwork.SelectAreaSecondX > 0)
+                        {
+                            _selectStartNetwork.SelectAreaSecondX--;
+                            HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                            if (_selectStartNetwork.SelectAreaSecondX == _selectStartNetwork.SelectAreaFirstX && _selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit)
+                            {
+                                SelectionRect.X = _selectStartNetwork.SelectAreaFirstX;
+                                SelectionRect.Y = _selectStartNetwork.SelectAreaFirstY;
+                                _selectStartNetwork.AcquireSelectRect();
+                            }
+                        }
+                    }
+                    break;
+                case Key.Right:
+                    if (CrossNetState == CrossNetworkState.NoCross)
+                    {
+                        if (_selectStartNetwork.SelectAreaSecondX < GlobalSetting.LadderXCapacity - 1)
+                        {
+                            _selectStartNetwork.SelectAreaSecondX++;
+                            HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                            if (_selectStartNetwork.SelectAreaSecondX == _selectStartNetwork.SelectAreaFirstX && _selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit)
+                            {
+                                SelectionRect.X = _selectStartNetwork.SelectAreaFirstX;
+                                SelectionRect.Y = _selectStartNetwork.SelectAreaFirstY;
+                                _selectStartNetwork.AcquireSelectRect();
+                            }
+                        }
+                    }
+                    break;
+                case Key.Up:
+                    if (CrossNetState == CrossNetworkState.CrossUp)
+                    {
+                        CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count + 1);
+                        foreach (var net in _selectAllNetworkCache)
+                        {
+                            net.IsSelectAreaMode = false;
+                            net.IsSelectAllMode = false;
+                        }
+                        foreach (var net in _selectAllNetworks)
+                        {
+                            net.IsSelectAllMode = true;
+                        }
+                        VScrollToRect(_selectAllNetworks.First().NetworkNumber,0);
+                    }
+                    else if (CrossNetState == CrossNetworkState.CrossDown)
+                    {
+                        CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count - 1);
+                        foreach (var net in _selectAllNetworkCache)
+                        {
+                            net.IsSelectAreaMode = false;
+                            net.IsSelectAllMode = false;
+                        }
+                        if (_selectAllNetworks.Count == 0)
+                        {
+                            CrossNetState = CrossNetworkState.NoCross;
+                            _selectStartNetwork.IsSelectAllMode = false;
+                            VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.RowCount - 1);
+                        }
+                        else
+                        {
+                            foreach (var net in _selectAllNetworks)
+                            {
+                                net.IsSelectAllMode = true;
+                            }
+                            VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                        }
+                    }
+                    else
+                    {
+                        if (_selectStartNetwork.SelectAreaSecondY == 0)
+                        {
+                            CrossNetState = CrossNetworkState.CrossUp;
+                            CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count + 1);
+                            _selectStartNetwork.IsSelectAllMode = true;
+                            foreach (var net in _selectAllNetworkCache)
+                            {
+                                net.IsSelectAreaMode = false;
+                                net.IsSelectAllMode = false;
+                            }
+                            foreach (var net in _selectAllNetworks)
+                            {
+                                net.IsSelectAllMode = true;
+                            }
+                            VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
+                        }
+                        else
+                        {
+                            _selectStartNetwork.SelectAreaSecondY--;
+                            VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                            if (_selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit && _selectStartNetwork.SelectArea.Width == GlobalSetting.LadderWidthUnit)
+                            {
+                                _selectRect.X = _selectStartNetwork.SelectAreaFirstX;
+                                _selectRect.Y = _selectStartNetwork.SelectAreaFirstY;
+                                _selectStartNetwork.AcquireSelectRect();
+                            }
+                        }
+                    }
+                    break;
+                case Key.Down:
+                    if (CrossNetState == CrossNetworkState.CrossDown)
+                    {
+                        CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count + 1);
+                        foreach (var net in _selectAllNetworkCache)
+                        {
+                            net.IsSelectAreaMode = false;
+                            net.IsSelectAllMode = false;
+                        }
+                        foreach (var net in _selectAllNetworks)
+                        {
+                            net.IsSelectAllMode = true;
+                        }
+                        VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                    }
+                    else if (CrossNetState == CrossNetworkState.CrossUp)
+                    {
+                        CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count - 1);
+                        foreach (var net in _selectAllNetworkCache)
+                        {
+                            net.IsSelectAreaMode = false;
+                            net.IsSelectAllMode = false;
+                        }
+                        if (_selectAllNetworks.Count == 0)
+                        {
+                            CrossNetState = CrossNetworkState.NoCross;
+                            _selectStartNetwork.IsSelectAllMode = false;
+                            VScrollToRect(_selectStartNetwork.NetworkNumber, 0);
+                        }
+                        else
+                        {
+                            foreach (var net in _selectAllNetworks)
+                            {
+                                net.IsSelectAllMode = true;
+                            }
+                            VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
+                        }
+                    }
+                    else
+                    {
+                        if (_selectStartNetwork.SelectAreaSecondY == _selectStartNetwork.RowCount - 1)
+                        {
+                            CrossNetState = CrossNetworkState.CrossDown;
+                            CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count + 1);
+                            _selectStartNetwork.IsSelectAllMode = true;
+                            foreach (var net in _selectAllNetworkCache)
+                            {
+                                net.IsSelectAreaMode = false;
+                                net.IsSelectAllMode = false;
+                            }
+                            foreach (var net in _selectAllNetworks)
+                            {
+                                net.IsSelectAllMode = true;
+                            }
+                            VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                        }
+                        else
+                        {
+                            _selectStartNetwork.SelectAreaSecondY++;
+                            VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                            if (_selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit && _selectStartNetwork.SelectArea.Width == GlobalSetting.LadderWidthUnit)
+                            {
+                                _selectRect.X = _selectStartNetwork.SelectAreaFirstX;
+                                _selectRect.Y = _selectStartNetwork.SelectAreaFirstY;
+                                _selectStartNetwork.AcquireSelectRect();
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void ChangeSingleSelectionArea(Key key)
+        {
+            switch (key)
+            {
+                case Key.Left:
+                    _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
+                    _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
+                    _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaSecondX = _selectRect.X - 1;
+                    _selectStartNetwork.SelectAreaSecondY = _selectRect.Y;
+                    HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                    CrossNetState = CrossNetworkState.NoCross;
+                    SelectionStatus = SelectStatus.MultiSelecting;
+                    break;
+                case Key.Right:
+                    _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
+                    _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
+                    _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaSecondX = _selectRect.X + 1;
+                    _selectStartNetwork.SelectAreaSecondY = _selectRect.Y;
+                    HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                    CrossNetState = CrossNetworkState.NoCross;
+                    SelectionStatus = SelectStatus.MultiSelecting;
+                    break;
+                case Key.Up:
+                    if (_selectRect.Y == 0)
+                    {
+                        CrossNetState = CrossNetworkState.CrossUp;
+                        CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count + 1);
+                        _selectStartNetwork.IsSelectAllMode = true;
+                        foreach (var net in _selectAllNetworkCache)
+                        {
+                            net.IsSelectAreaMode = false;
+                            net.IsSelectAllMode = false;
+                        }
+                        foreach (var net in _selectAllNetworks)
+                        {
+                            net.IsSelectAllMode = true;
+                        }
+                        VScrollToRect(_selectAllNetworks.First().NetworkNumber,0);
+                    }
+                    else
+                    {
+                        _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaSecondY = _selectRect.Y - 1;
+                        CrossNetState = CrossNetworkState.NoCross;
+                        VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                    }
+                    SelectionStatus = SelectStatus.MultiSelecting;
+                    break;
+                case Key.Down:
+                    if (_selectRect.Y == _selectStartNetwork.RowCount - 1)
+                    {
+                        CrossNetState = CrossNetworkState.CrossDown;
+                        CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count + 1);
+                        _selectStartNetwork.IsSelectAllMode = true;
+                        foreach (var net in _selectAllNetworkCache)
+                        {
+                            net.IsSelectAreaMode = false;
+                            net.IsSelectAllMode = false;
+                        }
+                        foreach (var net in _selectAllNetworks)
+                        {
+                            net.IsSelectAllMode = true;
+                        }
+                        VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                    }
+                    else
+                    {
+                        _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaSecondY = _selectRect.Y + 1;
+                        CrossNetState = CrossNetworkState.NoCross;
+                        VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                    }
+                    SelectionStatus = SelectStatus.MultiSelecting;
+                    break;
+                default:
+                    break;
+            }
         }
         private void OnLadderDiagramMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -1714,7 +2129,7 @@ namespace SamSoarII.AppMain.Project
                 //单选
                 if(containOutput)
                 {
-                    xStart = 10 - width;
+                    xStart = GlobalSetting.LadderXCapacity - width;
                 }
                 else
                 {
@@ -1739,7 +2154,7 @@ namespace SamSoarII.AppMain.Project
                     targetNetwork = _selectStartNetwork;
                     if (containOutput)
                     {
-                        xStart = 10 - width;
+                        xStart = GlobalSetting.LadderXCapacity - width;
                     }
                     else
                     {
