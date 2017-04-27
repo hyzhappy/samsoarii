@@ -17,14 +17,13 @@
 #endif
 
 typedef void(*vDllfun)(void);
-typedef void(*vsii16Dllfun)(char*, int, uint16_t*);
 typedef void(*vsii32Dllfun)(char*, int, uint32_t*);
-typedef void(*vsif32Dllfun)(char*, int, float*);
-typedef void(*vsid64Dllfun)(char*, int, double*);
-typedef void(*vsiiv16Dllfun)(char*, int, uint16_t);
+typedef void(*vsii64Dllfun)(char*, int, uint64_t*);
+typedef void(*vsi64Dllfun)(char*, uint64_t*);
+typedef void(*vsif64Dllfun)(char*, int, double*);
 typedef void(*vsiiv32Dllfun)(char*, int, uint32_t);
-typedef void(*vsifv32Dllfun)(char*, int, float);
-typedef void(*vsidv64Dllfun)(char*, int, double);
+typedef void(*vsiiv64Dllfun)(char*, int, uint64_t);
+typedef void(*vsifv64Dllfun)(char*, int, double);
 typedef void(*vsiiDllfun)(char*, int, int);
 typedef void(*vsiDllfun)(char*, int);
 typedef void(*vsDllfun)(char*);
@@ -35,27 +34,24 @@ static vDllfun dfBeforeRunLadder;
 static vDllfun dfRunLadder;
 static vDllfun dfAfterRunLadder;
 static vsii32Dllfun dfSetBit;
-static vsii16Dllfun dfSetWord;
-static vsii32Dllfun dfSetDWord;
-static vsif32Dllfun dfSetFloat;
-static vsid64Dllfun dfSetDouble;
+static vsii32Dllfun dfSetWord;
+static vsii64Dllfun dfSetDWord;
+static vsif64Dllfun dfSetFloat;
 static vsii32Dllfun dfGetBit;
-static vsii16Dllfun dfGetWord;
-static vsii32Dllfun dfGetDWord;
-static vsif32Dllfun dfGetFloat;
-static vsid64Dllfun dfGetDouble;
+static vsii32Dllfun dfGetWord;
+static vsii64Dllfun dfGetDWord;
+static vsif64Dllfun dfGetFloat;
+static vsi64Dllfun dfGetFeq;
 static vsiiDllfun dfSetEnable;
 static vDllfun dfInitDataPoint;
 static vsiiv32Dllfun dfAddBitDataPoint;
-static vsiiv16Dllfun dfAddWordDataPoint;
-static vsiiv32Dllfun dfAddDWordDataPoint;
-static vsifv32Dllfun dfAddFloatDataPoint;
-static vsidv64Dllfun dfAddDoubleDataPoint;
+static vsiiv32Dllfun dfAddWordDataPoint;
+static vsiiv64Dllfun dfAddDWordDataPoint;
+static vsifv64Dllfun dfAddFloatDataPoint;
 static vsiiv32Dllfun dfRemoveBitDataPoint;
-static vsiiv16Dllfun dfRemoveWordDataPoint;
-static vsiiv32Dllfun dfRemoveDWordDataPoint;
-static vsifv32Dllfun dfRemoveFloatDataPoint;
-static vsidv64Dllfun dfRemoveDoubleDataPoint;
+static vsiiv32Dllfun dfRemoveWordDataPoint;
+static vsiiv64Dllfun dfRemoveDWordDataPoint;
+static vsifv64Dllfun dfRemoveFloatDataPoint;
 static vsiDllfun dfAddViewInput;
 static vsiDllfun dfAddViewOutput;
 static vsiDllfun dfRemoveViewInput;
@@ -111,26 +107,26 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 3;
 	}
-	dfGetWord = (vsii16Dllfun)GetProcAddress(hdll, "GetWord");
+	dfGetWord = (vsii32Dllfun)GetProcAddress(hdll, "GetWord");
 	if (dfGetWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 4;
 	}
-	dfGetDWord = (vsii32Dllfun)GetProcAddress(hdll, "GetDoubleWord");
+	dfGetDWord = (vsii64Dllfun)GetProcAddress(hdll, "GetDoubleWord");
 	if (dfGetDWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 5;
 	}
-	dfGetFloat = (vsif32Dllfun)GetProcAddress(hdll, "GetFloat");
+	dfGetFloat = (vsif64Dllfun)GetProcAddress(hdll, "GetFloat");
 	if (dfGetFloat == NULL)
 	{
 		FreeLibrary(hdll);
 		return 6;
 	}
-	dfGetDouble = (vsid64Dllfun)GetProcAddress(hdll, "GetDouble");
-	if (dfGetDouble == NULL)
+	dfGetFeq = (vsi64Dllfun)GetProcAddress(hdll, "GetFeq");
+	if (dfGetFeq == NULL)
 	{
 		FreeLibrary(hdll);
 		return 7;
@@ -141,29 +137,23 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 8;
 	}
-	dfSetWord = (vsii16Dllfun)GetProcAddress(hdll, "SetWord");
+	dfSetWord = (vsii32Dllfun)GetProcAddress(hdll, "SetWord");
 	if (dfSetWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 9;
 	}
-	dfSetDWord = (vsii32Dllfun)GetProcAddress(hdll, "SetDoubleWord");
+	dfSetDWord = (vsii64Dllfun)GetProcAddress(hdll, "SetDoubleWord");
 	if (dfSetDWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 10;
 	}
-	dfSetFloat = (vsif32Dllfun)GetProcAddress(hdll, "SetFloat");
+	dfSetFloat = (vsif64Dllfun)GetProcAddress(hdll, "SetFloat");
 	if (dfGetFloat == NULL)
 	{
 		FreeLibrary(hdll);
 		return 11;
-	}
-	dfSetDouble = (vsid64Dllfun)GetProcAddress(hdll, "SetDouble");
-	if (dfGetDouble == NULL)
-	{
-		FreeLibrary(hdll);
-		return 12;
 	}
 	dfSetEnable = (vsiiDllfun)GetProcAddress(hdll, "SetEnable");
 	if (dfSetEnable == NULL)
@@ -183,29 +173,23 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 15;
 	}
-	dfAddWordDataPoint = (vsiiv16Dllfun)GetProcAddress(hdll, "AddWordDataPoint");
+	dfAddWordDataPoint = (vsiiv32Dllfun)GetProcAddress(hdll, "AddWordDataPoint");
 	if (dfAddWordDataPoint == NULL)
 	{
 		FreeLibrary(hdll);
 		return 16;
 	}
-	dfAddDWordDataPoint = (vsiiv32Dllfun)GetProcAddress(hdll, "AddDoubleWordDataPoint");
+	dfAddDWordDataPoint = (vsiiv64Dllfun)GetProcAddress(hdll, "AddDoubleWordDataPoint");
 	if (dfAddDWordDataPoint == NULL)
 	{
 		FreeLibrary(hdll);
 		return 17;
 	}
-	dfAddFloatDataPoint = (vsifv32Dllfun)GetProcAddress(hdll, "AddFloatDataPoint");
+	dfAddFloatDataPoint = (vsifv64Dllfun)GetProcAddress(hdll, "AddFloatDataPoint");
 	if (dfAddFloatDataPoint == NULL)
 	{
 		FreeLibrary(hdll);
 		return 18;
-	}
-	dfAddDoubleDataPoint = (vsidv64Dllfun)GetProcAddress(hdll, "AddDoubleDataPoint");
-	if (dfAddDoubleDataPoint == NULL)
-	{
-		FreeLibrary(hdll);
-		return 19;
 	}
 	dfRemoveBitDataPoint = (vsiiv32Dllfun)GetProcAddress(hdll, "RemoveBitDataPoint");
 	if (dfRemoveBitDataPoint == NULL)
@@ -213,29 +197,23 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 20;
 	}
-	dfRemoveWordDataPoint = (vsiiv16Dllfun)GetProcAddress(hdll, "RemoveWordDataPoint");
+	dfRemoveWordDataPoint = (vsiiv32Dllfun)GetProcAddress(hdll, "RemoveWordDataPoint");
 	if (dfRemoveWordDataPoint == NULL)
 	{
 		FreeLibrary(hdll);
 		return 21;
 	}
-	dfRemoveDWordDataPoint = (vsiiv32Dllfun)GetProcAddress(hdll, "RemoveDoubleWordDataPoint");
+	dfRemoveDWordDataPoint = (vsiiv64Dllfun)GetProcAddress(hdll, "RemoveDoubleWordDataPoint");
 	if (dfRemoveDWordDataPoint == NULL)
 	{
 		FreeLibrary(hdll);
 		return 22;
 	}
-	dfRemoveFloatDataPoint = (vsifv32Dllfun)GetProcAddress(hdll, "RemoveFloatDataPoint");
+	dfRemoveFloatDataPoint = (vsifv64Dllfun)GetProcAddress(hdll, "RemoveFloatDataPoint");
 	if (dfRemoveFloatDataPoint == NULL)
 	{
 		FreeLibrary(hdll);
 		return 23;
-	}
-	dfRemoveDoubleDataPoint = (vsidv64Dllfun)GetProcAddress(hdll, "RemoveDoubleDataPoint");
-	if (dfRemoveDoubleDataPoint == NULL)
-	{
-		FreeLibrary(hdll);
-		return 24;
 	}
 	dfAddViewInput = (vsiDllfun)GetProcAddress(hdll, "AddViewInput");
 	if (dfAddViewInput == NULL)
@@ -309,24 +287,24 @@ EXPORT void GetBit(char* name, int size, uint32_t* output)
 	dfGetBit(name, size, output);
 }
 
-EXPORT void GetWord(char* name, int size, uint16_t* output)
+EXPORT void GetWord(char* name, int size, uint32_t* output)
 {
 	dfGetWord(name, size, output);
 }
 
-EXPORT void GetDoubleWord(char* name, int size, uint32_t* output)
+EXPORT void GetDoubleWord(char* name, int size, uint64_t* output)
 {
 	dfGetDWord(name, size, output);
 }
 
-EXPORT void GetFloat(char* name, int size, float* output)
+EXPORT void GetFloat(char* name, int size, double* output)
 {
 	dfGetFloat(name, size, output);
 }
 
-EXPORT void GetDouble(char* name, int size, double* output)
+EXPORT void GetFeq(char* name, uint64_t* output)
 {
-	dfGetDouble(name, size, output);
+	dfGetFeq(name, output);
 }
 
 EXPORT void SetBit(char* name, int size, uint32_t* input)
@@ -334,24 +312,19 @@ EXPORT void SetBit(char* name, int size, uint32_t* input)
 	dfSetBit(name, size, input);
 }
 
-EXPORT void SetWord(char* name, int size, uint16_t* input)
+EXPORT void SetWord(char* name, int size, uint32_t* input)
 {
 	dfSetWord(name, size, input);
 }
 
-EXPORT void SetDoubleWord(char* name, int size, uint32_t* input)
+EXPORT void SetDoubleWord(char* name, int size, uint64_t* input)
 {
 	dfSetDWord(name, size, input);
 }
 
-EXPORT void SetFloat(char* name, int size, float* input)
+EXPORT void SetFloat(char* name, int size, double* input)
 {
 	dfSetFloat(name, size, input);
-}
-
-EXPORT void SetDouble(char* name, int size, double* input)
-{
-	dfSetDouble(name, size, input);
 }
 
 EXPORT void SetEnable(char* name, int size, int value)
@@ -369,24 +342,19 @@ EXPORT void AddBitDataPoint(char* name, int time, uint32_t value)
 	dfAddBitDataPoint(name, time, value);
 }
 
-EXPORT void AddWordDataPoint(char* name, int time, uint16_t value)
+EXPORT void AddWordDataPoint(char* name, int time, uint32_t value)
 {
 	dfAddWordDataPoint(name, time, value);
 }
 
-EXPORT void AddDoubleWordDataPoint(char* name, int time, uint32_t value)
+EXPORT void AddDoubleWordDataPoint(char* name, int time, uint64_t value)
 {
 	dfAddDWordDataPoint(name, time, value);
 }
 
-EXPORT void AddFloatDataPoint(char* name, int time, float value)
+EXPORT void AddFloatDataPoint(char* name, int time, double value)
 {
 	dfAddFloatDataPoint(name, time, value);
-}
-
-EXPORT void AddDoubleDataPoint(char* name, int time, double value)
-{
-	dfAddDoubleDataPoint(name, time, value);
 }
 
 EXPORT void RemoveBitDataPoint(char* name, int time, uint32_t value)
@@ -394,24 +362,19 @@ EXPORT void RemoveBitDataPoint(char* name, int time, uint32_t value)
 	dfRemoveBitDataPoint(name, time, value);
 }
 
-EXPORT void RemoveWordDataPoint(char* name, int time, uint16_t value)
+EXPORT void RemoveWordDataPoint(char* name, int time, uint32_t value)
 {
 	dfRemoveWordDataPoint(name, time, value);
 }
 
-EXPORT void RemoveDoubleWordDataPoint(char* name, int time, uint32_t value)
+EXPORT void RemoveDoubleWordDataPoint(char* name, int time, uint64_t value)
 {
 	dfRemoveDWordDataPoint(name, time, value);
 }
 
-EXPORT void RemoveFloatDataPoint(char* name, int time, float value)
+EXPORT void RemoveFloatDataPoint(char* name, int time, double value)
 {
 	dfRemoveFloatDataPoint(name, time, value);
-}
-
-EXPORT void RemoveDoubleDataPoint(char* name, int time, double value)
-{
-	dfRemoveDoubleDataPoint(name, time, value);
 }
 
 EXPORT void AddViewInput(char* name, int type)

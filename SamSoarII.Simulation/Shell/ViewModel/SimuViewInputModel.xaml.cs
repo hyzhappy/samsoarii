@@ -107,17 +107,18 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             Line line = null;
             //Rectangle rect = null;
             CenterCanvas.Children.Clear();
-            int i1, i2;
-            float f1, f2;
+            Int32 w1, w2;
+            Int64 d1, d2;
+            double f1, f2;
             switch (Inst)
             {
                 case "LDWEQ":
                     CenterTextBlock.Text = "W==";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 == i2)
+                    w1 = (Int32)(this[1].Value);
+                    w2 = (Int32)(this[2].Value);
+                    if (w1 == w2)
                     {
                         FillGreen();
                     }
@@ -126,9 +127,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "W<>";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 != i2)
+                    w1 = (Int32)(this[1].Value);
+                    w2 = (Int32)(this[2].Value);
+                    if (w1 != w2)
                     {
                         FillGreen();
                     }
@@ -137,9 +138,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "W>=";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 >= i2)
+                    w1 = (Int32)(this[1].Value);
+                    w2 = (Int32)(this[2].Value);
+                    if (w1 >= w2)
                     {
                         FillGreen();
                     }
@@ -148,9 +149,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "W<=";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 <= i2)
+                    w1 = (Int32)(this[1].Value);
+                    w2 = (Int32)(this[2].Value);
+                    if (w1 <= w2)
                     {
                         FillGreen();
                     }
@@ -159,9 +160,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "W>";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 > i2)
+                    w1 = (Int32)(this[1].Value);
+                    w2 = (Int32)(this[2].Value);
+                    if (w1 > w2)
                     {
                         FillGreen();
                     }
@@ -170,9 +171,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "W<";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 < i2)
+                    w1 = (Int32)(this[1].Value);
+                    w2 = (Int32)(this[2].Value);
+                    if (w1 < w2)
                     {
                         FillGreen();
                     }
@@ -181,9 +182,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "D==";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 == i2)
+                    d1 = (Int64)(this[1].Value);
+                    d2 = (Int64)(this[2].Value);
+                    if (d1 == d2)
                     {
                         FillGreen();
                     }
@@ -192,9 +193,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "D<>";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 != i2)
+                    d1 = (Int64)(this[1].Value);
+                    d2 = (Int64)(this[2].Value);
+                    if (d1 != d2)
                     {
                         FillGreen();
                     }
@@ -203,9 +204,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "D>=";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 >= i2)
+                    d1 = (Int64)(this[1].Value);
+                    d2 = (Int64)(this[2].Value);
+                    if (d1 >= d2)
                     {
                         FillGreen();
                     }
@@ -214,9 +215,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "D<=";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 <= i2)
+                    d1 = (Int64)(this[1].Value);
+                    d2 = (Int64)(this[2].Value);
+                    if (d1 <= d2)
                     {
                         FillGreen();
                     }
@@ -225,9 +226,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "D>";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 > i2)
+                    d1 = (Int64)(this[1].Value);
+                    d2 = (Int64)(this[2].Value);
+                    if (d1 > d2)
                     {
                         FillGreen();
                     }
@@ -236,9 +237,9 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "D<";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    i1 = (int)(this[1].Value);
-                    i2 = (int)(this[2].Value);
-                    if (i1 < i2)
+                    d1 = (Int64)(this[1].Value);
+                    d2 = (Int64)(this[2].Value);
+                    if (d1 < d2)
                     {
                         FillGreen();
                     }
@@ -247,8 +248,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "F==";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    f1 = (float)(this[1].Value);
-                    f2 = (float)(this[2].Value);
+                    f1 = (double)(this[1].Value);
+                    f2 = (double)(this[2].Value);
                     if (f1 == f2)
                     {
                         FillGreen();
@@ -258,8 +259,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "F<>";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    f1 = (float)(this[1].Value);
-                    f2 = (float)(this[2].Value);
+                    f1 = (double)(this[1].Value);
+                    f2 = (double)(this[2].Value);
                     if (f1 != f2)
                     {
                         FillGreen();
@@ -269,8 +270,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "F>=";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    f1 = (float)(this[1].Value);
-                    f2 = (float)(this[2].Value);
+                    f1 = (double)(this[1].Value);
+                    f2 = (double)(this[2].Value);
                     if (f1 >= f2)
                     {
                         FillGreen();
@@ -280,8 +281,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "F<=";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    f1 = (float)(this[1].Value);
-                    f2 = (float)(this[2].Value);
+                    f1 = (double)(this[1].Value);
+                    f2 = (double)(this[2].Value);
                     if (f1 <= f2)
                     {
                         FillGreen();
@@ -291,8 +292,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "F>";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    f1 = (float)(this[1].Value);
-                    f2 = (float)(this[2].Value);
+                    f1 = (double)(this[1].Value);
+                    f2 = (double)(this[2].Value);
                     if (f1 > f2)
                     {
                         FillGreen();
@@ -302,8 +303,8 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     CenterTextBlock.Text = "F<";
                     ValueTextBlock.Text = this[1].ToString();
                     Value2TextBlock.Text = this[2].ToString();
-                    f1 = (float)(this[1].Value);
-                    f2 = (float)(this[2].Value);
+                    f1 = (double)(this[1].Value);
+                    f2 = (double)(this[2].Value);
                     if (f1 < f2)
                     {
                         FillGreen();
@@ -311,13 +312,13 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     break;
                 default:
                     // 涂个-[绿]-表示当前值为1
-                    if ((int)(this[1].Value) == 1)
+                    if ((Int32)(this[1].Value) == 1)
                     {
                         FillGreen();
                     }
                     else
                     // 涂个-[红]-表示当前值非法
-                    if ((int)(this[1].Value) != 0)
+                    if ((Int32)(this[1].Value) != 0)
                     {
                         FillRed();
                     }
@@ -478,27 +479,17 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
-                    labels[0] = String.Format("{0:s}(Value1)", this[1].Name);
-                    labels[1] = String.Format("{0:s}(Value2)", this[2].Name);
-                    values[0] = String.Empty;
-                    values[1] = String.Empty;
-                    types[0] = this[1].Type;
-                    types[1] = this[2].Type;
-                    if (this[1].Islocked)
-                        values[0] = this[1].Value.ToString();
-                    if (this[2].Islocked)
-                        values[1] = this[2].Value.ToString();
+                    labels[0] = "IN1";
+                    labels[1] = "IN2";
+                    _SetDialogProperty(labels, values, types);
                     break;
-                // (Value)
+                // (IN)
                 default:
                     labels = new string[1];
                     values = new string[1];
                     types = new string[1];
-                    labels[0] = String.Format("{0:s}(Value)", this[1].Name);
-                    values[0] = String.Empty;
-                    types[0] = this[1].Type;
-                    if (this[1].Islocked)
-                        values[0] = this[1].Value.ToString();
+                    labels[0] = "IN";
+                    _SetDialogProperty(labels, values, types);
                     break;
             }
             dialog = new SimuArgsDialog(labels, values, types);

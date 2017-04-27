@@ -451,6 +451,19 @@ namespace SamSoarII.Simulation.Core
             UpdateStart();
         }
         /// <summary>
+        /// 修改变量的值
+        /// </summary>
+        /// <param name="svunit"></param>
+        public void Change(SimulateVariableUnit svunit)
+        {
+            if (svunit.Islocked)
+            {
+                svunit.Set(dllmodel);
+                svunit.Islocked = false;
+            }
+        }
+
+        /// <summary>
         /// 替换一个变量单元
         /// </summary>
         /// <param name="oldUnit">旧的变量单元</param>
@@ -527,6 +540,7 @@ namespace SamSoarII.Simulation.Core
             // 重启更新线程
             UpdateStart();
         }
+        
         /// <summary>
         /// 获得第一个符合参数条件的变量单元
         /// </summary>
@@ -632,7 +646,8 @@ namespace SamSoarII.Simulation.Core
             // 将锁定列表中的变量重设锁定
             foreach (SimulateVariableUnit _svunit in svllist)
             {
-                _svunit.Value = svunit.Value;
+                if (svunit.Type.Equals(_svunit.Type))
+                    _svunit.Value = svunit.Value;
                 _svunit.Islocked = true;
             }
             // 调用dll的锁定接口

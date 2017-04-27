@@ -115,6 +115,8 @@ namespace SamSoarII.Simulation.Core
         public const int LOADDLL_CANNOT_FOUND_AFTERRUNLADDER = 0x1E0000;
         /// <summary> LoadDll返回结果：没找到RunData的入口</summary>
         public const int LOADDLL_CANNOT_FOUND_RUNDATA = 0x1F0000;
+        /// <summary> LoadDll返回结果：没找到InitRunLadder的入口</summary>
+        public const int LOADDLL_CANNOT_FOUND_INITRUNLADDER = 0x200000;
 
         /// <summary>
         /// 动态库接口：读取工程dll
@@ -155,7 +157,7 @@ namespace SamSoarII.Simulation.Core
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            UInt32[] output
+            Int32[] output
         );
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace SamSoarII.Simulation.Core
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            UInt32[] output
+            Int32[] output
         );
         
         /// <summary>
@@ -187,7 +189,7 @@ namespace SamSoarII.Simulation.Core
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            UInt64[] output
+            Int64[] output
         );
         
         /// <summary>
@@ -205,6 +207,20 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPArray)]
             double[] output
         );
+
+        /// <summary>
+        /// 动态库接口：获取脉冲频率
+        /// </summary>
+        /// <param name="name">脉冲输出口</param>
+        /// <param name="output">写入结果的空间</param>
+        [DllImport("simu.dll", EntryPoint = "GetFeq")]
+        private static extern void GetFeq
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Int64[] output
+        );
         
         /// <summary>
         /// 动态库接口：写入位变量的值
@@ -219,7 +235,7 @@ namespace SamSoarII.Simulation.Core
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            UInt32[] input
+            Int32[] input
         );
         
         /// <summary>
@@ -235,7 +251,7 @@ namespace SamSoarII.Simulation.Core
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            UInt32[] input
+            Int32[] input
         );
 
         /// <summary>
@@ -251,7 +267,7 @@ namespace SamSoarII.Simulation.Core
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            UInt64[] input
+            Int64[] input
         );
 
         /// <summary>
@@ -305,7 +321,7 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int time,
-            UInt32 value
+            Int32 value
         );
         
         /// <summary>
@@ -320,7 +336,7 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int time,
-            UInt32 value
+            Int32 value
         );
         
         /// <summary>
@@ -335,7 +351,7 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int time,
-            UInt64 value
+            Int64 value
         );
         
         /// <summary>
@@ -365,7 +381,7 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int time,
-            UInt32 value
+            Int32 value
         );
 
         /// <summary>
@@ -380,7 +396,7 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int time,
-            UInt32 value
+            Int32 value
         );
 
         /// <summary>
@@ -395,7 +411,7 @@ namespace SamSoarII.Simulation.Core
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int time,
-            UInt64 value
+            Int64 value
         );
 
         /// <summary>
@@ -473,6 +489,12 @@ namespace SamSoarII.Simulation.Core
             string name,
             int type
         );
+
+        /// <summary>
+        /// 在开始仿真之前，需要做的初始化工作
+        /// </summary>
+        [DllImport("simu.dll", EntryPoint = "InitRunLadder")]
+        private static extern void InitRunLadder();
 
         /// <summary>
         /// 每运行一次仿真PLC之前，要运行的函数
@@ -582,6 +604,8 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         private void _SimulateThread()
         {
+            // 初始化
+            InitRunLadder();
             // 存活状态下运行循环
             while (simulateActive)
             {
@@ -688,31 +712,12 @@ namespace SamSoarII.Simulation.Core
         /// <param name="var">名称</param>
         /// <param name="size">长度</param>
         /// <returns>获取的值的数组</returns>
-        public int[] GetValue_Bit(string var, int size)
+        public Int32[] GetValue_Bit(string var, int size)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
-            int[] ret = new int[size];
-            UInt32[] _ret32;
-            switch (name)
-            {
-                // 基名称为位变量的名称
-                case "X": case "Y": case "M":case "C":case "T":case "S":
-                    // 调用dll函数，获得u32位整数的值
-                    _ret32 = new UInt32[size];
-                    GetBit(var, size, _ret32);
-                    // 类型转换并返回
-                    for (i = 0; i < size; i++)
-                        ret[i] = (int)(_ret32[i]);
-                    return ret;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            var = var.ToUpper();
+            Int32[] ret = new Int32[size];
+            GetBit(var, size, ret);
+            return ret;
         }
         
         /// <summary>
@@ -721,35 +726,12 @@ namespace SamSoarII.Simulation.Core
         /// <param name="var">名称</param>
         /// <param name="size">长度</param>
         /// <returns>获取的值的数组</returns>
-        public int[] GetValue_Word(string var, int size)
+        public Int32[] GetValue_Word(string var, int size)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
-            int[] ret = new int[size];
-            UInt32[] _ret32;
-            switch (name)
-            {
-                // 基名称为字变量的名称
-                case "D": case "TV": case "CV":
-                    // 基名称为CV时，注意CV后面存在双字变量
-                    if (name.Equals("CV") && addr >= 200)
-                    {
-                        throw new ArgumentException("{0:s} is DoubleWord.", var);
-                    }
-                    _ret32 = new UInt32[size];
-                    GetWord(var, size, _ret32);
-                    // 类型转换，注意还原符号位
-                    for (i = 0; i < size; i++)
-                        ret[i] = (int)((Int32)(_ret32[i]));
-                    return ret;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            var = var.ToUpper();
+            Int32[] ret = new Int32[size];
+            GetWord(var, size, ret);
+            return ret;
         }
         
         /// <summary>
@@ -758,33 +740,12 @@ namespace SamSoarII.Simulation.Core
         /// <param name="var">名称</param>
         /// <param name="size">长度</param>
         /// <returns>获取的值的数组</returns>
-        public long[] GetValue_DWord(string var, int size)
+        public Int64[] GetValue_DWord(string var, int size)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
-            long[] ret = new long[size];
-            UInt64[] _ret64;
-            switch (name)
-            {
-                // 基名称为双字变量的名称
-                case "D": case "CV":
-                    if (name.Equals("CV") && addr < 200)
-                    {
-                        throw new ArgumentException("{0:s} is Word.", var);
-                    }
-                    _ret64 = new UInt64[size];
-                    GetDoubleWord(var, size, _ret64);
-                    for (i = 0; i < size; i++)
-                        ret[i] = (long)((Int64)(_ret64[i]));
-                    return ret;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            var = var.ToUpper();
+            Int64[] ret = new Int64[size];
+            GetDoubleWord(var, size, ret);
+            return ret;
         }
         
         /// <summary>
@@ -795,23 +756,23 @@ namespace SamSoarII.Simulation.Core
         /// <returns>获取的值的数组</returns>
         public double[] GetValue_Float(string var, int size)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
+            var = var.ToUpper();
             double[] ret = new double[size];
-            switch (name)
-            {
-                // 基名称为浮点变量的名称
-                case "D":
-                    GetFloat(var, size, ret);
-                    return ret;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            GetFloat(var, size, ret);
+            return ret;
+        }
+
+        /// <summary>
+        /// 获取脉冲信号的频率
+        /// </summary>
+        /// <param name="var">脉冲输出口</param>
+        /// <returns></returns>
+        public Int64 GetFeq(string var)
+        {
+            var = var.ToUpper();
+            Int64[] ret = new Int64[1];
+            GetFeq(var, ret);
+            return ret[0];
         }
 
         /// <summary>
@@ -820,28 +781,10 @@ namespace SamSoarII.Simulation.Core
         /// <param name="var">名称</param>
         /// <param name="size">大小</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Bit(string var, int size, int[] input)
+        public void SetValue_Bit(string var, int size, Int32[] input)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
-            UInt32[] _ret32;
-            switch (name)
-            {
-                // 基名称为位变量的名称
-                case "X": case "Y": case "M": case "C": case "T": case "S":
-                    _ret32 = new UInt32[size];
-                    for (i = 0; i < size; i++)
-                        _ret32[i] = (UInt32)(input[i]);
-                    SetBit(var, size, _ret32);
-                    break;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            var = var.ToUpper();
+            SetBit(var, size, input);
         }
 
         /// <summary>
@@ -850,32 +793,10 @@ namespace SamSoarII.Simulation.Core
         /// <param name="var">名称</param>
         /// <param name="size">大小</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Word(string var, int size, int[] input)
+        public void SetValue_Word(string var, int size, Int32[] input)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
-            UInt32[] _ret32;
-            switch (name)
-            {
-                // 基名称为位变量的名称
-                case "D": case "TV": case "CV":
-                    if (name.Equals("CV") && addr >= 200)
-                    {
-                        throw new ArgumentException("{0:s} is DoubleWord.", var);
-                    }
-                    _ret32 = new UInt32[size];
-                    for (i = 0; i < size; i++)
-                        _ret32[i] = (UInt32)(input[i]);
-                    SetWord(var, size, _ret32);
-                    break;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            var = var.ToUpper();
+            SetWord(var, size, input);
         }
         
         /// <summary>
@@ -884,31 +805,10 @@ namespace SamSoarII.Simulation.Core
         /// <param name="var">名称</param>
         /// <param name="size">大小</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_DWord(string var, int size, long[] input)
+        public void SetValue_DWord(string var, int size, Int64[] input)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
-            UInt64[] _ret64;
-            switch (name)
-            {
-                case "D": case "CV":
-                    if (name.Equals("CV") && addr < 200)
-                    {
-                        throw new ArgumentException("{0:s} is Word.", var);
-                    }
-                    _ret64 = new UInt64[size];
-                    for (i = 0; i < size; i++)
-                        _ret64[i] = (UInt64)(input[i]);
-                    SetDoubleWord(var, size, _ret64);
-                    break;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            var = var.ToUpper();
+            SetDoubleWord(var, size, input);
         }
 
         /// <summary>
@@ -919,23 +819,10 @@ namespace SamSoarII.Simulation.Core
         /// <param name="input">输入的值</param>
         public void SetValue_Float(string var, int size, double[] input)
         {
-            // 找到第一个非字母的字符
-            int i = 0;
-            while (char.IsLetter(var[i])) i++;
-            // 获得基名称和偏移地址
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            // 设置返回的数组
-            switch (name)
-            {
-                case "D":
-                    SetFloat(var, size, input);
-                    break;
-                default:
-                    throw new ArgumentException("Unidentified variable {0:s}", var);
-            }
+            var = var.ToUpper();
+            SetFloat(var, size, input);
         }
-        
+   
         #endregion
 
         #region Lock Value
@@ -974,16 +861,16 @@ namespace SamSoarII.Simulation.Core
                 switch (sdmodel.Type)
                 {
                     case "BIT":
-                        AddBitDataPoint(sdmodel.Name, vs.TimeStart, (uint)((int)(vs.Value)));
+                        AddBitDataPoint(sdmodel.Name, vs.TimeStart, (Int32)(vs.Value));
                         break;
                     case "WORD":
-                        AddWordDataPoint(sdmodel.Name, vs.TimeStart, (UInt16)((int)(vs.Value)));
+                        AddWordDataPoint(sdmodel.Name, vs.TimeStart, (Int32)(vs.Value));
                         break;
                     case "DWORD":
-                        AddDWordDataPoint(sdmodel.Name, vs.TimeStart, (uint)((int)(vs.Value)));
+                        AddDWordDataPoint(sdmodel.Name, vs.TimeStart, (Int64)(vs.Value));
                         break;
                     case "FLOAT":
-                        AddFloatDataPoint(sdmodel.Name, vs.TimeStart, (float)(vs.Value));
+                        AddFloatDataPoint(sdmodel.Name, vs.TimeStart, (double)(vs.Value));
                         break;
                 }
             }

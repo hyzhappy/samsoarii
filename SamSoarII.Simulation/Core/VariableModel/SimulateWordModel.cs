@@ -1,7 +1,9 @@
-﻿using System;
+﻿using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -24,36 +26,20 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
         protected override bool _Check_Name(string _name)
         {
-            int i = 0;
-            while (char.IsLetter(_name[i])) i++;
-            string _base = _name.Substring(0, i);
-            int offset = 0;
             try
             {
-                offset = int.Parse(_name.Substring(i));
+                if (ValueParser.ParseWordValue(_name) != WordValue.Null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            catch (FormatException e)
+            catch (ValueParseException e)
             {
                 return false;
-            }
-            switch (_base)
-            {
-                case "K":
-                    return true;
-                case "D":
-                    if (offset < 0 || offset >= 8192)
-                        return false;
-                    return true;
-                case "CV":
-                    if (offset < 0 || offset >= 200)
-                        return false;
-                    return true;
-                case "TV":
-                    if (offset < 0 || offset >= 256)
-                        return false;
-                    return true;
-                default:
-                    return false;
             }
         }
         public override string ToString()
@@ -68,8 +54,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override void Update(SimulateDllModel dllmodel)
         {
-            int[] ivalues = dllmodel.GetValue_Word(Name, 1);
-            int value_old = value;
+            Int32[] ivalues = dllmodel.GetValue_Word(Name, 1);
+            Int32 value_old = value;
             this.value = ivalues[0];
             if (value_old != value)
             {
@@ -78,7 +64,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
         public override void Set(SimulateDllModel dllmodel)
         {
-            int[] ivalues = { this.value };
+            Int32[] ivalues = { this.value };
             dllmodel.SetValue_Word(Name, 1, ivalues);
         }
     }
@@ -102,6 +88,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     this.values[i] = new SimulateWordUnit();
                     this.values[i].Name = String.Format("{0:s}{1:d}", Base, Offset + i);
                     this.values[i].Value = 0;
+                    this.values[i].CanClose = false;
+                    this.values[i].CanLock = false;
                 }
             }
         }

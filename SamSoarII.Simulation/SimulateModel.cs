@@ -155,24 +155,7 @@ namespace SamSoarII.Simulation
                 return unit;
             }
             // 不存在则新建
-            switch (type)
-            {
-                case "BIT":
-                    unit = new SimulateBitUnit();
-                    break;
-                case "WORD":
-                    unit = new SimulateWordUnit();
-                    break;
-                case "DWORD":
-                    unit = new SimulateDWordUnit();
-                    break;
-                case "FLOAT":
-                    unit = new SimulateFloatUnit();
-                    break;
-                default:
-                    return unit;
-            }
-            unit.Name = name;
+            unit = SimulateVariableUnit.Create(name, type);
             // 注册到管理器中
             smanager.Add(unit);
             return unit;
@@ -191,19 +174,19 @@ namespace SamSoarII.Simulation
             {
                 case "BIT":
                     unit = new SimulateBitUnit();
-                    unit.Value = int.Parse(name.Substring(1));
+                    unit.Value = Int32.Parse(name.Substring(1));
                     break;
                 case "WORD":
                     unit = new SimulateWordUnit();
-                    unit.Value = int.Parse(name.Substring(1));
+                    unit.Value = Int32.Parse(name.Substring(1));
                     break;
                 case "DWORD":
                     unit = new SimulateDWordUnit();
-                    unit.Value = int.Parse(name.Substring(1));
+                    unit.Value = Int64.Parse(name.Substring(1));
                     break;
                 case "FLOAT":
                     unit = new SimulateFloatUnit();
-                    unit.Value = float.Parse(name.Substring(1));
+                    unit.Value = double.Parse(name.Substring(1));
                     break;
                 default:
                     return unit;
@@ -401,6 +384,16 @@ namespace SamSoarII.Simulation
         {
             smanager.Unlock(e.Old);
         }
+
+        /// <summary>
+        /// 监视变量单次修改时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void OnVariableUnitValueChanged(object sender, VariableUnitChangeEventArgs e)
+        {
+            smanager.Change(e.Old);
+        }
         /// <summary>
         /// 变量数据模型锁定时发生
         /// </summary>
@@ -584,6 +577,7 @@ namespace SamSoarII.Simulation
         {
             svbmodel.VariableUnitLocked += OnVariableUnitLocked;
             svbmodel.VariableUnitUnlocked += OnVariableUnitUnlocked;
+            svbmodel.VariableUnitValueChanged += OnVariableUnitValueChanged;
         }
         /// <summary>
         /// 显示主窗口，主窗口已经弃用，主要用来建立Route

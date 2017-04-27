@@ -135,31 +135,21 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             string[] types = null;
             switch (Inst)
             {
-                // (Value, Count)
+                // (OUT, CT)
                 case "SET": case "SETIM": case "RST": case "RSTIM":
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
-                    labels[0] = String.Format("{0:s}(Value)", this[1].Name);
-                    labels[1] = String.Format("{0:s}(Count)", this[2].Name);
-                    values[0] = String.Empty;
-                    values[1] = String.Empty;
-                    types[0] = this[1].Type;
-                    types[1] = this[2].Type;
-                    if (this[1].Islocked)
-                        values[0] = this[1].Value.ToString();
-                    if (this[2].Islocked)
-                        values[1] = this[2].Value.ToString();
+                    labels[0] = "OUT";
+                    labels[1] = "CT";
+                    _SetDialogProperty(labels, values, types);
                     break;
                 default:
                     labels = new string[1];
                     values = new string[1];
                     types = new string[1];
-                    values[0] = String.Empty;
-                    labels[0] = String.Format("{0:s}(Value)", this[1].Name);
-                    types[0] = this[1].Type;
-                    if (this[1].Islocked)
-                        values[0] = this[1].Value.ToString();
+                    labels[0] = "OUT";
+                    _SetDialogProperty(labels, values, types);
                     break;
             }
             dialog = new SimuArgsDialog(labels, values, types);

@@ -17,6 +17,7 @@ using System.Threading;
 
 using SamSoarII.Simulation.Core.Event;
 using SamSoarII.Simulation.Core.VariableModel;
+using Microsoft.Win32;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation.UI.Monitor
@@ -138,6 +139,13 @@ namespace SamSoarII.Simulation.UI.Monitor
                     Grid.SetRow(Button_Expand, id);
                 }
             }
+            /// <summary>
+            /// 变量元件
+            /// </summary>
+            public SimulateVariableUnit SVUnit
+            {
+                get { return this.svunit; }
+            }
 
             #region Focus
             /// <summary> 聚焦状态的标志常量：未被聚焦，处于自由状态</summary>
@@ -256,11 +264,11 @@ namespace SamSoarII.Simulation.UI.Monitor
                 Button_Expand = new MonitorExpandButton();
                 // 统一右键菜单
                 TextBox_Name.ContextMenu = parent.RightClickMenu;
-                ComboBox_Type.ContextMenu = parent.RightClickMenu;
+                //ComboBox_Type.ContextMenu = parent.RightClickMenu;
                 TextBox_Var.ContextMenu = parent.RightClickMenu;
                 TextBox_Value.ContextMenu = parent.RightClickMenu;
                 TextBox_Value.IsReadOnly = true;
-                Button_Value.ContextMenu = parent.RightClickMenu;
+                //Button_Value.ContextMenu = parent.RightClickMenu;
                 Button_Value.IsReadOnly = true;
                 // 订购事件
                 TextBox_Name.TextLegalChanged += OnTextLegalChanged;
@@ -411,6 +419,15 @@ namespace SamSoarII.Simulation.UI.Monitor
                 TextBox_Var.Visibility = Visibility.Visible;
                 ComboBox_Type.Visibility = Visibility.Visible;
                 currentRowDefinition.Height = new GridLength(24);
+                // 是否可以关闭
+                if (svunit.CanClose)
+                {
+                    Button_Close.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Button_Close.Visibility = Visibility.Hidden;
+                }
                 // 如果是变量组，只能展开不能锁定
                 if (svunit is SimulateUnitSeries)
                 {
@@ -429,10 +446,10 @@ namespace SamSoarII.Simulation.UI.Monitor
                 else
                 {
                     Button_Lock.IsLocked = svunit.Islocked;
-                    Button_Lock.Visibility = Visibility.Visible;
+                    Button_Lock.Visibility = (svunit.CanLock ? Visibility.Visible : Visibility.Hidden);
                     Button_Expand.Visibility = Visibility.Hidden;
                     // 如果是位变量，显示值开关按钮
-                    if (svunit is SimulateBitUnit)
+                    if (svunit.Type.Equals("BIT"))
                     {
                         TextBox_Value.Visibility = Visibility.Hidden;
                         Button_Value.Visibility = Visibility.Visible;
@@ -500,7 +517,12 @@ namespace SamSoarII.Simulation.UI.Monitor
             /// 当要在这个元素后添加一个新元素时，触发这个代理
             /// </summary>
             public event RoutedEventHandler InsertRowElementAfterHere = delegate { };
-            
+
+            /// <summary>
+            /// 当要更改当前变量的别名时，触发这个代理
+            /// </summary>
+            public event VariableUnitChangeEventHandler VariableUnitRenamed = delegate { };
+
             /// <summary>
             /// 当输入框的文本更改时发生
             /// </summary>
@@ -556,18 +578,22 @@ namespace SamSoarII.Simulation.UI.Monitor
                 if (sender == TextBox_Value && Button_Lock.IsLocked)
                 {
                     // 修改值
-                    if (svunit is SimulateFloatUnit)
+                    switch (svunit.Type)
                     {
-                        svunit.Value = float.Parse(TextBox_Value.Text);
-                        _e.New = svunit;
-                        VariableUnitLocked(this, _e);
+                        case "WORD":
+                            svunit.Value = Int32.Parse(TextBox_Value.Text);
+                            break;
+                        case "DWORD":
+                            svunit.Value = Int64.Parse(TextBox_Value.Text);
+                            break;
+                        case "FLOAT":
+                            svunit.Value = double.Parse(TextBox_Value.Text);
+                            break;
+                        default:
+                            throw new ArgumentException(String.Format("Unsupported variable type {0:s} for lock input", svunit.Type));
                     }
-                    else
-                    {
-                        svunit.Value = int.Parse(TextBox_Value.Text);
-                        _e.New = svunit;
-                        VariableUnitLocked(this, _e);
-                    }
+                    _e.New = svunit;
+                    VariableUnitLocked(this, _e);    
                     return;
                 }
                 // 新的变量
@@ -597,32 +623,28 @@ namespace SamSoarII.Simulation.UI.Monitor
                     // 设为合法颜色
                     TextBox_Name.Background = Brushes.White;
                 }
-                // 剩下的发送源默认是类型选择框，如果不是也可替换为现类型
+                // 修改的是别名
+                else if (sender == TextBox_Var)
+                {
+                    _svunit = svunit;
+                    _svunit.Var = TextBox_Var.Text;
+                    _e.New = _svunit;
+                    //Setup(_svunit);
+                    VariableUnitRenamed(this, _e);
+                    return;
+                }
+                // 剩下的发送源默认是类型选择框
                 else
                 {
-                    switch (ComboBox_Type.Text)
+                    _svunit = SimulateVariableUnit.Create(
+                        TextBox_Name.Text,
+                        ComboBox_Type.Text);
+                    if (_svunit == null)
                     {
-                        case "BIT":
-                            _svunit = new SimulateBitUnit();
-                            break;
-                        case "WORD":
-                            _svunit = new SimulateWordUnit();
-                            break;
-                        case "DWORD":
-                            _svunit = new SimulateDWordUnit();
-                            break;
-                        case "FLOAT":
-                            _svunit = new SimulateFloatUnit();
-                            break;
-                        default:
-                            return;
+                        return;
                     }
                 }
-                // 对新变量设置属性，安装并发送事件
-                _svunit.Name = TextBox_Name.Text;
-                //_svunit.Type = ComboBox_Type;
-                _svunit.Var = TextBox_Var.Text;
-                //_svunit.Value = TextBox_Value.Text;
+                // 对新变量安装并发送事件
                 _e.New = _svunit;
                 Setup(_svunit); 
                 VariableUnitChanged(this, _e);
@@ -1041,6 +1063,21 @@ namespace SamSoarII.Simulation.UI.Monitor
             {
                 node.SetAttributeValue("Inherited", "SimulateFloatUnit");
             }
+            if (svunit is SimulatePulseUnit)
+            {
+                node.SetAttributeValue("Inherited", "SimulatePulseUnit");
+            }
+            if (svunit is SimulateSpecialUnit)
+            {
+                SimulateSpecialUnit ssunit = (SimulateSpecialUnit)(svunit);
+                node.SetAttributeValue("Inherited", "SimulateSpecialUnit");
+                node.SetAttributeValue("CanRead", ssunit.CanRead);
+                node.SetAttributeValue("CanWrite", ssunit.CanWrite);
+                XElement _node = new XElement("Prototype");
+                SaveSVUnit(_node, ((SimulateSpecialUnit)(svunit)).Prototype);
+                node.Add(_node);
+                return;
+            }
             if (svunit is SimulateVInputUnit)
             {
                 node.SetAttributeValue("Inherited", "SimulateVInputUnit");
@@ -1103,6 +1140,13 @@ namespace SamSoarII.Simulation.UI.Monitor
                 case "SimulateFloatUnit":
                     ret = new SimulateFloatUnit();
                     break;
+                case "SimulateSpecialUnit":
+                    bool canread = bool.Parse(node.Attribute("CanRead").Value);
+                    bool canwrite = bool.Parse(node.Attribute("CanWrite").Value);
+                    ret = new SimulateSpecialUnit(
+                        LoadSVUnit(node.Element("Prototype")),
+                        canread, canwrite);
+                    return ret;
                 // 输入类型直接返回
                 case "SimulateVInputUnit":
                     ret = new SimulateVInputUnit();
@@ -1209,7 +1253,7 @@ namespace SamSoarII.Simulation.UI.Monitor
         /// <summary>
         /// 当变量组扩展时，触发这个代理
         /// </summary>
-        public event RoutedEventHandler VariableUnitExpanded;
+        public event RoutedEventHandler VariableUnitExpanded = delegate { };
 
         /// <summary>
         /// 当替换变量时发生
@@ -1373,6 +1417,68 @@ namespace SamSoarII.Simulation.UI.Monitor
             }
         }
         
+        /// <summary>
+        /// 当改变进制表示时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void OnVariableUnitBase(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+            {
+                MenuItem mitem = (MenuItem)(sender);
+                if (mitem.Parent is ContextMenu)
+                {
+                    ContextMenu cmenu = (ContextMenu)(mitem.Parent);
+                    if (cmenu.PlacementTarget is MonitorTextBox)
+                    {
+                        MonitorTextBox mtbox = (MonitorTextBox)(cmenu.PlacementTarget);
+                        switch (mitem.Header.ToString())
+                        {
+                            case "十进制":
+                                mtbox.Type = (mtbox.Type & 0x0f) | MonitorTextBox.BASE_10;
+                                break;
+                            case "十六进制":
+                                mtbox.Type = (mtbox.Type & 0x0f) | MonitorTextBox.BASE_16;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 当要保存监视表格时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnTableSave(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfdialog = new SaveFileDialog();
+            sfdialog.Title = "保存监视表格文件";
+            sfdialog.Filter = "ssm文件|*.ssm";
+            if (sfdialog.ShowDialog() == true)
+            {
+                Save(sfdialog.FileName);
+            }
+        }
+
+        /// <summary>
+        /// 当要读取监视表格时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnTableLoad(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofdialog = new OpenFileDialog();
+            ofdialog.Title = "打开监视表格文件";
+            ofdialog.Filter = "ssm文件|*.ssm";
+            if (ofdialog.ShowDialog() == true)
+            {
+                Load(ofdialog.FileName);
+            }
+        }
+
         #endregion
     }
 }

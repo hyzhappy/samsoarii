@@ -28,7 +28,7 @@ namespace SamSoarII.Simulation.UI.Monitor
     public class MonitorTextBox : TextBox
     {
         #region Numbers & Numbers Interface
-
+        
         #region Simulate Variable Unit
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                     SetText();
                 }
             }
-            protected get
+            get
             {
                 return this.svunit;
             }
@@ -74,6 +74,11 @@ namespace SamSoarII.Simulation.UI.Monitor
         public const int TYPE_VAR = 0x03;
         /// <summary> 类型标志：数值</summary>
         public const int TYPE_VALUE = 0x04;
+        /// <summary> 显示标志：10进制显示</summary>
+        public const int BASE_10 = 0x00;
+        /// <summary> 显示标志：16进制显示</summary>
+        public const int BASE_16 = 0x10;
+
         /// <summary>
         /// 类型
         /// </summary>
@@ -90,6 +95,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             set
             {
                 this.type = value;
+                OnValueChanged(this, new RoutedEventArgs());
             }
         }
         #endregion
@@ -120,7 +126,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             // 根据变量和类型设置文本
             this.Dispatcher.Invoke(() =>
             {
-                switch (Type)
+                switch (Type & 0x0f)
                 {
                     case TYPE_NAME:
                         if (Text == null || !Text.Equals(svunit.Name))
@@ -136,7 +142,28 @@ namespace SamSoarII.Simulation.UI.Monitor
                         break;
                     case TYPE_VALUE:
                         if (Text == null || !Text.Equals(svunit.Value.ToString()))
-                            Text = svunit.Value.ToString();
+                        {
+                            switch (Type & 0xf0)
+                            {
+                                case BASE_10:
+                                    Text = SVUnit.Value.ToString();
+                                    break;
+                                case BASE_16:
+                                    switch (SVUnit.Type)
+                                    {
+                                        case "WORD":
+                                            Text = String.Format("{0:X8}", Int32.Parse(SVUnit.Value.ToString()));
+                                            break;
+                                        case "DWORD":
+                                            Text = String.Format("{0:X16}", Int64.Parse(SVUnit.Value.ToString()));
+                                            break;
+                                        default:
+                                            Text = SVUnit.Value.ToString();
+                                            break;
+                                    }
+                                    break;
+                            }
+                        }
                         break;
                     default:
                         Text = String.Empty;
@@ -176,7 +203,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 // 多个变量，即变量组的名称（D[0..100]）
                 Match m2 = Regex.Match(Text, @"^\w+\[\d+\.\.\d+\]$");
                 // 根据类型来判断
-                switch (type)
+                switch (type&0X0f)
                 {
                     // 检查名称是否合法
                     case TYPE_NAME:
@@ -203,34 +230,24 @@ namespace SamSoarII.Simulation.UI.Monitor
                                 if (!Regex.Match(Text, @"^[01]$").Success)
                                     return;
                                 // 合法时修改值
-                                svunit.Value = int.Parse(Text);
+                                svunit.Value = Int32.Parse(Text);
                                 break;
                             // 类型为字（WORD）
                             case "WORD":
                                 // 只有整数才合法
                                 if (!Regex.Match(Text, @"^\d+$").Success)
                                     return;
-                                svunit.Value = int.Parse(Text);
-                                // 如果超过16位范围则非法
-                                if (((int)(svunit.Value) >> 16) != 0)
-                                    return;
+                                svunit.Value = Int32.Parse(Text);
                                 break;
                             // 类型为双字（DWORD）
                             case "DWORD":
                                 // 只有整数才合法
                                 if (!Regex.Match(Text, @"^\d+$").Success)
                                     return;
-                                svunit.Value = int.Parse(Text);
+                                svunit.Value = Int64.Parse(Text);
                                 // 双字在int范围内，所以无需检查范围
                                 break;
                             case "FLOAT":
-                                // 只有整数和浮点才合法
-                                if (!Regex.Match(Text, @"^\d+(\.\d+)?$").Success)
-                                    return;
-                                // 能转换即合法
-                                svunit.Value = float.Parse(Text);
-                                break;
-                            case "DOUBLE":
                                 // 只有整数和浮点才合法
                                 if (!Regex.Match(Text, @"^\d+(\.\d+)?$").Success)
                                     return;
@@ -304,7 +321,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             {
                 // 键入Enter时
                 case Key.Enter:
-                    switch (Type)
+                    switch (Type&0x0f)
                     {
                         // 名称框向后新建新的变量
                         case TYPE_NAME:
@@ -348,7 +365,7 @@ namespace SamSoarII.Simulation.UI.Monitor
         /// <param name="e">事件</param>
         private void OnValueChanged(object sender, RoutedEventArgs e)
         {
-            switch (Type)
+            switch (Type&0x0f)
             {
                 case TYPE_VALUE:
                     SetText();
@@ -363,7 +380,7 @@ namespace SamSoarII.Simulation.UI.Monitor
         /// <param name="e">事件</param>
         private void OnLockChanged(object sender, RoutedEventArgs e)
         {
-            switch (Type)
+            switch (Type&0x0f)
             {
                 case TYPE_VALUE:
                     IsReadOnly = (!SVUnit.Islocked);

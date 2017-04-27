@@ -42,28 +42,11 @@ namespace SamSoarII.Simulation.UI.Monitor
                     {
                         return;
                     }
-                    if (svunit.Name[0] == 'D')
+                    if (svunit.Name[0] == 'D' && !(svunit is SimulateSpecialUnit))
                     {
                         Items.Add("WORD");
                         Items.Add("DWORD");
                         Items.Add("FLOAT");
-                        Items.Add("DOUBLE");
-                        if (svunit is SimulateBitUnit)
-                        {
-                            throw new FormatException();
-                        }
-                        if (svunit is SimulateWordUnit)
-                        {
-                            Text = "WORD";
-                        }
-                        if (svunit is SimulateDWordUnit)
-                        {
-                            Text = "DWORD";
-                        }
-                        if (svunit is SimulateFloatUnit)
-                        {
-                            Text = "FLOAT";
-                        }
                         if (svunit is SimulateUnitSeries)
                         {
                             SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
@@ -81,10 +64,11 @@ namespace SamSoarII.Simulation.UI.Monitor
                                 case "FLOAT":
                                     Text = "FLOAT";
                                     break;
-                                case "DOUBLE":
-                                    Text = "DOUBLE";
-                                    break;
                             }
+                        }
+                        else
+                        {
+                            Text = svunit.Type;
                         }
                     }
                     else
@@ -92,49 +76,19 @@ namespace SamSoarII.Simulation.UI.Monitor
                         if (svunit is SimulateUnitSeries)
                         {
                             SimulateUnitSeries ssunit = (SimulateUnitSeries)(svunit);
-                            switch (ssunit.DataType)
+                            Items.Add(ssunit.DataType);
+                            Text = ssunit.DataType;
+                        }
+                        else
+                        {
+                            Items.Add(svunit.Type);
+                            Text = svunit.Type;
+                            switch (svunit.Name)
                             {
-                                case "BIT":
-                                    Items.Add("BIT");
-                                    Text = "BIT";
-                                    break;
-                                case "WORD":
-                                    Items.Add("WORD");
-                                    Text = "WORD";
-                                    break;
-                                case "DWORD":
-                                    Items.Add("DWORD");
-                                    Text = "DWORD";
-                                    break;
-                                case "FLOAT":
-                                    Items.Add("FLOAT");
-                                    Text = "FLOAT";
-                                    break;
-                                case "DOUBLE":
-                                    Items.Add("DOUBLE");
-                                    Text = "DOUBLE";
+                                case "Y0": case "Y1": case "Y2": case "Y3":
+                                    Items.Add("PULSE");
                                     break;
                             }
-                        }
-                        if (svunit is SimulateBitUnit)
-                        {
-                            Items.Add("BIT");
-                            Text = "BIT";
-                        }
-                        if (svunit is SimulateWordUnit)
-                        {
-                            Items.Add("WORD");
-                            Text = "WORD";
-                        }
-                        if (svunit is SimulateDWordUnit)
-                        {
-                            Items.Add("DWORD");
-                            Text = "DWORD";
-                        }
-                        if (svunit is SimulateFloatUnit)
-                        {
-                            Items.Add("FLOAT");
-                            Text = "FLOAT";
                         }
                     }
                 });

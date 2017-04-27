@@ -56,7 +56,9 @@
     <Compile Include="Core\Global\GlobalSetting.cs" />
     <Compile Include="Core\SimulateDllModel.cs" />
     <Compile Include="Core\SimulateManager.cs" />
+    <Compile Include="Core\VariableModel\SimulatePulseModel.cs" />
     <Compile Include="Core\VariableModel\SimulateSpecialModel.cs" />
+    <Compile Include="Core\VariableModel\SimulateStringUnit.cs" />
     <Compile Include="Core\VariableModel\SimulateUnitSeries.cs" />
     <Compile Include="Core\VariableModel\SimulateVariableModel.cs" />
     <Compile Include="Core\VariableModel\SimulateDWordModel.cs" />
@@ -193,6 +195,10 @@
     <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
       <Project>{AAFB923A-B366-4D7D-AB40-81F7D71A1F30}</Project>
       <Name>SamSoarII.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.ValueModel\SamSoarII.ValueModel.csproj">
+      <Project>{5357953A-ADC8-40EE-A685-3165F1BE99CC}</Project>
+      <Name>SamSoarII.ValueModel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

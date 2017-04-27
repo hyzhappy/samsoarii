@@ -470,6 +470,7 @@ namespace SamSoarII.Simulation.UI
                 e.Handled = true;
             }
         }
+
         private void OnLadderDiagramMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
