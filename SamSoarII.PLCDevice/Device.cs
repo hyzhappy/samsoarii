@@ -13,6 +13,7 @@ namespace SamSoarII.PLCDevice
         private static BroadDevice _defaultDevice = new BroadDevice();
         public static Device DefaultDevice { get { return _defaultDevice; } }
         
+        public abstract int BitNumber { get; }
         public abstract IntRange XRange { get; }
         public abstract IntRange YRange { get; }
         public abstract IntRange MRange { get; }

@@ -195,7 +195,6 @@ namespace SamSoarII.AppMain.Project
                         dialog.Title = "表格重命名";
                         break;
                 }
-
             }
         }
         
@@ -246,7 +245,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if (dialog == null)
                 {
-                    dialog = new ModbusTableDialog();
+                    InitializeDialog();
                     DialogType = DIALOG_CREATE;
                     dialog.TB_Name.Text = String.Empty;
                     dialog.TB_Comment.Text = String.Empty;

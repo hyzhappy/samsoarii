@@ -32,7 +32,7 @@ namespace SamSoarII.PLCCOM.USB
         );
 
         [DllImport("plcusb.dll", EntryPoint = "read")]
-        static extern private void USB_Read
+        static extern public int USB_Read
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -41,14 +41,115 @@ namespace SamSoarII.PLCCOM.USB
             char[] input
         );
 
+        [DllImport("plcusb.dll", EntryPoint = "read16")]
+        static extern public int USB_Read16
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            UInt16[] input
+        );
+        
+        [DllImport("plcusb.dll", EntryPoint = "read32")]
+        static extern public int USB_Read32
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            UInt32[] input
+        );
+
+        [DllImport("plcusb.dll", EntryPoint = "read64")]
+        static extern public int USB_Read64
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            UInt64[] input
+        );
+
+        [DllImport("plcusb.dll", EntryPoint = "read32f")]
+        static extern public int USB_Read32f
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            float[] input
+        );
+
+        [DllImport("plcusb.dll", EntryPoint = "read64f")]
+        static extern public int USB_Read64f
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            double[] input
+        );
+
         [DllImport("plcusb.dll", EntryPoint = "write")]
-        static extern private void USB_Write
+        static extern public int USB_Write
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int length,
             [MarshalAs(UnmanagedType.LPArray)]
             char[] output
+        );
+
+
+        [DllImport("plcusb.dll", EntryPoint = "write16")]
+        static extern public int USB_Write16
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            UInt16[] output
+        );
+
+        [DllImport("plcusb.dll", EntryPoint = "write32")]
+        static extern public int USB_Write32
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            UInt32[] output
+        );
+
+        [DllImport("plcusb.dll", EntryPoint = "write64")]
+        static extern public int USB_Write64
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            UInt64[] output
+        );
+
+        [DllImport("plcusb.dll", EntryPoint = "write32f")]
+        static extern public int USB_Write32f
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            float[] output
+        );
+
+        [DllImport("plcusb.dll", EntryPoint = "write64f")]
+        static extern public int USB_Write64f
+        (
+            [MarshalAs(UnmanagedType.LPStr)]
+            string name,
+            int length,
+            [MarshalAs(UnmanagedType.LPArray)]
+            double[] output
         );
 
         [DllImport("plcusb.dll", EntryPoint = "download")]

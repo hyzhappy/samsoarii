@@ -14,6 +14,14 @@ namespace SamSoarII.PLCDevice
         {
             _type = type;
         }
+
+        public override int BitNumber
+        {
+            get
+            {
+                return 16;
+            }
+        }
         public override IntRange AIRange
         {
             get

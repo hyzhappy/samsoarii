@@ -22,6 +22,7 @@ namespace SamSoarII.AppMain
     {
         public App()
         {
+            SpecialValueManager.Initialize();
             ValueCommentManager.Initialize();
             VariableManager.Initialize();
             ValueAliasManager.Initialize();
@@ -32,6 +33,11 @@ namespace SamSoarII.AppMain
             GlobalSetting.Load();
             SettingManager.Load();
             SimulateHelper.LoadGlobalSetting();
+            foreach (SpecialValue svalue in SpecialValueManager.Values)
+            {
+                ValueCommentManager.UpdateComment(svalue.Name, svalue.Describe);
+                ValueAliasManager.UpdateAlias(svalue.Name, svalue.NickName);
+            }
             this.Exit += App_Exit;
         }
 

@@ -174,17 +174,19 @@ EXPORT int transfer(uint8_t* data, int len)
 	}
 	int retrycount = 0;		/* Retry count */
 	int pipe;				/* Pipe number */
-	int transferred;		/* transferred size of sent data*/
-	uint8_t endpoint = 0xFF;
-	do
+	int transferred;		/* Transferred size of sent data*/
+	uint8_t endpoint = 0;	/* Endpoint */
+	do /* Start of transfer loop */
 	{
 		pipe = libusb_bulk_transfer(handle, endpoint, data, len, &transferred, TIMEOUT);
+		// Clear the endpoint halt
 		if (pipe == LIBUSB_ERROR_PIPE)
 		{
 			libusb_clear_halt(handle, endpoint);
 		}
 	}
 	while ((pipe == LIBUSB_ERROR_PIPE) && (++retrycount <= RETRY_MAX));
+	// Retry it over the maxinum? 
 	if (retrycount > RETRY_MAX)
 	{
 		return CANNOT_TRANSFER;
@@ -542,15 +544,22 @@ int _get_crc
 	uint8_t*	high
 )
 {
+	// Make sure that ((crct<<2)+crc)%crcp == 0
 	int crct = 0;
 	int crcp = 60000;
 	int i = 0;
+	// Calculate (crct<<2)
 	for (i = 0 ; i < length; i++)
 	{
 		crct <<= 8;
 		crct += data[i];
 		crct %= crcp;
 	}
+	crct <<= 8;
+	crct %= data[i];
+	crct <<= 8;
+	crct %= data[i];
+	// Calculate crc and return
 	return crct == 0 ? 0 : (crcp - crct);
 }
 
@@ -576,75 +585,92 @@ int _read
 	uint8_t*	vz_input
 )
 {
-	uint16_t div_length = 0;
-	uint8_t* rpt = NULL;
-	uint32_t rpt_length = 0;
-	
+	uint16_t div_length = 0; 		/* The left halt length if it is normal read command and divide the data into couple of parts */
+	uint8_t* rpt 		= NULL;	 	/* Report pointer */
+	uint32_t rpt_length = 0; 		/* Report data length */
+	// vz_type is not 0, means V/Z command 
 	if (vz_type)
 	{
+		// out of length limit?
 		if (length >= 256) 
 		{
 			return OUT_OF_LENGTH_LIMIT;
 		}
+		// set the read command struct
 		rcmd2->plc_port = 0x01;
 		rcmd2->command = FGS_READ;
 		rcmd2->address_type = ADDRESS_VZ;
+		// data package 1 (normal)
 		rcmd2->data1.address_base = address_type;
-		rcmd2->data1.length = length / _get_unit_length(address_type);
-		rcmd2->data1.offset_low = offset & 0xff;
+		rcmd2->data1.length = length / _get_unit_length(address_type);		/* notice that it is register count length */
+		rcmd2->data1.offset_low = offset & 0xff;							
 		rcmd2->data1.offset_high = (offset >> 8) & 0xff;
+		// data package 2 (vz)
 		rcmd2->data2.address_base = vz_type;
 		rcmd2->data2.offset_low = vz_offset & 0xff;
+		// get CRC code
 		_get_crc((uint8_t*)rcmd2, sizeof(struct read_command2) - 2,
 			&(rcmd2->crc_low), &(rcmd2->crc_high));
-		
+		// send the command
 		if (transfer((uint8_t*)rcmd2, sizeof(struct read_command2)))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
+		// receive the report
 		if (transfer((uint8_t*)rrpt2, sizeof(_rrpt2)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
+		// get the address type, which is FGs info code?
 		if (rrpt2->address_type != ADDRESS_VZ)
 		{
 			return ERROR_RECV_REPORT | ((int)(rrpt2->address_type) << 8);
 		}
+		// get the read report and data values inside of it. 
 		else
 		{
+			// seek it to the end of report header
 			rpt = (uint8_t*)rrpt2;
 			rpt += sizeof(struct read_report2);
+			// get the data length (per byte) and write
 			rpt_length = _get_unit_length(*rpt++);
 			rpt_length *= *rpt++;
 			memcpy(*input, rpt, rpt_length);
+			// move the input stream and report stream next
 			*input += rpt_length;
 			rpt += rpt_length;
+			// write the vz data
 			rpt_length = _get_unit_length(*rpt++);
 			memcpy(vz_input, rpt, rpt_length);
 			rpt += rpt_length;
 		}
 	}
+	// normal read command
 	else
 	{
 		if (length >= 511)
 		{
 			return OUT_OF_LENGTH_LIMIT;
 		}
+		// Calculate the divide length
 		div_length = length / (_get_unit_length(address_type) * 2);
-		rcmd1->plc_port = 0x00;
+		rcmd1->plc_port = 0x01;
 		rcmd1->command = FGS_READ;
-		rcmd1->address_type = ADDRESS_VZ;
+		rcmd1->address_type = ADDRESS_NORMAL;
+		// data package 1
 		rcmd1->data1.address_base = address_type;
 		rcmd1->data1.length = div_length;
 		rcmd1->data1.offset_low = offset & 0xff;
 		rcmd1->data1.offset_high = (offset >> 8) & 0xff;
+		// data package 2
 		rcmd1->data2.address_base = address_type;
 		rcmd1->data2.length = (length / _get_unit_length(address_type)) - div_length;
 		rcmd1->data2.offset_low = (offset + div_length) & 0xff;
 		rcmd1->data2.offset_high = ((offset + div_length) >> 8) & 0xff;
+		// get CRC code
 		_get_crc((uint8_t*)rcmd2, sizeof(struct read_command1) - 2,
 			&(rcmd1->crc_low), &(rcmd1->crc_high));
-			
+		// send the command, receive the report, get the info code
 		if (transfer((uint8_t*)rcmd1, sizeof(struct read_command1)))
 		{
 			return CANNOT_SEND_COMMAND;
@@ -659,13 +685,16 @@ int _read
 		}
 		else
 		{
+			// move to data zone
 			rpt = (uint8_t*)rrpt1;
 			rpt += sizeof(struct read_report1);
+			// read left part
 			rpt_length = _get_unit_length(*rpt++);
 			rpt_length *= *rpt++;
 			memcpy(*input, rpt, rpt_length);
 			*input += rpt_length;
 			rpt += rpt_length;
+			// read right part
 			rpt_length = _get_unit_length(*rpt++);
 			rpt_length *= *rpt++;
 			memcpy(*input, rpt, rpt_length);
@@ -698,37 +727,42 @@ int _write
 	uint8_t* 	vz_output
 )
 {
-	uint16_t div_length = 0;
-	uint8_t* cmd = NULL;
-	uint8_t cmd_length = 0;
-	
+	uint16_t 	div_length 	= 0; 		/* The left halt length if it is normal read command and divide the data into couple of parts */
+	uint8_t* 	cmd 	  	= NULL;	 	/* Report pointer */
+	uint8_t 	cmd_length 	= 0; 		/* Report data length */
+	// vz_type is not 0, means V/Z command 
 	if (vz_type)
 	{
+		// out of length limit?
 		if (length >= 256) 
 		{
 			return OUT_OF_LENGTH_LIMIT;
 		}
+		// set the write command
 		wcmd2->plc_port = 0x01;
 		wcmd2->command = FGS_WRITE;
 		wcmd2->address_type = ADDRESS_VZ;
+		// move to data zone
 		cmd = (uint8_t*)wcmd1;
 		cmd += sizeof(struct write_command2);
+		// data package 1
 		*cmd++ = vz_type;
 		*cmd++ = vz_offset;
+		// data package 2
 		*cmd++ = address_type;
 		*cmd++ = length / _get_unit_length(address_type);
-		cmd_length = length;
 		*cmd++ = offset & 0xff;
 		*cmd++ = (offset >> 8) & 0xff;
+		cmd_length = length;
 		memcpy(cmd, *output, cmd_length);
 		*output += cmd_length;
 		cmd += cmd_length;
-		
+		// the length of whole command struct
 		cmd_length = (int)cmd - (int)wcmd2;
-		_get_crc((uint8_t*)wcmd2, cmd_length,
-			cmd, cmd+1);
+		// get CRC code
+		_get_crc((uint8_t*)wcmd2, cmd_length, cmd, cmd+1);
 		cmd_length += 2;
-		
+		// USB transfer
 		if (transfer((uint8_t*)wcmd2, cmd_length))
 		{
 			return CANNOT_SEND_COMMAND;
@@ -744,6 +778,7 @@ int _write
 	}
 	else
 	{
+		// out of limit?
 		if (length >= 511)
 		{
 			return OUT_OF_LENGTH_LIMIT;
@@ -752,9 +787,10 @@ int _write
 		wcmd1->plc_port = 0x00;
 		wcmd1->command = FGS_WRITE;
 		wcmd1->address_type = ADDRESS_NORMAL;
+		// move to data zone
 		cmd = (uint8_t*)wcmd1;
 		cmd += sizeof(struct write_command1);
-		
+		// data package 1
 		*cmd = address_type;
 		cmd_length = _get_unit_length(*cmd++);
 		*cmd++ = div_length;
@@ -764,7 +800,7 @@ int _write
 		memcpy(cmd, *output, cmd_length);
 		*output += cmd_length;
 		cmd += cmd_length;
-		
+		// data package 2
 		*cmd = address_type;
 		*cmd++ = length / _get_unit_length(address_type) - div_length;
 		*cmd++ = (offset + div_length) & 0xff;
@@ -773,12 +809,12 @@ int _write
 		memcpy(cmd, *output, cmd_length);
 		*output += cmd_length;
 		cmd += cmd_length;
-		
+		// get SRC code
 		cmd_length = (int)cmd - (int)wcmd1;
 		_get_crc((uint8_t*)wcmd1, cmd_length,
 			cmd, cmd+1);
 		cmd_length += 2;
-		
+		// USB transfers
 		if (transfer((uint8_t*)wcmd1, cmd_length))
 		{
 			return CANNOT_SEND_COMMAND;
@@ -825,17 +861,19 @@ static uint8_t _vz_value = 0;
  *
  * \param 	name	Register name
  * \param	length	Data length
- */ 
+ */
 void _analysis_name
 (
 	char* 	name,
 	int 	length
 )
 {
+	// first char of string name
 	switch (name[0])
 	{
 	case 'X':
 		_address_type = ADDRESS_TYPE_X;
+		// move to offset and v/z
 		name += 1;
 		break;
 	case 'Y':
@@ -851,6 +889,7 @@ void _analysis_name
 		name += 1;
 		break;
 	case 'T':
+		// T or TV ? look at second char
 		switch (name[1])
 		{
 		case 'V':
@@ -863,6 +902,7 @@ void _analysis_name
 			break;
 		}
 		break;
+		// C ot CV?
 	case 'C':
 		switch (name[1])
 		{
@@ -881,6 +921,7 @@ void _analysis_name
 		name += 1;
 		break;
 	case 'A':
+		// AI or AO?
 		switch (name[1])
 		{
 		case 'I':
@@ -906,7 +947,9 @@ void _analysis_name
 	}
 	_length = length;
 	char _vz_char = '\0';
+	// read offset and v/z
 	sscanf(name, "%d%c%d", &_offset, &_vz_char, &_vz_offset);
+	// has vz offset? Y or Z? 
 	switch (_vz_char)
 	{
 		case 'V':
@@ -991,6 +1034,176 @@ EXPORT int write
 	return 0;
 }
 
+/** \name read16
+ * Read the 16-bit integer
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int read16
+(
+	char*		name,
+	int			length,
+	uint16_t*	input
+)
+{
+	return read(name, length<<1, (uint8_t*)input);
+}
+
+/** \name read32
+ * Read the 32-bit integer
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int read32
+(
+	char*		name,
+	int			length,
+	uint32_t*	input
+)
+{
+	return read(name, length<<2, (uint8_t*)input);
+}
+
+/** \name read64
+ * Read the 64-bit integer
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int read64
+(
+	char*		name,
+	int			length,
+	uint64_t*	input
+)
+{
+	return read(name, length<<3, (uint8_t*)input);
+}
+
+/** \name read32f
+ * Read the 32-bit float
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int read32f
+(
+	char*		name,
+	int			length,
+	float*		input
+)
+{
+	return read(name, length<<2, (uint8_t*)input);
+}
+
+/** \name read64f
+ * Read the 64-bit float (double)
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int read64f
+(
+	char*		name,
+	int			length,
+	double*		input
+)
+{
+	return read(name, length<<3, (uint8_t*)input);
+}
+
+/** \name write16
+ * Write the 16-bit integer
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int write16
+(
+	char*		name,
+	int			length,
+	uint16_t*	output
+)
+{
+	return write(name, length<<1, (uint8_t*)output);
+}
+
+/** \name write32
+ * Write the 32-bit integer
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int write32
+(
+	char*		name,
+	int			length,
+	uint32_t*	output
+)
+{
+	return write(name, length<<2, (uint8_t*)output);
+}
+
+/** \name write64
+ * Write the 64-bit integer
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int write64
+(
+	char*		name,
+	int			length,
+	uint64_t*	output
+)
+{
+	return write(name, length<<3, (uint8_t*)output);
+}
+
+/** \name write32f
+ * Write the 32-bit float
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int write32f
+(
+	char*		name,
+	int			length,
+	float*		output
+)
+{
+	return write(name, length<<2, (uint8_t*)output);
+}
+
+
+/** \name write64f
+ * Write the 64-bit float (double)
+ *
+ * \param	name	Register name
+ * \param 	length	Length to read (number)
+ * \param	input	Memory to read
+ */
+EXPORT int write64f
+(
+	char*		name,
+	int			length,
+	double*		output
+)
+{
+	return write(name, length<<3, (uint8_t*)output);
+}
 
 static uint8_t data_bin[1<<20];
 static uint8_t data_pro[1<<20];
