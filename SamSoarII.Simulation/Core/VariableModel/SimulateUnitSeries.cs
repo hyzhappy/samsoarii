@@ -70,11 +70,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         protected override bool _Check_Name(string _name)
         {
-            Match m = Regex.Match(_name, @"^\w+\[\d+\.\.\d+\]$");
-            if (!m.Success)
-            {
-                return false;
-            }
+            Match m1 = Regex.Match(_name, @"^\w+\[\d+\.\.\d+\]$");
+            if (!m1.Success) return false;
             return true;
         }
 

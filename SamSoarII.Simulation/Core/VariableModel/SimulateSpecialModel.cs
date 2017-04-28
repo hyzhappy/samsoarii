@@ -9,7 +9,44 @@ namespace SamSoarII.Simulation.Core.VariableModel
 {
     public class SimulateSpecialUnit : SimulateVariableUnit
     {
+        public SimulateSpecialUnit(
+            SimulateVariableUnit _prototype, 
+            bool _canread, bool _canwrite)
+        {
+            Prototype = _prototype;
+            CanRead = _canread;
+            CanWrite = _canwrite;
+            Prototype.ValueChanged += OnPrototypeValueChanged;
+            Prototype.LockChanged += OnPrototypeLockChanged;
+        }
+
         public SimulateVariableUnit Prototype { get; private set; }
+
+        public override string Name
+        {
+            get
+            {
+                return Prototype.Name;
+            }
+
+            set
+            {
+                Prototype.Name = value;
+            }
+        }
+
+        public override string Var
+        {
+            get
+            {
+                return Prototype.Var;
+            }
+
+            set
+            {
+                Prototype.Var = value;
+            }
+        }
         
         public override string Type
         {
@@ -18,8 +55,46 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 return Prototype.Type;
             }
         }
-        
 
+        public override bool Islocked
+        {
+            get
+            {
+                return Prototype.Islocked;
+            }
+
+            set
+            {
+                Prototype.Islocked = value;
+            }
+        }
+
+        public override bool CanLock
+        {
+            get
+            {
+                return Prototype.CanLock;
+            }
+
+            set
+            {
+                Prototype.CanLock = value;
+            }
+        }
+
+        public override bool CanClose
+        {
+            get
+            {
+                return Prototype.CanClose;
+            }
+
+            set
+            {
+                Prototype.CanClose = value;
+            }
+        }
+        
         public override object Value
         {
             get
@@ -35,9 +110,34 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override event RoutedEventHandler ValueChanged = delegate { };
 
-        public bool CanRead { get; private set; }
+        private void OnPrototypeValueChanged(object sender, RoutedEventArgs e)
+        {
+            ValueChanged(this, e);
+        }
 
-        public bool CanWrite { get; private set; }
+        public override event RoutedEventHandler LockChanged = delegate { };
+
+        private void OnPrototypeLockChanged(object sender, RoutedEventArgs e)
+        {
+            LockChanged(this, e);
+        }
+
+        public bool CanRead { get; private set; } = true;
+
+        private bool canwrite = true;
+
+        public bool CanWrite
+        {
+            get
+            {
+                return this.canwrite;
+            }
+            private set
+            {
+                this.canwrite = value;
+                CanLock = value;
+            }
+        }
 
         public override void Set(SimulateDllModel dllmodel)
         {
@@ -59,54 +159,12 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             return true;
         }
-        
-    }
 
-    public class SimulateSpecialModel : SimulateVariableModel
-    {
-        static private SimulateSpecialUnit[] units;
-
-        static SimulateSpecialModel()
+        public override string ToString()
         {
-            units = new SimulateSpecialUnit[100];
-            
+            return Prototype?.ToString();
         }
 
-        public override int Size
-        {
-            get
-            {
-                return units.Length;
-            }
 
-            set
-            {
-
-            }
-        }
-
-        public override SimulateVariableUnit[] Values
-        {
-            get
-            {
-                return units;
-            }
-        }
-
-        public override void Set(SimulateDllModel dllmodel)
-        {
-            foreach (SimulateSpecialUnit ssunit in units)
-            {
-                ssunit.Set(dllmodel);
-            }
-        }
-
-        public override void Update(SimulateDllModel dllmodel)
-        {
-            foreach (SimulateSpecialUnit ssunit in units)
-            {
-                ssunit.Update(dllmodel);
-            }
-        }
     }
 }

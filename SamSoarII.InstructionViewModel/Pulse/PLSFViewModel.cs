@@ -34,8 +34,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is PLSFModel)
                 {
                     this.model = (PLSFModel)(value);
-                    FreqValue = model.FreqValue;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -74,7 +72,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[2]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {

@@ -14,7 +14,7 @@ using SamSoarII.LadderInstModel.Communication;
 
 namespace SamSoarII.LadderInstViewModel
 {
-    class SENDViewModel : OutputRectBaseViewModel
+    public class SENDViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {

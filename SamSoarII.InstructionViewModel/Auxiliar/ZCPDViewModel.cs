@@ -35,10 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is ZCPDModel)
                 {
                     this.model = (ZCPDModel)(value);
-                    InputValue1 = model.InputValue1;
-                    InputValue2 = model.InputValue2;
-                    InputValue3 = model.InputValue3;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -79,7 +75,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                InputValue2 = ValueParser.ParseDoubleWordValue(valueStrings[2]);
+                InputValue2 = ValueParser.ParseDoubleWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -87,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                InputValue3 = ValueParser.ParseDoubleWordValue(valueStrings[4]);
+                InputValue3 = ValueParser.ParseDoubleWordValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -95,7 +91,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[6]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[3]);
             }
             catch (ValueParseException)
             {

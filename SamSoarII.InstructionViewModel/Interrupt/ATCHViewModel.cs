@@ -62,15 +62,15 @@ namespace SamSoarII.LadderInstViewModel.Interrupt
 
         public override void ParseValue(IList<string> valueStrings)
         {
-            FuncName = valueStrings[0];
             try
             {
-                IDValue = ValueParser.ParseWordValue(valueStrings[2]);
+                IDValue = ValueParser.ParseWordValue(valueStrings[0]);
             }
             catch (ValueParseException)
             {
                 IDValue = WordValue.Null;
             }
+            FuncName = valueStrings[1];
         }
 
         public override IPropertyDialog PreparePropertyDialog()

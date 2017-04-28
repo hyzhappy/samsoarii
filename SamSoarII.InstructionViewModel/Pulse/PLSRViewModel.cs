@@ -35,8 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is PLSRModel)
                 {
                     this.model = (PLSRModel)(value);
-                    ArgumentValue = model.ArgumentValue;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -59,6 +57,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
         {
             List<string> result = new List<string>();
             result.Add(ArgumentValue.ValueString);
+            result.Add(VelocityValue.ValueString);
             result.Add(OutputValue.ValueString);
             return result;
         }
@@ -75,7 +74,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                VelocityValue = ValueParser.ParseWordValue(valueStrings[2]);
+                VelocityValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -83,7 +82,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {

@@ -49,6 +49,7 @@
     <Compile Include="BitValue\VariableBitValue.cs" />
     <Compile Include="BitValue\XBitValue.cs" />
     <Compile Include="BitValue\YBitValue.cs" />
+    <Compile Include="CFunctionManager.cs" />
     <Compile Include="DoubleWordValue\CV32DoubleWordValue.cs" />
     <Compile Include="DoubleWordValue\DDoubleWordValue.cs" />
     <Compile Include="DoubleWordValue\DoubleWordValue.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="FloatValue\VariableFloatValue.cs" />
     <Compile Include="IValueModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecialValueManager.cs" />
     <Compile Include="ValueAliasManager.cs" />
     <Compile Include="ValueCommentManager.cs" />
     <Compile Include="ValueParser.cs" />
@@ -92,6 +94,11 @@
       <Project>{AAFB923A-B366-4D7D-AB40-81F7D71A1F30}</Project>
       <Name>SamSoarII.Utility</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SpecialRegisters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -15,6 +15,6 @@
         <TextBlock x:Name="MiddleTextBlock2" Width="250" Height="36" FontSize="30" Canvas.Left="25" Canvas.Top="150" TextAlignment="Left"></TextBlock>
         <TextBlock x:Name="MiddleTextBlock3" Width="250" Height="36" FontSize="30" Canvas.Left="25" Canvas.Top="180" TextAlignment="Left"></TextBlock>
         <TextBlock x:Name="MiddleTextBlock4" Width="250" Height="36" FontSize="30" Canvas.Left="25" Canvas.Top="210" TextAlignment="Left"></TextBlock>
-        <TextBlock x:Name="BottomTextBlock" Width="250" Height="36" FontSize="30" Canvas.Left="25" Canvas.Top="250" TextAlignment="Center"></TextBlock>
+        <TextBlock x:Name="MiddleTextBlock5" Width="250" Height="36" FontSize="30" Canvas.Left="25" Canvas.Top="240" TextAlignment="Left"></TextBlock>
     </Canvas>
 </local:SimuViewBaseModel>

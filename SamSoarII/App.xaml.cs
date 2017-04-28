@@ -22,12 +22,18 @@ namespace SamSoarII.AppMain
     {
         public App()
         {
+            SpecialValueManager.Initialize();
             ValueCommentManager.Initialize();
             ValueAliasManager.Initialize();
             ElementList.InitializeElementCollection();
             InstructionCommentManager.MappedMessageChanged += ElementList.InstructionCommentManager_MappedMessageChanged;
             ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
             ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
+            foreach (SpecialValue svalue in SpecialValueManager.Values)
+            {
+                ValueCommentManager.UpdateComment(svalue.Name, svalue.Describe);
+                ValueAliasManager.UpdateAlias(svalue.Name, svalue.NickName);
+            }
             SettingManager.Load();
             this.Exit += App_Exit;
         }

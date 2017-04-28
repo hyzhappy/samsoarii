@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -15,6 +16,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             get { return (Object)(this.value); }
             set { this.value = (double)(value); }
         }
+
         public override string Type
         {
             get
@@ -22,38 +24,30 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 return "FLOAT";
             }
         }
+
         protected override bool _Check_Name(string _name)
         {
-            int i = 0;
-            while (char.IsLetter(_name[i])) i++;
-            string _base = _name.Substring(0, i);
-            int offset = 0;
-            try
-            {
-                offset = int.Parse(_name.Substring(i));
-            }
-            catch (FormatException e)
-            {
-                return false;
-            }
+            Match m1 = Regex.Match(_name, @"^(K|D)(\d+)$");
+            if (!m1.Success) return false;
+            string _base = m1.Groups[1].Value;
+            int _offset = int.Parse(m1.Groups[2].Value);
             switch (_base)
             {
-                case "F":
+                case "K":
                     return true;
                 case "D":
-                    if (offset < 0 || offset >= 8192)
-                        return false;
                     return true;
                 default:
                     return false;
             }
         }
+
         public override string ToString()
         {
             string _name = Name;
             if (manager != null)
                 _name = manager.GetVariableName(this);
-            return String.Format("{0:s}({1:s}{2:d})={3}{4:d}", Name, basename, offset + 1, value, Islocked ? "(Lock)" : String.Empty);
+            return String.Format("{0:s}={1}{2:s}", Name, value, Islocked ? "(Lock)" : String.Empty);
         }
 
         public override event RoutedEventHandler ValueChanged = delegate { };
@@ -96,7 +90,9 @@ namespace SamSoarII.Simulation.Core.VariableModel
                 {
                     this.values[i] = new SimulateFloatUnit();
                     this.values[i].Name = String.Format("{0:s}{1:d}", Base, Offset + i*2);
-                    this.values[i].Value = (float)(0.0);
+                    this.values[i].Value = (double)(0.0);
+                    this.values[i].CanClose = false;
+                    this.values[i].CanLock = false;
                 }
             }
         }

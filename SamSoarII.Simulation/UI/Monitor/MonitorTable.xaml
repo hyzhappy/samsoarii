@@ -69,7 +69,11 @@
                 </Grid.Children>
                 <Grid.ContextMenu>
                     <ContextMenu x:Name="RightClickMenu">
-                        
+                        <MenuItem Header="十进制" Click="OnVariableUnitBase"></MenuItem>
+                        <MenuItem Header="十六进制" Click="OnVariableUnitBase"></MenuItem>
+                        <Separator></Separator>
+                        <MenuItem Header="保存列表" Click="OnTableSave"></MenuItem>
+                        <MenuItem Header="读取列表" Click="OnTableLoad"></MenuItem>
                     </ContextMenu>
                 </Grid.ContextMenu>
             </Grid>

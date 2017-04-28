@@ -144,7 +144,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             {
                 return;
             }
-            if (svunit is SimulateBitUnit)
+            if (svunit.Type.Equals("BIT"))
             {
                 // 根据值来设置文本
                 switch ((int)(svunit.Value))

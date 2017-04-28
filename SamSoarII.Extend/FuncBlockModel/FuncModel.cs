@@ -67,10 +67,9 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// <param name="_name">参数新名称</param>
         public void SetArgName(int id, string _name)
         {
-            argnames[id] = _name;
+            argnames[id] = _name; 
         }
 
         #endregion
     }
 }
-

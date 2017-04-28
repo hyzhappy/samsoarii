@@ -14,7 +14,7 @@ using SamSoarII.LadderInstModel.Communication;
 
 namespace SamSoarII.LadderInstViewModel
 {
-    class MBUSViewModel : OutputRectBaseViewModel
+    public class MBUSViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {

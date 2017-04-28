@@ -33,6 +33,7 @@ namespace SamSoarII.LadderInstViewModel
         private int _y;
         private bool _isCommentMode;
         private bool _isMonitorMode;
+
         public override int X
         {
             get

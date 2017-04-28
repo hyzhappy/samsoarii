@@ -9,7 +9,7 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class SMOVModel : BaseModel
     {
-        public WordValue SourceValue { get; set; }
+        public WordValue SoruceValue { get; set; }
         public WordValue SourceStart { get; set; }
         public WordValue SourceCount { get; set; }
         public WordValue DestinationValue { get; set; }
@@ -17,7 +17,7 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 
         public SMOVModel()
         {
-            SourceValue = WordValue.Null;
+            SoruceValue = WordValue.Null;
             SourceStart = WordValue.Null;
             SourceCount = WordValue.Null;
             DestinationValue = WordValue.Null;
@@ -26,7 +26,7 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 
         public SMOVModel(WordValue _SoruceValue, WordValue _SourceStart, WordValue _SourceCount, WordValue _DestinationValue, WordValue _DestinationStart)
         {
-            SourceValue = _SoruceValue;
+            SoruceValue = _SoruceValue;
             SourceStart = _SourceStart;
             SourceCount = _SourceCount;
             DestinationValue = _DestinationValue;

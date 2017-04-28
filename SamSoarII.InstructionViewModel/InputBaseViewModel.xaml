@@ -31,7 +31,7 @@
             <StackPanel.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="FontSize" Value="{Binding Source={StaticResource FontData},Path=SelectFontSize}"></Setter>
-                    <Setter Property="FontFamily" Value="{Binding Source={StaticResource FontData},Path=SelectFontFamily}"></Setter>
+                    <Setter Property="FontFamily" Value="{Binding Source={StaticResource FontData},Path=CommentFontFamily}"></Setter>
                     <Setter Property="Foreground" Value="{Binding Source={StaticResource ColorData},Path=SelectColor}"></Setter>
                     <Setter Property="TextWrapping" Value="Wrap"></Setter>
                     <Setter Property="Margin" Value="20, 20, 0, 0"></Setter>

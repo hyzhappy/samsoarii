@@ -35,11 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is SMOVModel)
                 {
                     this.model = (SMOVModel)(value);
-                    SourceStart = model.SourceStart;
-                    SourceCount = model.SourceCount;
-                    SourceValue = model.SourceValue;
-                    DestinationStart = model.DestinationStart;
-                    DestinationValue = model.DestinationValue;
                 }
                 else
                 {
@@ -81,7 +76,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                SourceStart = ValueParser.ParseWordValue(valueStrings[2]);
+                SourceStart = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -89,7 +84,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                SourceCount = ValueParser.ParseWordValue(valueStrings[4]);
+                SourceCount = ValueParser.ParseWordValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -97,7 +92,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                DestinationValue = ValueParser.ParseWordValue(valueStrings[6]);
+                DestinationValue = ValueParser.ParseWordValue(valueStrings[3]);
             }
             catch (ValueParseException)
             {
@@ -105,7 +100,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                DestinationStart = ValueParser.ParseWordValue(valueStrings[8]);
+                DestinationStart = ValueParser.ParseWordValue(valueStrings[4]);
             }
             catch (ValueParseException)
             {
@@ -236,12 +231,12 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             get
             {
                 if (model == null) return WordValue.Null;
-                return model.SourceValue;
+                return model.SoruceValue;
             }
             set
             {
                 if (model == null) return;
-                model.SourceValue = value;
+                model.SoruceValue = value;
                 MiddleTextBlock1.Text = String.Format("SV:{0:s}", value.ValueShowString);
             }
         }

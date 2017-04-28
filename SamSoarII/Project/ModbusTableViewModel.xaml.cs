@@ -81,7 +81,7 @@ namespace SamSoarII.AppMain.Project
         public ModbusTableViewModel()
         {
             InitializeComponent();
-            InitializeDialog();
+            //InitializeDialog();
             Current = null;
             DataContext = this;
             ModelChanged += OnModelChanged;
@@ -195,7 +195,6 @@ namespace SamSoarII.AppMain.Project
                         dialog.Title = "表格重命名";
                         break;
                 }
-
             }
         }
         
@@ -204,9 +203,10 @@ namespace SamSoarII.AppMain.Project
             dialog = new ModbusTableDialog();
             dialog.B_Ensure.Click += OnDialogEnsureClick;
             dialog.B_Cancel.Click += OnDialogCancelClick;
-            dialog.Visibility = Visibility.Hidden;
+            dialog.Closed += OnDialogClosed;
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
-
+        
         #endregion
 
         #region Device
@@ -243,12 +243,12 @@ namespace SamSoarII.AppMain.Project
         {
             if (model == null)
             {
-                DialogType = DIALOG_CREATE;
-                if (!dialog.IsActive)
+                if (dialog == null)
                 {
+                    InitializeDialog();
+                    DialogType = DIALOG_CREATE;
                     dialog.TB_Name.Text = String.Empty;
                     dialog.TB_Comment.Text = String.Empty;
-                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     dialog.ShowDialog();
                 }
                 return;
@@ -302,14 +302,13 @@ namespace SamSoarII.AppMain.Project
         {
             _ArguemntsTranslate(ref model, ref index);
             Current = model;
-            DialogType = DIALOG_RENAME;
-            dialog.TB_Name.Text = Current.Name;
-            dialog.TB_Comment.Text = Current.Comment;
-            if (dialog.Visibility == Visibility.Hidden)
+            if (dialog == null)
             {
-                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                InitializeDialog();
+                DialogType = DIALOG_RENAME;
+                dialog.TB_Name.Text = Current.Name;
+                dialog.TB_Comment.Text = Current.Comment;
                 dialog.ShowDialog();
-                dialog.Visibility = Visibility.Visible;
             }
         }
 
@@ -489,7 +488,7 @@ namespace SamSoarII.AppMain.Project
                         model.Name = name;
                         model.Comment = comment;
                         AddModel(model, currentindex);
-                        dialog.Hide();
+                        dialog.Close();
                     }
                     break;
                 case DIALOG_RENAME:
@@ -502,7 +501,7 @@ namespace SamSoarII.AppMain.Project
                         Current.Name = name;
                         Current.Comment = comment;
                         ModelChanged(this, e);
-                        dialog.Hide();
+                        dialog.Close();
                     }
                     break;
             }
@@ -510,10 +509,16 @@ namespace SamSoarII.AppMain.Project
 
         private void OnDialogCancelClick(object sender, RoutedEventArgs e)
         {
-            dialog.Hide();
-            dialog.Visibility = Visibility.Hidden;
+            dialog.Close();
         }
 
+        private void OnDialogClosed(object sender, EventArgs e)
+        {
+            dialog.B_Ensure.Click -= OnDialogEnsureClick;
+            dialog.B_Cancel.Click -= OnDialogCancelClick;
+            dialog.Closed -= OnDialogClosed;
+            dialog = null;
+        }
         #endregion
 
         private void OnModelChanged(object sender, RoutedEventArgs e)

@@ -18,6 +18,15 @@ using SamSoarII.Simulation.Shell.Event;
 using System.ComponentModel;
 using SamSoarII.Simulation.UI.Base;
 using SamSoarII.Simulation.UI.Chart;
+using SamSoarII.LadderInstViewModel.Interrupt;
+using SamSoarII.LadderInstModel.Interrupt;
+using SamSoarII.LadderInstModel.Communication;
+using SamSoarII.LadderInstViewModel.Pulse;
+using SamSoarII.LadderInstModel.Pulse;
+using SamSoarII.LadderInstModel.HighCount;
+using SamSoarII.LadderInstViewModel.Auxiliar;
+using SamSoarII.LadderInstModel.Auxiliar;
+using SamSoarII.LadderInstViewModel.Counter;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -153,19 +162,7 @@ namespace SamSoarII.AppMain.Project
             }
             return CLOSE_OK;
         }
-
-        #region Save & Load GlobalSetting
-        //public static void SaveGlobalSetting()
-        //{
-        //    SamSoarII.Simulation.Core.Global.GlobalSetting.Save();
-        //}
-
-        //public static void LoadGlobalSetting()
-        //{
-        //    SamSoarII.Simulation.Core.Global.GlobalSetting.Load();
-        //}
-        #endregion
-
+        
         #region Setup
         static public void Setup(SimulateModel _smodel)
         {
@@ -738,6 +735,48 @@ namespace SamSoarII.AppMain.Project
                        ((MVDBLKModel)(bvmodel.Model)).DestinationValue.ValueShowString,
                        ((MVDBLKModel)(bvmodel.Model)).Count.ValueShowString));
             }
+            if (bvmodel is TONViewModel)
+            {
+                svbmodel.Setup(String.Format("TON {0:s} {1:s}",
+                        ((TONModel)(bvmodel.Model)).TimerValue.ValueShowString,
+                        ((TONModel)(bvmodel.Model)).EndValue.ValueShowString));
+            }
+            if (bvmodel is TONRViewModel)
+            {
+                svbmodel.Setup(String.Format("TONR {0:s} {1:s}",
+                        ((TONRModel)(bvmodel.Model)).TimerValue.ValueShowString,
+                        ((TONRModel)(bvmodel.Model)).EndValue.ValueShowString));
+            }
+            if (bvmodel is TOFViewModel)
+            {
+                svbmodel.Setup(String.Format("TOF {0:s} {1:s}",
+                        ((TOFModel)(bvmodel.Model)).TimerValue.ValueShowString,
+                        ((TOFModel)(bvmodel.Model)).EndValue.ValueShowString));
+            }
+            if (bvmodel is CTUViewModel)
+            {
+                svbmodel.Setup(String.Format("CTU {0:s} {1:s}",
+                        ((CTUModel)(bvmodel.Model)).CountValue.ValueShowString,
+                        ((CTUModel)(bvmodel.Model)).EndValue.ValueShowString));
+            }
+            if (bvmodel is CTDViewModel)
+            {
+                svbmodel.Setup(String.Format("CTU {0:s} {1:s}",
+                        ((CTDModel)(bvmodel.Model)).CountValue.ValueShowString,
+                        ((CTDModel)(bvmodel.Model)).StartValue.ValueShowString));
+            }
+            if (bvmodel is CTUDViewModel)
+            {
+                svbmodel.Setup(String.Format("CTUD {0:s} {1:s}",
+                        ((CTUDModel)(bvmodel.Model)).CountValue.ValueShowString,
+                        ((CTUDModel)(bvmodel.Model)).EndValue.ValueShowString));
+            }
+            if (bvmodel is HCNTViewModel)
+            {
+                svbmodel.Setup(String.Format("HCNT {0:s} {1:s}",
+                        ((HCNTModel)(bvmodel.Model)).CountValue.ValueShowString,
+                        ((HCNTModel)(bvmodel.Model)).DefineValue.ValueShowString));
+            }
             if (bvmodel is CALLMViewModel)
             {
                 svbmodel.Setup(String.Format("CALLM {0:s}",
@@ -832,6 +871,324 @@ namespace SamSoarII.AppMain.Project
                        ((SHRModel)(bvmodel.Model)).SourceValue.ValueShowString,
                        ((SHRModel)(bvmodel.Model)).DestinationValue.ValueShowString,
                        ((SHRModel)(bvmodel.Model)).Count.ValueShowString));
+            }
+            if (bvmodel is SHLBViewModel)
+            {
+                svbmodel.Setup(String.Format("SHLB {0:s} {1:s} {2:s} {3:s}",
+                       ((SHLBModel)(bvmodel.Model)).SourceValue.ValueShowString,
+                       ((SHLBModel)(bvmodel.Model)).DestinationValue.ValueShowString,
+                       ((SHLBModel)(bvmodel.Model)).CountValue.ValueShowString,
+                       ((SHLBModel)(bvmodel.Model)).MoveValue.ValueShowString));
+            }
+            if (bvmodel is SHRBViewModel)
+            {
+                svbmodel.Setup(String.Format("SHLB {0:s} {1:s} {2:s} {3:s}",
+                       ((SHRBModel)(bvmodel.Model)).SourceValue.ValueShowString,
+                       ((SHRBModel)(bvmodel.Model)).DestinationValue.ValueShowString,
+                       ((SHRBModel)(bvmodel.Model)).CountValue.ValueShowString,
+                       ((SHRBModel)(bvmodel.Model)).MoveValue.ValueShowString));
+            }
+            if (bvmodel is ATCHViewModel)
+            {
+                svbmodel.Setup(String.Format("ATCH {0:s} {1:s}",
+                    ((ATCHModel)(bvmodel.Model)).IDValue.ValueShowString,
+                    ((ATCHModel)(bvmodel.Model)).FuncName));
+            }
+            if (bvmodel is DTCHViewModel)
+            {
+                svbmodel.Setup(String.Format("DTCH {0:s}",
+                    ((DTCHModel)(bvmodel.Model)).IDValue.ValueShowString));
+            }
+            if (bvmodel is EIViewModel)
+            {
+                svbmodel.Setup("EI");
+            }
+            if (bvmodel is DIViewModel)
+            {
+                svbmodel.Setup("DI");
+            }
+            if (bvmodel is TRDViewModel)
+            {
+                svbmodel.Setup(String.Format("TRD {0:s}",
+                    ((TRDModel)(bvmodel.Model)).StartValue.ValueShowString));
+            }
+            if (bvmodel is TWRViewModel)
+            {
+                svbmodel.Setup(String.Format("TWR {0:s}",
+                    ((TWRModel)(bvmodel.Model)).StartValue.ValueShowString));
+            }
+            if (bvmodel is MBUSViewModel)
+            {
+                svbmodel.Setup(String.Format("MBUS {0:s} {1:s} {2:s}",
+                    ((MBUSModel)(bvmodel.Model)).COMPort.ValueShowString,
+                    ((MBUSModel)(bvmodel.Model)).Table,
+                    ((MBUSModel)(bvmodel.Model)).Message.ValueShowString));
+            }
+            if (bvmodel is SENDViewModel)
+            {
+                svbmodel.Setup(String.Format("SEND {0:s} {1:s} {2:s}",
+                    ((SENDModel)(bvmodel.Model)).COMPort.ValueShowString,
+                    ((SENDModel)(bvmodel.Model)).BaseValue.ValueShowString,
+                    ((SENDModel)(bvmodel.Model)).CountValue.ValueShowString));
+            }
+            if (bvmodel is REVViewModel)
+            {
+                svbmodel.Setup(String.Format("REV {0:s} {1:s} {2:s}",
+                    ((REVModel)(bvmodel.Model)).COMPort.ValueShowString,
+                    ((REVModel)(bvmodel.Model)).BaseValue.ValueShowString,
+                    ((REVModel)(bvmodel.Model)).CountValue.ValueShowString));
+            }
+            if (bvmodel is PLSFViewModel)
+            {
+                svbmodel.Setup(String.Format("PLSF {0:s} {1:s}",
+                    ((PLSFModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((PLSFModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is DPLSFViewModel)
+            {
+                svbmodel.Setup(String.Format("DPLSF {0:s} {1:s}",
+                    ((DPLSFModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((DPLSFModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is PWMViewModel)
+            {
+                svbmodel.Setup(String.Format("PWM {0:s} {1:s} {2:s}",
+                    ((PWMModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((PWMModel)(bvmodel.Model)).DutyCycleValue.ValueShowString,
+                    ((PWMModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is DPWMViewModel)
+            {
+                svbmodel.Setup(String.Format("DPWM {0:s} {1:s} {2:s}",
+                    ((DPWMModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((DPWMModel)(bvmodel.Model)).DutyCycleValue.ValueShowString,
+                    ((DPWMModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is PLSYViewModel)
+            {
+                svbmodel.Setup(String.Format("PLSY {0:s} {1:s} {2:s}",
+                    ((PLSYModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((PLSYModel)(bvmodel.Model)).PulseValue.ValueShowString,
+                    ((PLSYModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is DPLSYViewModel)
+            {
+                svbmodel.Setup(String.Format("DPLSY {0:s} {1:s} {2:s}",
+                    ((DPLSYModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((DPLSYModel)(bvmodel.Model)).PulseValue.ValueShowString,
+                    ((DPLSYModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is PLSRViewModel)
+            {
+                svbmodel.Setup(String.Format("PLSR {0:s} {1:s} {2:s}",
+                    ((PLSRModel)(bvmodel.Model)).ArgumentValue.ValueShowString,
+                    ((PLSRModel)(bvmodel.Model)).VelocityValue.ValueShowString,
+                    ((PLSRModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is DPLSRViewModel)
+            {
+                svbmodel.Setup(String.Format("DPLSR {0:s} {1:s} {2:s}",
+                    ((DPLSRModel)(bvmodel.Model)).ArgumentValue.ValueShowString,
+                    ((DPLSRModel)(bvmodel.Model)).VelocityValue.ValueShowString,
+                    ((DPLSRModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is PLSRDViewModel)
+            {
+                svbmodel.Setup(String.Format("PLSRD {0:s} {1:s} {2:s} {3:s}",
+                    ((PLSRDModel)(bvmodel.Model)).ArgumentValue.ValueShowString,
+                    ((PLSRDModel)(bvmodel.Model)).VelocityValue.ValueShowString,
+                    ((PLSRDModel)(bvmodel.Model)).OutputValue1.ValueShowString,
+                    ((PLSRDModel)(bvmodel.Model)).OutputValue2.ValueShowString));
+            }
+            if (bvmodel is DPLSRDViewModel)
+            {
+                svbmodel.Setup(String.Format("DPLSRD {0:s} {1:s} {2:s} {3:s}",
+                    ((DPLSRDModel)(bvmodel.Model)).ArgumentValue.ValueShowString,
+                    ((DPLSRDModel)(bvmodel.Model)).VelocityValue.ValueShowString,
+                    ((DPLSRDModel)(bvmodel.Model)).OutputValue1.ValueShowString,
+                    ((DPLSRDModel)(bvmodel.Model)).OutputValue2.ValueShowString));
+            }
+            if (bvmodel is PLSNEXTViewModel)
+            {
+                svbmodel.Setup(String.Format("PLSNEXT {0:s}",
+                    ((PLSNEXTModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is PLSSTOPViewModel)
+            {
+                svbmodel.Setup(String.Format("PLSSTOP {0:s}",
+                    ((PLSSTOPModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is ZRNViewModel)
+            {
+                svbmodel.Setup(String.Format("ZRN {0:s} {1:s} {2:s} {3:s}",
+                    ((ZRNModel)(bvmodel.Model)).BackValue.ValueShowString,
+                    ((ZRNModel)(bvmodel.Model)).CrawValue.ValueShowString,
+                    ((ZRNModel)(bvmodel.Model)).SignalValue.ValueShowString,
+                    ((ZRNModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is DZRNViewModel)
+            {
+                svbmodel.Setup(String.Format("DZRN {0:s} {1:s} {2:s} {3:s}",
+                    ((DZRNModel)(bvmodel.Model)).BackValue.ValueShowString,
+                    ((DZRNModel)(bvmodel.Model)).CrawValue.ValueShowString,
+                    ((DZRNModel)(bvmodel.Model)).SignalValue.ValueShowString,
+                    ((DZRNModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is PTOViewModel)
+            {
+                svbmodel.Setup(String.Format("PTO {0:s} {1:s} {2:s}",
+                    ((PTOModel)(bvmodel.Model)).ArgumentValue.ValueShowString,
+                    ((PTOModel)(bvmodel.Model)).OutputValue1.ValueShowString,
+                    ((PTOModel)(bvmodel.Model)).OutputValue2.ValueShowString));
+            }
+            if (bvmodel is DRVIViewModel)
+            {
+                svbmodel.Setup(String.Format("DRVI {0:s} {1:s} {2:s}",
+                    ((DRVIModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((DRVIModel)(bvmodel.Model)).PulseValue.ValueShowString,
+                    ((DRVIModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is DDRVIViewModel)
+            {
+                svbmodel.Setup(String.Format("DDRVI {0:s} {1:s} {2:s}",
+                    ((DDRVIModel)(bvmodel.Model)).FreqValue.ValueShowString,
+                    ((DDRVIModel)(bvmodel.Model)).PulseValue.ValueShowString,
+                    ((DDRVIModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is HCNTViewModel)
+            {
+                svbmodel.Setup(String.Format("HCNT {0:s} {1:s} {2:s}",
+                    ((HCNTModel)(bvmodel.Model)).DefineValue.ValueShowString,
+                    ((HCNTModel)(bvmodel.Model)).CountValue.ValueShowString));
+            }
+            if (bvmodel is LOGViewModel)
+            {
+                svbmodel.Setup(String.Format("LOG {0:s} {1:s}",
+                    ((LOGModel)(bvmodel.Model)).InputValue.ValueShowString,
+                    ((LOGModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is POWViewModel)
+            {
+                svbmodel.Setup(String.Format("POW {0:s} {1:s} {2:s}",
+                    ((POWModel)(bvmodel.Model)).InputValue1.ValueShowString,
+                    ((POWModel)(bvmodel.Model)).InputValue2.ValueShowString,
+                    ((POWModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is FACTViewModel)
+            {
+                svbmodel.Setup(String.Format("FACT {0:s} {1:s}",
+                    ((FACTModel)(bvmodel.Model)).InputValue.ValueShowString,
+                    ((FACTModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is CMPViewModel)
+            {
+                svbmodel.Setup(String.Format("CMP {0:s} {1:s} {2:s}",
+                    ((CMPModel)(bvmodel.Model)).InputValue1.ValueShowString,
+                    ((CMPModel)(bvmodel.Model)).InputValue2.ValueShowString,
+                    ((CMPModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is CMPDViewModel)
+            {
+                svbmodel.Setup(String.Format("CMPD {0:s} {1:s} {2:s}",
+                    ((CMPDModel)(bvmodel.Model)).InputValue1.ValueShowString,
+                    ((CMPDModel)(bvmodel.Model)).InputValue2.ValueShowString,
+                    ((CMPDModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is CMPFViewModel)
+            {
+                svbmodel.Setup(String.Format("CMPF {0:s} {1:s} {2:s}",
+                    ((CMPFModel)(bvmodel.Model)).InputValue1.ValueShowString,
+                    ((CMPFModel)(bvmodel.Model)).InputValue2.ValueShowString,
+                    ((CMPFModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is ZCPViewModel)
+            {
+                svbmodel.Setup(String.Format("ZCP {0:s} {1:s} {2:s} {3:s}",
+                    ((ZCPModel)(bvmodel.Model)).InputValue1.ValueShowString,
+                    ((ZCPModel)(bvmodel.Model)).InputValue2.ValueShowString,
+                    ((ZCPModel)(bvmodel.Model)).InputValue3.ValueShowString,
+                    ((ZCPModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is ZCPDViewModel)
+            {
+                svbmodel.Setup(String.Format("ZCPD {0:s} {1:s} {2:s} {3:s}",
+                    ((ZCPDModel)(bvmodel.Model)).InputValue1.ValueShowString,
+                    ((ZCPDModel)(bvmodel.Model)).InputValue2.ValueShowString,
+                    ((ZCPDModel)(bvmodel.Model)).InputValue3.ValueShowString,
+                    ((ZCPDModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is ZCPFViewModel)
+            {
+                svbmodel.Setup(String.Format("ZCPF {0:s} {1:s} {2:s} {3:s}",
+                    ((ZCPFModel)(bvmodel.Model)).InputValue1.ValueShowString,
+                    ((ZCPFModel)(bvmodel.Model)).InputValue2.ValueShowString,
+                    ((ZCPFModel)(bvmodel.Model)).InputValue3.ValueShowString,
+                    ((ZCPFModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is NEGViewModel)
+            {
+                svbmodel.Setup(String.Format("NEG {0:s} {1:s}",
+                    ((NEGModel)(bvmodel.Model)).InputValue.ValueShowString,
+                    ((NEGModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is NEGDViewModel)
+            {
+                svbmodel.Setup(String.Format("NEG {0:s} {1:s}",
+                    ((NEGDModel)(bvmodel.Model)).InputValue.ValueShowString,
+                    ((NEGDModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is XCHViewModel)
+            {
+                svbmodel.Setup(String.Format("XCH {0:s} {1:s}",
+                    ((XCHModel)(bvmodel.Model)).LeftValue.ValueShowString,
+                    ((XCHModel)(bvmodel.Model)).RightValue.ValueShowString));
+            }
+            if (bvmodel is XCHDViewModel)
+            {
+                svbmodel.Setup(String.Format("XCHD {0:s} {1:s}",
+                    ((XCHDModel)(bvmodel.Model)).LeftValue.ValueShowString,
+                    ((XCHDModel)(bvmodel.Model)).RightValue.ValueShowString));
+            }
+            if (bvmodel is XCHFViewModel)
+            {
+                svbmodel.Setup(String.Format("XCHF {0:s} {1:s}",
+                    ((XCHFModel)(bvmodel.Model)).LeftValue.ValueShowString,
+                    ((XCHFModel)(bvmodel.Model)).RightValue.ValueShowString));
+            }
+            if (bvmodel is CMLViewModel)
+            {
+                svbmodel.Setup(String.Format("CML {0:s} {1:s}",
+                    ((CMLModel)(bvmodel.Model)).InputValue.ValueShowString,
+                    ((CMLModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is CMLDViewModel)
+            {
+                svbmodel.Setup(String.Format("CMLD {0:s} {1:s}",
+                    ((CMLDModel)(bvmodel.Model)).InputValue.ValueShowString,
+                    ((CMLDModel)(bvmodel.Model)).OutputValue.ValueShowString));
+            }
+            if (bvmodel is FMOVViewModel)
+            {
+                svbmodel.Setup(String.Format("FMOV {0:s} {1:s} {2:s}",
+                    ((FMOVModel)(bvmodel.Model)).SourceValue.ValueShowString,
+                    ((FMOVModel)(bvmodel.Model)).CountValue.ValueShowString,
+                    ((FMOVModel)(bvmodel.Model)).DestinationValue.ValueShowString));
+            }
+            if (bvmodel is FMOVDViewModel)
+            {
+                svbmodel.Setup(String.Format("FMOVD {0:s} {1:s} {2:s}",
+                    ((FMOVDModel)(bvmodel.Model)).SourceValue.ValueShowString,
+                    ((FMOVDModel)(bvmodel.Model)).CountValue.ValueShowString,
+                    ((FMOVDModel)(bvmodel.Model)).DestinationValue.ValueShowString));
+            }
+            if (bvmodel is SMOVViewModel)
+            {
+                svbmodel.Setup(String.Format("SMOV {0:s} {1:s} {2:s} {3:s} {4:s}",
+                    ((SMOVModel)(bvmodel.Model)).SoruceValue.ValueShowString,
+                    ((SMOVModel)(bvmodel.Model)).SourceStart.ValueShowString,
+                    ((SMOVModel)(bvmodel.Model)).SourceCount.ValueShowString,
+                    ((SMOVModel)(bvmodel.Model)).DestinationValue.ValueShowString,
+                    ((SMOVModel)(bvmodel.Model)).DestinationStart.ValueShowString));
             }
             svbmodel.X = bvmodel.X;
             svbmodel.Y = bvmodel.Y;

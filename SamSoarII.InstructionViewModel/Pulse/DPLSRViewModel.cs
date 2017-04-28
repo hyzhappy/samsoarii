@@ -35,9 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DPLSRModel)
                 {
                     this.model = (DPLSRModel)(value);
-                    ArgumentValue = model.ArgumentValue;
-                    VelocityValue = model.VelocityValue;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -77,7 +74,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                VelocityValue = ValueParser.ParseDoubleWordValue(valueStrings[2]);
+                VelocityValue = ValueParser.ParseDoubleWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -85,7 +82,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -131,11 +128,11 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             else if (!check2)
             {
-                throw new ValueParseException("V格式非法");
+                throw new ValueParseException("V格式非法！");
             }
             else if (!check3)
             {
-                throw new ValueParseException("OUT格式非法");
+                throw new ValueParseException("OUT格式非法！");
             }
         }
 
