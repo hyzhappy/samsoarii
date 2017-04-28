@@ -35,8 +35,6 @@ namespace SamSoarII.LadderInstViewModel
                 if (value is HCNTModel)
                 {
                     this.model = (HCNTModel)(value);
-                    CountValue = model.CountValue;
-                    DefineValue = model.DefineValue;
                 }
                 else
                 {

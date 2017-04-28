@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel
 {
-    class TONRViewModel : OutputRectBaseViewModel
+    public class TONRViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {
@@ -35,8 +35,6 @@ namespace SamSoarII.LadderInstViewModel
                 if (value is TONRModel)
                 {
                     this.model = (TONRModel)(value);
-                    TimerValue = model.TimerValue;
-                    EndValue = model.EndValue;
                 }
                 else
                 {
@@ -75,7 +73,7 @@ namespace SamSoarII.LadderInstViewModel
             }
             try
             {
-                EndValue = ValueParser.ParseWordValue(valueStrings[2]);
+                EndValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -99,7 +97,7 @@ namespace SamSoarII.LadderInstViewModel
             bool check1 = ValueParser.CheckValueString(valueStrings[0], new Regex[] {
                 ValueParser.VerifyWordRegex4});
             bool check2 = ValueParser.CheckValueString(valueStrings[2], new Regex[] {
-                ValueParser.VerifyWordRegex3, ValueParser.VerifyIntHValueRegex});
+                ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex});
             if (check1 && check2)
             {
                 TimerValue = ValueParser.ParseWordValue(valueStrings[0], contextDevice);

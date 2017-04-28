@@ -35,7 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is PLSNEXTModel)
                 {
                     this.model = (PLSNEXTModel)(value);
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {

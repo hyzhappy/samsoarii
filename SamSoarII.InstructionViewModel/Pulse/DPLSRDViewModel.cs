@@ -35,10 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DPLSRDModel)
                 {
                     this.model = (DPLSRDModel)(value);
-                    ArgumentValue = model.ArgumentValue;
-                    VelocityValue = model.VelocityValue;
-                    OutputValue1 = model.OutputValue1;
-                    OutputValue2 = model.OutputValue2;
                 }
                 else
                 {
@@ -79,7 +75,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                VelocityValue = ValueParser.ParseDoubleWordValue(valueStrings[2]);
+                VelocityValue = ValueParser.ParseDoubleWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -87,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue1 = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue1 = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -95,7 +91,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue2 = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue2 = ValueParser.ParseBitValue(valueStrings[3]);
             }
             catch (ValueParseException)
             {

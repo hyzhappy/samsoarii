@@ -35,10 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is DZRNModel)
                 {
                     this.model = (DZRNModel)(value);
-                    BackValue = model.BackValue;
-                    CrawValue = model.CrawValue;
-                    SignalValue = model.SignalValue;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -79,7 +75,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                CrawValue = ValueParser.ParseDoubleWordValue(valueStrings[2]);
+                CrawValue = ValueParser.ParseDoubleWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -87,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                SignalValue = ValueParser.ParseBitValue(valueStrings[4]);
+                SignalValue = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
@@ -95,7 +91,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[3]);
             }
             catch (ValueParseException)
             {

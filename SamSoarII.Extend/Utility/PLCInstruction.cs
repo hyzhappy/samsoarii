@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -246,7 +247,6 @@ namespace SamSoarII.Extend.Utility
                     case "LDWEQ":case "LDWNE":case "LDWGE":case "LDWLE":case "LDWG":case "LDWL":
                     case "AWEQ":case "AWNE":case "AWGE":case "AWLE":case "AWG":case "AWL":
                     case "ORWEQ": case "ORWNE":case "ORWGE":case "ORWLE":case "ORWG":case "ORWL":
-                    case "ATCH":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
                         this.flag2 = ToCStyle(args[2], "r", "WORD");
                         break;
@@ -407,6 +407,13 @@ namespace SamSoarII.Extend.Utility
                         this.flag3 = ToCStyle(args[3], "r", "FLOAT");
                         this.flag4 = ToCStyle(args[4], "w", "BIT");
                         break;
+                    // (rB, wB, rW, rW)
+                    case "SHLB": case "SHRB":
+                        this.flag1 = ToCStyle(args[1], "r", "BIT");
+                        this.flag2 = ToCStyle(args[2], "w", "BIT");
+                        this.flag3 = ToCStyle(args[3], "r", "WORD");
+                        this.flag4 = ToCStyle(args[4], "r", "WORD");
+                        break;
                     // (rwW, rW, rwB)
                     /*
                      * TON, TONR, TOF这三个计时器比较特殊
@@ -443,6 +450,11 @@ namespace SamSoarII.Extend.Utility
                         this.flag3 = ToCStylePointer(args[3]);
                         this.flag4 = ToCStylePointer(args[4]);
                         this.flag5 = ToCStylePointer(args[5]);
+                        break;
+                    // (rW, rS)
+                    case "ATCH":
+                        this.flag1 = ToCStyle(args[1], "r", "WORD");
+                        this.flag2 = args[2];
                         break;
                     // (rW, rW, rW, wW, rW)
                     case "SMOV":
@@ -574,14 +586,10 @@ namespace SamSoarII.Extend.Utility
         /// <returns>c语言格式</returns>
         private string ToCStyle(string var, string mode="rw", string ctype="WORD")
         {
-            if (var.Equals(String.Empty))
-                return String.Empty;
-            // 找到最后一个字母
-            int i = 0;
-            while (i < var.Length && Char.IsLetter(var[i])) i++;
-            // 确定前面的类型名称和后面的数值
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
+            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
+            if (!m1.Success) return var;
+            string name = m1.Groups[1].Value;
+            int addr = int.Parse(m1.Groups[2].Value);
             // 如果该参数可写，需要附带写入使能
             if (mode.Equals("w") || mode.Equals("rw"))
             {
@@ -591,7 +599,7 @@ namespace SamSoarII.Extend.Utility
                 }
                 else
                 {
-                    this.enbit += "&&" + String.Format("{0:s}Enable[{1:d}]", name, addr);
+                    this.enbit += "||" + String.Format("{0:s}Enable[{1:d}]", name, addr);
                 }
             }
             switch (name)
@@ -614,8 +622,8 @@ namespace SamSoarII.Extend.Utility
                      switch (ctype)
                      {
                         case "WORD": return String.Format("{0:s}Word[{1:d}]", name, addr);
-                        case "DWORD": return String.Format("(*((uint32_t*)({0:s}Word+{1:d})))", name, addr);
-                        case "FLOAT": return String.Format("(*((float*)({0:s}Word+{1:d})))", name, addr);
+                        case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:d})))", name, addr);
+                        case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:d})))", name, addr);
                         default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                      }
                 // 32位寄存器
@@ -625,8 +633,8 @@ namespace SamSoarII.Extend.Utility
                         switch (ctype)
                         {
                             case "WORD": return String.Format("{0:s}Word[{1:d}]", name, addr);
-                            case "DWORD": return String.Format("(*((uint32_t*)({0:s}Word+{1:d})))", name, addr);
-                            case "FLOAT": return String.Format("(*((float*)({0:s}Word+{1:d})))", name, addr);
+                            case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:d})))", name, addr);
+                            case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:d})))", name, addr);
                             default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                         }
                     }
@@ -634,22 +642,22 @@ namespace SamSoarII.Extend.Utility
                     {
                         switch (ctype)
                         {
-                            case "WORD": return String.Format("(*((uint16_t*)({0:s}DoubleWord+{1:d})))", name, addr - 200);
+                            case "WORD": return String.Format("(*((uint32_t*)({0:s}DoubleWord+{1:d})))", name, addr - 200);
                             case "DWORD": return String.Format("{0:s}DoubleWords[{1:d}]", name, addr - 200);
-                            case "FLOAT": return String.Format("(*((float*)({0:s}DoubleWord+{1:d})))", name, addr - 200);
+                            case "FLOAT": return String.Format("(*((double*)({0:s}DoubleWord+{1:d})))", name, addr - 200);
                             default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                         }
                     }
                 case "K": case "F":
                     if (mode.Equals("r"))
-                        return var.Substring(i);
+                        return addr.ToString();
                     else
-                        throw new ArgumentException("{0:s} cannot be wrote.\n", var);
+                        throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
                 case "H":
                     if (mode.Equals("r"))
-                        return "0x" + var.Substring(i);
+                        return "0x" + addr.ToString();
                     else
-                        throw new ArgumentException("{0:s} cannot be wrote.\n", var);
+                        throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
                 default:
                     return var;
             }

@@ -36,7 +36,7 @@ namespace SamSoarII.Extend.FuncBlockModel
 
         public Dictionary<string, SortedList<int, FuncBlock_Assignment>> Assigns { get; }
             = new Dictionary<string, SortedList<int, FuncBlock_Assignment>>();
-
+       
         public FuncBlockModel(string text)
         {
             Root = new FuncBlock_Root(this, text);
@@ -94,7 +94,7 @@ namespace SamSoarII.Extend.FuncBlockModel
             ret.Sort();
             return ret;
         }
-
+        
 
 
         public void Move(int index)
@@ -196,4 +196,3 @@ namespace SamSoarII.Extend.FuncBlockModel
         }
     }
 }
-

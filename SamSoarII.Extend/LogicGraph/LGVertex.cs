@@ -191,10 +191,15 @@ namespace SamSoarII.Extend.LogicGraph
                 }
                 // 表达式合并
                 this.Expr = "(" + ExprHelper.Merge(subexprs, 0, subexprs.Count - 1) + ")";
-            } 
-            else
+            }
+            // 如果存在前向边
+            else if (BackEdges.Count > 0)
             {
                 this.Expr = BackEdges[0].Expr;
+            }
+            else
+            {
+                this.Expr = "1";
             }
             //Console.Write("expr end {0:d}, {1:s}\n", Id, Expr);
         }

@@ -1,0 +1,653 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SpecialRegisters>
+  <Register Name="D5952" Base="D" Offset="5952" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS1"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5953" Base="D" Offset="5953" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS2"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5954" Base="D" Offset="5954" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS3"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5955" Base="D" Offset="5955" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS4"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5956" Base="D" Offset="5956" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS5"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5957" Base="D" Offset="5957" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS6"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5958" Base="D" Offset="5958" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS7"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5959" Base="D" Offset="5959" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS8"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5960" Base="D" Offset="5960" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS9"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5961" Base="D" Offset="5961" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS10"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5962" Base="D" Offset="5962" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS11"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5963" Base="D" Offset="5963" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS12"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5964" Base="D" Offset="5964" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS13"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5965" Base="D" Offset="5965" Type="WORD"             
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS14"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5966" Base="D" Offset="5966" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS15"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D5967" Base="D" Offset="5967" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS16"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="D8060" Base="D" Offset="8060" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT0"
+            Describe="X000滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8061" Base="D" Offset="8060" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT1"
+            Describe="X001滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8062" Base="D" Offset="8062" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT2"
+            Describe="X002滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8063" Base="D" Offset="8063" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT3"
+            Describe="X003滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8064" Base="D" Offset="8064" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT4"
+            Describe="X004滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8065" Base="D" Offset="8065" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT5"
+            Describe="X005滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8066" Base="D" Offset="8066" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT6"
+            Describe="X006滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8067" Base="D" Offset="8067" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT7"
+            Describe="X007滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8068" Base="D" Offset="8068" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT10"
+            Describe="X010滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8069" Base="D" Offset="8069" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT11"
+            Describe="X011滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8070" Base="D" Offset="8070" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT12"
+            Describe="X012滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8071" Base="D" Offset="8071" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT13"
+            Describe="X013滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8072" Base="D" Offset="8072" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT14"
+            Describe="X014滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8073" Base="D" Offset="8073" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT15"
+            Describe="X015滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8074" Base="D" Offset="8074" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT16"
+            Describe="X016滤波时间(0~32767ms)">
+  </Register>
+  <Register Name="D8075" Base="D" Offset="8075" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="XWT17"
+            Describe="X017滤波时间(0~32767ms)">
+  </Register>  
+  <Register Name="D8076" Base="D" Offset="8076" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT0"
+            Describe="Y000原点回归加减速时间">
+  </Register>
+  <Register Name="D8077" Base="D" Offset="8077" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT1"
+            Describe="Y000原点回归加减速时间">
+  </Register>
+  <Register Name="D8078" Base="D" Offset="8078" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT2"
+            Describe="Y000原点回归加减速时间">
+  </Register>
+  <Register Name="D8079" Base="D" Offset="8079" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT3"
+            Describe="Y000原点回归加减速时间">
+  </Register>
+  <Register Name="D8092" Base="D" Offset="8092" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT0"
+            Describe="Y000原点回归加减速时间">
+  </Register>
+  <Register Name="D8093" Base="D" Offset="8093" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT1"
+            Describe="Y001原点回归加减速时间">
+  </Register>
+  <Register Name="D8094" Base="D" Offset="8094" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT2"
+            Describe="Y002原点回归加减速时间">
+  </Register>
+  <Register Name="D8095" Base="D" Offset="8095" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="OBAT3"
+            Describe="Y003原点回归加减速时间">
+  </Register>
+  <Register Name="D8108" Base="D" Offset="8108" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="ERRID0"
+            Describe="Y000出错脉冲段编号（用于多段脉冲）">
+  </Register>
+  <Register Name="D8109" Base="D" Offset="8109" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="ERRID1"
+            Describe="Y001出错脉冲段编号（用于多段脉冲）">
+  </Register>
+  <Register Name="D8110" Base="D" Offset="8110" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="ERRID2"
+            Describe="Y002出错脉冲段编号（用于多段脉冲）">
+  </Register>
+  <Register Name="D8111" Base="D" Offset="8111" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="ERRID3"
+            Describe="Y003出错脉冲段编号（用于多段脉冲）">
+  </Register>
+  <Register Name="D8124" Base="D" Offset="8124" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PSID0"
+            Describe="Y000当前脉冲段（用于多段脉冲）">
+  </Register>
+  <Register Name="D8125" Base="D" Offset="8125" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PSID1"
+            Describe="Y001当前脉冲段（用于多段脉冲）">
+  </Register>
+  <Register Name="D8126" Base="D" Offset="8126" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PSID2"
+            Describe="Y002当前脉冲段（用于多段脉冲）">
+  </Register>
+  <Register Name="D8127" Base="D" Offset="8127" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="PSID3"
+            Describe="Y003当前脉冲段（用于多段脉冲）">
+  </Register>
+  <Register Name="D8140" Base="D" Offset="8140" Type="DWORD"
+            CanRead="True"  CanWrite="True"
+            NickName="PCT0"
+            Describe="Y000的双字脉冲累积计数">
+  </Register>
+  <Register Name="D8142" Base="D" Offset="8142" Type="DWORD" 
+            CanRead="True"  CanWrite="True"
+            NickName="PCT1"
+            Describe="Y001的双字脉冲累积计数">
+  </Register>
+  <Register Name="D8144" Base="D" Offset="8144" Type="DWORD"
+            CanRead="True"  CanWrite="True"
+            NickName="PCT2"
+            Describe="Y002的双字脉冲累积计数">
+  </Register>
+  <Register Name="D8146" Base="D" Offset="8146" Type="DWORD"
+            CanRead="True"  CanWrite="True"
+            NickName="PCT3"
+            Describe="Y003的双字脉冲累积计数">
+  </Register>
+  <Register Name="D8173" Base="D" Offset="8173" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="ITRT0"
+            Describe="中断定时器0设定值，设定值范围1~32767ms">
+  </Register>
+  <Register Name="D8174" Base="D" Offset="8174" Type="WORD"
+            CanRead="True"  CanWrite="True"
+            NickName="ITRT1"
+            Describe="中断定时器1设定值，设定值范围1~32767ms">
+  </Register>
+  <Register Name="D8175" Base="D" Offset="8175" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="SCANP"
+            Describe="扫描周期（ms）">
+  </Register>
+  <Register Name="D8176" Base="D" Offset="8176" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="ERROR"
+            Describe="ERROR状态错误编号">
+  </Register>
+  <Register Name="D8177" Base="D" Offset="8177" Type="WORD"
+            CanRead="True"  CanWrite="False"
+            NickName="ERROR"
+            Describe="越界操作码编号">
+  </Register>
+  <Register Name="M7488" Base="M" Offset="7488" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS17"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7489" Base="M" Offset="7489" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS18"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7490" Base="M" Offset="7490" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS19"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7491" Base="M" Offset="7491" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS20"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7492" Base="M" Offset="7492" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS21"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7493" Base="M" Offset="7493" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS22"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7494" Base="M" Offset="7494" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS23"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7495" Base="M" Offset="7495" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS24"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7496" Base="M" Offset="7496" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS25"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7497" Base="M" Offset="7497" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS26"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7498" Base="M" Offset="7498" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS27"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7499" Base="M" Offset="7499" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS28"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7500" Base="M" Offset="7500" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS29"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7501" Base="M" Offset="7501" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS30"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7502" Base="M" Offset="7502" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS31"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M7503" Base="M" Offset="7503" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PLCSYS32"
+            Describe="PLC系统使用">
+  </Register>
+  <Register Name="M8051" Base="M" Offset="8051" Type="BIT"
+            CanRead="True"  CanWrite="True"
+            NickName="CF251"
+            Describe="高速计数器C251倍频设置（1—四倍频    0—一倍频）">
+  </Register>
+  <Register Name="M8052" Base="M" Offset="8052" Type="BIT"
+            CanRead="True"  CanWrite="True"
+            NickName="CF252"
+            Describe="高速计数器C252倍频设置（1—四倍频    0—一倍频）">
+  </Register>
+  <Register Name="M8054" Base="M" Offset="8054" Type="BIT"
+            CanRead="True"  CanWrite="True"
+            NickName="CF254"
+            Describe="高速计数器C254倍频设置（1—四倍频    0—一倍频）">
+  </Register>
+  <Register Name="M8070" Base="M" Offset="8070" Type="BIT"
+            CanRead="True"  CanWrite="True"
+            NickName="IGERR0"
+            Describe="Y000是否忽略错误，继续发送脉冲，默认忽略为0">
+  </Register>
+  <Register Name="M8071" Base="M" Offset="8071" Type="BIT"
+            CanRead="True"  CanWrite="True"
+            NickName="IGERR1"
+            Describe="Y000是否忽略错误，继续发送脉冲，默认忽略为0">
+  </Register>
+  <Register Name="M8072" Base="M" Offset="8072" Type="BIT"
+            CanRead="True"  CanWrite="True"
+            NickName="IGERR2"
+            Describe="Y000是否忽略错误，继续发送脉冲，默认忽略为0">
+  </Register>
+  <Register Name="M8073" Base="M" Offset="8073" Type="BIT"
+            CanRead="True"  CanWrite="True"
+            NickName="IGERR3"
+            Describe="Y000是否忽略错误，继续发送脉冲，默认忽略为0">
+  </Register>
+  <Register Name="M8070" Base="M" Offset="8070" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="ISERR0"
+            Describe="Y000检查每段用户设置脉冲个数和频率是否正确(用于多段脉冲)">
+  </Register>
+  <Register Name="M8071" Base="M" Offset="8071" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="ISERR1"
+            Describe="Y001检查每段用户设置脉冲个数和频率是否正确(用于多段脉冲)">
+  </Register>
+  <Register Name="M8072" Base="M" Offset="8072" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="ISERR2"
+            Describe="Y002检查每段用户设置脉冲个数和频率是否正确(用于多段脉冲)">
+  </Register>
+  <Register Name="M8073" Base="M" Offset="8073" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="IGERR3"
+            Describe="Y003检查每段用户设置脉冲个数和频率是否正确(用于多段脉冲)">
+  </Register>
+  <Register Name="M8102" Base="M" Offset="8102" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PD0"
+            Describe="Y000脉冲方向，正方向为1">
+  </Register>
+  <Register Name="M8103" Base="M" Offset="8103" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PD1"
+            Describe="Y001脉冲方向，正方向为1">
+  </Register>
+  <Register Name="M8104" Base="M" Offset="8104" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PD2"
+            Describe="Y002脉冲方向，正方向为1">
+  </Register>
+  <Register Name="M8105" Base="M" Offset="8105" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PD3"
+            Describe="Y003脉冲方向，正方向为1">
+  </Register>
+  <Register Name="M8118" Base="M" Offset="8118" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="POF0"
+            Describe="Y000脉冲累积计数溢出标记，溢出为1">
+  </Register>
+  <Register Name="M8119" Base="M" Offset="8119" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="POF1"
+            Describe="Y001脉冲累积计数溢出标记，溢出为1">
+  </Register>
+  <Register Name="M8120" Base="M" Offset="8120" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="POF2"
+            Describe="Y002脉冲累积计数溢出标记，溢出为1">
+  </Register>
+  <Register Name="M8121" Base="M" Offset="8121" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="POF3"
+            Describe="Y003脉冲累积计数溢出标记，溢出为1">
+  </Register>
+  <Register Name="M8134" Base="M" Offset="8134" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PAT0"
+            Describe="Y000脉冲正在输出">
+  </Register>
+  <Register Name="M8135" Base="M" Offset="8135" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PAT1"
+            Describe="Y001脉冲正在输出">
+  </Register>
+  <Register Name="M8136" Base="M" Offset="8136" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PAT2"
+            Describe="Y002脉冲正在输出">
+  </Register>
+  <Register Name="M8137" Base="M" Offset="8137" Type="BIT"
+            CanRead="True"  CanWrite="False"
+            NickName="PAT3"
+            Describe="Y003脉冲正在输出">
+  </Register>
+  <Register Name="M8150" Base="M" Offset="8150" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="FSP"
+            Describe="第一个扫描周期接通，接通一个扫描周期">
+  </Register>
+  <Register Name="M8151" Base="M" Offset="8151" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="RUNON"
+            Describe="程序运行时闭合">
+  </Register>
+  <Register Name="M8152" Base="M" Offset="8152" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="RUNOFF"
+            Describe="程序运行时断开">
+  </Register>
+  <Register Name="M8153" Base="M" Offset="8153" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="RTCLOW"
+            Describe="RTC电池电压低（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8154" Base="M" Offset="8154" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="DC24V"
+            Describe="DC24V故障（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8155" Base="M" Offset="8155" Type="BIT"
+             CanRead="True" CanWrite="False"
+             NickName="IOERR"
+             Describe="IO配置错误（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8156" Base="M" Offset="8156" Type="BIT"
+             CanRead="True" CanWrite="False"
+             NickName="HWERR"
+             Describe="PLC硬件错误（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8157" Base="M" Offset="8157" Type="BIT"
+             CanRead="True" CanWrite="False"
+             NickName="ORFERR"
+             Describe="输出刷新错误（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8158" Base="M" Offset="8158" Type="BIT"
+             CanRead="True" CanWrite="False"
+             NickName="CLK_10ms"
+             Describe="10ms时钟脉冲输出（ 注:1-HIGH  0-LOW ）">
+  </Register>
+  <Register Name="M8159" Base="M" Offset="8159" Type="BIT"
+             CanRead="True" CanWrite="False"
+             NickName="CLK_100ms"
+             Describe="100ms时钟脉冲输出（ 注:1-HIGH  0-LOW ）">
+  </Register>
+  <Register Name="M8160" Base="M" Offset="8160" Type="BIT"
+             CanRead="True" CanWrite="False"
+             NickName="CLK_1s"
+             Describe="1s时钟脉冲输出（ 注:1-HIGH  0-LOW ）">
+  </Register>
+  <Register Name="M8161" Base="M" Offset="8161" Type="BIT"
+             CanRead="True" CanWrite="False"
+             NickName="CLK_60s"
+             Describe="1min时钟脉冲输出（ 注:1-HIGH  0-LOW ）">
+  </Register>
+  <Register Name="M8162" Base="M" Offset="8162" Type="BIT"
+             CanRead="True" CanWrite="True"
+             NickName="ULCLR"
+             Describe="非锁存区内存全部清除（ 注:1-CLEAR  0-NONE ）">
+  </Register>
+  <Register Name="M8163" Base="M" Offset="8163" Type="BIT"
+            CanRead="True" CanWrite="True"
+            NickName="LKCLR"
+            Describe="锁存区内存全部清除（ 注:1-CLEAR  0-NONE ）">
+  </Register>
+  <Register Name="M8164" Base="M" Offset="8164" Type="BIT"
+            CanRead="True" CanWrite="True"
+            NickName="OBAN"
+            Describe="所有输出禁止（ 注:1-DISABLE  0-ENABLE ）">
+  </Register>
+  <Register Name="M8165" Base="M" Offset="8165" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="SHD"
+            Describe="位移动指令方向指示（ 注:1-LEFT  0-RIGHT ）">
+  </Register>
+  <Register Name="M8166" Base="M" Offset="8166" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="SHOF"
+            Describe="移位指令溢出位（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8167" Base="M" Offset="8167" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="SHZ"
+            Describe="移位指令零标志（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8168" Base="M" Offset="8168" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="BCDERR"
+            Describe="BCD转换错误标记（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8169" Base="M" Offset="8169" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="COF"
+            Describe="运算结果溢出（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8170" Base="M" Offset="8170" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="CLZ"
+            Describe="运算负数结果（ 注:1-Y 0-N ）">
+  </Register>
+  <Register Name="M8171" Base="M" Offset="8171" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="CEZ"
+            Describe="运算结果为零（ 注:1-Y 0-N ）">
+  </Register>
+  <Register Name="M8172" Base="M" Offset="8172" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="DIVZ"
+            Describe="除数为零（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8173" Base="M" Offset="8173" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="OFFSETOF"
+            Describe="偏移地址越界（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8174" Base="M" Offset="8174" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="ERRSTATUS"
+            Describe="错误状态（ 注:1-ERROR 0-OK ）">
+  </Register>
+  <Register Name="M8175" Base="M" Offset="8175" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="RUNSTATUS"
+            Describe="运行状态（ 注:1-RUN 0-STOP ）">
+  </Register>
+  <Register Name="M8176" Base="M" Offset="8176" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="ISSEND0"
+            Describe="COM0（232）正在发送标志">
+  </Register>
+  <Register Name="M8177" Base="M" Offset="8177" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="ISSEND1"
+            Describe="COM1（485）正在发送标志">
+  </Register>
+  <Register Name="M8178" Base="M" Offset="8178" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="ISRSV0"
+            Describe="COM0（232）正在接收标志">
+  </Register>
+  <Register Name="M8179" Base="M" Offset="8179" Type="BIT"
+            CanRead="True" CanWrite="False"
+            NickName="ISRSV1"
+            Describe="COM1（485）正在接收标志">
+  </Register>
+  <Register Name="M8176" Base="M" Offset="8176" Type="BIT"
+            CanRead="True" CanWrite="True"
+            NickName="FISEND0"
+            Describe="COM0（232）发送完成标志">
+  </Register>
+  <Register Name="M8177" Base="M" Offset="8177" Type="BIT"
+            CanRead="True" CanWrite="True"
+            NickName="FISEND1"
+            Describe="COM1（485）发送完成标志">
+  </Register>
+  <Register Name="M8178" Base="M" Offset="8178" Type="BIT"
+            CanRead="True" CanWrite="True"
+            NickName="FIRSV0"
+            Describe="COM0（232）接收完成标志">
+  </Register>
+  <Register Name="M8179" Base="M" Offset="8179" Type="BIT"
+            CanRead="True" CanWrite="True"
+            NickName="FIRSV1"
+            Describe="COM1（485）接收完成标志">
+  </Register>
+</SpecialRegisters>

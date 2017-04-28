@@ -288,48 +288,55 @@ namespace SamSoarII.AppMain
         }
         public void CloseCurrentProject()
         {
-            if (_projectModel != null)
+            if (_projectModel != null && _projectModel.IsModify)
             {
-                var result = MessageBox.Show("是否保存当前工程?");
-                if (result == MessageBoxResult.OK || result == MessageBoxResult.Yes)
+                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                switch (mbret)
                 {
-                    SaveProject();
+                    case MessageBoxResult.Yes:
+                        SaveProject();
+                        _projectModel.IsModify = false;
+                        CloseCurrentProject();
+                        return;
+                    case MessageBoxResult.No:
+                        _projectModel.IsModify = false;
+                        CloseCurrentProject();
+                        return;
+                    case MessageBoxResult.Cancel:
+                    default:
+                        return;
                 }
             }
-            _projectTreeView.CloseElementList();
-            _projectTreeView.TabItemOpened -= OnTabOpened;
-            _projectTreeView.RoutineRemoved -= OnRemoveRoutine;
-            _projectTreeView.RoutineRenamed -= OnRenameRoutine;
-            _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
-            _projectTreeView.InstructionTreeItemDoubleClick -= OnInstructionTreeItemDoubleClick;
-            _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
-            ProjectFullFileName = string.Empty;
-            _mainTabControl.SelectionChanged -= OnTabItemChanged;
-            _mainWindow.ClearProjectTreeView();
-            _mainTabControl.Reset();
-            _projectTreeView = null;
-            _projectModel = null;
+            else
+            {
+                _projectTreeView.CloseElementList();
+                _projectTreeView.TabItemOpened -= OnTabOpened;
+                _projectTreeView.RoutineRemoved -= OnRemoveRoutine;
+                _projectTreeView.RoutineRenamed -= OnRenameRoutine;
+                _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
+                _projectTreeView.InstructionTreeItemDoubleClick -= OnInstructionTreeItemDoubleClick;
+                _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
+                ProjectFullFileName = string.Empty;
+                _mainTabControl.SelectionChanged -= OnTabItemChanged;
+                _mainWindow.ClearProjectTreeView();
+                _mainTabControl.Reset();
+                _projectTreeView = null;
+                _projectModel = null;
+            }
         }
         public void SaveProject()
         {
             _projectModel.Save(ProjectFullFileName);
         }
+
         public void SaveAsProject(string fullFileName)
         {
             _projectModel.Save(fullFileName);
         }
+
         public bool LoadProject(string fullFileName)
         {
-            if (_projectModel != null)
-            {
-                var result = MessageBox.Show("是否保存当前工程?");
-                if (result == MessageBoxResult.OK || result == MessageBoxResult.Yes)
-                {
-                    SaveProject();
-                }
-            }
             _projectModel = ProjectHelper.LoadProject(fullFileName, new ProjectModel(String.Empty, _mainWindow.OutputModel));
-            ProjectFileManager.Update(_projectModel.ProjectName,fullFileName);
             if (_projectModel != null)
             {
                 if (_projectModel.IsModify)

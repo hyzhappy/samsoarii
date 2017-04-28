@@ -34,9 +34,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 if (value is PWMModel)
                 {
                     this.model = (PWMModel)(value);
-                    FreqValue = model.FreqValue;
-                    DutyCycleValue = model.DutyCycleValue;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -59,7 +56,6 @@ namespace SamSoarII.LadderInstViewModel.Pulse
         {
             List<string> result = new List<string>();
             result.Add(FreqValue.ValueString);
-            result.Add(DutyCycleValue.ValueString);
             result.Add(OutputValue.ValueString);
             return result;
         }
@@ -76,7 +72,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                DutyCycleValue = ValueParser.ParseWordValue(valueStrings[2]);
+                DutyCycleValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
@@ -84,7 +80,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             }
             try
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[4]);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {

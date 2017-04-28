@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel.Auxiliar
 {
-    class NEGViewModel : OutputRectBaseViewModel
+    public class NEGViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {
@@ -35,8 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is NEGModel)
                 {
                     this.model = (NEGModel)(value);
-                    InputValue = model.InputValue;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -75,7 +73,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                OutputValue = ValueParser.ParseWordValue(valueStrings[2]);
+                OutputValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {

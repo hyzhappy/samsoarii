@@ -34,8 +34,6 @@ namespace SamSoarII.LadderInstViewModel.Counter
                 if (value is CTUModel)
                 {
                     this.model = (CTUModel)(value);
-                    CountValue = model.CountValue;
-                    EndValue = model.EndValue;
                 }
                 else
                 {

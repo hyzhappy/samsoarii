@@ -15,8 +15,7 @@ namespace SamSoarII.LadderInstModel
 
         public CTUDModel()
         {
-            CountValue = WordValue.Null;
-            EndValue = WordValue.Null;
+
         }
 
         public CTUDModel(IValueModel _CountValue, IValueModel _EndValue)

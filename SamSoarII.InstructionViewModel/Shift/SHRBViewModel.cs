@@ -1,85 +1,20 @@
 ﻿using System;
+using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
-using PLCElementModel.PLCElementModel.Shift;
 using SamSoarII.ValueModel;
-using System.Windows.Controls;
 using SamSoarII.PLCDevice;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace SamSoarII.LadderInstViewModel
 {
     public class SHRBViewModel : OutputRectBaseViewModel
     {
-        private SHRBModel model;
-        public BitValue SourceValue
-        {
-            get
-            {
-                return model.SourceValue;
-            }
-            set
-            {
-                model.SourceValue = value;
-                MiddleTextBlock1.Text = string.Format("S:{0}", model.SourceValue.ValueShowString);
-            }
-        }
-        public BitValue DestinationValue
-        {
-            get
-            {
-                return model.DestinationValue;
-            }
-            set
-            {
-                model.DestinationValue = value;
-                MiddleTextBlock2.Text = string.Format("D:{0}", model.DestinationValue.ValueShowString);
-            }
-        }
-        public WordValue SourceLength
-        {
-            get
-            {
-                return model.SourceLength;
-            }
-            set
-            {
-                model.SourceLength = value;
-                MiddleTextBlock3.Text = string.Format("SLen:{0}", model.SourceLength.ValueShowString);
-            }
-        }
-        public WordValue DestinationLength
-        {
-            get
-            {
-                return model.DestinationLength;
-            }
-            set
-            {
-                model.DestinationLength = value;
-                MiddleTextBlock4.Text = string.Format("DLen:{0}", model.DestinationLength.ValueShowString);
-            }
-        }
-        public override BaseModel Model
-        {
-            get
-            {
-                return model;
-            }
-            protected set
-            {
-                model = value as SHRBModel;
-                SourceValue = model.SourceValue;
-                DestinationValue = model.DestinationValue;
-                SourceLength = model.SourceLength;
-                DestinationLength = model.DestinationLength;
-            }
-        }
-        private TextBlock[] _commentTextBlocks = new TextBlock[] { new TextBlock(), new TextBlock(), new TextBlock(), new TextBlock() };
         public override string InstructionName
         {
             get
@@ -87,39 +22,20 @@ namespace SamSoarII.LadderInstViewModel
                 return "SHRB";
             }
         }
-        public SHRBViewModel()
+
+        public override BaseModel Model
         {
-            TopTextBlock.Text = InstructionName;
-            Model = new SHRBModel();
-            CommentArea.Children.Add(_commentTextBlocks[0]);
-            CommentArea.Children.Add(_commentTextBlocks[1]);
-            CommentArea.Children.Add(_commentTextBlocks[2]);
-            CommentArea.Children.Add(_commentTextBlocks[3]);
-        }
-        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
-        {
-            var oldvaluestring1 = SourceValue.ValueString;
-            var oldvaluestring2 = DestinationValue.ValueString;
-            var oldvaluestring3 = SourceLength.ValueString;
-            var oldvaluestring4 = DestinationLength.ValueString;
-            if (ValueParser.CheckValueString(valueStrings[0], new Regex[] { ValueParser.VerifyBitRegex1 }) && ValueParser.CheckValueString(valueStrings[2], new Regex[] { ValueParser.VerifyBitRegex2 }) && ValueParser.CheckValueString(valueStrings[4], new Regex[] { ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex }) && ValueParser.CheckValueString(valueStrings[6], new Regex[] { ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex }))
+            get
             {
-                SourceValue = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
-                DestinationValue = ValueParser.ParseBitValue(valueStrings[2], contextDevice);
-                SourceLength = ValueParser.ParseWordValue(valueStrings[4], contextDevice);
-                DestinationLength = ValueParser.ParseWordValue(valueStrings[6], contextDevice);
-                InstructionCommentManager.ModifyValue(this, oldvaluestring1, SourceValue.ValueString);
-                InstructionCommentManager.ModifyValue(this, oldvaluestring2, DestinationValue.ValueString);
-                InstructionCommentManager.ModifyValue(this, oldvaluestring3, SourceLength.ValueString);
-                InstructionCommentManager.ModifyValue(this, oldvaluestring4, DestinationLength.ValueString);
-                ValueCommentManager.UpdateComment(SourceValue, valueStrings[1]);
-                ValueCommentManager.UpdateComment(DestinationValue, valueStrings[3]);
-                ValueCommentManager.UpdateComment(SourceLength, valueStrings[5]);
-                ValueCommentManager.UpdateComment(DestinationLength, valueStrings[7]);
+                return this.model;
             }
-            else
+
+            protected set
             {
-                throw new ValueParseException("Unexpected input");
+                if (value is SHRBModel)
+                {
+                    this.model = (SHRBModel)(value);
+                }
             }
         }
 
@@ -127,10 +43,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             return new SHRBViewModel();
         }
-        private static int CatalogID { get { return 1205; } }
+
         public override int GetCatalogID()
         {
-            return CatalogID;
+            return 1211;
         }
 
         public override IEnumerable<string> GetValueString()
@@ -138,8 +54,8 @@ namespace SamSoarII.LadderInstViewModel
             List<string> result = new List<string>();
             result.Add(SourceValue.ValueString);
             result.Add(DestinationValue.ValueString);
-            result.Add(SourceLength.ValueString);
-            result.Add(DestinationLength.ValueString);
+            result.Add(CountValue.ValueString);
+            result.Add(MoveValue.ValueString);
             return result;
         }
 
@@ -149,33 +65,33 @@ namespace SamSoarII.LadderInstViewModel
             {
                 SourceValue = ValueParser.ParseBitValue(valueStrings[0]);
             }
-            catch (ValueParseException exception)
+            catch (ValueParseException e)
             {
                 SourceValue = BitValue.Null;
             }
             try
             {
-                SourceLength = ValueParser.ParseWordValue(valueStrings[2]);
-            }
-            catch (ValueParseException exception)
-            {
-                SourceLength = WordValue.Null;
-            }
-            try
-            {
                 DestinationValue = ValueParser.ParseBitValue(valueStrings[1]);
             }
-            catch (ValueParseException exception)
+            catch (ValueParseException e)
             {
                 DestinationValue = BitValue.Null;
             }
             try
             {
-                DestinationLength = ValueParser.ParseWordValue(valueStrings[3]);
+                CountValue = ValueParser.ParseWordValue(valueStrings[2]);
             }
-            catch (ValueParseException exception)
+            catch (ValueParseException e)
             {
-                DestinationLength = WordValue.Null;
+                CountValue = WordValue.Null;
+            }
+            try
+            {
+                MoveValue = ValueParser.ParseWordValue(valueStrings[3]);
+            }
+            catch (ValueParseException e)
+            {
+                MoveValue = WordValue.Null;
             }
         }
 
@@ -183,47 +99,157 @@ namespace SamSoarII.LadderInstViewModel
         {
             var dialog = new ElementPropertyDialog(4);
             dialog.Title = InstructionName;
-            dialog.ShowLine1("S", SourceValue);
-            dialog.ShowLine3("D", DestinationValue);
-            dialog.ShowLine5("SLen", SourceLength);
-            dialog.ShowLine7("DLen", DestinationLength);
+            dialog.ShowLine1("SRC", SourceValue);
+            dialog.ShowLine3("DST", DestinationValue);
+            dialog.ShowLine5("N1", CountValue);
+            dialog.ShowLine7("N2", MoveValue);
             return dialog;
+        }
+
+        public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
+        {
+            var oldvaluestring1 = SourceValue.ValueString;
+            var oldvaluestring2 = DestinationValue.ValueString;
+            var oldvaluestring3 = CountValue.ValueString;
+            var oldvaluestring4 = MoveValue.ValueString;
+            bool check1 = ValueParser.CheckValueString(valueStrings[0],
+                new Regex[] { ValueParser.VerifyBitRegex1 });
+            bool check2 = ValueParser.CheckValueString(valueStrings[2],
+                new Regex[] { ValueParser.VerifyBitRegex2 });
+            bool check3 = ValueParser.CheckValueString(valueStrings[4],
+                new Regex[] { ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex });
+            bool check4 = ValueParser.CheckValueString(valueStrings[6],
+                new Regex[] { ValueParser.VerifyWordRegex3, ValueParser.VerifyIntKHValueRegex });
+            if (check1 && check2 && check3 && check4)
+            {
+                SourceValue = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
+                DestinationValue = ValueParser.ParseBitValue(valueStrings[2], contextDevice);
+                CountValue = ValueParser.ParseWordValue(valueStrings[4], contextDevice);
+                MoveValue = ValueParser.ParseWordValue(valueStrings[6], contextDevice);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring1, SourceValue.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring2, DestinationValue.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring3, CountValue.ValueString);
+                InstructionCommentManager.ModifyValue(this, oldvaluestring4, MoveValue.ValueString);
+                ValueCommentManager.UpdateComment(SourceValue, valueStrings[1]);
+                ValueCommentManager.UpdateComment(DestinationValue, valueStrings[3]);
+                ValueCommentManager.UpdateComment(CountValue, valueStrings[5]);
+                ValueCommentManager.UpdateComment(MoveValue, valueStrings[7]);
+            }
         }
 
         public override void UpdateCommentContent()
         {
             if (SourceValue != BitValue.Null)
             {
-                _commentTextBlocks[0].Text = string.Format("{0}:{1}", SourceValue.ValueString, SourceValue.Comment);
+                _commentTextBlocks[0].Text = String.Format("{0:s}:{1:s}",
+                    SourceValue.ValueString,
+                    SourceValue.Comment);
             }
             else
             {
-                _commentTextBlocks[0].Text = string.Empty;
+                _commentTextBlocks[0].Text = String.Empty;
             }
             if (DestinationValue != BitValue.Null)
             {
-                _commentTextBlocks[1].Text = string.Format("{0}:{1}", DestinationValue.ValueString, DestinationValue.Comment);
+                _commentTextBlocks[1].Text = String.Format("{0:s}:{1:s}",
+                    DestinationValue.ValueString,
+                    DestinationValue.Comment);
             }
             else
             {
-                _commentTextBlocks[1].Text = string.Empty;
+                _commentTextBlocks[1].Text = String.Empty;
             }
-            if (SourceLength != WordValue.Null)
+            if (CountValue != WordValue.Null)
             {
-                _commentTextBlocks[2].Text = string.Format("{0}:{1}", SourceLength.ValueString, SourceLength.Comment);
-            }
-            else
-            {
-                _commentTextBlocks[2].Text = string.Empty;
-            }
-            if (DestinationLength != WordValue.Null)
-            {
-                _commentTextBlocks[3].Text = string.Format("{0}:{1}", DestinationLength.ValueString, DestinationLength.Comment);
+                _commentTextBlocks[2].Text = String.Format("{0:s}:{1:s}",
+                    CountValue.ValueString,
+                    CountValue.Comment);
             }
             else
             {
-                _commentTextBlocks[3].Text = string.Empty;
+                _commentTextBlocks[2].Text = String.Empty;
+            }
+            if (MoveValue != WordValue.Null)
+            {
+                _commentTextBlocks[3].Text = String.Format("{0:s}:{1:s}",
+                    MoveValue.ValueString,
+                    MoveValue.Comment);
+            }
+            else
+            {
+                _commentTextBlocks[3].Text = String.Empty;
+            }
+
+        }
+
+        private SHRBModel model;
+
+        public BitValue SourceValue
+        {
+            get { return this.model?.SourceValue; }
+            set
+            {
+                if (this.model != null)
+                {
+                    this.model.SourceValue = value;
+                    MiddleTextBlock1.Text = String.Format("SRC:{0:s}", value.ValueString);
+                }
             }
         }
+
+        public BitValue DestinationValue
+        {
+            get { return this.model?.DestinationValue; }
+            set
+            {
+                if (this.model != null)
+                {
+                    this.model.DestinationValue = value;
+                    BottomTextBlock.Text = String.Format("DST:{0:s}", value.ValueString);
+                }
+            }
+        }
+
+        public WordValue CountValue
+        {
+            get { return this.model?.CountValue; }
+            set
+            {
+                if (this.model != null)
+                {
+                    this.model.CountValue = value;
+                    MiddleTextBlock2.Text = String.Format("N1:{0:s}", value.ValueString);
+                }
+            }
+        }
+
+        public WordValue MoveValue
+        {
+            get { return this.model?.MoveValue; }
+            set
+            {
+                if (this.model != null)
+                {
+                    this.model.MoveValue = value;
+                    MiddleTextBlock3.Text = String.Format("N2:{0:s}", value.ValueString);
+                }
+            }
+        }
+
+        private TextBlock[] _commentTextBlocks = new TextBlock[]
+        {
+            new TextBlock(), new TextBlock(), new TextBlock(), new TextBlock()
+        };
+
+        public SHRBViewModel()
+        {
+            TopTextBlock.Text = InstructionName;
+            Model = new SHRBModel();
+            foreach (TextBlock tblock in _commentTextBlocks)
+            {
+                CommentArea.Children.Add(tblock);
+            }
+        }
+
     }
 }

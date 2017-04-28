@@ -14,14 +14,20 @@ namespace SamSoarII.LadderInstViewModel
     {
         private static FontManager FontDataProvider = new FontManager();
         private FontFamily _selectFontFamily;
+        private FontFamily _commentFontFamily;
         private int _selectFontSize;
         private int _selectFontSizeIndex;
         private int _selectFontFamilyIndex;
+        private int _commentFontFamilyIndex = -1;
+        
         private FontManager(){ }
         public void Initialize()
         {
             _selectFontSize = _selectFontSizeIndex + 20;
             _selectFontFamily = new FontFamily((new InstalledFontCollection()).Families[_selectFontFamilyIndex].Name);
+            _commentFontFamily = (_commentFontFamilyIndex < 0)
+                ? new FontFamily("微软雅黑")
+                : new FontFamily((new InstalledFontCollection()).Families[_commentFontFamilyIndex].Name);
         }
         public static FontManager GetFontDataProvider()
         {
@@ -51,6 +57,18 @@ namespace SamSoarII.LadderInstViewModel
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SelectFontFamilyIndex"));
             }
         }
+        public int CommentFontFamilyIndex
+        {
+            get
+            {
+                return _commentFontFamilyIndex;
+            }
+            set
+            {
+                _commentFontFamilyIndex = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("CommentFontFamilyIndex"));
+            }
+        }
         public FontFamily SelectFontFamily
         {
             get
@@ -61,6 +79,18 @@ namespace SamSoarII.LadderInstViewModel
             {
                 _selectFontFamily = value;
                 PropertyChanged.Invoke(this,new PropertyChangedEventArgs("SelectFontFamily"));
+            }
+        }
+        public FontFamily CommentFontFamily
+        {
+            get
+            {
+                return _commentFontFamily;
+            }
+            set
+            {
+                _commentFontFamily = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("CommentFontFamily"));
             }
         }
         public int SelectFontSize

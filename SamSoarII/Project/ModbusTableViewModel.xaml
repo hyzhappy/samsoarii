@@ -22,7 +22,8 @@
         <DataGrid x:Name="DG_Table" ItemsSource="{Binding Tables}"
                   Grid.Row="0" Grid.Column="1"
                   AutoGenerateColumns="False" CanUserResizeColumns="False"
-                  SelectionChanged="DG_Table_SelectionChanged" CellEditEnding="DG_Table_CellEditEnding">
+                  SelectionChanged="DG_Table_SelectionChanged" CellEditEnding="DG_Table_CellEditEnding"
+                  RowBackground="White" AlternatingRowBackground="AliceBlue">
             <DataGrid.Resources>
                 <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type local:ModbusTableComboBoxItems}" MethodName="SelectedHandleCodes">
                 </ObjectDataProvider>

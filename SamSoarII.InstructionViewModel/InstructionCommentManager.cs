@@ -119,6 +119,7 @@ namespace SamSoarII.LadderInstViewModel
                 }
             }
         }
+
         public static void UpdateCommentContent(IValueModel value)
         {
             UpdateCommentContent(value.ValueString);
@@ -154,7 +155,8 @@ namespace SamSoarII.LadderInstViewModel
         public static void Clear()
         {
             _valueRelatedModel.Clear();
-            MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Clear, string.Empty, null));
+            MappedMessageChanged(new MappedMessageChangedEventArgs(MappedMessageChangedType.Clear, String.Empty, null));
         }
+
     }
 }

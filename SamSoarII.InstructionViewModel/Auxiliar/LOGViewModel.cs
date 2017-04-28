@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel.Auxiliar
 {
-    class LOGViewModel : OutputRectBaseViewModel
+    public class LOGViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {
@@ -35,8 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is LOGModel)
                 {
                     this.model = (LOGModel)(value);
-                    InputValue = model.InputValue;
-                    OutputValue = model.OutputValue;
                 }
                 else
                 {
@@ -75,7 +73,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                OutputValue = ValueParser.ParseFloatValue(valueStrings[2]);
+                OutputValue = ValueParser.ParseFloatValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {

@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace SamSoarII.LadderInstViewModel.Auxiliar
 {
-    class XCHViewModel : OutputRectBaseViewModel
+    public class XCHViewModel : OutputRectBaseViewModel
     {
         public override string InstructionName
         {
@@ -35,8 +35,6 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 if (value is XCHModel)
                 {
                     this.model = (XCHModel)(value);
-                    LeftValue = model.LeftValue;
-                    RightValue = model.RightValue;
                 }
                 else
                 {
@@ -75,7 +73,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
             try
             {
-                RightValue = ValueParser.ParseWordValue(valueStrings[2]);
+                RightValue = ValueParser.ParseWordValue(valueStrings[1]);
             }
             catch (ValueParseException)
             {
