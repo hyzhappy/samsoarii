@@ -20,13 +20,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
 using SamSoarII.LadderInstViewModel;
-using SamSoarII.AppMain.UI.HelpDocComponet;
 using System.Windows.Media.Animation;
 using Xceed.Wpf.AvalonDock.Themes;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Global;
 using Xceed.Wpf.AvalonDock.Controls;
 using System.Xml;
+using SamSoarII.HelpDocument.HelpDocComponet;
+using SamSoarII.HelpDocument;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -880,44 +881,44 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-        private void OnCheckNetworkErrorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (_interactionFacade != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-        }
+        //private void OnCheckNetworkErrorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        //{
+        //    if (_interactionFacade != null)
+        //    {
+        //        e.CanExecute = _interactionFacade.ProjectLoaded;
+        //    }
+        //    else
+        //    {
+        //        e.CanExecute = false;
+        //    }
+        //}
 
-        private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (_interactionFacade.CurrentLadder != null)
-            {
-                if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
-                {
-                    MessageBox.Show(string.Format("程序控制指令配对失败！"));
-                }
-                else
-                {
-                    var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
-                    while (tempQueue.Count > 0)
-                    {
-                        var ladderNetworkViewModel = tempQueue.Dequeue();
-                        if (ladderNetworkViewModel.IsNetworkError())
-                        {
-                            MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
-                        }
-                        else
-                        {
-                            MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
-                        }
-                    }
-                }
-            }
-        }
+        //private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        //{
+            //if (_interactionFacade.CurrentLadder != null)
+            //{
+            //    if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
+            //    {
+            //        MessageBox.Show(string.Format("程序控制指令配对失败！"));
+            //    }
+            //    else
+            //    {
+            //        var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
+            //        while (tempQueue.Count > 0)
+            //        {
+            //            var ladderNetworkViewModel = tempQueue.Dequeue();
+            //            if (ladderNetworkViewModel.IsNetworkError())
+            //            {
+            //                MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
+            //            }
+            //            else
+            //            {
+            //                MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
+            //            }
+            //        }
+            //    }
+            //}
+        //}
         private void ScrollToLeftAnimation()
         {
             DoubleAnimation animation = new DoubleAnimation();

@@ -12,13 +12,16 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="8*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <WindowsFormsHost x:Name="windowsFormsHost" Height="24" Width="400">
+        <WindowsFormsHost x:Name="windowsFormsHost" Height="24" Width="350">
             <wf:TextBox x:Name="InstructionInputTextBox" Multiline="False" TextChanged="OnTextChanged" KeyDown="OnKeyDown" MouseClick="OnMouseClick"></wf:TextBox>
         </WindowsFormsHost>
-        <Button x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Click="OnEnsureButtonClick">确定</Button>
+        <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="EnsureButton" Width="70" Height="24" Click="OnEnsureButtonClick">确定</Button>
+            <Button x:Name="HelpButton" Width="70" Height="24" Margin="15,0,0,0" Click="OnHelpButtonClick">帮助</Button>
+        </StackPanel>
         <Grid>
             <local:PopupNotTop x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" HorizontalOffset="0" IsOpen="False" Topmost="False">
                 <Border BorderBrush="Beige" BorderThickness="3" Width="600" Height="150">

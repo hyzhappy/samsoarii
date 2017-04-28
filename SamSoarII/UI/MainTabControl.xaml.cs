@@ -13,6 +13,7 @@ using Xceed.Wpf.AvalonDock.Layout;
 using SamSoarII.Simulation.UI;
 using SamSoarII.Simulation.UI.Chart;
 using SamSoarII.AppMain.UI.HelpDocComponet;
+using SamSoarII.HelpDocument.HelpDocComponet;
 
 namespace SamSoarII.AppMain.UI
 {

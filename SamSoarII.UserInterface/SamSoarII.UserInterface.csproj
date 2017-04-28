@@ -159,6 +159,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.HelpDocument\SamSoarII.HelpDocument.csproj">
+      <Project>{932DAF07-5116-44DF-9091-BD4CDC7CD01E}</Project>
+      <Name>SamSoarII.HelpDocument</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj">
       <Project>{6ddbbac0-a051-43ac-be0d-d70227d61687}</Project>
       <Name>SamSoarII.PLCDevice</Name>

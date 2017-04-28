@@ -3,7 +3,7 @@
                     xmlns:local="clr-namespace:SamSoarII.AppMain.Resources.ResourceDictionary">
     <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
         <Border x:Name="Border">
-            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/down.png" Width="14" Height="14" Opacity="0.8"></Image>
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/down.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -79,7 +79,7 @@
     </ControlTemplate>
     <ControlTemplate x:Key="ComboxItemTemplate" TargetType="{x:Type ComboBoxItem}">
         <StackPanel x:Name="Stackpanel" Orientation="Horizontal" Height="20" Margin="4,2,4,2">
-            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/Doc.png" Width="14" Height="14"></Image>
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/Doc.png" Width="14" Height="14"></Image>
             <TextBlock Margin="0,3,0,0" Text="{Binding TabHeader}"></TextBlock>
         </StackPanel>
         <ControlTemplate.Triggers>
@@ -93,7 +93,7 @@
     </ControlTemplate>
     <ControlTemplate x:Key="ScrollToLeft" TargetType="RepeatButton">
         <Border x:Name="Border">
-            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/left.png" Width="14" Height="14" Opacity="0.8"></Image>
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/left.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -110,7 +110,7 @@
     </ControlTemplate>
     <ControlTemplate x:Key="ScrollToRight" TargetType="RepeatButton">
         <Border x:Name="Border">
-            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/right.png" Width="14" Height="14" Opacity="0.8"></Image>
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/right.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -127,7 +127,7 @@
     </ControlTemplate>
     <ControlTemplate TargetType="RepeatButton" x:Key="UpButton">
         <Border x:Name="Border">
-            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/up.png" Width="14" Height="14" Opacity="0.8"></Image>
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/up.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -144,7 +144,7 @@
     </ControlTemplate>
     <ControlTemplate TargetType="RepeatButton" x:Key="DownButton">
         <Border x:Name="Border">
-            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/down.png" Width="14" Height="14" Opacity="0.8"></Image>
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/down.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -161,7 +161,7 @@
     </ControlTemplate>
     <ControlTemplate x:Key="CloseButton" TargetType="Button">
         <Border x:Name="Border">
-            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/UI/HelpDocComponet/Resources/Images/close.png" Width="14" Height="14" Opacity="0.8"></Image>
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/close.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

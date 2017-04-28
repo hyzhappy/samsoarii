@@ -47,12 +47,14 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
                         <ColumnDefinition Width="2*"></ColumnDefinition>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="EnsureButton" Width="100" Height="30" Content="确定" Grid.Column="1" Click="OnEnsureButtonClick"></Button>
-                    <Button x:Name="CancelButton" Width="100" Height="30" Content="取消" Grid.Column="2" Click="OnCancelButtonClick"></Button>
+                    <Button x:Name="EnsureButton" Width="80" Height="30" Content="确定" Grid.Column="1" Click="OnEnsureButtonClick"></Button>
+                    <Button x:Name="CancelButton" Width="80" Height="30" Content="取消" Grid.Column="2" Click="OnCancelButtonClick"></Button>
+                    <Button Width="80" Height="30" Content="帮助" Grid.Column="3" Click="OnHelpButtonClick"></Button>
                 </Grid>
             </Grid>
         </Border>

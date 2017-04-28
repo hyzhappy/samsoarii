@@ -552,4 +552,21 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <ControlTemplate x:Key="PLCSettingButton" TargetType="Button">
+        <StackPanel Orientation="Vertical" x:Name="stackpanel" Opacity="0.9">
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII;component/Resources/Image/PLCSetting.png" Width="14" Height="14" Opacity="0.8"></Image>
+            <TextBlock FontSize="7" Margin="6,0,0,0">PLC</TextBlock>
+        </StackPanel>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="stackpanel" Property="Background" Value="#FFA5D6FF"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="stackpanel" Property="Opacity" Value="1.3"></Setter>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter TargetName="stackpanel" Property="Opacity" Value="0.3"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

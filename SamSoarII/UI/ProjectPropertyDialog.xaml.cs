@@ -1,5 +1,6 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.AppMain.UI.ProjectPropertyWidget;
+using SamSoarII.HelpDocument;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +64,11 @@ namespace SamSoarII.AppMain.UI
         {
             Close();
         }
-
+        private void OnHelpButtonClick(object sender, RoutedEventArgs e)
+        {
+            HelpDocWindow helpDocWindow = new HelpDocWindow();
+            helpDocWindow.Show();
+        }
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox listBox = sender as ListBox;
@@ -84,8 +89,7 @@ namespace SamSoarII.AppMain.UI
                 EnsureButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
         }
+
         #endregion
-
-
     }
 }

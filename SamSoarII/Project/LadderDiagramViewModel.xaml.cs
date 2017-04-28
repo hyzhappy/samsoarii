@@ -352,7 +352,7 @@ namespace SamSoarII.AppMain.Project
         #region JMP,LBL,FOR,NEXT instructions check
         public bool CheckProgramControlInstructions()
         {
-             List<BaseViewModel> eles = GetProgramControlViewModels();
+            List<BaseViewModel> eles = GetProgramControlViewModels();
             List<BaseViewModel> eles_for = eles.Where(x => { return x.GetType() == typeof(FORViewModel); }).ToList();
             List<BaseViewModel> eles_next = eles.Where(x => { return x.GetType() == typeof(NEXTViewModel); }).ToList();
             List<BaseViewModel> eles_jmp = eles.Where(x => { return x.GetType() == typeof(JMPViewModel); }).ToList();
@@ -564,6 +564,16 @@ namespace SamSoarII.AppMain.Project
             _commandManager.Execute(command);
             SelectionStatus = SelectStatus.Idle;
         }
+        public void NetworkRemoveRows(LadderNetworkViewModel network,int startRowNumber,int count)
+        {
+            NetworkRemoveRowCommand command;
+            for (int i = 0; i < count; i++)
+            {
+                command = new LadderCommand.NetworkRemoveRowCommand(network, startRowNumber + i);
+                _commandManager.Execute(command);
+            }
+            SelectionStatus = SelectStatus.Idle;
+        }
         public void NetworkAddRow(LadderNetworkViewModel network, int rowNumber)
         {
             var command = new LadderCommand.NetworkAddRowCommand(network, rowNumber);
@@ -752,11 +762,11 @@ namespace SamSoarII.AppMain.Project
 
         #region Selection Rectangle Relative
 
-        private void VScrollToRect(int num, int row)
+        public void VScrollToRect(int networkNumber, int row)
         {
             double scale = GlobalSetting.LadderScaleX;
             double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
-            foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < num; }))
+            foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < networkNumber; }))
             {
                 offset += scale * (item.ActualHeight + 20) / 2.65;
             }
@@ -765,7 +775,7 @@ namespace SamSoarII.AppMain.Project
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
-        private void HScrollToRect(int XIndex)
+        public void HScrollToRect(int XIndex)
         {
             double scale = GlobalSetting.LadderScaleX;
             double offset = 0;
@@ -2307,6 +2317,7 @@ namespace SamSoarII.AppMain.Project
                 net.IsSelectAllMode = false;
             }
             _selectAllNetworkCache.Clear();
+            CrossNetState = CrossNetworkState.NoCross;
         }
 
         private void EnterSingleSelectedState()
@@ -2324,6 +2335,7 @@ namespace SamSoarII.AppMain.Project
                 net.IsSelectAllMode = false;
             }
             _selectAllNetworkCache.Clear();
+            CrossNetState = CrossNetworkState.NoCross;
         }
 
         private void EnterMultiSelectingState()

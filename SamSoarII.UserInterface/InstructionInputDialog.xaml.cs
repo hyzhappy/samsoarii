@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.HelpDocument;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -529,6 +530,11 @@ namespace SamSoarII.UserInterface
                     RemovePopup();
                 }
             }
+        }
+        private void OnHelpButtonClick(object sender, RoutedEventArgs e)
+        {
+            HelpDocWindow helpDocWindow = new HelpDocWindow();
+            helpDocWindow.Show();
         }
     }
 }

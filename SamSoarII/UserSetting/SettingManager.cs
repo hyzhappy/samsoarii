@@ -1,6 +1,6 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.AppMain.Properties;
-using SamSoarII.AppMain.UI.HelpDocComponet;
+using SamSoarII.HelpDocument.HelpDocComponet;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

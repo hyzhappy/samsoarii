@@ -54,5 +54,9 @@ namespace SamSoarII.LadderInstViewModel
             // Nothing to do
             return null;
         }
+        public override bool Assert()
+        {
+            return NextElemnets.Where(x => { return x.Type == ElementType.Null; }).Count() == 1 && NextElemnets.Count == 1;
+        }
     }
 }

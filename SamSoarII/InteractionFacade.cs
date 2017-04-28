@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using SamSoarII.ValueModel;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.AppMain.LadderGraphModule;
 
 namespace SamSoarII.AppMain
 {
@@ -90,14 +91,116 @@ namespace SamSoarII.AppMain
             get;
             private set;
         }
-
         public InteractionFacade(MainWindow mainwindow)
         {
             this._mainWindow = mainwindow;
             mainwindow.InstShortCutOpen += Mainwindow_InstShortCutOpen;
+            mainwindow.InsertRowCommand.CanExecute += InsertRowCommand_CanExecute;
+            mainwindow.InsertRowCommand.Executed += InsertRowCommand_Executed;
+            mainwindow.DeleteRowCommand.CanExecute += DeleteRowCommand_CanExecute;
+            mainwindow.DeleteRowCommand.Executed += DeleteRowCommand_Executed;
+            mainwindow.CheckLadderCommand.CanExecute += CheckLadderCommand_CanExecute;
+            mainwindow.CheckLadderCommand.Executed += CheckLadderCommand_Executed;
             _mainTabControl = _mainWindow.MainTab;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             SimulateHelper.TabOpen += OnTabOpened;
+        }
+
+        private void CheckLadderCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ErrorMessage errorMessage = LadderGraphCheckModule.Execute(CurrentLadder);
+            if (errorMessage.Error == ErrorType.None)
+            {
+                MessageBox.Show("程序正确!");
+            }
+            else if (errorMessage.Error == ErrorType.InstPair)
+            {
+                MessageBox.Show("循环指令或跳转指令不匹配!");
+            }
+            else if (errorMessage.Error == ErrorType.Empty)
+            {
+                MessageBox.Show(string.Format("网络{0}元素为空!",errorMessage.RefNetworks.First().NetworkNumber));
+            }
+            else
+            {
+                errorMessage.RefNetworks.First().AcquireSelectRect();
+                CurrentLadder.SelectionRect.X = errorMessage.RefNetworks.Last().ErrorModels.First().X;
+                CurrentLadder.SelectionRect.Y = errorMessage.RefNetworks.Last().ErrorModels.First().Y;
+                CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
+                CurrentLadder.VScrollToRect(errorMessage.RefNetworks.First().NetworkNumber, CurrentLadder.SelectionRect.Y);
+                switch (errorMessage.Error)
+                {
+                    case ErrorType.Open:
+                        MessageBox.Show("光标处开路错误!");
+                        break;
+                    case ErrorType.Short:
+                        MessageBox.Show("光标处短路错误!");
+                        break;
+                    case ErrorType.SelfLoop:
+                        MessageBox.Show("光标处自环错误!");
+                        break;
+                    case ErrorType.HybridLink:
+                        MessageBox.Show("光标处混联错误!");
+                        break;
+                    case ErrorType.Special:
+                        MessageBox.Show("光标处特殊指令错误!");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        private void CheckLadderCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = CurrentLadder != null;
+        }
+
+        private void DeleteRowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (CurrentLadder.SelectionStatus == SelectStatus.SingleSelected)
+            {
+                CurrentLadder.NetworkRemoveRow(CurrentLadder.SelectRectOwner,CurrentLadder.SelectionRect.Y);
+            }
+            else
+            {
+                if (CurrentLadder.CrossNetState == CrossNetworkState.NoCross)
+                {
+                    if (CurrentLadder.SelectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit)
+                    {
+                        CurrentLadder.NetworkRemoveRow(CurrentLadder.SelectStartNetwork, CurrentLadder.SelectStartNetwork.SelectAreaFirstY);
+                    }
+                    else
+                    {
+                        CurrentLadder.NetworkRemoveRows(CurrentLadder.SelectStartNetwork,Math.Min(CurrentLadder.SelectStartNetwork.SelectAreaFirstY,CurrentLadder.SelectStartNetwork.SelectAreaSecondY),Math.Abs(CurrentLadder.SelectStartNetwork.SelectAreaFirstY - CurrentLadder.SelectStartNetwork.SelectAreaSecondY) + 1);
+                    }
+                }
+            }
+        }
+        private void DeleteRowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (CurrentLadder != null && CurrentLadder.SelectionStatus != SelectStatus.Idle && CurrentLadder.CrossNetState == CrossNetworkState.NoCross)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        private void InsertRowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            CurrentLadder.NetworkAddRow(CurrentLadder.SelectRectOwner,CurrentLadder.SelectionRect.Y + 1);
+        }
+        private void InsertRowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (CurrentLadder != null && CurrentLadder.SelectionStatus == SelectStatus.SingleSelected)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
         private void Mainwindow_InstShortCutOpen(object sender, RoutedEventArgs e)
         {

@@ -42,7 +42,7 @@ namespace SamSoarII.Extend.LogicGraph
             this.nedges = new List<LGEdge>();
             this.pedges = new List<LGEdge>();
             this.expr = "null";
-        }        
+        }
 
         /// <summary>
         /// 该节点是否能使用
@@ -191,17 +191,22 @@ namespace SamSoarII.Extend.LogicGraph
                 }
                 // 表达式合并
                 this.Expr = "(" + ExprHelper.Merge(subexprs, 0, subexprs.Count - 1) + ")";
-            } 
-            else
+            }
+            // 如果存在前向边
+            else if (BackEdges.Count > 0)
             {
                 this.Expr = BackEdges[0].Expr;
+            }
+            else
+            {
+                this.Expr = "1";
             }
             //Console.Write("expr end {0:d}, {1:s}\n", Id, Expr);
         }
         /// <summary>
         /// 生成从该节点出发到达所有终点的PLC指令
         /// </summary>
-        public void GenInst(List<PLCInstruction> insts, int flags=0)
+        public void GenInst(List<PLCInstruction> insts, int flags = 0)
         {
             // 到达终点可跳出
             if (this.IsTerminate)
@@ -319,3 +324,4 @@ namespace SamSoarII.Extend.LogicGraph
         }
     }
 }
+
