@@ -67,6 +67,13 @@ namespace SamSoarII.Simulation.UI.Chart
             BuildRouted();
         }
 
+        public void Update()
+        {
+            VList.Update();
+            VChart.Update();
+            VChart.UpdateChart();
+        }
+
         #region Actual Size
         protected override void OnActualWidthChanged()
         {
@@ -114,28 +121,8 @@ namespace SamSoarII.Simulation.UI.Chart
         public void BuildRouted(SimulateModel _parent)
         {
             parent = _parent;
-            parent.RunDataFinished += OnRunDataFinished;
-            parent.RunDrawFinished += OnRunDrawFinished;
         }
-
-        public event SimulateDataModelEventHandler RunDrawFinished;
-        private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
-        {
-            if (RunDrawFinished != null)
-            {
-                RunDrawFinished(this, e);
-            }
-        }
-
-        public event SimulateDataModelEventHandler RunDataFinished;
-        private void OnRunDataFinished(object sender, SimulateDataModelEventArgs e)
-        {
-            if (RunDataFinished != null)
-            {
-                RunDataFinished(this, e);
-            }
-        }
-
+        
         public event SimulateDataModelEventHandler SDModelSetup;
         private void OnSDModelSetup(object sender, SimulateDataModelEventArgs e)
         {

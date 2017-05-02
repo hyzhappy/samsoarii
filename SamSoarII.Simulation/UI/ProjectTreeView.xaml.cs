@@ -27,6 +27,7 @@ namespace SamSoarII.Simulation.UI
 
         public const int ADDTVI_TYPE_SUBROUTINES = 0x01;
         public const int ADDTVI_TYPE_FUNCBLOCKS = 0x02;
+
         public void AddTreeViewItem(string name, int type)
         {
             TreeViewItem tvitem = new TreeViewItem();

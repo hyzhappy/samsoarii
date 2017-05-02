@@ -80,15 +80,20 @@ namespace SamSoarII.Simulation.UI.Chart
                     if (vts < timestart) vts = timestart;
                     if (vte > timeend) vte = timeend;
                     if (vts >= vte) continue;
-                    if (vs is IntSegment)
+                    if (vs is BitSegment || vs is WordSegment)
                     {
-                        min = Math.Min(min, (double)((int)(vs.Value)));
-                        max = Math.Max(max, (double)((int)(vs.Value)));
+                        min = Math.Min(min, (double)((Int32)(vs.Value)));
+                        max = Math.Max(max, (double)((Int32)(vs.Value)));
+                    }
+                    if (vs is DWordSegment)
+                    {
+                        min = Math.Min(min, (double)((Int64)(vs.Value)));
+                        max = Math.Max(max, (double)((Int64)(vs.Value)));
                     }
                     if (vs is FloatSegment)
                     {
-                        min = Math.Min(min, (double)((float)(vs.Value)));
-                        max = Math.Max(max, (double)((float)(vs.Value)));
+                        min = Math.Min(min, (double)(vs.Value));
+                        max = Math.Max(max, (double)(vs.Value));
                     }
                 }
             }
@@ -114,13 +119,17 @@ namespace SamSoarII.Simulation.UI.Chart
                     if (vts < XRuler.TimeStart) vts = XRuler.TimeStart;
                     if (vte > XRuler.TimeEnd) vte = XRuler.TimeEnd;
                     if (vts >= vte) continue;
-                    if (vs is IntSegment)
+                    if (vs is BitSegment || vs is WordSegment)
                     {
-                        v = (double)((int)(vs.Value));
+                        v = (double)((Int32)vs.Value);
+                    }
+                    if (vs is DWordSegment)
+                    {
+                        v = (double)((Int64)vs.Value);
                     }
                     if (vs is FloatSegment)
                     {
-                        v = (double)((float)(vs.Value));
+                        v = (double)vs.Value;
                     }
                     linev = new Line();
                     linev.Y1 = CanvaHeight * (vp - YRuler.ValueStart) / (YRuler.ValueEnd - YRuler.ValueStart);

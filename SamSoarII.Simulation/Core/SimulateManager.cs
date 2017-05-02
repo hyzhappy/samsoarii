@@ -32,6 +32,13 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         private SimulateDllModel dllmodel;
         /// <summary>
+        /// dll模型
+        /// </summary>
+        public SimulateDllModel DllModel
+        {
+            get { return this.dllmodel; }
+        }
+        /// <summary>
         /// 变量模型的列表
         /// </summary>
         private LinkedList<SimulateVariableModel> vlist;
@@ -71,11 +78,15 @@ namespace SamSoarII.Simulation.Core
             lddict = new Dictionary<string, SimulateDataModel>();
             vddict = new Dictionary<string, SimulateDataModel>();
             // 初始化事件监听
-            dllmodel.RunDataFinished += OnRunDataFinished;
-            dllmodel.RunDrawFinished += OnRunDrawFinished;
+            //dllmodel.RunDataFinished += OnRunDataFinished;
+            //dllmodel.RunDrawFinished += OnRunDrawFinished;
             // 初始化更新线程
             updateactive = false;
             updatethread = null;
+
+            dllmodel.SimulateStart += OnSimulateStart;
+            dllmodel.SimulatePause += OnSimulatePause;
+            dllmodel.SimulateAbort += OnSimulateAbort;
         }
         
         /// <summary>
@@ -216,9 +227,9 @@ namespace SamSoarII.Simulation.Core
             if (SimuStatus == SIMU_RUNNING)
                 return;
             // 开始仿真
-            SimuStatus = SIMU_RUNNING;
+            //SimuStatus = SIMU_RUNNING;
             dllmodel.Start();
-            UpdateStart();
+            //UpdateStart();
         }
         /// <summary>
         /// 暂停仿真
@@ -229,9 +240,9 @@ namespace SamSoarII.Simulation.Core
             if (SimuStatus == SIMU_PAUSE || SimuStatus == SIMU_STOP)
                 return;
             // 暂停仿真
-            SimuStatus = SIMU_PAUSE;
+            //SimuStatus = SIMU_PAUSE;
             dllmodel.Pause();
-            UpdateStop();
+            //UpdateStop();
         }
         /// <summary>
         /// 停止仿真
@@ -242,26 +253,9 @@ namespace SamSoarII.Simulation.Core
             if (SimuStatus == SIMU_STOP)
                 return;
             // 停止仿真
-            SimuStatus = SIMU_STOP;
+            //SimuStatus = SIMU_STOP;
             dllmodel.Abort();
-            UpdateStop();
-            // 初始化所有变量
-            int[] emptyBuffer = new int[8192];
-            long[] emptyBufferLong = new long[56];
-            for (int i = 0; i < emptyBuffer.Length; i++)
-            {
-                emptyBuffer[i] = 0;
-            }
-            dllmodel.SetValue_Bit("X0", 128, emptyBuffer);
-            dllmodel.SetValue_Bit("Y0", 128, emptyBuffer);
-            dllmodel.SetValue_Bit("M0", 256 << 5, emptyBuffer);
-            dllmodel.SetValue_Bit("C0", 256, emptyBuffer);
-            dllmodel.SetValue_Bit("T0", 256, emptyBuffer);
-            dllmodel.SetValue_Bit("S0", 32 << 5, emptyBuffer);
-            dllmodel.SetValue_Word("D0", 8192, emptyBuffer);
-            dllmodel.SetValue_Word("TV0", 256, emptyBuffer);
-            dllmodel.SetValue_Word("CV0", 200, emptyBuffer);
-            dllmodel.SetValue_DWord("CV200", 56, emptyBufferLong);
+            //UpdateStop();
         }
         #endregion
 
@@ -783,9 +777,17 @@ namespace SamSoarII.Simulation.Core
                 SimulateDataModel sdmodel = vddict[name];
                 switch (sdmodel.Type)
                 {
-                    case "BIT": case "WORD": case "DWORD":
-                        vs = new IntSegment();
-                        vs.Value = int.Parse(args[2]);
+                    case "BIT": 
+                        vs = new BitSegment();
+                        vs.Value = Int32.Parse(args[2]);
+                        break;
+                    case "WORD":
+                        vs = new WordSegment();
+                        vs.Value = Int32.Parse(args[2]);
+                        break;
+                    case "DWORD":
+                        vs = new DWordSegment();
+                        vs.Value = Int64.Parse(args[2]);
                         break;
                     case "FLOAT":
                         vs = new FloatSegment();
@@ -818,25 +820,27 @@ namespace SamSoarII.Simulation.Core
         }
 
         #region Event Handler
-        public event SimulateDataModelEventHandler RunDataFinished;
-        private void OnRunDataFinished(object sender, SimulateDataModelEventArgs e)
+
+        #region Simulate Control
+        
+        private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
-            UpdateView(e.TimeStart, e.TimeEnd);
-            if (RunDataFinished != null)
-            {
-                RunDataFinished(this, e);
-            }
+            SimuStatus = SIMU_RUNNING;
+            UpdateStart();
         }
 
-        public event SimulateDataModelEventHandler RunDrawFinished;
-        private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
+        private void OnSimulatePause(object sender, RoutedEventArgs e)
         {
-            UpdateView(e.TimeStart, e.TimeEnd);
-            if (RunDrawFinished != null)
-            {
-                RunDrawFinished(this, e);
-            }
+            SimuStatus = SIMU_PAUSE;
+            UpdateStop();
         }
+
+        private void OnSimulateAbort(object sender, RoutedEventArgs e)
+        {
+            SimuStatus = SIMU_STOP;
+            UpdateStop();
+        }
+        #endregion
 
         #endregion
 

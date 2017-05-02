@@ -141,8 +141,8 @@
         </Style>
     </Window.Resources>
     <DockPanel x:Name="MainDockPanel">
-        <Menu DockPanel.Dock="Top" Height="28" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
-            <MenuItem Header="文件(_F)" Margin="0,-4,0,0">
+        <Menu DockPanel.Dock="Top" Height="27" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
+            <MenuItem Header="文件(_F)" Margin="0,-5,0,0">
                 <MenuItem Header="新建工程" Command="ApplicationCommands.New">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
@@ -174,7 +174,7 @@
                 <Separator/>
                 <MenuItem Header="退出" Command="ApplicationCommands.Close"></MenuItem>
             </MenuItem>
-            <MenuItem Header="编辑(_E)" Margin="0,-4,0,0">
+            <MenuItem Header="编辑(_E)" Margin="0,-5,0,0">
                 <MenuItem Header="撤销" Command="ApplicationCommands.Undo">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
@@ -207,7 +207,7 @@
                 <Separator/>
                 <MenuItem Header="查找和替换"></MenuItem>
             </MenuItem>
-            <MenuItem Header="视图(_V)" Margin="0,-4,0,0">
+            <MenuItem Header="视图(_V)" Margin="0,-5,0,0">
                 <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
                 <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
                 <Separator></Separator>
@@ -224,20 +224,20 @@
                 <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowMonitorCommand}"></MenuItem>
                 <MenuItem Header="仿真图表"></MenuItem>
             </MenuItem>
-            <MenuItem Header="工程(_P)" Margin="0,-4,0,0">
+            <MenuItem Header="工程(_P)" Margin="0,-5,0,0">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
                 <MenuItem Header="添加函数功能块" Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>
-            <MenuItem Header="生成(_B)" Margin="0,-4,0,0">
+            <MenuItem Header="生成(_B)" Margin="0,-5,0,0">
                 <MenuItem Header="编译" Command="{x:Static app:GlobalCommand.CompileCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Compile.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="工具(_T)" Margin="0,-4,0,0">
+            <MenuItem Header="工具(_T)" Margin="0,-5,0,0">
                 <MenuItem Header="上载">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
@@ -262,7 +262,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="帮助(_H)" Margin="0,-4,0,0">
+            <MenuItem Header="帮助(_H)" Margin="0,-5,0,0">
                 <MenuItem Header="查看帮助" Click="OnShowHelpDocWindow"></MenuItem>
                 <MenuItem Header="在线升级"></MenuItem>
                 <Separator></Separator>

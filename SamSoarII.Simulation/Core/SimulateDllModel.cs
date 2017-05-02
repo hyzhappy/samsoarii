@@ -13,6 +13,7 @@ using System.Windows;
 
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Chart;
+using System.Collections.ObjectModel;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -54,69 +55,43 @@ namespace SamSoarII.Simulation.Core
         /// <summary> LoadDll返回结果：成功</summary>
         public const int LOADDLL_OK = 0x00;
         /// <summary> LoadDll返回结果：没找到dll</summary>
-        public const int LOADDLL_CANNOT_FOUND_DLLFILE = 0x010000;
+        public const int LOADDLL_CANNOT_FOUND_DLLFILE = 0x01;
         /// <summary> LoadDll返回结果：没找到RunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_RUNLADDER = 0x020000;
+        public const int LOADDLL_CANNOT_FOUND_RUNLADDER = 0x02;
         /// <summary> LoadDll返回结果：没找到GetBit的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETBIT = 0x030000;
+        public const int LOADDLL_CANNOT_FOUND_GETBIT = 0x03;
         /// <summary> LoadDll返回结果：没找到GetWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETWORD = 0x040000;
+        public const int LOADDLL_CANNOT_FOUND_GETWORD = 0x04;
         /// <summary> LoadDll返回结果：没找到GetDWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETDWORD = 0x050000;
+        public const int LOADDLL_CANNOT_FOUND_GETDWORD = 0x05;
         /// <summary> LoadDll返回结果：没找到GetFloat的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETFLOAT = 0x060000;
+        public const int LOADDLL_CANNOT_FOUND_GETFLOAT = 0x06;
         /// <summary> LoadDll返回结果：没找到GetDouble的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETDOUBLE = 0x070000;
+        public const int LOADDLL_CANNOT_FOUND_GETDOUBLE = 0x07;
         /// <summary> LoadDll返回结果：没找到SetBit的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETBIT = 0x080000;
+        public const int LOADDLL_CANNOT_FOUND_SETBIT = 0x08;
         /// <summary> LoadDll返回结果：没找到SetWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETWORD = 0x090000;
+        public const int LOADDLL_CANNOT_FOUND_SETWORD = 0x09;
         /// <summary> LoadDll返回结果：没找到SetDWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETDWORD = 0x0A0000;
+        public const int LOADDLL_CANNOT_FOUND_SETDWORD = 0x0A;
         /// <summary> LoadDll返回结果：没找到SetFloat的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETFLOAT = 0x0B0000;
+        public const int LOADDLL_CANNOT_FOUND_SETFLOAT = 0x0B;
         /// <summary> LoadDll返回结果：没找到SetDouble的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETDOUBLE = 0x0C0000;
+        public const int LOADDLL_CANNOT_FOUND_SETDOUBLE = 0x0C;
         /// <summary> LoadDll返回结果：没找到SetEnable的入口</summary>
-        public const int LOADDLL_CANNOT_FOUNF_SETENABLE = 0x0D0000;
-        /// <summary> LoadDll返回结果：没找到InitDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_INITDATAPOINT = 0x0E0000;
-        /// <summary> LoadDll返回结果：没找到AddBitDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_ADDBITDATAPOINT = 0x0F0000;
-        /// <summary> LoadDll返回结果：没找到AddWordDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_ADDWORDDATAPOINT = 0x100000;
-        /// <summary> LoadDll返回结果：没找到AddDWordDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_ADDDWORDDATAPOINT = 0x110000;
-        /// <summary> LoadDll返回结果：没找到AddFloatDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_ADDFLOATDATAPOINT = 0x120000;
-        /// <summary> LoadDll返回结果：没找到AddDoubleDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_ADDDOUBLEATAPOINT = 0x130000;
-        /// <summary> LoadDll返回结果：没找到RemoveBitDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_REMOVEBITDATAPOINT = 0x140000;
-        /// <summary> LoadDll返回结果：没找到RemoveWordDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_REMOVEWORDDATAPOINT = 0x150000;
-        /// <summary> LoadDll返回结果：没找到RemoveDWordDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_REMOVEDWORDDATAPOINT = 0x160000;
-        /// <summary> LoadDll返回结果：没找到RemoveFloatDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_REMOVEFLOATDATAPOINT = 0x170000;
-        /// <summary> LoadDll返回结果：没找到RemoveDoubleDataPoint的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_REMOVEDOUBLEATAPOINT = 0x180000;
-        /// <summary> LoadDll返回结果：没找到AddViewInput的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_ADDVIEWINPUT = 0x190000;
-        /// <summary> LoadDll返回结果：没找到AddViewOutput的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_ADDVIEWOUTPUT = 0x1A0000;
-        /// <summary> LoadDll返回结果：没找到RemoveViewInput的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_REMOVEVIEWINPUT = 0x1B0000;
-        /// <summary> LoadDll返回结果：没找到RemoveViewOutput的入口</summary>
-        public const int LOADDLL_CANNOT_FOUNd_REMOVEVIEWOUTPUT = 0x1C0000;
+        public const int LOADDLL_CANNOT_FOUND_SETENABLE = 0x0D;
         /// <summary> LoadDll返回结果：没找到BeforeRunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_BEFORERUNLADDER = 0x1D0000;
+        public const int LOADDLL_CANNOT_FOUND_BEFORERUNLADDER = 0x0E;
         /// <summary> LoadDll返回结果：没找到AfterRunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_AFTERRUNLADDER = 0x1E0000;
-        /// <summary> LoadDll返回结果：没找到RunData的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_RUNDATA = 0x1F0000;
+        public const int LOADDLL_CANNOT_FOUND_AFTERRUNLADDER = 0x0F;
         /// <summary> LoadDll返回结果：没找到InitRunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_INITRUNLADDER = 0x200000;
+        public const int LOADDLL_CANNOT_FOUND_INITRUNLADDER = 0x10;
+        /// <summary> LoadDll返回结果：没找到InitClock的入口</summary>
+        public const int LOADDLL_CANNOT_FOUND_INITCLOCK = 0x11;
+        /// <summary> LoadDll返回结果：没找到GetClock的入口</summary>
+        public const int LOADDLL_CANNNT_FOUND_GETCLOCK = 0x12;
+        /// <summary> LoadDll返回结果：没找到SetClockRate的入口</summary>
+        public const int LOADDLL_CANNOT_FOUND_SETCLOCKRATE = 0x13;
 
         /// <summary>
         /// 动态库接口：读取工程dll
@@ -300,196 +275,7 @@ namespace SamSoarII.Simulation.Core
             int size,
             int value
         );
-
-        /// <summary>
-        /// 初始化数据点系统
-        /// </summary>
-        [DllImport("simu.dll", EntryPoint = "InitDataPoint")]
-        public static extern void InitDataPoint
-        (
-        );
-
-        /// <summary>
-        /// 添加一个类型为位的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "AddBitDataPoint")]
-        private static extern void AddBitDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            Int32 value
-        );
         
-        /// <summary>
-        /// 添加一个类型为字的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "AddWordDataPoint")]
-        private static extern void AddWordDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            Int32 value
-        );
-        
-        /// <summary>
-        /// 添加一个类型为双字的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "AddDWordDataPoint")]
-        private static extern void AddDWordDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            Int64 value
-        );
-        
-        /// <summary>
-        /// 添加一个类型为浮点的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "AddFloatDataPoint")]
-        private static extern void AddFloatDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            double value
-        );
-        
-        /// <summary>
-        /// 删除一个类型为位的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "RemoveBitDataPoint")]
-        private static extern void RemoveBitDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            Int32 value
-        );
-
-        /// <summary>
-        /// 删除一个类型为字的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "RemoveWordDataPoint")]
-        private static extern void RemoveWordDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            Int32 value
-        );
-
-        /// <summary>
-        /// 删除一个类型为双字的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "RemoveDWordDataPoint")]
-        private static extern void RemoveDWordDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            Int64 value
-        );
-
-        /// <summary>
-        /// 删除一个类型为浮点的数据点
-        /// </summary>
-        /// <param name="name">名称</param>
-        /// <param name="time">时间</param>
-        /// <param name="value">值</param>
-        [DllImport("simu.dll", EntryPoint = "RemoveFloatDataPoint")]
-        private static extern void RemoveFloatDataPoint
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int time,
-            double value
-        );
-        
-        /// <summary> 视点类型：位 </summary>
-        private const int DP_TYPE_BIT = 0x01;
-        /// <summary> 视点类型：字 </summary>
-        private const int DP_TYPE_WORD = 0x02;
-        /// <summary> 视点类型：双字 </summary>
-        private const int DP_TYPE_DOUBLEWORD = 0x03;
-        /// <summary> 视点类型：浮点 </summary>
-        private const int DP_TYPE_FLOAT = 0x04;
-
-        /// <summary>
-        /// 添加新的输入视点（锁定）
-        /// </summary>
-        /// <param name="name">视点名称</param>
-        /// <param name="type">视点类型</param>
-        [DllImport("simu.dll", EntryPoint = "AddViewInput")]
-        private static extern void AddViewInput
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int type
-        );
-        
-        /// <summary>
-        /// 添加新的输出视点（监视）
-        /// </summary>
-        /// <param name="name">视点名称</param>
-        /// <param name="type">视点类型</param>
-        [DllImport("simu.dll", EntryPoint = "AddViewOutput")]
-        private static extern void AddViewOutput
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int type
-        );
-        
-        /// <summary>
-        /// 删除输入视点（解锁）
-        /// </summary>
-        /// <param name="name">视点名称</param>
-        /// <param name="type">视点类型</param>
-        [DllImport("simu.dll", EntryPoint = "RemoveViewInput")]
-        private static extern void RemoveViewInput
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int type
-        );
-
-        /// <summary>
-        /// 删除输出视点（解除监视）
-        /// </summary>
-        /// <param name="name">视点名称</param>
-        /// <param name="type">视点类型</param>
-        [DllImport("simu.dll", EntryPoint = "RemoveViewOutput")]
-        private static extern void RemoveViewOutput
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string name,
-            int type
-        );
-
         /// <summary>
         /// 在开始仿真之前，需要做的初始化工作
         /// </summary>
@@ -509,19 +295,25 @@ namespace SamSoarII.Simulation.Core
         private static extern void AfterRunLadder();
 
         /// <summary>
-        /// 进行一次数据运行，获得输出视点在时间段内的数据情况
+        /// 初始化仿真计时时间
         /// </summary>
-        /// <param name="outputFile">输出的报告文件</param>
-        /// <param name="starttime">时间段起点</param>
-        /// <param name="endtime">时间段终点</param>
-        [DllImport("simu.dll", EntryPoint = "RunData")]
-        private static extern void RunData
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string outputFile,
-            int starttime,
-            int endtime
-        );
+        /// <param name="time">要初始化的值</param>
+        [DllImport("simu.dll", EntryPoint = "InitClock")]
+        private static extern void InitClock(int time);
+
+        /// <summary>
+        /// 获取当前的计时时间
+        /// </summary>
+        /// <returns>计时时间</returns>
+        [DllImport("simu.dll", EntryPoint = "GetClock")]
+        private static extern int GetClock();
+
+        /// <summary>
+        /// 设置时间速率
+        /// </summary>
+        /// <param name="timerate">时间速率，越小越快</param>
+        [DllImport("simu.dll", EntryPoint = "SetClockRate")]
+        private static extern void SetClockRate(int timerate);
         #endregion
         
         /// <summary>
@@ -532,6 +324,7 @@ namespace SamSoarII.Simulation.Core
             // 初始化线程
             simulateActive = false;
             simulateThread = null;
+            SimulateAbort += OnSimulateThreadClosed;
         }
 
         #region Simulate Process
@@ -555,6 +348,11 @@ namespace SamSoarII.Simulation.Core
         public const int SIMULATE_RUNNING = 0x01;
         /// <summary> 仿真状态：暂停 </summary>
         public const int SIMULATE_PAUSE = 0x02;
+        
+        /// <summary> 仿真模式：正常 </summary>
+        public const int SIMUMODE_NORMAL = 0x00;
+        /// <summary> 仿真模式：图表绘制 </summary>
+        public const int SIMUMODE_CHART = 0x01;
 
         /// <summary>
         /// 仿真状态
@@ -598,12 +396,37 @@ namespace SamSoarII.Simulation.Core
                 }
             }
         }
+
+        /// <summary>
+        /// 仿真模式
+        /// </summary>
+        private int simumode = SIMUMODE_NORMAL;
+        /// <summary>
+        /// 仿真模式
+        /// </summary>
+        public int SimuMode
+        {
+            get
+            {
+                return this.simumode;
+            }
+            set
+            {
+                Abort();
+                this.simumode = value;
+            }
+        }
+
+        public int TimeStart { get; set; }
+
+        public int TimeEnd { get; set; }
         
         /// <summary>
         /// 仿真线程要运行的函数
         /// </summary>
         private void _SimulateThread()
         {
+            SetClockRate(50);
             // 初始化
             InitRunLadder();
             // 存活状态下运行循环
@@ -624,8 +447,63 @@ namespace SamSoarII.Simulation.Core
                 RunLadder();
                 AfterRunLadder();
             }
+            // 发送线程终止的事件
+            SimulateAbort(this, new RoutedEventArgs());
         }
+        
+        /// <summary>
+        /// 仿真线程要运行的函数（图表模式）
+        /// </summary>
+        public void _SimulateThread_Chart()
+        {
+            SetClockRate(5);
+            InitRunLadder();
+            InitClock(TimeStart);
+            // 当前时间
+            int time = GetClock();
+            int count = 0;
+            double progress = 0.0;
+            while (simulateActive)
+            {
+                count++;
+                // 设置锁定的视点
+                foreach (SimulateDataModel sdmodel in locksdmodels)
+                {
+                    sdmodel.Set(this, time);
+                }
 
+                while (!simulateRunning)
+                {
+                    if (!simulateActive) break;
+                    Thread.Sleep(10);
+                }
+                if (!simulateActive) break;
+
+                BeforeRunLadder();
+                RunLadder();
+                AfterRunLadder();
+                // 检查是否超过终止时间
+                time = GetClock();
+                if (time >= TimeEnd)
+                    simulateActive = false;
+                if (!simulateActive) break;
+
+                double _progress = (double)(time - TimeStart) / (TimeEnd - TimeStart) * 100;
+                if (_progress - progress > 1.0)
+                {
+                    progress = _progress;
+                    SimulateProgress(progress, new RoutedEventArgs());
+                }
+                // 读取监视的视点
+                foreach (SimulateDataModel sdmodel in viewsdmodels)
+                {
+                    sdmodel.Update(this, time);
+                }
+            }
+            // 发送线程终止的事件
+            SimulateAbort(this, new RoutedEventArgs());
+        }
+        
         /// <summary>
         /// 开始仿真
         /// </summary>
@@ -637,9 +515,18 @@ namespace SamSoarII.Simulation.Core
             // 设置新线程
             if (simulateThread == null)
             {
-                simulateThread = new Thread(_SimulateThread);
+                switch (SimuMode)
+                {
+                    case SIMUMODE_NORMAL:
+                        simulateThread = new Thread(_SimulateThread);
+                        break;
+                    case SIMUMODE_CHART:
+                        simulateThread = new Thread(_SimulateThread_Chart);
+                        break;
+                }
                 simulateThread.Start();
-            } 
+                SimulateStart(this, new RoutedEventArgs());
+            }
         }
 
         /// <summary>
@@ -649,8 +536,9 @@ namespace SamSoarII.Simulation.Core
         {
             // 设置运行状态为false
             simulateRunning = false;
+            SimulatePause(this, new RoutedEventArgs());
         }
-        
+
         /// <summary>
         /// 停止仿真
         /// </summary>
@@ -665,6 +553,7 @@ namespace SamSoarII.Simulation.Core
                 simulateThread.Abort();
                 simulateThread = null;
             }
+            SimulateAbort(this, new RoutedEventArgs());
         }
 
         /// <summary>
@@ -674,13 +563,6 @@ namespace SamSoarII.Simulation.Core
         /// <param name="endtime">结束时间</param>
         public void RunData(double starttime, double endtime)
         {
-            // 运行并将记录返回到simulog.log中
-            RunData("simulog.log", (int)(starttime), (int)(endtime));
-            // 发送数据运行完毕的事件
-            SimulateDataModelEventArgs e = new SimulateDataModelEventArgs();
-            e.TimeStart = starttime;
-            e.TimeEnd = endtime;
-            RunDataFinished(this, e);
         }
 
         /// <summary>
@@ -690,16 +572,6 @@ namespace SamSoarII.Simulation.Core
         /// <param name="endtime"></param>
         public void RunDraw(double starttime, double endtime)
         {
-            // 运行并将记录返回到simulog.log中
-            RunData("simulog.log", (int)(starttime), (int)(endtime)); 
-            // 发送图表运行完毕的事件
-            SimulateDataModelEventArgs e = new SimulateDataModelEventArgs();
-            e.TimeStart = starttime;
-            e.TimeEnd = endtime;
-            if (RunDrawFinished != null)
-            {
-                RunDrawFinished(this, e);
-            }
         }
 
         #endregion
@@ -846,8 +718,11 @@ namespace SamSoarII.Simulation.Core
         {
             SetEnable(var, size, 0);
         }
-        
-        //private List<SimulateDataModel> locksdmodels = new List<SimulateDataModel>();
+        /// <summary>
+        /// 锁定视点的集合
+        /// </summary>
+        private ObservableCollection<SimulateDataModel> locksdmodels 
+            = new ObservableCollection<SimulateDataModel>();
         
         /// <summary>
         /// 锁定一个视点
@@ -855,24 +730,10 @@ namespace SamSoarII.Simulation.Core
         /// <param name="sdmodel">视点模型</param>
         public void Lock(SimulateDataModel sdmodel)
         {
-            // 将视点内的数据点依次添加
-            foreach (ValueSegment vs in sdmodel.Values)
+            if (!locksdmodels.Contains(sdmodel))
             {
-                switch (sdmodel.Type)
-                {
-                    case "BIT":
-                        AddBitDataPoint(sdmodel.Name, vs.TimeStart, (Int32)(vs.Value));
-                        break;
-                    case "WORD":
-                        AddWordDataPoint(sdmodel.Name, vs.TimeStart, (Int32)(vs.Value));
-                        break;
-                    case "DWORD":
-                        AddDWordDataPoint(sdmodel.Name, vs.TimeStart, (Int64)(vs.Value));
-                        break;
-                    case "FLOAT":
-                        AddFloatDataPoint(sdmodel.Name, vs.TimeStart, (double)(vs.Value));
-                        break;
-                }
+                locksdmodels.Add(sdmodel);
+                SetEnable(sdmodel.Name, 1, 1);
             }
         }
         
@@ -882,49 +743,32 @@ namespace SamSoarII.Simulation.Core
         /// <param name="sdmodel">视点模型</param>
         public void Unlock(SimulateDataModel sdmodel)
         {
-            switch (sdmodel.Type)
+            if (locksdmodels.Contains(sdmodel))
             {
-                case "BIT":
-                    RemoveViewInput(sdmodel.Name, DP_TYPE_BIT);
-                    break;
-                case "WORD":
-                    RemoveViewInput(sdmodel.Name, DP_TYPE_WORD);
-                    break;
-                case "DWORD":
-                    RemoveViewInput(sdmodel.Name, DP_TYPE_DOUBLEWORD);
-                    break;
-                case "FLOAT":
-                    RemoveViewInput(sdmodel.Name, DP_TYPE_FLOAT);
-                    break;
+                locksdmodels.Remove(sdmodel);
+                SetEnable(sdmodel.Name, 1, 0);
             }
         }
         #endregion
 
         #region View Value
-
-        //private List<SimulateDataModel> viewsdmodels = new List<SimulateDataModel>();
-        //private Dictionary<string, SimulateDataModel> viewsdmodels = new Dictionary<string, SimulateDataModel>();
         
+        /// <summary>
+        /// 监视视点的集合
+        /// </summary>
+        private ObservableCollection<SimulateDataModel> viewsdmodels
+            = new ObservableCollection<SimulateDataModel>();
+
+
         /// <summary>
         /// 监视一个视点
         /// </summary>
         /// <param name="sdmodel">视点模型</param>
         public void View(SimulateDataModel sdmodel)
         {
-            switch (sdmodel.Type)
+            if (!viewsdmodels.Contains(sdmodel))
             {
-                case "BIT":
-                    AddViewOutput(sdmodel.Name, DP_TYPE_BIT);
-                    break;
-                case "WORD":
-                    AddViewOutput(sdmodel.Name, DP_TYPE_WORD);
-                    break;
-                case "DWORD":
-                    AddViewOutput(sdmodel.Name, DP_TYPE_DOUBLEWORD);
-                    break;
-                case "FLOAT":
-                    AddViewOutput(sdmodel.Name, DP_TYPE_FLOAT);
-                    break;
+                viewsdmodels.Add(sdmodel);
             }
         }
         
@@ -934,20 +778,9 @@ namespace SamSoarII.Simulation.Core
         /// <param name="sdmodel"></param>
         public void Unview(SimulateDataModel sdmodel)
         {
-            switch (sdmodel.Type)
+            if (viewsdmodels.Contains(sdmodel))
             {
-                case "BIT":
-                    RemoveViewOutput(sdmodel.Name, DP_TYPE_BIT);
-                    break;
-                case "WORD":
-                    RemoveViewOutput(sdmodel.Name, DP_TYPE_WORD);
-                    break;
-                case "DWORD":
-                    RemoveViewOutput(sdmodel.Name, DP_TYPE_DOUBLEWORD);
-                    break;
-                case "FLOAT":
-                    RemoveViewOutput(sdmodel.Name, DP_TYPE_FLOAT);
-                    break;
+                viewsdmodels.Remove(sdmodel);
             }
         }
 
@@ -955,15 +788,42 @@ namespace SamSoarII.Simulation.Core
 
         #region Event Handler
 
-        /// <summary>
-        /// 当完成一次数据运行后，触发这个代理
-        /// </summary>
-        public event SimulateDataModelEventHandler RunDataFinished = delegate { };
+        #region Thread
 
         /// <summary>
-        /// 当完成一次图表运行后，触发这个代理
+        /// 当仿真线程开始时，触发这个代理
         /// </summary>
-        public event SimulateDataModelEventHandler RunDrawFinished = delegate { };
+        public event RoutedEventHandler SimulateStart = delegate { };
+
+        /// <summary>
+        /// 当仿真线程暂停时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler SimulatePause = delegate { };
+
+        /// <summary>
+        /// 当仿真线程停止时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler SimulateAbort = delegate { };
+
+        /// <summary>
+        /// 每次仿真进度更新时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler SimulateProgress = delegate { }; 
+        
+        /// <summary>
+        /// 当线程终止时发生
+        /// </summary>
+        /// <param name="sender">发送源</param>
+        /// <param name="e">事件</param>
+        private void OnSimulateThreadClosed(object sender, RoutedEventArgs e)
+        {
+            // 将线程设为null
+            simulateThread = null;
+        }
+
+        #endregion
+
+
 
         #endregion
 

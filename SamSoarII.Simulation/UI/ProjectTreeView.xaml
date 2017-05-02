@@ -16,14 +16,6 @@
                     <TreeViewItem.Items>
                         <TreeViewItem Header="程序" IsExpanded="True">
                             <TreeViewItem.Items>
-                                <TreeViewItem x:Name="TVI_AllRoutine" IsExpanded="False">
-                                    <TreeViewItem.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="/Resources/Image/TreeViewIcon/AllProgram.ico"></Image>
-                                            <TextBlock Margin="6,0,0,0">所有程序</TextBlock>
-                                        </StackPanel>
-                                    </TreeViewItem.Header>
-                                </TreeViewItem>
                                 <TreeViewItem x:Name="TVI_MainRoutine" IsExpanded="True">
                                     <TreeViewItem.Resources>
 

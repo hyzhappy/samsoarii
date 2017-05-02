@@ -21,6 +21,7 @@ namespace SamSoarII.UserInterface
     public partial class AddNewRoutineWindow : Window, IDisposable
     {
         public event RoutedEventHandler EnsureButtonClick;
+        public event RoutedEventHandler CancelButtonClick;
         public string NameContent
         {
             get

@@ -54,7 +54,7 @@ namespace SamSoarII.UserInterface
             set
             {
                 this.functions = value;
-                functionlabels = value.Select(msgs => { return _StringToLabel(msgs[0]); });
+                functionlabels = value.Select(msgs => { return _StringToLabel(msgs[1]); });
                 string _tempstring = ValueString1;
                 ValueString1 = String.Empty;
                 ValueString1 = _tempstring;
@@ -667,7 +667,7 @@ namespace SamSoarII.UserInterface
             {
                 case INST_CALLM:
                     IEnumerable<string[]> fit = Functions.Where(
-                        (string[] msgs) => { return msgs[0].Equals(ValueString1); });
+                        (string[] msgs) => { return msgs[1].Equals(ValueString1); });
                     if (fit.Count() == 0)
                     {
                         ValueTextBox1.Background = Brushes.Red;
@@ -677,55 +677,47 @@ namespace SamSoarII.UserInterface
                     {
                         ValueTextBox1.Background = Brushes.White;
                         string[] msgs = fit.First();
-                        ValueCount = 5;
-                        if (msgs[8].Equals(String.Empty))
-                            ValueCount = 4;
-                        if (msgs[6].Equals(String.Empty))
-                            ValueCount = 3;
-                        if (msgs[4].Equals(String.Empty))
-                            ValueCount = 2;
-                        if (msgs[2].Equals(String.Empty))
-                            ValueCount = 1;
+                        ValueCount = msgs.Length / 2;
                         switch (ValueCount)
                         {
                             case 1:
                                 ShowLine1("FUNC");
-                                ValueString1 = msgs[0];
+                                ValueString1 = msgs[1];
                                 break;
                             case 2:
                                 ShowLine1("FUNC");
-                                ValueString1 = msgs[0];
-                                ShowLine2(msgs[1]);
+                                ValueString1 = msgs[1];
+                                ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
                                 //ValueString2 = String.Empty;
                                 break;
                             case 3:
                                 ShowLine1("FUNC");
-                                ValueString1 = msgs[0];
-                                ShowLine2(msgs[1]);
+                                ValueString1 = msgs[1];
+                                ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
                                 //ValueString2 = String.Empty;
-                                ShowLine3(msgs[3]);
+                                ShowLine3(msgs[4].Remove(msgs[4].Length - 1));
                                 //ValueString3 = String.Empty;
                                 break;
                             case 4:
                                 ShowLine1("FUNC");
-                                ValueString1 = msgs[0];
-                                ShowLine2(msgs[1]);
+                                ValueString1 = msgs[1];
+                                ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
                                 //ValueString2 = String.Empty;
-                                ShowLine3(msgs[3]);
+                                ShowLine3(msgs[4].Remove(msgs[4].Length - 1));
                                 //ValueString3 = String.Empty;
-                                ShowLine4(msgs[5]);
+                                ShowLine4(msgs[6].Remove(msgs[6].Length - 1));
                                 //ValueString4 = String.Empty;
                                 break;
                             case 5:
                                 ShowLine1("FUNC");
-                                ValueString1 = msgs[0];
-                                ShowLine2(msgs[1]);
+                                ValueString1 = msgs[1];
+                                ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
                                 //ValueString2 = String.Empty;
-                                ShowLine3(msgs[3]);
+                                ShowLine3(msgs[4].Remove(msgs[4].Length - 1));
                                 //ValueString3 = String.Empty;
-                                ShowLine4(msgs[5]);
+                                ShowLine4(msgs[6].Remove(msgs[6].Length - 1));
                                 //ValueString4 = String.Empty;
-                                ShowLine5(msgs[7]);
+                                ShowLine5(msgs[8].Remove(msgs[8].Length - 1));
                                 //ValueString5 = String.Empty;
                                 break;
                             default:
@@ -893,6 +885,46 @@ namespace SamSoarII.UserInterface
             get
             {
                 List<string> result = new List<string>();
+                if (InstMode == INST_CALLM)
+                {
+                    IEnumerable<string[]> fit = Functions.Where(
+                        (string[] msgs) => { return msgs[1].Equals(ValueString1); });
+                    if (fit.Count() != 0)
+                    {
+                        string[] msgs = fit.First();
+                        result.Add(ValueString1);
+                        result.Add(CommentString1);
+                        if (ValueCount > 1)
+                        {
+                            result.Add(msgs[2]);
+                            result.Add(msgs[3]);
+                            result.Add(ValueString2);
+                            result.Add(CommentString2);
+                        }
+                        if (ValueCount > 2)
+                        {
+                            result.Add(msgs[4]);
+                            result.Add(msgs[5]);
+                            result.Add(ValueString3);
+                            result.Add(CommentString3);
+                        }
+                        if (ValueCount > 3)
+                        {
+                            result.Add(msgs[6]);
+                            result.Add(msgs[7]);
+                            result.Add(ValueString4);
+                            result.Add(CommentString4);
+                        }
+                        if (ValueCount > 4)
+                        {
+                            result.Add(msgs[8]);
+                            result.Add(msgs[9]);
+                            result.Add(ValueString5);
+                            result.Add(CommentString5);
+                        }
+                    }
+                    return result;
+                }
                 switch (ValueCount)
                 {
                     case 1:

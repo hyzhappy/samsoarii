@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Simulation.Core.VariableModel;
+using SamSoarII.Simulation.UI;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
 using System;
@@ -249,17 +250,37 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                  */
                 case "CALLM":
                     this[1] = new SimulateStringUnit(texts[1]);
-                    CFunction func = CFunctionManager.Get(texts[1]);
-                    if (func != null)
+                    IEnumerable<FuncHeaderModel> fit = SimuParent.AllFuncs.Headers.Where
+                    (
+                        (FuncHeaderModel _fhmodel) =>
+                        {
+                            return _fhmodel.Name.Equals(texts[1]);
+                        }
+                    );
+                    if (fit.Count() == 0)
                     {
-                        if (func.Arg1 != null)
-                            this[2] = _parent.GetVariableUnit(texts[2], func.Arg1.Type);
-                        if (func.Arg2 != null)
-                            this[3] = _parent.GetVariableUnit(texts[3], func.Arg2.Type);
-                        if (func.Arg3 != null)
-                            this[4] = _parent.GetVariableUnit(texts[4], func.Arg3.Type);
-                        if (func.Arg4 != null)
-                            this[5] = _parent.GetVariableUnit(texts[5], func.Arg4.Type);
+                        throw new ArgumentException(String.Format("Cannot found function {0:s}", texts[1]));
+                    }
+                    FuncHeaderModel fhmodel = fit.First();
+                    for (int i = 0; i < fhmodel.ArgCount; i++)
+                    {
+                        string type = fhmodel.GetArgType(i);
+                        switch (type)
+                        {
+                            case "_BIT*":
+                                type = "BIT";
+                                break;
+                            case "_WORD*":
+                                type = "WORD";
+                                break;
+                            case "D_WORD*":
+                                type = "DWORD";
+                                break;
+                            case "_FLOAT*":
+                                type = "FLOAT";
+                                break;
+                        }
+                        this[i + 2] = _parent.GetVariableUnit(texts[i + 2], type);
                     }
                     break;
                 // (rS)

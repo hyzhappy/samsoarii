@@ -437,11 +437,19 @@ namespace SamSoarII.Extend.FuncBlockModel
                     // 设置新的范围终点
                     if (last.Next != null)
                     {
-                        end = last.Next.Value.IndexStart - 1;
+                        // 注意区域块不包含前括号，需要移到前括号的前面
+                        if (last.Next.Value is FuncBlock_Local)
+                        {
+                            end = last.Next.Value.IndexStart - 2;
+                        }
+                        else
+                        {
+                            end = last.Next.Value.IndexStart - 1;
+                        }
                     }
                     else
                     {
-                        end = IndexEnd;
+                        end = IndexEnd - 1;
                     }
                     // 删除范围内的节点
                     List<LinkedListNode<FuncBlock>> removenodes = new List<LinkedListNode<FuncBlock>>();
@@ -469,7 +477,10 @@ namespace SamSoarII.Extend.FuncBlockModel
                         if (fb is FuncBlock_FuncHeader)
                         {
                             FuncBlock_FuncHeader fbf = (FuncBlock_FuncHeader)(fb);
-                            fbf.Block.Header = null;
+                            if (fbf.Block != null)
+                            {
+                                fbf.Block.Header = null;
+                            }
                         }
 
                         childrens.Remove(removenode);
@@ -535,29 +546,38 @@ namespace SamSoarII.Extend.FuncBlockModel
                         }
                         if (this is FuncBlock_Root && bracketcount == 0)
                         {
-                            int hstart = Current != null ? Current.Value.IndexEnd + 1 : 0;
+                            int hstart = dividelabel + 1;
                             int hend = i;
                             string htext = text.Substring(hstart, hend - hstart + 1);
-                            Match m1 = Regex.Match(htext, @"([a-zA-Z_]\w*)\s*\(\s*((\s*[a-zA-Z_]\w*\s+[a-zA-Z_]\w*,?\s*)*)\)");
+                            Match m1 = Regex.Match(htext, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\((.*)\)\s*$");
                             // 如果符合函数头部的正则表达式格式
                             if (m1.Success)
                             {
                                 FuncModel func = new FuncModel();
-                                func.Name = m1.Groups[1].Value;
-                                string[] argtexts = m1.Groups[2].Value.Split(',');
-                                // 检查内部的参数是否符合格式
-                                for (int j = 0; j < argtexts.Length; j++)
+                                func.ReturnType = Regex.Replace(m1.Groups[1].Value, @"\s*", String.Empty);
+                                func.Name = m1.Groups[3].Value;
+                                if (m1.Groups[4].Value.Length == 0)
                                 {
-                                    Match m2 = Regex.Match(argtexts[j], @"^\s*([a-zA-Z_]\w*)\s+([a-zA-Z_]\w*)\s*$");
-                                    if (m2.Success)
+                                    func.ArgCount = 0;
+                                }
+                                else
+                                {
+                                    string[] argtexts = m1.Groups[4].Value.Split(',');
+                                    func.ArgCount = argtexts.Length;
+                                    // 检查内部的参数是否符合格式
+                                    for (int j = 0; j < argtexts.Length; j++)
                                     {
-                                        func.SetArgType(j, m2.Groups[1].Value);
-                                        func.SetArgName(j, m2.Groups[2].Value);
-                                    }
-                                    else
-                                    {
-                                        func = null;
-                                        break;
+                                        Match m2 = Regex.Match(argtexts[j], @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
+                                        if (m2.Success)
+                                        {
+                                            func.SetArgType(j, Regex.Replace(m2.Groups[1].Value, @"\s*", String.Empty));
+                                            func.SetArgName(j, m2.Groups[3].Value);
+                                        }
+                                        else
+                                        {
+                                            func = null;
+                                            break;
+                                        }
                                     }
                                 }
                                 // 建立函数头部
@@ -808,7 +828,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                 }
                 FuncModel fmodel = value.Model;
                 // 设置新的虚拟声明变量
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < fmodel.ArgCount; i++)
                 {
                     string argname = fmodel.GetArgName(i);
                     if (argname.Equals(String.Empty)) break;
@@ -879,15 +899,15 @@ namespace SamSoarII.Extend.FuncBlockModel
             Match m1 = null;
             if (texts.Length == 1)
             {
-                m1 = Regex.Match(text, @"^\s*[a-zA-Z_]\w*\s*([a-zA-Z_]\w*)\s*;\s*$");
+                m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
             }
             if (texts.Length == 2)
             {
-                m1 = Regex.Match(texts[0], @"^\s*[a-zA-Z_]\w*\s*([a-zA-Z_]\w*)\s*$");
+                m1 = Regex.Match(texts[0], @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
             }
             if (m1 != null && m1.Success)
             {
-                Name = m1.Groups[1].Value;
+                Name = m1.Groups[3].Value;
             }
             else
             {
@@ -970,12 +990,12 @@ namespace SamSoarII.Extend.FuncBlockModel
             string[] texts = text.Split('=');
             if (texts.Length == 1)
             {
-                Match m1 = Regex.Match(text, @"^\s*[a-zA-Z_]\w*\s*[a-zA-Z_]\w*\s*;\s*$");
+                Match m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
                 return m1.Success;
             }
             if (texts.Length == 2)
             {
-                Match m1 = Regex.Match(texts[0], @"^\s*[a-zA-Z_]\w*\s*[a-zA-Z_]\w*\s*$");
+                Match m1 = Regex.Match(texts[0], @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
                 Match m2 = Regex.Match(texts[1], @"^\s*\d+\s*;\s*$");
                 Match m3 = Regex.Match(texts[1], @"^\s*\d*\.\d+\s*;\s*$");
                 Match m4 = Regex.Match(texts[1], @"^\s*0x[\da-fA-F]{1,8}\s*;\s*$");
@@ -1014,30 +1034,30 @@ namespace SamSoarII.Extend.FuncBlockModel
         public override void Build(string text, int start, int end, int offset = 0)
         {
             ClearDefines();
-            Match m1 = Regex.Match(text.Substring(start, end-start+1), @"^\s*([a-zA-Z_]\w*)\s*(.*);$");
+            Match m1 = Regex.Match(text.Substring(start, end-start+1), @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
             if (!m1.Success) return;
-            string _text = m1.Groups[2].Value;
+            string _text = m1.Groups[3].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {
-                Match m2 = Regex.Match(sub, @"^\s*([a-zA-Z_]\w*)\s*");
+                Match m2 = Regex.Match(sub, @"^((\s*\*)*)\s*([a-zA-Z_]\w*)\s*");
                 if (!m2.Success) return;
                 FuncBlock_Assignment fba = new FuncBlock_Assignment(model);
                 fba.Namespace = Parent.Namespace;
-                fba.Name = m2.Groups[1].Value;
+                fba.Name = m2.Groups[3].Value;
                 defines.Add(fba);
             }
         }
 
         static public bool TextSuit(string text)
         {
-            Match m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*)\s*(.*);$");
+            Match m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
             if (!m1.Success) return false;
-            string _text = m1.Groups[2].Value;
+            string _text = m1.Groups[3].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {
-                Match m2 = Regex.Match(sub, @"^\s*[a-zA-Z_]\w*\s*(=\s*[\w\.]*\s*)?$");
+                Match m2 = Regex.Match(sub, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s*(=\s*[\w\.]*\s*)?$");
                 if (!m2.Success) return false; 
             }
             return true;
@@ -1122,7 +1142,7 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// <returns></returns>
         static public bool TextSuit(string text)
         {
-            Match m1 = Regex.Match(text, @"\w[\w\d]?[\b\t\n]?\(((\w[\w\d]?[\b\t\n]+\w[\w\d]?,?)?)\)");
+            Match m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s*([a-zA-Z_]\w*)\((\s*([a-zA-Z_]\w*(\s*\*)*)\s*([a-zA-Z_]\w*),?)*\)\s*$");
             return m1.Success;
         }
     }

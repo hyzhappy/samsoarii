@@ -10,27 +10,20 @@ namespace SamSoarII.LadderInstModel
     public class CALLMModel : BaseModel
     {
         public string FunctionName { get; set; }
-        public IValueModel Value1 { get; set; }
-        public IValueModel Value2 { get; set; }
-        public IValueModel Value3 { get; set; }
-        public IValueModel Value4 { get; set; }
+        public ArgumentValue Value1 { get; set; }
+        public ArgumentValue Value2 { get; set; }
+        public ArgumentValue Value3 { get; set; }
+        public ArgumentValue Value4 { get; set; }
 
         public CALLMModel()
         {
             FunctionName = string.Empty;
-            Value1 = WordValue.Null;
-            Value2 = WordValue.Null;
-            Value3 = WordValue.Null;
-            Value4 = WordValue.Null;
+            Value1 = ArgumentValue.Null;
+            Value2 = ArgumentValue.Null;
+            Value3 = ArgumentValue.Null;
+            Value4 = ArgumentValue.Null;
         }
-        public CALLMModel(string functionName)
-        {
-            FunctionName = functionName;
-            Value1 = WordValue.Null;
-            Value2 = WordValue.Null;
-            Value3 = WordValue.Null;
-            Value4 = WordValue.Null;
-        }
+
         public override string GenerateCode()
         {
             return string.Format("if({0})\r\n{{\r\n{1}({2},{3});\r\n}}\r\n",ImportVaribleName,FunctionName,Value1.GetValue(),Value2.GetValue());

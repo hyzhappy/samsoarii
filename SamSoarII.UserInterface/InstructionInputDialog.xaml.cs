@@ -114,6 +114,11 @@ namespace SamSoarII.UserInterface
         {
             InitializeComponent();
 
+            this.instructionNameAndToolTips = instructionNameAndToolTips;
+            subdiagramNames = _subdiagramNames.ToList();
+            functionMessages = _functionMessages.ToList();
+            modbusNames = _modbusNames.ToList();
+
             TB_Args = new TextBlock[6];
             TBD_Args = new TextBlock[6];
             for (int i = 0; i < 6; i++)
@@ -134,41 +139,40 @@ namespace SamSoarII.UserInterface
             DataContext = this;
             OpenTimer.Interval = TimeSpan.FromSeconds(0.7);
             OpenTimer.Tick += OpenTimer_Tick;
-            Loaded += (sender, e) =>
-            {
-                InstructionInputTextBox.Focus();
-                InstructionInputTextBox.Select(InstructionInputTextBox.Text.Length, 0);
-                this.instructionNameAndToolTips = instructionNameAndToolTips;
-                instructionNames.AddRange(this.instructionNameAndToolTips.Keys.ToArray());
-                subdiagramNames = _subdiagramNames.ToList();
-                functionMessages = _functionMessages.ToList();
-                modbusNames = _modbusNames.ToList();
-                foreach (var name in instructionNames)
-                {
-                    Label temp = new Label();
-                    temp.Content = name;
-                    _collectionSource.Add(temp);
-                }
-                foreach (var name in subdiagramNames)
-                {
-                    Label temp = new Label();
-                    temp.Content = name;
-                    _subdiagramSource.Add(temp);
-                }
-                foreach (var msgs in functionMessages)
-                {
-                    Label temp = new Label();
-                    temp.Content = msgs[0];
-                    _functionSource.Add(temp);
-                }
-                foreach (var name in modbusNames)
-                {
-                    Label temp = new Label();
-                    temp.Content = name;
-                    _modbusSource.Add(temp);
-                }
-            };
+            Loaded += OnWindowLoaded; 
         }
+
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            InstructionInputTextBox.Focus();
+            InstructionInputTextBox.Select(InstructionInputTextBox.Text.Length, 0);
+            instructionNames.AddRange(this.instructionNameAndToolTips.Keys.ToArray());
+            foreach (var name in instructionNames)
+            {
+                Label temp = new Label();
+                temp.Content = name;
+                _collectionSource.Add(temp);
+            }
+            foreach (var name in subdiagramNames)
+            {
+                Label temp = new Label();
+                temp.Content = name;
+                _subdiagramSource.Add(temp);
+            }
+            foreach (var msgs in functionMessages)
+            {
+                Label temp = new Label();
+                temp.Content = msgs[1];
+                _functionSource.Add(temp);
+            }
+            foreach (var name in modbusNames)
+            {
+                Label temp = new Label();
+                temp.Content = name;
+                _modbusSource.Add(temp);
+            }
+        }
+
         private void OpenTimer_Tick(object sender, EventArgs e)
         {
             PopupTextblock1.Text = CollectionStack.SelectItem.Content as string;
@@ -251,36 +255,40 @@ namespace SamSoarII.UserInterface
             }
             else
             {
-                currentText = InstructionInputTextBox.Text.ToUpper();
+                currentText = InstructionInputTextBox.Text;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CollectionSource"));
-                if (CheckInstructionName(currentText))
+                if (CheckInstructionName(currentText.ToUpper()))
                 {
-                    CollectionStack.SelectItem = CollectionSource.Where(x => { return x.Content as string == currentText; }).First();
-                    SetPopup(CollectionStack.SelectItem);
+                    IEnumerable<Label> fit = CollectionSource.Where(x => { return x.Content as string == currentText; });
+                    if (fit.Count() > 0)
+                    {
+                        CollectionStack.SelectItem = fit.First();
+                        SetPopup(CollectionStack.SelectItem);
+                    }
                 }
                 else
                 {
                     CollectionStack.SelectItem = null;
                 }
-                List<string> InstructionInput = currentText.ToUpper().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                if (InstructionInput.Count() > 0 && CheckInstructionName(InstructionInput[0]))
+                List<string> InstructionInput = currentText.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (InstructionInput.Count() > 0 && CheckInstructionName(InstructionInput[0].ToUpper()))
                 {
                     List<string> tempList = new List<string>();
-                    instructionNameAndToolTips.TryGetValue(InstructionInput[0], out tempList);
-                    if (InstructionInput[0].Equals("CALLM") && InstructionInput.Count() > 1)
+                    instructionNameAndToolTips.TryGetValue(InstructionInput[0].ToUpper(), out tempList);
+                    if (InstructionInput[0].ToUpper().Equals("CALLM") && InstructionInput.Count() > 1)
                     {
                         IEnumerable<string[]> fit = functionMessages.Where(
-                            (string[] msgs) => { return msgs[0].Equals(InstructionInput[1]); });
+                            (string[] msgs) => { return msgs[1].Equals(InstructionInput[1]); });
                         if (fit.Count() > 0)
                         {
                             List<string> _tempList = new List<string>();
                             _tempList.Add(tempList[0]);
                             _tempList.Add(tempList[1]);
                             string[] msgs = fit.First();
-                            for (int i = 0; i < (msgs.Length-1)/2; i++)
+                            for (int i = 0; i < (msgs.Length-2)/2; i++)
                             {
-                                string argtype = msgs[i * 2 + 1];
-                                string argname = msgs[i * 2 + 2];
+                                string argtype = msgs[i * 2 + 2];
+                                string argname = msgs[i * 2 + 3];
                                 switch (argtype)
                                 {
                                     case "BIT":

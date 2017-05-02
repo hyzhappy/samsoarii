@@ -25,6 +25,11 @@ namespace SamSoarII.Simulation.Shell.ViewModel
         protected SimulateVariableUnit _args5;
         protected SimuArgsDialog dialog;
 
+        public SimulateModel SimuParent
+        {
+            get { return this._parent; }
+        }
+
         public virtual int X
         {
             get

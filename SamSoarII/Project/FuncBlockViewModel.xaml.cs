@@ -293,33 +293,41 @@ namespace SamSoarII.AppMain.Project
             }
             else
             {
+                if (model.Current is FuncBlock_FuncHeader)
+                {
+                    model.CurrentNode = new LinkedListNode<FuncBlock>(model.Root);
+                }
                 if (model.Current is FuncBlock_Root)
                 {
-                    FuncBlock prev = null;
-                    FuncBlock next = null;
+                    LinkedListNode<FuncBlock> nprev = null;
+                    LinkedListNode<FuncBlock> nnext = null;
                     if (model.Current.Current != null)
                     {
-                        prev = model.Current.Current.Value;
+                        nprev = model.Current.Current;
                         if (model.Current.Current.Next != null)
                         {
-                            next = model.Current.Current.Next.Value;
+                            nnext = model.Current.Current.Next;
                         }
                     }
-                    if (next == null && prev != null &&
-                        prev.IndexStart > e.Offset)
+                    if (nprev != null &&
+                        nprev.Value.IndexStart > e.Offset)
                     {
-                        next = prev;
-                        prev = model.Current.Current.Previous?.Value;
+                        nnext = nprev;
+                        nprev = nprev.Previous;
                     }
-                    if (next != null)
+                    while (nprev != null
+                        && !(nprev.Value is FuncBlock_Local))
                     {
-                        if (e.Offset + e.RemovalLength >= next.IndexStart)
-                        {
-                            if (prev != null) start = prev.IndexEnd + 1;
-                            end = next.IndexEnd;
-                            model.Root.Build(CodeTextBox.Text, start, end, offset);
-                        }
+                        nprev = nprev.Previous;
+                    } 
+                    while (nnext != null
+                        && !(nnext.Value is FuncBlock_Local))
+                    {
+                        nnext = nnext.Next;
                     }
+                    start = nprev != null ? (nprev.Value.IndexEnd + 1) : (model.Current.IndexStart);
+                    end = nnext != null ? (nnext.Value.IndexStart - 2) : (model.Current.IndexEnd - 1);
+                    model.Root.Build(CodeTextBox.Text, start, end, offset);
                 }
                 else if (insertMatch2.Success || removeMatch2.Success)
                 {
@@ -359,17 +367,17 @@ namespace SamSoarII.AppMain.Project
             model.Move(e.Offset);
             if (e.InsertionLength == 1 && e.RemovalLength == 0)
             {
-                if (char.IsLetterOrDigit(e.InsertedText[0]))
+                if (char.IsLetterOrDigit(e.InsertedText[0]) || e.InsertedText[0] == '_')
                 {
                     int wordend = CodeTextBox.CaretOffset - 1;
                     int wordstart = wordend;
                     while (wordstart >= 0 &&
-                        Char.IsLetterOrDigit(CodeTextBox.Text[wordstart]))
+                        (Char.IsLetterOrDigit(CodeTextBox.Text[wordstart]) || CodeTextBox.Text[wordstart] == '_'))
                     {
                         wordstart--;
                     }
                     while (wordend < CodeTextBox.Text.Length &&
-                        Char.IsLetterOrDigit(CodeTextBox.Text[wordend]))
+                        (Char.IsLetterOrDigit(CodeTextBox.Text[wordend]) || CodeTextBox.Text[wordend] == '_'))
                     {
                         wordend++;
                     }
@@ -389,6 +397,7 @@ namespace SamSoarII.AppMain.Project
                 if (CCSProfix.Length > 0 && CCSProfixCursor > 0)
                 {
                     CCSProfix = CCSProfix.Remove(CCSProfixCursor - 1, 1);
+                    CCSProfixCursor--;
                 }
             }
             else
@@ -464,11 +473,13 @@ namespace SamSoarII.AppMain.Project
                             CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
                             CodeTextBox.CaretOffset += inserttext.Length;
                         }
+                        model.Move(CodeTextBox.CaretOffset);
                         break;
                     default:
                         break;
                 }
             }
+            OutputDebug();
         }
         /// <summary>
         /// 当文本光标移动后发生
@@ -784,7 +795,7 @@ namespace SamSoarII.AppMain.Project
                         int plen = CCSProfix.Length;
                         string inserttext = ccstblocks[CCSCursor].Text;
                         inserttext = inserttext.Substring(plen);
-                        CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
+                        CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset + (plen - CCSProfixCursor), inserttext);
                         model.Current.InnerOffset += inserttext.Length;
                         //CCSProfix = String.Empty;
                         //CodeTextBox.CaretOffset += inserttext.Length;

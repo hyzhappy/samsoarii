@@ -65,7 +65,7 @@ namespace SamSoarII.Simulation.UI.Chart
             get { return this.timestart + DesignWidth * TimeScale; }
             set { TimeScale = (value - TimeStart) / DesignWidth; }
         }
-
+        
         public int DivideNumber
         {
             get { return this.divnum; }
@@ -164,6 +164,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 else
                 {
                     StartPointLine.Opacity = 0.0;
+                    PointStartDisable(this, new RoutedEventArgs());
                 }
                 if ((pstatus & POINT_ENDSETTING) != 0 ||
                     (pstatus & POINT_ENDLOCK) != 0)
@@ -173,6 +174,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 else
                 {
                     EndPointLine.Opacity = 0.0;
+                    PointEndDisable(this, new RoutedEventArgs());
                 }
                 if ((pstatus & POINT_STARTSETTING) != 0)
                 {
@@ -190,6 +192,8 @@ namespace SamSoarII.Simulation.UI.Chart
                 {
                     if (TPW_StartPoint != null)
                     {
+                        PointStart = TPW_StartPoint.Value;
+                        PointStartEnable(this, new RoutedEventArgs());
                         TPW_StartPoint.Close();
                         TPW_StartPoint = null;
                     }
@@ -210,6 +214,8 @@ namespace SamSoarII.Simulation.UI.Chart
                 {
                     if (TPW_EndPoint != null)
                     {
+                        PointEnd = TPW_EndPoint.Value;
+                        PointEndEnable(this, new RoutedEventArgs());
                         TPW_EndPoint.Close();
                         TPW_EndPoint = null;
                     }
@@ -262,6 +268,7 @@ namespace SamSoarII.Simulation.UI.Chart
         }
         
         private Line StartPointLine;
+
         private Line EndPointLine;
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -273,12 +280,10 @@ namespace SamSoarII.Simulation.UI.Chart
             double tx = TimeStart + px * TimeScale;
             if ((PStatus & POINT_STARTSETTING) != 0)
             {
-                //StartPointLine.X1 = StartPointLine.X2 = px;
                 TPW_StartPoint.Value = tx;
             }
             if ((PStatus & POINT_ENDSETTING) != 0)
             {
-                //EndPointLine.X1 = EndPointLine.X2 = px;
                 TPW_EndPoint.Value = tx;
             }
             
@@ -315,12 +320,25 @@ namespace SamSoarII.Simulation.UI.Chart
         #endregion
 
         #region Event Handler
-        public event RoutedEventHandler StartLineChanged;
-        public event RoutedEventHandler EndLineChanged;
-        public event RoutedEventHandler StartTimeChanged;
-        public event RoutedEventHandler EndTimeChanged;
 
-        private TimePointWindow TPW_StartPoint;
+        public event RoutedEventHandler StartLineChanged = delegate { };
+
+        public event RoutedEventHandler EndLineChanged = delegate { };
+
+        public event RoutedEventHandler StartTimeChanged = delegate { };
+
+        public event RoutedEventHandler EndTimeChanged = delegate { };
+
+        public event RoutedEventHandler PointStartEnable = delegate { };
+
+        public event RoutedEventHandler PointEndEnable = delegate { };
+
+        public event RoutedEventHandler PointStartDisable = delegate { };
+
+        public event RoutedEventHandler PointEndDisable = delegate { };
+
+        private TimePointWindow TPW_StartPoint = null;
+
         private void MI_StartPoint_Click(object sender, RoutedEventArgs e)
         {
             if ((PStatus & POINT_STARTLOCK) != 0)
@@ -332,11 +350,12 @@ namespace SamSoarII.Simulation.UI.Chart
                 PStatus |= POINT_STARTSETTING;
             }
         }
+
         private void TPW_StartPoint_B_ok_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                PointStart = TPW_StartPoint.Value;
+                //PointStart = TPW_StartPoint.Value;
                 PStatus &= ~(POINT_STARTSETTING);
                 PStatus |= POINT_STARTLOCK;
             }
@@ -344,6 +363,7 @@ namespace SamSoarII.Simulation.UI.Chart
             {
             }
         }
+
         private void TPW_StartPoint_ValueChanged(object sender, RoutedEventArgs e)
         {
             if (sender is TimePointWindow)
@@ -361,12 +381,10 @@ namespace SamSoarII.Simulation.UI.Chart
                 {
                     StartPointLine.Opacity = 0.0;
                 }
-                if (StartLineChanged != null)
-                {
-                    StartLineChanged(StartPointLine, new RoutedEventArgs());
-                }
+                StartLineChanged(StartPointLine, new RoutedEventArgs());
             }
         }
+
         private void TPW_StartPoint_Closed(object sender, EventArgs e)
         {
             if ((PStatus & POINT_STARTSETTING) != 0)
@@ -375,7 +393,8 @@ namespace SamSoarII.Simulation.UI.Chart
             }
         }
 
-        private TimePointWindow TPW_EndPoint;
+        private TimePointWindow TPW_EndPoint = null;
+
         private void MI_EndPoint_Click(object sender, RoutedEventArgs e)
         {
             if ((PStatus & POINT_ENDLOCK) != 0)
@@ -386,13 +405,13 @@ namespace SamSoarII.Simulation.UI.Chart
             {
                 PStatus |= POINT_ENDSETTING;
             }
-            
         }
+
         private void TPW_EndPoint_B_ok_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                PointEnd = TPW_EndPoint.Value;
+                //PointEnd = TPW_EndPoint.Value;
                 PStatus &= ~(POINT_ENDSETTING);
                 PStatus |= POINT_ENDLOCK;
             }
@@ -400,6 +419,7 @@ namespace SamSoarII.Simulation.UI.Chart
             {
             }
         }
+
         private void TPW_EndPoint_ValueChanged(object sender, RoutedEventArgs e)
         {
             if (sender is TimePointWindow)
@@ -417,12 +437,10 @@ namespace SamSoarII.Simulation.UI.Chart
                 {
                     EndPointLine.Opacity = 0.0;
                 }
-                if (EndLineChanged != null)
-                {
-                    EndLineChanged(EndPointLine, new RoutedEventArgs());
-                }
+                EndLineChanged(EndPointLine, new RoutedEventArgs());
             }
         }
+
         private void TPW_EndPoint_Closed(object sender, EventArgs e)
         {
             if ((PStatus & POINT_ENDSETTING) != 0)
@@ -449,14 +467,8 @@ namespace SamSoarII.Simulation.UI.Chart
             TimeStart = (double)(GlobalSetting.TimeRulerStart);
             TimeEnd = (double)(GlobalSetting.TimeRulerEnd);
             Update();
-            if (StartTimeChanged != null)
-            {
-                StartTimeChanged(this, new RoutedEventArgs());
-            }
-            if (EndTimeChanged != null)
-            {
-                EndTimeChanged(this, new RoutedEventArgs());
-            }
+            StartTimeChanged(this, new RoutedEventArgs());
+            EndTimeChanged(this, new RoutedEventArgs());
         }
         #endregion
     }

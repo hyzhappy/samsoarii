@@ -617,11 +617,6 @@ namespace SamSoarII.AppMain.UI
                         return;
                     }
                     string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
-                    if (File.Exists(fullFileName))
-                    {
-                        MessageBox.Show("指定路径已存在同名文件");
-                        return;
-                    }
                     PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
                     CreateProject(name, fullFileName);
                     newProjectDialog.Close();
@@ -670,7 +665,12 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
-
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "ssp文件|*.ssp";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                _interactionFacade.SaveAsProject(saveFileDialog.FileName);
+            }
         }
 
         private void OnCompileCommandExecute(object sender, RoutedEventArgs e)
@@ -715,6 +715,9 @@ namespace SamSoarII.AppMain.UI
                 {
                     SimulateModeButton.IsChecked = false;
                 }
+                SimulateHelper.SModel.SimulateStart += OnSimulateStart;
+                SimulateHelper.SModel.SimulatePause += OnSimulatePause;
+                SimulateHelper.SModel.SimulateAbort += OnSimulateAbort;
             }
             else if (SimulateModeButton.IsChecked == false)
             {
@@ -732,65 +735,58 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
-        private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
+        private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
-            if (SimuStartButton.IsChecked == true)
-            {
-                if (SimuPauseButton.IsChecked == true)
-                {
-                    SimuPauseButton.IsChecked = false;
-                }
-                if (SimuStopButton.IsChecked == true)
-                {
-                    SimuStopButton.IsChecked = false;
-                }
-                SimulateHelper.SModel.Start();
-            }
-            else
+            Dispatcher.Invoke(() =>
             {
                 SimuStartButton.IsChecked = true;
-            }
+                SimuPauseButton.IsChecked = false;
+                SimuStopButton.IsChecked = false;
+                SimuStartButton.IsEnabled = false;
+                SimuPauseButton.IsEnabled = true;
+                SimuStopButton.IsEnabled = true;
+            });
+        }
+
+        private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
+        {
+            SimulateHelper.SModel.Start();
+        }
+        
+        private void OnSimulatePause(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SimuStartButton.IsChecked = false;
+                SimuPauseButton.IsChecked = true;
+                SimuStopButton.IsChecked = false;
+                SimuStartButton.IsEnabled = true;
+                SimuPauseButton.IsEnabled = false;
+                SimuStopButton.IsEnabled = true;
+            });
         }
 
         private void OnSimuPauseCommandExecute(object sender, RoutedEventArgs e)
         {
-            if (SimuPauseButton.IsChecked == true)
+            SimulateHelper.SModel.Pause();
+        }
+
+        private void OnSimulateAbort(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
             {
-                if (SimuStartButton.IsChecked == true)
-                {
-                    SimuStartButton.IsChecked = false;
-                }
-                if (SimuStopButton.IsChecked == true)
-                {
-                    SimuStopButton.IsChecked = false;
-                }
-                SimulateHelper.SModel.Pause();
-            }
-            else
-            {
-                SimuPauseButton.IsChecked = true;
-            }
+                SimuStartButton.IsChecked = false;
+                SimuPauseButton.IsChecked = false;
+                SimuStopButton.IsChecked = true;
+                SimuStartButton.IsEnabled = true;
+                SimuPauseButton.IsEnabled = false;
+                SimuStopButton.IsEnabled = false;
+            });
         }
 
         private void OnSimuStopCommandExecute(object sender, RoutedEventArgs e)
         {
-
-            if (SimuStopButton.IsChecked == true)
-            {
-                if (SimuStartButton.IsChecked == true)
-                {
-                    SimuStartButton.IsChecked = false;
-                }
-                if (SimuPauseButton.IsChecked == true)
-                {
-                    SimuPauseButton.IsChecked = false;
-                }
-                SimulateHelper.SModel.Stop();
-            }
-            else
-            {
-                SimuStopButton.IsChecked = true;
-            }
+            SimulateHelper.SModel.Stop();
         }
 
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
@@ -881,17 +877,17 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-        //private void OnCheckNetworkErrorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        //{
-        //    if (_interactionFacade != null)
-        //    {
-        //        e.CanExecute = _interactionFacade.ProjectLoaded;
-        //    }
-        //    else
-        //    {
-        //        e.CanExecute = false;
-        //    }
-        //}
+        private void OnCheckNetworkErrorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
 
         //private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         //{

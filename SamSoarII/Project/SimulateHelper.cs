@@ -27,6 +27,7 @@ using SamSoarII.LadderInstModel.HighCount;
 using SamSoarII.LadderInstViewModel.Auxiliar;
 using SamSoarII.LadderInstModel.Auxiliar;
 using SamSoarII.LadderInstViewModel.Counter;
+using SamSoarII.Extend.FuncBlockModel;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -91,56 +92,23 @@ namespace SamSoarII.AppMain.Project
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETDOUBLE:
                     MessageBox.Show("Error : 找不到入口SetDouble\r\n");
                     break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDBITDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口AddBitDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDOUBLEATAPOINT:
-                    MessageBox.Show("Error : 找不到入口AddDoubleDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDFLOATDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口AddFloatDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDWORDDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口AddWordDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDWORDDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口AddDWordDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEBITDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口RemoveBitDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDOUBLEATAPOINT:
-                    MessageBox.Show("Error : 找不到入口RemoveDoubleDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEFLOATDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口RemoveFloatDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEWORDDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口RemoveWordDataPoint\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDWORDDATAPOINT:
-                    MessageBox.Show("Error : 找不到入口RemoveDWordDataPoint\r\n");
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_BEFORERUNLADDER:
+                    MessageBox.Show("Error : 找不到入口BeforeRunLadder\r\n");
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_AFTERRUNLADDER:
                     MessageBox.Show("Error : 找不到入口AfterRunLadder\r\n");
                     break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_BEFORERUNLADDER:
-                    MessageBox.Show("Error : 找不到入口BeforeRunLadder\r\n");
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_INITRUNLADDER:
+                    MessageBox.Show("Error : 找不到入口InitRunLadder\r\n");
                     break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWINPUT:
-                    MessageBox.Show("Error : 找不到入口AddViewInput\r\n");
+                case SimulateDllModel.LOADDLL_CANNNT_FOUND_GETCLOCK:
+                    MessageBox.Show("Error : 找不到入口GetClock\r\n");
                     break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWOUTPUT:
-                    MessageBox.Show("Error : 找不到入口AddViewOutput\r\n");
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_INITCLOCK:
+                    MessageBox.Show("Error : 找不到入口InitClock\r\n");
                     break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEVIEWINPUT:
-                    MessageBox.Show("Error : 找不到入口RemoveViewInput\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUNd_REMOVEVIEWOUTPUT:
-                    MessageBox.Show("Error : 找不到入口RemoveViewOutput\r\n");
-                    break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_RUNDATA:
-                    MessageBox.Show("Error : 找不到入口RunData\r\n");
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETCLOCKRATE:
+                    MessageBox.Show("Error : 找不到入口SetClockRate\r\n");
                     break;
                 default:
                     MessageBox.Show("Error : 发生未知错误\r\n");
@@ -172,6 +140,19 @@ namespace SamSoarII.AppMain.Project
         static public void SetupSimulateModel(ProjectModel pmodel)
         {
             if (smodel == null) return;
+            
+            foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
+            {
+                SimuViewFuncBlockModel svfbmodel = new SimuViewFuncBlockModel("");
+                SetupFuncBlockModel(svfbmodel, fbvmodel);
+                smodel.FuncBlocks.Add(svfbmodel);
+            }
+            smodel.AllFuncs = new SimuViewFuncBlockModel("所有函数");
+            foreach (SimuViewFuncBlockModel svfbmodel in smodel.FuncBlocks)
+            {
+                smodel.AllFuncs.Code += svfbmodel.Code;
+                smodel.AllFuncs.Headers.AddRange(svfbmodel.Headers);
+            }
 
             LadderDiagramViewModel lvdmodel = pmodel.MainRoutine;
             SimuViewDiagramModel svdmodel = new SimuViewDiagramModel(smodel, lvdmodel.Name);
@@ -185,18 +166,6 @@ namespace SamSoarII.AppMain.Project
                 smodel.SubRoutines.Add(svdmodel);
             }
             smodel.AllRoutine = new SimuViewAllDiaModel(smodel);
-
-            foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
-            {
-                SimuViewFuncBlockModel svfbmodel = new SimuViewFuncBlockModel("");
-                SetupFuncBlockModel(svfbmodel, fbvmodel);
-                smodel.FuncBlocks.Add(svfbmodel);
-            }
-            smodel.AllFuncs = new SimuViewFuncBlockModel("所有函数");
-            foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
-            {
-                smodel.AllFuncs.Code += fbvmodel.Code;
-            }
         }
         
         private static void SetupDiagramModel(SimuViewDiagramModel svdmodel, LadderDiagramViewModel lvdmodel)
@@ -234,10 +203,40 @@ namespace SamSoarII.AppMain.Project
             lcharts.Add(lchart);
         }
 
+        private static string ConvertCode(string code)
+        {
+            string ret = code;
+            ret = ret.Replace("BIT", "_BIT");
+            ret = ret.Replace("WORD", "_WORD");
+            ret = ret.Replace("FLOAT", "_FLOAT");
+            return ret;
+        }
+
         private static void SetupFuncBlockModel(SimuViewFuncBlockModel svfbmodel, FuncBlockViewModel fbvmodel)
         {
             svfbmodel.FuncBlockName = fbvmodel.FuncBlockName;
-            svfbmodel.Code = fbvmodel.Code;
+            svfbmodel.Code = ConvertCode(fbvmodel.Code);
+            foreach (FuncModel fmodel in fbvmodel.Funcs)
+            {
+                FuncHeaderModel fhmodel = new FuncHeaderModel();
+                fhmodel.Name = ConvertCode(fmodel.Name);
+                fhmodel.ReturnType = ConvertCode(fmodel.ReturnType);
+                fhmodel.ArgCount = fmodel.ArgCount;
+                for (int i = 0; i < fhmodel.ArgCount; i++)
+                {
+                    fhmodel.SetArgName(i, 
+                        ConvertCode(
+                            fmodel.GetArgName(i)
+                        )
+                    );
+                    fhmodel.SetArgType(i,
+                        ConvertCode(
+                            fmodel.GetArgType(i)
+                        )
+                    );
+                }
+                svfbmodel.Headers.Add(fhmodel);
+            }
         }
 
         private static SimuViewBaseModel ConvertViewModel(BaseViewModel bvmodel)
@@ -779,8 +778,12 @@ namespace SamSoarII.AppMain.Project
             }
             if (bvmodel is CALLMViewModel)
             {
-                svbmodel.Setup(String.Format("CALLM {0:s}",
-                        ((CALLMModel)(bvmodel.Model)).FunctionName));
+                svbmodel.Setup(String.Format("CALLM {0:s} {1:s} {2:s} {3:s} {4:s}",
+                        ((CALLMModel)(bvmodel.Model)).FunctionName,
+                        ((CALLMModel)(bvmodel.Model)).Value1.ValueShowString,
+                        ((CALLMModel)(bvmodel.Model)).Value2.ValueShowString,
+                        ((CALLMModel)(bvmodel.Model)).Value3.ValueShowString,
+                        ((CALLMModel)(bvmodel.Model)).Value4.ValueShowString));
             }
             if (bvmodel is CALLViewModel)
             {

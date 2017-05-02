@@ -6,6 +6,7 @@ using SamSoarII.PLCCompiler;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
 using SamSoarII.Utility;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -736,23 +737,18 @@ namespace SamSoarII.AppMain.Project
                     );
                     break;
                 case ElementPropertyDialog.INST_CALLM:
-                    epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Select(
+                    epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Where(
+                        (FuncModel fmodel) => { return fmodel.CanCALLM(); }  
+                    ).Select(
                         (FuncModel fmodel) =>
                         {
-                            int argcount = 0;
-                            for (; argcount < 4; argcount++)
+                            string[] result = new string[fmodel.ArgCount * 2 + 2];
+                            result[0] = fmodel.ReturnType;
+                            result[1] = fmodel.Name;
+                            for (int i = 0; i < fmodel.ArgCount; i++)
                             {
-                                if (fmodel.GetArgName(argcount).Equals(String.Empty))
-                                {
-                                    break;
-                                }
-                            }
-                            string[] result = new string[argcount * 2 + 1];
-                            result[0] = fmodel.Name;
-                            for (int i = 0; i < argcount; i++)
-                            {
-                                result[i * 2 + 1] = fmodel.GetArgType(i);
-                                result[i * 2 + 2] = fmodel.GetArgName(i);
+                                result[i * 2 + 2] = fmodel.GetArgType(i);
+                                result[i * 2 + 3] = fmodel.GetArgName(i);
                             }
                             return result;
                         }
@@ -783,7 +779,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     dialog.Close();
                 }
-                catch (Exception ex)
+                catch (ValueParseException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }

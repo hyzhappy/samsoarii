@@ -19,6 +19,8 @@ namespace SamSoarII.Extend.FuncBlockModel
 {
     public class FuncModel
     {
+        static private string[] CALLMTYPES = {"BIT*", "WORD*", "DWORD*", "FLOAT*"}; 
+
         #region Number
 
         /// <summary>
@@ -26,13 +28,29 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// 返回类型
+        /// </summary>
+        public string ReturnType { get; set;}
+        /// <summary>
         /// 所有参数的类型
         /// </summary>
-        private string[] argtypes = new string[4] { String.Empty, String.Empty, String.Empty, String.Empty };
+        private string[] argtypes = new string[0];
         /// <summary>
         /// 所有参数的名称
         /// </summary>
-        private string[] argnames = new string[4] { String.Empty, String.Empty, String.Empty, String.Empty };
+        private string[] argnames = new string[0];
+        /// <summary>
+        /// 参数个数
+        /// </summary>
+        public int ArgCount
+        {
+            get { return argtypes.Length; }
+            set
+            {
+                argtypes = new string[value];
+                argnames = new string[value];
+            }
+        }
         /// <summary>
         /// 获取参数的类型
         /// </summary>
@@ -68,6 +86,33 @@ namespace SamSoarII.Extend.FuncBlockModel
         public void SetArgName(int id, string _name)
         {
             argnames[id] = _name; 
+        }
+
+        public bool CanCALLM()
+        {
+            if (ArgCount > 4)
+            {
+                return false;
+            }
+            for (int i = 0; i < ArgCount; i++)
+            {
+                if (!CALLMTYPES.Contains(GetArgType(i)))
+                    return false;
+            }
+            return true;
+        }
+
+        public string[] GetMessageList()
+        {
+            string[] ret = new string[ArgCount * 2 + 2];
+            ret[0] = ReturnType;
+            ret[1] = Name;
+            for (int i = 0; i < ArgCount; i++)
+            {
+                ret[i * 2 + 2] = GetArgType(i);
+                ret[i * 2 + 3] = GetArgName(i);
+            }
+            return ret;
         }
 
         #endregion
