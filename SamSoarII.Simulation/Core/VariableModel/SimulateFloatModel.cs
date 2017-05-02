@@ -14,7 +14,13 @@ namespace SamSoarII.Simulation.Core.VariableModel
         override public Object Value
         {
             get { return (Object)(this.value); }
-            set { this.value = (double)(value); }
+            set
+            {
+                double _value = this.value;
+                this.value = (double)(value);
+                if (_value != this.value)
+                    ValueChanged(this, new RoutedEventArgs());
+            }
         }
 
         public override string Type
@@ -56,11 +62,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             double[] fvalues = dllmodel.GetValue_Float(Name, 1);
             double value_old = value;
-            this.value = fvalues[0];
-            if (value_old != value)
-            {
-                ValueChanged(this, new RoutedEventArgs());
-            }
+            Value = fvalues[0];
         }
 
         public override void Set(SimulateDllModel dllmodel)
@@ -68,7 +70,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
             double[] fvalues = { this.value };
             dllmodel.SetValue_Float(Name, 1, fvalues);
         }
-
     }
 
     public class SimulateFloatModel : SimulateVariableModel

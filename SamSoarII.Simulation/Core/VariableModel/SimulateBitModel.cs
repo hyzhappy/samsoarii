@@ -15,7 +15,13 @@ namespace SamSoarII.Simulation.Core.VariableModel
         override public Object Value
         {
             get { return (Object)(this.value); }
-            set { this.value = (int)(value); }
+            set
+            {
+                int _value = this.value;
+                this.value = (int)(value);
+                if (_value != this.value)
+                    ValueChanged(this, new RoutedEventArgs());
+            }
         }
         public override string ToString()
         {
@@ -56,12 +62,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             if (Islocked) return;
             Int32[] ivalues = dllmodel.GetValue_Bit(Name, 1);
-            Int32 value_old = value;
-            this.value = ivalues[0];
-            if (value_old != value)
-            {
-                ValueChanged(this, new RoutedEventArgs());
-            }
+            Value = ivalues[0];
         }
 
         public override void Set(SimulateDllModel dllmodel)

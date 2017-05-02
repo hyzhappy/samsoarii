@@ -60,6 +60,10 @@ namespace SamSoarII.Simulation.UI.Monitor
             /// </summary>
             private RowDefinition currentRowDefinition;
             /// <summary>
+            /// 对应的显示变量组的行分割块
+            /// </summary>
+            private RowDefinition seriesRowDefinition;
+            /// <summary>
             /// 元素ID，对应行号
             /// </summary>
             private int id;
@@ -71,6 +75,8 @@ namespace SamSoarII.Simulation.UI.Monitor
             /// 元素组件聚焦的位置
             /// </summary>
             private int focus;
+            
+
             #endregion
 
             #region Public
@@ -106,6 +112,11 @@ namespace SamSoarII.Simulation.UI.Monitor
             /// 元素组件：删除元素的图标按钮
             /// </summary>
             public MonitorCloseButton Button_Close;
+            /// <summary>
+            /// 元素组件：显示连续变量组的框架
+            /// </summary>
+            public MonitorSeriesBox Box_Series;
+
             #endregion
 
             #endregion
@@ -235,6 +246,16 @@ namespace SamSoarII.Simulation.UI.Monitor
                 Button_Value.SVUnit = svunit;
                 Button_Lock.SVUnit = svunit;
                 Button_Expand.SVUnit = svunit;
+                if (svunit is SimulateUnitSeries)
+                {
+                    Box_Series.Series = (SimulateUnitSeries)svunit;
+                    Button_Expand.IsExpanded = true; 
+                    Box_Series.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Box_Series.Visibility = Visibility.Collapsed;
+                }
                 // 如果变量为空则隐藏，否则显示
                 if (svunit == null)
                 {
@@ -262,6 +283,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 Button_Close = new MonitorCloseButton();
                 Button_Lock = new MonitorLockButton();
                 Button_Expand = new MonitorExpandButton();
+                Box_Series = new MonitorSeriesBox();
                 // 统一右键菜单
                 TextBox_Name.ContextMenu = parent.RightClickMenu;
                 //ComboBox_Type.ContextMenu = parent.RightClickMenu;
@@ -306,24 +328,26 @@ namespace SamSoarII.Simulation.UI.Monitor
                 Button_Lock.VariableUnitLocked += OnVariableUnitLocked;
                 Button_Lock.VariableUnitUnlocked += OnVariableUnitUnlocked;
                 Button_Close.MouseUp += OnCloseButtonClicked;
+                Box_Series.B_Detail.Click += OnDetailButtonClicked;
                 VariableUnitChanged += parent.OnVariableUnitChanged;
                 VariableUnitClosed += parent.OnVariableUnitDeleted;
                 VariableUnitLocked += parent.OnVariableUnitLocked;
                 VariableUnitUnlocked += parent.OnVariableUnitUnlocked;
-                VariableUnitExpanded += parent.OnVariableUnitExpanded;
+                //VariableUnitExpanded += parent.OnVariableUnitExpanded;
                 InsertRowElementBeforeHere += parent.OnInsertRowBeforeHere;
                 InsertRowElementAfterHere += parent.OnInsertRowAfterHere;
                 FocusUp += parent.OnFocusUp;
                 FocusDown += parent.OnFocusDown;
                 // 设置表格行列
-                Grid.SetRow(TextBox_Name, id);
-                Grid.SetRow(ComboBox_Type, id);
-                Grid.SetRow(TextBox_Var, id);
-                Grid.SetRow(TextBox_Value, id);
-                Grid.SetRow(Button_Value, id);
-                Grid.SetRow(Button_Lock, id);
-                Grid.SetRow(Button_Close, id);
-                Grid.SetRow(Button_Expand, id);
+                Grid.SetRow(TextBox_Name, id * 2 - 1);
+                Grid.SetRow(ComboBox_Type, id * 2 - 1);
+                Grid.SetRow(TextBox_Var, id * 2 - 1);
+                Grid.SetRow(TextBox_Value, id * 2 - 1);
+                Grid.SetRow(Button_Value, id * 2 - 1);
+                Grid.SetRow(Button_Lock, id * 2 - 1);
+                Grid.SetRow(Button_Close, id * 2 - 1);
+                Grid.SetRow(Button_Expand, id * 2 - 1);
+                Grid.SetRow(Box_Series, id * 2);
                 Grid.SetColumn(TextBox_Name, 0);
                 Grid.SetColumn(ComboBox_Type, 1);
                 Grid.SetColumn(TextBox_Var, 2);
@@ -332,12 +356,16 @@ namespace SamSoarII.Simulation.UI.Monitor
                 Grid.SetColumn(Button_Lock, 4);
                 Grid.SetColumn(Button_Expand, 4);
                 Grid.SetColumn(Button_Close, 5);
+                Grid.SetColumn(Box_Series, 0);
+                Grid.SetColumnSpan(Box_Series, 6);
                 // 设置行分割块
                 currentRowDefinition = new RowDefinition();
                 currentRowDefinition.Height = new GridLength(24);
+                seriesRowDefinition = new RowDefinition();
+                seriesRowDefinition.Height = GridLength.Auto;
                 // 加入到表格的组件集合中
-                //parent.MainGrid.RowDefinitions.Add(currentRowDefinition);
-                parent.MainGrid.RowDefinitions.Insert(id, currentRowDefinition);
+                parent.MainGrid.RowDefinitions.Insert(id * 2 - 1, seriesRowDefinition);
+                parent.MainGrid.RowDefinitions.Insert(id * 2 - 1, currentRowDefinition);
                 parent.MainGrid.Children.Add(TextBox_Name);
                 parent.MainGrid.Children.Add(ComboBox_Type);
                 parent.MainGrid.Children.Add(TextBox_Var);
@@ -346,6 +374,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 parent.MainGrid.Children.Add(Button_Lock);
                 parent.MainGrid.Children.Add(Button_Close);
                 parent.MainGrid.Children.Add(Button_Expand);
+                parent.MainGrid.Children.Add(Box_Series);
             }
             
             /// <summary>
@@ -361,39 +390,41 @@ namespace SamSoarII.Simulation.UI.Monitor
                 TextBox_Name.LostFocus -= OnChildrenLostFocus;
                 TextBox_Name.FocusUp -= OnFocusUp;
                 TextBox_Name.FocusDown -= OnFocusDown;
-                TextBox_Name.FocusLeft -= OnFocusLeft;
-                TextBox_Name.FocusRight -= OnFocusRight;
+                //TextBox_Name.FocusLeft -= OnFocusLeft;
+                //TextBox_Name.FocusRight -= OnFocusRight;
                 ComboBox_Type.TextLegalChanged -= OnTextLegalChanged;
                 ComboBox_Type.GotFocus -= OnChildrenGotFocus;
                 ComboBox_Type.LostFocus -= OnChildrenLostFocus;
                 ComboBox_Type.FocusUp -= OnFocusUp;
                 ComboBox_Type.FocusDown -= OnFocusDown;
-                ComboBox_Type.FocusLeft -= OnFocusLeft;
-                ComboBox_Type.FocusRight -= OnFocusRight;
+                //ComboBox_Type.FocusLeft -= OnFocusLeft;
+                //ComboBox_Type.FocusRight -= OnFocusRight;
                 TextBox_Var.TextLegalChanged -= OnTextLegalChanged;
                 TextBox_Var.GotFocus -= OnChildrenGotFocus;
                 TextBox_Var.LostFocus -= OnChildrenLostFocus;
                 TextBox_Var.FocusUp -= OnFocusUp;
                 TextBox_Var.FocusDown -= OnFocusDown;
-                TextBox_Var.FocusLeft -= OnFocusLeft;
-                TextBox_Var.FocusRight -= OnFocusRight;
+                //TextBox_Var.FocusLeft -= OnFocusLeft;
+                //TextBox_Var.FocusRight -= OnFocusRight;
                 TextBox_Value.TextLegalChanged -= OnTextLegalChanged;
                 TextBox_Value.GotFocus -= OnChildrenGotFocus;
                 TextBox_Value.LostFocus -= OnChildrenLostFocus;
                 TextBox_Value.FocusUp -= OnFocusUp;
                 TextBox_Value.FocusDown -= OnFocusDown;
-                TextBox_Value.FocusLeft -= OnFocusLeft;
-                TextBox_Value.FocusRight -= OnFocusRight;
+                //TextBox_Value.FocusLeft -= OnFocusLeft;
+                //TextBox_Value.FocusRight -= OnFocusRight;
                 Button_Value.TextLegalChanged -= OnTextLegalChanged;
                 Button_Expand.MouseDown -= OnExpandButtonClicked;
                 Button_Close.MouseUp -= OnCloseButtonClicked;
                 Button_Lock.VariableUnitLocked -= OnVariableUnitLocked;
                 Button_Lock.VariableUnitUnlocked -= OnVariableUnitUnlocked;
+                Button_Close.MouseUp -= OnCloseButtonClicked;
+                Box_Series.B_Detail.Click -= OnDetailButtonClicked;
                 VariableUnitChanged -= parent.OnVariableUnitChanged;
                 VariableUnitClosed -= parent.OnVariableUnitDeleted;
                 VariableUnitLocked -= parent.OnVariableUnitLocked;
                 VariableUnitUnlocked -= parent.OnVariableUnitUnlocked;
-                VariableUnitExpanded -= parent.OnVariableUnitExpanded;
+                //VariableUnitExpanded -= parent.OnVariableUnitExpanded;
                 InsertRowElementBeforeHere -= parent.OnInsertRowBeforeHere;
                 InsertRowElementAfterHere -= parent.OnInsertRowAfterHere;
                 FocusUp -= parent.OnFocusUp;
@@ -406,6 +437,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 parent.MainGrid.Children.Remove(Button_Value);
                 parent.MainGrid.Children.Remove(Button_Lock);
                 parent.MainGrid.Children.Remove(Button_Close);
+                parent.MainGrid.RowDefinitions.Remove(seriesRowDefinition);
                 parent.MainGrid.RowDefinitions.Remove(currentRowDefinition);
             }
             
@@ -420,7 +452,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 ComboBox_Type.Visibility = Visibility.Visible;
                 currentRowDefinition.Height = new GridLength(24);
                 // 是否可以关闭
-                if (svunit.CanClose)
+                if (parent.reles.Count() > 1 && svunit.CanClose)
                 {
                     Button_Close.Visibility = Visibility.Visible;
                 }
@@ -435,12 +467,16 @@ namespace SamSoarII.Simulation.UI.Monitor
                     Button_Expand.IsExpanded = ssunit.IsExpand;
                     Button_Lock.Visibility = Visibility.Hidden;
                     Button_Expand.Visibility = Visibility.Visible;
+                    TextBox_Value.Visibility = Visibility.Hidden;
+                    Button_Value.Visibility = Visibility.Visible;
                 }
                 // 如果是输入变量，不能锁定和展开
                 else if (svunit is SimulateVInputUnit)
                 {
                     Button_Lock.Visibility = Visibility.Hidden;
                     Button_Expand.Visibility = Visibility.Hidden;
+                    TextBox_Value.Visibility = Visibility.Hidden;
+                    Button_Value.Visibility = Visibility.Hidden;
                 }
                 // 如果是其他变量，只能锁定不能展开
                 else
@@ -678,6 +714,14 @@ namespace SamSoarII.Simulation.UI.Monitor
             /// <param name="e">事件</param>
             private void OnExpandButtonClicked(object sender, RoutedEventArgs e)
             {
+                if (Button_Expand.IsExpanded)
+                {
+                    Box_Series.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Box_Series.Visibility = Visibility.Collapsed;
+                }
                 VariableUnitExpanded(this, e);
             }
             
@@ -845,6 +889,11 @@ namespace SamSoarII.Simulation.UI.Monitor
 
             #endregion
 
+            private void OnDetailButtonClicked(object sender, RoutedEventArgs e)
+            {
+                Button_Value.ShowDetailDialog();
+            }
+
             #endregion
 
             public override string ToString()
@@ -875,6 +924,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             // 获取变量列表时要包括变量值展开后的所有变量
             get
             {
+                /*
                 // 返回的结果
                 List<SimulateVariableUnit> ret = new List<SimulateVariableUnit>();
                 // 对于原列表中的所有变量
@@ -898,6 +948,8 @@ namespace SamSoarII.Simulation.UI.Monitor
                     }
                 }
                 return ret;
+                */
+                return this.svunits;
             }
         }
 

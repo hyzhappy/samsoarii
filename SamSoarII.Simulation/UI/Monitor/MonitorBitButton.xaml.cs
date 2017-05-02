@@ -79,6 +79,8 @@ namespace SamSoarII.Simulation.UI.Monitor
         public const int STATUS_OFF = 0x00;
         /// <summary> 按钮状态标志常量：出错 </summary>
         public const int STATUS_ERROR = 0x02;
+        /// <summary> 按钮状态标志常量：显示变量组 </summary>
+        public const int STATUS_SERIES = 0x03;
         /// <summary>
         /// 按钮状态
         /// </summary>
@@ -112,6 +114,10 @@ namespace SamSoarII.Simulation.UI.Monitor
                             Title.Text = "ERROR";
                             Background = Brushes.Red;
                             break;
+                        case STATUS_SERIES:
+                            Title.Text = "...";
+                            Background = Brushes.Transparent;
+                            break;
                     }
                 });
             }
@@ -144,6 +150,11 @@ namespace SamSoarII.Simulation.UI.Monitor
             {
                 return;
             }
+            if (svunit is SimulateUnitSeries)
+            {
+                Status = STATUS_SERIES;
+                return;
+            }
             if (svunit.Type.Equals("BIT"))
             {
                 // 根据值来设置文本
@@ -161,11 +172,32 @@ namespace SamSoarII.Simulation.UI.Monitor
                 }
             }
         }
+        
+        private MonitorDetailDialog dialog;
 
+        public void ShowDetailDialog()
+        {
+            if (!(SVUnit is SimulateUnitSeries) ||
+                dialog != null)
+            {
+                return;
+            }
+            dialog = new MonitorDetailDialog(
+                (SimulateUnitSeries)SVUnit);
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialog.Closed += OnDialogClosed;
+            dialog.Show();
+        }
+
+        private void OnDialogClosed(object sender, EventArgs e)
+        {
+            dialog = null;
+        }
+        
         #region Event Handler
 
         #region KeyBoard Control
-        
+
         /// <summary>
         /// 当焦点上移时，触发这个代理
         /// </summary>
@@ -227,6 +259,11 @@ namespace SamSoarII.Simulation.UI.Monitor
         /// </summary>
         protected override void OnClick()
         {
+            if (Status == STATUS_SERIES)
+            {
+                ShowDetailDialog();
+                return;
+            }
             // 非只读状态下才能点击按钮
             if (!IsReadOnly)
             {

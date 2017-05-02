@@ -10,6 +10,8 @@ using System.Threading;
 using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Chart;
+using System.Collections.ObjectModel;
+using SamSoarII.Simulation.UI;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -41,7 +43,7 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 变量模型的列表
         /// </summary>
-        private LinkedList<SimulateVariableModel> vlist;
+        private ObservableCollection<SimulateVariableModel> vlist;
         /// <summary>
         /// 未锁定的变量单元的字典，根据名称来获得匹配集合
         /// </summary>
@@ -71,7 +73,7 @@ namespace SamSoarII.Simulation.Core
         {
             // 初始化成员
             dllmodel = new SimulateDllModel();
-            vlist = new LinkedList<SimulateVariableModel>();
+            vlist = new ObservableCollection<SimulateVariableModel>();
             udict = new Dictionary<string, List<SimulateVariableUnit> >();
             ldict = new Dictionary<string, List<SimulateVariableUnit> >();
             vndict = new Dictionary<string, string>();
@@ -87,6 +89,7 @@ namespace SamSoarII.Simulation.Core
             dllmodel.SimulateStart += OnSimulateStart;
             dllmodel.SimulatePause += OnSimulatePause;
             dllmodel.SimulateAbort += OnSimulateAbort;
+            dllmodel.SimulateException += OnSimulateException;
         }
         
         /// <summary>
@@ -272,7 +275,7 @@ namespace SamSoarII.Simulation.Core
             UpdateStop();
             // 根据给定参数，创建新的模型
             SimulateVariableModel svmodel = SimulateVariableModel.Create(name, size, type);
-            vlist.AddLast(svmodel);
+            vlist.Add(svmodel);
             // 重启更新线程
             UpdateStart();
         }
@@ -285,7 +288,8 @@ namespace SamSoarII.Simulation.Core
             // 终止更新线程，防止资源冲突
             UpdateStop();
             // 添加变量模型
-            vlist.AddLast(svmodel);
+            if (!vlist.Contains(svmodel))
+                vlist.Add(svmodel);
             // 重启更新线程
             UpdateStart();
         }
@@ -295,6 +299,12 @@ namespace SamSoarII.Simulation.Core
         /// <param name="svunit">变量单元</param>
         public void Add(SimulateVariableUnit svunit)
         {
+            if (svunit is SimulateUnitSeries)
+            {
+                SimulateUnitSeries series = (SimulateUnitSeries)svunit;
+                Add(series.Model);
+                return;
+            }
             // 终止更新线程，防止资源冲突
             UpdateStop();
 
@@ -399,6 +409,13 @@ namespace SamSoarII.Simulation.Core
         /// <param name="svunit"></param>
         public void Remove(SimulateVariableUnit svunit)
         {
+            if (svunit is SimulateUnitSeries)
+            {
+                SimulateUnitSeries series = (SimulateUnitSeries)svunit;
+                Remove(series.Model);
+                return;
+            }
+
             // 终止更新线程，防止资源冲突
             UpdateStop();
 
@@ -840,6 +857,33 @@ namespace SamSoarII.Simulation.Core
             SimuStatus = SIMU_STOP;
             UpdateStop();
         }
+
+        private void OnSimulateException(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                Exception exc = (Exception)sender;
+                SimulateExceptionDialog dialog = new SimulateExceptionDialog();
+                dialog.TB_Message.Text = exc.Message;
+                dialog.B_Continue.Click += (_sender, _e) =>
+                {
+                    dllmodel.Start();
+                    dialog.Close();
+                };
+                dialog.B_Pause.Click += (_sender, _e) =>
+                {
+                    dllmodel.Pause();
+                    dialog.Close();
+                };
+                dialog.B_Abort.Click += (_sender, _e) =>
+                {
+                    dllmodel.Abort();
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            });
+        }
+
         #endregion
 
         #endregion

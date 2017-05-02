@@ -716,6 +716,7 @@ namespace SamSoarII.AppMain.Project
             return maxY;
         }
         #region Event handlers
+
         #region Relative to Element changed
         public event LadderElementChangedHandler ElementChanged = delegate { };
         public event LadderElementChangedHandler VerticalLineChanged = delegate { };

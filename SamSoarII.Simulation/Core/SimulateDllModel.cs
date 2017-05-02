@@ -424,6 +424,7 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 仿真线程要运行的函数
         /// </summary>
+        [HandleProcessCorruptedStateExceptions]
         private void _SimulateThread()
         {
             SetClockRate(50);
@@ -444,7 +445,16 @@ namespace SamSoarII.Simulation.Core
                 if (!simulateActive) break;
                 // 运行一次仿真PLC
                 BeforeRunLadder();
-                RunLadder();
+                try
+                {
+                    RunLadder();
+                }
+                // 触发异常时暂停并发送事件等待处理
+                catch (Exception exce)
+                {
+                    Pause();
+                    SimulateException(exce, new RoutedEventArgs());
+                }
                 AfterRunLadder();
             }
             // 发送线程终止的事件
@@ -478,9 +488,17 @@ namespace SamSoarII.Simulation.Core
                     Thread.Sleep(10);
                 }
                 if (!simulateActive) break;
-
                 BeforeRunLadder();
-                RunLadder();
+                try
+                {
+                    RunLadder();
+                }
+                // 触发异常时发送事件，并暂停运行等待处理
+                catch (Exception exce)
+                {
+                    SimulateException(exce, new RoutedEventArgs());
+                    simulateRunning = false;
+                }
                 AfterRunLadder();
                 // 检查是否超过终止时间
                 time = GetClock();
@@ -525,8 +543,8 @@ namespace SamSoarII.Simulation.Core
                         break;
                 }
                 simulateThread.Start();
-                SimulateStart(this, new RoutedEventArgs());
             }
+            SimulateStart(this, new RoutedEventArgs());
         }
 
         /// <summary>
@@ -804,6 +822,11 @@ namespace SamSoarII.Simulation.Core
         /// 当仿真线程停止时，触发这个代理
         /// </summary>
         public event RoutedEventHandler SimulateAbort = delegate { };
+
+        /// <summary>
+        /// 当仿真发生异常时，触发这个代理
+        /// </summary>
+        public event RoutedEventHandler SimulateException = delegate { };
 
         /// <summary>
         /// 每次仿真进度更新时，触发这个代理
