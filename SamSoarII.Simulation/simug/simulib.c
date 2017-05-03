@@ -61,7 +61,7 @@ static time_t _time_t_new;
 // pulse
 static int32_t YTime[4];
 static double YCount[4];
-static int64_t YTarget[4];
+static uint64_t YTarget[4];
 static int32_t YITime[4];
 static int32_t YZStatus[4];
 static int32_t YZTime[4];
@@ -69,7 +69,7 @@ static int64_t YZFeq[4];
 int64_t YFeq[4];
 static int64_t YPTarget[4];
 static int64_t YDTime[4];
-static int64_t YDFeq[4];
+static uint64_t YDFeq[4];
 
 // get a result (32-bit integer) by add a couple of 32-bit integers
 int32_t _addw(int32_t ia, int32_t ib)
@@ -527,7 +527,7 @@ void _bitset(int32_t* addr, int32_t* enable, int32_t size)
 {
 	while (--size >= 0)
 	{
-		if (enable[size]) addr[size] = 1;
+		if (!enable[size]) addr[size] = 1;
 	}
 }
 
@@ -540,7 +540,7 @@ void _bitrst(int32_t* addr, int32_t* enable, int32_t size)
 {
 	while (--size >= 0)
 	{
-		if (enable[size]) addr[size] = 0;
+		if (!enable[size]) addr[size] = 0;
 	}
 }
 
@@ -555,7 +555,7 @@ void _bitcpy(int32_t* source_addr, int32_t* target_addr, int32_t* enable, int32_
 {
 	while (--size >= 0)
 	{
-		if (enable[size])
+		if (!enable[size])
 			target_addr[size] = source_addr[size];
 	}
 }
@@ -578,9 +578,11 @@ void _ton(int32_t* tval, int32_t* tbit, int32_t cod, int32_t sv, int32_t* otim)
 		// increase the counter value and old time
 		*tval += itv;
 		*otim += itv * 100;
-		// arrive at the reserve value?
+		// arrive at the end value?
 		if (*tval >= sv)
 		{
+			// keep it no more than end value
+			*tval = sv;
 			// set the counter bit
 			*tbit = 1;
 		}
@@ -591,6 +593,8 @@ void _ton(int32_t* tval, int32_t* tbit, int32_t cod, int32_t sv, int32_t* otim)
 		*tval = 0;
 		// reset the counter bit to zero
 		*tbit = 0;
+		// update the old time
+		*otim = counttimems;
 	}
 }
 
@@ -615,17 +619,27 @@ void _tonr(int32_t* tval, int32_t* tbit, int32_t cod, int32_t sv, int32_t* otim)
 		// arrive at the reserve value?
 		if (*tval >= sv)
 		{
+			// keep it no more than end value
+			*tval = sv;
 			// set the counter bit
 			*tbit = 1;
 		}
+	}
+	else
+	{
+		// update the old time
+		*otim = counttimems;
 	}
 }
 
 // attach an interrupt function
 void _atch(int id, vfun func)
 {
+	if (id >= 6 && itr_funcs[id] != func) 
+	{
+		itr_times[id - 6] = counttimems;
+	}
 	itr_funcs[id] = func;
-	if (id >= 6) itr_times[id - 6] = counttimems;
 }
 
 // detach an interrupt function
@@ -649,6 +663,8 @@ void _di()
 // try to invoke interrupt
 void _itr_invoke()
 {
+	if (!itr_enable)
+		return;
 	int32_t _X0 = XBit[0];
 	// interrupt id 0 : X0 up edge
 	if (!itr_oldXBit[0] && _X0 &&
@@ -691,14 +707,14 @@ void _itr_invoke()
 	itr_oldXBit[1] = _X1;
 	// interrupt id 6 : timer1 arrive
 	while (itr_funcs[6] && DWord[8173] > 0 &&
-		counttime - itr_times[0] > DWord[8173])
+		counttimems - itr_times[0] > DWord[8173])
 	{
 		itr_times[0] += DWord[8173];
 		itr_funcs[6]();
 	}
 	// interrupt id 6 : timer1 arrive
 	while (itr_funcs[7] && DWord[8174] > 0 &&
-		counttime - itr_times[1] > DWord[8174])
+		counttimems - itr_times[1] > DWord[8174])
 	{
 		itr_times[1] += DWord[8174];
 		itr_funcs[7]();
@@ -791,7 +807,7 @@ void _dplsf(uint64_t feq, int32_t* out)
 			// get the changed value (in float)
 			double _yc = YCount[id] + _pn;
 			// check if it overflow 64-bit integer dimension 
-			*_of = (_yc > ~((uint64_t)(0)));
+			*_of = (_yc > (~((uint64_t)(0))));
 			// convert to integer and set it if it not overflow
 			if (!*_of) *_ct = (uint64_t)(_yc);
 			// over the inteval time
@@ -843,10 +859,16 @@ void _dplsy(uint64_t feq, uint64_t* pn, int32_t* out)
 	}
 }
 
+static uint64_t _plsrmsgbuff[8196];
 // Create a segment-divided and linear-faded pulse by 32-bit parameter
-void _plsr(uint32_t* msg, uint32_t it, int32_t* out)
+void _plsr(uint32_t* msg, int32_t it, int32_t* out)
 {
-
+	int i = 0;
+	while (msg[i] != 0)
+	{
+		_plsrmsgbuff[i] = (uint64_t)(msg[i]);
+	}
+	_dplsr(_plsrmsgbuff, it, out);
 }
 
 // Create a segment-divided and linear-faded pulse by 64-bit parameter
@@ -854,7 +876,7 @@ void _plsr(uint32_t* msg, uint32_t it, int32_t* out)
 // msg : message array
 // it : inteval time to fade the fequency
 // out : the port to output the generated pulse signal
-void _dplsr(uint64_t* msg, uint64_t it, int32_t* out)
+void _dplsr(uint64_t* msg, int64_t it, int32_t* out)
 {
 	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
 	if (id < 4)
@@ -876,13 +898,13 @@ void _dplsr(uint64_t* msg, uint64_t it, int32_t* out)
 		// error index flag
 		uint32_t* _errid = &DWord[8108 + id];
 		// previous fequency
-		uint64_t _feq_old;
+		int64_t _feq_old;
 		// current fequency
-		uint64_t _feq_new;
+		int64_t _feq_new;
 		// inteval pulse number
-		uint64_t _pn_itv;
+		int64_t _pn_itv;
 		// the all of pulse number in this segment
-		uint64_t _pn;
+		int64_t _pn;
 		// check and initialize it if not active
 		if (!*_active)
 		{
@@ -900,7 +922,7 @@ void _dplsr(uint64_t* msg, uint64_t it, int32_t* out)
 					// get the maxinum pulse number
 					_pn = msg[*_errid * 2 - 1];
 					// get the inteval pulse number
-					_pn_itv = (_feq_old + _feq_new) * it / 2;
+					_pn_itv = (_feq_old + _feq_new) * it / 2000;
 					// Error 23 : Pulse number is over the allowed limit.
 					if (_pn > 1000000) *_err = 23;
 					// Error 24 : The fequency of first segment is less than the minimum.
@@ -934,15 +956,17 @@ void _dplsr(uint64_t* msg, uint64_t it, int32_t* out)
 			*_active = 1;
 			*_YIndex = 1;
 			*_ct = 0;
-			YTarget[id] = msg[1];		// the target number to move it to the next segment
+			YTarget[id] = 0;		    // the target number to move it to the next segment
 			YITime[id] = counttimems;   // the start time when it come into this segment
 			return;
 		}
+		
 		// get the segment infomation
-		_feq_old = (*_YIndex > 1 ? msg[*_YIndex * 2 - 4] : 0);
-		_feq_new = msg[*_YIndex * 2 - 2];
-		_pn = msg[*_YIndex * 2 - 1];
-		_pn_itv = (_feq_old + _feq_new) * it / 2;
+		_feq_old = ((*_YIndex) > 1 ? msg[(*_YIndex) * 2 - 4] : 0);
+		_feq_new = msg[(*_YIndex) * 2 - 2];
+		_pn = msg[(*_YIndex) * 2 - 1];
+		_pn_itv = (_feq_old + _feq_new) * it / 2000;
+		
 		// the last segment?
 		if (_feq_new == 0)
 		{
@@ -970,18 +994,25 @@ void _dplsr(uint64_t* msg, uint64_t it, int32_t* out)
 		// move to next xegment
 		else
 		{
-			*_YIndex++;
-			YTarget[id] += _pn;
+			//_dplsf(_feq_new, out);
+			(*_YIndex) = (*_YIndex) + 1;
+			YTarget[id] = *_ct;
 			YITime[id] = counttimems;
 		}
 	}
 }
 
 // Create a segment-divided, linear-faded and oriented pulse by 32-bit parameter
-void _plsrd(uint32_t* msg, uint32_t ct, int32_t* out, int32_t* dir){}
+void _plsrd(uint32_t* msg, int32_t ct, int32_t* out, int32_t* dir)
+{
+	_plsr(msg, ct, out);
+}
 
 // Create a segment-divided, linear-faded and oriented pulse by 64-bit parameter
-void _dplsrd(uint64_t* msg, uint64_t ct, int32_t* out, int32_t* dir){}
+void _dplsrd(uint64_t* msg, int64_t ct, int32_t* out, int32_t* dir)
+{
+	_dplsr(msg, ct, out);
+}
 
 // Move to next segment
 void _plsnext(int32_t* out)
@@ -1013,8 +1044,15 @@ void _plsstop(int32_t* out)
 	{
 		// set the active flag to 0
 		uint32_t *_active = &MBit[8134 + id];
+		// counter
+		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		// overflow flag
+		uint32_t* _of = &MBit[8118 + id];
 		*_active = 0;
+		*_ct = 0;
+		*_of = 0;
 		YFeq[id] = 0;
+		YTime[id] = 0;
 	}
 }
 
@@ -1035,9 +1073,9 @@ void _dzrn(uint64_t cv, uint64_t bv, int32_t sg, int32_t* out)
 		// zrn inteval time
 		uint32_t* _zt = &DWord[8076 + id];
 		// old fequency 
-		uint64_t _feq_old;
+		int64_t _feq_old;
 		// new fequency
-		uint64_t _feq_new;
+		int64_t _feq_new;
 		// initialize
 		if (!*_active)
 		{
@@ -1056,7 +1094,7 @@ void _dzrn(uint64_t cv, uint64_t bv, int32_t sg, int32_t* out)
 				YZStatus[id] = 1;		
 			}
 			// on climbing
-			else if (YZTime[id] - counttimems < *_zt) 
+			else if (counttimems - YZTime[id] < *_zt) 
 			{
 				_dplsf(cv * (counttimems - YITime[id]) / (*_zt), out);
 			}
@@ -1139,11 +1177,11 @@ void _pto(uint64_t* msg, int32_t* out, int32_t* dir)
 			return;
 		}
 		// start fequency
-		uint64_t _feq_old = msg[*_YIndex * 3 - 2];
+		int64_t _feq_old = msg[*_YIndex * 3 - 2];
 		// end fequency
-		uint64_t _feq_new = msg[*_YIndex * 3 - 1];
+		int64_t _feq_new = msg[*_YIndex * 3 - 1];
 		// pulse number
-		uint64_t _pn = msg[*_YIndex * 3];
+		int64_t _pn = msg[*_YIndex * 3];
 		// unarrive at the target?
 		if (*_ct < YPTarget[id])
 		{
@@ -1183,15 +1221,15 @@ void _ddrvi(uint64_t feq, uint64_t pn, int32_t* out)
 		// error code
 		uint32_t* _err = &DWord[8176];
 		// interval time
-		uint32_t* _it = &DWord[8092 + id];
+		int32_t* _it = &DWord[8092 + id];
 		// old fequency
-		uint64_t _feq_old;
+		int64_t _feq_old;
 		// new fequency
-		uint64_t _feq_new;
+		int64_t _feq_new;
 		// pulse number
-		uint64_t _pn;
+		int64_t _pn;
 		// interval pulse number
-		uint64_t _pn_itv;
+		int64_t _pn_itv;
 		// check and initialize
 		if (!*_active)
 		{
@@ -1202,7 +1240,7 @@ void _ddrvi(uint64_t feq, uint64_t pn, int32_t* out)
 				_feq_old = YFeq[id];
 				_feq_new = feq;
 				_pn = pn;
-				_pn_itv = (_feq_old + _feq_new) * (*_it) / 2;
+				_pn_itv = (_feq_old + _feq_new) * (*_it) / 2000;
 				if (_pn > 1000000) *_err = 23;
 				if (_feq_new < 50) *_err = 25;
 				if (_pn < 1000) *_err = 26;
@@ -1231,7 +1269,7 @@ void _ddrvi(uint64_t feq, uint64_t pn, int32_t* out)
 		_feq_old = YDFeq[id];
 		_feq_new = feq;
 		_pn = pn;
-		_pn_itv = (_feq_old + _feq_new) * (*_it) / 2;
+		_pn_itv = (_feq_old + _feq_new) * (*_it) / 2000;
 		// in the interval zone
 		if (*_ct < YTarget[id] + _pn_itv)
 		{

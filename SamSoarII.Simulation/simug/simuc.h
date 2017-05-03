@@ -8,16 +8,11 @@
 #include <string.h>
 #include <Windows.h>
 
-#ifndef _SIMUC_H__
-#define _SIMUC_H__
-
 #ifdef BUILD_DLL
 #define DLL_EXPORT __declspec(dllexport)
 #else
 #define DLL_EXPORT __declspec(dllimport)
 #endif // BUILD_DLL
-
-#endif // _SIMUC_H__
 
 #ifdef __cplusplus
 #define EXPORT extern "C" DLL_EXPORT __stdcall
@@ -162,7 +157,6 @@ EXPORT void GetFloat(char* name, int size, double* output)
 		break;
 	}
 }
-
 // Get the signal frequency
 EXPORT void GetFeq(char* name, uint64_t* output)
 {
@@ -177,7 +171,20 @@ EXPORT void GetFeq(char* name, uint64_t* output)
 		break;
 	}
 }
-
+// Set the signal frequency
+EXPORT void SetFeq(char* name, uint64_t input)
+{
+	int addr = 0;
+	switch (name[0])
+	{
+	case 'Y':
+		sscanf(name + 1, "%d", &addr);
+		YFeq[addr] = input;
+		break;
+	default:
+		break;
+	}
+}
 // Set the Bit value to targeted bit register (X/Y/M/C/T/S)
 EXPORT void SetBit(char* name, int size, uint32_t* input)
 {
@@ -316,416 +323,6 @@ EXPORT void SetEnable(char* name, int size, int value)
 		break;
 	}
 }
-/* 
-	The manipulation of lock registers and view registers
-	Here is the behaviors
-	1. Add an lock event to change the value of the targeted register at a specific time
-	2. Delete the event above (unuse now)
-	3. Add the view register
-	4. Remove the lock register by remove all of its lock events
-	5. Remove the view rigister
-   */
-
-// the ID of value type
-#define DP_TYPE_BIT 0x01
-#define DP_TYPE_WORD 0x02
-#define DP_TYPE_DOUBLEWORD 0x03
-#define DP_TYPE_FLOAT 0x04
-// convert the struct DataPoint and get the value of specific type
-#define WORDVALUE(dp) *((uint32_t*)(&(dp).rsv1))
-#define DWORDVALUE(dp) *((uint64_t*)(&(dp).rsv1))
-#define FLOATVALUE(dp) *((float*)(&(dp).rsv1))
-#define DOUBLEVALUE(dp) *((double*)(&(dp).rsv1))
-/*
-   DataPoint struct :
-		type : value type
-		name : register name
-		time : value changed time
-		rsv1, rsv2 : reserve memory, commonly used to store the value 
-	*/
-struct DataPoint
-{
-	int type;
-	char* name;
-	int time;
-	int32_t rsv1, rsv2;
-};
-/*
-struct BitDataPoint
-{
-	char* name;
-	int time;
-	int value;
-};
-
-struct WordDataPoint
-{
-	char* name;
-	int time;
-	int value;
-};
-
-struct DoubleWordDataPoint
-{
-	char* name;
-	int time;
-	int value;
-};
-
-struct floatWordDataPoint
-{
-	char* name;
-	int time;
-	float value;
-};
-
-struct DoubleDataPoint
-{
-	char* name;
-	int time;
-	double value;
-};
-*/
-// DataPointInput
-static int dpic;
-static struct DataPoint dpis[65536];
-// DataPointOutput
-static int dpoc;
-static struct DataPoint dpos[65536];
-
-/*
-   the struct to illustrate the view register
-	type : register value type
-	name : register name
-	dp : the start DataPoint
-	dpend : the ending DataPoint
-	*/
-struct DataInputView
-{
-	int type;
-	char* name;
-	struct DataPoint* dp;
-	struct DataPoint* dpend;
-};
-// DataViewInput
-static int dvic;
-static struct DataInputView dvis[1024];
-// DataViewOutput
-static int dvoc;
-static struct DataPoint dvos[1024];
-/*	The memory to store register names
-	In order to avoid the dynamic allocation and memory expose
-	*/
-static char nmem[65536];
-static char* _nmem;
-static char* XName[128];
-static char* YName[128];
-static char* MName[256 << 5];
-static char* CName[256];
-static char* TName[256];
-static char* SName[32 << 5];
-static char* DName[8192];
-static char* CVName[256];
-static char* TVName[256];
-// Initialize the name memory
-EXPORT void InitDataPoint()
-{
-	int i;
-	_nmem = &nmem[0];	
-	for (i = 0; i < 65536; i++)
-		nmem[i] = 0;
-
-	for (i = 0; i < 128; i++)
-		XName[i] = 0;
-	for (i = 0; i < 128; i++)
-		YName[i] = 0;
-	for (i = 0; i < (256<<5); i++)
-		MName[i] = 0;
-	for (i = 0; i < 256; i++)
-		CName[i] = 0;
-	for (i = 0; i < 256; i++)
-		TName[i] = 0;
-	for (i = 0; i < (32<<5); i++)
-		SName[i] = 0;
-	for (i = 0; i < 8192; i++)
-		DName[i] = 0;
-	for (i = 0; i < 256; i++)
-		CVName[i] = 0;
-	for (i = 0; i < 256; i++)
-		TVName[i] = 0;
-
-	dpic = 0;
-}
-// clone the targeted name to the name memory
-char* _CloneName(char* name)
-{
-	int offset = 0;
-	switch (name[0])
-	{
-	case 'C': 
-		switch (name[1])
-		{
-		case 'V':
-			sscanf(name + 2, "%d", &offset);
-			if (!CVName[offset])
-			{
-				sprintf(_nmem, "CV%d", offset);
-				CVName[offset] = _nmem;
-				_nmem = _nmem + (strlen(_nmem) + 1);
-			}
-			return CVName[offset];
-		default:
-			sscanf(name + 1, "%d", &offset);
-			if (!CName[offset])
-			{
-				sprintf(_nmem, "C%d", offset);
-				CName[offset] = _nmem;
-				_nmem = _nmem + (strlen(_nmem) + 1);
-			}
-			return CName[offset];
-		}
-		break;
-	case 'T':
-		switch (name[1])
-		{
-		case 'V':
-			sscanf(name + 2, "%d", &offset);
-			if (!TVName[offset])
-			{
-				sprintf(_nmem, "TV%d", offset);
-				TVName[offset] = _nmem;
-				_nmem = _nmem + (strlen(_nmem) + 1);
-			}
-			return TVName[offset];
-		default:
-			sscanf(name + 1, "%d", &offset);
-			if (!TName[offset])
-			{
-				sprintf(_nmem, "T%d", offset);
-				TName[offset] = _nmem;
-				_nmem = _nmem + (strlen(_nmem) + 1);
-			}
-			return TName[offset];
-		}
-		break;
-	case 'D':
-		sscanf(name + 1, "%d", &offset);
-		if (!DName[offset])
-		{
-			sprintf(_nmem, "D%d", offset);
-			DName[offset] = _nmem;
-			_nmem = _nmem + (strlen(_nmem) + 1);
-		}
-		return DName[offset];
-	case 'X':
-		sscanf(name + 1, "%d", &offset);
-		if (!XName[offset])
-		{
-			sprintf(_nmem, "X%d", offset);
-			XName[offset] = _nmem;
-			_nmem = _nmem + (strlen(_nmem) + 1);
-		}
-		return XName[offset];
-	case 'Y':
-		sscanf(name + 1, "%d", &offset);
-		if (!YName[offset])
-		{
-			sprintf(_nmem, "Y%d", offset);
-			YName[offset] = _nmem;
-			_nmem = _nmem + (strlen(_nmem) + 1);
-		}
-		return YName[offset];
-	case 'M':
-		sscanf(name + 1, "%d", &offset);
-		if (!MName[offset])
-		{
-			sprintf(_nmem, "M%d", offset);
-			MName[offset] = _nmem;
-			_nmem = _nmem + (strlen(_nmem) + 1);
-		}
-		return MName[offset];
-	case 'S':
-		sscanf(name + 1, "%d", &offset);
-		if (!SName[offset])
-		{
-			sprintf(_nmem, "S%d", offset);
-			CName[offset] = _nmem;
-			_nmem = _nmem + (strlen(_nmem) + 1);
-		}
-		return SName[offset];
-	default:
-		return NULL;
-	}
-}
-// Add a DataPoint of BIT value
-EXPORT void AddBitDataPoint(char* name, int time, uint32_t value)
-{
-	dpis[dpic].type = DP_TYPE_BIT;
-	dpis[dpic].name = _CloneName(name);
-	dpis[dpic].time = time;
-	WORDVALUE(dpis[dpic]) = value;
-	dpic++;
-}
-// Add a DataPoint of WORD value
-EXPORT void AddWordDataPoint(char* name, int time, uint16_t value)
-{
-	dpis[dpic].type = DP_TYPE_WORD;
-	dpis[dpic].name = _CloneName(name);
-	dpis[dpic].time = time;
-	WORDVALUE(dpis[dpic]) = value;
-	dpic++;
-}
-// Add a DataPoint of DOUBLE value
-EXPORT void AddDoubleWordDataPoint(char* name, int time, uint32_t value)
-{
-	dpis[dpic].type = DP_TYPE_DOUBLEWORD;
-	dpis[dpic].name = _CloneName(name);
-	dpis[dpic].time = time;
-	DWORDVALUE(dpis[dpic]) = value;
-	dpic++;
-}
-// Add a DataPoint of FLOAT value
-EXPORT void AddFloatDataPoint(char* name, int time, float value)
-{
-	dpis[dpic].type = DP_TYPE_FLOAT;
-	dpis[dpic].name = _CloneName(name);
-	dpis[dpic].time = time;
-	FLOATVALUE(dpis[dpic]) = value;
-	dpic++;
-}
-
-void _RemoveDataPoint(int id)
-{
-	int i;
-
-	for (i = id + 1; i < dpic; i++)
-	{
-		memcpy(dpis+(i-1), dpis+i, sizeof(struct DataPoint));
-	}
-
-	dpic--;
-}
-
-EXPORT void RemoveBitDataPoint(char* name, int time, uint32_t value)
-{
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_BIT &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			_RemoveDataPoint(i);
-		}
-	}
-}
-
-EXPORT void RemoveWordDataPoint(char* name, int time, uint16_t value)
-{
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_WORD &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			_RemoveDataPoint(i);
-		}
-	}
-}
-
-EXPORT void RemoveDoubleWordDataPoint(char* name, int time, uint32_t value)
-{
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_DOUBLEWORD &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			_RemoveDataPoint(i);
-		}
-	}
-}
-
-EXPORT void RemoveFloatDataPoint(char* name, int time, float value)
-{
-	int i;
-	for (i = 0; i < dpic; i++)
-	{
-		if (dpis[i].type == DP_TYPE_FLOAT &&
-			!strcmp(dpis[i].name, name) &&
-			dpis[i].time == time)
-		{
-			_RemoveDataPoint(i);
-		}
-	}
-}
-
-EXPORT void AddViewInput(char* name, int type)
-{
-
-}
-
-EXPORT void AddViewOutput(char* name, int type)
-{
-	dvos[dvoc].type = type;
-	dvos[dvoc].name = _CloneName(name);
-	switch (type)
-	{
-	case DP_TYPE_BIT:
-	case DP_TYPE_WORD:
-		WORDVALUE(dvos[dvoc]) = 0;
-		break;
-	case DP_TYPE_DOUBLEWORD:
-		DWORDVALUE(dvos[dvoc]) = 0;
-		break;
-	case DP_TYPE_FLOAT:
-		FLOATVALUE(dvos[dvoc]) = 0.0;
-		break;
-	}
-	dvoc++;
-}
-
-void _RemoveViewPoint(int id)
-{
-	int i;
-
-	for (i = id + 1; i < dvoc; i++)
-	{
-		memcpy(dvos+(i-1), dvos+i, sizeof(struct DataPoint));
-	}
-
-	dvoc--;
-
-}
-
-EXPORT void RemoveViewInput(char* name, int type)
-{
-	int i = 0, j = 0;
-	for (; i < dpic ; i++)
-	{
-		if (strcmp(dpis[i].name, name) ||
-			dpis[i].type != type)
-		{
-			memcpy(dpis+(j++), dpis+(i), sizeof(struct DataPoint));
-		}
-	}
-	dpic = j;
-}
-
-EXPORT void RemoveViewOutput(char* name, int type)
-{
-	int i;
-	for (i = 0; i < dvoc; i++)
-	{
-		if (dvos[i].type == type &&
-			!strcmp(dvos[i].name, name))
-		{
-			_RemoveViewPoint(i);
-		}
-	}
-}
 
 static int currenttime;
 static int beforetime;
@@ -733,33 +330,58 @@ static int aftertime;
 static int deltatime;
 int counttime;
 int counttimems;
+int timerate = 50;
 static int scanperiod = 1000;
 
-EXPORT void InitClock()
+EXPORT void InitClock(int _counttimems)
 {
-	counttime = 0;
-	counttimems = 0;
+	counttimems = _counttimems;
+	counttime = counttimems * 1000;
 }
 
 void UpdateClock()
 {
 	LARGE_INTEGER lpCount;
 	QueryPerformanceCounter(&lpCount);
-	currenttime = (int)(lpCount.QuadPart / 10);
+	currenttime = (int)(lpCount.QuadPart / timerate);
+}
+
+EXPORT int GetClock()
+{
+	return counttimems;
+}
+
+EXPORT void SetClockRate(int _timerate)
+{
+	timerate = _timerate;
+}
+
+void InitRegisters()
+{
+	memset(XBit, 0, sizeof(XBit));
+	memset(YBit, 0, sizeof(YBit));
+	memset(SBit, 0, sizeof(SBit));
+	memset(MBit, 0, sizeof(MBit));
+	memset(TBit, 0, sizeof(TBit));
+	memset(CBit, 0, sizeof(CBit));
+	memset(DWord, 0, sizeof(DWord));
+	memset(CVWord, 0, sizeof(CVWord));
+	memset(TVWord, 0, sizeof(TVWord));
+	memset(CVDoubleWord, 0, sizeof(CVDoubleWord));
+	
+	MBit[8151] = 0;
+	MBit[8152] = 1;
 }
 
 EXPORT void BeforeRunLadder()
 {
 	UpdateClock();
 	beforetime = currenttime;
-
+	
 	MBit[8158] = ((counttimems / 5) & 1);
 	MBit[8159] = ((counttimems / 50) & 1);
 	MBit[8160] = ((counttimems / 500) & 1);
 	MBit[8161] = ((counttimems / 30000) & 1);
-
-	//printf("counttime=%d counttimems=%d 10msclock=%d 100msclock=%d 1sclock=%d\n",
-	//	counttime, counttimems, MBit[8158], MBit[8159], MBit[8160]);
 }
 
 EXPORT void AfterRunLadder()
@@ -767,299 +389,18 @@ EXPORT void AfterRunLadder()
 	UpdateClock();
 	aftertime = currenttime;
 	deltatime = aftertime - beforetime;
-	//if (deltatime < 0 || deltatime > 100)
-	//	deltatime = 1;
 	counttime += deltatime;
 	counttimems = counttime / 1000;
 }
 
-void _SortDataPoint(int l, int r)
+EXPORT void InitRunLadder()
 {
-	if (l < 0 || r < 0 || l > r)
-		return;
-	int i = l, j = r;
-	struct DataPoint* k = &dpis[(l + r) >> 1];
-	struct DataPoint tmp;
-	while (i <= j)
-	{
-		while (dpis[i].name < k->name || dpis[i].name == k->name && dpis[i].time < k->time) i++;
-		while (dpis[j].name > k->name || dpis[j].name == k->name && dpis[j].time > k->time) j--;
-		if (i <= j)
-		{
-			memcpy(&tmp, dpis + i, sizeof(struct DataPoint));
-			memcpy(dpis + i, dpis + j, sizeof(struct DataPoint));
-			memcpy(dpis + j, &tmp, sizeof(struct DataPoint));
-			i++; j--;
-		}
-	}
-	if (i < r) _SortDataPoint(i, r);
-	if (j > l) _SortDataPoint(l, j);
+	InitRegisters();
+	InitClock(0);
+	BeforeRunLadder();
+	RunLadder();
+	AfterRunLadder();
+	MBit[8151] = 1;
+	MBit[8152] = 0;
 }
 
-EXPORT void RunData(char* outputFile, int starttime, int endtime)
-{
-	int i, j;
-
-	FILE* fout = fopen(outputFile, "w");
-	if (fout == NULL) return;
-	_SortDataPoint(0, dpic - 1);
-	dvis[0].name = dpis[0].name;
-	dvis[0].type = dpis[0].type;
-	dvis[0].dp = dpis;
-	dvic = 1;
-	for (i = 1; i < dpic; i++)
-	{
-		if (strcmp(dpis[i-1].name, dpis[i].name))
-		{
-			dvis[dvic-1].dpend = dpis + i;
-			dvis[dvic].name = dpis[i].name;
-			dvis[dvic].type = dpis[i].type;
-			dvis[dvic++].dp = dpis + i;
-		}
-	}
-	dvis[dvic-1].dpend = dpis + dpic;
-	if (dpic == 0) dvic = 0;
-
-	int t1, t2, dt, dc;
-
-	counttime = 0;
-	counttimems = 0;
-	dt = 0;
-	while (counttimems < endtime)
-	{
-		for (i = 0; i < dvic; i++)
-		{
-			while (dvis[i].dp != dvis[i].dpend &&
-				   dvis[i].dp->time <= counttimems)
-			{
-				int offset;
-				switch (dvis[i].name[0])
-				{
-				case 'X':
-					sscanf(dvis[i].name + 1, "%d", &offset);
-					XBit[offset] = WORDVALUE(*dvis[i].dp);
-					break;
-				case 'Y':
-					sscanf(dvis[i].name + 1, "%d", &offset);
-					YBit[offset] = WORDVALUE(*dvis[i].dp);
-					break;
-				case 'M':
-					sscanf(dvis[i].name + 1, "%d", &offset);
-					MBit[offset] = WORDVALUE(*dvis[i].dp);
-					break;
-				case 'S':
-					sscanf(dvis[i].name + 1, "%d", &offset);
-					SBit[offset] = WORDVALUE(*dvis[i].dp);
-					break;
-				case 'T':
-					switch (dvis[i].name[1])
-					{
-					case 'V':
-						sscanf(dvis[i].name + 2, "%d", &offset);
-						TVWord[offset] = WORDVALUE(*dvis[i].dp);
-						break;
-					default:
-						sscanf(dvis[i].name + 1, "%d", &offset);
-						TBit[offset] = WORDVALUE(*dvis[i].dp);
-						break;
-					}
-					break;
-				case 'C':
-					switch (dvis[i].name[1])
-					{
-					case 'V':
-						sscanf(dvis[i].name + 2, "%d", &offset);
-						if (offset < 200)
-							CVWord[offset] = WORDVALUE(*dvis[i].dp);
-						else
-							CVDoubleWord[offset] = WORDVALUE(*dvis[i].dp);
-						break;
-					default:
-						sscanf(dvis[i].name + 1, "%d", &offset);
-						CBit[offset] = WORDVALUE(*dvis[i].dp);
-						break;
-					}
-					break;
-				case 'D':
-					sscanf(dvis[i].name + 1, "%d", &offset);
-					switch (dvis[i].type)
-					{
-					case DP_TYPE_WORD:
-						//printf("set word %d\n", WORDVALUE(*dvis[i].dp));
-						DWord[offset] = WORDVALUE(*dvis[i].dp);
-						break;
-					case DP_TYPE_DOUBLEWORD:
-						*((uint64_t*)(DWord + offset)) = WORDVALUE(*dvis[i].dp);
-						break;
-					case DP_TYPE_FLOAT:
-						*((double*)(DWord + offset)) = FLOATVALUE(*dvis[i].dp);
-						break;
-					default:
-						break;
-					}
-					break;
-				}
-				dvis[i].dp++;
-			}
-		}
-
-		//dt = 0;
-		dc = 0;
-		while (dt < scanperiod)
-		{
-			BeforeRunLadder();
-			RunLadder();
-			AfterRunLadder();
-			UpdateClock();
-			t2 = currenttime;
-			dt += deltatime;
-			dc++;
-		}
-		//printf("CountTime=%d MoveTime=%d MoveCount=%d CurrentTime=%d\n", counttime, dt, dc, currenttime);
-		dt -= scanperiod;
-
-		if (counttimems < starttime)
-			continue;
-
-		for (i = 0; i < dvoc; i++)
-		{
-			int offset;
-			int32_t valuew;
-			int64_t valued;
-			double valuef;
-
-			dvos[i].time = counttimems;
-			switch (dvos[i].name[0])
-			{
-			case 'X':
-				sscanf(dvos[i].name + 1, "%d", &offset);
-				valuew = XBit[offset];
-				break;
-			case 'Y':
-				sscanf(dvos[i].name + 1, "%d", &offset);
-				valuew = YBit[offset];
-				break;
-			case 'M':
-				sscanf(dvos[i].name + 1, "%d", &offset);
-				valuew = MBit[offset];
-				break;
-			case 'S':
-				sscanf(dvos[i].name + 1, "%d", &offset);
-				valuew = SBit[offset];
-				break;
-			case 'T':
-				switch (dvos[i].name[1])
-				{
-				case 'V':
-					sscanf(dvos[i].name + 2, "%d", &offset);
-					valuew = TVWord[offset];
-					break;
-				default:
-					sscanf(dvos[i].name + 1, "%d", &offset);
-					valuew = TBit[offset];
-					break;
-				}
-				break;
-			case 'C':
-				switch (dvos[i].name[1]) 
-				{
-				case 'V':
-					sscanf(dvos[i].name + 2, "%d", &offset);
-					if (offset < 200)
-						valuew = CVWord[offset];
-					else
-						valued = CVDoubleWord[offset];
-					break;
-				default:
-					sscanf(dvos[i].name + 1, "%d", &offset);
-					valuew = CBit[offset];
-					break;
-				}
-				break;
-			case 'D':
-				sscanf(dvos[i].name + 1, "%d", &offset);
-				switch (dvos[i].type)
-				{
-				case DP_TYPE_WORD:
-					valuew = DWord[offset];
-					break;
-				case DP_TYPE_DOUBLEWORD:
-					valued = *((int64_t*)(DWord + offset));
-					break;
-				case DP_TYPE_FLOAT:
-					valuef = *((double*)(DWord + offset));
-					break;
-				default:
-					break;
-				}
-				break;
-			}
-
-			switch (dvos[i].type)
-			{
-			case DP_TYPE_BIT:
-			case DP_TYPE_WORD:
-				if (WORDVALUE(dvos[i]) != valuew)
-				{
-					WORDVALUE(dvos[i]) = valuew;
-					memcpy(dpos+(dpoc++), dvos+i, sizeof(struct DataPoint));
-				}
-				break;
-			case DP_TYPE_DOUBLEWORD:
-				if (DWORDVALUE(dvos[i]) != valued)
-				{
-					DWORDVALUE(dvos[i]) = valued;
-					memcpy(dpos+(dpoc++), dvos+i, sizeof(struct DataPoint));
-				}
-				break;
-			case DP_TYPE_FLOAT:
-				if (FLOATVALUE(dvos[i]) != valuef)
-				{
-					FLOATVALUE(dvos[i]) = valuef;
-					memcpy(dpos+(dpoc++), dvos+i, sizeof(struct DataPoint));
-				}
-				break;
-			}
-
-			if (dpoc >= 60000)
-			{
-				for (j = 0; j < dpoc; j++)
-				{
-					fprintf(fout, "%s %d", dpos[j].name, dpos[j].time);
-					switch (dpos[j].type)
-					{
-					case DP_TYPE_BIT:
-					case DP_TYPE_WORD:
-						fprintf(fout, " %d\n", WORDVALUE(dpos[j]));
-						break;
-					case DP_TYPE_DOUBLEWORD:
-						fprintf(fout, " %lld\n", DWORDVALUE(dpos[j]));
-						break;
-					case DP_TYPE_FLOAT:
-						fprintf(fout, " %llf\n", FLOATVALUE(dpos[j]));
-						break;
-					}
-				}
-				dpoc = 0;
-			}
-		}
-	}
-	for (j = 0; j < dpoc; j++)
-	{
-		fprintf(fout, "%s %d", dpos[j].name, dpos[j].time);
-		switch (dpos[j].type)
-		{
-		case DP_TYPE_BIT:
-		case DP_TYPE_WORD:
-			fprintf(fout, " %d\n", WORDVALUE(dpos[j]));
-			break;
-		case DP_TYPE_DOUBLEWORD:
-			fprintf(fout, " %lld\n", DWORDVALUE(dpos[j]));
-			break;
-		case DP_TYPE_FLOAT:
-			fprintf(fout, " %llf\n", FLOATVALUE(dpos[j]));
-			break;
-		}
-	}
-	fclose(fout);
-}
