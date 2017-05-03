@@ -2238,6 +2238,22 @@ namespace SamSoarII.AppMain.Project
                 net.IsSelectAllMode = true;
             }
         }
+
+        //public event ExecutedRoutedEventHandler FindCommandExecute = delegate { };
+        
+        private void OnFindCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            //FindCommandExecute(sender, e);   
+            ProjectModel.IFacade.MainWindow.LACFind.Show();
+        }
+
+        //public event ExecutedRoutedEventHandler ReplaceCommandExecute = delegate { };
+
+        private void OnReplaceCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            //ReplaceCommandExecute(sender, e);
+            ProjectModel.IFacade.MainWindow.LACReplace.Show();
+        }
         #endregion
 
         #region Command can execute
@@ -2283,6 +2299,16 @@ namespace SamSoarII.AppMain.Project
         private void RedoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _commandManager.CanRedo;
+        }
+
+        private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
 
         #endregion
@@ -2350,8 +2376,8 @@ namespace SamSoarII.AppMain.Project
                 _selectRectOwner = null;
             }
         }
+
         #endregion
-
-
+        
     }
 }

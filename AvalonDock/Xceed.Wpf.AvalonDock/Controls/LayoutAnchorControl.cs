@@ -99,16 +99,24 @@ namespace Xceed.Wpf.AvalonDock.Controls
         //    }
         //}
 
+        
+             
         public void Show()
         {
-            _model.Root.Manager.ShowAutoHideWindow(this);
-            _model.IsActive = true;
+            if (!_model.IsActive)
+            {
+                _model.Root.Manager.ShowAutoHideWindow(this);
+                _model.IsActive = true;
+            }
         }
 
         public void Hide()
         {
-            _model.Root.Manager.HideAutoHideWindow(this);
-            _model.IsActive = false;
+            if (_model.IsActive)
+            {
+                _model.Root.Manager.HideAutoHideWindow(this);
+                _model.IsActive = false;
+            }
         }
         
         protected override void OnMouseDown(System.Windows.Input.MouseButtonEventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,5 +22,9 @@ namespace SamSoarII.LadderInstModel
             VaribleNameList.Add(name);
         }
         public abstract string GenerateCode();
+        
+        public abstract int ParaCount { get; }
+        public abstract IValueModel GetPara(int id);
+        public abstract void SetPara(int id, IValueModel value);
     }
 }

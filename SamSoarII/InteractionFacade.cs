@@ -44,6 +44,10 @@ namespace SamSoarII.AppMain
         }
 
         private MainWindow _mainWindow;
+        public MainWindow MainWindow
+        {
+            get { return _mainWindow; }
+        }
 
         public bool IsLadderMode
         {
@@ -367,6 +371,7 @@ namespace SamSoarII.AppMain
             else
             {
                 _projectModel = new ProjectModel(name, _mainWindow.OutputModel);
+                _projectModel.IFacade = this;
                 ProjectFileManager.Update(name,fullFileName);
                 ValueAliasManager.Clear();
                 ValueCommentManager.Clear();
@@ -440,6 +445,7 @@ namespace SamSoarII.AppMain
         public bool LoadProject(string fullFileName)
         {
             _projectModel = ProjectHelper.LoadProject(fullFileName, new ProjectModel(String.Empty, _mainWindow.OutputModel));
+            _projectModel.IFacade = this;
             if (_projectModel != null)
             {
                 if (_projectModel.IsModify)
@@ -675,6 +681,7 @@ namespace SamSoarII.AppMain
             _projectModel.CompileFuncBlock(progmodel.ProgramName);
             _mainWindow.LACOutput.Show();
         }
+        
         #endregion
 
     }

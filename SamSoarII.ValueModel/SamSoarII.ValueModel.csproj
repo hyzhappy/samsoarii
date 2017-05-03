@@ -66,6 +66,7 @@
     <Compile Include="IValueModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialValueManager.cs" />
+    <Compile Include="StringValue.cs" />
     <Compile Include="ValueAliasManager.cs" />
     <Compile Include="ValueCommentManager.cs" />
     <Compile Include="ValueParser.cs" />

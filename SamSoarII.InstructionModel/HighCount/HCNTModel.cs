@@ -29,5 +29,32 @@ namespace SamSoarII.LadderInstModel.HighCount
         {
             return String.Empty;
         }
+
+        public override int ParaCount
+        {
+            get
+            {
+                return 2;
+            }
+        }
+        public override IValueModel GetPara(int id)
+        {
+            switch (id)
+            {
+                case 0: return CountValue;
+                case 1: return DefineValue;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            switch (id)
+            {
+                case 0: CountValue = (DoubleWordValue)value; break;
+                case 1: DefineValue = (DoubleWordValue)value; break;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
     }
 }

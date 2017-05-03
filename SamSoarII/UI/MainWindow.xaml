@@ -205,7 +205,8 @@
                 <Separator></Separator>
                 <MenuItem Header="全选" Command="ApplicationCommands.SelectAll"></MenuItem>
                 <Separator/>
-                <MenuItem Header="查找和替换"></MenuItem>
+                <MenuItem Header="查找" Command="ApplicationCommands.Find"></MenuItem>
+                <MenuItem Header="替换" Command="ApplicationCommands.Replace"></MenuItem>
             </MenuItem>
             <MenuItem Header="视图(_V)" Margin="0,-5,0,0">
                 <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
@@ -407,6 +408,18 @@
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.LeftSide>
+                <ad:LayoutRoot.RightSide>
+                    <ad:LayoutAnchorSide>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                    </ad:LayoutAnchorSide>
+                </ad:LayoutRoot.RightSide>
                 <ad:LayoutRoot.BottomSide>
                     <ad:LayoutAnchorSide>
                         <ad:LayoutAnchorGroup>

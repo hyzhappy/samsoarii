@@ -34,5 +34,36 @@ namespace SamSoarII.LadderInstModel.Pulse
         {
             return String.Empty;
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 4;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            switch (id)
+            {
+                case 0: return ArgumentValue;
+                case 1: return VelocityValue;
+                case 2: return OutputValue1;
+                case 3: return OutputValue2;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            switch (id)
+            {
+                case 0: ArgumentValue = (WordValue)value; break;
+                case 1: VelocityValue = (WordValue)value; break;
+                case 2: OutputValue1 = (BitValue)value; break;
+                case 3: OutputValue2 = (BitValue)value; break;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
     }
 }

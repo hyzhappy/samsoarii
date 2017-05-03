@@ -38,10 +38,12 @@ namespace SamSoarII.AppMain.UI
     {
         private InteractionFacade _interactionFacade;
         private CanAnimationScroll MainScroll;
-        public LayoutAnchorControl LACProj;
-        public LayoutAnchorControl LACSimuProj;
-        public LayoutAnchorControl LACMonitor;
-        public LayoutAnchorControl LACOutput;
+        public LayoutAnchorControl LACProj { get; private set; }
+        public LayoutAnchorControl LACSimuProj { get; private set; }
+        public LayoutAnchorControl LACMonitor { get; private set; }
+        public LayoutAnchorControl LACOutput { get; private set; }
+        public LayoutAnchorControl LACFind { get; private set; }
+        public LayoutAnchorControl LACReplace { get; private set; }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
         {
@@ -51,6 +53,51 @@ namespace SamSoarII.AppMain.UI
             this.Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
+
+            FindWindow findwindow = new FindWindow(_interactionFacade);
+            LAFind.Content = findwindow;
+
+        }
+
+        private void InitializeAvalonDock()
+        {
+            //DockManager.Theme = new VS2010Theme();
+
+            LayoutSetting.Load();
+
+            LACProj = LAProj.AnchorControl;
+            LACSimuProj = LASimuProj.AnchorControl;
+            LACMonitor = LAMonitor.AnchorControl;
+            LACOutput = LAOutput.AnchorControl;
+            LACFind = LAFind.AnchorControl;
+            LACReplace = LAReplace.AnchorControl;
+
+            InitializeAvalonDock(LAProj);
+            InitializeAvalonDock(LASimuProj);
+            InitializeAvalonDock(LAMonitor);
+            InitializeAvalonDock(LAOutput);
+            InitializeAvalonDock(LAFind);
+            InitializeAvalonDock(LAReplace);
+
+        }
+
+        private void InitializeAvalonDock(LayoutAnchorable LAnch)
+        {
+            AnchorSide side;
+            side = LayoutSetting.GetDefaultSideAnchorable(LAnch.Title);
+            LAnch.ReplaceSide(side);
+
+            double[] autohidesize;
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAnch.Title);
+            LAnch.AutoHideWidth = autohidesize[0];
+            LAnch.AutoHideHeight = autohidesize[1];
+
+            double[] floatsize;
+            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAnch.Title);
+            LAnch.FloatingWidth = floatsize[0];
+            LAnch.FloatingHeight = floatsize[1];
+
+            LAnch.Hide();
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -65,60 +112,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
-        private void InitializeAvalonDock()
-        {
-            //DockManager.Theme = new VS2010Theme();
-
-            LayoutSetting.Load();
-
-            LACProj = LAProj.AnchorControl;
-            LACSimuProj = LASimuProj.AnchorControl;
-            LACMonitor = LAMonitor.AnchorControl;
-            LACOutput = LAOutput.AnchorControl;
-
-            AnchorSide side;
-            side = LayoutSetting.GetDefaultSideAnchorable(LAProj.Title);
-            LAProj.ReplaceSide(side);
-            side = LayoutSetting.GetDefaultSideAnchorable(LASimuProj.Title);
-            LASimuProj.ReplaceSide(side);
-            side = LayoutSetting.GetDefaultSideAnchorable(LAMonitor.Title);
-            LAMonitor.ReplaceSide(side);
-            side = LayoutSetting.GetDefaultSideAnchorable(LAOutput.Title);
-            LAOutput.ReplaceSide(side);
-            LAProj.Hide();
-            LASimuProj.Hide();
-            LAMonitor.Hide();
-            LAOutput.Hide();
-
-            double[] autohidesize;
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAProj.Title);
-            LAProj.AutoHideWidth = autohidesize[0];
-            LAProj.AutoHideHeight = autohidesize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LASimuProj.Title);
-            LASimuProj.AutoHideWidth = autohidesize[0];
-            LASimuProj.AutoHideHeight = autohidesize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMonitor.Title);
-            LAMonitor.AutoHideWidth = autohidesize[0];
-            LAMonitor.AutoHideHeight = autohidesize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAOutput.Title);
-            LAOutput.AutoHideWidth = autohidesize[0];
-            LAOutput.AutoHideHeight = autohidesize[1];
-
-            double[] floatsize;
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAProj.Title);
-            LAProj.FloatingWidth = floatsize[0];
-            LAProj.FloatingHeight = floatsize[1];
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LASimuProj.Title);
-            LASimuProj.FloatingWidth = floatsize[0];
-            LASimuProj.FloatingHeight = floatsize[1];
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAMonitor.Title);
-            LAMonitor.FloatingWidth = floatsize[0];
-            LAMonitor.FloatingHeight = floatsize[1];
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAOutput.Title);
-            LAOutput.FloatingWidth = floatsize[0];
-            LAOutput.FloatingHeight = floatsize[1];
-        }
+        
 
         protected override void OnClosed(EventArgs e)
         {
@@ -261,7 +255,7 @@ namespace SamSoarII.AppMain.UI
             string text = String.Format("{0:s}已经更改，是否保存？", _interactionFacade.ProjectModel.ProjectName);
             return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
         }
-
+        
         #region Command can Execute
         private void ClosePageCanExecuteCommand(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -548,7 +542,7 @@ namespace SamSoarII.AppMain.UI
         {
             LACOutput.Show();
         }
-
+        
         private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             AddNewRoutineWindow window = new AddNewRoutineWindow();
@@ -888,32 +882,32 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
+        
         //private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         //{
-            //if (_interactionFacade.CurrentLadder != null)
-            //{
-            //    if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
-            //    {
-            //        MessageBox.Show(string.Format("程序控制指令配对失败！"));
-            //    }
-            //    else
-            //    {
-            //        var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
-            //        while (tempQueue.Count > 0)
-            //        {
-            //            var ladderNetworkViewModel = tempQueue.Dequeue();
-            //            if (ladderNetworkViewModel.IsNetworkError())
-            //            {
-            //                MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
-            //            }
-            //            else
-            //            {
-            //                MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
-            //            }
-            //        }
-            //    }
-            //}
+        //if (_interactionFacade.CurrentLadder != null)
+        //{
+        //    if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
+        //    {
+        //        MessageBox.Show(string.Format("程序控制指令配对失败！"));
+        //    }
+        //    else
+        //    {
+        //        var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
+        //        while (tempQueue.Count > 0)
+        //        {
+        //            var ladderNetworkViewModel = tempQueue.Dequeue();
+        //            if (ladderNetworkViewModel.IsNetworkError())
+        //            {
+        //                MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
+        //            }
+        //        }
+        //    }
+        //}
         //}
         private void ScrollToLeftAnimation()
         {

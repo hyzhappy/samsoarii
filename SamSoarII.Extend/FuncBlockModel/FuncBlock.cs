@@ -482,7 +482,6 @@ namespace SamSoarII.Extend.FuncBlockModel
                                 fbf.Block.Header = null;
                             }
                         }
-
                         childrens.Remove(removenode);
                     }
                 }
@@ -549,10 +548,12 @@ namespace SamSoarII.Extend.FuncBlockModel
                             int hstart = dividelabel + 1;
                             int hend = i;
                             string htext = text.Substring(hstart, hend - hstart + 1);
-                            Match m1 = Regex.Match(htext, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\((.*)\)\s*$");
+                            Match m1 = Regex.Match(htext, @"\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\((.*)\)\s*$");
                             // 如果符合函数头部的正则表达式格式
                             if (m1.Success)
                             {
+                                hstart += m1.Index;
+                                //hstart = hend - m1.Value.Length + 1;
                                 FuncModel func = new FuncModel();
                                 func.ReturnType = Regex.Replace(m1.Groups[1].Value, @"\s*", String.Empty);
                                 func.Name = m1.Groups[3].Value;
@@ -585,7 +586,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                                 {
                                     FuncBlock_FuncHeader newblock = new FuncBlock_FuncHeader(model);
                                     newblock.Model = func;
-                                    newblock.IndexStart = hstart + m1.Index;
+                                    newblock.IndexStart = hstart;
                                     newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
                                     AddChildren(newblock);
                                 }

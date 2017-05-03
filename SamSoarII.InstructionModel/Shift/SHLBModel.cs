@@ -26,5 +26,36 @@ namespace SamSoarII.LadderInstModel
         {
             throw new NotImplementedException();
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 4;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            switch (id)
+            {
+                case 0: return SourceValue;
+                case 1: return DestinationValue;
+                case 2: return CountValue;
+                case 3: return MoveValue;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            switch (id)
+            {
+                case 0: SourceValue = (BitValue)value; break;
+                case 1: DestinationValue = (BitValue)value; break;
+                case 2: CountValue = (WordValue)value; break;
+                case 3: MoveValue = (WordValue)value; break;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
     }
 }

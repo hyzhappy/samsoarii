@@ -24,5 +24,32 @@ namespace SamSoarII.LadderInstModel
         {
             return string.Format("sr_bool {0} = {1} < {2};\r\n", ExportVaribleName, Value1.GetValue(), Value2.GetValue());
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 2;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            switch (id)
+            {
+                case 0: return Value1;
+                case 1: return Value2;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            switch (id)
+            {
+                case 0: Value1 = (DoubleWordValue)value; break;
+                case 1: Value2 = (DoubleWordValue)value; break;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
     }
 }

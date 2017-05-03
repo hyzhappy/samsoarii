@@ -39,5 +39,32 @@ namespace SamSoarII.LadderInstModel
                 return string.Format("if({0})\r\n{{\r\nplc_bool* p = &{2};\r\nfor(int i = 0; i < {1}; i++)\r\n{{\r\n*p = 0;\r\np++;\r\n}}\r\n}}\r\n", ImportVaribleName, Count.GetValue(), Value.GetValue());
             }
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 2;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            switch (id)
+            {
+                case 0: return Value;
+                case 1: return Count;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            switch (id)
+            {
+                case 0: Value = (BitValue)value; break;
+                case 1: Count = (WordValue)value; break;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
     }
 }
