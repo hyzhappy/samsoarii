@@ -115,6 +115,7 @@ namespace SamSoarII.AppMain.Project
             }
             set
             {
+                
                 _isMasked = value;
                 if (_isMasked)
                 {

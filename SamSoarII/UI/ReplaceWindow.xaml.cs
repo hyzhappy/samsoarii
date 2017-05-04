@@ -1,4 +1,5 @@
-﻿using SamSoarII.AppMain.Project;
+﻿using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.AppMain.Project;
 using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
@@ -23,17 +24,20 @@ using System.Windows.Shapes;
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
-    /// FindWindow.xaml 的交互逻辑
+    /// ReplaceWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class FindWindow : UserControl, INotifyPropertyChanged
+    public partial class ReplaceWindow : UserControl, INotifyPropertyChanged
     {
         #region Numbers
 
         private InteractionFacade parent;
-        
-        private ObservableCollection<FindElement> items
-            = new ObservableCollection<FindElement>();
-        public IEnumerable<FindElement> Items
+
+        private LadderCommand.CommandManager _cmdmanager 
+            = new LadderCommand.CommandManager();
+
+        private ObservableCollection<ReplaceElement> items
+            = new ObservableCollection<ReplaceElement>();
+        public IEnumerable<ReplaceElement> Items
         {
             get
             {
@@ -57,10 +61,7 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
-        public FindWindow
-        (
-            InteractionFacade _parent
-        )
+        public ReplaceWindow(InteractionFacade _parent)
         {
             InitializeComponent();
             DataContext = this;
@@ -135,15 +136,83 @@ namespace SamSoarII.AppMain.UI
                     }
                     if (check)
                     {
-                        items.Add(new FindElement(bvmodel, ldvmodel, lnvmodel));
+                        items.Add(new ReplaceElement(bvmodel, ldvmodel, lnvmodel));
                     }
                 }
             }
         }
-        
+
+        private void Replace()
+        {
+            int success = 0;
+            int error = 0;
+            string errormsg = String.Empty;
+            NetworkReplaceElementsCommandGroup commandall = new NetworkReplaceElementsCommandGroup();
+
+            foreach (ReplaceElement rele in Items)
+            {
+                BaseViewModel bvmodel = rele.BVModel;
+                //BaseModel bmodel = bvmodel.Model;
+                LadderNetworkViewModel lnvmodel = rele.LNVModel;
+                LadderDiagramViewModel ldvmodel = rele.LDVModel;
+                int x = bvmodel.X;
+                int y = bvmodel.Y;
+
+                string text_old = rele.Detail;
+                string text_new = TB_Change.Text;
+                string[] args_old = text_old.Split(' ');
+                string[] args_new = text_new.Split(' ');
+                string text_fin = String.Empty;
+                for (int i = 0; i < args_old.Length; i++)
+                {
+                    if (i >= args_new.Length 
+                     || args_new[i].Equals("*"))
+                    {
+                        text_fin += args_old[i] + " ";
+                    }
+                    else
+                    {
+                        text_fin += args_new[i] + " ";
+                    }
+                }
+                NetworkReplaceElementsCommand command = null;
+                try
+                {
+                    ldvmodel.RegisterInstructionInput(
+                        text_fin, x, y, lnvmodel, ref command);
+                    commandall += command;
+                    success++;
+                }
+                catch (ValueParseException exce2)
+                {
+                    error++;
+                    errormsg += String.Format("在{0:s}的网络{1:d}的坐标({2:d},{3:d})处发生错误：{4:s}\r\n",
+                        ldvmodel.ProgramName, lnvmodel.NetworkNumber, x, y, exce2.Message);
+                }
+                catch (LadderDiagramViewModel.InstructionExecption exce3)
+                {
+                    error++;
+                    errormsg += String.Format("在{0:s}的网络{1:d}的坐标({2:d},{3:d})处发生错误：{4:s}\r\n",
+                        ldvmodel.ProgramName, lnvmodel.NetworkNumber, x, y, exce3.Message);
+                }
+            }
+
+            _cmdmanager.Execute(commandall);
+         
+            ReplaceReportWindow report = new ReplaceReportWindow();
+            report.TB_Subtitle.Text = String.Format("总共进行了{0:d}次替换，{1:d}次成功，{2:d}次错误。"
+                ,success + error, success, error);
+            report.TB_Message.Text = errormsg;
+            report.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            report.ShowDialog();
+
+            Find();
+        }
+
         #region Event Handler
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        
+
         private void TB_Input_TextChanged(object sender, TextChangedEventArgs e)
         {
             string text = TB_Input.Text;
@@ -163,7 +232,7 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
-                    check = ValueParser.CheckValueString(args[i], new Regex[] 
+                    check = ValueParser.CheckValueString(args[i], new Regex[]
                     {
                         ValueParser.VarRegex,
                         ValueParser.VerifyIntKHValueRegex,
@@ -180,17 +249,57 @@ namespace SamSoarII.AppMain.UI
 
         private void TB_Input_KeyDown(object sender, KeyEventArgs e)
         {
-            if (TB_Input.Background != Brushes.LightGreen) return;
+            if (TB_Input.Background == Brushes.Red) return;
             if (e.Key != Key.Enter) return;
             Find();
             TB_Input.Background = Brushes.White;
         }
-        
+
+        private void TB_Change_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string text = TB_Change.Text;
+            string[] args = text.Split(' ');
+            bool check = false;
+
+            TB_Change.Background = Brushes.LightGreen;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].Equals("*"))
+                    continue;
+                if (i == 0)
+                {
+                    check = true;
+                }
+                else
+                {
+                    check = ValueParser.CheckValueString(args[i], new Regex[]
+                    {
+                        ValueParser.VarRegex,
+                        ValueParser.VerifyIntKHValueRegex,
+                        ValueParser.VerifyFloatKValueRegex
+                    });
+                }
+                if (!check)
+                {
+                    TB_Change.Background = Brushes.Red;
+                    break;
+                }
+            }
+        }
+
+        private void TB_Change_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TB_Input.Background != Brushes.White) return;
+            if (TB_Change.Background == Brushes.Red) return;
+            if (e.Key != Key.Enter) return;
+            Replace();
+            TB_Change.Background = Brushes.White;
+        }
 
         private void DG_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DG_List.SelectedIndex < 0) return;
-            FindElement fele = items[DG_List.SelectedIndex];
+            ReplaceElement fele = items[DG_List.SelectedIndex];
             BaseViewModel bvmodel = fele.BVModel;
             int x = bvmodel.X;
             int y = bvmodel.Y;
@@ -199,11 +308,32 @@ namespace SamSoarII.AppMain.UI
             NavigateToNetworkEventArgs _e = new NavigateToNetworkEventArgs(network, diagram, x, y);
             parent.NavigateToNetwork(_e);
         }
+        
+        private void UndoCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.Handled = _cmdmanager.CanUndo;
+        }
+
+        private void UndoExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            _cmdmanager.Undo();
+        }
+        
+        private void RedoCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.Handled = _cmdmanager.CanRedo;
+        }
+
+        private void RedoExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            _cmdmanager.Redo();
+        }
+
         #endregion
 
     }
 
-    public class FindElement : INotifyPropertyChanged
+    public class ReplaceElement : INotifyPropertyChanged
     {
         #region Numbers
         private BaseViewModel bvmodel;
@@ -227,18 +357,32 @@ namespace SamSoarII.AppMain.UI
             }
         }
         private LadderDiagramViewModel ldvmodel;
+        public LadderDiagramViewModel LDVModel
+        {
+            get
+            {
+                return this.ldvmodel;
+            }
+        }
         public string Diagram
         {
             get { return ldvmodel.ProgramName; }
         }
         private LadderNetworkViewModel lnvmodel;
+        public LadderNetworkViewModel LNVModel
+        {
+            get
+            {
+                return this.lnvmodel;
+            }
+        }
         public string Network
         {
             get { return String.Format("{0:d}", lnvmodel.NetworkNumber); }
         }
         #endregion
 
-        public FindElement
+        public ReplaceElement
         (
             BaseViewModel _bvmodel,
             LadderDiagramViewModel _ldvmodel,

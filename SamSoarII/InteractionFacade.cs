@@ -326,6 +326,11 @@ namespace SamSoarII.AppMain
 
         private void ElementList_NavigateToNetwork(NavigateToNetworkEventArgs e)
         {
+            NavigateToNetwork(e);
+        }
+
+        public void NavigateToNetwork(NavigateToNetworkEventArgs e)
+        {
             LadderDiagramViewModel tempItem;
             if (ProjectModel.MainRoutine.ProgramName == e.RefLadderName)
             {
@@ -547,7 +552,7 @@ namespace SamSoarII.AppMain
                     return ret;
             }
             _mainWindow.LASimuProj.Content = SimulateHelper.SModel.PTView;
-            _mainWindow.LAMonitor.Content = SimulateHelper.SModel.MTable;
+            _mainWindow.LASimuMonitor.Content = SimulateHelper.SModel.MTable;
             _mainTabControl.ReplaceAllTabsToSimulate();
             return ret;
         }

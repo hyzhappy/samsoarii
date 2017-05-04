@@ -91,6 +91,7 @@
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
     <Compile Include="Event\TabType.cs" />
     <Compile Include="Functionality\LadderVariable.cs" />
+    <Compile Include="Global\GlobalCommand.cs" />
     <Compile Include="Global\GlobalUsageList.cs" />
     <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
@@ -103,7 +104,6 @@
     <Compile Include="LadderCommand\NetworkRemoveElementsCommand.cs" />
     <Compile Include="Event\ShowTabItemEventArgs.cs" />
     <Compile Include="Event\EventHandler.cs" />
-    <Compile Include="Global\GlobalCommand.cs" />
     <Compile Include="Global\GlobalSetting.cs" />
     <Compile Include="InteractionFacade.cs" />
     <Compile Include="LadderCommand\NetworkRowCountChangeCommand.cs" />
@@ -161,6 +161,12 @@
     </Compile>
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ReplaceReportWindow.xaml.cs">
+      <DependentUpon>ReplaceReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ReplaceWindow.xaml.cs">
+      <DependentUpon>ReplaceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MainMonitor.xaml.cs">
       <DependentUpon>MainMonitor.xaml</DependentUpon>
@@ -448,6 +454,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ProjectPropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ReplaceReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ReplaceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

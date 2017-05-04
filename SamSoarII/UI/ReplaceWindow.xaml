@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SamSoarII.AppMain.UI.FindWindow"
+﻿<UserControl x:Class="SamSoarII.AppMain.UI.ReplaceWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,8 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="300"
              Background="White">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static ApplicationCommands.Undo}" CanExecute="UndoCanExecute"  Executed="UndoExecuted"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCanExecute"  Executed="RedoExecuted"/>
+    </UserControl.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
             <RowDefinition Height="*"/>
@@ -38,10 +43,20 @@
                  Margin="60,4,4,4"
                  TextChanged="TB_Input_TextChanged"
                  KeyDown="TB_Input_KeyDown">
-
+        </TextBox>
+        <TextBlock Grid.Row="2" Grid.Column="0"
+                   VerticalAlignment="Center" Margin="6,0,0,0"
+                   FontSize="14">
+            替换：
+        </TextBlock>
+        <TextBox x:Name="TB_Change"
+                 Grid.Row="2" Grid.Column="0"
+                 Margin="60,4,4,4"
+                 TextChanged="TB_Change_TextChanged"
+                 KeyDown="TB_Change_KeyDown">
         </TextBox>
         <DataGrid x:Name="DG_List" ItemsSource="{Binding Items}"
-                  Grid.Row="2" Grid.Column="0"
+                  Grid.Row="3" Grid.Column="0"
                   AutoGenerateColumns="False" CanUserResizeColumns="False"
                   RowBackground="White" AlternatingRowBackground="AliceBlue"
                   SelectionChanged="DG_List_SelectionChanged">
@@ -56,7 +71,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn x:Name="DGTC_Network" Binding="{Binding Network}"
                                     Header="网络" Width="40">
-                    
+
                 </DataGridTextColumn>
             </DataGrid.Columns>
 

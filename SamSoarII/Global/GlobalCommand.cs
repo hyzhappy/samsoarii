@@ -17,7 +17,7 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand ZoomOutCommand { get; set; }
         public static RoutedUICommand ShowProjectTreeViewCommand { get; set; }
         public static RoutedUICommand ShowSimulateTreeViewCommand { get; set; }
-        public static RoutedUICommand ShowMonitorCommand { get; set; }
+        public static RoutedUICommand ShowSimuMonitorCommand { get; set; }
         public static RoutedUICommand ShowMainMonitorCommand { get; set; }
         public static RoutedUICommand ShowOutputCommand { get; set; }
         public static RoutedUICommand ShowCommunicationSettingDialogCommand { get; set; }
@@ -48,7 +48,7 @@ namespace SamSoarII.AppMain
             ShowProjectTreeViewCommand = new RoutedUICommand();
             ShowSimulateTreeViewCommand = new RoutedUICommand();
             ShowCommunicationSettingDialogCommand = new RoutedUICommand();
-            ShowMonitorCommand = new RoutedUICommand();
+            ShowSimuMonitorCommand = new RoutedUICommand();
             ShowMainMonitorCommand = new RoutedUICommand();
             ShowOutputCommand = new RoutedUICommand();
             CompileCommand = new RoutedUICommand();

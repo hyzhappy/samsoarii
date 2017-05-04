@@ -10,7 +10,6 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkReplaceElementsCommand : IUndoableCommand
     {
-
         private LadderNetworkViewModel _network;
         private HashSet<BaseViewModel> _elements;
         private HashSet<VerticalLineViewModel> _vlines;
@@ -78,6 +77,40 @@ namespace SamSoarII.AppMain.LadderCommand
             foreach (var oldvline in _oldvlines)
             {
                 _network.ReplaceVerticalLine(oldvline);
+            }
+        }
+    }
+
+    public class NetworkReplaceElementsCommandGroup : IUndoableCommand
+    {
+        private List<NetworkReplaceElementsCommand> items
+            = new List<NetworkReplaceElementsCommand>();
+
+        static public NetworkReplaceElementsCommandGroup operator + 
+            (NetworkReplaceElementsCommandGroup group, NetworkReplaceElementsCommand command)
+        {
+            group.items.Add(command);
+            return group;
+        }
+        
+        public void Execute()
+        {
+            for (int i = 0; i < items.Count(); i++)
+            {
+                items[i].Execute();
+            }
+        }
+
+        public void Redo()
+        {
+            Execute();
+        }
+
+        public void Undo()
+        {
+            for (int i = items.Count()-1; i >= 0; i--)
+            {
+                items[i].Undo();
             }
         }
     }
