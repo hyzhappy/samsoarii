@@ -33,7 +33,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}" Executed="OnShowSimulateTreeViewCommand" CanExecute="ShowSimulateTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowMonitorCommand}" Executed="OnShowMonitorCommand" CanExecute="ShowMonitorCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="OnShowMainMonitorCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOutputCommand}" Executed="OnShowOutputCommand" CanExecute="ShowOutputCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogCommandExecute" CanExecute="OnShowCommunicationSettingDialogCommandCanExecute"></CommandBinding>
         <!--Project Command-->
@@ -257,7 +257,7 @@
                         <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="监视" Command="{x:Static app:GlobalCommand.MonitorCommand}"></MenuItem>
+                <MenuItem Header="监视" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
                 <MenuItem Header="程序检测" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
@@ -426,7 +426,7 @@
                 <ad:LayoutRoot.RightSide>
                     <ad:LayoutAnchorSide>
                         <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingHeight="800" FloatingWidth="300" AutoHideHeight="800" AutoHideWidth="300">
+                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
                                 <mon:MainMonitor x:Name="MainMonitor"/>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>

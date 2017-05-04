@@ -408,7 +408,17 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
+        private void OnShowMainMonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void ShowOutputCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -565,7 +575,10 @@ namespace SamSoarII.AppMain.UI
         {
             LACMonitor.Show();
         }
-
+        private void OnShowMainMonitorCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            LACMainMonitor.Show();
+        }
         private void OnShowOutputCommand(object sender, RoutedEventArgs e)
         {
             LACOutput.Show();
