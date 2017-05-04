@@ -18,7 +18,7 @@ namespace SamSoarII.UserInterface
             get
             {
                 return (bool)GetValue(TopmostProperty);
-            }  
+            }
             set
             {
                 SetValue(TopmostProperty, value);

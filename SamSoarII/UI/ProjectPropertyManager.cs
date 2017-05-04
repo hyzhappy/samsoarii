@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SamSoarII.UserInterface;
+using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -29,6 +31,7 @@ namespace SamSoarII.AppMain.UI
             ParamsDic.Add("HoldingSectParams", new HoldingSectionParams());
             ParamsDic.Add("AnalogQuantityParams", new AnalogQuantityParams());
             ParamsDic.Add("ExpanModuleParams", new ExpansionModuleParams());
+            ParamsDic.Add("CommunicationParams",new CommunicationParams());
         }
         #region Save and Load ProjectProperty
         public static XElement CreateProjectPropertyXElement()
@@ -65,6 +68,7 @@ namespace SamSoarII.AppMain.UI
             ParamsDic["HoldingSectParams"].LoadPropertyByXElement(rootNode.Element("HoldingSectParams"));
             ParamsDic["AnalogQuantityParams"].LoadPropertyByXElement(rootNode.Element("AnalogQuantityParams"));
             ParamsDic["ExpanModuleParams"].LoadPropertyByXElement(rootNode.Element("ExpanModuleParams"));
+            ParamsDic["CommunicationParams"].LoadPropertyByXElement(rootNode.Element("CommunicationParams"));
         }
         #endregion
     }

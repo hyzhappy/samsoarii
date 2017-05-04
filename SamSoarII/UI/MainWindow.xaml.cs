@@ -41,6 +41,7 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACProj;
         public LayoutAnchorControl LACSimuProj;
         public LayoutAnchorControl LACMonitor;
+        public LayoutAnchorControl LACMainMonitor;
         public LayoutAnchorControl LACOutput;
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
@@ -75,6 +76,7 @@ namespace SamSoarII.AppMain.UI
             LACProj = LAProj.AnchorControl;
             LACSimuProj = LASimuProj.AnchorControl;
             LACMonitor = LAMonitor.AnchorControl;
+            LACMainMonitor = LAMainMonitor.AnchorControl;
             LACOutput = LAOutput.AnchorControl;
 
             AnchorSide side;
@@ -84,11 +86,14 @@ namespace SamSoarII.AppMain.UI
             LASimuProj.ReplaceSide(side);
             side = LayoutSetting.GetDefaultSideAnchorable(LAMonitor.Title);
             LAMonitor.ReplaceSide(side);
+            side = LayoutSetting.GetDefaultSideAnchorable(LAMainMonitor.Title);
+            LAMainMonitor.ReplaceSide(side);
             side = LayoutSetting.GetDefaultSideAnchorable(LAOutput.Title);
             LAOutput.ReplaceSide(side);
             LAProj.Hide();
             LASimuProj.Hide();
             LAMonitor.Hide();
+            LAMainMonitor.Hide();
             LAOutput.Hide();
 
             double[] autohidesize;
@@ -101,6 +106,9 @@ namespace SamSoarII.AppMain.UI
             autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMonitor.Title);
             LAMonitor.AutoHideWidth = autohidesize[0];
             LAMonitor.AutoHideHeight = autohidesize[1];
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMainMonitor.Title);
+            LAMainMonitor.AutoHideWidth = autohidesize[0];
+            LAMainMonitor.AutoHideHeight = autohidesize[1];
             autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAOutput.Title);
             LAOutput.AutoHideWidth = autohidesize[0];
             LAOutput.AutoHideHeight = autohidesize[1];
@@ -115,6 +123,9 @@ namespace SamSoarII.AppMain.UI
             floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAMonitor.Title);
             LAMonitor.FloatingWidth = floatsize[0];
             LAMonitor.FloatingHeight = floatsize[1];
+            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAMainMonitor.Title);
+            LAMainMonitor.FloatingWidth = floatsize[0];
+            LAMainMonitor.FloatingHeight = floatsize[1];
             floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAOutput.Title);
             LAOutput.FloatingWidth = floatsize[0];
             LAOutput.FloatingHeight = floatsize[1];
@@ -182,6 +193,7 @@ namespace SamSoarII.AppMain.UI
                 else
                 {
                     _interactionFacade.LoadProject(projectMessage.Value.Item2);
+                    ProjectFileManager.Update(projectMessage.Value.Item1, projectMessage.Value.Item2);
                     LadderModeButton.IsChecked = true;
                     InstModeButton.IsChecked = false;
                     LACProj.Show();
@@ -334,7 +346,17 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
+        private void OnShowCommunicationSettingDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void ZoomOutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -948,6 +970,17 @@ namespace SamSoarII.AppMain.UI
                 default:
                     break;
             }
+        }
+        private void OnShowCommunicationSettingDialogCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ParamsDic["CommunicationParams"]);
+            BaseSetting baseSetting = dialog.GetBaseSetting();
+            baseSetting.SettingButtonClick += (sender1, e1) =>
+            {
+                CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ParamsDic["CommunicationParams"]);
+                dialog1.ShowDialog();
+            };
+            dialog.ShowDialog();
         }
     }
 }

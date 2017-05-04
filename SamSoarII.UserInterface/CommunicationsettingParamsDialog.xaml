@@ -1,0 +1,75 @@
+﻿<Window x:Class="SamSoarII.UserInterface.CommunicationsettingParamsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        mc:Ignorable="d"
+        Title="通信参数设置" Height="200" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="StackPanel">
+                <Setter Property="Margin" Value="5,5,0,0"></Setter>
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Padding" Value=" 3,2,0,0"></Setter>
+                <Setter Property="Height" Value="18"></Setter>
+                <Setter Property="Margin" Value="3,0,0,0"></Setter>
+                <Setter Property="IsEditable" Value="False"></Setter>
+            </Style>
+        </Grid.Resources>
+        <StackPanel Orientation="Vertical">
+            <StackPanel>
+                <TextBlock>通信参数:</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0,2,0,0">PC串口</TextBlock>
+                <ComboBox x:Name="SerialPortComboBox" Width="70" SelectedIndex="{Binding SerialPortIndex}">
+                    <ComboBoxItem>COM1</ComboBoxItem>
+                    <ComboBoxItem>COM2</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0,2,0,0">波特率</TextBlock>
+                <ComboBox x:Name="BaudRateComboBox" Width="70" SelectedIndex="{Binding BaudRateIndex}">
+                    <ComboBoxItem>4800</ComboBoxItem>
+                    <ComboBoxItem>9600</ComboBoxItem>
+                    <ComboBoxItem>19200</ComboBoxItem>
+                    <ComboBoxItem>38400</ComboBoxItem>
+                    <ComboBoxItem>57600</ComboBoxItem>
+                    <ComboBoxItem>115200</ComboBoxItem>
+                </ComboBox>
+                <TextBlock Text="停止位" Margin="20,2,0,0"></TextBlock>
+                <ComboBox x:Name="StopBitComboBox" Width="50" SelectedIndex="{Binding StopBitIndex}">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>2</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0,2,0,0">数据位</TextBlock>
+                <ComboBox x:Name="DataBitComboBox" Width="50" SelectedIndex="{Binding DataBitIndex}">
+                    <ComboBoxItem>8</ComboBoxItem>
+                </ComboBox>
+                <TextBlock Margin="40,2,0,0">校验码</TextBlock>
+                <ComboBox x:Name="CheckCodeComboBox" Width="60" SelectedIndex="{Binding CheckCodeIndex}">
+                    <ComboBoxItem>NONE</ComboBoxItem>
+                    <ComboBoxItem>EVEN</ComboBoxItem>
+                    <ComboBoxItem>ODD</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0,10,0,0">超时时间</TextBlock>
+                <local:RangeTextBox LowRange="1" TopRange="6000" DefaultValue="20" x:Name="rangeTextbox"></local:RangeTextBox>
+                <TextBlock Margin="5,10,0,0">*ms</TextBlock>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Button x:Name="EnsureButton" Width="50" Height="20" Margin="160,0,0,0">确定</Button>
+            <Button x:Name="CancelButton" Width="50" Height="20" Margin="10,0,0,0">取消</Button>
+        </StackPanel>
+    </Grid>
+</Window>

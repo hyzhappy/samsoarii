@@ -36,7 +36,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         public static ErrorMessage Execute(LadderDiagramViewModel ladderDiagram)
         {
             ErrorType error = ErrorType.None;
-            foreach (var network in ladderDiagram.GetNetworks())
+            foreach (var network in ladderDiagram.GetNetworks().Where(x => { return !x.IsMasked; }))
             {
                 error = CheckNetwork(network);
                 if (error != ErrorType.None)
@@ -596,7 +596,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         private static List<BaseViewModel> GetProgramControlViewModels(LadderDiagramViewModel ladderDiagram)
         {
             List<BaseViewModel> eles = new List<BaseViewModel>();
-            foreach (var network in ladderDiagram.GetNetworks())
+            foreach (var network in ladderDiagram.GetNetworks().Where(x => { return !x.IsMasked; }))
             {
                 foreach (var model in network.GetElements().Where(x => { return x.GetType() == typeof(FORViewModel) || x.GetType() == typeof(NEXTViewModel) || x.GetType() == typeof(JMPViewModel) || x.GetType() == typeof(LBLViewModel); }))
                 {

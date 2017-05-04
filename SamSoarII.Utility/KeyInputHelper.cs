@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace SamSoarII.AppMain.UI
+namespace SamSoarII.Utility
 {
     public class KeyInputHelper
     {

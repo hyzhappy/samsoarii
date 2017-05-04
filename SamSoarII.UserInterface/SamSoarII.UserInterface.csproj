@@ -56,6 +56,13 @@
     <Compile Include="AddNewRoutineWindow.xaml.cs">
       <DependentUpon>AddNewRoutineWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CommunicationParams.cs" />
+    <Compile Include="CommunicationSettingDialog.xaml.cs">
+      <DependentUpon>CommunicationSettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CommunicationsettingParamsDialog.xaml.cs">
+      <DependentUpon>CommunicationsettingParamsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CSVExportDialog.xaml.cs">
       <DependentUpon>CSVExportDialog.xaml</DependentUpon>
     </Compile>
@@ -100,8 +107,14 @@
     <Compile Include="SimuArgsDialog.xaml.cs">
       <DependentUpon>SimuArgsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\BaseSetting.xaml.cs">
+      <DependentUpon>BaseSetting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CollectionStackPanel.cs" />
     <Compile Include="UserControls\PopupNotTop.cs" />
+    <Compile Include="UserControls\RangeTextBox.xaml.cs">
+      <DependentUpon>RangeTextBox.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -116,6 +129,14 @@
     <Page Include="AddNewRoutineWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CommunicationSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CommunicationsettingParamsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CSVExportDialog.xaml">
       <SubType>Designer</SubType>
@@ -157,8 +178,20 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\BaseSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\RangeTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SamSoarII.Communication\SamSoarII.Communication.csproj">
+      <Project>{0DFE87A3-E06C-408F-A791-04A9C1590ED1}</Project>
+      <Name>SamSoarII.Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.HelpDocument\SamSoarII.HelpDocument.csproj">
       <Project>{932DAF07-5116-44DF-9091-BD4CDC7CD01E}</Project>
       <Name>SamSoarII.HelpDocument</Name>
@@ -166,6 +199,10 @@
     <ProjectReference Include="..\SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj">
       <Project>{6ddbbac0-a051-43ac-be0d-d70227d61687}</Project>
       <Name>SamSoarII.PLCDevice</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
+      <Project>{AAFB923A-B366-4D7D-AB40-81F7D71A1F30}</Project>
+      <Name>SamSoarII.Utility</Name>
     </ProjectReference>
     <ProjectReference Include="..\SamSoarII.ValueModel\SamSoarII.ValueModel.csproj">
       <Project>{5357953a-adc8-40ee-a685-3165f1be99cc}</Project>

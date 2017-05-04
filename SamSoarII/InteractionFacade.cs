@@ -332,13 +332,9 @@ namespace SamSoarII.AppMain
                 tempItem = ProjectModel.SubRoutines.Where(x => { return x.ProgramName == e.RefLadderName; }).First();
             }
             var network = tempItem.GetNetworkByNumber(e.NetworkNum);
-            tempItem.AcquireSelectRect(network);
+            network.AcquireSelectRect();
             tempItem.SelectionRect.X = e.X;
             tempItem.SelectionRect.Y = e.Y;
-            if (!network.LadderCanvas.Children.Contains(tempItem.SelectionRect))
-            {
-                network.LadderCanvas.Children.Add(tempItem.SelectionRect);
-            }
             tempItem.NavigateToNetworkByNum(e.NetworkNum);
             _mainTabControl.ShowItem(tempItem);
         }

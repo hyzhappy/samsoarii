@@ -26,7 +26,6 @@ namespace SamSoarII.HelpDocument.HelpDocComponet
         {
             InitializeComponent();
         }
-        private HelpDocTreeItem oldItem = null;
         private void OnOpenAll(object sender, RoutedEventArgs e)
         {
             foreach (var item in HelpDocTree.Items)

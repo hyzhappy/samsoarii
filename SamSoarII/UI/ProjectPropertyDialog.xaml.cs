@@ -1,6 +1,7 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.AppMain.UI.ProjectPropertyWidget;
 using SamSoarII.HelpDocument;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;

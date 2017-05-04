@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace SamSoarII.AppMain.UI
+namespace SamSoarII.Utility
 {
     public interface IXEleCreateOrLoad
     {

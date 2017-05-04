@@ -17,6 +17,7 @@ using SamSoarII.AppMain.UI;
 using System.Windows.Controls;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.PLCDevice;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.AppMain.Project
 {

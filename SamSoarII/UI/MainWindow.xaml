@@ -9,6 +9,7 @@
         xmlns:proj="clr-namespace:SamSoarII.AppMain.Project"
         xmlns:hdoc="clr-namespace:SamSoarII.HelpDocument.HelpDocComponet;assembly=SamSoarII.HelpDocument"
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:mon="clr-namespace:SamSoarII.AppMain.UI.Monitor"
         mc:Ignorable="d"
         Title="SamSoarII" Height="400" Width="600" WindowState="Maximized">
     <Window.CommandBindings>
@@ -32,7 +33,9 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}" Executed="OnShowSimulateTreeViewCommand" CanExecute="ShowSimulateTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowMonitorCommand}" Executed="OnShowMonitorCommand" CanExecute="ShowMonitorCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOutputCommand}" Executed="OnShowOutputCommand" CanExecute="ShowOutputCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogCommandExecute" CanExecute="OnShowCommunicationSettingDialogCommandCanExecute"></CommandBinding>
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
@@ -45,6 +48,7 @@
         <!-- Tool Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
         <CommandBinding x:Name="CheckLadderCommand" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.MonitorCommand}"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
@@ -253,7 +257,7 @@
                         <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="监视"></MenuItem>
+                <MenuItem Header="监视" Command="{x:Static app:GlobalCommand.MonitorCommand}"></MenuItem>
                 <MenuItem Header="程序检测" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
@@ -351,6 +355,9 @@
                 <Button VerticalAlignment="Top" Tag="11" Click="OnClick" ToolTip="竖线删除" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource VLineCancel}"></Button>
             </ToolBar>
             <ToolBar Style="{x:Null}" x:Name="SettingToolBar">
+                <Button ToolTip="通信设置" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}">
+                    <Image Source="/Resources/Image/CommunicationSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
                 <Button ToolTip="系统设置" Height="24" Width="24" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
@@ -416,6 +423,15 @@
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.BottomSide>
+                <ad:LayoutRoot.RightSide>
+                    <ad:LayoutAnchorSide>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingHeight="800" FloatingWidth="300" AutoHideHeight="800" AutoHideWidth="300">
+                                <mon:MainMonitor x:Name="MainMonitor"/>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                    </ad:LayoutAnchorSide>
+                </ad:LayoutRoot.RightSide>
             </ad:LayoutRoot>
         </ad:DockingManager>
     </DockPanel>

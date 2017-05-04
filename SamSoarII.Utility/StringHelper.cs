@@ -37,7 +37,7 @@ namespace SamSoarII.Utility
         public static string Trunc(string value)
         {
             int count = value.Count();
-            count += ChineseCharCount(value) % 2 == 0 ? ChineseCharCount(value) / 2 : ChineseCharCount(value) / 2 + 1;
+            count += ChineseCharCount(value);
             if (count > MaxCapacity)
             {
                 int TruncNum = count - MaxCapacity + 3;

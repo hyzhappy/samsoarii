@@ -114,7 +114,6 @@ namespace SamSoarII.AppMain.Project
             }
             set
             {
-                
                 _isMasked = value;
                 if (_isMasked)
                 {
@@ -122,6 +121,8 @@ namespace SamSoarII.AppMain.Project
                     LadderCanvas.Background = Brushes.LightGray;
                     CommentAreaExpander.Opacity = 0.4;
                     LadderCanvas.Opacity = 0.4;
+                    ReleaseSelectRect();
+                    IsSelectAreaMode = false;
                 }
                 else
                 {
@@ -856,22 +857,25 @@ namespace SamSoarII.AppMain.Project
 
         private void OnEditComment(object sender, RoutedEventArgs e)
         {
-            SamSoarII.UserInterface.NetworkCommentEditDialog editDialog = new UserInterface.NetworkCommentEditDialog();
-            editDialog.NetworkNumber = NetworkNumber;
-            editDialog.NetworkBrief = NetworkBrief;
-            editDialog.NetworkDescription = NetworkDescription;
-            editDialog.EnsureButtonClick += (sender1, e1) =>
+            if (!IsMasked)
             {
-                NetworkBrief = editDialog.NetworkBrief;
-                NetworkDescription = editDialog.NetworkDescription;
-                editDialog.Close();
-            };
-            editDialog.ShowDialog();
+                NetworkCommentEditDialog editDialog = new UserInterface.NetworkCommentEditDialog();
+                editDialog.NetworkNumber = NetworkNumber;
+                editDialog.NetworkBrief = NetworkBrief;
+                editDialog.NetworkDescription = NetworkDescription;
+                editDialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    NetworkBrief = editDialog.NetworkBrief;
+                    NetworkDescription = editDialog.NetworkDescription;
+                    editDialog.Close();
+                };
+                editDialog.ShowDialog();
+            }
         }
 
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed)
+            if(e.LeftButton == MouseButtonState.Pressed && !IsMasked)
             {
                 var pos = e.GetPosition(LadderCanvas);
                 var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
@@ -972,7 +976,6 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.SelectionRect.NetworkParent = this;
             }
         }
-
         public List<BaseViewModel> GetSelectedElements()
         {
             List<BaseViewModel> result = new List<BaseViewModel>();

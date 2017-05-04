@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface
 {
@@ -15,6 +18,14 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface
             CommunParams232 = (CommunicationInterfaceParams)ProjectPropertyManager.ParamsDic["CommunParams232"];
             SetCommunicationType(CommunParams232.CommuType);
             DataContext = CommunParams232;
+            Binding binding = new Binding();
+            binding.Source = this.CommunParams232;
+            binding.Path = new PropertyPath("StationNum");
+            rangeTextbox1.GetTextBox().SetBinding(TextBox.TextProperty, binding);
+            binding = new Binding();
+            binding.Source = this.CommunParams232;
+            binding.Path = new PropertyPath("Timeout");
+            rangeTextbox2.GetTextBox().SetBinding(TextBox.TextProperty, binding);
         }
         public override void SetCommunicationType(CommunicationType type)
         {
@@ -40,8 +51,8 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface
             {
                 CommunParams232.BufferBitIndex = Combox5.SelectedIndex;
             }
-            CommunParams232.StationNum = int.Parse(NTextBox.Text);
-            CommunParams232.Timeout = int.Parse(TTextBox.Text);
+            CommunParams232.StationNum = int.Parse(rangeTextbox1.GetTextBox().Text);
+            CommunParams232.Timeout = int.Parse(rangeTextbox2.GetTextBox().Text);
         }
     }
 }

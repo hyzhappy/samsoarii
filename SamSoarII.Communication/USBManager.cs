@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
+namespace SamSoarII.Communication
 {
-    interface ISaveDialog
+    public class USBManager
     {
-        void Save();
+
     }
 }

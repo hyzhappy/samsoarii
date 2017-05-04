@@ -730,8 +730,8 @@ namespace SamSoarII.AppMain.Project
         private void EditCommentReact()
         {
             LadderDiagramCommentEditDialog dialog = new LadderDiagramCommentEditDialog();
-            dialog.LadderComment = this.LadderComment;
-            dialog.LadderName = this.ProgramName;
+            dialog.LadderComment = LadderComment;
+            dialog.LadderName = ProgramName;
             dialog.EnsureButtonClick += (sender, e) =>
             {
                 this.LadderComment = dialog.LadderComment;
@@ -751,7 +751,7 @@ namespace SamSoarII.AppMain.Project
         public string GenerateCode(string functionName)
         {
             string logicCode = string.Empty;
-            foreach (var net in _ladderNetworks)
+            foreach (var net in _ladderNetworks.Where(x => { return !x.IsMasked; }))
             {
                 logicCode += net.GenerateCode();
             }
@@ -1209,7 +1209,7 @@ namespace SamSoarII.AppMain.Project
                         int y = _selectRect.Y;
                         var oldelements = _selectRectOwner.GetElements().Where(ele => ele.Y == y && ele.X >= x);
                         var elements = new List<BaseViewModel>();
-                        for (int i = x; i < GlobalSetting.LadderXCapacity - 1; i++)
+                        for (int i = Math.Max(x,1); i < GlobalSetting.LadderXCapacity - 1; i++)
                         {
                             elements.Add(new HorizontalLineViewModel() { X = i, Y = y });
                         }
@@ -2130,8 +2130,8 @@ namespace SamSoarII.AppMain.Project
             int yStart = 0;
             var elements = ProjectHelper.CreateLadderElementsByXElement(xEle);
             var vlines = ProjectHelper.CreateLadderVertialLineByXElement(xEle);
-            IEnumerable<BaseViewModel> oldelements = null;
-            IEnumerable<VerticalLineViewModel> oldvlines = null;
+            IEnumerable<BaseViewModel> oldelements = new List<BaseViewModel>();
+            IEnumerable<VerticalLineViewModel> oldvlines = new List<VerticalLineViewModel>();
             bool containOutput = elements.Any(x => x.Type == LadderInstModel.ElementType.Output);
             var targetNetwork = _selectRectOwner;
             if (_selectRectOwner != null)
@@ -2154,7 +2154,7 @@ namespace SamSoarII.AppMain.Project
                     _commandManager.Execute(command1);
                 }
                 oldelements = _selectRectOwner.GetElements().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width -1 && ele.Y <= yStart + height - 1);
-                oldvlines = _selectRectOwner.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width - 1 && ele.Y <= yStart + height - 1);
+                oldvlines = _selectRectOwner.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X < xStart + width - 1 && ele.Y < yStart + height - 1);
             }
             else
             {
@@ -2178,7 +2178,7 @@ namespace SamSoarII.AppMain.Project
                         _commandManager.Execute(command1);
                     }
                     oldelements = _selectStartNetwork.GetSelectedElements().Union(_selectStartNetwork.GetElements().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width - 1 && ele.Y <= yStart + height - 1));
-                    oldvlines = _selectStartNetwork.GetSelectedVerticalLines().Union(_selectStartNetwork.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width - 1 && ele.Y <= yStart + height - 1));           
+                    oldvlines = _selectStartNetwork.GetSelectedVerticalLines().Union(_selectStartNetwork.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X < xStart + width - 1 && ele.Y < yStart + height - 1));
                 }
             }
             foreach (var element in elements)

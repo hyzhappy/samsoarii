@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface"
              xmlns:ui="clr-namespace:SamSoarII.AppMain.UI"
+             xmlns:usr="clr-namespace:SamSoarII.UserInterface;assembly=SamSoarII.UserInterface"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="390">
     <UserControl.Resources>
@@ -87,20 +88,12 @@
         <Canvas Grid.Row="2">
             <StackPanel Canvas.Top="10">
                 <TextBlock FontSize="16" Text="站号设置"></TextBlock>
-                <TextBox x:Name="NTextBox" Margin="5,0,0,0" FontSize="16" Width="60" PreviewKeyDown="OnPreviewKeyDown" Text="{Binding StationNum}" TextChanged="OnTextChanged"></TextBox>
-                <StackPanel x:Name="stackpaneldata1" Orientation="Vertical" Width="15">
-                    <RepeatButton x:Name="NUpButton" Height="12" Template="{StaticResource UpButton}" Click="UpClick" IsEnabled="{Binding NCanUp}"></RepeatButton>
-                    <RepeatButton x:Name="NDownButton" Height="12" Template="{StaticResource DownButton}" Click="DownClick" IsEnabled="{Binding NCanDown}"></RepeatButton>
-                </StackPanel>
+                <usr:RangeTextBox x:Name="rangeTextbox1" Margin="5,-2,0,0" LowRange="1" TopRange="128" DefaultValue="2"></usr:RangeTextBox>
                 <TextBlock FontSize="16" Text="(1-128)"></TextBlock>
             </StackPanel>
             <StackPanel Canvas.Top="50">
                 <TextBlock FontSize="16" Text="超时时间"></TextBlock>
-                <TextBox x:Name="TTextBox" Margin="5,0,0,0" FontSize="16" Width="60" PreviewKeyDown="OnPreviewKeyDown" Text="{Binding Timeout}" TextChanged="OnTextChanged"></TextBox>
-                <StackPanel x:Name="stackpaneldata2" Orientation="Vertical" Width="15">
-                    <RepeatButton x:Name="TUpButton" Height="12" Template="{StaticResource UpButton}" Click="UpClick" IsEnabled="{Binding TCanUp}"></RepeatButton>
-                    <RepeatButton x:Name="TDownButton" Height="12" Template="{StaticResource DownButton}" Click="DownClick" IsEnabled="{Binding TCanDown}"></RepeatButton>
-                </StackPanel>
+                <usr:RangeTextBox x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="1" TopRange="255" DefaultValue="20"></usr:RangeTextBox>
                 <TextBlock FontSize="16" Text="*10ms    (1-255)"></TextBlock>
             </StackPanel>
         </Canvas>
