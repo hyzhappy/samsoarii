@@ -32,7 +32,7 @@ namespace SamSoarII.AppMain.UI
 
         private InteractionFacade parent;
 
-        private LadderCommand.CommandManager _cmdmanager 
+        private LadderCommand.CommandManager _cmdmanager
             = new LadderCommand.CommandManager();
 
         private ObservableCollection<ReplaceElement> items
@@ -58,6 +58,10 @@ namespace SamSoarII.AppMain.UI
                 Find();
             }
         }
+
+        private ReplaceFormat RF_Input { get; set; } = new ReplaceFormat();
+
+        private ReplaceFormat RF_Change { get; set; } = new ReplaceFormat();
 
         #endregion
 
@@ -107,34 +111,13 @@ namespace SamSoarII.AppMain.UI
                     if (bvmodel is HorizontalLineViewModel
                      || bvmodel is VerticalLineViewModel)
                         continue;
-                    if (args.Length > 0 && !args[0].Equals("*")
-                     && !args[0].Equals(bvmodel.InstructionName))
-                        continue;
-                    check = true;
-                    for (int i = 0; i < bvmodel.Model.ParaCount; i++)
+                    BaseModel bmodel = bvmodel.Model;
+                    string input = bvmodel.InstructionName;
+                    for (int i = 0; i < bmodel.ParaCount; i++)
                     {
-                        if (args.Length <= i + 1)
-                        {
-                            if (!args.Last().Equals("."))
-                            {
-                                check = false;
-                            }
-                            break;
-                        }
-                        if (!args[i + 1].Equals("*")
-                         && !args[i + 1].Equals(".")
-                         && !args[i + 1].Equals(bvmodel.Model.GetPara(i).ValueString))
-                        {
-                            check = false;
-                            break;
-                        }
+                        input += " " + bmodel.GetPara(i).ValueString;
                     }
-                    if (args.Length - 1 > bvmodel.Model.ParaCount
-                     && !args[bvmodel.Model.ParaCount].Equals("."))
-                    {
-                        check = false;
-                    }
-                    if (check)
+                    if (RF_Input.Match(input))
                     {
                         items.Add(new ReplaceElement(bvmodel, ldvmodel, lnvmodel));
                     }
@@ -157,29 +140,14 @@ namespace SamSoarII.AppMain.UI
                 LadderDiagramViewModel ldvmodel = rele.LDVModel;
                 int x = bvmodel.X;
                 int y = bvmodel.Y;
-
-                string text_old = rele.Detail;
-                string text_new = TB_Change.Text;
-                string[] args_old = text_old.Split(' ');
-                string[] args_new = text_new.Split(' ');
-                string text_fin = String.Empty;
-                for (int i = 0; i < args_old.Length; i++)
-                {
-                    if (i >= args_new.Length 
-                     || args_new[i].Equals("*"))
-                    {
-                        text_fin += args_old[i] + " ";
-                    }
-                    else
-                    {
-                        text_fin += args_new[i] + " ";
-                    }
-                }
+                
                 NetworkReplaceElementsCommand command = null;
                 try
                 {
-                    ldvmodel.RegisterInstructionInput(
-                        text_fin, x, y, lnvmodel, ref command);
+                    command = RF_Change.Replace(
+                        RF_Input,
+                        rele.Detail, x, y,
+                        ldvmodel, lnvmodel);
                     commandall += command;
                     success++;
                 }
@@ -198,10 +166,10 @@ namespace SamSoarII.AppMain.UI
             }
 
             _cmdmanager.Execute(commandall);
-         
+
             ReplaceReportWindow report = new ReplaceReportWindow();
             report.TB_Subtitle.Text = String.Format("总共进行了{0:d}次替换，{1:d}次成功，{2:d}次错误。"
-                ,success + error, success, error);
+                , success + error, success, error);
             report.TB_Message.Text = errormsg;
             report.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             report.ShowDialog();
@@ -215,35 +183,15 @@ namespace SamSoarII.AppMain.UI
 
         private void TB_Input_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string text = TB_Input.Text;
-            string[] args = text.Split(' ');
-            bool check = false;
-
-            TB_Input.Background = Brushes.LightGreen;
-            for (int i = 0; i < args.Length; i++)
+            RF_Input.Text = TB_Input.Text;
+            switch (RF_Input.Type)
             {
-                if (args[i].Equals("*"))
-                    continue;
-                if (args[i].Equals("."))
-                    continue;
-                if (i == 0)
-                {
-                    check = true;
-                }
-                else
-                {
-                    check = ValueParser.CheckValueString(args[i], new Regex[]
-                    {
-                        ValueParser.VarRegex,
-                        ValueParser.VerifyIntKHValueRegex,
-                        ValueParser.VerifyFloatKValueRegex
-                    });
-                }
-                if (!check)
-                {
+                case ReplaceFormat.TYPE_INVALID:
                     TB_Input.Background = Brushes.Red;
                     break;
-                }
+                default:
+                    TB_Input.Background = Brushes.LightGreen;
+                    break;
             }
         }
 
@@ -257,33 +205,19 @@ namespace SamSoarII.AppMain.UI
 
         private void TB_Change_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string text = TB_Change.Text;
-            string[] args = text.Split(' ');
-            bool check = false;
-
-            TB_Change.Background = Brushes.LightGreen;
-            for (int i = 0; i < args.Length; i++)
+            RF_Change.Text = TB_Change.Text;
+            switch (RF_Change.Type)
             {
-                if (args[i].Equals("*"))
-                    continue;
-                if (i == 0)
-                {
-                    check = true;
-                }
-                else
-                {
-                    check = ValueParser.CheckValueString(args[i], new Regex[]
-                    {
-                        ValueParser.VarRegex,
-                        ValueParser.VerifyIntKHValueRegex,
-                        ValueParser.VerifyFloatKValueRegex
-                    });
-                }
-                if (!check)
-                {
+                case ReplaceFormat.TYPE_REGISTER:
+                case ReplaceFormat.TYPE_LADDER:
+                    if (RF_Input.Type == RF_Change.Type)
+                        TB_Change.Background = Brushes.LightGreen;
+                    else
+                        TB_Change.Background = Brushes.Red;
+                    break;
+                default:
                     TB_Change.Background = Brushes.Red;
                     break;
-                }
             }
         }
 
@@ -292,8 +226,10 @@ namespace SamSoarII.AppMain.UI
             if (TB_Input.Background != Brushes.White) return;
             if (TB_Change.Background == Brushes.Red) return;
             if (e.Key != Key.Enter) return;
+            TB_Change.IsEnabled = false;
             Replace();
             TB_Change.Background = Brushes.White;
+            TB_Change.IsEnabled = true;
         }
 
         private void DG_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -308,20 +244,20 @@ namespace SamSoarII.AppMain.UI
             NavigateToNetworkEventArgs _e = new NavigateToNetworkEventArgs(network, diagram, x, y);
             parent.NavigateToNetwork(_e);
         }
-        
+
         private void UndoCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.Handled = _cmdmanager.CanUndo;
+            e.CanExecute = _cmdmanager.CanUndo;
         }
 
         private void UndoExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             _cmdmanager.Undo();
         }
-        
+
         private void RedoCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.Handled = _cmdmanager.CanRedo;
+            e.CanExecute = _cmdmanager.CanRedo;
         }
 
         private void RedoExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -329,8 +265,349 @@ namespace SamSoarII.AppMain.UI
             _cmdmanager.Redo();
         }
 
+        private void OnConfigClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         #endregion
 
+    }
+    
+    public class ReplaceFormat
+    {
+        public const int TYPE_INVALID = 0x00;
+        public const int TYPE_LADDER = 0x01;
+        public const int TYPE_REGISTER = 0x02;
+        public int Type { get; private set; }
+
+        public const int ARG_INVAILD = 0x00;
+        public const int ARG_INSTRUCTION = 0x01;
+        public const int ARG_REGISTER = 0x02;
+        public const int ARG_ANYONE = 0x03;
+        public const int ARG_ANYSUFFIX = 0x04;
+        public struct ReplaceFormatArg
+        {
+            public int Type;
+            public string Text;
+            public string Base;
+            public int Low;
+            public int High;
+            public string Offset;
+            public int OLow;
+            public int OHigh;
+        }
+        
+        private ReplaceFormatArg[] args = new ReplaceFormatArg[0];
+        public int ArgsCount { get { return args.Length; } }
+        public ReplaceFormatArg GetArgs(int id) { return args[id]; }
+        
+        private static Regex VRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)$",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static Regex ARegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)\[([0-9]+)\.\.([0-9]+)\]$",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static Regex VVRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)(V|Z)([0-9]+)$", 
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static Regex AVRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)\[([0-9]+)\.\.([0-9]+)\](V|Z)([0-9]+)$", 
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static Regex VARegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)(V|Z)\[([0-9]+)\.\.([0-9]+)\]$",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static Regex AARegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)\[([0-9]+)\.\.([0-9]+)\](V|Z)\[([0-9]+)\.\.([0-9]+)\]$",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private string text;
+        public string Text
+        {
+            get { return this.text; }
+            set
+            {
+                this.text = value;
+                if (text.Equals(String.Empty))
+                {
+                    this.args = new ReplaceFormatArg[0];
+                    Type = TYPE_INVALID;
+                    return;
+                }
+                string[] sargs = text.Split(' ');
+                this.args = new ReplaceFormatArg[sargs.Length];
+                for (int i = 0; i < args.Length; i++)
+                {
+                    args[i].Text = sargs[i];
+                    args[i].Base = String.Empty;
+                    args[i].Low = args[i].High = 0;
+                    args[i].Offset = String.Empty;
+                    args[i].OLow = args[i].OHigh = 0;
+                    switch (sargs[i])
+                    {
+                        case "*":
+                            args[i].Type = ARG_ANYONE;
+                            break;
+                        case ".":
+                            args[i].Type = ARG_ANYSUFFIX;
+                            break;
+                        default:
+                            args[i].Type = ARG_REGISTER;
+                            Match m1 = VVRegex.Match(sargs[i]);
+                            Match m2 = AVRegex.Match(sargs[i]);
+                            Match m3 = VARegex.Match(sargs[i]);
+                            Match m4 = AARegex.Match(sargs[i]);
+                            Match m5 = VRegex.Match(sargs[i]);
+                            Match m6 = ARegex.Match(sargs[i]);
+                            if (m1.Success)
+                            {
+                                args[i].Base = m1.Groups[1].Value;
+                                args[i].Low = int.Parse(m1.Groups[2].Value);
+                                args[i].High = args[i].Low;
+                                args[i].Offset = m1.Groups[3].Value;
+                                args[i].OLow = int.Parse(m1.Groups[4].Value);
+                                args[i].OHigh = args[i].OLow;
+                            }
+                            else if (m2.Success)
+                            {
+                                args[i].Base = m2.Groups[1].Value;
+                                args[i].Low = int.Parse(m2.Groups[2].Value);
+                                args[i].High = int.Parse(m2.Groups[3].Value);
+                                args[i].Offset = m2.Groups[4].Value;
+                                args[i].OLow = int.Parse(m2.Groups[5].Value);
+                                args[i].OHigh = args[i].OLow;
+                            }
+                            else if (m3.Success)
+                            {
+                                args[i].Base = m3.Groups[1].Value;
+                                args[i].Low = int.Parse(m3.Groups[2].Value);
+                                args[i].High = args[i].Low;
+                                args[i].Offset = m3.Groups[3].Value;
+                                args[i].OLow = int.Parse(m3.Groups[4].Value);
+                                args[i].OHigh = int.Parse(m3.Groups[5].Value);
+                            }
+                            else if (m4.Success)
+                            {
+                                args[i].Base = m4.Groups[1].Value;
+                                args[i].Low = int.Parse(m4.Groups[2].Value);
+                                args[i].High = int.Parse(m4.Groups[3].Value);
+                                args[i].Offset = m4.Groups[4].Value;
+                                args[i].OLow = int.Parse(m4.Groups[5].Value);
+                                args[i].OHigh = int.Parse(m4.Groups[6].Value);
+                            }
+                            else if (m5.Success)
+                            {
+                                args[i].Base = m5.Groups[1].Value;
+                                args[i].Low = int.Parse(m5.Groups[2].Value);
+                                args[i].High = args[i].Low;
+                            }
+                            else if (m6.Success)
+                            {
+                                args[i].Base = m6.Groups[1].Value;
+                                args[i].Low = int.Parse(m6.Groups[2].Value);
+                                args[i].High = int.Parse(m6.Groups[3].Value);
+                            }
+                            else if (LadderInstViewModelPrototype.CheckInstructionName(sargs[i]))
+                            {
+                                args[i].Type = ARG_INSTRUCTION;
+                            }
+                            else
+                            {
+                                args[i].Type = ARG_INVAILD;
+                            }
+                            break;
+                    }
+                    switch (args[i].Type)
+                    {
+                        case ARG_INVAILD:
+                            Type = TYPE_INVALID;
+                            return;
+                        case ARG_INSTRUCTION:
+                            if (i > 0)
+                            {
+                                Type = TYPE_INVALID;
+                                return;
+                            }
+                            break;
+                        case ARG_REGISTER:
+                            if (i == 0 && sargs.Length > 1)
+                            {
+                                Type = TYPE_INVALID;
+                                return;
+                            }
+                            if (i == 0)
+                            {
+                                Type = TYPE_REGISTER;
+                                return;
+                            }
+                            break;
+                        case ARG_ANYONE:
+                            break;
+                        case ARG_ANYSUFFIX:
+                            if (i < sargs.Length - 1)
+                            {
+                                Type = TYPE_INVALID;
+                                return;
+                            }
+                            break;
+                        default:
+                            Type = TYPE_INVALID;
+                            return;
+                    }
+                }
+                Type = TYPE_LADDER;
+            }
+        }
+
+        public ReplaceFormat()
+        {
+            Text = String.Empty;
+        }
+
+        public ReplaceFormat(string _text)
+        {
+            Text = _text;
+        }
+
+        public bool Match(string input)
+        {
+            ReplaceFormat iformat = new ReplaceFormat(input);
+            if (iformat.Type != TYPE_LADDER)
+                return false;
+            switch (Type)
+            {
+                case TYPE_INVALID:
+                    return false;
+                case TYPE_LADDER:
+                    for (int i = 0; i < ArgsCount; i++)
+                    {
+                        if (GetArgs(i).Type == ARG_ANYSUFFIX)
+                            return true;
+                        if (iformat.ArgsCount <= i)
+                            return false;
+                        if (!Match(GetArgs(i), iformat.GetArgs(i)))
+                            return false;
+                    }
+                    return true;
+                case TYPE_REGISTER:
+                    for (int i = 1; i < iformat.ArgsCount; i++)
+                    {
+                        if (!Match(GetArgs(0), iformat.GetArgs(i)))
+                            return false;
+                    }
+                    return true;
+                default:
+                    return false;
+            }            
+        }
+
+        private bool Match(ReplaceFormatArg arg1, ReplaceFormatArg arg2)
+        {
+            switch (arg1.Type)
+            {
+                case ARG_INVAILD:
+                    return false;
+                case ARG_INSTRUCTION:
+                    return (arg2.Type == arg1.Type && arg2.Text.Equals(arg1.Text));
+                case ARG_ANYONE:
+                    return true;
+                case ARG_ANYSUFFIX:
+                    return true;
+                case ARG_REGISTER:
+                    if (!arg1.Base.Equals(arg2.Base))
+                        return false;
+                    if (arg2.High < arg1.Low)
+                        return false;
+                    if (arg2.Low > arg1.High)
+                        return false;
+                    if (!arg1.Offset.Equals(String.Empty))
+                    {
+                        if (!arg1.Offset.Equals(arg2.Offset))
+                            return false;
+                        if (arg2.OHigh < arg1.OLow)
+                            return false;
+                        if (arg2.OLow > arg1.OHigh)
+                            return false;
+                    }
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public NetworkReplaceElementsCommand Replace
+        (
+            ReplaceFormat prototype,
+            string input, int x, int y, 
+            LadderDiagramViewModel ldvmodel,
+            LadderNetworkViewModel lnvmodel
+        )
+        {
+            ReplaceFormat iformat = new ReplaceFormat(input);
+            string output = String.Empty;
+            for (int i = 0; i < iformat.ArgsCount; i++)
+            {
+                if (prototype.Type == TYPE_REGISTER)
+                { 
+                    if (iformat.GetArgs(i).Type == ARG_REGISTER)
+                    {
+                        if (!Match(prototype.GetArgs(0), iformat.GetArgs(i)))
+                        {
+                            output += iformat.GetArgs(i).Text + " ";
+                        }
+                        else
+                        {
+                            bool isunique = false;
+                            isunique = (prototype.GetArgs(0).Low == prototype.GetArgs(0).High);
+                            isunique |= (GetArgs(0).Low == GetArgs(0).High);
+                            int baseid = GetArgs(0).Low;
+                            if (!isunique)
+                                baseid += iformat.GetArgs(i).Low - prototype.GetArgs(0).Low;
+                            output += String.Format("{0:s}{1:d}",
+                                    GetArgs(0).Base, baseid);
+                            if (!GetArgs(0).Offset.Equals(String.Empty))
+                                output += String.Format("{0:s}{1:d}",
+                                    GetArgs(0).Offset, GetArgs(0).OLow);
+                            output += " ";
+                        }
+                    }
+                    else
+                    {
+                        output += iformat.GetArgs(i).Text + " ";
+                    }
+                    continue;
+                }
+                if (i >= ArgsCount)
+                {
+                    output += iformat.GetArgs(i).Text + " ";
+                    continue;
+                }
+                switch (GetArgs(i).Type)
+                {
+                    case ARG_INSTRUCTION:
+                        output += GetArgs(i).Text + " ";
+                        break;
+                    case ARG_REGISTER:
+                        bool isunique = false;
+                        isunique |= (i >= prototype.ArgsCount);
+                        if (!isunique)
+                        {
+                            isunique = (prototype.GetArgs(i).Low == prototype.GetArgs(i).High);
+                            isunique |= (GetArgs(i).Low == GetArgs(i).High);
+                        }
+                        int baseid = GetArgs(i).Low;
+                        if (!isunique)
+                            baseid += iformat.GetArgs(i).Low - prototype.GetArgs(i).Low;
+                        output += String.Format("{0:s}{1:d}",
+                                GetArgs(i).Base, baseid);
+                        if (!GetArgs(i).Offset.Equals(String.Empty))
+                            output += String.Format("{0:s}{1:d}",
+                                GetArgs(i).Offset, GetArgs(i).OLow);
+                        output += " ";
+                        break;
+                    default:
+                        output += iformat.GetArgs(i).Text + " ";
+                        break;
+                }
+            }
+            NetworkReplaceElementsCommand command = null;
+            ldvmodel.RegisterInstructionInput(
+               output, x, y, lnvmodel, ref command);
+            return command;
+        }
     }
 
     public class ReplaceElement : INotifyPropertyChanged

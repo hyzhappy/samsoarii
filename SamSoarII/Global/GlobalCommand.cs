@@ -17,14 +17,14 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand ZoomOutCommand { get; set; }
         public static RoutedUICommand ShowProjectTreeViewCommand { get; set; }
         public static RoutedUICommand ShowSimulateTreeViewCommand { get; set; }
-        public static RoutedUICommand ShowSimuMonitorCommand { get; set; }
-        public static RoutedUICommand ShowMainMonitorCommand { get; set; }
         public static RoutedUICommand ShowOutputCommand { get; set; }
         public static RoutedUICommand ShowCommunicationSettingDialogCommand { get; set; }
         public static RoutedUICommand CompileCommand { get; set; }
         public static RoutedUICommand MonitorCommand { get; set; }
         public static RoutedUICommand DownloadCommand { get; set; }
         public static RoutedUICommand UploadCommand { get; set; }
+        public static RoutedUICommand ShowSimuMonitorCommand { get; set; }
+        public static RoutedUICommand ShowMainMonitorCommand { get; set; }
         public static RoutedUICommand LadderModeToggleCommand { get; set; }
         public static RoutedUICommand InstModeToggleCommand { get; set; }
         public static RoutedUICommand CommentModeToggleCommand { get; set; }

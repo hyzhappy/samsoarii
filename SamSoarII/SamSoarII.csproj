@@ -70,9 +70,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.AvalonDock.resources">
-      <HintPath>\\Mac\Home\Downloads\AvalonDock_2_0_2000\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

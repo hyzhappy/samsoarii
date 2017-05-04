@@ -8,9 +8,18 @@
              d:DesignHeight="800" d:DesignWidth="300"
              Background="White">
     <UserControl.CommandBindings>
-        <CommandBinding Command="{x:Static ApplicationCommands.Undo}" CanExecute="UndoCanExecute"  Executed="UndoExecuted"/>
-        <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCanExecute"  Executed="RedoExecuted"/>
+        <CommandBinding Command="ApplicationCommands.Undo" CanExecute="UndoCanExecute"  Executed="UndoExecuted"/>
+        <CommandBinding Command="ApplicationCommands.Redo" CanExecute="RedoCanExecute"  Executed="RedoExecuted"/>
     </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <Style x:Key="ImageEnable" TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.3"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
@@ -32,6 +41,21 @@
                 <TextBlock>当前程序</TextBlock>
                 <TextBlock>所有程序</TextBlock>
             </ComboBox>
+            <Button ToolTip="撤销" Command="{x:Static ApplicationCommands.Undo}" 
+                    Grid.Row="0" Grid.Column="1"
+                    Height="24" Width="24">
+                <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+            </Button>
+            <Button ToolTip="重做" Command="{x:Static ApplicationCommands.Redo}" 
+                    Grid.Row="0" Grid.Column="2"
+                    Height="24" Width="24">
+                <Image Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+            </Button>
+            <Button ToolTip="设置" Click="OnConfigClick"
+                    Grid.Row="0" Grid.Column="3"
+                    Height="24" Width="24">
+                <Image Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+            </Button>
         </Grid>
         <TextBlock Grid.Row="1" Grid.Column="0"
                    VerticalAlignment="Center" Margin="6,0,0,0"
@@ -54,6 +78,10 @@
                  Margin="60,4,4,4"
                  TextChanged="TB_Change_TextChanged"
                  KeyDown="TB_Change_KeyDown">
+            <TextBox.CommandBindings>
+                <CommandBinding Command="ApplicationCommands.Undo" CanExecute="UndoCanExecute"  Executed="UndoExecuted"/>
+                <CommandBinding Command="ApplicationCommands.Redo" CanExecute="RedoCanExecute"  Executed="RedoExecuted"/>
+            </TextBox.CommandBindings>
         </TextBox>
         <DataGrid x:Name="DG_List" ItemsSource="{Binding Items}"
                   Grid.Row="3" Grid.Column="0"
@@ -61,15 +89,13 @@
                   RowBackground="White" AlternatingRowBackground="AliceBlue"
                   SelectionChanged="DG_List_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="DGTC_Detail" Binding="{Binding Detail}"
+                <DataGridTextColumn x:Name="DGTC_Detail" IsReadOnly="True" Binding="{Binding Detail}"
                                     Header="元件" Width="*">
-
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_Diagram" Binding="{Binding Diagram}"
+                <DataGridTextColumn x:Name="DGTC_Diagram" IsReadOnly="True" Binding="{Binding Diagram}"
                                     Header="程序" Width="80">
-
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_Network" Binding="{Binding Network}"
+                <DataGridTextColumn x:Name="DGTC_Network" IsReadOnly="True" Binding="{Binding Network}"
                                     Header="网络" Width="40">
 
                 </DataGridTextColumn>
