@@ -37,12 +37,14 @@ namespace SamSoarII.AppMain.UI
     public partial class MainWindow : Window
     {
         private InteractionFacade _interactionFacade;
+        public LayoutAnchorControl LACProj { get; private set; }
+        public LayoutAnchorControl LACSimuProj { get; private set; }
+        public LayoutAnchorControl LACMonitor { get; private set; }
+        public LayoutAnchorControl LACOutput { get; private set; }
+        public LayoutAnchorControl LACFind { get; private set; }
+        public LayoutAnchorControl LACReplace { get; private set; }
+        public LayoutAnchorControl LACMainMonitor { get; private set; }
         private CanAnimationScroll MainScroll;
-        public LayoutAnchorControl LACProj;
-        public LayoutAnchorControl LACSimuProj;
-        public LayoutAnchorControl LACMonitor;
-        public LayoutAnchorControl LACMainMonitor;
-        public LayoutAnchorControl LACOutput;
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
         {
@@ -52,6 +54,8 @@ namespace SamSoarII.AppMain.UI
             this.Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
+            FindWindow findwindow = new FindWindow(_interactionFacade);
+            LAFind.Content = findwindow;
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -78,59 +82,35 @@ namespace SamSoarII.AppMain.UI
             LACMonitor = LAMonitor.AnchorControl;
             LACMainMonitor = LAMainMonitor.AnchorControl;
             LACOutput = LAOutput.AnchorControl;
+            LACFind = LAFind.AnchorControl;
+            LACReplace = LAReplace.AnchorControl;
 
+            InitializeAvalonDock(LAProj);
+            InitializeAvalonDock(LASimuProj);
+            InitializeAvalonDock(LAMonitor);
+            InitializeAvalonDock(LAMainMonitor);
+            InitializeAvalonDock(LAOutput);
+            InitializeAvalonDock(LAFind);
+            InitializeAvalonDock(LAReplace);
+        }
+        private void InitializeAvalonDock(LayoutAnchorable LAnch)
+        {
             AnchorSide side;
-            side = LayoutSetting.GetDefaultSideAnchorable(LAProj.Title);
-            LAProj.ReplaceSide(side);
-            side = LayoutSetting.GetDefaultSideAnchorable(LASimuProj.Title);
-            LASimuProj.ReplaceSide(side);
-            side = LayoutSetting.GetDefaultSideAnchorable(LAMonitor.Title);
-            LAMonitor.ReplaceSide(side);
-            side = LayoutSetting.GetDefaultSideAnchorable(LAMainMonitor.Title);
-            LAMainMonitor.ReplaceSide(side);
-            side = LayoutSetting.GetDefaultSideAnchorable(LAOutput.Title);
-            LAOutput.ReplaceSide(side);
-            LAProj.Hide();
-            LASimuProj.Hide();
-            LAMonitor.Hide();
-            LAMainMonitor.Hide();
-            LAOutput.Hide();
+            side = LayoutSetting.GetDefaultSideAnchorable(LAnch.Title);
+            LAnch.ReplaceSide(side);
 
             double[] autohidesize;
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAProj.Title);
-            LAProj.AutoHideWidth = autohidesize[0];
-            LAProj.AutoHideHeight = autohidesize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LASimuProj.Title);
-            LASimuProj.AutoHideWidth = autohidesize[0];
-            LASimuProj.AutoHideHeight = autohidesize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMonitor.Title);
-            LAMonitor.AutoHideWidth = autohidesize[0];
-            LAMonitor.AutoHideHeight = autohidesize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAMainMonitor.Title);
-            LAMainMonitor.AutoHideWidth = autohidesize[0];
-            LAMainMonitor.AutoHideHeight = autohidesize[1];
-            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAOutput.Title);
-            LAOutput.AutoHideWidth = autohidesize[0];
-            LAOutput.AutoHideHeight = autohidesize[1];
+            autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAnch.Title);
+            LAnch.AutoHideWidth = autohidesize[0];
+            LAnch.AutoHideHeight = autohidesize[1];
 
             double[] floatsize;
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAProj.Title);
-            LAProj.FloatingWidth = floatsize[0];
-            LAProj.FloatingHeight = floatsize[1];
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LASimuProj.Title);
-            LASimuProj.FloatingWidth = floatsize[0];
-            LASimuProj.FloatingHeight = floatsize[1];
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAMonitor.Title);
-            LAMonitor.FloatingWidth = floatsize[0];
-            LAMonitor.FloatingHeight = floatsize[1];
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAMainMonitor.Title);
-            LAMainMonitor.FloatingWidth = floatsize[0];
-            LAMainMonitor.FloatingHeight = floatsize[1];
-            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAOutput.Title);
-            LAOutput.FloatingWidth = floatsize[0];
-            LAOutput.FloatingHeight = floatsize[1];
-        }
+            floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAnch.Title);
+            LAnch.FloatingWidth = floatsize[0];
+            LAnch.FloatingHeight = floatsize[1];
 
+            LAnch.Hide();
+        }
         protected override void OnClosed(EventArgs e)
         {
             LayoutSetting.Save();
@@ -705,7 +685,12 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
-
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "ssp文件|*.ssp";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                _interactionFacade.SaveAsProject(saveFileDialog.FileName);
+            }
         }
 
         private void OnCompileCommandExecute(object sender, RoutedEventArgs e)
@@ -750,6 +735,9 @@ namespace SamSoarII.AppMain.UI
                 {
                     SimulateModeButton.IsChecked = false;
                 }
+                SimulateHelper.SModel.SimulateStart += OnSimulateStart;
+                SimulateHelper.SModel.SimulatePause += OnSimulatePause;
+                SimulateHelper.SModel.SimulateAbort += OnSimulateAbort;
             }
             else if (SimulateModeButton.IsChecked == false)
             {
@@ -766,66 +754,55 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
-        private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
+        private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
-            if (SimuStartButton.IsChecked == true)
-            {
-                if (SimuPauseButton.IsChecked == true)
-                {
-                    SimuPauseButton.IsChecked = false;
-                }
-                if (SimuStopButton.IsChecked == true)
-                {
-                    SimuStopButton.IsChecked = false;
-                }
-                SimulateHelper.SModel.Start();
-            }
-            else
+            Dispatcher.Invoke(() =>
             {
                 SimuStartButton.IsChecked = true;
-            }
+                SimuPauseButton.IsChecked = false;
+                SimuStopButton.IsChecked = false;
+                SimuStartButton.IsEnabled = false;
+                SimuPauseButton.IsEnabled = true;
+                SimuStopButton.IsEnabled = true;
+            });
+        }
+        private void OnSimulatePause(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SimuStartButton.IsChecked = false;
+                SimuPauseButton.IsChecked = true;
+                SimuStopButton.IsChecked = false;
+                SimuStartButton.IsEnabled = true;
+                SimuPauseButton.IsEnabled = false;
+                SimuStopButton.IsEnabled = true;
+            });
+        }
+        private void OnSimulateAbort(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SimuStartButton.IsChecked = false;
+                SimuPauseButton.IsChecked = false;
+                SimuStopButton.IsChecked = true;
+                SimuStartButton.IsEnabled = true;
+                SimuPauseButton.IsEnabled = false;
+                SimuStopButton.IsEnabled = false;
+            });
+        }
+        private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
+        {
+            SimulateHelper.SModel.Start();
         }
 
         private void OnSimuPauseCommandExecute(object sender, RoutedEventArgs e)
         {
-            if (SimuPauseButton.IsChecked == true)
-            {
-                if (SimuStartButton.IsChecked == true)
-                {
-                    SimuStartButton.IsChecked = false;
-                }
-                if (SimuStopButton.IsChecked == true)
-                {
-                    SimuStopButton.IsChecked = false;
-                }
-                SimulateHelper.SModel.Pause();
-            }
-            else
-            {
-                SimuPauseButton.IsChecked = true;
-            }
+            SimulateHelper.SModel.Pause();
         }
 
         private void OnSimuStopCommandExecute(object sender, RoutedEventArgs e)
         {
-
-            if (SimuStopButton.IsChecked == true)
-            {
-                if (SimuStartButton.IsChecked == true)
-                {
-                    SimuStartButton.IsChecked = false;
-                }
-                if (SimuPauseButton.IsChecked == true)
-                {
-                    SimuPauseButton.IsChecked = false;
-                }
-                SimulateHelper.SModel.Stop();
-            }
-            else
-            {
-                SimuStopButton.IsChecked = true;
-            }
+            SimulateHelper.SModel.Stop();
         }
 
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
