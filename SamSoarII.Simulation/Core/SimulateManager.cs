@@ -10,6 +10,8 @@ using System.Threading;
 using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Chart;
+using System.Collections.ObjectModel;
+using SamSoarII.Simulation.UI;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -32,9 +34,16 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         private SimulateDllModel dllmodel;
         /// <summary>
+        /// dll模型
+        /// </summary>
+        public SimulateDllModel DllModel
+        {
+            get { return this.dllmodel; }
+        }
+        /// <summary>
         /// 变量模型的列表
         /// </summary>
-        private LinkedList<SimulateVariableModel> vlist;
+        private ObservableCollection<SimulateVariableModel> vlist;
         /// <summary>
         /// 未锁定的变量单元的字典，根据名称来获得匹配集合
         /// </summary>
@@ -64,18 +73,23 @@ namespace SamSoarII.Simulation.Core
         {
             // 初始化成员
             dllmodel = new SimulateDllModel();
-            vlist = new LinkedList<SimulateVariableModel>();
+            vlist = new ObservableCollection<SimulateVariableModel>();
             udict = new Dictionary<string, List<SimulateVariableUnit> >();
             ldict = new Dictionary<string, List<SimulateVariableUnit> >();
             vndict = new Dictionary<string, string>();
             lddict = new Dictionary<string, SimulateDataModel>();
             vddict = new Dictionary<string, SimulateDataModel>();
             // 初始化事件监听
-            dllmodel.RunDataFinished += OnRunDataFinished;
-            dllmodel.RunDrawFinished += OnRunDrawFinished;
+            //dllmodel.RunDataFinished += OnRunDataFinished;
+            //dllmodel.RunDrawFinished += OnRunDrawFinished;
             // 初始化更新线程
             updateactive = false;
             updatethread = null;
+
+            dllmodel.SimulateStart += OnSimulateStart;
+            dllmodel.SimulatePause += OnSimulatePause;
+            dllmodel.SimulateAbort += OnSimulateAbort;
+            dllmodel.SimulateException += OnSimulateException;
         }
         
         /// <summary>
@@ -216,9 +230,9 @@ namespace SamSoarII.Simulation.Core
             if (SimuStatus == SIMU_RUNNING)
                 return;
             // 开始仿真
-            SimuStatus = SIMU_RUNNING;
+            //SimuStatus = SIMU_RUNNING;
             dllmodel.Start();
-            UpdateStart();
+            //UpdateStart();
         }
         /// <summary>
         /// 暂停仿真
@@ -229,9 +243,9 @@ namespace SamSoarII.Simulation.Core
             if (SimuStatus == SIMU_PAUSE || SimuStatus == SIMU_STOP)
                 return;
             // 暂停仿真
-            SimuStatus = SIMU_PAUSE;
+            //SimuStatus = SIMU_PAUSE;
             dllmodel.Pause();
-            UpdateStop();
+            //UpdateStop();
         }
         /// <summary>
         /// 停止仿真
@@ -242,26 +256,9 @@ namespace SamSoarII.Simulation.Core
             if (SimuStatus == SIMU_STOP)
                 return;
             // 停止仿真
-            SimuStatus = SIMU_STOP;
+            //SimuStatus = SIMU_STOP;
             dllmodel.Abort();
-            UpdateStop();
-            // 初始化所有变量
-            int[] emptyBuffer = new int[8192];
-            long[] emptyBufferLong = new long[56];
-            for (int i = 0; i < emptyBuffer.Length; i++)
-            {
-                emptyBuffer[i] = 0;
-            }
-            dllmodel.SetValue_Bit("X0", 128, emptyBuffer);
-            dllmodel.SetValue_Bit("Y0", 128, emptyBuffer);
-            dllmodel.SetValue_Bit("M0", 256 << 5, emptyBuffer);
-            dllmodel.SetValue_Bit("C0", 256, emptyBuffer);
-            dllmodel.SetValue_Bit("T0", 256, emptyBuffer);
-            dllmodel.SetValue_Bit("S0", 32 << 5, emptyBuffer);
-            dllmodel.SetValue_Word("D0", 8192, emptyBuffer);
-            dllmodel.SetValue_Word("TV0", 256, emptyBuffer);
-            dllmodel.SetValue_Word("CV0", 200, emptyBuffer);
-            dllmodel.SetValue_DWord("CV200", 56, emptyBufferLong);
+            //UpdateStop();
         }
         #endregion
 
@@ -278,7 +275,7 @@ namespace SamSoarII.Simulation.Core
             UpdateStop();
             // 根据给定参数，创建新的模型
             SimulateVariableModel svmodel = SimulateVariableModel.Create(name, size, type);
-            vlist.AddLast(svmodel);
+            vlist.Add(svmodel);
             // 重启更新线程
             UpdateStart();
         }
@@ -291,7 +288,8 @@ namespace SamSoarII.Simulation.Core
             // 终止更新线程，防止资源冲突
             UpdateStop();
             // 添加变量模型
-            vlist.AddLast(svmodel);
+            if (!vlist.Contains(svmodel))
+                vlist.Add(svmodel);
             // 重启更新线程
             UpdateStart();
         }
@@ -301,6 +299,12 @@ namespace SamSoarII.Simulation.Core
         /// <param name="svunit">变量单元</param>
         public void Add(SimulateVariableUnit svunit)
         {
+            if (svunit is SimulateUnitSeries)
+            {
+                SimulateUnitSeries series = (SimulateUnitSeries)svunit;
+                Add(series.Model);
+                return;
+            }
             // 终止更新线程，防止资源冲突
             UpdateStop();
 
@@ -405,6 +409,13 @@ namespace SamSoarII.Simulation.Core
         /// <param name="svunit"></param>
         public void Remove(SimulateVariableUnit svunit)
         {
+            if (svunit is SimulateUnitSeries)
+            {
+                SimulateUnitSeries series = (SimulateUnitSeries)svunit;
+                Remove(series.Model);
+                return;
+            }
+
             // 终止更新线程，防止资源冲突
             UpdateStop();
 
@@ -783,9 +794,17 @@ namespace SamSoarII.Simulation.Core
                 SimulateDataModel sdmodel = vddict[name];
                 switch (sdmodel.Type)
                 {
-                    case "BIT": case "WORD": case "DWORD":
-                        vs = new IntSegment();
-                        vs.Value = int.Parse(args[2]);
+                    case "BIT": 
+                        vs = new BitSegment();
+                        vs.Value = Int32.Parse(args[2]);
+                        break;
+                    case "WORD":
+                        vs = new WordSegment();
+                        vs.Value = Int32.Parse(args[2]);
+                        break;
+                    case "DWORD":
+                        vs = new DWordSegment();
+                        vs.Value = Int64.Parse(args[2]);
                         break;
                     case "FLOAT":
                         vs = new FloatSegment();
@@ -818,25 +837,54 @@ namespace SamSoarII.Simulation.Core
         }
 
         #region Event Handler
-        public event SimulateDataModelEventHandler RunDataFinished;
-        private void OnRunDataFinished(object sender, SimulateDataModelEventArgs e)
+
+        #region Simulate Control
+        
+        private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
-            UpdateView(e.TimeStart, e.TimeEnd);
-            if (RunDataFinished != null)
-            {
-                RunDataFinished(this, e);
-            }
+            SimuStatus = SIMU_RUNNING;
+            UpdateStart();
         }
 
-        public event SimulateDataModelEventHandler RunDrawFinished;
-        private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
+        private void OnSimulatePause(object sender, RoutedEventArgs e)
         {
-            UpdateView(e.TimeStart, e.TimeEnd);
-            if (RunDrawFinished != null)
-            {
-                RunDrawFinished(this, e);
-            }
+            SimuStatus = SIMU_PAUSE;
+            UpdateStop();
         }
+
+        private void OnSimulateAbort(object sender, RoutedEventArgs e)
+        {
+            SimuStatus = SIMU_STOP;
+            UpdateStop();
+        }
+
+        private void OnSimulateException(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                Exception exc = (Exception)sender;
+                SimulateExceptionDialog dialog = new SimulateExceptionDialog();
+                dialog.TB_Message.Text = exc.Message;
+                dialog.B_Continue.Click += (_sender, _e) =>
+                {
+                    dllmodel.Start();
+                    dialog.Close();
+                };
+                dialog.B_Pause.Click += (_sender, _e) =>
+                {
+                    dllmodel.Pause();
+                    dialog.Close();
+                };
+                dialog.B_Abort.Click += (_sender, _e) =>
+                {
+                    dllmodel.Abort();
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            });
+        }
+
+        #endregion
 
         #endregion
 

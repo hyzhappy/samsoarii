@@ -11,6 +11,7 @@ namespace SamSoarII.ValueModel
         Bool = 0,
         DoubleWord = 1,
         Word = 2,
-        Float = 3
+        Float = 3,
+        String = 4
     }
 }

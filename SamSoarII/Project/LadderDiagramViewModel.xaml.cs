@@ -352,7 +352,7 @@ namespace SamSoarII.AppMain.Project
         #region JMP,LBL,FOR,NEXT instructions check
         public bool CheckProgramControlInstructions()
         {
-            List<BaseViewModel> eles = GetProgramControlViewModels();
+             List<BaseViewModel> eles = GetProgramControlViewModels();
             List<BaseViewModel> eles_for = eles.Where(x => { return x.GetType() == typeof(FORViewModel); }).ToList();
             List<BaseViewModel> eles_next = eles.Where(x => { return x.GetType() == typeof(NEXTViewModel); }).ToList();
             List<BaseViewModel> eles_jmp = eles.Where(x => { return x.GetType() == typeof(JMPViewModel); }).ToList();
@@ -1062,26 +1062,10 @@ namespace SamSoarII.AppMain.Project
         {
             IEnumerable<string> subdiagramNames = _projectModel.SubRoutines.Select(
                 (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName; });
-            IEnumerable<string[]> functionMessages = _projectModel.Funcs.Select(
-                (FuncModel fmodel) => 
-                {
-                    int argcount = 0;
-                    for (; argcount < 4; argcount++)
-                    {
-                        if (fmodel.GetArgName(argcount).Equals(String.Empty))
-                        {
-                            break;
-                        }
-                    }
-                    string[] result = new string[argcount*2+1];
-                    result[0] = fmodel.Name;
-                    for (int i = 0; i < argcount; i++)
-                    {
-                        result[i * 2 + 1] = fmodel.GetArgType(i);
-                        result[i * 2 + 2] = fmodel.GetArgName(i);
-                    }
-                    return result;
-                }
+            IEnumerable<string[]> functionMessages = _projectModel.Funcs.Where(
+                (FuncModel fmodel) => { return fmodel.CanCALLM(); }
+            ).Select(
+                (FuncModel fmodel) => { return fmodel.GetMessageList(); }
             );
             IEnumerable<string> modbusNames = _projectModel.MTVModel.Models.Select(
                 (ModbusTableModel mtmodel) => { return mtmodel.Name; });
@@ -1102,16 +1086,22 @@ namespace SamSoarII.AppMain.Project
                 BaseViewModel viewmodel;
                 try
                 {
-                    InstructionInput = dialog.InstructionInput.ToUpper().Trim().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                    InstructionInput = dialog.InstructionInput.Trim().Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                    for (int i = 0; i < InstructionInput.Count() ; i++)
+                    {
+                        if (InstructionInput[0].Equals("CALLM") && i == 1)
+                            continue;
+                        InstructionInput[i] = InstructionInput[i].ToUpper();
+                    }
                     if (InstructionInput.Count == 0)
                     {
-                        throw new InstructionExecption(string.Format("the input is empty"));
+                        throw new InstructionExecption(string.Format("输入为空."));
                     }
                     else
                     {
                         if (!LadderInstViewModelPrototype.CheckInstructionName(InstructionInput[0]))
                         {
-                            throw new InstructionExecption(string.Format("the instructionName is not exist!"));
+                            throw new InstructionExecption(string.Format("输入的指令不存在！"));
                         }
                     }
                     switch (InstructionInput[0])
@@ -1119,65 +1109,94 @@ namespace SamSoarII.AppMain.Project
                         case "CALL":
                             if (InstructionInput.Count() < 2)
                             {
-                                throw new FormatException("必须输入子程序名称。");
+                                throw new InstructionExecption("必须输入子程序名称。");
                             }
-                            selectedSubdiagram = _projectModel.SubRoutines.Where(
-                                (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName.Equals(InstructionInput[1]); }).First();
+                            try
+                            {
+                                selectedSubdiagram = _projectModel.SubRoutines.Where(
+                                    (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName.Equals(InstructionInput[1]); }).First();
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                throw new InstructionExecption(String.Format("找不到子程序{0:s}", InstructionInput[1]));
+                            }
                             break;
                         case "ATCH":
                             if (InstructionInput.Count() < 3)
                             {
-                                throw new FormatException("必须输入子程序名称。");
+                                throw new InstructionExecption("必须输入子程序名称。");
                             }
-                            selectedSubdiagram = _projectModel.SubRoutines.Where(
-                                (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName.Equals(InstructionInput[2]); }).First();
+                            try
+                            {
+                                selectedSubdiagram = _projectModel.SubRoutines.Where(
+                                    (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName.Equals(InstructionInput[2]); }).First();
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                throw new InstructionExecption(String.Format("找不到子程序{0:s}", InstructionInput[2]));
+                            }
                             break;
                         case "CALLM":
                             if (InstructionInput.Count() < 2)
                             {
                                 throw new FormatException("必须输入函数名称。");
                             }
-                            selectedFunction = _projectModel.Funcs.Where(
-                                (FuncModel fmodel) => { return fmodel.Name.Equals(InstructionInput[1]); }).First();
+                            try
+                            {
+                                selectedFunction = _projectModel.Funcs.Where(
+                                    (FuncModel fmodel) => { return fmodel.Name.Equals(InstructionInput[1]); }).First();
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                throw new InstructionExecption(String.Format("找不到C函数{0:s}", InstructionInput[1]));
+                            }
                             break;
                         case "MBUS":
                             if (InstructionInput.Count() < 3)
                             {
-                                throw new FormatException("必须输入MODBUS表格。");
+                                throw new InstructionExecption("必须输入MODBUS表格名称。");
                             }
-                            selectedModbus = _projectModel.MTVModel.Models.Where(
-                                (ModbusTableModel mtmodel) => { return mtmodel.Name.Equals(InstructionInput[2]); }).First();
+                            try
+                            {
+                                selectedModbus = _projectModel.MTVModel.Models.Where(
+                                    (ModbusTableModel mtmodel) => { return mtmodel.Name.Equals(InstructionInput[2]); }).First();
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                throw new InstructionExecption(String.Format("找不到MODBUS表格{0:s}", InstructionInput[2]));
+                            }
                             break;
                     }
-                    viewmodel = LadderInstViewModelPrototype.Clone(InstructionInput[0]);
-                    //InstructionInput.RemoveAt(0);
                     List<string> valueStrings = new List<string>();
-                    for (int i = 1; i < InstructionInput.Count(); i++)
+                    if (selectedFunction != null)
                     {
-                        string valueString = InstructionInput[i];
-                        valueStrings.Add(valueString);
-                        if (selectedFunction != null)
+                        ArgumentValue[] _values = new ArgumentValue[selectedFunction.ArgCount];
+                        if (InstructionInput.Count() - 2 != selectedFunction.ArgCount)
                         {
-                            if (i == 1)
+                            throw new FormatException("输入的参数数量与函数不相符！");
+                        }
+                        for (int i = 0; i < selectedFunction.ArgCount; i++)
+                        {
+                            string _name = InstructionInput[i + 2];
+                            string _argname = selectedFunction.GetArgName(i);
+                            string _argtype = selectedFunction.GetArgType(i);
+                            _values[i] = ArgumentValue.Create(_argname, _argtype, _name,
+                                PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                            if (ValueCommentManager.ContainValue(_name))
                             {
-                                valueStrings.Add(string.Empty);
-                            }
-                            else
-                            {
-                                if (ValueCommentManager.ContainValue(valueString))
-                                {
-                                    valueStrings.Add(ValueCommentManager.GetComment(valueString));
-                                }
-                                else
-                                {
-                                    valueStrings.Add(string.Empty);
-                                }
-                                valueStrings.Add(selectedFunction.GetArgType(i - 2));
-                                valueStrings.Add(selectedFunction.GetArgName(i - 2));
+                                _values[i].Comment = ValueCommentManager.GetComment(_name);
                             }
                         }
-                        else
+                        viewmodel = LadderInstViewModelPrototype.Clone("CALLM");
+                        ((CALLMViewModel)(viewmodel)).AcceptNewValues(selectedFunction.Name, _values);
+                    }
+                    else
+                    {
+                        viewmodel = LadderInstViewModelPrototype.Clone(InstructionInput[0]);
+                        for (int i = 1; i < InstructionInput.Count(); i++)
                         {
+                            string valueString = InstructionInput[i];
+                            valueStrings.Add(valueString);
                             if (ValueCommentManager.ContainValue(valueString))
                             {
                                 valueStrings.Add(ValueCommentManager.GetComment(valueString));
@@ -1187,21 +1206,14 @@ namespace SamSoarII.AppMain.Project
                                 valueStrings.Add(string.Empty);
                             }
                         }
-                    }
-                    if (selectedFunction != null)
-                    {
-                        for (int i = InstructionInput.Count() - 2; i < 4; i++)
+                        if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
                         {
-                            valueStrings.Add(String.Empty); // Value
-                            valueStrings.Add(String.Empty); // Comment
-                            valueStrings.Add(String.Empty); // ArgType
-                            valueStrings.Add(String.Empty); // ArgName
+                            viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                         }
-                        viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
-                    }
-                    if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
-                    {
-                        viewmodel.AcceptNewValues(valueStrings,PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                        else if (selectedFunction == null)
+                        {
+                            throw new InstructionExecption("输入的参数数量与指令不相符！");
+                        }
                     }
                     if (viewmodel.Type == LadderInstModel.ElementType.Output)
                     {
@@ -1240,10 +1252,6 @@ namespace SamSoarII.AppMain.Project
                     }
                     dialog.Close();
                 }
-                catch (FormatException exce1)
-                {
-                    MessageBox.Show(string.Format(exce1.Message));
-                }
                 catch (ValueParseException exce2)
                 {
                     MessageBox.Show(string.Format(exce2.Message));
@@ -1252,23 +1260,6 @@ namespace SamSoarII.AppMain.Project
                 {
                     MessageBox.Show(string.Format(exce3.Message));
                 }
-                /*
-                catch (InvalidOperationException exce4)
-                {
-                    switch (InstructionInput[0])
-                    {
-                        case "CALL":
-                            MessageBox.Show(String.Format("找不到子程序{0:s}", InstructionInput[1]));
-                            break;
-                        case "CALLM":
-                            MessageBox.Show(String.Format("找不到函数{0:s}", InstructionInput[1]));
-                            break;
-                        case "MBUS":
-                            MessageBox.Show(String.Format("找不到Modbus表格{0:s}", InstructionInput[2]));
-                            break;
-                    }
-                }
-                */
             };
             dialog.ShowDialog();
         }
@@ -2247,6 +2238,22 @@ namespace SamSoarII.AppMain.Project
                 net.IsSelectAllMode = true;
             }
         }
+
+        //public event ExecutedRoutedEventHandler FindCommandExecute = delegate { };
+        
+        private void OnFindCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            //FindCommandExecute(sender, e);   
+            ProjectModel.IFacade.MainWindow.LACFind.Show();
+        }
+
+        //public event ExecutedRoutedEventHandler ReplaceCommandExecute = delegate { };
+
+        private void OnReplaceCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            //ReplaceCommandExecute(sender, e);
+            ProjectModel.IFacade.MainWindow.LACReplace.Show();
+        }
         #endregion
 
         #region Command can execute
@@ -2292,6 +2299,16 @@ namespace SamSoarII.AppMain.Project
         private void RedoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _commandManager.CanRedo;
+        }
+
+        private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
 
         #endregion
@@ -2359,8 +2376,8 @@ namespace SamSoarII.AppMain.Project
                 _selectRectOwner = null;
             }
         }
+
         #endregion
-
-
+        
     }
 }

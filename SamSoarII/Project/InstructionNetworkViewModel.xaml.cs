@@ -118,40 +118,54 @@ namespace SamSoarII.AppMain.Project
 
         public void Update()
         {
-            NetworkHeader.Text = String.Format("Network{0:d}", lnvmodel.NetworkNumber);
+            int rowid = 0;
+            RowDefinition rdef;
+            NetworkHeader.Text = String.Format("Network {0:d}", lnvmodel?.NetworkNumber);
+            insts = new List<PLCOriginInst>();
             G_Inst.RowDefinitions.Clear();
             G_Inst.Children.Clear();
+            rdef = new RowDefinition();
+            rdef.Height = new GridLength(20);
+            TextBlock tberr = new TextBlock();
+            tberr.Background = Brushes.Red;
+            Grid.SetRow(tberr, 0);
+            Grid.SetColumn(tberr, 0);
+            Grid.SetColumnSpan(tberr, 6);
+            G_Inst.RowDefinitions.Add(rdef);
+            G_Inst.Children.Add(tberr);
             if (lnvmodel == null)
             {
+                tberr.Text = "找不到 Network。";
                 return;
             }
             this.lchart = GenerateHelper.CreateLadderChart(lnvmodel.GetElements().Union(lnvmodel.GetVerticalLines()));
             if (lchart.checkOpenCircuit())
             {
+                tberr.Text = String.Format("Network {0:d} 的梯形图存在断路错误！", lnvmodel.NetworkNumber);
                 networkInstsDict[lnvmodel] = null;
                 return;
             }
             this.lgraph = lchart.Generate();
             if (lgraph.checkShortCircuit())
             {
+                tberr.Text = String.Format("Network {0:d} 的梯形图存在短路错误！", lnvmodel.NetworkNumber);
                 networkInstsDict[lnvmodel] = null;
                 return;
             }
             if (lgraph.CheckFusionCircuit())
             {
+                tberr.Text = String.Format("Network {0:d} 的梯形图存在混连错误！", lnvmodel.NetworkNumber);
                 networkInstsDict[lnvmodel] = null;
                 return;
             }
             List<PLCInstruction> _insts = lgraph.GenInst();
             networkInstsDict[lnvmodel] = _insts;
-            insts = new List<PLCOriginInst>();
             foreach (PLCInstruction inst in _insts)
             {
                 insts.Add(inst.ToOrigin());
             }
-
-            int rowid = 0;
-            RowDefinition rdef;
+            G_Inst.RowDefinitions.Clear();
+            G_Inst.Children.Clear();
             instTextDict.Clear();
             foreach (PLCOriginInst inst in insts)
             {

@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserSetting>
+  <FavoritePages />
+  <RecentUsedProjectMessages>
+    <RecentUsedProjectMessage>
+      <Year>2017</Year>
+      <Month>4</Month>
+      <Day>28</Day>
+      <Hour>9</Hour>
+      <Minute>39</Minute>
+      <Second>58</Second>
+      <ProjectName>PROJ14</ProjectName>
+      <ProjectFullFileName>\\vmware-host\Shared Folders\桌面\samsoarii_previous\PROJ14.ssp</ProjectFullFileName>
+    </RecentUsedProjectMessage>
+    <RecentUsedProjectMessage>
+      <Year>2017</Year>
+      <Month>4</Month>
+      <Day>27</Day>
+      <Hour>14</Hour>
+      <Minute>32</Minute>
+      <Second>4</Second>
+      <ProjectName>PROJ13</ProjectName>
+      <ProjectFullFileName>\\vmware-host\Shared Folders\桌面\samsoarii_previous\PROJ13.ssp</ProjectFullFileName>
+    </RecentUsedProjectMessage>
+  </RecentUsedProjectMessages>
+  <SystemSetting>
+    <LadderOriginScaleX>0.38918918918918921</LadderOriginScaleX>
+    <LadderOriginScaleY>0.38918918918918921</LadderOriginScaleY>
+    <LadderScaleX>1</LadderScaleX>
+    <LadderScaleY>1</LadderScaleY>
+    <FuncBlockFontSize>16</FuncBlockFontSize>
+    <SelectedIndexOfFontSizeComboBox>10</SelectedIndexOfFontSizeComboBox>
+    <SelectedIndexOfFontFamilyComboBox>0</SelectedIndexOfFontFamilyComboBox>
+    <_A>255</_A>
+    <_R>0</_R>
+    <_G>0</_G>
+    <_B>0</_B>
+  </SystemSetting>
+  <SimulateSetting>
+    <ScanPeriodType>0</ScanPeriodType>
+    <ScanPeriodConst>1</ScanPeriodConst>
+    <ScanPeriodRate>400</ScanPeriodRate>
+    <ScanDataMaximum>65536</ScanDataMaximum>
+    <ScanLockMaximum>8</ScanLockMaximum>
+    <ScanViewMaximum>8</ScanViewMaximum>
+    <TimeRulerDivideNumber>20</TimeRulerDivideNumber>
+    <TimeRulerSubDivideNumber>5</TimeRulerSubDivideNumber>
+    <TimeRulerStart>0</TimeRulerStart>
+    <TimeRulerEnd>800</TimeRulerEnd>
+    <DrawAccurate>1024</DrawAccurate>
+    <DrawMaximum>8</DrawMaximum>
+    <DrawValueStart>0</DrawValueStart>
+    <DrawValueEnd>1000</DrawValueEnd>
+    <DrawValueDivide>50</DrawValueDivide>
+    <DrawValueSubDivide>2</DrawValueSubDivide>
+    <Brush1>#FF000000</Brush1>
+    <Brush2>#FFFF8C00</Brush2>
+    <Brush3>#FF00008B</Brush3>
+    <Brush4>#FF8A2BE2</Brush4>
+    <Brush5>#FF008B8B</Brush5>
+    <Brush6>#FFA9A9A9</Brush6>
+    <Brush7>#FFB8860B</Brush7>
+    <Brush8>#FF00CED1</Brush8>
+  </SimulateSetting>
+</UserSetting>

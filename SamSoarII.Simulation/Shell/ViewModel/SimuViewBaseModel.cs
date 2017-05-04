@@ -25,6 +25,11 @@ namespace SamSoarII.Simulation.Shell.ViewModel
         protected SimulateVariableUnit _args5;
         protected SimuArgsDialog dialog;
 
+        public SimulateModel SimuParent
+        {
+            get { return this._parent; }
+        }
+
         public virtual int X
         {
             get
@@ -169,7 +174,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             return svbmodel;
         }
 
-        protected void _SetDialogProperty(string[] labels, string[] values, string[] types)
+        protected void _SetDialogProperty(string[] labels, string[] values, string[] types, bool[] islocks)
         {
             for (int i = 0; i < labels.Length; i++)
             {
@@ -184,6 +189,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                 types[i] = (this[i + 1].CanLock)
                     ? this[i + 1].Type
                     : "READONLY";
+                islocks[i] = this[i + 1].Islocked;
             }
         }
 

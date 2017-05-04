@@ -62,7 +62,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         void SetupCloseTimer()
         {
             _closeTimer = new DispatcherTimer(DispatcherPriority.Background);
-            _closeTimer.Interval = TimeSpan.FromMilliseconds(1500);
+            _closeTimer.Interval = TimeSpan.FromMilliseconds(100);
             _closeTimer.Tick += (s, e) =>
             {
                 if (_manager.AutoHideWindow.IsWin32MouseOver ||

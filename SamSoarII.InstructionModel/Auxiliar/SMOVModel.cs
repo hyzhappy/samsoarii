@@ -37,5 +37,39 @@ namespace SamSoarII.LadderInstModel.Auxiliar
         {
             return String.Empty;
         }
+
+        public override int ParaCount
+        {
+            get
+            {
+                return 5;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            switch (id)
+            {
+                case 0: return SoruceValue;
+                case 1: return SourceStart;
+                case 2: return SourceCount;
+                case 3: return DestinationValue;
+                case 4: return DestinationStart;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters of instruction 'SMOV'", id));
+            }
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            switch (id)
+            {
+                case 0: SoruceValue = (WordValue)value; break;
+                case 1: SourceStart = (WordValue)value; break;
+                case 2: SourceCount = (WordValue)value; break;
+                case 3: DestinationValue = (WordValue)value; break;
+                case 4: DestinationStart = (WordValue)value; break;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters of instruction 'SMOV'", id));
+            }
+        }
     }
 }

@@ -31,5 +31,34 @@ namespace SamSoarII.LadderInstModel.Communication
         {
             return String.Empty;
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 3;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            switch (id)
+            {
+                case 0: return COMPort;
+                case 1: return BaseValue;
+                case 2: return CountValue;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            switch (id)
+            {
+                case 0: COMPort = (WordValue)value; break;
+                case 1: BaseValue = (WordValue)value; break;
+                case 2: CountValue = (WordValue)value; break;
+                default: throw new ArgumentOutOfRangeException(String.Format("Index {0:d} out of range for parameters", id));
+            }
+        }
     }
 }

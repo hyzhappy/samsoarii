@@ -130,13 +130,13 @@ void _plsy(uint32_t feq, uint32_t* pn, int32_t* out);
 // Extra message : Pulse number (64-bit integer)
 void _dplsy(uint64_t feq, uint64_t* pn, int32_t* out);
 // Create a segment-divided and linear-faded pulse by 32-bit parameter
-void _plsr(uint32_t* msg, uint32_t ct, int32_t* out);
+void _plsr(uint32_t* msg, int32_t ct, int32_t* out);
 // Create a segment-divided and linear-faded pulse by 64-bit parameter
-void _dplsr(uint64_t* msg, uint64_t ct, int32_t* out);
+void _dplsr(uint64_t* msg, int64_t ct, int32_t* out);
 // Create a segment-divided, linear-faded and oriented pulse by 32-bit parameter
-void _plsrd(uint32_t* msg, uint32_t ct, int32_t* out, int32_t* dir);
+void _plsrd(uint32_t* msg, int32_t ct, int32_t* out, int32_t* dir);
 // Create a segment-divided, linear-faded and oriented pulse by 64-bit parameter
-void _dplsrd(uint64_t* msg, uint64_t ct, int32_t* out, int32_t* dir);
+void _dplsrd(uint64_t* msg, int64_t ct, int32_t* out, int32_t* dir);
 // Move to next segment
 void _plsnext(int32_t* out);
 // Stop generating signal

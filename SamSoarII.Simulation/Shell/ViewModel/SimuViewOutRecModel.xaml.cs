@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Simulation.Core.VariableModel;
+using SamSoarII.Simulation.UI;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
 using System;
@@ -249,17 +250,37 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                  */
                 case "CALLM":
                     this[1] = new SimulateStringUnit(texts[1]);
-                    CFunction func = CFunctionManager.Get(texts[1]);
-                    if (func != null)
+                    IEnumerable<FuncHeaderModel> fit = SimuParent.AllFuncs.Headers.Where
+                    (
+                        (FuncHeaderModel _fhmodel) =>
+                        {
+                            return _fhmodel.Name.Equals(texts[1]);
+                        }
+                    );
+                    if (fit.Count() == 0)
                     {
-                        if (func.Arg1 != null)
-                            this[2] = _parent.GetVariableUnit(texts[2], func.Arg1.Type);
-                        if (func.Arg2 != null)
-                            this[3] = _parent.GetVariableUnit(texts[3], func.Arg2.Type);
-                        if (func.Arg3 != null)
-                            this[4] = _parent.GetVariableUnit(texts[4], func.Arg3.Type);
-                        if (func.Arg4 != null)
-                            this[5] = _parent.GetVariableUnit(texts[5], func.Arg4.Type);
+                        throw new ArgumentException(String.Format("Cannot found function {0:s}", texts[1]));
+                    }
+                    FuncHeaderModel fhmodel = fit.First();
+                    for (int i = 0; i < fhmodel.ArgCount; i++)
+                    {
+                        string type = fhmodel.GetArgType(i);
+                        switch (type)
+                        {
+                            case "_BIT*":
+                                type = "BIT";
+                                break;
+                            case "_WORD*":
+                                type = "WORD";
+                                break;
+                            case "D_WORD*":
+                                type = "DWORD";
+                                break;
+                            case "_FLOAT*":
+                                type = "FLOAT";
+                                break;
+                        }
+                        this[i + 2] = _parent.GetVariableUnit(texts[i + 2], type);
                     }
                     break;
                 // (rS)
@@ -387,6 +408,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             string[] labels = null;
             string[] values = null;
             string[] types = null;
+            bool[] islocks = null;
             switch (Inst)
             {
                 // (IN, OUT)
@@ -421,9 +443,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
+                    islocks = new bool[2];
                     labels[0] = "IN";
                     labels[1] = "OUT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (OUT1, OUT2)
                 case "XCH":
@@ -432,9 +455,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
+                    islocks = new bool[2];
                     labels[0] = "OUT1";
                     labels[1] = "OUT2";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (IN1, IN2, OUT)
                 case "ADD":
@@ -472,10 +496,11 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[3];
                     values = new string[3];
                     types = new string[3];
+                    islocks = new bool[3];
                     labels[0] = "IN1";
                     labels[1] = "IN2";
                     labels[2] = "OUT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (IN, IN1, IN2, OUT)
                 case "ZCP":
@@ -484,11 +509,12 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[4];
                     values = new string[4];
                     types = new string[4];
+                    islocks = new bool[4];
                     labels[0] = "IN";
                     labels[1] = "IN1";
                     labels[2] = "IN2";
                     labels[3] = "OUT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (S, D, CT)
                 case "MVBLK":
@@ -498,10 +524,11 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[3];
                     values = new string[3];
                     types = new string[3];
+                    islocks = new bool[3];
                     labels[0] = "S";
                     labels[1] = "D";
                     labels[2] = "CT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (TV, SV)
                 case "TON":
@@ -510,9 +537,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
+                    islocks = new bool[2];
                     labels[0] = "TV";
                     labels[1] = "SV";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (CV, SV)
                 case "CTU":
@@ -522,9 +550,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
+                    islocks = new bool[2];
                     labels[0] = "CV";
                     labels[1] = "TV";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (FEQ, OUT)
                 case "PLSF":
@@ -532,9 +561,10 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
+                    islocks = new bool[2];
                     labels[0] = "FEQ";
                     labels[1] = "OUT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (FEQ, DF, OUT)
                 case "PWM":
@@ -542,10 +572,11 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[3];
                     values = new string[3];
                     types = new string[3];
+                    islocks = new bool[3];
                     labels[0] = "FEQ";
                     labels[1] = "DF";
                     labels[2] = "OUT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 // (FEQ, PN, OUT)
                 case "PLSY":
@@ -553,15 +584,16 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[3];
                     values = new string[3];
                     types = new string[3];
+                    islocks = new bool[3];
                     labels[0] = "FEQ";
                     labels[1] = "PN";
                     labels[2] = "OUT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 default:
                     return;
             }
-            dialog = new SimuArgsDialog(labels, values, types);
+            dialog = new SimuArgsDialog(labels, values, types, islocks);
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.EnsureClick += OnDialogEnsureClicked;
             dialog.CancelClick += OnDialogCancelClicked;

@@ -56,31 +56,9 @@ namespace SamSoarII.Simulation.Core.DataModel
 
     }
 
-    public class IntSegment : ValueSegment
-    {
-        protected int value;
-        override public object Value
-        {
-            get
-            {
-                return this.value;
-            }
-            set
-            {
-                this.value = (int)(value);
-            }
-        }
-        public override ValueSegment Clone()
-        {
-            IntSegment iseg = new IntSegment();
-            iseg.Value = Value;
-            return _Clone(iseg);
-        }
-    }
-
     public class FloatSegment : ValueSegment
     {
-        protected float value;
+        protected double value;
         override public object Value
         {
             get
@@ -89,7 +67,7 @@ namespace SamSoarII.Simulation.Core.DataModel
             }
             set
             {
-                this.value = (float)(value);
+                this.value = (double)(value);
             }
         }
         public override ValueSegment Clone()
@@ -100,19 +78,70 @@ namespace SamSoarII.Simulation.Core.DataModel
         }
     }
     
-    public class BitSegment : IntSegment
+    public class BitSegment : ValueSegment
     {
-
+        protected Int32 value;
+        override public object Value
+        {
+            get
+            {
+                return this.value;
+            }
+            set
+            {
+                this.value = (Int32)(value);
+            }
+        }
+        public override ValueSegment Clone()
+        {
+            BitSegment bseg = new BitSegment();
+            bseg.Value = Value;
+            return _Clone(bseg);
+        }
     }
 
-    public class WordSegment : IntSegment
+    public class WordSegment : ValueSegment
     {
-
+        protected Int32 value;
+        override public object Value
+        {
+            get
+            {
+                return this.value;
+            }
+            set
+            {
+                this.value = (Int32)(value);
+            }
+        }
+        public override ValueSegment Clone()
+        {
+            WordSegment wseg = new WordSegment();
+            wseg.Value = Value;
+            return _Clone(wseg);
+        }
     }
 
-    public class DWordSegment : IntSegment
+    public class DWordSegment : ValueSegment
     {
-
+        protected Int64 value;
+        override public object Value
+        {
+            get
+            {
+                return this.value;
+            }
+            set
+            {
+                this.value = (Int64)(value);
+            }
+        }
+        public override ValueSegment Clone()
+        {
+            DWordSegment dseg = new DWordSegment();
+            dseg.Value = Value;
+            return _Clone(dseg);
+        }
     }
 
     public class ValueSegmentTimeComparer : IComparer<ValueSegment>

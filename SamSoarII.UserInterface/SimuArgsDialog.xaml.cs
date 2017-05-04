@@ -41,7 +41,8 @@ namespace SamSoarII.UserInterface
         public SimuArgsDialog(
             string[] labels, 
             string[] values, 
-            string[] types)
+            string[] types,
+            bool[] islocks)
         {
             bool[] canlocks = null;
             if (types != null)
@@ -69,7 +70,7 @@ namespace SamSoarII.UserInterface
                 TB_Arg5.Text = values[4];
                 TB_Arg5.IsEnabled = canlocks[4];
                 CB_Lock5.IsEnabled = canlocks[4];
-                CB_Lock5.IsChecked = canlocks[4];
+                CB_Lock5.IsChecked = islocks[4];
                 CB_Lock5.IsChecked |= (values[4].Length > 0);
             }
             if (labels == null || labels.Length < 4)
@@ -87,7 +88,7 @@ namespace SamSoarII.UserInterface
                 TB_Arg4.Text = values[3];
                 TB_Arg4.IsEnabled = canlocks[3];
                 CB_Lock4.IsEnabled = canlocks[3];
-                CB_Lock4.IsChecked = canlocks[3];
+                CB_Lock4.IsChecked = islocks[3];
                 CB_Lock4.IsChecked |= (values[3].Length > 0);
             }
             if (labels == null || labels.Length < 3)
@@ -105,7 +106,7 @@ namespace SamSoarII.UserInterface
                 TB_Arg3.Text = values[2];
                 TB_Arg3.IsEnabled = canlocks[2];
                 CB_Lock3.IsEnabled = canlocks[2];
-                CB_Lock3.IsChecked = canlocks[2];
+                CB_Lock3.IsChecked = islocks[2];
                 CB_Lock3.IsChecked |= (values[2].Length > 0);
             }
             if (labels == null || labels.Length < 2)
@@ -123,7 +124,7 @@ namespace SamSoarII.UserInterface
                 TB_Arg2.Text = values[1];
                 TB_Arg2.IsEnabled = canlocks[1];
                 CB_Lock2.IsEnabled = canlocks[1];
-                CB_Lock2.IsChecked = canlocks[1];
+                CB_Lock2.IsChecked = islocks[1];
                 CB_Lock2.IsChecked |= (values[1].Length > 0);
             }
             if (labels == null || labels.Length < 1)
@@ -141,7 +142,7 @@ namespace SamSoarII.UserInterface
                 TB_Arg1.Text = values[0];
                 TB_Arg1.IsEnabled = canlocks[0];
                 CB_Lock1.IsEnabled = canlocks[0];
-                CB_Lock1.IsChecked = canlocks[0];
+                CB_Lock1.IsChecked = islocks[0];
                 CB_Lock1.IsChecked |= (values[0].Length > 0);
             }
         }

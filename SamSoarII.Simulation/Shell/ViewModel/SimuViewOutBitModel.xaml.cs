@@ -133,6 +133,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
             string[] labels = null;
             string[] values = null;
             string[] types = null;
+            bool[] islocks = null;
             switch (Inst)
             {
                 // (OUT, CT)
@@ -140,19 +141,21 @@ namespace SamSoarII.Simulation.Shell.ViewModel
                     labels = new string[2];
                     values = new string[2];
                     types = new string[2];
+                    islocks = new bool[2];
                     labels[0] = "OUT";
                     labels[1] = "CT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
                 default:
                     labels = new string[1];
                     values = new string[1];
                     types = new string[1];
+                    islocks = new bool[1];
                     labels[0] = "OUT";
-                    _SetDialogProperty(labels, values, types);
+                    _SetDialogProperty(labels, values, types, islocks);
                     break;
             }
-            dialog = new SimuArgsDialog(labels, values, types);
+            dialog = new SimuArgsDialog(labels, values, types, islocks);
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.EnsureClick += OnDialogEnsureClicked;
             dialog.CancelClick += OnDialogCancelClicked;

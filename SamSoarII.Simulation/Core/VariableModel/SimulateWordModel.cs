@@ -11,11 +11,17 @@ namespace SamSoarII.Simulation.Core.VariableModel
 {
     public class SimulateWordUnit : SimulateVariableUnit
     {
-        protected int value;
+        protected Int32 value;
         override public Object Value
         {
             get { return (Object)(this.value); }
-            set { this.value = (int)(value); }
+            set
+            {
+                Int32 _value = this.value;
+                this.value = (Int32)(value);
+                if (_value != this.value)
+                    ValueChanged(this, new RoutedEventArgs());
+            }
         }
         public override string Type
         {
@@ -54,13 +60,9 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override void Update(SimulateDllModel dllmodel)
         {
+            if (Islocked) return;
             Int32[] ivalues = dllmodel.GetValue_Word(Name, 1);
-            Int32 value_old = value;
-            this.value = ivalues[0];
-            if (value_old != value)
-            {
-                ValueChanged(this, new RoutedEventArgs());
-            }
+            Value = ivalues[0];
         }
         public override void Set(SimulateDllModel dllmodel)
         {

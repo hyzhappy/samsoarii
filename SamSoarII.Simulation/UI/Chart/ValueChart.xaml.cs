@@ -88,7 +88,6 @@ namespace SamSoarII.Simulation.UI.Chart
             svcmodel.SDModelView += OnSDModelView;
             svcmodel.SDModelUnlock += OnSDModelUnlock;
             svcmodel.SDModelUnview += OnSDModelUnview;
-            svcmodel.RunDataFinished += OnRunDataFinished;
             truler = svcmodel.TRuler;
             truler.StartLineChanged += OnStartLineChanged;
             truler.EndLineChanged += OnEndLineChanged;
@@ -345,6 +344,7 @@ namespace SamSoarII.Simulation.UI.Chart
         }
 
         public event SimulateDataModelEventHandler XYModelCreate;
+
         private void OnRunDrawFinished(object sender, SimulateDataModelEventArgs e)
         {
             List<SimulateDataModel> views = new List<SimulateDataModel>();
@@ -362,7 +362,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 XYModelCreate(this, e);
             }
         }
-
+      
         private void OnStartLineChanged(object sender, RoutedEventArgs e)
         {
             if (sender is Line)
@@ -609,10 +609,13 @@ namespace SamSoarII.Simulation.UI.Chart
             double y2 = Math.Max(cssy, csey);
             y1 = Math.Max(((int)(y1)) / 40, 0) * 40;
             y2 = Math.Min(((int)(y2 + 40)) / 40, SDCModels.Count()) * 40;
-            Canvas.SetTop(Cursor, y1);
-            Canvas.SetLeft(Cursor, x1);
-            Cursor.Width = x2 - x1;
-            Cursor.Height = y2 - y1;
+            if (x2 - x1 > 0 && y2 - y1 > 0)
+            {
+                Canvas.SetTop(Cursor, y1);
+                Canvas.SetLeft(Cursor, x1);
+                Cursor.Width = x2 - x1;
+                Cursor.Height = y2 - y1;
+            }
             this.Focus();
         }
 
@@ -795,11 +798,19 @@ namespace SamSoarII.Simulation.UI.Chart
             switch (sdmodel.Type)
             {
                 case "BIT":
+                    BitSegment bseg = new BitSegment();
+                    bseg.Value = value;
+                    vseg = bseg;
+                    break;
                 case "WORD":
+                    WordSegment wseg = new WordSegment();
+                    wseg.Value = value;
+                    vseg = wseg;
+                    break;
                 case "DWORD":
-                    IntSegment iseg = new IntSegment();
-                    iseg.Value = value;
-                    vseg = iseg;
+                    DWordSegment dseg = new DWordSegment();
+                    dseg.Value = value;
+                    vseg = dseg;
                     break;
                 case "FLOAT":
                     FloatSegment fseg = new FloatSegment();

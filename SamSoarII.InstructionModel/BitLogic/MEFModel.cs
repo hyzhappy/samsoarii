@@ -8,21 +8,32 @@ namespace SamSoarII.LadderInstModel
 {
     public class MEFModel : BaseModel
     {
-        public BitValue Value { get; set; }
 
         public MEFModel()
         {
-            Value = BitValue.Null;
-        }
-
-        public MEFModel(BitValue value)
-        {
-            Value = value;
         }
 
         public override string GenerateCode()
         {
             throw new NotImplementedException();
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

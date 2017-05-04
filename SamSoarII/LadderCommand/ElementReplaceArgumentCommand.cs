@@ -1,4 +1,5 @@
 ﻿using SamSoarII.LadderInstViewModel;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,23 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Execute()
         {
-            bvmodel.AcceptNewValues(pstring_new, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+            if (bvmodel.InstructionName.Equals("CALLM"))
+            {
+                int argcount = (pstring_new.Count() - 2) / 4;
+                ArgumentValue[] _values = new ArgumentValue[argcount];
+                for (int i = 0; i < argcount; i++)
+                {
+                    _values[i] = ArgumentValue.Create(
+                        pstring_new[i * 4 + 3], pstring_new[i * 4 + 2], pstring_new[i * 4 + 4],
+                        PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    _values[i].Comment = pstring_new[i * 4 + 5];
+                }
+                ((CALLMViewModel)(bvmodel)).AcceptNewValues(pstring_new[0], _values);
+            }
+            else
+            {
+                bvmodel.AcceptNewValues(pstring_new, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+            }
         }
 
         public void Redo()
@@ -32,7 +49,23 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
-            bvmodel.AcceptNewValues(pstring_old, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+            if (bvmodel.InstructionName.Equals("CALLM"))
+            {
+                int argcount = (pstring_old.Count() - 2) / 4;
+                ArgumentValue[] _values = new ArgumentValue[argcount];
+                for (int i = 0; i < argcount; i++)
+                {
+                    _values[i] = ArgumentValue.Create(
+                        pstring_old[i * 4 + 2], pstring_old[i * 4 + 3], pstring_old[i * 4 + 4],
+                        PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    _values[i].Comment = pstring_old[i * 4 + 5];
+                }
+                   ((CALLMViewModel)(bvmodel)).AcceptNewValues(pstring_old[0], _values);
+            }
+            else
+            {
+                bvmodel.AcceptNewValues(pstring_old, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+            }
         }
     }
 }

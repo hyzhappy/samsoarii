@@ -89,6 +89,11 @@ namespace SamSoarII.AppMain.UI
         public void ShowItem(ITabItem item)
         {
             LayoutDocument ldoc = null;
+            if (item is UserControl)
+            {
+                UserControl uctrl = (UserControl)(item);
+                uctrl.GotFocus += OnTabGotFocus;
+            }
             if (!TabItemCollection.Contains(item))
             {
                 TabItemCollection.Add(item);
@@ -116,7 +121,7 @@ namespace SamSoarII.AppMain.UI
             SelectedItem = item;
             SelectedContentIndex = ldocid;
         }
-
+        
         public void CloseItem(ITabItem item)
         {
             if (_lDocDict.ContainsKey(item))
@@ -215,6 +220,8 @@ namespace SamSoarII.AppMain.UI
 
         public event SelectionChangedEventHandler SelectionChanged = delegate { };
 
+        public event RoutedEventHandler GotFocus = delegate { };
+
         private void OnActiveChanged(object sender, EventArgs e)
         {
             if (sender is LayoutDocument)
@@ -274,6 +281,12 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+
+        private void OnTabGotFocus(object sender, RoutedEventArgs e)
+        {
+            GotFocus(this, e);
+        }
+
         #endregion
     }
 }

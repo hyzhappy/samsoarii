@@ -16,5 +16,22 @@ namespace SamSoarII.LadderInstModel
         {
             return string.Format("uint32_t {0} = !{1};\r\n", ExportVaribleName, ImportVaribleName);
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

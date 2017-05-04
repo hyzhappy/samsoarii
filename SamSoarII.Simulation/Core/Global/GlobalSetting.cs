@@ -88,7 +88,7 @@ namespace SamSoarII.Simulation.Core.Global
             get { return RulerScaleTransform.ScaleX; }
             set { RulerScaleTransform.ScaleX = value; }
         }
-        
+
         public static double RulerScaleY
         {
             get { return RulerScaleTransform.ScaleY; }
@@ -96,7 +96,7 @@ namespace SamSoarII.Simulation.Core.Global
         }
 
         public static int FuncBlockFontSize { get; set; }
-        
+
         public const int SCANPERIOD_CONST = 0x00;
         public const int SCANPERIOD_RATE = 0x01;
         public static int ScanPeriodType { get; set; }
@@ -110,7 +110,7 @@ namespace SamSoarII.Simulation.Core.Global
         public static int TimeRulerSubDivideNumber { get; set; }
         public static int TimeRulerStart { get; set; }
         public static int TimeRulerEnd { get; set; }
-        
+
         public static int DrawAccurate { get; set; }
         public static int DrawMaximum { get; set; }
         public static SolidColorBrush[] DrawBrushes { get; set; }
@@ -118,7 +118,7 @@ namespace SamSoarII.Simulation.Core.Global
         public static int DrawValueSubDivide { get; set; }
         public static int DrawValueStart { get; set; }
         public static int DrawValueEnd { get; set; }
-        
+
         static GlobalSetting()
         {
             LadderScaleTransform = new ScaleTransform();
@@ -136,7 +136,7 @@ namespace SamSoarII.Simulation.Core.Global
             //LadderOriginScaleX = scale;
             //LadderOriginScaleY = scale;
         }
-        
+
         //public static void Save()
         //{
         //    var cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -192,7 +192,7 @@ namespace SamSoarII.Simulation.Core.Global
             }
             return rootNode;
         }
-        public static void LoadSystemSettingByXELement(XElement selfNode,XElement mainNode)
+        public static void LoadSystemSettingByXELement(XElement selfNode, XElement mainNode)
         {
             try
             {
@@ -261,7 +261,6 @@ namespace SamSoarII.Simulation.Core.Global
                 TimeRulerDivideNumber = 20;
                 TimeRulerSubDivideNumber = 5;
             }
-
             try
             {
                 TimeRulerStart = int.Parse(selfNode.Element("TimeRulerStart").Value);
@@ -272,7 +271,6 @@ namespace SamSoarII.Simulation.Core.Global
                 TimeRulerStart = 0;
                 TimeRulerEnd = 800;
             }
-
             try
             {
                 DrawValueStart = int.Parse(selfNode.Element("DrawValueStart").Value);
@@ -328,6 +326,8 @@ namespace SamSoarII.Simulation.Core.Global
         {
             return _loadScaleSuccessFlag;
         }
+   
+
         //public static void Load()
         //{
         //    try
@@ -442,7 +442,7 @@ namespace SamSoarII.Simulation.Core.Global
         //    {
         //        DrawMaximum = 8;
         //    }
-            
+
         //}
     }
 }

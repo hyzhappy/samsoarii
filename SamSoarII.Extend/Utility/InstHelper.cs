@@ -1147,12 +1147,12 @@ namespace SamSoarII.Extend.Utility
                             // 无参数的函数
                             if (inst[2].Equals(String.Empty))
                             {
-                                sw.Write("_USERFUNC_{0:s}();", inst[1]);
+                                sw.Write("{0:s}();", inst[1]);
                             }
                             // 至少存在一个参数
                             else
                             {
-                                sw.Write("_USERFUNC_{0:s}({1:s}", inst[1], inst[2]);
+                                sw.Write("{0:s}({1:s}", inst[1], inst[2]);
                                 for (int i = 3; i < 6; i++)
                                 {
                                     if (inst[i].Equals(String.Empty)) break;

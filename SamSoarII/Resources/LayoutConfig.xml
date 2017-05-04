@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LayoutSetting>
+  <DockWidth>
+    <KeyValuePair Key="工程资源管理器" Value="223" />
+    <KeyValuePair Key="仿真资源管理器" Value="240" />
+    <KeyValuePair Key="仿真监视" Value="415" />
+    <KeyValuePair Key="输出" Value="*" />
+    <KeyValuePair Key="查找" Value="240" />
+    <KeyValuePair Key="替换" Value="240" />
+  </DockWidth>
+  <DockHeight>
+    <KeyValuePair Key="工程资源管理器" Value="*" />
+    <KeyValuePair Key="仿真资源管理器" Value="*" />
+    <KeyValuePair Key="仿真监视" Value="*" />
+    <KeyValuePair Key="输出" Value="320" />
+    <KeyValuePair Key="查找" Value="*" />
+    <KeyValuePair Key="替换" Value="*" />
+  </DockHeight>
+  <Side>
+    <KeyValuePair Key="工程资源管理器" Value="LEFT" />
+    <KeyValuePair Key="仿真资源管理器" Value="LEFT" />
+    <KeyValuePair Key="仿真监视" Value="RIGHT" />
+    <KeyValuePair Key="输出" Value="BOTTOM" />
+    <KeyValuePair Key="查找" Value="LEFT" />
+    <KeyValuePair Key="替换" Value="LEFT" />
+  </Side>
+  <FloatWidth>
+    <KeyValuePair Key="工程资源管理器" Value="240" />
+    <KeyValuePair Key="仿真资源管理器" Value="240" />
+    <KeyValuePair Key="仿真监视" Value="240" />
+    <KeyValuePair Key="输出" Value="800" />
+    <KeyValuePair Key="查找" Value="240" />
+    <KeyValuePair Key="替换" Value="240" />
+  </FloatWidth>
+  <FloatHeight>
+    <KeyValuePair Key="工程资源管理器" Value="600" />
+    <KeyValuePair Key="仿真资源管理器" Value="600" />
+    <KeyValuePair Key="仿真监视" Value="600" />
+    <KeyValuePair Key="输出" Value="320" />
+    <KeyValuePair Key="查找" Value="600" />
+    <KeyValuePair Key="替换" Value="600" />
+  </FloatHeight>
+  <AutoHideWidth>
+    <KeyValuePair Key="工程资源管理器" Value="240" />
+    <KeyValuePair Key="仿真资源管理器" Value="240" />
+    <KeyValuePair Key="仿真监视" Value="508" />
+    <KeyValuePair Key="输出" Value="800" />
+    <KeyValuePair Key="查找" Value="240" />
+    <KeyValuePair Key="替换" Value="240" />
+  </AutoHideWidth>
+  <AutoHideHeight>
+    <KeyValuePair Key="工程资源管理器" Value="600" />
+    <KeyValuePair Key="仿真资源管理器" Value="600" />
+    <KeyValuePair Key="仿真监视" Value="600" />
+    <KeyValuePair Key="输出" Value="320" />
+    <KeyValuePair Key="查找" Value="600" />
+    <KeyValuePair Key="替换" Value="600" />
+  </AutoHideHeight>
+</LayoutSetting>

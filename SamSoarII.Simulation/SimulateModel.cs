@@ -23,6 +23,7 @@ using System.IO;
 using SamSoarII.Simulation.Core.Event;
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Base;
+using SamSoarII.UserInterface;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -46,6 +47,10 @@ namespace SamSoarII.Simulation
         /// 仿真管理器
         /// </summary>
         private SimulateManager smanager;
+        /// <summary>
+        /// dll模型
+        /// </summary>
+        private SimulateDllModel dllmodel;
         /// <summary>
         /// 所有元件单元的显示模型，已弃用
         /// </summary>
@@ -75,10 +80,6 @@ namespace SamSoarII.Simulation
             }
         }
         /// <summary>
-        /// 定时更新界面的线程
-        /// </summary>
-        private Thread UpdateThread;
-        /// <summary>
         /// 显示所有元件程序的界面
         /// </summary>
         public SimuViewAllDiaModel AllRoutine;
@@ -103,29 +104,25 @@ namespace SamSoarII.Simulation
         /// </summary>
         public SimuViewChartModel MainChart;
         /// <summary>
+        /// 图表的时间尺
+        /// </summary>
+        public TimeRuler TRuler;
+        /// <summary>
         /// 显示所有子图表的界面的列表
         /// </summary>
         public List<SimuViewTabModel> SubCharts;
-        /// <summary>
-        /// 仿真的主窗口，由于通过AvalonDock和软件窗口合并，故已弃用
-        /// </summary>
-        //public SimulateWindow MainWindow;
         /// <summary>
         /// 仿真的工程资源树界面
         /// </summary>
         public ProjectTreeView PTView;
         /// <summary>
-        /// 仿真的控制台界面
-        /// </summary>
-        public PLCTopPhoto PLCTopPhoto;
-        /// <summary>
         /// 监视变量的表格的界面
         /// </summary>
         public MonitorTable MTable;
         /// <summary>
-        /// LED灯显示的变量组模型
+        /// 显示图表绘制进度的窗口
         /// </summary>
-        public SimulateBitModel LEDBit;
+        private ProgressBarWindow pbwin;
         #endregion
 
         /// <summary>
@@ -201,8 +198,7 @@ namespace SamSoarII.Simulation
         public SimulateModel()
         {
             smanager = new SimulateManager();
-            //svmodels = new List<SimuViewBaseModel>();
-            //suvars = new SortedSet<SimulateVariableUnit>(new SimulateVariableUintComparer());
+            dllmodel = smanager.DllModel;
             smvars = new List<SimulateVariableUnit>();
             AllRoutine = null;
             MainRoutine = null;
@@ -210,11 +206,6 @@ namespace SamSoarII.Simulation
             AllFuncs = null;
             FuncBlocks = new List<SimuViewFuncBlockModel>();
             SubCharts = new List<SimuViewTabModel>();
-            //XYCharts = new List<SimuViewXYModel>();
-            LEDBit = new SimulateBitModel();
-            LEDBit.Base = "Y0";
-            LEDBit.Size = 8;
-            smanager.Add(LEDBit);
         }
 
         /// <summary>
@@ -229,20 +220,99 @@ namespace SamSoarII.Simulation
         }
 
         #region Event handler
-        /// <summary>
-        /// 关闭主窗口时发生（已弃用）
-        /// </summary>
-        /// <param name="sender">发送源</param>
-        /// <param name="e">事件</param>
-        private void OnMainWindowClosed(object sender, EventArgs e)
-        {
 
-            if (PLCTopPhoto.RunTrigger.Status == UI.PLCTop.Trigger.STATUS_RUN)
+        #region PointStart & PointEnd
+
+        public bool PointStartEnable { get; private set; }
+
+        public bool PointEndEnable { get; private set; }
+
+        private void OnPointStartEnable(object sender, RoutedEventArgs e)
+        {
+            PointStartEnable = true;
+            dllmodel.TimeStart = (int)TRuler.PointStart;
+            if (PointStartEnable && PointEndEnable)
             {
-                smanager.Stop();
+                dllmodel.SimuMode = SimulateDllModel.SIMUMODE_CHART;
             }
-            UpdateThread.Abort();
         }
+        
+        private void OnPointEndEnable(object sender, RoutedEventArgs e)
+        {
+            PointEndEnable = true;
+            dllmodel.TimeEnd = (int)TRuler.PointEnd;
+            if (PointStartEnable && PointEndEnable)
+            {
+                dllmodel.SimuMode = SimulateDllModel.SIMUMODE_CHART;
+            }
+        }
+
+        private void OnPointStartDisable(object sender, RoutedEventArgs e)
+        {
+            PointStartEnable = false;
+            dllmodel.SimuMode = SimulateDllModel.SIMUMODE_NORMAL;
+        }
+
+        private void OnPointEndDisable(object sender, RoutedEventArgs e)
+        {
+            PointEndEnable = false;
+            dllmodel.SimuMode = SimulateDllModel.SIMUMODE_NORMAL;
+        }
+
+        #endregion
+
+        #region Simulate Control
+
+        public event RoutedEventHandler SimulateStart = delegate { };
+
+        public event RoutedEventHandler SimulatePause = delegate { };
+
+        public event RoutedEventHandler SimulateAbort = delegate { };
+
+        private void OnSimulateStart(object sender, RoutedEventArgs e)
+        {
+            SimulateStart(this, e);
+            if (dllmodel.SimuMode == SimulateDllModel.SIMUMODE_CHART)
+            {
+                pbwin = new ProgressBarWindow("当前进度", "正在选定时间范围内运行，请稍后。。。");
+                pbwin.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                pbwin.ShowDialog();
+            }
+        }
+
+        private void OnSimulatePause(object sender, RoutedEventArgs e)
+        {
+            SimulatePause(this, e);
+        }
+
+        private void OnSimulateAbort(object sender, RoutedEventArgs e)
+        {
+            SimulateAbort(this, e);
+            if (dllmodel.SimuMode == SimulateDllModel.SIMUMODE_CHART)
+            {
+                if (pbwin != null)
+                {
+                    pbwin.Dispatcher.Invoke(
+                        () => { pbwin.Close(); });
+                    pbwin = null;
+                }
+                MainChart.Dispatcher.Invoke(
+                    MainChart.Update);
+            }
+        }
+
+        private void OnSimulateProgress(object sender, RoutedEventArgs e)
+        {
+            if (sender is double && pbwin != null)
+            {
+                double pvalue = (double)sender;
+                pbwin.Dispatcher.Invoke(
+                    () => { pbwin.Value = pvalue; });
+            }
+        }
+        
+        #endregion
+
         /// <summary>
         /// 将要打开tab子界面时触发的事件代理
         /// </summary>
@@ -324,11 +394,6 @@ namespace SamSoarII.Simulation
             if (sender is TreeViewItem)
             {
                 TreeViewItem tvi = sender as TreeViewItem;
-                if (tvi == PTView.TVI_AllRoutine)
-                {
-                    OnTabOpened(sender, new ShowTabItemEventArgs("所有程序"));
-                }
-                else
                 if (tvi == PTView.TVI_MainRoutine)
                 {
                     OnTabOpened(sender, new ShowTabItemEventArgs("主程序"));
@@ -512,25 +577,21 @@ namespace SamSoarII.Simulation
         /// </summary>
         private void BuildRouted()
         {
-            // 主窗口
-            //MainWindow.OpenChart += OnTabOpened;
-            //MainWindow.Closed += OnMainWindowClosed;
             // 项目树
             PTView = new ProjectTreeView();
             foreach (SimuViewDiagramModel svdmodel in SubRoutines)
             {
                 PTView.AddTreeViewItem(svdmodel.Name, ProjectTreeView.ADDTVI_TYPE_SUBROUTINES);
             }
+            PTView.AddTreeViewItem("所有函数", ProjectTreeView.ADDTVI_TYPE_FUNCBLOCKS);
             foreach (SimuViewFuncBlockModel svfmodel in FuncBlocks)
             {
                 PTView.AddTreeViewItem(svfmodel.Name, ProjectTreeView.ADDTVI_TYPE_FUNCBLOCKS);
             }
-            TreeViewItem tvi_arou = PTView.TVI_AllRoutine;
             TreeViewItem tvi_mrou = PTView.TVI_MainRoutine;
             TreeViewItem tvi_srou = PTView.TVI_SubRoutines;
             TreeViewItem tvi_fblo = PTView.TVI_FuncBlocks;
             TreeViewItem tvi_char = PTView.TVI_Chart;
-            tvi_arou.MouseDoubleClick += OnProjectTreeDoubleClicked;
             tvi_mrou.MouseDoubleClick += OnProjectTreeDoubleClicked;
             foreach (TreeViewItem tvi in tvi_srou.Items)
             {
@@ -541,10 +602,6 @@ namespace SamSoarII.Simulation
                 tvi.MouseDoubleClick += OnProjectTreeDoubleClicked;
             }
             tvi_char.MouseDoubleClick += OnProjectTreeDoubleClicked;
-            // 仿真模拟PLC控制器
-            PLCTopPhoto = new PLCTopPhoto();
-            PLCTopPhoto.RunTrigger.Run += PLCTopPhotoTriggerRun;
-            PLCTopPhoto.RunTrigger.Stop += PLCTopPhotoTriggerStop;
             // 监视列表的第一个空表单
             SimulateVInputUnit sviunit = new SimulateVInputUnit();
             smvars.Add(sviunit);
@@ -565,9 +622,20 @@ namespace SamSoarII.Simulation
             MainChart.SDModelDraw += OnSimulateDataModelDraw;
             MainChart.XYModelCreate += OnSimuViewXYModelCreate;
             MainChart.BuildRouted(this);
+            // 时间尺
+            TRuler = MainChart.TRuler;
+            TRuler.PointStartEnable += OnPointStartEnable;
+            TRuler.PointStartDisable += OnPointStartDisable;
+            TRuler.PointEndEnable += OnPointEndEnable;
+            TRuler.PointEndDisable += OnPointEndDisable;
             // 仿真管理器
-            smanager.RunDataFinished += OnRunDataFinished;
-            smanager.RunDrawFinished += OnRunDrawFinished;
+            //smanager.RunDataFinished += OnRunDataFinished;
+            //smanager.RunDrawFinished += OnRunDrawFinished;
+            // DLL模型
+            dllmodel.SimulateStart += OnSimulateStart;
+            dllmodel.SimulatePause += OnSimulatePause;
+            dllmodel.SimulateAbort += OnSimulateAbort;
+            dllmodel.SimulateProgress += OnSimulateProgress;
         }
         /// <summary>
         /// 建立与元件显示模型的事件连接
@@ -703,8 +771,6 @@ namespace SamSoarII.Simulation
                 {
                     // 没问题
                     case SimulateDllModel.LOADDLL_OK:
-                        // 初始化所有的数据点
-                        SimulateDllModel.InitDataPoint();
                         break;
                     // 各种错误
                     // 包括找不到dll，以及缺少函数入口
@@ -741,56 +807,26 @@ namespace SamSoarII.Simulation
                     case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETDOUBLE:
                         report.Text += "Error : 找不到入口SetDouble\r\n";
                         break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDBITDATAPOINT:
-                        report.Text += "Error : 找不到入口AddBitDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDWORDDATAPOINT:
-                        report.Text += "Error : 找不到入口AddWordDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDWORDDATAPOINT:
-                        report.Text += "Error : 找不到入口AddDWordDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDFLOATDATAPOINT:
-                        report.Text += "Error : 找不到入口AddFloatDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDDOUBLEATAPOINT:
-                        report.Text += "Error : 找不到入口AddDoubleDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEBITDATAPOINT:
-                        report.Text += "Error : 找不到入口RemoveBitDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEWORDDATAPOINT:
-                        report.Text += "Error : 找不到入口RemoveWordDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDWORDDATAPOINT:
-                        report.Text += "Error : 找不到入口RemoveDWordDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEFLOATDATAPOINT:
-                        report.Text += "Error : 找不到入口RemoveFloatDataPoint\r\n";
-                        break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEDOUBLEATAPOINT:
-                        report.Text += "Error : 找不到入口RemoveDoubleDataPoint\r\n";
-                        break;
                     case SimulateDllModel.LOADDLL_CANNOT_FOUND_BEFORERUNLADDER:
                         report.Text += "Error : 找不到入口BeforeRunLadder\r\n";
                         break;
                     case SimulateDllModel.LOADDLL_CANNOT_FOUND_AFTERRUNLADDER:
                         report.Text += "Error : 找不到入口AfterRunLadder\r\n";
                         break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWINPUT:
-                        report.Text += "Error : 找不到入口AddViewInput\r\n";
+                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_INITRUNLADDER:
+                        report.Text += "Error : 找不到入口InitRunLadder\r\n";
                         break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_ADDVIEWOUTPUT:
-                        report.Text += "Error : 找不到入口AddViewOutput\r\n";
+                    case SimulateDllModel.LOADDLL_CANNNT_FOUND_GETCLOCK:
+                        report.Text += "Error : 找不到入口GetClock\r\n";
                         break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_REMOVEVIEWINPUT:
-                        report.Text += "Error : 找不到入口RemoveViewInput\r\n";
+                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_INITCLOCK:
+                        report.Text += "Error : 找不到入口InitClock\r\n";
                         break;
-                    case SimulateDllModel.LOADDLL_CANNOT_FOUNd_REMOVEVIEWOUTPUT:
-                        report.Text += "Error : 找不到入口RemoveViewOutput\r\n";
+                    case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETCLOCKRATE:
+                        report.Text += "Error : 找不到入口SetClockRate\r\n";
                         break;
                     default:
-                        report.Text += "error : 发生未知错误\r\n";
+                        report.Text += "Error : 发生未知错误\r\n";
                         break;
                 }
             });

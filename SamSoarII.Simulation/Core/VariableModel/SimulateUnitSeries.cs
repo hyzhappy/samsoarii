@@ -48,6 +48,21 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         private SimulateVariableModel model;
 
+        public SimulateVariableModel Model
+        {
+            get { return this.model; }
+        }
+        
+        public string Base
+        {
+            get { return model.Base; }
+        }
+
+        public int Offset
+        {
+            get { return model.Offset; }
+        }
+        
         public override object Value
         {
             get

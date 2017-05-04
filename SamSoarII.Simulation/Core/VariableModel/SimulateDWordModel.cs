@@ -11,11 +11,17 @@ namespace SamSoarII.Simulation.Core.VariableModel
 {
     public class SimulateDWordUnit : SimulateVariableUnit
     {
-        protected long value;
+        protected Int64 value;
         override public Object Value
         {
-            get { return (Object)(this.value); }
-            set { this.value = (long)(value); }
+            get { return (Object)(this.value); }            
+			set
+            {
+                Int64 _value = this.value;
+                this.value = (Int64)(value);
+                if (_value != this.value)
+                    ValueChanged(this, new RoutedEventArgs());
+            }
         }
         public override string ToString()
         {
@@ -53,13 +59,9 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public override void Update(SimulateDllModel dllmodel)
         {
+			if (Islocked) return;
             Int64[] ivalues = dllmodel.GetValue_DWord(Name, 1);
-            Int64 value_old = value;
-            this.value = ivalues[0];
-            if (value_old != value)
-            {
-                ValueChanged(this, new RoutedEventArgs());
-            }
+            Value = ivalues[0];
         }
         public override void Set(SimulateDllModel dllmodel)
         {

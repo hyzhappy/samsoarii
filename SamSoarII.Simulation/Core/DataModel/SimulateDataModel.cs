@@ -66,7 +66,6 @@ namespace SamSoarII.Simulation.Core.DataModel
             }
         }
         
-        
         public SimulateDataModel()
         {
             values = new List<ValueSegment>();
@@ -84,8 +83,16 @@ namespace SamSoarII.Simulation.Core.DataModel
             ValueSegment vs;
             switch (Type)
             {
-                case "BIT": case "WORD": case "DWORD":
-                    vs = new IntSegment();
+                case "BIT": 
+                    vs = new BitSegment();
+                    vs.Value = 0;
+                    break;
+                case "WORD":
+                    vs = new WordSegment();
+                    vs.Value = 0;
+                    break;
+                case "DWORD":
+                    vs = new DWordSegment();
                     vs.Value = 0;
                     break;
                 case "FLOAT":
@@ -143,6 +150,119 @@ namespace SamSoarII.Simulation.Core.DataModel
             return new SimulateDataModel(svunit);
         }
 
+
+        #region Set & Update
+
+        private int CurrentIndex { get; set; }
+
+        private ValueSegment CurrentSegment
+        {
+            get
+            {
+                if (CurrentIndex < 0)
+                    return null;
+                if (CurrentIndex >= values.Count())
+                    return null;
+                return values[CurrentIndex];
+            }
+        }
+
+        public void Move(int time)
+        {
+            CurrentIndex = Math.Max(CurrentIndex, 0);
+            while (CurrentSegment != null
+                && CurrentSegment.TimeEnd < time)
+            {
+                CurrentIndex++;
+            }
+            CurrentIndex = Math.Min(CurrentIndex, values.Count() - 1);
+            while (CurrentSegment != null
+                && CurrentSegment.TimeStart > time)
+            {
+                CurrentIndex--;
+            }
+        }
+
+        public void Set(SimulateDllModel dllmodel, int time)
+        {
+            Move(time);
+            if (CurrentSegment != null
+             && CurrentSegment.TimeStart <= time
+             && CurrentSegment.TimeEnd >= time)
+            {
+                SVUnit.Value = CurrentSegment.Value;
+                SVUnit.Set(dllmodel);
+            }
+        }
+
+        public void Update(SimulateDllModel dllmodel, int time)
+        {
+            SVUnit.Update(dllmodel);
+            Move(time);
+            ValueSegment nseg = null;
+            if (CurrentSegment != null)
+            {
+                nseg = CurrentSegment;
+                if (time > nseg.TimeEnd)
+                {
+                    if (!SVUnit.Value.Equals(nseg.Value))
+                    {
+                        nseg = nseg.Clone();
+                        nseg.Value = SVUnit.Value;
+                        nseg.TimeStart = nseg.TimeEnd + 1;
+                        nseg.TimeEnd = time;
+                        values.Insert(CurrentIndex + 1, nseg);
+                    }
+                    else
+                    {
+                        nseg.TimeEnd = time;
+                    }
+                }
+                else if (time >= nseg.TimeStart && time <= nseg.TimeEnd)
+                {
+                    if (!SVUnit.Value.Equals(nseg.Value))
+                    {
+                        values.Remove(nseg);
+                        ValueSegment lseg = nseg.Clone();
+                        ValueSegment rseg = nseg.Clone();
+                        nseg = nseg.Clone();
+                        lseg.TimeEnd = time - 1;
+                        rseg.TimeStart = time + 1;
+                        nseg.TimeStart = nseg.TimeEnd = time;
+                        nseg.Value = SVUnit.Value;
+                        if (rseg.TimeEnd >= rseg.TimeStart)
+                            values.Insert(CurrentIndex, rseg);
+                        values.Insert(CurrentIndex, nseg);
+                        if (lseg.TimeEnd >= lseg.TimeStart)
+                            values.Insert(CurrentIndex, lseg);
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException(String.Format("Cannot get value segment related to time {0:d}", time));
+                }
+            }
+            else if (values.Count() == 0)
+            {
+                Init(time);
+                CurrentIndex = 0;
+                CurrentSegment.Value = SVUnit.Value;
+            }
+            else if (CurrentIndex < 0)
+            {
+                nseg = values.First().Clone();
+                nseg.Value = SVUnit.Value;
+                nseg.TimeStart = nseg.TimeEnd = time;
+                values.Insert(0, nseg);
+            }
+            else
+            {
+                throw new ArgumentException(String.Format("Cannot get value segment related to time {0:d}", time));
+            }
+        }
+
+        #endregion
+        
         #region XML
         public void SaveXml(XElement node_SDModel, int timestart, int timeend)
         {
@@ -200,8 +320,14 @@ namespace SamSoarII.Simulation.Core.DataModel
                 ValueSegment vs;
                 switch (Type)
                 {
-                    case "BIT": case "WORD": case "DWORD":
-                        vs = new IntSegment();
+                    case "BIT": 
+                        vs = new BitSegment();
+                        break;
+                    case "WORD":
+                        vs = new WordSegment();
+                        break;
+                    case "DWORD":
+                        vs = new DWordSegment();
                         break;
                     case "FLOAT":
                         vs = new FloatSegment();
@@ -233,14 +359,20 @@ namespace SamSoarII.Simulation.Core.DataModel
                 switch (Type)
                 {
                     case "BIT":
+                        vs = new BitSegment();
+                        vs.Value = (Int32)node_VS.Attribute("Value");
+                        break;
                     case "WORD":
+                        vs = new WordSegment();
+                        vs.Value = (Int32)node_VS.Attribute("Value");
+                        break;
                     case "DWORD":
-                        vs = new IntSegment();
-                        vs.Value = (int)(node_VS.Attribute("Value"));
+                        vs = new DWordSegment();
+                        vs.Value = (Int64)node_VS.Attribute("Value");
                         break;
                     case "FLOAT":
                         vs = new FloatSegment();
-                        vs.Value = (float)(node_VS.Attribute("Value"));
+                        vs.Value = (double)node_VS.Attribute("Value");
                         break;
                     default:
                         throw new FormatException();

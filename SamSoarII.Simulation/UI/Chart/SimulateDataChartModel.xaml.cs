@@ -131,7 +131,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 if (vts < rts) vts = rts;
                 if (vte > rte) vte = rte;
                 if (vts > vte) continue;
-                if (vs is IntSegment && sdmodel.Type.Equals("BIT"))
+                if (vs is BitSegment)
                 {
                     hline = new Line();
                     hline.X1 = ActualWidth * (vts - rts) / (rte - rts);

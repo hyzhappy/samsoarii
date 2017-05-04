@@ -80,6 +80,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         public string ProjectName { get; set; }
+        public InteractionFacade IFacade { get; set; }
         public LadderDiagramViewModel MainRoutine { get; set; }
         public ObservableCollection<LadderDiagramViewModel> SubRoutines { get; set; } = new ObservableCollection<LadderDiagramViewModel>();
         public ObservableCollection<TreeViewItem> SubRoutineTreeViewItems { get; set; } = new ObservableCollection<TreeViewItem>();
@@ -430,7 +431,6 @@ namespace SamSoarII.AppMain.Project
             string result = string.Empty;
             return result;
         }
-
 
     }
 }

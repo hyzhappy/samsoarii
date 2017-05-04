@@ -8,18 +8,33 @@ namespace SamSoarII.LadderInstModel
 {
     public class MEPModel : BaseModel
     {
-        public BitValue Value { get; set; }
         public MEPModel()
         {
-            Value = BitValue.Null;
         }
         public MEPModel(BitValue value)
         {
-            Value = value;
         }
         public override string GenerateCode()
         {
             throw new NotImplementedException();
         }
+        public override int ParaCount
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public override IValueModel GetPara(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetPara(int id, IValueModel value)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

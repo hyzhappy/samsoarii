@@ -136,16 +136,25 @@
       <DependentUpon>MonitorCloseButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorComboBox.cs" />
+    <Compile Include="UI\Monitor\MonitorDetailDialog.xaml.cs">
+      <DependentUpon>MonitorDetailDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Monitor\MonitorExpandButton.xaml.cs">
       <DependentUpon>MonitorExpandButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorLockButton.xaml.cs">
       <DependentUpon>MonitorLockButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Monitor\MonitorSeriesBox.xaml.cs">
+      <DependentUpon>MonitorSeriesBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Monitor\MonitorTable.xaml.cs">
       <DependentUpon>MonitorTable.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorTextBox.cs" />
+    <Compile Include="UI\SimulateExceptionDialog.xaml.cs">
+      <DependentUpon>SimulateExceptionDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\SimulateReportViewModel.xaml.cs">
       <DependentUpon>SimulateReportViewModel.xaml</DependentUpon>
     </Compile>
@@ -278,6 +287,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Monitor\MonitorDetailDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Monitor\MonitorExpandButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -286,7 +299,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Monitor\MonitorSeriesBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Monitor\MonitorTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SimulateExceptionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

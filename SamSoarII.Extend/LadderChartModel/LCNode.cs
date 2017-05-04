@@ -232,7 +232,6 @@ namespace SamSoarII.Extend.LadderChartModel
             get { return this.rnodeid; }
             set { this.rnodeid = value; }
         }
-
         /// <summary>
         /// 该元件的表达式模式（限逻辑元件）
         /// </summary>        

@@ -1,6 +1,7 @@
 ﻿using SamSoarII.PLCDevice;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,6 +99,20 @@ namespace SamSoarII.UserInterface
 
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
         {
+            if (File.Exists(PathContent + @"\" + NameContent + ".ssp"))
+            {
+                string title = "是否覆盖";
+                string text = String.Format("{0:s}在当前目录已经存在，是否覆盖？", NameContent);
+                MessageBoxResult mbret = MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                switch (mbret)
+                {
+                    case MessageBoxResult.Yes:
+                        break;
+                    case MessageBoxResult.No:
+                    case MessageBoxResult.Cancel:
+                        return;
+                }
+            }
             if(EnsureButtonClick != null)
             {
                 EnsureButtonClick.Invoke(this, new RoutedEventArgs());
