@@ -1,4 +1,5 @@
-﻿using SamSoarII.Extend.Utility;
+﻿using SamSoarII.AppMain.UI;
+using SamSoarII.Extend.Utility;
 using SamSoarII.LadderInstViewModel;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,7 @@ namespace SamSoarII.AppMain.Project
             invmodels.Add(invmodel);
         }
         
-        public IEnumerable<PLCOriginInst> Check()
+        public IEnumerable<ErrorReportElement> Check()
         {
             cvdict.Clear();
             tvdict.Clear();
@@ -109,16 +110,26 @@ namespace SamSoarII.AppMain.Project
             outdict.Clear();
             int forcount = 0;
             int stkcount = 0;
+            int outcount = 0;
             Match match = null;
 
             foreach (InstructionNetworkViewModel invmodel in invmodels)
             {
                 stkcount = 0;
+                outcount = 0;
                 if (invmodel.Status == InstructionNetworkViewModel.STATUS_OPEN
                  || invmodel.Status == InstructionNetworkViewModel.STATUS_SHORT
                  || invmodel.Status == InstructionNetworkViewModel.STATUS_FUSION)
                 {
                     continue;
+                }
+                foreach (PLCOriginInst inst in invmodel.Insts)
+                {
+                    if (inst.ProtoType is OutputBaseViewModel
+                     || inst.ProtoType is OutputRectBaseViewModel)
+                    {
+                        outcount++;
+                    }
                 }
                 foreach (PLCOriginInst inst in invmodel.Insts)
                 {
@@ -167,8 +178,8 @@ namespace SamSoarII.AppMain.Project
                                 _inst = cvdict[inst[1]];
                                 if (_inst.Status == PLCOriginInst.STATUS_ACCEPT)
                                 {
-                                    inst.Status = PLCOriginInst.STATUS_WARNING;
-                                    inst.Message = String.Format("计数器{0:s}被尝试在别的地方使用。", inst[1]);
+                                    _inst.Status = PLCOriginInst.STATUS_WARNING;
+                                    _inst.Message = String.Format("计数器{0:s}被尝试在别的地方使用。", inst[1]);
                                 }
                             }
                             break;
@@ -193,15 +204,30 @@ namespace SamSoarII.AppMain.Project
                                 _inst = tvdict[inst[1]];
                                 if (_inst.Status == PLCOriginInst.STATUS_ACCEPT)
                                 {
-                                    inst.Status = PLCOriginInst.STATUS_WARNING;
-                                    inst.Message = String.Format("计时器{0:s}被尝试在别的地方使用。", inst[1]);
+                                    _inst.Status = PLCOriginInst.STATUS_WARNING;
+                                    _inst.Message = String.Format("计时器{0:s}被尝试在别的地方使用。", inst[1]);
                                 }
                             }
                             break;
                         case "FOR":
+                            if (outcount > 1)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format("FOR指令不能和别的输出指令在同一个网络下使用。");
+                            }
                             forcount++;
                             break;
                         case "NEXT":
+                            if (stkcount > 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format("LBL指令不能带条件。");
+                            }
+                            if (outcount > 1)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format("NEXT指令不能和别的输出指令在同一个网络下使用。");
+                            }
                             if (forcount == 0)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
@@ -213,6 +239,16 @@ namespace SamSoarII.AppMain.Project
                             }
                             break;
                         case "LBL":
+                            if (stkcount > 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format("LBL指令不能带条件。");
+                            }
+                            if (outcount > 1)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format("LBL指令不能和别的输出指令在同一个网络下使用。");
+                            }
                             if (!lbdict.ContainsKey(inst[1]))
                             {
                                 lbdict.Add(inst[1], inst);
@@ -320,14 +356,14 @@ namespace SamSoarII.AppMain.Project
                 }
             }
 
-            List<PLCOriginInst> result = new List<PLCOriginInst>();
+            List<ErrorReportElement> result = new List<ErrorReportElement>();
             foreach (InstructionNetworkViewModel invmodel in invmodels)
             {
                 invmodel.UpdateCheck();
                 foreach (PLCOriginInst inst in invmodel.Insts)
                 {
                     if (inst.Status == PLCOriginInst.STATUS_ERROR)
-                        result.Add(inst);
+                        result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
                 }
             }
             foreach (InstructionNetworkViewModel invmodel in invmodels)
@@ -335,7 +371,7 @@ namespace SamSoarII.AppMain.Project
                 foreach (PLCOriginInst inst in invmodel.Insts)
                 {
                     if (inst.Status == PLCOriginInst.STATUS_WARNING)
-                        result.Add(inst);
+                        result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
                 }
             }
             return result;

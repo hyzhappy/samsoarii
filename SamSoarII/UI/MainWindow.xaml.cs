@@ -45,6 +45,7 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACFind { get; private set; }
         public LayoutAnchorControl LACReplace { get; private set; }
         public LayoutAnchorControl LACMainMonitor { get; private set; }
+        public LayoutAnchorControl LACErrorList { get; private set; }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
         {
@@ -59,6 +60,7 @@ namespace SamSoarII.AppMain.UI
             LAFind.Content = findwindow;
             ReplaceWindow replacewindow = new ReplaceWindow(_interactionFacade);
             LAReplace.Content = replacewindow;
+
         }
 
         private void InitializeAvalonDock()
@@ -74,6 +76,7 @@ namespace SamSoarII.AppMain.UI
             LACFind = LAFind.AnchorControl;
             LACReplace = LAReplace.AnchorControl;
             LACMainMonitor = LAMainMonitor.AnchorControl;
+            LACErrorList = LAErrorList.AnchorControl;
 
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LASimuProj);
@@ -82,6 +85,7 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
             InitializeAvalonDock(LAMainMonitor);
+            InitializeAvalonDock(LAErrorList);
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)

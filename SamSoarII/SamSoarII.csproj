@@ -147,6 +147,9 @@
     </Compile>
     <Compile Include="UI\ElementListHelp\ELementStackPanel.cs" />
     <Compile Include="UI\ElementListHelp\NavigateToNetworkEventArgs.cs" />
+    <Compile Include="UI\ErrorReportWindow.xaml.cs">
+      <DependentUpon>ErrorReportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\FindWindow.xaml.cs">
       <DependentUpon>FindWindow.xaml</DependentUpon>
     </Compile>
@@ -371,6 +374,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ElementList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ErrorReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -71,6 +71,11 @@ namespace SamSoarII.AppMain.Project
 
         private LadderNetworkViewModel lnvmodel;
 
+        public LadderNetworkViewModel LNVModel
+        {
+            get { return this.lnvmodel; }
+        }
+
         private LadderChart lchart;
 
         private LGraph lgraph;

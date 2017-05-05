@@ -50,6 +50,12 @@ namespace SamSoarII.AppMain
             get { return _mainWindow; }
         }
 
+        private ErrorReportWindow _erwindow;
+        public ErrorReportWindow ERWindow
+        {
+            get { return _erwindow; }
+        }
+
         public bool IsLadderMode
         {
             get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0; }
@@ -109,12 +115,19 @@ namespace SamSoarII.AppMain
             _mainTabControl = _mainWindow.MainTab;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             SimulateHelper.TabOpen += OnTabOpened;
+            _erwindow = new ErrorReportWindow(this);
+            mainwindow.LAErrorList.Content = _erwindow;
         }
 
         private void CheckLadderCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            List<PLCOriginInst> weinsts = new List<PLCOriginInst>();
-            IEnumerable<PLCOriginInst> _weinsts = null;
+            CheckLadder();
+        }
+
+        public bool CheckLadder()
+        {
+            List<ErrorReportElement> weinsts = new List<ErrorReportElement>();
+            IEnumerable<ErrorReportElement> _weinsts = null;
             _weinsts = _projectModel.MainRoutine.IDVModel.Check();
             weinsts.AddRange(_weinsts);
             foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
@@ -124,7 +137,8 @@ namespace SamSoarII.AppMain
             }
             int ecount = 0;
             int wcount = 0;
-            foreach (PLCOriginInst inst in weinsts)
+            bool result = false;
+            foreach (ErrorReportElement inst in weinsts)
             {
                 switch (inst.Status)
                 {
@@ -136,7 +150,6 @@ namespace SamSoarII.AppMain
                         break;
                 }
             }
-
             ErrorMessage errorMessage = LadderGraphCheckModule.Execute(CurrentLadder);
             if (errorMessage.Error == ErrorType.None
              || errorMessage.Error == ErrorType.InstPair)
@@ -146,15 +159,23 @@ namespace SamSoarII.AppMain
                     MessageBox.Show(
                         String.Format("程序存在{0:d}处错误，{1:d}处警告。",
                             ecount, wcount));
+                    result = (ecount == 0);
                 }
                 else
                 {
                     MessageBox.Show("程序正确!");
+                    result = true;
+                }
+                if (!result)
+                {
+                    _erwindow.Update(weinsts);
+                    _mainWindow.LACErrorList.Show();
                 }
             }
             else if (errorMessage.Error == ErrorType.Empty)
             {
                 MessageBox.Show(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber));
+                result = false;
             }
             else
             {
@@ -183,8 +204,11 @@ namespace SamSoarII.AppMain
                     default:
                         break;
                 }
+                result = false;
             }
+            return result;
         }
+
         private void CheckLadderCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = CurrentLadder != null;

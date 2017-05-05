@@ -226,7 +226,7 @@
                 </MenuItem>
                 <MenuItem Header="错误列表"></MenuItem>
                 <MenuItem Header="输出" Command="{x:Static app:GlobalCommand.ShowOutputCommand}"></MenuItem>
-                <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowMonitorCommand}"></MenuItem>
+                <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowSimuMonitorCommand}"></MenuItem>
                 <MenuItem Header="仿真图表"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)" Margin="0,-5,0,0">
@@ -420,6 +420,10 @@
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="LAOutput" Title="输出" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
                                 <proj:ReportOutputModel x:Name="OutputModel"/>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAErrorList" Title="错误列表" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
