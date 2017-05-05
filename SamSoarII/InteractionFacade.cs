@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using SamSoarII.ValueModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.AppMain.LadderGraphModule;
+using SamSoarII.Extend.Utility;
 
 namespace SamSoarII.AppMain
 {
@@ -27,7 +28,7 @@ namespace SamSoarII.AppMain
                 _projectModel.IsCommentMode = _isCommentMode;
             }
         }
-        
+
         private ProjectModel _projectModel;
         public ProjectModel ProjectModel
         {
@@ -112,18 +113,48 @@ namespace SamSoarII.AppMain
 
         private void CheckLadderCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ErrorMessage errorMessage = LadderGraphCheckModule.Execute(CurrentLadder);
-            if (errorMessage.Error == ErrorType.None)
+            List<PLCOriginInst> weinsts = new List<PLCOriginInst>();
+            IEnumerable<PLCOriginInst> _weinsts = null;
+            _weinsts = _projectModel.MainRoutine.IDVModel.Check();
+            weinsts.AddRange(_weinsts);
+            foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
             {
-                MessageBox.Show("程序正确!");
+                _weinsts = ldvmodel.IDVModel.Check();
+                weinsts.AddRange(_weinsts);
             }
-            else if (errorMessage.Error == ErrorType.InstPair)
+            int ecount = 0;
+            int wcount = 0;
+            foreach (PLCOriginInst inst in weinsts)
             {
-                MessageBox.Show("循环指令或跳转指令不匹配!");
+                switch (inst.Status)
+                {
+                    case PLCOriginInst.STATUS_WARNING:
+                        wcount++;
+                        break;
+                    case PLCOriginInst.STATUS_ERROR:
+                        ecount++;
+                        break;
+                }
+            }
+
+            ErrorMessage errorMessage = LadderGraphCheckModule.Execute(CurrentLadder);
+            if (errorMessage.Error == ErrorType.None
+             || errorMessage.Error == ErrorType.InstPair)
+            {
+                if (weinsts.Count() > 0)
+                {
+                    MessageBox.Show(
+                        String.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                            ecount, wcount));
+                }
+                else
+                {
+                    MessageBox.Show("程序正确!");
+                }
             }
             else if (errorMessage.Error == ErrorType.Empty)
             {
-                MessageBox.Show(string.Format("网络{0}元素为空!",errorMessage.RefNetworks.First().NetworkNumber));
+                MessageBox.Show(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber));
             }
             else
             {
@@ -163,7 +194,7 @@ namespace SamSoarII.AppMain
         {
             if (CurrentLadder.SelectionStatus == SelectStatus.SingleSelected)
             {
-                CurrentLadder.NetworkRemoveRow(CurrentLadder.SelectRectOwner,CurrentLadder.SelectionRect.Y);
+                CurrentLadder.NetworkRemoveRow(CurrentLadder.SelectRectOwner, CurrentLadder.SelectionRect.Y);
             }
             else
             {
@@ -175,7 +206,7 @@ namespace SamSoarII.AppMain
                     }
                     else
                     {
-                        CurrentLadder.NetworkRemoveRows(CurrentLadder.SelectStartNetwork,Math.Min(CurrentLadder.SelectStartNetwork.SelectAreaFirstY,CurrentLadder.SelectStartNetwork.SelectAreaSecondY),Math.Abs(CurrentLadder.SelectStartNetwork.SelectAreaFirstY - CurrentLadder.SelectStartNetwork.SelectAreaSecondY) + 1);
+                        CurrentLadder.NetworkRemoveRows(CurrentLadder.SelectStartNetwork, Math.Min(CurrentLadder.SelectStartNetwork.SelectAreaFirstY, CurrentLadder.SelectStartNetwork.SelectAreaSecondY), Math.Abs(CurrentLadder.SelectStartNetwork.SelectAreaFirstY - CurrentLadder.SelectStartNetwork.SelectAreaSecondY) + 1);
                     }
                 }
             }
@@ -193,7 +224,7 @@ namespace SamSoarII.AppMain
         }
         private void InsertRowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CurrentLadder.NetworkAddRow(CurrentLadder.SelectRectOwner,CurrentLadder.SelectionRect.Y + 1);
+            CurrentLadder.NetworkAddRow(CurrentLadder.SelectRectOwner, CurrentLadder.SelectionRect.Y + 1);
         }
         private void InsertRowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -307,14 +338,14 @@ namespace SamSoarII.AppMain
         {
             foreach (var hline in network.GetSelectedHLines())
             {
-                network.RemoveElement(hline.X,hline.Y);
+                network.RemoveElement(hline.X, hline.Y);
             }
         }
         public void RemoveNetworkVLines(LadderNetworkViewModel network)
         {
             foreach (var vline in network.GetSelectedVerticalLines())
             {
-                network.RemoveVerticalLine(vline.X,vline.Y);
+                network.RemoveVerticalLine(vline.X, vline.Y);
             }
         }
         public MessageBoxResult ShowSaveYesNoCancelDialog()

@@ -46,17 +46,14 @@
                   RowBackground="White" AlternatingRowBackground="AliceBlue"
                   SelectionChanged="DG_List_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="DGTC_Detail" Binding="{Binding Detail}"
+                <DataGridTextColumn x:Name="DGTC_Detail" IsReadOnly="True" Binding="{Binding Detail}"
                                     Header="元件" Width="*">
-
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_Diagram" Binding="{Binding Diagram}"
+                <DataGridTextColumn x:Name="DGTC_Diagram" IsReadOnly="True" Binding="{Binding Diagram}"
                                     Header="程序" Width="80">
-
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_Network" Binding="{Binding Network}"
+                <DataGridTextColumn x:Name="DGTC_Network" IsReadOnly="True" Binding="{Binding Network}"
                                     Header="网络" Width="40">
-                    
                 </DataGridTextColumn>
             </DataGrid.Columns>
 

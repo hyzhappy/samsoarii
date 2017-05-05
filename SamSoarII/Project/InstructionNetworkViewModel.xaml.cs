@@ -61,13 +61,27 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private LadderNetworkViewModel lnvmodel;
-        private LadderChart lchart;
-        private LGraph lgraph;
-        private List<PLCOriginInst> insts;
-        private Dictionary<LadderNetworkViewModel, List<PLCInstruction>> networkInstsDict;
-        private Dictionary<IntPoint, TextBlock> instTextDict;
+        public const int STATUS_ACCEPT = 0x00;
+        public const int STATUS_OPEN = 0x01;
+        public const int STATUS_SHORT = 0x02;
+        public const int STATUS_FUSION = 0x03;
+        public const int STATUS_WARNING = 0x04;
+        public const int STATUS_ERROR = 0x05;
+        public int Status { get; private set; }
 
+        private LadderNetworkViewModel lnvmodel;
+
+        private LadderChart lchart;
+
+        private LGraph lgraph;
+
+        private List<PLCOriginInst> insts;
+
+        public IEnumerable<PLCOriginInst> Insts
+        {
+            get { return this.insts; }
+        }
+        
         public LadderNetworkViewModel LadderNetwork
         {
             get { return this.lnvmodel; }
@@ -91,8 +105,6 @@ namespace SamSoarII.AppMain.Project
         {
             InitializeComponent();
             lnvmodel = null;
-            networkInstsDict = new Dictionary<LadderNetworkViewModel, List<PLCInstruction>>();
-            instTextDict = new Dictionary<IntPoint, TextBlock>();
         }
         
         public void Setup(LadderNetworkViewModel _lnvmodel)
@@ -102,10 +114,6 @@ namespace SamSoarII.AppMain.Project
             this.lnvmodel = _lnvmodel;
             lnvmodel.ElementChanged += OnElementChanged;
             lnvmodel.VerticalLineChanged += OnVerticalLineChanged;
-            if (!networkInstsDict.ContainsKey(lnvmodel))
-            {
-                networkInstsDict.Add(lnvmodel, null);
-            }
             Update();
         }
 
@@ -135,38 +143,38 @@ namespace SamSoarII.AppMain.Project
             G_Inst.Children.Add(tberr);
             if (lnvmodel == null)
             {
+                Status = STATUS_ERROR;
                 tberr.Text = "找不到 Network。";
                 return;
             }
             this.lchart = GenerateHelper.CreateLadderChart(lnvmodel.GetElements().Union(lnvmodel.GetVerticalLines()));
             if (lchart.checkOpenCircuit())
             {
+                Status = STATUS_OPEN;
                 tberr.Text = String.Format("Network {0:d} 的梯形图存在断路错误！", lnvmodel.NetworkNumber);
-                networkInstsDict[lnvmodel] = null;
                 return;
             }
             this.lgraph = lchart.Generate();
             if (lgraph.checkShortCircuit())
             {
+                Status = STATUS_SHORT;
                 tberr.Text = String.Format("Network {0:d} 的梯形图存在短路错误！", lnvmodel.NetworkNumber);
-                networkInstsDict[lnvmodel] = null;
                 return;
             }
             if (lgraph.CheckFusionCircuit())
             {
+                Status = STATUS_FUSION;
                 tberr.Text = String.Format("Network {0:d} 的梯形图存在混连错误！", lnvmodel.NetworkNumber);
-                networkInstsDict[lnvmodel] = null;
                 return;
             }
+            Status = STATUS_ACCEPT;
             List<PLCInstruction> _insts = lgraph.GenInst();
-            networkInstsDict[lnvmodel] = _insts;
             foreach (PLCInstruction inst in _insts)
             {
                 insts.Add(inst.ToOrigin());
             }
             G_Inst.RowDefinitions.Clear();
             G_Inst.Children.Clear();
-            instTextDict.Clear();
             foreach (PLCOriginInst inst in insts)
             {
                 rdef = new RowDefinition();
@@ -188,11 +196,74 @@ namespace SamSoarII.AppMain.Project
                     Grid.SetRow(tb, rowid);
                     Grid.SetColumn(tb, colid);
                     G_Inst.Children.Add(tb);
-                    IntPoint ip = new IntPoint();
-                    ip.X = colid;
-                    ip.Y = rowid;
-                    instTextDict.Add(ip, tb);
                 }
+                rowid++;
+            }
+            rdef = new RowDefinition();
+            rdef.Height = new GridLength(1, GridUnitType.Star);
+            G_Inst.RowDefinitions.Add(rdef);
+            G_Inst.Children.Add(Cursor);
+        }
+
+        public void UpdateCheck()
+        {
+            foreach (PLCOriginInst inst in insts)
+            {
+                switch (inst.Status)
+                {
+                    case PLCOriginInst.STATUS_WARNING:
+                        Status = STATUS_WARNING;
+                        break;
+                    case PLCOriginInst.STATUS_ERROR:
+                        Status = STATUS_ERROR;
+                        break;
+                }
+                if (Status == STATUS_ERROR)
+                {
+                    break;
+                }
+            }
+            int rowid = 0;
+            RowDefinition rdef;
+            G_Inst.RowDefinitions.Clear();
+            G_Inst.Children.Clear();
+            foreach (PLCOriginInst inst in insts)
+            {
+                rdef = new RowDefinition();
+                rdef.Height = new GridLength(20);
+                G_Inst.RowDefinitions.Add(rdef);
+                TextBlock tb = new TextBlock();
+                tb.Text = rowid.ToString();
+                tb.Foreground = inst.ProtoType != null ? Brushes.Black : Brushes.Gray;
+                tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
+                Grid.SetRow(tb, rowid);
+                Grid.SetColumn(tb, 0);
+                G_Inst.Children.Add(tb);
+                for (int colid = 1; colid <= 6; colid++)
+                {
+                    tb = new TextBlock();
+                    tb.Text = inst[colid - 1];
+                    tb.Foreground = inst.ProtoType != null ? Brushes.Black : Brushes.Gray;
+                    tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
+                    switch (inst.Status)
+                    {
+                        case PLCOriginInst.STATUS_WARNING:
+                            tb.Background = Brushes.LightYellow;
+                            break;
+                        case PLCOriginInst.STATUS_ERROR:
+                            tb.Background = Brushes.Red;
+                            break;
+                    }
+                    Grid.SetRow(tb, rowid);
+                    Grid.SetColumn(tb, colid);
+                    G_Inst.Children.Add(tb);
+                }
+                tb = new TextBlock();
+                tb.Text = inst.Message;
+                tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
+                Grid.SetRow(tb, rowid);
+                Grid.SetColumn(tb, 7);
+                G_Inst.Children.Add(tb);
                 rowid++;
             }
             rdef = new RowDefinition();

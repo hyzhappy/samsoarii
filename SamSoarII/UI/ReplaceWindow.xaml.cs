@@ -44,9 +44,10 @@ namespace SamSoarII.AppMain.UI
                 return this.items;
             }
         }
-
+        
         public const int MODE_CURRENT = 0x00;
         public const int MODE_ALL = 0x01;
+        public const int MODE_MULTIPLY = 0x02;
         private int mode;
         public int Mode
         {
@@ -62,7 +63,7 @@ namespace SamSoarII.AppMain.UI
         private ReplaceFormat RF_Input { get; set; } = new ReplaceFormat();
 
         private ReplaceFormat RF_Change { get; set; } = new ReplaceFormat();
-
+        
         #endregion
 
         public ReplaceWindow(InteractionFacade _parent)
@@ -72,7 +73,7 @@ namespace SamSoarII.AppMain.UI
             parent = _parent;
             Mode = MODE_CURRENT;
         }
-
+        
         private void Find()
         {
             string text = TB_Input.Text;
@@ -83,11 +84,16 @@ namespace SamSoarII.AppMain.UI
             {
                 case MODE_CURRENT:
                     ITabItem currenttab = parent.MainTabControl.CurrentTab;
-                    if (!(currenttab is MainTabDiagramItem))
-                        break;
-                    MainTabDiagramItem mtditem = (MainTabDiagramItem)currenttab;
-                    LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(mtditem.LAP_Ladder.Children.First().Content);
-                    Find(ldvmodel, args);
+                    if (currenttab is MainTabDiagramItem)
+                    {
+                        MainTabDiagramItem mtditem = (MainTabDiagramItem)currenttab;
+                        LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(mtditem.LAP_Ladder.Children.First().Content);
+                        Find(ldvmodel, args);
+                    }
+                    if (currenttab is LadderDiagramViewModel)
+                    {
+                        Find((LadderDiagramViewModel)currenttab, args);
+                    }
                     break;
                 case MODE_ALL:
                     ProjectModel pmodel = parent.ProjectModel;
@@ -103,7 +109,6 @@ namespace SamSoarII.AppMain.UI
 
         private void Find(LadderDiagramViewModel ldvmodel, string[] args)
         {
-            bool check = false;
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
                 foreach (BaseViewModel bvmodel in lnvmodel.GetElements())
@@ -132,7 +137,7 @@ namespace SamSoarII.AppMain.UI
             string errormsg = String.Empty;
             NetworkReplaceElementsCommandGroup commandall = new NetworkReplaceElementsCommandGroup();
 
-            foreach (ReplaceElement rele in Items)
+            foreach (ReplaceElement rele in DG_List.SelectedItems)
             {
                 BaseViewModel bvmodel = rele.BVModel;
                 //BaseModel bmodel = bvmodel.Model;
@@ -176,6 +181,7 @@ namespace SamSoarII.AppMain.UI
 
             Find();
         }
+        
 
         #region Event Handler
 
@@ -264,16 +270,28 @@ namespace SamSoarII.AppMain.UI
         {
             _cmdmanager.Redo();
         }
-
+        
         private void OnConfigClick(object sender, RoutedEventArgs e)
         {
-            
+            G_Main.Visibility = Visibility.Hidden;
+            G_Config.Visibility = Visibility.Visible;
+        }
+        
+        private void BC_Ensure_Click(object sender, RoutedEventArgs e)
+        {
+            G_Main.Visibility = Visibility.Visible;
+            G_Config.Visibility = Visibility.Hidden;
+        }
+
+        private void BC_Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            G_Main.Visibility = Visibility.Visible;
+            G_Config.Visibility = Visibility.Hidden;
         }
 
         #endregion
-
     }
-    
+
     public class ReplaceFormat
     {
         public const int TYPE_INVALID = 0x00;
@@ -675,7 +693,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         #region Event Handler
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
         #endregion
     }
 }

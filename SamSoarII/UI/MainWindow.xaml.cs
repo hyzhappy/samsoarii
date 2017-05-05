@@ -115,7 +115,31 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (_interactionFacade.ProjectModel != null
+             && _interactionFacade.ProjectModel.IsModify)
+            {
+                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                switch (mbret)
+                {
+                    case MessageBoxResult.Yes:
+                        OnSaveProjectExecute(this, new RoutedEventArgs());
+                        _interactionFacade.ProjectModel.IsModify = false;
+                        break;
+                    case MessageBoxResult.No:
+                        _interactionFacade.ProjectModel.IsModify = false;
+                        break;
+                    case MessageBoxResult.Cancel:
+                    default:
+                        e.Cancel = true;
+                        return;
+                }
+            }
+            base.OnClosing(e);
+        }
+
 
         protected override void OnClosed(EventArgs e)
         {
