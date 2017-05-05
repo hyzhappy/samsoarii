@@ -1843,6 +1843,7 @@ namespace SamSoarII.AppMain.Project
 
         private void OnLadderDiagramMouseDown(object sender, MouseButtonEventArgs e)
         {
+            
             this.Focus();
             Keyboard.Focus(this);
             if(e.LeftButton == MouseButtonState.Pressed)
@@ -1853,6 +1854,12 @@ namespace SamSoarII.AppMain.Project
 
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
         {
+            Point _p = e.GetPosition(this);
+            if (_p.X > _actualWidth - 30
+             || _p.Y > _actualHeight - 30)
+            {
+                return;
+            }
             if(_selectStatus == SelectStatus.SingleSelected)
             {
                 if (IsPressingCtrl)
