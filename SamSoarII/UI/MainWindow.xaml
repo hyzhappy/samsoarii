@@ -36,6 +36,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="ShowMainMonitorCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOutputCommand}" Executed="OnShowOutputCommand" CanExecute="ShowOutputCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogExecute" CanExecute="ShowCommunicationSettingDialogCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" Executed="OnShowErrorListExecute" CanExecute="ShowErrorListCanExecute"></CommandBinding>
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
@@ -48,6 +49,7 @@
         <!-- Tool Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
         <CommandBinding x:Name="CheckLadderCommand" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></CommandBinding>
+        <CommandBinding x:Name="CheckFuncBlockCommand" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.MonitorCommand}"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
@@ -224,7 +226,7 @@
                         <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="错误列表"></MenuItem>
+                <MenuItem Header="错误列表" Command="{x:Static app:GlobalCommand.ShowErrorListCommand}"></MenuItem>
                 <MenuItem Header="输出" Command="{x:Static app:GlobalCommand.ShowOutputCommand}"></MenuItem>
                 <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowSimuMonitorCommand}"></MenuItem>
                 <MenuItem Header="仿真图表"></MenuItem>
@@ -259,7 +261,10 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="监视" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
-                <MenuItem Header="程序检测" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
+                <MenuItem Header="程序检测">
+                    <MenuItem Header="梯形图" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
+                    <MenuItem Header="函数功能块" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></MenuItem>
+                </MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
                     <MenuItem.Icon>

@@ -13,6 +13,10 @@ using SamSoarII.ValueModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.AppMain.LadderGraphModule;
 using SamSoarII.Extend.Utility;
+using System.IO;
+using SamSoarII.Extend.FuncBlockModel;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace SamSoarII.AppMain
 {
@@ -102,6 +106,7 @@ namespace SamSoarII.AppMain
             get;
             private set;
         }
+
         public InteractionFacade(MainWindow mainwindow)
         {
             this._mainWindow = mainwindow;
@@ -112,6 +117,8 @@ namespace SamSoarII.AppMain
             mainwindow.DeleteRowCommand.Executed += DeleteRowCommand_Executed;
             mainwindow.CheckLadderCommand.CanExecute += CheckLadderCommand_CanExecute;
             mainwindow.CheckLadderCommand.Executed += CheckLadderCommand_Executed;
+            mainwindow.CheckFuncBlockCommand.CanExecute += CheckFuncBlockCommand_CanExecute;
+            mainwindow.CheckFuncBlockCommand.Executed += CheckFuncBlock_Executed;
             _mainTabControl = _mainWindow.MainTab;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             SimulateHelper.TabOpen += OnTabOpened;
@@ -121,10 +128,10 @@ namespace SamSoarII.AppMain
 
         private void CheckLadderCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CheckLadder();
+            CheckLadder(true);
         }
 
-        public bool CheckLadder()
+        public bool CheckLadder(bool showreport = false)
         {
             List<ErrorReportElement> weinsts = new List<ErrorReportElement>();
             IEnumerable<ErrorReportElement> _weinsts = null;
@@ -168,8 +175,10 @@ namespace SamSoarII.AppMain
                 }
                 if (!result)
                 {
+                    _erwindow.Mode = ErrorReportWindow.MODE_LADDER;
                     _erwindow.Update(weinsts);
-                    _mainWindow.LACErrorList.Show();
+                    if (showreport)
+                        _mainWindow.LACErrorList.Show();
                 }
             }
             else if (errorMessage.Error == ErrorType.Empty)
@@ -209,7 +218,160 @@ namespace SamSoarII.AppMain
             return result;
         }
 
+        private void CheckFuncBlock_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            CheckFuncBlock(true);
+        }
+        
+        public bool CheckFuncBlock(bool showreport = false)
+        {
+            bool result = true;
+            if (_projectModel.FuncBlocks.Count() == 0)
+            {
+                return result;
+            }
+            List<string> ofiles = new List<string>();
+            List<FuncBlockViewModel> fbvmodels = new List<FuncBlockViewModel>();
+            Process cmd = null;
+            string stdout = null;
+            string stderr = null;
+            Match m1 = null;
+            Match m2 = null;
+            string message = null;
+            int line = 0;
+            int column = 0;
+            ErrorReportElement_FB ewele = null;
+            List<ErrorReportElement_FB> eweles = new List<ErrorReportElement_FB>();
+            foreach (FuncBlockViewModel fbvmodel in _projectModel.FuncBlocks)
+            {
+                //string hfile = SamSoarII.Utility.FileHelper.GetTempFile(".h");
+                string cfile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
+                string ofile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
+                fbvmodels.Add(fbvmodel);
+                ofiles.Add(ofile);
+                StreamWriter cw = new StreamWriter(cfile);
+                cw.Write("typedef int BIT;\n");
+                cw.Write("typedef int WORD;\n");
+                cw.Write("typedef long DWORD;\n");
+                cw.Write("typedef double FLOAT;\n");
+                foreach (FuncModel fmodel in fbvmodel.Funcs)
+                {
+                    cw.Write(String.Format("{0:s} {1:s}(", 
+                        fmodel.ReturnType, fmodel.Name));
+                    if (fmodel.ArgCount > 0)
+                    {
+                        cw.Write(fmodel.GetArgType(0));
+                        for (int i = 1; i < fmodel.ArgCount; i++)
+                        {
+                            cw.Write("," + fmodel.GetArgType(i));
+                        }
+                    }
+                    cw.Write(");\n");
+                }
+                cw.Write(fbvmodel.Code);
+                cw.Close();
+
+                cmd = new Process();
+                cmd.StartInfo.FileName = "i686-w64-mingw32-gcc";
+                cmd.StartInfo.Arguments = string.Format("{0} -o {1}", cfile, ofile);
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.StartInfo.RedirectStandardOutput = true;
+                cmd.StartInfo.RedirectStandardError = true;
+                cmd.Start();
+                cmd.WaitForExit();
+                stdout = cmd.StandardOutput.ReadToEnd();
+                stderr = cmd.StandardError.ReadToEnd();
+                m1 = Regex.Match(stderr, @"\s(.+):(.+):(.+): error: (.+)\n");
+                m2 = Regex.Match(stderr, @"\s(.+):(.+):(.+): warning: (.+)\n");
+                while (m1 != null && m1.Success)
+                {
+                    message = m1.Groups[4].Value;
+                    line = int.Parse(m1.Groups[2].Value);
+                    column = int.Parse(m1.Groups[3].Value);
+                    ewele = new ErrorReportElement_FB
+                    (
+                        ErrorReportElement_FB.STATUS_ERROR,
+                        message,
+                        fbvmodel,
+                        line,
+                        column
+                    );
+                    eweles.Add(ewele);
+                    m1 = m1.NextMatch();
+                }
+                while (m2 != null && m2.Success)
+                {
+                    message = m1.Groups[4].Value;
+                    line = int.Parse(m1.Groups[2].Value);
+                    column = int.Parse(m1.Groups[3].Value);
+                    ewele = new ErrorReportElement_FB
+                    (
+                        ErrorReportElement_FB.STATUS_WARNING,
+                        message,
+                        fbvmodel,
+                        line,
+                        column
+                    );
+                    eweles.Add(ewele);
+                    m2 = m2.NextMatch();
+                }
+            }
+
+            string bfile = SamSoarII.Utility.FileHelper.GetTempFile(".bin");
+            cmd = new Process();
+            cmd.StartInfo.FileName = "i686-w64-mingw32-gcc";
+            cmd.StartInfo.Arguments = String.Format("-o {0:s}",
+                cmd, bfile);
+            foreach (string ofile in ofiles)
+            {
+                cmd.StartInfo.Arguments += " " + ofile;
+            }
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            stdout = cmd.StandardOutput.ReadToEnd();
+            stderr = cmd.StandardError.ReadToEnd();
+            m1 = Regex.Match(stderr, @"\s(.+):(.+):\((.+)\): (.+)\n");
+            while (m1 != null && m1.Success)
+            {
+                message = m1.Groups[5].Value;
+                line = column = 0;
+                string _ofile = m1.Groups[3].Value;
+                int _ofile_id = ofiles.IndexOf(_ofile);
+                if (_ofile_id >= 0)
+                {
+                    FuncBlockViewModel _fbvmodel = fbvmodels[_ofile_id];
+                    ewele = new ErrorReportElement_FB
+                    (
+                        ErrorReportElement_FB.STATUS_ERROR,
+                        message,
+                        _fbvmodel,
+                        line,
+                        column
+                    );
+                    eweles.Add(ewele);
+
+                }
+                m1 = m1.NextMatch();
+            }
+            
+            _erwindow.Mode = ErrorReportWindow.MODE_FUNC;
+            _erwindow.Update(eweles);
+            if (showreport)
+                _mainWindow.LACErrorList.Show();
+            return result;
+        }
+        
         private void CheckLadderCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = CurrentLadder != null;
+        }
+        
+        private void CheckFuncBlockCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = CurrentLadder != null;
         }
@@ -383,7 +545,7 @@ namespace SamSoarII.AppMain
         {
             NavigateToNetwork(e);
         }
-
+        
         public void NavigateToNetwork(NavigateToNetworkEventArgs e)
         {
             LadderDiagramViewModel tempItem;
@@ -401,6 +563,11 @@ namespace SamSoarII.AppMain
             tempItem.SelectionRect.Y = e.Y;
             tempItem.NavigateToNetworkByNum(e.NetworkNum);
             _mainTabControl.ShowItem(tempItem);
+        }
+
+        public void NavigateToFuncBlock(FuncBlockViewModel fbvmodel, int line, int column)
+        {
+            
         }
 
         public void CreateProject(string name, string fullFileName)

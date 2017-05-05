@@ -143,8 +143,7 @@ namespace SamSoarII.AppMain.UI
             }
             base.OnClosing(e);
         }
-
-
+        
         protected override void OnClosed(EventArgs e)
         {
             LayoutSetting.Save();
@@ -479,6 +478,18 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private void ShowErrorListCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
         private void DownloadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
 
@@ -600,6 +611,11 @@ namespace SamSoarII.AppMain.UI
         private void OnShowOutputCommand(object sender, RoutedEventArgs e)
         {
             LACOutput.Show();
+        }
+
+        private void OnShowErrorListExecute(object sender, RoutedEventArgs e)
+        {
+            LACErrorList.Show();
         }
 
         private void OnShowCommunicationSettingDialogExecute(object sender, RoutedEventArgs e)

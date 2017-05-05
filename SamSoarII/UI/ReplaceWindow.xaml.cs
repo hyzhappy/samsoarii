@@ -501,6 +501,10 @@ namespace SamSoarII.AppMain.UI
                     }
                     return true;
                 case TYPE_REGISTER:
+                    if (iformat.ArgsCount < 2)
+                    {
+                        return false;
+                    }
                     for (int i = 1; i < iformat.ArgsCount; i++)
                     {
                         if (!Match(GetArgs(0), iformat.GetArgs(i)))

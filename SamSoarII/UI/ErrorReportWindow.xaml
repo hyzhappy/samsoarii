@@ -57,6 +57,27 @@
                 警告 0
             </TextBlock>
         </ToggleButton>
+        <DataGrid x:Name="DG_FList" ItemsSource="{Binding FItems}"
+                  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  SelectedCellsChanged="DG_FList_SelectedCellsChanged">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="25">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Rectangle Fill="{Binding BrushFill}"></Rectangle>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="说明" Width="2*" IsReadOnly="True" Binding="{Binding Message}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="程序" Width="120" IsReadOnly="True"  Binding="{Binding Program}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="坐标" Width="60" IsReadOnly="True" Binding="{Binding Point}">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <DataGrid x:Name="DG_List" ItemsSource="{Binding Items}"
                   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                   AutoGenerateColumns="False"
@@ -80,5 +101,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+         
     </Grid>
 </UserControl>

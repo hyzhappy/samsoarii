@@ -115,7 +115,6 @@ namespace SamSoarII.AppMain.Project
             }
             set
             {
-                
                 _isMasked = value;
                 if (_isMasked)
                 {
@@ -135,7 +134,6 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-
 
         private bool _isCommendMode;
         public bool IsCommentMode
@@ -707,6 +705,7 @@ namespace SamSoarII.AppMain.Project
             return _ladderVerticalLines.Values.Any(l => { return (l.X == p.X) && (l.Y == p.Y); });
         }
         #endregion
+
         //返回最后一行的Y坐标
         public int GetMaxY()
         {

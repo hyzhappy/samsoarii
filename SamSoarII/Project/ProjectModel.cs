@@ -408,7 +408,7 @@ namespace SamSoarII.AppMain.Project
             OModel.Write(OModel.Report_Complie, s);
             //MessageBox.Show(s);
         }
-
+        
         private string GenerateCodeFromLadder()
         {
             string code = string.Empty;

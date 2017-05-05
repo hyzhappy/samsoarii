@@ -11,7 +11,7 @@ namespace SamSoarII.LadderInstViewModel
 {
     public class NEXTViewModel : OutputRectBaseViewModel
     {
-        private NEXTModel _model;
+        private NEXTModel _model = new NEXTModel();
         public override BaseModel Model
         {
             get
@@ -58,5 +58,7 @@ namespace SamSoarII.LadderInstViewModel
         {
             return NextElemnets.Where(x => { return x.Type == ElementType.Null; }).Count() == 1 && NextElemnets.Count == 1;
         }
+
+        
     }
 }
