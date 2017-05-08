@@ -301,7 +301,7 @@ namespace ICSharpCode.AvalonEdit
         /// Gets the scroll viewer used by the text editor.
         /// This property can return null if the template has not been applied / does not contain a scroll viewer.
         /// </summary>
-        internal ScrollViewer ScrollViewer
+        public ScrollViewer ScrollViewer
         {
             get { return scrollViewer; }
         }
@@ -877,6 +877,18 @@ namespace ICSharpCode.AvalonEdit
 					textArea.Caret.Offset = value;
 			}
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="column"></param>
+        public void SetPosition(int line, int column)
+        {
+            TextArea textArea = this.TextArea;
+            if (textArea != null)
+                textArea.Caret.Position = new TextViewPosition(line, column);
+        }
+
         /// <summary>
         /// Occurs when the cursor of textarea was moved 
         /// </summary>

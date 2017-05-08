@@ -239,7 +239,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         #region TextEditer Events
-        
+
         /// <summary>
         /// 当用户键入字符前发生
         /// </summary>
@@ -261,7 +261,7 @@ namespace SamSoarII.AppMain.Project
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void textEditer_DocumentChanged(object sender, DocumentChangeEventArgs e)
-       {
+        {
             int offset = e.InsertionLength - e.RemovalLength;
             //model.Move(e.Offset);
             Regex localRegex = new Regex(@"[\{\}]");
@@ -319,7 +319,7 @@ namespace SamSoarII.AppMain.Project
                         && !(nprev.Value is FuncBlock_Local))
                     {
                         nprev = nprev.Previous;
-                    } 
+                    }
                     while (nnext != null
                         && !(nnext.Value is FuncBlock_Local))
                     {
@@ -344,7 +344,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     else
                     {
-                        throw new Exception(String.Format("Code Structure Error : {0:s} in {1:s}", 
+                        throw new Exception(String.Format("Code Structure Error : {0:s} in {1:s}",
                             model.Current.ToString(), model.Current.Parent.ToString()));
                     }
                 }
@@ -444,7 +444,8 @@ namespace SamSoarII.AppMain.Project
                         break;
                     case ';':
                         break;
-                    case '/': case '*':
+                    case '/':
+                    case '*':
                         end = CodeTextBox.CaretOffset - 1;
                         start = end - 1;
                         if (start >= 0 && CodeTextBox.Text[start] == '/' && CodeTextBox.Text[end] == '/')
@@ -514,6 +515,19 @@ namespace SamSoarII.AppMain.Project
             {
                 OModel.AppendLine(OModel.Report_Debug, fb.ToString());
             }
+        }
+
+        public void SetPosition(int line, int column)
+        {
+            CodeTextBox.SetPosition(line, column);
+            ScrollViewer sv = CodeTextBox.ScrollViewer;
+            if (sv == null) return;
+            double y = line * 19 - 25 - sv.ViewportHeight / 2;
+            y = Math.Max(0, y);
+            sv.ScrollToVerticalOffset(y);
+            double x = column * 16 - sv.ViewportWidth / 2;
+            x = Math.Max(0, x);
+            sv.ScrollToHorizontalOffset(x);
         }
 
         /// <summary>

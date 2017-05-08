@@ -15,13 +15,13 @@ namespace SamSoarII.Communication.Command
         private byte length1;
         private byte startLowAddr1;
         private byte startHighAddr1;
-        //当某数据类型长度超过32或有两个数据类型同时请求时使用
+        // 当某数据类型长度超过32或有两个数据类型同时请求时使用
         private byte addrType2;
         private byte length2 = 0;
         private byte startLowAddr2 = 0;
         private byte startHighAddr2 = 0;
         private byte[] command;
-        //返回的数据
+        // 返回的数据
         private byte[] _retData;
         public byte[] RetData
         {
@@ -157,7 +157,7 @@ namespace SamSoarII.Communication.Command
                 }
             }
         }
-        //Can be call after assign value for Property of RetData
+        // Can be call after assign value for Property of RetData
         public List<byte[]> GetRetData()
         {
             List<byte[]> templist = new List<byte[]>(2);

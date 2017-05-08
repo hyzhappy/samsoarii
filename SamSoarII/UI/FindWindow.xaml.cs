@@ -82,7 +82,7 @@ namespace SamSoarII.AppMain.UI
                     if (currenttab is MainTabDiagramItem)
                     {
                         MainTabDiagramItem mtditem = (MainTabDiagramItem)currenttab;
-                        LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(mtditem.LAP_Ladder.Children.First().Content);
+                        LadderDiagramViewModel ldvmodel = mtditem.LDVM_ladder;
                         Find(ldvmodel, args);
                     }
                     if (currenttab is LadderDiagramViewModel)
