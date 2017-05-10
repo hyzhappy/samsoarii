@@ -3,6 +3,7 @@ using SamSoarII.AppMain.UI;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.LadderInstViewModel.Interrupt;
 using SamSoarII.PLCCompiler;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
@@ -888,7 +889,9 @@ namespace SamSoarII.AppMain.Project
             if (e.Data.GetDataPresent(ptvitem.GetType()))
             {
                 ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
-                if (ptvitem.RelativeObject is BaseViewModel)
+                if (ptvitem.RelativeObject is BaseViewModel
+                 || ptvitem.RelativeObject is FuncModel
+                 || ptvitem.RelativeObject is LadderDiagramViewModel)
                 {
                     AcquireSelectRect(e);
                 }
@@ -899,6 +902,8 @@ namespace SamSoarII.AppMain.Project
         {
             base.OnDrop(e);
             ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            bool isacquired = AcquireSelectRect(e);
+            if (!isacquired) return;
             if (e.Data.GetDataPresent(ptvitem.GetType()))
             {
                 ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
@@ -906,12 +911,61 @@ namespace SamSoarII.AppMain.Project
                 {
                     BaseViewModel bvmodel = (BaseViewModel)(ptvitem.RelativeObject);
                     bvmodel = bvmodel.Clone();
-                    bool isacquired = AcquireSelectRect(e);
-                    if (isacquired)
+                    bvmodel.X = _ladderDiagram.SelectionRect.X;
+                    bvmodel.Y = _ladderDiagram.SelectionRect.Y;
+                    _ladderDiagram.ReplaceSingleElement(this, bvmodel);
+                }
+                else if (ptvitem.RelativeObject is FuncModel)
+                {
+                    FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
+                    if (!fmodel.CanCALLM())
                     {
-                        bvmodel.X = _ladderDiagram.SelectionRect.X;
-                        bvmodel.Y = _ladderDiagram.SelectionRect.Y;
-                        _ladderDiagram.ReplaceSingleElement(this, bvmodel);
+                        MessageBox.Show(String.Format("{0:s}无法被CALLM指令调用，请检查参数的个数和类型。", fmodel.Name));
+                        return;
+                    }
+                    CALLMViewModel vmodel = new CALLMViewModel();
+                    ArgumentValue[] avalues = new ArgumentValue[fmodel.ArgCount];
+                    for (int i = 0; i < avalues.Length; i++)
+                    {
+                        avalues[i] = ArgumentValue.Null;
+                    }
+                    vmodel.AcceptNewValues(fmodel.Name, avalues);
+                    vmodel.X = _ladderDiagram.SelectionRect.X;
+                    vmodel.Y = _ladderDiagram.SelectionRect.Y;
+                    _ladderDiagram.ReplaceSingleElement(this, vmodel);
+                }
+                else if (ptvitem.RelativeObject is LadderDiagramViewModel)
+                {
+                    LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(ptvitem.RelativeObject);
+                    BaseViewModel bvmodel_old = GetElementByPosition(
+                        _ladderDiagram.SelectionRect.X,
+                        _ladderDiagram.SelectionRect.Y);
+                    if (bvmodel_old is ATCHViewModel)
+                    {
+                        string[] paras_old = bvmodel_old.GetValueString().ToArray();
+                        paras_old = new string[]
+                        {
+                            paras_old[0],
+                            ValueCommentManager.GetComment(paras_old[0]),
+                            paras_old[1]
+                        };
+                        string[] paras_new = paras_old.ToArray();
+                        if (paras_old[0].Equals(String.Empty))
+                        {
+                            paras_old[0] = paras_new[0] = "K0";
+                        }
+                        paras_new[2] = ldvmodel.ProgramName;
+                        ElementReplaceArgumentCommand command = new ElementReplaceArgumentCommand(
+                            bvmodel_old, paras_old, paras_new);
+                        _ladderDiagram.CommandExecute(command);
+                    }
+                    else
+                    {
+                        CALLViewModel bvmodel_new = new CALLViewModel();
+                        bvmodel_new.AcceptNewValues(
+                            new string[1] { ldvmodel.ProgramName },
+                            PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                        _ladderDiagram.ReplaceSingleElement(this, bvmodel_new);
                     }
                 }
             }

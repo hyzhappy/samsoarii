@@ -404,6 +404,7 @@ namespace SamSoarII.AppMain.Project
             {
                 CCSProfix = String.Empty;
             }
+            TextChanged(this, new RoutedEventArgs());
             OutputDebug();
         }
         /// <summary>
@@ -528,6 +529,22 @@ namespace SamSoarII.AppMain.Project
             double x = column * 16 - sv.ViewportWidth / 2;
             x = Math.Max(0, x);
             sv.ScrollToHorizontalOffset(x);
+        }
+
+        public void SetOffset(int offset)
+        {
+            CodeTextBox.CaretOffset = offset;
+            int line = CodeTextBox.Row;
+            int column = CodeTextBox.Column;
+            ScrollViewer sv = CodeTextBox.ScrollViewer;
+            if (sv == null) return;
+            double y = line * 19 - 25 - sv.ViewportHeight / 2;
+            y = Math.Max(0, y);
+            sv.ScrollToVerticalOffset(y);
+            double x = column * 16 - sv.ViewportWidth / 2;
+            x = Math.Max(0, x);
+            sv.ScrollToHorizontalOffset(x);
+
         }
 
         /// <summary>
@@ -975,6 +992,12 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #endregion
-        
+
+        #region Event Handler
+
+        public event RoutedEventHandler TextChanged = delegate { };
+
+        #endregion
+
     }
 }

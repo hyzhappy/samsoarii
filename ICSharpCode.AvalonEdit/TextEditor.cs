@@ -880,6 +880,32 @@ namespace ICSharpCode.AvalonEdit
         /// <summary>
         /// 
         /// </summary>
+        public int Row
+        {
+            get
+            {
+                TextArea textArea = this.TextArea;
+                if (textArea != null)
+                    return textArea.Caret.Position.Line;
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Column
+        {
+            get
+            {
+                TextArea textArea = this.TextArea;
+                if (textArea != null)
+                    return textArea.Caret.Position.Column;
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="line"></param>
         /// <param name="column"></param>
         public void SetPosition(int line, int column)

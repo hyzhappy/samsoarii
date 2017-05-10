@@ -549,6 +549,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
         public void ReplaceSingleVerticalLine(LadderNetworkViewModel network, VerticalLineViewModel vline)
         {
             var vlines = new List<VerticalLineViewModel>();
@@ -560,18 +561,21 @@ namespace SamSoarII.AppMain.Project
                 _commandManager.Execute(command);
             }
         }
+
         public void RemoveSingleVerticalLine(LadderNetworkViewModel network, VerticalLineViewModel vline)
         {
             var vlines = new List<VerticalLineViewModel>() { vline };
             var command = new LadderCommand.NetworkRemoveElementsCommand(network, new List<BaseViewModel>(), vlines);
             _commandManager.Execute(command);
         }
+
         public void NetworkRemoveRow(LadderNetworkViewModel network, int rowNumber)
         {
             var command = new LadderCommand.NetworkRemoveRowCommand(network, rowNumber);
             _commandManager.Execute(command);
             SelectionStatus = SelectStatus.Idle;
         }
+
         public void NetworkRemoveRows(LadderNetworkViewModel network,int startRowNumber,int count)
         {
             NetworkRemoveRowCommand command;
@@ -582,6 +586,7 @@ namespace SamSoarII.AppMain.Project
             }
             SelectionStatus = SelectStatus.Idle;
         }
+
         public void NetworkAddRow(LadderNetworkViewModel network, int rowNumber)
         {
             var command = new LadderCommand.NetworkAddRowCommand(network, rowNumber);

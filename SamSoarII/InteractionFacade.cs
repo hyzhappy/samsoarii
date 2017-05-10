@@ -449,6 +449,12 @@ namespace SamSoarII.AppMain
             fbvmodel.SetPosition(line, column);
         }
 
+        public void NavigateToFuncBlock(FuncBlockViewModel fbvmodel, int offset)
+        {
+            _mainTabControl.ShowItem(fbvmodel);
+            fbvmodel.SetOffset(offset);
+        }
+
         #endregion
 
         #region Modification

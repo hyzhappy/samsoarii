@@ -72,7 +72,7 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
             _projectModel = project;
-            InteractionFacade _ifacade = project.IFacade;
+            InteractionFacade _ifacade = Project.IFacade;
             _ifacade.PTVEvent += OnGotPTVEvent;
             _elementList = new ElementList();
             DataContext = Project;
@@ -109,6 +109,7 @@ namespace SamSoarII.AppMain.UI
             }
             foreach (FuncBlockViewModel fbvmodel in project.FuncBlocks)
             {
+                fbvmodel.TextChanged += OnFuncBlockTextChanged;
                 ProjectTreeViewItem parent = null;
                 if (fpdict.ContainsKey(fbvmodel.ProgramName))
                 {
@@ -232,12 +233,11 @@ namespace SamSoarII.AppMain.UI
             createitem.MouseDoubleClick += OnPTVIDoubleClick;
             createitem.MenuItemClick += ONPTVIMenuClick;
             createitem.Renamed += OnPTVIRenamed;
-            //createitem.PreviewMouseMove += OnPTVIMouseMove;
-            //createitem.PreviewDragOver += OnPTVIDragOver;
+            createitem.Expanded += OnPTVIExpanded;
             createitem.IsCritical = iscritical;
             return createitem;
         }
-        
+
         #endregion
 
         #region Rebuild Tree
@@ -261,12 +261,19 @@ namespace SamSoarII.AppMain.UI
         {
             ptvitem.RelativeObject = fbvmodel;
             ptvitem.Items.Clear();
+            if (fbvmodel.Funcs.Count() == 0)
+            {
+                CreatePTVItem(
+                    ptvitem,
+                    ProjectTreeViewItem.TYPE_CONST,
+                    "没有函数");
+            }
             foreach (FuncModel fmodel in fbvmodel.Funcs)
             {
                 CreatePTVItem(
                     ptvitem,
                     ProjectTreeViewItem.TYPE_FUNC,
-                    fmodel);
+                    fmodel, false);
             }
         }
 
@@ -339,6 +346,7 @@ namespace SamSoarII.AppMain.UI
             if (sender is ProjectTreeViewItem)
             {
                 ProjectTreeViewItem ptvitem = (ProjectTreeViewItem)sender;
+                if (ptvitem.IsRenaming) return;
                 switch (ptvitem.Flags & 0x0f)
                 {
                     case ProjectTreeViewItem.TYPE_ROUTINE:
@@ -358,6 +366,12 @@ namespace SamSoarII.AppMain.UI
                         break;
                     case ProjectTreeViewItem.TYPE_FUNCBLOCK:
                         TabItemOpened(ptvitem.RelativeObject, new ShowTabItemEventArgs(TabType.Program));
+                        break;
+                    case ProjectTreeViewItem.TYPE_FUNC:
+                        ProjectTreeViewItem parent = (ProjectTreeViewItem)(ptvitem.Parent);
+                        FuncBlockViewModel fbvmodel = (FuncBlockViewModel)(parent.RelativeObject);
+                        FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
+                        Project.IFacade.NavigateToFuncBlock(fbvmodel, fmodel.Offset);
                         break;
                     case ProjectTreeViewItem.TYPE_MODBUS:
                         TabItemOpened(ptvitem.RelativeObject, new ShowTabItemEventArgs(TabType.Modbus));
@@ -496,9 +510,9 @@ namespace SamSoarII.AppMain.UI
                         }
                     }
                     ptvitem.RenameClose();
-                    dpdict.Remove(fbvmodel.ProgramName);
+                    fpdict.Remove(fbvmodel.ProgramName);
                     fbvmodel.ProgramName = ptvitem.Text;
-                    dpdict.Add(fbvmodel.ProgramName, ptvitem);
+                    fpdict.Add(fbvmodel.ProgramName, ptvitem);
                     /*
                     _e = new ProjectTreeViewEventArgs(
                         ProjectTreeViewEventArgs.TYPE_FUNCBLOCK | ProjectTreeViewEventArgs.FLAG_REPLACE,
@@ -510,6 +524,15 @@ namespace SamSoarII.AppMain.UI
                 {
                     ptvitem.RenameClose();
                 }
+            }
+        }
+        
+        private void OnPTVIExpanded(object sender, RoutedEventArgs e)
+        {
+            ProjectTreeViewItem ptvitem = (ProjectTreeViewItem)sender;
+            if (ptvitem.RelativeObject is FuncBlockViewModel)
+            {
+                Rebuild(ptvitem, (FuncBlockViewModel)(ptvitem.RelativeObject));
             }
         }
 
@@ -668,7 +691,6 @@ namespace SamSoarII.AppMain.UI
                     switch (e.Flags & ~0xf)
                     {
                         case ProjectTreeViewEventArgs.FLAG_CREATE:
-                            selectitem = (ProjectTreeViewItem)(selectitem.Parent);
                             createitem = CreatePTVItem(
                                 selectitem,
                                 ProjectTreeViewItem.TYPE_FUNCBLOCK
@@ -677,6 +699,7 @@ namespace SamSoarII.AppMain.UI
                                 e.RelativeObject,
                                 false);
                             selectitem.IsExpanded = true;
+                            ((FuncBlockViewModel)(e.RelativeObject)).TextChanged += OnFuncBlockTextChanged;
                             Rebuild(createitem, (FuncBlockViewModel)(e.RelativeObject));
                             //fpdict.Add(rname, createitem);
                             createitem.Rename();
@@ -725,6 +748,22 @@ namespace SamSoarII.AppMain.UI
             ProjectTreeViewEventArgs _e = new ProjectTreeViewEventArgs(
                 ProjectTreeViewEventArgs.TYPE_MODBUS, _projectModel.MTVModel, _projectModel.MTVModel);
             OnGotPTVEvent(sender, _e);
+        }
+
+        private void OnFuncBlockTextChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is FuncBlockViewModel)
+            {
+                FuncBlockViewModel fbvmodel = (FuncBlockViewModel)sender;
+                if (fpdict.ContainsKey(fbvmodel.ProgramName))
+                {
+                    ProjectTreeViewItem ptvitem = fpdict[fbvmodel.ProgramName];
+                    if (ptvitem.IsExpanded == true)
+                    {
+                        ptvitem.IsExpanded = false;
+                    }
+                }
+            }
         }
         
         #region Drag & Drop

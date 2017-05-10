@@ -70,7 +70,7 @@ namespace SamSoarII.LadderInstViewModel.Interrupt
             {
                 IDValue = WordValue.Null;
             }
-            FuncName = valueStrings[1];
+            FuncName = valueStrings[2];
         }
 
         public override IPropertyDialog PreparePropertyDialog()

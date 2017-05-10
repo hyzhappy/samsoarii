@@ -22,7 +22,10 @@ namespace SamSoarII.Extend.FuncBlockModel
         static private string[] CALLMTYPES = {"BIT*", "WORD*", "DWORD*", "FLOAT*"}; 
 
         #region Number
-
+        /// <summary>
+        /// 文本坐标
+        /// </summary>
+        public int Offset { get; set; }
         /// <summary>
         /// 函数名称
         /// </summary>

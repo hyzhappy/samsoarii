@@ -168,7 +168,7 @@ namespace SamSoarII.ValueModel
             {
                 get
                 {
-                    return string.Empty;
+                    return "???";
                 }
             }
 

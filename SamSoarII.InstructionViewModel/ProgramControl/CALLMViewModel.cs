@@ -56,7 +56,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value1 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null 
+                 && !value.ArgumentName.Equals(String.Empty))
                     MiddleTextBlock2.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock2.Text = String.Empty;
@@ -74,7 +75,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value2 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null
+                 && !value.ArgumentName.Equals(String.Empty))
                     MiddleTextBlock3.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock3.Text = String.Empty;
@@ -92,7 +94,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value3 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null
+                 && !value.ArgumentName.Equals(String.Empty))
                     MiddleTextBlock4.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock4.Text = String.Empty;
@@ -110,7 +113,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value4 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null
+                 && !value.ArgumentName.Equals(String.Empty))
                     MiddleTextBlock5.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock5.Text = String.Empty;

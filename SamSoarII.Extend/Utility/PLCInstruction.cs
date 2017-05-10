@@ -669,6 +669,8 @@ namespace SamSoarII.Extend.Utility
         /// <returns></returns>
         private string ToCStylePointer(string var)
         {
+            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
+            if (!m1.Success) return var;
             if (var.Equals(String.Empty))
                 return String.Empty;
             // 找到最后一个字母

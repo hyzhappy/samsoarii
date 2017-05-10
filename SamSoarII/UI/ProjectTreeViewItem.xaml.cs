@@ -255,6 +255,10 @@ namespace SamSoarII.AppMain.UI
                         IconSource = "/Resources/Image/TreeViewIcon/Ladders.png";
                         Text = RelativeObject.ToString();
                         break;
+                    case TYPE_CONST:
+                        IconSource = String.Empty;
+                        Text = RelativeObject.ToString();
+                        break;
                     case TYPE_INSTRUCTION:
                         if (RelativeObject is BaseViewModel)
                         {
@@ -450,13 +454,18 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
             DataContext = this;
+            RelativeObject = String.Empty;
             Flags = ProjectTreeViewItem.TYPE_CONST;
         }
 
         public bool IsRenaming { get; private set; } = false;
 
+        private ContextMenu _contextmenu;
+
         public void Rename(string errormsg = null)
         {
+            _contextmenu = this.ContextMenu;
+            this.ContextMenu = null;
             IsRenaming = true;
             IsSelected = true;
             TBL_Text.Visibility = Visibility.Hidden;
@@ -477,6 +486,7 @@ namespace SamSoarII.AppMain.UI
 
         public void RenameClose()
         {
+            this.ContextMenu = _contextmenu;
             IsRenaming = false;
             TBL_Text.Visibility = Visibility.Visible;
             TBO_Text.Visibility = Visibility.Hidden;
