@@ -776,22 +776,22 @@ namespace SamSoarII.AppMain.UI
         {
             if (SimulateModeButton.IsChecked == true)
             {
-                LACOutput.Show();
+                //LACOutput.Show();
                 int ret = _interactionFacade.SimulateProject();
                 if (ret == SimulateHelper.SIMULATE_OK)
                 {
-                    LAOutput.Hide();
+                    //LAOutput.Hide();
                     LAProj.Hide();
                     LACSimuProj.Show();
                     SimuToolBarTray.Visibility = Visibility.Visible;
+                    SimulateHelper.SModel.SimulateStart += OnSimulateStart;
+                    SimulateHelper.SModel.SimulatePause += OnSimulatePause;
+                    SimulateHelper.SModel.SimulateAbort += OnSimulateAbort;
                 }
                 else
                 {
                     SimulateModeButton.IsChecked = false;
                 }
-                SimulateHelper.SModel.SimulateStart += OnSimulateStart;
-                SimulateHelper.SModel.SimulatePause += OnSimulatePause;
-                SimulateHelper.SModel.SimulateAbort += OnSimulateAbort;
             }
             else if (SimulateModeButton.IsChecked == false)
             {

@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.AppMain.UI;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
@@ -343,6 +344,11 @@ namespace SamSoarII.AppMain.Project
 
         // parent ladder diagram
         private LadderDiagramViewModel _ladderDiagram;
+
+        public LadderDiagramViewModel LDVModel
+        {
+            get { return _ladderDiagram; }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -872,18 +878,78 @@ namespace SamSoarII.AppMain.Project
 
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed && !IsMasked)
+            AcquireSelectRect(e);
+        }
+
+        protected override void OnDragOver(DragEventArgs e)
+        {
+            base.OnDragOver(e);
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            if (e.Data.GetDataPresent(ptvitem.GetType()))
             {
-                var pos = e.GetPosition(LadderCanvas);
-                var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
-                if (!IsSingleSelected())
+                ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                if (ptvitem.RelativeObject is BaseViewModel)
                 {
-                    AcquireSelectRect();
+                    AcquireSelectRect(e);
                 }
-                _ladderDiagram.SelectionRect.X = intPoint.X;
-                _ladderDiagram.SelectionRect.Y = intPoint.Y;
             }
         }
+
+        protected override void OnDrop(DragEventArgs e)
+        {
+            base.OnDrop(e);
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            if (e.Data.GetDataPresent(ptvitem.GetType()))
+            {
+                ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                if (ptvitem.RelativeObject is BaseViewModel)
+                {
+                    BaseViewModel bvmodel = (BaseViewModel)(ptvitem.RelativeObject);
+                    bvmodel = bvmodel.Clone();
+                    bool isacquired = AcquireSelectRect(e);
+                    if (isacquired)
+                    {
+                        bvmodel.X = _ladderDiagram.SelectionRect.X;
+                        bvmodel.Y = _ladderDiagram.SelectionRect.Y;
+                        _ladderDiagram.ReplaceSingleElement(this, bvmodel);
+                    }
+                }
+            }
+        }
+
+        public bool AcquireSelectRect(MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && !IsMasked)
+            {
+                var pos = e.GetPosition(LadderCanvas);
+                return AcquireSelectRect(pos);
+            }
+            return false;
+        }
+        
+        public bool AcquireSelectRect(DragEventArgs e)
+        {
+            var pos = e.GetPosition(LadderCanvas);
+            return AcquireSelectRect(pos);
+        }
+
+        public bool AcquireSelectRect(Point pos)
+        {
+            var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
+            if (intPoint.X < 0 || intPoint.X >= 12
+             || intPoint.Y < 0 || intPoint.Y >= RowCount)
+            {
+                return false;
+            }
+            if (!IsSingleSelected())
+            {
+                AcquireSelectRect();
+            }
+            _ladderDiagram.SelectionRect.X = intPoint.X;
+            _ladderDiagram.SelectionRect.Y = intPoint.Y;
+            return true;
+        }
+
 
         #endregion
 

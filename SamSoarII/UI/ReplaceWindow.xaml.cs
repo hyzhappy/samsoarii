@@ -43,6 +43,15 @@ namespace SamSoarII.AppMain.UI
             {
                 return this.items;
             }
+            set
+            {
+                items.Clear();
+                foreach (ReplaceElement item in value)
+                {
+                    items.Add(item);
+                }
+                PropertyChanged(this, new PropertyChangedEventArgs("Items"));
+            }
         }
         
         public const int MODE_CURRENT = 0x00;
@@ -72,6 +81,8 @@ namespace SamSoarII.AppMain.UI
             DataContext = this;
             parent = _parent;
             Mode = MODE_CURRENT;
+            TB_Input.Background = Brushes.Red;
+            TB_Change.Background = Brushes.Red;
         }
         
         private void Find()
@@ -130,12 +141,15 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
-        private void Replace()
+        private void Replace(bool showdialog = true)
         {
             int success = 0;
             int error = 0;
             string errormsg = String.Empty;
-            NetworkReplaceElementsCommandGroup commandall = new NetworkReplaceElementsCommandGroup();
+
+            NetworkReplaceElementsCommandGroup commandall =
+                new NetworkReplaceElementsCommandGroup(
+                    this, Items.ToArray());
 
             foreach (ReplaceElement rele in DG_List.SelectedItems)
             {
@@ -143,17 +157,22 @@ namespace SamSoarII.AppMain.UI
                 //BaseModel bmodel = bvmodel.Model;
                 LadderNetworkViewModel lnvmodel = rele.LNVModel;
                 LadderDiagramViewModel ldvmodel = rele.LDVModel;
+                ldvmodel.IsModify = true;
                 int x = bvmodel.X;
                 int y = bvmodel.Y;
                 
                 NetworkReplaceElementsCommand command = null;
+                NetworkReplaceElementsCommand_ForReplaceWindow commandrw = null;
                 try
                 {
                     command = RF_Change.Replace(
                         RF_Input,
                         rele.Detail, x, y,
                         ldvmodel, lnvmodel);
-                    commandall += command;
+                    commandrw = new NetworkReplaceElementsCommand_ForReplaceWindow(
+                        lnvmodel, rele, command);
+                    commandall.Add(command);
+                    commandall.Add(commandrw);
                     success++;
                 }
                 catch (ValueParseException exce2)
@@ -172,17 +191,18 @@ namespace SamSoarII.AppMain.UI
 
             _cmdmanager.Execute(commandall);
 
-            ReplaceReportWindow report = new ReplaceReportWindow();
-            report.TB_Subtitle.Text = String.Format("总共进行了{0:d}次替换，{1:d}次成功，{2:d}次错误。"
-                , success + error, success, error);
-            report.TB_Message.Text = errormsg;
-            report.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            report.ShowDialog();
-
-            Find();
+            if (showdialog || error > 0)
+            {
+                ReplaceReportWindow report = new ReplaceReportWindow();
+                report.TB_Subtitle.Text = String.Format("总共进行了{0:d}次替换，{1:d}次成功，{2:d}次错误。"
+                    , success + error, success, error);
+                report.TB_Message.Text = errormsg;
+                report.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                report.ShowDialog();
+            }
+            //Find();
         }
         
-
         #region Event Handler
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -234,6 +254,27 @@ namespace SamSoarII.AppMain.UI
             if (e.Key != Key.Enter) return;
             TB_Change.IsEnabled = false;
             Replace();
+            TB_Change.Background = Brushes.White;
+            TB_Change.IsEnabled = true;
+        }
+        
+        private void DataGridCell_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TB_Input.Background != Brushes.White) return;
+            if (TB_Change.Background == Brushes.Red) return;
+            if (e.Key != Key.Enter) return;
+            TB_Change.IsEnabled = false;
+            Replace(false);
+            TB_Change.Background = Brushes.White;
+            TB_Change.IsEnabled = true;
+        }
+
+        private void DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (TB_Input.Background != Brushes.White) return;
+            if (TB_Change.Background == Brushes.Red) return;
+            TB_Change.IsEnabled = false;
+            Replace(false);
             TB_Change.Background = Brushes.White;
             TB_Change.IsEnabled = true;
         }
@@ -290,6 +331,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
+        
     }
 
     public class ReplaceFormat
@@ -642,6 +684,11 @@ namespace SamSoarII.AppMain.UI
             {
                 return this.bvmodel;
             }
+            set
+            {
+                this.bvmodel = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Detail"));
+            }
         }
         public string Detail
         {
@@ -679,6 +726,18 @@ namespace SamSoarII.AppMain.UI
         {
             get { return String.Format("{0:d}", lnvmodel.NetworkNumber); }
         }
+
+        private bool isselected;
+        public bool IsSelected
+        {
+            get { return this.isselected; }
+            set
+            {
+                this.isselected = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
+            }
+        }
+
         #endregion
 
         public ReplaceElement
@@ -699,5 +758,130 @@ namespace SamSoarII.AppMain.UI
         #region Event Handler
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
         #endregion
+    }
+    
+    public class NetworkReplaceElementsCommand_ForReplaceWindow : IUndoableCommand
+    {
+        private LadderNetworkViewModel lnvmodel;
+        public  ReplaceElement Element { get; private set; }
+        private BaseViewModel BVM_old;
+        private BaseViewModel BVM_new;
+        
+        public NetworkReplaceElementsCommand_ForReplaceWindow
+        (
+            LadderNetworkViewModel _lnvmodel,
+            ReplaceElement _element,
+            BaseViewModel _BVM_old,
+            BaseViewModel _BVM_new
+        )
+        {
+            lnvmodel = _lnvmodel;
+            Element = _element;
+            BVM_old = _BVM_old;
+            BVM_new = _BVM_new;
+        }
+
+
+        public NetworkReplaceElementsCommand_ForReplaceWindow
+        (
+            LadderNetworkViewModel _lnvmodel,
+            ReplaceElement _element,
+            NetworkReplaceElementsCommand _command
+        )
+        {
+            lnvmodel = _lnvmodel;
+            Element = _element;
+            BVM_old = _command.PopOldElement();
+            BVM_new = _command.PopNewElement();
+        }
+
+        public void Execute()
+        {
+            lnvmodel.ReplaceElement(BVM_new);
+            Element.BVModel = BVM_new;
+        }
+
+        public void Redo()
+        {
+            Execute();
+        }
+
+        public void Undo()
+        {
+            lnvmodel.ReplaceElement(BVM_old);
+            Element.BVModel = BVM_old;
+        }
+        
+    }
+
+    public class NetworkReplaceElementsCommandGroup : IUndoableCommand
+    {
+        private List<IUndoableCommand> items
+            = new List<IUndoableCommand>();
+        private ReplaceWindow parent;
+        private IEnumerable<ReplaceElement> eles_all;
+        private List<ReplaceElement> eles_replaced
+            = new List<ReplaceElement>();
+
+        public NetworkReplaceElementsCommandGroup
+        (
+            ReplaceWindow _parent,
+            IEnumerable<ReplaceElement> _eles_all
+        )
+        {
+            parent = _parent;
+            eles_all = _eles_all;
+        }
+
+        public void Add(NetworkReplaceElementsCommand command)
+        {
+            items.Add(command);
+        }
+
+        public void Add(NetworkReplaceElementsCommand_ForReplaceWindow command)
+        {
+            items.Add(command);
+            eles_replaced.Add(command.Element);
+        }
+
+        public void Execute()
+        {
+            parent.Items = eles_all;/*
+            foreach (ReplaceElement ele in eles_all)
+            {
+                ele.IsSelected = false;
+            }
+            foreach (ReplaceElement ele in eles_replaced)
+            {
+                ele.IsSelected = true;
+            }*/
+            for (int i = 0; i < items.Count(); i++)
+            {
+                items[i].Execute();
+            }
+            
+        }
+
+        public void Redo()
+        {
+            Execute();
+        }
+
+        public void Undo()
+        {
+            parent.Items = eles_all;/*
+            foreach (ReplaceElement ele in eles_all)
+            {
+                ele.IsSelected = false;
+            }
+            foreach (ReplaceElement ele in eles_replaced)
+            {
+                ele.IsSelected = true;
+            }*/
+            for (int i = items.Count() - 1; i >= 0; i--)
+            {
+                items[i].Undo();
+            }
+        }
     }
 }

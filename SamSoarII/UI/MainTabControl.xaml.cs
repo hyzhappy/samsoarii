@@ -89,10 +89,10 @@ namespace SamSoarII.AppMain.UI
         public void ShowItem(ITabItem item)
         {
             LayoutDocument ldoc = null;
-            if (item is UserControl)
+            if (item is FuncBlockViewModel)
             {
-                UserControl uctrl = (UserControl)(item);
-                uctrl.GotFocus += OnTabGotFocus;
+                FuncBlockViewModel fbvmodel = (FuncBlockViewModel)item;
+                fbvmodel.CodeTextBox.Focus();
             }
             if (!TabItemCollection.Contains(item))
             {
@@ -131,6 +131,7 @@ namespace SamSoarII.AppMain.UI
             int ldocid = Children.IndexOf(ldoc);
             SelectedItem = item;
             SelectedContentIndex = ldocid;
+            
         }
         
         public void CloseItem(ITabItem item)

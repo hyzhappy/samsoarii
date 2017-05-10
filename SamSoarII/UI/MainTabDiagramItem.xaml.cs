@@ -1,6 +1,7 @@
 ﻿using SamSoarII.AppMain.Project;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,30 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// MainTabItem.xaml 的交互逻辑
     /// </summary>
-    public partial class MainTabDiagramItem : UserControl, ITabItem
+    public partial class MainTabDiagramItem : UserControl, ITabItem, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private static event PropertyChangedEventHandler StaticPropertyChanged;
+
+        private void OnStaticPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged(this, e);
+        }
+
         #region Numbers
+
+        static private double gsheight;
+
+        public double GSHeight
+        {
+            get { return gsheight; }
+            set
+            {
+                gsheight = value;
+                StaticPropertyChanged(this, new PropertyChangedEventArgs("GSHeight"));
+            }
+        }
 
         #region View Mode
         public const int VIEWMODE_LADDER = 0x01;
@@ -83,6 +105,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         protected double actualheight;
+        
         double ITabItem.ActualHeight
         {
             get
@@ -100,7 +123,7 @@ namespace SamSoarII.AppMain.UI
         public LadderDiagramViewModel LDVM_ladder { get; private set; }
 
         public InstructionDiagramViewModel IDVM_inst { get; private set; }
-
+        
         #endregion
 
         public MainTabDiagramItem()
@@ -112,13 +135,16 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
 
+            DataContext = this;
+            StaticPropertyChanged += OnStaticPropertyChanged;
+
             LDVM_ladder = (LadderDiagramViewModel)(ITI_ladder);
             GB_Ladder.Content = LDVM_ladder;
             IDVM_inst = (InstructionDiagramViewModel)(LDVM_ladder.IDVModel);
             GB_Inst.Content = IDVM_inst;
             ViewMode = _viewmode;
         }
-
+        
     }
 }
 

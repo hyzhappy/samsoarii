@@ -162,6 +162,9 @@
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ProjectTreeViewItem.xaml.cs">
+      <DependentUpon>ProjectTreeViewItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ReplaceReportWindow.xaml.cs">
       <DependentUpon>ReplaceReportWindow.xaml</DependentUpon>
     </Compile>
@@ -461,6 +464,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\ProjectTreeViewItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\ReplaceReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -552,6 +559,37 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\SpecialRegisters.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\ElementList.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\Func.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlockFolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\Modbus.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\ModbusFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Network.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\NetworkFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Program.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Root.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Routine.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\RoutineFolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output2.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Ladders.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Input1.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Input2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

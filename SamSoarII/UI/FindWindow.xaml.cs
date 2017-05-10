@@ -68,6 +68,7 @@ namespace SamSoarII.AppMain.UI
             DataContext = this;
             parent = _parent;
             Mode = MODE_CURRENT;
+            TB_Input.Background = Brushes.Red;
         }
 
         private void Find()
@@ -104,7 +105,6 @@ namespace SamSoarII.AppMain.UI
 
         private void Find(LadderDiagramViewModel ldvmodel, string[] args)
         {
-
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
                 foreach (BaseViewModel bvmodel in lnvmodel.GetElements())
@@ -125,7 +125,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        
+
         #region Event Handler
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

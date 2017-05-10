@@ -93,9 +93,13 @@
                   Grid.Row="2" Grid.Column="0"
                   AutoGenerateColumns="False" CanUserResizeColumns="False"
                   RowBackground="White" AlternatingRowBackground="AliceBlue"
-                  SelectionChanged="DG_List_SelectionChanged">
+                  SelectionChanged="DG_List_SelectionChanged"
+                  KeyDown="TB_Change_KeyDown">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
+                        <EventSetter Event="KeyDown" Handler="DataGridCell_KeyDown"/>
+                        <EventSetter Event="MouseDoubleClick" Handler="DataGridCell_MouseDoubleClick"/>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="LightBlue"/>
@@ -129,17 +133,10 @@
         <Grid x:Name="G_Config" Visibility="Hidden"
               Grid.Row="1" Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="32"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="32"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0"
-                       VerticalAlignment="Center"
-                       FontSize="14"
-                       Margin="6,0,0,0">
-                自定义程序选择：
-            </TextBlock>
-            <Grid Grid.Row="2" Grid.Column="0">
+            <Grid Grid.Row="1" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>

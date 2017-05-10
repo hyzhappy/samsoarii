@@ -34,7 +34,27 @@ namespace SamSoarII.AppMain.LadderCommand
             _oldvlines = new HashSet<VerticalLineViewModel>();
         }
 
-        public void Execute()
+        public BaseViewModel PopOldElement()
+        {
+            BaseViewModel bvmodel = _oldelements.FirstOrDefault();
+            if (bvmodel != null)
+            {
+                _oldelements.Remove(bvmodel);
+            }
+            return bvmodel;
+        }
+        
+        public BaseViewModel PopNewElement()
+        {
+            BaseViewModel bvmodel = _elements.FirstOrDefault();
+            if (bvmodel != null)
+            {
+                _elements.Remove(bvmodel);
+            }
+            return bvmodel;
+        }
+
+        public virtual void Execute()
         {
             foreach(var oldele in _oldelements)
             {
@@ -54,12 +74,12 @@ namespace SamSoarII.AppMain.LadderCommand
             }
         }
 
-        public void Redo()
+        public virtual void Redo()
         {
             Execute();
         }
 
-        public void Undo()
+        public virtual void Undo()
         {
             foreach (var ele in _elements)
             {
@@ -80,38 +100,5 @@ namespace SamSoarII.AppMain.LadderCommand
             }
         }
     }
-
-    public class NetworkReplaceElementsCommandGroup : IUndoableCommand
-    {
-        private List<NetworkReplaceElementsCommand> items
-            = new List<NetworkReplaceElementsCommand>();
-
-        static public NetworkReplaceElementsCommandGroup operator + 
-            (NetworkReplaceElementsCommandGroup group, NetworkReplaceElementsCommand command)
-        {
-            group.items.Add(command);
-            return group;
-        }
-        
-        public void Execute()
-        {
-            for (int i = 0; i < items.Count(); i++)
-            {
-                items[i].Execute();
-            }
-        }
-
-        public void Redo()
-        {
-            Execute();
-        }
-
-        public void Undo()
-        {
-            for (int i = items.Count()-1; i >= 0; i--)
-            {
-                items[i].Undo();
-            }
-        }
-    }
+    
 }

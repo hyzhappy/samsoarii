@@ -17,11 +17,14 @@ using System.IO;
 using SamSoarII.Extend.FuncBlockModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace SamSoarII.AppMain
 {
     public class InteractionFacade
     {
+        #region Numbers & Interfaces
+
         private bool _isCommentMode;
         public bool IsCommentMode
         {
@@ -41,7 +44,13 @@ namespace SamSoarII.AppMain
                 return _projectModel;
             }
         }
+
         private ProjectTreeView _projectTreeView;
+        public ProjectTreeView PTView
+        {
+            get { return this._projectTreeView; }
+        }
+
         private MainTabControl _mainTabControl;
         public MainTabControl MainTabControl
         {
@@ -119,12 +128,17 @@ namespace SamSoarII.AppMain
             mainwindow.CheckLadderCommand.Executed += CheckLadderCommand_Executed;
             mainwindow.CheckFuncBlockCommand.CanExecute += CheckFuncBlockCommand_CanExecute;
             mainwindow.CheckFuncBlockCommand.Executed += CheckFuncBlock_Executed;
+
             _mainTabControl = _mainWindow.MainTab;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             SimulateHelper.TabOpen += OnTabOpened;
             _erwindow = new ErrorReportWindow(this);
             mainwindow.LAErrorList.Content = _erwindow;
         }
+
+        #endregion
+
+        #region Project Checker
 
         private void CheckLadderCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -163,14 +177,16 @@ namespace SamSoarII.AppMain
             {
                 if (weinsts.Count() > 0)
                 {
-                    MessageBox.Show(
-                        String.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                            ecount, wcount));
                     result = (ecount == 0);
+                    if (showreport || !result)
+                        MessageBox.Show(
+                            String.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                                ecount, wcount));
                 }
                 else
                 {
-                    MessageBox.Show("程序正确!");
+                    if (showreport)
+                        MessageBox.Show("程序正确!");
                     result = true;
                 }
                 if (!result)
@@ -237,7 +253,6 @@ namespace SamSoarII.AppMain
             string stderr = null;
             Match m1 = null;
             Match m2 = null;
-            Match m3 = null;
             string message = null;
             int sline = 0;
             int line = 0;
@@ -275,7 +290,7 @@ namespace SamSoarII.AppMain
                 cw.Close();
                 sline = 4 + fbvmodel.Funcs.Count();
                 cmd = new Process();
-                cmd.StartInfo.FileName = "i686-w64-mingw32-gcc";
+                cmd.StartInfo.FileName = "arm-none-eabi-gcc";
                 cmd.StartInfo.Arguments = string.Format("-c {0} -o {1}", cfile, ofile);
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;
@@ -287,7 +302,6 @@ namespace SamSoarII.AppMain
                 stderr = cmd.StandardError.ReadToEnd();
                 m1 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): error: (.+)\r\n");
                 m2 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): warning: (.+)\r\n");
-                //m3 = Regex.Match(stderr, @"[^\s](.+):(.+):\((.+)\): (.+)\r\n");
                 while (m1 != null && m1.Success)
                 {
                     message = m1.Groups[4].Value;
@@ -306,9 +320,9 @@ namespace SamSoarII.AppMain
                 }
                 while (m2 != null && m2.Success)
                 {
-                    message = m1.Groups[4].Value;
-                    line = int.Parse(m1.Groups[2].Value) - sline;
-                    column = int.Parse(m1.Groups[3].Value);
+                    message = m2.Groups[4].Value;
+                    line = int.Parse(m2.Groups[2].Value) - sline;
+                    column = int.Parse(m2.Groups[3].Value);
                     ewele = new ErrorReportElement_FB
                     (
                         ErrorReportElement_FB.STATUS_WARNING,
@@ -320,29 +334,11 @@ namespace SamSoarII.AppMain
                     eweles.Add(ewele);
                     m2 = m2.NextMatch();
                 }
-                /*
-                while (m3 != null && m3.Success)
-                {
-                    message = m3.Groups[4].Value;
-                    line = column = 0;
-                    string _ofile = m3.Groups[1].Value;
-                    ewele = new ErrorReportElement_FB
-                    (
-                        ErrorReportElement_FB.STATUS_ERROR,
-                        message,
-                        fbvmodel,
-                        line,
-                        column
-                    );
-                    eweles.Add(ewele);
-                    m3 = m3.NextMatch();
-                }
-                */
             }
 
             string bfile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
             cmd = new Process();
-            cmd.StartInfo.FileName = "i686-w64-mingw32-gcc";
+            cmd.StartInfo.FileName = "arm-none-eabi-gcc";
             cmd.StartInfo.Arguments = String.Format("-o {0:s}", bfile);
             foreach (string ofile in ofiles)
             {
@@ -379,11 +375,33 @@ namespace SamSoarII.AppMain
                 }
                 m1 = m1.NextMatch();
             }
-            
-            _erwindow.Mode = ErrorReportWindow.MODE_FUNC;
-            _erwindow.Update(eweles);
-            if (showreport)
-                _mainWindow.LACErrorList.Show();
+            int ecount = 0;
+            int wcount = 0;
+            foreach (ErrorReportElement_FB _ewele in eweles)
+            {
+                switch (_ewele.Status)
+                {
+                    case ErrorReportElement_FB.STATUS_ERROR:
+                        ecount++; break;
+                    case ErrorReportElement_FB.STATUS_WARNING:
+                        wcount++; break;
+                }
+            }
+            result = (ecount == 0);
+            if (showreport || !result)
+            {
+                if (ecount == 0 && wcount == 0)
+                {
+                    MessageBox.Show("函数块全部正确！");
+                }
+                else
+                {
+                    MessageBox.Show(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount));
+                    _erwindow.Mode = ErrorReportWindow.MODE_FUNC;
+                    _erwindow.Update(eweles);
+                    _mainWindow.LACErrorList.Show();
+                }
+            }
             return result;
         }
         
@@ -396,6 +414,293 @@ namespace SamSoarII.AppMain
         {
             e.CanExecute = CurrentLadder != null;
         }
+
+        #endregion
+
+        #region Navigate
+
+        private void ElementList_NavigateToNetwork(NavigateToNetworkEventArgs e)
+        {
+            NavigateToNetwork(e);
+        }
+
+        public void NavigateToNetwork(NavigateToNetworkEventArgs e)
+        {
+            LadderDiagramViewModel tempItem;
+            if (ProjectModel.MainRoutine.ProgramName == e.RefLadderName)
+            {
+                tempItem = ProjectModel.MainRoutine;
+            }
+            else
+            {
+                tempItem = ProjectModel.SubRoutines.Where(x => { return x.ProgramName == e.RefLadderName; }).First();
+            }
+            var network = tempItem.GetNetworkByNumber(e.NetworkNum);
+            network.AcquireSelectRect();
+            tempItem.SelectionRect.X = e.X;
+            tempItem.SelectionRect.Y = e.Y;
+            tempItem.NavigateToNetworkByNum(e.NetworkNum);
+            _mainTabControl.ShowItem(tempItem);
+        }
+
+        public void NavigateToFuncBlock(FuncBlockViewModel fbvmodel, int line, int column)
+        {
+            _mainTabControl.ShowItem(fbvmodel);
+            fbvmodel.SetPosition(line, column);
+        }
+
+        #endregion
+
+        #region Modification
+
+        #region Routine
+        
+        public void CreateRoutine
+        (
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            LadderDiagramViewModel ldvmodel = new LadderDiagramViewModel(String.Empty, _projectModel);
+            _projectModel.Add(ldvmodel);
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_ROUTINE
+                  | ProjectTreeViewEventArgs.FLAG_CREATE,
+                    ldvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = ldvmodel;
+            }
+            _mainWindow.LACProj.Show();
+            PTVEvent(this, e);
+        }
+
+
+        public void RemoveRoutine
+        (
+            LadderDiagramViewModel ldvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            _projectModel.Remove(ldvmodel);
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_ROUTINE
+                  | ProjectTreeViewEventArgs.FLAG_REMOVE,
+                    ldvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = ldvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
+        public void ReplaceRoutine
+        (
+            LadderDiagramViewModel ldvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_ROUTINE
+                  | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                    ldvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = ldvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
+        #endregion
+
+        #region Network
+
+        public void CreateNetwork
+        (
+            LadderDiagramViewModel ldvmodel, 
+            int networknumber,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            LadderNetworkViewModel lnvmodel = null;
+            lnvmodel = new LadderNetworkViewModel(ldvmodel, networknumber);
+            ldvmodel.IFAddNetwork(lnvmodel);
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_NETWORK
+                  | ProjectTreeViewEventArgs.FLAG_CREATE,
+                    lnvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = lnvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
+        public void RemoveNetwork
+        (
+            LadderNetworkViewModel lnvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+            ldvmodel.IFRemoveNetwork(lnvmodel);
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_NETWORK
+                  | ProjectTreeViewEventArgs.FLAG_REMOVE,
+                    lnvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = lnvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
+        public void ReplaceNetwork
+        (
+            LadderNetworkViewModel lnvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_NETWORK
+                  | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                    lnvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = lnvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
+        #endregion
+
+        #region FuncBlock
+
+        public void CreateFuncBlock
+        (
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            FuncBlockViewModel fbvmodel = new FuncBlockViewModel(String.Empty);
+            _projectModel.Add(fbvmodel);
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_FUNCBLOCK
+                  | ProjectTreeViewEventArgs.FLAG_CREATE,
+                    fbvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = fbvmodel;
+            }
+            _mainWindow.LACProj.Show();
+            PTVEvent(this, e);
+        }
+        
+        public void RemoveFuncBlock
+        (
+            FuncBlockViewModel fbvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            _projectModel.Remove(fbvmodel);
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_FUNCBLOCK
+                  | ProjectTreeViewEventArgs.FLAG_REMOVE,
+                    fbvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = fbvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
+        public void ReplaceFuncBlock
+        (
+            FuncBlockViewModel fbvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_FUNCBLOCK
+                  | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                    fbvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = fbvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
+        #endregion
+
+        #region Modbus
+        
+        public void CreateModbus
+        (
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            _mainTabControl.ShowItem(_projectModel.MTVModel);
+            _projectModel.MTVModel.AddModel();
+        }
+
+        public void RemoveModbus
+        (
+            ModbusTableModel mtmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            _mainTabControl.ShowItem(_projectModel.MTVModel);
+            _projectModel.MTVModel.RemoveModel(mtmodel);
+        }
+
+        public void ReplaceModbus
+        (
+            ModbusTableModel mtmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            _mainTabControl.ShowItem(_projectModel.MTVModel);
+            //_projectModel.MTVModel.RemoveModel(mtmodel);
+        }
+
+        #endregion
+
+        #region In Network
 
         private void DeleteRowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -418,6 +723,7 @@ namespace SamSoarII.AppMain
                 }
             }
         }
+
         private void DeleteRowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (CurrentLadder != null && CurrentLadder.SelectionStatus != SelectStatus.Idle && CurrentLadder.CrossNetState == CrossNetworkState.NoCross)
@@ -429,10 +735,12 @@ namespace SamSoarII.AppMain
                 e.CanExecute = false;
             }
         }
+
         private void InsertRowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             CurrentLadder.NetworkAddRow(CurrentLadder.SelectRectOwner, CurrentLadder.SelectionRect.Y + 1);
         }
+
         private void InsertRowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (CurrentLadder != null && CurrentLadder.SelectionStatus == SelectStatus.SingleSelected)
@@ -444,6 +752,7 @@ namespace SamSoarII.AppMain
                 e.CanExecute = false;
             }
         }
+
         private void Mainwindow_InstShortCutOpen(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -489,6 +798,7 @@ namespace SamSoarII.AppMain
                     break;
             }
         }
+
         private void SelectionRectRight()
         {
             if (CurrentLadder.SelectionRect.X < GlobalSetting.LadderXCapacity - 1)
@@ -496,6 +806,7 @@ namespace SamSoarII.AppMain
                 CurrentLadder.SelectionRect.X++;
             }
         }
+
         private void SelectionRectDown()
         {
             if (CurrentLadder.SelectionRect.Y + 1 > CurrentLadder.SelectRectOwner.RowCount - 1)
@@ -504,6 +815,7 @@ namespace SamSoarII.AppMain
             }
             CurrentLadder.SelectionRect.Y++;
         }
+
         private void ReplaceElementsExecute(int catalogId)
         {
             if (catalogId != 10 && catalogId != 11 && catalogId != 101)
@@ -541,6 +853,7 @@ namespace SamSoarII.AppMain
                 }
             }
         }
+
         public void RemoveNetworkHLines(LadderNetworkViewModel network)
         {
             foreach (var hline in network.GetSelectedHLines())
@@ -548,6 +861,7 @@ namespace SamSoarII.AppMain
                 network.RemoveElement(hline.X, hline.Y);
             }
         }
+
         public void RemoveNetworkVLines(LadderNetworkViewModel network)
         {
             foreach (var vline in network.GetSelectedVerticalLines())
@@ -555,41 +869,18 @@ namespace SamSoarII.AppMain
                 network.RemoveVerticalLine(vline.X, vline.Y);
             }
         }
+
+        #endregion
+
+        #endregion
+
+        #region Project Handle
+
         public MessageBoxResult ShowSaveYesNoCancelDialog()
         {
             string title = "确认保存";
             string text = String.Format("{0:s}已经更改，是否保存？", _projectModel.ProjectName);
             return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-        }
-
-        private void ElementList_NavigateToNetwork(NavigateToNetworkEventArgs e)
-        {
-            NavigateToNetwork(e);
-        }
-        
-        public void NavigateToNetwork(NavigateToNetworkEventArgs e)
-        {
-            LadderDiagramViewModel tempItem;
-            if (ProjectModel.MainRoutine.ProgramName == e.RefLadderName)
-            {
-                tempItem = ProjectModel.MainRoutine;
-            }
-            else
-            {
-                tempItem = ProjectModel.SubRoutines.Where(x => { return x.ProgramName == e.RefLadderName; }).First();
-            }
-            var network = tempItem.GetNetworkByNumber(e.NetworkNum);
-            network.AcquireSelectRect();
-            tempItem.SelectionRect.X = e.X;
-            tempItem.SelectionRect.Y = e.Y;
-            tempItem.NavigateToNetworkByNum(e.NetworkNum);
-            _mainTabControl.ShowItem(tempItem);
-        }
-
-        public void NavigateToFuncBlock(FuncBlockViewModel fbvmodel, int line, int column)
-        {
-            _mainTabControl.ShowItem(fbvmodel);
-            fbvmodel.SetPosition(line, column);   
         }
 
         public void CreateProject(string name, string fullFileName)
@@ -623,10 +914,8 @@ namespace SamSoarII.AppMain
                 InstructionCommentManager.Clear();
                 _projectTreeView = new ProjectTreeView(_projectModel);
                 _projectTreeView.TabItemOpened += OnTabOpened;
-                _projectTreeView.RoutineRemoved += OnRemoveRoutine;
-                _projectTreeView.RoutineRenamed += OnRenameRoutine;
+                _projectTreeView.PTVHandle += OnGotPTVHandle;
                 _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
-                _projectTreeView.RoutineCompile += OnCompileRoutine;
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowEditItem += OnTabOpened;
                 _mainTabControl.Reset();
@@ -634,11 +923,9 @@ namespace SamSoarII.AppMain
                 CurrentLadder = _projectModel.MainRoutine;
                 _mainWindow.SetProjectTreeView(_projectTreeView);
                 ProjectFullFileName = fullFileName;
-                _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
-                _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
-                UpdateRefNetworksBrief(_projectModel);
             }
         }
+
         public void CloseCurrentProject()
         {
             if (_projectModel != null && _projectModel.IsModify)
@@ -662,13 +949,10 @@ namespace SamSoarII.AppMain
             }
             else
             {
-                _projectTreeView.CloseElementList();
+                //_projectTreeView.CloseElementList();
                 _projectTreeView.TabItemOpened -= OnTabOpened;
-                _projectTreeView.RoutineRemoved -= OnRemoveRoutine;
-                _projectTreeView.RoutineRenamed -= OnRenameRoutine;
+                _projectTreeView.PTVHandle += OnGotPTVHandle;
                 _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
-                _projectTreeView.InstructionTreeItemDoubleClick -= OnInstructionTreeItemDoubleClick;
-                _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
                 ProjectFullFileName = string.Empty;
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
                 _mainWindow.ClearProjectTreeView();
@@ -677,77 +961,74 @@ namespace SamSoarII.AppMain
                 _projectModel = null;
             }
         }
+
         public void SaveProject()
         {
-            _projectModel.Save(ProjectFullFileName);
+            SaveAsProject(ProjectFullFileName);
         }
 
-        public void SaveAsProject(string fullFileName)
+        public void SaveAsProject(string fileName)
         {
-            _projectModel.Save(fullFileName);
+            XDocument xdoc = new XDocument();
+            XElement xele_r = new XElement("Root");
+            xdoc.Add(xele_r);
+            XElement xele_p = new XElement("Project");
+            _projectModel.Save(xele_p);
+            xele_r.Add(xele_p);
+            XElement xele_ptv = new XElement("ProjectTreeView");
+            _projectTreeView.Save(xele_ptv);
+            xele_r.Add(xele_ptv);
+            xdoc.Save(fileName);
         }
 
-        public bool LoadProject(string fullFileName)
+        public bool LoadProject(string fileName)
         {
-            _projectModel = ProjectHelper.LoadProject(fullFileName, new ProjectModel(String.Empty, _mainWindow.OutputModel));
-            _projectModel.IFacade = this;
-            if (_projectModel != null)
+            if (_projectModel != null && _projectModel.IsModify)
             {
-                if (_projectModel.IsModify)
+                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                switch (mbret)
                 {
-                    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                    switch (mbret)
-                    {
-                        case MessageBoxResult.Yes:
-                            SaveProject();
-                            _projectModel.IsModify = false;
-                            return LoadProject(fullFileName);
-                        case MessageBoxResult.No:
-                            _projectModel.IsModify = false;
-                            return LoadProject(fullFileName);
-                        case MessageBoxResult.Cancel:
-                        default:
-                            return false;
-                    }
+                    case MessageBoxResult.Yes:
+                        SaveProject();
+                        _projectModel.IsModify = false;
+                        return LoadProject(fileName);
+                    case MessageBoxResult.No:
+                        _projectModel.IsModify = false;
+                        return LoadProject(fileName);
+                    case MessageBoxResult.Cancel:
+                    default:
+                        return false;
                 }
-                else
-                {
-                    SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
-                    _mainTabControl.SelectionChanged -= OnTabItemChanged;
-                    _mainTabControl.ShowEditItem -= OnTabOpened;
-                    if (_projectTreeView != null)
-                    {
-                        _projectTreeView.CloseElementList();
-                    }
-                    _projectTreeView = new ProjectTreeView(_projectModel);
-                    _projectTreeView.TabItemOpened += OnTabOpened;
-                    _projectTreeView.RoutineRemoved += OnRemoveRoutine;
-                    _projectTreeView.RoutineRenamed += OnRenameRoutine;
-                    _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
-                    _projectTreeView.RoutineCompile += OnCompileRoutine;
-                    _mainTabControl.Reset();
-                    _mainTabControl.SelectionChanged += OnTabItemChanged;
-                    _mainTabControl.ShowEditItem += OnTabOpened;
-                    _mainTabControl.ShowItem(_projectModel.MainRoutine);
-                    CurrentLadder = _projectModel.MainRoutine;
-                    _mainWindow.SetProjectTreeView(_projectTreeView);
-                    ProjectFullFileName = fullFileName;
-                    _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
-                    _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
-                    _projectTreeView.SubRoutineTreeItems.ItemsSource = _projectModel.SubRoutineTreeViewItems;
-                    UpdateRefNetworksBrief(_projectModel);
-                    return true;
-                } 
             }
-            return false;
-        }
-        private void UpdateRefNetworksBrief(ProjectModel projectModel)
-        {
-            projectModel.UpdateNetworkBriefs(projectModel.MainRoutine,ChangeType.Add);
-            foreach (var item in projectModel.SubRoutines)
+            else
             {
-                projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
-            }
+                _projectModel = ProjectHelper.LoadProject(fileName, new ProjectModel(String.Empty, _mainWindow.OutputModel));
+                _projectModel.IFacade = this;
+                XDocument xdoc = XDocument.Load(fileName);
+                XElement xele_r = xdoc.Element("Root");
+                XElement xele_rtv = xele_r.Element("ProjectTreeView");
+                SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
+                _mainTabControl.SelectionChanged -= OnTabItemChanged;
+                _mainTabControl.ShowEditItem -= OnTabOpened;
+                if (_projectTreeView != null)
+                {
+                    //_projectTreeView.CloseElementList();
+                }
+                _projectTreeView = new ProjectTreeView(_projectModel, xele_rtv);
+                _projectTreeView.TabItemOpened += OnTabOpened;
+                _projectTreeView.PTVHandle += OnGotPTVHandle;
+                _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+                _mainTabControl.Reset();
+                _mainTabControl.SelectionChanged += OnTabItemChanged;
+                _mainTabControl.ShowEditItem += OnTabOpened;
+                _mainTabControl.ShowItem(_projectModel.MainRoutine);
+                CurrentLadder = _projectModel.MainRoutine;
+                _mainWindow.SetProjectTreeView(_projectTreeView);
+                ProjectFullFileName = fileName;
+                //_projectTreeView.SubRoutineTreeItems.ItemsSource = _projectModel.SubRoutineTreeViewItems;
+                return true;
+            } 
+            return false;
         }
         
         public bool AddNewSubRoutine(string name)
@@ -759,7 +1040,7 @@ namespace SamSoarII.AppMain
             else
             {
                 LadderDiagramViewModel ldmodel = new LadderDiagramViewModel(name, _projectModel);
-                _projectModel.AddSubRoutine(ldmodel);
+                _projectModel.Add(ldmodel);
                 _mainTabControl.ShowItem(ldmodel);
                 return true;
             }
@@ -774,7 +1055,7 @@ namespace SamSoarII.AppMain
             else
             {
                 FuncBlockViewModel fbmodel = new FuncBlockViewModel(name);
-                _projectModel.AddFuncBlock(fbmodel);
+                _projectModel.Add(fbmodel);
                 _mainTabControl.ShowItem(fbmodel);
                 return true;
             }
@@ -787,6 +1068,14 @@ namespace SamSoarII.AppMain
 
         public int SimulateProject()
         {
+            if (!CheckFuncBlock(false))
+            {
+                return SimulateHelper.SIMULATE_FUNCBLOCK_ERROR;
+            }
+            if (!CheckLadder(false))
+            {
+                return SimulateHelper.SIMULATE_LADDER_ERROR;
+            }
             int ret = SimulateHelper.Simulate(this, _mainWindow.OutputModel);
             switch (ret)
             {
@@ -801,12 +1090,17 @@ namespace SamSoarII.AppMain
             return ret;
         }
 
+        #endregion
+        
         public void CloseTabItem(ITabItem tabItem)
         {
             _mainTabControl.CloseItem(tabItem);
         }
 
         #region Event handler
+
+        public event ProjectTreeViewEventHandler PTVEvent = delegate { };
+
         private void OnEditTabOpened(object sender, ShowTabItemEventArgs e)
         {
             
@@ -866,67 +1160,99 @@ namespace SamSoarII.AppMain
                 }
             }
         }
-
-        private void OnInstructionTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var instTreeItem = sender as InstrucionTreeItem;
-            if(instTreeItem != null)
-            {
-                if(CurrentLadder != null)
-                {
-                    CurrentLadder.ReplaceSingleElement(instTreeItem.InstructionIndex);
-                }
-            }
-        }
-       
-        private void OnRenameRoutine(object sender, RoutineRenamedEventArgs e)
-        {
-            var progmodel = sender as IProgram;
-            if(progmodel != null)
-            {
-                if(progmodel.ProgramName != e.NewName)
-                {
-                    if(_projectModel.ContainProgram(e.NewName))
-                    {
-                        MessageBox.Show("已存在同名子程序");
-                        // 刷新TreeView中的Item
-                        progmodel.ProgramName = progmodel.ProgramName;
-                        return;
-                    }
-                    else
-                    {
-                        progmodel.ProgramName = e.NewName;   
-                    }
-                }
-            }
-        }
-
-        private void OnRemoveRoutine(object sender, RoutedEventArgs e)
-        {
-            LadderDiagramViewModel ldmodel = sender as LadderDiagramViewModel;
-            if (ldmodel != null)
-            {
-                _projectModel.RemoveSubRoutine(ldmodel);
-                _mainTabControl.CloseItem(ldmodel);
-            }
-            else
-            {
-                var fbmodel = sender as FuncBlockViewModel;
-                if (fbmodel != null)
-                {
-                    _projectModel.RemoveFuncBlock(fbmodel);
-                    _mainTabControl.CloseItem(fbmodel);
-                }
-            }
-        }
-
-        private void OnCompileRoutine(object sender, RoutedEventArgs e)
-        {
-            var progmodel = sender as IProgram;
-            _projectModel.CompileFuncBlock(progmodel.ProgramName);
-            _mainWindow.LACOutput.Show();
-        }
         
+        private void OnGotPTVHandle(object sender, ProjectTreeViewEventArgs e)
+        {
+            LadderDiagramViewModel ldvmodel = null;
+            LadderNetworkViewModel lnvmodel = null;
+            FuncBlockViewModel fbvmodel = null;
+            ModbusTableModel mtmodel = null;
+            switch (e.Flags & 0xf)
+            {
+                case ProjectTreeViewEventArgs.TYPE_ROUTINE:
+                    if (e.RelativeObject is LadderDiagramViewModel)
+                    {
+                        ldvmodel = (LadderDiagramViewModel)(e.RelativeObject);
+                    }
+                    switch (e.Flags & ~0xf)
+                    {
+                        case ProjectTreeViewEventArgs.FLAG_CREATE:
+                            CreateRoutine(e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
+                            ReplaceRoutine(ldvmodel, e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REMOVE:
+                            RemoveRoutine(ldvmodel, e);
+                            break;
+                    }
+                    break;
+                case ProjectTreeViewEventArgs.TYPE_FUNCBLOCK:
+                    if (e.RelativeObject is FuncBlockViewModel)
+                    {
+                        fbvmodel = (FuncBlockViewModel)(e.RelativeObject);
+                    }
+                    switch (e.Flags & ~0xf)
+                    {
+                        case ProjectTreeViewEventArgs.FLAG_CREATE:
+                            CreateFuncBlock(e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
+                            ReplaceFuncBlock(fbvmodel, e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REMOVE:
+                            RemoveFuncBlock(fbvmodel, e);
+                            break;
+                    }
+                    break;
+                case ProjectTreeViewEventArgs.TYPE_NETWORK:
+                    if (e.RelativeObject is LadderNetworkViewModel)
+                    {
+                        lnvmodel = (LadderNetworkViewModel)(e.RelativeObject);
+                        ldvmodel = lnvmodel.LDVModel;
+                    }
+                    switch (e.Flags & ~0xf)
+                    {
+                        case ProjectTreeViewEventArgs.FLAG_CREATE:
+                            CreateNetwork(ldvmodel, ldvmodel.NetworkCount, e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
+                            ReplaceNetwork(lnvmodel, e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REMOVE:
+                            RemoveNetwork(lnvmodel, e);
+                            break;
+                    }
+                    break;
+                case ProjectTreeViewEventArgs.TYPE_MODBUS:
+                    if (e.RelativeObject is ModbusTableModel)
+                    {
+                        mtmodel = (ModbusTableModel)(e.RelativeObject);
+                    }
+                    switch (e.Flags & ~0xf)
+                    {
+                        case ProjectTreeViewEventArgs.FLAG_CREATE:
+                            CreateModbus(e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
+                            ReplaceModbus(mtmodel, e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REMOVE:
+                            RemoveModbus(mtmodel, e);
+                            break;
+                    }
+                    break;
+                case ProjectTreeViewEventArgs.TYPE_INSTRUCTION:
+                    if (e.RelativeObject is BaseViewModel && CurrentLadder != null)
+                    {
+                        CurrentLadder.ReplaceSingleElement(((BaseViewModel)(e.RelativeObject)).GetCatalogID());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         #endregion
 
     }

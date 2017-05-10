@@ -25,6 +25,7 @@ using SamSoarII.PLCDevice;
 using SamSoarII.ValueModel;
 using SamSoarII.AppMain.LadderCommand;
 using SamSoarII.Extend.FuncBlockModel;
+using SamSoarII.AppMain.UI;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -386,6 +387,7 @@ namespace SamSoarII.AppMain.Project
             return eles;
         }
         #endregion
+
         #region Network manipulation
         public LadderNetworkViewModel GetNetworkByNumber(int number)
         {
@@ -460,14 +462,6 @@ namespace SamSoarII.AppMain.Project
         }
 
         #region Network manipulation，undoable command form method
-        public void RemoveSingleNetworkCommand(LadderNetworkViewModel network)
-        {
-            var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
-            _commandManager.Execute(command);
-            network.PropertyChanged -= Network_PropertyChanged;
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
-            IDVModel.Setup(this);
-        }
         public void ReplaceSingleElement(LadderNetworkViewModel network, BaseViewModel element)
         {
             var elements = new List<BaseViewModel>();
@@ -492,33 +486,48 @@ namespace SamSoarII.AppMain.Project
             _commandManager.Execute(command);
             IDVModel.Setup(this);
         }
+
         public void AddNewNetworkBefore(LadderNetworkViewModel network)
         {
-            var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber);
-            var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
-            _commandManager.Execute(command);
-            newnetwork.PropertyChanged += Network_PropertyChanged;
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
-            IDVModel.Setup(this);
+            _projectModel.IFacade.CreateNetwork(
+                this, network.NetworkNumber);
         }
+
         public void AddNewNetworkAfter(LadderNetworkViewModel network)
         {
-            var newnetwork = new LadderNetworkViewModel(this, network.NetworkNumber + 1);
-            var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, newnetwork, newnetwork.NetworkNumber);
-            _commandManager.Execute(command);
-            newnetwork.PropertyChanged += Network_PropertyChanged;
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
-            IDVModel.Setup(this);
+            _projectModel.IFacade.CreateNetwork(
+                this, network.NetworkNumber + 1);
         }
+
         public void AppendNewNetwork()
         {
-            var network = new LadderNetworkViewModel(this, _ladderNetworks.Count);
+            _projectModel.IFacade.CreateNetwork(
+                this, _ladderNetworks.Count());
+        }
+
+        public void IFAddNetwork(LadderNetworkViewModel network)
+        {
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
             _commandManager.Execute(command);
             network.PropertyChanged += Network_PropertyChanged;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
+        
+        public void RemoveSingleNetworkCommand(LadderNetworkViewModel network)
+        {
+            _projectModel.IFacade.RemoveNetwork(network);
+        }
+
+        public void IFRemoveNetwork(LadderNetworkViewModel network)
+        {
+            var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
+            _commandManager.Execute(command);
+            network.PropertyChanged -= Network_PropertyChanged;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+            IDVModel.Setup(this);
+        }
+        
         /// <summary>
         /// 放置一个新的元素在选择框内
         /// </summary>
@@ -1843,7 +1852,6 @@ namespace SamSoarII.AppMain.Project
 
         private void OnLadderDiagramMouseDown(object sender, MouseButtonEventArgs e)
         {
-            
             this.Focus();
             Keyboard.Focus(this);
             if(e.LeftButton == MouseButtonState.Pressed)
@@ -2005,7 +2013,8 @@ namespace SamSoarII.AppMain.Project
             {
                 ShowInstructionInputDialog("");
             }
-        } 
+        }
+        
         #endregion
 
         #region Command execute

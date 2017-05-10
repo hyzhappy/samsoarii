@@ -17,6 +17,9 @@ using SamSoarII.LadderInstViewModel;
 using SamSoarII.UserInterface;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using SamSoarII.Extend.FuncBlockModel;
+using System.Xml.Linq;
+
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
@@ -24,413 +27,987 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class ProjectTreeView : UserControl, INotifyPropertyChanged
     {
+        #region Numbers
+
+        private Dictionary<string, ProjectTreeViewItem> dpdict
+            = new Dictionary<string, ProjectTreeViewItem>();
+
+        private Dictionary<string, ProjectTreeViewItem> fpdict
+            = new Dictionary<string, ProjectTreeViewItem>();
 
         private ProjectModel _projectModel;
+
         public ProjectModel Project
         {
             get { return _projectModel; }
         }
-
-        private string _oldname;
         
-        private bool _isInEditMode;
-        public bool IsInEditMode
-        {
-            get { return _isInEditMode; }
-            set
-            {
-                _isInEditMode = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsInEditMode"));
-            }
-        }
-        ElementList _elementList;
-        public event MouseButtonEventHandler InstructionTreeItemDoubleClick = delegate { }; 
+        private ElementList _elementList;
 
-        public event ShowTabItemEventHandler TabItemOpened = delegate { };
+        #region Components
 
-        public event RoutedEventHandler RoutineCompile = delegate { };
+        private ProjectTreeViewItem PTVI_Root;
+        private ProjectTreeViewItem PTVI_Program;
+        private ProjectTreeViewItem PTVI_MainRoutine;
+        private ProjectTreeViewItem PTVI_SubRoutines;
+        private ProjectTreeViewItem PTVI_FuncBlocks;
+        private ProjectTreeViewItem PTVI_ElementList;
+        private ProjectTreeViewItem PTVI_Modbus;
+        private ProjectTreeViewItem PTVI_Ladders;
+        private ProjectTreeViewItem[] PTVI_Insts;
+        static private string[] PTVIH_Insts
+        = { "位逻辑", "比较指令", "转换指令", "逻辑运算",
+            "传送指令", "浮点运算", "整数运算", "定时器",
+            "计数器", "程序控制", "移位指令", "中断指令",
+            "实时时钟", "通信指令", "脉冲输出", "高速计数",
+            "辅助指令"};
 
-        public event RoutineRenamedEventHandler RoutineRenamed = delegate { };
+        #endregion
 
-        public event RoutedEventHandler RoutineRemoved = delegate { };
+        #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        #region Initialize 
 
-        public event NavigateToNetworkEventHandler NavigatedToNetwork = delegate { };
-
-        public ProjectTreeView(ProjectModel project)
+        public ProjectTreeView(ProjectModel project, XElement xele = null)
         {
             InitializeComponent();
             _projectModel = project;
+            InteractionFacade _ifacade = project.IFacade;
+            _ifacade.PTVEvent += OnGotPTVEvent;
             _elementList = new ElementList();
             DataContext = Project;
-            Project.RefNetworksBriefChanged += Project_RefNetworksBriefChanged;
             Project.MTVModel.ModelChanged += OnModbusChanged;
-            OnModbusChanged(this, new RoutedEventArgs());
+            ReinitializeComponent();
+
+            if (xele != null)
+            {
+                Load(xele);
+            }
+            ProjectTreeViewItem ptvitem = null;
+            foreach (LadderDiagramViewModel ldvmodel in project.SubRoutines)
+            {
+                ProjectTreeViewItem parent = null;
+                if (dpdict.ContainsKey(ldvmodel.ProgramName))
+                {
+                    parent = dpdict[ldvmodel.ProgramName];
+                    dpdict.Remove(ldvmodel.ProgramName);
+                }
+                else
+                {
+                    parent = PTVI_SubRoutines;
+                }
+                ptvitem = CreatePTVItem(
+                        parent,
+                        ProjectTreeViewItem.TYPE_ROUTINE
+                      | ProjectTreeViewItem.FLAG_CREATENETWORK
+                      | ProjectTreeViewItem.FLAG_RENAME
+                      | ProjectTreeViewItem.FLAG_REMOVE,
+                        ldvmodel, 
+                        false);
+                Rebuild(ptvitem, ldvmodel);
+                dpdict.Add(ldvmodel.ProgramName, ptvitem);
+            }
+            foreach (FuncBlockViewModel fbvmodel in project.FuncBlocks)
+            {
+                ProjectTreeViewItem parent = null;
+                if (fpdict.ContainsKey(fbvmodel.ProgramName))
+                {
+                    parent = fpdict[fbvmodel.ProgramName];
+                    fpdict.Remove(fbvmodel.ProgramName);
+                }
+                else
+                {
+                    parent = PTVI_FuncBlocks;
+                }
+                ptvitem = CreatePTVItem(
+                        parent,
+                        ProjectTreeViewItem.TYPE_FUNCBLOCK
+                      | ProjectTreeViewItem.FLAG_RENAME
+                      | ProjectTreeViewItem.FLAG_REMOVE,
+                        fbvmodel, 
+                        false);
+                Rebuild(ptvitem, fbvmodel);
+                fpdict.Add(fbvmodel.ProgramName, ptvitem);
+            }
+
+            PTVI_Root.IsExpanded = true;
+            PTVI_Program.IsExpanded = true;
+            Rebuild(PTVI_MainRoutine, project.MainRoutine);
+            if (dpdict.ContainsKey(project.MainRoutine.ProgramName))
+            {
+                dpdict.Remove(project.MainRoutine.ProgramName);
+            }
+            dpdict.Add(project.MainRoutine.ProgramName, PTVI_MainRoutine);
+            Rebuild(PTVI_Modbus, project.MTVModel);
         }
 
-        private void Project_RefNetworksBriefChanged(RefNetworksBriefChangedEventArgs e)
+        private void ReinitializeComponent()
         {
-            switch (e.Type)
+            PTVI_Root = CreatePTVItem(
+                null,
+                ProjectTreeViewItem.TYPE_ROOT
+              | ProjectTreeViewItem.FLAG_RENAME,
+                _projectModel);
+            TV_Main.Items.Add(PTVI_Root);
+
+            PTVI_Program = CreatePTVItem(
+                PTVI_Root,
+                ProjectTreeViewItem.TYPE_PROGRAM,
+                "程序");
+
+            PTVI_MainRoutine = CreatePTVItem(
+                PTVI_Program,
+                ProjectTreeViewItem.TYPE_ROUTINE
+              | ProjectTreeViewItem.FLAG_CREATENETWORK,
+                _projectModel.MainRoutine);
+
+            PTVI_SubRoutines = CreatePTVItem(
+                PTVI_Program,
+                ProjectTreeViewItem.TYPE_ROUTINEFLODER
+              | ProjectTreeViewItem.FLAG_CREATEFOLDER
+              | ProjectTreeViewItem.FLAG_CREATEROUTINE,
+                "子程序");
+
+            PTVI_FuncBlocks = CreatePTVItem(
+                PTVI_Program,
+                ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER
+              | ProjectTreeViewItem.FLAG_CREATEFOLDER
+              | ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK,
+                "函数功能块");
+            
+            PTVI_Modbus = CreatePTVItem(
+                PTVI_Root,
+                ProjectTreeViewItem.TYPE_MODBUSFLODER
+              | ProjectTreeViewItem.FLAG_CREATEMODBUS,
+                _projectModel.MTVModel);
+
+            PTVI_ElementList = CreatePTVItem(
+                PTVI_Root,
+                ProjectTreeViewItem.TYPE_ELEMENTLIST,
+                _elementList);
+
+            PTVI_Ladders = CreatePTVItem(
+                PTVI_Root,
+                ProjectTreeViewItem.TYPE_LADDERS,
+                "指令");
+
+            PTVI_Insts = new ProjectTreeViewItem[PTVIH_Insts.Length];
+            for (int i = 0; i < PTVIH_Insts.Length; i++)
             {
-                case ChangeType.Add:
-                    if (e.Routine.IsMainLadder)
+                PTVI_Insts[i] = CreatePTVItem(
+                    PTVI_Ladders,
+                    ProjectTreeViewItem.TYPE_LADDERS,
+                    PTVIH_Insts[i]);
+            }
+            foreach (BaseViewModel bvmodel in LadderInstViewModelPrototype.GetElementViewModels())
+            {
+                int id = bvmodel.GetCatalogID() / 100 - 2;
+                if (id >= 0 && id < PTVI_Insts.Length)
+                {
+                    CreatePTVItem(
+                        PTVI_Insts[id],
+                        ProjectTreeViewItem.TYPE_INSTRUCTION,
+                        bvmodel,
+                        false);
+                }
+            }
+        }
+
+        private ProjectTreeViewItem CreatePTVItem
+        (
+            ProjectTreeViewItem     parent,
+            int                     flags,
+            object                  relativeObject,
+            bool                    iscritical = true
+        )
+        {
+            ProjectTreeViewItem createitem = new ProjectTreeViewItem();
+            createitem.RelativeObject = relativeObject;
+            createitem.Flags = flags;
+            if (parent != null)
+            {
+                parent.Items.Add(createitem);
+                createitem.RegisterPath();
+            }
+            createitem.MouseDoubleClick += OnPTVIDoubleClick;
+            createitem.MenuItemClick += ONPTVIMenuClick;
+            createitem.Renamed += OnPTVIRenamed;
+            //createitem.PreviewMouseMove += OnPTVIMouseMove;
+            //createitem.PreviewDragOver += OnPTVIDragOver;
+            createitem.IsCritical = iscritical;
+            return createitem;
+        }
+        
+        #endregion
+
+        #region Rebuild Tree
+
+        private void Rebuild(ProjectTreeViewItem ptvitem, LadderDiagramViewModel ldvmodel)
+        {
+            ptvitem.RelativeObject = ldvmodel;
+            ptvitem.Items.Clear();
+            foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
+            {
+                CreatePTVItem(
+                    ptvitem,
+                    ProjectTreeViewItem.TYPE_NETWORK
+                  | ProjectTreeViewItem.FLAG_RENAME
+                  | ProjectTreeViewItem.FLAG_REMOVE,
+                    lnvmodel);
+            }
+        }
+
+        private void Rebuild(ProjectTreeViewItem ptvitem, FuncBlockViewModel fbvmodel)
+        {
+            ptvitem.RelativeObject = fbvmodel;
+            ptvitem.Items.Clear();
+            foreach (FuncModel fmodel in fbvmodel.Funcs)
+            {
+                CreatePTVItem(
+                    ptvitem,
+                    ProjectTreeViewItem.TYPE_FUNC,
+                    fmodel);
+            }
+        }
+
+        private void Rebuild(ProjectTreeViewItem ptvitem, ModbusTableViewModel mtvmodel)
+        {
+            ptvitem.RelativeObject = mtvmodel;
+            ptvitem.Items.Clear();
+            foreach (ModbusTableModel mtmodel in mtvmodel.Models)
+            {
+                CreatePTVItem(
+                    ptvitem, 
+                    ProjectTreeViewItem.TYPE_MODBUS
+                  | ProjectTreeViewItem.FLAG_RENAME
+                  | ProjectTreeViewItem.FLAG_REMOVE,
+                    mtmodel);
+            }
+        }
+
+        #endregion
+
+        #region Modification
+
+        private void RemoveAll(ProjectTreeViewItem ptvitem)
+        {
+            ProjectTreeViewEventArgs _e = null;
+            switch (ptvitem.Flags & 0xf)
+            {
+                case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                case ProjectTreeViewItem.TYPE_MODBUSFLODER:
+                case ProjectTreeViewItem.TYPE_NETWORKFLODER:
+                    foreach (ProjectTreeViewItem _ptvitem in ptvitem.Items)
                     {
-                        MainRoutineTreeItem.ItemsSource = Project.RefNetworksBrief[e.Routine];
-                    }
-                    else
-                    {
-                        foreach (var item in SubRoutineTreeItems.ItemsSource)
-                        {
-                            if (((TreeViewItem)item).Header == e.Routine)
-                            {
-                                ((TreeViewItem)item).ContextMenu = (ContextMenu)FindResource("SubRoutineContextMenu");
-                                ((TreeViewItem)item).MouseDoubleClick += OnRoutineTreeItemDoubleClick;
-                                ((TreeViewItem)item).HeaderTemplate = (DataTemplate)FindResource("ProgramTemplate");
-                                ((TreeViewItem)item).IsExpanded = true;
-                                ((TreeViewItem)item).Selected -= OnSelected;
-                                ((TreeViewItem)item).ItemsSource = Project.RefNetworksBrief[e.Routine];
-                            }
-                        }
+                        RemoveAll(_ptvitem);
                     }
                     break;
-                case ChangeType.Remove:
-                    break;
-                case ChangeType.Modify:
-                    if (MainRoutineTreeItem.Header == e.Routine)
-                    {
-                        MainRoutineTreeItem.ItemsSource = Project.RefNetworksBrief[e.Routine];
-                    }
-                    else
-                    {
-                        foreach (var item in SubRoutineTreeItems.ItemsSource)
-                        {
-                            if (((TreeViewItem)item).Header == e.Routine)
-                            {
-                                ((TreeViewItem)item).ItemsSource = Project.RefNetworksBrief[e.Routine];
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case ChangeType.Clear:
+                case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                case ProjectTreeViewItem.TYPE_ROUTINE:
+                case ProjectTreeViewItem.TYPE_MODBUS:
+                case ProjectTreeViewItem.TYPE_NETWORK:
+                    _e = new ProjectTreeViewEventArgs((ptvitem.Flags & 0xf) | ProjectTreeViewEventArgs.FLAG_REMOVE,
+                        ptvitem.RelativeObject, ptvitem);
+                    PTVHandle(this, _e);
                     break;
                 default:
+                    throw new ArgumentException(String.Format("Cannot remove this item : {0:s}", ptvitem));
+            }
+            if (ptvitem.Parent is ProjectTreeViewItem)
+            {
+                ((ProjectTreeViewItem)(ptvitem.Parent)).Items.Remove(ptvitem);
+            }
+        }
+
+        #endregion
+
+        #region Event Handler
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        
+        public event ShowTabItemEventHandler TabItemOpened = delegate { };
+
+        public event NavigateToNetworkEventHandler NavigatedToNetwork = delegate { };
+
+        public event ProjectTreeViewEventHandler PTVHandle = delegate { };
+        
+        public event MouseButtonEventHandler InstructionTreeItemDoubleClick = delegate { };
+
+        private void OnPTVIDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ProjectTreeViewItem)
+            {
+                ProjectTreeViewItem ptvitem = (ProjectTreeViewItem)sender;
+                switch (ptvitem.Flags & 0x0f)
+                {
+                    case ProjectTreeViewItem.TYPE_ROUTINE:
+                        TabItemOpened(ptvitem.RelativeObject, new ShowTabItemEventArgs(TabType.Program));
+                        break;
+                    case ProjectTreeViewItem.TYPE_NETWORK:
+                        if (ptvitem.RelativeObject is LadderNetworkViewModel)
+                        {
+                            LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)(ptvitem.RelativeObject);
+                            LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+                            NavigateToNetworkEventArgs _e1 = new NavigateToNetworkEventArgs(
+                                lnvmodel.NetworkNumber,
+                                ldvmodel.ProgramName,
+                                0, 0);
+                            NavigatedToNetwork(_e1);
+                        }
+                        break;
+                    case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                        TabItemOpened(ptvitem.RelativeObject, new ShowTabItemEventArgs(TabType.Program));
+                        break;
+                    case ProjectTreeViewItem.TYPE_MODBUS:
+                        TabItemOpened(ptvitem.RelativeObject, new ShowTabItemEventArgs(TabType.Modbus));
+                        if (ptvitem.RelativeObject is ModbusTableModel)
+                        {
+                            _projectModel.MTVModel.Current = (ModbusTableModel)ptvitem.RelativeObject;
+                        }
+                        break;
+                    case ProjectTreeViewItem.TYPE_MODBUSFLODER:
+                        TabItemOpened(ptvitem.RelativeObject, new ShowTabItemEventArgs(TabType.Modbus));
+                        break;
+                    case ProjectTreeViewItem.TYPE_ELEMENTLIST:
+                        _elementList.Show();
+                        break;
+                    case ProjectTreeViewItem.TYPE_INSTRUCTION:
+                        ProjectTreeViewEventArgs _e2 = new ProjectTreeViewEventArgs(
+                            ProjectTreeViewEventArgs.TYPE_INSTRUCTION 
+                          | ProjectTreeViewEventArgs.FLAG_REPLACE, 
+                            ptvitem.RelativeObject, ptvitem.RelativeObject);
+                        PTVHandle(this, _e2);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void ONPTVIMenuClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is ProjectMenuItem)
+            {
+                ProjectMenuItem pmitem = (ProjectMenuItem)sender;
+                ProjectTreeViewItem ptvitem = pmitem.PTVItem;
+                ProjectTreeViewEventArgs _e = null;
+                int flags_type = ptvitem.Flags & 0xf;
+                switch (pmitem.Flags)
+                {
+                    case ProjectTreeViewItem.FLAG_CREATEROUTINE:
+                        _e = new ProjectTreeViewEventArgs(
+                            ProjectTreeViewEventArgs.TYPE_ROUTINE 
+                          | ProjectTreeViewEventArgs.FLAG_CREATE,
+                            pmitem.RelativeObject, ptvitem);
+                        PTVHandle(this, _e);
+                        break;
+                    case ProjectTreeViewItem.FLAG_CREATENETWORK:
+                        _e = new ProjectTreeViewEventArgs(
+                            ProjectTreeViewEventArgs.TYPE_NETWORK
+                          | ProjectTreeViewEventArgs.FLAG_CREATE,
+                            pmitem.RelativeObject, ptvitem);
+                        PTVHandle(this, _e);
+                        break;
+                    case ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK:
+                        _e = new ProjectTreeViewEventArgs(
+                            ProjectTreeViewEventArgs.TYPE_FUNCBLOCK
+                          | ProjectTreeViewEventArgs.FLAG_CREATE,
+                            pmitem.RelativeObject, ptvitem);
+                        PTVHandle(this, _e);
+                        break;
+                    case ProjectTreeViewItem.FLAG_CREATEMODBUS:
+                        _e = new ProjectTreeViewEventArgs(
+                            ProjectTreeViewEventArgs.TYPE_MODBUS
+                          | ProjectTreeViewEventArgs.FLAG_CREATE,
+                            pmitem.RelativeObject, ptvitem);
+                        PTVHandle(this, _e);
+                        break;
+                    case ProjectTreeViewItem.FLAG_RENAME:
+                        ptvitem.Rename();
+                        break;
+                    case ProjectTreeViewItem.FLAG_REMOVE:
+                        MessageBoxResult result = MessageBox.Show(
+                            "删除后不能恢复，是否确定？", "重要", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        if (result == MessageBoxResult.Yes)
+                            RemoveAll(ptvitem);
+                        break;
+                    case ProjectTreeViewItem.FLAG_CREATEFOLDER:
+                        ProjectTreeViewItem createitem = CreatePTVItem(
+                            ptvitem, ptvitem.Flags, String.Empty, false);
+                        ptvitem.IsExpanded = true;
+                        createitem.Rename();
+                        break;
+                }
+            }
+        }
+
+        private void OnPTVIRenamed(object sender, RoutedEventArgs e)
+        {
+            if (sender is ProjectTreeViewItem)
+            {
+                ProjectTreeViewItem ptvitem = (ProjectTreeViewItem)sender;
+                ProjectTreeViewItem ptvparent = (ProjectTreeViewItem)(ptvitem.Parent);
+                ProjectTreeViewEventArgs _e = null;
+                if (ptvitem.Text.Equals(String.Empty))
+                {
+                    ptvitem.Rename("名称不能为空！");
+                    return;
+                }
+                foreach (ProjectTreeViewItem _ptvitem in ptvparent.Items)
+                {
+                    if (_ptvitem != ptvitem && _ptvitem.Text.Equals(ptvitem.Text))
+                    {
+                        ptvitem.Rename(String.Format("同文件夹下已存在名称 {0:s}。", ptvitem.Text));
+                        return;
+                    }
+                }
+                if (ptvitem.RelativeObject is LadderDiagramViewModel)
+                {
+                    LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(ptvitem.RelativeObject);
+                    foreach (LadderDiagramViewModel _ldvmodel in _projectModel.SubRoutines)
+                    {
+                        if (_ldvmodel != ldvmodel && _ldvmodel.ProgramName.Equals(ptvitem.Text))
+                        {
+                            ptvitem.Rename(String.Format("已存在子程序 {0:s}。", ptvitem.Text));
+                            return;
+                        }
+                    }
+                    ptvitem.RenameClose();
+                    dpdict.Remove(ldvmodel.ProgramName);
+                    ldvmodel.ProgramName = ptvitem.Text;
+                    dpdict.Add(ldvmodel.ProgramName, ptvitem);
+                    /*
+                    _e = new ProjectTreeViewEventArgs(
+                        ProjectTreeViewEventArgs.TYPE_ROUTINE | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                        ldvmodel, ptvitem.Text);
+                    PTVHandle(this, _e);
+                    */
+                }
+                else if (ptvitem.RelativeObject is FuncBlockViewModel)
+                {
+                    FuncBlockViewModel fbvmodel = (FuncBlockViewModel)(ptvitem.RelativeObject);
+                    foreach (FuncBlockViewModel _fbvmodel in _projectModel.FuncBlocks)
+                    {
+                        if (_fbvmodel != fbvmodel && _fbvmodel.ProgramName.Equals(ptvitem.Text))
+                        {
+                            ptvitem.Rename(String.Format("已存在函数功能块 {0:s}。", ptvitem.Text));
+                            return;
+                        }
+                    }
+                    ptvitem.RenameClose();
+                    dpdict.Remove(fbvmodel.ProgramName);
+                    fbvmodel.ProgramName = ptvitem.Text;
+                    dpdict.Add(fbvmodel.ProgramName, ptvitem);
+                    /*
+                    _e = new ProjectTreeViewEventArgs(
+                        ProjectTreeViewEventArgs.TYPE_FUNCBLOCK | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                        fbvmodel, ptvitem.Text);
+                    PTVHandle(this, _e);
+                    */
+                }
+                else
+                {
+                    ptvitem.RenameClose();
+                }
+            }
+        }
+
+        private void OnGotPTVEvent(object sender, ProjectTreeViewEventArgs e)
+        {
+            ProjectTreeViewItem selectitem = null;
+            ProjectTreeViewItem createitem = null;
+            ProjectTreeViewItem deleteitem = null;
+            string rname = null;
+            string tname = null;
+            if (e.TargetedObject is ProjectTreeViewItem)
+            {
+                selectitem = (ProjectTreeViewItem)e.TargetedObject;
+            }
+            switch (e.Flags & 0xf)
+            {
+                case ProjectTreeViewEventArgs.TYPE_ROUTINE:
+                    if (!(e.RelativeObject is LadderDiagramViewModel))
+                    {
+                        throw new ArgumentException(String.Format("Unsupported RelativeObject {0:s}", e.RelativeObject));
+                    }
+                    rname = ((LadderDiagramViewModel)(e.RelativeObject)).ProgramName;
+                    if (selectitem == null)
+                    {
+                        if (e.TargetedObject is LadderDiagramViewModel)
+                        {
+                            tname = ((LadderDiagramViewModel)(e.TargetedObject)).ProgramName;
+                            if (dpdict.ContainsKey(tname))
+                            {
+                                selectitem = dpdict[tname];
+                                selectitem = (ProjectTreeViewItem)(selectitem.Parent);
+                            }
+                        }
+                    }
+                    if (selectitem == null)
+                    {
+                        selectitem = PTVI_SubRoutines;
+                    }
+                    switch (e.Flags & ~0xf)
+                    {
+                        case ProjectTreeViewEventArgs.FLAG_CREATE:
+                            createitem = CreatePTVItem(
+                                selectitem,
+                                ProjectTreeViewItem.TYPE_ROUTINE
+                              | ProjectTreeViewItem.FLAG_CREATENETWORK
+                              | ProjectTreeViewItem.FLAG_RENAME
+                              | ProjectTreeViewItem.FLAG_REMOVE,
+                                e.RelativeObject,
+                                false);
+                            selectitem.IsExpanded = true;
+                            Rebuild(createitem, (LadderDiagramViewModel)(e.RelativeObject));
+                            //dpdict.Add(rname, createitem);
+                            createitem.Rename();
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REMOVE:
+                            if (!dpdict.ContainsKey(rname))
+                            {
+                                throw new ArgumentException(String.Format("Cannot found routine {0:s} in the ProjectTreeView.", rname));
+                            }
+                            deleteitem = dpdict[rname];
+                            selectitem = (ProjectTreeViewItem)(deleteitem.Parent);
+                            selectitem.Items.Remove(deleteitem);
+                            dpdict.Remove(rname);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
+                            if (tname == null)
+                            {
+                                tname = e.TargetedObject.ToString();
+                            }
+                            if (dpdict.ContainsKey(tname))
+                            {
+                                selectitem = dpdict[tname];
+                            }
+                            else
+                            {
+                                throw new ArgumentException(String.Format("Cannot found routine {0:s}", tname));
+                            }
+                            Rebuild(selectitem, (LadderDiagramViewModel)(e.RelativeObject));
+                            dpdict.Remove(tname);
+                            dpdict.Add(rname, selectitem);
+                            break;
+                    }
+                    break;
+                case ProjectTreeViewItem.TYPE_NETWORK:
+                    if (!(e.RelativeObject is LadderNetworkViewModel)
+                     && !(e.RelativeObject is LadderDiagramViewModel))
+                    {
+                        throw new ArgumentException(String.Format("Unsupported RelativeObject {0:s}", e.RelativeObject));
+                    }
+                    LadderNetworkViewModel lnvmodel = null;
+                    LadderDiagramViewModel ldvmodel = null;
+                    if (e.RelativeObject is LadderNetworkViewModel)
+                    {
+                        lnvmodel = (LadderNetworkViewModel)(e.RelativeObject);
+                    }
+                    if (e.RelativeObject is LadderDiagramViewModel)
+                    {
+                        ldvmodel = (LadderDiagramViewModel)(e.RelativeObject);
+                    }
+                    if (ldvmodel == null)
+                    {
+                        ldvmodel = lnvmodel.LDVModel;
+                    }
+                    if (!dpdict.ContainsKey(ldvmodel.ProgramName))
+                    {
+                        throw new ArgumentException(String.Format("Cannot found routine {0:s} in the ProjectTreeView.", ldvmodel.ProgramName));
+                    }
+                    selectitem = dpdict[ldvmodel.ProgramName];
+                    switch (e.Flags & ~0xf)
+                    {
+                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
+                            foreach (ProjectTreeViewItem ptvitem in selectitem.Items)
+                            {
+                                if (ptvitem.RelativeObject is LadderNetworkViewModel
+                                 && ((LadderNetworkViewModel)(ptvitem.RelativeObject)).NetworkNumber == lnvmodel.NetworkNumber)
+                                {
+                                    selectitem = ptvitem;
+                                    break;
+                                }
+                            }
+                            if (!(selectitem.RelativeObject is LadderNetworkViewModel))
+                            {
+                                throw new ArgumentException(String.Format("Cannot found network {0:d} in routine {1:s}",
+                                    lnvmodel.NetworkNumber, ldvmodel.ProgramName));
+                            }
+                            selectitem.RelativeObject = lnvmodel;
+                            selectitem.Flags = selectitem.Flags;
+                            break;
+                        default:
+                            Rebuild(selectitem, ldvmodel);
+                            break;
+                    }
+                    break;
+                case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                    if (!(e.RelativeObject is FuncBlockViewModel))
+                    {
+                        throw new ArgumentException(String.Format("Unsupported RelativeObject {0:s}", e.RelativeObject));
+                    }
+                    rname = ((FuncBlockViewModel)(e.RelativeObject)).ProgramName;
+                    if (selectitem == null)
+                    {
+                        if (e.TargetedObject is FuncBlockViewModel)
+                        {
+                            tname = ((FuncBlockViewModel)(e.TargetedObject)).ProgramName;
+                            if (dpdict.ContainsKey(tname))
+                            {
+                                selectitem = dpdict[tname];
+                                selectitem = (ProjectTreeViewItem)(selectitem.Parent);
+                            }
+                        }
+                    }
+                    if (selectitem == null)
+                    {
+                        selectitem = PTVI_FuncBlocks;
+                    }
+                    switch (e.Flags & ~0xf)
+                    {
+                        case ProjectTreeViewEventArgs.FLAG_CREATE:
+                            selectitem = (ProjectTreeViewItem)(selectitem.Parent);
+                            createitem = CreatePTVItem(
+                                selectitem,
+                                ProjectTreeViewItem.TYPE_FUNCBLOCK
+                              | ProjectTreeViewItem.FLAG_RENAME
+                              | ProjectTreeViewItem.FLAG_REMOVE,
+                                e.RelativeObject,
+                                false);
+                            selectitem.IsExpanded = true;
+                            Rebuild(createitem, (FuncBlockViewModel)(e.RelativeObject));
+                            //fpdict.Add(rname, createitem);
+                            createitem.Rename();
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REMOVE:
+                            if (!fpdict.ContainsKey(rname))
+                            {
+                                throw new ArgumentException(String.Format("Cannot found funcblock {0:s} in the ProjectTreeView.", rname));
+                            }
+                            deleteitem = fpdict[rname];
+                            selectitem = (ProjectTreeViewItem)(deleteitem.Parent);
+                            selectitem.Items.Remove(deleteitem);
+                            fpdict.Remove(rname);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
+                            if (tname == null)
+                            {
+                                tname = e.TargetedObject.ToString();
+                            }
+                            if (fpdict.ContainsKey(tname))
+                            {
+                                selectitem = fpdict[tname];
+                            }
+                            else
+                            {
+                                throw new ArgumentException(String.Format("Cannot found FuncBlock {0:s}", tname));
+                            }
+                            Rebuild(selectitem, (FuncBlockViewModel)(e.RelativeObject));
+                            fpdict.Remove(tname);
+                            fpdict.Add(rname, selectitem);
+                            break;
+                    }
+                    break;
+                case ProjectTreeViewItem.TYPE_MODBUS:
+                    if (!(e.RelativeObject is ModbusTableViewModel))
+                    {
+                        throw new ArgumentException(String.Format("Unsupported RelativeObject {0:s}", e.RelativeObject));
+                    }
+                    Rebuild(PTVI_Modbus, (ModbusTableViewModel)(e.RelativeObject));
                     break;
             }
-        }
-
-        #region Event handler
-        // 从ContextMenu打开子程序处理事件，直接调用双击事件
-        void OnOpenRoutine(object sender, RoutedEventArgs e)
-        {
-            var menuitem = sender as MenuItem;
-            if (menuitem != null)
-            {
-                var contextmenu = menuitem.Parent as ContextMenu;
-                if (contextmenu != null)
-                {
-                    var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
-                    if (treeviewitem != null)
-                    {
-                        TabItemOpened.Invoke(treeviewitem.Header, new ShowTabItemEventArgs(TabType.Program));
-                    }
-                }
-            }         
-        }
-
-        // 每次双击会触发两次这个事件 ???
-        private void OnRoutineTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var treeItem = sender as TreeViewItem;
-            if(treeItem != null)
-            {
-                IProgram prog = treeItem.Header as IProgram;
-                if(prog != null)
-                {
-                    TabItemOpened.Invoke(prog, new ShowTabItemEventArgs(TabType.Program));
-                }           
-            }        
-        }
-        void OnInstructionTreeItemDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (this.InstructionTreeItemDoubleClick != null)
-            {
-                InstructionTreeItemDoubleClick.Invoke(sender, e);
-            }
-        }
-        private void OnShowCommentList(object sender, MouseButtonEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
-        }
-
-        private void OnShowCommentList(object sender, RoutedEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.CommentList));
-        }
-
-        private void OnShowUsageList(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void OnShowUsageList(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OnShowVariableList(object sender, MouseButtonEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
-        }
-
-        private void OnShowVariableList(object sender, RoutedEventArgs e)
-        {
-            TabItemOpened.Invoke(sender, new ShowTabItemEventArgs(TabType.VariableList));
-        }
-
-        private void OnRenameRoutine(object sender, RoutedEventArgs e)
-        {
-            var menuitem = sender as MenuItem;
-            if (menuitem != null)
-            {
-                var contextmenu = menuitem.Parent as ContextMenu;
-                if (contextmenu != null)
-                {
-                    var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
-                    if (treeviewitem != null)
-                    {
-                        var prog = treeviewitem.Header as IProgram;
-                        if(prog != null)
-                        {
-                            _oldname = prog.ProgramName;
-                            IsInEditMode = true;
-                        }
-
-                    }
-                }
-            }
-        }
-
-        private void OnCompileRoutine(object sender, RoutedEventArgs e)
-        {
-            var menuitem = sender as MenuItem;
-            if (menuitem != null)
-            {
-                var contextmenu = menuitem.Parent as ContextMenu;
-                if (contextmenu != null)
-                {
-                    var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
-                    if (treeviewitem != null)
-                    {
-                        RoutineCompile.Invoke(treeviewitem.Header, new RoutedEventArgs());
-                    }
-                }
-            }
-        }
-
-        private void OnRemoveRoutine(object sender, RoutedEventArgs e)
-        {
-            var menuitem = sender as MenuItem;
-            if (menuitem != null)
-            {
-                var contextmenu = menuitem.Parent as ContextMenu;
-                if (contextmenu != null)
-                {
-                    var treeviewitem = contextmenu.PlacementTarget as TreeViewItem;
-                    if (treeviewitem != null)
-                    {
-                        var result = MessageBox.Show("删除后不能恢复，是否确定", "重要", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                        if(result == MessageBoxResult.Yes)
-                        {
-                            RoutineRemoved.Invoke(treeviewitem.Header, new RoutedEventArgs());
-                        }
-                    }
-                }
-            }
-        }
-
-        private void OnEditTextBoxVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if(textBox.IsVisible)
-            {
-                textBox.Focus();
-                textBox.SelectAll();
-            }
-        }
-
-        private void OnEditTextBoxKeyDown(object sender, KeyEventArgs e )
-        {
-            if(e.Key == Key.Enter)
-            {
-                IsInEditMode = false;
-            }
-            if(e.Key == Key.Escape)
-            {
-                var textBox = sender as TextBox;
-                textBox.Text = _oldname;
-                IsInEditMode = false;
-            }
-        }
-
-        private void OnEditTextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            IsInEditMode = false;
-            var textBox = sender as TextBox;
-            TreeViewItem item = FindTreeItem(sender as TextBox);
-            RoutineRenamed.Invoke(item.Header, new RoutineRenamedEventArgs(textBox.Text));
-        }
-
-        static TreeViewItem FindTreeItem(DependencyObject source)
-        {
-            while (source != null && !(source is TreeViewItem))
-                source = VisualTreeHelper.GetParent(source);
-            return source as TreeViewItem;
-        }
-        private void OnElementListOpenDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            double workHeight = SystemParameters.WorkArea.Height;
-            double workWidth = SystemParameters.WorkArea.Width;
-            _elementList.Left = (workWidth - _elementList.Width) / 2;
-            _elementList.Top = (workHeight - _elementList.Height) / 2;
-            _elementList.Show();
-        }
-        private void OnElementListOpen(object sender, RoutedEventArgs e)
-        {
-            double workHeight = SystemParameters.WorkArea.Height;
-            double workWidth = SystemParameters.WorkArea.Width;
-            _elementList.Left = (workWidth - _elementList.Width) / 2;
-            _elementList.Top = (workHeight - _elementList.Height) / 2;
-            _elementList.Show();
-        }
-        private void OnSelected(object sender, RoutedEventArgs e)
-        {
-            TreeViewItem item = sender as TreeViewItem;
-            if (item.Header.GetType() == typeof(string))
-            {
-                var parent = VisualTreeHelper.GetParent(item);
-                while (parent.GetType() != typeof(TreeViewItem))
-                {
-                    parent = VisualTreeHelper.GetParent(parent);
-                }
-                int networkNum = int.Parse(item.Header.ToString().Substring(0,1));
-                LadderDiagramViewModel model = (parent as TreeViewItem).Header as LadderDiagramViewModel;
-                NavigatedToNetwork.Invoke(new NavigateToNetworkEventArgs(networkNum,model.ProgramName,0,0));
-            }
-            e.Handled = true;
-        }
-
-        private void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            TreeViewItem item = sender as TreeViewItem;
-            if (item.Header is string)
-            {
-                e.Handled = true;
-            }
-        }
-        public void CloseElementList()
-        {
-            _elementList.Closing -= _elementList.OnClosing;
-            _elementList.Close();
-        }
-        #region Modbus
-        private TreeViewItem _GetTVItemFromMItem(MenuItem mitem)
-        {
-            if (mitem.Parent is ContextMenu)
-            {
-                ContextMenu cmenu = (ContextMenu)(mitem.Parent);
-                if (cmenu.PlacementTarget is TreeViewItem)
-                {
-                    TreeViewItem tvitem = (TreeViewItem)(cmenu.PlacementTarget);
-                    return tvitem;
-                }
-            }
-            return null;
         }
 
         private void OnModbusChanged(object sender, RoutedEventArgs e)
         {
-            TVI_Modbus.Items.Clear();
-            foreach (ModbusTableModel model in Project.MTVModel.Models)
+            ProjectTreeViewEventArgs _e = new ProjectTreeViewEventArgs(
+                ProjectTreeViewEventArgs.TYPE_MODBUS, _projectModel.MTVModel, _projectModel.MTVModel);
+            OnGotPTVEvent(sender, _e);
+        }
+        
+        #region Drag & Drop
+
+        private ProjectTreeViewItem dragitem = null;
+        public ProjectTreeViewItem DragItem
+        {
+            get { return this.dragitem; }
+            private set { this.dragitem = value; }
+        }
+
+        private ProjectTreeViewItem currentitem = null;
+        public ProjectTreeViewItem CurrentItem
+        {
+            get { return this.currentitem; }
+            private set
             {
-                TreeViewItem tvitem = new TreeViewItem();
-                tvitem.Header = model.Name;
-                TVI_Modbus.Items.Add(tvitem);
+                if (currentitem == value) return;
+                if (currentitem != null)
+                {
+                    currentitem.Background = Brushes.Transparent;
+                }
+                this.currentitem = value;
+                if (currentitem != null && dragitem != null
+                 && currentitem != dragitem)
+                {
+                    if (dragitem.IsAncestorOf(currentitem))
+                        return;
+                    switch (dragitem.Flags & 0xf)
+                    {
+                        case ProjectTreeViewItem.TYPE_ROUTINE:
+                        case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                            if ((currentitem.Flags & 0xf) != ProjectTreeViewItem.TYPE_ROUTINEFLODER)
+                                return;
+                            break;
+                        case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                        case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                            if ((currentitem.Flags & 0xf) != ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER)
+                                return;
+                            break;
+                        default:
+                            return;
+                    }
+                    currentitem.Background = Brushes.BlueViolet;
+                }
             }
         }
 
-        private void OnModbusCreated(object sender, RoutedEventArgs e)
+        private void OnPTVIMouseMove(object sender, MouseEventArgs e)
         {
-            TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
-            Project.MTVModel.AddModel();
+            if (e.OriginalSource is FrameworkElement)
+            {
+                FrameworkElement fele = (FrameworkElement)(e.OriginalSource);
+                while (!(fele is ProjectTreeViewItem)
+                    && (fele.Parent is FrameworkElement))
+                {
+                    fele = (FrameworkElement)(fele.Parent);
+                }
+                if (fele is ProjectTreeViewItem)
+                {
+                    CurrentItem = (ProjectTreeViewItem)fele;
+                }
+            }
+            if (CurrentItem == null) return;
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                DragItem = null;
+                CurrentItem.Background = Brushes.Transparent;
+                return;
+            }
+            if (DragItem == null && TV_Main.SelectedItem != null)
+            {
+                CurrentItem = (ProjectTreeViewItem)(TV_Main.SelectedItem);
+                if (CurrentItem.IsCritical) return;
+                if (CurrentItem.IsRenaming) return;
+                DragItem = CurrentItem;
+                DragDrop.DoDragDrop(TV_Main, DragItem, DragDropEffects.Move);
+            }
         }
 
-        private void OnModbusDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OnPTVIDragOver(object sender, DragEventArgs e)
         {
-            if (sender == TVI_Modbus)
+            if (e.OriginalSource is FrameworkElement)
             {
-                TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
+                FrameworkElement fele = (FrameworkElement)(e.OriginalSource);
+                while (!(fele is ProjectTreeViewItem)
+                    && (fele.Parent is FrameworkElement))
+                {
+                    fele = (FrameworkElement)(fele.Parent);
+                }
+                if (fele is ProjectTreeViewItem)
+                {
+                    CurrentItem = (ProjectTreeViewItem)fele;
+                }
             }
-            else if (sender is TreeViewItem)
+        }
+
+        private void TV_Main_Drop(object sender, DragEventArgs e)
+        {
+            if (CurrentItem.Background != Brushes.BlueViolet) return;
+            DragItem.ReleasePath();
+            ((ProjectTreeViewItem)(DragItem.Parent)).Items.Remove(DragItem);
+            CurrentItem.Items.Add(DragItem);
+            CurrentItem.IsExpanded = true;
+            DragItem.RegisterPath();
+            DragItem.IsSelected = true;
+            DragItem = null;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Save & Load
+
+        public void Save(XElement xele)
+        {
+            XElement xele_sr = new XElement("PTVI_SubRoutines");
+            Save(PTVI_SubRoutines, xele_sr);
+            xele.Add(xele_sr);
+            XElement xele_fb = new XElement("PTVI_FuncBlocks");
+            Save(PTVI_FuncBlocks, xele_fb);
+            xele.Add(xele_fb);
+            foreach (KeyValuePair<string, ProjectTreeViewItem> kvs in dpdict)
             {
-                OnModbusOpened(sender, new RoutedEventArgs());
+                XElement xele_dp = new XElement("Routine");
+                xele_dp.SetAttributeValue("Name", kvs.Key);
+                xele_dp.SetAttributeValue("Path", ((ProjectTreeViewItem)(kvs.Value.Parent)).Path);
+                xele.Add(xele_dp);
+            }
+            foreach (KeyValuePair<string, ProjectTreeViewItem> kvs in fpdict)
+            {
+                XElement xele_fp = new XElement("FuncBlock");
+                xele_fp.SetAttributeValue("Name", kvs.Key);
+                xele_fp.SetAttributeValue("Path", ((ProjectTreeViewItem)(kvs.Value.Parent)).Path);
+                xele.Add(xele_fp);
             }
         }
         
-        private void OnModbusOpened(object sender, RoutedEventArgs e)
+        public void Save(ProjectTreeViewItem ptvitem, XElement xele)
         {
-            if (sender is MenuItem)
+            xele.SetAttributeValue("Text", ptvitem.Text);
+            xele.SetAttributeValue("Flags", ptvitem.Flags);
+            foreach (ProjectTreeViewItem _ptvitem in ptvitem.Items)
             {
-                MenuItem mitem = (MenuItem)(sender);
-                sender = _GetTVItemFromMItem(mitem);
-            }
-            if (sender is TreeViewItem)
-            {
-                string header = ((TreeViewItem)(sender)).Header.ToString();
-                IEnumerable<ModbusTableModel> fit = Project.MTVModel.Models.Where(
-                    (ModbusTableModel model) => { return model.Name.Equals(header); });
-                if (fit.Count() > 0)
-                    Project.MTVModel.Current = fit.First();
-                if (Project.MTVModel.Current != null)
-                    TabItemOpened(Project.MTVModel, new ShowTabItemEventArgs(TabType.Modbus));
-                else
-                    MessageBox.Show(String.Format("错误：找不到{0:s}。", header));
+                switch (_ptvitem.Flags & 0xf)
+                {
+                    case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                    case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                        XElement xele_i = new XElement("Item");
+                        xele.Add(xele_i);
+                        Save(_ptvitem, xele_i);
+                        break;
+                }
             }
         }
 
-        private void OnModbusRenamed(object sender, RoutedEventArgs e)
+        public void Load(XElement xele)
         {
-            if (sender is MenuItem)
+            XElement xele_sr = xele.Element("PTVI_SubRoutines");
+            Load(PTVI_SubRoutines, xele_sr);
+            XElement xele_fb = xele.Element("PTVI_FuncBlocks");
+            Load(PTVI_FuncBlocks, xele_fb);
+            dpdict.Clear();
+            fpdict.Clear();
+            foreach (XElement xele_dp in xele.Elements("Routine"))
             {
-                MenuItem mitem = (MenuItem)(sender);
-                sender = _GetTVItemFromMItem(mitem);
+                string name = xele_dp.Attribute("Name").Value;
+                string path = xele_dp.Attribute("Path").Value;
+                ProjectTreeViewItem ptvitem = ProjectTreeViewItem.GetPTVIFromPath(path);
+                dpdict.Add(name, ptvitem);
             }
-            if (sender is TreeViewItem)
+            foreach (XElement xele_fp in xele.Elements("FuncBlock"))
             {
-                OnModbusOpened(sender, e);
-                if (Project.MTVModel.Current != null)
-                    Project.MTVModel.RenameModel();
+                string name = xele_fp.Attribute("Name").Value;
+                string path = xele_fp.Attribute("Path").Value;
+                ProjectTreeViewItem ptvitem = ProjectTreeViewItem.GetPTVIFromPath(path);
+                fpdict.Add(name, ptvitem);
             }
         }
-
-        private void OnModbusRemoved(object sender, RoutedEventArgs e)
+        
+        public void Load(ProjectTreeViewItem ptvitem, XElement xele)
         {
-            if (sender is MenuItem)
+            foreach (XElement xele_i in xele.Elements("Item"))
             {
-                MenuItem mitem = (MenuItem)(sender);
-                sender = _GetTVItemFromMItem(mitem);
-            }
-            if (sender is TreeViewItem)
-            {
-                OnModbusOpened(sender, e);
-                if (Project.MTVModel.Current != null)
-                    Project.MTVModel.RemoveModel();
+                int flags = int.Parse(xele_i.Attribute("Flags").Value);
+                string text = xele_i.Attribute("Text").Value;
+                ProjectTreeViewItem _ptvitem = null;
+                _ptvitem = CreatePTVItem(
+                    ptvitem, flags, text, false);
+                Load(_ptvitem, xele_i);
             }
         }
 
         #endregion
-
-        #endregion
+        
     }
+
+    public class ProjectMenuItem : MenuItem
+    {
+        private ProjectTreeViewItem parent;
+
+        public ProjectTreeViewItem PTVItem
+        {
+            get { return this.parent; }
+        }
+        
+        public int ParentFlags
+        {
+            get { return parent.Flags; }
+        }
+
+        public object RelativeObject
+        {
+            get { return parent.RelativeObject; }
+        }
+
+        public int Flags { get; private set; } 
+
+        public ProjectMenuItem(ProjectTreeViewItem _parent, int _flags)
+        {
+            parent = _parent;
+            Flags = _flags;
+            switch (Flags)
+            {
+                case ProjectTreeViewItem.FLAG_CREATEFOLDER:
+                    Header = "新建文件夹"; break;
+                case ProjectTreeViewItem.FLAG_CREATEROUTINE:
+                    Header = "新建子程序"; break;
+                case ProjectTreeViewItem.FLAG_CREATENETWORK:
+                    Header = "新建网络"; break;
+                case ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK:
+                    Header = "新建函数块"; break;
+                case ProjectTreeViewItem.FLAG_CREATEMODBUS:
+                    Header = "新建MODBUS表格"; break;
+                case ProjectTreeViewItem.FLAG_RENAME:
+                    Header = "重命名"; break;
+                case ProjectTreeViewItem.FLAG_REMOVE:
+                    Header = "删除"; break;
+            }
+        }
+    }
+
+　  public class ProjectTreeViewEventArgs : EventArgs
+    {
+        public const int TYPE_ROOT = 0x0;
+        public const int TYPE_ROUTINEFLODER = 0x1;
+        public const int TYPE_NETWORKFLODER = 0x2;
+        public const int TYPE_FUNCBLOCKFLODER = 0x3;
+        public const int TYPE_MODBUSFLODER = 0x4;
+        public const int TYPE_ROUTINE = 0x5;
+        public const int TYPE_NETWORK = 0x6;
+        public const int TYPE_FUNCBLOCK = 0x7;
+        public const int TYPE_MODBUS = 0x8;
+        public const int TYPE_ELEMENTLIST = 0x9;
+        public const int TYPE_FOLDER = 0xa;
+        public const int TYPE_INSTRUCTION = 0xb;
+
+        public const int FLAG_CREATE = 0x10;
+        public const int FLAG_REPLACE = 0x20;
+        public const int FLAG_REMOVE = 0x40;
+        public const int FLAG_CREATEBEFORE = 0x80;
+        public const int FLAG_CREATEAFTER = 0x100;
+
+        public int Flags { get; private set; }
+
+        public object RelativeObject { get; set; }
+
+        public object TargetedObject { get; set; }
+
+        public ProjectTreeViewEventArgs
+        (
+            int _flags,
+            object _relativeObject,
+            object _targetedObject
+        )
+        {
+            Flags = _flags;
+            RelativeObject = _relativeObject;
+            TargetedObject = _targetedObject;
+        }
+    }
+
+    public delegate void ProjectTreeViewEventHandler(object sender, ProjectTreeViewEventArgs e);
+    
 }

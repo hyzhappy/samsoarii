@@ -42,6 +42,9 @@ namespace SamSoarII.AppMain.Project
         }
         
         public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
+        public const int SIMULATE_LADDER_ERROR = 0x0100;
+        public const int SIMULATE_FUNCBLOCK_ERROR = 0x0101;
+
         public const int CLOSE_OK = 0x00;
 
         static public int Simulate(InteractionFacade ifacade, ReportOutputModel omodel)

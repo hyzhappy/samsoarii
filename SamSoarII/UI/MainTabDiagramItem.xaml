@@ -10,18 +10,20 @@
                    Background="White">
     <Grid x:Name="G_Main">
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="RD_Inst" Height="1000*" MinHeight="0"/>
-            <RowDefinition Height="8"/>
-            <RowDefinition x:Name="RD_Ladder" Height="1000*" MinHeight="0"/>
+            <RowDefinition x:Name="RD_Inst" Height="*" MinHeight="64"/>
+            <RowDefinition x:Name="RD_Ladder" Height="*" MinHeight="64"/>
         </Grid.RowDefinitions>
         <GroupBox x:Name="GB_Ladder" Header="梯形图"
-                  Grid.Row="0" Grid.Column="0" Margin="4,0,4,0">
+                  Grid.Row="0" Grid.Column="0" Margin="4,4,4,4">
         </GroupBox>
-        <Rectangle x:Name="R_Inteval"
-                   Grid.Row="1" Grid.Column="0">
-        </Rectangle>
+        <GridSplitter x:Name="GS_Inteval" Height="16"
+                      Grid.Row="1" Grid.Column="0"
+                      VerticalAlignment="Top"
+                      HorizontalAlignment="Stretch"
+                      Background="Transparent">
+        </GridSplitter>
         <GroupBox x:Name="GB_Inst" Header="指令"
-                  Grid.Row="2" Grid.Column="0" Margin="4,0,4,4">
+                  Grid.Row="1" Grid.Column="0" Margin="4,4,4,0">
         </GroupBox>
     </Grid>
 </UserControl>

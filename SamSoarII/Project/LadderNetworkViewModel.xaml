@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="3600" x:Name="LadderNetworkUserControl">
+             d:DesignHeight="300" d:DesignWidth="3600" x:Name="LadderNetworkUserControl"
+             AllowDrop="True">
     <StackPanel Margin="0,0,0,20">
         <StackPanel.Resources>
             <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
