@@ -22,12 +22,33 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// ProjectTreeViewItem.xaml 的交互逻辑
     /// </summary>
-    public partial class ProjectTreeViewItem : TreeViewItem, INotifyPropertyChanged
+    public partial class ProjectTreeViewItem : TreeViewItem, INotifyPropertyChanged, IComparable<ProjectTreeViewItem>
     {
         public bool IsCritical { get; set; }
 
-        public object RelativeObject { get; set; }
+        public bool IsOrder { get; set; }
 
+        private object relativeobject;
+        public object RelativeObject
+        {
+            get
+            {
+                return this.relativeobject;
+            }
+            set
+            {
+                if (relativeobject is INotifyPropertyChanged)
+                {
+                    ((INotifyPropertyChanged)relativeobject).PropertyChanged -= OnRelativePropertyChanged;
+                }
+                this.relativeobject = value;
+                if (relativeobject is INotifyPropertyChanged)
+                {
+                    ((INotifyPropertyChanged)relativeobject).PropertyChanged += OnRelativePropertyChanged;
+                }
+            }
+        }
+        
         private string iconsource;
         public string IconSource
         {
@@ -55,8 +76,7 @@ namespace SamSoarII.AppMain.UI
             get { return TBS_Text.Text; }
             set { TBS_Text.Text = value; }
         }
-
-
+        
         #region Path System
 
         static private Dictionary<string, ProjectTreeViewItem> ppdict
@@ -449,6 +469,39 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
+        
+        public int CompareTo(ProjectTreeViewItem that)
+        {
+            int rank1 = 0;
+            switch (this.Flags)
+            {
+                case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                case ProjectTreeViewItem.TYPE_NETWORKFLODER:
+                case ProjectTreeViewItem.TYPE_MODBUSFLODER:
+                    rank1 = 0;
+                    break;
+                default:
+                    rank1 = 1;
+                    break;
+            }
+            int rank2 = 0;
+            switch (that.Flags)
+            {
+                case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                case ProjectTreeViewItem.TYPE_NETWORKFLODER:
+                case ProjectTreeViewItem.TYPE_MODBUSFLODER:
+                    rank2 = 0;
+                    break;
+                default:
+                    rank2 = 1;
+                    break;
+            }
+            if (rank1 < rank2) return -1;
+            if (rank1 > rank2) return 1;
+            return this.Text.CompareTo(that.Text);
+        }
 
         public ProjectTreeViewItem()
         {
@@ -458,15 +511,25 @@ namespace SamSoarII.AppMain.UI
             Flags = ProjectTreeViewItem.TYPE_CONST;
         }
 
+        #region Rename
+
         public bool IsRenaming { get; private set; } = false;
+
+        static public bool HasRenaming { get; private set; } = false;
 
         private ContextMenu _contextmenu;
 
         public void Rename(string errormsg = null)
         {
+            if (errormsg == null && HasRenaming)
+            {
+                MessageBox.Show("已存在正在重命名的项目！");
+                return;
+            }
             _contextmenu = this.ContextMenu;
             this.ContextMenu = null;
             IsRenaming = true;
+            HasRenaming = true;
             IsSelected = true;
             TBL_Text.Visibility = Visibility.Hidden;
             TBO_Text.Visibility = Visibility.Visible;
@@ -488,15 +551,40 @@ namespace SamSoarII.AppMain.UI
         {
             this.ContextMenu = _contextmenu;
             IsRenaming = false;
+            HasRenaming = false;
             TBL_Text.Visibility = Visibility.Visible;
             TBO_Text.Visibility = Visibility.Hidden;
             TB_ErrorMsg.Visibility = Visibility.Collapsed;
             TBO_Text.IsEnabled = false;
         }
 
+        #endregion
+
         #region Event Handler
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        
+        private void OnRelativePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "NetworkBrief":
+                    if (RelativeObject is LadderNetworkViewModel)
+                    {
+                        LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)RelativeObject;
+                        if (lnvmodel.NetworkBrief == null
+                         || lnvmodel.NetworkBrief.Equals(String.Empty))
+                        {
+                            Text = String.Format("网络 {0:d}", lnvmodel.NetworkNumber);
+                        }
+                        else
+                        {
+                            Text = String.Format("{0:d}-{1:s}", lnvmodel.NetworkNumber, lnvmodel.NetworkBrief);
+                        }
+                    }
+                    break;
+            }
+        }
 
         public event RoutedEventHandler MenuItemClick = delegate { };
         

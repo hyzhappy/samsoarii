@@ -193,8 +193,7 @@ namespace SamSoarII.AppMain
                 {
                     _erwindow.Mode = ErrorReportWindow.MODE_LADDER;
                     _erwindow.Update(weinsts);
-                    if (showreport)
-                        _mainWindow.LACErrorList.Show();
+                    _mainWindow.LACErrorList.Show();
                 }
             }
             else if (errorMessage.Error == ErrorType.Empty)
@@ -504,6 +503,7 @@ namespace SamSoarII.AppMain
             {
                 e.RelativeObject = ldvmodel;
             }
+            _mainTabControl.CloseItem(ldvmodel);
             PTVEvent(this, e);
         }
 
@@ -525,6 +525,7 @@ namespace SamSoarII.AppMain
             {
                 e.RelativeObject = ldvmodel;
             }
+            _mainTabControl.RenameItem(ldvmodel);
             PTVEvent(this, e);
         }
 
@@ -612,6 +613,7 @@ namespace SamSoarII.AppMain
         {
             FuncBlockViewModel fbvmodel = new FuncBlockViewModel(String.Empty);
             _projectModel.Add(fbvmodel);
+            _mainWindow.LACProj.Show();
             if (e == null)
             {
                 e = new ProjectTreeViewEventArgs
@@ -624,7 +626,6 @@ namespace SamSoarII.AppMain
             {
                 e.RelativeObject = fbvmodel;
             }
-            _mainWindow.LACProj.Show();
             PTVEvent(this, e);
         }
         
@@ -635,6 +636,7 @@ namespace SamSoarII.AppMain
         )
         {
             _projectModel.Remove(fbvmodel);
+            _mainTabControl.CloseItem(fbvmodel);
             if (e == null)
             {
                 e = new ProjectTreeViewEventArgs
@@ -656,6 +658,7 @@ namespace SamSoarII.AppMain
             ProjectTreeViewEventArgs e = null
         )
         {
+            _mainTabControl.RenameItem(fbvmodel);
             if (e == null)
             {
                 e = new ProjectTreeViewEventArgs

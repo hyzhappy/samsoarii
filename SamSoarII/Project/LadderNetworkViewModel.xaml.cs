@@ -891,7 +891,8 @@ namespace SamSoarII.AppMain.Project
                 ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
                 if (ptvitem.RelativeObject is BaseViewModel
                  || ptvitem.RelativeObject is FuncModel
-                 || ptvitem.RelativeObject is LadderDiagramViewModel)
+                 || ptvitem.RelativeObject is LadderDiagramViewModel
+                 || ptvitem.RelativeObject is ModbusTableModel)
                 {
                     AcquireSelectRect(e);
                 }
@@ -967,6 +968,23 @@ namespace SamSoarII.AppMain.Project
                             PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                         _ladderDiagram.ReplaceSingleElement(this, bvmodel_new);
                     }
+                }
+                else if (ptvitem.RelativeObject is ModbusTableModel)
+                {
+                    ModbusTableModel mtmodel = (ModbusTableModel)(ptvitem.RelativeObject);
+                    if (!mtmodel.IsVaild)
+                    {
+                        MessageBox.Show("Modbus表格非法，请检查表格项是否补全。");
+                        return;
+                    }
+                    MBUSViewModel vmodel = new MBUSViewModel();
+                    string[] paras = { "K232", "", mtmodel.Name, "", "D0", ""};
+                    vmodel.AcceptNewValues(
+                        paras,
+                        PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    vmodel.X = _ladderDiagram.SelectionRect.X;
+                    vmodel.Y = _ladderDiagram.SelectionRect.Y;
+                    _ladderDiagram.ReplaceSingleElement(this, vmodel);
                 }
             }
         }

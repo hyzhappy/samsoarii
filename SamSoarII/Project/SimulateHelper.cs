@@ -77,8 +77,8 @@ namespace SamSoarII.AppMain.Project
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETFLOAT:
                     MessageBox.Show("Error : 找不到入口GetFloat\r\n");
                     break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETDOUBLE:
-                    MessageBox.Show("Error : 找不到入口GetDouble\r\n");
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETFEQ:
+                    MessageBox.Show("Error : 找不到入口GetFeq\r\n");
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETBIT:
                     MessageBox.Show("Error : 找不到入口SetBit\r\n");
@@ -92,8 +92,8 @@ namespace SamSoarII.AppMain.Project
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETFLOAT:
                     MessageBox.Show("Error : 找不到入口SetFloat\r\n");
                     break;
-                case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETDOUBLE:
-                    MessageBox.Show("Error : 找不到入口SetDouble\r\n");
+                case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETFEQ:
+                    MessageBox.Show("Error : 找不到入口SetFeq\r\n");
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_BEFORERUNLADDER:
                     MessageBox.Show("Error : 找不到入口BeforeRunLadder\r\n");

@@ -2000,15 +2000,11 @@ namespace SamSoarII.AppMain.Project
             {
                 InstructionNetworkViewModel invmodel = (InstructionNetworkViewModel)(sender);
                 BaseViewModel viewmodel = invmodel.CurrentViewModel;
-                LadderNetworkViewModel lvnmodel = invmodel.LadderNetwork;
-                if (lvnmodel.GetElements().Contains(viewmodel))
-                {
-                    if (_selectRect.NetworkParent != null)
-                        _selectRect.NetworkParent.ReleaseSelectRect();
-                    _selectRect.X = viewmodel.X;
-                    _selectRect.Y = viewmodel.Y;
-                    lvnmodel.AcquireSelectRect();
-                }
+                LadderNetworkViewModel lnvmodel = invmodel.LadderNetwork;
+                _projectModel.IFacade.NavigateToNetwork(
+                    new NavigateToNetworkEventArgs(
+                        lnvmodel.NetworkNumber, ProgramName,
+                        viewmodel.X, viewmodel.Y));
             }
         }
 

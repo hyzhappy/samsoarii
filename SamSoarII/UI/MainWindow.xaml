@@ -40,6 +40,7 @@
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewModbusCommand}" Executed="OnAddNewModbusCommandExecute" CanExecute="AddNewModbusCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Executed="OnShowPropertyDialogCommandExecute" CanExecute="ShowPropertyDialogCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" CanExecute="OnInstShortCutOpenCommandCanExecute"></CommandBinding>
         <CommandBinding x:Name="InsertRowCommand" Command="{x:Static app:GlobalCommand.InsertRowCommand}"></CommandBinding>
@@ -234,6 +235,7 @@
             <MenuItem Header="工程(_P)" Margin="0,-5,0,0">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
                 <MenuItem Header="添加函数功能块" Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}"></MenuItem>
+                <MenuItem Header="添加Modbus表格" Command="{x:Static app:GlobalCommand.AddNewModbusCommand}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>

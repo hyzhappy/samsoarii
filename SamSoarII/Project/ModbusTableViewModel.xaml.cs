@@ -481,6 +481,11 @@ namespace SamSoarII.AppMain.Project
         {
             string name = dialog.TB_Name.Text;
             string comment = dialog.TB_Comment.Text;
+            if (name.Equals(String.Empty))
+            {
+                MessageBox.Show("表格名称不能为空！");
+                return;
+            }
             IEnumerable<ModbusTableModel> fit = models.Where(
                 (ModbusTableModel model) => { return model.Name.Equals(name); });
             switch (DialogType)
@@ -726,6 +731,27 @@ namespace SamSoarII.AppMain.Project
     {
         public ModbusTableModel()
         {
+        }
+
+        public bool IsVaild
+        {
+            get
+            {
+                foreach (ModbusTable mtable in Tables)
+                {
+                    if (mtable.SlaveID.Equals(String.Empty))
+                        return false;
+                    if (mtable.HandleCode.Equals(String.Empty))
+                        return false;
+                    if (mtable.SlaveCount.Equals(String.Empty))
+                        return false;
+                    if (mtable.SlaveRegister.Equals(String.Empty))
+                        return false;
+                    if (mtable.MasteRegister.Equals(String.Empty))
+                        return false;
+                }
+                return true;
+            }
         }
 
         #region Numbers

@@ -11,6 +11,7 @@ namespace SamSoarII.AppMain
     {
         public static RoutedUICommand AddNewFuncBlockCommand { get; set; }
         public static RoutedUICommand AddNewSubRoutineCommand { get; set; }
+        public static RoutedUICommand AddNewModbusCommand { get; set; }
         public static RoutedUICommand InsertRowCommand { get; set; }
         public static RoutedUICommand DeleteRowCommand { get; set; }
         public static RoutedUICommand ZoomInCommand { get; set; }
@@ -43,6 +44,7 @@ namespace SamSoarII.AppMain
         {
             AddNewFuncBlockCommand = new RoutedUICommand();
             AddNewSubRoutineCommand = new RoutedUICommand();
+            AddNewModbusCommand = new RoutedUICommand();
             InsertRowCommand = new RoutedUICommand();
             DeleteRowCommand = new RoutedUICommand();
             ZoomInCommand = new RoutedUICommand();

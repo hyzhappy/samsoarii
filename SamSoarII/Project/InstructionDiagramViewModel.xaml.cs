@@ -379,30 +379,64 @@ namespace SamSoarII.AppMain.Project
 
         #region Event Handler
 
+        #region Cursor
+
+        private const int CURSOR_SOURCE_NULL = 0x00;
+        private const int CURSOR_SOURCE_THIS = 0x01;
+        private const int CURSOR_SOURCE_LADDER = 0x02;
+        private int cursorsource = CURSOR_SOURCE_NULL;
+
         private void OnLadderCursorChanged(object sender, RoutedEventArgs e)
         {
+            if (cursorsource != CURSOR_SOURCE_NULL)
+            {
+                return;
+            }
+            cursorsource = CURSOR_SOURCE_LADDER;
             if (sender is SelectRect)
             {
                 SelectRect sr = (SelectRect)(sender);
-                if (sr == null) return;
-                BaseViewModel bvmodel = sr.CurrentElement;
-                if (bvmodel == null) return;
-                double currenty = 0; 
-                foreach (InstructionNetworkViewModel invmodel in invmodels)
+                if (sr != null)
                 {
-                    if (invmodel.CatchCursor(bvmodel))
+                    BaseViewModel bvmodel = sr.CurrentElement;
+                    if (bvmodel != null)
                     {
-                        double cursory = 20 + Grid.GetRow(invmodel.Cursor) * 20;
-                        Scroll.ScrollToVerticalOffset(Math.Max(0, currenty + cursory - Scroll.ViewportHeight / 2));
+                        double currenty = 0;
+                        foreach (InstructionNetworkViewModel invmodel in invmodels)
+                        {
+                            if (invmodel.CatchCursor(bvmodel))
+                            {
+                                double cursory = 20 + Grid.GetRow(invmodel.Cursor) * 20;
+                                Scroll.ScrollToVerticalOffset(Math.Max(0, currenty + cursory - Scroll.ViewportHeight / 2));
+                            }
+                            currenty += invmodel.ActualHeight;
+                        }
                     }
-                    currenty += invmodel.ActualHeight;
                 }
             }
+            cursorsource = CURSOR_SOURCE_NULL;
         }
 
         public event RoutedEventHandler CursorChanged = delegate { };
         private void OnNetworkCursorChanged(object sender, RoutedEventArgs e)
         {
+            if (cursorsource != CURSOR_SOURCE_NULL)
+            {
+                if (cursorsource == CURSOR_SOURCE_LADDER
+                 && sender is InstructionNetworkViewModel)
+                {
+                    double currenty = 0;
+                    foreach (InstructionNetworkViewModel invmodel in invmodels)
+                    {
+                        if (invmodel == sender) break;
+                        currenty += invmodel.ActualHeight;
+                    }
+                    double cursory = 20 + Grid.GetRow(((InstructionNetworkViewModel)(sender)).Cursor) * 20;
+                    Scroll.ScrollToVerticalOffset(Math.Max(0, currenty + cursory - Scroll.ViewportHeight / 2));
+                }
+                return;
+            }
+            cursorsource = CURSOR_SOURCE_THIS;
             if (sender is InstructionNetworkViewModel)
             {
                 if (invmodelcursor != null && invmodelcursor != sender)
@@ -412,6 +446,7 @@ namespace SamSoarII.AppMain.Project
                 invmodelcursor = (InstructionNetworkViewModel)(sender);
                 CursorChanged(sender, e);
             }
+            cursorsource = CURSOR_SOURCE_NULL;
         }
 
         public event RoutedEventHandler CursorEdit = delegate { };
@@ -422,7 +457,9 @@ namespace SamSoarII.AppMain.Project
                 CursorEdit(sender, e);
             }
         }
-        
+
+        #endregion
+
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Up && invmodelcursor != null)

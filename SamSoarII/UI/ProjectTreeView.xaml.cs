@@ -102,8 +102,7 @@ namespace SamSoarII.AppMain.UI
                       | ProjectTreeViewItem.FLAG_CREATENETWORK
                       | ProjectTreeViewItem.FLAG_RENAME
                       | ProjectTreeViewItem.FLAG_REMOVE,
-                        ldvmodel, 
-                        false);
+                        ldvmodel, false);
                 Rebuild(ptvitem, ldvmodel);
                 dpdict.Add(ldvmodel.ProgramName, ptvitem);
             }
@@ -125,8 +124,7 @@ namespace SamSoarII.AppMain.UI
                         ProjectTreeViewItem.TYPE_FUNCBLOCK
                       | ProjectTreeViewItem.FLAG_RENAME
                       | ProjectTreeViewItem.FLAG_REMOVE,
-                        fbvmodel, 
-                        false);
+                        fbvmodel, false);
                 Rebuild(ptvitem, fbvmodel);
                 fpdict.Add(fbvmodel.ProgramName, ptvitem);
             }
@@ -219,7 +217,8 @@ namespace SamSoarII.AppMain.UI
             ProjectTreeViewItem     parent,
             int                     flags,
             object                  relativeObject,
-            bool                    iscritical = true
+            bool                    iscritical = true,
+            bool                    isorder = false
         )
         {
             ProjectTreeViewItem createitem = new ProjectTreeViewItem();
@@ -227,7 +226,21 @@ namespace SamSoarII.AppMain.UI
             createitem.Flags = flags;
             if (parent != null)
             {
-                parent.Items.Add(createitem);
+                if (parent.IsOrder)
+                {
+                    for (int i = 0; i < parent.Items.Count; i++)
+                    {
+                        if (createitem.CompareTo((ProjectTreeViewItem)(parent.Items[i])) <= 0)
+                        {
+                            parent.Items.Insert(i, createitem);
+                            break;
+                        }
+                    }
+                }
+                if (!parent.Items.Contains(createitem))
+                {
+                    parent.Items.Add(createitem);
+                }
                 createitem.RegisterPath();
             }
             createitem.MouseDoubleClick += OnPTVIDoubleClick;
@@ -235,6 +248,7 @@ namespace SamSoarII.AppMain.UI
             createitem.Renamed += OnPTVIRenamed;
             createitem.Expanded += OnPTVIExpanded;
             createitem.IsCritical = iscritical;
+            createitem.IsOrder = isorder;
             return createitem;
         }
 
@@ -288,7 +302,8 @@ namespace SamSoarII.AppMain.UI
                     ProjectTreeViewItem.TYPE_MODBUS
                   | ProjectTreeViewItem.FLAG_RENAME
                   | ProjectTreeViewItem.FLAG_REMOVE,
-                    mtmodel);
+                    mtmodel,
+                    false);
             }
         }
 
@@ -448,7 +463,12 @@ namespace SamSoarII.AppMain.UI
                         break;
                     case ProjectTreeViewItem.FLAG_CREATEFOLDER:
                         ProjectTreeViewItem createitem = CreatePTVItem(
-                            ptvitem, ptvitem.Flags, String.Empty, false);
+                            ptvitem, 
+                            ptvitem.Flags 
+                          | ProjectTreeViewItem.FLAG_RENAME 
+                          | ProjectTreeViewItem.FLAG_REMOVE, 
+                            String.Empty, 
+                            false, true);
                         ptvitem.IsExpanded = true;
                         createitem.Rename();
                         break;
@@ -467,6 +487,15 @@ namespace SamSoarII.AppMain.UI
                 {
                     ptvitem.Rename("名称不能为空！");
                     return;
+                }
+                for (int i = 0; i < ptvitem.Text.Length; i++)
+                {
+                    switch (ptvitem.Text[i])
+                    {
+                        case '~': case '`': case '!': case '@': case '#': case '$': case '%': case '^': case '&': case '*':
+                            ptvitem.Rename(String.Format("存在非法字符：{0:c}", ptvitem.Text[i]));
+                            return;
+                    }
                 }
                 foreach (ProjectTreeViewItem _ptvitem in ptvparent.Items)
                 {
@@ -491,12 +520,10 @@ namespace SamSoarII.AppMain.UI
                     dpdict.Remove(ldvmodel.ProgramName);
                     ldvmodel.ProgramName = ptvitem.Text;
                     dpdict.Add(ldvmodel.ProgramName, ptvitem);
-                    /*
                     _e = new ProjectTreeViewEventArgs(
                         ProjectTreeViewEventArgs.TYPE_ROUTINE | ProjectTreeViewEventArgs.FLAG_REPLACE,
                         ldvmodel, ptvitem.Text);
                     PTVHandle(this, _e);
-                    */
                 }
                 else if (ptvitem.RelativeObject is FuncBlockViewModel)
                 {
@@ -513,12 +540,10 @@ namespace SamSoarII.AppMain.UI
                     fpdict.Remove(fbvmodel.ProgramName);
                     fbvmodel.ProgramName = ptvitem.Text;
                     fpdict.Add(fbvmodel.ProgramName, ptvitem);
-                    /*
                     _e = new ProjectTreeViewEventArgs(
                         ProjectTreeViewEventArgs.TYPE_FUNCBLOCK | ProjectTreeViewEventArgs.FLAG_REPLACE,
                         fbvmodel, ptvitem.Text);
                     PTVHandle(this, _e);
-                    */
                 }
                 else
                 {
@@ -574,6 +599,11 @@ namespace SamSoarII.AppMain.UI
                     switch (e.Flags & ~0xf)
                     {
                         case ProjectTreeViewEventArgs.FLAG_CREATE:
+                            if (ProjectTreeViewItem.HasRenaming)
+                            {
+                                MessageBox.Show("存在正在重命名的项目，不能新建新的项目。");
+                                return;
+                            }
                             createitem = CreatePTVItem(
                                 selectitem,
                                 ProjectTreeViewItem.TYPE_ROUTINE
@@ -616,7 +646,7 @@ namespace SamSoarII.AppMain.UI
                             break;
                     }
                     break;
-                case ProjectTreeViewItem.TYPE_NETWORK:
+                case ProjectTreeViewEventArgs.TYPE_NETWORK:
                     if (!(e.RelativeObject is LadderNetworkViewModel)
                      && !(e.RelativeObject is LadderDiagramViewModel))
                     {
@@ -666,7 +696,7 @@ namespace SamSoarII.AppMain.UI
                             break;
                     }
                     break;
-                case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                case ProjectTreeViewEventArgs.TYPE_FUNCBLOCK:
                     if (!(e.RelativeObject is FuncBlockViewModel))
                     {
                         throw new ArgumentException(String.Format("Unsupported RelativeObject {0:s}", e.RelativeObject));
@@ -733,7 +763,7 @@ namespace SamSoarII.AppMain.UI
                             break;
                     }
                     break;
-                case ProjectTreeViewItem.TYPE_MODBUS:
+                case ProjectTreeViewEventArgs.TYPE_MODBUS:
                     if (!(e.RelativeObject is ModbusTableViewModel))
                     {
                         throw new ArgumentException(String.Format("Unsupported RelativeObject {0:s}", e.RelativeObject));
@@ -792,6 +822,13 @@ namespace SamSoarII.AppMain.UI
                 {
                     if (dragitem.IsAncestorOf(currentitem))
                         return;
+                    foreach (ProjectTreeViewItem ptvitem in currentitem.Items)
+                    {
+                        if (ptvitem.Text.Equals(dragitem.Text))
+                        {
+                            return;
+                        }
+                    }
                     switch (dragitem.Flags & 0xf)
                     {
                         case ProjectTreeViewItem.TYPE_ROUTINE:
@@ -905,14 +942,17 @@ namespace SamSoarII.AppMain.UI
         
         public void Save(ProjectTreeViewItem ptvitem, XElement xele)
         {
-            xele.SetAttributeValue("Text", ptvitem.Text);
+            xele.SetAttributeValue("Text", 
+                ptvitem.IsRenaming ? "# 正在被重命名" : ptvitem.Text);
             xele.SetAttributeValue("Flags", ptvitem.Flags);
             foreach (ProjectTreeViewItem _ptvitem in ptvitem.Items)
             {
                 switch (_ptvitem.Flags & 0xf)
                 {
                     case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                    case ProjectTreeViewItem.TYPE_NETWORKFLODER:
                     case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                    case ProjectTreeViewItem.TYPE_MODBUSFLODER:
                         XElement xele_i = new XElement("Item");
                         xele.Add(xele_i);
                         Save(_ptvitem, xele_i);
@@ -953,13 +993,12 @@ namespace SamSoarII.AppMain.UI
                 string text = xele_i.Attribute("Text").Value;
                 ProjectTreeViewItem _ptvitem = null;
                 _ptvitem = CreatePTVItem(
-                    ptvitem, flags, text, false);
+                    ptvitem, flags, text, false, true);
                 Load(_ptvitem, xele_i);
             }
         }
 
         #endregion
-        
     }
 
     public class ProjectMenuItem : MenuItem
@@ -1017,10 +1056,13 @@ namespace SamSoarII.AppMain.UI
         public const int TYPE_ROUTINE = 0x5;
         public const int TYPE_NETWORK = 0x6;
         public const int TYPE_FUNCBLOCK = 0x7;
-        public const int TYPE_MODBUS = 0x8;
-        public const int TYPE_ELEMENTLIST = 0x9;
-        public const int TYPE_FOLDER = 0xa;
-        public const int TYPE_INSTRUCTION = 0xb;
+        public const int TYPE_FUNC = 0x8;
+        public const int TYPE_MODBUS = 0x9;
+        public const int TYPE_ELEMENTLIST = 0xa;
+        public const int TYPE_PROGRAM = 0xb;
+        public const int TYPE_LADDERS = 0xc;
+        public const int TYPE_INSTRUCTION = 0xd;
+        public const int TYPE_CONST = 0xf;
 
         public const int FLAG_CREATE = 0x10;
         public const int FLAG_REPLACE = 0x20;

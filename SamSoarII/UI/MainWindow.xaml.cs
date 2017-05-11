@@ -347,6 +347,18 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private void AddNewModbusCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
         private void ZoomInCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -625,30 +637,19 @@ namespace SamSoarII.AppMain.UI
         
         private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            AddNewRoutineWindow window = new AddNewRoutineWindow();
-            window.EnsureButtonClick += (sender1, e1) =>
-            {
-                if (!_interactionFacade.AddNewSubRoutine(window.NameContent))
-                {
-                    MessageBox.Show("已存在同名的子程序或函数功能块");
-                }
-                window.Close();
-            };
-            window.ShowDialog();
+            LACProj.Show();
+            _interactionFacade.CreateRoutine();
         }
 
         private void OnAddNewFuncBlockCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            AddNewRoutineWindow window = new AddNewRoutineWindow();
-            window.EnsureButtonClick += (sender1, e1) =>
-            {
-                if (!_interactionFacade.AddNewFuncBlock(window.NameContent))
-                {
-                    MessageBox.Show("已存在同名的子程序或函数功能块");
-                }
-                window.Close();
-            };
-            window.ShowDialog();
+            LACProj.Show();
+            _interactionFacade.CreateFuncBlock();
+        }
+
+        private void OnAddNewModbusCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            _interactionFacade.CreateModbus();
         }
 
         private void OnNewProjectExecute(object sender, RoutedEventArgs e)

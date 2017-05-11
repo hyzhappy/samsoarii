@@ -131,7 +131,15 @@ namespace SamSoarII.AppMain.UI
             int ldocid = Children.IndexOf(ldoc);
             SelectedItem = item;
             SelectedContentIndex = ldocid;
-            
+        }
+
+        public void RenameItem(ITabItem item)
+        {
+            if (_lDocDict.ContainsKey(item))
+            {
+                LayoutDocument ldoc = _lDocDict[item];
+                ldoc.Title = item.TabHeader;
+            }
         }
         
         public void CloseItem(ITabItem item)
