@@ -55,7 +55,10 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 StopCloseTimer();
             }
             else
-                System.Diagnostics.Debug.Assert(false);
+            {
+                StopCloseTimer();
+                //System.Diagnostics.Debug.Assert(false);
+            }
         }
 
         DispatcherTimer _closeTimer = null;

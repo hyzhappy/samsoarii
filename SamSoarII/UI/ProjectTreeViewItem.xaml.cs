@@ -161,6 +161,9 @@ namespace SamSoarII.AppMain.UI
         public const int FLAG_CREATEMODBUS = 0x100;
         public const int FLAG_RENAME = 0x200;
         public const int FLAG_REMOVE = 0x400;
+        public const int FLAG_CREATENETWORKAFTER = 0x800;
+        public const int FLAG_CREATENETWORKBEFORE = 0x1000;
+        public const int FLAG_CONFIG = 0x2000;
 
         private int flags;
         public int Flags
@@ -175,7 +178,7 @@ namespace SamSoarII.AppMain.UI
                     this.ContextMenu = new ContextMenu();
                     ProjectMenuItem pmitem = null;
                     int _flags = FLAG_CREATEFOLDER;
-                    while (_flags <= FLAG_REMOVE)
+                    while (_flags <= FLAG_CONFIG)
                     {
                         if ((flags & _flags) != 0)
                         {
@@ -473,7 +476,7 @@ namespace SamSoarII.AppMain.UI
         public int CompareTo(ProjectTreeViewItem that)
         {
             int rank1 = 0;
-            switch (this.Flags)
+            switch (this.Flags & 0xf)
             {
                 case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
                 case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
@@ -486,7 +489,7 @@ namespace SamSoarII.AppMain.UI
                     break;
             }
             int rank2 = 0;
-            switch (that.Flags)
+            switch (that.Flags & 0xf)
             {
                 case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
                 case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
@@ -609,9 +612,8 @@ namespace SamSoarII.AppMain.UI
             Text = TBO_Text.Text;
             Renamed(this, new RoutedEventArgs());
         }
-        
+
         #endregion
+        
     }
-
-
 }

@@ -116,7 +116,7 @@ namespace SamSoarII.AppMain.UI
                     string input = bvmodel.InstructionName;
                     for (int i = 0; i < bmodel.ParaCount; i++)
                     {
-                        input += " " + bmodel.GetPara(i).ValueString;
+                        input += " " + bmodel.GetPara(i).ValueShowString;
                     }
                     if (RF_Input.Match(input))
                     {

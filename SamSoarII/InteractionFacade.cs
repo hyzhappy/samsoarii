@@ -988,6 +988,7 @@ namespace SamSoarII.AppMain
             _projectTreeView.Save(xele_ptv);
             xele_r.Add(xele_ptv);
             xdoc.Save(fileName);
+            _projectModel.IsModify = false;
         }
 
         public bool LoadProject(string fileName)
@@ -1225,12 +1226,22 @@ namespace SamSoarII.AppMain
                         case ProjectTreeViewEventArgs.FLAG_CREATE:
                             CreateNetwork(ldvmodel, ldvmodel.NetworkCount, e);
                             break;
+                        case ProjectTreeViewEventArgs.FLAG_CREATEBEFORE:
+                            CreateNetwork(ldvmodel, lnvmodel.NetworkNumber, e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_CREATEAFTER:
+                            CreateNetwork(ldvmodel, lnvmodel.NetworkNumber+1, e);
+                            break;
+                        case ProjectTreeViewEventArgs.FLAG_CONFIG:
+                            lnvmodel.EditComment();
+                            break;
                         case ProjectTreeViewEventArgs.FLAG_REPLACE:
                             ReplaceNetwork(lnvmodel, e);
                             break;
                         case ProjectTreeViewEventArgs.FLAG_REMOVE:
                             RemoveNetwork(lnvmodel, e);
                             break;
+                        
                     }
                     break;
                 case ProjectTreeViewEventArgs.TYPE_MODBUS:

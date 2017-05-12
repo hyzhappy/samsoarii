@@ -85,7 +85,8 @@ namespace SamSoarII.AppMain.Project
                     invmodel = new InstructionNetworkViewModel();
                     invmodel.CursorChanged += OnNetworkCursorChanged;
                     invmodel.CursorEdit += OnNetworkCursorEdit;
-                    invmodel.Setup(lnvmodel);
+                    lnvmodel.INVModel = invmodel;
+                    //invmodel.Setup(lnvmodel);
                     invmodeldict.Add(lnvmodel, invmodel);
                 }
                 MainStack.Children.Add(invmodel);
@@ -97,7 +98,8 @@ namespace SamSoarII.AppMain.Project
         {
             invmodels.Clear();
             InstructionNetworkViewModel invmodel = new InstructionNetworkViewModel();
-            invmodel.Setup(lnvmodel);
+            lnvmodel.INVModel = invmodel;
+            //invmodel.Setup(lnvmodel);
             MainStack.Children.Add(invmodel);
             invmodels.Add(invmodel);
         }

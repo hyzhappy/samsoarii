@@ -38,7 +38,6 @@
                       SelectedIndex="{Binding Mode, Mode=TwoWay}">
                 <TextBlock>当前程序</TextBlock>
                 <TextBlock>所有程序</TextBlock>
-                <TextBlock>自定义...</TextBlock>
             </ComboBox>
             <Button ToolTip="撤销" Command="{x:Static ApplicationCommands.Undo}" 
                     Grid.Row="0" Grid.Column="1"

@@ -13,6 +13,7 @@
                   AllowDrop="True" 
                   MouseMove="OnPTVIMouseMove"  
                   DragOver="OnPTVIDragOver"
+                  DragLeave="TV_Main_DragLeave"
                   Drop="TV_Main_Drop">
         </TreeView>
     </Grid> 

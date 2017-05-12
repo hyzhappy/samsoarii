@@ -146,13 +146,56 @@ namespace SamSoarII.LadderInstViewModel
             return result;
         }
 
+        private ArgumentValue ArgumentDefaultParse(string text)
+        {
+            string[] args = text.Split(' ');
+            IValueModel ivmodel = null;
+            switch (args[1])
+            {
+                case "BIT*":    ivmodel = BitValue.Null; break;
+                case "WORD*":   ivmodel = WordValue.Null; break;
+                case "DWORD*":  ivmodel = DWordValue.Null; break;
+                case "FLOAT*":  ivmodel = FloatValue.Null; break;
+                default:        return ArgumentValue.Null;
+            }
+            return new ArgumentValue(args[0], args[1], ivmodel);
+        }
+
         public override void ParseValue(IList<string> valueStrings)
         {
             FuncName = valueStrings[0];
-            Value1 = ArgumentValue.Parse(valueStrings[1]);
-            Value2 = ArgumentValue.Parse(valueStrings[2]);
-            Value3 = ArgumentValue.Parse(valueStrings[3]);
-            Value4 = ArgumentValue.Parse(valueStrings[4]);
+            try
+            {
+                Value1 = ArgumentValue.Parse(valueStrings[1]);
+            }
+            catch (ValueParseException)
+            {
+                Value1 = ArgumentDefaultParse(valueStrings[1]);
+            }
+            try
+            {
+                Value2 = ArgumentValue.Parse(valueStrings[2]);
+            }
+            catch (ValueParseException)
+            {
+                Value2 = ArgumentDefaultParse(valueStrings[2]);
+            }
+            try
+            {
+                Value3 = ArgumentValue.Parse(valueStrings[3]);
+            }
+            catch (ValueParseException)
+            {
+                Value3 = ArgumentDefaultParse(valueStrings[3]);
+            }
+            try
+            {
+                Value4 = ArgumentValue.Parse(valueStrings[4]);
+            }
+            catch (ValueParseException)
+            {
+                Value4 = ArgumentDefaultParse(valueStrings[4]);
+            }
         }
 
         public override IPropertyDialog PreparePropertyDialog()

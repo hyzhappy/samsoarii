@@ -161,6 +161,15 @@
     <Compile Include="LogicOperation\ORWViewModel.cs" />
     <Compile Include="LogicOperation\XORDViewModel.cs" />
     <Compile Include="LogicOperation\XORWViewModel.cs" />
+    <Compile Include="MicroDiagramViewModel.xaml.cs">
+      <DependentUpon>MicroDiagramViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MicroNetworkViewModel.xaml.cs">
+      <DependentUpon>MicroNetworkViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MicroViewModel.xaml.cs">
+      <DependentUpon>MicroViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Move\MOVDViewModel.cs" />
     <Compile Include="Move\MOVFViewModel.cs" />
     <Compile Include="Move\MOVViewModel.cs" />
@@ -219,11 +228,7 @@
       <DependentUpon>VerticalLineViewModel.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Counter\" />
-    <Folder Include="Interrupt\" />
-    <Folder Include="Pulse\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj">
       <Project>{69569578-5258-4aec-9e10-dde7234d78fb}</Project>
@@ -254,6 +259,18 @@
     <Page Include="InputBaseViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MicroDiagramViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MicroNetworkViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MicroViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="OutputBaseViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>

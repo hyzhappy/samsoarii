@@ -180,6 +180,18 @@ namespace SamSoarII.AppMain.Project
         public HashSet<BaseViewModel> ErrorModels { get; set; } = new HashSet<BaseViewModel>();
         private SortedDictionary<IntPoint, BaseViewModel> _ladderElements = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines = new SortedDictionary<IntPoint, VerticalLineViewModel>();
+
+        private InstructionNetworkViewModel _invmodel;
+        public InstructionNetworkViewModel INVModel
+        {
+            get { return this._invmodel; }
+            set
+            {
+                this._invmodel = value;
+                _invmodel.Setup(this);
+            }
+        }
+         
         public BaseViewModel GetElementByPosition(int X, int Y)
         {
             IntPoint ip = new IntPoint();
@@ -779,7 +791,7 @@ namespace SamSoarII.AppMain.Project
                     if (dialog is ElementPropertyDialog)
                     {
                         ElementReplaceArgumentCommand eracommand = new ElementReplaceArgumentCommand(
-                            sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
+                            this, sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
                         _ladderDiagram.CommandExecute(eracommand);
                     }
                     else
@@ -861,6 +873,11 @@ namespace SamSoarII.AppMain.Project
 
         private void OnEditComment(object sender, RoutedEventArgs e)
         {
+            EditComment();
+        }
+
+        public void EditComment()
+        {
             if (!IsMasked)
             {
                 NetworkCommentEditDialog editDialog = new UserInterface.NetworkCommentEditDialog();
@@ -926,9 +943,21 @@ namespace SamSoarII.AppMain.Project
                     }
                     CALLMViewModel vmodel = new CALLMViewModel();
                     ArgumentValue[] avalues = new ArgumentValue[fmodel.ArgCount];
-                    for (int i = 0; i < avalues.Length; i++)
+                    for (int i = 0; i < fmodel.ArgCount; i++)
                     {
-                        avalues[i] = ArgumentValue.Null;
+                        IValueModel ivmodel = null;
+                        switch (fmodel.GetArgType(i))
+                        {
+                            case "BIT": ivmodel = BitValue.Null; break;
+                            case "WORD": ivmodel = WordValue.Null; break;
+                            case "DWORD": ivmodel = DWordValue.Null; break;
+                            case "FLOAT": ivmodel = FloatValue.Null; break;
+                            default: ivmodel = WordValue.Null; break;
+                        }
+                        avalues[i] = new ArgumentValue(
+                            fmodel.GetArgName(i),
+                            fmodel.GetArgType(i),
+                            ivmodel);
                     }
                     vmodel.AcceptNewValues(fmodel.Name, avalues);
                     vmodel.X = _ladderDiagram.SelectionRect.X;
@@ -957,7 +986,7 @@ namespace SamSoarII.AppMain.Project
                         }
                         paras_new[2] = ldvmodel.ProgramName;
                         ElementReplaceArgumentCommand command = new ElementReplaceArgumentCommand(
-                            bvmodel_old, paras_old, paras_new);
+                            this, bvmodel_old, paras_old, paras_new);
                         _ladderDiagram.CommandExecute(command);
                     }
                     else

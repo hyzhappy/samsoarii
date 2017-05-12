@@ -484,7 +484,6 @@ namespace SamSoarII.AppMain.Project
             }
             var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
             _commandManager.Execute(command);
-            IDVModel.Setup(this);
         }
 
         public void AddNewNetworkBefore(LadderNetworkViewModel network)
@@ -511,7 +510,6 @@ namespace SamSoarII.AppMain.Project
             _commandManager.Execute(command);
             network.PropertyChanged += Network_PropertyChanged;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
-            IDVModel.Setup(this);
         }
         
         public void RemoveSingleNetworkCommand(LadderNetworkViewModel network)
@@ -1509,7 +1507,8 @@ namespace SamSoarII.AppMain.Project
                     if (CrossNetState == CrossNetworkState.NoCross)
                     {
                         return _selectStartNetwork.NetworkNumber > 0 || _selectStartNetwork.SelectAreaSecondY > 0;
-                    }else if (CrossNetState == CrossNetworkState.CrossDown)
+                    }
+                    else if (CrossNetState == CrossNetworkState.CrossDown)
                     {
                         return true;
                     }
@@ -1869,7 +1868,7 @@ namespace SamSoarII.AppMain.Project
         {
             Point _p = e.GetPosition(this);
             if (_p.X > _actualWidth - 30
-             || _p.Y > _actualHeight - 30)
+             || _p.Y > _actualHeight - 50)
             {
                 return;
             }
@@ -1877,6 +1876,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if (IsPressingCtrl)
                 {
+                    /*
                     var p = e.GetPosition(_selectRectOwner.LadderCanvas);
                     var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
                     if ((pp.X == _selectRect.X - 1) && (pp.Y == _selectRect.Y))
@@ -1895,6 +1895,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         SelectRectDownWithLine();
                     }
+                    */
                 }
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
@@ -1975,7 +1976,6 @@ namespace SamSoarII.AppMain.Project
                         default:
                             break;
                     }
-               
                 }
             }
         }

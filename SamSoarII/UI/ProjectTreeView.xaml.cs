@@ -165,14 +165,14 @@ namespace SamSoarII.AppMain.UI
                 ProjectTreeViewItem.TYPE_ROUTINEFLODER
               | ProjectTreeViewItem.FLAG_CREATEFOLDER
               | ProjectTreeViewItem.FLAG_CREATEROUTINE,
-                "子程序");
+                "子程序", true, true);
 
             PTVI_FuncBlocks = CreatePTVItem(
                 PTVI_Program,
                 ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER
               | ProjectTreeViewItem.FLAG_CREATEFOLDER
               | ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK,
-                "函数功能块");
+                "函数功能块", true, true);
             
             PTVI_Modbus = CreatePTVItem(
                 PTVI_Root,
@@ -265,8 +265,10 @@ namespace SamSoarII.AppMain.UI
                 CreatePTVItem(
                     ptvitem,
                     ProjectTreeViewItem.TYPE_NETWORK
-                  | ProjectTreeViewItem.FLAG_RENAME
-                  | ProjectTreeViewItem.FLAG_REMOVE,
+                  | ProjectTreeViewItem.FLAG_REMOVE
+                  | ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE
+                  | ProjectTreeViewItem.FLAG_CREATENETWORKAFTER
+                  | ProjectTreeViewItem.FLAG_CONFIG,
                     lnvmodel);
             }
         }
@@ -320,7 +322,12 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
                 case ProjectTreeViewItem.TYPE_MODBUSFLODER:
                 case ProjectTreeViewItem.TYPE_NETWORKFLODER:
+                    List<ProjectTreeViewItem> ptvis = new List<ProjectTreeViewItem>();
                     foreach (ProjectTreeViewItem _ptvitem in ptvitem.Items)
+                    {
+                        ptvis.Add(_ptvitem);
+                    }
+                    foreach (ProjectTreeViewItem _ptvitem in ptvis)
                     {
                         RemoveAll(_ptvitem);
                     }
@@ -435,6 +442,27 @@ namespace SamSoarII.AppMain.UI
                         _e = new ProjectTreeViewEventArgs(
                             ProjectTreeViewEventArgs.TYPE_NETWORK
                           | ProjectTreeViewEventArgs.FLAG_CREATE,
+                            pmitem.RelativeObject, ptvitem);
+                        PTVHandle(this, _e);
+                        break;
+                    case ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE:
+                        _e = new ProjectTreeViewEventArgs(
+                            ProjectTreeViewEventArgs.TYPE_NETWORK
+                          | ProjectTreeViewEventArgs.FLAG_CREATEBEFORE,
+                            pmitem.RelativeObject, ptvitem);
+                        PTVHandle(this, _e);
+                        break;
+                    case ProjectTreeViewItem.FLAG_CREATENETWORKAFTER:
+                        _e = new ProjectTreeViewEventArgs(
+                            ProjectTreeViewEventArgs.TYPE_NETWORK
+                          | ProjectTreeViewEventArgs.FLAG_CREATEAFTER,
+                            pmitem.RelativeObject, ptvitem);
+                        PTVHandle(this, _e);
+                        break;
+                    case ProjectTreeViewItem.FLAG_CONFIG:
+                        _e = new ProjectTreeViewEventArgs(
+                            flags_type
+                          | ProjectTreeViewEventArgs.FLAG_CONFIG,
                             pmitem.RelativeObject, ptvitem);
                         PTVHandle(this, _e);
                         break;
@@ -873,7 +901,8 @@ namespace SamSoarII.AppMain.UI
             }
             if (DragItem == null && TV_Main.SelectedItem != null)
             {
-                CurrentItem = (ProjectTreeViewItem)(TV_Main.SelectedItem);
+                if (CurrentItem != TV_Main.SelectedItem) return;
+                //CurrentItem = (ProjectTreeViewItem)(TV_Main.SelectedItem);
                 if (CurrentItem.IsCritical) return;
                 if (CurrentItem.IsRenaming) return;
                 DragItem = CurrentItem;
@@ -903,11 +932,31 @@ namespace SamSoarII.AppMain.UI
             if (CurrentItem.Background != Brushes.BlueViolet) return;
             DragItem.ReleasePath();
             ((ProjectTreeViewItem)(DragItem.Parent)).Items.Remove(DragItem);
-            CurrentItem.Items.Add(DragItem);
+            if (CurrentItem.IsOrder)
+            {
+                for (int i = 0; i < CurrentItem.Items.Count; i++)
+                {
+                    if (DragItem.CompareTo((ProjectTreeViewItem)(CurrentItem.Items[i])) <= 0)
+                    {
+                        CurrentItem.Items.Insert(i, DragItem);
+                        break;
+                    }
+                }
+            }
+            if (!CurrentItem.Items.Contains(DragItem))
+            {
+                CurrentItem.Items.Add(DragItem);
+            }
             CurrentItem.IsExpanded = true;
             DragItem.RegisterPath();
             DragItem.IsSelected = true;
             DragItem = null;
+        }
+
+
+        private void TV_Main_DragLeave(object sender, DragEventArgs e)
+        {
+            _projectModel.IFacade.MainWindow.LACProj.Hide();
         }
 
         #endregion
@@ -999,6 +1048,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
+        
     }
 
     public class ProjectMenuItem : MenuItem
@@ -1026,6 +1076,23 @@ namespace SamSoarII.AppMain.UI
         {
             parent = _parent;
             Flags = _flags;
+            string profix = String.Empty;
+            switch (parent.Flags & 0xf)
+            {
+                case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                case ProjectTreeViewItem.TYPE_MODBUSFLODER:
+                case ProjectTreeViewItem.TYPE_NETWORKFLODER:
+                case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                    profix = "文件夹"; break;
+                case ProjectTreeViewItem.TYPE_ROUTINE:
+                    profix = "子程序"; break;
+                case ProjectTreeViewItem.TYPE_NETWORK:
+                    profix = "网络"; break;
+                case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                    profix = "函数块"; break;
+                case ProjectTreeViewItem.TYPE_MODBUS:
+                    profix = "表格"; break;
+            }
             switch (Flags)
             {
                 case ProjectTreeViewItem.FLAG_CREATEFOLDER:
@@ -1039,9 +1106,15 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewItem.FLAG_CREATEMODBUS:
                     Header = "新建MODBUS表格"; break;
                 case ProjectTreeViewItem.FLAG_RENAME:
-                    Header = "重命名"; break;
+                    Header = profix + "重命名"; break;
                 case ProjectTreeViewItem.FLAG_REMOVE:
-                    Header = "删除"; break;
+                    Header = profix + "删除"; break;
+                case ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE:
+                    Header = "向前插入"; break;
+                case ProjectTreeViewItem.FLAG_CREATENETWORKAFTER:
+                    Header = "向后插入"; break;
+                case ProjectTreeViewItem.FLAG_CONFIG:
+                    Header = profix + "属性"; break;
             }
         }
     }
@@ -1069,6 +1142,7 @@ namespace SamSoarII.AppMain.UI
         public const int FLAG_REMOVE = 0x40;
         public const int FLAG_CREATEBEFORE = 0x80;
         public const int FLAG_CREATEAFTER = 0x100;
+        public const int FLAG_CONFIG = 0x200;
 
         public int Flags { get; private set; }
 

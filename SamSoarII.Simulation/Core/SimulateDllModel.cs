@@ -466,7 +466,7 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         public void _SimulateThread_Chart()
         {
-            SetClockRate(5);
+            SetClockRate(1);
             InitRunLadder();
             InitClock(TimeStart);
             // 当前时间

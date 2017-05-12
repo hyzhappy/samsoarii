@@ -28,6 +28,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _ladderDiagram.RemoveNetwork(net);
             }
+            _ladderDiagram.IDVModel.Setup(_ladderDiagram);
         }
 
         public void Redo()
@@ -38,6 +39,7 @@ namespace SamSoarII.AppMain.LadderCommand
         public void Undo()
         {
             _ladderDiagram.AddNetwork(_removedNetworks, _index);
+            _ladderDiagram.IDVModel.Setup(_ladderDiagram);
         }
     }
 }

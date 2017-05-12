@@ -131,7 +131,7 @@ namespace SamSoarII.AppMain.UI
                     string input = bvmodel.InstructionName;
                     for (int i = 0; i < bmodel.ParaCount; i++)
                     {
-                        input += " " + bmodel.GetPara(i).ValueString;
+                        input += " " + bmodel.GetPara(i).ValueShowString;
                     }
                     if (RF_Input.Match(input))
                     {
@@ -235,11 +235,13 @@ namespace SamSoarII.AppMain.UI
             switch (RF_Change.Type)
             {
                 case ReplaceFormat.TYPE_REGISTER:
-                case ReplaceFormat.TYPE_LADDER:
                     if (RF_Input.Type == RF_Change.Type)
                         TB_Change.Background = Brushes.LightGreen;
                     else
                         TB_Change.Background = Brushes.Red;
+                    break;
+                case ReplaceFormat.TYPE_LADDER:
+                    TB_Change.Background = Brushes.LightGreen;
                     break;
                 default:
                     TB_Change.Background = Brushes.Red;
@@ -346,6 +348,9 @@ namespace SamSoarII.AppMain.UI
         public const int ARG_REGISTER = 0x02;
         public const int ARG_ANYONE = 0x03;
         public const int ARG_ANYSUFFIX = 0x04;
+        public const int ARG_NAME = 0x05;
+        public const int ARG_UNDEFINED = 0x06;
+
         public struct ReplaceFormatArg
         {
             public int Type;
@@ -398,6 +403,10 @@ namespace SamSoarII.AppMain.UI
                     args[i].OLow = args[i].OHigh = 0;
                     switch (sargs[i])
                     {
+                        case "?":
+                        case "???":
+                            args[i].Type = ARG_UNDEFINED;
+                            break;
                         case "*":
                             args[i].Type = ARG_ANYONE;
                             break;
@@ -460,13 +469,20 @@ namespace SamSoarII.AppMain.UI
                                 args[i].Low = int.Parse(m6.Groups[2].Value);
                                 args[i].High = int.Parse(m6.Groups[3].Value);
                             }
-                            else if (LadderInstViewModelPrototype.CheckInstructionName(sargs[i]))
+                            else if (i == 0)
                             {
-                                args[i].Type = ARG_INSTRUCTION;
+                                if (LadderInstViewModelPrototype.CheckInstructionName(sargs[i]))
+                                {
+                                    args[i].Type = ARG_INSTRUCTION;
+                                }
+                                else
+                                {
+                                    args[i].Type = ARG_INVAILD;
+                                }
                             }
                             else
                             {
-                                args[i].Type = ARG_INVAILD;
+                                args[i].Type = ARG_NAME;
                             }
                             break;
                     }
@@ -483,6 +499,8 @@ namespace SamSoarII.AppMain.UI
                             }
                             break;
                         case ARG_REGISTER:
+                        case ARG_NAME:
+                        case ARG_UNDEFINED:
                             if (i == 0 && sargs.Length > 1)
                             {
                                 Type = TYPE_INVALID;
@@ -503,9 +521,6 @@ namespace SamSoarII.AppMain.UI
                                 return;
                             }
                             break;
-                        default:
-                            Type = TYPE_INVALID;
-                            return;
                     }
                 }
                 Type = TYPE_LADDER;
@@ -525,8 +540,8 @@ namespace SamSoarII.AppMain.UI
         public bool Match(string input)
         {
             ReplaceFormat iformat = new ReplaceFormat(input);
-            if (iformat.Type != TYPE_LADDER)
-                return false;
+            //if (iformat.Type != TYPE_LADDER)
+            //    return false;
             switch (Type)
             {
                 case TYPE_INVALID:
@@ -549,10 +564,10 @@ namespace SamSoarII.AppMain.UI
                     }
                     for (int i = 1; i < iformat.ArgsCount; i++)
                     {
-                        if (!Match(GetArgs(0), iformat.GetArgs(i)))
-                            return false;
+                        if (Match(GetArgs(0), iformat.GetArgs(i)))
+                            return true;
                     }
-                    return true;
+                    return false;
                 default:
                     return false;
             }            
@@ -587,6 +602,10 @@ namespace SamSoarII.AppMain.UI
                             return false;
                     }
                     return true;
+                case ARG_NAME:
+                    return arg2.Type == ARG_NAME ? arg1.Text.Equals(arg2.Text) : false;
+                case ARG_UNDEFINED:
+                    return (arg2.Type == ARG_UNDEFINED);
                 default:
                     return false;
             }
@@ -601,36 +620,66 @@ namespace SamSoarII.AppMain.UI
         )
         {
             ReplaceFormat iformat = new ReplaceFormat(input);
+            ReplaceFormatArg arg;
+            arg.Type = ARG_INVAILD;
+            arg.Low = arg.High = arg.OLow = arg.OHigh = 0;
+            arg.Offset = arg.Base = arg.Text = String.Empty;
             string output = String.Empty;
             for (int i = 0; i < iformat.ArgsCount; i++)
             {
                 if (prototype.Type == TYPE_REGISTER)
-                { 
-                    if (iformat.GetArgs(i).Type == ARG_REGISTER)
+                {
+                    if (Type == TYPE_REGISTER
+                     && !Match(prototype.GetArgs(0), iformat.GetArgs(i)))
                     {
-                        if (!Match(prototype.GetArgs(0), iformat.GetArgs(i)))
-                        {
-                            output += iformat.GetArgs(i).Text + " ";
-                        }
-                        else
-                        {
-                            bool isunique = false;
-                            isunique = (prototype.GetArgs(0).Low == prototype.GetArgs(0).High);
-                            isunique |= (GetArgs(0).Low == GetArgs(0).High);
-                            int baseid = GetArgs(0).Low;
-                            if (!isunique)
-                                baseid += iformat.GetArgs(i).Low - prototype.GetArgs(0).Low;
-                            output += String.Format("{0:s}{1:d}",
-                                    GetArgs(0).Base, baseid);
-                            if (!GetArgs(0).Offset.Equals(String.Empty))
-                                output += String.Format("{0:s}{1:d}",
-                                    GetArgs(0).Offset, GetArgs(0).OLow);
-                            output += " ";
-                        }
+                        output += iformat.GetArgs(i).Text + " ";
                     }
                     else
                     {
-                        output += iformat.GetArgs(i).Text + " ";
+                        arg.Type = ARG_INVAILD;
+                        if (Type == TYPE_REGISTER)
+                        {
+                            arg = GetArgs(0);
+                        }
+                        else if (i <= ArgsCount)
+                        {
+                            arg = GetArgs(i);
+                        }
+                        switch (arg.Type)
+                        {
+                            case ARG_INSTRUCTION:
+                                if (iformat.GetArgs(i).Type != ARG_INSTRUCTION)
+                                {
+                                    output += iformat.GetArgs(i).Text + " ";
+                                    break;
+                                }
+                                output += arg.Text + " ";
+                                break;
+                            case ARG_REGISTER:
+                                if (iformat.GetArgs(i).Type != ARG_REGISTER 
+                                 && iformat.GetArgs(i).Type != ARG_UNDEFINED)
+                                {
+                                    output += iformat.GetArgs(i).Text + " ";
+                                    break;
+                                }
+                                bool isunique = false;
+                                isunique = (!prototype.GetArgs(0).Base.Equals(arg.Base));
+                                isunique |= (prototype.GetArgs(0).Low == prototype.GetArgs(0).High);
+                                isunique |= (arg.Low == arg.High);
+                                int baseid = arg.Low;
+                                if (!isunique)
+                                    baseid += iformat.GetArgs(i).Low - prototype.GetArgs(0).Low;
+                                output += String.Format("{0:s}{1:d}",
+                                        arg.Base, baseid);
+                                if (!arg.Offset.Equals(String.Empty))
+                                    output += String.Format("{0:s}{1:d}",
+                                        arg.Offset, arg.OLow);
+                                output += " ";
+                                break;
+                            default:
+                                output += iformat.GetArgs(i).Text + " ";
+                                break;
+                        }
                     }
                     continue;
                 }
@@ -697,7 +746,7 @@ namespace SamSoarII.AppMain.UI
                 string result = bvmodel.InstructionName;
                 for (int i = 0; i < bvmodel.Model.ParaCount; i++)
                 {
-                    result += " " + bvmodel.Model.GetPara(i).ValueString;
+                    result += " " + bvmodel.Model.GetPara(i).ValueShowString;
                 }
                 return result;
             }

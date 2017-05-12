@@ -238,6 +238,10 @@ namespace SamSoarII.Extend.Utility
                     case "DTCH":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
                         break;
+                    // (rwW)
+                    case "TRD": case "TWR":
+                        this.flag1 = ToCStyle(args[1], "rw", "WORD");
+                        break;
                     // (wB, rW)
                     case "SET": case "SETIM": case "RST": case "RSTIM":
                         this.flag1 = ToCStyle(args[1], "w", "BIT");

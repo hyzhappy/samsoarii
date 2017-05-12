@@ -72,6 +72,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
+            _network.INVModel.Setup(_network);
         }
 
         public virtual void Redo()
@@ -89,7 +90,6 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.RemoveVerticalLine(vline);
             }
-
             foreach (var oldele in _oldelements)
             {
                 _network.ReplaceElement(oldele);
@@ -98,6 +98,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(oldvline);
             }
+            _network.INVModel.Setup(_network);
         }
     }
     
