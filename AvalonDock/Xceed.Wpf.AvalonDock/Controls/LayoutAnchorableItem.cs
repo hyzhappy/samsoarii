@@ -216,6 +216,11 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 _anchorable.Root.Manager._ExecuteAutoHideCommand(_anchorable);
         }
 
+        public void AutoHide()
+        {
+            ExecuteAutoHideCommand(null);
+        }
+
         #endregion
 
         #region DockCommand

@@ -30,7 +30,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         bool HitTest(Point dragPoint);
 
-        DropTargetType Type { get; }
+        DropTargetType Type { get;}
 
         void Drop(LayoutFloatingWindow floatingWindow);
 

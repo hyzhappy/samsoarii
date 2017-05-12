@@ -36,6 +36,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         protected override void Drop(LayoutAnchorableFloatingWindow floatingWindow)
         {
+            ILayoutAnchorablePane[] childrenToTransfer = null;
             switch (Type)
             {
                 case DropTargetType.DockingManagerDockLeft:
@@ -51,7 +52,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                             if (layoutAnchorablePaneGroup != null &&
                                 layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Horizontal)
                             {
-                                var childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
+                                childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
                                 for (int i = 0; i < childrenToTransfer.Length; i++)
                                     _manager.Layout.RootPanel.Children.Insert(i, childrenToTransfer[i]);
                             }
@@ -86,7 +87,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                             if (layoutAnchorablePaneGroup != null &&
                                 layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Horizontal)
                             {
-                                var childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
+                                childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
                                 for (int i = 0; i < childrenToTransfer.Length; i++)
                                     _manager.Layout.RootPanel.Children.Add(childrenToTransfer[i]);
                             }
@@ -121,7 +122,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                             if (layoutAnchorablePaneGroup != null &&
                                 layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)
                             {
-                                var childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
+                                childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
                                 for (int i = 0; i < childrenToTransfer.Length; i++)
                                     _manager.Layout.RootPanel.Children.Insert(i, childrenToTransfer[i]);
                             }
@@ -156,7 +157,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                             if (layoutAnchorablePaneGroup != null &&
                                 layoutAnchorablePaneGroup.Orientation == System.Windows.Controls.Orientation.Vertical)
                             {
-                                var childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
+                                childrenToTransfer = layoutAnchorablePaneGroup.Children.ToArray();
                                 for (int i = 0; i < childrenToTransfer.Length; i++)
                                     _manager.Layout.RootPanel.Children.Add(childrenToTransfer[i]);
 
@@ -180,8 +181,36 @@ namespace Xceed.Wpf.AvalonDock.Controls
                     break;
                     #endregion
             }
-
-
+            foreach (ILayoutAnchorablePane ilapane in childrenToTransfer)
+            {
+                if (ilapane is LayoutAnchorablePane)
+                {
+                    LayoutAnchorablePane lapane = (LayoutAnchorablePane)ilapane;
+                    foreach (LayoutAnchorable lanch in lapane.Children)
+                    {
+                        lanch.IsDock = true;
+                        switch (Type)
+                        {
+                            case DropTargetType.DockingManagerDockLeft:
+                                Global.LayoutSetting.AddDefaultSideAnchorable(
+                                    lanch.Title, "LEFT");
+                                break;
+                            case DropTargetType.DockingManagerDockRight:
+                                Global.LayoutSetting.AddDefaultSideAnchorable(
+                                    lanch.Title, "RIGHT");
+                                break;
+                            case DropTargetType.DockingManagerDockTop:
+                                Global.LayoutSetting.AddDefaultSideAnchorable(
+                                    lanch.Title, "TOP");
+                                break;
+                            case DropTargetType.DockingManagerDockBottom:
+                                Global.LayoutSetting.AddDefaultSideAnchorable(
+                                    lanch.Title, "DOWN");
+                                break;
+                        }
+                    }
+                }
+            }
             base.Drop(floatingWindow);
         }
 
