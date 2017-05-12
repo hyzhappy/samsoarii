@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using System.Runtime.ExceptionServices;
 using System.Security;
 using System.Windows;
-
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Chart;
 using System.Collections.ObjectModel;
+using SamSoarII.PLCDevice;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -311,9 +311,17 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 设置时间速率
         /// </summary>
-        /// <param name="timerate">时间速率，越小越快</param>
+        /// <param name="timerate">时间速率，越小越快，但精度越差</param>
         [DllImport("simu.dll", EntryPoint = "SetClockRate")]
         private static extern void SetClockRate(int timerate);
+
+        /// <summary>
+        /// 设置位数
+        /// </summary>
+        /// <param name="basebit">位数</param>
+        [DllImport("simu.dll", EntryPoint = "SetBaseBit")]
+        private static extern void SetBaseBit(int basebit);
+
         #endregion
         
         /// <summary>
@@ -427,6 +435,8 @@ namespace SamSoarII.Simulation.Core
         [HandleProcessCorruptedStateExceptions]
         private void _SimulateThread()
         {
+            PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+            SetBaseBit(device.BitNumber);
             SetClockRate(50);
             // 初始化
             InitRunLadder();
@@ -466,6 +476,8 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         public void _SimulateThread_Chart()
         {
+            PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+            SetBaseBit(device.BitNumber);
             SetClockRate(1);
             InitRunLadder();
             InitClock(TimeStart);

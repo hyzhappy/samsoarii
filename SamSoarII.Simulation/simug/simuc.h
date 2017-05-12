@@ -324,6 +324,12 @@ EXPORT void SetEnable(char* name, int size, int value)
 	}
 }
 
+int basebit = 32;
+EXPORT void SetBaseBit(int _basebit)
+{
+	basebit = _basebit;
+}
+
 static int currenttime;
 static int beforetime;
 static int aftertime;
