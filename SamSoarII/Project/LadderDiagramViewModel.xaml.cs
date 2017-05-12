@@ -305,16 +305,12 @@ namespace SamSoarII.AppMain.Project
             _projectModel = _parent;
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
-            this.Loaded += (sender, e) =>
-            {
-                Focus();
-                Keyboard.Focus(this);
-            };
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
         }
         public void NavigateToNetworkByNum(int num)
         {
+            /*
             double scale = GlobalSetting.LadderScaleX;
             double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
             foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < num; }))
@@ -322,6 +318,9 @@ namespace SamSoarII.AppMain.Project
                 offset += scale * (item.ActualHeight + 20) / 3.03;
             }
             MainScrollViewer.ScrollToVerticalOffset(offset);
+            */
+            VScrollToRect(num, _selectRect.Y);
+            HScrollToRect(_selectRect.X);
         }
         private void InitializeInstructionNameAndToolTips()
         {
@@ -779,9 +778,9 @@ namespace SamSoarII.AppMain.Project
             double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
             foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < networkNumber; }))
             {
-                offset += scale * (item.ActualHeight + 20) / 2.65;
+                offset += scale * (item.ActualHeight + 20) / 2.89;
             }
-            offset += scale * (_selectRect.ActualHeight * row + 20) / 3.2;
+            offset += scale * (_selectRect.ActualHeight * row + 20) / 2.89;
             offset -= MainScrollViewer.ViewportHeight / 2;
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
@@ -791,8 +790,8 @@ namespace SamSoarII.AppMain.Project
             double scale = GlobalSetting.LadderScaleX;
             double offset = 0;
             offset += scale * GlobalSetting.LadderWidthUnit * (XIndex + 1) / 2.89;
-            offset -= (MainScrollViewer.ViewportWidth - 7 * scale);
-            offset = Math.Max(offset,0);
+            offset -= MainScrollViewer.ViewportWidth / 2;
+            offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToHorizontalOffset(offset);
         }
         private void SelectRectUp()
@@ -2413,6 +2412,16 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-        
+
+        private bool loadedbefore = false;
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!loadedbefore)
+            {
+                Focus();
+                Keyboard.Focus(this);
+                loadedbefore = true;
+            }
+        }
     }
 }

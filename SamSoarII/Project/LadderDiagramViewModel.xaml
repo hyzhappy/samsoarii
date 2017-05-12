@@ -13,7 +13,8 @@
              PreviewKeyDown="OnLadderDiagramKeyDown"   
              PreviewKeyUp="OnLadderDiagramKeyUp"
              MouseUp="OnLadderDiagramMouseUp"
-             MouseMove="OnLadderDiagramMouseMove">
+             MouseMove="OnLadderDiagramMouseMove"
+             Loaded="UserControl_Loaded">
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static ApplicationCommands.Cut}"   CanExecute="CutCopyCommandCanExecute" Executed="OnCutCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Copy}"  CanExecute="CutCopyCommandCanExecute" Executed="OnCopyCommandExecute"></CommandBinding>
