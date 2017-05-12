@@ -545,8 +545,8 @@ namespace SamSoarII.AppMain.UI
             else
             {
                 TB_ErrorMsg.Visibility = Visibility.Collapsed;
-                TBO_Text.Focus();
             }
+            TBO_Text.Focus();
             TBO_Text.SelectAll();
         }
 
@@ -600,6 +600,7 @@ namespace SamSoarII.AppMain.UI
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
+            TB_ErrorMsg.Visibility = Visibility.Collapsed;
             if (e.Key == Key.Enter)
             {
                 Text = TBO_Text.Text;
@@ -607,13 +608,13 @@ namespace SamSoarII.AppMain.UI
             }
         }
         
-        private void TBO_Text_LostFocus(object sender, RoutedEventArgs e)
+        private void TBO_Text_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             Text = TBO_Text.Text;
             Renamed(this, new RoutedEventArgs());
         }
 
         #endregion
-        
+
     }
 }

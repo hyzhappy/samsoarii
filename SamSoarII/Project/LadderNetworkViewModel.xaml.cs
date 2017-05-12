@@ -995,6 +995,8 @@ namespace SamSoarII.AppMain.Project
                         bvmodel_new.AcceptNewValues(
                             new string[1] { ldvmodel.ProgramName },
                             PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                        bvmodel_new.X = _ladderDiagram.SelectionRect.X;
+                        bvmodel_new.Y = _ladderDiagram.SelectionRect.Y;
                         _ladderDiagram.ReplaceSingleElement(this, bvmodel_new);
                     }
                 }

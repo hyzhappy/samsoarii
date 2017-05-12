@@ -877,11 +877,11 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
-        private void OnPTVIMouseMove(object sender, MouseEventArgs e)
+        private ProjectTreeViewItem GetPTVIParent(object obj)
         {
-            if (e.OriginalSource is FrameworkElement)
+            if (obj is FrameworkElement)
             {
-                FrameworkElement fele = (FrameworkElement)(e.OriginalSource);
+                FrameworkElement fele = (FrameworkElement)obj;
                 while (!(fele is ProjectTreeViewItem)
                     && (fele.Parent is FrameworkElement))
                 {
@@ -889,9 +889,15 @@ namespace SamSoarII.AppMain.UI
                 }
                 if (fele is ProjectTreeViewItem)
                 {
-                    CurrentItem = (ProjectTreeViewItem)fele;
+                    return (ProjectTreeViewItem)fele;
                 }
             }
+            return null;
+        }
+
+        private void OnPTVIMouseMove(object sender, MouseEventArgs e)
+        {
+            CurrentItem = GetPTVIParent(e.OriginalSource);
             if (CurrentItem == null) return;
             if (e.LeftButton != MouseButtonState.Pressed)
             {
@@ -912,19 +918,7 @@ namespace SamSoarII.AppMain.UI
 
         private void OnPTVIDragOver(object sender, DragEventArgs e)
         {
-            if (e.OriginalSource is FrameworkElement)
-            {
-                FrameworkElement fele = (FrameworkElement)(e.OriginalSource);
-                while (!(fele is ProjectTreeViewItem)
-                    && (fele.Parent is FrameworkElement))
-                {
-                    fele = (FrameworkElement)(fele.Parent);
-                }
-                if (fele is ProjectTreeViewItem)
-                {
-                    CurrentItem = (ProjectTreeViewItem)fele;
-                }
-            }
+            CurrentItem = GetPTVIParent(e.OriginalSource);
         }
 
         private void TV_Main_Drop(object sender, DragEventArgs e)
@@ -956,7 +950,10 @@ namespace SamSoarII.AppMain.UI
 
         private void TV_Main_DragLeave(object sender, DragEventArgs e)
         {
-            _projectModel.IFacade.MainWindow.LACProj.Hide();
+            if (GetPTVIParent(e.OriginalSource) == null)
+            {
+                _projectModel.IFacade.MainWindow.LACProj.Hide();
+            }
         }
 
         #endregion
@@ -1164,5 +1161,4 @@ namespace SamSoarII.AppMain.UI
     }
 
     public delegate void ProjectTreeViewEventHandler(object sender, ProjectTreeViewEventArgs e);
-    
 }
