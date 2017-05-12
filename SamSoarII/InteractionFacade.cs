@@ -1101,7 +1101,7 @@ namespace SamSoarII.AppMain
         }
 
         #endregion
-        
+
         public void CloseTabItem(ITabItem tabItem)
         {
             _mainTabControl.CloseItem(tabItem);
@@ -1274,6 +1274,5 @@ namespace SamSoarII.AppMain
         }
 
         #endregion
-
     }
 }

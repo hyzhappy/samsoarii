@@ -781,22 +781,22 @@ namespace SamSoarII.AppMain.Project
                     {
                         lcn[1] = ((ZCPModel)(bvm.Model)).InputValue1.ValueShowString;
                         lcn[2] = ((ZCPModel)(bvm.Model)).InputValue2.ValueShowString;
-                        lcn[2] = ((ZCPModel)(bvm.Model)).InputValue3.ValueShowString;
-                        lcn[3] = ((ZCPModel)(bvm.Model)).OutputValue.ValueShowString;
+                        lcn[3] = ((ZCPModel)(bvm.Model)).InputValue3.ValueShowString;
+                        lcn[4] = ((ZCPModel)(bvm.Model)).OutputValue.ValueShowString;
                     }
                     if (bvm.Model is ZCPFModel)
                     {
                         lcn[1] = ((ZCPFModel)(bvm.Model)).InputValue1.ValueShowString;
                         lcn[2] = ((ZCPFModel)(bvm.Model)).InputValue2.ValueShowString;
-                        lcn[2] = ((ZCPFModel)(bvm.Model)).InputValue3.ValueShowString;
-                        lcn[3] = ((ZCPFModel)(bvm.Model)).OutputValue.ValueShowString;
+                        lcn[3] = ((ZCPFModel)(bvm.Model)).InputValue3.ValueShowString;
+                        lcn[4] = ((ZCPFModel)(bvm.Model)).OutputValue.ValueShowString;
                     }
                     if (bvm.Model is ZCPDModel)
                     {
                         lcn[1] = ((ZCPDModel)(bvm.Model)).InputValue1.ValueShowString;
                         lcn[2] = ((ZCPDModel)(bvm.Model)).InputValue2.ValueShowString;
-                        lcn[2] = ((ZCPDModel)(bvm.Model)).InputValue3.ValueShowString;
-                        lcn[3] = ((ZCPDModel)(bvm.Model)).OutputValue.ValueShowString;
+                        lcn[3] = ((ZCPDModel)(bvm.Model)).InputValue3.ValueShowString;
+                        lcn[4] = ((ZCPDModel)(bvm.Model)).OutputValue.ValueShowString;
                     }
                     if (bvm.Model is NEGModel)
                     {

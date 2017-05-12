@@ -19,10 +19,11 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using SamSoarII.Extend.FuncBlockModel;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace SamSoarII.AppMain.UI
 {
-    /// <summary>
+    /// <summary>   
     /// ProjectTreeView.xaml 的交互逻辑
     /// </summary>
     public partial class ProjectTreeView : UserControl, INotifyPropertyChanged
@@ -520,7 +521,7 @@ namespace SamSoarII.AppMain.UI
                 {
                     switch (ptvitem.Text[i])
                     {
-                        case '~': case '`': case '!': case '@': case '#': case '$': case '%': case '^': case '&': case '*':
+                        case '#': case '@':
                             ptvitem.Rename(String.Format("存在非法字符：{0:c}", ptvitem.Text[i]));
                             return;
                     }
@@ -535,6 +536,12 @@ namespace SamSoarII.AppMain.UI
                 }
                 if (ptvitem.RelativeObject is LadderDiagramViewModel)
                 {
+                    Match m = Regex.Match(ptvitem.Text, @"^[a-zA-Z_]\w*$");
+                    if (!m.Success)
+                    {
+                        ptvitem.Rename("名称格式非法！");
+                        return;
+                    }
                     LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(ptvitem.RelativeObject);
                     foreach (LadderDiagramViewModel _ldvmodel in _projectModel.SubRoutines)
                     {
@@ -923,6 +930,7 @@ namespace SamSoarII.AppMain.UI
 
         private void TV_Main_Drop(object sender, DragEventArgs e)
         {
+            if (CurrentItem == null) return;
             if (CurrentItem.Background != Brushes.BlueViolet) return;
             DragItem.ReleasePath();
             ((ProjectTreeViewItem)(DragItem.Parent)).Items.Remove(DragItem);
@@ -946,7 +954,6 @@ namespace SamSoarII.AppMain.UI
             DragItem.IsSelected = true;
             DragItem = null;
         }
-
 
         private void TV_Main_DragLeave(object sender, DragEventArgs e)
         {
@@ -1045,7 +1052,6 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
-        
     }
 
     public class ProjectMenuItem : MenuItem
