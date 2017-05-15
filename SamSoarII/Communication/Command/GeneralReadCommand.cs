@@ -13,15 +13,44 @@ namespace SamSoarII.Communication.Command
         private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
         private const byte commandType = CommunicationDataDefine.FGS_READ;
         private byte addrTypeNum = 0x01;
+
         private byte addrType1;
         private byte length1;
         private byte startLowAddr1;
         private byte startHighAddr1;
+        public AddrSegment AddrSeg1
+        {
+            get
+            {
+                return new AddrSegment
+                (
+                    addrType1,
+                    length1,
+                    startLowAddr1,
+                    startHighAddr1
+                );
+            }
+        }
+
         //当某数据类型长度超过32或有两个数据类型同时请求时使用
-        private byte addrType2 = 0;
-        private byte length2 = 0;
-        private byte startLowAddr2 = 0;
-        private byte startHighAddr2 = 0;
+        private byte addrType2;
+        private byte length2;
+        private byte startLowAddr2;
+        private byte startHighAddr2;
+        public AddrSegment AddrSeg2
+        {
+            get
+            {
+                return new AddrSegment
+                (
+                    addrType2,
+                    length2,
+                    startLowAddr2,
+                    startHighAddr2
+                );
+            }
+        }
+
         private byte[] command;
         //返回的数据
         private byte[] _retData;

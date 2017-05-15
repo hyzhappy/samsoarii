@@ -39,6 +39,27 @@ namespace SamSoarII.Communication.Command
         private byte startLowAddr1;
         private byte startLowAddr2;
         private byte startHighAddr;
+        public IntraSegment IntraSeg
+        {
+            get
+            {
+                AddrSegment _base = new AddrSegment
+                (
+                    addrType1,
+                    length,
+                    startLowAddr1,
+                    startHighAddr
+                );
+                AddrSegment _intra = new AddrSegment
+                (
+                    addrType2,
+                    1,
+                    startLowAddr2,
+                    0
+                );
+                return new IntraSegment(_base, _intra);
+            }
+        }
         public List<ElementModel> RefElements { get; set; } = new List<ElementModel>();
         public IntrasegmentReadCommand(){}
         public void InitializeCommandByElement()
