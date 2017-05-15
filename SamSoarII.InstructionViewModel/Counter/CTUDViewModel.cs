@@ -90,7 +90,13 @@ namespace SamSoarII.LadderInstViewModel.Counter
             dialog.ShowLine5("SV:", EndValue);
             return dialog;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(CountValue);
+            result.Add(EndValue);
+            return result;
+        }
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = CountValue.ValueString;

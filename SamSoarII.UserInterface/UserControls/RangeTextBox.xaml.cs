@@ -67,7 +67,6 @@ namespace SamSoarII.UserInterface
             set
             {
                 SetValue(DefaultValueProperty,value);
-                textbox.Text = value.ToString();
             }
         }
         //public string Text
@@ -100,7 +99,14 @@ namespace SamSoarII.UserInterface
             InitializeComponent();
             DataContext = this;
             PropertyChanged = delegate { };
+            Loaded += RangeTextBox_Loaded;
         }
+
+        private void RangeTextBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            textbox.Text = DefaultValue.ToString();
+        }
+
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textbox = sender as TextBox;

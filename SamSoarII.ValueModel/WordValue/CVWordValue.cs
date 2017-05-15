@@ -10,6 +10,7 @@ namespace SamSoarII.ValueModel
     {
         public CVWordValue(uint index, WordValue offset)
         {
+            Base = string.Format("CV");
             Index = index;
             Offset = offset == null ? WordValue.Null : offset;
         }
@@ -20,19 +21,6 @@ namespace SamSoarII.ValueModel
             {
                 return ValueString;
             }
-        }
-
-        public override string ValueString
-        {
-            get
-            {
-                return string.Format("CV{0}{1}", Index, Offset.ValueString);
-            }
-        }
-
-        public override string GetValue()
-        {
-            throw new NotImplementedException();
         }
     }
 }

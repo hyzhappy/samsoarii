@@ -68,7 +68,12 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(LBLIndex.ValueString);
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(LBLIndex);
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             try

@@ -10,10 +10,10 @@ namespace SamSoarII.ValueModel
     {
         public VWordValue(uint index)
         {
+            Base = string.Format("V");
             Index = index;
+            Offset = Null;
         }
-
-
         public override string ValueShowString
         {
             get
@@ -21,15 +21,13 @@ namespace SamSoarII.ValueModel
                 return ValueString;
             }
         }
-
         public override string ValueString
         {
             get
             {
-                return string.Format("V{0}", Index);
+                return string.Format("{0}{1}",Base ,Index);
             }
         }
-
         public override string GetValue()
         {
             throw new NotImplementedException();

@@ -47,19 +47,38 @@ namespace SamSoarII.AppMain.Project
     {
 
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
-
+        private bool _isExpand;
+        public bool IsExpand
+        {
+            get
+            {
+                return _isExpand;
+            }
+            set
+            {
+                _isExpand = value;
+            }
+        }
         private int HeightUnit { get { return IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
-
         private int _rowCount;
+        private int _oldRowCount;
+        private bool _canHide = false;
         public int RowCount
         {
             get
             {
-                return _rowCount;
+                if (!_canHide)
+                {
+                    return _rowCount;
+                }
+                else
+                {
+                    return _oldRowCount;
+                }
             }
             set
             {
-                if(value > 0)
+                if(value > 0 || _canHide)
                 {
                     _rowCount = value;
                     LadderCanvas.Height = _rowCount * HeightUnit;
@@ -241,7 +260,15 @@ namespace SamSoarII.AppMain.Project
             {
                 _selectAreaFirstY = value;
                 var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
-                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
+                int height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
+                if (_canHide)
+                {
+                    height = 0;
+                }
+                else
+                {
+                    height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
+                }
                 SelectArea.Height = height;
                 Canvas.SetTop(SelectArea, top);
             }
@@ -287,7 +314,15 @@ namespace SamSoarII.AppMain.Project
                 }
                 _selectAreaSecondY = value;
                 var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
-                var height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
+                int height;
+                if (_canHide)
+                {
+                    height = 0;
+                }
+                else
+                {
+                    height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
+                }
                 SelectArea.Height = height;
                 Canvas.SetTop(SelectArea, top);
             }
@@ -328,7 +363,14 @@ namespace SamSoarII.AppMain.Project
                     SelectAreaFirstY = 0;
                     SelectAreaFirstX = 0;
                     SelectAreaSecondX = GlobalSetting.LadderXCapacity - 1;
-                    SelectAreaSecondY = RowCount - 1;
+                    if (_canHide)
+                    {
+                        SelectAreaSecondY = 0;
+                    }
+                    else
+                    {
+                        SelectAreaSecondY = RowCount - 1;
+                    }
                     CommentAreaGrid.Background = new SolidColorBrush(Colors.DarkBlue);
                     CommentAreaGrid.Background.Opacity = 0.3;
                 }
@@ -341,7 +383,7 @@ namespace SamSoarII.AppMain.Project
         public Rectangle SelectArea { get; set; } = new Rectangle();
 
         #endregion
-
+        private bool _canScrollToolTip = false;
         // parent ladder diagram
         private LadderDiagramViewModel _ladderDiagram;
 
@@ -356,13 +398,25 @@ namespace SamSoarII.AppMain.Project
             SelectArea.Fill = new SolidColorBrush(Colors.DarkBlue);
             SelectArea.Opacity = 0.2;
             Canvas.SetZIndex(SelectArea, -1);
+            Tag = false;
+            Loaded += (sender, e) =>
+            {
+                if (!(bool)Tag)
+                {
+                    ladderExpander.IsExpand = IsExpand;
+                }
+                Tag = true;
+            };
+            ladderExpander.MouseEnter += OnMouseEnter;
+            ladderExpander.MouseLeave += OnMouseLeave;
+            ladderExpander.expandButton.IsExpandChanged += ExpandButton_IsExpandChanged;
+            ThumbnailButton.ToolTipOpening += ThumbnailButton_ToolTipOpening;
+            ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
         }
-
         public IEnumerable<BaseViewModel> GetElements()
         {
             return _ladderElements.Values;
         }
-
         public BaseViewModel SearchElement(int x, int y)
         {
             var p = new IntPoint() { X = x, Y = y };
@@ -382,7 +436,6 @@ namespace SamSoarII.AppMain.Project
             }
             return null;
         }
-
         public IEnumerable<VerticalLineViewModel> GetVerticalLines()
         {
             return _ladderVerticalLines.Values;
@@ -872,6 +925,7 @@ namespace SamSoarII.AppMain.Project
 
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
+            var type = sender.GetType();
             if(e.LeftButton == MouseButtonState.Pressed && !IsMasked)
             {
                 var pos = e.GetPosition(LadderCanvas);
@@ -949,12 +1003,10 @@ namespace SamSoarII.AppMain.Project
         {
             return NetworkNumber == 0;
         }
-
         public bool IsLastNetwork()
         {
             return NetworkNumber == (_ladderDiagram.NetworkCount - 1);
         }
-
         public void ReleaseSelectRect()
         {
             if(IsSingleSelected())
@@ -963,7 +1015,6 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.SelectionRect.NetworkParent = null;
             }
         }
-
         public void AcquireSelectRect()
         {
             if (!LadderCanvas.Children.Contains(_ladderDiagram.SelectionRect))
@@ -1053,5 +1104,123 @@ namespace SamSoarII.AppMain.Project
             }
             return result;
         }
+        private void ReloadElementsToCanvas()
+        {
+            LadderCanvas.Children.Clear();
+            RowCount = _oldRowCount;
+            _canHide = false;
+            foreach (var ele in _ladderElements.Values)
+            {
+                LadderCanvas.Children.Add(ele);
+            }
+            foreach (var ele in _ladderVerticalLines.Values)
+            {
+                LadderCanvas.Children.Add(ele);
+            }
+        }
+        private void ClearElementsFromCanvas()
+        {
+            LadderCanvas.Children.Clear();
+            _oldRowCount = RowCount;
+            _canHide = true;
+            RowCount = 0;
+        }
+        #region ladder expand module
+        private void OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Color color = new Color();
+            color.A = 255;
+            color.R = 60;
+            color.G = 58;
+            color.B = 58;
+            SolidColorBrush brush = new SolidColorBrush(color);
+            Rect.Fill = brush;
+            Rect.Opacity = 0.08;
+            ladderExpander.Background = brush;
+            ladderExpander.Opacity = 0.2;
+        }
+        private void OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
+            Rect.Fill = brush;
+            Rect.Opacity = 1;
+            ladderExpander.Background = brush;
+            ladderExpander.Opacity = 1;
+        }
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ladderExpander.IsExpand = !ladderExpander.IsExpand;
+        }
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (_canScrollToolTip)
+            {
+                ScrollViewer scroll = (ScrollViewer)((ToolTip)ThumbnailButton.ToolTip).Content;
+                scroll.ScrollToVerticalOffset(scroll.VerticalOffset + e.Delta / 20);
+                e.Handled = true;
+            }
+        }
+        private void ThumbnailButton_ToolTipClosing(object sender, ToolTipEventArgs e)
+        {
+            _canScrollToolTip = false;
+        }
+        private void ThumbnailButton_ToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            _canScrollToolTip = true;
+        }
+        private ToolTip GenerateToolTipByLadder()
+        {
+            ToolTip tooltip = new ToolTip();
+            ScrollViewer scroll = new ScrollViewer();
+            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            Canvas canvas = new Canvas();
+            scroll.MaxHeight = 385;
+            canvas.Background = new SolidColorBrush(Colors.White);
+            canvas.HorizontalAlignment = HorizontalAlignment.Left;
+            ScaleTransform transform = new ScaleTransform(GlobalSetting.LadderOriginScaleX / 1.7, GlobalSetting.LadderOriginScaleY / 1.7);
+            canvas.Height = _oldRowCount * HeightUnit;
+            canvas.Width = LadderCanvas.Width;
+            foreach (var ele in _ladderElements.Values)
+            {
+                canvas.Children.Add(ele);
+            }
+            foreach (var ele in _ladderVerticalLines.Values)
+            {
+                canvas.Children.Add(ele);
+            }
+            canvas.LayoutTransform = transform;
+            scroll.Content = canvas;
+            tooltip.Content = scroll;
+            return tooltip;
+        }
+        private void RemoveToolTipByLadder(ToolTip tooltip)
+        {
+            if (tooltip != null)
+            {
+                Canvas canvas = (Canvas)((ScrollViewer)tooltip.Content).Content;
+                canvas.LayoutTransform = null;
+                canvas.Children.Clear();
+            }
+        }
+        private void ExpandButton_IsExpandChanged(object sender, RoutedEventArgs e)
+        {
+            ExpandLadder(ladderExpander.IsExpand);
+        }
+        private void ExpandLadder(bool isExpand)
+        {
+            if (isExpand)
+            {
+                RemoveToolTipByLadder((ToolTip)ThumbnailButton.ToolTip);
+                ThumbnailButton.ToolTip = null;
+                ReloadElementsToCanvas();
+            }
+            else
+            {
+                ClearElementsFromCanvas();
+                ThumbnailButton.ToolTip = GenerateToolTipByLadder();
+            }
+        }
+        #endregion
     }
 }

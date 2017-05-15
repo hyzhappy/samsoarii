@@ -25,7 +25,7 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
         public FilterSettingWidget()
         {
             InitializeComponent();
-            FilterParams = (FilterParams)ProjectPropertyManager.ParamsDic["FilterParams"];
+            FilterParams = (FilterParams)ProjectPropertyManager.ProjectPropertyDic["FilterParams"];
             DataContext = FilterParams;
         }
 

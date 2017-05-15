@@ -47,6 +47,30 @@ namespace SamSoarII.ValueModel
             }
         }
 
+        public string Base
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        public uint Index
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public WordValue Offset
+        {
+            get
+            {
+                return WordValue.Null;
+            }
+        }
+
         public string GetValue()
         {
             return value;

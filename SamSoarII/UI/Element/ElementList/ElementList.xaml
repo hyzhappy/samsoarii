@@ -57,7 +57,11 @@
                 </WrapPanel>
             </Border>
         </ScrollViewer>
-        <DataGrid x:Name="ElementDataGrid" RowDetailsVisibilityMode="Collapsed" SelectionMode="Extended" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" AutoGenerateColumns="False" ColumnHeaderHeight="24" VerticalScrollBarVisibility="Auto" ItemsSource="{Binding ElementCollection}" Background="Gray" HorizontalScrollBarVisibility="Auto" RowBackground="LightYellow" AlternatingRowBackground="LightBlue" CanUserResizeColumns="False" CellEditEnding="DataGrid_CellEditEnding">
+        <DataGrid x:Name="ElementDataGrid" RowDetailsVisibilityMode="Collapsed" SelectionMode="Extended" 
+                  Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" AutoGenerateColumns="False" 
+                  ColumnHeaderHeight="24" VerticalScrollBarVisibility="Auto" ItemsSource="{Binding ElementCollection}" 
+                  Background="Gray" HorizontalScrollBarVisibility="Auto" RowBackground="LightYellow" 
+                  AlternatingRowBackground="LightBlue" CanUserResizeColumns="False" CellEditEnding="DataGrid_CellEditEnding">
             <DataGrid.Resources>
                 <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
                     <Border Background="White" BorderBrush="Black" BorderThickness="1">

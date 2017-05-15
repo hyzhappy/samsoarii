@@ -58,7 +58,15 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(MoveValue.ValueString);
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(SourceValue);
+            result.Add(CountValue);
+            result.Add(DestinationValue);
+            result.Add(MoveValue);
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             try

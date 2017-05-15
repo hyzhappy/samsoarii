@@ -28,6 +28,7 @@ using Xceed.Wpf.AvalonDock.Controls;
 using System.Xml;
 using SamSoarII.HelpDocument.HelpDocComponet;
 using SamSoarII.HelpDocument;
+using SamSoarII.AppMain.UI.Monitor;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -37,13 +38,14 @@ namespace SamSoarII.AppMain.UI
     public partial class MainWindow : Window
     {
         private InteractionFacade _interactionFacade;
-        private CanAnimationScroll MainScroll;
         public LayoutAnchorControl LACProj { get; private set; }
         public LayoutAnchorControl LACSimuProj { get; private set; }
         public LayoutAnchorControl LACMonitor { get; private set; }
         public LayoutAnchorControl LACOutput { get; private set; }
         public LayoutAnchorControl LACFind { get; private set; }
         public LayoutAnchorControl LACReplace { get; private set; }
+        public LayoutAnchorControl LACMainMonitor { get; private set; }
+        private CanAnimationScroll MainScroll;
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
         {
@@ -53,10 +55,25 @@ namespace SamSoarII.AppMain.UI
             this.Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
-
             FindWindow findwindow = new FindWindow(_interactionFacade);
             LAFind.Content = findwindow;
+        }
 
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is ElementList)
+                {
+                    window.Closing -= ((ElementList)window).OnClosing;
+                    window.Close();
+                }
+                if (window is ElementInitializeWindow)
+                {
+                    window.Closing -= ((ElementInitializeWindow)window).OnClosing;
+                    window.Close();
+                }
+            }
         }
 
         private void InitializeAvalonDock()
@@ -68,6 +85,7 @@ namespace SamSoarII.AppMain.UI
             LACProj = LAProj.AnchorControl;
             LACSimuProj = LASimuProj.AnchorControl;
             LACMonitor = LAMonitor.AnchorControl;
+            LACMainMonitor = LAMainMonitor.AnchorControl;
             LACOutput = LAOutput.AnchorControl;
             LACFind = LAFind.AnchorControl;
             LACReplace = LAReplace.AnchorControl;
@@ -75,12 +93,11 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LASimuProj);
             InitializeAvalonDock(LAMonitor);
+            InitializeAvalonDock(LAMainMonitor);
             InitializeAvalonDock(LAOutput);
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
-
         }
-
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
         {
             AnchorSide side;
@@ -99,33 +116,25 @@ namespace SamSoarII.AppMain.UI
 
             LAnch.Hide();
         }
-
-        private void MainWindow_Closing(object sender, CancelEventArgs e)
-        {
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window.Name == "elementList")
-                {
-                    window.Closing -= ((ElementList)window).OnClosing;
-                    window.Close();
-                    break;
-                }
-            }
-        }
-        
-
         protected override void OnClosed(EventArgs e)
         {
             LayoutSetting.Save();
-
             base.OnClosed(e);
             Application.Current.Shutdown();
         }
-
+        public void SetProjectMonitor(MainMonitor MMonitor)
+        {
+            MonitorViewGrid.Children.Clear();
+            MonitorViewGrid.Children.Add(MMonitor);
+        }
         public void SetProjectTreeView(ProjectTreeView treeview)
         {
             TreeViewGrid.Children.Clear();
             TreeViewGrid.Children.Add(treeview);
+        }
+        public void ClearProjectMonitor()
+        {
+            MonitorViewGrid.Children.Clear();
         }
         public void ClearProjectTreeView()
         {
@@ -176,6 +185,7 @@ namespace SamSoarII.AppMain.UI
                 else
                 {
                     _interactionFacade.LoadProject(projectMessage.Value.Item2);
+                    ProjectFileManager.Update(projectMessage.Value.Item1, projectMessage.Value.Item2);
                     LadderModeButton.IsChecked = true;
                     InstModeButton.IsChecked = false;
                     LACProj.Show();
@@ -255,8 +265,30 @@ namespace SamSoarII.AppMain.UI
             string text = String.Format("{0:s}已经更改，是否保存？", _interactionFacade.ProjectModel.ProjectName);
             return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
         }
-        
+
         #region Command can Execute
+        private void OnEleListOpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        private void OnEleInitializeCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void ClosePageCanExecuteCommand(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = MainTab.SelectedItem != null;
@@ -328,7 +360,17 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
+        private void OnShowCommunicationSettingDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void ZoomOutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -380,7 +422,17 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
+        private void OnShowMainMonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         private void ShowOutputCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -494,10 +546,19 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Command Execute
+        private void OnEleInitializeCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            _interactionFacade.projectTreeView.OpenEleInitialize();
+        }
+        private void OnEleListOpenCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            _interactionFacade.projectTreeView.OpenElementList();
+        }
         private void OnCloseProjectCommand(object sender, ExecutedRoutedEventArgs e)
         {
             _interactionFacade.CloseCurrentProject();
             LAProj.Hide();
+            LAMainMonitor.Hide();
         }
         private void ClosePageExecuteCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -537,12 +598,15 @@ namespace SamSoarII.AppMain.UI
         {
             LACMonitor.Show();
         }
-
+        private void OnShowMainMonitorCommand(object sender, RoutedEventArgs e)
+        {
+            LACMainMonitor.Show();
+        }
         private void OnShowOutputCommand(object sender, RoutedEventArgs e)
         {
             LACOutput.Show();
         }
-        
+
         private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             AddNewRoutineWindow window = new AddNewRoutineWindow();
@@ -611,6 +675,11 @@ namespace SamSoarII.AppMain.UI
                         return;
                     }
                     string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
+                    if (File.Exists(fullFileName))
+                    {
+                        MessageBox.Show("指定路径已存在同名文件");
+                        return;
+                    }
                     PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
                     CreateProject(name, fullFileName);
                     newProjectDialog.Close();
@@ -728,7 +797,6 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
         private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -741,12 +809,6 @@ namespace SamSoarII.AppMain.UI
                 SimuStopButton.IsEnabled = true;
             });
         }
-
-        private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
-        {
-            SimulateHelper.SModel.Start();
-        }
-        
         private void OnSimulatePause(object sender, RoutedEventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -759,12 +821,6 @@ namespace SamSoarII.AppMain.UI
                 SimuStopButton.IsEnabled = true;
             });
         }
-
-        private void OnSimuPauseCommandExecute(object sender, RoutedEventArgs e)
-        {
-            SimulateHelper.SModel.Pause();
-        }
-
         private void OnSimulateAbort(object sender, RoutedEventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -776,6 +832,15 @@ namespace SamSoarII.AppMain.UI
                 SimuPauseButton.IsEnabled = false;
                 SimuStopButton.IsEnabled = false;
             });
+        }
+        private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
+        {
+            SimulateHelper.SModel.Start();
+        }
+
+        private void OnSimuPauseCommandExecute(object sender, RoutedEventArgs e)
+        {
+            SimulateHelper.SModel.Pause();
         }
 
         private void OnSimuStopCommandExecute(object sender, RoutedEventArgs e)
@@ -871,44 +936,6 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-        private void OnCheckNetworkErrorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (_interactionFacade != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-        }
-        
-        //private void OnCheckNetworkErrorCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        //{
-        //if (_interactionFacade.CurrentLadder != null)
-        //{
-        //    if (!_interactionFacade.CurrentLadder.CheckProgramControlInstructions())
-        //    {
-        //        MessageBox.Show(string.Format("程序控制指令配对失败！"));
-        //    }
-        //    else
-        //    {
-        //        var tempQueue = new Queue<LadderNetworkViewModel>(_interactionFacade.CurrentLadder.GetNetworks());
-        //        while (tempQueue.Count > 0)
-        //        {
-        //            var ladderNetworkViewModel = tempQueue.Dequeue();
-        //            if (ladderNetworkViewModel.IsNetworkError())
-        //            {
-        //                MessageBox.Show(string.Format("网络{0}错误", ladderNetworkViewModel.NetworkNumber));
-        //            }
-        //            else
-        //            {
-        //                MessageBox.Show(string.Format("网络{0}正常，可以编译!", ladderNetworkViewModel.NetworkNumber));
-        //            }
-        //        }
-        //    }
-        //}
-        //}
         private void ScrollToLeftAnimation()
         {
             DoubleAnimation animation = new DoubleAnimation();
@@ -939,5 +966,17 @@ namespace SamSoarII.AppMain.UI
                     break;
             }
         }
+        private void OnShowCommunicationSettingDialogCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+            BaseSetting baseSetting = dialog.GetBaseSetting();
+            baseSetting.SettingButtonClick += (sender1, e1) =>
+            {
+                CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+                dialog1.ShowDialog();
+            };
+            dialog.ShowDialog();
+        }
     }
 }
+

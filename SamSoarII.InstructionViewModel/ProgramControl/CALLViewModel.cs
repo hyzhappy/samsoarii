@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.PLCDevice;
+using SamSoarII.ValueModel;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -61,7 +62,11 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(FunctionName);
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             FunctionName = valueStrings[0];

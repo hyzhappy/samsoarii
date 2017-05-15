@@ -72,5 +72,9 @@ namespace SamSoarII.LadderInstViewModel
         {
             return new List<string>();
         }
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            return new List<IValueModel>();
+        }
     }
 }

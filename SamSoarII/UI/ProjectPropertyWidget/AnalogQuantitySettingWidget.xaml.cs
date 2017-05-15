@@ -26,7 +26,7 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
         public AnalogQuantitySettingWidget()
         {
             InitializeComponent();
-            AnalogQuantityParams = (AnalogQuantityParams)ProjectPropertyManager.ParamsDic["AnalogQuantityParams"];
+            AnalogQuantityParams = (AnalogQuantityParams)ProjectPropertyManager.ProjectPropertyDic["AnalogQuantityParams"];
             DataContext = AnalogQuantityParams;
         }
         public void Save()

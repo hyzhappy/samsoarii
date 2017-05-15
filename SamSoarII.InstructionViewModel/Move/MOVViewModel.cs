@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using SamSoarII.UserInterface;
 using SamSoarII.LadderInstModel;
 using SamSoarII.ValueModel;
-using SamSoarII.UserInterface;
 using System.Windows;
 using SamSoarII.PLCDevice;
 using System.Text.RegularExpressions;
@@ -110,6 +109,13 @@ namespace SamSoarII.LadderInstViewModel
             List<string> result = new List<string>();
             result.Add(SourceValue.ValueString);
             result.Add(DestinationValue.ValueString);
+            return result;
+        }
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(SourceValue);
+            result.Add(DestinationValue);
             return result;
         }
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)

@@ -10,6 +10,7 @@ namespace SamSoarII.ValueModel
     { 
         public AIWordValue(uint index, WordValue offset)
         {
+            Base = string.Format("AI");
             Index = index;
             Offset = offset == null ? WordValue.Null : offset;
         }
@@ -18,21 +19,8 @@ namespace SamSoarII.ValueModel
         {
             get
             {
-                throw new NotImplementedException();
+                return ValueString;
             }
-        }
-
-        public override string ValueString
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override string GetValue()
-        {
-            throw new NotImplementedException();
         }
     }
 }

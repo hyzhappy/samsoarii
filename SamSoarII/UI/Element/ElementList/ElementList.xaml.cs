@@ -590,7 +590,6 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
         public static void ValueCommentManager_ValueCommentChanged(ValueCommentChangedEventArgs e)
         {
             if (e.Type == ValueChangedType.Clear)

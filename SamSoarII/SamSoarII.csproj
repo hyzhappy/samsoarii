@@ -86,6 +86,17 @@
     <Compile Include="AvalonDockTest.xaml.cs">
       <DependentUpon>AvalonDockTest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Communication\Command\GeneralReadCommand.cs" />
+    <Compile Include="Communication\Command\GeneralWriteCommand.cs" />
+    <Compile Include="Communication\Command\ICommunicationCommand.cs" />
+    <Compile Include="Communication\Command\IntrasegmentReadCommand.cs" />
+    <Compile Include="Communication\Command\IntrasegmentWriteCommand.cs" />
+    <Compile Include="Communication\CommunicationDataDefine.cs" />
+    <Compile Include="Communication\CommunicationDataManager.cs" />
+    <Compile Include="Communication\SerialPortManager.cs" />
+    <Compile Include="Communication\USBManager.cs" />
+    <Compile Include="Communication\Util\CommandHelper.cs" />
+    <Compile Include="Communication\Util\CRC16.cs" />
     <Compile Include="Event\LadderElementChangedArgs.cs" />
     <Compile Include="Event\RoutineChangedEventArgs.cs" />
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
@@ -145,11 +156,21 @@
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="UI\ElementList.xaml.cs">
+    <Compile Include="UI\Controls\CanExpandButton.cs" />
+    <Compile Include="UI\Controls\LadderExpander.xaml.cs">
+      <DependentUpon>LadderExpander.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Element\ElementInitialize\BitElementModel.cs" />
+    <Compile Include="UI\Element\ElementInitialize\ElementInitializeWindow.xaml.cs">
+      <DependentUpon>ElementInitializeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Element\ElementInitialize\WordElementModel.cs" />
+    <Compile Include="UI\Element\ElementList\ElementList.xaml.cs">
       <DependentUpon>ElementList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ElementListHelp\ELementStackPanel.cs" />
-    <Compile Include="UI\ElementListHelp\NavigateToNetworkEventArgs.cs" />
+    <Compile Include="UI\Element\ElementList\ElementListHelp\ELementStackPanel.cs" />
+    <Compile Include="UI\Element\ElementList\ElementListHelp\NavigateToNetworkEventArgs.cs" />
+    <Compile Include="UI\Element\IElementInitializeModel.cs" />
     <Compile Include="UI\FindWindow.xaml.cs">
       <DependentUpon>FindWindow.xaml</DependentUpon>
     </Compile>
@@ -162,18 +183,29 @@
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Monitor\ElementModel.cs" />
     <Compile Include="UI\Monitor\MainMonitor.xaml.cs">
       <DependentUpon>MainMonitor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Monitor\MonitorCommand.cs" />
+    <Compile Include="UI\Monitor\MonitorDataHandle.cs" />
+    <Compile Include="UI\Monitor\MonitorManager.cs" />
     <Compile Include="UI\Monitor\MonitorVariableTable.xaml.cs">
       <DependentUpon>MonitorVariableTable.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Monitor\UserInterface\AddElementDialog.xaml.cs">
+      <DependentUpon>AddElementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Monitor\UserInterface\QuickAddElementDialog.xaml.cs">
+      <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Util\ElementAddressHelper.cs" />
     <Compile Include="UserSetting\SettingManager.cs" />
     <Compile Include="UI\InstrucionTreeItem.cs" />
     <Compile Include="UI\ModbusTableDialog.xaml.cs">
       <DependentUpon>ModbusTableDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ElementListHelp\CSVFileHelper.cs" />
+    <Compile Include="UI\Element\ElementList\ElementListHelp\CSVFileHelper.cs" />
     <Compile Include="UI\OptionDialog.xaml.cs">
       <DependentUpon>OptionDialog.xaml</DependentUpon>
     </Compile>
@@ -367,7 +399,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ElementList.xaml">
+    <Page Include="UI\Controls\LadderExpander.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Element\ElementInitialize\ElementInitializeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Element\ElementList\ElementList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -398,6 +438,14 @@
     <Page Include="UI\Monitor\MonitorVariableTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Monitor\UserInterface\AddElementDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Monitor\UserInterface\QuickAddElementDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\OptionDialog.xaml">
       <SubType>Designer</SubType>
@@ -534,6 +582,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\SpecialRegisters.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Monitor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\expandOff.png" />
+    <Resource Include="Resources\Image\expandOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\ElementInitialize.png" />
+    <Resource Include="Resources\Image\ElementTable.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

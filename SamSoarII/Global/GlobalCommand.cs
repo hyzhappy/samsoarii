@@ -37,6 +37,8 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand SimuStartCommand { get; set; }
         public static RoutedUICommand SimuPauseCommand { get; set; }
         public static RoutedUICommand SimuStopCommand { get; set; }
+        public static RoutedUICommand EleListOpenCommand { get; set; }
+        public static RoutedUICommand EleInitializeCommand { get; set; }
         static GlobalCommand()
         {
             AddNewFuncBlockCommand = new RoutedUICommand();
@@ -67,6 +69,8 @@ namespace SamSoarII.AppMain
             SimuStartCommand = new RoutedUICommand();
             SimuStopCommand = new RoutedUICommand();
             SimuPauseCommand = new RoutedUICommand();
+            EleListOpenCommand = new RoutedUICommand();
+            EleInitializeCommand = new RoutedUICommand();
         }
     }
 }

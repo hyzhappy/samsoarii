@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:SamSoarII.AppMain.Resources.ResourceDictionary">
+                    xmlns:local="clr-namespace:SamSoarII.AppMain.Resources.ResourceDictionary"
+                    xmlns:control="clr-namespace:SamSoarII.AppMain.UI">
     <ControlTemplate x:Key="HLine" TargetType="Button">
         <Canvas Width="30" x:Name="canvas" Height="24">
             <Label>
@@ -566,6 +567,29 @@
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="stackpanel" Property="Opacity" Value="0.3"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="ExpandButton" TargetType="{x:Type control:CanExpandButton}">
+        <Image x:Name="image" Width="50" Height="50"></Image>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsExpand" Value="true">
+                <Setter TargetName="image" Property="Source" Value="pack://application:,,,/SamSoarII;component/Resources/Image/expandOff.png"></Setter>
+            </Trigger>
+            <Trigger Property="IsExpand" Value="false">
+                <Setter TargetName="image" Property="Source" Value="pack://application:,,,/SamSoarII;component/Resources/Image/expandOn.png"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="ThumbnailButton" TargetType="Button">
+        <Border x:Name="border" BorderBrush="#FFB6B6B6" BorderThickness="4">
+            <Grid>
+                <TextBlock Foreground="#FFB6B6B6" FontSize="40">. . .</TextBlock>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#FF9ACDFF"></Setter>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

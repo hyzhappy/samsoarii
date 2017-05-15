@@ -61,7 +61,14 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             result.Add(OutputValue.ValueString);
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(FreqValue);
+            result.Add(PulseValue);
+            result.Add(OutputValue);
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             try

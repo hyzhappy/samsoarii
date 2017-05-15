@@ -4,9 +4,68 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.Monitor"
+             xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             d:DesignHeight="700" d:DesignWidth="300" x:Name="UserControl">
+    <Grid Width="{Binding ElementName=UserControl,Path=ActualWidth}">
+        <Grid.CommandBindings>
+            <CommandBinding x:Name="AddElementCommand" Command="{x:Static local:MonitorCommand.AddElementCommand}"></CommandBinding>
+            <CommandBinding x:Name="QuickAddElementCommand" Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}"></CommandBinding>
+            <CommandBinding x:Name="DeleteElementCommand" Command="{x:Static local:MonitorCommand.DeleteElementsCommand}"></CommandBinding>
+            <CommandBinding x:Name="DeleteAllElementCommand" Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}" CanExecute="OnDeleteAllElementCommandCanExecute"></CommandBinding>
+        </Grid.CommandBindings>
+        <Grid.Resources>
+            <ContextMenu x:Key="contextMenu">
+                <MenuItem Header="添加" Command="{x:Static local:MonitorCommand.AddElementCommand}"></MenuItem>
+                <MenuItem Header="快速添加" Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}"></MenuItem>
+                <MenuItem Header="删除" Command="{x:Static local:MonitorCommand.DeleteElementsCommand}"></MenuItem>
+                <MenuItem Header="全部删除" Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}"></MenuItem>
+            </ContextMenu>
+        </Grid.Resources>
+        <DataGrid x:Name="ElementDataGrid" HorizontalScrollBarVisibility="Auto" RowHeaderWidth="0"
+                  Background="White" VerticalScrollBarVisibility="Auto" SelectionMode="Extended"
+                  AutoGenerateColumns="False" ColumnHeaderHeight="24" RowBackground="#FFFDFDD0"
+                  CanUserResizeColumns="True" ItemsSource="{Binding Elements}" ContextMenu="{StaticResource contextMenu}"
+                  CanUserAddRows="False" CanUserDeleteRows="False" MouseDoubleClick="OnMouseDoubleClick">
+            <DataGrid.Resources>
+                <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
+                    <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="0,3,0,0">
+                        <ContentPresenter TextBlock.FontSize="12" TextBlock.TextAlignment="Center"></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+                <Style TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
+                    <Setter Property="TextWrapping" Value="Wrap"></Setter>
+                    <Setter Property="FontSize" Value="12"></Setter>
+                    <Setter Property="FontFamily" Value="Arial"></Setter>
+                </Style>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="ElementName" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="True" Header="软元件" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding ShowName}">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="ElementValue" CanUserSort="False" Width="1.4*" MinWidth="92" IsReadOnly="True" Header="ON/OFF/当前值" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding CurrentValue}">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="SetValue" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="True" Header="设定值" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding SetValue}">
+                </DataGridTextColumn>
+                <DataGridComboBoxColumn x:Name="DataType" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="False" Header="数据类型">
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                            <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                            <EventSetter Event="GotFocus" Handler="OnGotFocus"></EventSetter>
+                            <EventSetter Event="LostFocus" Handler="OnLostFocus"></EventSetter>
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                            <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                </DataGridComboBoxColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

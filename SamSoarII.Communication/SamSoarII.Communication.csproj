@@ -43,18 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\GeneralReadCommand.cs" />
-    <Compile Include="Command\GeneralWriteCommand.cs" />
-    <Compile Include="Command\ICommunicationCommand.cs" />
-    <Compile Include="Command\IntrasegmentReadCommand.cs" />
-    <Compile Include="Command\IntrasegmentWriteCommand.cs" />
-    <Compile Include="CommunicationDataDefine.cs" />
-    <Compile Include="CommunicationDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialPortManager.cs" />
-    <Compile Include="USBManager.cs" />
-    <Compile Include="Util\CommandHelper.cs" />
-    <Compile Include="Util\CRC16.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj">

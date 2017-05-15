@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +12,13 @@ namespace SamSoarII.Communication.Command
     {
         private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
         private const byte commandType = CommunicationDataDefine.FGS_READ;
-        private byte addrTypeNum;
+        private byte addrTypeNum = 0x01;
         private byte addrType1;
         private byte length1;
         private byte startLowAddr1;
         private byte startHighAddr1;
         //当某数据类型长度超过32或有两个数据类型同时请求时使用
-        private byte addrType2;
+        private byte addrType2 = 0;
         private byte length2 = 0;
         private byte startLowAddr2 = 0;
         private byte startHighAddr2 = 0;
@@ -33,9 +35,53 @@ namespace SamSoarII.Communication.Command
             {
                 _retData = value;
                 CheckRetData();
+                if (IsSuccess)
+                {
+                    UpdataValues();
+                }
             }
         }
         public bool IsSuccess { get; set; }
+        public List<ElementModel> RefElements_A { get; set; } = new List<ElementModel>();
+        public List<ElementModel> RefElements_B { get; set; } = new List<ElementModel>();
+        public GeneralReadCommand(){}
+        public void InitializeCommandByElement()
+        {
+            ElementModel element_a, element_b;
+            if (RefElements_A.Count > 0)
+            {
+                element_a = RefElements_A.First();
+                addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), element_a.AddrType), element_a.StartAddr);
+                length1 = (byte)RefElements_A.Count;
+                byte[] startaddr = ValueConverter.GetBytes((ushort)element_a.StartAddr);
+                startLowAddr1 = startaddr[0];
+                startHighAddr1 = startaddr[1];
+            }
+            if (RefElements_B.Count > 0)
+            {
+                element_b = RefElements_B.First();
+                addrType2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), element_b.AddrType), element_b.StartAddr);
+                if (addrType1 != addrType2)
+                {
+                    addrTypeNum = 0x02;
+                }
+                else
+                {
+                    addrTypeNum = 0x01;
+                }
+                length2 = (byte)RefElements_B.Count;
+                byte[] startaddr = ValueConverter.GetBytes((ushort)element_b.StartAddr);
+                startLowAddr2 = startaddr[0];
+                startHighAddr2 = startaddr[1];
+            }
+            GenerateCommand();
+        }
+        public void UpdataValues()
+        {
+            List<byte[]> retData = GetRetData();
+            CommandHelper.UpdataElements(RefElements_A,retData[0],length1);
+            CommandHelper.UpdataElements(RefElements_B,retData[1],length2);
+        }
         public GeneralReadCommand(byte addrType,byte length,byte startLowAddr,byte startHighAddr)
         {
             if (length > CommunicationDataDefine.MAX_ELEM_NUM * 2)
@@ -158,7 +204,7 @@ namespace SamSoarII.Communication.Command
             }
         }
         //Can be call after assign value for Property of RetData
-        public List<byte[]> GetRetData()
+        private List<byte[]> GetRetData()
         {
             List<byte[]> templist = new List<byte[]>(2);
             if (IsSuccess)

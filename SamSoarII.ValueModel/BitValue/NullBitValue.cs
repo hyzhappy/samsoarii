@@ -27,7 +27,7 @@ namespace SamSoarII.ValueModel
 
         public override string GetValue()
         {
-            throw new InvalidOperationException();
+            return string.Empty;
         }
         
     }

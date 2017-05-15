@@ -5,64 +5,79 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
+             xmlns:ui="clr-namespace:SamSoarII.AppMain.UI"
+             xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="3600" x:Name="LadderNetworkUserControl">
-    <StackPanel Margin="0,0,0,20">
-        <StackPanel.Resources>
-            <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
-                <MenuItem Header="编辑网络注释" Click="OnEditComment"></MenuItem>
-            </ContextMenu>
-        </StackPanel.Resources>
-        <Grid x:Name="CommentAreaGrid" Background="Transparent" >
-            <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
-                <Expander x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
-                    <Expander.Header>
-                        <Grid Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="3*"></ColumnDefinition>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Label x:Name="NetworkNumberLabel" FontSize="32" Grid.Column="0" Grid.Row="0">Network</Label>
-                            <Label x:Name="NetworkStepCountLabel" FontSize="32" Grid.Column="1" Grid.Row="0">Step:</Label>
-                            <Label x:Name="NetworkBriefLabel" FontSize="32" Grid.Column="2" Grid.Row="0" Content=""></Label>
-                        </Grid>
-                    </Expander.Header>
-                    <TextBlock x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"></TextBlock>
-                </Expander>
-            </Border>
+    <UserControl.Resources>
+        <util:BoolToVisibilityConverter2 x:Key="converter"></util:BoolToVisibilityConverter2>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal">
+        <ui:LadderExpander x:Name="ladderExpander" IsExpand="True" Margin="-50,-18,0,0" Height="{Binding ElementName=mainstack,Path=ActualHeight}"></ui:LadderExpander>
+        <Grid>
+            <Rectangle x:Name="Rect" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}">
+            </Rectangle>
+            <StackPanel x:Name="mainstack" Margin="0,0,0,20">
+                <StackPanel.Resources>
+                    <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
+                        <MenuItem Header="编辑网络注释" Click="OnEditComment"></MenuItem>
+                    </ContextMenu>
+                </StackPanel.Resources>
+                <Grid x:Name="CommentAreaGrid" Background="Transparent">
+                    <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
+                        <Expander x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
+                            <Expander.Header>
+                                <Grid Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="NetworkNumberLabel" FontSize="32" Grid.Column="0" Grid.Row="0">Network</Label>
+                                    <Label x:Name="NetworkStepCountLabel" FontSize="32" Grid.Column="1" Grid.Row="0">Step:</Label>
+                                    <Label x:Name="NetworkBriefLabel" FontSize="32" Grid.Column="2" Grid.Row="0" Content=""></Label>
+                                </Grid>
+                            </Expander.Header>
+                            <TextBlock x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"></TextBlock>
+                        </Expander>
+                    </Border>
+                    <Button x:Name="ThumbnailButton" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1540,0,0,0" Width="65" Height="55" 
+                            Visibility="{Binding ElementName=ladderExpander,Path=IsExpand,Converter={StaticResource converter}}"
+                            Template="{StaticResource ThumbnailButton}" MouseDoubleClick="OnMouseDoubleClick" MouseWheel="OnMouseWheel"/>
+                </Grid>
+                <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" PreviewMouseDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+                    <Canvas.ContextMenu>
+                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <MenuItem Header="图元剪切"></MenuItem>
+                            <MenuItem Header="图元复制"></MenuItem>
+                            <MenuItem Header="图元粘贴"></MenuItem>
+                            <MenuItem Header="图元删除"></MenuItem>
+                            <MenuItem Header="插入行">
+                                <MenuItem Header="向前插入" Click="OnAddNewRowBefore"></MenuItem>
+                                <MenuItem Header="向后插入" Click="OnAddNewRowAfter"></MenuItem>
+                                <MenuItem Header="末尾追加" Click="OnAppendNewRow"></MenuItem>
+                            </MenuItem>
+                            <MenuItem Header="删除行" Click="OnDeleteRow"></MenuItem>
+                            <Separator></Separator>
+                            <MenuItem Header="网络插入">
+                                <MenuItem Header="向前插入" Click="OnAddNewNetworkBefore"></MenuItem>
+                                <MenuItem Header="向后插入" Click="OnAddNewNetworkAfter"></MenuItem>
+                                <MenuItem Header="末尾追加" Click="OnAppendNewNetwork"></MenuItem>
+                            </MenuItem>
+                            <MenuItem Header="网络删除" Click="OnRemoveNetwork"></MenuItem>
+                            <MenuItem Header="网络剪切"></MenuItem>
+                            <MenuItem Header="网络复制"></MenuItem>
+                            <MenuItem Header="网络粘贴"></MenuItem>
+                            <Separator></Separator>
+                            <MenuItem Header="屏蔽网络" IsCheckable="True" IsChecked="{Binding IsMasked}"></MenuItem>
+                            <Separator></Separator>
+                            <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
+                            <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
+                        </ContextMenu>
+                    </Canvas.ContextMenu>
+                </Canvas>
+            </StackPanel>
         </Grid>
-        <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" PreviewMouseDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-            <Canvas.ContextMenu>
-                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Header="图元剪切"></MenuItem>
-                    <MenuItem Header="图元复制"></MenuItem>
-                    <MenuItem Header="图元粘贴"></MenuItem>
-                    <MenuItem Header="图元删除"></MenuItem>
-                    <MenuItem Header="插入行">
-                        <MenuItem Header="向前插入" Click="OnAddNewRowBefore"></MenuItem>
-                        <MenuItem Header="向后插入" Click="OnAddNewRowAfter"></MenuItem>
-                        <MenuItem Header="末尾追加" Click="OnAppendNewRow"></MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="删除行" Click="OnDeleteRow"></MenuItem>
-                    <Separator></Separator>
-                    <MenuItem Header="网络插入">
-                        <MenuItem Header="向前插入" Click="OnAddNewNetworkBefore"></MenuItem>
-                        <MenuItem Header="向后插入" Click="OnAddNewNetworkAfter"></MenuItem>
-                        <MenuItem Header="末尾追加" Click="OnAppendNewNetwork"></MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="网络删除" Click="OnRemoveNetwork"></MenuItem>
-                    <MenuItem Header="网络剪切"></MenuItem>
-                    <MenuItem Header="网络复制"></MenuItem>
-                    <MenuItem Header="网络粘贴"></MenuItem>
-                    <Separator></Separator>
-                    <MenuItem Header="屏蔽网络" IsCheckable="True" IsChecked="{Binding IsMasked}"></MenuItem>
-                    <Separator></Separator>
-                    <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
-                    <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
-                </ContextMenu>
-            </Canvas.ContextMenu>
-        </Canvas>
     </StackPanel>
 </UserControl>

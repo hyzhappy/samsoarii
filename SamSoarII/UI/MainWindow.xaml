@@ -59,6 +59,8 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuStartCommand}" Executed="OnSimuStartCommandExecute" CanExecute="SimuStartCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Executed="OnSimuPauseCommandExecute" CanExecute="SimuPauseCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuStopCommand}" Executed="OnSimuStopCommandExecute" CanExecute="SimuStopCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.EleInitializeCommand}" Executed="OnEleInitializeCommandExecute" CanExecute="OnEleInitializeCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.EleListOpenCommand}" Executed="OnEleListOpenCommandExecute" CanExecute="OnEleListOpenCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ClosePage}" Executed="ClosePageExecuteCommand" CanExecute="ClosePageCanExecuteCommand"></CommandBinding>
         <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}" Executed="ScrollToLeftCommandExecute" CanExecute="ScrollToLeftCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}" Executed="ScrollToRightCommandExecute" CanExecute="ScrollToRightCommandCanExecute"></CommandBinding>
@@ -72,7 +74,6 @@
         <ad:LayoutItemFromLayoutModelConverter x:Key="LayoutItemFromLayoutModelConverter" />
         <ad:ActivateCommandLayoutItemFromLayoutModelConverter x:Key="ActivateCommandLayoutItemFromLayoutModelConverter" />
         <ad:BoolToSideBrushConverter x:Key="BoolToSideBrushConverter" />
-
         <Style x:Key="ImageEnable" TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -336,6 +337,14 @@
                     <Image Source="/Resources/Image/DeleteRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
+            <ToolBar>
+                <Button ToolTip="软元件表" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.EleListOpenCommand}">
+                    <Image Source="/Resources/Image/ElementTable.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
+                <Button ToolTip="软元件初始化" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.EleInitializeCommand}">
+                    <Image Source="/Resources/Image/ElementInitialize.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
+            </ToolBar>
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Top" Height="25">
             <ToolBar Style="{x:Null}" x:Name="ShortCutToolBar">
@@ -425,6 +434,12 @@
                             <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                                <Grid x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                                </Grid>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.RightSide>
                 <ad:LayoutRoot.BottomSide>
@@ -436,15 +451,6 @@
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.BottomSide>
-                <ad:LayoutRoot.RightSide>
-                    <ad:LayoutAnchorSide>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
-                                <mon:MainMonitor x:Name="MainMonitor"/>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                    </ad:LayoutAnchorSide>
-                </ad:LayoutRoot.RightSide>
             </ad:LayoutRoot>
         </ad:DockingManager>
     </DockPanel>

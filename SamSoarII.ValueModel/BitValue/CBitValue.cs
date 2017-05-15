@@ -10,6 +10,7 @@ namespace SamSoarII.ValueModel
     {
         public CBitValue(uint index, WordValue offset)
         {
+            Base = string.Format("C");
             Index = index;
             Offset = offset == null ? WordValue.Null : offset;
         }
@@ -21,26 +22,5 @@ namespace SamSoarII.ValueModel
                 return ValueString;
             }
         }
-
-        public override string ValueString
-        {
-            get
-            {
-                return string.Format("C{0}{1}", Index, Offset.ValueString);
-            }
-        }
-
-        public override string GetValue()
-        {
-            if(Offset != WordValue.Null)
-            {
-                return string.Format("CBit[{0} + {1}]", Index, Offset.GetValue());
-            }
-            else
-            {
-                return string.Format("CBit[{0}]", Index);
-            }
-        }
-        
     }
 }

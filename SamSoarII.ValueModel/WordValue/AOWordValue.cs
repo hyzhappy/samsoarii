@@ -10,6 +10,7 @@ namespace SamSoarII.ValueModel
     {
         public AOWordValue(uint index, WordValue offset)
         {
+            Base = string.Format("AO");
             Index = index;
             Offset = offset == null ? WordValue.Null : offset;
         }
@@ -20,19 +21,6 @@ namespace SamSoarII.ValueModel
             {
                 return ValueString;
             }
-        }
-
-        public override string ValueString
-        {
-            get
-            {
-                return string.Format("AO{0}{1}", Index, Offset.ValueString);
-            }
-        }
-
-        public override string GetValue()
-        {
-            throw new NotImplementedException();
         }
     }
 }

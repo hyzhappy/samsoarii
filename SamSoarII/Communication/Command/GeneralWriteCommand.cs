@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +19,7 @@ namespace SamSoarII.Communication.Command
         private byte startHighAddr1;
         private byte[] data1; 
         //当某数据类型长度超过32或有两个数据类型同时请求时使用
-        private byte addrType2;
+        private byte addrType2 = 0;
         private byte length2 = 0;
         private byte startLowAddr2 = 0;
         private byte startHighAddr2 = 0;
@@ -38,6 +40,24 @@ namespace SamSoarII.Communication.Command
             }
         }
         public bool IsSuccess { get; set; }
+        public List<ElementModel> RefElements_A { get; set; } = new List<ElementModel>();
+        public List<ElementModel> RefElements_B { get; set; } = new List<ElementModel>();
+        public GeneralWriteCommand(byte[] data)
+        {
+            data1 = data;
+            InitializeCommandByElement();
+            GenerateCommand();
+        }
+        private void InitializeCommandByElement()
+        {
+            ElementModel element = RefElements_A.First();
+            addrTypeNum = 0x01;
+            addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType),element.AddrType),element.StartAddr);
+            length1 = 0x01;
+            byte[] startaddr = ValueConverter.GetBytes((ushort)element.StartAddr);
+            startLowAddr1 = startaddr[0];
+            startHighAddr1 = startaddr[1];
+        }
         public GeneralWriteCommand(byte addrType, byte length, byte startLowAddr, byte startHighAddr,byte[] data)
         {
             int byteCnt = CommandHelper.GetLengthByAddrType(addrType);
@@ -57,7 +77,6 @@ namespace SamSoarII.Communication.Command
             {
                 addrTypeNum = 0x01;
                 addrType1 = addrType;
-                addrType2 = addrType;
                 startLowAddr1 = startLowAddr;
                 startHighAddr1 = startHighAddr;
                 if (length <= CommunicationDataDefine.MAX_ELEM_NUM)
@@ -67,6 +86,7 @@ namespace SamSoarII.Communication.Command
                 }
                 else
                 {
+                    addrType2 = addrType;
                     length1 = CommunicationDataDefine.MAX_ELEM_NUM;
                     length2 = (byte)(length - CommunicationDataDefine.MAX_ELEM_NUM);
                     data1 = new byte[length1 * byteCnt];
@@ -93,7 +113,7 @@ namespace SamSoarII.Communication.Command
                 return;//throw Exception
             }
         }
-        public GeneralWriteCommand(byte[] addrType, byte[] length, byte[] startLowAddr, byte[] startHighAddr,byte[] data1,byte[] data2)
+        private GeneralWriteCommand(byte[] addrType, byte[] length, byte[] startLowAddr, byte[] startHighAddr,byte[] data1,byte[] data2)
         {
             if (CommandHelper.GetLengthByAddrType(addrType[0]) * length[0] != data1.Length || CommandHelper.GetLengthByAddrType(addrType[1]) * length[1] != data2.Length)
             {

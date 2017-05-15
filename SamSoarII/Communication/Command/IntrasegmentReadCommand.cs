@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,10 @@ namespace SamSoarII.Communication.Command
             {
                 _retData = value;
                 CheckRetData();
+                if (IsSuccess)
+                {
+                    UpdataValues();
+                }
             }
         }
         private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
@@ -33,19 +39,34 @@ namespace SamSoarII.Communication.Command
         private byte startLowAddr1;
         private byte startLowAddr2;
         private byte startHighAddr;
+        public List<ElementModel> RefElements { get; set; } = new List<ElementModel>();
+        public IntrasegmentReadCommand(){}
+        public void InitializeCommandByElement()
+        {
+            if (RefElements.Count > 0)
+            {
+                ElementModel element = RefElements.First();
+                addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), element.AddrType), element.StartAddr);
+                length = (byte)RefElements.Count;
+                byte[] startaddr = ValueConverter.GetBytes((ushort)element.StartAddr);
+                startLowAddr1 = startaddr[0];
+                startHighAddr = startaddr[1];
+                addrType2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), element.IntrasegmentType), element.IntrasegmentAddr);
+                startLowAddr2 = (byte)element.IntrasegmentAddr;
+            }
+            GenerateCommand();
+        }
+        public void UpdataValues()
+        {
+            List<byte[]> retData = GetRetData();
+            CommandHelper.UpdataElements(RefElements, retData[0], length);
+        }
         public IntrasegmentReadCommand(byte[] addrType, byte length, byte[] startLowAddr, byte startHighAddr)
         {
             if (length > CommunicationDataDefine.MAX_ELEM_NUM)
             {
                 return;
             }
-            //由于是变址，这里无法检测地址是否越界
-            //if (startHighAddr << 8 > ushort.MaxValue - startLowAddr[0] - length + 1)
-            //{
-            //    return;//throw Exception
-            //}
-            //if (CommandCheck.checkAddrRange(addrType[0], length, (ushort)(startLowAddr[0] + startHighAddr << 8)))
-            //{
             addrType1 = addrType[0];
             addrType2 = addrType[1];
             startLowAddr1 = startLowAddr[0];
@@ -53,11 +74,6 @@ namespace SamSoarII.Communication.Command
             this.startHighAddr = startHighAddr;
             this.length = length;
             GenerateCommand();
-            //}
-            //else
-            //{
-                //return;//throw Exception
-            //}
         }
         private void GenerateCommand()
         {
@@ -115,7 +131,7 @@ namespace SamSoarII.Communication.Command
             }
         }
         //Can be call after assign value for Property of RetData
-        public List<byte[]> GetRetData()
+        private List<byte[]> GetRetData()
         {
             List<byte[]> templist = new List<byte[]>(2);
             if (IsSuccess)

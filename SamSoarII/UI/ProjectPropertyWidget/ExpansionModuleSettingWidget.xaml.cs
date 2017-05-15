@@ -33,7 +33,7 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
         public ExpansionModuleSettingWidget()
         {
             InitializeComponent();
-            ExpanModuleParams = (ExpansionModuleParams)ProjectPropertyManager.ParamsDic["ExpanModuleParams"];
+            ExpanModuleParams = (ExpansionModuleParams)ProjectPropertyManager.ProjectPropertyDic["ExpanModuleParams"];
             DataContext = ExpanModuleParams;
         }
         public void Save()

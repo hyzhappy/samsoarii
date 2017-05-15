@@ -59,7 +59,13 @@ namespace SamSoarII.LadderInstViewModel.Counter
             result.Add(StartValue.ValueString);
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(CountValue);
+            result.Add(StartValue);
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             try

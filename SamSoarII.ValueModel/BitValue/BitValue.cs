@@ -16,11 +16,28 @@ namespace SamSoarII.ValueModel
             }
         }
 
-        public abstract string ValueString { get; }
+        public virtual string ValueString
+        {
+            get
+            {
+                return string.Format("{0}{1}{2}", Base, Index, Offset.ValueString);
+            }
+        }
         public abstract string ValueShowString { get; }
-        protected uint Index { get; set; }
-        protected WordValue Offset { get; set; }
-        public abstract string GetValue();
+        public string Base { get; protected set; }
+        public uint Index { get; protected set; }
+        public WordValue Offset { get; protected set; }
+        public virtual string GetValue()
+        {
+            if (Offset != WordValue.Null)
+            {
+                return string.Format("{0}Bit[{1} + {2}]", Base, Index, Offset.GetValue());
+            }
+            else
+            {
+                return string.Format("{0}Bit[{1}]", Base, Index);
+            }
+        }
         public virtual string Comment
         {
             get
@@ -34,7 +51,6 @@ namespace SamSoarII.ValueModel
         }
         public virtual bool IsVariable { get { return false; } }
         public static BitValue Null { get { return _nullBitValue; } }
-
         private static NullBitValue _nullBitValue = new NullBitValue();
     }
 }

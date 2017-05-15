@@ -15,7 +15,7 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface
         public COM485()
         {
             SetGroup();
-            CommunParams485 = (CommunicationInterfaceParams)ProjectPropertyManager.ParamsDic["CommunParams485"];
+            CommunParams485 = (CommunicationInterfaceParams)ProjectPropertyManager.ProjectPropertyDic["CommunParams485"];
             SetCommunicationType(CommunParams485.CommuType);
             DataContext = CommunParams485;
             Binding binding = new Binding();

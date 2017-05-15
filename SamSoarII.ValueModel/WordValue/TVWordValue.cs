@@ -10,8 +10,9 @@ namespace SamSoarII.ValueModel
     {
         public TVWordValue(uint index, WordValue offset)
         {
+            Base = string.Format("TV");
             Index = index;
-            Offset = offset == null ? WordValue.Null : offset;
+            Offset = offset == null ? Null : offset;
         }
 
         public override string ValueShowString
@@ -20,19 +21,6 @@ namespace SamSoarII.ValueModel
             {
                 return ValueString;
             }
-        }
-
-        public override string ValueString
-        {
-            get
-            {
-                return string.Format("TV{0}{1}", Index, Offset.ValueString);
-            }
-        }
-
-        public override string GetValue()
-        {
-            throw new NotImplementedException();
         }
     }
 }

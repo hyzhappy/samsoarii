@@ -1,0 +1,93 @@
+﻿<Window x:Class="SamSoarII.AppMain.UI.ElementInitializeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
+        xmlns:usr="clr-namespace:SamSoarII.UserInterface;assembly=SamSoarII.UserInterface"
+        mc:Ignorable="d"
+        Title="ElementInitializeWindow" Height="600" Width="500" WindowStartupLocation="CenterScreen" Closing="OnClosing">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="ElementTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="util:ElementAddressType"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="20,20,0,0">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16">软元件地址</TextBlock>
+                    <ComboBox x:Name="EleTypeCombox" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" VerticalAlignment="Top" Width="50" Height="20" SelectionChanged="OnSelectionChanged"></ComboBox>
+                    <usr:OnlyNumsTextBox x:Name="textBox" IsNumsOnly="True" VerticalAlignment="Top" Height="20" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
+                    <StackPanel Orientation="Horizontal" Margin="80,0,0,0">
+                        <Button x:Name="AddButton" Content="添加" Height="20" Width="60"></Button>
+                        <Button x:Name="CloseButton" Content="关闭" Height="20" Width="60" Margin="30,0,0,0"></Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock FontSize="16" VerticalAlignment="Top">数据类型</TextBlock>
+                    <ComboBox x:Name="DataTypeCombox" Height="20" VerticalAlignment="Top" Width="100" Margin="5,0,0,0" ItemsSource="{Binding DataTypes}" SelectedIndex="0"></ComboBox>
+                    <StackPanel Margin="127,0,0,0" Orientation="Horizontal">
+                        <Button x:Name="DeleteButton" Content="删除" Height="20" Width="60"></Button>
+                        <Button x:Name="DeleteAllButton" Content="全部删除" Height="20" Width="60" Margin="30,0,0,0"></Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock FontSize="16">软元件长度</TextBlock>
+                    <usr:OnlyNumsTextBox x:Name="LengthTextbox" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Width="80" Text="1"></usr:OnlyNumsTextBox>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <Grid Margin="20,10,30,20" Grid.Row="1">
+            <DataGrid x:Name="ElementDataGrid" HorizontalScrollBarVisibility="Auto" RowHeaderWidth="0"
+                          VerticalScrollBarVisibility="Auto" SelectionMode="Extended" CanUserDeleteRows="False"
+                          AutoGenerateColumns="False" ColumnHeaderHeight="24" RowBackground="#FFFDFDD0"
+                          CanUserResizeColumns="True" ItemsSource="{Binding Elements}" CanUserAddRows="False"
+                          Background="White" CellEditEnding="OnCellEditEnding">
+                <DataGrid.Resources>
+                    <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
+                        <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="0,3,0,0">
+                            <ContentPresenter TextBlock.FontSize="12" TextBlock.TextAlignment="Center"></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                    <Style TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
+                        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+                        <Setter Property="FontSize" Value="12"></Setter>
+                        <Setter Property="FontFamily" Value="Arial"></Setter>
+                    </Style>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="ElementName" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="True" Header="软元件" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding ShowName}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="ElementValue" CanUserSort="False" Width="1.3*" MinWidth="85" IsReadOnly="False" Header="ON/OFF/值" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding ShowValue,Mode=TwoWay}">
+                    </DataGridTextColumn>
+                    <DataGridComboBoxColumn x:Name="DataType" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="False" Header="数据类型">
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                                <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                        <DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                                <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>
+                    </DataGridComboBoxColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

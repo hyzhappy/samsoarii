@@ -35,7 +35,7 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget
         }
         private void InitializeDataContext()
         {
-            HoldingSectionParams = (HoldingSectionParams)ProjectPropertyManager.ParamsDic["HoldingSectParams"];
+            HoldingSectionParams = (HoldingSectionParams)ProjectPropertyManager.ProjectPropertyDic["HoldingSectParams"];
             DataContext = HoldingSectionParams;
             MStackPanel1.DataContext = this;
             MStackPanel2.DataContext = this;

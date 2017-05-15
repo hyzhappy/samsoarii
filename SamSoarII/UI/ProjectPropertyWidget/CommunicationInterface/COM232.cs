@@ -15,7 +15,7 @@ namespace SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface
         public COM232()
         {
             SetGroup();
-            CommunParams232 = (CommunicationInterfaceParams)ProjectPropertyManager.ParamsDic["CommunParams232"];
+            CommunParams232 = (CommunicationInterfaceParams)ProjectPropertyManager.ProjectPropertyDic["CommunParams232"];
             SetCommunicationType(CommunParams232.CommuType);
             DataContext = CommunParams232;
             Binding binding = new Binding();

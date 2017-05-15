@@ -7,6 +7,7 @@ using SamSoarII.LadderInstModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
 using SamSoarII.LadderInstModel.Interrupt;
+using SamSoarII.ValueModel;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -41,7 +42,11 @@ namespace SamSoarII.LadderInstViewModel
         {
             return new List<string>();
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             // Nothing to do

@@ -119,15 +119,18 @@
                             </StackPanel>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-                    
                 </TreeViewItem>
                 <TreeViewItem Header="元件浏览" IsExpanded="True">
                     <TreeViewItem.Resources>
                         <ContextMenu x:Key="elementContextMenu">
                             <MenuItem Header="打开软元件表" Click="OnElementListOpen"></MenuItem>
                         </ContextMenu>
+                        <ContextMenu x:Key="eleInitializeContextMenu">
+                            <MenuItem Header="打开软元件初始化表" Click="OnEleInitializeOpen"></MenuItem>
+                        </ContextMenu>
                     </TreeViewItem.Resources>
                     <TreeViewItem Header="软元件表" ContextMenu="{StaticResource elementContextMenu}" MouseDoubleClick="OnElementListOpenDoubleClick"></TreeViewItem>
+                    <TreeViewItem Header="软元件初始化" ContextMenu="{StaticResource eleInitializeContextMenu}" MouseDoubleClick="OnEleInitializeOpenDoubleClick"></TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem x:Name="TVI_Modbus" Header="Modbus表格" IsExpanded="True" MouseDoubleClick="OnModbusDoubleClick">
                     <TreeViewItem.Resources>

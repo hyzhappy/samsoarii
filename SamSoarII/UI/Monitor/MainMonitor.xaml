@@ -4,9 +4,90 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.Monitor"
+             xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
-             d:DesignHeight="1000" d:DesignWidth="400">
-    <Grid>
-        
-    </Grid>
+             d:DesignHeight="800" d:DesignWidth="300" x:Name="UserControl" Background="#FFFBFCF6">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:MonitorCommand.AddElementCommand}" CanExecute="OnAddElementCommandCanExecute" Executed="OnAddElementCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}" CanExecute="OnQuickAddElementsCommandCanExecute" Executed="OnQuickAddElementsCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static local:MonitorCommand.DeleteElementsCommand}" CanExecute="OnDeleteElementsCommandCanExecute" Executed="OnDeleteElementsCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}" CanExecute="OnDeleteAllElementCommandCanExecute" Executed="OnDeleteAllElementCommandExecute"></CommandBinding>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <ContextMenu x:Key="ListBoxContextMenu">
+            <MenuItem Header="增加表格" Click="AddTableClick"></MenuItem>
+            <MenuItem Header="删除表格" Click="DeleteTableClick"></MenuItem>
+            <MenuItem Header="删除所有" Click="DeleteAllTables"></MenuItem>
+        </ContextMenu>
+        <ControlTemplate x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
+            <Grid>
+                <Border x:Name="Border">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="pack://application:,,,/SamSoarII;component/Resources/Image/table.png" Width="14"></Image>
+                        <ContentPresenter HorizontalAlignment="Left" Name="ContentSite" Content="{Binding TableName}" VerticalAlignment="Center" Grid.Column="1"></ContentPresenter>
+                    </Grid>
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="LightBlue"></Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="#FF72CBE8"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <util:DoubleConverter1 x:Key="DoubleConverter1"></util:DoubleConverter1>
+        <util:BoolConverter x:Key="ReverseBool"></util:BoolConverter>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="20"></Setter>
+            <Setter Property="Width" Value="70"></Setter>
+            <Setter Property="FontSize" Value="12"></Setter>
+            <Setter Property="Margin" Value="10,0,20,0"></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border BorderBrush="Black" BorderThickness="1.5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition x:Name="Row2" Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
+                <StackPanel Height="35" Orientation="Horizontal">
+                    <Button x:Name="AddButton" Command="{x:Static local:MonitorCommand.AddElementCommand}" IsEnabled="{Binding ElementName=StartMonitor,Path=IsEnabled}">添加软元件</Button>
+                    <Button x:Name="StartMonitor" Click="OnClick">监视开始</Button>
+                    <Button x:Name="StopMonitor" Click="OnClick" IsEnabled="{Binding ElementName=StartMonitor,Path=IsEnabled,Converter={StaticResource ReverseBool}}">监视停止</Button>
+                </StackPanel>
+                <StackPanel Height="35" Orientation="Horizontal">
+                    <Button x:Name="QuickButton" Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}" IsEnabled="{Binding ElementName=StartMonitor,Path=IsEnabled}">快速添加</Button>
+                    <Button x:Name="DeleteButton" Command="{x:Static local:MonitorCommand.DeleteElementsCommand}" IsEnabled="{Binding ElementName=StartMonitor,Path=IsEnabled}">删除软元件</Button>
+                    <Button x:Name="DeleteAllButton" Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}" IsEnabled="{Binding ElementName=StartMonitor,Path=IsEnabled}">全部删除</Button>
+                </StackPanel>
+            </StackPanel>
+            <ScrollViewer Margin="5,5,0,0" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical" MinWidth="75">
+                    <TextBox x:Name="textbox" Height="20" Margin="5,0,0,0" Text="{Binding CurrentTableName}" GotFocus="OnGotFocus" LostFocus="OnLostFocus"></TextBox>
+                    <ListBox x:Name="Tables" Grid.Row="1" ItemsSource="{Binding tables}" Margin="5,0,0,0" SelectedIndex="0" Height="{Binding ElementName=UserControl,Path=ActualHeight,Converter={StaticResource DoubleConverter1}}" ContextMenu="{StaticResource ListBoxContextMenu}">
+                        <ListBox.Resources>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Template" Value="{StaticResource ListBoxItemTempalte}"></Setter>
+                                <EventSetter Event="Selected" Handler="OnSelected"></EventSetter>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+                </StackPanel>
+            </ScrollViewer>
+            <Border Grid.Row="1" Grid.Column="1" Margin="5" BorderBrush="Black" BorderThickness="0.7">
+                <ContentControl Content="{Binding CurrentTable}"></ContentControl>
+            </Border>
+        </Grid>
+    </Border>
 </UserControl>

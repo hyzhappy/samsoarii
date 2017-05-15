@@ -60,7 +60,13 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             result.Add(RightValue.ValueString);
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(LeftValue);
+            result.Add(RightValue);
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             try

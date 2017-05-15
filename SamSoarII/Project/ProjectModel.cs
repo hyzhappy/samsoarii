@@ -18,6 +18,7 @@ using System.Windows.Controls;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
+using SamSoarII.AppMain.UI.Monitor;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -88,6 +89,8 @@ namespace SamSoarII.AppMain.Project
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
         public ModbusTableViewModel MTVModel { get; set; }
         public ReportOutputModel OModel { get; set; }
+        public MonitorManager MMonitorManager { get; set; }
+        public bool CanMonitor { get; set; } = false;
         public Device CurrentDevice
         {
             get { return PLCDeviceManager.GetPLCDeviceManager().SelectDevice; }
@@ -98,7 +101,7 @@ namespace SamSoarII.AppMain.Project
                     MTVModel.PLCDevice = value;
             }
         }
-
+        public XElement EleInitializeData { get; set; }
         public IEnumerable<FuncModel> Funcs
         {
             get
@@ -111,7 +114,6 @@ namespace SamSoarII.AppMain.Project
                 return result;
             }
         }
-
         public void UpdateNetworkBriefs(LadderDiagramViewModel Routine, ChangeType Type)
         {
             switch (Type)
@@ -157,6 +159,7 @@ namespace SamSoarII.AppMain.Project
             MTVModel = new ModbusTableViewModel();
             MTVModel.PLCDevice = CurrentDevice;
             OModel = _outputmodel;
+            MMonitorManager = new MonitorManager(this);
         }
 
         public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -172,7 +175,6 @@ namespace SamSoarII.AppMain.Project
             ldmodel.IsMainLadder = true;
             MainRoutine = ldmodel;
         }
-
         /// <summary>
         /// Find Routine by name from current project, if not found, return null
         /// </summary>
@@ -277,6 +279,8 @@ namespace SamSoarII.AppMain.Project
             rootNode.Add(ProjectHelper.CreateXElementByValueComments());
             rootNode.Add(ProjectHelper.CreateXElementByValueAlias());
             rootNode.Add(ProjectPropertyManager.CreateProjectPropertyXElement());
+            rootNode.Add(MMonitorManager.MMWindow.CreateXElementByTables());
+            rootNode.Add(IFacade.projectTreeView.EleInitialize.CreatXElementByElements());
             //rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             foreach (var ldmodel in SubRoutines)
@@ -292,7 +296,6 @@ namespace SamSoarII.AppMain.Project
             rootNode.Add(mtnode);
             xdoc.Save(filepath);
         }
-
         public bool Open(string filepath)
         {
             //try
@@ -317,6 +320,8 @@ namespace SamSoarII.AppMain.Project
             ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
             ProjectHelper.LoadValueAliasByXElement(rootNode.Element("ValueAlias"));
             ProjectPropertyManager.LoadProjectPropertyByXElement(rootNode.Element("ProjectPropertyParams"));
+            EleInitializeData = rootNode.Element("EleInitialize");
+            MMonitorManager.MMWindow.LoadTablesByXElement(rootNode.Element("Tables"));
             //ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));
             var ldnodes = rootNode.Elements("Ladder");
             foreach (XElement ldnode in ldnodes)
@@ -334,6 +339,7 @@ namespace SamSoarII.AppMain.Project
                     SubRoutineTreeViewItems.Add(item);
                     ldmodel.PropertyChanged += MainRoutine_PropertyChanged;
                 }
+                ldmodel.IsExpand = bool.Parse(ldnode.Attribute("IsExpand").Value);
             }
             // Open FunctionBlock
             var fbnodes = rootNode.Elements("FuncBlock");

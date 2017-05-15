@@ -15,6 +15,7 @@ using SamSoarII.LadderInstModel;
 using SamSoarII.Utility;
 using SamSoarII.UserInterface;
 using SamSoarII.PLCDevice;
+using SamSoarII.ValueModel;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -161,7 +162,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             return new List<string>();
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            return new List<IValueModel>();
+        }
         public override void UpdateCommentContent()
         {
             // nothing to do

@@ -10,6 +10,7 @@ namespace SamSoarII.ValueModel
     {
         public SBitValue(uint index, WordValue offset)
         {
+            Base = string.Format("S");
             Index = index;
             Offset = offset == null ? WordValue.Null : offset;
         }
@@ -21,27 +22,5 @@ namespace SamSoarII.ValueModel
                 return ValueString;
             }
         }
-
-        public override string ValueString
-        {
-            get
-            {
-                return string.Format("S{0}{1}", Index, Offset.ValueString);
-            }
-        }
-
-        public override string GetValue()
-        {
-            if (Offset != WordValue.Null)
-            {
-                return string.Format("SBit[{0} + {1}]", Index, Offset.GetValue());
-            }
-            else
-            {
-                return string.Format("SBit[{0}]", Index);
-            }
-        }
-
-
     }
 }

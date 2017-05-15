@@ -185,8 +185,30 @@ namespace SamSoarII.ValueModel
         {
             get { return new NullArgumentValue(); }
         }
-        
 
+        public string Base
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        public uint Index
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public WordValue Offset
+        {
+            get
+            {
+                return WordValue.Null;
+            }
+        }
     }
     
 }

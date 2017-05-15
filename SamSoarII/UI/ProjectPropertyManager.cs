@@ -19,27 +19,27 @@ namespace SamSoarII.AppMain.UI
     }
     public class ProjectPropertyManager
     {
-        public static Dictionary<string, IXEleCreateOrLoad> ParamsDic;
+        public static Dictionary<string, IXEleCreateOrLoad> ProjectPropertyDic;
         private ProjectPropertyManager(){}
         static ProjectPropertyManager()
         {
-            ParamsDic = new Dictionary<string, IXEleCreateOrLoad>();
-            ParamsDic.Add("CommunParams232", new CommunicationInterfaceParams());
-            ParamsDic.Add("CommunParams485", new CommunicationInterfaceParams());
-            ParamsDic.Add("PasswordParams", new PasswordParams());
-            ParamsDic.Add("FilterParams", new FilterParams());
-            ParamsDic.Add("HoldingSectParams", new HoldingSectionParams());
-            ParamsDic.Add("AnalogQuantityParams", new AnalogQuantityParams());
-            ParamsDic.Add("ExpanModuleParams", new ExpansionModuleParams());
-            ParamsDic.Add("CommunicationParams",new CommunicationParams());
+            ProjectPropertyDic = new Dictionary<string, IXEleCreateOrLoad>();
+            ProjectPropertyDic.Add("CommunParams232", new CommunicationInterfaceParams());
+            ProjectPropertyDic.Add("CommunParams485", new CommunicationInterfaceParams());
+            ProjectPropertyDic.Add("PasswordParams", new PasswordParams());
+            ProjectPropertyDic.Add("FilterParams", new FilterParams());
+            ProjectPropertyDic.Add("HoldingSectParams", new HoldingSectionParams());
+            ProjectPropertyDic.Add("AnalogQuantityParams", new AnalogQuantityParams());
+            ProjectPropertyDic.Add("ExpanModuleParams", new ExpansionModuleParams());
+            ProjectPropertyDic.Add("CommunicationParams",new CommunicationParams());
         }
         #region Save and Load ProjectProperty
         public static XElement CreateProjectPropertyXElement()
         {
             var rootNode = new XElement("ProjectPropertyParams");
-            for (int i = 0; i < ParamsDic.Values.Count; i++)
+            for (int i = 0; i < ProjectPropertyDic.Values.Count; i++)
             {
-                var node = ParamsDic.Values.ElementAt(i).CreateRootXElement();
+                var node = ProjectPropertyDic.Values.ElementAt(i).CreateRootXElement();
                 if (i == 0)
                 {
                     node.SetAttributeValue("Interface",232);
@@ -58,17 +58,17 @@ namespace SamSoarII.AppMain.UI
             {
                 if (item.FirstAttribute.Value == "232")
                 {
-                    ParamsDic["CommunParams232"].LoadPropertyByXElement(item);
+                    ProjectPropertyDic["CommunParams232"].LoadPropertyByXElement(item);
                 }else if (item.FirstAttribute.Value == "485")
                 {
-                    ParamsDic["CommunParams485"].LoadPropertyByXElement(item);
+                    ProjectPropertyDic["CommunParams485"].LoadPropertyByXElement(item);
                 }
             }
-            ParamsDic["FilterParams"].LoadPropertyByXElement(rootNode.Element("FilterParams"));
-            ParamsDic["HoldingSectParams"].LoadPropertyByXElement(rootNode.Element("HoldingSectParams"));
-            ParamsDic["AnalogQuantityParams"].LoadPropertyByXElement(rootNode.Element("AnalogQuantityParams"));
-            ParamsDic["ExpanModuleParams"].LoadPropertyByXElement(rootNode.Element("ExpanModuleParams"));
-            ParamsDic["CommunicationParams"].LoadPropertyByXElement(rootNode.Element("CommunicationParams"));
+            ProjectPropertyDic["FilterParams"].LoadPropertyByXElement(rootNode.Element("FilterParams"));
+            ProjectPropertyDic["HoldingSectParams"].LoadPropertyByXElement(rootNode.Element("HoldingSectParams"));
+            ProjectPropertyDic["AnalogQuantityParams"].LoadPropertyByXElement(rootNode.Element("AnalogQuantityParams"));
+            ProjectPropertyDic["ExpanModuleParams"].LoadPropertyByXElement(rootNode.Element("ExpanModuleParams"));
+            ProjectPropertyDic["CommunicationParams"].LoadPropertyByXElement(rootNode.Element("CommunicationParams"));
         }
         #endregion
     }

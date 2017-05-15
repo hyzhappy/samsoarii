@@ -75,6 +75,9 @@
     <Compile Include="ElementPropertyDialog.xaml.cs">
       <DependentUpon>ElementPropertyDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ElementValueModifyDialog.xaml.cs">
+      <DependentUpon>ElementValueModifyDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="InstructionInputDialog.xaml.cs">
       <DependentUpon>InstructionInputDialog.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,7 @@
       <DependentUpon>BaseSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CollectionStackPanel.cs" />
+    <Compile Include="UserControls\OnlyNumsTextBox.cs" />
     <Compile Include="UserControls\PopupNotTop.cs" />
     <Compile Include="UserControls\RangeTextBox.xaml.cs">
       <DependentUpon>RangeTextBox.xaml</DependentUpon>
@@ -157,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ElementValueModifyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="InstructionInputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -195,10 +203,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SamSoarII.Communication\SamSoarII.Communication.csproj">
-      <Project>{0DFE87A3-E06C-408F-A791-04A9C1590ED1}</Project>
-      <Name>SamSoarII.Communication</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.HelpDocument\SamSoarII.HelpDocument.csproj">
       <Project>{932DAF07-5116-44DF-9091-BD4CDC7CD01E}</Project>
       <Name>SamSoarII.HelpDocument</Name>

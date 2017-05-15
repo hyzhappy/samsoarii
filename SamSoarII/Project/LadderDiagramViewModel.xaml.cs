@@ -103,7 +103,18 @@ namespace SamSoarII.AppMain.Project
 
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         private int HeightUnit { get { return _isCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
-
+        private bool _isExpand;
+        public bool IsExpand
+        {
+            get
+            {
+                return _isExpand;
+            }
+            set
+            {
+                _isExpand = value;
+            }
+        }
         public string TabHeader
         {
             get
@@ -279,7 +290,7 @@ namespace SamSoarII.AppMain.Project
                 this._actualHeight = value;
             }
         }
-
+        private bool _canScrollToolTip = false;
         private InstructionDiagramViewModel idvmodel;
         public InstructionDiagramViewModel IDVModel
         {
@@ -309,10 +320,19 @@ namespace SamSoarII.AppMain.Project
             {
                 Focus();
                 Keyboard.Focus(this);
+                ladderExpander.IsExpand = IsExpand;
             };
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
+            ladderExpander.MouseEnter += OnMouseEnter;
+            ladderExpander.MouseLeave += OnMouseLeave;
+            ladderExpander.line.Visibility = Visibility.Hidden;
+            ladderExpander.line1.Visibility = Visibility.Hidden;
+            ladderExpander.expandButton.IsExpandChanged += ExpandButton_IsExpandChanged;
+            ThumbnailButton.ToolTipOpening += ThumbnailButton_ToolTipOpening;
+            ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
         }
+        
         public void NavigateToNetworkByNum(int num)
         {
             double scale = GlobalSetting.LadderScaleX;
@@ -326,7 +346,7 @@ namespace SamSoarII.AppMain.Project
         private void InitializeInstructionNameAndToolTips()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Console.WriteLine(assembly.GetManifestResourceNames());
+            //Console.WriteLine(assembly.GetManifestResourceNames());
             Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.InstructionPopup.xml");
             Dictionary<string, List<string>> tempDic = new Dictionary<string, List<string>>();
             XDocument xDoc = XDocument.Load(stream);
@@ -349,44 +369,6 @@ namespace SamSoarII.AppMain.Project
             }
             InstrutionNameAndToolTips = tempDic;
         }
-        #region JMP,LBL,FOR,NEXT instructions check
-        public bool CheckProgramControlInstructions()
-        {
-             List<BaseViewModel> eles = GetProgramControlViewModels();
-            List<BaseViewModel> eles_for = eles.Where(x => { return x.GetType() == typeof(FORViewModel); }).ToList();
-            List<BaseViewModel> eles_next = eles.Where(x => { return x.GetType() == typeof(NEXTViewModel); }).ToList();
-            List<BaseViewModel> eles_jmp = eles.Where(x => { return x.GetType() == typeof(JMPViewModel); }).ToList();
-            List<BaseViewModel> eles_lbl = eles.Where(x => { return x.GetType() == typeof(LBLViewModel); }).ToList();
-            if (eles_for.Count != eles_next.Count || eles_jmp.Count != eles_lbl.Count)
-            {
-                return false;
-            }
-            else
-            {
-                foreach (var ele_jmp in eles_jmp)
-                {
-                    string lblindex = (ele_jmp.Model as JMPModel).LBLIndex.ToString();
-                    if (!eles_lbl.Exists(x => { return (x.Model as LBLModel).LBLIndex.ToString() == lblindex; }))
-                        {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-        private List<BaseViewModel> GetProgramControlViewModels()
-            {
-            List<BaseViewModel> eles = new List<BaseViewModel>();
-            foreach (var network in GetNetworks())
-            {
-                foreach (var model in network.GetElements().Where(x => { return x.GetType() == typeof(FORViewModel) || x.GetType() == typeof(NEXTViewModel) || x.GetType() == typeof(JMPViewModel) || x.GetType() == typeof(LBLViewModel); }))
-                {
-                    eles.Add(model);
-                }
-            }
-            return eles;
-        }
-        #endregion
         #region Network manipulation
         public LadderNetworkViewModel GetNetworkByNumber(int number)
         {
@@ -424,12 +406,10 @@ namespace SamSoarII.AppMain.Project
             }
             SelectionStatus = SelectStatus.SingleSelected;
         }
-
         public IEnumerable<LadderNetworkViewModel> GetNetworks()
         {
             return _ladderNetworks;
         }
-
         private void ReloadNetworksToStackPanel()
         {
             LadderNetworkStackPanel.Children.Clear();
@@ -805,7 +785,7 @@ namespace SamSoarII.AppMain.Project
                 VScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
             }
         }
-
+        
         private void SelectRectDown()
         {
             if (_selectRectOwner != null)
@@ -1835,6 +1815,7 @@ namespace SamSoarII.AppMain.Project
 
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
         {
+            
             if(_selectStatus == SelectStatus.SingleSelected)
             {
                 if (IsPressingCtrl)
@@ -2378,6 +2359,95 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-        
+        #region ladder expand module
+        private void OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            Color color = new Color();
+            color.A = 255;
+            color.R = 60;
+            color.G = 58;
+            color.B = 58;
+            SolidColorBrush brush = new SolidColorBrush(color);
+            Rect.Fill = brush;
+            Rect.Opacity = 0.08;
+            ladderExpander.Background = brush;
+            ladderExpander.Opacity = 0.2;
+        }
+        private void OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
+            Rect.Fill = brush;
+            Rect.Opacity = 1;
+            ladderExpander.Background = brush;
+            ladderExpander.Opacity = 1;
+        }
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ladderExpander.IsExpand = !ladderExpander.IsExpand;
+        }
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (_canScrollToolTip)
+            {
+                ScrollViewer scroll = (ScrollViewer)((ToolTip)ThumbnailButton.ToolTip).Content;
+                scroll.ScrollToVerticalOffset(scroll.VerticalOffset + e.Delta / 20);
+            }
+        }
+        private void ThumbnailButton_ToolTipClosing(object sender, ToolTipEventArgs e)
+        {
+            _canScrollToolTip = false;
+        }
+        private void ThumbnailButton_ToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            _canScrollToolTip = true;
+        }
+        private void ExpandButton_IsExpandChanged(object sender, RoutedEventArgs e)
+        {
+            ExpandLadder(ladderExpander.IsExpand);
+        }
+        private ToolTip GenerateToolTipByLadder()
+        {
+            ToolTip tooltip = new ToolTip();
+            ScrollViewer scroll = new ScrollViewer();
+            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            StackPanel stackpanel = new StackPanel();
+            scroll.MaxHeight = 385;
+            stackpanel.Background = new SolidColorBrush(Colors.White);
+            stackpanel.HorizontalAlignment = HorizontalAlignment.Left;
+            ScaleTransform transform = new ScaleTransform(GlobalSetting.LadderOriginScaleX / 1.7, GlobalSetting.LadderOriginScaleY / 1.7);
+            foreach (LadderNetworkViewModel net in _ladderNetworks)
+            {
+                stackpanel.Children.Add(net);
+            }
+            stackpanel.LayoutTransform = transform;
+            scroll.Content = stackpanel;
+            tooltip.Content = scroll;
+            return tooltip;
+        }
+        private void RemoveToolTipByLadder(ToolTip tooltip)
+        {
+            if (tooltip != null)
+            {
+                StackPanel stackpanel = (StackPanel)((ScrollViewer)tooltip.Content).Content;
+                stackpanel.LayoutTransform = null;
+                stackpanel.Children.Clear();
+            }
+        }
+        private void ExpandLadder(bool isExpand)
+        {
+            if (isExpand)
+            {
+                RemoveToolTipByLadder((ToolTip)ThumbnailButton.ToolTip);
+                ThumbnailButton.ToolTip = null;
+                ReloadNetworksToStackPanel();
+            }
+            else
+            {
+                LadderNetworkStackPanel.Children.Clear();
+                ThumbnailButton.ToolTip = GenerateToolTipByLadder();
+            }
+        }
+        #endregion
     }
 }

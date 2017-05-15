@@ -1,5 +1,4 @@
-﻿using SamSoarII.Communication;
-using SamSoarII.Utility;
+﻿using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +55,7 @@ namespace SamSoarII.UserInterface
             //wait to check
             if ((bool)baseSetting.radiobutton.IsChecked)
             {
-                SerialPortManager.CheckSerialPort();
+                
             }
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)

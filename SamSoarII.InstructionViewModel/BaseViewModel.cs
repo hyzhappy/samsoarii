@@ -8,6 +8,8 @@ using System.Windows.Media;
 using SamSoarII.UserInterface;
 using SamSoarII.LadderInstModel;
 using SamSoarII.PLCDevice;
+using SamSoarII.ValueModel;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public class ShowPropertyDialogEventArgs : EventArgs
@@ -100,7 +102,7 @@ namespace SamSoarII.LadderInstViewModel
         public abstract void AcceptNewValues(IList<string> valueStrings, Device contextDevice);
 
         public abstract IEnumerable<string> GetValueString();
-
+        public abstract IEnumerable<IValueModel> GetValueModels();
         public abstract void UpdateCommentContent();
         public override string ToString()
         {

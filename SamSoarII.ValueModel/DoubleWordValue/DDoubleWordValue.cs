@@ -10,29 +10,16 @@ namespace SamSoarII.ValueModel
     {
         public DDoubleWordValue(uint index, WordValue offset)
         {
+            Base = string.Format("D");
             Index = index;
             Offset = offset == null ? WordValue.Null : offset;
         }
-
         public override string ValueShowString
         {
             get
             {
                 return ValueString;
             }
-        }
-
-        public override string ValueString
-        {
-            get
-            {
-                return string.Format("D{0}{1}", Index, Offset.ValueString);
-            }
-        }
-
-        public override string GetValue()
-        {
-            throw new NotImplementedException();
         }
     }
 }

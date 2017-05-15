@@ -27,7 +27,6 @@ namespace SamSoarII.AppMain
                 _projectModel.IsCommentMode = _isCommentMode;
             }
         }
-        
         private ProjectModel _projectModel;
         public ProjectModel ProjectModel
         {
@@ -38,6 +37,13 @@ namespace SamSoarII.AppMain
         }
         private ProjectTreeView _projectTreeView;
         private MainTabControl _mainTabControl;
+        public ProjectTreeView projectTreeView
+        {
+            get
+            {
+                return _projectTreeView;
+            }
+        }
         public MainTabControl MainTabControl
         {
             get { return this._mainTabControl; }
@@ -342,7 +348,6 @@ namespace SamSoarII.AppMain
             tempItem.NavigateToNetworkByNum(e.NetworkNum);
             _mainTabControl.ShowItem(tempItem);
         }
-
         public void CreateProject(string name, string fullFileName)
         {
             if (_projectModel != null && _projectModel.IsModify)
@@ -384,6 +389,7 @@ namespace SamSoarII.AppMain
                 _mainTabControl.ShowItem(_projectModel.MainRoutine);
                 CurrentLadder = _projectModel.MainRoutine;
                 _mainWindow.SetProjectTreeView(_projectTreeView);
+                _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
                 ProjectFullFileName = fullFileName;
                 _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
                 _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
@@ -414,6 +420,7 @@ namespace SamSoarII.AppMain
             else
             {
                 _projectTreeView.CloseElementList();
+                _projectTreeView.CloseEleInitializeList();
                 _projectTreeView.TabItemOpened -= OnTabOpened;
                 _projectTreeView.RoutineRemoved -= OnRemoveRoutine;
                 _projectTreeView.RoutineRenamed -= OnRenameRoutine;
@@ -423,6 +430,7 @@ namespace SamSoarII.AppMain
                 ProjectFullFileName = string.Empty;
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
                 _mainWindow.ClearProjectTreeView();
+                _mainWindow.ClearProjectMonitor();
                 _mainTabControl.Reset();
                 _projectTreeView = null;
                 _projectModel = null;
@@ -437,7 +445,6 @@ namespace SamSoarII.AppMain
         {
             _projectModel.Save(fullFileName);
         }
-
         public bool LoadProject(string fullFileName)
         {
             _projectModel = ProjectHelper.LoadProject(fullFileName, new ProjectModel(String.Empty, _mainWindow.OutputModel));
@@ -463,14 +470,17 @@ namespace SamSoarII.AppMain
                 }
                 else
                 {
-                    SamSoarII.LadderInstViewModel.InstructionCommentManager.UpdateAllComment();
+                    InstructionCommentManager.UpdateAllComment();
                     _mainTabControl.SelectionChanged -= OnTabItemChanged;
                     _mainTabControl.ShowEditItem -= OnTabOpened;
                     if (_projectTreeView != null)
                     {
                         _projectTreeView.CloseElementList();
+                        _projectTreeView.CloseEleInitializeList();
                     }
                     _projectTreeView = new ProjectTreeView(_projectModel);
+                    _projectTreeView.EleInitialize.LoadElementsByXElement(_projectModel.EleInitializeData);
+                    _projectModel.EleInitializeData = null;
                     _projectTreeView.TabItemOpened += OnTabOpened;
                     _projectTreeView.RoutineRemoved += OnRemoveRoutine;
                     _projectTreeView.RoutineRenamed += OnRenameRoutine;
@@ -482,6 +492,7 @@ namespace SamSoarII.AppMain
                     _mainTabControl.ShowItem(_projectModel.MainRoutine);
                     CurrentLadder = _projectModel.MainRoutine;
                     _mainWindow.SetProjectTreeView(_projectTreeView);
+                    _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
                     ProjectFullFileName = fullFileName;
                     _projectTreeView.InstructionTreeItemDoubleClick += OnInstructionTreeItemDoubleClick;
                     _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.PLCDevice;
+using SamSoarII.ValueModel;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -101,5 +102,9 @@ namespace SamSoarII.LadderInstViewModel
 
         }
 
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

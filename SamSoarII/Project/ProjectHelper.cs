@@ -14,6 +14,7 @@ namespace SamSoarII.AppMain.Project
         {
             XElement result = new XElement("Ladder");
             result.SetAttributeValue("Name", ldmodel.ProgramName);
+            result.SetAttributeValue("IsExpand",ldmodel.ladderExpander.IsExpand);
             if (ldmodel.IsMainLadder)
             {
                 result.SetAttributeValue("IsMain", "True");
@@ -32,6 +33,7 @@ namespace SamSoarII.AppMain.Project
             result.SetAttributeValue("Number", netmodel.NetworkNumber);
             result.SetAttributeValue("RowCount", netmodel.RowCount);
             result.SetAttributeValue("IsMasked", netmodel.IsMasked);
+            result.SetAttributeValue("IsExpand", netmodel.ladderExpander.IsExpand);
             XElement briefNode = new XElement("Brief");
             XElement descNode = new XElement("Description");
             briefNode.SetValue(netmodel.NetworkBrief);
@@ -70,7 +72,6 @@ namespace SamSoarII.AppMain.Project
             }
             return result;
         }
-
         public static XElement CreateXElementByLadderElementsAndVertialLines(IEnumerable<BaseViewModel> instEles, IEnumerable<VerticalLineViewModel> vlines, int xBegin, int yBegin, int width, int height)
         {
             XElement result = CreateXElementByLadderElementsAndVertialLines(instEles, vlines);
@@ -105,6 +106,7 @@ namespace SamSoarII.AppMain.Project
             {
                 var net = CreateLadderNetworkByXElement(netNode, result);
                 result.AppendNetwork(net);
+                net.IsExpand = bool.Parse(netNode.Attribute("IsExpand").Value);
             }
             return result;
         }

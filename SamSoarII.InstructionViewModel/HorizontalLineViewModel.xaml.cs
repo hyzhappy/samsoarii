@@ -15,6 +15,7 @@ using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using System.ComponentModel;
 using SamSoarII.PLCDevice;
+using SamSoarII.ValueModel;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -177,6 +178,11 @@ namespace SamSoarII.LadderInstViewModel
         public override string ToString()
         {
             return string.Format("The Mapped Instructions:(Click corresponding item! and Navigate to belonging network)");
+        }
+
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            return new List<IValueModel>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +36,23 @@ namespace SamSoarII.Communication.Command
                 CheckRetData();
             }
         }
+        public ElementModel RefElement { get; set; }
+        public IntrasegmentWriteCommand(byte[] data)
+        {
+            this.data = data;
+            InitializeCommandByElement();
+            GenerateCommand();
+        }
+        private void InitializeCommandByElement()
+        {
+            addrType2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType),RefElement.IntrasegmentType),RefElement.IntrasegmentAddr);
+            startLowAddr2 = (byte)RefElement.IntrasegmentAddr;
+            addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), RefElement.AddrType), RefElement.StartAddr);
+            length = 0x01;
+            byte[] startaddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr);
+            startLowAddr1 = startaddr[0];
+            startHighAddr = startaddr[1];
+        }
         public IntrasegmentWriteCommand(byte[] addrType, byte length, byte[] startLowAddr, byte startHighAddr,byte[] data)
         {
             if (length > CommunicationDataDefine.MAX_ELEM_NUM)
@@ -53,7 +72,7 @@ namespace SamSoarII.Communication.Command
             this.length = length;
             GenerateCommand();
         }
-        private void GenerateCommand()
+        public void GenerateCommand()
         {
             int cnt = data.Length;
             command = new byte[11 + cnt];

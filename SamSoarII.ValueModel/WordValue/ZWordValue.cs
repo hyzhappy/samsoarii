@@ -10,7 +10,9 @@ namespace SamSoarII.ValueModel
     {
         public ZWordValue(uint index)
         {
+            Base = string.Format("Z");
             Index = index;
+            Offset = Null;
         }
 
         public override string ValueShowString
@@ -25,7 +27,7 @@ namespace SamSoarII.ValueModel
         {
             get
             {
-                return string.Format("Z{0}", Index);
+                return string.Format("{0}{1}",Base ,Index);
             }
         }
 

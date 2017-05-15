@@ -10,6 +10,7 @@ namespace SamSoarII.ValueModel
     {
         public TBitValue(uint index, WordValue offset)
         {
+            Base = string.Format("T");
             Index = index;
             Offset = offset == null ? WordValue.Null : offset;
         }
@@ -19,26 +20,6 @@ namespace SamSoarII.ValueModel
             get
             {
                 return ValueString;
-            }
-        }
-
-        public override string ValueString
-        {
-            get
-            {
-                return string.Format("T{0}{1}", Index, Offset.ValueString);
-            }
-        }
-
-        public override string GetValue()
-        {
-            if (Offset != WordValue.Null)
-            {
-                return string.Format("TBit[{0} + {1}]", Index, Offset.GetValue());
-            }
-            else
-            {
-                return string.Format("TBit[{0}]", Index);
             }
         }
     }

@@ -141,7 +141,11 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(Value4.ToString());
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             FuncName = valueStrings[0];

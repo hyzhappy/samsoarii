@@ -15,9 +15,16 @@ namespace SamSoarII.ValueModel
                 return LadderValueType.DoubleWord;
             }
         }
-        protected uint Index { get; set; }
-        protected WordValue Offset { get; set; }
-        public abstract string ValueString { get; }
+        public string Base { get; protected set; }
+        public uint Index { get; protected set; }
+        public WordValue Offset { get; protected set; }
+        public virtual string ValueString
+        {
+            get
+            {
+                return string.Format("{0}{1}{2}", Base, Index, Offset.ValueString);
+            }
+        }
         public abstract string ValueShowString { get; }
         public string Comment
         {
@@ -31,7 +38,17 @@ namespace SamSoarII.ValueModel
             }
         }
         public virtual bool IsVariable { get { return false; } }
-        public abstract string GetValue();
+        public virtual string GetValue()
+        {
+            if (Offset != WordValue.Null)
+            {
+                return string.Format("{0}DoubleWord[{1} + {2}]", Base, Index, Offset.GetValue());
+            }
+            else
+            {
+                return string.Format("{0}DoubleWord[{1}]", Base, Index);
+            }
+        }
         public static DoubleWordValue Null { get { return _nullDoubleWordValue; } }
         private static NullDoubleWordValue _nullDoubleWordValue = new NullDoubleWordValue();
     }

@@ -60,7 +60,13 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             result.Add(OutputValue.ValueString);
             return result;
         }
-
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(InputValue);
+            result.Add(OutputValue);
+            return result;
+        }
         public override void ParseValue(IList<string> valueStrings)
         {
             try
@@ -137,6 +143,8 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 _commentTextBlocks[1].Text = String.Empty;
             }
         }
+
+        
 
         private CMLDModel model;
 

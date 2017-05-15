@@ -115,6 +115,13 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(Count.ValueString);
             return result;
         }
+        public override IEnumerable<IValueModel> GetValueModels()
+        {
+            List<IValueModel> result = new List<IValueModel>();
+            result.Add(Value);
+            result.Add(Count);
+            return result;
+        }
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = Value.ValueString;
