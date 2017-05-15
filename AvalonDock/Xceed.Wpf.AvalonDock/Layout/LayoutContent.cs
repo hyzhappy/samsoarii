@@ -652,7 +652,6 @@ namespace Xceed.Wpf.AvalonDock.Layout
                 IsSelected = true;
                 IsActive = true;
             }
-
         }
 
         /// <summary>

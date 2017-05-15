@@ -41,10 +41,14 @@ namespace Xceed.Wpf.AvalonDock.Controls
             _model.AnchorControl = this;
             _model.IsActiveChanged += new EventHandler(_model_IsActiveChanged);
             _model.IsSelectedChanged += new EventHandler(_model_IsSelectedChanged);
-
+            if (_model.Content is FrameworkElement)
+            {
+                FrameworkElement fele = (FrameworkElement)(_model.Content);
+                fele.Loaded += OnModelContentLoaded;
+            }
             SetSide(_model.FindParent<LayoutAnchorSide>().Side);
         }
-
+        
         void _model_IsSelectedChanged(object sender, EventArgs e)
         {
             if (!_model.IsAutoHidden)
@@ -99,21 +103,29 @@ namespace Xceed.Wpf.AvalonDock.Controls
         //        ((ILogicalChildrenContainer)contentModel.Root.Manager).InternalAddLogicalChild(contentModel.Content);
         //    }
         //}
-        
+
+        private bool called_Show = false;
         public void Show()
         {
             if (!_model.IsActive)
             {
+                called_Show = true;
                 _model.Root.Manager.ShowAutoHideWindow(this);
                 _model.IsActive = true;
-                if (LayoutSetting.GetDefaultIsDockAnchorable(_model.Title))
-                {
-                    _model.ToggleAutoHide();
-                }
                 if (LayoutSetting.GetDefaultIsFloatAnchorable(_model.Title))
                 {
                     _model.Float();
                 }
+            }
+        }
+        
+        private void OnModelContentLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!called_Show) return;
+            called_Show = false;
+            if (LayoutSetting.GetDefaultIsDockAnchorable(_model.Title))
+            {
+                _model.ToggleAutoHide();
             }
         }
 

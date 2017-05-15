@@ -461,14 +461,6 @@
                             <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                                <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                                </ad:LayoutAnchorable>
-                            </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.RightSide>
             </ad:LayoutRoot>

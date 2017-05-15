@@ -172,10 +172,10 @@ namespace SamSoarII.AppMain.UI
             set
             {
                 this.flags = value;
-                this.ContextMenu = null;
+                ContextMenu = new ContextMenu();
                 if ((flags & ~0xf) != 0)
                 {
-                    this.ContextMenu = new ContextMenu();
+                    //this.ContextMenu = new ContextMenu();
                     ProjectMenuItem pmitem = null;
                     int _flags = FLAG_CREATEFOLDER;
                     while (_flags <= FLAG_CONFIG)
@@ -189,6 +189,7 @@ namespace SamSoarII.AppMain.UI
                         _flags <<= 1;
                     }
                 }
+
                 switch (flags & 0xf)
                 {
                     case TYPE_ROOT:
@@ -564,7 +565,7 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Event Handler
-
+        
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         
         private void OnRelativePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -590,7 +591,16 @@ namespace SamSoarII.AppMain.UI
         }
 
         public event RoutedEventHandler MenuItemClick = delegate { };
-        
+
+        protected override void OnContextMenuOpening(ContextMenuEventArgs e)
+        {
+            base.OnContextMenuOpening(e);
+            if ((Flags & ~0xf) == 0)
+            {
+                ContextMenu.Visibility = Visibility.Hidden;
+            }
+        }
+
         private void OnMenuItemClick(object sender, RoutedEventArgs e)
         {
             MenuItemClick(sender, e);
@@ -613,7 +623,7 @@ namespace SamSoarII.AppMain.UI
             Text = TBO_Text.Text;
             Renamed(this, new RoutedEventArgs());
         }
-
+        
         #endregion
 
     }
