@@ -239,7 +239,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         #region TextEditer Events
-        
+
         /// <summary>
         /// 当用户键入字符前发生
         /// </summary>
@@ -261,7 +261,7 @@ namespace SamSoarII.AppMain.Project
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void textEditer_DocumentChanged(object sender, DocumentChangeEventArgs e)
-       {
+        {
             int offset = e.InsertionLength - e.RemovalLength;
             //model.Move(e.Offset);
             Regex localRegex = new Regex(@"[\{\}]");
@@ -319,7 +319,7 @@ namespace SamSoarII.AppMain.Project
                         && !(nprev.Value is FuncBlock_Local))
                     {
                         nprev = nprev.Previous;
-                    } 
+                    }
                     while (nnext != null
                         && !(nnext.Value is FuncBlock_Local))
                     {
@@ -344,7 +344,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     else
                     {
-                        throw new Exception(String.Format("Code Structure Error : {0:s} in {1:s}", 
+                        throw new Exception(String.Format("Code Structure Error : {0:s} in {1:s}",
                             model.Current.ToString(), model.Current.Parent.ToString()));
                     }
                 }

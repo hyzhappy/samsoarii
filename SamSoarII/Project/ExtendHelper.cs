@@ -23,7 +23,6 @@ namespace SamSoarII.AppMain.Project
             LGraph lgraph = lchart.Generate();
             List<PLCInstruction> insts = lgraph.GenInst();
             return insts;
-
         }
     }
 }

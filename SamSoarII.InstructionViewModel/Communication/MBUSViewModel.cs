@@ -79,10 +79,10 @@ namespace SamSoarII.LadderInstViewModel
             {
                 COMPort = WordValue.Null;
             }
-            Table = valueStrings[2];
+            Table = valueStrings[1];
             try
             {
-                Message = ValueParser.ParseWordValue(valueStrings[4]);
+                Message = ValueParser.ParseWordValue(valueStrings[2]);
             }
             catch (ValueParseException)
             {
