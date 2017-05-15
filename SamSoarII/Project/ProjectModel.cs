@@ -97,8 +97,6 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(value.Type);
-                if (MTVModel != null)
-                    MTVModel.PLCDevice = value;
             }
         }
         public XElement EleInitializeData { get; set; }
@@ -145,23 +143,19 @@ namespace SamSoarII.AppMain.Project
             }
             RefNetworksBriefChanged.Invoke(new RefNetworksBriefChangedEventArgs(Type, Routine));
         }
-
         public ProjectModel()
         {
 
         }
-
         public ProjectModel(string projectname, ReportOutputModel _outputmodel)
         {
             ProjectName = projectname;
             MainRoutine = new LadderDiagramViewModel("Main", this);
             MainRoutine.IsMainLadder = true;
-            MTVModel = new ModbusTableViewModel();
-            MTVModel.PLCDevice = CurrentDevice;
-            OModel = _outputmodel;
             MMonitorManager = new MonitorManager(this);
+            MTVModel = new ModbusTableViewModel(this);
+            OModel = _outputmodel;
         }
-
         public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "LadderNetworks")
@@ -169,119 +163,52 @@ namespace SamSoarII.AppMain.Project
                 UpdateNetworkBriefs(sender as LadderDiagramViewModel, ChangeType.Modify);
             }
         }
-
-        public void SetMainRoutine(LadderDiagramViewModel ldmodel)
-        {
-            ldmodel.IsMainLadder = true;
-            MainRoutine = ldmodel;
-        }
-        /// <summary>
-        /// Find Routine by name from current project, if not found, return null
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <returns></returns>
-        public LadderDiagramViewModel GetRoutineByName(string name)
-        {
-            if (MainRoutine != null)
-            {
-                if (MainRoutine.ProgramName == name)
-                    return MainRoutine;
-            }
-            foreach (var routine in SubRoutines)
-            {
-                if (routine.ProgramName == name)
-                {
-                    return routine;
-                }
-            }
-            return null;
-        }
-        /// <summary>
-        /// Find FunctionBlock by name from current project, if not found, return null
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <returns></returns>
-        public FuncBlockViewModel GetFuncBlockByName(string name)
-        {
-            foreach (var funcb in FuncBlocks)
-            {
-                if (funcb.ProgramName == name)
-                {
-                    return funcb;
-                }
-            }
-            return null;
-        }
-
-
         public bool ContainProgram(string name)
         {
             return SubRoutines.Any(x => x.ProgramName == name) | FuncBlocks.Any(x => x.ProgramName == name);
         }
-        /// <summary>
-        /// Add SubRoutine 
-        /// </summary>
-        /// <param name="ldmodel"></param>
-        public void AddSubRoutine(LadderDiagramViewModel ldmodel)
+        public void Add(LadderDiagramViewModel ldmodel)
         {
-            SubRoutines.Add(ldmodel);
-            TreeViewItem item = new TreeViewItem();
-            item.Header = ldmodel;
-            SubRoutineTreeViewItems.Add(item);
-            UpdateNetworkBriefs(ldmodel, ChangeType.Add);
-            ldmodel.PropertyChanged += MainRoutine_PropertyChanged;
-        }
-        /// <summary>
-        /// Add FunctionBlock 
-        /// </summary>
-        /// <param name="fbmodel"></param>
-        public void AddFuncBlock(FuncBlockViewModel fbmodel)
-        {
-            fbmodel.OModel = OModel;
-            FuncBlocks.Add(fbmodel);
-        }
-
-        public void RemoveSubRoutine(LadderDiagramViewModel ldmodel)
-        {
-            SubRoutines.Remove(ldmodel);
-            foreach (var item in SubRoutineTreeViewItems)
+            if (!SubRoutines.Contains(ldmodel))
             {
-                if (item.Header == ldmodel)
-                {
-                    SubRoutineTreeViewItems.Remove(item);
-                    break;
-                }
+                UpdateNetworkBriefs(ldmodel, ChangeType.Add);
+                SubRoutines.Add(ldmodel);
             }
-            UpdateNetworkBriefs(ldmodel, ChangeType.Remove);
-            ldmodel.PropertyChanged -= MainRoutine_PropertyChanged;
         }
-
-        public void RemoveFuncBlock(FuncBlockViewModel fbmodel)
+        public void Add(FuncBlockViewModel fbmodel)
         {
-            FuncBlocks.Remove(fbmodel);
+            if (!FuncBlocks.Contains(fbmodel))
+            {
+                fbmodel.OModel = OModel;
+                FuncBlocks.Add(fbmodel);
+            }
         }
-
+        public void Remove(LadderDiagramViewModel ldmodel)
+        {
+            if (SubRoutines.Contains(ldmodel))
+            {
+                SubRoutines.Remove(ldmodel);
+                UpdateNetworkBriefs(ldmodel, ChangeType.Remove);
+            }
+        }
+        public void Remove(FuncBlockViewModel fbmodel)
+        {
+            if (FuncBlocks.Contains(fbmodel))
+                FuncBlocks.Remove(fbmodel);
+        }
         /// <summary>
         /// Save the ProjectModel to a xml format file
         /// </summary>
         /// <param name="filepath"></param>
-        public void Save(string filepath)
+        public void Save(XElement rootNode)
         {
-            XDocument xdoc = new XDocument();
-            //XDeclaration decNode = new XDeclaration("1.0", "utf-8", null);
-            //xdoc.Add(decNode);
-            var rootNode = new XElement("Project");
             rootNode.SetAttributeValue("Name", ProjectName);
             rootNode.SetAttributeValue("DeviceType", CurrentDevice.Type);
-            xdoc.Add(rootNode);
             var settingNode = new XElement("Setting");
             rootNode.Add(settingNode);
             rootNode.Add(ProjectHelper.CreateXElementByValueComments());
             rootNode.Add(ProjectHelper.CreateXElementByValueAlias());
             rootNode.Add(ProjectPropertyManager.CreateProjectPropertyXElement());
-            rootNode.Add(MMonitorManager.MMWindow.CreateXElementByTables());
-            rootNode.Add(IFacade.projectTreeView.EleInitialize.CreatXElementByElements());
-            //rootNode.Add(ProjectHelper.CreateXElementByGlobalVariableList());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             foreach (var ldmodel in SubRoutines)
             {
@@ -294,35 +221,21 @@ namespace SamSoarII.AppMain.Project
             var mtnode = new XElement("Modbus");
             MTVModel.Save(mtnode);
             rootNode.Add(mtnode);
-            xdoc.Save(filepath);
+            //rootNode.Add(MMonitorManager.MMWindow.CreateXElementByTables());
+            //rootNode.Add(IFacade.PTView.EleInitialize.CreatXElementByElements());
         }
-        public bool Open(string filepath)
+        public bool Open(XElement rootNode)
         {
-            //try
-            //{
-            XDocument xmldoc = XDocument.Load(filepath);
-            XElement rootNode = xmldoc.Element("Project");
             ProjectName = rootNode.Attribute("Name").Value;
-            PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType((PLCDeviceType)Enum.Parse(typeof(PLCDeviceType),rootNode.Attribute("DeviceType").Value));
-            // Open Ladder Model
-            foreach (var item in SubRoutines)
-            {
-                item.PropertyChanged -= MainRoutine_PropertyChanged;
-            }
+            PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType((PLCDeviceType)Enum.Parse(typeof(PLCDeviceType), rootNode.Attribute("DeviceType").Value));
             SubRoutines.Clear();
-            SubRoutineTreeViewItems.Clear();
-            UpdateNetworkBriefs(null, ChangeType.Clear);
             FuncBlocks.Clear();
-            //VariableManager.Clear();
             ValueAliasManager.Clear();
             ValueCommentManager.Clear();
             InstructionCommentManager.Clear();
             ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
             ProjectHelper.LoadValueAliasByXElement(rootNode.Element("ValueAlias"));
             ProjectPropertyManager.LoadProjectPropertyByXElement(rootNode.Element("ProjectPropertyParams"));
-            EleInitializeData = rootNode.Element("EleInitialize");
-            MMonitorManager.MMWindow.LoadTablesByXElement(rootNode.Element("Tables"));
-            //ProjectHelper.LoadGlobalVariableListByXElement(rootNode.Element("GlobalVariableList"));
             var ldnodes = rootNode.Elements("Ladder");
             foreach (XElement ldnode in ldnodes)
             {
@@ -336,10 +249,7 @@ namespace SamSoarII.AppMain.Project
                     SubRoutines.Add(ldmodel);
                     TreeViewItem item = new TreeViewItem();
                     item.Header = ldmodel;
-                    SubRoutineTreeViewItems.Add(item);
-                    ldmodel.PropertyChanged += MainRoutine_PropertyChanged;
                 }
-                ldmodel.IsExpand = bool.Parse(ldnode.Attribute("IsExpand").Value);
             }
             // Open FunctionBlock
             var fbnodes = rootNode.Elements("FuncBlock");
@@ -350,17 +260,13 @@ namespace SamSoarII.AppMain.Project
                 FuncBlocks.Add(fbmodel);
             }
             var mtnodes = rootNode.Element("Modbus");
-            var mtmodel = new ModbusTableViewModel();
+            var mtmodel = new ModbusTableViewModel(this);
             mtmodel.Load(mtnodes);
             MTVModel = mtmodel;
             return true;
-            //}
-            //catch (Exception exception)
-            //{
-            //    return false;
-            //}
+            //EleInitializeData = rootNode.Element("EleInitialize");
+            //MMonitorManager.MMWindow.LoadTablesByXElement(rootNode.Element("Tables"));
         }
-
         public void Compile()
         {
             string ladderFile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
@@ -381,40 +287,6 @@ namespace SamSoarII.AppMain.Project
             OModel.Write(OModel.Report_Complie, s);
             //MessageBox.Show(s);
         }
-
-        public void CompileFuncBlock(string name)
-        {
-            FuncBlockViewModel fbvmodel = null;
-            foreach (FuncBlockViewModel _fbvmodel in FuncBlocks)
-            {
-                if (_fbvmodel.ProgramName.Equals(name))
-                {
-                    fbvmodel = _fbvmodel;
-                    break;
-                }
-            }
-            if (fbvmodel == null)
-            {
-                return;
-            }
-
-            string fbfile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
-            string oofile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
-            File.WriteAllText(fbfile, fbvmodel.Code);
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "i686-w64-mingw32-gcc";
-            cmd.StartInfo.Arguments = string.Format("{0} -o {1}", fbfile, oofile);
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.RedirectStandardError = true;
-            cmd.Start();
-            cmd.WaitForExit();
-            string s = string.Format("stdout : {0}\r\nstderr: {1}\r\n", cmd.StandardOutput.ReadToEnd(), cmd.StandardError.ReadToEnd());
-            OModel.Write(OModel.Report_Complie, s);
-            //MessageBox.Show(s);
-        }
-
         private string GenerateCodeFromLadder()
         {
             string code = string.Empty;

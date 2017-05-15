@@ -151,13 +151,15 @@ namespace Xceed.Wpf.AvalonDock.Controls
         {
             _internalHost_ContentRendered = true;
         }
-
+        
         protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == Win32Helper.WM_WINDOWPOSCHANGING)
             {
                 if (_internalHost_ContentRendered)
+                {
                     Win32Helper.SetWindowPos(_internalHwndSource.Handle, Win32Helper.HWND_TOP, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize);
+                }
             }
             return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
         }

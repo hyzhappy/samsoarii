@@ -12,6 +12,7 @@ namespace SamSoarII.PLCDevice
     public abstract class Device
     {
         public abstract string DeviceName { get; }
+        public abstract int BitNumber { get; }
         public abstract PLCDeviceType Type { get; }
         private static BroadDevice _defaultDevice;
         private static MaxRangeDevice _maxRangeDevice;

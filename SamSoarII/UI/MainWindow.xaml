@@ -32,13 +32,15 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ZoomOutCommand}" Executed="OnZoomOutCommandExecute" CanExecute="ZoomOutCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}" Executed="OnShowSimulateTreeViewCommand" CanExecute="ShowSimulateTreeViewCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMonitorCommand}" Executed="OnShowMonitorCommand" CanExecute="ShowMonitorCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="OnShowMainMonitorCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimuMonitorCommand}" Executed="OnShowSimuMonitorCommand" CanExecute="ShowSimuMonitorCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="ShowMainMonitorCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOutputCommand}" Executed="OnShowOutputCommand" CanExecute="ShowOutputCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogCommandExecute" CanExecute="OnShowCommunicationSettingDialogCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogExecute" CanExecute="ShowCommunicationSettingDialogCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" Executed="OnShowErrorListExecute" CanExecute="ShowErrorListCanExecute"></CommandBinding>
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewModbusCommand}" Executed="OnAddNewModbusCommandExecute" CanExecute="AddNewModbusCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Executed="OnShowPropertyDialogCommandExecute" CanExecute="ShowPropertyDialogCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" CanExecute="OnInstShortCutOpenCommandCanExecute"></CommandBinding>
         <CommandBinding x:Name="InsertRowCommand" Command="{x:Static app:GlobalCommand.InsertRowCommand}"></CommandBinding>
@@ -48,6 +50,7 @@
         <!-- Tool Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
         <CommandBinding x:Name="CheckLadderCommand" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></CommandBinding>
+        <CommandBinding x:Name="CheckFuncBlockCommand" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.MonitorCommand}"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
@@ -74,6 +77,7 @@
         <ad:LayoutItemFromLayoutModelConverter x:Key="LayoutItemFromLayoutModelConverter" />
         <ad:ActivateCommandLayoutItemFromLayoutModelConverter x:Key="ActivateCommandLayoutItemFromLayoutModelConverter" />
         <ad:BoolToSideBrushConverter x:Key="BoolToSideBrushConverter" />
+
         <Style x:Key="ImageEnable" TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -225,14 +229,15 @@
                         <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="错误列表"></MenuItem>
+                <MenuItem Header="错误列表" Command="{x:Static app:GlobalCommand.ShowErrorListCommand}"></MenuItem>
                 <MenuItem Header="输出" Command="{x:Static app:GlobalCommand.ShowOutputCommand}"></MenuItem>
-                <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowMonitorCommand}"></MenuItem>
+                <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowSimuMonitorCommand}"></MenuItem>
                 <MenuItem Header="仿真图表"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)" Margin="0,-5,0,0">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
                 <MenuItem Header="添加函数功能块" Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}"></MenuItem>
+                <MenuItem Header="添加Modbus表格" Command="{x:Static app:GlobalCommand.AddNewModbusCommand}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>
@@ -260,7 +265,10 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="监视" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
-                <MenuItem Header="程序检测" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
+                <MenuItem Header="程序检测">
+                    <MenuItem Header="梯形图" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
+                    <MenuItem Header="函数功能块" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></MenuItem>
+                </MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="选项" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
                     <MenuItem.Icon>
@@ -419,29 +427,11 @@
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAMonitor" Title="仿真监视" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                            <ad:LayoutAnchorable x:Name="LASimuMonitor" Title="仿真监视" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.LeftSide>
-                <ad:LayoutRoot.RightSide>
-                    <ad:LayoutAnchorSide>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                                <Grid x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-                                </Grid>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                    </ad:LayoutAnchorSide>
-                </ad:LayoutRoot.RightSide>
                 <ad:LayoutRoot.BottomSide>
                     <ad:LayoutAnchorSide>
                         <ad:LayoutAnchorGroup>
@@ -449,8 +439,30 @@
                                 <proj:ReportOutputModel x:Name="OutputModel"/>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAErrorList" Title="错误列表" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.BottomSide>
+                <ad:LayoutRoot.RightSide>
+                    <ad:LayoutAnchorSide>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                                <Grid x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                                </Grid>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                    </ad:LayoutAnchorSide>
+                </ad:LayoutRoot.RightSide>
             </ad:LayoutRoot>
         </ad:DockingManager>
     </DockPanel>

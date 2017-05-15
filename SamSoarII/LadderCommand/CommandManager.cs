@@ -32,6 +32,7 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             command.Execute();
             UndoStack.Push(command);
+            RedoStack.Clear();
             IsModify = true;
         }
 

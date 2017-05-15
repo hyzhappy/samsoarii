@@ -1,7 +1,9 @@
 ﻿using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.AppMain.UI;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.LadderInstViewModel.Interrupt;
 using SamSoarII.PLCCompiler;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
@@ -198,6 +200,18 @@ namespace SamSoarII.AppMain.Project
         public HashSet<BaseViewModel> ErrorModels { get; set; } = new HashSet<BaseViewModel>();
         private SortedDictionary<IntPoint, BaseViewModel> _ladderElements = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines = new SortedDictionary<IntPoint, VerticalLineViewModel>();
+
+        private InstructionNetworkViewModel _invmodel;
+        public InstructionNetworkViewModel INVModel
+        {
+            get { return this._invmodel; }
+            set
+            {
+                this._invmodel = value;
+                _invmodel.Setup(this);
+            }
+        }
+         
         public BaseViewModel GetElementByPosition(int X, int Y)
         {
             IntPoint ip = new IntPoint();
@@ -386,6 +400,11 @@ namespace SamSoarII.AppMain.Project
         private bool _canScrollToolTip = false;
         // parent ladder diagram
         private LadderDiagramViewModel _ladderDiagram;
+
+        public LadderDiagramViewModel LDVModel
+        {
+            get { return _ladderDiagram; }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -825,7 +844,7 @@ namespace SamSoarII.AppMain.Project
                     if (dialog is ElementPropertyDialog)
                     {
                         ElementReplaceArgumentCommand eracommand = new ElementReplaceArgumentCommand(
-                            sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
+                            this, sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
                         _ladderDiagram.CommandExecute(eracommand);
                     }
                     else
@@ -907,6 +926,11 @@ namespace SamSoarII.AppMain.Project
 
         private void OnEditComment(object sender, RoutedEventArgs e)
         {
+            EditComment();
+        }
+
+        public void EditComment()
+        {
             if (!IsMasked)
             {
                 NetworkCommentEditDialog editDialog = new UserInterface.NetworkCommentEditDialog();
@@ -925,19 +949,163 @@ namespace SamSoarII.AppMain.Project
 
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var type = sender.GetType();
-            if(e.LeftButton == MouseButtonState.Pressed && !IsMasked)
+            AcquireSelectRect(e);
+        }
+
+        protected override void OnDragOver(DragEventArgs e)
+        {
+            base.OnDragOver(e);
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            if (e.Data.GetDataPresent(ptvitem.GetType()))
             {
-                var pos = e.GetPosition(LadderCanvas);
-                var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
-                if (!IsSingleSelected())
+                ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                if (ptvitem.RelativeObject is BaseViewModel
+                 || ptvitem.RelativeObject is FuncModel
+                 || ptvitem.RelativeObject is LadderDiagramViewModel
+                 || ptvitem.RelativeObject is ModbusTableModel)
                 {
-                    AcquireSelectRect();
+                    AcquireSelectRect(e);
                 }
-                _ladderDiagram.SelectionRect.X = intPoint.X;
-                _ladderDiagram.SelectionRect.Y = intPoint.Y;
             }
         }
+
+        protected override void OnDrop(DragEventArgs e)
+        {
+            base.OnDrop(e);
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            bool isacquired = AcquireSelectRect(e);
+            if (!isacquired) return;
+            if (e.Data.GetDataPresent(ptvitem.GetType()))
+            {
+                ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
+                if (ptvitem.RelativeObject is BaseViewModel)
+                {
+                    BaseViewModel bvmodel = (BaseViewModel)(ptvitem.RelativeObject);
+                    bvmodel = bvmodel.Clone();
+                    bvmodel.X = _ladderDiagram.SelectionRect.X;
+                    bvmodel.Y = _ladderDiagram.SelectionRect.Y;
+                    _ladderDiagram.ReplaceSingleElement(this, bvmodel);
+                }
+                else if (ptvitem.RelativeObject is FuncModel)
+                {
+                    FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
+                    if (!fmodel.CanCALLM())
+                    {
+                        MessageBox.Show(String.Format("{0:s}无法被CALLM指令调用，请检查参数的个数和类型。", fmodel.Name));
+                        return;
+                    }
+                    CALLMViewModel vmodel = new CALLMViewModel();
+                    ArgumentValue[] avalues = new ArgumentValue[fmodel.ArgCount];
+                    for (int i = 0; i < fmodel.ArgCount; i++)
+                    {
+                        IValueModel ivmodel = null;
+                        switch (fmodel.GetArgType(i))
+                        {
+                            case "BIT": ivmodel = BitValue.Null; break;
+                            case "WORD": ivmodel = WordValue.Null; break;
+                            case "DWORD": ivmodel = DWordValue.Null; break;
+                            case "FLOAT": ivmodel = FloatValue.Null; break;
+                            default: ivmodel = WordValue.Null; break;
+                        }
+                        avalues[i] = new ArgumentValue(
+                            fmodel.GetArgName(i),
+                            fmodel.GetArgType(i),
+                            ivmodel);
+                    }
+                    vmodel.AcceptNewValues(fmodel.Name, avalues);
+                    vmodel.X = _ladderDiagram.SelectionRect.X;
+                    vmodel.Y = _ladderDiagram.SelectionRect.Y;
+                    _ladderDiagram.ReplaceSingleElement(this, vmodel);
+                }
+                else if (ptvitem.RelativeObject is LadderDiagramViewModel)
+                {
+                    LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(ptvitem.RelativeObject);
+                    BaseViewModel bvmodel_old = GetElementByPosition(
+                        _ladderDiagram.SelectionRect.X,
+                        _ladderDiagram.SelectionRect.Y);
+                    if (bvmodel_old is ATCHViewModel)
+                    {
+                        string[] paras_old = bvmodel_old.GetValueString().ToArray();
+                        paras_old = new string[]
+                        {
+                            paras_old[0],
+                            ValueCommentManager.GetComment(paras_old[0]),
+                            paras_old[1]
+                        };
+                        string[] paras_new = paras_old.ToArray();
+                        if (paras_old[0].Equals(String.Empty))
+                        {
+                            paras_old[0] = paras_new[0] = "K0";
+                        }
+                        paras_new[2] = ldvmodel.ProgramName;
+                        ElementReplaceArgumentCommand command = new ElementReplaceArgumentCommand(
+                            this, bvmodel_old, paras_old, paras_new);
+                        _ladderDiagram.CommandExecute(command);
+                    }
+                    else
+                    {
+                        CALLViewModel bvmodel_new = new CALLViewModel();
+                        bvmodel_new.AcceptNewValues(
+                            new string[1] { ldvmodel.ProgramName },
+                            PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                        bvmodel_new.X = _ladderDiagram.SelectionRect.X;
+                        bvmodel_new.Y = _ladderDiagram.SelectionRect.Y;
+                        _ladderDiagram.ReplaceSingleElement(this, bvmodel_new);
+                    }
+                }
+                else if (ptvitem.RelativeObject is ModbusTableModel)
+                {
+                    ModbusTableModel mtmodel = (ModbusTableModel)(ptvitem.RelativeObject);
+                    if (!mtmodel.IsVaild)
+                    {
+                        MessageBox.Show("Modbus表格非法，请检查表格项是否补全。");
+                        return;
+                    }
+                    MBUSViewModel vmodel = new MBUSViewModel();
+                    string[] paras = { "K232", "", mtmodel.Name, "", "D0", ""};
+                    vmodel.AcceptNewValues(
+                        paras,
+                        PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    vmodel.X = _ladderDiagram.SelectionRect.X;
+                    vmodel.Y = _ladderDiagram.SelectionRect.Y;
+                    _ladderDiagram.ReplaceSingleElement(this, vmodel);
+                }
+            }
+        }
+
+        public bool AcquireSelectRect(MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && !IsMasked)
+            {
+                var pos = e.GetPosition(LadderCanvas);
+                return AcquireSelectRect(pos);
+            }
+            return false;
+        }
+        
+        public bool AcquireSelectRect(DragEventArgs e)
+        {
+            var pos = e.GetPosition(LadderCanvas);
+            return AcquireSelectRect(pos);
+        }
+
+        public bool AcquireSelectRect(Point pos)
+        {
+            var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
+            if (intPoint.X < 0 || intPoint.X >= 12
+             || intPoint.Y < 0 || intPoint.Y >= RowCount)
+            {
+                return false;
+            }
+            if (!IsSingleSelected())
+            {
+                AcquireSelectRect();
+            }
+            _ladderDiagram.SelectionRect.X = intPoint.X;
+            _ladderDiagram.SelectionRect.Y = intPoint.Y;
+            return true;
+        }
+
 
         #endregion
 

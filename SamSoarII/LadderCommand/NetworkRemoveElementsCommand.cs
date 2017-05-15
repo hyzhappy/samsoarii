@@ -9,7 +9,6 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkRemoveElementsCommand : IUndoableCommand
     {
-
         private LadderNetworkViewModel _network;
         private HashSet<BaseViewModel> _elements;
         private HashSet<VerticalLineViewModel> _vlines;
@@ -38,6 +37,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.RemoveVerticalLine(vline);
             }
+            _network.INVModel.Setup(_network);
         }
 
         public void Redo()
@@ -55,6 +55,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
+            _network.INVModel.Setup(_network);
         }
     }
 }

@@ -141,12 +141,13 @@ namespace Xceed.Wpf.AvalonDock.Controls
         }
 
         public void Drop(Point dropLocation, out bool dropHandled)
-        { 
+        {
             dropHandled = false;
-
+            
             UpdateMouseLocation(dropLocation);
 
             var floatingWindowModel = _floatingWindow.Model as LayoutFloatingWindow;
+            
             var root = floatingWindowModel.Root;
 
             if (_currentHost != null)
@@ -158,8 +159,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 root.CollectGarbage();
                 dropHandled = true;
             }
-
-
+            
             _currentWindowAreas.ForEach(a => _currentWindow.DragLeave(a));
 
             if (_currentDropTarget != null)

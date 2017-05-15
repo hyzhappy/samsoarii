@@ -43,19 +43,36 @@
         <DataGrid x:Name="DG_List" ItemsSource="{Binding Items}"
                   Grid.Row="2" Grid.Column="0"
                   AutoGenerateColumns="False" CanUserResizeColumns="False"
-                  RowBackground="White" AlternatingRowBackground="AliceBlue">
+                  RowBackground="White" AlternatingRowBackground="AliceBlue"
+                  SelectionChanged="DG_List_SelectionChanged">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FontWeight" Value="Heavy"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FontWeight" Value="Light"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="DGTC_Detail" Binding="{Binding Detail}"
+                <DataGridTextColumn x:Name="DGTC_Detail" IsReadOnly="True" Binding="{Binding Detail}"
                                     Header="元件" Width="*">
-
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_Diagram" Binding="{Binding Diagram}"
+                <DataGridTextColumn x:Name="DGTC_Diagram" IsReadOnly="True" Binding="{Binding Diagram}"
                                     Header="程序" Width="80">
-
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_Network" Binding="{Binding Network}"
+                <DataGridTextColumn x:Name="DGTC_Network" IsReadOnly="True" Binding="{Binding Network}"
                                     Header="网络" Width="40">
-                    
                 </DataGridTextColumn>
             </DataGrid.Columns>
 

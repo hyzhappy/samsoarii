@@ -22,6 +22,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.AvalonDock.Layout;
 using System.Windows.Threading;
+using Xceed.Wpf.AvalonDock.Global;
 
 namespace Xceed.Wpf.AvalonDock.Controls
 {
@@ -64,7 +65,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         }
 
         LayoutAnchorable _model;
-
+        
         public ILayoutElement Model
         {
             get { return _model; }
@@ -98,15 +99,21 @@ namespace Xceed.Wpf.AvalonDock.Controls
         //        ((ILogicalChildrenContainer)contentModel.Root.Manager).InternalAddLogicalChild(contentModel.Content);
         //    }
         //}
-
         
-             
         public void Show()
         {
             if (!_model.IsActive)
             {
                 _model.Root.Manager.ShowAutoHideWindow(this);
                 _model.IsActive = true;
+                if (LayoutSetting.GetDefaultIsDockAnchorable(_model.Title))
+                {
+                    _model.ToggleAutoHide();
+                }
+                if (LayoutSetting.GetDefaultIsFloatAnchorable(_model.Title))
+                {
+                    _model.Float();
+                }
             }
         }
 

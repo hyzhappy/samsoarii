@@ -101,6 +101,7 @@ namespace SamSoarII.AppMain.Project
             {
                 result.IsMainLadder = false;
             }
+            result.IsExpand = bool.Parse(xEle.Attribute("IsExpand").Value);
             result.InitNetworks();
             foreach (XElement netNode in xEle.Elements("Network"))
             {
@@ -202,7 +203,10 @@ namespace SamSoarII.AppMain.Project
         public static ProjectModel LoadProject(string filepath, ProjectModel model)
         {
             //ProjectModel model = new ProjectModel();
-            if (model.Open(filepath))
+            XDocument xdoc = XDocument.Load(filepath);
+            XElement xele_r = xdoc.Element("Root");
+            XElement xele_p = xele_r.Element("Project");
+            if (model.Open(xele_p))
             {
                 return model;
             }

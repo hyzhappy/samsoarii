@@ -625,9 +625,9 @@ namespace Xceed.Wpf.AvalonDock.Layout
         public void Float()
         {
             if (PreviousContainer != null &&
-                PreviousContainer.FindParent<LayoutFloatingWindow>() != null)
+                PreviousContainer.FindParent<LayoutFloatingWindow>() != null &&
+                Parent is ILayoutPane)
             {
-
                 var currentContainer = Parent as ILayoutPane;
                 var currentContainerIndex = (currentContainer as ILayoutGroup).IndexOfChild(this);
                 var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;

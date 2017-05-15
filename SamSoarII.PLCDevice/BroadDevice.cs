@@ -13,6 +13,7 @@ namespace SamSoarII.PLCDevice
     /// </summary>
     public class BroadDevice : Device
     {
+        public override int BitNumber { get { return 32; } }
         public override IntRange AIRange
         {
             get

@@ -51,6 +51,7 @@ static vsiiDllfun dfSetEnable;
 static viDllfun dfInitClock;
 static iDllfun dfGetClock;
 static viDllfun dfSetClockRate;
+static viDllfun dfSetBaseBit;
 
 EXPORT void CreateDll(char* simucPath, char* simufPath, char* simudllPath, char* simuaPath)
 {
@@ -149,7 +150,7 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 11;
 	}
-	dfSetFeq = (vsiv64Dllfun)GetProcAddress(hdll, "GetFeq");
+	dfSetFeq = (vsiv64Dllfun)GetProcAddress(hdll, "SetFeq");
 	if (dfSetFeq == NULL)
 	{
 		FreeLibrary(hdll);
@@ -196,6 +197,12 @@ EXPORT int LoadDll(char* simudllPath)
 	{
 		FreeLibrary(hdll);
 		return 19;
+	}
+	dfSetBaseBit = (viDllfun)GetProcAddress(hdll, "SetBaseBit");
+	if (dfSetBaseBit == NULL)
+	{
+		FreeLibrary(hdll);
+		return 20;
 	}
 	return 0;
 }
@@ -292,7 +299,12 @@ EXPORT int GetClock()
 	return dfGetClock();
 }
 
-EXPORT int SetClockRate(int _rate)
+EXPORT void SetClockRate(int _rate)
 {
 	dfSetClockRate(_rate);
+}
+
+EXPORT void SetBaseBit(int _basebit)
+{
+	dfSetBaseBit(_basebit);
 }

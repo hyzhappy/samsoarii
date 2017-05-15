@@ -17,6 +17,24 @@
             <ListBox x:Name="LB_Tables"
                      Grid.Row="0" Grid.Column="0"
                      SelectionChanged="LB_Tables_SelectionChanged">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Blue"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontWeight" Value="Heavy"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontWeight" Value="Light"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
         </ScrollViewer>
         <DataGrid x:Name="DG_Table" ItemsSource="{Binding Tables}"
@@ -28,6 +46,24 @@
                 <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type local:ModbusTableComboBoxItems}" MethodName="SelectedHandleCodes">
                 </ObjectDataProvider>
             </DataGrid.Resources>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FontWeight" Value="Heavy"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FontWeight" Value="Light"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="DGTC_SlaveID" Header="从站号" Width="*"
                                     IsReadOnly="False" Binding="{Binding SlaveID}">
@@ -61,47 +97,47 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Button x:Name="B_Insert"
-                    Grid.Row="0" Grid.Column="0"
+                    Grid.Row="0" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_Insert_Click">
                 插入行
             </Button>
             <Button x:Name="B_Remove"
-                    Grid.Row="1" Grid.Column="0"
+                    Grid.Row="1" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_Remove_Click">
                 删除行
             </Button>
             <Button x:Name="B_Up"
-                    Grid.Row="2" Grid.Column="0"
+                    Grid.Row="2" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_Up_Click">
                 当前行上移
             </Button>
             <Button x:Name="B_Down"
-                    Grid.Row="3" Grid.Column="0"
+                    Grid.Row="3" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_Down_Click">
                 当前行下移
             </Button>
             <Button x:Name="B_AddModel"
-                    Grid.Row="4" Grid.Column="0"
+                    Grid.Row="4" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_AddModel_Click">
                 新建表格
             </Button>
             <Button x:Name="B_RemoveModel"
-                    Grid.Row="5" Grid.Column="0"
+                    Grid.Row="5" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_RemoveModel_Click">
                 删除表格
             </Button>
             <Button x:Name="B_ModelUp"
-                    Grid.Row="6" Grid.Column="0"
+                    Grid.Row="6" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_ModelUp_Click">
                 当前表格上移
             </Button>
             <Button x:Name="B_ModelDown"
-                    Grid.Row="7" Grid.Column="0"
+                    Grid.Row="7" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_ModelDown_Click">
                 当前表格下移
             </Button>
             <Button x:Name="B_Close"
-                    Grid.Row="8" Grid.Column="0"
+                    Grid.Row="8" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_Close_Click">
                 关闭
             </Button>

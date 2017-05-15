@@ -241,10 +241,10 @@ namespace SamSoarII.Extend.LadderChartModel
                 if (!node.Type.Equals(String.Empty))
                     lgraph.InsertEdge(node, node.LNodeID, node.RNodeID);
                 // 设置起点
-                if (node.IsStart)
+                if (node.IsStart && node.HAccess)
                     lgraph.SetStart(node.LNodeID);
                 // 设置终点
-                if (node.IsTerminate)
+                if (node.IsTerminate && node.HAccess)
                     lgraph.SetTerminate(node.RNodeID);
             }
             return lgraph;

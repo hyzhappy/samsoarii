@@ -47,8 +47,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         {
             get { return _detectionRect; }
         }
-
-
+        
         T _targetElement;
         public T TargetElement
         {
@@ -61,7 +60,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         {
             get { return _type; }
         }
-
+        
         protected virtual void Drop(LayoutAnchorableFloatingWindow floatingWindow)
         { }
 

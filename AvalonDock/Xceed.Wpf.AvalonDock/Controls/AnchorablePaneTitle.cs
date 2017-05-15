@@ -22,6 +22,8 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Input;
 using Xceed.Wpf.AvalonDock.Layout;
+using System.ComponentModel;
+using System.Windows.Media;
 
 namespace Xceed.Wpf.AvalonDock.Controls
 {
@@ -33,12 +35,11 @@ namespace Xceed.Wpf.AvalonDock.Controls
             IsHitTestVisibleProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(true));
             FocusableProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(false));
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AnchorablePaneTitle), new FrameworkPropertyMetadata(typeof(AnchorablePaneTitle)));
+            
         }
-
-
+        
         public AnchorablePaneTitle()
-        { 
-
+        {
         }
 
         #region Model
@@ -57,12 +58,16 @@ namespace Xceed.Wpf.AvalonDock.Controls
         public LayoutAnchorable Model
         {
             get { return (LayoutAnchorable)GetValue(ModelProperty); }
-            set { SetValue(ModelProperty, value); }
+            set
+            {
+                SetValue(ModelProperty, value);
+            }
         }
-
+        
         static void _OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             ((AnchorablePaneTitle)sender).OnModelChanged(e);
+            
         }
 
         /// <summary>
@@ -71,13 +76,55 @@ namespace Xceed.Wpf.AvalonDock.Controls
         protected virtual void OnModelChanged(DependencyPropertyChangedEventArgs e)
         {
             if (Model != null)
+            {
+                if (Model.Content is FrameworkElement)
+                {
+                    FrameworkElement fele = (FrameworkElement)(Model.Content);
+                    fele.GotFocus += OnModelGotFocus;
+                    AFocus = true;
+                }
                 SetLayoutItem(Model.Root.Manager.GetLayoutItemFromModel(Model));
+            }
             else
                 SetLayoutItem(null);
         }
+        
+        private static AnchorablePaneTitle afocuscurrent = null;
+        public static AnchorablePaneTitle AFocusCurrent
+        {
+            get { return afocuscurrent; }
+        }
+        private bool afocus;
+        public bool AFocus
+        {
+            get { return this.afocus; }
+            set
+            {
+                this.afocus = value;
+                switch (afocus)
+                {
+                    case true:
+                        if(afocuscurrent != null && afocuscurrent != this)
+                            afocuscurrent.AFocus = false;
+                        afocuscurrent = this;
+                        this.afocus = value;
+                        Background = Brushes.LightBlue;
+                        break;
+                    case false:
+                        Background = Brushes.Transparent;
+                        if (afocuscurrent == this)
+                            afocuscurrent = null;
+                        break;
+                }
+            }
+        }
+        
+        private void OnModelGotFocus(object sender, RoutedEventArgs e)
+        {
+            AFocus = true;
+        }
 
         #endregion
-
 
         #region LayoutItem
 
@@ -111,8 +158,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         }
 
         #endregion
-
-
+        
         private void OnHide()
         {
             Model.Hide();
@@ -156,6 +202,8 @@ namespace Xceed.Wpf.AvalonDock.Controls
         protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
+
+            AFocus = true;
 
             if (!e.Handled)
             {

@@ -29,6 +29,13 @@ namespace SamSoarII.Extend.Utility
                 }
             }
         }
+
+        public const int STATUS_ACCEPT = 0x00;
+        public const int STATUS_WARNING = 0x01;
+        public const int STATUS_ERROR = 0x02;
+        public int Status { get; set; }
+
+        public string Message { get; set; }
        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SamSoarII.AppMain.Project;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,30 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// MainTabItem.xaml 的交互逻辑
     /// </summary>
-    public partial class MainTabDiagramItem : DockingManager, ITabItem
+    public partial class MainTabDiagramItem : UserControl, ITabItem, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private static event PropertyChangedEventHandler StaticPropertyChanged;
+
+        private void OnStaticPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged(this, e);
+        }
+
         #region Numbers
+
+        static private double gsheight;
+
+        public double GSHeight
+        {
+            get { return gsheight; }
+            set
+            {
+                gsheight = value;
+                StaticPropertyChanged(this, new PropertyChangedEventArgs("GSHeight"));
+            }
+        }
 
         #region View Mode
         public const int VIEWMODE_LADDER = 0x01;
@@ -35,21 +57,28 @@ namespace SamSoarII.AppMain.UI
             set
             {
                 this.viewmode = value;
-                if ((viewmode & VIEWMODE_LADDER) != 0)
+                if ((viewmode & VIEWMODE_LADDER) == 0
+                 && (viewmode & VIEWMODE_INST) == 0)
                 {
-                    ShowLadder();
+                    Content = null;
+                }
+                else if ((viewmode & VIEWMODE_LADDER) != 0
+                      && (viewmode & VIEWMODE_INST) == 0)
+                {
+                    GB_Ladder.Content = null;
+                    Content = LDVM_ladder;
+                }
+                else if ((viewmode & VIEWMODE_LADDER) == 0
+                      && (viewmode & VIEWMODE_INST) != 0)
+                {
+                    GB_Inst.Content = null;
+                    Content = IDVM_inst;
                 }
                 else
                 {
-                    HideLadder();
-                }
-                if ((viewmode & VIEWMODE_INST) != 0)
-                {
-                    ShowInst();
-                }
-                else
-                {
-                    HideInst();
+                    Content = G_Main;
+                    GB_Ladder.Content = LDVM_ladder;
+                    GB_Inst.Content = IDVM_inst;
                 }
             }
         }
@@ -76,6 +105,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         protected double actualheight;
+        
         double ITabItem.ActualHeight
         {
             get
@@ -90,6 +120,10 @@ namespace SamSoarII.AppMain.UI
         }
         #endregion
 
+        public LadderDiagramViewModel LDVM_ladder { get; private set; }
+
+        public InstructionDiagramViewModel IDVM_inst { get; private set; }
+        
         #endregion
 
         public MainTabDiagramItem()
@@ -101,45 +135,16 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
 
-            LadderDiagramViewModel LDVM_ladder = (LadderDiagramViewModel)(ITI_ladder);
-            LA_Ladder.Content = ITI_ladder;
-            LA_Inst.Content = LDVM_ladder.IDVModel;
+            DataContext = this;
+            StaticPropertyChanged += OnStaticPropertyChanged;
 
+            LDVM_ladder = (LadderDiagramViewModel)(ITI_ladder);
+            GB_Ladder.Content = LDVM_ladder;
+            IDVM_inst = (InstructionDiagramViewModel)(LDVM_ladder.IDVModel);
+            GB_Inst.Content = IDVM_inst;
             ViewMode = _viewmode;
         }
-
-        public void ShowLadder()
-        {
-            if (!LAPGroup.Children.Contains(LAP_Ladder))
-            {
-                LAPGroup.InsertChildAt(LAPGroup.Children.Count, LAP_Ladder);
-            }
-        }
-
-        public void HideLadder()
-        {
-            if (LAPGroup.Children.Contains(LAP_Ladder))
-            {
-                LAPGroup.RemoveChild(LAP_Ladder);
-            }
-        }
-
-        public void ShowInst()
-        {
-            if (!LAPGroup.Children.Contains(LAP_Inst))
-            {
-                LAPGroup.InsertChildAt(LAPGroup.Children.Count, LAP_Inst);
-            }
-        }
-
-        public void HideInst()
-        {
-            if (LAPGroup.Children.Contains(LAP_Inst))
-            {
-                LAPGroup.RemoveChild(LAP_Inst);
-            }
-        }
-
+        
     }
 }
 

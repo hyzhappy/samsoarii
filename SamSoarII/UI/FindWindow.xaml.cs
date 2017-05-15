@@ -55,6 +55,8 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private ReplaceFormat RF_Input { get; set; } = new ReplaceFormat();
+
         #endregion
 
         public FindWindow
@@ -63,26 +65,31 @@ namespace SamSoarII.AppMain.UI
         )
         {
             InitializeComponent();
+            DataContext = this;
             parent = _parent;
             Mode = MODE_CURRENT;
-            DataContext = this;
+            TB_Input.Background = Brushes.Red;
         }
 
         private void Find()
         {
             string text = TB_Input.Text;
             string[] args = text.Split(' ');
-
             items.Clear();
             switch (Mode)
             {
                 case MODE_CURRENT:
                     ITabItem currenttab = parent.MainTabControl.CurrentTab;
-                    if (!(currenttab is MainTabDiagramItem))
-                        break;
-                    MainTabDiagramItem mtditem = (MainTabDiagramItem)currenttab;
-                    LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(mtditem.LAP_Ladder.Children.First().Content);
-                    Find(ldvmodel, args);
+                    if (currenttab is MainTabDiagramItem)
+                    {
+                        MainTabDiagramItem mtditem = (MainTabDiagramItem)currenttab;
+                        LadderDiagramViewModel ldvmodel = mtditem.LDVM_ladder;
+                        Find(ldvmodel, args);
+                    }
+                    if (currenttab is LadderDiagramViewModel)
+                    {
+                        Find((LadderDiagramViewModel)currenttab, args);
+                    }
                     break;
                 case MODE_ALL:
                     ProjectModel pmodel = parent.ProjectModel;
@@ -98,7 +105,6 @@ namespace SamSoarII.AppMain.UI
 
         private void Find(LadderDiagramViewModel ldvmodel, string[] args)
         {
-            bool check = false;
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
                 foreach (BaseViewModel bvmodel in lnvmodel.GetElements())
@@ -106,119 +112,78 @@ namespace SamSoarII.AppMain.UI
                     if (bvmodel is HorizontalLineViewModel
                      || bvmodel is VerticalLineViewModel)
                         continue;
-                    if (args.Length > 0 && !args[0].Equals("*")
-                     && !args[0].Equals(bvmodel.InstructionName))
-                        continue;
-                    check = true;
-                    for (int i = 0; i < bvmodel.Model.ParaCount; i++)
+                    BaseModel bmodel = bvmodel.Model;
+                    string input = bvmodel.InstructionName;
+                    for (int i = 0; i < bmodel.ParaCount; i++)
                     {
-                        if (args.Length <= i + 1)
-                            break;
-                        if (!args[i + 1].Equals("*")
-                         && !args[i + 1].Equals(bvmodel.Model.GetPara(i).ValueString))
-                        {
-                            check = false;
-                            break;
-                        }
+                        input += " " + bmodel.GetPara(i).ValueShowString;
                     }
-                    if (check)
+                    if (RF_Input.Match(input))
                     {
                         items.Add(new FindElement(bvmodel, ldvmodel, lnvmodel));
                     }
                 }
             }
         }
-        
+
         #region Event Handler
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        
+
         private void TB_Input_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string text = TB_Input.Text;
-            string[] args = text.Split(' ');
-            bool check = false;
-
-            TB_Input.Background = Brushes.LightGreen;
-            for (int i = 0; i < args.Length; i++)
+            RF_Input.Text = TB_Input.Text;
+            switch (RF_Input.Type)
             {
-                if (args[i].Equals("*"))
-                    continue;
-                if (i == 0)
-                {
-                    check = true;
-                }
-                else
-                {
-                    check = ValueParser.CheckValueString(args[i], new Regex[] 
-                    {
-                        ValueParser.VarRegex,
-                        ValueParser.VerifyIntKHValueRegex,
-                        ValueParser.VerifyFloatKValueRegex
-                    });
-                }
-                if (!check)
-                {
+                case ReplaceFormat.TYPE_INVALID:
                     TB_Input.Background = Brushes.Red;
                     break;
-                }
+                default:
+                    TB_Input.Background = Brushes.LightGreen;
+                    break;
             }
         }
 
         private void TB_Input_KeyDown(object sender, KeyEventArgs e)
         {
-            if (TB_Input.Background != Brushes.LightGreen) return;
+            if (TB_Input.Background == Brushes.Red) return;
             if (e.Key != Key.Enter) return;
             Find();
             TB_Input.Background = Brushes.White;
         }
+
+        private void DG_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DG_List.SelectedIndex < 0) return;
+            FindElement fele = items[DG_List.SelectedIndex];
+            BaseViewModel bvmodel = fele.BVModel;
+            int x = bvmodel.X;
+            int y = bvmodel.Y;
+            string diagram = fele.Diagram;
+            int network = int.Parse(fele.Network);
+            NavigateToNetworkEventArgs _e = new NavigateToNetworkEventArgs(network, diagram, x, y);
+            parent.NavigateToNetwork(_e);
+        }
+
         #endregion
     }
 
-    public class FindElement : INotifyPropertyChanged
+    public class FindFormat : ReplaceFormat
     {
-        #region Numbers
-        private BaseViewModel bvmodel;
-        public string Detail
-        {
-            get
-            {
-                string result = bvmodel.InstructionName;
-                for (int i = 0; i < bvmodel.Model.ParaCount; i++)
-                {
-                    result += " " + bvmodel.Model.GetPara(i).ValueString;
-                }
-                return result;
-            }
-        }
-        private LadderDiagramViewModel ldvmodel;
-        public string Diagram
-        {
-            get { return ldvmodel.ProgramName; }
-        }
-        private LadderNetworkViewModel lnvmodel;
-        public string Network
-        {
-            get { return String.Format("{0:d}", lnvmodel.NetworkNumber); }
-        }
-        #endregion
 
+    }
+
+    public class FindElement : ReplaceElement, INotifyPropertyChanged
+    {
         public FindElement
         (
             BaseViewModel _bvmodel,
             LadderDiagramViewModel _ldvmodel,
             LadderNetworkViewModel _lnvmodel
-        )
+        ) : base(_bvmodel, _ldvmodel, _lnvmodel)
         {
-            bvmodel = _bvmodel;
-            ldvmodel = _ldvmodel;
-            lnvmodel = _lnvmodel;
-            PropertyChanged(this, new PropertyChangedEventArgs("Detail"));
-            PropertyChanged(this, new PropertyChangedEventArgs("Diagram"));
-            PropertyChanged(this, new PropertyChangedEventArgs("Network"));
         }
-
-        #region Event Handler
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        #endregion
     }
+
+
 }

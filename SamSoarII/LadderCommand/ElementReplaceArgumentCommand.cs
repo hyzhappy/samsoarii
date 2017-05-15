@@ -1,4 +1,5 @@
-﻿using SamSoarII.LadderInstViewModel;
+﻿using SamSoarII.AppMain.Project;
+using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,16 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class ElementReplaceArgumentCommand : IUndoableCommand
     {
+        private LadderNetworkViewModel lnvmodel;
         private BaseViewModel bvmodel;
         private IList<string> pstring_old;
         private IList<string> pstring_new;
 
-        public ElementReplaceArgumentCommand(BaseViewModel _bvmodel, IList<string> _pstring_old, IList<string> _pstring_new)
+        public ElementReplaceArgumentCommand(
+            LadderNetworkViewModel _lnvmodel, BaseViewModel _bvmodel, 
+            IList<string> _pstring_old, IList<string> _pstring_new)
         {
+            lnvmodel = _lnvmodel;
             bvmodel = _bvmodel;
             pstring_old = _pstring_old;
             pstring_new = _pstring_new;
@@ -40,6 +45,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 bvmodel.AcceptNewValues(pstring_new, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             }
+            lnvmodel.INVModel.Setup(lnvmodel);
         }
 
         public void Redo()
@@ -66,6 +72,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 bvmodel.AcceptNewValues(pstring_old, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             }
+            lnvmodel.INVModel.Setup(lnvmodel);
         }
     }
 }

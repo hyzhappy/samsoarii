@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using System.Runtime.ExceptionServices;
 using System.Security;
 using System.Windows;
-
 using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Chart;
 using System.Collections.ObjectModel;
+using SamSoarII.PLCDevice;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -66,8 +66,8 @@ namespace SamSoarII.Simulation.Core
         public const int LOADDLL_CANNOT_FOUND_GETDWORD = 0x05;
         /// <summary> LoadDll返回结果：没找到GetFloat的入口</summary>
         public const int LOADDLL_CANNOT_FOUND_GETFLOAT = 0x06;
-        /// <summary> LoadDll返回结果：没找到GetDouble的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETDOUBLE = 0x07;
+        /// <summary> LoadDll返回结果：没找到GetFeq的入口</summary>
+        public const int LOADDLL_CANNOT_FOUND_GETFEQ = 0x07;
         /// <summary> LoadDll返回结果：没找到SetBit的入口</summary>
         public const int LOADDLL_CANNOT_FOUND_SETBIT = 0x08;
         /// <summary> LoadDll返回结果：没找到SetWord的入口</summary>
@@ -76,8 +76,8 @@ namespace SamSoarII.Simulation.Core
         public const int LOADDLL_CANNOT_FOUND_SETDWORD = 0x0A;
         /// <summary> LoadDll返回结果：没找到SetFloat的入口</summary>
         public const int LOADDLL_CANNOT_FOUND_SETFLOAT = 0x0B;
-        /// <summary> LoadDll返回结果：没找到SetDouble的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETDOUBLE = 0x0C;
+        /// <summary> LoadDll返回结果：没找到SetFeq的入口</summary>
+        public const int LOADDLL_CANNOT_FOUND_SETFEQ = 0x0C;
         /// <summary> LoadDll返回结果：没找到SetEnable的入口</summary>
         public const int LOADDLL_CANNOT_FOUND_SETENABLE = 0x0D;
         /// <summary> LoadDll返回结果：没找到BeforeRunLadder的入口</summary>
@@ -311,9 +311,17 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 设置时间速率
         /// </summary>
-        /// <param name="timerate">时间速率，越小越快</param>
+        /// <param name="timerate">时间速率，越小越快，但精度越差</param>
         [DllImport("simu.dll", EntryPoint = "SetClockRate")]
         private static extern void SetClockRate(int timerate);
+
+        /// <summary>
+        /// 设置位数
+        /// </summary>
+        /// <param name="basebit">位数</param>
+        [DllImport("simu.dll", EntryPoint = "SetBaseBit")]
+        private static extern void SetBaseBit(int basebit);
+
         #endregion
         
         /// <summary>
@@ -427,6 +435,8 @@ namespace SamSoarII.Simulation.Core
         [HandleProcessCorruptedStateExceptions]
         private void _SimulateThread()
         {
+            PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+            SetBaseBit(device.BitNumber);
             SetClockRate(50);
             // 初始化
             InitRunLadder();
@@ -466,7 +476,9 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         public void _SimulateThread_Chart()
         {
-            SetClockRate(5);
+            PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+            SetBaseBit(device.BitNumber);
+            SetClockRate(1);
             InitRunLadder();
             InitClock(TimeStart);
             // 当前时间

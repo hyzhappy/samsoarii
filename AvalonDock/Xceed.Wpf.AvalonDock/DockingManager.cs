@@ -1279,15 +1279,13 @@ namespace Xceed.Wpf.AvalonDock
 #endif
             if (_logicalChildren.Select(ch => ch.GetValueOrDefault<object>()).Contains(element))
                 return;
-
-
-            if (element is UserControl)
+            
+            if (element is FrameworkElement)
             {
-                UserControl userctrl = (UserControl)(element);
-                if (userctrl.Parent != null)
+                FrameworkElement ctrl = (FrameworkElement)element;
+                if (ctrl.Parent != null)
                     return;
             }
-
             _logicalChildren.Add(new WeakReference(element));
             AddLogicalChild(element);
         }
@@ -1527,8 +1525,10 @@ namespace Xceed.Wpf.AvalonDock
             var contentModelAsAnchorable = contentModel as LayoutAnchorable;
             if (contentModelAsAnchorable != null &&
                 contentModelAsAnchorable.IsAutoHidden)
+            {
                 contentModelAsAnchorable.ToggleAutoHide();
-
+                contentModelAsAnchorable.IsFloat = true;
+            }
             var parentPane = contentModel.Parent as ILayoutPane;
             var parentPaneAsPositionableElement = contentModel.Parent as ILayoutPositionableElement;
             var parentPaneAsWithActualSize = contentModel.Parent as ILayoutPositionableElementWithActualSize;
@@ -1628,6 +1628,11 @@ namespace Xceed.Wpf.AvalonDock
 
         internal void StartDraggingFloatingWindowForPane(LayoutAnchorablePane paneModel)
         {
+            foreach (LayoutAnchorable lanch in paneModel.Children)
+            {
+                lanch.IsFloat = true;
+            }
+
             if (paneModel.Children.Any(c => !c.CanFloat))
                 return;
             var paneAsPositionableElement = paneModel as ILayoutPositionableElement;
@@ -1637,9 +1642,7 @@ namespace Xceed.Wpf.AvalonDock
             double fwHeight = paneAsPositionableElement.FloatingHeight;
             double fwLeft = paneAsPositionableElement.FloatingLeft;
             double fwTop = paneAsPositionableElement.FloatingTop;
-
-
-
+            
             if (fwWidth == 0.0)
                 fwWidth = paneAsWithActualSize.ActualWidth;
             if (fwHeight == 0.0)
@@ -1832,25 +1835,26 @@ namespace Xceed.Wpf.AvalonDock
                     }
                 }
             }
-
-            foreach (var areaHost in this.FindVisualChildren<LayoutDocumentPaneControl>())
+            if (!(draggingWindow is LayoutAnchorableFloatingWindowControl))
             {
-                _areas.Add(new DropArea<LayoutDocumentPaneControl>(
-                    areaHost,
-                    DropAreaType.DocumentPane));
-            }
-
-            foreach (var areaHost in this.FindVisualChildren<LayoutDocumentPaneGroupControl>())
-            {
-                var documentGroupModel = areaHost.Model as LayoutDocumentPaneGroup;
-                if (documentGroupModel.Children.Where(c => c.IsVisible).Count() == 0)
+                foreach (var areaHost in this.FindVisualChildren<LayoutDocumentPaneControl>())
                 {
-                    _areas.Add(new DropArea<LayoutDocumentPaneGroupControl>(
+                    _areas.Add(new DropArea<LayoutDocumentPaneControl>(
                         areaHost,
-                        DropAreaType.DocumentPaneGroup));
+                        DropAreaType.DocumentPane));
+                }
+                foreach (var areaHost in this.FindVisualChildren<LayoutDocumentPaneGroupControl>())
+                {
+                    var documentGroupModel = areaHost.Model as LayoutDocumentPaneGroup;
+                    if (documentGroupModel.Children.Where(c => c.IsVisible).Count() == 0)
+                    {
+                        _areas.Add(new DropArea<LayoutDocumentPaneGroupControl>(
+                            areaHost,
+                            DropAreaType.DocumentPaneGroup));
+                    }
                 }
             }
-
+            
             return _areas;
         }
 

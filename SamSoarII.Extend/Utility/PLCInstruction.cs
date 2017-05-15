@@ -238,6 +238,10 @@ namespace SamSoarII.Extend.Utility
                     case "DTCH":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
                         break;
+                    // (rwW)
+                    case "TRD": case "TWR":
+                        this.flag1 = ToCStyle(args[1], "rw", "WORD");
+                        break;
                     // (wB, rW)
                     case "SET": case "SETIM": case "RST": case "RSTIM":
                         this.flag1 = ToCStyle(args[1], "w", "BIT");
@@ -669,6 +673,8 @@ namespace SamSoarII.Extend.Utility
         /// <returns></returns>
         private string ToCStylePointer(string var)
         {
+            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
+            if (!m1.Success) return var;
             if (var.Equals(String.Empty))
                 return String.Empty;
             // 找到最后一个字母

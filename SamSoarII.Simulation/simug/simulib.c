@@ -9,8 +9,8 @@
 #include "simulib.h"
 
 // externed from simuc.h
-// Bit Number of WORD
-extern int BaseBit;
+// Bit number of WORD
+extern int basebit;
 // Register Memorys
 extern int32_t XBit[128];
 extern int32_t YBit[128];
@@ -76,6 +76,8 @@ int32_t _addw(int32_t ia, int32_t ib)
 {
 	// calculate the result
 	int32_t ic = ia + ib;
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	// convert to unsigned format
 	uint32_t _ia = (uint32_t)(ia);
 	uint32_t _ib = (uint32_t)(ib);
@@ -93,6 +95,8 @@ int32_t _addw(int32_t ia, int32_t ib)
 int64_t _addd(int64_t ia, int64_t ib)
 {
 	int64_t ic = ia + ib;
+	ic <<= 64 - basebit * 2;
+	ic >>= 64 - basebit * 2;
 	uint64_t _ia = (uint64_t)(ia);
 	uint64_t _ib = (uint64_t)(ib);
 	uint64_t _ic = (uint64_t)(ic);
@@ -115,6 +119,8 @@ double _addf(double ia, double ib)
 int32_t _subw(int32_t ia, int32_t ib)
 {
 	int32_t ic = ia - ib;
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	uint32_t _ia = (uint32_t)(ia);
 	uint32_t _ib = (uint32_t)(ib);
 	uint32_t _ic = (uint32_t)(ic);
@@ -128,6 +134,8 @@ int32_t _subw(int32_t ia, int32_t ib)
 int64_t _subd(int64_t ia, int64_t ib)
 {
 	int64_t ic = ia - ib;
+	ic <<= 64 - basebit * 2;
+	ic >>= 64 - basebit * 2;
 	uint64_t _ia = (uint64_t)(ia);
 	uint64_t _ib = (uint64_t)(ib);
 	uint64_t _ic = (uint64_t)(ic);
@@ -152,6 +160,13 @@ int64_t _mulwd(int32_t ia, int32_t ib)
 	int64_t _ia = (int64_t)(ia);
 	int64_t _ib = (int64_t)(ib);
 	int64_t ic = _ia * _ib;
+	int32_t ich = (ic >> 32);
+	int32_t icl = (ic & 0xffffffff);
+	ich <<= 32 - basebit;
+	ich >>= 32 - basebit;
+	icl <<= 32 - basebit;
+	icl >>= 32 - basebit;
+	ic = ((((int64_t)(ich)) << 32) | icl);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
 	return ic;
@@ -161,6 +176,8 @@ int64_t _mulwd(int32_t ia, int32_t ib)
 int32_t _mulww(int32_t ia, int32_t ib)
 {
 	int32_t ic = ia * ib;
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	uint32_t _ia = (uint32_t)(ia < 0 ? -ia : ia);
 	uint32_t _ib = (uint32_t)(ib < 0 ? -ib : ib);
 	// get the maximum number in 64-bit integer
@@ -175,6 +192,8 @@ int32_t _mulww(int32_t ia, int32_t ib)
 int64_t _muldd(int64_t ia, int64_t ib)
 {
 	int64_t ic = ia * ib;
+	ic <<= 64 - basebit * 2;
+	ic >>= 64 - basebit * 2;
 	uint64_t _ia = (uint32_t)(ia < 0 ? -ia : ia);
 	uint64_t _ib = (uint32_t)(ib < 0 ? -ib : ib);
 	// get the maximum number in 64-bit integer
@@ -213,6 +232,10 @@ int64_t _divwd(int32_t ia, int32_t ib)
 		int64_t ic = 0;
 		int32_t div = ia / ib;
 		int32_t mod = ia % ib;
+		div <<= 32 - basebit;
+		div >>= 32 - basebit;
+		mod <<= 32 - basebit;
+		mod >>= 32 - basebit;
 		ic = mod;
 		ic <<= 32;
 		ic |= div;
@@ -238,6 +261,8 @@ int32_t _divww(int32_t ia, int32_t ib)
 	else
 	{
 		int32_t ic = ia / ib;
+		ic <<= 32 - basebit;
+		ic >>= 32 - basebit;
 		MBit[8169] = 0;
 		MBit[8170] = (ic < 0);
 		MBit[8171] = (ic == 0);
@@ -260,6 +285,8 @@ int64_t _divdd(int64_t ia, int64_t ib)
 	else
 	{
 		int64_t ic = ia / ib;
+		ic <<= 64 - basebit * 2;
+		ic >>= 64 - basebit * 2;
 		MBit[8169] = 0;
 		MBit[8170] = (ic < 0);
 		MBit[8171] = (ic == 0);
@@ -272,6 +299,8 @@ int64_t _divdd(int64_t ia, int64_t ib)
 int32_t _incw(int32_t ia)
 {
 	int32_t ic = ia + 1;
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	MBit[8169] = (ia > 0 && ic < 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
@@ -282,6 +311,8 @@ int32_t _incw(int32_t ia)
 int64_t _incd(int64_t ia)
 {
 	int64_t ic = ia + 1;
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	MBit[8169] = (ia > 0 && ic < 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
@@ -292,6 +323,8 @@ int64_t _incd(int64_t ia)
 int32_t _decw(int32_t ia)
 {
 	int32_t ic = ia - 1;
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	MBit[8169] = (ia < 0 && ic > 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
@@ -302,6 +335,8 @@ int32_t _decw(int32_t ia)
 int64_t _decd(int64_t ia)
 {
 	int64_t ic = ia - 1;
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	MBit[8169] = (ia < 0 && ic > 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
@@ -309,7 +344,7 @@ int64_t _decd(int64_t ia)
 }
 
 // PI (The rate between radios and perimeter)
-double PI = acos(-1); 
+double PI = 3.1415926; 
 
 // sin a 64-bit float (radian)
 double _sin(double ia)
@@ -360,6 +395,8 @@ double _exp(double ia)
 int32_t _DWORD_to_WORD(int64_t ia)
 {
 	int32_t ic = (int32_t)(ia);
+	ic <<= 32 - basebit;
+	ic >>= 32 - basebit;
 	MBit[8170] = ((ia >> 32) != 0);
 	return ic;
 }
@@ -368,6 +405,8 @@ int32_t _DWORD_to_WORD(int64_t ia)
 int64_t _WORD_to_DWORD(int32_t ia)
 {
 	int64_t ic = (int64_t)(ia);
+	ic <<= 64 - basebit * 2;
+	ic >>= 64 - basebit * 2;
 	return ic;
 }
 
@@ -382,6 +421,8 @@ double _DWORD_to_FLOAT(int64_t ia)
 int64_t _FLOAT_to_ROUND(double ia)
 {
 	int64_t ic = round(ia);
+	ic <<= 64 - basebit * 2;
+	ic >>= 64 - basebit * 2;
 	return ic;
 }
 
@@ -389,6 +430,8 @@ int64_t _FLOAT_to_ROUND(double ia)
 int64_t _FLOAT_to_TRUNC(double ia)
 {
 	int64_t ic = (int64_t)(ia);
+	ic <<= 64 - basebit * 2;
+	ic >>= 64 - basebit * 2;
 	return ic;
 }
 
@@ -397,7 +440,10 @@ int32_t _WORD_to_BCD(int32_t itg)
 {
 	// M8168 : BCD converting error
 	MBit[8168] = (itg < 0 || itg > 9999);
-	return (itg % 10) | ((itg / 10 % 10) << 4) | ((itg / 100 % 10) << 8) | ((itg / 1000 % 10) << 12);
+	int32_t ret = (itg % 10) | ((itg / 10 % 10) << 4) | ((itg / 100 % 10) << 8) | ((itg / 1000 % 10) << 12);
+	ret <<= 32 - basebit;
+	ret >>= 32 - basebit;
+	return ret;
 }
 
 // Convert BCD code to 32-Bit integer
@@ -408,13 +454,18 @@ int32_t _BCD_to_WORD(int32_t BCD)
 	MBit[8168] |= (((BCD >> 8) & 15) > 9);
 	MBit[8168] |= (((BCD >> 4) & 15) > 9);
 	MBit[8168] |= ((BCD & 15) > 9);
-	return ((BCD >> 12) & 15) * 1000 + ((BCD >> 8) & 15) * 100 + ((BCD >> 4) & 15) * 10 + (BCD & 15);
+	int32_t ret = ((BCD >> 12) & 15) * 1000 + ((BCD >> 8) & 15) * 100 + ((BCD >> 4) & 15) * 10 + (BCD & 15);
+	ret <<= 32 - basebit;
+	ret >>= 32 - basebit;
+	return ret;
 }
 
 // shift 32-Bit integer to right
 uint32_t _shrw(uint32_t ia, uint32_t ib)
 {
 	uint32_t ic = (ia >> ib);
+	if (basebit < 32)
+		ic &= (1 << basebit) - 1;
 	// M8166 : over bit 
 	MBit[8166] = ib <= 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
@@ -425,6 +476,8 @@ uint32_t _shrw(uint32_t ia, uint32_t ib)
 uint64_t _shrd(uint64_t ia, uint64_t ib)
 {
 	uint64_t ic = (ia >> ib);
+	if (basebit < 32)
+		ic &= (1L << (basebit*2)) - 1;
 	MBit[8166] = ib <= 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
 	return ic;
@@ -434,6 +487,8 @@ uint64_t _shrd(uint64_t ia, uint64_t ib)
 uint32_t _shlw(uint32_t ia, uint32_t ib)
 {
 	uint32_t ic = (ia << ib);
+	if (basebit < 32)
+		ic &= (1 << basebit) - 1;
 	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) & 0x80000000) >> 31);
 	MBit[8167] = (ic == 0);
 	return ic;
@@ -443,6 +498,8 @@ uint32_t _shlw(uint32_t ia, uint32_t ib)
 uint64_t _shld(uint64_t ia, uint64_t ib)
 {
 	uint64_t ic = (ia << ib);
+	if (basebit < 32)
+		ic &= (1L << (basebit*2)) - 1;
 	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) & 0x8000000000000000L) >> 63);
 	MBit[8167] = (ic == 0);
 	return ic;
@@ -453,6 +510,8 @@ uint32_t _rorw(uint32_t ia, uint32_t ib)
 {
 	ib %= 32;
 	uint32_t ic = (ia >> ib) | (ia << (32 - ib));
+	if (basebit < 32)
+		ic &= (1 << basebit) - 1;
 	MBit[8166] = ib == 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
 	return ic;
@@ -464,6 +523,8 @@ uint64_t _rord(uint64_t ia, uint64_t ib)
 {
 	ib %= 64;
 	uint64_t ic = (ia >> ib) | (ia << (64 - ib));
+	if (basebit < 32)
+		ic &= (1L << (basebit*2)) - 1;
 	MBit[8166] = ib == 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
 	return ic;
@@ -474,6 +535,8 @@ uint32_t _rolw(uint32_t ia, uint32_t ib)
 {
 	ib %= 32;
 	uint32_t ic = (ia << ib) | (ia >> (32 - ib));
+	if (basebit < 32)
+		ic &= (1 << basebit) - 1;
 	MBit[8166] = ib == 0 ? 0 : (((ia << (ib - 1)) & 0x80000000) >> 31);
 	MBit[8167] = (ic == 0);
 	return ic;
@@ -484,6 +547,8 @@ uint64_t _rold(uint64_t ia, uint64_t ib)
 {
 	ib %= 32;
 	uint64_t ic = (ia << ib) | (ia >> (64 - ib));
+	if (basebit < 32)
+		ic &= (1L << (basebit*2)) - 1;
 	MBit[8166] = ib == 0 ? 0 : (((ia << (ib - 1)) & 0x8000000000000000L) >> 63);
 	MBit[8167] = (ic == 0);
 	return ic;
@@ -738,7 +803,7 @@ void _trd(int32_t* d)
 	d[5] = _WORD_to_BCD(rtimer->tm_sec);
 	d[6] = 0;
 	d[7] = _WORD_to_BCD(rtimer->tm_wday);
-	free(rtimer);
+	//free(rtimer);
 }
 
 // Set the system real time

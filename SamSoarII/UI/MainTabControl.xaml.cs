@@ -89,10 +89,10 @@ namespace SamSoarII.AppMain.UI
         public void ShowItem(ITabItem item)
         {
             LayoutDocument ldoc = null;
-            if (item is UserControl)
+            if (item is FuncBlockViewModel)
             {
-                UserControl uctrl = (UserControl)(item);
-                uctrl.GotFocus += OnTabGotFocus;
+                FuncBlockViewModel fbvmodel = (FuncBlockViewModel)item;
+                fbvmodel.CodeTextBox.Focus();
             }
             if (!TabItemCollection.Contains(item))
             {
@@ -101,8 +101,19 @@ namespace SamSoarII.AppMain.UI
                 ldoc.Title = item.TabHeader;
                 if (item is LadderDiagramViewModel)
                 {
-                    MainTabDiagramItem mtditem = new MainTabDiagramItem((IProgram)item, ViewMode);
-                    DiagramCollection.Add(mtditem);
+
+                    IEnumerable<MainTabDiagramItem> fit = DiagramCollection.Where(
+                        (MainTabDiagramItem _mtditem) => { return _mtditem.LDVM_ladder == item; });
+                    MainTabDiagramItem mtditem = null;
+                    if (fit.Count() == 0)
+                    {
+                        mtditem = new MainTabDiagramItem((IProgram)item, ViewMode);
+                        DiagramCollection.Add(mtditem);
+                    }
+                    else
+                    {
+                        mtditem = fit.First();
+                    }
                     ldoc.Content = mtditem;
                 }
                 else
@@ -121,6 +132,15 @@ namespace SamSoarII.AppMain.UI
             SelectedItem = item;
             SelectedContentIndex = ldocid;
         }
+
+        public void RenameItem(ITabItem item)
+        {
+            if (_lDocDict.ContainsKey(item))
+            {
+                LayoutDocument ldoc = _lDocDict[item];
+                ldoc.Title = item.TabHeader;
+            }
+        }
         
         public void CloseItem(ITabItem item)
         {
@@ -130,15 +150,17 @@ namespace SamSoarII.AppMain.UI
                 Children.Remove(ldoc);
                 _lDocDict.Remove(item);
                 TabItemCollection.Remove(item);
+                /*
                 if (item is LadderDiagramViewModel)
                 {
                     MainTabDiagramItem[] fit = DiagramCollection.Where(
-                        (MainTabDiagramItem mtditem) => { return mtditem.LA_Ladder.Content == item; }).ToArray();
+                        (MainTabDiagramItem mtditem) => { return mtditem.LDVM_ladder == item; }).ToArray();
                     foreach (MainTabDiagramItem mtditem in fit)
                     {
                         DiagramCollection.Remove(mtditem);
                     }
                 }
+                */
             }
         }
 

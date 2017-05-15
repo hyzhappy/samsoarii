@@ -171,6 +171,9 @@
     <Compile Include="UI\Element\ElementList\ElementListHelp\ELementStackPanel.cs" />
     <Compile Include="UI\Element\ElementList\ElementListHelp\NavigateToNetworkEventArgs.cs" />
     <Compile Include="UI\Element\IElementInitializeModel.cs" />
+    <Compile Include="UI\ErrorReportWindow.xaml.cs">
+      <DependentUpon>ErrorReportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\FindWindow.xaml.cs">
       <DependentUpon>FindWindow.xaml</DependentUpon>
     </Compile>
@@ -198,6 +201,15 @@
     </Compile>
     <Compile Include="UI\Monitor\UserInterface\QuickAddElementDialog.xaml.cs">
       <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectTreeViewItem.xaml.cs">
+      <DependentUpon>ProjectTreeViewItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ReplaceReportWindow.xaml.cs">
+      <DependentUpon>ReplaceReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ReplaceWindow.xaml.cs">
+      <DependentUpon>ReplaceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Util\ElementAddressHelper.cs" />
     <Compile Include="UserSetting\SettingManager.cs" />
@@ -411,6 +423,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\ErrorReportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\FindWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -498,6 +514,18 @@
     <Page Include="UI\ProjectPropertyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectTreeViewItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ReplaceReportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ReplaceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

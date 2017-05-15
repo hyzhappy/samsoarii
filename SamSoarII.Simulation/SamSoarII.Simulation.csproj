@@ -197,6 +197,10 @@
       <Project>{165052f6-7c49-4d44-bafe-a3575b2d1191}</Project>
       <Name>SamSoarII.Extend</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.PLCDevice\SamSoarII.PLCDevice.csproj">
+      <Project>{6ddbbac0-a051-43ac-be0d-d70227d61687}</Project>
+      <Name>SamSoarII.PLCDevice</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.UserInterface\SamSoarII.UserInterface.csproj">
       <Project>{76F2627D-B161-4E88-AE31-043DC7C8DA61}</Project>
       <Name>SamSoarII.UserInterface</Name>

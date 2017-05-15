@@ -78,17 +78,20 @@ namespace SamSoarII.AppMain.Project
         /// <summary>
         /// 初始化构造函数 
         /// </summary>
-        public ModbusTableViewModel()
+        public ModbusTableViewModel(ProjectModel _parent)
         {
             InitializeComponent();
             //InitializeDialog();
+            parent = _parent;
             Current = null;
             DataContext = this;
             ModelChanged += OnModelChanged;
         }
-        
+
         #region Numbers
         
+        private ProjectModel parent;
+
         #region Models & Tables
 
         private List<ModbusTableModel> models = new List<ModbusTableModel>();
@@ -134,6 +137,7 @@ namespace SamSoarII.AppMain.Project
                     ModbusTableModel model = models[i];
                     if (model == value)
                     {
+                        LB_Tables.SelectedIndex = i;
                         currentmodel = model;
                         currentindex = i;
                         B_RemoveModel.IsEnabled = true;
@@ -206,11 +210,15 @@ namespace SamSoarII.AppMain.Project
             dialog.Closed += OnDialogClosed;
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
-        
+
         #endregion
 
         #region Device
-        public Device PLCDevice { get; set; } = new FGs16MRDevice();
+         
+        public Device PLCDevice
+        {
+            get { return parent.CurrentDevice; }
+        }
 
         #endregion
 
@@ -473,6 +481,11 @@ namespace SamSoarII.AppMain.Project
         {
             string name = dialog.TB_Name.Text;
             string comment = dialog.TB_Comment.Text;
+            if (name.Equals(String.Empty))
+            {
+                MessageBox.Show("表格名称不能为空！");
+                return;
+            }
             IEnumerable<ModbusTableModel> fit = models.Where(
                 (ModbusTableModel model) => { return model.Name.Equals(name); });
             switch (DialogType)
@@ -592,7 +605,7 @@ namespace SamSoarII.AppMain.Project
                             case "0x02（读位）":
                             case "0x05（写位）":
                             case "0x0F（写多位）":
-                                if (!check1)
+                                if (!check2)
                                 {
                                     throw new ValueParseException("需要输入位寄存器！");
                                 }
@@ -602,7 +615,7 @@ namespace SamSoarII.AppMain.Project
                             case "0x04（读字）":
                             case "0x06（写字）":
                             case "0x10（写多字）":
-                                if (!check2)
+                                if (!check1)
                                 {
                                     throw new ValueParseException("需要输入单字寄存器！");
                                 }
@@ -718,6 +731,27 @@ namespace SamSoarII.AppMain.Project
     {
         public ModbusTableModel()
         {
+        }
+
+        public bool IsVaild
+        {
+            get
+            {
+                foreach (ModbusTable mtable in Tables)
+                {
+                    if (mtable.SlaveID.Equals(String.Empty))
+                        return false;
+                    if (mtable.HandleCode.Equals(String.Empty))
+                        return false;
+                    if (mtable.SlaveCount.Equals(String.Empty))
+                        return false;
+                    if (mtable.SlaveRegister.Equals(String.Empty))
+                        return false;
+                    if (mtable.MasteRegister.Equals(String.Empty))
+                        return false;
+                }
+                return true;
+            }
         }
 
         #region Numbers

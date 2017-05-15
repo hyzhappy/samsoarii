@@ -199,6 +199,14 @@
     </Style>
 
     <Style TargetType="avalonDockControls:AnchorablePaneTitle">
+        <!--Style.Triggers>
+            <Trigger Property="ModelFocus" Value="True">
+                <Setter Property="Background" Value="Blue"/>
+            </Trigger>
+            <Trigger Property="ModelFocus" Value="False">
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+        </-->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -616,6 +624,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
+                            
                             <Border x:Name="Header">
                                 <avalonDockControls:AnchorablePaneTitle Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"/>
                             </Border>

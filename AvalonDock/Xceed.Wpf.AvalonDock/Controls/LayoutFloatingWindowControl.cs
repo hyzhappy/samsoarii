@@ -268,6 +268,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 _attachDrag = false;
 
                 IntPtr lParam = new IntPtr(((int)mousePosition.X & (int)0xFFFF) | (((int)mousePosition.Y) << 16));
+
                 Win32Helper.SendMessage(windowHandle, Win32Helper.WM_NCLBUTTONDOWN, new IntPtr(Win32Helper.HT_CAPTION), lParam);
             }
         }

@@ -24,16 +24,19 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             _oldRowCount = _network.RowCount;
             _network.RowCount = _newRowCount;
+            //_network.INVModel.Setup(_network);
         }
 
         public void Redo()
         {
             _network.RowCount = _newRowCount;
+            //_network.INVModel.Setup(_network);
         }
 
         public void Undo()
         {
             _network.RowCount = _oldRowCount;
+            //_network.INVModel.Setup(_network);
         }
     }
 }

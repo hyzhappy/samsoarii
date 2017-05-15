@@ -40,7 +40,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 vline.Y++;
                 _network.ReplaceVerticalLine(vline);
             }
-
+            _network.INVModel.Setup(_network);
         }
 
         public void Redo()
@@ -66,6 +66,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 vline.Y--;
                 _network.ReplaceVerticalLine(vline);
             }
+            _network.INVModel.Setup(_network);
         }
     }
 }

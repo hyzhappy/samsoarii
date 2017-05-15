@@ -10,7 +10,6 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkReplaceElementsCommand : IUndoableCommand
     {
-
         private LadderNetworkViewModel _network;
         private HashSet<BaseViewModel> _elements;
         private HashSet<VerticalLineViewModel> _vlines;
@@ -35,7 +34,27 @@ namespace SamSoarII.AppMain.LadderCommand
             _oldvlines = new HashSet<VerticalLineViewModel>();
         }
 
-        public void Execute()
+        public BaseViewModel PopOldElement()
+        {
+            BaseViewModel bvmodel = _oldelements.FirstOrDefault();
+            if (bvmodel != null)
+            {
+                _oldelements.Remove(bvmodel);
+            }
+            return bvmodel;
+        }
+        
+        public BaseViewModel PopNewElement()
+        {
+            BaseViewModel bvmodel = _elements.FirstOrDefault();
+            if (bvmodel != null)
+            {
+                _elements.Remove(bvmodel);
+            }
+            return bvmodel;
+        }
+
+        public virtual void Execute()
         {
             foreach(var oldele in _oldelements)
             {
@@ -53,14 +72,15 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
+            _network.INVModel.Setup(_network);
         }
 
-        public void Redo()
+        public virtual void Redo()
         {
             Execute();
         }
 
-        public void Undo()
+        public virtual void Undo()
         {
             foreach (var ele in _elements)
             {
@@ -70,7 +90,6 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.RemoveVerticalLine(vline);
             }
-
             foreach (var oldele in _oldelements)
             {
                 _network.ReplaceElement(oldele);
@@ -79,6 +98,8 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(oldvline);
             }
+            _network.INVModel.Setup(_network);
         }
     }
+    
 }

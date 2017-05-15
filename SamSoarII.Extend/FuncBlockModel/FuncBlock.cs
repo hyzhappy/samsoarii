@@ -548,13 +548,14 @@ namespace SamSoarII.Extend.FuncBlockModel
                             int hstart = dividelabel + 1;
                             int hend = i;
                             string htext = text.Substring(hstart, hend - hstart + 1);
-                            Match m1 = Regex.Match(htext, @"\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\((.*)\)\s*$");
+                            Match m1 = Regex.Match(htext, @"([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\((.*)\)\s*$");
                             // 如果符合函数头部的正则表达式格式
                             if (m1.Success)
                             {
                                 hstart += m1.Index;
                                 //hstart = hend - m1.Value.Length + 1;
                                 FuncModel func = new FuncModel();
+                                func.Offset = hstart;
                                 func.ReturnType = Regex.Replace(m1.Groups[1].Value, @"\s*", String.Empty);
                                 func.Name = m1.Groups[3].Value;
                                 if (m1.Groups[4].Value.Length == 0)

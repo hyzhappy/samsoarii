@@ -17,6 +17,7 @@ namespace Xceed.Wpf.AvalonDock.Global
         #region Default dock of Anchorable
         static private Dictionary<string, string> _defaultDockWidthAnchorable = new Dictionary<string, string>();
         static private Dictionary<string, string> _defaultDockHeighAnchorable = new Dictionary<string, string>();
+
         static public void AddDefaultDockWidthAnchorable(string titlename, string dockwidth)
         {
             if (titlename == null) return;
@@ -29,6 +30,7 @@ namespace Xceed.Wpf.AvalonDock.Global
                 _defaultDockWidthAnchorable[titlename] = dockwidth;
             }
         }
+
         static public void AddDefaultDockHeighAnchorable(string titlename, string dockwidth)
         {
             if (titlename == null) return;
@@ -41,6 +43,7 @@ namespace Xceed.Wpf.AvalonDock.Global
                 _defaultDockHeighAnchorable[titlename] = dockwidth;
             }
         }
+
         static public GridLength[] GetDefaultDockAnchorable(string titlename)
         {
             GridLength[] ret = new GridLength[2];
@@ -64,6 +67,7 @@ namespace Xceed.Wpf.AvalonDock.Global
             ret[1] = ParseGridLength(heighst); 
             return ret; 
         }
+
         static private GridLength ParseGridLength(string st)
         {
             Match m1 = Regex.Match(st, @"^\*$");
@@ -96,6 +100,37 @@ namespace Xceed.Wpf.AvalonDock.Global
 
             return new GridLength(1, GridUnitType.Star);
         }
+        #endregion
+
+        #region Default IsDock of Anchorable
+        static private Dictionary<string, bool> _defaultIsDockAnchorable = new Dictionary<string, bool>();
+
+        static public void AddDefaultIsDockAnchorable(string titlename, bool isdock)
+        {
+            if (titlename == null) return;
+            if (!_defaultIsDockAnchorable.ContainsKey(titlename))
+            {
+                _defaultIsDockAnchorable.Add(titlename, isdock);
+            }
+            else
+            {
+                _defaultIsDockAnchorable[titlename] = isdock;
+            }
+        }
+
+        static public bool GetDefaultIsDockAnchorable(string titlename)
+        {
+            if (titlename == null) return false;
+            if (!_defaultIsDockAnchorable.ContainsKey(titlename))
+            {
+                return false;
+            }
+            else
+            {
+                return _defaultIsDockAnchorable[titlename];
+            }
+        }
+
         #endregion
 
         #region Default side of Anchorable
@@ -142,7 +177,9 @@ namespace Xceed.Wpf.AvalonDock.Global
 
         #region Default FloatWindow Size of Anchorable
         static private Dictionary<string, string> _defaultFloatWidthAnchorable = new Dictionary<string, string>();
+
         static private Dictionary<string, string> _defaultFloatHeighAnchorable = new Dictionary<string, string>();
+
         static public void AddDefaultFloatWidthAnchorable(string titlename, string floatwidth)
         {
             if (_defaultFloatWidthAnchorable.ContainsKey(titlename))
@@ -154,6 +191,7 @@ namespace Xceed.Wpf.AvalonDock.Global
                 _defaultFloatWidthAnchorable.Add(titlename, floatwidth);
             }
         }
+
         static public void AddDefaultFloatHeighAnchorable(string titlename, string floatwidth)
         {
             if (_defaultFloatHeighAnchorable.ContainsKey(titlename))
@@ -165,6 +203,7 @@ namespace Xceed.Wpf.AvalonDock.Global
                 _defaultFloatHeighAnchorable.Add(titlename, floatwidth);
             }
         }
+
         static public double[] GetDefaultFloatSizeAnchorable(string titlename)
         {
             double floatwidth = 0.0;
@@ -180,6 +219,37 @@ namespace Xceed.Wpf.AvalonDock.Global
             double[] ret = { floatwidth, floatheigh };
             return ret;
         }
+        #endregion
+        
+        #region Default IsFloat of Anchorable
+        static private Dictionary<string, bool> _defaultIsFloatAnchorable = new Dictionary<string, bool>();
+
+        static public void AddDefaultIsFloatAnchorable(string titlename, bool isdock)
+        {
+            if (titlename == null) return;
+            if (!_defaultIsFloatAnchorable.ContainsKey(titlename))
+            {
+                _defaultIsFloatAnchorable.Add(titlename, isdock);
+            }
+            else
+            {
+                _defaultIsFloatAnchorable[titlename] = isdock;
+            }
+        }
+
+        static public bool GetDefaultIsFloatAnchorable(string titlename)
+        {
+            if (titlename == null) return false;
+            if (!_defaultIsFloatAnchorable.ContainsKey(titlename))
+            {
+                return false;
+            }
+            else
+            {
+                return _defaultIsFloatAnchorable[titlename];
+            }
+        }
+
         #endregion
 
         #region Default AutoHide Size of Anchorable
@@ -223,27 +293,38 @@ namespace Xceed.Wpf.AvalonDock.Global
             return ret;
         }
         #endregion
-
+        
         static public void Save()
         {
             XDocument xdoc = new XDocument();
             XElement node_Root = new XElement("LayoutSetting");
+            XElement node_ID = new XElement("IsDock");
             XElement node_DW = new XElement("DockWidth");
             XElement node_DH = new XElement("DockHeight");
             XElement node_S = new XElement("Side");
+            XElement node_IF = new XElement("IsFloat");
             XElement node_FW = new XElement("FloatWidth");
             XElement node_FH = new XElement("FloatHeight");
             XElement node_AW = new XElement("AutoHideWidth");
             XElement node_AH = new XElement("AutoHideHeight");
+            node_Root.Add(node_ID);
             node_Root.Add(node_DW);
             node_Root.Add(node_DH);
             node_Root.Add(node_S);
+            node_Root.Add(node_IF);
             node_Root.Add(node_FW);
             node_Root.Add(node_FH);
             node_Root.Add(node_AW);
             node_Root.Add(node_AH);
 
             XElement node_KVP = null;
+            foreach (KeyValuePair<string, bool> kvp in _defaultIsDockAnchorable)
+            {
+                node_KVP = new XElement("KeyValuePair");
+                node_KVP.SetAttributeValue("Key", kvp.Key);
+                node_KVP.SetAttributeValue("Value", kvp.Value);
+                node_ID.Add(node_KVP);
+            }
             foreach (KeyValuePair<string, string> kvp in _defaultDockWidthAnchorable)
             {
                 node_KVP = new XElement("KeyValuePair");
@@ -264,6 +345,13 @@ namespace Xceed.Wpf.AvalonDock.Global
                 node_KVP.SetAttributeValue("Key", kvp.Key);
                 node_KVP.SetAttributeValue("Value", kvp.Value);
                 node_S.Add(node_KVP);
+            }
+            foreach (KeyValuePair<string, bool> kvp in _defaultIsFloatAnchorable)
+            {
+                node_KVP = new XElement("KeyValuePair");
+                node_KVP.SetAttributeValue("Key", kvp.Key);
+                node_KVP.SetAttributeValue("Value", kvp.Value);
+                node_IF.Add(node_KVP);
             }
             foreach (KeyValuePair<string, string> kvp in _defaultFloatWidthAnchorable)
             {
@@ -297,18 +385,25 @@ namespace Xceed.Wpf.AvalonDock.Global
             xdoc.Add(node_Root);
             xdoc.Save("layoutconfig.xml");
         }
-
         static public void Load()
         {
             XDocument xdoc = XDocument.Load("layoutconfig.xml");
             XElement node_Root = xdoc.Element("LayoutSetting");
+            XElement nodes_ID = node_Root.Element("IsDock");
             XElement nodes_DW = node_Root.Element("DockWidth");
             XElement nodes_DH = node_Root.Element("DockHeight");
             XElement nodes_S = node_Root.Element("Side");
+            XElement nodes_IF = node_Root.Element("IsFloat");
             XElement nodes_FW = node_Root.Element("FloatWidth");
             XElement nodes_FH = node_Root.Element("FloatHeight");
             XElement nodes_AW = node_Root.Element("AutoHideWidth");
             XElement nodes_AH = node_Root.Element("AutoHideHeight");
+            foreach (XElement node_KVP in nodes_ID.Elements("KeyValuePair"))
+            {
+                string key = node_KVP.Attribute("Key").Value as string;
+                bool value = bool.Parse(node_KVP.Attribute("Value").Value);
+                AddDefaultIsDockAnchorable(key, value);
+            }
             foreach (XElement node_KVP in nodes_DW.Elements("KeyValuePair"))
             {
                 string key = node_KVP.Attribute("Key").Value as string;
@@ -326,6 +421,12 @@ namespace Xceed.Wpf.AvalonDock.Global
                 string key = node_KVP.Attribute("Key").Value as string;
                 string value = node_KVP.Attribute("Value").Value as string;
                 AddDefaultSideAnchorable(key, value);
+            }
+            foreach (XElement node_KVP in nodes_IF.Elements("KeyValuePair"))
+            {
+                string key = node_KVP.Attribute("Key").Value as string;
+                bool value = bool.Parse(node_KVP.Attribute("Value").Value);
+                AddDefaultIsFloatAnchorable(key, value);
             }
             foreach (XElement node_KVP in nodes_FW.Elements("KeyValuePair"))
             {

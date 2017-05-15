@@ -10,7 +10,6 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkRemoveRowCommand : IUndoableCommand
     {
-
         private LadderNetworkViewModel _network;
 
         private int _rowNumber;
@@ -70,6 +69,7 @@ namespace SamSoarII.AppMain.LadderCommand
             }
             _oldRowCount = _network.RowCount;
             _network.RowCount--;
+            _network.INVModel.Setup(_network);
         }
 
         public void Undo()
@@ -98,6 +98,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
+            _network.INVModel.Setup(_network);
         }
     }
 }

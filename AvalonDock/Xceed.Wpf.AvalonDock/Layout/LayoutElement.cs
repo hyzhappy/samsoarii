@@ -116,10 +116,12 @@ namespace Xceed.Wpf.AvalonDock.Layout
             get
             {
                 var parent = Parent;
+
                 while (parent != null && (!(parent is ILayoutRoot)))
                 {
                     parent = parent.Parent;
                 }
+
                 return parent as ILayoutRoot;
             }
         }

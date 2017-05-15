@@ -34,7 +34,7 @@ namespace Xceed.Wpf.AvalonDock.Layout
         public LayoutAnchorControl AnchorControl
         {
             get; set;
-        } 
+        }
 
         #region IsVisible
         [XmlIgnore]
@@ -208,6 +208,8 @@ namespace Xceed.Wpf.AvalonDock.Layout
             RaisePropertyChanged("IsVisible");
             RaisePropertyChanged("IsHidden");
             NotifyIsVisibleChanged();
+            isdock = false;
+            isfloat = false;
         }
 
         public event EventHandler<CancelEventArgs> Hiding;
@@ -432,6 +434,36 @@ namespace Xceed.Wpf.AvalonDock.Layout
 
 
         #region AutoHide
+        private bool isdock = false;
+        public bool IsDock
+        {
+            get
+            {
+                return this.isdock;
+            }
+            set
+            {
+                this.isdock = value;
+                LayoutSetting.AddDefaultIsDockAnchorable(Title, isdock);
+                if (isdock) IsFloat = false;
+            }
+        }
+
+        private bool isfloat = false;
+        public bool IsFloat
+        {
+            get
+            {
+                return this.isfloat;
+            }
+            set
+            {
+                this.isfloat = value;
+                LayoutSetting.AddDefaultIsFloatAnchorable(Title, isfloat);
+                if (isfloat) IsDock = false;
+            }
+        }
+
         public void ToggleAutoHide()
         {
             #region Anchorable is already auto hidden
@@ -530,20 +562,22 @@ namespace Xceed.Wpf.AvalonDock.Layout
                         cnt.PreviousContainer = previousContainer;
                     }
                 }
-
-
+                
                 foreach (var anchorableToToggle in parentGroup.Children.ToArray())
                 {
                     previousContainer.Children.Add(anchorableToToggle);
                 }
 
                 parentSide.Children.Remove(parentGroup);
+                IsDock = true;
             }
             #endregion
             #region Anchorable is docked
             else if (Parent is LayoutAnchorablePane)
             {
                 IsActive = false;
+                IsDock = false;
+                IsFloat = false;
 
                 var root = Root;
                 var parentPane = Parent as LayoutAnchorablePane;
