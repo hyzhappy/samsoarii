@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.AppMain.Project;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,12 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class CommandManager
     {
+        private LadderDiagramViewModel ldvmodel;
+        public CommandManager() { }
+        public CommandManager(LadderDiagramViewModel LDVmodel)
+        {
+            ldvmodel = LDVmodel;
+        }
         private bool ismodify;
         public bool IsModify
         {
@@ -31,6 +38,7 @@ namespace SamSoarII.AppMain.LadderCommand
         public void Execute(IUndoableCommand command)
         {
             command.Execute();
+            InvokeLDNetwordsChangedEvent(command);
             UndoStack.Push(command);
             RedoStack.Clear();
             IsModify = true;
@@ -43,6 +51,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 var command = UndoStack.Pop();
                 RedoStack.Push(command);
                 command.Undo();
+                InvokeLDNetwordsChangedEvent(command);
                 IsModify = true;
             }
         }
@@ -54,7 +63,16 @@ namespace SamSoarII.AppMain.LadderCommand
                 var command = RedoStack.Pop();
                 UndoStack.Push(command);
                 command.Redo();
+                InvokeLDNetwordsChangedEvent(command);
                 IsModify = true;
+            }
+        }
+        private void InvokeLDNetwordsChangedEvent(IUndoableCommand command)
+        {
+            if (command is LadderDiagramReplaceNetworksCommand || command is LadderDiagramRemoveNetworksCommand
+                || command is LadderDiagramExchangeNetworkCommand)
+            {
+                ldvmodel.InvokeLDNetwordsEvent();
             }
         }
     }

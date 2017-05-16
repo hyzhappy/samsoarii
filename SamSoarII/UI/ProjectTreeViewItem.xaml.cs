@@ -577,7 +577,7 @@ namespace SamSoarII.AppMain.UI
         {
             switch (e.PropertyName)
             {
-                case "NetworkBrief":
+                case "NetworkMessage":
                     if (RelativeObject is LadderNetworkViewModel)
                     {
                         LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)RelativeObject;

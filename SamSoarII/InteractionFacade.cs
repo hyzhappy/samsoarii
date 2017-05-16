@@ -833,6 +833,10 @@ namespace SamSoarII.AppMain
             _mainTabControl.ShowItem(fbvmodel);
             fbvmodel.SetOffset(offset);
         }
+        private void InitializeLDNetwordsChangedHandle(LadderDiagramViewModel ldvmodel)
+        {
+            ldvmodel.LDNetwordsChanged += _projectTreeView.LDNetwordsChanged;
+        }
         public void CreateProject(string name, string fullFileName)
         {
             if (_projectModel != null && _projectModel.IsModify)
@@ -866,6 +870,7 @@ namespace SamSoarII.AppMain
                 _projectTreeView.TabItemOpened += OnTabOpened;
                 _projectTreeView.PTVHandle += OnGotPTVHandle;
                 _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+                InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowEditItem += OnTabOpened;
                 _mainTabControl.Reset();
@@ -968,6 +973,7 @@ namespace SamSoarII.AppMain
                 _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
                 _projectTreeView.LoadElementInitWindByXElement(_projectModel.EleInitializeData);
                 _projectModel.EleInitializeData = null;
+                InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
                 _mainTabControl.Reset();
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowEditItem += OnTabOpened;
@@ -989,6 +995,7 @@ namespace SamSoarII.AppMain
                 projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
             }
         }
+        
         public void CompileProject()
         {
             _projectModel.Compile();

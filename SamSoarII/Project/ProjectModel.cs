@@ -84,7 +84,6 @@ namespace SamSoarII.AppMain.Project
         public InteractionFacade IFacade { get; set; }
         public LadderDiagramViewModel MainRoutine { get; set; }
         public ObservableCollection<LadderDiagramViewModel> SubRoutines { get; set; } = new ObservableCollection<LadderDiagramViewModel>();
-        public ObservableCollection<TreeViewItem> SubRoutineTreeViewItems { get; set; } = new ObservableCollection<TreeViewItem>();
         public Dictionary<LadderDiagramViewModel, ObservableCollection<string>> RefNetworksBrief { get; set; } = new Dictionary<LadderDiagramViewModel, ObservableCollection<string>>();
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
         public ModbusTableViewModel MTVModel { get; set; }
@@ -172,6 +171,7 @@ namespace SamSoarII.AppMain.Project
             if (!SubRoutines.Contains(ldmodel))
             {
                 UpdateNetworkBriefs(ldmodel, ChangeType.Add);
+                ldmodel.LDNetwordsChanged += IFacade.PTView.LDNetwordsChanged;
                 SubRoutines.Add(ldmodel);
             }
         }
@@ -188,6 +188,7 @@ namespace SamSoarII.AppMain.Project
             if (SubRoutines.Contains(ldmodel))
             {
                 SubRoutines.Remove(ldmodel);
+                ldmodel.LDNetwordsChanged += IFacade.PTView.LDNetwordsChanged;
                 UpdateNetworkBriefs(ldmodel, ChangeType.Remove);
             }
         }

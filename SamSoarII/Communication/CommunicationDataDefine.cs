@@ -25,6 +25,7 @@ namespace SamSoarII.Communication
         //读写命令定义
         public const byte FGS_READ = 0xFE;
         public const byte FGS_WRITE = 0xFF;
+        public const byte FORCE_CANCEL = 0xF6;
         //最多一次读写元件个数 ,以字节为长度
         public const byte MAX_ELEM_NUM = 0x20;
         //一包数据读写地址种类

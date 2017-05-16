@@ -98,6 +98,7 @@ namespace SamSoarII.AppMain.Project
             {
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
             }
         }
 
@@ -110,7 +111,7 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 NetworkBriefLabel.Content = value;
-                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("NetworkBrief"));
+                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("NetworkMessage"));
             }
         }
 
@@ -973,6 +974,11 @@ namespace SamSoarII.AppMain.Project
             base.OnDrop(e);
             ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
             bool isacquired = AcquireSelectRect(e);
+            if (e.Data.GetDataPresent(typeof(LadderNetworkViewModel)))
+            {
+                isacquired = false;
+                ReleaseSelectRect();
+            }
             if (!isacquired) return;
             if (e.Data.GetDataPresent(ptvitem.GetType()))
             {

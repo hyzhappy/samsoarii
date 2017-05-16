@@ -83,12 +83,12 @@ namespace SamSoarII.Utility
         unsafe
         public static uint FloatToUInt(float value)
         {
-            return *(uint*)&value;
+            return *((uint*)&value);
         }
         unsafe 
         public static float UIntToFloat(uint value)
         {
-            return *(float*)&value;
+            return *((float*)&value);
         }
         unsafe
         public static string ChangeShowValue(WordType sourceType,WordType desType,uint value)

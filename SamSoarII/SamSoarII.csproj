@@ -87,6 +87,7 @@
     <Compile Include="AvalonDockTest.xaml.cs">
       <DependentUpon>AvalonDockTest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Communication\Command\ForceCancelCommand.cs" />
     <Compile Include="Communication\Command\GeneralReadCommand.cs" />
     <Compile Include="Communication\Command\GeneralWriteCommand.cs" />
     <Compile Include="Communication\Command\ICommunicationCommand.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Global\GlobalUsageList.cs" />
     <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
+    <Compile Include="LadderCommand\LadderDiagramExchangeNetworkCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
     <Compile Include="LadderCommand\NetworkAddRowCommand.cs" />

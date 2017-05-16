@@ -26,6 +26,7 @@ using SamSoarII.ValueModel;
 using SamSoarII.AppMain.LadderCommand;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.AppMain.UI;
+using System.Collections.Specialized;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -47,7 +48,6 @@ namespace SamSoarII.AppMain.Project
         CrossDown,
         NoCross
     }
-
     public partial class LadderDiagramViewModel : UserControl, IProgram
     {
         private ProjectModel _projectModel;
@@ -234,7 +234,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         #region About CommandManager
-        private LadderCommand.CommandManager _commandManager = new LadderCommand.CommandManager();
+        private LadderCommand.CommandManager _commandManager;
         
         public bool IsModify
         {
@@ -322,6 +322,7 @@ namespace SamSoarII.AppMain.Project
                 Keyboard.Focus(this);
                 ladderExpander.IsExpand = IsExpand;
             };
+            _commandManager = new LadderCommand.CommandManager(this);
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
             ladderExpander.MouseEnter += OnMouseEnter;
@@ -1823,17 +1824,14 @@ namespace SamSoarII.AppMain.Project
         {
             EditCommentReact();
         }
-        private void OnLadderDiagramMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.Focus();
-            Keyboard.Focus(this);
-            if(e.LeftButton == MouseButtonState.Pressed)
-            {           
-                SelectionStatus = SelectStatus.Idle;
-            }
-        }
+        
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
         {
+            currentItem = GetNetworkByMouse();
+            if (currentItem == null && dragItem != null)
+            {
+                dragItem.Opacity = 1;
+            }
             Point _p = e.GetPosition(this);
             if (_p.X > _actualWidth - 30
              || _p.Y > _actualHeight - 50)
@@ -1921,6 +1919,26 @@ namespace SamSoarII.AppMain.Project
                         default:
                             break;
                     }
+                }
+            }
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                var p1 = e.GetPosition(MainScrollViewer);
+                if ((MainScrollViewer.ViewportHeight - p1.Y) < 35 * GlobalSetting.LadderScaleY)
+                {
+                    MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + 30 * GlobalSetting.LadderScaleY);
+                }
+                else if(p1.Y < 15 * GlobalSetting.LadderScaleY)
+                {
+                    MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset - 30 * GlobalSetting.LadderScaleY);
+                }
+                else if (p1.X < 15 * GlobalSetting.LadderScaleX)
+                {
+                    MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset - 30 * GlobalSetting.LadderScaleX);
+                }
+                else if ((MainScrollViewer.ViewportWidth - p1.X) < 35 * GlobalSetting.LadderScaleX)
+                {
+                    MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + 30 * GlobalSetting.LadderScaleX);
                 }
             }
         }
@@ -2016,6 +2034,7 @@ namespace SamSoarII.AppMain.Project
                             {
                                 //全选，补回一个空网络
                                 _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(this, new LadderNetworkViewModel(this, 0), removednets, index));
+
                             }
                             else
                             {
@@ -2290,9 +2309,16 @@ namespace SamSoarII.AppMain.Project
         {
             e.CanExecute = true;
         }
-
         #endregion
+        #region ReloadPTVByLadderDiagram
+        public delegate void LDNetwordsChangedEventHandler(LadderDiagramViewModel LDView);
 
+        public event LDNetwordsChangedEventHandler LDNetwordsChanged = delegate { };
+        public void InvokeLDNetwordsEvent()
+        {
+            LDNetwordsChanged.Invoke(this);
+        }
+        #endregion
         #region Selection state transfers
         private void EnterIdleState()
         {
@@ -2458,40 +2484,58 @@ namespace SamSoarII.AppMain.Project
             }
         }
         #endregion
+        #region network drag(only is isExpand)
         private LadderNetworkViewModel dragItem;
         private LadderNetworkViewModel currentItem;
-        private void OnDragOver(object sender, DragEventArgs e)
+        private void OnLadderDiagramMouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            this.Focus();
+            Keyboard.Focus(this);
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                SelectionStatus = SelectStatus.Idle;
+            }
+            var network = GetNetworkByMouse();
+            if (network != null)
+            {
+                if (!network.ladderExpander.IsExpand)
+                {
+                    dragItem = network;
+                }
+                else
+                {
+                    dragItem = null;
+                }
+            }
         }
         private void OnDragEnter(object sender, DragEventArgs e)
         {
-
-        }
-        private void OnDragLeave(object sender, DragEventArgs e)
-        {
-
+            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+            var desnetwork = (LadderNetworkViewModel)e.Source;
+            if (sourcenet != desnetwork)
+            {
+                sourcenet.Opacity = 0.3;
+                desnetwork.ladderExpander.IsExpand = false;
+                var command = new LadderDiagramExchangeNetworkCommand(this, sourcenet, desnetwork);
+                _commandManager.Execute(command);
+            }
         }
         private void OnDrop(object sender, DragEventArgs e)
         {
-            var t = e.Source;
+            var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+            sourcenet.Opacity = 1;
+            dragItem = null;
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var network = GetNetworkByMouse();
-                if (network != null && !network.ladderExpander.IsExpand)
+                if (currentItem != null)
                 {
-                    if (currentItem == null)
+                    if (dragItem != null)
                     {
-                        currentItem = network;
-                    }
-                    else
-                    {
-                        if (currentItem != network)
+                        if (dragItem != currentItem)
                         {
-                            dragItem = currentItem;
                             DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
                         }
                     }
@@ -2509,5 +2553,6 @@ namespace SamSoarII.AppMain.Project
             }
             return null;
         }
+        #endregion
     }
 }

@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using SamSoarII.Extend.FuncBlockModel;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using static SamSoarII.AppMain.Project.LadderDiagramViewModel;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -69,7 +70,7 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
-        #region Initialize 
+        #region Initialize
 
         public ProjectTreeView(ProjectModel project, XElement xele = null)
         {
@@ -841,7 +842,11 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        
+        public void LDNetwordsChanged(LadderDiagramViewModel ldvmodel)
+        {
+            ProjectTreeViewItem item = dpdict[ldvmodel.ProgramName];
+            Rebuild(item,ldvmodel);
+        }
         #region Drag & Drop
 
         private ProjectTreeViewItem dragitem = null;
