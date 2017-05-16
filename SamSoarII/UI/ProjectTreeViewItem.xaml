@@ -12,7 +12,7 @@
     <TreeViewItem.Header>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding IconSource}"></Image>
+                <Image Source="{Binding IconSource}" Height="17"></Image>
                 <Grid Margin="6,0,0,0">
                 <TextBlock x:Name="TBL_Text" Text="{Binding Text,Mode=TwoWay}"></TextBlock>
                 <TextBlock x:Name="TBS_Text" Margin="60,0,0,0"></TextBlock>

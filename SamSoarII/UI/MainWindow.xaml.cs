@@ -292,7 +292,6 @@ namespace SamSoarII.AppMain.UI
             string text = String.Format("{0:s}已经更改，是否保存？", _interactionFacade.ProjectModel.ProjectName);
             return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
         }
-
         #region Command can Execute
         private void OnEleListOpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -591,15 +590,14 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
-
         #region Command Execute
         private void OnEleInitializeCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            //_interactionFacade.projectTreeView.OpenEleInitialize();
+            _interactionFacade.PTView.OpenEleInitialize();
         }
         private void OnEleListOpenCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            //_interactionFacade.projectTreeView.OpenElementList();
+            _interactionFacade.PTView.OpenElementList();
         }
         private void OnCloseProjectCommand(object sender, ExecutedRoutedEventArgs e)
         {

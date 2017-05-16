@@ -210,6 +210,8 @@ namespace SamSoarII.AppMain.Project
             rootNode.Add(ProjectHelper.CreateXElementByValueAlias());
             rootNode.Add(ProjectPropertyManager.CreateProjectPropertyXElement());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
+            rootNode.Add(MMonitorManager.MMWindow.CreateXElementByTables());
+            rootNode.Add(IFacade.PTView.CreatXElementByElementInitWind());
             foreach (var ldmodel in SubRoutines)
             {
                 rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(ldmodel));
@@ -221,8 +223,6 @@ namespace SamSoarII.AppMain.Project
             var mtnode = new XElement("Modbus");
             MTVModel.Save(mtnode);
             rootNode.Add(mtnode);
-            //rootNode.Add(MMonitorManager.MMWindow.CreateXElementByTables());
-            //rootNode.Add(IFacade.PTView.EleInitialize.CreatXElementByElements());
         }
         public bool Open(XElement rootNode)
         {
@@ -236,6 +236,8 @@ namespace SamSoarII.AppMain.Project
             ProjectHelper.LoadValueCommentsByXElement(rootNode.Element("ValueComments"));
             ProjectHelper.LoadValueAliasByXElement(rootNode.Element("ValueAlias"));
             ProjectPropertyManager.LoadProjectPropertyByXElement(rootNode.Element("ProjectPropertyParams"));
+            MMonitorManager.MMWindow.LoadTablesByXElement(rootNode.Element("Tables"));
+            EleInitializeData = rootNode.Element("EleInitialize");
             var ldnodes = rootNode.Elements("Ladder");
             foreach (XElement ldnode in ldnodes)
             {
@@ -264,8 +266,6 @@ namespace SamSoarII.AppMain.Project
             mtmodel.Load(mtnodes);
             MTVModel = mtmodel;
             return true;
-            //EleInitializeData = rootNode.Element("EleInitialize");
-            //MMonitorManager.MMWindow.LoadTablesByXElement(rootNode.Element("Tables"));
         }
         public void Compile()
         {

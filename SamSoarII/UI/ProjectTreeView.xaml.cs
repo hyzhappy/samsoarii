@@ -44,6 +44,7 @@ namespace SamSoarII.AppMain.UI
         }
         
         private ElementList _elementList;
+        private ElementInitializeWindow _elementInitWind;
 
         #region Components
 
@@ -53,6 +54,7 @@ namespace SamSoarII.AppMain.UI
         private ProjectTreeViewItem PTVI_SubRoutines;
         private ProjectTreeViewItem PTVI_FuncBlocks;
         private ProjectTreeViewItem PTVI_ElementList;
+        private ProjectTreeViewItem PTVI_ELementInitWdow;
         private ProjectTreeViewItem PTVI_Modbus;
         private ProjectTreeViewItem PTVI_Ladders;
         private ProjectTreeViewItem[] PTVI_Insts;
@@ -76,10 +78,11 @@ namespace SamSoarII.AppMain.UI
             InteractionFacade _ifacade = Project.IFacade;
             _ifacade.PTVEvent += OnGotPTVEvent;
             _elementList = new ElementList();
+            _elementInitWind = new ElementInitializeWindow();
             DataContext = Project;
             Project.MTVModel.ModelChanged += OnModbusChanged;
+            
             ReinitializeComponent();
-
             if (xele != null)
             {
                 Load(xele);
@@ -185,6 +188,11 @@ namespace SamSoarII.AppMain.UI
                 PTVI_Root,
                 ProjectTreeViewItem.TYPE_ELEMENTLIST,
                 _elementList);
+
+            PTVI_ELementInitWdow = CreatePTVItem(
+                PTVI_Root,
+                ProjectTreeViewItem.TYPE_ELEMENTINITIALIZE,
+                _elementInitWind);
 
             PTVI_Ladders = CreatePTVItem(
                 PTVI_Root,
@@ -409,6 +417,9 @@ namespace SamSoarII.AppMain.UI
                     case ProjectTreeViewItem.TYPE_ELEMENTLIST:
                         _elementList.Show();
                         break;
+                    case ProjectTreeViewItem.TYPE_ELEMENTINITIALIZE:
+                        _elementInitWind.Show();
+                        break;
                     case ProjectTreeViewItem.TYPE_INSTRUCTION:
                         ProjectTreeViewEventArgs _e2 = new ProjectTreeViewEventArgs(
                             ProjectTreeViewEventArgs.TYPE_INSTRUCTION 
@@ -492,7 +503,7 @@ namespace SamSoarII.AppMain.UI
                         break;
                     case ProjectTreeViewItem.FLAG_CREATEFOLDER:
                         ProjectTreeViewItem createitem = CreatePTVItem(
-                            ptvitem, 
+                            ptvitem,
                             ptvitem.Flags 
                           | ProjectTreeViewItem.FLAG_RENAME 
                           | ProjectTreeViewItem.FLAG_REMOVE, 
@@ -922,7 +933,6 @@ namespace SamSoarII.AppMain.UI
                 DragDrop.DoDragDrop(TV_Main, DragItem, DragDropEffects.Move);
             }
         }
-
         private void OnPTVIDragOver(object sender, DragEventArgs e)
         {
             CurrentItem = GetPTVIParent(e.OriginalSource);
@@ -954,7 +964,6 @@ namespace SamSoarII.AppMain.UI
             DragItem.IsSelected = true;
             DragItem = null;
         }
-
         private void TV_Main_DragLeave(object sender, DragEventArgs e)
         {
             if (GetPTVIParent(e.OriginalSource) == null)
@@ -1013,7 +1022,22 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
+        public void OpenElementList()
+        {
+            _elementList.Show();
+        }
+        public void OpenEleInitialize()
+        {
+            _elementInitWind.Show();
+        }
+        public XElement CreatXElementByElementInitWind()
+        {
+            return _elementInitWind.CreatXElementByElements();
+        }
+        public void LoadElementInitWindByXElement(XElement rootNode)
+        {
+            _elementInitWind.LoadElementsByXElement(rootNode);
+        }
         public void Load(XElement xele)
         {
             XElement xele_sr = xele.Element("PTVI_SubRoutines");
@@ -1134,11 +1158,14 @@ namespace SamSoarII.AppMain.UI
         public const int TYPE_FUNCBLOCK = 0x7;
         public const int TYPE_FUNC = 0x8;
         public const int TYPE_MODBUS = 0x9;
-        public const int TYPE_ELEMENTLIST = 0xa;
-        public const int TYPE_PROGRAM = 0xb;
-        public const int TYPE_LADDERS = 0xc;
-        public const int TYPE_INSTRUCTION = 0xd;
-        public const int TYPE_CONST = 0xf;
+        
+        public const int TYPE_PROGRAM = 0xa;
+        public const int TYPE_LADDERS = 0xb;
+        public const int TYPE_INSTRUCTION = 0xc;
+        public const int TYPE_CONST = 0xd;
+
+        public const int TYPE_ELEMENTLIST = 0xe;
+        public const int TYPE_ELEMENTINITIALIZE = 0xf;
 
         public const int FLAG_CREATE = 0x10;
         public const int FLAG_REPLACE = 0x20;
@@ -1165,6 +1192,5 @@ namespace SamSoarII.AppMain.UI
             TargetedObject = _targetedObject;
         }
     }
-
     public delegate void ProjectTreeViewEventHandler(object sender, ProjectTreeViewEventArgs e);
 }

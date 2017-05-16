@@ -59,6 +59,7 @@ namespace SamSoarII.Utility
                 return (uint)(data[0] >> 16 + data[1] >> 24 + data[2] + data[3] >> 8);
             }
         }
+        unsafe
         public static uint ParseShowValue(string showValue,WordType type)
         {
             switch (type)
@@ -74,11 +75,22 @@ namespace SamSoarII.Utility
                 case WordType.BCD:
                     return ToUINT16(ushort.Parse(showValue));
                 case WordType.FLOAT:
-                    return (uint)float.Parse(showValue);
+                    return FloatToUInt(float.Parse(showValue));
                 default:
                     throw new FormatException();
             }
         }
+        unsafe
+        public static uint FloatToUInt(float value)
+        {
+            return *(uint*)&value;
+        }
+        unsafe 
+        public static float UIntToFloat(uint value)
+        {
+            return *(float*)&value;
+        }
+        unsafe
         public static string ChangeShowValue(WordType sourceType,WordType desType,uint value)
         {
             switch (desType)
@@ -101,7 +113,7 @@ namespace SamSoarII.Utility
                         return ToBCD((ushort)value).ToString();
                     }
                 case WordType.FLOAT:
-                    return ((float)value).ToString();
+                    return (*(float*)&value).ToString();
                 default:
                     throw new Exception();
             }

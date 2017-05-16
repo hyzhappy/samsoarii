@@ -62,7 +62,7 @@ namespace SamSoarII.AppMain.UI
         }
         public string GenerateCode()
         {
-            return string.Format("{0}Bit[{1}] = (plc_bool){2};/r/n", Base,Offset,Value);
+            return string.Format("{0}Bit[{1}] = {2};/r/n", Base,Offset,Value);
         }
         public XElement CreateXElementByModel()
         {

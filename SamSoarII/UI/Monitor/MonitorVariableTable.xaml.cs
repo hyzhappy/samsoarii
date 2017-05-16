@@ -285,7 +285,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             return outvalue;
                         }
                     case WordType.FLOAT:
-                        return (uint)float.Parse(value);
+                        return ValueConverter.FloatToUInt(float.Parse(value));
                     default:
                         return null;
                 }

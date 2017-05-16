@@ -962,11 +962,12 @@ namespace SamSoarII.AppMain
                 InstructionCommentManager.UpdateAllComment();
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
                 _mainTabControl.ShowEditItem -= OnTabOpened;
-                _projectModel.EleInitializeData = null;
                 _projectTreeView = new ProjectTreeView(_projectModel, xele_rtv);
                 _projectTreeView.TabItemOpened += OnTabOpened;
                 _projectTreeView.PTVHandle += OnGotPTVHandle;
                 _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+                _projectTreeView.LoadElementInitWindByXElement(_projectModel.EleInitializeData);
+                _projectModel.EleInitializeData = null;
                 _mainTabControl.Reset();
                 _mainTabControl.SelectionChanged += OnTabItemChanged;
                 _mainTabControl.ShowEditItem += OnTabOpened;

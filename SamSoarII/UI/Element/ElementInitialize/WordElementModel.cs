@@ -85,7 +85,7 @@ namespace SamSoarII.AppMain.UI
                 case WordType.BCD:
                     return string.Format("{0}Word[{1}] = (uint16_t){2};/r/n", Base, Offset, Value);
                 case WordType.FLOAT:
-                    return string.Format("{0}Float[{1}] = (float){2};/r/n", Base, Offset, Value);
+                    return string.Format("{0}Float[{1}] = (double){2};/r/n", Base, Offset, Value);
                 default:
                     return string.Empty;
             }

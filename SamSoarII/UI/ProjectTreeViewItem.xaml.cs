@@ -48,7 +48,6 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        
         private string iconsource;
         public string IconSource
         {
@@ -148,11 +147,13 @@ namespace SamSoarII.AppMain.UI
         public const int TYPE_FUNCBLOCK = 0x7;
         public const int TYPE_FUNC = 0x8;
         public const int TYPE_MODBUS = 0x9;
-        public const int TYPE_ELEMENTLIST = 0xa;
-        public const int TYPE_PROGRAM = 0xb;
-        public const int TYPE_LADDERS = 0xc;
-        public const int TYPE_INSTRUCTION = 0xd;
-        public const int TYPE_CONST = 0xf;
+        
+        public const int TYPE_PROGRAM = 0xa;
+        public const int TYPE_LADDERS = 0xb;
+        public const int TYPE_INSTRUCTION = 0xc;
+        public const int TYPE_CONST = 0xd;
+        public const int TYPE_ELEMENTLIST = 0xe;
+        public const int TYPE_ELEMENTINITIALIZE = 0xf;
 
         public const int FLAG_CREATEFOLDER = 0x10;
         public const int FLAG_CREATEROUTINE = 0x20;
@@ -267,8 +268,12 @@ namespace SamSoarII.AppMain.UI
                         Text = "Modbus表格";
                         break;
                     case TYPE_ELEMENTLIST:
-                        IconSource = "/Resources/Image/TreeViewIcon/ElementList.png";
+                        IconSource = "/Resources/Image/ElementTable.png";
                         Text = "软元件管理器";
+                        break;
+                    case TYPE_ELEMENTINITIALIZE:
+                        IconSource = "/Resources/Image/ElementInitialize.png";
+                        Text = "软元件初始化";
                         break;
                     case TYPE_PROGRAM:
                         IconSource = "/Resources/Image/TreeViewIcon/Program.png";

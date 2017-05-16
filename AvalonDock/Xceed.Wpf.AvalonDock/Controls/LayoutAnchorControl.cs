@@ -106,6 +106,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
             {
                 _model.Root.Manager.ShowAutoHideWindow(this);
                 _model.IsActive = true;
+                /*
                 if (LayoutSetting.GetDefaultIsDockAnchorable(_model.Title))
                 {
                     _model.ToggleAutoHide();
@@ -114,6 +115,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 {
                     _model.Float();
                 }
+                */
             }
         }
 

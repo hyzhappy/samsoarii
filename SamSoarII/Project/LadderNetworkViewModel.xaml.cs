@@ -47,9 +47,8 @@ namespace SamSoarII.AppMain.Project
     /// </summary>
     public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
     {
-
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
-        private bool _isExpand;
+        private bool _isExpand = true;
         public bool IsExpand
         {
             get

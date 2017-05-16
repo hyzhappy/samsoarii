@@ -77,7 +77,6 @@
         <ad:LayoutItemFromLayoutModelConverter x:Key="LayoutItemFromLayoutModelConverter" />
         <ad:ActivateCommandLayoutItemFromLayoutModelConverter x:Key="ActivateCommandLayoutItemFromLayoutModelConverter" />
         <ad:BoolToSideBrushConverter x:Key="BoolToSideBrushConverter" />
-
         <Style x:Key="ImageEnable" TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -451,14 +450,6 @@
                             <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
                                 <Grid x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
                                 </Grid>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                                <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                                </ad:LayoutAnchorable>
-                            </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>

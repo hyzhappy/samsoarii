@@ -51,7 +51,6 @@ namespace SamSoarII.AppMain.Project
     public partial class LadderDiagramViewModel : UserControl, IProgram
     {
         private ProjectModel _projectModel;
-
         public ProjectModel ProjectModel
         {
             get { return this._projectModel; }
@@ -104,7 +103,7 @@ namespace SamSoarII.AppMain.Project
 
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         private int HeightUnit { get { return _isCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
-        private bool _isExpand;
+        private bool _isExpand = true;
         public bool IsExpand
         {
             get
@@ -332,21 +331,6 @@ namespace SamSoarII.AppMain.Project
             ladderExpander.expandButton.IsExpandChanged += ExpandButton_IsExpandChanged;
             ThumbnailButton.ToolTipOpening += ThumbnailButton_ToolTipOpening;
             ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
-        }
-        
-        public void NavigateToNetworkByNum(int num)
-        {
-            /*
-            double scale = GlobalSetting.LadderScaleX;
-            double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
-            foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < num; }))
-            {
-                offset += scale * (item.ActualHeight + 20) / 3.03;
-            }
-            MainScrollViewer.ScrollToVerticalOffset(offset);
-            */
-            VScrollToRect(num, _selectRect.Y);
-            HScrollToRect(_selectRect.X);
         }
         private void InitializeInstructionNameAndToolTips()
         {
@@ -695,7 +679,6 @@ namespace SamSoarII.AppMain.Project
             ReloadNetworksToStackPanel();
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
-
         public void RemoveNetwork(LadderNetworkViewModel network)
         {
             if (_ladderNetworks.Count > 1)
@@ -758,17 +741,20 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Selection Rectangle Relative
-
+        public void NavigateToNetworkByNum(int num)
+        {
+            VScrollToRect(num, _selectRect.Y);
+            HScrollToRect(_selectRect.X);
+        }
         public void VScrollToRect(int networkNumber, int row)
         {
-            double scale = GlobalSetting.LadderScaleX;
+            double scale = GlobalSetting.LadderScaleY;
             double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
             foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < networkNumber; }))
             {
-                offset += scale * (item.ActualHeight + 20) / 2.89;
+                offset += scale * (item.ActualHeight + 20) / 3.035;
             }
             offset += scale * (_selectRect.ActualHeight * row + 20) / 2.89;
-            offset -= MainScrollViewer.ViewportHeight / 2;
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
@@ -777,7 +763,7 @@ namespace SamSoarII.AppMain.Project
             double scale = GlobalSetting.LadderScaleX;
             double offset = 0;
             offset += scale * GlobalSetting.LadderWidthUnit * (XIndex + 1) / 2.89;
-            offset -= MainScrollViewer.ViewportWidth / 2;
+            offset -= scale * MainScrollViewer.ViewportWidth / 2.5;
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToHorizontalOffset(offset);
         }
@@ -1829,17 +1815,14 @@ namespace SamSoarII.AppMain.Project
                 e.Handled = true;
             }
         }
-
         private void OnCommentAreaMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             EditCommentReact();
         }
-
         private void OnEditComment(object sender, RoutedEventArgs e)
         {
             EditCommentReact();
         }
-
         private void OnLadderDiagramMouseDown(object sender, MouseButtonEventArgs e)
         {
             this.Focus();
@@ -1849,7 +1832,6 @@ namespace SamSoarII.AppMain.Project
                 SelectionStatus = SelectStatus.Idle;
             }
         }
-
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
         {
             Point _p = e.GetPosition(this);
@@ -1860,36 +1842,13 @@ namespace SamSoarII.AppMain.Project
             }
             if(_selectStatus == SelectStatus.SingleSelected)
             {
-                if (IsPressingCtrl)
-                {
-                    /*
-                    var p = e.GetPosition(_selectRectOwner.LadderCanvas);
-                    var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
-                    if ((pp.X == _selectRect.X - 1) && (pp.Y == _selectRect.Y))
-                    {
-                        SelectRectLeftWithLine();
-                    }
-                    if ((pp.X == _selectRect.X + 1) && (pp.Y == _selectRect.Y))
-                    {
-                        SelectRectRightWithLine();
-                    }
-                    if (pp.X == _selectRect.X && (pp.Y == _selectRect.Y - 1))
-                    {
-                        SelectRectUpWithLine();
-                    }
-                    if (pp.X == _selectRect.X && (pp.Y == _selectRect.Y + 1))
-                    {
-                        SelectRectDownWithLine();
-                    }
-                    */
-                }
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     if(_selectRectOwner != null)
                     {
                         var p = e.GetPosition(_selectRectOwner.LadderCanvas);
                         var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
-                        if((pp.X != _selectRect.X) || (pp.Y != _selectRect.Y))
+                        if(p.Y < 0 || (pp.X != _selectRect.X) || (pp.Y != _selectRect.Y))
                         {
                             _selectStartNetwork = _selectRectOwner;
                             _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
@@ -2399,7 +2358,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-	private bool loadedbefore = false;
+	    private bool loadedbefore = false;
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (!loadedbefore)
@@ -2499,5 +2458,56 @@ namespace SamSoarII.AppMain.Project
             }
         }
         #endregion
+        private LadderNetworkViewModel dragItem;
+        private LadderNetworkViewModel currentItem;
+        private void OnDragOver(object sender, DragEventArgs e)
+        {
+
+        }
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+
+        }
+        private void OnDragLeave(object sender, DragEventArgs e)
+        {
+
+        }
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            var t = e.Source;
+        }
+        private void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                var network = GetNetworkByMouse();
+                if (network != null && !network.ladderExpander.IsExpand)
+                {
+                    if (currentItem == null)
+                    {
+                        currentItem = network;
+                    }
+                    else
+                    {
+                        if (currentItem != network)
+                        {
+                            dragItem = currentItem;
+                            DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
+                        }
+                    }
+                }
+            }
+        }
+        private LadderNetworkViewModel GetNetworkByMouse()
+        {
+            foreach (var network in LadderNetworks)
+            {
+                if (network.IsMouseOver)
+                {
+                    return network;
+                }
+            }
+            return null;
+        }
     }
 }

@@ -187,7 +187,7 @@ namespace SamSoarII.Communication
                                 }
                                 break;
                             case WordType.FLOAT:
-                                elements[i].CurrentValue = string.Format("{0}", (float)value);
+                                elements[i].CurrentValue = string.Format("{0}", ValueConverter.UIntToFloat(value));
                                 break;
                             default:
                                 break;
