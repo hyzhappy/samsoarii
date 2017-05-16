@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class FMOVDModel : BaseModel
     {
+        public override string InstructionName => "FMOVD";
+
         public DoubleWordValue SourceValue { get; set; }
         public DoubleWordValue DestinationValue { get; set; }
         public WordValue CountValue { get; set; }

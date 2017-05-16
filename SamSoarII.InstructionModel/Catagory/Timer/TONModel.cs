@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class TONModel : BaseModel
     {
+        public override string InstructionName => "TON";
         public WordValue TimerValue { get; set; }
         public WordValue EndValue { get; set; }
 

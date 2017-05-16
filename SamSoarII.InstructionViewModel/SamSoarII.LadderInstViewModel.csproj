@@ -232,6 +232,9 @@
     <Compile Include="Monitor\MoniInputViewModel.xaml.cs">
       <DependentUpon>MoniInputViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Monitor\MoniNetworkViewModel.xaml.cs">
+      <DependentUpon>MoniNetworkViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Monitor\MoniOutBitViewModel.xaml.cs">
       <DependentUpon>MoniOutBitViewModel.xaml</DependentUpon>
     </Compile>
@@ -314,6 +317,10 @@
     <Page Include="Monitor\MoniInputViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Monitor\MoniNetworkViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Monitor\MoniOutBitViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>

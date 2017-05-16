@@ -26,10 +26,6 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             DataContext = this;
         }
         
-        public override void Setup(string text)
-        {
-        }
-
         public override void Update()
         {
         }

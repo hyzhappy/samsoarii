@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class MULFModel : BaseModel
     {
+        public override string InstructionName => "MULF";
         public FloatValue InputValue1 { get; set; }
         public FloatValue InputValue2 { get; set; }
         public FloatValue OutputValue { get; set; }

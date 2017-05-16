@@ -46,37 +46,52 @@
                             Visibility="{Binding ElementName=ladderExpander,Path=IsExpand,Converter={StaticResource converter}}"
                             Template="{StaticResource ThumbnailButton}" MouseDoubleClick="OnMouseDoubleClick" MouseWheel="OnMouseWheel"/>
                 </Grid>
-                <Canvas x:Name="LadderCanvas" HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" PreviewMouseDown="OnCanvasMouseDown" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-                    <Canvas.ContextMenu>
-                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="图元剪切"></MenuItem>
-                            <MenuItem Header="图元复制"></MenuItem>
-                            <MenuItem Header="图元粘贴"></MenuItem>
-                            <MenuItem Header="图元删除"></MenuItem>
-                            <MenuItem Header="插入行">
-                                <MenuItem Header="向前插入" Click="OnAddNewRowBefore"></MenuItem>
-                                <MenuItem Header="向后插入" Click="OnAddNewRowAfter"></MenuItem>
-                                <MenuItem Header="末尾追加" Click="OnAppendNewRow"></MenuItem>
-                            </MenuItem>
-                            <MenuItem Header="删除行" Click="OnDeleteRow"></MenuItem>
-                            <Separator></Separator>
-                            <MenuItem Header="网络插入">
-                                <MenuItem Header="向前插入" Click="OnAddNewNetworkBefore"></MenuItem>
-                                <MenuItem Header="向后插入" Click="OnAddNewNetworkAfter"></MenuItem>
-                                <MenuItem Header="末尾追加" Click="OnAppendNewNetwork"></MenuItem>
-                            </MenuItem>
-                            <MenuItem Header="网络删除" Click="OnRemoveNetwork"></MenuItem>
-                            <MenuItem Header="网络剪切"></MenuItem>
-                            <MenuItem Header="网络复制"></MenuItem>
-                            <MenuItem Header="网络粘贴"></MenuItem>
-                            <Separator></Separator>
-                            <MenuItem Header="屏蔽网络" IsCheckable="True" IsChecked="{Binding IsMasked}"></MenuItem>
-                            <Separator></Separator>
-                            <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
-                            <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
-                        </ContextMenu>
-                    </Canvas.ContextMenu>
-                </Canvas>
+                <Grid>
+                    <Canvas x:Name="LadderCanvas_Monitor" 
+                        HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
+                        PreviewMouseDown="OnCanvasMouseDown" 
+                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+                        <Canvas.ContextMenu>
+                            <ContextMenu x:Name="CM_Monitor">
+
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
+                    </Canvas>
+                    <Canvas x:Name="LadderCanvas_Edit" 
+                        HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
+                        PreviewMouseDown="OnCanvasMouseDown" 
+                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+                        <Canvas.ContextMenu>
+                            <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                <MenuItem Header="图元剪切"></MenuItem>
+                                <MenuItem Header="图元复制"></MenuItem>
+                                <MenuItem Header="图元粘贴"></MenuItem>
+                                <MenuItem Header="图元删除"></MenuItem>
+                                <MenuItem Header="插入行">
+                                    <MenuItem Header="向前插入" Click="OnAddNewRowBefore"></MenuItem>
+                                    <MenuItem Header="向后插入" Click="OnAddNewRowAfter"></MenuItem>
+                                    <MenuItem Header="末尾追加" Click="OnAppendNewRow"></MenuItem>
+                                </MenuItem>
+                                <MenuItem Header="删除行" Click="OnDeleteRow"></MenuItem>
+                                <Separator></Separator>
+                                <MenuItem Header="网络插入">
+                                    <MenuItem Header="向前插入" Click="OnAddNewNetworkBefore"></MenuItem>
+                                    <MenuItem Header="向后插入" Click="OnAddNewNetworkAfter"></MenuItem>
+                                    <MenuItem Header="末尾追加" Click="OnAppendNewNetwork"></MenuItem>
+                                </MenuItem>
+                                <MenuItem Header="网络删除" Click="OnRemoveNetwork"></MenuItem>
+                                <MenuItem Header="网络剪切"></MenuItem>
+                                <MenuItem Header="网络复制"></MenuItem>
+                                <MenuItem Header="网络粘贴"></MenuItem>
+                                <Separator></Separator>
+                                <MenuItem Header="屏蔽网络" IsCheckable="True" IsChecked="{Binding IsMasked}"></MenuItem>
+                                <Separator></Separator>
+                                <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
+                                <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
+                    </Canvas>
+                </Grid>
             </StackPanel>
         </Grid>
     </StackPanel>

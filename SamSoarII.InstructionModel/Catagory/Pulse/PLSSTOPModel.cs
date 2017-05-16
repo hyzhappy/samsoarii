@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Pulse
 {
     public class PLSSTOPModel : BaseModel
     {
+        public override string InstructionName => "PLSSTOP";
         public BitValue OutputValue { get; set; }
 
         public PLSSTOPModel()

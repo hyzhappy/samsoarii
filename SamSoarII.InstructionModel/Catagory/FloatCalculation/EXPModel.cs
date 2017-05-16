@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class EXPModel : BaseModel
     {
+        public override string InstructionName => "EXP";
         public FloatValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
         public EXPModel(FloatValue inputValue, FloatValue outputValue)

@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class CMPDModel : BaseModel
     {
+        public override string InstructionName => "CMPD";
+
         public DoubleWordValue InputValue1 { get; set; }
         public DoubleWordValue InputValue2 { get; set; }
         public BitValue OutputValue { get; set; }

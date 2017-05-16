@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class CMPFModel : BaseModel
     {
+        public override string InstructionName => "CMPF";
+
         public FloatValue InputValue1 { get; set; }
         public FloatValue InputValue2 { get; set; }
         public BitValue OutputValue { get; set; }

@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class MVBLKModel : BaseModel
     {
+        public override string InstructionName => "MVBLK";
         public WordValue SourceValue { get; set; }
         public WordValue DestinationValue { get; set; }
         public WordValue Count { get; set; }

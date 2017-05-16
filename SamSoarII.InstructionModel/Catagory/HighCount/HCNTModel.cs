@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.HighCount
 {
     public class HCNTModel : BaseModel
     {
+        public override string InstructionName => "HCNT";
         public DoubleWordValue CountValue { get; set; }
 
         public DoubleWordValue DefineValue { get; set; }

@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace SamSoarII.LadderInstViewModel.Monitor
 {
     /// <summary>
-    /// MoniHLineViewModel.xaml 的交互逻辑
+    /// MoniNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class MoniHLineViewModel : MoniBaseViewModel
+    public partial class MoniNetworkViewModel : UserControl
     {
-        public MoniHLineViewModel()
+        public MoniNetworkViewModel()
         {
             InitializeComponent();
-            DataContext = this;
-        }
-
-        public override void Update()
-        {
         }
     }
 }

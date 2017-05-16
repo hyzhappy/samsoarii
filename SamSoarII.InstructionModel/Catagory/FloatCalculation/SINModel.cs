@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class SINModel : BaseModel
     {
+        public override string InstructionName => "SIN";
         public FloatValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
         public SINModel(FloatValue inputValue, FloatValue outputValue)

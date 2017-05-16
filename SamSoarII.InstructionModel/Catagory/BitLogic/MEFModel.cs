@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class MEFModel : BaseModel
     {
+        public override string InstructionName => "MEF";
 
         public MEFModel()
         {

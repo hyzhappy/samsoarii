@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,24 +27,13 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             DataContext = this;
         }
 
-        public MoniSpecViewModel(string text)
+        public MoniSpecViewModel(BaseModel bmodel)
         {
             InitializeComponent();
             DataContext = this;
-            Setup(text);
+            Model = bmodel;
         }
-
-        public override void Setup(string text)
-        {
-            string[] texts = text.Split(' ');
-            Inst = texts[0];
-            for (int i = 1; i < texts.Length; i++)
-            {
-                _labels[i - 1] = texts[i];
-            }
-            Update();
-        }
-
+        
         public override void Update()
         {
             Line line = null;

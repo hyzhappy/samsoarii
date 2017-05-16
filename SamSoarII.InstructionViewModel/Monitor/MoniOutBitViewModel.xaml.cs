@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -29,23 +30,13 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             DataContext = this;
         }
         
-        public MoniOutBitViewModel(string text)
+        public MoniOutBitViewModel(BaseModel bmodel)
         {
             InitializeComponent();
             DataContext = this;
-            Setup(text);
+            Model = bmodel;
         }
         
-        public override void Setup(string text)
-        {
-            string[] texts = text.Split(' ');
-            Inst = texts[0];
-            for (int i = 1; i < texts.Length; i++)
-            {
-                _labels[i - 1] = texts[i];
-            }
-            Update();
-        }
 
         public override void Update()
         {
@@ -54,16 +45,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
             PropertyChanged(this, new PropertyChangedEventArgs("CenterTextBlock_Text"));
         }
-
-        public override void SetValue(int id, string value)
-        {
-            base.SetValue(id, value);
-            PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
-            PropertyChanged(this, new PropertyChangedEventArgs("CenterTextBlock_Text"));
-        }
-
+        
         #region UI
 
         static string[] BIT_0_SHOWS = { "0", "OFF", "FALSE" };
@@ -76,10 +58,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 bool value = false;
                 try
                 {
-                    if (!BIT_0_SHOWS.Contains(_values[0])
-                     && !BIT_1_SHOWS.Contains(_values[0]))
+                    if (!BIT_0_SHOWS.Contains(_values[0].Value)
+                     && !BIT_1_SHOWS.Contains(_values[0].Value))
                         throw new FormatException("value0 is not a BIT.");
-                    value = BIT_1_SHOWS.Contains(_values[0]);
+                    value = BIT_1_SHOWS.Contains(_values[0].Value);
                 }
                 catch (FormatException)
                 {
@@ -93,8 +75,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[0].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[0], _values[0])
+                return Model.ParaCount > 1 && _values[0] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(0).ValueString,
+                        _values[0].Value)
                     : String.Empty;
             }
         }
@@ -103,8 +87,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[1].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[0], _values[0])
+                return Model.ParaCount > 2 && _values[1] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(1).ValueString,
+                        _values[1].Value)
                     : String.Empty;
             }
         }
@@ -122,6 +108,15 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                     default: return String.Empty;
                 }
             }
+        }
+
+        protected override void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            base.OnValueChanged(sender, e);
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
+
         }
 
         #endregion

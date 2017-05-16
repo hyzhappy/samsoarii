@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Pulse
 {
     public class PLSYModel : BaseModel
     {
+        public override string InstructionName => "PLSY";
         public WordValue FreqValue { get; set; }
         public WordValue PulseValue { get; set; }
         public BitValue OutputValue { get; set; }

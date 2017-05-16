@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class TRUNCModel : BaseModel
     {
+        public override string InstructionName => "TRUNC";
         public FloatValue InputValue { get; set; }
         public DoubleWordValue OutputValue { get; set; }
         public TRUNCModel()

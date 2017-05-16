@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class ANDWModel : BaseModel
     {
+        public override string InstructionName => "ANDW";
         public WordValue InputValue1 { get; set; }
         public WordValue InputValue2 { get; set; }
         public WordValue OutputValue { get; set; }

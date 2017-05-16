@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class INCModel : BaseModel
     {
+        public override string InstructionName => "INC";
         public WordValue InputValue { get; set; }
         public WordValue OutputValue { get; set; }
         public INCModel()

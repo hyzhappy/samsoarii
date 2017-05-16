@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -29,24 +30,13 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             DataContext = this;
         }
 
-        public MoniOutRecViewModel(string text)
+        public MoniOutRecViewModel(BaseModel bmodel)
         {
             InitializeComponent();
             DataContext = this;
-            Setup(text);
+            Model = bmodel;
         }
-
-        public override void Setup(string text)
-        {
-            string[] texts = text.Split(' ');
-            Inst = texts[0];
-            for (int i = 1; i < texts.Length; i++)
-            {
-                _labels[i - 1] = texts[i];
-            }
-            Update();
-        }
-
+        
         public override void Update()
         {
             PropertyChanged(this, new PropertyChangedEventArgs("TopTextBox_Text"));
@@ -56,31 +46,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox4_Text"));
             PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox5_Text"));
         }
-
-        public override void SetValue(int id, string value)
-        {
-            base.SetValue(id, value);
-            //PropertyChanged(this, new PropertyChangedEventArgs("TopTextBox_Text"));
-            switch (id)
-            {
-                case 0: 
-                    PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox1_Text"));
-                    break;
-                case 1:
-                    PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox2_Text"));
-                    break;
-                case 2:
-                    PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox3_Text"));
-                    break;
-                case 3:
-                    PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox4_Text"));
-                    break;
-                case 4:
-                    PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox5_Text"));
-                    break;
-            }
-        }
-
+        
         #region UI
 
         public string TopTextBox_Text
@@ -95,8 +61,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[0].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[0], _values[0])
+                return Model.ParaCount > 1 && _values[0] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(0).ValueString,
+                        _values[0].Value)
                     : String.Empty;
             }
         }
@@ -105,8 +73,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[1].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[1], _values[1])
+                return Model.ParaCount > 2 && _values[1] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(1).ValueString,
+                        _values[1].Value)
                     : String.Empty;
             }
         }
@@ -115,8 +85,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[2].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[2], _values[2])
+                return Model.ParaCount > 3 && _values[2] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(2).ValueString,
+                        _values[2].Value)
                     : String.Empty;
             }
         }
@@ -125,8 +97,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[3].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[3], _values[3])
+                return Model.ParaCount > 4 && _values[3] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(3).ValueString,
+                        _values[3].Value)
                     : String.Empty;
             }
         }
@@ -135,9 +109,40 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[4].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[4], _values[4])
+                return Model.ParaCount > 5 && _values[4] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(4).ValueString,
+                        _values[4].Value)
                     : String.Empty;
+            }
+        }
+
+        protected override void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            base.OnValueChanged(sender, e);
+            for (int i = 0; i < Model.ParaCount; i++)
+            {
+                if (sender == _values[i])
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox1_Text"));
+                            break;
+                        case 1:
+                            PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox2_Text"));
+                            break;
+                        case 2:
+                            PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox3_Text"));
+                            break;
+                        case 3:
+                            PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox4_Text"));
+                            break;
+                        case 4:
+                            PropertyChanged(this, new PropertyChangedEventArgs("MiddleTextBox5_Text"));
+                            break;
+                    }
+                }
             }
         }
 

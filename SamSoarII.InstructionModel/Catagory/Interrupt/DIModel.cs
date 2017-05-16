@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Interrupt
 {
     public class DIModel : BaseModel
     {
+        public override string InstructionName => "DI";
         public DIModel()
         {
         }

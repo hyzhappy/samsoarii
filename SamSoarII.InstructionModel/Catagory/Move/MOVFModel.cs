@@ -10,6 +10,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class MOVFModel : BaseModel
     {
+        public override string InstructionName => "MOVF";
         public FloatValue SourceValue { get; set; }
         public FloatValue DestinationValue { get; set; }
         public MOVFModel()

@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class INVWModel : BaseModel
     {
+        public override string InstructionName => "INVW";
         public WordValue InputValue { get; set; }
         public WordValue OutputValue { get; set; }
         public INVWModel()

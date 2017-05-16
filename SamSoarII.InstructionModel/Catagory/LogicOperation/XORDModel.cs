@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class XORDModel : BaseModel
     {
+        public override string InstructionName => "XORD";
         public DoubleWordValue InputValue1 { get; set; }
         public DoubleWordValue InputValue2 { get; set; }
         public DoubleWordValue OutputValue { get; set; }

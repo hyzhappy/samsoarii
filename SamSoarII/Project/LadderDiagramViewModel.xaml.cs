@@ -85,6 +85,20 @@ namespace SamSoarII.AppMain.Project
                 _message = message;
             }
         }
+        private LadderMode _laddermode = LadderMode.Edit;
+        public LadderMode LadderMode
+        {
+            get { return this._laddermode; }
+            set
+            {
+                this._laddermode = value;
+                foreach (LadderNetworkViewModel lnvmodel in GetNetworks())
+                {
+                    lnvmodel.LadderMode = value;
+                }
+            }
+        }
+
         private bool _isCommentMode;
         public bool IsCommendMode
         {

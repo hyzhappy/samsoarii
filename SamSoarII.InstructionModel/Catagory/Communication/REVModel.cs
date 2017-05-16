@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Communication
 {
     public class REVModel : BaseModel
     {
+        public override string InstructionName => "REV";
+
         public WordValue COMPort { get; set; }
         public WordValue BaseValue { get; set; }
         public WordValue CountValue { get; set; }

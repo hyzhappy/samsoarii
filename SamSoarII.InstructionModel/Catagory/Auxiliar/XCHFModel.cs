@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class XCHFModel : BaseModel
     {
+        public override string InstructionName => "XCHF";
+
         public FloatValue LeftValue { get; set; }
         public FloatValue RightValue { get; set; }
 

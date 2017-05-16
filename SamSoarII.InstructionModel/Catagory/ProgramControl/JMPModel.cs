@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class JMPModel : BaseModel
     {
+        public override string InstructionName => "JMP";
         public WordValue LBLIndex { get; set; }
         public JMPModel()
         {

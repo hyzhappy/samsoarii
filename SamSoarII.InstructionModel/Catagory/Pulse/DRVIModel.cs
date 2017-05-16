@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Pulse
 {
     public class DRVIModel : BaseModel
     {
+        public override string InstructionName => "DRVI";
         public WordValue FreqValue;
         public WordValue PulseValue;
         public BitValue OutputValue;

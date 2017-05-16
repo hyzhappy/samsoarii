@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class SHLBModel : BaseModel
     {
+        public override string InstructionName => "SHLB";
         public BitValue SourceValue { get; set; }
         public BitValue DestinationValue { get; set; }
         public WordValue CountValue { get; set; }

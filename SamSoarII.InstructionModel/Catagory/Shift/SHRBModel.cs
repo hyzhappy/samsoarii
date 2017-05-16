@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class SHRBModel : BaseModel
     {
+        public override string InstructionName => "SHRB";
         public BitValue SourceValue { get; set; }
         public BitValue DestinationValue { get; set; }
         public WordValue CountValue { get; set; }

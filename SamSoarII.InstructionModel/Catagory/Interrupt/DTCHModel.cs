@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Interrupt
 {
     public class DTCHModel : BaseModel
     {
+        public override string InstructionName => "DTCH";
+
         public WordValue IDValue { get; set; }
 
         public DTCHModel()

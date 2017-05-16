@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class CTUDModel : BaseModel
     {
+        public override string InstructionName => "CTUD";
         public IValueModel CountValue { get; set; }
 
         public IValueModel EndValue { get; set; }

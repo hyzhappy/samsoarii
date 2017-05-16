@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class ZCPFModel : BaseModel
     {
+        public override string InstructionName => "ZCPF";
+
         public FloatValue InputValue1 { get; set; }
         public FloatValue InputValue2 { get; set; }
         public FloatValue InputValue3 { get; set; }

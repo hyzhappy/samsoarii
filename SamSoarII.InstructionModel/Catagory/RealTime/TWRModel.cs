@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class TWRModel : BaseModel
     {
+        public override string InstructionName => "TWR";
         public WordValue StartValue { get; set; }
         public TWRModel()
         {

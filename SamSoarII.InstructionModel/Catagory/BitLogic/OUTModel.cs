@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class OUTModel : BaseModel
     {
+        public override string InstructionName => "OUT";
         public BitValue Value { get; set; }
         public OUTModel()
         {

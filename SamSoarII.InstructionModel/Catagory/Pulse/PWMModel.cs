@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class PWMModel : BaseModel
     {
+        public override string InstructionName => "PWM";
         public WordValue FreqValue { get; set; }
         public WordValue DutyCycleValue { get; set; }
         public BitValue OutputValue { get; set; }

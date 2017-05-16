@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class DTOFModel : BaseModel
     {
+        public override string InstructionName => "DTOF";
         public DoubleWordValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
 

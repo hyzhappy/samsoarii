@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class COSModel : BaseModel
     {
+        public override string InstructionName => "COS";
         public FloatValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
         public COSModel(FloatValue inputValue, FloatValue outputValue)

@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class BCDModel : BaseModel
     {
+        public override string InstructionName => "BCD";
         public WordValue InputValue { get; set; }
         public WordValue OutputValue { get; set; }
         public BCDModel()

@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Pulse
 {
     public class DPWMModel : BaseModel
     {
+        public override string InstructionName => "DPWM";
         public DoubleWordValue FreqValue { get; set; }
         public DoubleWordValue DutyCycleValue { get; set; }
         public BitValue OutputValue { get; set; }

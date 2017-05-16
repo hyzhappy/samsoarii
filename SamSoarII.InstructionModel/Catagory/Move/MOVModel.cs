@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class MOVModel : BaseModel
     {
+        public override string InstructionName => "MOV";
+
         public WordValue SourceValue { get; set; }
         public WordValue DestinationValue { get; set; }
         public MOVModel()

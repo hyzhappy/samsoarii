@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class XCHModel : BaseModel
     {
+        public override string InstructionName => "XCH";
+
         public WordValue LeftValue { get; set; }
         public WordValue RightValue { get; set; }
 

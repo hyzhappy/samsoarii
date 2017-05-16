@@ -106,7 +106,15 @@ namespace SamSoarII.LadderInstViewModel
         public abstract void UpdateCommentContent();
         public override string ToString()
         {
-            return string.Format("InstructionName:{0}    RoutineName:{1}    NetworkNumber:{2}    X:{3}   Y:{4}", InstructionName,RefLadderName,NetWorkNum,X,Y);
+            return String.Format("(R={0:s})(N={1:d})(X={2:d},Y={3:d})(I={4:s})",
+                RefLadderName, NetWorkNum, X, Y, ToInstString());
+            //return string.Format("InstructionName:{0}    RoutineName:{1}    NetworkNumber:{2}    X:{3}   Y:{4}", InstructionName,RefLadderName,NetWorkNum,X,Y);
         }
+        public string ToInstString()
+        {
+            if (Model == null) return String.Empty;
+            return Model.ToString();
+        }
+
     }
 }

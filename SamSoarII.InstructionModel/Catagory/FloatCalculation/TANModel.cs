@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class TANModel : BaseModel
     {
+        public override string InstructionName => "TAN";
         public FloatValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
         public TANModel(FloatValue inputValue, FloatValue outputValue)

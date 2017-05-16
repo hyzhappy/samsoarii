@@ -1,22 +1,37 @@
-﻿using System;
+﻿using SamSoarII.LadderInstModel;
+using SamSoarII.ValueModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace SamSoarII.LadderInstViewModel.Monitor
 {
+    public interface IMoniValueModel
+    {
+        string Value { get; }
+        event RoutedEventHandler ValueChanged;
+    }
+
     public abstract class MoniBaseViewModel : UserControl
     {
+        protected BaseModel _model;
         protected int _x;
         protected int _y;
-        protected string _iname;
-        protected string[] _labels = new string[5]
-            {String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,};
-        protected string[] _values = new string[5]
-            {String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,};
+        protected IMoniValueModel[] _values = new IMoniValueModel[5];
 
+        public virtual BaseModel Model
+        {
+            get { return this._model; }
+            protected set
+            {
+                this._model = value;
+                Update();
+            }
+        }
         public virtual int X
         {
             get
@@ -45,29 +60,34 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return this._iname;
-            }
-            set
-            {
-                this._iname = value;
+                return _model.InstructionName;
             }
         }
-
-        public abstract void Setup(string text);
 
         public abstract void Update();
-        
-        public virtual void SetValue(int id, string value)
+
+        public void SetValueModel(int id, IMoniValueModel mvmodel)
         {
-            _values[id] = value;
+            if (_values[id] != null)
+            {
+                _values[id].ValueChanged -= OnValueChanged;
+            }
+            _values[id] = mvmodel;
+            if (_values[id] != null)
+            {
+                _values[id].ValueChanged += OnValueChanged;
+            }
         }
 
-        static public MoniBaseViewModel Create(string text)
+        protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
         {
-            string[] texts = text.Split(' ');
-            string inst = texts[0];
+
+        }
+
+        static public MoniBaseViewModel Create(BaseModel bmodel)
+        {
             MoniBaseViewModel svbmodel = null;
-            switch (inst)
+            switch (bmodel.InstructionName)
             {
                 case "LD":
                 case "LDI":
@@ -75,7 +95,12 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 case "LDIIM":
                 case "LDP":
                 case "LDF":
-                    //svbmodel = new MoniInputViewModel(text);
+                    svbmodel = new MoniInputViewModel(bmodel);
+                    break;
+                case "INV":
+                case "MEP":
+                case "MEF":
+                    svbmodel = new MoniSpecViewModel(bmodel);
                     break;
                 case "ALT":
                 case "ALTP":
@@ -85,14 +110,16 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 case "RSTIM":
                 case "SET":
                 case "SETIM":
-                    //svbmodel = new MoniOutBitViewModel(text);
+                    svbmodel = new MoniOutBitViewModel(bmodel);
                     break;
                 case "HLINE":
+                    svbmodel = new MoniVLineViewModel();
                     break;
                 case "VLINE":
+                    svbmodel = new MoniHLineViewModel();
                     break;
                 default:
-                    //svbmodel = new MoniOutRecViewModel(text);
+                    svbmodel = new MoniOutRecViewModel(bmodel);
                     break;
             }
             return svbmodel;

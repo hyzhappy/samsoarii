@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -30,27 +31,11 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             DataContext = this;
         }
 
-        public MoniInputViewModel(string text)
+        public MoniInputViewModel(BaseModel bmodel)
         {
             InitializeComponent();
             DataContext = this;
-            Setup(text);
-        }
-
-        /// <summary>
-        /// 辨别一行指令语句，设置这个控件
-        /// </summary>
-        /// <param name="text">指令语句，为inst arg1 arg2 ... 的格式</param>
-        public override void Setup(string text)
-        {
-            // 空格分隔，获得指令名称和参数集合
-            string[] texts = text.Split(' ');
-            Inst = texts[0];
-            for (int i = 1; i < texts.Length; i++)
-            {
-                _labels[i - 1] = texts[i];
-            }
-            Update();
+            Model = bmodel;
         }
         
         /// <summary>
@@ -58,8 +43,6 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         /// </summary>
         public override void Update()
         {
-            // 显示位参数的名称和值
-            ValueTextBlock.Text = _labels[0];
             // 开始画画
             Line line = null;
             //Rectangle rect = null;
@@ -169,15 +152,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
             PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
         }
-
-        public override void SetValue(int id, string value)
-        {
-            base.SetValue(id, value);
-            PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
-        }
-
+        
         #region UI 
 
         static string[] BIT_0_SHOWS = { "0", "OFF", "FALSE"};
@@ -201,8 +176,8 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                         case "LDIIM":
                         case "LDP":
                         case "LDF":
-                            if (!BIT_0_SHOWS.Contains(_values[0])
-                             && !BIT_1_SHOWS.Contains(_values[0]))
+                            if (!BIT_0_SHOWS.Contains(_values[0].Value)
+                             && !BIT_1_SHOWS.Contains(_values[0].Value))
                                 throw new FormatException("value0 is not a BIT.");
                             break;
                     }
@@ -210,11 +185,11 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                     {
                         case "LD":
                         case "LDIM":
-                            value = BIT_1_SHOWS.Contains(_values[0]);
+                            value = BIT_1_SHOWS.Contains(_values[0].Value);
                             break;
                         case "LDI":
                         case "LDIIM":
-                            value = BIT_0_SHOWS.Contains(_values[0]);
+                            value = BIT_0_SHOWS.Contains(_values[0].Value);
                             break;
                         case "LDWEQ":
                         case "LDWNE":
@@ -222,8 +197,8 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                         case "LDWGE":
                         case "LDWL":
                         case "LDWG":
-                            w1 = Int32.Parse(_values[0]);
-                            w2 = Int32.Parse(_values[1]);
+                            w1 = Int32.Parse(_values[0].Value);
+                            w2 = Int32.Parse(_values[1].Value);
                             break;
                         case "LDDEQ":
                         case "LDDNE":
@@ -231,8 +206,8 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                         case "LDDGE":
                         case "LDDL":
                         case "LDDG":
-                            d1 = Int64.Parse(_values[0]);
-                            d2 = Int64.Parse(_values[1]);
+                            d1 = Int64.Parse(_values[0].Value);
+                            d2 = Int64.Parse(_values[1].Value);
                             break;
                         case "LDFEQ":
                         case "LDFNE":
@@ -240,8 +215,8 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                         case "LDFGE":
                         case "LDFL":
                         case "LDFG":
-                            f1 = double.Parse(_values[0]);
-                            f2 = double.Parse(_values[1]);
+                            f1 = double.Parse(_values[0].Value);
+                            f2 = double.Parse(_values[1].Value);
                             break;
                     }
                     switch (Inst)
@@ -278,8 +253,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[0].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[0], _values[0])
+                return Model.ParaCount > 1 && _values[0] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(0).ValueString,
+                        _values[0].Value)
                     : String.Empty;
             }
         }
@@ -288,10 +265,20 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
-                return _labels[1].Length > 0
-                    ? String.Format("{0:s} = {1:s}", _labels[0], _values[0])
+                return Model.ParaCount > 2 && _values[1] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(1).ValueString,
+                        _values[1].Value)
                     : String.Empty;
             }
+        }
+
+        protected override void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            base.OnValueChanged(sender, e);
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
         }
 
         #endregion

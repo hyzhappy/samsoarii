@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class FACTModel : BaseModel
     {
+        public override string InstructionName => "FACT";
+
         public WordValue InputValue { get; set; }
         public DoubleWordValue OutputValue { get; set; }
 

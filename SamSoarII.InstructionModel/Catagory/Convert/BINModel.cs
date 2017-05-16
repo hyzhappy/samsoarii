@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class BINModel : BaseModel
     {
+        public override string InstructionName => "BIN";
         public WordValue InputValue { get; set; }
         public WordValue OutputValue { get; set; }
         public BINModel()

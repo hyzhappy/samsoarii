@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Interrupt
 {
     public class ATCHModel : BaseModel
     {
+        public override string InstructionName => "ATCH";
         public string FuncName { get; set; }
 
         public WordValue IDValue { get; set; }
