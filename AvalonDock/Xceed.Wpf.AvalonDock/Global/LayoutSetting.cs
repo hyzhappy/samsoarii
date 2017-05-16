@@ -385,6 +385,7 @@ namespace Xceed.Wpf.AvalonDock.Global
             xdoc.Add(node_Root);
             xdoc.Save("layoutconfig.xml");
         }
+
         static public void Load()
         {
             XDocument xdoc = XDocument.Load("layoutconfig.xml");

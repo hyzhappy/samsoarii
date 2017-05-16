@@ -171,7 +171,7 @@ namespace SamSoarII.AppMain.UI
                         ldvmodel, lnvmodel);
                     commandrw = new NetworkReplaceElementsCommand_ForReplaceWindow(
                         lnvmodel, rele, command);
-                    commandall.Add(command);
+                    //commandall.Add(command);
                     commandall.Add(commandrw);
                     success++;
                 }
@@ -251,6 +251,11 @@ namespace SamSoarII.AppMain.UI
 
         private void TB_Change_KeyDown(object sender, KeyEventArgs e)
         {
+            if (called_DataGridCell_KeyDown)
+            {
+                called_DataGridCell_KeyDown = false;
+                return;
+            }
             if (TB_Input.Background != Brushes.White) return;
             if (TB_Change.Background == Brushes.Red) return;
             if (e.Key != Key.Enter) return;
@@ -259,9 +264,11 @@ namespace SamSoarII.AppMain.UI
             TB_Change.Background = Brushes.White;
             TB_Change.IsEnabled = true;
         }
-        
+
+        private bool called_DataGridCell_KeyDown = false;
         private void DataGridCell_KeyDown(object sender, KeyEventArgs e)
         {
+            called_DataGridCell_KeyDown = true;
             if (TB_Input.Background != Brushes.White) return;
             if (TB_Change.Background == Brushes.Red) return;
             if (e.Key != Key.Enter) return;
@@ -895,15 +902,7 @@ namespace SamSoarII.AppMain.UI
 
         public void Execute()
         {
-            parent.Items = eles_all;/*
-            foreach (ReplaceElement ele in eles_all)
-            {
-                ele.IsSelected = false;
-            }
-            foreach (ReplaceElement ele in eles_replaced)
-            {
-                ele.IsSelected = true;
-            }*/
+            parent.Items = eles_all;
             for (int i = 0; i < items.Count(); i++)
             {
                 items[i].Execute();
@@ -918,15 +917,7 @@ namespace SamSoarII.AppMain.UI
 
         public void Undo()
         {
-            parent.Items = eles_all;/*
-            foreach (ReplaceElement ele in eles_all)
-            {
-                ele.IsSelected = false;
-            }
-            foreach (ReplaceElement ele in eles_replaced)
-            {
-                ele.IsSelected = true;
-            }*/
+            parent.Items = eles_all;
             for (int i = items.Count() - 1; i >= 0; i--)
             {
                 items[i].Undo();

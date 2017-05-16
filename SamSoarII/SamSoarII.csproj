@@ -295,6 +295,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\Image\TreeViewIcon\Icons.psd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -625,6 +626,25 @@
   <ItemGroup>
     <Resource Include="Resources\Image\ElementInitialize.png" />
     <Resource Include="Resources\Image\ElementTable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\TreeViewIcon\ElementList.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Func.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlockFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Input1.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Input2.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output1.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output2.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Ladders.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Modbus.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\ModbusFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Network.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\NetworkFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Program.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Root.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Routine.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\RoutineFolder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

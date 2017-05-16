@@ -190,8 +190,11 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 {
                     var paneModel = pane.Model as LayoutAnchorablePane;
                     var manager = paneModel.Root.Manager;
-
                     manager.StartDraggingFloatingWindowForPane(paneModel);
+                }
+                else
+                {
+                    Model.Root.Manager.StartDraggingFloatingWindowForContent(Model);
                 }
             }
 
