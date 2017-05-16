@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class MULDModel : BaseModel
     {
+        public override string InstructionName => "MULD";
         public DoubleWordValue InputValue1 { get; set; }
         public DoubleWordValue InputValue2 { get; set; }
         public DoubleWordValue OutputValue { get; set; }

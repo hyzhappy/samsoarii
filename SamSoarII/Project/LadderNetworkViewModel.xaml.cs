@@ -4,6 +4,7 @@ using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.LadderInstViewModel.Interrupt;
+using SamSoarII.LadderInstViewModel.Monitor;
 using SamSoarII.PLCCompiler;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
@@ -42,11 +43,56 @@ namespace SamSoarII.AppMain.Project
         Down_Inc,
         None
     }
+    public enum LadderMode
+    {
+        Edit,
+        Monitor
+    }
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
     public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
     {
+        #region Canvas System
+
+        public Canvas LadderCanvas { get; private set; }
+        private LadderMode laddermode;
+        public LadderMode LadderMode
+        {
+            get { return this.laddermode; }
+            set
+            {
+                this.laddermode = LadderMode;
+                switch (laddermode)
+                {
+                    case LadderMode.Edit:
+                        LadderCanvas_Edit.Visibility = Visibility.Visible;
+                        LadderCanvas_Monitor.Visibility = Visibility.Hidden;
+                        if (_ladderDiagram != null 
+                         && LadderCanvas_Monitor.Children.Contains(_ladderDiagram.SelectionRect))
+                        {
+                            LadderCanvas_Monitor.Children.Remove(_ladderDiagram.SelectionRect);
+                            LadderCanvas_Edit.Children.Add(_ladderDiagram.SelectionRect);
+                        }
+                        LadderCanvas = LadderCanvas_Edit;
+                        break;
+                    case LadderMode.Monitor:
+                        LadderCanvas_Edit.Visibility = Visibility.Hidden;
+                        LadderCanvas_Monitor.Visibility = Visibility.Visible;
+                        if (_ladderDiagram != null
+                         && LadderCanvas_Edit.Children.Contains(_ladderDiagram.SelectionRect))
+                        {
+                            LadderCanvas_Edit.Children.Remove(_ladderDiagram.SelectionRect);
+                            LadderCanvas_Monitor.Children.Add(_ladderDiagram.SelectionRect);
+                        }
+                        LadderCanvas = LadderCanvas_Monitor;
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         private bool _isExpand = true;
         public bool IsExpand
@@ -198,8 +244,14 @@ namespace SamSoarII.AppMain.Project
             }
         }
         public HashSet<BaseViewModel> ErrorModels { get; set; } = new HashSet<BaseViewModel>();
-        private SortedDictionary<IntPoint, BaseViewModel> _ladderElements = new SortedDictionary<IntPoint, BaseViewModel>();
-        private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines = new SortedDictionary<IntPoint, VerticalLineViewModel>();
+        private SortedDictionary<IntPoint, BaseViewModel> _ladderElements 
+            = new SortedDictionary<IntPoint, BaseViewModel>();
+        private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines 
+            = new SortedDictionary<IntPoint, VerticalLineViewModel>();
+        private SortedDictionary<IntPoint, MoniBaseViewModel> _monitorElements
+            = new SortedDictionary<IntPoint, MoniBaseViewModel>();
+        private SortedDictionary<IntPoint, MoniVLineViewModel> _monitorVLines
+            = new SortedDictionary<IntPoint, MoniVLineViewModel>();
 
         private InstructionNetworkViewModel _invmodel;
         public InstructionNetworkViewModel INVModel
@@ -397,6 +449,7 @@ namespace SamSoarII.AppMain.Project
         public Rectangle SelectArea { get; set; } = new Rectangle();
 
         #endregion
+
         private bool _canScrollToolTip = false;
         // parent ladder diagram
         private LadderDiagramViewModel _ladderDiagram;
@@ -411,6 +464,7 @@ namespace SamSoarII.AppMain.Project
         public LadderNetworkViewModel(LadderDiagramViewModel parent, int number)
         {
             InitializeComponent();
+            LadderMode = LadderMode.Edit;
             _ladderDiagram = parent;
             RowCount = 1;
             NetworkNumber = number;
@@ -460,6 +514,70 @@ namespace SamSoarII.AppMain.Project
             return _ladderVerticalLines.Values;
         }
 
+        #region Monitor Ladder
+        
+        private void CreateMonitorElement(BaseViewModel bvmodel)
+        {
+            MoniBaseViewModel mbvmodel = null;
+            if (bvmodel is VerticalLineViewModel)
+            {
+                mbvmodel = new MoniVLineViewModel();
+            }
+            else if (bvmodel is HorizontalLineViewModel)
+            {
+                mbvmodel = new MoniHLineViewModel();
+            }
+            else
+            {
+                mbvmodel = MoniBaseViewModel.Create(bvmodel.Model);
+            }
+            mbvmodel.X = bvmodel.X;
+            mbvmodel.Y = bvmodel.Y;
+            LadderCanvas_Monitor.Children.Add(mbvmodel);
+            IntPoint p = new IntPoint() { X = bvmodel.X, Y = bvmodel.Y };
+            if (mbvmodel is MoniVLineViewModel)
+            {
+                if (!_monitorVLines.ContainsKey(p))
+                {
+                    _monitorVLines.Add(p, (MoniVLineViewModel)mbvmodel);
+                }
+            }
+            else
+            {
+                if (!_monitorElements.ContainsKey(p))
+                {
+                    _monitorElements.Add(p, mbvmodel); 
+                }
+                else
+                {
+                    _monitorElements[p] = mbvmodel;
+                }
+            }
+
+        }
+
+        private void RemoveMonitorElement(int X, int Y)
+        {
+            IntPoint p = new IntPoint() { X = X, Y = Y };
+            if (_monitorElements.ContainsKey(p))
+            {
+                LadderCanvas_Monitor.Children.Remove(_monitorElements[p]);
+                _monitorElements.Remove(p);
+            }
+        }
+
+        private void RemoveMonitorVLine(int X, int Y)
+        {
+            IntPoint p = new IntPoint() { X = X, Y = Y };
+            if (_monitorVLines.ContainsKey(p))
+            {
+                LadderCanvas_Monitor.Children.Remove(_monitorVLines[p]);
+                _monitorVLines.Remove(p);
+            }
+        }
+
+        #endregion
+
         #region Ladder content modification methods
         public BaseViewModel ReplaceElement(BaseViewModel element)
         {
@@ -492,13 +610,14 @@ namespace SamSoarII.AppMain.Project
                     InstructionCommentManager.Unregister(oldele);
                     oldele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
                     _ladderElements.Remove(p);
-                    LadderCanvas.Children.Remove(oldele);
+                    LadderCanvas_Edit.Children.Remove(oldele);
                 }
                 element.IsCommentMode = _isCommendMode;
                 _ladderElements.Add(p, element);
-                LadderCanvas.Children.Add(element);
+                LadderCanvas_Edit.Children.Add(element);
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
+                CreateMonitorElement(element);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = oldele;
                 e.BVModel_new = element;
@@ -513,7 +632,8 @@ namespace SamSoarII.AppMain.Project
             {
                 vline.IsCommentMode = _isCommendMode;
                 _ladderVerticalLines.Add(p, vline);
-                LadderCanvas.Children.Add(vline);
+                LadderCanvas_Edit.Children.Add(vline);
+                CreateMonitorElement(vline);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = null;
                 e.BVModel_new = vline;
@@ -525,10 +645,11 @@ namespace SamSoarII.AppMain.Project
             if (_ladderElements.ContainsKey(pos))
             {
                 var ele = _ladderElements[pos];
-                LadderCanvas.Children.Remove(ele);
+                LadderCanvas_Edit.Children.Remove(ele);
                 _ladderElements.Remove(pos);
                 InstructionCommentManager.Unregister(ele);
                 ele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
+                RemoveMonitorElement(pos.X, pos.Y);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = ele;
                 e.BVModel_new = null;
@@ -553,8 +674,9 @@ namespace SamSoarII.AppMain.Project
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = _ladderVerticalLines[pos];
                 e.BVModel_new = null;
-                LadderCanvas.Children.Remove(_ladderVerticalLines[pos]);
+                LadderCanvas_Edit.Children.Remove(_ladderVerticalLines[pos]);
                 _ladderVerticalLines.Remove(pos);
+                RemoveMonitorVLine(pos.X, pos.Y);
                 VerticalLineChanged(this, e);
                 return true;
             }
@@ -1279,21 +1401,31 @@ namespace SamSoarII.AppMain.Project
         }
         private void ReloadElementsToCanvas()
         {
-            LadderCanvas.Children.Clear();
+            LadderCanvas_Edit.Children.Clear();
+            LadderCanvas_Monitor.Children.Clear();
             RowCount = _oldRowCount;
             _canHide = false;
             foreach (var ele in _ladderElements.Values)
             {
-                LadderCanvas.Children.Add(ele);
+                LadderCanvas_Edit.Children.Add(ele);
             }
             foreach (var ele in _ladderVerticalLines.Values)
             {
-                LadderCanvas.Children.Add(ele);
+                LadderCanvas_Edit.Children.Add(ele);
+            }
+            foreach (var ele in _monitorElements.Values)
+            {
+                LadderCanvas_Monitor.Children.Add(ele);
+            }
+            foreach (var ele in _monitorVLines.Values)
+            {
+                LadderCanvas_Monitor.Children.Add(ele);
             }
         }
         private void ClearElementsFromCanvas()
         {
-            LadderCanvas.Children.Clear();
+            LadderCanvas_Edit.Children.Clear();
+            LadderCanvas_Monitor.Children.Clear();
             _oldRowCount = RowCount;
             _canHide = true;
             RowCount = 0;

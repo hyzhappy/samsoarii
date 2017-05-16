@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class ROUNDModel : BaseModel
     {
+        public override string InstructionName => "ROUND";
         public FloatValue InputValue { get; set; }
         public DoubleWordValue OutputValue { get; set; }
         public ROUNDModel()

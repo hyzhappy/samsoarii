@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class ROLModel : BaseModel
     {
+        public override string InstructionName => "ROL";
         public WordValue SourceValue { get; set; }
         public WordValue DestinationValue { get; set; }
         public WordValue Count { get; set; }

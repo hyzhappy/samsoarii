@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class MOVDModel : BaseModel
     {
+        public override string InstructionName => "MOVD";
         public DoubleWordValue SourceValue { get; set; }
         public DoubleWordValue DestinationValue { get; set; }
         public MOVDModel()

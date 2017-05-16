@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class CMLModel : BaseModel
     {
+        public override string InstructionName => "CML";
+
         public WordValue InputValue { get; set; }
         public WordValue OutputValue { get; set; }
 

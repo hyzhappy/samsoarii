@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class DECDModel : BaseModel
     {
+        public override string InstructionName => "DECD";
         public DoubleWordValue InputValue { get; set; }
         public DoubleWordValue OutputValue { get; set; }
         public DECDModel()

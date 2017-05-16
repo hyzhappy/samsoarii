@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class ZCPModel : BaseModel
     {
+        public override string InstructionName => "ZCP";
+
         public WordValue InputValue1 { get; set; }
         public WordValue InputValue2 { get; set; }
         public WordValue InputValue3 { get; set; }

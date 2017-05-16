@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class LOGModel : BaseModel
     {
+        public override string InstructionName => "LOG";
+
         public FloatValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
         

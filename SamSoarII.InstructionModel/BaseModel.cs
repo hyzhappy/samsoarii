@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public abstract class BaseModel
     {
+        public abstract string InstructionName { get; }
         public string ImportVaribleName { get; set; }
         public string ExportVaribleName { get; set; }    
         protected List<string> VaribleNameList = new List<string>();
@@ -26,5 +27,14 @@ namespace SamSoarII.LadderInstModel
         public abstract int ParaCount { get; }
         public abstract IValueModel GetPara(int id);
         public abstract void SetPara(int id, IValueModel value);
+        public override string ToString()
+        {
+            string result = InstructionName;
+            for (int i = 0; i < ParaCount; i++)
+            {
+                result += " " + GetPara(i).ValueShowString;
+            }
+            return result;
+        }
     }
 }

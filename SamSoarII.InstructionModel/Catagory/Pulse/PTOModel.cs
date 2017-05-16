@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Pulse
 {
     public class PTOModel : BaseModel
     {
+        public override string InstructionName => "PTO";
         public WordValue ArgumentValue;
         public BitValue OutputValue1;
         public BitValue OutputValue2;

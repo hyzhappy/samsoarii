@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Communication
 {
     public class MBUSModel : BaseModel
     {
+        public override string InstructionName => "MBUS";
+
         public WordValue COMPort { get; set; }
         public string Table { get; set; }
         public WordValue Message { get; set; }

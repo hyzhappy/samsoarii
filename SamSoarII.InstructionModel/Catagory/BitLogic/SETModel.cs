@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class SETModel : BaseModel
     {
+        public override string InstructionName => "SET";
+
         public BitValue Value { get; set; }
         public WordValue Count { get; set; }
 

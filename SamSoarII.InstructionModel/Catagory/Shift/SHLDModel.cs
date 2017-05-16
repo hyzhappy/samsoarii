@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class SHLDModel : BaseModel
     {
+        public override string InstructionName => "SHLD";
         public DoubleWordValue SourceValue { get; set; }
         public DoubleWordValue DestinationValue { get; set; }
         public WordValue Count { get; set; }

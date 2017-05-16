@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class NEGDModel : BaseModel
     {
+        public override string InstructionName => "NEGD";
+
         public DoubleWordValue InputValue { get; set; }
         public DoubleWordValue OutputValue { get; set; }
 

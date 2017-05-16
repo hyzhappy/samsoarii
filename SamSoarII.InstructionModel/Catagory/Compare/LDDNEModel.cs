@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class LDDNEModel : BaseModel
     {
+        public override string InstructionName => "LDDNE";
+
         public DoubleWordValue Value1 { get; set; }
         public DoubleWordValue Value2 { get; set; }
         public LDDNEModel()

@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class SUBDModel : BaseModel
     {
+        public override string InstructionName => "SUBD";
         public DoubleWordValue InputValue1 { get; set; }
         public DoubleWordValue InputValue2 { get; set; }
         public DoubleWordValue OutputValue { get; set; }

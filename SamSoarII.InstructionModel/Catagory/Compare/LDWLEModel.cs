@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class LDWLEModel : BaseModel
     {
+        public override string InstructionName => "LDWLE";
         public WordValue Value1 { get; set; }
         public WordValue Value2 { get; set; }
         public LDWLEModel()

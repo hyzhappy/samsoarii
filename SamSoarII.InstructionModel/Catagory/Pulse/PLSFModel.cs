@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class PLSFModel : BaseModel
     {
+        public override string InstructionName => "PLSF";
         public WordValue FreqValue { get; set; }
         public BitValue OutputValue { get; set; }
         public PLSFModel()

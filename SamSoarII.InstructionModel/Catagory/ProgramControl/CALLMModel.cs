@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class CALLMModel : BaseModel
     {
+        public override string InstructionName => "CALLM";
         public string FunctionName { get; set; }
         public ArgumentValue Value1 { get; set; }
         public ArgumentValue Value2 { get; set; }

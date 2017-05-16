@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class SETIMModel : BaseModel
     {
+        public override string InstructionName => "SETIM";
+
         public BitValue Value { get; set; }
         public WordValue Count { get; set; }
         public SETIMModel()

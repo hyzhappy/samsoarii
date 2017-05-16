@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class DECModel : BaseModel
     {
+        public override string InstructionName => "DEC";
         public WordValue InputValue { get; set; }
         public WordValue OutputValue { get; set; }
         public DECModel()

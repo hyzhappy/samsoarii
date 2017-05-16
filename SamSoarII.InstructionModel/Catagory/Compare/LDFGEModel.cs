@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class LDFGEModel : BaseModel
     {
+        public override string InstructionName => "LDFGE";
+
         public FloatValue Value1 { get; set; }
         public FloatValue Value2 { get; set; }
         public LDFGEModel()

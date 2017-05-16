@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class SQRTModel : BaseModel
     {
+        public override string InstructionName => "SQRT";
         public FloatValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
         public SQRTModel(FloatValue inputValue, FloatValue outputValue)

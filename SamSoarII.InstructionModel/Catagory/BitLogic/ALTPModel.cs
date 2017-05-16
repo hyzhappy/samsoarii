@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class ALTPModel : BaseModel
     {
+        public override string InstructionName => "ALTP";
+
         public BitValue Value { get; set; }
         public ALTPModel()
         {

@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class WTODModel : BaseModel
     {
+        public override string InstructionName => "WTOD";
         public WordValue InputValue { get; set; }
         public DoubleWordValue OutputValue { get; set; }
 

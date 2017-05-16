@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class RSTIMModel : BaseModel
     {
+        public override string InstructionName => "RSTIM";
+
         public BitValue Value { get; set; }
         public WordValue Count { get; set; }
         public RSTIMModel()

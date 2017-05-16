@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Auxiliar
 {
     public class SMOVModel : BaseModel
     {
+        public override string InstructionName => "SMOV";
+
         public WordValue SoruceValue { get; set; }
         public WordValue SourceStart { get; set; }
         public WordValue SourceCount { get; set; }

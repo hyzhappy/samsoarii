@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class NEXTModel : BaseModel
     {
+        public override string InstructionName => "NEXT";
         public override string GenerateCode()
         {
             return string.Format("}}\r\n}}\r\n");

@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class LDIIMModel : BaseModel
     {
+        public override string InstructionName => "LDIIM";
+
         public BitValue Value { get; set; }
         public LDIIMModel()
         {

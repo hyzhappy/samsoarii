@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class ALTModel : BaseModel
     {
+        public override string InstructionName => "ALT";
+
         public BitValue Value { get; set; }
 
         public ALTModel()

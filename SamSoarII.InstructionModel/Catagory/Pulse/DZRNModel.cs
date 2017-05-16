@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel.Pulse
 {
     public class DZRNModel : BaseModel
     {
+        public override string InstructionName => "DZRN";
         public DoubleWordValue BackValue { get; set; }
         public DoubleWordValue CrawValue { get; set; }
         public BitValue SignalValue { get; set; }

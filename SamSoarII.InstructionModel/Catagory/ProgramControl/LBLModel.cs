@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class LBLModel : BaseModel
     {
+        public override string InstructionName => "LBL";
         public WordValue LBLIndex { get; set; } 
         public LBLModel()
         {

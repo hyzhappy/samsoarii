@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class FORModel : BaseModel
     {
+        public override string InstructionName => "FOR";
         public WordValue Count { get; set; }
         public FORModel()
         {

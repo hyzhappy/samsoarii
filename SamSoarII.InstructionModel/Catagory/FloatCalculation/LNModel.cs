@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class LNModel : BaseModel
     {
+        public override string InstructionName => "LN";
         public FloatValue InputValue { get; set; }
         public FloatValue OutputValue { get; set; }
         public LNModel(FloatValue inputValue, FloatValue outputValue)

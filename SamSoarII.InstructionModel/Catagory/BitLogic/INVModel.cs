@@ -8,6 +8,8 @@ namespace SamSoarII.LadderInstModel
 {
     public class INVModel : BaseModel
     {
+        public override string InstructionName => "INV";
+
         public INVModel()
         {
 

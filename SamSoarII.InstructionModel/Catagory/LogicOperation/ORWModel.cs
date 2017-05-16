@@ -8,6 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class ORWModel : BaseModel
     {
+        public override string InstructionName => "ORW";
         public WordValue InputValue1 { get; set; }
         public WordValue InputValue2 { get; set; }
         public WordValue OutputValue { get; set; }

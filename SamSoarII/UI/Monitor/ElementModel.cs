@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Utility;
+using SamSoarII.LadderInstViewModel.Monitor;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,11 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Windows;
 
 namespace SamSoarII.AppMain.UI.Monitor
 {
-    public class ElementModel:INotifyPropertyChanged
+    public class ElementModel : INotifyPropertyChanged, IMoniValueModel
     {
+        #region IMoniValueModel
+        public string Value
+        {
+            get { return SetValue; }
+        }
+
+        public event RoutedEventHandler ValueChanged = delegate { };
+        #endregion
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public string AddrType { get; set; }
         public uint StartAddr { get; set; }
@@ -57,6 +68,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 _setValue = value;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SetValue"));
+                ValueChanged.Invoke(this, new RoutedEventArgs());
             }
         }
         public string[] ShowTypes

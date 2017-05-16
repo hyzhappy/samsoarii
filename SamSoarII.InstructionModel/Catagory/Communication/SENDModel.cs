@@ -9,6 +9,8 @@ namespace SamSoarII.LadderInstModel.Communication
 {
     public class SENDModel : BaseModel
     {
+        public override string InstructionName => "SEND";
+
         public WordValue COMPort { get; set; }
         public WordValue BaseValue { get; set; }
         public WordValue CountValue { get; set; }

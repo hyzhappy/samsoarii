@@ -9,6 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class SUBFModel : BaseModel
     {
+        public override string InstructionName => "SUBF";
         public FloatValue InputValue1 { get; set; }
         public FloatValue InputValue2 { get; set; }
         public FloatValue OutputValue { get; set; }
