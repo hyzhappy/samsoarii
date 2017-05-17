@@ -16,7 +16,7 @@
             <Line x:Name="line" Stroke="Black" Margin="25,0,0,0" StrokeThickness="3" X1="0" X2="0" Y1="0" Y2="{Binding ElementName=canvas,Path=ActualHeight,Converter={StaticResource Converter}}"></Line>
             <Line x:Name="line1" Stroke="Black" Margin="25,-20,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
         </StackPanel>
-        <Rectangle x:Name="rect" Width="50" Height="{Binding ElementName=control,Path=ActualHeight}">
-        </Rectangle>
+        <!--<Rectangle x:Name="rect" Width="50" Height="{Binding ElementName=control,Path=ActualHeight}">
+        </Rectangle>-->
     </Canvas>
 </UserControl>

@@ -68,9 +68,10 @@ namespace SamSoarII.Communication.Command
         public bool IsSuccess { get; set; }
         public List<ElementModel> RefElements_A { get; set; } = new List<ElementModel>();
         public List<ElementModel> RefElements_B { get; set; } = new List<ElementModel>();
-        public GeneralWriteCommand(byte[] data)
+        public GeneralWriteCommand(byte[] data, ElementModel RefElement)
         {
             data1 = data;
+            RefElements_A.Add(RefElement);
             InitializeCommandByElement();
             GenerateCommand();
         }

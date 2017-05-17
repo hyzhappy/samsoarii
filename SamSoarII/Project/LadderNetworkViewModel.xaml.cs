@@ -75,6 +75,7 @@ namespace SamSoarII.AppMain.Project
                             LadderCanvas_Edit.Children.Add(_ladderDiagram.SelectionRect);
                         }
                         LadderCanvas = LadderCanvas_Edit;
+                        LadderCanvas_Monitor.Height = 0;
                         break;
                     case LadderMode.Monitor:
                         LadderCanvas_Edit.Visibility = Visibility.Hidden;
@@ -86,6 +87,7 @@ namespace SamSoarII.AppMain.Project
                             LadderCanvas_Monitor.Children.Add(_ladderDiagram.SelectionRect);
                         }
                         LadderCanvas = LadderCanvas_Monitor;
+                        LadderCanvas_Edit.Height = 0;
                         break;
                 }
             }
@@ -289,13 +291,33 @@ namespace SamSoarII.AppMain.Project
         
         #region Selection relative data
 
-        public int SelectAreaOriginX
+        public int SelectAreaOriginFX
         {
             get;set;
         }
-        public int SelectAreaOriginY
+        public int SelectAreaOriginFY
         {
             get;set;
+        }
+        private int _selectAreaOriginSX;
+        public int SelectAreaOriginSX
+        {
+            get
+            {
+                return _selectAreaOriginSX;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                if (value > GlobalSetting.LadderXCapacity - 1)
+                {
+                    value = GlobalSetting.LadderXCapacity - 1;
+                }
+                _selectAreaOriginSX = value;
+            }
         }
         private int _selectAreaFirstX;
         private int _selectAreaFirstY;
@@ -326,7 +348,7 @@ namespace SamSoarII.AppMain.Project
             {
                 _selectAreaFirstY = value;
                 var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
-                int height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
+                int height;
                 if (_canHide)
                 {
                     height = 0;
@@ -499,7 +521,39 @@ namespace SamSoarII.AppMain.Project
             }
             return null;
         }
-
+        public void EnterOriginSelectArea(bool isUp)
+        {
+            if (!isUp)
+            {
+                if (!_canHide && SelectAreaOriginFY == 0 && SelectAreaOriginFX == SelectAreaOriginSX)
+                {
+                    AcquireSelectRect();
+                }
+                else
+                {
+                    SelectAreaSecondY = 0;
+                    SelectAreaFirstX = SelectAreaOriginFX;
+                    SelectAreaFirstY = SelectAreaOriginFY;
+                    SelectAreaSecondX = SelectAreaOriginSX;
+                    IsSelectAreaMode = true;
+                }
+            }
+            else
+            {
+                if (!_canHide && SelectAreaOriginFY == RowCount - 1 && SelectAreaOriginFX == SelectAreaOriginSX)
+                {
+                    AcquireSelectRect();
+                }
+                else
+                {
+                    SelectAreaSecondY = RowCount > 0 ? RowCount - 1 : 0 ;
+                    SelectAreaFirstX = SelectAreaOriginFX;
+                    SelectAreaFirstY = SelectAreaOriginFY;
+                    SelectAreaSecondX = SelectAreaOriginSX;
+                    IsSelectAreaMode = true;
+                }
+            }
+        }
         public VerticalLineViewModel SearchVerticalLine(int x, int y)
         {
             var p = new IntPoint() { X = x, Y = y };
@@ -1224,12 +1278,12 @@ namespace SamSoarII.AppMain.Project
             {
                 return false;
             }
+            _ladderDiagram.SelectionRect.X = intPoint.X;
+            _ladderDiagram.SelectionRect.Y = intPoint.Y;
             if (!IsSingleSelected())
             {
                 AcquireSelectRect();
             }
-            _ladderDiagram.SelectionRect.X = intPoint.X;
-            _ladderDiagram.SelectionRect.Y = intPoint.Y;
             return true;
         }
 
@@ -1317,6 +1371,9 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.AcquireSelectRect(this);
                 LadderCanvas.Children.Add(_ladderDiagram.SelectionRect);
                 _ladderDiagram.SelectionRect.NetworkParent = this;
+                SelectAreaOriginFX = _ladderDiagram.SelectionRect.X;
+                SelectAreaOriginFY = _ladderDiagram.SelectionRect.Y;
+                SelectAreaOriginSX = _ladderDiagram.SelectionRect.X;
             }
         }
         public List<BaseViewModel> GetSelectedElements()

@@ -59,9 +59,10 @@ namespace SamSoarII.Communication.Command
             }
         }
         public ElementModel RefElement { get; set; }
-        public IntrasegmentWriteCommand(byte[] data)
+        public IntrasegmentWriteCommand(byte[] data, ElementModel RefElement)
         {
             this.data = data;
+            this.RefElement = RefElement;
             InitializeCommandByElement();
             GenerateCommand();
         }

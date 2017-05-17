@@ -1854,7 +1854,6 @@ namespace Xceed.Wpf.AvalonDock
                     }
                 }
             }
-            
             return _areas;
         }
 

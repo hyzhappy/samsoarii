@@ -111,7 +111,7 @@ namespace SamSoarII.UserInterface
         {
             TextBox textbox = sender as TextBox;
             int oldvalue = textbox.Text == string.Empty ? 0 : int.Parse(textbox.Text);
-            if (oldvalue == 0 && (e.Key == Key.D0 || e.Key == Key.NumPad0))
+            if (oldvalue == 0 && KeyInputHelper.NumAssert(e.Key) && textbox.Text != string.Empty)
             {
                 e.Handled = true;
             }

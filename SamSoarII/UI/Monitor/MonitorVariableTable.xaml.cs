@@ -199,7 +199,25 @@ namespace SamSoarII.AppMain.UI.Monitor
             ((Grid)dialog.FindName("Content1")).Visibility = Visibility.Visible;
             dialog.ForceButtonClick += (sender1, e1) =>
             {
-                
+                byte value;
+                if (sender1 == dialog.FindName("ForceON") || sender1 == dialog.FindName("ForceOFF"))
+                {
+                    if (sender1 == dialog.FindName("ForceON")) value = 0x01;
+                    else value = 0x00;
+                    GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value },element);
+                    command.RefElements_A.Add(element);
+                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                }
+                else if (sender1 == dialog.FindName("UndoForce"))
+                {
+                    ForceCancelCommand command = new ForceCancelCommand(false,element);
+                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                }
+                else
+                {
+                    ForceCancelCommand command = new ForceCancelCommand(true,element);
+                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                }
             };
         }
         private void InitializeBitDialog(ElementValueModifyDialog dialog, ElementModel element)
@@ -212,13 +230,13 @@ namespace SamSoarII.AppMain.UI.Monitor
                 else bitvalue = 0x00;
                 if (element.IsIntrasegment)
                 {
-                    IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { bitvalue });
+                    IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { bitvalue },element);
                     command.RefElement = element;
                     _parent.dataHandle.WriteCommands.Enqueue(command);
                 }
                 else
                 {
-                    GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { bitvalue });
+                    GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { bitvalue },element);
                     command.RefElements_A.Add(element);
                     _parent.dataHandle.WriteCommands.Enqueue(command);
                 }
@@ -247,13 +265,13 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                     if (element.IsIntrasegment)
                     {
-                        IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data);
+                        IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data,element);
                         command.RefElement = element;
                         _parent.dataHandle.WriteCommands.Enqueue(command);
                     }
                     else
                     {
-                        GeneralWriteCommand command = new GeneralWriteCommand(data);
+                        GeneralWriteCommand command = new GeneralWriteCommand(data,element);
                         command.RefElements_A.Add(element);
                         _parent.dataHandle.WriteCommands.Enqueue(command);
                     }

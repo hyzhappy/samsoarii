@@ -16,7 +16,13 @@ namespace SamSoarII.Communication.Command
         private byte[] command;
         private bool isAll = false;
         public ElementModel RefElement { get; set; }
-        public ForceCancelCommand() { }
+        public ForceCancelCommand(bool isAll,ElementModel RefElement)
+        {
+            this.isAll = isAll;
+            this.RefElement = RefElement;
+            InitializeCommandByElement();
+            GenerateCommand();
+        }
         public void InitializeCommandByElement()
         {
             addrType = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), RefElement.AddrType), RefElement.StartAddr);
@@ -28,7 +34,6 @@ namespace SamSoarII.Communication.Command
             {
                 startLowAddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr)[0];
             }
-            GenerateCommand();
         }
         private void GenerateCommand()
         {

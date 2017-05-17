@@ -241,10 +241,10 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-
+        private CrossNetworkState _crossNetState;
         public CrossNetworkState CrossNetState
         {
-            get; set; 
+            get;set;
         }
 
         #region About CommandManager
@@ -1453,6 +1453,9 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
+        #region shift move
+        
         private void SelectionAreaChanged(Key key)
         {
             if (_selectStatus == SelectStatus.SingleSelected)
@@ -1493,7 +1496,7 @@ namespace SamSoarII.AppMain.Project
                 case Key.Up:
                     if (CrossNetState == CrossNetworkState.NoCross)
                     {
-                        return _selectStartNetwork.NetworkNumber > 0 || _selectStartNetwork.SelectAreaSecondY > 0;
+                        return _selectStartNetwork.NetworkNumber > 0 || _selectStartNetwork.SelectAreaSecondY > 0 || !_selectStartNetwork.IsSelectAllMode;
                     }
                     else if (CrossNetState == CrossNetworkState.CrossDown)
                     {
@@ -1513,7 +1516,7 @@ namespace SamSoarII.AppMain.Project
                 case Key.Down:
                     if (CrossNetState == CrossNetworkState.NoCross)
                     {
-                        return _selectStartNetwork.NetworkNumber < _ladderNetworks.Count - 1 || _selectStartNetwork.SelectAreaSecondY < _selectStartNetwork.RowCount - 1;
+                        return _selectStartNetwork.NetworkNumber < _ladderNetworks.Count - 1 || _selectStartNetwork.SelectAreaSecondY < _selectStartNetwork.RowCount - 1 || !_selectStartNetwork.IsSelectAllMode;
                     }
                     else if (CrossNetState == CrossNetworkState.CrossUp)
                     {
@@ -1536,18 +1539,25 @@ namespace SamSoarII.AppMain.Project
         }
         private bool SingleSelectionAreaCanChange(Key key)
         {
-            switch (key)
+            if (_selectStartNetwork != null && _selectStartNetwork.ladderExpander.IsExpand)
             {
-                case Key.Left:
-                    return SelectionRect.X > 0;
-                case Key.Right:
-                    return SelectionRect.X < GlobalSetting.LadderXCapacity - 1;
-                case Key.Up:
-                    return SelectStartNetwork.NetworkNumber > 0 || SelectionRect.Y > 0;
-                case Key.Down:
-                    return SelectStartNetwork.NetworkNumber < _ladderNetworks.Count - 1 || SelectionRect.Y < SelectStartNetwork.RowCount - 1;
-                default:
-                    return false;
+                switch (key)
+                {
+                    case Key.Left:
+                        return SelectionRect.X > 0;
+                    case Key.Right:
+                        return SelectionRect.X < GlobalSetting.LadderXCapacity - 1;
+                    case Key.Up:
+                        return SelectStartNetwork.NetworkNumber > 0 || SelectionRect.Y > 0 || !SelectStartNetwork.IsSelectAllMode;
+                    case Key.Down:
+                        return SelectStartNetwork.NetworkNumber < _ladderNetworks.Count - 1 || SelectionRect.Y < SelectStartNetwork.RowCount - 1 || !SelectStartNetwork.IsSelectAllMode;
+                    default:
+                        return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
         private void ChangeMutiSelectionArea(Key key)
@@ -1560,6 +1570,7 @@ namespace SamSoarII.AppMain.Project
                         if (_selectStartNetwork.SelectAreaSecondX > 0)
                         {
                             _selectStartNetwork.SelectAreaSecondX--;
+                            _selectStartNetwork.SelectAreaOriginSX = _selectStartNetwork.SelectAreaSecondX;
                             HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                             if (_selectStartNetwork.SelectAreaSecondX == _selectStartNetwork.SelectAreaFirstX && _selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit)
                             {
@@ -1576,6 +1587,7 @@ namespace SamSoarII.AppMain.Project
                         if (_selectStartNetwork.SelectAreaSecondX < GlobalSetting.LadderXCapacity - 1)
                         {
                             _selectStartNetwork.SelectAreaSecondX++;
+                            _selectStartNetwork.SelectAreaOriginSX = _selectStartNetwork.SelectAreaSecondX;
                             HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                             if (_selectStartNetwork.SelectAreaSecondX == _selectStartNetwork.SelectAreaFirstX && _selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit)
                             {
@@ -1599,38 +1611,16 @@ namespace SamSoarII.AppMain.Project
                         {
                             net.IsSelectAllMode = true;
                         }
-                        VScrollToRect(_selectAllNetworks.First().NetworkNumber,0);
+                        if (_selectAllNetworks.Count > 0)
+                        {
+                            VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
+                        }
                     }
                     else if (CrossNetState == CrossNetworkState.CrossDown)
                     {
-                        CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count - 1);
-                        foreach (var net in _selectAllNetworkCache)
+                        if (_selectAllNetworks.Count > 0)
                         {
-                            net.IsSelectAreaMode = false;
-                            net.IsSelectAllMode = false;
-                        }
-                        if (_selectAllNetworks.Count == 0)
-                        {
-                            CrossNetState = CrossNetworkState.NoCross;
-                            _selectStartNetwork.IsSelectAllMode = false;
-                            VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.RowCount - 1);
-                        }
-                        else
-                        {
-                            foreach (var net in _selectAllNetworks)
-                            {
-                                net.IsSelectAllMode = true;
-                            }
-                            VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
-                        }
-                    }
-                    else
-                    {
-                        if (_selectStartNetwork.SelectAreaSecondY == 0)
-                        {
-                            CrossNetState = CrossNetworkState.CrossUp;
-                            CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count + 1);
-                            _selectStartNetwork.IsSelectAllMode = true;
+                            CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count - 1);
                             foreach (var net in _selectAllNetworkCache)
                             {
                                 net.IsSelectAreaMode = false;
@@ -1640,7 +1630,24 @@ namespace SamSoarII.AppMain.Project
                             {
                                 net.IsSelectAllMode = true;
                             }
-                            VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
+                            if (_selectAllNetworks.Count > 0)
+                            {
+                                VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                            }
+                        }
+                        else
+                        {
+                            _selectStartNetwork.IsSelectAllMode = false;
+                            _selectStartNetwork.EnterOriginSelectArea(true);
+                            CrossNetState = CrossNetworkState.NoCross;
+                        }
+                    }
+                    else
+                    {
+                        if (_selectStartNetwork.SelectAreaSecondY == 0)
+                        {
+                            _selectStartNetwork.IsSelectAllMode = true;
+                            CrossNetState = CrossNetworkState.CrossUp;
                         }
                         else
                         {
@@ -1668,38 +1675,16 @@ namespace SamSoarII.AppMain.Project
                         {
                             net.IsSelectAllMode = true;
                         }
-                        VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                        if (_selectAllNetworks.Count > 0)
+                        {
+                            VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                        }
                     }
                     else if (CrossNetState == CrossNetworkState.CrossUp)
                     {
-                        CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count - 1);
-                        foreach (var net in _selectAllNetworkCache)
+                        if (_selectAllNetworks.Count > 0)
                         {
-                            net.IsSelectAreaMode = false;
-                            net.IsSelectAllMode = false;
-                        }
-                        if (_selectAllNetworks.Count == 0)
-                        {
-                            CrossNetState = CrossNetworkState.NoCross;
-                            _selectStartNetwork.IsSelectAllMode = false;
-                            VScrollToRect(_selectStartNetwork.NetworkNumber, 0);
-                        }
-                        else
-                        {
-                            foreach (var net in _selectAllNetworks)
-                            {
-                                net.IsSelectAllMode = true;
-                            }
-                            VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
-                        }
-                    }
-                    else
-                    {
-                        if (_selectStartNetwork.SelectAreaSecondY == _selectStartNetwork.RowCount - 1)
-                        {
-                            CrossNetState = CrossNetworkState.CrossDown;
-                            CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count + 1);
-                            _selectStartNetwork.IsSelectAllMode = true;
+                            CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count - 1);
                             foreach (var net in _selectAllNetworkCache)
                             {
                                 net.IsSelectAreaMode = false;
@@ -1709,7 +1694,24 @@ namespace SamSoarII.AppMain.Project
                             {
                                 net.IsSelectAllMode = true;
                             }
-                            VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                            if (_selectAllNetworks.Count > 0)
+                            {
+                                VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
+                            }
+                        }
+                        else
+                        {
+                            _selectStartNetwork.IsSelectAllMode = false;
+                            _selectStartNetwork.EnterOriginSelectArea(false);
+                            CrossNetState = CrossNetworkState.NoCross;
+                        }
+                    }
+                    else
+                    {
+                        if (!_selectStartNetwork.ladderExpander.IsExpand || _selectStartNetwork.SelectAreaSecondY == _selectStartNetwork.RowCount - 1)
+                        {
+                            _selectStartNetwork.IsSelectAllMode = true;
+                            CrossNetState = CrossNetworkState.CrossDown;
                         }
                         else
                         {
@@ -1733,23 +1735,25 @@ namespace SamSoarII.AppMain.Project
             switch (key)
             {
                 case Key.Left:
-                    _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
-                    _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaOriginFX = _selectRect.X;
+                    _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
                     _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaSecondX = _selectRect.X - 1;
                     _selectStartNetwork.SelectAreaSecondY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaOriginSX = _selectRect.X - 1;
                     HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                     CrossNetState = CrossNetworkState.NoCross;
                     SelectionStatus = SelectStatus.MultiSelecting;
                     break;
                 case Key.Right:
-                    _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
-                    _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaOriginFX = _selectRect.X;
+                    _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
                     _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaSecondX = _selectRect.X + 1;
                     _selectStartNetwork.SelectAreaSecondY = _selectRect.Y;
+                    _selectStartNetwork.SelectAreaOriginSX = _selectRect.X + 1;
                     HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                     CrossNetState = CrossNetworkState.NoCross;
                     SelectionStatus = SelectStatus.MultiSelecting;
@@ -1757,24 +1761,14 @@ namespace SamSoarII.AppMain.Project
                 case Key.Up:
                     if (_selectRect.Y == 0)
                     {
-                        CrossNetState = CrossNetworkState.CrossUp;
-                        CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count + 1);
                         _selectStartNetwork.IsSelectAllMode = true;
-                        foreach (var net in _selectAllNetworkCache)
-                        {
-                            net.IsSelectAreaMode = false;
-                            net.IsSelectAllMode = false;
-                        }
-                        foreach (var net in _selectAllNetworks)
-                        {
-                            net.IsSelectAllMode = true;
-                        }
-                        VScrollToRect(_selectAllNetworks.First().NetworkNumber,0);
+                        CrossNetState = CrossNetworkState.CrossUp;
                     }
                     else
                     {
-                        _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
-                        _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaOriginFX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaOriginSX = _selectRect.X;
                         _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
                         _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
                         _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
@@ -1787,24 +1781,14 @@ namespace SamSoarII.AppMain.Project
                 case Key.Down:
                     if (_selectRect.Y == _selectStartNetwork.RowCount - 1)
                     {
-                        CrossNetState = CrossNetworkState.CrossDown;
-                        CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count + 1);
                         _selectStartNetwork.IsSelectAllMode = true;
-                        foreach (var net in _selectAllNetworkCache)
-                        {
-                            net.IsSelectAreaMode = false;
-                            net.IsSelectAllMode = false;
-                        }
-                        foreach (var net in _selectAllNetworks)
-                        {
-                            net.IsSelectAllMode = true;
-                        }
-                        VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
+                        CrossNetState = CrossNetworkState.CrossDown;
                     }
                     else
                     {
-                        _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
-                        _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaOriginFX = _selectRect.X;
+                        _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
+                        _selectStartNetwork.SelectAreaOriginSX = _selectRect.X;
                         _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
                         _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
                         _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
@@ -1818,6 +1802,8 @@ namespace SamSoarII.AppMain.Project
                     break;
             }
         }
+        #endregion
+
         private void OnLadderDiagramMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
@@ -1863,8 +1849,9 @@ namespace SamSoarII.AppMain.Project
                         if(p.Y < 0 || (pp.X != _selectRect.X) || (pp.Y != _selectRect.Y))
                         {
                             _selectStartNetwork = _selectRectOwner;
-                            _selectStartNetwork.SelectAreaOriginX = _selectRect.X;
-                            _selectStartNetwork.SelectAreaOriginY = _selectRect.Y;
+                            _selectStartNetwork.SelectAreaOriginFX = _selectRect.X;
+                            _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
+                            _selectStartNetwork.SelectAreaOriginSX = pp.X;
                             _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
                             _selectStartNetwork.SelectAreaFirstY = _selectRect.Y;
                             _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
@@ -1889,8 +1876,9 @@ namespace SamSoarII.AppMain.Project
                             }
                             var p = e.GetPosition(_selectStartNetwork.LadderCanvas);
                             var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
+                            _selectStartNetwork.SelectAreaOriginSX = pp.X;
                             _selectStartNetwork.IsSelectAllMode = false;
-                            if (pp.X == _selectStartNetwork.SelectAreaOriginX && pp.Y == _selectStartNetwork.SelectAreaOriginY)
+                            if (pp.X == _selectStartNetwork.SelectAreaOriginFX && pp.Y == _selectStartNetwork.SelectAreaOriginFY)
                             {
                                 SelectionRect.X = pp.X;
                                 SelectionRect.Y = pp.Y;
@@ -1898,8 +1886,8 @@ namespace SamSoarII.AppMain.Project
                             }
                             else
                             {
-                                _selectStartNetwork.SelectAreaFirstX = _selectStartNetwork.SelectAreaOriginX;
-                                _selectStartNetwork.SelectAreaFirstY = _selectStartNetwork.SelectAreaOriginY;
+                                _selectStartNetwork.SelectAreaFirstX = _selectStartNetwork.SelectAreaOriginFX;
+                                _selectStartNetwork.SelectAreaFirstY = _selectStartNetwork.SelectAreaOriginFY;
                                 _selectStartNetwork.SelectAreaSecondX = pp.X;
                                 _selectStartNetwork.SelectAreaSecondY = pp.Y;
                             }
