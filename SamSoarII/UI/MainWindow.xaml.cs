@@ -40,12 +40,9 @@ namespace SamSoarII.AppMain.UI
         private InteractionFacade _interactionFacade;
         private CanAnimationScroll MainScroll;
         public LayoutAnchorControl LACProj { get; private set; }
-        public LayoutAnchorControl LACSimuProj { get; private set; }
-        public LayoutAnchorControl LACSimuMonitor { get; private set; }
-        public LayoutAnchorControl LACOutput { get; private set; }
         public LayoutAnchorControl LACFind { get; private set; }
         public LayoutAnchorControl LACReplace { get; private set; }
-        public LayoutAnchorControl LACMainMonitor { get; private set; }
+        public LayoutAnchorControl LACMonitor { get; private set; }
         public LayoutAnchorControl LACErrorList { get; private set; }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
@@ -86,21 +83,15 @@ namespace SamSoarII.AppMain.UI
             LayoutSetting.Load();
 
             LACProj = LAProj.AnchorControl;
-            LACSimuProj = LASimuProj.AnchorControl;
-            LACSimuMonitor = LASimuMonitor.AnchorControl;
-            LACOutput = LAOutput.AnchorControl;
             LACFind = LAFind.AnchorControl;
             LACReplace = LAReplace.AnchorControl;
-            LACMainMonitor = LAMainMonitor.AnchorControl;
+            LACMonitor = LAMonitor.AnchorControl;
             LACErrorList = LAErrorList.AnchorControl;
 
             InitializeAvalonDock(LAProj);
-            InitializeAvalonDock(LASimuProj);
-            InitializeAvalonDock(LASimuMonitor);
-            InitializeAvalonDock(LAOutput);
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
-            InitializeAvalonDock(LAMainMonitor);
+            InitializeAvalonDock(LAMonitor);
             InitializeAvalonDock(LAErrorList);
         }
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -263,6 +254,7 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
+        #region Project
         private void CreateMainRoutine(string name)
         {
 
@@ -292,6 +284,8 @@ namespace SamSoarII.AppMain.UI
             string text = String.Format("{0:s}已经更改，是否保存？", _interactionFacade.ProjectModel.ProjectName);
             return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
         }
+        #endregion
+
         #region Command can Execute
         private void OnEleListOpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -486,6 +480,18 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private void MonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
         private void ShowPropertyDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -590,6 +596,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
+
         #region Command Execute
         private void OnEleInitializeCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -603,7 +610,7 @@ namespace SamSoarII.AppMain.UI
         {
             _interactionFacade.CloseCurrentProject();
             LAProj.Hide();
-            LAMainMonitor.Hide();
+            LAMonitor.Hide();
         }
         private void ClosePageExecuteCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -633,25 +640,12 @@ namespace SamSoarII.AppMain.UI
         {
             LACProj.Show();
         }
-
-        private void OnShowSimulateTreeViewCommand(object sender, RoutedEventArgs e)
-        {
-            LACSimuProj.Show();
-        }
-
-        private void OnShowSimuMonitorCommand(object sender, RoutedEventArgs e)
-        {
-            LACSimuMonitor.Show();
-        }
+        
         private void OnShowMainMonitorCommand(object sender, RoutedEventArgs e)
         {
-            LACMainMonitor.Show();
+            LACMonitor.Show();
         }
-        private void OnShowOutputCommand(object sender, RoutedEventArgs e)
-        {
-            LACOutput.Show();
-        }
-	    private void OnShowErrorListExecute(object sender, RoutedEventArgs e)
+        private void OnShowErrorListExecute(object sender, RoutedEventArgs e)
         {
             LACErrorList.Show();
         }
@@ -788,6 +782,12 @@ namespace SamSoarII.AppMain.UI
         {
 
         }
+
+        private void OnMonitorCommandExecute(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         private void OnCloseProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -803,13 +803,9 @@ namespace SamSoarII.AppMain.UI
         {
             if (SimulateModeButton.IsChecked == true)
             {
-                //LACOutput.Show();
                 int ret = _interactionFacade.SimulateProject();
                 if (ret == SimulateHelper.SIMULATE_OK)
                 {
-                    //LAOutput.Hide();
-                    LAProj.Hide();
-                    LACSimuProj.Show();
                     SimuToolBarTray.Visibility = Visibility.Visible;
                     SimulateHelper.SModel.SimulateStart += OnSimulateStart;
                     SimulateHelper.SModel.SimulatePause += OnSimulatePause;
@@ -822,11 +818,8 @@ namespace SamSoarII.AppMain.UI
             }
             else if (SimulateModeButton.IsChecked == false)
             {
-                if (SimulateHelper.Close(_interactionFacade) == SimulateHelper.CLOSE_OK)
+                if (SimulateHelper.Close() == SimulateHelper.CLOSE_OK)
                 {
-                    LASimuProj.Hide();
-                    LASimuMonitor.Hide();
-                    LACProj.Show();
                     SimuToolBarTray.Visibility = Visibility.Collapsed;
                 }
                 else
@@ -916,6 +909,11 @@ namespace SamSoarII.AppMain.UI
             Application.Current.Shutdown();
         }
 
+        private void OnDownloadCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        
         #endregion
 
         private void OnCommentModeToggle(object sender, ExecutedRoutedEventArgs e)
@@ -1017,6 +1015,11 @@ namespace SamSoarII.AppMain.UI
                 dialog1.ShowDialog();
             };
             dialog.ShowDialog();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

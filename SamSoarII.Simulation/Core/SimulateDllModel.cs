@@ -748,6 +748,7 @@ namespace SamSoarII.Simulation.Core
         {
             SetEnable(var, size, 0);
         }
+
         /// <summary>
         /// 锁定视点的集合
         /// </summary>

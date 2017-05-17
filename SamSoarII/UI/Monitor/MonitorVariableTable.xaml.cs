@@ -214,13 +214,13 @@ namespace SamSoarII.AppMain.UI.Monitor
                 {
                     IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { bitvalue });
                     command.RefElement = element;
-                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                    _parent.Manager.Add(command);
                 }
                 else
                 {
                     GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { bitvalue });
                     command.RefElements_A.Add(element);
-                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                    _parent.Manager.Add(command);
                 }
             };
         }
@@ -249,13 +249,13 @@ namespace SamSoarII.AppMain.UI.Monitor
                     {
                         IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data);
                         command.RefElement = element;
-                        _parent.dataHandle.WriteCommands.Enqueue(command);
+                        _parent.Manager.Add(command);
                     }
                     else
                     {
                         GeneralWriteCommand command = new GeneralWriteCommand(data);
                         command.RefElements_A.Add(element);
-                        _parent.dataHandle.WriteCommands.Enqueue(command);
+                        _parent.Manager.Add(command);
                     }
                 }
             };

@@ -77,6 +77,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             {
                 _values[id].ValueChanged += OnValueChanged;
             }
+            Update();
         }
 
         protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
@@ -95,6 +96,24 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 case "LDIIM":
                 case "LDP":
                 case "LDF":
+                case "LDWEQ":
+                case "LDWNE":
+                case "LDWLE":
+                case "LDWGE":
+                case "LDWL":
+                case "LDWG":
+                case "LDDEQ":
+                case "LDDNE":
+                case "LDDLE":
+                case "LDDGE":
+                case "LDDL":
+                case "LDDG":
+                case "LDFEQ":
+                case "LDFNE":
+                case "LDFLE":
+                case "LDFGE":
+                case "LDFL":
+                case "LDFG":
                     svbmodel = new MoniInputViewModel(bmodel);
                     break;
                 case "INV":

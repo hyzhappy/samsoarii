@@ -59,6 +59,16 @@ namespace SamSoarII.Communication.Command
                 );
                 return new IntraSegment(_base, _intra);
             }
+            set
+            {
+                if (value == null) return;
+                addrType1 = value.Base.Type;
+                length = value.Base.Length;
+                startLowAddr1 = value.Base.AddrLow;
+                startHighAddr = value.Base.AddrHigh;
+                addrType2 = value.Intra.Type;
+                startLowAddr2 = value.Intra.AddrLow;
+            }
         }
         public List<ElementModel> RefElements { get; set; } = new List<ElementModel>();
         public IntrasegmentReadCommand(){}

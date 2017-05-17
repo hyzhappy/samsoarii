@@ -29,7 +29,8 @@ namespace SamSoarII.AppMain.UI.Monitor
     public partial class MainMonitor : UserControl,INotifyPropertyChanged
     {
         private ProjectModel _projectmodel;
-        public MonitorDataHandle dataHandle { get; set; }
+        //public MonitorDataHandle dataHandle { get; set; }
+        public MonitorManager Manager { get; set; }
         public ObservableCollection<MonitorVariableTable> tables { get; set; } = new ObservableCollection<MonitorVariableTable>();
         public MonitorVariableTable SelectTable = null;
         private bool _isModify = true;
@@ -135,12 +136,10 @@ namespace SamSoarII.AppMain.UI.Monitor
             Button button = sender as Button;
             if (button == StartMonitor)
             {
-
                 button.IsEnabled = false;
             }
             else if (button == StopMonitor)
             {
-
                 StartMonitor.IsEnabled = true;
             }
         }

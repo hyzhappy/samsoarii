@@ -8,7 +8,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class LDModel : BaseModel
     {
-        public override string InstructionName => "LDM";
+        public override string InstructionName => "LD";
 
         public BitValue Value { get; set; }
         public LDModel()

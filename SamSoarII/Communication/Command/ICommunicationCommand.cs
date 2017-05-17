@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.AppMain.UI.Monitor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,17 @@ namespace SamSoarII.Communication.Command
             Length = _length;
             AddrLow = _addrLow;
             AddrHigh = _addrHigh;
+        }
+
+        public bool Merge(ElementModel emodel)
+        {
+            //if (emodel.IsIntrasegment) return false;
+            int addrdelta = (int)((int)Addr + Length - emodel.StartAddr);
+            if (addrdelta > 8) return false;
+            int _length = (int)(emodel.StartAddr - (int)Addr + 1);
+            if (_length > 32) return false;
+            Length = (byte)_length;
+            return true;
         }
     }
 
