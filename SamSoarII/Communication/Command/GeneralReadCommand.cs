@@ -30,6 +30,14 @@ namespace SamSoarII.Communication.Command
                     startHighAddr1
                 );
             }
+            set
+            {
+                if (value == null) return;
+                addrType1 = value.Type;
+                length1 = value.Length;
+                startLowAddr1 = value.AddrLow;
+                startHighAddr1 = value.AddrHigh;
+            }
         }
 
         //当某数据类型长度超过32或有两个数据类型同时请求时使用
@@ -48,6 +56,14 @@ namespace SamSoarII.Communication.Command
                     startLowAddr2,
                     startHighAddr2
                 );
+            }
+            set
+            {
+                if (value == null) return;
+                addrType2 = value.Type;
+                length2 = value.Length;
+                startLowAddr2 = value.AddrLow;
+                startHighAddr2 = value.AddrHigh;
             }
         }
 

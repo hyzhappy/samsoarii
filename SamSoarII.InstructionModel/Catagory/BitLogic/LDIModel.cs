@@ -9,7 +9,7 @@ namespace SamSoarII.LadderInstModel
 {
     public class LDIModel : BaseModel
     {
-        public override string InstructionName => "LDIM";
+        public override string InstructionName => "LDI";
 
         public BitValue Value { get; set; }
 

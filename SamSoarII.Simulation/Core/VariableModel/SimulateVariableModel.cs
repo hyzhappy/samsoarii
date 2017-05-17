@@ -1,4 +1,5 @@
 ﻿using SamSoarII.ValueModel;
+using SamSoarII.LadderInstViewModel.Monitor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,50 +10,10 @@ using System.Windows;
 
 namespace SamSoarII.Simulation.Core.VariableModel
 {
-    public class SimulateVariableUintComparer : IComparer<SimulateVariableUnit>
-    {
-        public int Compare(SimulateVariableUnit unit1, SimulateVariableUnit unit2)
-        {
-            int type1 = 0;
-            int type2 = 0;
-
-            if (unit1 is SimulateBitUnit)
-                type1 = 1;
-            if (unit1 is SimulateWordUnit)
-                type1 = 2;
-            if (unit1 is SimulateDWordUnit)
-                type1 = 3;
-            if (unit1 is SimulateFloatUnit)
-                type1 = 4;
-            if (unit1 is SimulateUnitSeries)
-                type1 = 6;
-
-            if (unit2 is SimulateBitUnit)
-                type2 = 1;
-            if (unit2 is SimulateWordUnit)
-                type2 = 2;
-            if (unit2 is SimulateDWordUnit)
-                type2 = 3;
-            if (unit2 is SimulateFloatUnit)
-                type2 = 4;
-            if (unit2 is SimulateUnitSeries)
-                type2 = 6;
-
-            if (type1 < type2)
-                return -1;
-            if (type1 > type2)
-                return 1;
-
-            return unit1.Name.CompareTo(unit2.Name);
-        }
-    }
-
     public abstract class SimulateVariableUnit
     {
         protected string name = "";
         protected string type = "";
-        //protected string basename = "";
-        //protected int offset = 0;
         protected string varname = "";
         protected bool islocked = false;
         protected SimulateManager manager = null;
@@ -244,6 +205,31 @@ namespace SamSoarII.Simulation.Core.VariableModel
                     break;
             }
             return null;
+        }
+    }
+
+    public class SimuMoniValueModel : IMoniValueModel
+    {
+        private SimulateVariableUnit svunit;
+
+        public string Value
+        {
+            get
+            {
+                return svunit.Value.ToString();
+            }
+        }
+
+        public SimuMoniValueModel(SimulateVariableUnit _svunit)
+        {
+            svunit = _svunit;
+            svunit.ValueChanged += OnValueChanged;
+        }
+
+        public event RoutedEventHandler ValueChanged = delegate { };
+        private void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            ValueChanged(this, e);
         }
     }
 

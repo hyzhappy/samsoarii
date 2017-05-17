@@ -64,6 +64,24 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+        private LadderMode _laddermode = LadderMode.Edit;
+        public LadderMode LadderMode
+        {
+            get
+            {
+                return this._laddermode;
+            }
+            set
+            {
+                this._laddermode = value;
+                MainRoutine.LadderMode = value;
+                foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
+                {
+                    ldvmodel.LadderMode = value;
+                }
+            }
+        }
+
         private bool _isCommentMode;
         public event RefNetworksBriefChangedEventHandler RefNetworksBriefChanged = delegate { };
 
@@ -87,7 +105,6 @@ namespace SamSoarII.AppMain.Project
         public Dictionary<LadderDiagramViewModel, ObservableCollection<string>> RefNetworksBrief { get; set; } = new Dictionary<LadderDiagramViewModel, ObservableCollection<string>>();
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
         public ModbusTableViewModel MTVModel { get; set; }
-        public ReportOutputModel OModel { get; set; }
         public MonitorManager MMonitorManager { get; set; }
         public bool CanMonitor { get; set; } = false;
         public Device CurrentDevice
@@ -146,14 +163,13 @@ namespace SamSoarII.AppMain.Project
         {
 
         }
-        public ProjectModel(string projectname, ReportOutputModel _outputmodel)
+        public ProjectModel(string projectname)
         {
             ProjectName = projectname;
             MainRoutine = new LadderDiagramViewModel("Main", this);
             MainRoutine.IsMainLadder = true;
             MMonitorManager = new MonitorManager(this);
             MTVModel = new ModbusTableViewModel(this);
-            OModel = _outputmodel;
         }
         public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -179,7 +195,6 @@ namespace SamSoarII.AppMain.Project
         {
             if (!FuncBlocks.Contains(fbmodel))
             {
-                fbmodel.OModel = OModel;
                 FuncBlocks.Add(fbmodel);
             }
         }
@@ -259,7 +274,6 @@ namespace SamSoarII.AppMain.Project
             foreach (XElement fbnode in fbnodes)
             {
                 var fbmodel = ProjectHelper.CreateFuncBlockByXElement(fbnode);
-                fbmodel.OModel = OModel;
                 FuncBlocks.Add(fbmodel);
             }
             var mtnodes = rootNode.Element("Modbus");
@@ -285,7 +299,6 @@ namespace SamSoarII.AppMain.Project
             cmd.Start();
             cmd.WaitForExit();
             string s = string.Format("stdout : {0}\r\nstderr: {1}\r\n", cmd.StandardOutput.ReadToEnd(), cmd.StandardError.ReadToEnd());
-            OModel.Write(OModel.Report_Complie, s);
             //MessageBox.Show(s);
         }
         private string GenerateCodeFromLadder()

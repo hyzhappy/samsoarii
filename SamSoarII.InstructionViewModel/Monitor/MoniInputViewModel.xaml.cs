@@ -149,8 +149,9 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             }
             CenterCanvas.Children.Add(CenterTextBlock);
             PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterTextBlock_Text"));
         }
         
         #region UI 
@@ -176,9 +177,32 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                         case "LDIIM":
                         case "LDP":
                         case "LDF":
+                            if (_values[0] == null)
+                                throw new FormatException("Lack of Arguments.");
                             if (!BIT_0_SHOWS.Contains(_values[0].Value)
                              && !BIT_1_SHOWS.Contains(_values[0].Value))
                                 throw new FormatException("value0 is not a BIT.");
+                            break;
+                        case "LDWEQ":
+                        case "LDWNE":
+                        case "LDWLE":
+                        case "LDWGE":
+                        case "LDWL":
+                        case "LDWG":
+                        case "LDDEQ":
+                        case "LDDNE":
+                        case "LDDLE":
+                        case "LDDGE":
+                        case "LDDL":
+                        case "LDDG":
+                        case "LDFEQ":
+                        case "LDFNE":
+                        case "LDFLE":
+                        case "LDFGE":
+                        case "LDFL":
+                        case "LDFG":
+                            if (_values[0] == null || _values[1] == null)
+                                throw new FormatException("Lack of arguments.");
                             break;
                     }
                     switch (Inst)
@@ -249,11 +273,11 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             }
         }
 
-        public string ValueTextBox_Text
+        public string ValueTextBlock_Text
         {
             get
             {
-                return Model.ParaCount > 1 && _values[0] != null
+                return Model.ParaCount > 0 && _values[0] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(0).ValueString,
                         _values[0].Value)
@@ -261,15 +285,44 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             }
         }
         
-        public string ValueTextBox2_Text
+        public string ValueTextBlock2_Text
         {
             get
             {
-                return Model.ParaCount > 2 && _values[1] != null
+                return Model.ParaCount > 1 && _values[1] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(1).ValueString,
                         _values[1].Value)
                     : String.Empty;
+            }
+        }
+        
+        public string CenterTextBlock_Text
+        {
+            get
+            {
+                switch (Inst)
+                {
+                    case "LDWEQ": return "W=="; 
+                    case "LDWNE": return "W<>";
+                    case "LDWLE": return "W<=";
+                    case "LDWGE": return "W>=";
+                    case "LDWL": return "W<";
+                    case "LDWG": return "W>";
+                    case "LDDEQ": return "D==";
+                    case "LDDNE": return "D<>";
+                    case "LDDLE": return "D<=";
+                    case "LDDGE": return "D>=";
+                    case "LDDL": return "D<";
+                    case "LDDG": return "D>";
+                    case "LDFEQ": return "F==";
+                    case "LDFNE": return "F<>";
+                    case "LDFLE": return "F<=";
+                    case "LDFGE": return "F>=";
+                    case "LDFL": return "F<";
+                    case "LDFG": return "F>";
+                    default: return String.Empty;
+                }
             }
         }
 
@@ -277,8 +330,9 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             base.OnValueChanged(sender, e);
             PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterTextBlock_Text"));
         }
 
         #endregion

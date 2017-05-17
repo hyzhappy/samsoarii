@@ -17,6 +17,9 @@ using SamSoarII.LadderInstModel.Communication;
 using SamSoarII.LadderInstModel.Pulse;
 using SamSoarII.LadderInstModel.HighCount;
 using SamSoarII.LadderInstModel.Auxiliar;
+using System.IO;
+using SamSoarII.Simulation.Core;
+using SamSoarII.Extend.FuncBlockModel;
 //using SamSoarII.GenerateModel;
 
 namespace SamSoarII.AppMain.Project
@@ -857,6 +860,119 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             return lchart;
+        }
+
+        public static int GenerateSimu(ProjectModel pmodel)
+        {
+            List<InstHelper.PLCInstNetwork> nets =
+                new List<InstHelper.PLCInstNetwork>();
+            Generate(pmodel.MainRoutine, nets);
+            foreach (LadderDiagramViewModel ldvmodel in pmodel.SubRoutines)
+            {
+                Generate(ldvmodel, nets);
+            }
+            // 建立仿真的c环境的路径
+            string currentPath = Environment.CurrentDirectory;
+            string ladderHFile = String.Format(@"{0:s}\simug\simuc.h", currentPath);
+            string ladderCFile = String.Format(@"{0:s}\simug\simuc.c", currentPath);
+            string funcBlockHFile = String.Format(@"{0:s}\simug\simuf.h", currentPath);
+            string funcBlockCFile = String.Format(@"{0:s}\simug\simuf.c", currentPath);
+            string simulibHFile = String.Format(@"{0:s}\simug\simulib.h", currentPath);
+            string simulibCFile = String.Format(@"{0:s}\simug\simulib.c", currentPath);
+            string outputDllFile = String.Format(@"{0:s}\simuc.dll", currentPath);
+            string outputAFile = String.Format(@"{0:s}\simuc.a", currentPath);
+            // 生成梯形图的c语言
+            StreamWriter sw = new StreamWriter(ladderCFile);
+            InstHelper.InstToSimuCode(sw, nets.ToArray());
+            sw.Close();
+            // 生成用户函数的c语言头
+            sw = new StreamWriter(funcBlockHFile);
+            sw.Write("#include<stdint.h>\r\n");
+            sw.Write("typedef int32_t _BIT;\r\n");
+            sw.Write("typedef int32_t _WORD;\r\n");
+            sw.Write("typedef int64_t D_WORD;\r\n");
+            sw.Write("typedef double _FLOAT;\r\n");
+            foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
+            {
+                GenerateCHeader(fbvmodel, sw);
+            }
+            sw.Close();
+            // 生成用户函数的c语言
+            sw = new StreamWriter(funcBlockCFile);
+            foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
+            {
+                GenerateCCode(fbvmodel, sw);
+            }
+            sw.Close();
+            // 生成仿真dll
+            SimulateDllModel.CreateDll(ladderCFile, funcBlockCFile, outputDllFile, outputAFile);
+            return SimulateDllModel.LoadDll(outputDllFile);
+        }
+        
+        public static void GenerateFinal()
+        {
+
+        }
+        
+        private static void Generate(
+            LadderDiagramViewModel ldvmodel, List<InstHelper.PLCInstNetwork> nets)
+        {
+            foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
+            {
+                Generate(lnvmodel, nets);
+            }
+        }
+
+        private static void Generate(
+            LadderNetworkViewModel lnvmodel, List<InstHelper.PLCInstNetwork> nets)
+        {
+            InstHelper.PLCInstNetwork net = new InstHelper.PLCInstNetwork(
+                lnvmodel.LDVModel.ProgramName,
+                lnvmodel.INVModel.Insts.ToArray());
+            nets.Add(net);
+        }
+
+        private static string GenerateCType(string type)
+        {
+            type = type.Replace("BIT", "_BIT");
+            type = type.Replace("WORD", "_WORD");
+            type = type.Replace("FLOAT", "_FLOAT");
+            return type;
+        }
+        
+        private static void GenerateCHeader(
+            FuncBlockViewModel fbvmodel, StreamWriter sw)
+        {
+            foreach (FuncModel fmodel in fbvmodel.Funcs)
+            {
+                if (fmodel.ArgCount == 0)
+                {
+                    sw.Write("{0:s} {1:s}();",
+                        GenerateCType(fmodel.ReturnType), 
+                        fmodel.Name);
+                }
+                else
+                {
+                    sw.Write("{0:s} {1:s}({2:s} {3:s}",
+                        GenerateCType(fmodel.ReturnType), 
+                        fmodel.Name,
+                        GenerateCType(fmodel.GetArgType(0)), 
+                        fmodel.GetArgName(0));
+                    for (int i = 1; i < fmodel.ArgCount; i++)
+                    {
+                        sw.Write(",{0:s} {1:s}",
+                            GenerateCType(fmodel.GetArgType(i)),
+                            fmodel.GetArgName(i));
+                    }
+                    sw.Write(");\r\n");
+                }
+            }
+        }
+
+        private static void GenerateCCode(
+            FuncBlockViewModel fbvmodel, StreamWriter sw)
+        {
+            sw.Write(GenerateCType(fbvmodel.Code));
         }
     }
 }

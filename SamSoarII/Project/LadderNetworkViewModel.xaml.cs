@@ -46,7 +46,8 @@ namespace SamSoarII.AppMain.Project
     public enum LadderMode
     {
         Edit,
-        Monitor
+        Monitor,
+        Simulate
     }
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
@@ -62,7 +63,7 @@ namespace SamSoarII.AppMain.Project
             get { return this.laddermode; }
             set
             {
-                this.laddermode = LadderMode;
+                this.laddermode = value;
                 switch (laddermode)
                 {
                     case LadderMode.Edit:
@@ -78,6 +79,7 @@ namespace SamSoarII.AppMain.Project
                         LadderCanvas_Monitor.Height = 0;
                         break;
                     case LadderMode.Monitor:
+                    case LadderMode.Simulate:
                         LadderCanvas_Edit.Visibility = Visibility.Hidden;
                         LadderCanvas_Monitor.Visibility = Visibility.Visible;
                         if (_ladderDiagram != null
@@ -130,7 +132,9 @@ namespace SamSoarII.AppMain.Project
                 if(value > 0 || _canHide)
                 {
                     _rowCount = value;
-                    LadderCanvas.Height = _rowCount * HeightUnit;
+                    LadderCanvas_Monitor.Height = _rowCount * HeightUnit;
+                    LadderCanvas_Edit.Height = _rowCount * HeightUnit;
+                    
                 }
             }
         }
@@ -212,7 +216,8 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _isCommendMode = value;
-                LadderCanvas.Height = _rowCount * HeightUnit;
+                LadderCanvas_Edit.Height = _rowCount * HeightUnit;
+                LadderCanvas_Monitor.Height = _rowCount * HeightUnit;
                 foreach (var ele in _ladderElements.Values)
                 {
                     ele.IsCommentMode = _isCommendMode;
@@ -570,6 +575,11 @@ namespace SamSoarII.AppMain.Project
 
         #region Monitor Ladder
         
+        public IEnumerable<MoniBaseViewModel> GetMonitors()
+        {
+            return _monitorElements.Values;
+        }
+
         private void CreateMonitorElement(BaseViewModel bvmodel)
         {
             MoniBaseViewModel mbvmodel = null;

@@ -15,7 +15,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         public MonitorDataHandle(MainMonitor mainMonitor)
         {
             _mainMonitor = mainMonitor;
-            _mainMonitor.dataHandle = this;
+            //_mainMonitor.dataHandle = this;
             ReadCommands = new Dictionary<int, List<ICommunicationCommand>>();
             WriteCommands = new Queue<ICommunicationCommand>();
         }

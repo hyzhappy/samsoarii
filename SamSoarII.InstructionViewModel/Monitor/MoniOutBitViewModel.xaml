@@ -19,13 +19,13 @@
             <Line X1="228" Y1="100" X2="300" Y2="100" Stroke="Black" StrokeThickness="4"></Line>
             <Path Stroke="Black" StrokeThickness="4" Data="M100,50 A60,60 0 0 0 100,150"></Path>
             <Path Stroke="Black" StrokeThickness="4" Data="M200,50 A60,60 0 0 1 200,150"></Path>
-            <TextBlock x:Name="ValueTextBlock"  Canvas.Top="0" Canvas.Left="0" Height="50" Width="300" TextAlignment="Center" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}"></TextBlock>
-            <Canvas Name="CenterCanvas" Width="100" Height="100" Canvas.Top="50" Canvas.Left="100">
+            <TextBlock x:Name="ValueTextBlock"  Canvas.Top="0" Canvas.Left="0" Height="50" Width="300" TextAlignment="Center" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}" Text="{Binding ValueTextBlock_Text}"></TextBlock>
+            <Canvas Name="CenterCanvas" Width="100" Height="100" Canvas.Top="50" Canvas.Left="100" Background="{Binding CenterCanva_Brush}">
                 <Rectangle Width="60" Height="60" Canvas.Top="20" Canvas.Left="20" Fill="Blue" Visibility="Hidden" Opacity="0.5"></Rectangle>
-                <TextBlock x:Name="CenterTextBlock" Width="100" Canvas.Top="20" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" TextAlignment="Center" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}">
+                <TextBlock x:Name="CenterTextBlock" Width="100" Canvas.Top="20" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" TextAlignment="Center" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}" Text="{Binding CenterTextBlock_Text}">
                 </TextBlock>
             </Canvas>
-            <TextBlock x:Name="CountTextBlock" Canvas.Left="0" Canvas.Top="150" Width="300" Height="50" TextAlignment="Center" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}">
+            <TextBlock x:Name="CountTextBlock" Canvas.Left="0" Canvas.Top="150" Width="300" Height="50" TextAlignment="Center" FontSize="{Binding Source={StaticResource FontData},Path=SelectFontSize}" Foreground="{Binding Source={StaticResource ColorData},Path=SelectColor}" FontFamily="{Binding Source={StaticResource FontData},Path=SelectFontFamily}" Text="{Binding CountTextBlock_Text}">
 
             </TextBlock>
         </Canvas>

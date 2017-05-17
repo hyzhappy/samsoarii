@@ -31,10 +31,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ZoomInCommand}" Executed="OnZoomInCommandExecute" CanExecute="ZoomInCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ZoomOutCommand}" Executed="OnZoomOutCommandExecute" CanExecute="ZoomOutCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}" Executed="OnShowSimulateTreeViewCommand" CanExecute="ShowSimulateTreeViewCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.ShowSimuMonitorCommand}" Executed="OnShowSimuMonitorCommand" CanExecute="ShowSimuMonitorCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="ShowMainMonitorCanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.ShowOutputCommand}" Executed="OnShowOutputCommand" CanExecute="ShowOutputCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogExecute" CanExecute="ShowCommunicationSettingDialogCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" Executed="OnShowErrorListExecute" CanExecute="ShowErrorListCanExecute"></CommandBinding>
         <!--Project Command-->
@@ -51,7 +48,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
         <CommandBinding x:Name="CheckLadderCommand" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></CommandBinding>
         <CommandBinding x:Name="CheckFuncBlockCommand" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></CommandBinding>
-        <CommandBinding Command="{x:Static app:GlobalCommand.MonitorCommand}"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.MonitorCommand}" Executed="OnMonitorCommandExecute" CanExecute="MonitorCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
@@ -216,22 +213,18 @@
                 <MenuItem Header="查找" Command="ApplicationCommands.Find"></MenuItem>
                 <MenuItem Header="替换" Command="ApplicationCommands.Replace"></MenuItem>
             </MenuItem>
-            <MenuItem Header="视图(_V)" Margin="0,-5,0,0">
+            <MenuItem Header="视图(_V)" Margin="0,-5,0,0" Click="MenuItem_Click">
                 <MenuItem Header="放大" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
                 <MenuItem Header="缩小" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
-                <Separator></Separator>
-                <MenuItem Header="工程资源管理器" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}"></MenuItem>
-                <MenuItem Header="仿真资源管理器" Command="{x:Static app:GlobalCommand.ShowSimulateTreeViewCommand}"></MenuItem>
-                <Separator></Separator>
                 <MenuItem Header="注释模式" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="工程资源管理器" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}"></MenuItem>
                 <MenuItem Header="错误列表" Command="{x:Static app:GlobalCommand.ShowErrorListCommand}"></MenuItem>
-                <MenuItem Header="输出" Command="{x:Static app:GlobalCommand.ShowOutputCommand}"></MenuItem>
-                <MenuItem Header="仿真监视" Command="{x:Static app:GlobalCommand.ShowSimuMonitorCommand}"></MenuItem>
-                <MenuItem Header="仿真图表"></MenuItem>
+                <MenuItem Header="监视列表" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)" Margin="0,-5,0,0">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
@@ -323,6 +316,9 @@
                 </Button>
                 <ToggleButton ToolTip="仿真" x:Name="SimulateModeButton" Command="{x:Static app:GlobalCommand.SimulateCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </ToggleButton>
+                <ToggleButton ToolTip="监视" x:Name="MonitorModeButton" Command="{x:Static app:GlobalCommand.MonitorCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                    <Image Source="/Resources/Image/Monitor.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </ToggleButton>
             </ToolBar>
             <ToolBar>
@@ -421,23 +417,10 @@
                                 </Grid>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LASimuProj" Title="仿真资源管理器" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LASimuMonitor" Title="仿真监视" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.LeftSide>
                 <ad:LayoutRoot.BottomSide>
                     <ad:LayoutAnchorSide>
-                        <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAOutput" Title="输出" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
-                                <proj:ReportOutputModel x:Name="OutputModel"/>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="LAErrorList" Title="错误列表" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
                             </ad:LayoutAnchorable>
@@ -447,7 +430,7 @@
                 <ad:LayoutRoot.RightSide>
                     <ad:LayoutAnchorSide>
                         <ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorable x:Name="LAMainMonitor" Title="监视" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                            <ad:LayoutAnchorable x:Name="LAMonitor" Title="监视" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
                                 <Grid x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
                                 </Grid>
                             </ad:LayoutAnchorable>

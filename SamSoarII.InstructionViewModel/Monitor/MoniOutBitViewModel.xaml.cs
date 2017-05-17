@@ -41,8 +41,8 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         public override void Update()
         {
             PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("CountTextBlock_Text"));
             PropertyChanged(this, new PropertyChangedEventArgs("CenterTextBlock_Text"));
         }
         
@@ -58,6 +58,8 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 bool value = false;
                 try
                 {
+                    if (_values[0] == null)
+                        throw new FormatException("Lack of arguments.");
                     if (!BIT_0_SHOWS.Contains(_values[0].Value)
                      && !BIT_1_SHOWS.Contains(_values[0].Value))
                         throw new FormatException("value0 is not a BIT.");
@@ -71,11 +73,11 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             }
         }
         
-        public string ValueTextBox_Text
+        public string ValueTextBlock_Text
         {
             get
             {
-                return Model.ParaCount > 1 && _values[0] != null
+                return Model.ParaCount > 0 && _values[0] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(0).ValueString,
                         _values[0].Value)
@@ -83,11 +85,11 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             }
         }
 
-        public string ValueTextBox2_Text
+        public string CountTextBlock_Text
         {
             get
             {
-                return Model.ParaCount > 2 && _values[1] != null
+                return Model.ParaCount > 1 && _values[1] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(1).ValueString,
                         _values[1].Value)
@@ -114,8 +116,8 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             base.OnValueChanged(sender, e);
             PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox_Text"));
-            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBox2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("CountTextBlock_Text"));
 
         }
 

@@ -14,14 +14,18 @@ namespace SamSoarII.AppMain.UI.Monitor
     public class ElementModel : INotifyPropertyChanged, IMoniValueModel
     {
         #region IMoniValueModel
+
         public string Value
         {
             get { return SetValue; }
         }
 
-        public event RoutedEventHandler ValueChanged = delegate { };
-        #endregion
+        public int RefCount { get; set; } = 1;
 
+        public event RoutedEventHandler ValueChanged = delegate { };
+        
+        #endregion
+        
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public string AddrType { get; set; }
         public uint StartAddr { get; set; }
@@ -43,6 +47,20 @@ namespace SamSoarII.AppMain.UI.Monitor
                 else
                 {
                     return string.Format("{0}{1}{2}{3}", AddrType, StartAddr, IntrasegmentType, IntrasegmentAddr);
+                }
+            }
+        }
+        public string FlagName
+        {
+            get
+            {
+                if (!IsIntrasegment)
+                {
+                    return String.Format("{0}_{1}_{2}", DataType, AddrType, StartAddr);
+                }
+                else
+                {
+                    return String.Format("{0}_{1}{2}{3}_{4}", DataType, AddrType, IntrasegmentType, IntrasegmentAddr, StartAddr);
                 }
             }
         }

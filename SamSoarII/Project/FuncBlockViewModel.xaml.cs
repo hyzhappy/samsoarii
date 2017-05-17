@@ -176,10 +176,6 @@ namespace SamSoarII.AppMain.Project
                 this._actualHeight = value;
             }
         }
-        /// <summary>
-        /// 用于输出调试信息的输出模型
-        /// </summary>
-        public ReportOutputModel OModel { get; set; }
 
         #endregion
 
@@ -405,7 +401,7 @@ namespace SamSoarII.AppMain.Project
                 CCSProfix = String.Empty;
             }
             TextChanged(this, new RoutedEventArgs());
-            OutputDebug();
+            //OutputDebug();
         }
         /// <summary>
         /// 当用户键入字符后发生
@@ -481,7 +477,7 @@ namespace SamSoarII.AppMain.Project
                         break;
                 }
             }
-            OutputDebug();
+            //OutputDebug();
         }
         /// <summary>
         /// 当文本光标移动后发生
@@ -495,29 +491,11 @@ namespace SamSoarII.AppMain.Project
             {
                 CCSProfixCursor = CodeTextBox.CaretOffset - CCSOffset;
             }
-            OutputDebug();
+            //OutputDebug();
         }
 
         #endregion
-
-        /// <summary>
-        /// 将当前函数块信息输出到输出模型中
-        /// </summary>
-        private void OutputDebug()
-        {
-            if (OModel == null)
-            {
-                return;
-            }
-            OModel.Clear(OModel.Report_Debug);
-            OModel.AppendLine(OModel.Report_Debug, String.Format("Index = {0:d}", model.CurrentIndex));
-            OModel.AppendLine(OModel.Report_Debug, model.Current.ToString());
-            foreach (FuncBlock fb in model.Current.Childrens)
-            {
-                OModel.AppendLine(OModel.Report_Debug, fb.ToString());
-            }
-        }
-
+        
         public void SetPosition(int line, int column)
         {
             CodeTextBox.SetPosition(line, column);

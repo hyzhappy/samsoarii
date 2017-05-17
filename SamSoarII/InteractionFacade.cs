@@ -125,7 +125,6 @@ namespace SamSoarII.AppMain
             mainwindow.CheckFuncBlockCommand.Executed += CheckFuncBlock_Executed;
             _mainTabControl = _mainWindow.MainTab;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
-            SimulateHelper.TabOpen += OnTabOpened;
             _erwindow = new ErrorReportWindow(this);
             mainwindow.LAErrorList.Content = _erwindow;
         }
@@ -860,7 +859,7 @@ namespace SamSoarII.AppMain
             }
             else
             {
-                _projectModel = new ProjectModel(name, _mainWindow.OutputModel);
+                _projectModel = new ProjectModel(name);
                 _projectModel.IFacade = this;
                 ProjectFileManager.Update(name,fullFileName);
                 ValueAliasManager.Clear();
@@ -959,7 +958,7 @@ namespace SamSoarII.AppMain
             }
             else
             {
-                _projectModel = ProjectHelper.LoadProject(fileName, new ProjectModel(String.Empty, _mainWindow.OutputModel));
+                _projectModel = ProjectHelper.LoadProject(fileName, new ProjectModel(String.Empty));
                 _projectModel.IFacade = this;
                 XDocument xdoc = XDocument.Load(fileName);
                 XElement xele_r = xdoc.Element("Root");
@@ -1011,7 +1010,7 @@ namespace SamSoarII.AppMain
             {
                 return SimulateHelper.SIMULATE_LADDER_ERROR;
             }
-            int ret = SimulateHelper.Simulate(this, _mainWindow.OutputModel);
+            int ret = SimulateHelper.Simulate(_projectModel);
             switch (ret)
             {
                 case SimulateHelper.SIMULATE_OK:
@@ -1019,9 +1018,6 @@ namespace SamSoarII.AppMain
                 default:
                     return ret;
             }
-            _mainWindow.LASimuProj.Content = SimulateHelper.SModel.PTView;
-            _mainWindow.LASimuMonitor.Content = SimulateHelper.SModel.MTable;
-            _mainTabControl.ReplaceAllTabsToSimulate();
             return ret;
         }
 
