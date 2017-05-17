@@ -170,6 +170,7 @@ namespace SamSoarII.AppMain.Project
             MainRoutine.IsMainLadder = true;
             MMonitorManager = new MonitorManager(this);
             MTVModel = new ModbusTableViewModel(this);
+            MMonitorManager.MMWindow.Manager = MMonitorManager;
         }
         public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {

@@ -69,8 +69,9 @@ namespace SamSoarII.AppMain.LadderCommand
         }
         private void InvokeLDNetwordsChangedEvent(IUndoableCommand command)
         {
-            if (command is LadderDiagramReplaceNetworksCommand || command is LadderDiagramRemoveNetworksCommand
-                || command is LadderDiagramExchangeNetworkCommand)
+            if (command is LadderDiagramReplaceNetworksCommand 
+             || command is LadderDiagramRemoveNetworksCommand
+             || command is LadderDiagramExchangeNetworkCommand)
             {
                 ldvmodel.InvokeLDNetwordsEvent();
             }

@@ -51,6 +51,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.MonitorCommand}" Executed="OnMonitorCommandExecute" CanExecute="MonitorCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.EditCommand}" Executed="OnEditCommandExecute" CanExecute="EditCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.LadderModeToggleCommand}" Executed="OnLadderModeToggle" CanExecute="LadderModeCanToggle"></CommandBinding>
@@ -256,7 +257,8 @@
                         <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="监视" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
+                <MenuItem Header="监视" x:Name="MI_Monitor" Command="{x:Static app:GlobalCommand.MonitorCommand}"></MenuItem>
+                <MenuItem Header="返回编辑" x:Name="MI_Edit" Command="{x:Static app:GlobalCommand.EditCommand}"></MenuItem>
                 <MenuItem Header="程序检测">
                     <MenuItem Header="梯形图" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
                     <MenuItem Header="函数功能块" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></MenuItem>

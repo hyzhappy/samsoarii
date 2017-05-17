@@ -39,11 +39,11 @@ namespace SamSoarII.AppMain.UI
     {
         private InteractionFacade _interactionFacade;
         private CanAnimationScroll MainScroll;
-        public LayoutAnchorControl LACProj { get; private set; }
-        public LayoutAnchorControl LACFind { get; private set; }
-        public LayoutAnchorControl LACReplace { get; private set; }
-        public LayoutAnchorControl LACMonitor { get; private set; }
-        public LayoutAnchorControl LACErrorList { get; private set; }
+        public LayoutAnchorControl LACProj { get { return LAProj?.AnchorControl; } }
+        public LayoutAnchorControl LACFind { get { return LAFind?.AnchorControl; } }
+        public LayoutAnchorControl LACReplace { get { return LAReplace?.AnchorControl; } }
+        public LayoutAnchorControl LACMonitor { get { return LAMonitor?.AnchorControl; } }
+        public LayoutAnchorControl LACErrorList { get { return LAErrorList?.AnchorControl; } }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
         {
@@ -81,13 +81,7 @@ namespace SamSoarII.AppMain.UI
             //DockManager.Theme = new VS2010Theme();
 
             LayoutSetting.Load();
-
-            LACProj = LAProj.AnchorControl;
-            LACFind = LAFind.AnchorControl;
-            LACReplace = LAReplace.AnchorControl;
-            LACMonitor = LAMonitor.AnchorControl;
-            LACErrorList = LAErrorList.AnchorControl;
-
+            
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
@@ -485,6 +479,20 @@ namespace SamSoarII.AppMain.UI
             if (_interactionFacade != null)
             {
                 e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = (e.CanExecute && _interactionFacade.ProjectModel.LadderMode != LadderMode.Simulate);
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void EditCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = (e.CanExecute && _interactionFacade.ProjectModel.LadderMode != LadderMode.Edit);
             }
             else
             {
@@ -518,7 +526,8 @@ namespace SamSoarII.AppMain.UI
         {
             e.CanExecute = true;
         }
-	private void ShowErrorListCanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+	    private void ShowErrorListCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
@@ -544,6 +553,7 @@ namespace SamSoarII.AppMain.UI
             if (_interactionFacade != null)
             {
                 e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = (e.CanExecute && _interactionFacade.ProjectModel.LadderMode != LadderMode.Monitor);
             }
             else
             {
@@ -594,7 +604,18 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = true;
             }
         }
-
+        
+        private void OnCloseProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
         #endregion
 
         #region Command Execute
@@ -785,23 +806,33 @@ namespace SamSoarII.AppMain.UI
 
         private void OnMonitorCommandExecute(object sender, RoutedEventArgs e)
         {
-            
+            if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
+            {
+                MonitorModeButton.IsChecked = _interactionFacade.MonitorProject();
+                if (MonitorModeButton.IsChecked == true)
+                {
+                    LACMonitor.Show();
+                }
+            }
+            else if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Monitor)
+            {
+                _interactionFacade.EditProject();
+                MonitorModeButton.IsChecked = false;
+            }
         }
 
-        private void OnCloseProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (_interactionFacade != null)
+        private void OnEditCommandExecute(object sender, RoutedEventArgs e)
+        { 
+            if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Simulate)
             {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
+                OnSimulateCommandExecute(sender, e);
             }
-            else
-            {
-                e.CanExecute = false;
-            }
+            _interactionFacade.EditProject();
         }
+        
         private void OnSimulateCommandExecute(object sender, RoutedEventArgs e)
         {
-            if (SimulateModeButton.IsChecked == true)
+            if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
                 int ret = _interactionFacade.SimulateProject();
                 if (ret == SimulateHelper.SIMULATE_OK)
@@ -810,13 +841,14 @@ namespace SamSoarII.AppMain.UI
                     SimulateHelper.SModel.SimulateStart += OnSimulateStart;
                     SimulateHelper.SModel.SimulatePause += OnSimulatePause;
                     SimulateHelper.SModel.SimulateAbort += OnSimulateAbort;
+                    SimulateModeButton.IsChecked = true;
                 }
                 else
                 {
                     SimulateModeButton.IsChecked = false;
                 }
             }
-            else if (SimulateModeButton.IsChecked == false)
+            else if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Simulate)
             {
                 if (SimulateHelper.Close() == SimulateHelper.CLOSE_OK)
                 {

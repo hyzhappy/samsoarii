@@ -20,6 +20,7 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand ShowCommunicationSettingDialogCommand { get; set; }
         public static RoutedUICommand CompileCommand { get; set; }
         public static RoutedUICommand MonitorCommand { get; set; }
+        public static RoutedUICommand EditCommand { get; set; }
         public static RoutedUICommand DownloadCommand { get; set; }
         public static RoutedUICommand UploadCommand { get; set; }
         public static RoutedUICommand ShowMainMonitorCommand { get; set; }
@@ -54,6 +55,7 @@ namespace SamSoarII.AppMain
             ShowErrorListCommand = new RoutedUICommand();
             CompileCommand = new RoutedUICommand();
             MonitorCommand = new RoutedUICommand();
+            EditCommand = new RoutedUICommand();
             DownloadCommand = new RoutedUICommand();
             UploadCommand = new RoutedUICommand();
             ShowPropertyDialogCommand = new RoutedUICommand();

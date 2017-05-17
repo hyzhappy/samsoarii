@@ -206,17 +206,18 @@ namespace SamSoarII.AppMain.UI.Monitor
                     else value = 0x00;
                     GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value },element);
                     command.RefElements_A.Add(element);
-                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                    
+                    //_parent.dataHandle.WriteCommands.Enqueue(command);
                 }
                 else if (sender1 == dialog.FindName("UndoForce"))
                 {
                     ForceCancelCommand command = new ForceCancelCommand(false,element);
-                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                    _parent.Manager.Add(command);
                 }
                 else
                 {
                     ForceCancelCommand command = new ForceCancelCommand(true,element);
-                    _parent.dataHandle.WriteCommands.Enqueue(command);
+                    _parent.Manager.Add(command);
                 }
             };
         }

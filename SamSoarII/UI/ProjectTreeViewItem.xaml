@@ -11,18 +11,20 @@
     </TreeViewItem.Resources>
     <TreeViewItem.Header>
         <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel x:Name="SP_Title" Orientation="Horizontal">
                 <Image Source="{Binding IconSource}" Height="17"></Image>
                 <Grid Margin="6,0,0,0">
-                <TextBlock x:Name="TBL_Text" Text="{Binding Text,Mode=TwoWay}"></TextBlock>
-                <TextBlock x:Name="TBS_Text" Margin="60,0,0,0"></TextBlock>
-                <TextBox x:Name="TBO_Text" Text="{Binding Text,Mode=TwoWay}" 
-                         Visibility="Hidden" Width="120" 
-                         KeyDown="TextBox_KeyDown"
-                         LostKeyboardFocus="TBO_Text_LostKeyboardFocus">
-                </TextBox>
-            </Grid>
+                    <TextBlock x:Name="TBL_Text" Text="{Binding Text,Mode=TwoWay}"></TextBlock>
+                    <TextBlock x:Name="TBS_Text" Margin="60,0,0,0"></TextBlock>
+                    <TextBox x:Name="TBO_Text" Text="{Binding Text,Mode=TwoWay}" 
+                             Visibility="Hidden" Width="120" 
+                             KeyDown="TextBox_KeyDown"
+                             LostKeyboardFocus="TBO_Text_LostKeyboardFocus">
+                    </TextBox>
+                </Grid>
             </StackPanel>
+            <Line x:Name="Underline" X1="0" X2="120" Visibility="Hidden" Stroke="BlueViolet" StrokeThickness="2">
+            </Line>
             <TextBlock x:Name="TB_ErrorMsg" Visibility="Collapsed" Foreground="Red"></TextBlock>
         </StackPanel>
     </TreeViewItem.Header>

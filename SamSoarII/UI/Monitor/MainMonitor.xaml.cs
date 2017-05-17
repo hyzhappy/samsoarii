@@ -28,11 +28,22 @@ namespace SamSoarII.AppMain.UI.Monitor
     /// </summary>
     public partial class MainMonitor : UserControl,INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         private ProjectModel _projectmodel;
-        //public MonitorDataHandle dataHandle { get; set; }
+        public LadderMode LadderMode
+        {
+            get
+            {
+                return _projectmodel.LadderMode;
+            }
+        }
+
         public MonitorManager Manager { get; set; }
-        public ObservableCollection<MonitorVariableTable> tables { get; set; } = new ObservableCollection<MonitorVariableTable>();
+        public ObservableCollection<MonitorVariableTable> tables { get; set; } 
+            = new ObservableCollection<MonitorVariableTable>();
         public MonitorVariableTable SelectTable = null;
+        
         private bool _isModify = true;
         public bool IsModify
         {
@@ -67,14 +78,43 @@ namespace SamSoarII.AppMain.UI.Monitor
                 }
             }
         }
+
+        private bool _isBeingMonitored = false;
         public bool IsBeingMonitored
         {
             get
             {
-                return !StartMonitor.IsEnabled;
+                return _isBeingMonitored;
+            }
+            set
+            {
+                _isBeingMonitored = value;
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public bool IsEnableModify
+        {
+            get
+            {
+                return !IsBeingMonitored;
+            }
+        }
+        public bool IsEnableStart
+        {
+            get
+            {
+                return _projectmodel != null
+                    && LadderMode != LadderMode.Edit
+                    && !IsBeingMonitored;
+            }
+        }
+        public bool IsEnableStop
+        {
+            get
+            {
+                return IsBeingMonitored;
+            }
+        }
+        
         private string oldTableName;
         public MonitorVariableTable CurrentTable
         {
@@ -85,7 +125,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             set
             {
                 SelectTable = value;
-                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("CurrentTable"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentTable"));
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentTableName"));
             }
         }
@@ -98,8 +138,10 @@ namespace SamSoarII.AppMain.UI.Monitor
             set
             {
                 CurrentTable.TableName = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentTableName"));
             }
         }
+
         public MainMonitor(ProjectModel projectModel)
         {
             InitializeComponent();
@@ -130,18 +172,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             table.DeleteElementCommand.Executed -= OnDeleteElementsCommandExecute;
             table.DeleteElementCommand.CanExecute -= OnDeleteElementsCommandCanExecute;
             table.DeleteAllElementCommand.Executed -= OnDeleteAllElementCommandExecute;
-        }
-        private void OnClick(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            if (button == StartMonitor)
-            {
-                button.IsEnabled = false;
-            }
-            else if (button == StopMonitor)
-            {
-                StartMonitor.IsEnabled = true;
-            }
         }
         private void AddTableClick(object sender, RoutedEventArgs e)
         {
@@ -188,7 +218,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             CurrentTable = (sender as ListBoxItem).Content as MonitorVariableTable;
             PropertyChanged.Invoke(this,new PropertyChangedEventArgs("CurrentTableName"));
         }
-
         private void OnGotFocus(object sender, RoutedEventArgs e)
         {
             oldTableName = textbox.Text;
@@ -228,6 +257,37 @@ namespace SamSoarII.AppMain.UI.Monitor
                 CurrentTable = tables[0];
             }
         }
+
+        private bool AssertValueModel(IValueModel model)
+        {
+            if (model is NullBitValue || model is NullWordValue || model is NullFloatValue
+                || model is NullDoubleWordValue || model is HDoubleWordValue || model is KDoubleWordValue
+                || model is KFloatValue || model is HWordValue || model is KWordValue
+                || model is StringValue || model is ArgumentValue)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        private int GetDataType(LadderValueType type)
+        {
+            switch (type)
+            {
+                case LadderValueType.Bool:
+                    return 0;
+                case LadderValueType.DoubleWord:
+                    return 3;
+                case LadderValueType.Word:
+                    return 1;
+                case LadderValueType.Float:
+                    return 6;
+                default:
+                    return -1;
+            }
+        }
         private void AddElement()
         {
             using (AddElementDialog dialog = new AddElementDialog())
@@ -241,6 +301,8 @@ namespace SamSoarII.AppMain.UI.Monitor
                         ele.StartAddr = (uint)(dialog.StartAddr + i);
                         ele.IntrasegmentType = dialog.IntrasegmentType;
                         ele.IntrasegmentAddr = dialog.IntrasegmentAddr;
+                        Manager.Add(ele);
+                        ele = Manager.Get(ele);
                         CurrentTable.AddElement(ele);
                     }
                     dialog.Close();
@@ -292,6 +354,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                         }
                         ShowTable(0);
                         dialog.Close();
+                        Manager.Initialize();
                     }
                 };
                 dialog.ShowDialog();
@@ -352,39 +415,10 @@ namespace SamSoarII.AppMain.UI.Monitor
                 }
             }
         }
-        private bool AssertValueModel(IValueModel model)
-        {
-            if (model is NullBitValue || model is NullWordValue || model is NullFloatValue 
-                || model is NullDoubleWordValue || model is HDoubleWordValue || model is KDoubleWordValue
-                || model is KFloatValue || model is HWordValue || model is KWordValue 
-                || model is StringValue || model is ArgumentValue)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        private int GetDataType(LadderValueType type)
-        {
-            switch (type)
-            {
-                case LadderValueType.Bool:
-                    return 0;
-                case LadderValueType.DoubleWord:
-                    return 3;
-                case LadderValueType.Word:
-                    return 1;
-                case LadderValueType.Float:
-                    return 6;
-                default:
-                    return -1;
-            }
-        }
         private void DeleteElement()
         {
             var temp = new List<ElementModel>(CurrentTable.ElementDataGrid.SelectedItems.OfType<ElementModel>());
+            Manager.Remove(temp);
             foreach (ElementModel item in temp)
             {
                 CurrentTable.DeleteElement(item);
@@ -392,6 +426,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         private void DeleteAllElements()
         {
+            Manager.Remove(CurrentTable.Elements);
             CurrentTable.DeleteAllElements();
         }
         public XElement CreateXElementByTables()
@@ -413,36 +448,53 @@ namespace SamSoarII.AppMain.UI.Monitor
                 tables.Add(table);
             }
         }
+
+        public void Start()
+        {
+            Manager.Start();
+            IsBeingMonitored = true;
+        }
+        public void Stop()
+        {
+            Manager.Abort();
+            IsBeingMonitored = false;
+        }
+
+        #region Command Bindings
+
+        #region Can Execute
         private void OnAddElementCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = CurrentTable != null;
+            e.CanExecute = IsEnableModify;
+            e.CanExecute = (e.CanExecute && CurrentTable != null);
         }
         private void OnQuickAddElementsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = IsEnableModify;
         }
         private void OnDeleteElementsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (CurrentTable != null && CurrentTable.ElementDataGrid.SelectedItems.Count > 0)
-            {
-                e.CanExecute = true;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
+            e.CanExecute = IsEnableModify;
+            e.CanExecute = (e.CanExecute && CurrentTable != null);
+            e.CanExecute = (e.CanExecute && CurrentTable.ElementDataGrid.SelectedItems.Count > 0);
         }
         private void OnDeleteAllElementCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (CurrentTable != null && CurrentTable.Elements.Count > 0)
-            {
-                e.CanExecute = true;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
+            e.CanExecute = IsEnableModify;
+            e.CanExecute = (e.CanExecute && CurrentTable != null);
+            e.CanExecute = (e.CanExecute && CurrentTable.Elements.Count > 0);
         }
+        private void OnStartCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = IsEnableStart;
+        }
+        private void OnStopCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = IsEnableStop;
+        }
+        #endregion
+
+        #region Execute
         private void OnAddElementCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             AddElement();
@@ -459,5 +511,16 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             DeleteAllElements();
         }
+        private void OnStartCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Start();
+        }
+        private void OnStopCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Stop();
+        }
+        #endregion
+
+        #endregion
     }
 }

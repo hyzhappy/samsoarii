@@ -36,7 +36,7 @@ namespace SamSoarII.Communication.Command
             //if (emodel.IsIntrasegment) return false;
             int addrdelta = (int)((int)Addr + Length - emodel.StartAddr);
             if (addrdelta > 8) return false;
-            int _length = (int)(emodel.StartAddr - (int)Addr + 1);
+            int _length = (int)(emodel.StartAddr + emodel.ByteCount - (int)Addr);
             if (_length > 32) return false;
             Length = (byte)_length;
             return true;

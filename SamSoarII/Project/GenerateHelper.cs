@@ -915,7 +915,8 @@ namespace SamSoarII.AppMain.Project
         }
         
         private static void Generate(
-            LadderDiagramViewModel ldvmodel, List<InstHelper.PLCInstNetwork> nets)
+            LadderDiagramViewModel ldvmodel, 
+            List<InstHelper.PLCInstNetwork> nets)
         {
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
@@ -924,7 +925,8 @@ namespace SamSoarII.AppMain.Project
         }
 
         private static void Generate(
-            LadderNetworkViewModel lnvmodel, List<InstHelper.PLCInstNetwork> nets)
+            LadderNetworkViewModel lnvmodel, 
+            List<InstHelper.PLCInstNetwork> nets)
         {
             InstHelper.PLCInstNetwork net = new InstHelper.PLCInstNetwork(
                 lnvmodel.LDVModel.ProgramName,
@@ -941,7 +943,8 @@ namespace SamSoarII.AppMain.Project
         }
         
         private static void GenerateCHeader(
-            FuncBlockViewModel fbvmodel, StreamWriter sw)
+            FuncBlockViewModel fbvmodel, 
+            StreamWriter sw)
         {
             foreach (FuncModel fmodel in fbvmodel.Funcs)
             {
@@ -970,7 +973,8 @@ namespace SamSoarII.AppMain.Project
         }
 
         private static void GenerateCCode(
-            FuncBlockViewModel fbvmodel, StreamWriter sw)
+            FuncBlockViewModel fbvmodel, 
+            StreamWriter sw)
         {
             sw.Write(GenerateCType(fbvmodel.Code));
         }

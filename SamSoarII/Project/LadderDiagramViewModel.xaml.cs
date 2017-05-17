@@ -491,6 +491,7 @@ namespace SamSoarII.AppMain.Project
 
         public void IFAddNetwork(LadderNetworkViewModel network)
         {
+            network.LDVModel = this;
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
             _commandManager.Execute(command);
             network.PropertyChanged += Network_PropertyChanged;
@@ -2309,7 +2310,7 @@ namespace SamSoarII.AppMain.Project
 
         private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = LadderMode == LadderMode.Edit;
         }
         #endregion
         #region ReloadPTVByLadderDiagram
@@ -2514,7 +2515,7 @@ namespace SamSoarII.AppMain.Project
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet != desnetwork)
+            if (sourcenet != null && sourcenet != desnetwork)
             {
                 sourcenet.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
@@ -2525,6 +2526,7 @@ namespace SamSoarII.AppMain.Project
         private void OnDrop(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
+            if (sourcenet == null) return;
             sourcenet.Opacity = 1;
             dragItem = null;
         }

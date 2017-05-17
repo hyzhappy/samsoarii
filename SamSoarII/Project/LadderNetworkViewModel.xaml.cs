@@ -484,6 +484,7 @@ namespace SamSoarII.AppMain.Project
         public LadderDiagramViewModel LDVModel
         {
             get { return _ladderDiagram; }
+            set { _ladderDiagram = value; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
