@@ -48,6 +48,8 @@ namespace SamSoarII.AppMain.UI.Monitor
 
     public class MonitorManager : IMonitorManager, IDisposable
     {
+        public ICommunicationManager CManager { get; set; }
+
         public MainMonitor MMWindow { get; set; }
 
         #region View Control
@@ -583,16 +585,17 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         private bool Send(ICommunicationCommand cmd)
         {
-            return true;
+            return (CManager.Write(cmd) == 0);
         }
 
         private bool Recv(ICommunicationCommand cmd)
         {
-            return true;
+            return (CManager.Read(cmd) == 0);
         }
 
         private void Execute(ICommunicationCommand cmd)
         {
+
         }
 
         public void Arrange()

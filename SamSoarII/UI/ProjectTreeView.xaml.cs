@@ -27,7 +27,7 @@ namespace SamSoarII.AppMain.UI
     /// <summary>   
     /// ProjectTreeView.xaml 的交互逻辑
     /// </summary>
-    public partial class ProjectTreeView : UserControl, INotifyPropertyChanged
+    public partial class ProjectTreeView : UserControl, INotifyPropertyChanged, IDisposable
     {
         #region Numbers
 
@@ -75,6 +75,7 @@ namespace SamSoarII.AppMain.UI
         public ProjectTreeView(ProjectModel project, XElement xele = null)
         {
             InitializeComponent();
+            ProjectTreeViewItem.HasRenaming = false;
             _projectModel = project;
             InteractionFacade _ifacade = Project.IFacade;
             _ifacade.PTVEvent += OnGotPTVEvent;
@@ -143,6 +144,12 @@ namespace SamSoarII.AppMain.UI
             }
             dpdict.Add(project.MainRoutine.ProgramName, PTVI_MainRoutine);
             Rebuild(PTVI_Modbus, project.MTVModel);
+        }
+
+        public void Dispose()
+        {
+            _projectModel.IFacade.PTVEvent -= OnGotPTVEvent;
+            _projectModel.MTVModel.ModelChanged -= OnModbusChanged;
         }
 
         private void ReinitializeComponent()
@@ -346,13 +353,6 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewItem.TYPE_ROUTINE:
                 case ProjectTreeViewItem.TYPE_MODBUS:
                 case ProjectTreeViewItem.TYPE_NETWORK:
-                    if (ptvitem.Parent is ProjectTreeViewItem)
-                    {
-                        if (((ProjectTreeViewItem)ptvitem.Parent).Items.Count == 1)
-                        {
-                            ((ProjectTreeViewItem)ptvitem.Parent).IsExpanded = false;
-                        }
-                    }
                     _e = new ProjectTreeViewEventArgs((ptvitem.Flags & 0xf) | ProjectTreeViewEventArgs.FLAG_REMOVE,
                         ptvitem.RelativeObject, ptvitem);
                     PTVHandle(this, _e);
@@ -362,10 +362,6 @@ namespace SamSoarII.AppMain.UI
             }
             if (ptvitem.Parent is ProjectTreeViewItem)
             {
-                if (((ProjectTreeViewItem)ptvitem.Parent).Items.Count == 1)
-                {
-                    ((ProjectTreeViewItem)ptvitem.Parent).IsExpanded = false;
-                }
                 ((ProjectTreeViewItem)(ptvitem.Parent)).Items.Remove(ptvitem);
             }
         }
@@ -522,7 +518,8 @@ namespace SamSoarII.AppMain.UI
                             String.Empty, 
                             false, true);
                         ptvitem.IsExpanded = true;
-                        createitem.Rename();
+                        createitem.Loaded += (sender1, e1) => { createitem.Rename(); };
+                        
                         break;
                 }
             }
@@ -657,11 +654,6 @@ namespace SamSoarII.AppMain.UI
                     switch (e.Flags & ~0xf)
                     {
                         case ProjectTreeViewEventArgs.FLAG_CREATE:
-                            if (ProjectTreeViewItem.HasRenaming)
-                            {
-                                MessageBox.Show("存在正在重命名的项目，不能新建新的项目。");
-                                return;
-                            }
                             createitem = CreatePTVItem(
                                 selectitem,
                                 ProjectTreeViewItem.TYPE_ROUTINE

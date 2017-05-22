@@ -362,7 +362,7 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-	    private void AddNewModbusCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+	private void AddNewModbusCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
@@ -430,22 +430,6 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-        
-        private void ShowSimuMonitorCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (_interactionFacade != null && SimulateHelper.SModel != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-        }
-        private void ShowOutputCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
 
         private void CompileCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -458,23 +442,26 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-        private void EditCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        private void MonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
                 e.CanExecute = _interactionFacade.ProjectLoaded;
-                e.CanExecute = (e.CanExecute && _interactionFacade.ProjectModel.LadderMode != LadderMode.Edit);
+                e.CanExecute = (e.CanExecute && _interactionFacade.ProjectModel.LadderMode != LadderMode.Simulate);
             }
             else
             {
                 e.CanExecute = false;
             }
         }
-        private void MonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        private void EditCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
                 e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = (e.CanExecute && _interactionFacade.ProjectModel.LadderMode != LadderMode.Edit);
             }
             else
             {
@@ -508,6 +495,7 @@ namespace SamSoarII.AppMain.UI
         {
             e.CanExecute = true;
         }
+
 	    private void ShowErrorListCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -789,11 +777,30 @@ namespace SamSoarII.AppMain.UI
         {
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
-                MonitorModeButton.IsChecked = _interactionFacade.MonitorProject();
-                if (MonitorModeButton.IsChecked == true)
+                CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+                BaseSetting baseSetting = dialog.GetBaseSetting();
+                baseSetting.SettingButtonClick += (sender1, e1) =>
                 {
-                    LACMonitor.Show();
-                }
+                    CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+                    dialog1.ShowDialog();
+                };
+                dialog.Ensure += (sender1, e1) =>
+                {
+                    if (_interactionFacade.MonitorProject())
+                    {
+                        MonitorModeButton.IsChecked = _interactionFacade.MonitorProject();
+                        if (MonitorModeButton.IsChecked == true)
+                        {
+                            LACMonitor.Show();
+                        }
+                        dialog.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("通信失败！请检查参数设置。");
+                    }
+                };
+                dialog.ShowDialog();
             }
             else if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Monitor)
             {
@@ -1026,6 +1033,10 @@ namespace SamSoarII.AppMain.UI
             {
                 CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
                 dialog1.ShowDialog();
+            };
+            dialog.Ensure += (sender2, e2) =>
+            {
+                dialog.Close();
             };
             dialog.ShowDialog();
         }

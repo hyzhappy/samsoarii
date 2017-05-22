@@ -97,6 +97,9 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        double ITabItem.ActualWidth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        double ITabItem.ActualHeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public CommentListControl()
         {
             InitializeComponent();
@@ -178,7 +181,7 @@ namespace SamSoarII.AppMain.UI
                 var textBox = e.EditingElement as TextBox;
                 if (comment != null && textBox != null)
                 {
-                    ValueCommentManager.UpdateComment(comment.ValueString, textBox.Text,false,true);
+                    //ValueCommentManager.UpdateComment(comment.ValueString, textBox.Text,false,true);
                     InstructionCommentManager.UpdateCommentContent(comment.ValueString);
                 }
             }

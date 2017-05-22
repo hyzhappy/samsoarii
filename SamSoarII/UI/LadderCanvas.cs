@@ -8,8 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using SamSoarII.Project;
-using SamSoarII.InstructionViewModel;
+using SamSoarII.LadderInstViewModel;
+using SamSoarII.AppMain.Project;
 using SamSoarII.Utility;
 namespace SamSoarII.AppMain.UI
 {

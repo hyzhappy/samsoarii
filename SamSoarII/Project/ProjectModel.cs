@@ -19,6 +19,7 @@ using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
 using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Communication;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -105,8 +106,9 @@ namespace SamSoarII.AppMain.Project
         public Dictionary<LadderDiagramViewModel, ObservableCollection<string>> RefNetworksBrief { get; set; } = new Dictionary<LadderDiagramViewModel, ObservableCollection<string>>();
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
         public ModbusTableViewModel MTVModel { get; set; }
-        public MonitorManager MMonitorManager { get; set; }
-        public bool CanMonitor { get; set; } = false;
+        public MonitorManager MMonitorManager { get; private set; }
+        public SerialPortManager PManager { get; private set; }
+        public USBManager UManager { get; private set; } 
         public Device CurrentDevice
         {
             get { return PLCDeviceManager.GetPLCDeviceManager().SelectDevice; }
@@ -171,6 +173,8 @@ namespace SamSoarII.AppMain.Project
             MMonitorManager = new MonitorManager(this);
             MTVModel = new ModbusTableViewModel(this);
             MMonitorManager.MMWindow.Manager = MMonitorManager;
+            PManager = new SerialPortManager();
+            UManager = new USBManager();
         }
         public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -188,7 +192,6 @@ namespace SamSoarII.AppMain.Project
             if (!SubRoutines.Contains(ldmodel))
             {
                 UpdateNetworkBriefs(ldmodel, ChangeType.Add);
-                ldmodel.LDNetwordsChanged += IFacade.PTView.LDNetwordsChanged;
                 SubRoutines.Add(ldmodel);
             }
         }
@@ -204,7 +207,6 @@ namespace SamSoarII.AppMain.Project
             if (SubRoutines.Contains(ldmodel))
             {
                 SubRoutines.Remove(ldmodel);
-                ldmodel.LDNetwordsChanged += IFacade.PTView.LDNetwordsChanged;
                 UpdateNetworkBriefs(ldmodel, ChangeType.Remove);
             }
         }

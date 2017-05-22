@@ -40,7 +40,7 @@
  */
 #define CANNOT_GET_HANDLE 0x06
 /** \def CANNOT_TRANSFER
- * Error code : happened when cannot transfer data between PC and PLC Device.
+ * Error code : happened when cannot Transfer data between PC and PLC Device.
  */
 #define CANNOT_TRANSFER 0x07
 /** \def CANNOT_SEND_COMMAND
@@ -52,11 +52,11 @@
  */
 #define CANNOT_RECV_REPORT 0x09
 /** \def ERROR_RECV_REPORT
- * Error code : happened when cannot transfer data between PC and PLC Device.
+ * Error code : happened when cannot Transfer data between PC and PLC Device.
  */
 #define ERROR_RECV_REPORT 0x0a
 /** \def OUT_OF_LENGTH_LIMIT
- * Error code : happened when try to transfer a data package above the length limit. 
+ * Error code : happened when try to Transfer a data package above the length limit. 
  */
 #define OUT_OF_LENGTH_LIMIT 0x0b
 /** \def CANNOT_FOUND_FILE
@@ -65,11 +65,11 @@
 #define CANNOT_FOUND_FILE 0x0c
 
 /** \def CANNOT_TRANSFER
- * The allowed maxinum time when transfer.
+ * The allowed maxinum time when Transfer.
  */
 #define TIMEOUT 1000
 /** \def RETRY_MAX
- * The allowed maxinum retry number when transfer error happen.
+ * The allowed maxinum retry number when Transfer error happen.
  */
 #define RETRY_MAX 8
 
@@ -96,7 +96,7 @@ static libusb_device_handle *handle = NULL;
  * 
  * \return Error code when it happen, otherwise return 0 which means OK.
  */
-EXPORT int open()
+EXPORT int Open()
 {
 	// if already exist, return error code
 	if (device != NULL)
@@ -145,7 +145,7 @@ EXPORT int open()
  * 
  * \return Error code when it happen, otherwise return 0 which means OK.
  */
-EXPORT int close()
+EXPORT int Close()
 {
 	if (device == NULL)
 	{
@@ -161,7 +161,7 @@ EXPORT int close()
 	return 0;
 }
 
-/** \name transfer
+/** \name Transfer
  * Send / Receive a series of data to / from the PLC Device.
  *
  * \param data		the base address of data
@@ -169,7 +169,7 @@ EXPORT int close()
  *
  * \return Error code when it happen, otherwise return 0 which means OK.  
  */
-EXPORT int transfer(uint8_t* data, int len)
+EXPORT int Transfer(uint8_t* data, int len)
 {
 	if (device == NULL)
 	{
@@ -181,11 +181,11 @@ EXPORT int transfer(uint8_t* data, int len)
 	}
 	int retrycount = 0;		/* Retry count */
 	int pipe;				/* Pipe number */
-	int transferred;		/* Transferred size of sent data*/
+	int Transferred;		/* Transferred size of sent data*/
 	uint8_t endpoint = 0;	/* Endpoint */
-	do /* Start of transfer loop */
+	do /* Start of Transfer loop */
 	{
-		pipe = libusb_bulk_transfer(handle, endpoint, data, len, &transferred, TIMEOUT);
+		pipe = libusb_bulk_transfer(handle, endpoint, data, len, &Transferred, TIMEOUT);
 		// Clear the endpoint halt
 		if (pipe == LIBUSB_ERROR_PIPE)
 		{
@@ -213,7 +213,7 @@ int plc_word_size = 2;
  *
  * \param bit		the number of bit (of a WORD integer)
  */
-EXPORT void config(int bit)
+EXPORT void Config(int bit)
 {
 	if (bit >= 32)
 	{
@@ -619,12 +619,12 @@ int _read
 		_get_crc((uint8_t*)rcmd2, sizeof(struct read_command2) - 2,
 			&(rcmd2->crc_low), &(rcmd2->crc_high));
 		// send the command
-		if (transfer((uint8_t*)rcmd2, sizeof(struct read_command2)))
+		if (Transfer((uint8_t*)rcmd2, sizeof(struct read_command2)))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
 		// receive the report
-		if (transfer((uint8_t*)rrpt2, sizeof(_rrpt2)))
+		if (Transfer((uint8_t*)rrpt2, sizeof(_rrpt2)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -678,11 +678,11 @@ int _read
 		_get_crc((uint8_t*)rcmd2, sizeof(struct read_command1) - 2,
 			&(rcmd1->crc_low), &(rcmd1->crc_high));
 		// send the command, receive the report, get the info code
-		if (transfer((uint8_t*)rcmd1, sizeof(struct read_command1)))
+		if (Transfer((uint8_t*)rcmd1, sizeof(struct read_command1)))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
-		if (transfer((uint8_t*)rrpt1, sizeof(_rrpt1)))
+		if (Transfer((uint8_t*)rrpt1, sizeof(_rrpt1)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -769,12 +769,12 @@ int _write
 		// get CRC code
 		_get_crc((uint8_t*)wcmd2, cmd_length, cmd, cmd+1);
 		cmd_length += 2;
-		// USB transfer
-		if (transfer((uint8_t*)wcmd2, cmd_length))
+		// USB Transfer
+		if (Transfer((uint8_t*)wcmd2, cmd_length))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
-		if (transfer((uint8_t*)wrpt2, sizeof(struct write_report2)))
+		if (Transfer((uint8_t*)wrpt2, sizeof(struct write_report2)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -821,12 +821,12 @@ int _write
 		_get_crc((uint8_t*)wcmd1, cmd_length,
 			cmd, cmd+1);
 		cmd_length += 2;
-		// USB transfers
-		if (transfer((uint8_t*)wcmd1, cmd_length))
+		// USB Transfers
+		if (Transfer((uint8_t*)wcmd1, cmd_length))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
-		if (transfer((uint8_t*)wrpt1, sizeof(struct write_report1)))
+		if (Transfer((uint8_t*)wrpt1, sizeof(struct write_report1)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -978,7 +978,7 @@ void _analysis_name
  * \param 	length	Length to read (per byte)
  * \param	input	Memory to read
  */
-EXPORT int read
+EXPORT int Read
 (
 	char* 		name,
 	int 		length,
@@ -1013,7 +1013,7 @@ EXPORT int read
  * \param 	length	Length to read (per byte)
  * \param	input	Memory to read
  */
-EXPORT int write
+EXPORT int Write
 (
 	char* 		name,
 	int 		length,
@@ -1048,7 +1048,7 @@ EXPORT int write
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int read16
+EXPORT int Read16
 (
 	char*		name,
 	int			length,
@@ -1065,7 +1065,7 @@ EXPORT int read16
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int read32
+EXPORT int Read32
 (
 	char*		name,
 	int			length,
@@ -1082,7 +1082,7 @@ EXPORT int read32
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int read64
+EXPORT int Read64
 (
 	char*		name,
 	int			length,
@@ -1099,7 +1099,7 @@ EXPORT int read64
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int read32f
+EXPORT int Read32f
 (
 	char*		name,
 	int			length,
@@ -1116,7 +1116,7 @@ EXPORT int read32f
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int read64f
+EXPORT int Read64f
 (
 	char*		name,
 	int			length,
@@ -1133,7 +1133,7 @@ EXPORT int read64f
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int write16
+EXPORT int Write16
 (
 	char*		name,
 	int			length,
@@ -1150,7 +1150,7 @@ EXPORT int write16
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int write32
+EXPORT int Write32
 (
 	char*		name,
 	int			length,
@@ -1167,7 +1167,7 @@ EXPORT int write32
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int write64
+EXPORT int Write64
 (
 	char*		name,
 	int			length,
@@ -1184,7 +1184,7 @@ EXPORT int write64
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int write32f
+EXPORT int Write32f
 (
 	char*		name,
 	int			length,
@@ -1202,7 +1202,7 @@ EXPORT int write32f
  * \param 	length	Length to read (number)
  * \param	input	Memory to read
  */
-EXPORT int write64f
+EXPORT int Write64f
 (
 	char*		name,
 	int			length,
@@ -1242,7 +1242,7 @@ void _xml_decode
 {
 }
 
-EXPORT int upload
+EXPORT int Upload
 (
 	char* file_bin,
 	char* file_pro
@@ -1262,7 +1262,7 @@ EXPORT int upload
 	return 0;
 }
 
-EXPORT int download
+EXPORT int Download
 (
 	char* file_bin, 
 	char* file_pro
@@ -1292,9 +1292,9 @@ EXPORT int download
 	fclose(fbin);
 	fclose(fpro);
 	
-	ret = transfer(data_bin, flbin);
+	ret = Transfer(data_bin, flbin);
 	if (ret != 0) return ret;
-	ret = transfer(data_pro, flpro);
+	ret = Transfer(data_pro, flpro);
 	if (ret != 0) return ret;
 	return 0;
 }
