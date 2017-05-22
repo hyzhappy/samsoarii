@@ -17,6 +17,25 @@ using System.Windows;
 
 namespace SamSoarII.AppMain.UI.Monitor
 {
+    public interface IMonitorManager : IMoniViewCtrl
+    {
+        void Start();
+        void Abort();
+        void Initialize();
+        void Initialize(ProjectModel pmodel);
+        ElementModel Get(ElementModel emodel);
+        void Add(ElementModel emodel);
+        void Remove(ElementModel emodel);
+        void Write(ElementModel emodel);
+        bool CanLock { get; }
+        void Lock(ElementModel emodel);
+        void Unlock(ElementModel emodel);
+        void Add(IEnumerable<ElementModel> emodel);
+        void Remove(IEnumerable<ElementModel> emodel);
+        void Add(ICommunicationCommand cmd);
+        void Remove(ICommunicationCommand cmd);
+    }
+
     public enum MonitorManager_ElementModelHandle
     {
         NULL = 0x00, ADD, REMOVE, WRITE, MULTIADD, MULTIREMOVE, MULTIWRITE
@@ -27,9 +46,19 @@ namespace SamSoarII.AppMain.UI.Monitor
         NULL = 0x00, ADD, REMOVE
     }
 
-    public class MonitorManager : IDisposable
+    public class MonitorManager : IMonitorManager, IDisposable
     {
         public MainMonitor MMWindow { get; set; }
+
+        #region View Control
+
+        public bool IsRunning { get; private set; }
+
+        public event RoutedEventHandler Started = delegate { };
+
+        public event RoutedEventHandler Aborted = delegate { };
+
+        #endregion
 
         #region Thread
 
@@ -61,11 +90,14 @@ namespace SamSoarII.AppMain.UI.Monitor
                             {
                                 CurrentCommand = null;
                             }
-                            if (ReadCommandIndex >= ReadCommands.Count())
+                            else
                             {
-                                ReadCommandIndex = 0;
+                                if (ReadCommandIndex >= ReadCommands.Count())
+                                {
+                                    ReadCommandIndex = 0;
+                                }
+                                CurrentCommand = ReadCommands[ReadCommandIndex++];
                             }
-                            CurrentCommand = ReadCommands[ReadCommandIndex++];
                         }
                     }
                     bool hassend = false;
@@ -108,25 +140,29 @@ namespace SamSoarII.AppMain.UI.Monitor
         
         public void Start()
         {
-            if (!_Thread_IsAlive)
+            if (!_Thread_IsAlive 
+             && (ComThread == null || !ComThread.IsAlive))
             {
                 ComThread = new Thread(_Thread_Run);
                 _Thread_Alive = true;
                 ComThread.Start();
+                IsRunning = true;
+                Started(this, new RoutedEventArgs());
             }
         }
 
         public void Abort()
         {
             _Thread_Alive = false;
+            IsRunning = false;
+            Aborted(this, new RoutedEventArgs());
         }
 
         #endregion
-
+        
         public MonitorManager(ProjectModel projectModel)
         {
             MMWindow = new MainMonitor(projectModel);
-            //DataHandle = new MonitorDataHandle(MMWindow);
             ComThread = new Thread(_Thread_Run);
             ThreadPause += OnThreadPause;
         }
@@ -138,13 +174,15 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         
         #region Initialize
-
+        
         public void Initialize()
         {
+            MMWindow.Manager = this;
             ReadModels.Clear();
             WriteModels.Clear();
             ReadCommands.Clear();
             WriteCommands.Clear();
+            _Add(LadderModels);
             if (MMWindow != null)
             {
                 foreach (MonitorVariableTable mvtable in MMWindow.tables)
@@ -152,16 +190,18 @@ namespace SamSoarII.AppMain.UI.Monitor
                     Initialize(mvtable);
                 }
             }
+            Arrange();
         }
 
         public void Initialize(ProjectModel pmodel)
         {
-            Initialize();
             Initialize(pmodel.MainRoutine);
             foreach (LadderDiagramViewModel ldvmodel in pmodel.SubRoutines)
             {
                 Initialize(ldvmodel);
             }
+            LadderModels = ReadModels.Values.ToArray();
+            Initialize();
         }
 
         private void Initialize(LadderDiagramViewModel ldvmodel)
@@ -176,7 +216,9 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             foreach (MoniBaseViewModel bvmodel in lnvmodel.GetMonitors())
             {
+                bvmodel.ViewCtrl = this;
                 BaseModel bmodel = bvmodel.Model;
+                if (bmodel == null) continue;
                 for (int i = 0; i < bmodel.ParaCount; i++)
                 {
                     IValueModel ivmodel = bmodel.GetPara(i);
@@ -197,7 +239,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             elementmodel.IsIntrasegment = false;
                         }
                         elementmodel.SetShowTypes();
-                        _Add(elementmodel);
+                        _Add(elementmodel, false);
                         elementmodel = Get(elementmodel);
                         bvmodel.SetValueModel(i, elementmodel);
                     }
@@ -211,7 +253,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 new ObservableCollection<ElementModel>();
             foreach (ElementModel emodel in mvtable.Elements)
             {
-                _Add(emodel);
+                _Add(emodel, false);
                 _elements.Add(Get(emodel));
             }
             mvtable.Elements = _elements;
@@ -251,8 +293,31 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         #endregion
 
+        #region Lock
+
+        public bool CanLock { get { return false; } }
+
+        public void Lock(ElementModel emodel)
+        {
+
+        }
+
+        public void Unlock(ElementModel emodel)
+        {
+
+        }
+
+        #endregion
+
         #region Monitor Element
 
+        private SortedList<string, ElementModel> ReadModels
+            = new SortedList<string, ElementModel>();
+        private SortedList<string, ElementModel> WriteModels
+            = new SortedList<string, ElementModel>();
+        private ElementModel[] LadderModels
+            = new ElementModel[0];
+        
         public MonitorManager_ElementModelHandle H_Model { get; private set; }
 
         public ElementModel O_Model { get; private set; }
@@ -289,7 +354,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
         }
 
-        private void _Add(ElementModel emodel)
+        private void _Add(ElementModel emodel, bool arrange = true)
         {
             string flagname = emodel.FlagName;
             if (!ReadModels.ContainsKey(flagname))
@@ -300,7 +365,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 ReadModels[flagname].RefCount++;
             }
-            Arrange();
+            if (arrange) Arrange();
         }
 
         public void Remove(ElementModel emodel)
@@ -320,7 +385,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
         }
 
-        private void _Remove(ElementModel emodel)
+        private void _Remove(ElementModel emodel, bool arrange = true)
         {
             string flagname = emodel.FlagName;
             ElementModel _emodel = null;
@@ -332,7 +397,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     ReadModels.Remove(flagname);
                 }
             }
-            Arrange();
+            if (arrange) Arrange();
         }
 
         public void Write(ElementModel emodel)
@@ -383,7 +448,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
         }
 
-        private void _Add(ElementModel[] emodels)
+        private void _Add(ElementModel[] emodels, bool arrange = true)
         {
             foreach (ElementModel emodel in emodels)
             {
@@ -397,7 +462,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     ReadModels[flagname].RefCount++;
                 }
             }
-            Arrange();
+            if (arrange) Arrange();
         }
 
         public void Remove(IEnumerable<ElementModel> emodels)
@@ -417,7 +482,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
         }
 
-        private void _Remove(ElementModel[] emodels)
+        private void _Remove(ElementModel[] emodels, bool arrange = true)
         {
             foreach (ElementModel emodel in emodels)
             {
@@ -432,7 +497,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                 }
             }
-            Arrange();
+            if (arrange) Arrange();
         }
 
         public void Write(IEnumerable<ElementModel> emodels)
@@ -464,13 +529,9 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         #region Communication Commands
         
-        private SortedList<string, ElementModel> ReadModels
-            = new SortedList<string, ElementModel>();
         private List<ICommunicationCommand> ReadCommands
             = new List<ICommunicationCommand>();
         private int ReadCommandIndex;
-        private SortedList<string, ElementModel> WriteModels
-            = new SortedList<string, ElementModel>();
         private Queue<ICommunicationCommand> WriteCommands
             = new Queue<ICommunicationCommand>();
         private ICommunicationCommand CurrentCommand;
@@ -544,7 +605,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 if (canmerge)
                 {
                     canmerge &= (prev.AddrType == next.AddrType);
-                    canmerge &= !(prev.IsIntrasegment ^ next.IsIntrasegment);
+                    //canmerge &= !(prev.IsIntrasegment ^ next.IsIntrasegment);
                     canmerge &= (prev.IntrasegmentType == next.IntrasegmentType);
                     canmerge &= (prev.IntrasegmentAddr == next.IntrasegmentAddr);
                 }
@@ -585,11 +646,12 @@ namespace SamSoarII.AppMain.UI.Monitor
                         byte addrtype2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.IntrasegmentType), next.IntrasegmentAddr);
                         byte startLowAddr2 = (byte)next.IntrasegmentAddr;
                         AddrSegment bseg = new AddrSegment(
-                            addrtype1, 1, startLowAddr1, startHighAddr);
+                            addrtype1, (byte)(next.ByteCount), startLowAddr1, startHighAddr);
                         AddrSegment iseg = new AddrSegment(
                             addrtype2, 1, startLowAddr2, 0);
                         ircmd.IntraSeg = new IntraSegment(
                             bseg, iseg);
+                        ReadCommands.Add(ircmd);
                     }
                     else
                     {
@@ -599,7 +661,8 @@ namespace SamSoarII.AppMain.UI.Monitor
                         byte startLowAddr = startaddr[0];
                         byte startHighAddr = startaddr[1];
                         grcmd.AddrSeg1 = new AddrSegment(
-                            addrtype, 1, startLowAddr, startHighAddr);
+                            addrtype, (byte)(next.ByteCount), startLowAddr, startHighAddr);
+                        ReadCommands.Add(grcmd);
                     }
                 }
                 prev = next;

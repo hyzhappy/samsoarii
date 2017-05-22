@@ -199,6 +199,7 @@
     <Compile Include="UI\Monitor\MonitorVariableTable.xaml.cs">
       <DependentUpon>MonitorVariableTable.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Monitor\SimulateMonitorManager.cs" />
     <Compile Include="UI\Monitor\UserInterface\AddElementDialog.xaml.cs">
       <DependentUpon>AddElementDialog.xaml</DependentUpon>
     </Compile>
@@ -293,6 +294,8 @@
     <EmbeddedResource Include="Project\CustomHighlighting.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="Communication\Util\usbdll\gen_usbdll.bat" />
+    <None Include="Communication\Util\usbdll\usbdll.o" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -663,6 +666,13 @@
   <ItemGroup>
     <Resource Include="Resources\Image\MainStyle\folderClose.png" />
     <Resource Include="Resources\Image\MainStyle\folderOpen.png" />
+  </ItemGroup>
+<ItemGroup>
+    <Content Include="Communication\Util\plcusb.dll" />
+    <Content Include="Communication\Util\usbdll\libusb-1.0.dll" />
+    <Content Include="Communication\Util\usbdll\libusb.h" />
+    <Content Include="Communication\Util\usbdll\usbdll.c" />
+    <Content Include="Communication\Util\usbdll\usbdll.h" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

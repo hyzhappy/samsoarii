@@ -1,6 +1,9 @@
 ﻿using SamSoarII.AppMain.UI;
+using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.Extend.Utility;
+using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -310,6 +313,98 @@ namespace SamSoarII.AppMain.Project
                                     _inst.Status = PLCOriginInst.STATUS_WARNING;
                                     _inst.Message = String.Format("{0:s}被尝试在别的地方线圈输入。", inst[1]);
                                     break;
+                                }
+                            }
+                            break;
+                        case "CALLM":
+                            {
+                                IEnumerable<FuncModel> fit = 
+                                    ldvmodel.ProjectModel.Funcs.Where(
+                                        (FuncModel _fmodel) => { return _fmodel.Name.Equals(inst[1]); });
+                                if (fit.Count() <= 0)
+                                {
+                                    inst.Status = PLCOriginInst.STATUS_ERROR;
+                                    inst.Message = String.Format("找不到用户函数{0:s}。", inst[1]);
+                                    break;
+                                }
+                                FuncModel fmodel = fit.First();
+                                if (!fmodel.CanCALLM())
+                                {
+                                    inst.Status = PLCOriginInst.STATUS_ERROR;
+                                    inst.Message = String.Format("用户函数{0:s}不能被CALLM指令调用。", inst[1]);
+                                    break;
+                                }
+                                for (int i = 0; i < fmodel.ArgCount; i++)
+                                {
+                                    try
+                                    {
+                                        switch (fmodel.GetArgType(i))
+                                        {
+                                            case "BIT*":
+                                                ValueParser.ParseBitValue(inst[i + 2]);
+                                                break;
+                                            case "WORD*":
+                                                ValueParser.ParseWordValue(inst[i + 2]);
+                                                break;
+                                            case "DWORD*":
+                                                ValueParser.ParseDoubleWordValue(inst[i + 2]);
+                                                break;
+                                            case "FLOAT*":
+                                                ValueParser.ParseFloatValue(inst[i + 2]);
+                                                break;
+                                        }
+                                    }
+                                    catch (ValueParseException)
+                                    {
+                                        inst.Status = PLCOriginInst.STATUS_ERROR;
+                                        if (inst[i + 2].Equals(String.Empty))
+                                        {
+                                            inst.Message = String.Format("缺少参数。");
+                                        }
+                                        else
+                                        {
+                                            inst.Message = String.Format("第{0:d}个参数{1:s}不合法。", i + 1, inst[i + 2]);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        case "MBUS":
+                            {
+                                IEnumerable<ModbusTableModel> fit =
+                                    ldvmodel.ProjectModel.MTVModel.Models.Where(
+                                        (ModbusTableModel _mtmodel) =>
+                                        {
+                                            return _mtmodel.Name.Equals(inst[2]);
+                                        });
+                                if (fit.Count() <= 0)
+                                {
+                                    inst.Status = PLCOriginInst.STATUS_ERROR;
+                                    inst.Message = String.Format("找不到MODBUS表格{0:s}。", inst[2]);
+                                }
+                                ModbusTableModel mtmodel = fit.First();
+                                if (!mtmodel.IsVaild)
+                                {
+                                    inst.Status = PLCOriginInst.STATUS_ERROR;
+                                    inst.Message = String.Format("MUDBUS表格{0:s}不合法。", inst[2]);
+                                }
+                            }
+                            break;
+                        case "CALL":
+                        case "ATCH":
+                            {
+                                int id = inst.Type.Equals("CALL") ? 1 : 2;
+                                IEnumerable<LadderDiagramViewModel> fit =
+                                    ldvmodel.ProjectModel.SubRoutines.Where(
+                                        (LadderDiagramViewModel _ldvmodel) =>
+                                        {
+                                            return _ldvmodel.Name.Equals(inst[id]);
+                                        });
+                                if (fit.Count() <= 0)
+                                {
+                                    inst.Status = PLCOriginInst.STATUS_ERROR;
+                                    inst.Message = String.Format("找不到子程序{0:s}", inst[id]);
                                 }
                             }
                             break;

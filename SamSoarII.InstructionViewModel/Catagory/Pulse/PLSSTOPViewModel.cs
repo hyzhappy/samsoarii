@@ -91,9 +91,9 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 ValueParser.VerifyBitRegex4});
             if (check1)
             {
-                OutputValue = ValueParser.ParseBitValue(valueStrings[6], contextDevice);
+                OutputValue = ValueParser.ParseBitValue(valueStrings[0], contextDevice);
                 InstructionCommentManager.ModifyValue(this, oldvaluestring1, OutputValue.ValueString);
-                ValueCommentManager.UpdateComment(OutputValue, valueStrings[7]);
+                ValueCommentManager.UpdateComment(OutputValue, valueStrings[1]);
             }
             else
             {

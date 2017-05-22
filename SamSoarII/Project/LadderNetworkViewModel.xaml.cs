@@ -484,6 +484,7 @@ namespace SamSoarII.AppMain.Project
         public LadderDiagramViewModel LDVModel
         {
             get { return _ladderDiagram; }
+            set { _ladderDiagram = value; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -1141,7 +1142,7 @@ namespace SamSoarII.AppMain.Project
         protected override void OnDragOver(DragEventArgs e)
         {
             base.OnDragOver(e);
-            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
             if (e.Data.GetDataPresent(ptvitem.GetType()))
             {
                 ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
@@ -1158,7 +1159,7 @@ namespace SamSoarII.AppMain.Project
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
-            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
             bool isacquired = AcquireSelectRect(e);
             if (e.Data.GetDataPresent(typeof(LadderNetworkViewModel)))
             {

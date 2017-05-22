@@ -588,35 +588,59 @@ namespace SamSoarII.Extend.Utility
         /// <param name="mode">访问变量的权限（r：读，w：写，rw：读写）</param>
         /// <param name="ctype">要转换成的c语言类型</param>
         /// <returns>c语言格式</returns>
-        private string ToCStyle(string var, string mode="rw", string ctype="WORD")
+        private string ToCStyle(string var, string mode = "rw", string ctype = "WORD")
         {
             Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
-            if (!m1.Success) return var;
-            string name = m1.Groups[1].Value;
-            int addr = int.Parse(m1.Groups[2].Value);
+            Match m2 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)(V|Z)(\d+)$");
+            string name = null;
+            int addrn = 0;
+            string addr = null;
+            if (m1.Success)
+            {
+                name = m1.Groups[1].Value;
+                addrn = int.Parse(m1.Groups[2].Value);
+                if (name.Equals("CV") && addrn >= 200)
+                {
+                    name = "CV32"; addrn -= 200;
+                }
+                addr = addrn.ToString();
+            }
+            else if (m2.Success)
+            {
+                name = m2.Groups[1].Value;
+                addrn = int.Parse(m2.Groups[2].Value);
+                if (name.Equals("CV") && addrn >= 200)
+                {
+                    name = "CV32"; addrn -= 200;
+                }
+                addr = String.Format("{0:d}+{1:s}Word[{2:s}]",
+                    addrn, m2.Groups[3].Value, m2.Groups[4].Value);
+            }
+            else
+            {
+                return var;
+            }
             // 如果该参数可写，需要附带写入使能
             if (mode.Equals("w") || mode.Equals("rw"))
             {
                 if (this.enbit.Equals(String.Empty))
                 {
-                    this.enbit = String.Format("{0:s}Enable[{1:d}]", name, addr);
+                    this.enbit = String.Format("{0:s}Enable[{1:s}]", name, addr);
                 }
                 else
                 {
-                    this.enbit += "||" + String.Format("{0:s}Enable[{1:d}]", name, addr);
+                    this.enbit += "||" + String.Format("{0:s}Enable[{1:s}]", name, addr);
                 }
             }
             switch (name)
             {
-                // 位线圈
                 case "X": case "Y": case "M": case "C": case "T": case "S":
                     switch (ctype)
                     {
-                        case "BIT": return String.Format("{0:s}Bit[{1:d}]", name, addr);
+                        case "BIT": return String.Format("{0:s}Bit[{1:s}]", name, addr);
                         default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                     }
-                // 16位寄存器
-                case "D": case "TV":
+                case "D": case "TV": case "AI": case "AO": case "V": case "Z":
                     /*
                      * 若要类型转换需要得到地址，所以要分为三个步骤
                      * 1. 获得这个变量的地址Word+addr
@@ -625,32 +649,26 @@ namespace SamSoarII.Extend.Utility
                      */
                      switch (ctype)
                      {
-                        case "WORD": return String.Format("{0:s}Word[{1:d}]", name, addr);
-                        case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:d})))", name, addr);
-                        case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:d})))", name, addr);
+                        case "WORD": return String.Format("{0:s}Word[{1:s}]", name, addr);
+                        case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:s})))", name, addr);
+                        case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:s})))", name, addr);
                         default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                      }
-                // 32位寄存器
                 case "CV":
-                    if (addr < 200)
+                    switch (ctype)
                     {
-                        switch (ctype)
-                        {
-                            case "WORD": return String.Format("{0:s}Word[{1:d}]", name, addr);
-                            case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:d})))", name, addr);
-                            case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:d})))", name, addr);
-                            default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
-                        }
+                        case "WORD": return String.Format("{0:s}Word[{1:s}]", name, addr);
+                        case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:s})))", name, addr);
+                        case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:s})))", name, addr);
+                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                     }
-                    else
+                case "CV32":
+                    switch (ctype)
                     {
-                        switch (ctype)
-                        {
-                            case "WORD": return String.Format("(*((uint32_t*)({0:s}DoubleWord+{1:d})))", name, addr - 200);
-                            case "DWORD": return String.Format("{0:s}DoubleWords[{1:d}]", name, addr - 200);
-                            case "FLOAT": return String.Format("(*((double*)({0:s}DoubleWord+{1:d})))", name, addr - 200);
-                            default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
-                        }
+                        case "WORD": return String.Format("(*((uint32_t*)({0:s}DoubleWord+{1:s})))", name, addr);
+                        case "DWORD": return String.Format("{0:s}DoubleWords[{1:s}]", name, addr);
+                        case "FLOAT": return String.Format("(*((double*)({0:s}DoubleWord+{1:s})))", name, addr);
+                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                     }
                 case "K": case "F":
                     if (mode.Equals("r"))

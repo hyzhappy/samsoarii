@@ -17,7 +17,7 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         public string Value
         {
-            get { return SetValue; }
+            get { return CurrentValue; }
         }
 
         public int RefCount { get; set; } = 1;
@@ -56,11 +56,11 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 if (!IsIntrasegment)
                 {
-                    return String.Format("{0}_{1}_{2}", DataType, AddrType, StartAddr);
+                    return String.Format("{0}_{1}", AddrType, StartAddr);
                 }
                 else
                 {
-                    return String.Format("{0}_{1}{2}{3}_{4}", DataType, AddrType, IntrasegmentType, IntrasegmentAddr, StartAddr);
+                    return String.Format("{0}_{1}{2}_{3}", AddrType, IntrasegmentType, IntrasegmentAddr, StartAddr);
                 }
             }
         }
@@ -102,6 +102,20 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
         }
         public int DataType { get; set; }
+        public int ByteCount
+        {
+            get
+            {
+                switch (DataType)
+                {
+                    case 0: return 1;
+                    case 1: return 2;
+                    case 3: return 4;
+                    case 6: return 4;
+                    default: return 1;
+                }
+            }
+        }
         public int SelectIndex
         {
             get

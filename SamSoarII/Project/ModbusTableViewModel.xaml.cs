@@ -20,6 +20,7 @@ using System.ComponentModel;
 using SamSoarII.ValueModel;
 using SamSoarII.PLCDevice;
 using System.Text.RegularExpressions;
+using System.Windows.Controls.Primitives;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -141,14 +142,14 @@ namespace SamSoarII.AppMain.Project
                         currentmodel = model;
                         currentindex = i;
                         B_RemoveModel.IsEnabled = true;
-                        B_ModelUp.IsEnabled = true;
-                        B_ModelDown.IsEnabled = true;
+                        B_ModelUp.IsEnabled = (i > 0);
+                        B_ModelDown.IsEnabled = (i < models.Count() - 1);
                         B_Insert.IsEnabled = true;
                         if (currentmodel.Current >= 0)
                         {
                             B_Remove.IsEnabled = true;
-                            B_Up.IsEnabled = true;
-                            B_Down.IsEnabled = true;
+                            B_Up.IsEnabled = (currentmodel.Current > 0);
+                            B_Down.IsEnabled = (currentmodel.Current < currentmodel.Tables.Count() - 1);
                         }
                     }
                 }
@@ -274,10 +275,7 @@ namespace SamSoarII.AppMain.Project
                 models.Insert(index, model);
             }
             ModelChanged(this, new RoutedEventArgs());
-            if (Current == null)
-            {
-                CurrentName = model.Name;
-            }
+            Current = model;
         }
 
         public void RemoveModel(ModbusTableModel model = null, int index = -1)
@@ -330,8 +328,6 @@ namespace SamSoarII.AppMain.Project
                     {
                         RemoveModel(model);
                         AddModel(model, index - 1);
-                        Current = model;
-                        ModelChanged(this, new RoutedEventArgs());
                     }
                     break;
                 case MOVE_DIRECTION.DOWN:
@@ -339,8 +335,6 @@ namespace SamSoarII.AppMain.Project
                     {
                         RemoveModel(model);
                         AddModel(model, index + 1);
-                        Current = model;
-                        ModelChanged(this, new RoutedEventArgs());
                     }
                     break;
             }
@@ -545,9 +539,9 @@ namespace SamSoarII.AppMain.Project
 
         private void LB_Tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (object obj in LB_Tables.SelectedItems)
-            {
-                string name = obj.ToString();
+            if (LB_Tables.SelectedItem != null)
+            { 
+                string name = LB_Tables.SelectedItem.ToString();
                 IEnumerable<ModbusTableModel> fit = Models.Where(
                     (ModbusTableModel model) => { return model.Name.Equals(name); });
                 if (fit.Count() > 0)
@@ -561,6 +555,7 @@ namespace SamSoarII.AppMain.Project
         
         private void DG_Table_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             if (Current != null)
             {
                 Current.Current = DG_Table.SelectedIndex;
@@ -568,81 +563,137 @@ namespace SamSoarII.AppMain.Project
             }
         }
         
-        private void DG_Table_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox tbox = null;
-            if (e.EditingElement is TextBox)
+            if (sender is TextBox)
             {
-                tbox = (TextBox)(e.EditingElement);
-            }
-            if (tbox == null)
-            {
-                return;
-            }
-            try
-            {
-                switch (e.Column.Header.ToString())
+                TextBox tb = (TextBox)sender;
+                if (tb.Parent is DataGridCell)
                 {
-                    case "从站号":
-                        int slaveid = int.Parse(tbox.Text);
-                        break;
-                    case "功能码":
-                        break;
-                    case "从站寄存器":
-                        int slaveregister = int.Parse(tbox.Text);
-                        break;
-                    case "从站长度":
-                        int slavecount = int.Parse(tbox.Text);
-                        break;
-                    case "主站寄存器":
-                        bool check1 = ValueParser.CheckValueString(tbox.Text, new Regex[] {
-                            ValueParser.VerifyWordRegex1});
-                        bool check2 = ValueParser.CheckValueString(tbox.Text, new Regex[] {
-                            ValueParser.VerifyBitRegex1});
-                        switch (Current.CurrentTable.HandleCode)
-                        {
-                            case "0x01（读位）":
-                            case "0x02（读位）":
-                            case "0x05（写位）":
-                            case "0x0F（写多位）":
-                                if (!check2)
-                                {
-                                    throw new ValueParseException("需要输入位寄存器！");
-                                }
-                                ValueParser.ParseBitValue(tbox.Text, PLCDevice);
-                                break;
-                            case "0x03（读字）":
-                            case "0x04（读字）":
-                            case "0x06（写字）":
-                            case "0x10（写多字）":
-                                if (!check1)
-                                {
-                                    throw new ValueParseException("需要输入单字寄存器！");
-                                }
-                                ValueParser.ParseWordValue(tbox.Text, PLCDevice);
-                                break;
-                        }
-                        break;
+                    DataGridCell dgc = (DataGridCell)(tb.Parent);
+                    
                 }
             }
-            catch (FormatException fe)
+        }
+
+        #region DataGrid Update
+
+        private void DataGridRow_Selected(object sender, RoutedEventArgs e)
+        {
+            DataGridRow dgrow = (DataGridRow)sender;
+            Update(dgrow, true);
+        }
+
+        private void DataGridRow_Unselected(object sender, RoutedEventArgs e)
+        {
+            DataGridRow dgrow = (DataGridRow)sender;
+            Update(dgrow, false);
+        }
+        
+        private void DataGridRow_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataGridRow dgrow = (DataGridRow)sender;
+            Update(dgrow);
+        }
+        
+        private void DataGridCell_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            DataGridCell dgcell = (DataGridCell)sender;
+            ModbusTable mtable = (ModbusTable)(dgcell.DataContext);
+            DataGridColumn dgcolumn = dgcell.Column;
+            string text = String.Empty;
+            if (dgcell.Content is TextBox)
             {
-                MessageBox.Show(fe.Message);
-                e.Cancel = true;
+                text = ((TextBox)(dgcell.Content)).Text;
             }
-            catch (ArgumentOutOfRangeException aoore)
+            if (dgcell.Content is TextBlock)
             {
-                MessageBox.Show(aoore.Message);
-                e.Cancel = true;
+                text = ((TextBlock)(dgcell.Content)).Text;
             }
-            catch (ValueParseException vpe)
+            if (dgcell.Content is ComboBox)
             {
-                MessageBox.Show(vpe.Message);
-                e.Cancel = true;
+                text = ((ComboBox)(dgcell.Content)).Text;
+            }
+            switch (dgcolumn.Header.ToString())
+            {
+                case "从站号":
+                    mtable.SlaveID = text; break;
+                case "功能码":
+                    mtable.HandleCode = text; break;
+                case "从站寄存器":
+                    mtable.SlaveRegister = text; break;
+                case "从站长度":
+                    mtable.SlaveCount = text; break;
+                case "主站寄存器":
+                    mtable.MasteRegister = text; break;
+            }
+            Update(dgcell);
+        }
+        
+        private void Update(DataGridRow dgrow, bool? isselected = null)
+        {
+            ModbusTable mtable = (ModbusTable)(dgrow.DataContext);
+            foreach (DataGridColumn dgcol in DG_Table.Columns)
+            {
+                FrameworkElement fele = dgcol.GetCellContent(dgrow);
+                if (fele.Parent is DataGridCell)
+                {
+                    DataGridCell dgcell = (DataGridCell)(fele.Parent);
+                    Update(dgcell, isselected);
+                }
             }
         }
+
+        private void Update(DataGridCell dgcell, bool? isselected = null)
+        {
+            ModbusTable mtable = (ModbusTable)(dgcell.DataContext);
+            DataGridColumn dgcolumn = dgcell.Column;
+            bool isvalid = false;
+            switch (dgcolumn.Header.ToString())
+            {
+                case "从站号":
+                    isvalid = mtable.SlaveID_IsValid; break;
+                case "功能码":
+                    isvalid = mtable.HandleCode_IsValid; break;
+                case "从站寄存器":
+                    isvalid = mtable.SlaveRegister_IsValid; break;
+                case "从站长度":
+                    isvalid = mtable.SlaveCount_IsValid; break;
+                case "主站寄存器":
+                    isvalid = mtable.MasterRegister_IsValid; break;
+            }
+            if (isselected == null)
+                isselected = dgcell.IsSelected;
+            if (isselected == true && isvalid)
+            {
+                dgcell.Background = Brushes.Blue;
+                dgcell.Foreground = Brushes.White;
+                dgcell.FontWeight = FontWeights.Heavy;
+            }
+            else if (isselected == true && !isvalid)
+            {
+                dgcell.Background = Brushes.Blue;
+                dgcell.Foreground = Brushes.OrangeRed;
+                dgcell.FontWeight = FontWeights.Heavy;
+            }
+            else if (isselected == false && isvalid)
+            {
+                dgcell.Background = Brushes.White;
+                dgcell.Foreground = Brushes.Black;
+                dgcell.FontWeight = FontWeights.Light;
+            }
+            else if (isselected == false && !isvalid)
+            {
+                dgcell.Background = Brushes.Red;
+                dgcell.Foreground = Brushes.Black;
+                dgcell.FontWeight = FontWeights.Light;
+            }
+        }
+
         #endregion
 
+        #endregion
+        
     }
 
     public class ModbusTableComboBoxItems
@@ -656,7 +707,7 @@ namespace SamSoarII.AppMain.Project
             return selectedhandlecodes;
         }
     }
-
+    
     public class ModbusTable : INotifyPropertyChanged
     {
         #region Private Numbers
@@ -722,7 +773,123 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged(this, new PropertyChangedEventArgs("MasteRegister"));
             }
         }
+
+        #endregion
+
+        #region Check
+
+        public bool SlaveID_IsValid
+        {
+            get
+            {
+                try
+                {
+                    int slaveid = int.Parse(SlaveID);
+                    return true;
+                }
+                catch (FormatException)
+                {
+                    return false;
+                }
+            }
+        }
+ 
+        public bool HandleCode_IsValid
+        {
+            get
+            {
+                return HandleCode.Length > 0;
+            }
+        }
         
+        public bool SlaveRegister_IsValid
+        {
+            get
+            {
+                try
+                {
+                    int slaveregister = int.Parse(SlaveRegister);
+                    return true;
+                }
+                catch (FormatException)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool SlaveCount_IsValid
+        {
+            get
+            {
+                try
+                {
+                    int slavecount = int.Parse(SlaveCount);
+                    return true;
+                }
+                catch (FormatException)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool MasterRegister_IsValid
+        {
+            get
+            {
+                try
+                {
+                    bool check1 = ValueParser.CheckValueString(MasteRegister, new Regex[] {
+                            ValueParser.VerifyWordRegex1});
+                    bool check2 = ValueParser.CheckValueString(MasteRegister, new Regex[] {
+                            ValueParser.VerifyBitRegex1});
+                    switch (HandleCode)
+                    {
+                        case "0x01（读位）":
+                        case "0x02（读位）":
+                        case "0x05（写位）":
+                        case "0x0F（写多位）":
+                            if (!check2)
+                            {
+                                throw new ValueParseException("需要输入位寄存器！");
+                            }
+                            ValueParser.ParseBitValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                            break;
+                        case "0x03（读字）":
+                        case "0x04（读字）":
+                        case "0x06（写字）":
+                        case "0x10（写多字）":
+                            if (!check1)
+                            {
+                                throw new ValueParseException("需要输入单字寄存器！");
+                            }
+                            ValueParser.ParseWordValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                            break;
+                        default:
+                            return false;
+                    }
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                return SlaveID_IsValid
+                    && HandleCode_IsValid
+                    && SlaveRegister_IsValid
+                    && SlaveCount_IsValid
+                    && MasterRegister_IsValid;
+            }
+        }
+
         #endregion
 
     }

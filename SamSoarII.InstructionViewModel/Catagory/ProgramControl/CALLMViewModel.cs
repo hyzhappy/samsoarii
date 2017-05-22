@@ -56,7 +56,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value1 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null 
+                 && value.ArgumentName.Length > 0)
                     MiddleTextBlock2.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock2.Text = String.Empty;
@@ -74,7 +75,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value2 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null
+                 && value.ArgumentName.Length > 0)
                     MiddleTextBlock3.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock3.Text = String.Empty;
@@ -92,7 +94,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value3 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null
+                 && value.ArgumentName.Length > 0)
                     MiddleTextBlock4.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock4.Text = String.Empty;
@@ -110,7 +113,8 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (_model == null) return;
                 _model.Value4 = value;
-                if (value != ArgumentValue.Null)
+                if (value != ArgumentValue.Null
+                 && value.ArgumentName.Length > 0)
                     MiddleTextBlock5.Text = String.Format("{0:s}:{1:s}", value.ArgumentName, value.ValueShowString);
                 else
                     MiddleTextBlock5.Text = String.Empty;
@@ -149,10 +153,41 @@ namespace SamSoarII.LadderInstViewModel
         public override void ParseValue(IList<string> valueStrings)
         {
             FuncName = valueStrings[0];
-            Value1 = ArgumentValue.Parse(valueStrings[1]);
-            Value2 = ArgumentValue.Parse(valueStrings[2]);
-            Value3 = ArgumentValue.Parse(valueStrings[3]);
-            Value4 = ArgumentValue.Parse(valueStrings[4]);
+            string[] args = null;
+            ArgumentValue[] values = new ArgumentValue[4];
+            for (int i = 0; i < valueStrings.Count-1; i++)
+            {
+                try
+                {
+                    values[i] = ArgumentValue.Parse(valueStrings[i+1]);
+                }
+                catch (ValueParseException)
+                {
+                    args = valueStrings[i+1].Split(' ');
+                    switch (args[1])
+                    {
+                        case "BIT*":
+                            values[i] = new ArgumentValue(args[0], args[1], BitValue.Null);
+                            break;
+                        case "WORD*":
+                            values[i] = new ArgumentValue(args[0], args[1], WordValue.Null);
+                            break;
+                        case "DWORD*":
+                            values[i] = new ArgumentValue(args[0], args[1], DWordValue.Null);
+                            break;
+                        case "FLOAT*":
+                            values[i] = new ArgumentValue(args[0], args[1], FloatValue.Null);
+                            break;
+                        default:
+                            values[i] = ArgumentValue.Null;
+                            break;
+                    }
+                }
+            }
+            Value1 = values[0];
+            Value2 = values[1];
+            Value3 = values[2];
+            Value4 = values[3];
         }
 
         public override IPropertyDialog PreparePropertyDialog()

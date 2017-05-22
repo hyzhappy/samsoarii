@@ -107,8 +107,8 @@ namespace Xceed.Wpf.AvalonDock.Controls
         private bool called_Show = false;
         public void Show()
         {
-            if (!_model.IsActive)
-            {
+            //if (!_model.IsActive)
+            //{
                 called_Show = true;
                 _model.Root.Manager.ShowAutoHideWindow(this);
                 _model.IsActive = true;
@@ -116,7 +116,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 {
                     _model.Float();
                 }
-            }
+           // }
         }
         
         private void OnModelContentLoaded(object sender, RoutedEventArgs e)
@@ -131,11 +131,11 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         public void Hide()
         {
-            if (_model.IsActive)
-            {
+           // if (_model.IsActive)
+            //{
                 _model.Root.Manager.HideAutoHideWindow(this);
                 _model.IsActive = false;
-            }
+            //}
         }
         
         protected override void OnMouseDown(System.Windows.Input.MouseButtonEventArgs e)

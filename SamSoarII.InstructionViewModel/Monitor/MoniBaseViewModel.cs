@@ -16,11 +16,19 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         event RoutedEventHandler ValueChanged;
     }
 
+    public interface IMoniViewCtrl
+    {
+        bool IsRunning { get; }
+        event RoutedEventHandler Started;
+        event RoutedEventHandler Aborted;
+    }
+
     public abstract class MoniBaseViewModel : UserControl
     {
         protected BaseModel _model;
         protected int _x;
         protected int _y;
+        protected IMoniViewCtrl _ctrl;
         protected IMoniValueModel[] _values = new IMoniValueModel[5];
 
         public virtual BaseModel Model
@@ -56,6 +64,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 Canvas.SetTop(this, Y * 300);
             }
         }
+        
         public virtual string Inst
         {
             get
@@ -64,6 +73,37 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             }
         }
 
+        public virtual IMoniViewCtrl ViewCtrl
+        {
+            get
+            {
+                return this._ctrl;
+            }
+            set
+            {
+                if (_ctrl != null)
+                {
+                    _ctrl.Started -= OnStart;
+                    _ctrl.Aborted -= OnAbort;
+                }
+                this._ctrl = value;
+
+                if (_ctrl != null)
+                {
+                    _ctrl.Started += OnStart;
+                    _ctrl.Aborted += OnAbort;
+                }
+            }
+        }
+
+        public virtual bool IsRunning
+        {
+            get
+            {
+                return _ctrl != null ? _ctrl.IsRunning : false;
+            }
+        }
+        
         public abstract void Update();
 
         public void SetValueModel(int id, IMoniValueModel mvmodel)
@@ -78,6 +118,16 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 _values[id].ValueChanged += OnValueChanged;
             }
             Update();
+        }
+
+        protected virtual void OnAbort(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        protected virtual void OnStart(object sender, RoutedEventArgs e)
+        {
+
         }
 
         protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
@@ -143,7 +193,5 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             }
             return svbmodel;
         }
-
     }
-    
 }

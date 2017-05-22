@@ -231,7 +231,7 @@ namespace SamSoarII.AppMain.UI
             bool                    isorder = false
         )
         {
-            ProjectTreeViewItem createitem = new ProjectTreeViewItem();
+            ProjectTreeViewItem createitem = new ProjectTreeViewItem(this);
             createitem.RelativeObject = relativeObject;
             createitem.Flags = flags;
             if (parent != null)
@@ -279,7 +279,7 @@ namespace SamSoarII.AppMain.UI
                   | ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE
                   | ProjectTreeViewItem.FLAG_CREATENETWORKAFTER
                   | ProjectTreeViewItem.FLAG_CONFIG,
-                    lnvmodel);
+                    lnvmodel, false);
             }
         }
 
@@ -346,6 +346,13 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewItem.TYPE_ROUTINE:
                 case ProjectTreeViewItem.TYPE_MODBUS:
                 case ProjectTreeViewItem.TYPE_NETWORK:
+                    if (ptvitem.Parent is ProjectTreeViewItem)
+                    {
+                        if (((ProjectTreeViewItem)ptvitem.Parent).Items.Count == 1)
+                        {
+                            ((ProjectTreeViewItem)ptvitem.Parent).IsExpanded = false;
+                        }
+                    }
                     _e = new ProjectTreeViewEventArgs((ptvitem.Flags & 0xf) | ProjectTreeViewEventArgs.FLAG_REMOVE,
                         ptvitem.RelativeObject, ptvitem);
                     PTVHandle(this, _e);
@@ -355,6 +362,10 @@ namespace SamSoarII.AppMain.UI
             }
             if (ptvitem.Parent is ProjectTreeViewItem)
             {
+                if (((ProjectTreeViewItem)ptvitem.Parent).Items.Count == 1)
+                {
+                    ((ProjectTreeViewItem)ptvitem.Parent).IsExpanded = false;
+                }
                 ((ProjectTreeViewItem)(ptvitem.Parent)).Items.Remove(ptvitem);
             }
         }
@@ -842,18 +853,38 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+
         public void LDNetwordsChanged(LadderDiagramViewModel ldvmodel)
         {
             ProjectTreeViewItem item = dpdict[ldvmodel.ProgramName];
             Rebuild(item,ldvmodel);
         }
+
         #region Drag & Drop
 
         private ProjectTreeViewItem dragitem = null;
         public ProjectTreeViewItem DragItem
         {
             get { return this.dragitem; }
-            private set { this.dragitem = value; }
+            private set
+            {
+                if (value == null)
+                {
+                    this.dragitem = null;
+                    return;
+                }
+                if (_projectModel.LadderMode != LadderMode.Edit) return;
+                if (value.IsCritical) return;
+                if (value.IsRenaming) return;
+                if ((value.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
+                {
+                    LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)(value.RelativeObject);
+                    LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+                    if (ldvmodel.GetNetworks().Count() <= 1) return;
+                }
+                this.dragitem = value;
+                DragDrop.DoDragDrop(TV_Main, dragitem, DragDropEffects.Move);
+            }
         }
 
         private ProjectTreeViewItem currentitem = null;
@@ -862,15 +893,29 @@ namespace SamSoarII.AppMain.UI
             get { return this.currentitem; }
             private set
             {
-                if (currentitem == value) return;
+                //if (currentitem == value) return;
                 if (currentitem != null)
                 {
+                    currentitem.Underline.Visibility = Visibility.Hidden;
                     currentitem.Background = Brushes.Transparent;
                 }
                 this.currentitem = value;
                 if (currentitem != null && dragitem != null
                  && currentitem != dragitem)
                 {
+                    if ((dragitem.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
+                    {
+                        switch (currentitem.Flags & 0xf)
+                        {
+                            case ProjectTreeViewItem.TYPE_NETWORK:
+                                currentitem.Underline.Visibility = Visibility.Visible;
+                                break;
+                            case ProjectTreeViewItem.TYPE_ROUTINE:
+                                currentitem.Underline.Visibility = Visibility.Visible;
+                                break;
+                        }
+                        return;
+                    }
                     if (dragitem.IsAncestorOf(currentitem))
                         return;
                     foreach (ProjectTreeViewItem ptvitem in currentitem.Items)
@@ -918,26 +963,40 @@ namespace SamSoarII.AppMain.UI
             return null;
         }
 
+        private ProjectTreeView GetThisParent(object obj)
+        {
+            if (obj is FrameworkElement)
+            {
+                FrameworkElement fele = (FrameworkElement)obj;
+                while (fele != this 
+                    && (fele.Parent is FrameworkElement))
+                {
+                    fele = (FrameworkElement)(fele.Parent);
+                }
+                if (fele == this)
+                {
+                    return this;
+                }
+            }
+            return null;
+        }
+
         private void OnPTVIMouseMove(object sender, MouseEventArgs e)
         {
-            CurrentItem = GetPTVIParent(e.OriginalSource);
-            if (CurrentItem == null) return;
             if (e.LeftButton != MouseButtonState.Pressed)
             {
                 DragItem = null;
-                CurrentItem.Background = Brushes.Transparent;
                 return;
             }
-            if (DragItem == null && TV_Main.SelectedItem != null)
+            CurrentItem = GetPTVIParent(e.OriginalSource);
+            if (CurrentItem == null) return;
+            if (DragItem == null && TV_Main.SelectedItem != null
+             && TV_Main.SelectedItem == CurrentItem)
             {
-                if (CurrentItem != TV_Main.SelectedItem) return;
-                //CurrentItem = (ProjectTreeViewItem)(TV_Main.SelectedItem);
-                if (CurrentItem.IsCritical) return;
-                if (CurrentItem.IsRenaming) return;
                 DragItem = CurrentItem;
-                DragDrop.DoDragDrop(TV_Main, DragItem, DragDropEffects.Move);
             }
         }
+
         private void OnPTVIDragOver(object sender, DragEventArgs e)
         {
             CurrentItem = GetPTVIParent(e.OriginalSource);
@@ -945,33 +1004,79 @@ namespace SamSoarII.AppMain.UI
 
         private void TV_Main_Drop(object sender, DragEventArgs e)
         {
-            if (CurrentItem == null) return;
-            if (CurrentItem.Background != Brushes.BlueViolet) return;
-            DragItem.ReleasePath();
-            ((ProjectTreeViewItem)(DragItem.Parent)).Items.Remove(DragItem);
-            if (CurrentItem.IsOrder)
+            if (CurrentItem == null
+             || CurrentItem.Background != Brushes.BlueViolet
+             && CurrentItem.Underline.Visibility != Visibility.Visible)
             {
-                for (int i = 0; i < CurrentItem.Items.Count; i++)
+                DragItem = null;
+                return;
+            }
+            if ((DragItem.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
+            {
+                LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)(DragItem.RelativeObject);
+                LadderDiagramViewModel ldvmodel = null;
+                int _networknumber = lnvmodel.NetworkNumber;
+                switch (CurrentItem.Flags & 0xf)
                 {
-                    if (DragItem.CompareTo((ProjectTreeViewItem)(CurrentItem.Items[i])) <= 0)
-                    {
-                        CurrentItem.Items.Insert(i, DragItem);
+                    case ProjectTreeViewItem.TYPE_ROUTINE:
+                        ldvmodel = (LadderDiagramViewModel)(CurrentItem.RelativeObject);
+                        lnvmodel.NetworkNumber = 0;
                         break;
+                    case ProjectTreeViewItem.TYPE_NETWORK:
+                        LadderNetworkViewModel prev = (LadderNetworkViewModel)(CurrentItem.RelativeObject);
+                        ldvmodel = prev.LDVModel;
+                        lnvmodel.NetworkNumber = prev.NetworkNumber + 1;
+                        if (ldvmodel == lnvmodel.LDVModel
+                         && lnvmodel.NetworkNumber > _networknumber)
+                        {
+                            lnvmodel.NetworkNumber--;
+                        }
+                        break;
+                    default:
+                        DragItem = null;
+                        return;
+                }
+                ProjectTreeViewEventArgs _e = new ProjectTreeViewEventArgs(
+                    ProjectTreeViewEventArgs.TYPE_NETWORK |
+                    ProjectTreeViewEventArgs.FLAG_REMOVE,
+                    lnvmodel, lnvmodel.LDVModel);
+                PTVHandle(this, _e);
+                _e = new ProjectTreeViewEventArgs(
+                    ProjectTreeViewEventArgs.TYPE_NETWORK |
+                    ProjectTreeViewEventArgs.FLAG_INSERT,
+                    lnvmodel, ldvmodel);
+                PTVHandle(this, _e);
+            }
+            else
+            {
+                DragItem.ReleasePath();
+                ((ProjectTreeViewItem)(DragItem.Parent)).Items.Remove(DragItem);
+                if (CurrentItem.IsOrder)
+                {
+                    for (int i = 0; i < CurrentItem.Items.Count; i++)
+                    {
+                        if (DragItem.CompareTo((ProjectTreeViewItem)(CurrentItem.Items[i])) <= 0)
+                        {
+                            CurrentItem.Items.Insert(i, DragItem);
+                            break;
+                        }
                     }
                 }
+                if (!CurrentItem.Items.Contains(DragItem))
+                {
+                    CurrentItem.Items.Add(DragItem);
+                }
+                CurrentItem.IsExpanded = true;
+                DragItem.RegisterPath();
+                DragItem.IsSelected = true;
             }
-            if (!CurrentItem.Items.Contains(DragItem))
-            {
-                CurrentItem.Items.Add(DragItem);
-            }
-            CurrentItem.IsExpanded = true;
-            DragItem.RegisterPath();
-            DragItem.IsSelected = true;
             DragItem = null;
+            CurrentItem = CurrentItem;
         }
+
         private void TV_Main_DragLeave(object sender, DragEventArgs e)
         {
-            if (GetPTVIParent(e.OriginalSource) == null)
+            if (e.Source == TV_Main)
             {
                 _projectModel.IFacade.MainWindow.LACProj.Hide();
             }
@@ -1082,75 +1187,7 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
     }
-
-    public class ProjectMenuItem : MenuItem
-    {
-        private ProjectTreeViewItem parent;
-
-        public ProjectTreeViewItem PTVItem
-        {
-            get { return this.parent; }
-        }
-        
-        public int ParentFlags
-        {
-            get { return parent.Flags; }
-        }
-
-        public object RelativeObject
-        {
-            get { return parent.RelativeObject; }
-        }
-
-        public int Flags { get; private set; } 
-
-        public ProjectMenuItem(ProjectTreeViewItem _parent, int _flags)
-        {
-            parent = _parent;
-            Flags = _flags;
-            string profix = String.Empty;
-            switch (parent.Flags & 0xf)
-            {
-                case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
-                case ProjectTreeViewItem.TYPE_MODBUSFLODER:
-                case ProjectTreeViewItem.TYPE_NETWORKFLODER:
-                case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
-                    profix = "文件夹"; break;
-                case ProjectTreeViewItem.TYPE_ROUTINE:
-                    profix = "子程序"; break;
-                case ProjectTreeViewItem.TYPE_NETWORK:
-                    profix = "网络"; break;
-                case ProjectTreeViewItem.TYPE_FUNCBLOCK:
-                    profix = "函数块"; break;
-                case ProjectTreeViewItem.TYPE_MODBUS:
-                    profix = "表格"; break;
-            }
-            switch (Flags)
-            {
-                case ProjectTreeViewItem.FLAG_CREATEFOLDER:
-                    Header = "新建文件夹"; break;
-                case ProjectTreeViewItem.FLAG_CREATEROUTINE:
-                    Header = "新建子程序"; break;
-                case ProjectTreeViewItem.FLAG_CREATENETWORK:
-                    Header = "新建网络"; break;
-                case ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK:
-                    Header = "新建函数块"; break;
-                case ProjectTreeViewItem.FLAG_CREATEMODBUS:
-                    Header = "新建MODBUS表格"; break;
-                case ProjectTreeViewItem.FLAG_RENAME:
-                    Header = profix + "重命名"; break;
-                case ProjectTreeViewItem.FLAG_REMOVE:
-                    Header = profix + "删除"; break;
-                case ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE:
-                    Header = "向前插入"; break;
-                case ProjectTreeViewItem.FLAG_CREATENETWORKAFTER:
-                    Header = "向后插入"; break;
-                case ProjectTreeViewItem.FLAG_CONFIG:
-                    Header = profix + "属性"; break;
-            }
-        }
-    }
-
+    
 　  public class ProjectTreeViewEventArgs : EventArgs
     {
         public const int TYPE_ROOT = 0x0;
@@ -1178,6 +1215,7 @@ namespace SamSoarII.AppMain.UI
         public const int FLAG_CREATEBEFORE = 0x80;
         public const int FLAG_CREATEAFTER = 0x100;
         public const int FLAG_CONFIG = 0x200;
+        public const int FLAG_INSERT = 0x400;
 
         public int Flags { get; private set; }
 
@@ -1197,5 +1235,6 @@ namespace SamSoarII.AppMain.UI
             TargetedObject = _targetedObject;
         }
     }
+
     public delegate void ProjectTreeViewEventHandler(object sender, ProjectTreeViewEventArgs e);
 }

@@ -491,6 +491,7 @@ namespace SamSoarII.AppMain.Project
 
         public void IFAddNetwork(LadderNetworkViewModel network)
         {
+            network.LDVModel = this;
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
             _commandManager.Execute(command);
             network.PropertyChanged += Network_PropertyChanged;
@@ -853,6 +854,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectLeftWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             SelectRectLeft();
             if (_selectRectOwner != null)
             {
@@ -876,6 +878,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectRightWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             int x = _selectRect.X;
             int y = _selectRect.Y;
             SelectRectRight();  
@@ -901,6 +904,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectUpWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             int x = _selectRect.X - 1;
             int y = _selectRect.Y - 1;
             if (_selectRectOwner != null)
@@ -927,6 +931,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectDownWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             int x = _selectRect.X - 1;
             int y = _selectRect.Y;
             if (_selectRectOwner != null)
@@ -1373,6 +1378,7 @@ namespace SamSoarII.AppMain.Project
             }      
             if(e.Key >= Key.A && e.Key <= Key.Z)
             {
+                if (LadderMode != LadderMode.Edit) return;
                 if((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.None)
                 {
                     char c;
@@ -1392,7 +1398,8 @@ namespace SamSoarII.AppMain.Project
             }
             if(e.Key == Key.Enter)
             {
-                if(_selectRectOwner != null)
+                if (LadderMode != LadderMode.Edit) return;
+                if (_selectRectOwner != null)
                 {
                     var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
                     if(viewmodel != null && viewmodel.Type != LadderInstModel.ElementType.HLine)
@@ -1408,7 +1415,8 @@ namespace SamSoarII.AppMain.Project
             }
             if(e.Key == Key.Delete)
             {
-                if(SelectionStatus == SelectStatus.SingleSelected)
+                if (LadderMode != LadderMode.Edit) return;
+                if (SelectionStatus == SelectStatus.SingleSelected)
                 {
                     var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
                     if (model != null)
@@ -2317,7 +2325,7 @@ namespace SamSoarII.AppMain.Project
 
         private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = LadderMode == LadderMode.Edit;
         }
         #endregion
         #region ReloadPTVByLadderDiagram
@@ -2506,6 +2514,10 @@ namespace SamSoarII.AppMain.Project
             {
                 SelectionStatus = SelectStatus.Idle;
             }
+            if (LadderMode != LadderMode.Edit)
+            {
+                return;
+            }
             var network = GetNetworkByMouse();
             if (network != null)
             {
@@ -2534,11 +2546,9 @@ namespace SamSoarII.AppMain.Project
         private void OnDrop(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            if (sourcenet != null)
-            {
-                sourcenet.Opacity = 1;
-                dragItem = null;
-            }
+            if (sourcenet == null) return;
+            sourcenet.Opacity = 1;
+            dragItem = null;
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {

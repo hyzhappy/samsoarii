@@ -476,6 +476,16 @@ namespace SamSoarII.AppMain
         {
             LadderNetworkViewModel lnvmodel = null;
             lnvmodel = new LadderNetworkViewModel(ldvmodel, networknumber);
+            InsertNetwork(ldvmodel, lnvmodel, e);
+        }
+
+        public void InsertNetwork
+        (
+            LadderDiagramViewModel ldvmodel,
+            LadderNetworkViewModel lnvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
             ldvmodel.IFAddNetwork(lnvmodel);
             if (e == null)
             {
@@ -1015,14 +1025,23 @@ namespace SamSoarII.AppMain
                 return SimulateHelper.SIMULATE_LADDER_ERROR;
             }
             int ret = SimulateHelper.Simulate(_projectModel);
-            switch (ret)
-            {
-                case SimulateHelper.SIMULATE_OK:
-                    break;
-                default:
-                    return ret;
-            }
             return ret;
+        }
+
+        public bool MonitorProject()
+        {
+            if (!CheckLadder(false))
+            {
+                return false;
+            }
+            _projectModel.LadderMode = LadderMode.Monitor;
+            _projectModel.MMonitorManager.Initialize(_projectModel);
+            return true;
+        }
+
+        public void EditProject()
+        {
+            _projectModel.LadderMode = LadderMode.Edit;
         }
 
         public void CloseTabItem(ITabItem tabItem)
@@ -1047,34 +1066,6 @@ namespace SamSoarII.AppMain
                 case TabType.Modbus:
                     ITabItem itab = _projectModel.MTVModel;
                     _mainTabControl.ShowItem(itab);
-                    break;
-                case TabType.Simulate:
-                    ITabItem tab = sender as ITabItem;
-                    _mainTabControl.ShowItem(tab);
-                    break;
-                case TabType.SimuToEdit:
-                    string header = e.Header;
-                    if (header.Equals("主程序") || header.Equals("main"))
-                    {
-                        _mainTabControl.ShowItem(_projectModel.MainRoutine);
-                        break;
-                    }
-                    foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
-                    {
-                        if (header.Equals(ldvmodel.ProgramName))
-                        {
-                            _mainTabControl.ShowItem(ldvmodel);
-                            break;
-                        }
-                    }
-                    foreach (FuncBlockViewModel fbvmodel in _projectModel.FuncBlocks)
-                    {
-                        if (header.Equals(fbvmodel.ProgramName))
-                        {
-                            _mainTabControl.ShowItem(fbvmodel);
-                            break;
-                        }
-                    }
                     break;
             }
         }
@@ -1141,6 +1132,10 @@ namespace SamSoarII.AppMain
                         lnvmodel = (LadderNetworkViewModel)(e.RelativeObject);
                         ldvmodel = lnvmodel.LDVModel;
                     }
+                    if (e.RelativeObject is LadderDiagramViewModel)
+                    {
+                        ldvmodel = (LadderDiagramViewModel)(e.RelativeObject);
+                    }
                     switch (e.Flags & ~0xf)
                     {
                         case ProjectTreeViewEventArgs.FLAG_CREATE:
@@ -1161,7 +1156,10 @@ namespace SamSoarII.AppMain
                         case ProjectTreeViewEventArgs.FLAG_REMOVE:
                             RemoveNetwork(lnvmodel, e);
                             break;
-
+                        case ProjectTreeViewEventArgs.FLAG_INSERT:
+                            ldvmodel = (LadderDiagramViewModel)(e.TargetedObject);
+                            InsertNetwork(ldvmodel, lnvmodel, e);
+                            break;
                     }
                     break;
                 case ProjectTreeViewEventArgs.TYPE_MODBUS:

@@ -50,21 +50,21 @@ namespace SamSoarII.UserInterface
         {
             if (ForceButtonClick != null)
             {
-                ForceButtonClick.Invoke(this,new RoutedEventArgs());
+                ForceButtonClick.Invoke(sender, new RoutedEventArgs());
             }
         }
         private void OnBitButtonClick(object sender, RoutedEventArgs e)
         {
             if (BitButtonClick != null)
             {
-                BitButtonClick.Invoke(this,new RoutedEventArgs());
+                BitButtonClick.Invoke(sender, new RoutedEventArgs());
             }
         }
         private void OnWordButtonClick(object sender, RoutedEventArgs e)
         {
             if (WordButtonClick != null)
             {
-                WordButtonClick.Invoke(this, new RoutedEventArgs());
+                WordButtonClick.Invoke(sender, new RoutedEventArgs());
             }
         }
     }
