@@ -1858,7 +1858,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    if(_selectRectOwner != null)
+                    if (_selectRectOwner != null)
                     {
                         var p = e.GetPosition(_selectRectOwner.LadderCanvas);
                         var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);

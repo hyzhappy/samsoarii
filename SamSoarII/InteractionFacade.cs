@@ -501,6 +501,7 @@ namespace SamSoarII.AppMain
             }
             PTVEvent(this, e);
         }
+
         public void RemoveNetwork
         (
             LadderNetworkViewModel lnvmodel,
@@ -523,6 +524,7 @@ namespace SamSoarII.AppMain
             }
             PTVEvent(this, e);
         }
+
         public void ReplaceNetwork
         (
             LadderNetworkViewModel lnvmodel,
@@ -644,6 +646,7 @@ namespace SamSoarII.AppMain
         #endregion
 
         #endregion
+
         private void DeleteRowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (CurrentLadder.SelectionStatus == SelectStatus.SingleSelected)

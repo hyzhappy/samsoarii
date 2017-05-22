@@ -76,7 +76,7 @@ namespace SamSoarII.AppMain.Project
                             LadderCanvas_Edit.Children.Add(_ladderDiagram.SelectionRect);
                         }
                         LadderCanvas = LadderCanvas_Edit;
-                        LadderCanvas_Monitor.Height = 0;
+                        //LadderCanvas_Monitor.Height = 0;
                         break;
                     case LadderMode.Monitor:
                     case LadderMode.Simulate:
@@ -89,7 +89,7 @@ namespace SamSoarII.AppMain.Project
                             LadderCanvas_Monitor.Children.Add(_ladderDiagram.SelectionRect);
                         }
                         LadderCanvas = LadderCanvas_Monitor;
-                        LadderCanvas_Edit.Height = 0;
+                        //LadderCanvas_Edit.Height = 0;
                         break;
                 }
             }

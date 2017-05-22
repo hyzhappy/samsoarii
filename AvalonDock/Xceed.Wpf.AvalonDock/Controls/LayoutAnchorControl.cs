@@ -108,7 +108,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         public void Show()
         {
             //if (!_model.IsActive)
-            //{
+           // {
                 called_Show = true;
                 _model.Root.Manager.ShowAutoHideWindow(this);
                 _model.IsActive = true;
