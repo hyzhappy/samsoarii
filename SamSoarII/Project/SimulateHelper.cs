@@ -31,6 +31,7 @@ using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstViewModel.Monitor;
 using SamSoarII.ValueModel;
 using SamSoarII.Simulation.Core.VariableModel;
+using SamSoarII.AppMain.UI.Monitor;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -46,6 +47,7 @@ namespace SamSoarII.AppMain.Project
         {
             get { return smodel; }
         }
+        static private SimulateMonitorManager smmanager;
         
         public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
         public const int SIMULATE_LADDER_ERROR = 0x0100;
@@ -56,6 +58,7 @@ namespace SamSoarII.AppMain.Project
         {
             pmodel = _pmodel;
             smodel = new SimulateModel();
+            smmanager = new SimulateMonitorManager(_pmodel.MMonitorManager.MMWindow, smodel);
             Setup(pmodel.MainRoutine);
             foreach (LadderDiagramViewModel lvdmodel in pmodel.SubRoutines)
             {
@@ -67,6 +70,7 @@ namespace SamSoarII.AppMain.Project
                 case SimulateDllModel.LOADDLL_OK:
                     smodel.ShowWindow();
                     pmodel.LadderMode = LadderMode.Simulate;
+                    smmanager.Initialize();
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                     MessageBox.Show("Error : 找不到生成的dll文件\r\n");
@@ -128,6 +132,7 @@ namespace SamSoarII.AppMain.Project
 
         static public int Close()
         {
+            smmanager.Abort();
             if (smodel != null)
             {
                 smodel.Dispose();
@@ -139,9 +144,9 @@ namespace SamSoarII.AppMain.Project
         
         #region Setup
         
-        private static void Setup(LadderDiagramViewModel lvdmodel)
+        private static void Setup(LadderDiagramViewModel ldvmodel)
         {
-            foreach (LadderNetworkViewModel lnvmodel in lvdmodel.GetNetworks())
+            foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
                 Setup(lnvmodel);
             }
@@ -151,12 +156,17 @@ namespace SamSoarII.AppMain.Project
         {
             foreach (MoniBaseViewModel mbvmodel in lnvmodel.GetMonitors())
             {
+                mbvmodel.ViewCtrl = smmanager;
                 BaseModel bmodel = mbvmodel.Model;
                 if (bmodel == null) continue;
                 for (int i = 0; i < bmodel.ParaCount; i++)
                 {
                     IValueModel vmodel = bmodel.GetPara(i);
                     SimulateVariableUnit svunit = null;
+                    if (vmodel.ValueString.Equals(String.Empty))
+                    {
+                        continue;
+                    }
                     switch (vmodel.Type)
                     {
                         case LadderValueType.Bool:
@@ -171,7 +181,11 @@ namespace SamSoarII.AppMain.Project
                         case LadderValueType.Float:
                             svunit = smodel.GetVariableUnit(vmodel.ValueString, "FLOAT");
                             break;
+                        case LadderValueType.String:
+                            svunit = new SimulateStringUnit(vmodel.ValueString);
+                            break;
                     }
+                    svunit.CanClose = false;
                     SimuMoniValueModel smvmodel = new SimuMoniValueModel(svunit);
                     mbvmodel.SetValueModel(i, smvmodel);
                 }

@@ -116,7 +116,7 @@ EXPORT int open()
 		libusb_get_device_descriptor(devicelist[i], &detail);
 		printf("idVendor = %d\n", detail.idVendor);
 		
-		if (detail.idVendor == SAMSOAR_PLC_VENDOR &&
+		if (detail.idVendor  == SAMSOAR_PLC_VENDOR &&
 			detail.idProduct == SAMSOAR_PLC_PRODUCT)
 		{
 			device = devicelist[i];
@@ -206,7 +206,7 @@ EXPORT int transfer(uint8_t* data, int len)
  * it represent the bit number of a PLC Device.
  * As normally, 16-bits : 2-bytes WORD, 32-bits : 4-bytes WORD.  
  */
-int plc_word_size = 4;
+int plc_word_size = 2;
 
 /** \name set the config message of it
  * It influence the stategy (data format..) of USB commucation. 

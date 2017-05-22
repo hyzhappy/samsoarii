@@ -17,7 +17,7 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         public string Value
         {
-            get { return SetValue; }
+            get { return CurrentValue; }
         }
 
         public int RefCount { get; set; } = 1;

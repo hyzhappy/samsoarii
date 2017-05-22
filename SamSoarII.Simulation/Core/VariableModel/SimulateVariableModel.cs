@@ -67,6 +67,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             get;
         }
+
         abstract public Object Value
         {
             get;
@@ -212,6 +213,8 @@ namespace SamSoarII.Simulation.Core.VariableModel
     {
         private SimulateVariableUnit svunit;
 
+        public event RoutedEventHandler ValueChanged = delegate { };
+
         public string Value
         {
             get
@@ -225,14 +228,13 @@ namespace SamSoarII.Simulation.Core.VariableModel
             svunit = _svunit;
             svunit.ValueChanged += OnValueChanged;
         }
-
-        public event RoutedEventHandler ValueChanged = delegate { };
+        
         private void OnValueChanged(object sender, RoutedEventArgs e)
         {
             ValueChanged(this, e);
         }
     }
-
+    
     public abstract class SimulateVariableModel
     {
         protected string basename = "";
@@ -372,7 +374,6 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
             return null;
         }
-        
         
     }
 }

@@ -24,6 +24,8 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class ProjectTreeViewItem : TreeViewItem, INotifyPropertyChanged, IComparable<ProjectTreeViewItem>
     {
+        private ProjectTreeView ptview;
+
         public bool IsCritical { get; set; }
 
         public bool IsOrder { get; set; }
@@ -48,6 +50,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+
         private string iconsource;
         public string IconSource
         {
@@ -512,10 +515,11 @@ namespace SamSoarII.AppMain.UI
             return this.Text.CompareTo(that.Text);
         }
 
-        public ProjectTreeViewItem()
+        public ProjectTreeViewItem(ProjectTreeView _ptview)
         {
             InitializeComponent();
             DataContext = this;
+            ptview = _ptview;
             RelativeObject = String.Empty;
             Flags = ProjectTreeViewItem.TYPE_CONST;
         }
@@ -600,7 +604,8 @@ namespace SamSoarII.AppMain.UI
         protected override void OnContextMenuOpening(ContextMenuEventArgs e)
         {
             base.OnContextMenuOpening(e);
-            if ((Flags & ~0xf) == 0)
+            if (ptview.Project.LadderMode != LadderMode.Edit
+             || (Flags & ~0xf) == 0)
             {
                 ContextMenu.Visibility = Visibility.Hidden;
             }
@@ -631,5 +636,73 @@ namespace SamSoarII.AppMain.UI
         
         #endregion
 
+    }
+    
+    public class ProjectMenuItem : MenuItem
+    {
+        private ProjectTreeViewItem parent;
+
+        public ProjectTreeViewItem PTVItem
+        {
+            get { return this.parent; }
+        }
+
+        public int ParentFlags
+        {
+            get { return parent.Flags; }
+        }
+
+        public object RelativeObject
+        {
+            get { return parent.RelativeObject; }
+        }
+
+        public int Flags { get; private set; }
+
+        public ProjectMenuItem(ProjectTreeViewItem _parent, int _flags)
+        {
+            parent = _parent;
+            Flags = _flags;
+            string profix = String.Empty;
+            switch (parent.Flags & 0xf)
+            {
+                case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                case ProjectTreeViewItem.TYPE_MODBUSFLODER:
+                case ProjectTreeViewItem.TYPE_NETWORKFLODER:
+                case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                    profix = "文件夹"; break;
+                case ProjectTreeViewItem.TYPE_ROUTINE:
+                    profix = "子程序"; break;
+                case ProjectTreeViewItem.TYPE_NETWORK:
+                    profix = "网络"; break;
+                case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                    profix = "函数块"; break;
+                case ProjectTreeViewItem.TYPE_MODBUS:
+                    profix = "表格"; break;
+            }
+            switch (Flags)
+            {
+                case ProjectTreeViewItem.FLAG_CREATEFOLDER:
+                    Header = "新建文件夹"; break;
+                case ProjectTreeViewItem.FLAG_CREATEROUTINE:
+                    Header = "新建子程序"; break;
+                case ProjectTreeViewItem.FLAG_CREATENETWORK:
+                    Header = "新建网络"; break;
+                case ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK:
+                    Header = "新建函数块"; break;
+                case ProjectTreeViewItem.FLAG_CREATEMODBUS:
+                    Header = "新建MODBUS表格"; break;
+                case ProjectTreeViewItem.FLAG_RENAME:
+                    Header = profix + "重命名"; break;
+                case ProjectTreeViewItem.FLAG_REMOVE:
+                    Header = profix + "删除"; break;
+                case ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE:
+                    Header = "向前插入"; break;
+                case ProjectTreeViewItem.FLAG_CREATENETWORKAFTER:
+                    Header = "向后插入"; break;
+                case ProjectTreeViewItem.FLAG_CONFIG:
+                    Header = profix + "属性"; break;
+            }
+        }
     }
 }

@@ -37,40 +37,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         private int _selectIndex;
         private string _tableName;
-        private bool _isModify = true;
-        public bool IsModify
-        {
-            get
-            {
-                if (_isModify)
-                {
-                    return true;
-                }
-                else
-                {
-                    foreach (var ele in Elements)
-                    {
-                        if (ele.IsModify)
-                        {
-                            _isModify = true;
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-            set
-            {
-                _isModify = value;
-                if (!_isModify)
-                {
-                    foreach (var ele in Elements)
-                    {
-                        ele.IsModify = false;
-                    }
-                }
-            }
-        }
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public ObservableCollection<ElementModel> Elements { get; set; } = new ObservableCollection<ElementModel>();
         public string TableName
@@ -104,7 +71,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             if (!Elements.ToList().Exists(x => { return x.ShowName == ele.ShowName; }))
             {
                 Elements.Add(ele);
-                IsModify = true;
             }
             else
             {
@@ -114,14 +80,12 @@ namespace SamSoarII.AppMain.UI.Monitor
         public void DeleteElement(ElementModel ele)
         {
             Elements.Remove(ele);
-            IsModify = true;
         }
         public void DeleteAllElements()
         {
             if (Elements.Count != 0)
             {
                 Elements.Clear();
-                IsModify = true;
             }
         }
         public XElement CreateXElmentByElements()
@@ -202,20 +166,36 @@ namespace SamSoarII.AppMain.UI.Monitor
                 byte value;
                 if (sender1 == dialog.FindName("ForceON") || sender1 == dialog.FindName("ForceOFF"))
                 {
-                    if (sender1 == dialog.FindName("ForceON")) value = 0x01;
-                    else value = 0x00;
-                    GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value },element);
-                    command.RefElements_A.Add(element);
-                    
-                    //_parent.dataHandle.WriteCommands.Enqueue(command);
+                    if (sender1 == dialog.FindName("ForceON"))
+                    {
+                        value = 0x01;
+                        element.SetValue = "ON";
+                    }
+                    else
+                    {
+                        value = 0x00;
+                        element.SetValue = "OFF";
+                    }
+                    if (_parent.Manager.CanLock)
+                    {
+                        _parent.Manager.Lock(element);
+                    }
+                    else
+                    {
+                        GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
+                        command.RefElements_A.Add(element);
+                        _parent.Manager.Add(command);
+                    }
                 }
                 else if (sender1 == dialog.FindName("UndoForce"))
                 {
+                    element.SetValue = String.Empty;
                     ForceCancelCommand command = new ForceCancelCommand(false,element);
                     _parent.Manager.Add(command);
                 }
                 else
                 {
+                    element.SetValue = String.Empty;
                     ForceCancelCommand command = new ForceCancelCommand(true,element);
                     _parent.Manager.Add(command);
                 }
@@ -256,6 +236,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 {
                     uint value = (uint)obj;
                     byte[] data;
+                    element.SetValue = value.ToString();
                     if (type == WordType.BCD || type == WordType.INT16 || type == WordType.POS_INT16)
                     {
                         data = ValueConverter.GetBytes((ushort)value);

@@ -117,7 +117,7 @@ namespace SamSoarII.Simulation.Core
         /// 动态库接口：PLC进行单独一次运行
         /// </summary>
         [DllImport("simu.dll", EntryPoint = "RunLadder")]
-        private static extern void RunLadder();
+        private static extern int RunLadder();
 
         /// <summary>
         /// 动态库接口：获取位变量的值
@@ -126,7 +126,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
         [DllImport("simu.dll", EntryPoint = "GetBit")]
-        private static extern void GetBit
+        private static extern int GetBit
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -142,7 +142,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
         [DllImport("simu.dll", EntryPoint = "GetWord")]
-        private static extern void GetWord
+        private static extern int GetWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -158,7 +158,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
         [DllImport("simu.dll", EntryPoint = "GetDoubleWord")]
-        private static extern void GetDoubleWord
+        private static extern int GetDoubleWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -174,7 +174,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
         [DllImport("simu.dll", EntryPoint = "GetFloat")]
-        private static extern void GetFloat
+        private static extern int GetFloat
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -189,7 +189,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">脉冲输出口</param>
         /// <param name="output">写入结果的空间</param>
         [DllImport("simu.dll", EntryPoint = "GetFeq")]
-        private static extern void GetFeq
+        private static extern int GetFeq
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -204,7 +204,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
         [DllImport("simu.dll", EntryPoint = "SetBit")]
-        private static extern void SetBit
+        private static extern int SetBit
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -220,7 +220,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
         [DllImport("simu.dll", EntryPoint = "SetWord")]
-        private static extern void SetWord
+        private static extern int SetWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -236,7 +236,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
         [DllImport("simu.dll", EntryPoint = "SetDoubleWord")]
-        private static extern void SetDoubleWord
+        private static extern int SetDoubleWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
@@ -252,7 +252,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
         [DllImport("simu.dll", EntryPoint = "SetFloat")]
-        private static extern void SetFloat
+        private static extern int SetFloat
         (
             [MarshalAs(UnmanagedType.LPStr)]
             string name,

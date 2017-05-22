@@ -15,6 +15,7 @@ namespace SamSoarII.Communication.Command
         private byte startLowAddr;
         private byte[] command;
         private bool isAll = false;
+        public bool IsAll { get { return this.isAll; } }
         public ElementModel RefElement { get; set; }
         public ForceCancelCommand(bool isAll,ElementModel RefElement)
         {

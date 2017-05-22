@@ -17,6 +17,25 @@ using System.Windows;
 
 namespace SamSoarII.AppMain.UI.Monitor
 {
+    public interface IMonitorManager : IMoniViewCtrl
+    {
+        void Start();
+        void Abort();
+        void Initialize();
+        void Initialize(ProjectModel pmodel);
+        ElementModel Get(ElementModel emodel);
+        void Add(ElementModel emodel);
+        void Remove(ElementModel emodel);
+        void Write(ElementModel emodel);
+        bool CanLock { get; }
+        void Lock(ElementModel emodel);
+        void Unlock(ElementModel emodel);
+        void Add(IEnumerable<ElementModel> emodel);
+        void Remove(IEnumerable<ElementModel> emodel);
+        void Add(ICommunicationCommand cmd);
+        void Remove(ICommunicationCommand cmd);
+    }
+
     public enum MonitorManager_ElementModelHandle
     {
         NULL = 0x00, ADD, REMOVE, WRITE, MULTIADD, MULTIREMOVE, MULTIWRITE
@@ -27,9 +46,19 @@ namespace SamSoarII.AppMain.UI.Monitor
         NULL = 0x00, ADD, REMOVE
     }
 
-    public class MonitorManager : IDisposable
+    public class MonitorManager : IMonitorManager, IDisposable
     {
         public MainMonitor MMWindow { get; set; }
+
+        #region View Control
+
+        public bool IsRunning { get; private set; }
+
+        public event RoutedEventHandler Started = delegate { };
+
+        public event RoutedEventHandler Aborted = delegate { };
+
+        #endregion
 
         #region Thread
 
@@ -117,16 +146,20 @@ namespace SamSoarII.AppMain.UI.Monitor
                 ComThread = new Thread(_Thread_Run);
                 _Thread_Alive = true;
                 ComThread.Start();
+                IsRunning = true;
+                Started(this, new RoutedEventArgs());
             }
         }
 
         public void Abort()
         {
             _Thread_Alive = false;
+            IsRunning = false;
+            Aborted(this, new RoutedEventArgs());
         }
 
         #endregion
-
+        
         public MonitorManager(ProjectModel projectModel)
         {
             MMWindow = new MainMonitor(projectModel);
@@ -144,6 +177,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         
         public void Initialize()
         {
+            MMWindow.Manager = this;
             ReadModels.Clear();
             WriteModels.Clear();
             ReadCommands.Clear();
@@ -182,6 +216,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             foreach (MoniBaseViewModel bvmodel in lnvmodel.GetMonitors())
             {
+                bvmodel.ViewCtrl = this;
                 BaseModel bmodel = bvmodel.Model;
                 if (bmodel == null) continue;
                 for (int i = 0; i < bmodel.ParaCount; i++)
@@ -258,8 +293,24 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         #endregion
 
+        #region Lock
+
+        public bool CanLock { get { return false; } }
+
+        public void Lock(ElementModel emodel)
+        {
+
+        }
+
+        public void Unlock(ElementModel emodel)
+        {
+
+        }
+
+        #endregion
+
         #region Monitor Element
-        
+
         private SortedList<string, ElementModel> ReadModels
             = new SortedList<string, ElementModel>();
         private SortedList<string, ElementModel> WriteModels

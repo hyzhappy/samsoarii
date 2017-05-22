@@ -76,7 +76,7 @@ namespace SamSoarII.AppMain.Project
                             LadderCanvas_Edit.Children.Add(_ladderDiagram.SelectionRect);
                         }
                         LadderCanvas = LadderCanvas_Edit;
-                        LadderCanvas_Monitor.Height = 0;
+                        //LadderCanvas_Monitor.Height = 0;
                         break;
                     case LadderMode.Monitor:
                     case LadderMode.Simulate:
@@ -89,7 +89,7 @@ namespace SamSoarII.AppMain.Project
                             LadderCanvas_Monitor.Children.Add(_ladderDiagram.SelectionRect);
                         }
                         LadderCanvas = LadderCanvas_Monitor;
-                        LadderCanvas_Edit.Height = 0;
+                        //LadderCanvas_Edit.Height = 0;
                         break;
                 }
             }
@@ -1142,7 +1142,7 @@ namespace SamSoarII.AppMain.Project
         protected override void OnDragOver(DragEventArgs e)
         {
             base.OnDragOver(e);
-            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
             if (e.Data.GetDataPresent(ptvitem.GetType()))
             {
                 ptvitem = (ProjectTreeViewItem)(e.Data.GetData(ptvitem.GetType()));
@@ -1159,7 +1159,7 @@ namespace SamSoarII.AppMain.Project
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
-            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem();
+            ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
             bool isacquired = AcquireSelectRect(e);
             if (e.Data.GetDataPresent(typeof(LadderNetworkViewModel)))
             {

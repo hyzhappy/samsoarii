@@ -48,6 +48,13 @@ namespace SamSoarII.Simulation
         /// </summary>
         private SimulateManager smanager;
         /// <summary>
+        /// 仿真管理器
+        /// </summary>
+        public SimulateManager SManager
+        {
+            get { return this.smanager; }
+        }
+        /// <summary>
         /// dll模型
         /// </summary>
         private SimulateDllModel dllmodel;

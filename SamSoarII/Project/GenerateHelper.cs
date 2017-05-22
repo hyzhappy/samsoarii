@@ -899,6 +899,7 @@ namespace SamSoarII.AppMain.Project
             sw.Close();
             // 生成用户函数的c语言
             sw = new StreamWriter(funcBlockCFile);
+            sw.Write("#include \"simuf.h\"\r\n");
             foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
             {
                 GenerateCCode(fbvmodel, sw);

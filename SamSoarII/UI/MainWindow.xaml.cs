@@ -406,47 +406,8 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-
-
-
-        private void ShowProjectTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (_interactionFacade != null && SimulateHelper.SModel == null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-        }
-
-
-        private void ShowSimulateTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (_interactionFacade != null && SimulateHelper.SModel != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-        }
         
-        private void ShowSimuMonitorCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (_interactionFacade != null && SimulateHelper.SModel != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-        }
-
-        private void ShowMainMonitorCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void ShowProjectTreeViewCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
@@ -457,9 +418,17 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-        private void ShowOutputCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        
+        private void ShowMainMonitorCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
 
         private void CompileCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)

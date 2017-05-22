@@ -163,6 +163,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
         {
             get
             {
+                if (!IsRunning) return Brushes.Transparent;
                 bool value = false;
                 Int32 w1 = 0, w2 = 0;
                 Int64 d1 = 0, d2 = 0;
@@ -280,7 +281,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 return Model.ParaCount > 0 && _values[0] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(0).ValueString,
-                        _values[0].Value)
+                        IsRunning ? _values[0].Value : "???")
                     : String.Empty;
             }
         }
@@ -292,7 +293,7 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                 return Model.ParaCount > 1 && _values[1] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(1).ValueString,
-                        _values[1].Value)
+                        IsRunning ? _values[1].Value : "???")
                     : String.Empty;
             }
         }
@@ -324,6 +325,24 @@ namespace SamSoarII.LadderInstViewModel.Monitor
                     default: return String.Empty;
                 }
             }
+        }
+
+        protected override void OnStart(object sender, RoutedEventArgs e)
+        {
+            base.OnStart(sender, e);
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterTextBlock_Text"));
+        }
+
+        protected override void OnAbort(object sender, RoutedEventArgs e)
+        {
+            base.OnAbort(sender, e);
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterCanva_Brush"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("ValueTextBlock2_Text"));
+            PropertyChanged(this, new PropertyChangedEventArgs("CenterTextBlock_Text"));
         }
 
         protected override void OnValueChanged(object sender, RoutedEventArgs e)

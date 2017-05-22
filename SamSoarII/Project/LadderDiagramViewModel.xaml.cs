@@ -854,6 +854,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectLeftWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             SelectRectLeft();
             if (_selectRectOwner != null)
             {
@@ -877,6 +878,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectRightWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             int x = _selectRect.X;
             int y = _selectRect.Y;
             SelectRectRight();  
@@ -902,6 +904,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectUpWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             int x = _selectRect.X - 1;
             int y = _selectRect.Y - 1;
             if (_selectRectOwner != null)
@@ -928,6 +931,7 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectDownWithLine()
         {
+            if (LadderMode != LadderMode.Edit) return;
             int x = _selectRect.X - 1;
             int y = _selectRect.Y;
             if (_selectRectOwner != null)
@@ -1374,6 +1378,7 @@ namespace SamSoarII.AppMain.Project
             }      
             if(e.Key >= Key.A && e.Key <= Key.Z)
             {
+                if (LadderMode != LadderMode.Edit) return;
                 if((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.None)
                 {
                     char c;
@@ -1393,7 +1398,8 @@ namespace SamSoarII.AppMain.Project
             }
             if(e.Key == Key.Enter)
             {
-                if(_selectRectOwner != null)
+                if (LadderMode != LadderMode.Edit) return;
+                if (_selectRectOwner != null)
                 {
                     var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
                     if(viewmodel != null && viewmodel.Type != LadderInstModel.ElementType.HLine)
@@ -1409,7 +1415,8 @@ namespace SamSoarII.AppMain.Project
             }
             if(e.Key == Key.Delete)
             {
-                if(SelectionStatus == SelectStatus.SingleSelected)
+                if (LadderMode != LadderMode.Edit) return;
+                if (SelectionStatus == SelectStatus.SingleSelected)
                 {
                     var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
                     if (model != null)
@@ -1843,7 +1850,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    if(_selectRectOwner != null)
+                    if (_selectRectOwner != null)
                     {
                         var p = e.GetPosition(_selectRectOwner.LadderCanvas);
                         var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
@@ -2497,6 +2504,10 @@ namespace SamSoarII.AppMain.Project
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 SelectionStatus = SelectStatus.Idle;
+            }
+            if (LadderMode != LadderMode.Edit)
+            {
+                return;
             }
             var network = GetNetworkByMouse();
             if (network != null)

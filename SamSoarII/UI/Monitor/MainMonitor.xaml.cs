@@ -39,56 +39,18 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
         }
 
-        public MonitorManager Manager { get; set; }
+        public IMonitorManager Manager { get; set; }
+        
         public ObservableCollection<MonitorVariableTable> tables { get; set; } 
             = new ObservableCollection<MonitorVariableTable>();
         public MonitorVariableTable SelectTable = null;
         
-        private bool _isModify = true;
-        public bool IsModify
-        {
-            get
-            {
-                if (_isModify)
-                {
-                    return true;
-                }
-                else
-                {
-                    foreach (var table in tables)
-                    {
-                        if (table.IsModify)
-                        {
-                            _isModify = true;
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-            set
-            {
-                _isModify = value;
-                if (!_isModify)
-                {
-                    foreach (var table in tables)
-                    {
-                        table.IsModify = false;
-                    }
-                }
-            }
-        }
-
-        private bool _isBeingMonitored = false;
+        //private bool _isBeingMonitored = false;
         public bool IsBeingMonitored
         {
             get
             {
-                return _isBeingMonitored;
-            }
-            set
-            {
-                _isBeingMonitored = value;
+                return Manager != null ? Manager.IsRunning : false;
             }
         }
         public bool IsEnableModify
@@ -185,7 +147,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             tables.Add(table);
             Tables.SelectedIndex = tables.Count - 1;
             CurrentTable = tables[tables.Count - 1];
-            IsModify = true;
         }
         private void DeleteTableClick(object sender, RoutedEventArgs e)
         {
@@ -195,16 +156,11 @@ namespace SamSoarII.AppMain.UI.Monitor
                 tables.Remove(CurrentTable);
                 Tables.SelectedIndex = 0;
                 CurrentTable = tables[0];
-                IsModify = true;
             }
         }
         private void DeleteAllTables(object sender, RoutedEventArgs e)
         {
             int cnt = tables.Count;
-            if (cnt > 2)
-            {
-                IsModify = true;
-            }
             for (int i = 0; i < cnt - 1; i++)
             {
                 RemoveTableCommand(tables.ElementAt(1));
@@ -452,12 +408,12 @@ namespace SamSoarII.AppMain.UI.Monitor
         public void Start()
         {
             Manager.Start();
-            IsBeingMonitored = true;
+            //IsBeingMonitored = true;
         }
         public void Stop()
         {
             Manager.Abort();
-            IsBeingMonitored = false;
+            //IsBeingMonitored = false;
         }
 
         #region Command Bindings

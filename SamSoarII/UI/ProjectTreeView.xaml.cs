@@ -231,7 +231,7 @@ namespace SamSoarII.AppMain.UI
             bool                    isorder = false
         )
         {
-            ProjectTreeViewItem createitem = new ProjectTreeViewItem();
+            ProjectTreeViewItem createitem = new ProjectTreeViewItem(this);
             createitem.RelativeObject = relativeObject;
             createitem.Flags = flags;
             if (parent != null)
@@ -862,6 +862,7 @@ namespace SamSoarII.AppMain.UI
                     this.dragitem = null;
                     return;
                 }
+                if (_projectModel.LadderMode != LadderMode.Edit) return;
                 if (value.IsCritical) return;
                 if (value.IsRenaming) return;
                 if ((value.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
@@ -1175,75 +1176,7 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
     }
-
-    public class ProjectMenuItem : MenuItem
-    {
-        private ProjectTreeViewItem parent;
-
-        public ProjectTreeViewItem PTVItem
-        {
-            get { return this.parent; }
-        }
-        
-        public int ParentFlags
-        {
-            get { return parent.Flags; }
-        }
-
-        public object RelativeObject
-        {
-            get { return parent.RelativeObject; }
-        }
-
-        public int Flags { get; private set; } 
-
-        public ProjectMenuItem(ProjectTreeViewItem _parent, int _flags)
-        {
-            parent = _parent;
-            Flags = _flags;
-            string profix = String.Empty;
-            switch (parent.Flags & 0xf)
-            {
-                case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
-                case ProjectTreeViewItem.TYPE_MODBUSFLODER:
-                case ProjectTreeViewItem.TYPE_NETWORKFLODER:
-                case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
-                    profix = "文件夹"; break;
-                case ProjectTreeViewItem.TYPE_ROUTINE:
-                    profix = "子程序"; break;
-                case ProjectTreeViewItem.TYPE_NETWORK:
-                    profix = "网络"; break;
-                case ProjectTreeViewItem.TYPE_FUNCBLOCK:
-                    profix = "函数块"; break;
-                case ProjectTreeViewItem.TYPE_MODBUS:
-                    profix = "表格"; break;
-            }
-            switch (Flags)
-            {
-                case ProjectTreeViewItem.FLAG_CREATEFOLDER:
-                    Header = "新建文件夹"; break;
-                case ProjectTreeViewItem.FLAG_CREATEROUTINE:
-                    Header = "新建子程序"; break;
-                case ProjectTreeViewItem.FLAG_CREATENETWORK:
-                    Header = "新建网络"; break;
-                case ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK:
-                    Header = "新建函数块"; break;
-                case ProjectTreeViewItem.FLAG_CREATEMODBUS:
-                    Header = "新建MODBUS表格"; break;
-                case ProjectTreeViewItem.FLAG_RENAME:
-                    Header = profix + "重命名"; break;
-                case ProjectTreeViewItem.FLAG_REMOVE:
-                    Header = profix + "删除"; break;
-                case ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE:
-                    Header = "向前插入"; break;
-                case ProjectTreeViewItem.FLAG_CREATENETWORKAFTER:
-                    Header = "向后插入"; break;
-                case ProjectTreeViewItem.FLAG_CONFIG:
-                    Header = profix + "属性"; break;
-            }
-        }
-    }
-
+    
 　  public class ProjectTreeViewEventArgs : EventArgs
     {
         public const int TYPE_ROOT = 0x0;
