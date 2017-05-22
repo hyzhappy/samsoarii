@@ -44,7 +44,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 return;
             }
             command.Execute();
-            InvokeLDNetwordsChangedEvent(command);
+            InvokeLDNetworksChangedEvent(command);
             UndoStack.Push(command);
             RedoStack.Clear();
             IsModify = true;
@@ -62,7 +62,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 var command = UndoStack.Pop();
                 RedoStack.Push(command);
                 command.Undo();
-                InvokeLDNetwordsChangedEvent(command);
+                InvokeLDNetworksChangedEvent(command);
                 IsModify = true;
             }
         }
@@ -79,17 +79,17 @@ namespace SamSoarII.AppMain.LadderCommand
                 var command = RedoStack.Pop();
                 UndoStack.Push(command);
                 command.Redo();
-                InvokeLDNetwordsChangedEvent(command);
+                InvokeLDNetworksChangedEvent(command);
                 IsModify = true;
             }
         }
-        private void InvokeLDNetwordsChangedEvent(IUndoableCommand command)
+        private void InvokeLDNetworksChangedEvent(IUndoableCommand command)
         {
-            if (command is LadderDiagramReplaceNetworksCommand 
+            if (command is LadderDiagramReplaceNetworksCommand
              || command is LadderDiagramRemoveNetworksCommand
              || command is LadderDiagramExchangeNetworkCommand)
             {
-                ldvmodel.InvokeLDNetwordsEvent();
+                ldvmodel.InvokeLDNetworksChanged();
             }
         }
     }

@@ -95,6 +95,7 @@
     <Compile Include="Communication\Command\IntrasegmentWriteCommand.cs" />
     <Compile Include="Communication\CommunicationDataDefine.cs" />
     <Compile Include="Communication\CommunicationDataManager.cs" />
+    <Compile Include="Communication\ICommunicationManager.cs" />
     <Compile Include="Communication\SerialPortManager.cs" />
     <Compile Include="Communication\USBManager.cs" />
     <Compile Include="Communication\Util\CommandHelper.cs" />
@@ -159,9 +160,15 @@
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="UI\CommentListControl.xaml.cs">
+      <DependentUpon>CommentListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\CanExpandButton.cs" />
     <Compile Include="UI\Controls\LadderExpander.xaml.cs">
       <DependentUpon>LadderExpander.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditVariableDialog.xaml.cs">
+      <DependentUpon>EditVariableDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Element\ElementInitialize\BitElementModel.cs" />
     <Compile Include="UI\Element\ElementInitialize\ElementInitializeWindow.xaml.cs">
@@ -194,7 +201,6 @@
       <DependentUpon>MainMonitor.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorCommand.cs" />
-    <Compile Include="UI\Monitor\MonitorDataHandle.cs" />
     <Compile Include="UI\Monitor\MonitorManager.cs" />
     <Compile Include="UI\Monitor\MonitorVariableTable.xaml.cs">
       <DependentUpon>MonitorVariableTable.xaml</DependentUpon>
@@ -214,6 +220,9 @@
     </Compile>
     <Compile Include="UI\ReplaceWindow.xaml.cs">
       <DependentUpon>ReplaceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SelectRect.xaml.cs">
+      <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Style\IconManager.cs" />
     <Compile Include="UI\Util\ElementAddressHelper.cs" />
@@ -419,9 +428,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\CommentListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\Controls\LadderExpander.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\EditVariableDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Element\ElementInitialize\ElementInitializeWindow.xaml">
       <SubType>Designer</SubType>
@@ -532,6 +549,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ReplaceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -667,7 +688,7 @@
     <Resource Include="Resources\Image\MainStyle\folderClose.png" />
     <Resource Include="Resources\Image\MainStyle\folderOpen.png" />
   </ItemGroup>
-<ItemGroup>
+  <ItemGroup>
     <Content Include="Communication\Util\plcusb.dll" />
     <Content Include="Communication\Util\usbdll\libusb-1.0.dll" />
     <Content Include="Communication\Util\usbdll\libusb.h" />

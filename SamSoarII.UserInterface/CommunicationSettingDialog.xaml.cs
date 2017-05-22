@@ -58,15 +58,18 @@ namespace SamSoarII.UserInterface
                 
             }
         }
+        public event RoutedEventHandler Cancel = delegate { };
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+            Cancel(this, e);
         }
+        public event RoutedEventHandler Ensure = delegate { };
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
         {
             //wait to check
             Save();
-            Close();
+            Ensure(this, e);
         }
         public void Save()
         {

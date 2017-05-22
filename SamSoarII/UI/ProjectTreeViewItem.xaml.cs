@@ -150,7 +150,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
-        
+
         #region Flags
 
         public const int TYPE_ROOT = 0x0;
@@ -565,11 +565,12 @@ namespace SamSoarII.AppMain.UI
             RelativeObject = String.Empty;
             Flags = ProjectTreeViewItem.TYPE_CONST;
         }
+
         #region Rename
 
         public bool IsRenaming { get; private set; } = false;
 
-        static public bool HasRenaming { get; private set; } = false;
+        static public bool HasRenaming { get; set; } = false;
 
         private ContextMenu _contextmenu;
 
@@ -646,9 +647,14 @@ namespace SamSoarII.AppMain.UI
         {
             base.OnContextMenuOpening(e);
             if (ptview.Project.LadderMode != LadderMode.Edit
-             || (Flags & ~0xf) == 0)
+             || (Flags & ~0xf) == 0
+             || HasRenaming)
             {
                 ContextMenu.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                ContextMenu.Visibility = Visibility.Visible;
             }
         }
 
@@ -674,7 +680,7 @@ namespace SamSoarII.AppMain.UI
             Text = TBO_Text.Text;
             Renamed(this, new RoutedEventArgs());
         }
-
+        
         #endregion
 
         private void OnExpanded(object sender, RoutedEventArgs e)

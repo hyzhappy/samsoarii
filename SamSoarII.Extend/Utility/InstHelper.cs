@@ -1183,7 +1183,7 @@ namespace SamSoarII.Extend.Utility
                             break;
                         // 通信
                         case "MBUS":
-                            sw.Write("_mbus({0:s}, NULL, 0, &{2:s});\n", inst[1], inst[3]);
+                            sw.Write("_mbus({0:s}, NULL, 0, &{1:s});\n", inst[1], inst[3]);
                             break;
                         case "SEND":
                             sw.Write("_send({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3]);

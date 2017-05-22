@@ -18,6 +18,7 @@ using System.IO;
 using SamSoarII.Extend.FuncBlockModel;
 using System.Xml.Linq;
 using SamSoarII.Extend.Utility;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.AppMain
 {
@@ -31,6 +32,36 @@ namespace SamSoarII.AppMain
             {
                 _isCommentMode = value;
                 _projectModel.IsCommentMode = _isCommentMode;
+            }
+        }
+        public bool IsLadderMode
+        {
+            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0; }
+            set
+            {
+                if (value == true)
+                {
+                    _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_LADDER;
+                }
+                if (value == false)
+                {
+                    _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_LADDER;
+                }
+            }
+        }
+        public bool IsInstMode
+        {
+            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_INST) != 0; }
+            set
+            {
+                if (value == true)
+                {
+                    _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_INST;
+                }
+                if (value == false)
+                {
+                    _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_INST;
+                }
             }
         }
         private ProjectModel _projectModel;
@@ -54,49 +85,12 @@ namespace SamSoarII.AppMain
         {
             get { return this._mainTabControl; }
         }
-
         private MainWindow _mainWindow;
         public MainWindow MainWindow
         {
             get { return _mainWindow; }
         }
         private ErrorReportWindow _erwindow;
-        public ErrorReportWindow ERWindow
-        {
-            get { return _erwindow; }
-        }
-        public bool IsLadderMode
-        {
-            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0; }
-            set
-            {
-                if (value == true)
-                {
-                    _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_LADDER;
-                }
-                if (value == false)
-                {
-                    _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_LADDER;
-                }
-            }
-        }
-
-        public bool IsInstMode
-        {
-            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_INST) != 0; }
-            set
-            {
-                if (value == true)
-                {
-                    _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_INST;
-                }
-                if (value == false)
-                {
-                    _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_INST;
-                }
-            }
-        }
-
         public bool ProjectLoaded
         {
             get
@@ -105,7 +99,6 @@ namespace SamSoarII.AppMain
             }
         }
         public string ProjectFullFileName { get; set; }
-
         public LadderDiagramViewModel CurrentLadder
         {
             get;
@@ -128,6 +121,8 @@ namespace SamSoarII.AppMain
             _erwindow = new ErrorReportWindow(this);
             mainwindow.LAErrorList.Content = _erwindow;
         }
+
+        #region Check
 
         private void CheckLadderCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -232,7 +227,6 @@ namespace SamSoarII.AppMain
         {
             CheckFuncBlock(true);
         }
-
         public bool CheckFuncBlock(bool showreport = false)
         {
             bool result = true;
@@ -398,6 +392,9 @@ namespace SamSoarII.AppMain
             }
             return result;
         }
+
+        #endregion
+
         #region Routine
         public void CreateRoutine
         (
@@ -546,6 +543,27 @@ namespace SamSoarII.AppMain
             PTVEvent(this, e);
         }
 
+        public void ReplaceNetwork
+        (
+            LadderDiagramViewModel ldvmodel,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_NETWORK
+                  | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                    ldvmodel, null);
+            }
+            else
+            {
+                e.RelativeObject = ldvmodel;
+            }
+            PTVEvent(this, e);
+        }
+
         #region FuncBlock
         public void CreateFuncBlock
         (
@@ -646,6 +664,8 @@ namespace SamSoarII.AppMain
         #endregion
 
         #endregion
+
+        #region Modification
 
         private void DeleteRowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -805,12 +825,10 @@ namespace SamSoarII.AppMain
                 network.RemoveVerticalLine(vline.X,vline.Y);
             }
         }
-        public MessageBoxResult ShowSaveYesNoCancelDialog()
-        {
-            string title = "确认保存";
-            string text = String.Format("{0:s}已经更改，是否保存？", _projectModel.ProjectName);
-            return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-        }
+
+        #endregion
+
+        #region Navigate
 
         private void ElementList_NavigateToNetwork(NavigateToNetworkEventArgs e)
         {
@@ -849,9 +867,19 @@ namespace SamSoarII.AppMain
             _mainTabControl.ShowItem(fbvmodel);
             fbvmodel.SetOffset(offset);
         }
+
+        #endregion
+
+        #region Project
+
+        public MessageBoxResult ShowSaveYesNoCancelDialog()
+        {
+            string title = "确认保存";
+            string text = String.Format("{0:s}已经更改，是否保存？", _projectModel.ProjectName);
+            return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+        }
         private void InitializeLDNetwordsChangedHandle(LadderDiagramViewModel ldvmodel)
         {
-            ldvmodel.LDNetwordsChanged += _projectTreeView.LDNetwordsChanged;
         }
         public void CreateProject(string name, string fullFileName)
         {
@@ -882,6 +910,11 @@ namespace SamSoarII.AppMain
                 ValueAliasManager.Clear();
                 ValueCommentManager.Clear();
                 InstructionCommentManager.Clear();
+                if (_projectTreeView != null)
+                {
+                    _projectTreeView.Dispose();
+                    _projectTreeView = null;
+                }
                 _projectTreeView = new ProjectTreeView(_projectModel);
                 _projectTreeView.TabItemOpened += OnTabOpened;
                 _projectTreeView.PTVHandle += OnGotPTVHandle;
@@ -939,7 +972,6 @@ namespace SamSoarII.AppMain
         {
             SaveAsProject(ProjectFullFileName);
         }
-
         public void SaveAsProject(string fileName)
         {
             XDocument xdoc = new XDocument();
@@ -983,6 +1015,11 @@ namespace SamSoarII.AppMain
                 InstructionCommentManager.UpdateAllComment();
                 _mainTabControl.SelectionChanged -= OnTabItemChanged;
                 _mainTabControl.ShowEditItem -= OnTabOpened;
+                if (_projectTreeView != null)
+                {
+                    _projectTreeView.Dispose();
+                    _projectTreeView = null;
+                }
                 _projectTreeView = new ProjectTreeView(_projectModel, xele_rtv);
                 _projectTreeView.TabItemOpened += OnTabOpened;
                 _projectTreeView.PTVHandle += OnGotPTVHandle;
@@ -1011,12 +1048,10 @@ namespace SamSoarII.AppMain
                 projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
             }
         }
-        
         public void CompileProject()
         {
             _projectModel.Compile();
         }
-
         public int SimulateProject()
         {
             if (!CheckFuncBlock(false))
@@ -1030,22 +1065,44 @@ namespace SamSoarII.AppMain
             int ret = SimulateHelper.Simulate(_projectModel);
             return ret;
         }
-
         public bool MonitorProject()
         {
             if (!CheckLadder(false))
             {
                 return false;
             }
+            CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
             _projectModel.LadderMode = LadderMode.Monitor;
+            if (paras.IsCOMLinked)
+            {
+                _projectModel.MMonitorManager.CManager = _projectModel.PManager;
+                if (paras.IsAutoCheck
+                 && !_projectModel.PManager.AutoCheck())
+                {
+                    return false;
+                }
+                if (_projectModel.PManager.Start() != 0)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                _projectModel.MMonitorManager.CManager = _projectModel.UManager;
+                if (_projectModel.UManager.Start() != 0)
+                {
+                    return false;
+                }
+            }
             _projectModel.MMonitorManager.Initialize(_projectModel);
             return true;
         }
-
         public void EditProject()
         {
             _projectModel.LadderMode = LadderMode.Edit;
         }
+
+        #endregion
 
         public void CloseTabItem(ITabItem tabItem)
         {

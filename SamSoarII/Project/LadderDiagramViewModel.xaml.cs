@@ -2332,9 +2332,9 @@ namespace SamSoarII.AppMain.Project
         public delegate void LDNetwordsChangedEventHandler(LadderDiagramViewModel LDView);
 
         public event LDNetwordsChangedEventHandler LDNetwordsChanged = delegate { };
-        public void InvokeLDNetwordsEvent()
+        public void InvokeLDNetworksChanged()
         {
-            LDNetwordsChanged.Invoke(this);
+            _projectModel.IFacade.ReplaceNetwork(this);
         }
         #endregion
         #region Selection state transfers
