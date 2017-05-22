@@ -6,10 +6,22 @@ using System.Threading.Tasks;
 using SamSoarII.LadderInstModel;
 using SamSoarII.PLCCompiler;
 using SamSoarII.LadderInstViewModel;
+using System.Windows.Media;
+
 namespace SamSoarII.AppMain.Project
 {
     public class LadderHelper
     {
+        public static SolidColorBrush FoldingBrush;
+        static LadderHelper()
+        {
+            Color color = new Color();
+            color.A = 255;
+            color.R = 60;
+            color.G = 58;
+            color.B = 58;
+            FoldingBrush = new SolidColorBrush(color);
+        }
         public static ExpGraphNode CreateNodeByElement(BaseViewModel viewmodel)
         {
             switch(viewmodel.Type)

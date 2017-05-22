@@ -1481,24 +1481,17 @@ namespace SamSoarII.AppMain.Project
         #region ladder Folding module
         private void OnMouseEnter(object sender, MouseEventArgs e)
         {
-            Color color = new Color();
-            color.A = 255;
-            color.R = 60;
-            color.G = 58;
-            color.B = 58;
-            SolidColorBrush brush = new SolidColorBrush(color);
-            Rect.Fill = brush;
+            Rect.Fill = LadderHelper.FoldingBrush;
             Rect.Opacity = 0.08;
-            ladderExpander.Background = brush;
-            ladderExpander.Opacity = 0.2;
+            ladderExpander.Rect.Fill = LadderHelper.FoldingBrush;
+            ladderExpander.Rect.Opacity = 0.2;
         }
         private void OnMouseLeave(object sender, MouseEventArgs e)
         {
-            SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
-            Rect.Fill = brush;
+            Rect.Fill = Brushes.Transparent;
             Rect.Opacity = 1;
-            ladderExpander.Background = brush;
-            ladderExpander.Opacity = 1;
+            ladderExpander.Rect.Fill = Brushes.Transparent;
+            ladderExpander.Rect.Opacity = 1;
         }
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -1529,7 +1522,7 @@ namespace SamSoarII.AppMain.Project
             scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             Canvas canvas = new Canvas();
             scroll.MaxHeight = 385;
-            canvas.Background = new SolidColorBrush(Colors.White);
+            canvas.Background = Brushes.White;
             canvas.HorizontalAlignment = HorizontalAlignment.Left;
             ScaleTransform transform = new ScaleTransform(GlobalSetting.LadderOriginScaleX / 1.7, GlobalSetting.LadderOriginScaleY / 1.7);
             canvas.Height = _oldRowCount * HeightUnit;

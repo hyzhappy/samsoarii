@@ -13,10 +13,9 @@
         <util:BoolToVisibilityConverter2 x:Key="converter"></util:BoolToVisibilityConverter2>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
-        <ui:LadderExpander x:Name="ladderExpander" IsExpand="True" Margin="-50,-20,0,0" Height="{Binding ElementName=mainstack,Path=ActualHeight}"></ui:LadderExpander>
+        <ui:LadderExpander x:Name="ladderExpander" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}" IsExpand="True" Margin="-50,0,0,0"/>
         <Grid>
-            <Rectangle x:Name="Rect" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}">
-            </Rectangle>
+            <Rectangle x:Name="Rect" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}"/>
             <StackPanel x:Name="mainstack" Margin="0,0,0,20">
                 <StackPanel.Resources>
                     <ContextMenu x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">

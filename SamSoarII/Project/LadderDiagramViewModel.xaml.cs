@@ -2328,6 +2328,7 @@ namespace SamSoarII.AppMain.Project
             e.CanExecute = LadderMode == LadderMode.Edit;
         }
         #endregion
+
         #region ReloadPTVByLadderDiagram
         public delegate void LDNetwordsChangedEventHandler(LadderDiagramViewModel LDView);
 
@@ -2337,6 +2338,7 @@ namespace SamSoarII.AppMain.Project
             LDNetwordsChanged.Invoke(this);
         }
         #endregion
+
         #region Selection state transfers
         private void EnterIdleState()
         {
@@ -2402,37 +2404,21 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-	    private bool loadedbefore = false;
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!loadedbefore)
-            {
-                Focus();
-                Keyboard.Focus(this);
-                loadedbefore = true;
-            }
-        }
+	    
         #region ladder Folding module
         private void OnMouseEnter(object sender, MouseEventArgs e)
         {
-            Color color = new Color();
-            color.A = 255;
-            color.R = 60;
-            color.G = 58;
-            color.B = 58;
-            SolidColorBrush brush = new SolidColorBrush(color);
-            Rect.Fill = brush;
+            Rect.Fill = LadderHelper.FoldingBrush;
             Rect.Opacity = 0.08;
-            ladderExpander.Background = brush;
-            ladderExpander.Opacity = 0.2;
+            ladderExpander.Rect.Fill = LadderHelper.FoldingBrush;
+            ladderExpander.Rect.Opacity = 0.2;
         }
         private void OnMouseLeave(object sender, MouseEventArgs e)
         {
-            SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
-            Rect.Fill = brush;
+            Rect.Fill = Brushes.Transparent;
             Rect.Opacity = 1;
-            ladderExpander.Background = brush;
-            ladderExpander.Opacity = 1;
+            ladderExpander.Rect.Fill = Brushes.Transparent;
+            ladderExpander.Rect.Opacity = 1;
         }
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -2466,7 +2452,7 @@ namespace SamSoarII.AppMain.Project
             scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             StackPanel stackpanel = new StackPanel();
             scroll.MaxHeight = 385;
-            stackpanel.Background = new SolidColorBrush(Colors.White);
+            stackpanel.Background = Brushes.White;
             stackpanel.HorizontalAlignment = HorizontalAlignment.Left;
             ScaleTransform transform = new ScaleTransform(GlobalSetting.LadderOriginScaleX / 1.7, GlobalSetting.LadderOriginScaleY / 1.7);
             foreach (LadderNetworkViewModel net in _ladderNetworks)
