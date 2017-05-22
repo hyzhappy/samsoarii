@@ -214,6 +214,7 @@
     <Compile Include="UI\ReplaceWindow.xaml.cs">
       <DependentUpon>ReplaceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Style\IconManager.cs" />
     <Compile Include="UI\Util\ElementAddressHelper.cs" />
     <Compile Include="UserSetting\SettingManager.cs" />
     <Compile Include="UI\InstrucionTreeItem.cs" />
@@ -647,6 +648,21 @@
     <Resource Include="Resources\Image\TreeViewIcon\Root.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Routine.png" />
     <Resource Include="Resources\Image\TreeViewIcon\RoutineFolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\MainStyle\FUNC.png" />
+    <Resource Include="Resources\Image\MainStyle\FuncBlock.png" />
+    <Resource Include="Resources\Image\MainStyle\Instruction.png" />
+    <Resource Include="Resources\Image\MainStyle\ModBusTable.png" />
+    <Resource Include="Resources\Image\MainStyle\Network.png" />
+    <Resource Include="Resources\Image\MainStyle\Project.png" />
+    <Resource Include="Resources\Image\MainStyle\Program.png" />
+    <Resource Include="Resources\Image\MainStyle\Routines.png" />
+    <Resource Include="Resources\Image\MainStyle\TVFolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\MainStyle\folderClose.png" />
+    <Resource Include="Resources\Image\MainStyle\folderOpen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

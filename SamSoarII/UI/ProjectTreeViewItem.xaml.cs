@@ -24,6 +24,18 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class ProjectTreeViewItem : TreeViewItem, INotifyPropertyChanged, IComparable<ProjectTreeViewItem>
     {
+        public static readonly DependencyProperty IconSourceProperty;
+        static ProjectTreeViewItem()
+        {
+            PropertyMetadata metadata = new PropertyMetadata();
+            metadata.PropertyChangedCallback += ProjectTreeViewItem_PropertyChangedEvent;
+            IconSourceProperty = DependencyProperty.Register("IconSource",typeof(string),typeof(ProjectTreeViewItem),metadata);
+        }
+        private static void ProjectTreeViewItem_PropertyChangedEvent(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ProjectTreeViewItem item = (ProjectTreeViewItem)d;
+            item.RaisePropertyChanged(item,"IconSource");
+        }
         public bool IsCritical { get; set; }
 
         public bool IsOrder { get; set; }
@@ -48,17 +60,21 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        private string iconsource;
+        public void RaisePropertyChanged(ProjectTreeViewItem item, string propertyName)
+        {
+            PropertyChanged.Invoke(item,new PropertyChangedEventArgs(propertyName));
+        }
         public string IconSource
         {
-            get { return this.iconsource; }
+            get
+            {
+                return (string)GetValue(IconSourceProperty);
+            }
             set
             {
-                this.iconsource = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("IconSource"));
+                SetValue(IconSourceProperty,value);
             }
         }
-
         private string text;
         public string Text
         {
@@ -66,7 +82,7 @@ namespace SamSoarII.AppMain.UI
             set
             {
                 this.text = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("Text"));
+                RaisePropertyChanged(this,"Text");
             }
         }
 
@@ -134,7 +150,7 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
-
+        
         #region Flags
 
         public const int TYPE_ROOT = 0x0;
@@ -190,24 +206,23 @@ namespace SamSoarII.AppMain.UI
                         _flags <<= 1;
                     }
                 }
-
                 switch (flags & 0xf)
                 {
                     case TYPE_ROOT:
-                        IconSource = "/Resources/Image/TreeViewIcon/Root.png";
+                        IconSource = "/Resources/Image/MainStyle/Project.png";
                         if (RelativeObject is ProjectModel)
                         {
                             Text = String.Format("工程 - {0:s}", ((ProjectModel)RelativeObject).ProjectName);
                         }
                         break;
                     case TYPE_ROUTINE:
-                        IconSource = "/Resources/Image/TreeViewIcon/Routine.png";
+                        IconSource = "/Resources/Image/MainStyle/Routines.png";
                         if (RelativeObject is LadderDiagramViewModel)
                         {
                             string name = ((LadderDiagramViewModel)RelativeObject).ProgramName;
                             if (name.Equals("Main"))
                             {
-                                Text = String.Format("主程序");
+                                Text = String.Format("主程序 - {0}",name);
                             }
                             else
                             {
@@ -216,11 +231,19 @@ namespace SamSoarII.AppMain.UI
                         }
                         break;
                     case TYPE_ROUTINEFLODER:
-                        IconSource = "/Resources/Image/TreeViewIcon/RoutineFolder.png";
+                        if (IsExpanded)
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderOpen.png";
+                        }
+                        else
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderClose.png";
+                        }
                         Text = RelativeObject.ToString();
                         break;
                     case TYPE_NETWORK:
-                        IconSource = "/Resources/Image/TreeViewIcon/Network.png";
+                        IconSource = "/Resources/Image/MainStyle/Network.png";
+                        Image.Height = 14;
                         if (RelativeObject is LadderNetworkViewModel)
                         {
                             LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)RelativeObject;
@@ -236,18 +259,32 @@ namespace SamSoarII.AppMain.UI
                         }
                         break;
                     case TYPE_NETWORKFLODER:
-                        IconSource = "/Resources/Image/TreeViewIcon/NerworkFolder.png";
+                        if (IsExpanded)
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderOpen.png";
+                        }
+                        else
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderClose.png";
+                        }
                         Text = RelativeObject.ToString();
                         break;
                     case TYPE_FUNCBLOCK:
-                        IconSource = "/Resources/Image/TreeViewIcon/FuncBlock.png";
+                        IconSource = "/Resources/Image/MainStyle/FUNC.png";
                         if (RelativeObject is FuncBlockViewModel)
                         {
                             Text = ((FuncBlockViewModel)RelativeObject).ProgramName;
                         }
                         break;
                     case TYPE_FUNCBLOCKFLODER:
-                        IconSource = "/Resources/Image/TreeViewIcon/FuncBlockFolder.png";
+                        if (IsExpanded)
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderOpen.png";
+                        }
+                        else
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderClose.png";
+                        }
                         Text = RelativeObject.ToString();
                         break;
                     case TYPE_FUNC:
@@ -258,14 +295,21 @@ namespace SamSoarII.AppMain.UI
                         }
                         break;
                     case TYPE_MODBUS:
-                        IconSource = "/Resources/Image/TreeViewIcon/Modbus.png";
+                        IconSource = "/Resources/Image/MainStyle/ModBusTable.png";
                         if (RelativeObject is ModbusTableModel)
                         {
                             Text = ((ModbusTableModel)RelativeObject).Name;
                         }
                         break;
                     case TYPE_MODBUSFLODER:
-                        IconSource = "/Resources/Image/TreeViewIcon/ModbusFolder.png";
+                        if (IsExpanded)
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderOpen.png";
+                        }
+                        else
+                        {
+                            IconSource = "/Resources/Image/MainStyle/folderClose.png";
+                        }
                         Text = "Modbus表格";
                         break;
                     case TYPE_ELEMENTLIST:
@@ -277,11 +321,12 @@ namespace SamSoarII.AppMain.UI
                         Text = "软元件初始化";
                         break;
                     case TYPE_PROGRAM:
-                        IconSource = "/Resources/Image/TreeViewIcon/Program.png";
+                        IconSource = "/Resources/Image/MainStyle/Program.png";
                         Text = "程序";
                         break;
                     case TYPE_LADDERS:
-                        IconSource = "/Resources/Image/TreeViewIcon/Ladders.png";
+                        IconSource = "/Resources/Image/MainStyle/Instruction.png";
+                        Image.Height = 20;
                         Text = RelativeObject.ToString();
                         break;
                     case TYPE_CONST:
@@ -519,7 +564,6 @@ namespace SamSoarII.AppMain.UI
             RelativeObject = String.Empty;
             Flags = ProjectTreeViewItem.TYPE_CONST;
         }
-
         #region Rename
 
         public bool IsRenaming { get; private set; } = false;
@@ -628,8 +672,52 @@ namespace SamSoarII.AppMain.UI
             Text = TBO_Text.Text;
             Renamed(this, new RoutedEventArgs());
         }
-        
         #endregion
-
+        private void OnCollapsed(object sender, RoutedEventArgs e)
+        {
+            ProjectTreeViewItem item = sender as ProjectTreeViewItem;
+            if (item.Items.Count > 0)
+            {
+                switch (item.Flags & 0xf)
+                {
+                    case TYPE_FUNCBLOCKFLODER:
+                    case TYPE_MODBUSFLODER:
+                    case TYPE_NETWORKFLODER:
+                    case TYPE_ROUTINEFLODER:
+                        item.IconSource = "/Resources/Image/MainStyle/folderClose.png";
+                        break;
+                    default:
+                        e.Handled = true;
+                        break;
+                }
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+        private void OnExpanded(object sender, RoutedEventArgs e)
+        {
+            ProjectTreeViewItem item = sender as ProjectTreeViewItem;
+            if (item.Items.Count > 0)
+            {
+                switch (item.Flags & 0xf)
+                {
+                    case TYPE_FUNCBLOCKFLODER:
+                    case TYPE_MODBUSFLODER:
+                    case TYPE_NETWORKFLODER:
+                    case TYPE_ROUTINEFLODER:
+                        item.IconSource = "/Resources/Image/MainStyle/folderOpen.png";
+                        break;
+                    default:
+                        e.Handled = true;
+                        break;
+                }
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

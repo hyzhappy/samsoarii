@@ -14,6 +14,8 @@ using SamSoarII.Simulation.UI;
 using SamSoarII.Simulation.UI.Chart;
 using SamSoarII.AppMain.UI.HelpDocComponet;
 using SamSoarII.HelpDocument.HelpDocComponet;
+using System.Windows.Media.Imaging;
+using SamSoarII.AppMain.UI.Style;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -101,7 +103,6 @@ namespace SamSoarII.AppMain.UI
                 ldoc.Title = item.TabHeader;
                 if (item is LadderDiagramViewModel)
                 {
-
                     IEnumerable<MainTabDiagramItem> fit = DiagramCollection.Where(
                         (MainTabDiagramItem _mtditem) => { return _mtditem.LDVM_ladder == item; });
                     MainTabDiagramItem mtditem = null;
@@ -230,6 +231,21 @@ namespace SamSoarII.AppMain.UI
                 {
                     CloseItem(tab);
                     return;
+                }
+            }
+            foreach (var child in Children)
+            {
+                if (child.IconSource == null && child.Content is MainTabDiagramItem)
+                {
+                    child.ImageSource = IconManager.RoutineImage;
+                }
+                else if (child.IconSource == null && child.Content is FuncBlockViewModel)
+                {
+                    child.ImageSource = IconManager.FuncImage;
+                }
+                else if (child.IconSource == null && child.Content is ModbusTableViewModel)
+                {
+                    child.ImageSource = IconManager.ModbusImage;
                 }
             }
         }

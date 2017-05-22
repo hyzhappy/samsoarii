@@ -61,7 +61,29 @@ namespace Xceed.Wpf.AvalonDock.Layout
         }
 
         #endregion //Title
+        #region ImageSource
+        public static readonly DependencyProperty ImageSourceProperty = 
+                    DependencyProperty.Register("ImageSource",typeof(string),typeof(LayoutContent), new UIPropertyMetadata(null, OnImageSourcePropertyChanged, CoerceImageSourceValue));
+        public string ImageSource
+        {
+            get { return (string)GetValue(ImageSourceProperty); }
+            set { SetValue(ImageSourceProperty, value); }
+        }
+        private static object CoerceImageSourceValue(DependencyObject obj, object value)
+        {
+            var lc = (LayoutContent)obj;
+            if (((string)value) != lc.ImageSource)
+            {
+                lc.RaisePropertyChanging(LayoutContent.ImageSourceProperty.Name);
+            }
+            return value;
+        }
 
+        private static void OnImageSourcePropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            ((LayoutContent)obj).RaisePropertyChanged(LayoutContent.ImageSourceProperty.Name);
+        }
+        #endregion
         #region Content
         [NonSerialized]
         private object _content = null;
@@ -81,7 +103,7 @@ namespace Xceed.Wpf.AvalonDock.Layout
         }
 
         #endregion
-
+        
         #region ContentId
 
         private string _contentId = null;

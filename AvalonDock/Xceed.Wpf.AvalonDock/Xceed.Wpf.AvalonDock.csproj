@@ -106,6 +106,7 @@
     <Compile Include="Converters\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\LayoutItemFromLayoutModelConverter.cs" />
     <Compile Include="Converters\NullToDoNothingConverter.cs" />
+    <Compile Include="Converters\SelectedItemMultiConverter.cs" />
     <Compile Include="Converters\UriSourceToBitmapImageConverter.cs" />
     <Compile Include="DocumentClosedEventArgs.cs" />
     <Compile Include="DocumentClosingEventArgs.cs" />

@@ -15,7 +15,13 @@ namespace SamSoarII.AppMain
 
         private const double ScaleMin = 0.4;
         private const double ScaleMax = 2.5;
-
+        public static int WholeWidth
+        {
+            get
+            {
+                return LadderWidthUnit * LadderXCapacity;
+            }
+        }
         public static int LadderWidthUnit { get { return 300; } }
 
         public static int LadderHeightUnit { get { return 300; } }

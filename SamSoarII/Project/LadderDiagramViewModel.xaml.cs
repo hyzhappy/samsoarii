@@ -1634,6 +1634,10 @@ namespace SamSoarII.AppMain.Project
                             {
                                 VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
                             }
+                            else
+                            {
+                                VScrollToRect(_selectStartNetwork.NetworkNumber,_selectStartNetwork.RowCount);
+                            }
                         }
                         else
                         {
@@ -1697,6 +1701,10 @@ namespace SamSoarII.AppMain.Project
                             if (_selectAllNetworks.Count > 0)
                             {
                                 VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
+                            }
+                            else
+                            {
+                                VScrollToRect(_selectStartNetwork.NetworkNumber,0);
                             }
                         }
                         else
@@ -2396,7 +2404,7 @@ namespace SamSoarII.AppMain.Project
                 loadedbefore = true;
             }
         }
-        #region ladder expand module
+        #region ladder Folding module
         private void OnMouseEnter(object sender, MouseEventArgs e)
         {
             Color color = new Color();
@@ -2486,6 +2494,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         #endregion
+
         #region network drag(only is isExpand)
         private LadderNetworkViewModel dragItem;
         private LadderNetworkViewModel currentItem;
@@ -2514,7 +2523,7 @@ namespace SamSoarII.AppMain.Project
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet != desnetwork)
+            if (sourcenet != null && sourcenet != desnetwork)
             {
                 sourcenet.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
@@ -2525,8 +2534,11 @@ namespace SamSoarII.AppMain.Project
         private void OnDrop(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            sourcenet.Opacity = 1;
-            dragItem = null;
+            if (sourcenet != null)
+            {
+                sourcenet.Opacity = 1;
+                dragItem = null;
+            }
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {

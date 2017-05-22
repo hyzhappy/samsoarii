@@ -32,8 +32,6 @@ namespace Xceed.Wpf.AvalonDock.Controls
         {
             FocusableProperty.OverrideMetadata(typeof(LayoutDocumentPaneControl), new FrameworkPropertyMetadata(false));
         }
-
-
         internal LayoutDocumentPaneControl(LayoutDocumentPane model)
         {
             if (model == null)
@@ -57,17 +55,16 @@ namespace Xceed.Wpf.AvalonDock.Controls
         {
             base.OnGotKeyboardFocus(e);
             System.Diagnostics.Trace.WriteLine( string.Format( "OnGotKeyboardFocus({0}, {1})", e.Source, e.NewFocus ) );
-
-
+            
             //if (_model.SelectedContent != null)
             //    _model.SelectedContent.IsActive = true;
-
+            
         }
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
-
+            
             if (_model.SelectedContent != null)
                 _model.SelectedContent.IsActive = true;
         }
@@ -92,7 +89,6 @@ namespace Xceed.Wpf.AvalonDock.Controls
         protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-
             if (!e.Handled && _model.SelectedContent != null)
                 _model.SelectedContent.IsActive = true;
         }

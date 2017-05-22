@@ -815,6 +815,10 @@ namespace SamSoarII.AppMain
                 tempItem = ProjectModel.SubRoutines.Where(x => { return x.ProgramName == e.RefLadderName; }).First();
             }
             var network = tempItem.GetNetworkByNumber(e.NetworkNum);
+            if (!network.ladderExpander.IsExpand)
+            {
+                network.ladderExpander.IsExpand = true;
+            }
             network.AcquireSelectRect();
             tempItem.SelectionRect.X = e.X;
             tempItem.SelectionRect.Y = e.Y;

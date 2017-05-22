@@ -29,6 +29,7 @@ namespace Xceed.Wpf.AvalonDock.Layout
     {
         public LayoutDocumentPane()
         {
+
         }
         public LayoutDocumentPane(LayoutContent firstChild)
         {

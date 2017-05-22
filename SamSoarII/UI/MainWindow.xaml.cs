@@ -99,7 +99,7 @@ namespace SamSoarII.AppMain.UI
             AnchorSide side;
             side = LayoutSetting.GetDefaultSideAnchorable(LAnch.Title);
             LAnch.ReplaceSide(side);
-
+            
             double[] autohidesize;
             autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAnch.Title);
             LAnch.AutoHideWidth = autohidesize[0];

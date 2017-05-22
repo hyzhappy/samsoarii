@@ -176,4 +176,20 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <ControlTemplate TargetType="{x:Type Button}" x:Key="TabItemCloseButtonTemplate">
+        <Canvas Name="ButtonCanvas" Width="15" Height="15" Opacity="0.3" Background="Transparent">
+            <Line Name="Line1" X1="4" Y1="4" X2="11" Y2="11" Stroke="Black" StrokeThickness="1"></Line>
+            <Line Name="Line2" X1="11" Y1="4" X2="4" Y2="11" Stroke="Black" StrokeThickness="1"></Line>
+        </Canvas>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.8"></Setter>
+                <Setter TargetName="Line1" Property="StrokeThickness" Value="2"></Setter>
+                <Setter TargetName="Line2" Property="StrokeThickness" Value="2"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.3"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

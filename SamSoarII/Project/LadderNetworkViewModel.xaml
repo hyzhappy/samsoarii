@@ -8,7 +8,7 @@
              xmlns:ui="clr-namespace:SamSoarII.AppMain.UI"
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="3600" x:Name="LadderNetworkUserControl">
+             d:DesignHeight="300" d:DesignWidth="{x:Static app:GlobalSetting.WholeWidth}" x:Name="LadderNetworkUserControl">
     <UserControl.Resources>
         <util:BoolToVisibilityConverter2 x:Key="converter"></util:BoolToVisibilityConverter2>
     </UserControl.Resources>

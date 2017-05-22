@@ -1299,27 +1299,7 @@ namespace SamSoarII.AppMain.Project
 
 
         #endregion
-
-        #region Command execute
-        private void ElementsCutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if((_ladderDiagram.SelectionStatus == SelectStatus.SingleSelected) || (_ladderDiagram.SelectionStatus == SelectStatus.MultiSelected))
-            {
-                e.CanExecute = true;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
-        }
-        #endregion
-
-        #region Command can execute
-        private void OnElementsCutCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-
-        }
-        #endregion
+        
 
         #region IComparable interface implemention
         // 按照NetworkNumber大小排序
@@ -1497,7 +1477,7 @@ namespace SamSoarII.AppMain.Project
             _canHide = true;
             RowCount = 0;
         }
-        #region ladder expand module
+        #region ladder Folding module
         private void OnMouseEnter(object sender, MouseEventArgs e)
         {
             Color color = new Color();

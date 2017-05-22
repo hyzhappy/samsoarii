@@ -138,9 +138,9 @@ namespace Xceed.Wpf.AvalonDock.Controls
         protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-
+            
             Model.IsActive = true;
-
+            
             if (e.ClickCount == 1)
             {
                 _mouseDownPoint = e.GetPosition(this);
