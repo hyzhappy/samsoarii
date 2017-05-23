@@ -108,6 +108,8 @@ namespace SamSoarII.AppMain
         {
             LadderScaleTransform = new ScaleTransform();
         }
+        public static bool IsSavedByTime { get; set; }
+        public static int SaveTimeSpan { get; set; }
         //public static void Save()
         //{
         //    var cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -140,6 +142,8 @@ namespace SamSoarII.AppMain
             rootNode.Add(new XElement("_R", _R));
             rootNode.Add(new XElement("_G", _G));
             rootNode.Add(new XElement("_B", _B));
+            rootNode.Add(new XElement("IsSavedByTime", IsSavedByTime));
+            rootNode.Add(new XElement("SaveTimeSpan", SaveTimeSpan));
             return rootNode;
         }
         public static void LoadSystemSettingByXELement(XElement rootNode)
@@ -204,6 +208,16 @@ namespace SamSoarII.AppMain
             catch (Exception)
             {
                 SelectColor = Colors.Black;
+            }
+            try
+            {
+                IsSavedByTime = bool.Parse(rootNode.Element("IsSavedByTime").Value);
+                SaveTimeSpan = int.Parse(rootNode.Element("SaveTimeSpan").Value);
+            }
+            catch (Exception)
+            {
+                IsSavedByTime = false;
+                SaveTimeSpan = 1;
             }
             FontManager.GetFontDataProvider().SelectFontSizeIndex = SelectedIndexOfFontSizeComboBox;
             FontManager.GetFontDataProvider().SelectFontFamilyIndex = SelectedIndexOfFontFamilyComboBox;

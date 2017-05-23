@@ -85,7 +85,7 @@ namespace SamSoarII.AppMain.Project
 
         private bool _isCommentMode;
         public event RefNetworksBriefChangedEventHandler RefNetworksBriefChanged = delegate { };
-
+        public AutoSavedManager autoSavedManager { get; set; }
         public bool IsCommentMode
         {
             get { return _isCommentMode; }

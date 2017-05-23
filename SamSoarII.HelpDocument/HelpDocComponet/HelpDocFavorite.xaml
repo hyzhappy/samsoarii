@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="1000" d:DesignWidth="300">
     <UserControl.CommandBindings>
+        <CommandBinding x:Name="PrintPageCommand" Command="{x:Static local:HelpDocCommand.PrintPage}"></CommandBinding>
         <CommandBinding x:Name="DeleteCommand" Command="{x:Static local:HelpDocCommand.DeletePage}"></CommandBinding>
         <CommandBinding x:Name="DeleteAllCommand" Command="{x:Static local:HelpDocCommand.DeleteAllPage}"></CommandBinding>
         <CommandBinding x:Name="OpenCommand" Command="{x:Static local:HelpDocCommand.OpenPage}"></CommandBinding>
@@ -17,7 +18,7 @@
             <MenuItem Header="删除" Command="{x:Static local:HelpDocCommand.DeletePage}"></MenuItem>
             <MenuItem Header="全部删除" Command="{x:Static local:HelpDocCommand.DeleteAllPage}"></MenuItem>
             <Separator/>
-            <MenuItem Header="打印"></MenuItem>
+            <MenuItem Header="打印" Command="{x:Static local:HelpDocCommand.PrintPage}"></MenuItem>
         </ContextMenu>
         <ControlTemplate x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
             <Grid>

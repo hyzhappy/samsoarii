@@ -906,6 +906,11 @@ namespace SamSoarII.AppMain
             {
                 _projectModel = new ProjectModel(name);
                 _projectModel.IFacade = this;
+                _projectModel.autoSavedManager = new AutoSavedManager(this);
+                if (GlobalSetting.IsSavedByTime)
+                {
+                    _projectModel.autoSavedManager.Start();
+                }
                 ProjectFileManager.Update(name,fullFileName);
                 ValueAliasManager.Clear();
                 ValueCommentManager.Clear();
@@ -965,6 +970,7 @@ namespace SamSoarII.AppMain
                 _mainWindow.ClearProjectMonitor();
                 _mainTabControl.Reset();
                 _projectTreeView = null;
+                _projectModel.autoSavedManager.Abort();
                 _projectModel = null;
             }
         }
@@ -1007,8 +1013,17 @@ namespace SamSoarII.AppMain
             }
             else
             {
+                if (_projectModel != null)
+                {
+                    _projectModel.autoSavedManager.Abort();
+                }
                 _projectModel = ProjectHelper.LoadProject(fileName, new ProjectModel(String.Empty));
                 _projectModel.IFacade = this;
+                _projectModel.autoSavedManager = new AutoSavedManager(this);
+                if (GlobalSetting.IsSavedByTime)
+                {
+                    _projectModel.autoSavedManager.Start();
+                }
                 XDocument xdoc = XDocument.Load(fileName);
                 XElement xele_r = xdoc.Element("Root");
                 XElement xele_rtv = xele_r.Element("ProjectTreeView");

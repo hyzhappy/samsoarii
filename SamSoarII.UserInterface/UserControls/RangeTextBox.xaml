@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="24" d:DesignWidth="80">
     <StackPanel Orientation="Horizontal">
-        <TextBox x:Name="textbox" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" Height="20" Width="60" GotFocus="OnGotFocus" LostFocus="OnLostFocus"></TextBox>
+        <TextBox x:Name="textbox" Text="{Binding Text,Mode=TwoWay}" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" Height="20" Width="60" GotFocus="OnGotFocus" LostFocus="OnLostFocus"></TextBox>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
             <RepeatButton x:Name="Button1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="10" IsEnabled="{Binding CanUp}"></RepeatButton>
             <RepeatButton x:Name="Button2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="10" IsEnabled="{Binding CanDown}"></RepeatButton>

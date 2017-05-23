@@ -64,6 +64,8 @@ namespace SamSoarII.HelpDocument.HelpDocComponet.HelpDocPages
             _helpDocWindow.AheadCommand.CanExecute += AheadCommand_CanExecute;
             _helpDocWindow.CollectCommand.Executed += CollectCommand_Executed;
             _helpDocWindow.CollectCommand.CanExecute += CollectCommand_CanExecute;
+            _helpDocWindow.PrintPage.CanExecute += PrintPage_CanExecute;
+            _helpDocWindow.PrintPage.Executed += PrintPage_Executed;
             _helpDocWindow.Home.Click += Home_Click;
             _pageTabControl = window.MainTab;
             _pageTabControl.PageTabControlStatusChanged += _pageTabControl_PageTabControlStatusChanged;
@@ -85,9 +87,27 @@ namespace SamSoarII.HelpDocument.HelpDocComponet.HelpDocPages
             _helpDocSearch.ItemDoubleClick += _helpDocSearch_ItemDoubleClick;
             _helpDocSearch.CollectCommand.Executed += CollectCommand_Executed2;
             _helpDocSearch.CollectCommand.CanExecute += CollectCommand_CanExecute2;
+            _helpDocTreeView.PrintPageCommand.CanExecute += PrintPage_CanExecute;
+            _helpDocTreeView.PrintPageCommand.Executed += PrintPage_Executed;
+            _helpDocFavorite.PrintPageCommand.CanExecute += PrintPage_CanExecute;
+            _helpDocFavorite.PrintPageCommand.Executed += PrintPage_Executed;
+            _helpDocSearch.PrintPageCommand.CanExecute += PrintPage_CanExecute;
+            _helpDocSearch.PrintPageCommand.Executed += PrintPage_Executed;
             _browsingHistoryManager = new BrowsingHistoryManager();
             _helpDocWindow.Loaded += _helpDocWindow_Loaded;
             _helpDocWindow.FuncGrid.SizeChanged += FuncGrid_SizeChanged;
+        }
+        private void PrintPage_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PrintDialog dialog = new PrintDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                
+            }
+        }
+        private void PrintPage_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
         private void CollectCommand_CanExecute2(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -223,8 +243,8 @@ namespace SamSoarII.HelpDocument.HelpDocComponet.HelpDocPages
         }
         private void FuncGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _helpDocSearch.CollectList.Height = e.NewSize.Height - 75;
-            _helpDocFavorite.CollectList.Height = e.NewSize.Height - 75;
+            _helpDocSearch.CollectList.Height = Math.Max(e.NewSize.Height - 75,0);
+            _helpDocFavorite.CollectList.Height = Math.Max(e.NewSize.Height - 75, 0);
             _helpDocSearch.CollectList.Width = e.NewSize.Width;
             _helpDocFavorite.CollectList.Width = e.NewSize.Width;
         }

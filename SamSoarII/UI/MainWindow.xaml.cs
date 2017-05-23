@@ -493,7 +493,14 @@ namespace SamSoarII.AppMain.UI
         }
         private void ShowOptionDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
 
 	    private void ShowErrorListCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -920,7 +927,7 @@ namespace SamSoarII.AppMain.UI
 
         private void OnShowOptionDialogCommandExecute(object sender, RoutedEventArgs e)
         {
-            OptionDialog dialog = new OptionDialog();
+            OptionDialog dialog = new OptionDialog(_interactionFacade);
             dialog.ShowDialog();
         }
 
@@ -1039,11 +1046,6 @@ namespace SamSoarII.AppMain.UI
                 dialog.Close();
             };
             dialog.ShowDialog();
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

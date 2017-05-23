@@ -8,6 +8,7 @@
              d:DesignHeight="1000" d:DesignWidth="300">
     <UserControl.CommandBindings>
         <CommandBinding x:Name="CollectCommand" Command="{x:Static local:HelpDocCommand.CollectPage}"></CommandBinding>
+        <CommandBinding x:Name="PrintPageCommand" Command="{x:Static local:HelpDocCommand.PrintPage}"></CommandBinding>
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <ContextMenu x:Key="TreeItemContext">
@@ -17,7 +18,7 @@
                 <MenuItem Header="全部打开" Click="OnOpenAll"></MenuItem>
                 <MenuItem Header="全部关闭" Click="OnCloseAll"></MenuItem>
             </MenuItem>
-            <MenuItem Header="打印"></MenuItem>
+            <MenuItem Header="打印" Command="{x:Static local:HelpDocCommand.PrintPage}"></MenuItem>
             <MenuItem Header="搜藏" Command="{x:Static local:HelpDocCommand.CollectPage}"></MenuItem>
         </ContextMenu>
         <DataTemplate x:Key="PageTemplateProto">

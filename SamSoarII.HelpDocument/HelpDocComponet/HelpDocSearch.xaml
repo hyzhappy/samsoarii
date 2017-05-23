@@ -7,13 +7,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="1000" d:DesignWidth="300">
     <UserControl.CommandBindings>
+        <CommandBinding x:Name="PrintPageCommand" Command="{x:Static local:HelpDocCommand.PrintPage}"></CommandBinding>
         <CommandBinding x:Name="OpenCommand" Command="{x:Static local:HelpDocCommand.OpenPage}"></CommandBinding>
         <CommandBinding x:Name="CollectCommand" Command="{x:Static local:HelpDocCommand.CollectPage}"></CommandBinding>
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <ContextMenu x:Key="ItemContext">
             <MenuItem Header="打开" Command="{x:Static local:HelpDocCommand.OpenPage}"></MenuItem>
-            <MenuItem Header="打印"></MenuItem>
+            <MenuItem Header="打印" Command="{x:Static local:HelpDocCommand.PrintPage}"></MenuItem>
             <MenuItem Header="搜藏" Command="{x:Static local:HelpDocCommand.CollectPage}"></MenuItem>
         </ContextMenu>
         <ControlTemplate x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
@@ -73,7 +74,7 @@
                 <TextBlock Margin="0,2,0,0" Width="40" Height="22" TextAlignment="Center" FontSize="16">搜索</TextBlock>
                 <TextBox x:Name="SearchTextBox" Width="100" Height="22" BorderBrush="#FF282912" BorderThickness="1" MaxLines="1" TextChanged="OnSearchTextChanged" FontSize="16" FontFamily="Arial" Padding="0,2,0,0"></TextBox>
                 <Label Height="25">
-                    <Image Source="/Resources/Image/Search.png"></Image>
+                    <Image Source="Resources/Images/Search.png"></Image>
                 </Label>
             </StackPanel>
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" BorderThickness="0">

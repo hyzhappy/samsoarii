@@ -23,11 +23,12 @@ namespace SamSoarII.AppMain.UI
     {
         private List<UserControl> _widget = new List<UserControl>();
         public static event RoutedEventHandler EnsureButtonClick = delegate { };
-        public OptionDialog()
+        public OptionDialog(InteractionFacade _interactionFacade)
         {
             InitializeComponent();
             _widget.Add(new FontSelectionWidget());
             _widget.Add(new ColorSelectionWidget());
+            _widget.Add(new OtherSettingWidget(_interactionFacade));
             ShowWidget(0);
         }
         private void ShowWidget(int index)

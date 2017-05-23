@@ -124,6 +124,7 @@
     <Compile Include="LadderCommand\NetworkRowCountChangeCommand.cs" />
     <Compile Include="LadderGraphModule\LadderGraphCheckModule.cs" />
     <Compile Include="LadderGraphModule\LadderGraphRelocationModule.cs" />
+    <Compile Include="Project\AutoSavedManager.cs" />
     <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\ExtendHelper.cs" />
     <Compile Include="Project\FuncBlockViewModel.xaml.cs">
@@ -205,6 +206,9 @@
     </Compile>
     <Compile Include="UI\Monitor\UserInterface\QuickAddElementDialog.xaml.cs">
       <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OptionWidget\OtherSettingWidget.xaml.cs">
+      <DependentUpon>OtherSettingWidget.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ProjectTreeViewItem.xaml.cs">
       <DependentUpon>ProjectTreeViewItem.xaml</DependentUpon>
@@ -483,6 +487,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\OptionWidget\FontSelectionWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\OtherSettingWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -22,18 +22,29 @@ namespace SamSoarII.UserInterface
     /// </summary>
     public partial class RangeTextBox : UserControl,INotifyPropertyChanged
     {
+        public static readonly DependencyProperty TextProperty;
         public static readonly DependencyProperty TopRangeProperty;
         public static readonly DependencyProperty LowRangeProperty;
         public static readonly DependencyProperty DefaultValueProperty;
-        //public static readonly DependencyProperty TextProperty;
         public event PropertyChangedEventHandler PropertyChanged;
 
         static RangeTextBox()
         {
+            TextProperty = DependencyProperty.Register("Text",typeof(string),typeof(RangeTextBox));
             TopRangeProperty = DependencyProperty.Register("TopRange",typeof(int),typeof(RangeTextBox));
             LowRangeProperty = DependencyProperty.Register("LowRange", typeof(int), typeof(RangeTextBox));
             DefaultValueProperty = DependencyProperty.Register("DefaultValue", typeof(int), typeof(RangeTextBox));
-            //TextProperty = DependencyProperty.Register("Text",typeof(string),typeof(RangeTextBox));
+        }
+        public string Text
+        {
+            get
+            {
+                return (string)GetValue(TextProperty);
+            }
+            set
+            {
+                SetValue(TextProperty,value);
+            }
         }
         private int oldvalue;
         public int TopRange
@@ -69,17 +80,6 @@ namespace SamSoarII.UserInterface
                 SetValue(DefaultValueProperty,value);
             }
         }
-        //public string Text
-        //{
-        //    get
-        //    {
-        //        return (string)GetValue(TextProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(TextProperty,value);
-        //    }
-        //}
         public bool CanUp
         {
             get
@@ -121,7 +121,7 @@ namespace SamSoarII.UserInterface
                 if (KeyInputHelper.NumAssert(e.Key))
                 {
                     newvalue = 10 * oldvalue + KeyInputHelper.GetKeyValue(e.Key);
-                    if (newvalue > TopRange)
+                    if (newvalue > TopRange || newvalue < LowRange)
                     {
                         e.Handled = true;
                     }

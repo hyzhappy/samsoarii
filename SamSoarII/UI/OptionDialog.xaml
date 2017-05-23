@@ -33,6 +33,7 @@
                 </ListBox.ItemsPanel>
                 <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">字体</ListBoxItem>
                 <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">颜色</ListBoxItem>
+                <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">其他</ListBoxItem>
             </ListBox>
         </Border>
         <Border BorderBrush="LightSteelBlue" BorderThickness="3,6,6,6" Grid.Column="1">

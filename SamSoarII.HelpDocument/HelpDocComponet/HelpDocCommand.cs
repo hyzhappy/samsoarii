@@ -19,6 +19,7 @@ namespace SamSoarII.HelpDocument.HelpDocComponet
         public static RoutedUICommand ClosePage { get; set; }
         public static RoutedUICommand ScrollToLeft { get; set; }
         public static RoutedUICommand ScrollToRight { get; set; }
+        public static RoutedUICommand PrintPage { get; set; }
         static HelpDocCommand()
         {
             HideOrShowCommand = new RoutedUICommand();
@@ -31,6 +32,7 @@ namespace SamSoarII.HelpDocument.HelpDocComponet
             ClosePage = new RoutedUICommand();
             ScrollToLeft = new RoutedUICommand();
             ScrollToRight = new RoutedUICommand();
+            PrintPage = new RoutedUICommand();
         }
     }
 }

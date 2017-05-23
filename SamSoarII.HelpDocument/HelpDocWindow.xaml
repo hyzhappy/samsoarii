@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="HelpDocWindow" Height="350" Width="525">
     <Window.CommandBindings>
+        <CommandBinding x:Name="PrintPage" Command="{x:Static hdoc:HelpDocCommand.PrintPage}"></CommandBinding>
         <CommandBinding Command="{x:Static hdoc:HelpDocCommand.HideOrShowCommand}" Executed="OnHideOrShowCommandExecuted"></CommandBinding>
         <CommandBinding x:Name="BackCommand" Command="{x:Static hdoc:HelpDocCommand.HistoryBack}"></CommandBinding>
         <CommandBinding x:Name="AheadCommand" Command="{x:Static hdoc:HelpDocCommand.HistoryAhead}"></CommandBinding>
@@ -178,7 +179,7 @@
                 <MenuItem Header="刷新(_R)"></MenuItem>
                 <MenuItem Header="Internet选项(_I)"></MenuItem>
                 <Separator/>
-                <MenuItem Header="打印(_P)"></MenuItem>
+                <MenuItem Header="打印(_P)" Command="{x:Static hdoc:HelpDocCommand.PrintPage}"></MenuItem>
             </MenuItem>
         </Menu>
         <Grid>
