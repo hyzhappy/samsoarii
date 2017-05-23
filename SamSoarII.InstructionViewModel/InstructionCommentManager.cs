@@ -12,7 +12,8 @@ namespace SamSoarII.LadderInstViewModel
         AddFirst,
         Remove,
         RemoveLast,
-        Clear
+        Clear,
+        Refresh
     }
     public class MappedMessageChangedEventArgs : EventArgs
     {
@@ -31,6 +32,17 @@ namespace SamSoarII.LadderInstViewModel
     {
         public static event MappedMessageChangedEventHandler MappedMessageChanged = delegate { };
         private static Dictionary<string, HashSet<BaseViewModel>> _valueRelatedModel = new Dictionary<string, HashSet<BaseViewModel>>();
+        public static Dictionary<string, HashSet<BaseViewModel>> ValueRelatedModel
+        {
+            get
+            {
+                return _valueRelatedModel;
+            }
+        }
+        public static void RaiseMappedMessageChangedEvent()
+        {
+            MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Refresh,string.Empty,null));
+        }
         static InstructionCommentManager()
         {
             ValueCommentManager.ValueCommentChanged += ValueCommentManager_ValueCommentChanged;

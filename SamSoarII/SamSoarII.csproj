@@ -160,15 +160,9 @@
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="UI\CommentListControl.xaml.cs">
-      <DependentUpon>CommentListControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\Controls\CanExpandButton.cs" />
     <Compile Include="UI\Controls\LadderExpander.xaml.cs">
       <DependentUpon>LadderExpander.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\EditVariableDialog.xaml.cs">
-      <DependentUpon>EditVariableDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Element\ElementInitialize\BitElementModel.cs" />
     <Compile Include="UI\Element\ElementInitialize\ElementInitializeWindow.xaml.cs">
@@ -428,17 +422,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\CommentListControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UI\Controls\LadderExpander.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\EditVariableDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Element\ElementInitialize\ElementInitializeWindow.xaml">
       <SubType>Designer</SubType>

@@ -353,6 +353,12 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewItem.TYPE_ROUTINE:
                 case ProjectTreeViewItem.TYPE_MODBUS:
                 case ProjectTreeViewItem.TYPE_NETWORK:
+                    if (ptvitem.Parent is ProjectTreeViewItem)
+                    {
+                        var parent = ptvitem.Parent as ProjectTreeViewItem;
+                        if (parent.Items.Count == 1)
+                            parent.IsExpanded = false;
+                    }
                     _e = new ProjectTreeViewEventArgs((ptvitem.Flags & 0xf) | ProjectTreeViewEventArgs.FLAG_REMOVE,
                         ptvitem.RelativeObject, ptvitem);
                     PTVHandle(this, _e);
@@ -362,7 +368,10 @@ namespace SamSoarII.AppMain.UI
             }
             if (ptvitem.Parent is ProjectTreeViewItem)
             {
-                ((ProjectTreeViewItem)(ptvitem.Parent)).Items.Remove(ptvitem);
+                var parent = ptvitem.Parent as ProjectTreeViewItem;
+                if (parent.Items.Count == 1)
+                    parent.IsExpanded = false;
+                parent.Items.Remove(ptvitem);
             }
         }
 
@@ -721,30 +730,7 @@ namespace SamSoarII.AppMain.UI
                         throw new ArgumentException(String.Format("Cannot found routine {0:s} in the ProjectTreeView.", ldvmodel.ProgramName));
                     }
                     selectitem = dpdict[ldvmodel.ProgramName];
-                    switch (e.Flags & ~0xf)
-                    {
-                        case ProjectTreeViewEventArgs.FLAG_REPLACE:
-                            foreach (ProjectTreeViewItem ptvitem in selectitem.Items)
-                            {
-                                if (ptvitem.RelativeObject is LadderNetworkViewModel
-                                 && ((LadderNetworkViewModel)(ptvitem.RelativeObject)).NetworkNumber == lnvmodel.NetworkNumber)
-                                {
-                                    selectitem = ptvitem;
-                                    break;
-                                }
-                            }
-                            if (!(selectitem.RelativeObject is LadderNetworkViewModel))
-                            {
-                                throw new ArgumentException(String.Format("Cannot found network {0:d} in routine {1:s}",
-                                    lnvmodel.NetworkNumber, ldvmodel.ProgramName));
-                            }
-                            selectitem.RelativeObject = lnvmodel;
-                            selectitem.Flags = selectitem.Flags;
-                            break;
-                        default:
-                            Rebuild(selectitem, ldvmodel);
-                            break;
-                    }
+                    Rebuild(selectitem, ldvmodel);
                     break;
                 case ProjectTreeViewEventArgs.TYPE_FUNCBLOCK:
                     if (!(e.RelativeObject is FuncBlockViewModel))

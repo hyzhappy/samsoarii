@@ -783,7 +783,7 @@ namespace SamSoarII.AppMain.Project
         {
             foreach (var ele in _ladderElements.Values)
             {
-                ele.NextElemnets.Clear();
+                ele.NextElements.Clear();
             }
         }
         public void PreCompile()
@@ -833,7 +833,7 @@ namespace SamSoarII.AppMain.Project
                 return model.SubElements;
             }
             List<BaseViewModel> result = new List<BaseViewModel>();
-            foreach (var ele in model.NextElemnets)
+            foreach (var ele in model.NextElements)
             {
                 var tempList = GetSubElements(ele);
                 foreach (var item in tempList)
@@ -881,7 +881,7 @@ namespace SamSoarII.AppMain.Project
         {
             if (viewmodel.IsSearched)
             {
-                return viewmodel.NextElemnets;
+                return viewmodel.NextElements;
             }
             List<BaseViewModel> result = new List<BaseViewModel>();
             if (viewmodel.X == 0)
@@ -892,7 +892,7 @@ namespace SamSoarII.AppMain.Project
                 nullModel.Y = viewmodel.Y;
                 result.Add(nullModel);
                 //result.Add(BaseViewModel.Null);
-                viewmodel.NextElemnets = result;
+                viewmodel.NextElements = result;
                 return result;
             }
             else
@@ -920,7 +920,7 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
                 viewmodel.IsSearched = true;
-                viewmodel.NextElemnets = result;
+                viewmodel.NextElements = result;
                 return result;
             }
         }
@@ -980,6 +980,24 @@ namespace SamSoarII.AppMain.Project
         #region Relative to Element changed
         public event LadderElementChangedHandler ElementChanged = delegate { };
         public event LadderElementChangedHandler VerticalLineChanged = delegate { };
+        #endregion
+
+        #region Update NetworkNum and LadderName of BaseViewModel
+        public void UpdateModelMessage()
+        {
+            foreach (var ele in LadderElements.Values)
+            {
+                ele.NetWorkNum = NetworkNumber;
+                ele.RefLadderName = LDVModel.ProgramName;
+            }
+        }
+        public void ClearModelMessage()
+        {
+            foreach (var ele in LadderElements.Values)
+            {
+                ele.NetWorkNum = -1;
+            }
+        }
         #endregion
 
         private void OnShowPropertyDialog(BaseViewModel sender, ShowPropertyDialogEventArgs e)
@@ -1447,6 +1465,7 @@ namespace SamSoarII.AppMain.Project
             }
             return result;
         }
+        #region ladder Folding module
         private void ReloadElementsToCanvas()
         {
             LadderCanvas_Edit.Children.Clear();
@@ -1478,7 +1497,6 @@ namespace SamSoarII.AppMain.Project
             _canHide = true;
             RowCount = 0;
         }
-        #region ladder Folding module
         private void OnMouseEnter(object sender, MouseEventArgs e)
         {
             Rect.Fill = LadderHelper.FoldingBrush;

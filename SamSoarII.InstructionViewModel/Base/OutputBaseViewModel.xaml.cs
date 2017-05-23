@@ -121,7 +121,7 @@ namespace SamSoarII.LadderInstViewModel
 
         public override bool Assert()
         {
-            return NextElemnets.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special); }) & NextElemnets.Count > 0;
+            return NextElements.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special); }) & NextElements.Count > 0;
         }
 
         private void UpdateCommentAreaVisibility()

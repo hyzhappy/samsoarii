@@ -64,13 +64,13 @@ namespace SamSoarII.AppMain.Project
                 node = CreateNodeByElement(viewmodel);
                 if(viewmodel.Type != ElementType.Output)
                     _viewmodel_node_map.Add(viewmodel, node);
-                if (viewmodel.NextElemnets.Count == 0)
+                if (viewmodel.NextElements.Count == 0)
                 {           
                     return node;
                 }
                 else
                 {
-                    foreach(var _next_viewmodel in viewmodel.NextElemnets)
+                    foreach(var _next_viewmodel in viewmodel.NextElements)
                     {
                         if(_next_viewmodel.Type != ElementType.Null)
                         {

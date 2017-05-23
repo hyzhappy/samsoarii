@@ -61,7 +61,7 @@ namespace SamSoarII.LadderInstViewModel
         }
         public override bool Assert()
         {
-            return NextElemnets.Where(x => { return x.Type == ElementType.Null; }).Count() == 1 && NextElemnets.Count == 1;
+            return NextElements.Where(x => { return x.Type == ElementType.Null; }).Count() == 1 && NextElements.Count == 1;
         }
 
         

@@ -128,7 +128,7 @@ namespace SamSoarII.LadderInstViewModel
         }
         public override bool Assert()
         {
-            return NextElemnets.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special) | (x.Type == ElementType.Null); }) & NextElemnets.Count > 0;
+            return NextElements.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special) | (x.Type == ElementType.Null); }) & NextElements.Count > 0;
         }
 
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)

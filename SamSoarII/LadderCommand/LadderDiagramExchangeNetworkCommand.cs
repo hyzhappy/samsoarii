@@ -31,6 +31,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 _ladderDiagram.AddNetwork(_sourceNetwork, _sourceNetwork.NetworkNumber - 1);
             }
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
+            _ladderDiagram.UpdateModelMessageByNetwork();
         }
         public void Redo()
         {

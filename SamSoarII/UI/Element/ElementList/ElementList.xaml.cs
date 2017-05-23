@@ -27,7 +27,7 @@ namespace SamSoarII.AppMain.UI
     public class ValueCommentAlias : INotifyPropertyChanged
     {
         private bool _isSpecialRegister = false;
-        private string _describe = string.Empty;
+        //private string _describe = string.Empty;
         private string _base;
         private uint _offset;
         private string _comment;
@@ -44,17 +44,17 @@ namespace SamSoarII.AppMain.UI
                 _isSpecialRegister = value;
             }
         }
-        public string Describe
-        {
-            get
-            {
-                return _describe;
-            }
-            set
-            {
-                _describe = value;
-            }
-        }
+        //public string Describe
+        //{
+        //    get
+        //    {
+        //        return _describe;
+        //    }
+        //    set
+        //    {
+        //        _describe = value;
+        //    }
+        //}
         public string Base
         {
             get
@@ -347,23 +347,23 @@ namespace SamSoarII.AppMain.UI
             {
                 _elementCollection.Add(new ValueCommentAlias(string.Format("AO"), i, string.Empty, string.Empty));
             }
-            InitializeElementDescribe();
+            //InitializeElementDescribe();
         }
-        private static void InitializeElementDescribe()
-        {
-            foreach (var item in _elementCollection)
-            {
-                foreach (var register in Device.SpecialRegisters)
-                {
-                    if (item.Base == register.Base && item.Offset == register.Offset)
-                    {
-                        item.Describe = register.Describe;
-                        item.IsSpecialRegister = true;
-                        break;
-                    }
-                }
-            }
-        }
+        //private static void InitializeElementDescribe()
+        //{
+        //    foreach (var item in _elementCollection)
+        //    {
+        //        foreach (var register in Device.SpecialRegisters)
+        //        {
+        //            if (item.Base == register.Base && item.Offset == register.Offset)
+        //            {
+        //                item.Describe = register.Describe;
+        //                item.IsSpecialRegister = true;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
         #endregion
         public ElementList()
         {
@@ -492,12 +492,12 @@ namespace SamSoarII.AppMain.UI
         public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
         {
             IEnumerable<ValueCommentAlias> fit = _elementCollection.Where(x => { return x.Name == e.ValueString; });
-            if (fit.Count() == 0 && e.MappedValueModel != null)
+            if (fit.Count() == 0 && e.MappedValueModel != null && e.Type != MappedMessageChangedType.Refresh)
             {
                 return;
             }
             ValueCommentAlias valueCommentAlias;
-            if (e.Type != MappedMessageChangedType.Clear)
+            if (e.Type != MappedMessageChangedType.Clear && e.Type != MappedMessageChangedType.Refresh)
             {
                 valueCommentAlias = fit.First();
             }
@@ -508,6 +508,10 @@ namespace SamSoarII.AppMain.UI
             List<TextBlock> mappedModels;
             switch (e.Type)
             {
+                case MappedMessageChangedType.Refresh:
+                    ClearMappedModels();
+                    RefreshMappedModels();
+                    break;
                 case MappedMessageChangedType.Add:
                     if (!valueCommentAlias.MappedModels.Exists(x => { return x.Text == e.MappedValueModel.ToString(); }))
                     {
@@ -550,18 +554,59 @@ namespace SamSoarII.AppMain.UI
                     valueCommentAlias.MappedModels = mappedModels;
                     break;
                 case MappedMessageChangedType.Clear:
-                    foreach (var item in _elementCollection.Where(x => { return x.MappedModels.Count > 1; }))
-                    {
-                        item.MappedModels.Clear();
-                        mappedModels = new List<TextBlock>(item.MappedModels);
-                        TextBlock textblock4 = new TextBlock();
-                        textblock4.Text = (new VerticalLineViewModel()).ToString();
-                        mappedModels.Add(textblock4);
-                        item.MappedModels = mappedModels;
-                    }
+                    ClearMappedModels();
                     break;
                 default:
                     break;
+            }
+        }
+        private static void ClearMappedModels()
+        {
+            List<TextBlock> mappedModels;
+            foreach (var item in _elementCollection.Where(x => { return x.MappedModels.Count > 1; }))
+            {
+                item.MappedModels.Clear();
+                mappedModels = new List<TextBlock>(item.MappedModels);
+                TextBlock textblock4 = new TextBlock();
+                textblock4.Text = (new VerticalLineViewModel()).ToString();
+                mappedModels.Add(textblock4);
+                item.MappedModels = mappedModels;
+            }
+        }
+        private static void RefreshMappedModels()
+        {
+            foreach (var item in _elementCollection)
+            {
+                if (InstructionCommentManager.ValueRelatedModel.ContainsKey(item.Name))
+                {
+                    RefreshMappedModelsByItem(item);
+                }
+            }
+        }
+        private static void RefreshMappedModelsByItem(ValueCommentAlias item)
+        {
+            item.MappedModels.Clear();
+            List<TextBlock> mappedModels = new List<TextBlock>(item.MappedModels);
+            IEnumerable<BaseViewModel> models = InstructionCommentManager.ValueRelatedModel[item.Name].Where(x => { return x.NetWorkNum != -1; });
+            if (models.Count() > 0)
+            {
+                TextBlock textblock = new TextBlock();
+                textblock.Text = (new HorizontalLineViewModel()).ToString();
+                mappedModels.Add(textblock);
+                foreach (var model in models)
+                {
+                    textblock = new TextBlock();
+                    textblock.Text = model.ToString();
+                    mappedModels.Add(textblock);
+                }
+                item.MappedModels = mappedModels;
+            }
+            else
+            {
+                TextBlock textblock = new TextBlock();
+                textblock.Text = (new VerticalLineViewModel()).ToString();
+                mappedModels.Add(textblock);
+                item.MappedModels = mappedModels;
             }
         }
         public static void ValueAliasManager_ValueAliasChanged(ValueAliasChangedEventArgs e)
@@ -695,18 +740,6 @@ namespace SamSoarII.AppMain.UI
             switch (button.Name)
             {
                 case "button1":
-                    _showSpecialRegister = !_showSpecialRegister;
-                    if (_showSpecialRegister)
-                    {
-                        SetButtonBackground(button);
-                    }
-                    else
-                    {
-                        ResetButtonBackground(button);
-                    }
-                    UpdateElementCollection();
-                    break;
-                case "button2":
                     _hasUsed = !_hasUsed;
                     if (_hasUsed)
                     {
@@ -718,7 +751,7 @@ namespace SamSoarII.AppMain.UI
                     }
                     UpdateElementCollection();
                     break;
-                case "button3":
+                case "button2":
                     _hasComment = !_hasComment;
                     if (_hasComment)
                     {
@@ -730,7 +763,7 @@ namespace SamSoarII.AppMain.UI
                     }
                     UpdateElementCollection();
                     break;
-                case "button4":
+                case "button3":
                     CSVImportDialog dialogImport;
                     using (dialogImport = new CSVImportDialog())
                     {
@@ -747,7 +780,7 @@ namespace SamSoarII.AppMain.UI
                         dialogImport.ShowDialog();
                     }
                     break;
-                case "button5":
+                case "button4":
                     CSVExportDialog dialogExport;
                     using (dialogExport = new CSVExportDialog())
                     {
@@ -843,7 +876,7 @@ namespace SamSoarII.AppMain.UI
         {
             TextBlock textblock = sender as TextBlock;
             string message = textblock.Text;
-            Regex regex = new Regex(".+RoutineName:(.+)NetworkNumber:([0-9]+)\\s+X:([0-9]+)\\s+Y:([0-9]+)", RegexOptions.IgnoreCase);
+            Regex regex = new Regex("\\(R=(.*)\\)\\(N=([0-9]+)\\)\\(X=([0-9]+),Y=([0-9]+)\\)\\(I=(.*)\\)", RegexOptions.IgnoreCase);
             Match match = regex.Match(message);
             if (match.Success)
             {

@@ -109,7 +109,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                         return true;
                     }
                 }
-                foreach (var item in ele.NextElemnets)
+                foreach (var item in ele.NextElements)
                 {
                     tempQueue.Enqueue(item);
                 }
@@ -120,7 +120,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         //短路检测
         private static bool CheckLadderGraphShort(LadderNetworkViewModel ladderNetwork,BaseViewModel checkmodel)
         {
-            List<BaseViewModel> eles = checkmodel.NextElemnets;
+            List<BaseViewModel> eles = checkmodel.NextElements;
             if (eles.Count == 1)
             {
                 return true;
@@ -135,7 +135,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             while (tempQueue.Count > 0)
             {
                 var ele = tempQueue.Dequeue();
-                if (eles.Intersect(ele.NextElemnets).Count() > 0)
+                if (eles.Intersect(ele.NextElements).Count() > 0)
                 {
                     ladderNetwork.ErrorModels.Clear();
                     ladderNetwork.ErrorModels.Add(ele);//add error element
@@ -143,7 +143,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
                 else
                 {
-                    foreach (var item in ele.NextElemnets)
+                    foreach (var item in ele.NextElements)
                     {
                         tempQueue.Enqueue(item);
                     }
@@ -179,7 +179,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     {
                         for (int k = j + 1; k < lines.Count(); k++)
                         {
-                            if (lines.ElementAt(j).NextElemnets.SequenceEqual(lines.ElementAt(k).NextElemnets))
+                            if (lines.ElementAt(j).NextElements.SequenceEqual(lines.ElementAt(k).NextElements))
                             {
                                 ladderNetwork.ErrorModels.Clear();
                                 ladderNetwork.ErrorModels.Add(lines.ElementAt(j));//add error element
@@ -269,16 +269,16 @@ namespace SamSoarII.AppMain.LadderGraphModule
         private static bool CheckHybridLink(LadderNetworkViewModel ladderNetwork)
         {
             //得到有多条支路的元素集合
-            var needCheckElements = ladderNetwork.LadderElements.Values.Where(x => { return x.NextElemnets.Count > 1; });
+            var needCheckElements = ladderNetwork.LadderElements.Values.Where(x => { return x.NextElements.Count > 1; });
             foreach (var ele in needCheckElements)
             {
-                for (int i = 0; i < ele.NextElemnets.Count; i++)
+                for (int i = 0; i < ele.NextElements.Count; i++)
                 {
-                    for (int j = i + 1; j < ele.NextElemnets.Count; j++)
+                    for (int j = i + 1; j < ele.NextElements.Count; j++)
                     {
                         //取其中任意两条支路并得到其交集
-                        var item1 = ele.NextElemnets.ElementAt(i);
-                        var item2 = ele.NextElemnets.ElementAt(j);
+                        var item1 = ele.NextElements.ElementAt(i);
+                        var item2 = ele.NextElements.ElementAt(j);
                         var tempPublicEle = item1.SubElements.Intersect(item2.SubElements);
                         int cnt = tempPublicEle.Count();
                         if (cnt == 1)
@@ -380,7 +380,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 return model.SubElements;
             }
             List<BaseViewModel> result = new List<BaseViewModel>();
-            foreach (var ele in model.NextElemnets)
+            foreach (var ele in model.NextElements)
             {
                 var tempList = GetSubElements(ele);
                 foreach (var item in tempList)
@@ -419,20 +419,20 @@ namespace SamSoarII.AppMain.LadderGraphModule
         {
             ladderNetwork.ClearSearchedFlag();
             List<BaseViewModel> tempList = new List<BaseViewModel>();
-            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElement.NextElemnets);
+            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElement.NextElements);
             while (tempQueue.Count > 0)
             {
                 var ele = tempQueue.Dequeue();
                 if (!ele.IsSearched)
                 {
                     ele.IsSearched = true;
-                    if (ele.NextElemnets.Exists(x => { return x.Type == ElementType.Null; }))
+                    if (ele.NextElements.Exists(x => { return x.Type == ElementType.Null; }))
                     {
                         tempList.Add(ele);
                     }
                     else
                     {
-                        foreach (var item in ele.NextElemnets)
+                        foreach (var item in ele.NextElements)
                         {
                             tempQueue.Enqueue(item);
                         }
@@ -511,7 +511,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                         ladderNetwork.ErrorModels.Add(item);
                         return true;
                     }
-                    foreach (var ele in item.NextElemnets)
+                    foreach (var ele in item.NextElements)
                     {
                         tempQueue.Enqueue(ele);
                     }

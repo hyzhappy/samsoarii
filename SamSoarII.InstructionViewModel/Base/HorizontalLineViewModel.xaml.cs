@@ -148,7 +148,7 @@ namespace SamSoarII.LadderInstViewModel
 
         public override bool Assert()
         {
-            return NextElemnets.All( x => { return (x.Type == ElementType.Null) | (x.Type == ElementType.Special) | (x.Type == ElementType.Input); }) & NextElemnets.Count > 0;
+            return NextElements.All( x => { return (x.Type == ElementType.Null) | (x.Type == ElementType.Special) | (x.Type == ElementType.Input); }) & NextElements.Count > 0;
         }
 
         public override BaseViewModel Clone()
