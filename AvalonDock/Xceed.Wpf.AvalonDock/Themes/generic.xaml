@@ -151,7 +151,7 @@
                     <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate>
+                            <ControlTemplate TargetType="{x:Type TabItem}">
                                 <Border Name="Border" BorderBrush="Black" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" Background="Transparent">
                                     <ContentPresenter Name="ContentSite" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <ContentPresenter.ContentTemplate>
@@ -630,13 +630,19 @@
                         </Border>
                     </avalonDockControls:DropDownControlArea>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"></Condition>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter Property="Visibility" Value="Visible" TargetName="DocumentCloseButton"  />
+                                <Setter TargetName="PART_border" Property="Background" Value="#FFADE8F9"/>
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
                         <DataTrigger Binding="{Binding Path=IsSelected}" Value="true">
                             <Setter Property="Visibility" Value="Visible" TargetName="DocumentCloseButton"  />
-                        </DataTrigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Visibility" Value="Visible" TargetName="DocumentCloseButton"  />
                             <Setter TargetName="PART_border" Property="Background" Value="LightSkyblue"/>
-                        </Trigger>
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding Path=CanClose}" Value="false">
                             <Setter Property="Visibility" Value="Collapsed" TargetName="DocumentCloseButton"  />
                         </DataTrigger>

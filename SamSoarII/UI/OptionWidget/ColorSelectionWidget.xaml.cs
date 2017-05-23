@@ -1,6 +1,7 @@
 ﻿using SamSoarII.LadderInstViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,30 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// ColorSelectionWidget.xaml 的交互逻辑
     /// </summary>
-    public partial class ColorSelectionWidget : UserControl
+    public partial class ColorSelectionWidget : UserControl,INotifyPropertyChanged
     {
+        private SolidColorBrush _oldColor = Brushes.Transparent;
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        public SolidColorBrush OldColor
+        {
+            get
+            {
+                return _oldColor;
+            }
+            set
+            {
+                _oldColor = value;
+                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("OldColor"));
+            }
+        }
         public ColorSelectionWidget()
         {
             InitializeComponent();
+            DataContext = this;
             OptionDialog.EnsureButtonClick += OptionDialog_EnsureButtonClick; ;
+            OldColor = new SolidColorBrush(colorPicker.SelectedColor);
         }
         private void OptionDialog_EnsureButtonClick(object sender, RoutedEventArgs e)
         {
@@ -44,9 +63,12 @@ namespace SamSoarII.AppMain.UI
                 window.Close();
             }
         }
-        private void OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            colorShowTextBox.Background = new SolidColorBrush(colorPicker.SelectedColor);
+            if (e.LeftButton == MouseButtonState.Released && OldColor.Color != colorPicker.SelectedColor)
+            {
+                OldColor = new SolidColorBrush(colorPicker.SelectedColor);
+            }
         }
     }
 }

@@ -190,7 +190,6 @@ namespace Xceed.Wpf.AvalonDock.Controls
                     }
                 }
             }
-
         }
 
         protected override void OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs e)
@@ -198,7 +197,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
             if (IsMouseCaptured)
                 ReleaseMouseCapture();
             _isMouseDown = false;
-
+            
             base.OnMouseLeftButtonUp(e);
         }
 

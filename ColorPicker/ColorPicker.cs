@@ -33,7 +33,10 @@ namespace ColorPicker
     public class ColorPicker : Control
     {
         #region Public Methods
-
+        public ColorPicker()
+        {
+            LayoutTransform = new ScaleTransform(1.3,1.3);
+        }
         static ColorPicker()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ColorPicker), new FrameworkPropertyMetadata(typeof(ColorPicker)));
@@ -129,7 +132,7 @@ namespace ColorPicker
             // Avoid endless loop
             if (m_withinChange)
                 return;
-
+            
             m_withinChange = true;
 
             Color newColor = GetHsvColor();

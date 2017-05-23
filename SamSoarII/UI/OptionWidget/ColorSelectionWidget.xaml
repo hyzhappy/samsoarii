@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+             xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              xmlns:ColorPicker="clr-namespace:ColorPicker;assembly=ColorPicker"
              xmlns:Inst="clr-namespace:SamSoarII.LadderInstViewModel;assembly=SamSoarII.LadderInstViewModel"
              mc:Ignorable="d" 
@@ -12,14 +13,16 @@
         <StackPanel Orientation="Vertical" Height="300" VerticalAlignment="Top">
             <StackPanel.Resources>
                 <ObjectDataProvider x:Key="ColorData" ObjectType="{x:Type Inst:ColorManager}" MethodName="GetColorDataProvider"></ObjectDataProvider>
+                <util:ColorToBrushConverter x:Key="ColorToBrushConverter"></util:ColorToBrushConverter>
             </StackPanel.Resources>
             <Border Margin="50,80,0,0">
                 <TextBlock FontSize="20">变量颜色选择</TextBlock>
             </Border>
-            <Canvas Margin="50,40,0,0">
-                <ColorPicker:ColorPicker x:Name="colorPicker" SelectedColor="{Binding Source={StaticResource ColorData},Path=SelectColor.Color}" SelectedColorChanged="OnSelectedColorChanged"></ColorPicker:ColorPicker>
-            </Canvas>
-            <TextBox x:Name="colorShowTextBox" IsEnabled="False" Width="100" Height="25" Margin="50,100,0,0" HorizontalAlignment="Left"></TextBox>
+            <ColorPicker:ColorPicker HorizontalAlignment="Left" Margin="50,20,0,0" x:Name="colorPicker" SelectedColor="{Binding Source={StaticResource ColorData},Path=SelectColor.Color}" MouseMove="OnMouseMove"></ColorPicker:ColorPicker>
+            <StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+                <Label ToolTip="当前颜色" BorderThickness="1,1,0,1" BorderBrush="Black" Background="{Binding ElementName=colorPicker,Path=SelectedColor,Converter={StaticResource ColorToBrushConverter}}" Width="100" Height="25" Margin="50,0,0,0" HorizontalAlignment="Left"/>
+                <Label ToolTip="上一种颜色" BorderThickness="1" BorderBrush="Black" Background="{Binding OldColor}" Width="30" Height="25" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
