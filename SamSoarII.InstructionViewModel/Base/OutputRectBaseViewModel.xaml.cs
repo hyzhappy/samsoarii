@@ -122,5 +122,156 @@ namespace SamSoarII.LadderInstViewModel
         {
             return NextElements.All(x => { return (x.Type == ElementType.Input) | (x.Type == ElementType.Special); }) & NextElements.Count > 0;
         }
+
+        #region Monitor
+
+        private string middletextblock1_oldtext
+            = String.Empty;
+        private string middletextblock2_oldtext
+            = String.Empty;
+        private string middletextblock3_oldtext
+            = String.Empty;
+        private string middletextblock4_oldtext
+            = String.Empty;
+        private string middletextblock5_oldtext
+            = String.Empty;
+        private bool ismonitormode;
+        public override bool IsMonitorMode
+        {
+            get
+            {
+                return this.ismonitormode;
+            }
+            set
+            {
+                this.ismonitormode = value;
+                switch (value)
+                {
+                    case true:
+                        middletextblock1_oldtext = MiddleTextBlock1.Text;
+                        middletextblock2_oldtext = MiddleTextBlock2.Text;
+                        middletextblock3_oldtext = MiddleTextBlock3.Text;
+                        middletextblock4_oldtext = MiddleTextBlock4.Text;
+                        middletextblock5_oldtext = MiddleTextBlock5.Text;
+                        UpdateMonitor();
+                        break;
+                    case false:
+                        MiddleTextBlock1.Text = middletextblock1_oldtext;
+                        MiddleTextBlock2.Text = middletextblock2_oldtext;
+                        MiddleTextBlock3.Text = middletextblock3_oldtext;
+                        MiddleTextBlock4.Text = middletextblock4_oldtext;
+                        MiddleTextBlock5.Text = middletextblock5_oldtext;
+                        break;
+                }
+            }
+        }
+
+        private void UpdateMonitor()
+        {
+            UpdateMonitor_MiddleTextBlock1();
+            UpdateMonitor_MiddleTextBlock2();
+            UpdateMonitor_MiddleTextBlock3();
+            UpdateMonitor_MiddleTextBlock4();
+            UpdateMonitor_MiddleTextBlock5();
+        }
+
+        private void UpdateMonitor_MiddleTextBlock1()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MiddleTextBlock1.Text = Model.ParaCount > 0 && _values[0] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(0).ValueString,
+                        IsRunning ? _values[0].Value : "???")
+                    : String.Empty;
+            });
+        }
+
+        private void UpdateMonitor_MiddleTextBlock2()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MiddleTextBlock2.Text = Model.ParaCount > 1 && _values[1] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(1).ValueString,
+                        IsRunning ? _values[1].Value : "???")
+                    : String.Empty;
+            });
+        }
+
+        private void UpdateMonitor_MiddleTextBlock3()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MiddleTextBlock3.Text = Model.ParaCount > 2 && _values[2] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(2).ValueString,
+                        IsRunning ? _values[2].Value : "???")
+                    : String.Empty;
+            });
+        }
+
+        private void UpdateMonitor_MiddleTextBlock4()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MiddleTextBlock4.Text = Model.ParaCount > 3 && _values[3] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(3).ValueString,
+                        IsRunning ? _values[3].Value : "???")
+                    : String.Empty;
+            });
+        }
+
+        private void UpdateMonitor_MiddleTextBlock5()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                MiddleTextBlock5.Text = Model.ParaCount > 4 && _values[4] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(4).ValueString,
+                        IsRunning ? _values[4].Value : "???")
+                    : String.Empty;
+            });
+        }
+
+        protected override void OnStart(object sender, RoutedEventArgs e)
+        {
+            base.OnStart(sender, e);
+            UpdateMonitor();
+        }
+
+        protected override void OnAbort(object sender, RoutedEventArgs e)
+        {
+            base.OnAbort(sender, e);
+            UpdateMonitor();
+        }
+
+        protected override void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            base.OnValueChanged(sender, e);
+            if (sender == _values[0])
+            {
+                UpdateMonitor_MiddleTextBlock1();
+            }
+            if (sender == _values[1])
+            {
+                UpdateMonitor_MiddleTextBlock2();
+            }
+            if (sender == _values[2])
+            {
+                UpdateMonitor_MiddleTextBlock3();
+            }
+            if (sender == _values[3])
+            {
+                UpdateMonitor_MiddleTextBlock4();
+            }
+            if (sender == _values[4])
+            {
+                UpdateMonitor_MiddleTextBlock5();
+            }
+        }
+
+        #endregion
     }
 }

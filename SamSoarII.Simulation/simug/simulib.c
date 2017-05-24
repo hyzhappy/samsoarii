@@ -22,6 +22,10 @@ extern int32_t DWord[8192];
 extern int32_t CVWord[200];
 extern int64_t CVDoubleWord[56];
 extern int32_t TVWord[256];
+extern int32_t AIWord[32];
+extern int32_t AOWord[32];
+extern int32_t VWord[8];
+extern int32_t ZWord[8];
 // Register writeable
 // Set 1 if you want to modify the value of register
 // othervise, Set 0 to lock the register and make it constant
@@ -34,6 +38,10 @@ extern int32_t SEnable[32 << 5];
 extern int32_t DEnable[8192];
 extern int32_t CVEnable[256];
 extern int32_t TVEnable[256];
+extern int32_t AIEnable[32];
+extern int32_t AOEnable[32];
+extern int32_t VEnable[8];
+extern int32_t ZEnable[8];
 // counttime
 extern int32_t counttimems;
 extern int32_t counttime;

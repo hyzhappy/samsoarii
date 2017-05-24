@@ -225,28 +225,8 @@
     <Compile Include="Micro\MicroViewModel.xaml.cs">
       <DependentUpon>MicroViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Monitor\MoniBaseViewModel.cs" />
-    <Compile Include="Monitor\MoniHLineViewModel.xaml.cs">
-      <DependentUpon>MoniHLineViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\MoniInputViewModel.xaml.cs">
-      <DependentUpon>MoniInputViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\MoniNetworkViewModel.xaml.cs">
-      <DependentUpon>MoniNetworkViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\MoniOutBitViewModel.xaml.cs">
-      <DependentUpon>MoniOutBitViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\MoniOutRecViewModel.xaml.cs">
-      <DependentUpon>MoniOutRecViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\MoniSpecViewModel.xaml.cs">
-      <DependentUpon>MoniSpecViewModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Monitor\MoniVLineViewModel.xaml.cs">
-      <DependentUpon>MoniVLineViewModel.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Monitor\IMoniValueModel.cs" />
+    <Compile Include="Monitor\IMoniViewCtrl.cs" />
     <Compile Include="NullViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -307,34 +287,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Micro\MicroViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Monitor\MoniHLineViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Monitor\MoniInputViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Monitor\MoniNetworkViewModel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Monitor\MoniOutBitViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Monitor\MoniOutRecViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Monitor\MoniSpecViewModel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Monitor\MoniVLineViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

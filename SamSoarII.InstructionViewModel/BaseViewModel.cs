@@ -9,6 +9,7 @@ using SamSoarII.UserInterface;
 using SamSoarII.LadderInstModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.ValueModel;
+using SamSoarII.LadderInstViewModel.Monitor;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -32,13 +33,14 @@ namespace SamSoarII.LadderInstViewModel
         public abstract int X { get; set; }
         public abstract int Y { get; set; }
         public abstract bool IsCommentMode { get; set; }
+        public bool CanModify { get; set; }
         public abstract string InstructionName { get; }
         public abstract BaseModel Model { get; protected set; }
         public List<BaseViewModel> NextElements = new List<BaseViewModel>();
         public List<BaseViewModel> SubElements = new List<BaseViewModel>();
         public bool IsSearched { get; set; }
         public virtual ElementType Type { get; }
-        public virtual int NetWorkNum{ get { return _netWorkNum; } set { _netWorkNum = value; } }
+        public virtual int NetWorkNum { get { return _netWorkNum; } set { _netWorkNum = value; } }
         private int _netWorkNum = -1;
         private string _refLadderName = string.Empty;
         public virtual string RefLadderName { get { return _refLadderName; } set { _refLadderName = value; } }
@@ -59,6 +61,7 @@ namespace SamSoarII.LadderInstViewModel
 
         public void BeginShowPropertyDialog()
         {
+            if (!CanModify) return;
             var dialog = PreparePropertyDialog();
             if (dialog is ElementPropertyDialog)
             {
@@ -114,6 +117,70 @@ namespace SamSoarII.LadderInstViewModel
             if (Model == null) return String.Empty;
             return Model.ToString();
         }
+
+        #region Monitor
+
+        public abstract bool IsMonitorMode { get; set; }
+
+        protected IMoniViewCtrl _ctrl;
+        public virtual IMoniViewCtrl ViewCtrl
+        {
+            get
+            {
+                return this._ctrl;
+            }
+            set
+            {
+                if (_ctrl != null)
+                {
+                    _ctrl.Started -= OnStart;
+                    _ctrl.Aborted -= OnAbort;
+                }
+                this._ctrl = value;
+
+                if (_ctrl != null)
+                {
+                    _ctrl.Started += OnStart;
+                    _ctrl.Aborted += OnAbort;
+                }
+            }
+        }
+        public virtual bool IsRunning
+        {
+            get
+            {
+                return _ctrl != null ? _ctrl.IsRunning : false;
+            }
+        }
+
+        protected IMoniValueModel[] _values = new IMoniValueModel[5];
+        public void SetValueModel(int id, IMoniValueModel mvmodel)
+        {
+            if (_values[id] != null)
+            {
+                _values[id].ValueChanged -= OnValueChanged;
+            }
+            _values[id] = mvmodel;
+            if (_values[id] != null)
+            {
+                _values[id].ValueChanged += OnValueChanged;
+            }
+        }
+
+        protected virtual void OnAbort(object sender, RoutedEventArgs e)
+        {
+
+        }
+        protected virtual void OnStart(object sender, RoutedEventArgs e)
+        {
+
+        }
+        protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
 
     }
 }

@@ -84,7 +84,7 @@ namespace SamSoarII.LadderInstViewModel
         {
             get
             {
-                throw new InvalidOperationException();
+                return null;
             }
             protected set
             {
@@ -169,5 +169,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             return new List<IValueModel>();
         }
+        #region Monitor
+
+        public override bool IsMonitorMode { get; set; }
+
+        #endregion
     }
 }

@@ -216,7 +216,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         
         private void Initialize(LadderNetworkViewModel lnvmodel)
         {
-            foreach (MoniBaseViewModel bvmodel in lnvmodel.GetMonitors())
+            foreach (BaseViewModel bvmodel in lnvmodel.GetElements())
             {
                 bvmodel.ViewCtrl = this;
                 BaseModel bmodel = bvmodel.Model;
