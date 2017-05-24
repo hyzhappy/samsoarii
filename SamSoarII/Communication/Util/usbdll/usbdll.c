@@ -31,10 +31,10 @@
  * Error code : happened when (handle == NULL) and try to use it to do something.
  */
 #define HANDLE_NULL 0x04
-/** \def CANNOT_GET_DEVICE
+/** \def CANNOT_GET_DEVICE_LIST
  * Error code : happened when cannot found the specified VENDOR id and PRODUCT id of an accepted device 
  */
-#define CANNOT_GET_DEVICE 0x05
+#define CANNOT_GET_DEVICE_LIST 0x05
 /** \def CANNOT_GET_HANDLE
  * Error code : happened when cannot create a new handle from device.
  */
@@ -63,6 +63,10 @@
  * Error code : happened when cannot found the file from the targeted file path.
  */
 #define CANNOT_FOUND_FILE 0x0c
+/** \def ERROR_INIT
+ * Error code : happened when initialize the usb device
+ */
+#define ERROR_INIT 0x0d
 
 /** \def CANNOT_TRANSFER
  * The allowed maxinum time when Transfer.
@@ -72,19 +76,14 @@
  * The allowed maxinum retry number when Transfer error happen.
  */
 #define RETRY_MAX 8
-
+/** \var context
+ * The Context of USB device
+ */
+static libusb_context* context = NULL;
 /** \var devicelist
  * The USB device list for PC.
  */
-static libusb_device **devicelist;
-/** \var device
- * The current device to deal with.
- */
-static libusb_device *device = NULL;
-/** \var detail
- * The infomation of current device (include VENDOR and PRODUCT id)
- */
-static struct libusb_device_descriptor detail;
+static libusb_device** devicelist;
 /** \var handle
  * The handle of current device.
  */
@@ -99,43 +98,26 @@ static libusb_device_handle *handle = NULL;
 EXPORT int Open()
 {
 	// if already exist, return error code
-	if (device != NULL)
-	{
-		return DEVICE_ACTIVE;
-	}
 	if (handle != NULL)
 	{
 		return HANDLE_ACTIVE;
 	}
-	ssize_t ct = libusb_get_device_list(NULL, &devicelist);
-	device = NULL;
-	// find the currect device in list
-	int i = 0;
-	for (i = 0 ; i < ct ; i++)
+	if (libusb_init(&context) < 0)
 	{
-		libusb_get_device_descriptor(devicelist[i], &detail);
-		printf("idVendor = %d\n", detail.idVendor);
-		
-		if (detail.idVendor  == SAMSOAR_PLC_VENDOR &&
-			detail.idProduct == SAMSOAR_PLC_PRODUCT)
-		{
-			device = devicelist[i];
-			break;
-		}
+		return ERROR_INIT;
 	}
-	// if not found, return error code
-	if (device == NULL)
+	ssize_t ct = libusb_get_device_list(context, &devicelist);
+	if (ct < 0)
 	{
-		return CANNOT_GET_DEVICE;
+		return CANNOT_GET_DEVICE_LIST;
 	}
-	// open the device and get the handle, return when error happens
-	int err = libusb_open(device, &handle);
-	if (err != 0)
+	handle = libusb_open_device_with_vid_pid(context, 
+		SAMSOAR_PLC_VENDOR, SAMSOAR_PLC_PRODUCT);
+	if (handle == NULL)
 	{
-		device = NULL;
-		handle = NULL;
 		return CANNOT_GET_HANDLE;
 	}
+	libusb_free_device_list(devicelist, 1);
 	// normally return
 	return 0;
 }
@@ -147,16 +129,11 @@ EXPORT int Open()
  */
 EXPORT int Close()
 {
-	if (device == NULL)
-	{
-		return DEVICE_NULL;
-	}
 	if (handle == NULL)
 	{
 		return HANDLE_NULL;
 	}
 	libusb_close(handle);
-	device = NULL;
 	handle = NULL;
 	return 0;
 }
@@ -171,10 +148,6 @@ EXPORT int Close()
  */
 EXPORT int Transfer(uint8_t* data, int len)
 {
-	if (device == NULL)
-	{
-		return DEVICE_NULL;
-	}
 	if (handle == NULL)
 	{
 		return HANDLE_NULL;

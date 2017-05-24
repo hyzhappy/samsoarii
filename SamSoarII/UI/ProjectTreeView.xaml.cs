@@ -527,11 +527,17 @@ namespace SamSoarII.AppMain.UI
                             String.Empty, 
                             false, true);
                         ptvitem.IsExpanded = true;
-                        createitem.Loaded += (sender1, e1) => { createitem.Rename(); };
-                        
+                        createitem.Loaded += OnCreateItemLoaded;
                         break;
                 }
             }
+        }
+
+        private void OnCreateItemLoaded(object sender, RoutedEventArgs e)
+        {
+            ProjectTreeViewItem ptvitem = (ProjectTreeViewItem)sender;
+            ptvitem.Loaded -= OnCreateItemLoaded;
+            ptvitem.Rename();
         }
 
         private void OnPTVIRenamed(object sender, RoutedEventArgs e)

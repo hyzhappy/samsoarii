@@ -209,6 +209,15 @@
     </Compile>
     <Compile Include="UI\OptionWidget\OtherSettingWidget.xaml.cs">
       <DependentUpon>OtherSettingWidget.xaml</DependentUpon>
+    </Compile> 
+    <Compile Include="UI\OptionWidget\ColorSettingDialog.xaml.cs">
+      <DependentUpon>ColorSettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OptionWidget\DemoCanvas.xaml.cs">
+      <DependentUpon>DemoCanvas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OptionWidget\DemoInstructionViewModel.xaml.cs">
+      <DependentUpon>DemoInstructionViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ProjectTreeViewItem.xaml.cs">
       <DependentUpon>ProjectTreeViewItem.xaml</DependentUpon>
@@ -483,6 +492,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\OptionWidget\ColorSelectionWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\ColorSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\DemoCanvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\DemoInstructionViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

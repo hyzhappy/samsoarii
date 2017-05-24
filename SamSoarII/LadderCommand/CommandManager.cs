@@ -11,6 +11,11 @@ namespace SamSoarII.AppMain.LadderCommand
     public class CommandManager
     {
         private LadderDiagramViewModel ldvmodel;
+        public LadderDiagramViewModel LDVModel
+        {
+            get { return this.ldvmodel; }
+            set { this.ldvmodel = value; }
+        }
         public CommandManager() { }
         public CommandManager(LadderDiagramViewModel LDVmodel)
         {

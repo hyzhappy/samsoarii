@@ -397,9 +397,7 @@ namespace SamSoarII.AppMain.Project
                 CursorChanged(this, new RoutedEventArgs());
             }
         }
-
         
-
         public event RoutedEventHandler CursorEdit = delegate { };
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
         {

@@ -120,14 +120,69 @@ namespace SamSoarII.AppMain
             rootNode.Add(new XElement("LadderScaleX", LadderScaleX));
             rootNode.Add(new XElement("LadderScaleY", LadderScaleY));
             rootNode.Add(new XElement("FuncBlockFontSize", FuncBlockFontSize));
-            rootNode.Add(new XElement("SelectedIndexOfFontSizeComboBox", SelectedIndexOfFontSizeComboBox));
-            rootNode.Add(new XElement("SelectedIndexOfFontFamilyComboBox", SelectedIndexOfFontFamilyComboBox));
             rootNode.Add(new XElement("_A", _A));
             rootNode.Add(new XElement("_R", _R));
             rootNode.Add(new XElement("_G", _G));
             rootNode.Add(new XElement("_B", _B));
             rootNode.Add(new XElement("IsSavedByTime", IsSavedByTime));
             rootNode.Add(new XElement("SaveTimeSpan", SaveTimeSpan));
+            XElement xele_font = new XElement("Font");
+            rootNode.Add(xele_font);
+            XElement xele = null;
+            xele = new XElement("Comment");
+            FontManager.SaveFontDataToXElement(
+                FontManager.GetComment(), xele);
+            xele_font.Add(xele);
+            xele = new XElement("Func");
+            FontManager.SaveFontDataToXElement(
+                FontManager.GetFunc(), xele);
+            xele_font.Add(xele);
+            xele = new XElement("Inst");
+            FontManager.SaveFontDataToXElement(
+                FontManager.GetInst(), xele);
+            xele_font.Add(xele);
+            xele = new XElement("Ladder");
+            FontManager.SaveFontDataToXElement(
+                FontManager.GetLadder(), xele);
+            xele_font.Add(xele);
+            xele = new XElement("Title");
+            FontManager.SaveFontDataToXElement(
+                FontManager.GetTitle(), xele);
+            xele_font.Add(xele);
+            XElement xele_color = new XElement("Color");
+            rootNode.Add(xele_color);
+            xele = new XElement("Comment");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetComment(), xele);
+            xele_color.Add(xele);
+            xele = new XElement("DiagramTitle");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetDiagramTitle(), xele);
+            xele_color.Add(xele);
+            xele = new XElement("FuncScreen");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetFuncScreen(), xele);
+            xele_color.Add(xele);
+            xele = new XElement("Inst");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetInst(), xele);
+            xele_color.Add(xele);
+            xele = new XElement("InstScreen");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetInstScreen(), xele);
+            xele_color.Add(xele);
+            xele = new XElement("Ladder");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetLadder(), xele);
+            xele_color.Add(xele);
+            xele = new XElement("LadderScreen");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetLadderScreen(), xele);
+            xele_color.Add(xele);
+            xele = new XElement("NetworkTitle");
+            ColorManager.SaveColorDataToXElement(
+                ColorManager.GetNetworkTitle(), xele);
+            xele_color.Add(xele);
             return rootNode;
         }
         public static void LoadSystemSettingByXELement(XElement rootNode)
@@ -138,7 +193,7 @@ namespace SamSoarII.AppMain
                 LadderOriginScaleY = double.Parse(rootNode.Element("LadderOriginScaleY").Value);
                 _loadScaleSuccessFlag = true;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 _loadScaleSuccessFlag = false;
             }
@@ -147,7 +202,7 @@ namespace SamSoarII.AppMain
                 LadderScaleX = double.Parse(rootNode.Element("LadderScaleX").Value);
                 LadderScaleY = double.Parse(rootNode.Element("LadderScaleY").Value);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 LadderScaleX = 1;
                 LadderScaleY = 1;
@@ -156,25 +211,87 @@ namespace SamSoarII.AppMain
             {
                 FuncBlockFontSize = int.Parse(rootNode.Element("FuncBlockFontSize").Value);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 FuncBlockFontSize = 16;
             }
             try
             {
-                SelectedIndexOfFontFamilyComboBox = int.Parse(rootNode.Element("SelectedIndexOfFontFamilyComboBox").Value);
+                XElement xele_font = rootNode.Element("Font");
+                FontManager.LoadFontDataByXElement(
+                    FontManager.GetTitle(), 
+                    xele_font.Element("Title"));
+                FontManager.LoadFontDataByXElement(
+                    FontManager.GetLadder(),
+                    xele_font.Element("Ladder"));
+                FontManager.LoadFontDataByXElement(
+                    FontManager.GetComment(),
+                    xele_font.Element("Comment"));
+                FontManager.LoadFontDataByXElement(
+                    FontManager.GetFunc(),
+                    xele_font.Element("Func"));
+                FontManager.LoadFontDataByXElement(
+                    FontManager.GetInst(),
+                    xele_font.Element("Inst"));
+                XElement xele_color = rootNode.Element("Color");
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetLadderScreen(),
+                    xele_color.Element("LadderScreen"));
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetLadder(),
+                    xele_color.Element("Ladder"));
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetComment(),
+                    xele_color.Element("Comment"));
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetDiagramTitle(),
+                    xele_color.Element("DiagramTitle"));
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetNetworkTitle(),
+                    xele_color.Element("NetworkTitle"));
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetFuncScreen(),
+                    xele_color.Element("FuncScreen"));
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetInstScreen(),
+                    xele_color.Element("InstScreen"));
+                ColorManager.LoadColorDataByXElement(
+                    ColorManager.GetInst(),
+                    xele_color.Element("Inst"));
             }
             catch (Exception)
             {
-                SelectedIndexOfFontFamilyComboBox = 0;
-            }
-            try
-            {
-                SelectedIndexOfFontSizeComboBox = int.Parse(rootNode.Element("SelectedIndexOfFontSizeComboBox").Value);
-            }
-            catch (Exception)
-            {
-                SelectedIndexOfFontSizeComboBox = 10;
+                FontManager.GetTitle().FontSize = 32;
+                FontManager.GetTitle().FontFamily = new FontFamily("微软雅黑");
+                FontManager.GetTitle().FontColor = ColorManager.Parse("255 0 0 0");
+                FontManager.GetLadder().FontSize = 24;
+                FontManager.GetLadder().FontFamily = new FontFamily("Courier New");
+                FontManager.GetLadder().FontColor = ColorManager.Parse("255 0 0 0");
+                FontManager.GetComment().FontSize = 16;
+                FontManager.GetComment().FontFamily = new FontFamily("微软雅黑");
+                FontManager.GetComment().FontColor = ColorManager.Parse("255 0 0 0");
+                FontManager.GetFunc().FontSize = 16;
+                FontManager.GetFunc().FontFamily = new FontFamily("Courier New");
+                FontManager.GetFunc().FontColor = ColorManager.Parse("255 0 0 0");
+                FontManager.GetInst().FontSize = 20;
+                FontManager.GetInst().FontFamily = new FontFamily("Courier New");
+                FontManager.GetInst().FontColor = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetLadder().Background = ColorManager.Parse("255 255 255 255");
+                ColorManager.GetLadder().Foreground = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetLadderScreen().Background = ColorManager.Parse("255 255 255 255");
+                ColorManager.GetLadderScreen().Foreground = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetDiagramTitle().Background = ColorManager.Parse("255 210 32 32");
+                ColorManager.GetDiagramTitle().Foreground = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetNetworkTitle().Background = ColorManager.Parse("255 32 210 32");
+                ColorManager.GetNetworkTitle().Foreground = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetComment().Background = ColorManager.Parse("255 210 250 250");
+                ColorManager.GetComment().Foreground = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetFuncScreen().Background = ColorManager.Parse("255 255 255 255");
+                ColorManager.GetFuncScreen().Foreground = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetInst().Background = ColorManager.Parse("255 255 255 255");
+                ColorManager.GetInst().Foreground = ColorManager.Parse("255 0 0 0");
+                ColorManager.GetInstScreen().Background = ColorManager.Parse("255 255 255 255");
+                ColorManager.GetInstScreen().Foreground = ColorManager.Parse("255 255 255 255");
             }
             try
             {
@@ -203,10 +320,6 @@ namespace SamSoarII.AppMain
                 IsSavedByTime = false;
                 SaveTimeSpan = 1;
             }
-            FontManager.GetFontDataProvider().SelectFontSizeIndex = SelectedIndexOfFontSizeComboBox;
-            FontManager.GetFontDataProvider().SelectFontFamilyIndex = SelectedIndexOfFontFamilyComboBox;
-            FontManager.GetFontDataProvider().Initialize();
-            ColorManager.GetColorDataProvider().SelectColor = new SolidColorBrush(SelectColor);
         }
         private static void SaveColor()
         {

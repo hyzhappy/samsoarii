@@ -1087,7 +1087,6 @@ namespace SamSoarII.AppMain
                 return false;
             }
             CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
-            
             if (paras.IsCOMLinked)
             {
                 _projectModel.MMonitorManager.CManager = _projectModel.PManager;

@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.AvalonDock.Global;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -211,6 +212,15 @@ namespace SamSoarII.AppMain.UI
         
         private void DG_List_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
+            if (!parent.MainWindow.LAErrorList.IsFloat
+             && !parent.MainWindow.LAErrorList.IsDock)
+            {
+                LayoutSetting.AddDefaultDockWidthAnchorable(
+                    "错误列表", parent.MainWindow.LAErrorList.AutoHideWidth.ToString());
+                LayoutSetting.AddDefaultDockHeighAnchorable(
+                    "错误列表", parent.MainWindow.LAErrorList.AutoHideHeight.ToString());
+                parent.MainWindow.LAErrorList.ToggleAutoHide();
+            }
             if (DG_List.SelectedIndex < 0) return;
             ErrorReportElement inst = (ErrorReportElement)DG_List.SelectedItem;
             BaseViewModel bvmodel = inst.Prototype;
@@ -224,6 +234,15 @@ namespace SamSoarII.AppMain.UI
         
         private void DG_FList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
+            if (!parent.MainWindow.LAErrorList.IsFloat
+             && !parent.MainWindow.LAErrorList.IsDock)
+            {
+                LayoutSetting.AddDefaultDockWidthAnchorable(
+                    "错误列表", parent.MainWindow.LAErrorList.AutoHideWidth.ToString());
+                LayoutSetting.AddDefaultDockHeighAnchorable(
+                    "错误列表", parent.MainWindow.LAErrorList.AutoHideHeight.ToString());
+                parent.MainWindow.LAErrorList.ToggleAutoHide();
+            }
             if (DG_FList.SelectedIndex < 0) return;
             ErrorReportElement_FB ele = (ErrorReportElement_FB)DG_FList.SelectedItem;
             FuncBlockViewModel fbvmodel = ele.FBVModel;

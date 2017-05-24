@@ -36,7 +36,6 @@ namespace SamSoarII.LadderInstViewModel
         private int _x;
         private int _y;
         private bool _isCommentMode;
-        private bool _isMonitorMode;
         public override int X
         {
             get
@@ -78,19 +77,7 @@ namespace SamSoarII.LadderInstViewModel
                 UpdateTopProperty();
             }
         }
-
-        public override bool IsMonitorMode
-        {
-            get
-            {
-                return _isMonitorMode;
-            }
-
-            set
-            {
-                _isMonitorMode = value;
-            }
-        }
+        
         public int CountLevel { get; set; }
         public override BaseModel Model
         {

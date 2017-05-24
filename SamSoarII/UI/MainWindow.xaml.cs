@@ -493,14 +493,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void ShowOptionDialogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (_interactionFacade != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
+            e.CanExecute = true;
         }
 
 	    private void ShowErrorListCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -834,6 +827,7 @@ namespace SamSoarII.AppMain.UI
                     SimulateHelper.SModel.SimulatePause += OnSimulatePause;
                     SimulateHelper.SModel.SimulateAbort += OnSimulateAbort;
                     SimulateModeButton.IsChecked = true;
+                    LACMonitor.Show();
                 }
                 else
                 {
@@ -1044,6 +1038,7 @@ namespace SamSoarII.AppMain.UI
             };
             dialog.ShowDialog();
         }
+        
     }
 }
 

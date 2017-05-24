@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstViewModel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -47,7 +48,32 @@ namespace SamSoarII.AppMain.UI
 
         private void OnEnsureButtonClick(object sender, RoutedEventArgs e)
         {
-            EnsureButtonClick.Invoke(this,e);
+            FontManager.GetTitle().Setup(
+                DemoFontManager.GetTitle());
+            FontManager.GetComment().Setup(
+                DemoFontManager.GetComment());
+            FontManager.GetInst().Setup(
+                DemoFontManager.GetInst());
+            FontManager.GetLadder().Setup(
+                DemoFontManager.GetLadder());
+            FontManager.GetFunc().Setup(
+                DemoFontManager.GetFunc());
+            ColorManager.GetComment().Setup(
+                DemoColorManager.GetComment());
+            ColorManager.GetDiagramTitle().Setup(
+                DemoColorManager.GetDiagramTitle());
+            ColorManager.GetFuncScreen().Setup(
+                DemoColorManager.GetFuncScreen());
+            ColorManager.GetInst().Setup(
+                DemoColorManager.GetInst());
+            ColorManager.GetInstScreen().Setup(
+                DemoColorManager.GetInstScreen());
+            ColorManager.GetLadder().Setup(
+                DemoColorManager.GetLadder());
+            ColorManager.GetLadderScreen().Setup(
+                DemoColorManager.GetLadderScreen());
+            ColorManager.GetNetworkTitle().Setup(
+                DemoColorManager.GetNetworkTitle());
             Close();
         }
 

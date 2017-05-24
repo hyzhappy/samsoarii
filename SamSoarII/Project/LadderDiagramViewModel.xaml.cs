@@ -597,7 +597,6 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-        
 
         #region Network manipulation，no command, invoked by command form method
 
@@ -2072,11 +2071,13 @@ namespace SamSoarII.AppMain.Project
                             {
                                 //全选，补回一个空网络
                                 _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(this, new LadderNetworkViewModel(this, 0), removednets, index));
+
                             }
                             else
                             {
                                 _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(this, removednets, index));
                             }
+
                         }
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
@@ -2346,7 +2347,6 @@ namespace SamSoarII.AppMain.Project
             e.CanExecute = LadderMode == LadderMode.Edit;
         }
         #endregion
-
         #region ReloadPTVByLadderDiagram
         public delegate void LDNetwordsChangedEventHandler(LadderDiagramViewModel LDView);
 
@@ -2356,7 +2356,6 @@ namespace SamSoarII.AppMain.Project
             _projectModel.IFacade.ReplaceNetwork(this);
         }
         #endregion
-
         #region Selection state transfers
         private void EnterIdleState()
         {
