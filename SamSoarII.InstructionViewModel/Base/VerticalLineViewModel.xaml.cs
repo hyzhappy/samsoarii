@@ -83,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel
         {
             get
             {
-                throw new NotImplementedException();
+                return null;
             }
             protected set
             {
@@ -161,5 +161,10 @@ namespace SamSoarII.LadderInstViewModel
         {
             return string.Format("Has no Mapped Instructions");
         }
+        #region Monitor
+
+        public override bool IsMonitorMode { get; set; }
+
+        #endregion
     }
 }

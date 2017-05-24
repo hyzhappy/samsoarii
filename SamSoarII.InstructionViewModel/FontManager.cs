@@ -60,6 +60,41 @@ namespace SamSoarII.LadderInstViewModel
             xele.SetAttributeValue("FontColor", ColorManager.ToString(fdat.FontColor));
         }
     }
+    
+    public class DemoFontManager
+    {
+        static private FontData Title
+               = new FontData("梯形图标题");
+        static private FontData Ladder
+            = new FontData("元件");
+        static private FontData Comment
+            = new FontData("注释");
+        static private FontData Func
+            = new FontData("函数块");
+        static private FontData Inst
+            = new FontData("PLC指令");
+
+        static public FontData GetTitle()
+        {
+            return Title;
+        }
+        static public FontData GetLadder()
+        {
+            return Ladder;
+        }
+        static public FontData GetComment()
+        {
+            return Comment;
+        }
+        static public FontData GetFunc()
+        {
+            return Func;
+        }
+        static public FontData GetInst()
+        {
+            return Inst;
+        }
+    }
 
     public class FontData : INotifyPropertyChanged
     {

@@ -126,5 +126,11 @@ namespace SamSoarII.LadderInstViewModel
         {
             // nothing to do
         }
+
+        #region Monitor
+
+        public override bool IsMonitorMode { get; set; }
+
+        #endregion
     }
 }

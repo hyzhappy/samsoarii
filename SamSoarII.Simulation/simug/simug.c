@@ -18,14 +18,14 @@
 
 typedef void(*vDllfun)(void);
 typedef void(*viDllfun)(int);
-typedef void(*vsii32Dllfun)(char*, int, int32_t*);
-typedef void(*vsii64Dllfun)(char*, int, int64_t*);
-typedef void(*vsi64Dllfun)(char*, int64_t*);
-typedef void(*vsiv64Dllfun)(char*, int64_t);
-typedef void(*vsif64Dllfun)(char*, int, double*);
-typedef void(*vsiiv32Dllfun)(char*, int, int32_t);
-typedef void(*vsiiv64Dllfun)(char*, int, int64_t);
-typedef void(*vsifv64Dllfun)(char*, int, double);
+typedef int(*isii32Dllfun)(char*, int, int32_t*);
+typedef int(*isii64Dllfun)(char*, int, int64_t*);
+typedef int(*isi64Dllfun)(char*, int64_t*);
+typedef int(*isiv64Dllfun)(char*, int64_t);
+typedef int(*isif64Dllfun)(char*, int, double*);
+typedef int(*isiiv32Dllfun)(char*, int, int32_t);
+typedef int(*isiiv64Dllfun)(char*, int, int64_t);
+typedef int(*isifv64Dllfun)(char*, int, double);
 typedef void(*vsiiDllfun)(char*, int, int);
 typedef void(*vsiDllfun)(char*, int);
 typedef void(*vsDllfun)(char*);
@@ -37,16 +37,16 @@ static vDllfun dfBeforeRunLadder;
 static vDllfun dfRunLadder;
 static vDllfun dfAfterRunLadder;
 static vDllfun dfInitRunLadder;
-static vsii32Dllfun dfSetBit;
-static vsii32Dllfun dfSetWord;
-static vsii64Dllfun dfSetDWord;
-static vsif64Dllfun dfSetFloat;
-static vsii32Dllfun dfGetBit;
-static vsii32Dllfun dfGetWord;
-static vsii64Dllfun dfGetDWord;
-static vsif64Dllfun dfGetFloat;
-static vsi64Dllfun dfGetFeq;
-static vsiv64Dllfun dfSetFeq;
+static isii32Dllfun dfSetBit;
+static isii32Dllfun dfSetWord;
+static isii64Dllfun dfSetDWord;
+static isif64Dllfun dfSetFloat;
+static isii32Dllfun dfGetBit;
+static isii32Dllfun dfGetWord;
+static isii64Dllfun dfGetDWord;
+static isif64Dllfun dfGetFloat;
+static isi64Dllfun dfGetFeq;
+static isiv64Dllfun dfSetFeq;
 static vsiiDllfun dfSetEnable;
 static viDllfun dfInitClock;
 static iDllfun dfGetClock;
@@ -96,61 +96,61 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 2;
 	}
-	dfGetBit = (vsii32Dllfun)GetProcAddress(hdll, "GetBit");
+	dfGetBit = (isii32Dllfun)GetProcAddress(hdll, "GetBit");
 	if (dfGetBit == NULL)
 	{
 		FreeLibrary(hdll);
 		return 3;
 	}
-	dfGetWord = (vsii32Dllfun)GetProcAddress(hdll, "GetWord");
+	dfGetWord = (isii32Dllfun)GetProcAddress(hdll, "GetWord");
 	if (dfGetWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 4;
 	}
-	dfGetDWord = (vsii64Dllfun)GetProcAddress(hdll, "GetDoubleWord");
+	dfGetDWord = (isii64Dllfun)GetProcAddress(hdll, "GetDoubleWord");
 	if (dfGetDWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 5;
 	}
-	dfGetFloat = (vsif64Dllfun)GetProcAddress(hdll, "GetFloat");
+	dfGetFloat = (isif64Dllfun)GetProcAddress(hdll, "GetFloat");
 	if (dfGetFloat == NULL)
 	{
 		FreeLibrary(hdll);
 		return 6;
 	}
-	dfGetFeq = (vsi64Dllfun)GetProcAddress(hdll, "GetFeq");
+	dfGetFeq = (isi64Dllfun)GetProcAddress(hdll, "GetFeq");
 	if (dfGetFeq == NULL)
 	{
 		FreeLibrary(hdll);
 		return 7;
 	}
-	dfSetBit = (vsii32Dllfun)GetProcAddress(hdll, "SetBit");
+	dfSetBit = (isii32Dllfun)GetProcAddress(hdll, "SetBit");
 	if (dfSetBit == NULL)
 	{
 		FreeLibrary(hdll);
 		return 8;
 	}
-	dfSetWord = (vsii32Dllfun)GetProcAddress(hdll, "SetWord");
+	dfSetWord = (isii32Dllfun)GetProcAddress(hdll, "SetWord");
 	if (dfSetWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 9;
 	}
-	dfSetDWord = (vsii64Dllfun)GetProcAddress(hdll, "SetDoubleWord");
+	dfSetDWord = (isii64Dllfun)GetProcAddress(hdll, "SetDoubleWord");
 	if (dfSetDWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 10;
 	}
-	dfSetFloat = (vsif64Dllfun)GetProcAddress(hdll, "SetFloat");
+	dfSetFloat = (isif64Dllfun)GetProcAddress(hdll, "SetFloat");
 	if (dfGetFloat == NULL)
 	{
 		FreeLibrary(hdll);
 		return 11;
 	}
-	dfSetFeq = (vsiv64Dllfun)GetProcAddress(hdll, "SetFeq");
+	dfSetFeq = (isiv64Dllfun)GetProcAddress(hdll, "SetFeq");
 	if (dfSetFeq == NULL)
 	{
 		FreeLibrary(hdll);
@@ -234,54 +234,54 @@ EXPORT void AfterRunLadder()
 	dfAfterRunLadder();
 }
 
-EXPORT void GetBit(char* name, int size, uint32_t* output)
+EXPORT int GetBit(char* name, int size, uint32_t* output)
 {
-	dfGetBit(name, size, output);
+	return dfGetBit(name, size, output);
 }
 
-EXPORT void GetWord(char* name, int size, uint32_t* output)
+EXPORT int GetWord(char* name, int size, uint32_t* output)
 {
-	dfGetWord(name, size, output);
+	return dfGetWord(name, size, output);
 }
 
-EXPORT void GetDoubleWord(char* name, int size, uint64_t* output)
+EXPORT int GetDoubleWord(char* name, int size, uint64_t* output)
 {
-	dfGetDWord(name, size, output);
+	return dfGetDWord(name, size, output);
 }
 
-EXPORT void GetFloat(char* name, int size, double* output)
+EXPORT int GetFloat(char* name, int size, double* output)
 {
-	dfGetFloat(name, size, output);
+	return dfGetFloat(name, size, output);
 }
 
-EXPORT void GetFeq(char* name, uint64_t* output)
+EXPORT int GetFeq(char* name, uint64_t* output)
 {
-	dfGetFeq(name, output);
+	return dfGetFeq(name, output);
 }
 
-EXPORT void SetFeq(char* name, int64_t input)
+EXPORT int SetFeq(char* name, int64_t input)
 {
-	dfSetFeq(name, input);
+	return dfSetFeq(name, input);
 }
 
-EXPORT void SetBit(char* name, int size, uint32_t* input)
+EXPORT int SetBit(char* name, int size, uint32_t* input)
 {
-	dfSetBit(name, size, input);
+	return dfSetBit(name, size, input);
 }
 
-EXPORT void SetWord(char* name, int size, uint32_t* input)
+EXPORT int SetWord(char* name, int size, uint32_t* input)
 {
-	dfSetWord(name, size, input);
+	return dfSetWord(name, size, input);
 }
 
-EXPORT void SetDoubleWord(char* name, int size, uint64_t* input)
+EXPORT int SetDoubleWord(char* name, int size, uint64_t* input)
 {
-	dfSetDWord(name, size, input);
+	return dfSetDWord(name, size, input);
 }
 
-EXPORT void SetFloat(char* name, int size, double* input)
+EXPORT int SetFloat(char* name, int size, double* input)
 {
-	dfSetFloat(name, size, input);
+	return dfSetFloat(name, size, input);
 }
 
 EXPORT void SetEnable(char* name, int size, int value)

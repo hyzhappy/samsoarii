@@ -56,8 +56,7 @@ namespace SamSoarII.AppMain.Project
     public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
     {
         #region Canvas System
-
-        public Canvas LadderCanvas { get; private set; }
+        
         private LadderMode laddermode;
         public LadderMode LadderMode
         {
@@ -65,34 +64,23 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 this.laddermode = value;
-                switch (laddermode)
+                foreach (BaseViewModel bvmodel in _ladderVerticalLines.Values.Union(_ladderElements.Values))
                 {
-                    case LadderMode.Edit:
-                    case LadderMode.Demo:
-                        LadderCanvas_Edit.Visibility = Visibility.Visible;
-                        LadderCanvas_Monitor.Visibility = Visibility.Collapsed;
-                        if (_ladderDiagram != null 
-                         && LadderCanvas_Monitor.Children.Contains(_ladderDiagram.SelectionRect))
-                        {
-                            LadderCanvas_Monitor.Children.Remove(_ladderDiagram.SelectionRect);
-                            LadderCanvas_Edit.Children.Add(_ladderDiagram.SelectionRect);
-                        }
-                        LadderCanvas = LadderCanvas_Edit;
-                        //LadderCanvas_Monitor.Height = 0;
-                        break;
-                    case LadderMode.Monitor:
-                    case LadderMode.Simulate:
-                        LadderCanvas_Monitor.Visibility = Visibility.Visible;
-                        LadderCanvas_Edit.Visibility = Visibility.Collapsed;
-                        if (_ladderDiagram != null
-                         && LadderCanvas_Edit.Children.Contains(_ladderDiagram.SelectionRect))
-                        {
-                            LadderCanvas_Edit.Children.Remove(_ladderDiagram.SelectionRect);
-                            LadderCanvas_Monitor.Children.Add(_ladderDiagram.SelectionRect);
-                        }
-                        LadderCanvas = LadderCanvas_Monitor;
-                        //LadderCanvas_Edit.Height = 0;
-                        break;
+                    switch (laddermode)
+                    {
+                        case LadderMode.Demo:
+                            bvmodel.IsMonitorMode = false;
+                            bvmodel.CanModify = false;
+                            break;
+                        case LadderMode.Edit:
+                            bvmodel.IsMonitorMode = false;
+                            bvmodel.CanModify = true;
+                            break;
+                        default:
+                            bvmodel.IsMonitorMode = true;
+                            bvmodel.CanModify = false;
+                            break;
+                    }
                 }
             }
         }
@@ -134,9 +122,7 @@ namespace SamSoarII.AppMain.Project
                 if(value > 0 || _canHide)
                 {
                     _rowCount = value;
-                    LadderCanvas_Monitor.Height = _rowCount * HeightUnit;
-                    LadderCanvas_Edit.Height = _rowCount * HeightUnit;
-                    
+                    LadderCanvas.Height = _rowCount * HeightUnit;
                 }
             }
         }
@@ -218,8 +204,7 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _isCommendMode = value;
-                LadderCanvas_Edit.Height = _rowCount * HeightUnit;
-                LadderCanvas_Monitor.Height = _rowCount * HeightUnit;
+                LadderCanvas.Height = _rowCount * HeightUnit;
                 foreach (var ele in _ladderElements.Values)
                 {
                     ele.IsCommentMode = _isCommendMode;
@@ -257,10 +242,6 @@ namespace SamSoarII.AppMain.Project
             = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines 
             = new SortedDictionary<IntPoint, VerticalLineViewModel>();
-        private SortedDictionary<IntPoint, MoniBaseViewModel> _monitorElements
-            = new SortedDictionary<IntPoint, MoniBaseViewModel>();
-        private SortedDictionary<IntPoint, MoniVLineViewModel> _monitorVLines
-            = new SortedDictionary<IntPoint, MoniVLineViewModel>();
 
         private InstructionNetworkViewModel _invmodel;
         public InstructionNetworkViewModel INVModel
@@ -582,75 +563,6 @@ namespace SamSoarII.AppMain.Project
             return _ladderVerticalLines.Values;
         }
 
-        #region Monitor Ladder
-        
-        public IEnumerable<MoniBaseViewModel> GetMonitors()
-        {
-            return _monitorElements.Values;
-        }
-
-        private void CreateMonitorElement(BaseViewModel bvmodel)
-        {
-            MoniBaseViewModel mbvmodel = null;
-            if (bvmodel is VerticalLineViewModel)
-            {
-                mbvmodel = new MoniVLineViewModel();
-            }
-            else if (bvmodel is HorizontalLineViewModel)
-            {
-                mbvmodel = new MoniHLineViewModel();
-            }
-            else
-            {
-                mbvmodel = MoniBaseViewModel.Create(bvmodel.Model);
-            }
-            mbvmodel.X = bvmodel.X;
-            mbvmodel.Y = bvmodel.Y;
-            LadderCanvas_Monitor.Children.Add(mbvmodel);
-            IntPoint p = new IntPoint() { X = bvmodel.X, Y = bvmodel.Y };
-            if (mbvmodel is MoniVLineViewModel)
-            {
-                if (!_monitorVLines.ContainsKey(p))
-                {
-                    _monitorVLines.Add(p, (MoniVLineViewModel)mbvmodel);
-                }
-            }
-            else
-            {
-                if (!_monitorElements.ContainsKey(p))
-                {
-                    _monitorElements.Add(p, mbvmodel); 
-                }
-                else
-                {
-                    _monitorElements[p] = mbvmodel;
-                }
-            }
-
-        }
-
-        private void RemoveMonitorElement(int X, int Y)
-        {
-            IntPoint p = new IntPoint() { X = X, Y = Y };
-            if (_monitorElements.ContainsKey(p))
-            {
-                LadderCanvas_Monitor.Children.Remove(_monitorElements[p]);
-                _monitorElements.Remove(p);
-            }
-        }
-
-        private void RemoveMonitorVLine(int X, int Y)
-        {
-            IntPoint p = new IntPoint() { X = X, Y = Y };
-            if (_monitorVLines.ContainsKey(p))
-            {
-                LadderCanvas_Monitor.Children.Remove(_monitorVLines[p]);
-                _monitorVLines.Remove(p);
-            }
-        }
-
-        #endregion
-
         #region Ladder content modification methods
         public BaseViewModel ReplaceElement(BaseViewModel element)
         {
@@ -684,14 +596,13 @@ namespace SamSoarII.AppMain.Project
                     InstructionCommentManager.Unregister(oldele);
                     oldele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
                     _ladderElements.Remove(p);
-                    LadderCanvas_Edit.Children.Remove(oldele);
+                    LadderCanvas.Children.Remove(oldele);
                 }
                 element.IsCommentMode = _isCommendMode;
                 _ladderElements.Add(p, element);
-                LadderCanvas_Edit.Children.Add(element);
+                LadderCanvas.Children.Add(element);
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
-                CreateMonitorElement(element);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = oldele;
                 e.BVModel_new = element;
@@ -706,8 +617,7 @@ namespace SamSoarII.AppMain.Project
             {
                 vline.IsCommentMode = _isCommendMode;
                 _ladderVerticalLines.Add(p, vline);
-                LadderCanvas_Edit.Children.Add(vline);
-                CreateMonitorElement(vline);
+                LadderCanvas.Children.Add(vline);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = null;
                 e.BVModel_new = vline;
@@ -719,11 +629,10 @@ namespace SamSoarII.AppMain.Project
             if (_ladderElements.ContainsKey(pos))
             {
                 var ele = _ladderElements[pos];
-                LadderCanvas_Edit.Children.Remove(ele);
+                LadderCanvas.Children.Remove(ele);
                 _ladderElements.Remove(pos);
                 InstructionCommentManager.Unregister(ele);
                 ele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
-                RemoveMonitorElement(pos.X, pos.Y);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = ele;
                 e.BVModel_new = null;
@@ -748,9 +657,8 @@ namespace SamSoarII.AppMain.Project
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = _ladderVerticalLines[pos];
                 e.BVModel_new = null;
-                LadderCanvas_Edit.Children.Remove(_ladderVerticalLines[pos]);
+                LadderCanvas.Children.Remove(_ladderVerticalLines[pos]);
                 _ladderVerticalLines.Remove(pos);
-                RemoveMonitorVLine(pos.X, pos.Y);
                 VerticalLineChanged(this, e);
                 return true;
             }
@@ -1411,7 +1319,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         result.Add(_ladderElements[p]);
                     }
-                    catch(KeyNotFoundException exception)
+                    catch(KeyNotFoundException)
                     {
                     } 
                 }
@@ -1439,7 +1347,7 @@ namespace SamSoarII.AppMain.Project
                             result.Add(_ladderElements[p]);
                         }
                     }
-                    catch (KeyNotFoundException exception)
+                    catch (KeyNotFoundException)
                     {
 
                     }
@@ -1466,7 +1374,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         result.Add(_ladderVerticalLines[p]);
                     }
-                    catch (KeyNotFoundException exception)
+                    catch (KeyNotFoundException)
                     {
                     }
                 }
@@ -1476,31 +1384,21 @@ namespace SamSoarII.AppMain.Project
         #region ladder Folding module
         private void ReloadElementsToCanvas()
         {
-            LadderCanvas_Edit.Children.Clear();
-            LadderCanvas_Monitor.Children.Clear();
+            LadderCanvas.Children.Clear();
             RowCount = _oldRowCount;
             _canHide = false;
             foreach (var ele in _ladderElements.Values)
             {
-                LadderCanvas_Edit.Children.Add(ele);
+                LadderCanvas.Children.Add(ele);
             }
             foreach (var ele in _ladderVerticalLines.Values)
             {
-                LadderCanvas_Edit.Children.Add(ele);
-            }
-            foreach (var ele in _monitorElements.Values)
-            {
-                LadderCanvas_Monitor.Children.Add(ele);
-            }
-            foreach (var ele in _monitorVLines.Values)
-            {
-                LadderCanvas_Monitor.Children.Add(ele);
+                LadderCanvas.Children.Add(ele);
             }
         }
         private void ClearElementsFromCanvas()
         {
-            LadderCanvas_Edit.Children.Clear();
-            LadderCanvas_Monitor.Children.Clear();
+            LadderCanvas.Children.Clear();
             _oldRowCount = RowCount;
             _canHide = true;
             RowCount = 0;

@@ -104,60 +104,7 @@ namespace SamSoarII.AppMain.UI
             }
         }
     }
-
-    public class DemoColorManager
-    {
-        static private ColorData LadderScreen
-            = new ColorData("梯形图背景");
-        static private ColorData Ladder
-            = new ColorData("元件");
-        static private ColorData Comment
-            = new ColorData("元件注释");
-        static private ColorData DiagramTitle
-            = new ColorData("梯形图标题");
-        static private ColorData NetworkTitle
-            = new ColorData("网络标题");
-        static private ColorData FuncScreen
-            = new ColorData("函数块背景");
-        static private ColorData InstScreen
-            = new ColorData("PLC指令背景");
-        static private ColorData Inst
-            = new ColorData("PLC指令单元格");
-
-        static public ColorData GetLadderScreen()
-        {
-            return LadderScreen;
-        }
-        static public ColorData GetLadder()
-        {
-            return Ladder;
-        }
-        static public ColorData GetComment()
-        {
-            return Comment;
-        }
-        static public ColorData GetDiagramTitle()
-        {
-            return DiagramTitle;
-        }
-        static public ColorData GetNetworkTitle()
-        {
-            return NetworkTitle;
-        }
-        static public ColorData GetFuncScreen()
-        {
-            return FuncScreen;
-        }
-        static public ColorData GetInstScreen()
-        {
-            return InstScreen;
-        }
-        static public ColorData GetInst()
-        {
-            return Inst;
-        }
-    }
-
+    
     public class ColorDataItem : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

@@ -154,10 +154,10 @@ namespace SamSoarII.AppMain.Project
 
         private static void Setup(LadderNetworkViewModel lnvmodel)
         {
-            foreach (MoniBaseViewModel mbvmodel in lnvmodel.GetMonitors())
+            foreach (BaseViewModel bvmodel in lnvmodel.GetElements())
             {
-                mbvmodel.ViewCtrl = smmanager;
-                BaseModel bmodel = mbvmodel.Model;
+                bvmodel.ViewCtrl = smmanager;
+                BaseModel bmodel = bvmodel.Model;
                 if (bmodel == null) continue;
                 for (int i = 0; i < bmodel.ParaCount; i++)
                 {
@@ -187,7 +187,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     svunit.CanClose = false;
                     SimuMoniValueModel smvmodel = new SimuMoniValueModel(svunit);
-                    mbvmodel.SetValueModel(i, smvmodel);
+                    bvmodel.SetValueModel(i, smvmodel);
                 }
             }
         }

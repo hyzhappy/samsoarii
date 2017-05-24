@@ -124,5 +124,115 @@ namespace SamSoarII.LadderInstViewModel
 
         }
 
+        #region Monitor
+
+        private string valuetextblock_oldtext
+            = String.Empty;
+        private string counttextblock_oldtext
+            = String.Empty;
+        private bool ismonitormode = false;
+        public override bool IsMonitorMode
+        {
+            get
+            {
+                return this.ismonitormode;
+            }
+            set
+            {
+                this.ismonitormode = value;
+                switch (value)
+                {
+                    case true:
+                        valuetextblock_oldtext = ValueTextBlock.Text;
+                        counttextblock_oldtext = CountTextBlock.Text;
+                        break;
+                    case false:
+                        ValueTextBlock.Text = valuetextblock_oldtext;
+                        CountTextBlock.Text = counttextblock_oldtext;
+                        break;
+                }
+            }
+        }
+
+        private void UpdateMonitor()
+        {
+            UpdateMonitor_ValueTextBlock();
+            UpdateMonitor_CountTextBlock();
+            UpdateMonitor_CenterCanvas();
+        }
+
+        private void UpdateMonitor_ValueTextBlock()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                ValueTextBlock.Text = Model.ParaCount > 0 && _values[0] != null
+                        ? String.Format("{0:s} = {1:s}",
+                            Model.GetPara(0).ValueString,
+                            IsRunning ? _values[0].Value : "???")
+                        : String.Empty;
+            });
+        }
+
+        private void UpdateMonitor_CountTextBlock()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                CountTextBlock.Text = Model.ParaCount > 1 && _values[1] != null
+                    ? String.Format("{0:s} = {1:s}",
+                        Model.GetPara(1).ValueString,
+                        IsRunning ? _values[1].Value : "???")
+                    : String.Empty;
+            });
+        }
+        
+        static string[] BIT_0_SHOWS = { "0", "OFF", "FALSE" };
+        static string[] BIT_1_SHOWS = { "1", "ON", "TRUE" };
+        private void UpdateMonitor_CenterCanvas()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (!IsRunning)
+                {
+                    CenterCanvas.Background = Brushes.Transparent;
+                    return;
+                }
+                bool value = false;
+                try
+                {
+                    if (_values[0] == null)
+                        throw new FormatException("Lack of arguments.");
+                    if (!BIT_0_SHOWS.Contains(_values[0].Value)
+                     && !BIT_1_SHOWS.Contains(_values[0].Value))
+                        throw new FormatException("value0 is not a BIT.");
+                    value = BIT_1_SHOWS.Contains(_values[0].Value);
+                }
+                catch (FormatException)
+                {
+                    CenterCanvas.Background = Brushes.Red;
+                    return;
+                }
+                CenterCanvas.Background = value ? Brushes.Green : Brushes.Transparent;
+            });
+        }
+
+        protected override void OnStart(object sender, RoutedEventArgs e)
+        {
+            base.OnStart(sender, e);
+            UpdateMonitor();
+        }
+
+        protected override void OnAbort(object sender, RoutedEventArgs e)
+        {
+            base.OnAbort(sender, e);
+            UpdateMonitor();
+        }
+
+        protected override void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            base.OnValueChanged(sender, e);
+            UpdateMonitor();
+        }
+        #endregion
+
     }
 }
