@@ -1087,7 +1087,7 @@ namespace SamSoarII.AppMain
                 return false;
             }
             CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
-            _projectModel.LadderMode = LadderMode.Monitor;
+            
             if (paras.IsCOMLinked)
             {
                 _projectModel.MMonitorManager.CManager = _projectModel.PManager;
@@ -1109,6 +1109,7 @@ namespace SamSoarII.AppMain
                     return false;
                 }
             }
+            _projectModel.LadderMode = LadderMode.Monitor;
             _projectModel.MMonitorManager.Initialize(_projectModel);
             return true;
         }

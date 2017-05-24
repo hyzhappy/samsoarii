@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:port="clr-namespace:System.IO.Ports;assembly=System"
         mc:Ignorable="d"
         Title="通信参数设置" Height="200" Width="300">
     <Grid>
@@ -12,6 +13,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.Resources>
+            <ObjectDataProvider x:Key="SerialPortNamesProvider" ObjectType="{x:Type port:SerialPort}" MethodName="GetPortNames"/>
             <Style TargetType="StackPanel">
                 <Setter Property="Margin" Value="5,5,0,0"></Setter>
             </Style>
@@ -28,9 +30,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="0,2,0,0">PC串口</TextBlock>
-                <ComboBox x:Name="SerialPortComboBox" Width="70" SelectedIndex="{Binding SerialPortIndex}">
-                    <ComboBoxItem>COM1</ComboBoxItem>
-                    <ComboBoxItem>COM2</ComboBoxItem>
+                <ComboBox x:Name="SerialPortComboBox" Width="70" ItemsSource="{Binding Source={StaticResource SerialPortNamesProvider}}" SelectedIndex="{Binding SerialPortIndex}">
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">

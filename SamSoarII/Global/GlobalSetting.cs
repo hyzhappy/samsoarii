@@ -110,23 +110,7 @@ namespace SamSoarII.AppMain
         }
         public static bool IsSavedByTime { get; set; }
         public static int SaveTimeSpan { get; set; }
-        //public static void Save()
-        //{
-        //    var cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        //    cfa.AppSettings.Settings["LadderOriginScaleX"].Value = LadderOriginScaleX.ToString();
-        //    cfa.AppSettings.Settings["LadderOriginScaleY"].Value = LadderOriginScaleY.ToString();
-        //    cfa.AppSettings.Settings["LadderScaleX"].Value = LadderScaleX.ToString();
-        //    cfa.AppSettings.Settings["LadderScaleY"].Value = LadderScaleY.ToString();
-        //    cfa.AppSettings.Settings["FuncBlockFontSize"].Value = FuncBlockFontSize.ToString();
-        //    cfa.AppSettings.Settings["SelectedIndexOfFontSizeComboBox"].Value = SelectedIndexOfFontSizeComboBox.ToString();
-        //    cfa.AppSettings.Settings["SelectedIndexOfFontFamilyComboBox"].Value = SelectedIndexOfFontFamilyComboBox.ToString();
-        //    SaveColor();
-        //    cfa.AppSettings.Settings["A"].Value = _A.ToString();
-        //    cfa.AppSettings.Settings["R"].Value = _R.ToString();
-        //    cfa.AppSettings.Settings["G"].Value = _G.ToString();
-        //    cfa.AppSettings.Settings["B"].Value = _B.ToString();
-        //    cfa.Save();
-        //}
+        
         public static XElement CreateXELementBySetting()
         {
             SaveColor();
@@ -235,75 +219,7 @@ namespace SamSoarII.AppMain
         {
             return _loadScaleSuccessFlag;
         }
-
-        //public static void Load()
-        //{
-        //    try
-        //    {
-        //        LadderOriginScaleX = double.Parse(ConfigurationManager.AppSettings["LadderOriginScaleX"]);
-        //        LadderOriginScaleY = double.Parse(ConfigurationManager.AppSettings["LadderOriginScaleY"]);
-        //        _loadScaleSuccessFlag = true;
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _loadScaleSuccessFlag = false;
-        //    }
-        //    try
-        //    {
-        //        LadderScaleX = double.Parse(ConfigurationManager.AppSettings["LadderScaleX"]);
-        //        LadderScaleY = double.Parse(ConfigurationManager.AppSettings["LadderScaleY"]);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        LadderScaleX = 1;
-        //        LadderScaleY = 1;
-        //    }
-        //    try
-        //    {
-        //        FuncBlockFontSize = int.Parse(ConfigurationManager.AppSettings["FuncBlockFontSize"]);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        FuncBlockFontSize = 16;
-        //    }
-        //    try
-        //    {
-        //        SelectedIndexOfFontFamilyComboBox = int.Parse(ConfigurationManager.AppSettings["SelectedIndexOfFontFamilyComboBox"]);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        SelectedIndexOfFontFamilyComboBox = 0;
-        //    }
-        //    try
-        //    {
-        //        SelectedIndexOfFontSizeComboBox = int.Parse(ConfigurationManager.AppSettings["SelectedIndexOfFontSizeComboBox"]);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        SelectedIndexOfFontSizeComboBox = 10;
-        //    }
-        //    try
-        //    {
-        //        _A = byte.Parse(ConfigurationManager.AppSettings["A"]);
-        //        _R = byte.Parse(ConfigurationManager.AppSettings["R"]);
-        //        _G = byte.Parse(ConfigurationManager.AppSettings["G"]);
-        //        _B = byte.Parse(ConfigurationManager.AppSettings["B"]);
-        //        Color color = new Color();
-        //        color.A = _A;
-        //        color.R = _R;
-        //        color.G = _G;
-        //        color.B = _B;
-        //        SelectColor = color;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        SelectColor = Colors.Black;
-        //    }
-        //    FontManager.GetFontDataProvider().SelectFontSizeIndex = SelectedIndexOfFontSizeComboBox;
-        //    FontManager.GetFontDataProvider().SelectFontFamilyIndex = SelectedIndexOfFontFamilyComboBox;
-        //    FontManager.GetFontDataProvider().Initialize();
-        //    ColorManager.GetColorDataProvider().SelectColor = new SolidColorBrush(SelectColor);
-        //}
+        
     }
 }
 

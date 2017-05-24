@@ -795,11 +795,8 @@ namespace SamSoarII.AppMain.UI
                 {
                     if (_interactionFacade.MonitorProject())
                     {
-                        MonitorModeButton.IsChecked = _interactionFacade.MonitorProject();
-                        if (MonitorModeButton.IsChecked == true)
-                        {
-                            LACMonitor.Show();
-                        }
+                        MonitorModeButton.IsChecked = true;
+                        LACMonitor.Show();
                         dialog.Close();
                     }
                     else

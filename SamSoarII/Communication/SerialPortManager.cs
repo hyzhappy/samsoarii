@@ -14,7 +14,7 @@ namespace SamSoarII.Communication
 {
     public class SerialPortManager : ICommunicationManager
     {
-        static private string[] PORTNAMES = { "COM1", "COM2" };
+        static private string[] PORTNAMES = SerialPort.GetPortNames();
         static private int[] BAUDRATES = { 4800, 9600, 19200, 38400, 57600, 115200 };
         static private int[] DATABITS = { 8 };
         static private int[] STOPBITS = { 1, 2 };
@@ -120,21 +120,24 @@ namespace SamSoarII.Communication
                 }
             }
         }
-        
-        public SerialPortManager()
+        public void InitializePort()
         {
-            PortName = "COM1";
-            BaudRate = 9600;
-            DataBits = 8;
-            StopBits = 1;
-            Timeout = 20;
-            Parity = "NONE";
+            CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
+            PortName = PORTNAMES[paras.SerialPortIndex];
+            BaudRate = BAUDRATES[paras.BaudRateIndex];
+            DataBits = DATABITS[paras.DataBitIndex];
+            StopBits = STOPBITS[paras.StopBitIndex];
+            Timeout = paras.Timeout;
+            Parity = PARITYS[paras.CheckCodeIndex];
         }
-
         public int Start()
         {
             try
             {
+                if (!((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]).IsAutoCheck)
+                {
+                    InitializePort();
+                }
                 port.Open();
             }
             catch (Exception)
@@ -188,22 +191,22 @@ namespace SamSoarII.Communication
             return 0;
         }
         
-        public void Load()
-        {
-            CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
-            PortName = PORTNAMES[paras.SerialPortIndex];
-            BaudRate = BAUDRATES[paras.BaudRateIndex];
-            DataBits = DATABITS[paras.DataBitIndex];
-            StopBits = STOPBITS[paras.StopBitIndex];
-            Timeout = paras.Timeout;
-            Parity = PARITYS[paras.CheckCodeIndex];
-        }
+        //public void Load()
+        //{
+        //    CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
+        //    PortName = PORTNAMES[paras.SerialPortIndex];
+        //    BaudRate = BAUDRATES[paras.BaudRateIndex];
+        //    DataBits = DATABITS[paras.DataBitIndex];
+        //    StopBits = STOPBITS[paras.StopBitIndex];
+        //    Timeout = paras.Timeout;
+        //    Parity = PARITYS[paras.CheckCodeIndex];
+        //}
         
         public bool AutoCheck()
         {
             foreach (string _portname in PORTNAMES)
             {
-                PortName = _portname;
+                port = new SerialPort(_portname);
                 try
                 {
                     port.Open();
