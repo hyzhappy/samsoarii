@@ -33,7 +33,6 @@ namespace SamSoarII.LadderInstViewModel
         private int _x;
         private int _y;
         private bool _isCommentMode;
-        private bool _isMonitorMode;
 
         public override int X
         {
@@ -77,20 +76,7 @@ namespace SamSoarII.LadderInstViewModel
                 UpdateCommentAreaVisibility();
             }
         }
-
-        public override bool IsMonitorMode
-        {
-            get
-            {
-                return _isMonitorMode;
-            }
-
-            set
-            {
-                _isMonitorMode = value;
-            }
-        }
-
+        
         public OutputBaseViewModel()
         {
             InitializeComponent();

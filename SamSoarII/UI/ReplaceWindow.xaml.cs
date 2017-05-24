@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.AvalonDock.Global;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -155,7 +156,8 @@ namespace SamSoarII.AppMain.UI
                 ldvmodel.IsModify = true;
                 int x = bvmodel.X;
                 int y = bvmodel.Y;
-                
+                _cmdmanager.LDVModel = ldvmodel;
+
                 NetworkReplaceElementsCommand command = null;
                 NetworkReplaceElementsCommand_ForReplaceWindow commandrw = null;
                 try
@@ -183,7 +185,6 @@ namespace SamSoarII.AppMain.UI
                         ldvmodel.ProgramName, lnvmodel.NetworkNumber, x, y, exce3.Message);
                 }
             }
-
             _cmdmanager.Execute(commandall);
 
             if (showdialog || error > 0)
@@ -285,6 +286,15 @@ namespace SamSoarII.AppMain.UI
 
         private void DG_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!parent.MainWindow.LAReplace.IsFloat
+             && !parent.MainWindow.LAReplace.IsDock)
+            {
+                LayoutSetting.AddDefaultDockWidthAnchorable(
+                    "替换", parent.MainWindow.LAReplace.AutoHideWidth.ToString());
+                LayoutSetting.AddDefaultDockHeighAnchorable(
+                    "替换", parent.MainWindow.LAReplace.AutoHideHeight.ToString());
+                parent.MainWindow.LAReplace.ToggleAutoHide();
+            }
             if (DG_List.SelectedIndex < 0) return;
             ReplaceElement fele = items[DG_List.SelectedIndex];
             BaseViewModel bvmodel = fele.BVModel;

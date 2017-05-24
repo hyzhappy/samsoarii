@@ -25,7 +25,27 @@ namespace SamSoarII.LadderInstViewModel.Monitor
             InitializeComponent();
             DataContext = this;
         }
-        
+
+        public override int X
+        {
+            get => base.X;
+            set
+            {
+                base.X = value;
+                Canvas.SetLeft(this, base.X * 300 + 280);
+            }
+        }
+
+        public override int Y
+        {
+            get => base.Y;
+            set
+            {
+                base.Y = value;
+                Canvas.SetTop(this, base.Y * 300 + 100);
+            }
+        }
+
         public override void Update()
         {
         }

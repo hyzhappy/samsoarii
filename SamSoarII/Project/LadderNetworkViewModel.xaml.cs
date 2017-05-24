@@ -47,7 +47,8 @@ namespace SamSoarII.AppMain.Project
     {
         Edit,
         Monitor,
-        Simulate
+        Simulate,
+        Demo
     }
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
@@ -67,8 +68,9 @@ namespace SamSoarII.AppMain.Project
                 switch (laddermode)
                 {
                     case LadderMode.Edit:
+                    case LadderMode.Demo:
                         LadderCanvas_Edit.Visibility = Visibility.Visible;
-                        LadderCanvas_Monitor.Visibility = Visibility.Hidden;
+                        LadderCanvas_Monitor.Visibility = Visibility.Collapsed;
                         if (_ladderDiagram != null 
                          && LadderCanvas_Monitor.Children.Contains(_ladderDiagram.SelectionRect))
                         {
@@ -80,8 +82,8 @@ namespace SamSoarII.AppMain.Project
                         break;
                     case LadderMode.Monitor:
                     case LadderMode.Simulate:
-                        LadderCanvas_Edit.Visibility = Visibility.Hidden;
                         LadderCanvas_Monitor.Visibility = Visibility.Visible;
+                        LadderCanvas_Edit.Visibility = Visibility.Collapsed;
                         if (_ladderDiagram != null
                          && LadderCanvas_Edit.Children.Contains(_ladderDiagram.SelectionRect))
                         {
@@ -282,6 +284,7 @@ namespace SamSoarII.AppMain.Project
             }
             return null;
         }
+
         public VerticalLineViewModel GetVerticalLineByPosition(int X, int Y)
         {
             IntPoint ip = new IntPoint();
@@ -514,10 +517,12 @@ namespace SamSoarII.AppMain.Project
             ThumbnailButton.ToolTipOpening += ThumbnailButton_ToolTipOpening;
             ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
         }
+
         public IEnumerable<BaseViewModel> GetElements()
         {
             return _ladderElements.Values;
         }
+
         public BaseViewModel SearchElement(int x, int y)
         {
             var p = new IntPoint() { X = x, Y = y };
@@ -527,6 +532,7 @@ namespace SamSoarII.AppMain.Project
             }
             return null;
         }
+
         public void EnterOriginSelectArea(bool isUp)
         {
             if (!isUp)
@@ -560,6 +566,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
         public VerticalLineViewModel SearchVerticalLine(int x, int y)
         {
             var p = new IntPoint() { X = x, Y = y };
@@ -569,6 +576,7 @@ namespace SamSoarII.AppMain.Project
             }
             return null;
         }
+
         public IEnumerable<VerticalLineViewModel> GetVerticalLines()
         {
             return _ladderVerticalLines.Values;
@@ -651,7 +659,8 @@ namespace SamSoarII.AppMain.Project
             element.RefLadderName = _ladderDiagram.ProgramName;
             bool flag = false;
             // Remove old element before
-            if (element.Type == ElementType.Output)
+            if (element.Type == ElementType.Output
+             && LadderMode != LadderMode.Demo)
             {
                 element.X = GlobalSetting.LadderXCapacity - 1;
                 if (element.Y >= 0 && element.Y < RowCount)
@@ -1319,7 +1328,6 @@ namespace SamSoarII.AppMain.Project
 
         #endregion
         
-
         #region IComparable interface implemention
         // 按照NetworkNumber大小排序
         public int CompareTo(object obj)

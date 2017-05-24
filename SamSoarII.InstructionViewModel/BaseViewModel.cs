@@ -32,7 +32,6 @@ namespace SamSoarII.LadderInstViewModel
         public abstract int X { get; set; }
         public abstract int Y { get; set; }
         public abstract bool IsCommentMode { get; set; }
-        public abstract bool IsMonitorMode { get; set; }
         public abstract string InstructionName { get; }
         public abstract BaseModel Model { get; protected set; }
         public List<BaseViewModel> NextElements = new List<BaseViewModel>();

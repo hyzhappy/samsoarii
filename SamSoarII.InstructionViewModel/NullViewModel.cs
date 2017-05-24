@@ -78,20 +78,7 @@ namespace SamSoarII.LadderInstViewModel
                 throw new InvalidOperationException();
             }
         }
-
-        public override bool IsMonitorMode
-        {
-            get
-            {
-                throw new InvalidOperationException();
-            }
-
-            set
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
+        
         public override void UpdateCommentContent()
         {
             // nothing to do

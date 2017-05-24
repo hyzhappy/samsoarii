@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.AvalonDock.Global;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -149,6 +150,15 @@ namespace SamSoarII.AppMain.UI
 
         private void DG_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!parent.MainWindow.LAFind.IsFloat
+             && !parent.MainWindow.LAFind.IsDock)
+            {
+                LayoutSetting.AddDefaultDockWidthAnchorable(
+                    "查找", parent.MainWindow.LAFind.AutoHideWidth.ToString());
+                LayoutSetting.AddDefaultDockHeighAnchorable(
+                    "查找", parent.MainWindow.LAFind.AutoHideHeight.ToString());
+                parent.MainWindow.LAFind.ToggleAutoHide();
+            }
             if (DG_List.SelectedIndex < 0) return;
             FindElement fele = items[DG_List.SelectedIndex];
             BaseViewModel bvmodel = fele.BVModel;

@@ -7,18 +7,66 @@
              xmlns:Inst="clr-namespace:SamSoarII.LadderInstViewModel;assembly=SamSoarII.LadderInstViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="480">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Canvas Height="300" VerticalAlignment="Top">
-            <Canvas.Resources>
-                <Style TargetType="ComboBoxItem">
-                    <Setter Property="Padding" Value="4,4,0,0"></Setter>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" 
+                        Value="Center">
+                </Setter>
+                <Setter Property="Margin" 
+                        Value="8,0,0,0">
+                </Setter>
+                <Setter Property="FontSize"
+                        Value="14">
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="80,10,10,10"></Setter>
+            </Style>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="24,6,24,6"></Setter>
+            </Style>
+        </Grid.Resources>
+        <TextBlock Grid.Row="0" Grid.Column="0">
+            字体范围：
+        </TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1">
+            字体风格：
+        </TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0">
+            字体大小：
+        </TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1">
+            字体颜色：
+        </TextBlock>
+        <ComboBox Grid.Row="0" Grid.Column="0"
+                  x:Name="CB_Range" SelectionChanged="ComboBox_SelectionChanged">
+        </ComboBox>
+        <ComboBox Grid.Row="0" Grid.Column="1"
+                  x:Name="CB_Family" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBox.ItemContainerStyle>
+                <Style>
+                    <Setter Property="TextBlock.FontFamily" Value="{Binding Family}"></Setter>
                 </Style>
-                <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type Inst:FontManager}" MethodName="GetFontDataProvider">
-                </ObjectDataProvider>
-            </Canvas.Resources>
-            <TextBlock FontSize="20" Canvas.Left="55" Canvas.Top="100">变量字体设置</TextBlock>
-            <ComboBox Width="120" Height="25" IsEditable="False" Canvas.Left="55" Canvas.Top="180" x:Name="FontSizeComboBox" SelectedIndex="{Binding Source={StaticResource FontData},Path=SelectFontSizeIndex}"></ComboBox>
-            <ComboBox Width="120" Height="25" IsEditable="False" Canvas.Left="55" Canvas.Top="250" x:Name="FontFamilyComboBox" SelectedIndex="{Binding Source={StaticResource FontData},Path=SelectFontFamilyIndex}" SelectionChanged="OnSelectionChanged"></ComboBox>
-        </Canvas>
-    </ScrollViewer>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
+        <ComboBox Grid.Row="1" Grid.Column="0"
+                  x:Name="CB_Size" SelectionChanged="ComboBox_SelectionChanged">
+        </ComboBox>
+        <Button Grid.Row="1" Grid.Column="1" Margin="80,10,10,10"
+                x:Name="BD_Color" Background="Black" Click="BD_Color_Click">
+        </Button>
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="效果预览">
+            <local:DemoCanvas x:Name="Demo"></local:DemoCanvas>
+        </GroupBox>
+    </Grid>
 </UserControl>
