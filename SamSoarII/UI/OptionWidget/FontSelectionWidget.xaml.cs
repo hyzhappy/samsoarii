@@ -32,7 +32,6 @@ namespace SamSoarII.AppMain.UI
         }
         private void OptionDialog_EnsureButtonClick(object sender, RoutedEventArgs e)
         {
-            var cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ComboBoxItem item = FontSizeComboBox.SelectedItem as ComboBoxItem;
             string temp = item.Content.ToString();
             int selectFontSize = int.Parse(temp);
@@ -46,12 +45,6 @@ namespace SamSoarII.AppMain.UI
             if (!FontManager.GetFontDataProvider().SelectFontFamily.FamilyNames.Values.Contains(temp))
             {
                 FontManager.GetFontDataProvider().SelectFontFamily = new FontFamily(temp);
-            }
-            if (sender is Window)
-            {
-                cfa.Save();
-                Window window = (Window)sender;
-                window.Close();
             }
         }
 

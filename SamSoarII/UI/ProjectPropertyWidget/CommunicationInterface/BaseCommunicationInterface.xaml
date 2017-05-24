@@ -88,12 +88,12 @@
         <Canvas Grid.Row="2">
             <StackPanel Canvas.Top="10">
                 <TextBlock FontSize="16" Text="站号设置"></TextBlock>
-                <usr:RangeTextBox x:Name="rangeTextbox1" Margin="5,-2,0,0" LowRange="1" TopRange="128" DefaultValue="2"></usr:RangeTextBox>
+                <usr:RangeTextBox x:Name="rangeTextbox1" Margin="5,-2,0,0" LowRange="1" TopRange="128" DefaultValue="-1"></usr:RangeTextBox>
                 <TextBlock FontSize="16" Text="(1-128)"></TextBlock>
             </StackPanel>
             <StackPanel Canvas.Top="50">
                 <TextBlock FontSize="16" Text="超时时间"></TextBlock>
-                <usr:RangeTextBox x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="1" TopRange="255" DefaultValue="20"></usr:RangeTextBox>
+                <usr:RangeTextBox x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="1" TopRange="255" DefaultValue="-1"></usr:RangeTextBox>
                 <TextBlock FontSize="16" Text="*10ms    (1-255)"></TextBlock>
             </StackPanel>
         </Canvas>

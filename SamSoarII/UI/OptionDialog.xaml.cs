@@ -48,6 +48,7 @@ namespace SamSoarII.AppMain.UI
         private void OnEnsureButtonClick(object sender, RoutedEventArgs e)
         {
             EnsureButtonClick.Invoke(this,e);
+            Close();
         }
 
         private void OnCancelButtonClick(object sender, RoutedEventArgs e)

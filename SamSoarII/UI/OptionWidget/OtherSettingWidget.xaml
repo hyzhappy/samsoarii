@@ -15,7 +15,7 @@
                 <TextBlock FontSize="16" Text="定时保存"></TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <usr:RangeTextBox x:Name="timespantextbox" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" LowRange="1" TopRange="20" Text="1" DefaultValue="1"></usr:RangeTextBox>
+                <usr:RangeTextBox x:Name="timespantextbox" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" LowRange="1" TopRange="20" DefaultValue="-1"></usr:RangeTextBox>
                 <TextBlock Margin="5,0,0,0" FontSize="16" Text="*分钟"></TextBlock>
             </StackPanel>
         </StackPanel>

@@ -22,7 +22,6 @@ namespace SamSoarII.UserInterface
     /// </summary>
     public partial class RangeTextBox : UserControl,INotifyPropertyChanged
     {
-        public static readonly DependencyProperty TextProperty;
         public static readonly DependencyProperty TopRangeProperty;
         public static readonly DependencyProperty LowRangeProperty;
         public static readonly DependencyProperty DefaultValueProperty;
@@ -30,21 +29,9 @@ namespace SamSoarII.UserInterface
 
         static RangeTextBox()
         {
-            TextProperty = DependencyProperty.Register("Text",typeof(string),typeof(RangeTextBox));
             TopRangeProperty = DependencyProperty.Register("TopRange",typeof(int),typeof(RangeTextBox));
             LowRangeProperty = DependencyProperty.Register("LowRange", typeof(int), typeof(RangeTextBox));
             DefaultValueProperty = DependencyProperty.Register("DefaultValue", typeof(int), typeof(RangeTextBox));
-        }
-        public string Text
-        {
-            get
-            {
-                return (string)GetValue(TextProperty);
-            }
-            set
-            {
-                SetValue(TextProperty,value);
-            }
         }
         private int oldvalue;
         public int TopRange
@@ -104,7 +91,10 @@ namespace SamSoarII.UserInterface
 
         private void RangeTextBox_Loaded(object sender, RoutedEventArgs e)
         {
-            textbox.Text = DefaultValue.ToString();
+            if (DefaultValue != -1)
+            {
+                textbox.Text = DefaultValue.ToString();
+            }
         }
 
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -121,7 +111,7 @@ namespace SamSoarII.UserInterface
                 if (KeyInputHelper.NumAssert(e.Key))
                 {
                     newvalue = 10 * oldvalue + KeyInputHelper.GetKeyValue(e.Key);
-                    if (newvalue > TopRange || newvalue < LowRange)
+                    if (!AssertRange(newvalue))
                     {
                         e.Handled = true;
                     }

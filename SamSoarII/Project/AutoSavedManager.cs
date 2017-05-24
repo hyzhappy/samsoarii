@@ -17,16 +17,24 @@ namespace SamSoarII.AppMain.Project
             _iFacade = IFacade;
             AutoSaveThread = new Thread(Run);
         }
-        public bool IsRunning
+        public bool notRunning
         {
             get
             {
-                return AutoSaveThread.ThreadState == ThreadState.Running;
+                return AutoSaveThread.ThreadState == ThreadState.Unstarted || AutoSaveThread.ThreadState == ThreadState.Stopped || AutoSaveThread.ThreadState == ThreadState.Aborted;
             }
         }
         public void Start()
         {
-            AutoSaveThread.Start();
+            if (AutoSaveThread.ThreadState == ThreadState.Unstarted || AutoSaveThread.ThreadState == ThreadState.Stopped)
+            {
+                AutoSaveThread.Start();
+            }
+            else if (AutoSaveThread.ThreadState == ThreadState.Aborted)
+            {
+                AutoSaveThread = new Thread(Run);
+                AutoSaveThread.Start();
+            }
         }
         public void Abort()
         {
