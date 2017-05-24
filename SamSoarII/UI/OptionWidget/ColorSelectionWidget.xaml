@@ -67,7 +67,7 @@
                 x:Name="BD_Foreground">
         </Border>
         <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="效果预览">
-            <local:DemoCanvas x:Name="Demo"></local:DemoCanvas>
+            <local:DemoCanvas x:Name="Demo"/>
         </GroupBox>
     </Grid>
 </UserControl>

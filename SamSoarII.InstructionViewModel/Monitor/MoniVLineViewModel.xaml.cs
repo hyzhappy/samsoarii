@@ -28,7 +28,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
 
         public override int X
         {
-            get => base.X;
+            get
+            {
+                return base.X;
+            }
             set
             {
                 base.X = value;
@@ -38,7 +41,10 @@ namespace SamSoarII.LadderInstViewModel.Monitor
 
         public override int Y
         {
-            get => base.Y;
+            get
+            {
+                return base.Y;
+            }
             set
             {
                 base.Y = value;

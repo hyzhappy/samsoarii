@@ -92,10 +92,10 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _isCommentMode = value;
-                MainRoutine.IsCommendMode = _isCommentMode;
+                MainRoutine.IsCommentMode = _isCommentMode;
                 foreach (var ldmodel in SubRoutines)
                 {
-                    ldmodel.IsCommendMode = _isCommentMode;
+                    ldmodel.IsCommentMode = _isCommentMode;
                 }
             }
         }

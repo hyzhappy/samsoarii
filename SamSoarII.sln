@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.AvalonDock", "Ava
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.HelpDocument", "SamSoarII.HelpDocument\SamSoarII.HelpDocument.csproj", "{932DAF07-5116-44DF-9091-BD4CDC7CD01E}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SamSoarII.Setup", "SamSoarII.Setup\SamSoarII.Setup.vdproj", "{EED6AF25-EC18-40ED-AAE8-6911B36EAD46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,8 @@ Global
 		{932DAF07-5116-44DF-9091-BD4CDC7CD01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{932DAF07-5116-44DF-9091-BD4CDC7CD01E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{932DAF07-5116-44DF-9091-BD4CDC7CD01E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EED6AF25-EC18-40ED-AAE8-6911B36EAD46}.Debug|Any CPU.ActiveCfg = Debug
+		{EED6AF25-EC18-40ED-AAE8-6911B36EAD46}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

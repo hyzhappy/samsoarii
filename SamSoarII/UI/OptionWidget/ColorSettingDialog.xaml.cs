@@ -19,19 +19,18 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// ColorSettingDialog.xaml 的交互逻辑
     /// </summary>
-    public partial class ColorSettingDialog : Window, INotifyPropertyChanged
+    public partial class ColorSettingDialog : Window
     {
         public const int TYPE_FONT = 0x01;
         public const int TYPE_BACKGROUND = 0x02;
         public const int TYPE_FOREGROUND = 0x03;
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        
 
         public object Relative { get; private set; }
 
         public int Type { get; private set; }
         
-        public Brush Color
+        public Color Color
         {
             get
             {
@@ -41,15 +40,15 @@ namespace SamSoarII.AppMain.UI
                 {
                     case TYPE_FONT:
                         fdat = (FontData)Relative;
-                        return fdat.FontColor;
+                        return ((SolidColorBrush)fdat.FontColor).Color;
                     case TYPE_BACKGROUND:
                         cdat = (ColorData)Relative;
-                        return cdat.Background;
+                        return ((SolidColorBrush)cdat.Background).Color;
                     case TYPE_FOREGROUND:
                         cdat = (ColorData)Relative;
-                        return cdat.Foreground;
+                        return ((SolidColorBrush)cdat.Foreground).Color;
                     default:
-                        return Brushes.Black;
+                        return Colors.Black;
                 }
             }
         }
@@ -57,9 +56,11 @@ namespace SamSoarII.AppMain.UI
         public ColorSettingDialog(object _relative, int _type)
         {
             InitializeComponent();
+            DataContext = this;
             Relative = _relative;
             Type = _type;
-            PropertyChanged(this, new PropertyChangedEventArgs("Color"));
+            CP_Color.SelectedColor = Color;
+            label.Background = new SolidColorBrush(CP_Color.SelectedColor);
         }
 
         private void B_Ensure_Click(object sender, RoutedEventArgs e)
@@ -87,6 +88,14 @@ namespace SamSoarII.AppMain.UI
         private void B_Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                label.Background = new SolidColorBrush(CP_Color.SelectedColor);
+            }
         }
     }
     

@@ -37,6 +37,7 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private OptionDialog SysSettingDialog;
         private InteractionFacade _interactionFacade;
         private CanAnimationScroll MainScroll;
         public LayoutAnchorControl LACProj { get { return LAProj?.AnchorControl; } }
@@ -57,6 +58,7 @@ namespace SamSoarII.AppMain.UI
             LAFind.Content = findwindow;
             ReplaceWindow replacewindow = new ReplaceWindow(_interactionFacade);
             LAReplace.Content = replacewindow;
+            SysSettingDialog = new OptionDialog(_interactionFacade);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -71,6 +73,11 @@ namespace SamSoarII.AppMain.UI
                 if (window is ElementInitializeWindow)
                 {
                     window.Closing -= ((ElementInitializeWindow)window).OnClosing;
+                    window.Close();
+                }
+                if (window is OptionDialog)
+                {
+                    window.Closing -= ((OptionDialog)window).OnClosing;
                     window.Close();
                 }
             }
@@ -918,8 +925,7 @@ namespace SamSoarII.AppMain.UI
 
         private void OnShowOptionDialogCommandExecute(object sender, RoutedEventArgs e)
         {
-            OptionDialog dialog = new OptionDialog(_interactionFacade);
-            dialog.ShowDialog();
+            SysSettingDialog.ShowDialog();
         }
 
         private void OnProcessExitExecute(object sender, RoutedEventArgs e)

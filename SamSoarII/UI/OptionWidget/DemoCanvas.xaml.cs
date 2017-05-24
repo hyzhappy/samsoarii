@@ -47,7 +47,6 @@ namespace SamSoarII.AppMain.UI
             fbvmodel.Visibility = Visibility.Hidden;
             divmodel.Visibility = Visibility.Hidden;
             
-            //ldvmodel.AddNetwork(lnvmodel, 0);
             GD_Main.Children.Add(ldvmodel);
             GD_Main.Children.Add(fbvmodel);
             GD_Main.Children.Add(divmodel);
@@ -56,24 +55,27 @@ namespace SamSoarII.AppMain.UI
             vmodel1.X = 0;
             vmodel1.Y = 0;
             vmodel1.ParseValue(new string[]{"X0"});
-            vmodel1.IsCommentMode = true;
+            vmodel1.UpdateCommentContent();
             lnvmodel.ReplaceElement(vmodel1);
 
             LDWEQViewModel vmodel2 = new LDWEQViewModel();
             vmodel2.X = 1;
             vmodel2.Y = 0;
             vmodel2.ParseValue(new string[] { "D0", "D1" });
-            vmodel2.IsCommentMode = true;
+            vmodel2.UpdateCommentContent();
             lnvmodel.ReplaceElement(vmodel2);
 
             SMOVViewModel vmodel3 = new SMOVViewModel();
             vmodel3.X = 2;
             vmodel3.Y = 0;
             vmodel3.ParseValue(new string[] { "D0", "K1", "K2", "D1", "K3" });
-            vmodel3.IsCommentMode = true;
+            vmodel3.UpdateCommentContent();
             lnvmodel.ReplaceElement(vmodel3);
 
+            ldvmodel.IsCommentMode = true;
+            lnvmodel.LadderCanvas.IsEnabled = false;
             fbvmodel.Code = "void Func(WORD* w1, WORD* w2, WORD* w3)\n{\n\tw3[0] = w1[0] + w2[0];\n}\n";
+            fbvmodel.IsEnabled = false;
         }
 
         public void ShowDiagram()

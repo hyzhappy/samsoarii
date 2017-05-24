@@ -92,7 +92,7 @@ namespace SamSoarII.AppMain.UI
                 FontFamilyItem ffitem = new FontFamilyItem(fontFamily);
                 CB_Family.Items.Add(ffitem);
             }
-            for (int i = 12; i <= 64; i += 2)
+            for (int i = 20; i <= 50; i++)
             {
                 ComboBoxItem item = new ComboBoxItem();
                 item.Content = i;
@@ -119,8 +119,7 @@ namespace SamSoarII.AppMain.UI
                 Current.Data.FontFamily = new FontFamily(ffitem.Family.Name);
             }
         }
-
-        private void BD_Color_Click(object sender, RoutedEventArgs e)
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             ColorSettingDialog csdialog = new ColorSettingDialog(
                 Current.Data, ColorSettingDialog.TYPE_FONT);

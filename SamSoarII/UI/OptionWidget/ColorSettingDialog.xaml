@@ -4,13 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+        xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
         xmlns:ColorPicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="编辑颜色" Height="200" Width="300">
+        Title="编辑颜色" Height="250" Width="400">
+    <Window.Resources>
+        <util:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -22,14 +27,18 @@
             </Style>
         </Grid.Resources>
         <ColorPicker:ColorPicker Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                 x:Name="CP_Color"
-                                 SelectedColor="{Binding Color, Mode=TwoWay}">
+                                 x:Name="CP_Color" MouseMove="OnMouseMove"
+                                 SelectedColor="{Binding Color}">
         </ColorPicker:ColorPicker>
-        <Button Grid.Row="1" Grid.Column="0"
+        <StackPanel Margin="20,-30,0,0" Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Label BorderBrush="Black" BorderThickness="1,1,0,1" ToolTip="当前颜色" Background="{Binding ElementName=CP_Color,Path=SelectedColor,Converter={StaticResource ColorToBrushConverter}}" Height="20" Width="90" HorizontalAlignment="Left"></Label>
+            <Label BorderBrush="Black" BorderThickness="1" ToolTip="上一种颜色" x:Name="label" Height="20" Width="30" HorizontalAlignment="Left"></Label>
+        </StackPanel>
+        <Button Grid.Row="2" Grid.Column="0" Height="20" Width="80"
                 x:Name="B_Ensure" Click="B_Ensure_Click">
             确定
         </Button>
-        <Button Grid.Row="1" Grid.Column="1"
+        <Button Grid.Row="2" Grid.Column="1" Height="20" Width="80"
                 x:Name="B_Cancel" Click="B_Cancel_Click">
             取消
         </Button>

@@ -28,7 +28,7 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
             _widget.Add(new FontSelectionWidget());
-            _widget.Add(new ColorSelectionWidget());
+            //_widget.Add(new ColorSelectionWidget());
             _widget.Add(new OtherSettingWidget(_interactionFacade));
             ShowWidget(0);
         }
@@ -92,6 +92,12 @@ namespace SamSoarII.AppMain.UI
             {
                 EnsureButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
+        }
+        public void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Window window = sender as Window;
+            e.Cancel = true;
+            window.Hide();
         }
     }
 }

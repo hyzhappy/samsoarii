@@ -62,11 +62,11 @@
         <ComboBox Grid.Row="1" Grid.Column="0"
                   x:Name="CB_Size" SelectionChanged="ComboBox_SelectionChanged">
         </ComboBox>
-        <Button Grid.Row="1" Grid.Column="1" Margin="80,10,10,10"
-                x:Name="BD_Color" Background="Black" Click="BD_Color_Click">
-        </Button>
+        <Label Grid.Row="1" Grid.Column="1" Margin="80,10,10,10"
+                x:Name="BD_Color" Background="Black" PreviewMouseLeftButtonDown="OnMouseLeftButtonDown">
+        </Label>
         <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="效果预览">
-            <local:DemoCanvas x:Name="Demo"></local:DemoCanvas>
+            <local:DemoCanvas x:Name="Demo"/>
         </GroupBox>
     </Grid>
 </UserControl>

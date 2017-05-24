@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         mc:Ignorable="d"
-        Title="OptionDialog" Height="600" Width="600" PreviewKeyDown="Window_PreviewKeyDown">
+        Title="OptionDialog" Height="600" Width="600" PreviewKeyDown="Window_PreviewKeyDown" Closing="OnClosing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -32,7 +32,6 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">字体</ListBoxItem>
-                <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">颜色</ListBoxItem>
                 <ListBoxItem Width="{Binding ElementName=MyListBox, Path=ActualWidth}">其他</ListBoxItem>
             </ListBox>
         </Border>

@@ -100,7 +100,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         private bool _isCommentMode;
-        public bool IsCommendMode
+        public bool IsCommentMode
         {
             get { return _isCommentMode; }
             set
