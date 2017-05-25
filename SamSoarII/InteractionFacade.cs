@@ -234,6 +234,7 @@ namespace SamSoarII.AppMain
             {
                 return result;
             }
+            List<string> cfiles = new List<string>();
             List<string> ofiles = new List<string>();
             List<FuncBlockViewModel> fbvmodels = new List<FuncBlockViewModel>();
             Process cmd = null;
@@ -253,6 +254,7 @@ namespace SamSoarII.AppMain
                 string cfile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
                 string ofile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
                 fbvmodels.Add(fbvmodel);
+                cfiles.Add(cfile);
                 ofiles.Add(ofile);
                 StreamWriter cw = new StreamWriter(cfile);
                 cw.Write("typedef int BIT;\n");
@@ -278,7 +280,9 @@ namespace SamSoarII.AppMain
                 cw.Close();
                 sline = 4 + fbvmodel.Funcs.Count();
                 cmd = new Process();
-                cmd.StartInfo.FileName = "arm-none-eabi-gcc";
+                cmd.StartInfo.FileName =
+                    String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc",
+                        Environment.CurrentDirectory);
                 cmd.StartInfo.Arguments = string.Format("-c {0} -o {1}", cfile, ofile);
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;
@@ -288,13 +292,14 @@ namespace SamSoarII.AppMain
                 cmd.WaitForExit();
                 stdout = cmd.StandardOutput.ReadToEnd();
                 stderr = cmd.StandardError.ReadToEnd();
-                m1 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): error: (.+)\r\n");
-                m2 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): warning: (.+)\r\n");
+                m1 = Regex.Match(stderr, @"[^\s](.+):(.+): error: (.+)\r\n");
+                m2 = Regex.Match(stderr, @"[^\s](.+):(.+): warning: (.+)\r\n");
                 while (m1 != null && m1.Success)
                 {
-                    message = m1.Groups[4].Value;
+                    message = m1.Groups[3].Value;
                     line = int.Parse(m1.Groups[2].Value) - sline;
-                    column = int.Parse(m1.Groups[3].Value);
+                    //column = int.Parse(m1.Groups[3].Value);
+                    column = 0;
                     ewele = new ErrorReportElement_FB
                     (
                         ErrorReportElement_FB.STATUS_ERROR,
@@ -308,9 +313,10 @@ namespace SamSoarII.AppMain
                 }
                 while (m2 != null && m2.Success)
                 {
-                    message = m2.Groups[4].Value;
+                    message = m2.Groups[3].Value;
                     line = int.Parse(m2.Groups[2].Value) - sline;
-                    column = int.Parse(m2.Groups[3].Value);
+                    //column = int.Parse(m2.Groups[3].Value);
+                    column = 0;
                     ewele = new ErrorReportElement_FB
                     (
                         ErrorReportElement_FB.STATUS_WARNING,
@@ -326,7 +332,10 @@ namespace SamSoarII.AppMain
 
             string bfile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
             cmd = new Process();
-            cmd.StartInfo.FileName = "arm-none-eabi-gcc";
+            cmd.StartInfo.FileName =
+                cmd.StartInfo.FileName =
+                    String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc",
+                        Environment.CurrentDirectory);
             cmd.StartInfo.Arguments = String.Format("-o {0:s}", bfile);
             foreach (string ofile in ofiles)
             {
@@ -340,26 +349,32 @@ namespace SamSoarII.AppMain
             cmd.WaitForExit();
             stdout = cmd.StandardOutput.ReadToEnd();
             stderr = cmd.StandardError.ReadToEnd();
-            m1 = Regex.Match(stderr, @"\s(.+):(.+):\((.+)\): (.+)\r\n");
+            m1 = Regex.Match(stderr, @"\s(.+):\((.+)\): (.+)\r\n");
             while (m1 != null && m1.Success)
             {
-                message = m1.Groups[4].Value;
+                message = m1.Groups[3].Value;
                 line = column = 0;
-                string _ofile = m1.Groups[1].Value;
-                int _ofile_id = ofiles.IndexOf(_ofile);
-                if (_ofile_id >= 0)
+                string _cfile = m1.Groups[1].Value;
+                IEnumerable<string> _cfiles_fit = cfiles.Where(
+                    (file) => { return file.EndsWith(_cfile); }
+                );
+                if (_cfiles_fit.Count() > 0)
                 {
-                    FuncBlockViewModel _fbvmodel = fbvmodels[_ofile_id];
-                    ewele = new ErrorReportElement_FB
-                    (
-                        ErrorReportElement_FB.STATUS_ERROR,
-                        message,
-                        _fbvmodel,
-                        line,
-                        column
-                    );
-                    eweles.Add(ewele);
-
+                    _cfile = _cfiles_fit.First();
+                    int _cfile_id = cfiles.IndexOf(_cfile);
+                    if (_cfile_id >= 0)
+                    {
+                        FuncBlockViewModel _fbvmodel = fbvmodels[_cfile_id];
+                        ewele = new ErrorReportElement_FB
+                        (
+                            ErrorReportElement_FB.STATUS_ERROR,
+                            message,
+                            _fbvmodel,
+                            line,
+                            column
+                        );
+                        eweles.Add(ewele);
+                    }
                 }
                 m1 = m1.NextMatch();
             }

@@ -273,7 +273,7 @@ namespace SamSoarII.AppMain.UI
                         IconSource = "/Resources/Image/MainStyle/FUNC.png";
                         if (RelativeObject is FuncBlockViewModel)
                         {
-                            Text = ((FuncBlockViewModel)RelativeObject).ProgramName;
+                            Text = ((FuncBlockViewModel)RelativeObject).ProgramName;    
                         }
                         break;
                     case TYPE_FUNCBLOCKFLODER:
@@ -291,7 +291,12 @@ namespace SamSoarII.AppMain.UI
                         IconSource = "/Resources/Image/TreeViewIcon/Func.png";
                         if (RelativeObject is FuncModel)
                         {
-                            Text = ((FuncModel)RelativeObject).Name;
+                            FuncModel fmodel = (FuncModel)RelativeObject;
+                            Text = fmodel.Name;
+                            if (fmodel.Comment != null)
+                            {
+                                SubText = fmodel.Comment;
+                            }
                         }
                         break;
                     case TYPE_MODBUS:
@@ -680,11 +685,13 @@ namespace SamSoarII.AppMain.UI
             Text = TBO_Text.Text;
             Renamed(this, new RoutedEventArgs());
         }
-        
-        #endregion
 
         private void OnExpanded(object sender, RoutedEventArgs e)
         {
+            if (RelativeObject is FuncBlockViewModel)
+            {
+                return;
+            }
             var item = sender as ProjectTreeViewItem;
             if (item.Items.Count > 0)
             {
@@ -707,6 +714,7 @@ namespace SamSoarII.AppMain.UI
                 e.Handled = true;
             }
         }
+
         private void OnCollapsed(object sender, RoutedEventArgs e)
         {
             var item = sender as ProjectTreeViewItem;
@@ -731,6 +739,8 @@ namespace SamSoarII.AppMain.UI
                 e.Handled = true;
             }
         }
+        #endregion
+
     }
 
     public class ProjectMenuItem : MenuItem

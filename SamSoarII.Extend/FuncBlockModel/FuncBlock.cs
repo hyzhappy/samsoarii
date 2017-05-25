@@ -261,6 +261,8 @@ namespace SamSoarII.Extend.FuncBlockModel
             FuncBlock_FuncHeader fbfh = null;
             // 局部区域元素
             FuncBlock_Local fbl = null;
+            // 标题注释元素
+            FuncBlock_Comment fbc = null;
             // 设置父亲
             newchild.Parent = this;
             // 区域元素需要设置局部的命名空间，用当前的命名空间+ID来命名，并且缩进高度加一
@@ -302,9 +304,9 @@ namespace SamSoarII.Extend.FuncBlockModel
             fbfh = null;
             fbl = null;
             // 如果新节点为函数头，后面的是区域
-            if (Current.Value is FuncBlock_FuncHeader &&
-                Current.Next != null &&
-                Current.Next.Value is FuncBlock_Local)
+            if (Current.Value is FuncBlock_FuncHeader
+             && Current.Next != null
+             && Current.Next.Value is FuncBlock_Local)
             {
                 fbfh = (FuncBlock_FuncHeader)(Current.Value);
                 fbl = (FuncBlock_Local)(Current.Next.Value);
@@ -322,6 +324,29 @@ namespace SamSoarII.Extend.FuncBlockModel
             {
                 fbl.Header = fbfh;
                 fbfh.Block = fbl;
+            }
+            fbfh = null;
+            fbc = null;
+            // 如果新节点为一行注释，后面的是函数头
+            if (Current.Value is FuncBlock_Comment
+             && Current.Next != null
+             && Current.Next.Value is FuncBlock_FuncHeader)
+            {
+                fbfh = (FuncBlock_FuncHeader)(Current.Next.Value);
+                fbc = (FuncBlock_Comment)(Current.Value);
+            }
+            // 如果新节点为函数头，前面的是注释
+            if (Current.Value is FuncBlock_FuncHeader
+             && Current.Previous != null
+             && Current.Previous.Value is FuncBlock_Comment)
+            {
+                fbfh = (FuncBlock_FuncHeader)(Current.Value);
+                fbc = (FuncBlock_Comment)(Current.Previous.Value);
+            }
+            // 上述两种情况可以组成函数
+            if (fbc != null && fbfh != null)
+            {
+                fbfh.Comment = fbc;
             }
         }
         /// <summary>
@@ -590,6 +615,14 @@ namespace SamSoarII.Extend.FuncBlockModel
                                     newblock.IndexStart = hstart;
                                     newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
                                     AddChildren(newblock);
+                                    if (newblock.Comment != null
+                                     && newblock.Comment.IndexEnd - newblock.Comment.IndexStart - 2 > 0)
+                                    {
+                                        newblock.Model.Comment
+                                            = text.Substring(
+                                                newblock.Comment.IndexStart + 1,
+                                                newblock.Comment.IndexEnd - newblock.Comment.IndexStart - 2);
+                                    }
                                 }
                             }
                         }
@@ -1117,6 +1150,10 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// 对应的函数信息模型
         /// </summary>
         public FuncModel Model { get; set; }
+        /// <summary>
+        /// 对应的标题注释
+        /// </summary>
+        public FuncBlock_Comment Comment { get; set;}
         /// <summary>
         /// 对应的函数区域
         /// </summary>

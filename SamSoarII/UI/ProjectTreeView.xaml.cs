@@ -24,7 +24,7 @@ using static SamSoarII.AppMain.Project.LadderDiagramViewModel;
 
 namespace SamSoarII.AppMain.UI
 {
-    /// <summary>   
+    /// <summary>
     /// ProjectTreeView.xaml 的交互逻辑
     /// </summary>
     public partial class ProjectTreeView : UserControl, INotifyPropertyChanged, IDisposable
@@ -54,6 +54,7 @@ namespace SamSoarII.AppMain.UI
         private ProjectTreeViewItem PTVI_MainRoutine;
         private ProjectTreeViewItem PTVI_SubRoutines;
         private ProjectTreeViewItem PTVI_FuncBlocks;
+        private ProjectTreeViewItem PTVI_LibFuncBlock;
         private ProjectTreeViewItem PTVI_ElementList;
         private ProjectTreeViewItem PTVI_ELementInitWdow;
         private ProjectTreeViewItem PTVI_Modbus;
@@ -185,7 +186,13 @@ namespace SamSoarII.AppMain.UI
               | ProjectTreeViewItem.FLAG_CREATEFOLDER
               | ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK,
                 "函数功能块", true, true);
-            
+
+            PTVI_LibFuncBlock = CreatePTVItem(
+                PTVI_FuncBlocks,
+                ProjectTreeViewItem.TYPE_FUNCBLOCK,
+                _projectModel.LibFuncBlock);
+            Rebuild(PTVI_LibFuncBlock, _projectModel.LibFuncBlock);
+
             PTVI_Modbus = CreatePTVItem(
                 PTVI_Root,
                 ProjectTreeViewItem.TYPE_MODBUSFLODER
@@ -837,13 +844,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
-        public void LDNetwordsChanged(LadderDiagramViewModel ldvmodel)
-        {
-            ProjectTreeViewItem item = dpdict[ldvmodel.ProgramName];
-            Rebuild(item,ldvmodel);
-        }
-
+        
         #region Drag & Drop
 
         private ProjectTreeViewItem dragitem = null;

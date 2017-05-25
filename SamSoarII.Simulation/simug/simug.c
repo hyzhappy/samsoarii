@@ -55,29 +55,9 @@ static viDllfun dfSetBaseBit;
 
 EXPORT void CreateDll(char* simucPath, char* simufPath, char* simudllPath, char* simuaPath)
 {
-	FILE* f = fopen("simucmd.bat", "w");
-	sprintf(cmd, "i686-w64-mingw32-gcc -c -DBUILD_DLL %s -o simuc.o", simucPath);
-	fprintf(f, "%s\n", cmd);
-	//system(cmd);
-	sprintf(cmd, "i686-w64-mingw32-gcc -c -DBUILD_DLL %s -o simuf.o", simufPath);
-	fprintf(f, "%s\n", cmd);
-	//system(cmd);
-	sprintf(cmd, "i686-w64-mingw32-gcc -c -DBUILD_DLL simug\\simulib.c -o simulib.o");
-	fprintf(f, "%s\n", cmd);
-	//system(cmd);
-	sprintf(cmd, "i686-w64-mingw32-gcc -shared -o %s simuc.o simuf.o simulib.o -Wl,--kill-at", simudllPath);
-	fprintf(f, "%s\n", cmd);
-	//system(cmd);
-	//system("erase simuc.o");
-	fprintf(f, "erase simuc.o\n");
-	//system("erase simuf.o");
-	fprintf(f, "erase simuf.o\n");
-	//system("erase simulib.o");
-	fprintf(f, "erase simulib.o\n");
-	//fprintf(f, "erase %d\n", simcPath);
-	//fprintf(f, "erase %d\n", simcfPath);
-	fclose(f);
-	system("simucmd.bat");
+	sprintf(cmd, "Compiler\\tcc\\tcc simug\\simulib.c %s %s -o %s -shared -DBUILD_DLL",
+		simucPath, simufPath, simudllPath);
+	system(cmd);
 }
 
 static char dllPath[256];
@@ -90,115 +70,115 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 1;
 	}
-	dfRunLadder = (vDllfun)GetProcAddress(hdll, "RunLadder");
+	dfRunLadder = (vDllfun)GetProcAddress(hdll, "_RunLadder@0");
 	if (dfRunLadder == NULL)
 	{
 		FreeLibrary(hdll);
 		return 2;
 	}
-	dfGetBit = (isii32Dllfun)GetProcAddress(hdll, "GetBit");
+	dfGetBit = (isii32Dllfun)GetProcAddress(hdll, "_GetBit@12");
 	if (dfGetBit == NULL)
 	{
 		FreeLibrary(hdll);
 		return 3;
 	}
-	dfGetWord = (isii32Dllfun)GetProcAddress(hdll, "GetWord");
+	dfGetWord = (isii32Dllfun)GetProcAddress(hdll, "_GetWord@12");
 	if (dfGetWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 4;
 	}
-	dfGetDWord = (isii64Dllfun)GetProcAddress(hdll, "GetDoubleWord");
+	dfGetDWord = (isii64Dllfun)GetProcAddress(hdll, "_GetDoubleWord@12");
 	if (dfGetDWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 5;
 	}
-	dfGetFloat = (isif64Dllfun)GetProcAddress(hdll, "GetFloat");
+	dfGetFloat = (isif64Dllfun)GetProcAddress(hdll, "_GetFloat@12");
 	if (dfGetFloat == NULL)
 	{
 		FreeLibrary(hdll);
 		return 6;
 	}
-	dfGetFeq = (isi64Dllfun)GetProcAddress(hdll, "GetFeq");
+	dfGetFeq = (isi64Dllfun)GetProcAddress(hdll, "_GetFeq@8");
 	if (dfGetFeq == NULL)
 	{
 		FreeLibrary(hdll);
 		return 7;
 	}
-	dfSetBit = (isii32Dllfun)GetProcAddress(hdll, "SetBit");
+	dfSetBit = (isii32Dllfun)GetProcAddress(hdll, "_SetBit@12");
 	if (dfSetBit == NULL)
 	{
 		FreeLibrary(hdll);
 		return 8;
 	}
-	dfSetWord = (isii32Dllfun)GetProcAddress(hdll, "SetWord");
+	dfSetWord = (isii32Dllfun)GetProcAddress(hdll, "_SetWord@12");
 	if (dfSetWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 9;
 	}
-	dfSetDWord = (isii64Dllfun)GetProcAddress(hdll, "SetDoubleWord");
+	dfSetDWord = (isii64Dllfun)GetProcAddress(hdll, "_SetDoubleWord@12");
 	if (dfSetDWord == NULL)
 	{
 		FreeLibrary(hdll);
 		return 10;
 	}
-	dfSetFloat = (isif64Dllfun)GetProcAddress(hdll, "SetFloat");
+	dfSetFloat = (isif64Dllfun)GetProcAddress(hdll, "_SetFloat@12");
 	if (dfGetFloat == NULL)
 	{
 		FreeLibrary(hdll);
 		return 11;
 	}
-	dfSetFeq = (isiv64Dllfun)GetProcAddress(hdll, "SetFeq");
+	dfSetFeq = (isiv64Dllfun)GetProcAddress(hdll, "_SetFeq@12");
 	if (dfSetFeq == NULL)
 	{
 		FreeLibrary(hdll);
 		return 12;
 	}
-	dfSetEnable = (vsiiDllfun)GetProcAddress(hdll, "SetEnable");
+	dfSetEnable = (vsiiDllfun)GetProcAddress(hdll, "_SetEnable@12");
 	if (dfSetEnable == NULL)
 	{
 		FreeLibrary(hdll);
 		return 13;
 	}
-	dfBeforeRunLadder = (vDllfun)GetProcAddress(hdll, "BeforeRunLadder");
+	dfBeforeRunLadder = (vDllfun)GetProcAddress(hdll, "_BeforeRunLadder@0");
 	if (dfBeforeRunLadder == NULL)
 	{
 		FreeLibrary(hdll);
 		return 14;
 	}
-	dfAfterRunLadder = (vDllfun)GetProcAddress(hdll, "AfterRunLadder");
+	dfAfterRunLadder = (vDllfun)GetProcAddress(hdll, "_AfterRunLadder@0");
 	if (dfAfterRunLadder == NULL)
 	{
 		FreeLibrary(hdll);
 		return 15;
 	}
-	dfInitRunLadder = (vDllfun)GetProcAddress(hdll, "InitRunLadder");
+	dfInitRunLadder = (vDllfun)GetProcAddress(hdll, "_InitRunLadder@0");
 	if (dfInitRunLadder == NULL)
 	{
 		FreeLibrary(hdll);
 		return 16;
 	}
-	dfInitClock = (viDllfun)GetProcAddress(hdll, "InitClock");
+	dfInitClock = (viDllfun)GetProcAddress(hdll, "_InitClock@4");
 	if (dfInitClock == NULL)
 	{
 		FreeLibrary(hdll);
 		return 17;
 	}
-	dfGetClock = (iDllfun)GetProcAddress(hdll, "GetClock");
+	dfGetClock = (iDllfun)GetProcAddress(hdll, "_GetClock@0");
 	if (dfGetClock == NULL)
 	{
 		FreeLibrary(hdll);
 		return 18;
 	}
-	dfSetClockRate = (viDllfun)GetProcAddress(hdll, "SetClockRate");
+	dfSetClockRate = (viDllfun)GetProcAddress(hdll, "_SetClockRate@4");
 	if (dfSetClockRate == NULL)
 	{
 		FreeLibrary(hdll);
 		return 19;
 	}
-	dfSetBaseBit = (viDllfun)GetProcAddress(hdll, "SetBaseBit");
+	dfSetBaseBit = (viDllfun)GetProcAddress(hdll, "_SetBaseBit@4");
 	if (dfSetBaseBit == NULL)
 	{
 		FreeLibrary(hdll);

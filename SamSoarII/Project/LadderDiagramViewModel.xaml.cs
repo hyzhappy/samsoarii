@@ -330,12 +330,7 @@ namespace SamSoarII.AppMain.Project
             _projectModel = _parent;
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
-            this.Loaded += (sender, e) =>
-            {
-                Focus();
-                Keyboard.Focus(this);
-                ladderExpander.IsExpand = IsExpand;
-            };
+            //this.Loaded += OnLoaded;
             _commandManager = new LadderCommand.CommandManager(this);
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
@@ -347,6 +342,14 @@ namespace SamSoarII.AppMain.Project
             ThumbnailButton.ToolTipOpening += ThumbnailButton_ToolTipOpening;
             ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
         }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Focus();
+            Keyboard.Focus(this);
+            ladderExpander.IsExpand = IsExpand;
+        }
+
         private void InitializeInstructionNameAndToolTips()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();

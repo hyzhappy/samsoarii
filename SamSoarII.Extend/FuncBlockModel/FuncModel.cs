@@ -31,6 +31,10 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// 标题注释
+        /// </summary>
+        public string Comment { get; set; }
+        /// <summary>
         /// 返回类型
         /// </summary>
         public string ReturnType { get; set;}

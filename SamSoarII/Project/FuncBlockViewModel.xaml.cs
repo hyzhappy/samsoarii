@@ -139,6 +139,19 @@ namespace SamSoarII.AppMain.Project
                 return result;
             }
         }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                return CodeTextBox.IsReadOnly;
+            }
+            set
+            {
+                CodeTextBox.IsReadOnly = value;
+            }
+        }
+        
         /// <summary>
         /// 控件的实际宽度
         /// </summary>
@@ -177,7 +190,7 @@ namespace SamSoarII.AppMain.Project
                 this._actualHeight = value;
             }
         }
-
+        
         #endregion
 
         /// <summary>
@@ -257,7 +270,7 @@ namespace SamSoarII.AppMain.Project
         void textEditer_DocumentChanged(object sender, DocumentChangeEventArgs e)
         {
             int offset = e.InsertionLength - e.RemovalLength;
-            //model.Move(e.Offset);
+            model.Move(e.Offset);
             Regex localRegex = new Regex(@"[\{\}]");
             Regex stmtRegex = new Regex(@";");
             Regex blankRegex = new Regex(@"^\s*$");
@@ -274,6 +287,7 @@ namespace SamSoarII.AppMain.Project
                 FuncBlock _parent = model.Current.Parent;
                 start = _parent.IndexStart;
                 end = _parent.IndexEnd - 1;
+                while (end < CodeTextBox.Text.Length && CodeTextBox.Text[end] != '\n') end++;
                 _parent.Build(CodeTextBox.Text, start, end, offset);
             }
             else if (insertMatch3.Success && removeMatch3.Success)

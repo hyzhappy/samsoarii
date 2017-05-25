@@ -33,7 +33,7 @@ namespace SamSoarII.LadderInstViewModel
         public abstract int X { get; set; }
         public abstract int Y { get; set; }
         public abstract bool IsCommentMode { get; set; }
-        public bool CanModify { get; set; }
+        public bool CanModify { get; set; } = true;
         public abstract string InstructionName { get; }
         public abstract BaseModel Model { get; protected set; }
         public List<BaseViewModel> NextElements = new List<BaseViewModel>();
