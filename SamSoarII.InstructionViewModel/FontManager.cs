@@ -42,10 +42,6 @@ namespace SamSoarII.LadderInstViewModel
         {
             return Func;
         }
-        static public FontData GetInst()
-        {
-            return Inst;
-        }
 
         static public void LoadFontDataByXElement(FontData fdat, XElement xele)
         {
@@ -89,10 +85,6 @@ namespace SamSoarII.LadderInstViewModel
         static public FontData GetFunc()
         {
             return Func;
-        }
-        static public FontData GetInst()
-        {
-            return Inst;
         }
     }
 

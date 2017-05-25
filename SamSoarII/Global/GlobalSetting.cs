@@ -137,10 +137,6 @@ namespace SamSoarII.AppMain
             FontManager.SaveFontDataToXElement(
                 FontManager.GetFunc(), xele);
             xele_font.Add(xele);
-            xele = new XElement("Inst");
-            FontManager.SaveFontDataToXElement(
-                FontManager.GetInst(), xele);
-            xele_font.Add(xele);
             xele = new XElement("Ladder");
             FontManager.SaveFontDataToXElement(
                 FontManager.GetLadder(), xele);
@@ -149,40 +145,6 @@ namespace SamSoarII.AppMain
             FontManager.SaveFontDataToXElement(
                 FontManager.GetTitle(), xele);
             xele_font.Add(xele);
-            XElement xele_color = new XElement("Color");
-            rootNode.Add(xele_color);
-            xele = new XElement("Comment");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetComment(), xele);
-            xele_color.Add(xele);
-            xele = new XElement("DiagramTitle");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetDiagramTitle(), xele);
-            xele_color.Add(xele);
-            xele = new XElement("FuncScreen");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetFuncScreen(), xele);
-            xele_color.Add(xele);
-            xele = new XElement("Inst");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetInst(), xele);
-            xele_color.Add(xele);
-            xele = new XElement("InstScreen");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetInstScreen(), xele);
-            xele_color.Add(xele);
-            xele = new XElement("Ladder");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetLadder(), xele);
-            xele_color.Add(xele);
-            xele = new XElement("LadderScreen");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetLadderScreen(), xele);
-            xele_color.Add(xele);
-            xele = new XElement("NetworkTitle");
-            ColorManager.SaveColorDataToXElement(
-                ColorManager.GetNetworkTitle(), xele);
-            xele_color.Add(xele);
             return rootNode;
         }
         public static void LoadSystemSettingByXELement(XElement rootNode)
@@ -230,34 +192,6 @@ namespace SamSoarII.AppMain
                 FontManager.LoadFontDataByXElement(
                     FontManager.GetFunc(),
                     xele_font.Element("Func"));
-                FontManager.LoadFontDataByXElement(
-                    FontManager.GetInst(),
-                    xele_font.Element("Inst"));
-                XElement xele_color = rootNode.Element("Color");
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetLadderScreen(),
-                    xele_color.Element("LadderScreen"));
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetLadder(),
-                    xele_color.Element("Ladder"));
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetComment(),
-                    xele_color.Element("Comment"));
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetDiagramTitle(),
-                    xele_color.Element("DiagramTitle"));
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetNetworkTitle(),
-                    xele_color.Element("NetworkTitle"));
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetFuncScreen(),
-                    xele_color.Element("FuncScreen"));
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetInstScreen(),
-                    xele_color.Element("InstScreen"));
-                ColorManager.LoadColorDataByXElement(
-                    ColorManager.GetInst(),
-                    xele_color.Element("Inst"));
             }
             catch (Exception)
             {
@@ -273,25 +207,6 @@ namespace SamSoarII.AppMain
                 FontManager.GetFunc().FontSize = 16;
                 FontManager.GetFunc().FontFamily = new FontFamily("Courier New");
                 FontManager.GetFunc().FontColor = ColorManager.Parse("255 0 0 0");
-                FontManager.GetInst().FontSize = 20;
-                FontManager.GetInst().FontFamily = new FontFamily("Courier New");
-                FontManager.GetInst().FontColor = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetLadder().Background = ColorManager.Parse("255 255 255 255");
-                ColorManager.GetLadder().Foreground = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetLadderScreen().Background = ColorManager.Parse("255 255 255 255");
-                ColorManager.GetLadderScreen().Foreground = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetDiagramTitle().Background = ColorManager.Parse("255 210 32 32");
-                ColorManager.GetDiagramTitle().Foreground = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetNetworkTitle().Background = ColorManager.Parse("255 32 210 32");
-                ColorManager.GetNetworkTitle().Foreground = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetComment().Background = ColorManager.Parse("255 210 250 250");
-                ColorManager.GetComment().Foreground = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetFuncScreen().Background = ColorManager.Parse("255 255 255 255");
-                ColorManager.GetFuncScreen().Foreground = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetInst().Background = ColorManager.Parse("255 255 255 255");
-                ColorManager.GetInst().Foreground = ColorManager.Parse("255 0 0 0");
-                ColorManager.GetInstScreen().Background = ColorManager.Parse("255 255 255 255");
-                ColorManager.GetInstScreen().Foreground = ColorManager.Parse("255 255 255 255");
             }
             try
             {

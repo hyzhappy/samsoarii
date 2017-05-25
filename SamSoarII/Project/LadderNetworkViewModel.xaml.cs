@@ -1384,16 +1384,19 @@ namespace SamSoarII.AppMain.Project
         #region ladder Folding module
         private void ReloadElementsToCanvas()
         {
-            LadderCanvas.Children.Clear();
-            RowCount = _oldRowCount;
-            _canHide = false;
-            foreach (var ele in _ladderElements.Values)
+            if (LadderMode != LadderMode.Demo)
             {
-                LadderCanvas.Children.Add(ele);
-            }
-            foreach (var ele in _ladderVerticalLines.Values)
-            {
-                LadderCanvas.Children.Add(ele);
+                LadderCanvas.Children.Clear();
+                RowCount = _oldRowCount;
+                _canHide = false;
+                foreach (var ele in _ladderElements.Values)
+                {
+                    LadderCanvas.Children.Add(ele);
+                }
+                foreach (var ele in _ladderVerticalLines.Values)
+                {
+                    LadderCanvas.Children.Add(ele);
+                }
             }
         }
         private void ClearElementsFromCanvas()

@@ -28,7 +28,6 @@ namespace SamSoarII.AppMain.UI
         {
             InitializeComponent();
             _widget.Add(new FontSelectionWidget());
-            //_widget.Add(new ColorSelectionWidget());
             _widget.Add(new OtherSettingWidget(_interactionFacade));
             ShowWidget(0);
         }
@@ -52,28 +51,10 @@ namespace SamSoarII.AppMain.UI
                 DemoFontManager.GetTitle());
             FontManager.GetComment().Setup(
                 DemoFontManager.GetComment());
-            FontManager.GetInst().Setup(
-                DemoFontManager.GetInst());
             FontManager.GetLadder().Setup(
                 DemoFontManager.GetLadder());
             FontManager.GetFunc().Setup(
                 DemoFontManager.GetFunc());
-            ColorManager.GetComment().Setup(
-                DemoColorManager.GetComment());
-            ColorManager.GetDiagramTitle().Setup(
-                DemoColorManager.GetDiagramTitle());
-            ColorManager.GetFuncScreen().Setup(
-                DemoColorManager.GetFuncScreen());
-            ColorManager.GetInst().Setup(
-                DemoColorManager.GetInst());
-            ColorManager.GetInstScreen().Setup(
-                DemoColorManager.GetInstScreen());
-            ColorManager.GetLadder().Setup(
-                DemoColorManager.GetLadder());
-            ColorManager.GetLadderScreen().Setup(
-                DemoColorManager.GetLadderScreen());
-            ColorManager.GetNetworkTitle().Setup(
-                DemoColorManager.GetNetworkTitle());
             Close();
         }
 

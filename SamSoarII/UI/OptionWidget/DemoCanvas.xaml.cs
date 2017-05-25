@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.Project;
+using SamSoarII.AppMain.UI.OptionWidget.DemoViewModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.LadderInstViewModel.Auxiliar;
 using System;
@@ -27,7 +28,6 @@ namespace SamSoarII.AppMain.UI
         private LadderDiagramViewModel ldvmodel;
         private LadderNetworkViewModel lnvmodel;
         private FuncBlockViewModel fbvmodel;
-        private DemoInstructionViewModel divmodel;
 
         public DemoCanvas()
         {
@@ -40,63 +40,88 @@ namespace SamSoarII.AppMain.UI
             pmodel = new ProjectModel("效果展示");
             ldvmodel = new LadderDiagramViewModel("效果展示", pmodel);
             lnvmodel = ldvmodel.GetNetworks().First();
-            fbvmodel = new FuncBlockViewModel("效果展示");
-            divmodel = new DemoInstructionViewModel();
+            
             ldvmodel.LadderMode = LadderMode.Demo;
             ldvmodel.Visibility = Visibility.Hidden;
-            fbvmodel.Visibility = Visibility.Hidden;
-            divmodel.Visibility = Visibility.Hidden;
-            
             GD_Main.Children.Add(ldvmodel);
-            GD_Main.Children.Add(fbvmodel);
-            GD_Main.Children.Add(divmodel);
 
-            LDViewModel vmodel1 = new LDViewModel();
-            vmodel1.X = 0;
-            vmodel1.Y = 0;
-            vmodel1.ParseValue(new string[]{"X0"});
-            vmodel1.UpdateCommentContent();
-            lnvmodel.ReplaceElement(vmodel1);
+            LDDemoViewModel ldmodel = new LDDemoViewModel();
+            LDWEQDemoViewModel ldweqmodel = new LDWEQDemoViewModel();
+            SMOVDemoViewModel smovmodel = new SMOVDemoViewModel();
+            lnvmodel.LadderCanvas.Children.Add(ldmodel);
+            lnvmodel.LadderCanvas.Children.Add(ldweqmodel);
+            lnvmodel.LadderCanvas.Children.Add(smovmodel);
 
-            LDWEQViewModel vmodel2 = new LDWEQViewModel();
-            vmodel2.X = 1;
-            vmodel2.Y = 0;
-            vmodel2.ParseValue(new string[] { "D0", "D1" });
-            vmodel2.UpdateCommentContent();
-            lnvmodel.ReplaceElement(vmodel2);
-
-            SMOVViewModel vmodel3 = new SMOVViewModel();
-            vmodel3.X = 2;
-            vmodel3.Y = 0;
-            vmodel3.ParseValue(new string[] { "D0", "K1", "K2", "D1", "K3" });
-            vmodel3.UpdateCommentContent();
-            lnvmodel.ReplaceElement(vmodel3);
-
-            ldvmodel.IsCommentMode = true;
+            lnvmodel.CommentAreaExpander.IsEnabled = false;
+            lnvmodel.ladderExpander.IsEnabled = false;
             lnvmodel.LadderCanvas.IsEnabled = false;
-            fbvmodel.Code = "void Func(WORD* w1, WORD* w2, WORD* w3)\n{\n\tw3[0] = w1[0] + w2[0];\n}\n";
-            fbvmodel.IsEnabled = false;
-        }
+            ldvmodel.CommentAreaExpander.IsEnabled = false;
+            ldvmodel.ladderExpander.IsEnabled = false;
+            ldvmodel.IsCommentMode = true;
 
+            fbvmodel = new FuncBlockViewModel("效果展示");
+            fbvmodel.Code = "void Func(WORD* w1, WORD* w2, WORD* w3)\n{\n\tw3[0] = w1[0] + w2[0];\n}\n";
+            fbvmodel.CodeTextBox.IsReadOnly = true;
+            GD_Main.Children.Add(fbvmodel);
+            fbvmodel.Visibility = Visibility.Hidden;
+        }
+        public void SetFontColor(Brush brush,int selectIndex)
+        {
+            switch (selectIndex)
+            {
+                case 1:
+                    ldvmodel.LadderTitleTextBlock.Foreground = brush;
+                    lnvmodel.NetworkNumberLabel.Foreground = brush;
+                    lnvmodel.NetworkStepCountLabel.Foreground = brush;
+                    break;
+                case 3:
+                    fbvmodel.CodeTextBox.Foreground = brush;
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void SetFontSize(int size,int selectIndex)
+        {
+            switch (selectIndex)
+            {
+                case 1:
+                    ldvmodel.LadderTitleTextBlock.FontSize = size;
+                    lnvmodel.NetworkNumberLabel.FontSize = size;
+                    lnvmodel.NetworkStepCountLabel.FontSize = size;
+                    break;
+                case 3:
+                    fbvmodel.CodeTextBox.FontSize = size;
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void SetFontFamily(string FamilyName,int selectIndex)
+        {
+            switch (selectIndex)
+            {
+                case 1:
+                    ldvmodel.LadderTitleTextBlock.FontFamily = new FontFamily(FamilyName);
+                    lnvmodel.NetworkNumberLabel.FontFamily = new FontFamily(FamilyName);
+                    lnvmodel.NetworkStepCountLabel.FontFamily = new FontFamily(FamilyName);
+                    break;
+                case 3:
+                    fbvmodel.CodeTextBox.FontFamily = new FontFamily(FamilyName);
+                    break;
+                default:
+                    break;
+            }
+        }
         public void ShowDiagram()
         {
             ldvmodel.Visibility = Visibility.Visible;
             fbvmodel.Visibility = Visibility.Hidden;
-            divmodel.Visibility = Visibility.Hidden;
         }
-
         public void ShowFuncBlock()
         {
             ldvmodel.Visibility = Visibility.Hidden;
             fbvmodel.Visibility = Visibility.Visible;
-            divmodel.Visibility = Visibility.Hidden;
-        }
-
-        public void ShowInstruction()
-        {
-            ldvmodel.Visibility = Visibility.Hidden;
-            fbvmodel.Visibility = Visibility.Hidden;
-            divmodel.Visibility = Visibility.Visible;
         }
     }
 }

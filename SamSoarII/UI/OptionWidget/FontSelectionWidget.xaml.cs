@@ -59,9 +59,6 @@ namespace SamSoarII.AppMain.UI
                     case "函数块":
                         Demo.ShowFuncBlock();
                         break;
-                    case "PLC指令":
-                        Demo.ShowInstruction();
-                        break;
                     default:
                         Demo.ShowDiagram();
                         break;
@@ -81,18 +78,18 @@ namespace SamSoarII.AppMain.UI
             DemoFontManager.GetTitle().Setup(FontManager.GetTitle());
             DemoFontManager.GetComment().Setup(FontManager.GetComment());
             DemoFontManager.GetFunc().Setup(FontManager.GetFunc());
-            DemoFontManager.GetInst().Setup(FontManager.GetInst());
+            //DemoFontManager.GetInst().Setup(FontManager.GetInst());
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetLadder()));
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetTitle()));
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetComment()));
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetFunc()));
-            CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetInst()));
+            //CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetInst()));
             foreach (var fontFamily in (new InstalledFontCollection()).Families)
             {
                 FontFamilyItem ffitem = new FontFamilyItem(fontFamily);
                 CB_Family.Items.Add(ffitem);
             }
-            for (int i = 20; i <= 50; i++)
+            for (int i = 12; i <= 50; i++)
             {
                 ComboBoxItem item = new ComboBoxItem();
                 item.Content = i;
@@ -107,16 +104,19 @@ namespace SamSoarII.AppMain.UI
             {
                 FontDataItem fditem = (FontDataItem)(CB_Range.SelectedItem);
                 Current = fditem;
+                Demo.SetFontColor(Current.Data.FontColor, CB_Range.SelectedIndex);
             }
             if (sender == CB_Size)
             {
                 ComboBoxItem cbitem = (ComboBoxItem)(CB_Size.SelectedItem);
                 Current.Data.FontSize = (int)(cbitem.Content);
+                Demo.SetFontSize(Current.Data.FontSize,CB_Range.SelectedIndex);
             }
             if (sender == CB_Family)
             {
                 FontFamilyItem ffitem = (FontFamilyItem)(CB_Family.SelectedItem);
                 Current.Data.FontFamily = new FontFamily(ffitem.Family.Name);
+                Demo.SetFontFamily(ffitem.Family.Name, CB_Range.SelectedIndex);
             }
         }
         private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -126,6 +126,7 @@ namespace SamSoarII.AppMain.UI
             csdialog.Closed += (sender1, e1) =>
             {
                 BD_Color.Background = Current.Data.FontColor;
+                Demo.SetFontColor(Current.Data.FontColor,CB_Range.SelectedIndex);
             };
             csdialog.ShowDialog();
         }

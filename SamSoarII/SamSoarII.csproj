@@ -207,9 +207,18 @@
     <Compile Include="UI\Monitor\UserInterface\QuickAddElementDialog.xaml.cs">
       <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\OptionWidget\DemoViewModel\LDDemoViewModel.xaml.cs">
+      <DependentUpon>LDDemoViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OptionWidget\DemoViewModel\LDWEQDemoViewModel.xaml.cs">
+      <DependentUpon>LDWEQDemoViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OptionWidget\DemoViewModel\SMOVDemoViewModel.xaml.cs">
+      <DependentUpon>SMOVDemoViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\OptionWidget\OtherSettingWidget.xaml.cs">
       <DependentUpon>OtherSettingWidget.xaml</DependentUpon>
-    </Compile> 
+    </Compile>
     <Compile Include="UI\OptionWidget\ColorSettingDialog.xaml.cs">
       <DependentUpon>ColorSettingDialog.xaml</DependentUpon>
     </Compile>
@@ -241,9 +250,6 @@
     <Compile Include="UI\Element\ElementList\ElementListHelp\CSVFileHelper.cs" />
     <Compile Include="UI\OptionDialog.xaml.cs">
       <DependentUpon>OptionDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\OptionWidget\ColorSelectionWidget.xaml.cs">
-      <DependentUpon>ColorSelectionWidget.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\OptionWidget\FontSelectionWidget.xaml.cs">
       <DependentUpon>FontSelectionWidget.xaml</DependentUpon>
@@ -491,10 +497,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\OptionWidget\ColorSelectionWidget.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\OptionWidget\ColorSettingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -504,6 +506,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\OptionWidget\DemoInstructionViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\DemoViewModel\LDDemoViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\DemoViewModel\LDWEQDemoViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\OptionWidget\DemoViewModel\SMOVDemoViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

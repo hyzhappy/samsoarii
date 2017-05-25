@@ -78,13 +78,13 @@
                            Style="{StaticResource LadderFontStyle}">
                 </TextBlock>
             </Canvas>
-            <TextBlock x:Name="Value2TextBlock" 
+            <TextBlock x:Name="Value2TextBlock"
                        Canvas.Top="150" Canvas.Left="0" Height="50" Width="300" TextAlignment="Center" 
                        Style="{StaticResource LadderFontStyle}">
             </TextBlock>
         </Canvas>
         <StackPanel x:Name="CommentArea" Width="300" Height="200"
-                    Background="{Binding Source={StaticResource CommentColor}, Path=Background}">
+                    Background="Transparent">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="FontSize" 
@@ -100,7 +100,7 @@
                             Value="Wrap">
                     </Setter>
                     <Setter Property="Margin" 
-                            Value="20, 20, 0, 0">
+                            Value="20, 5, 0, 0">
                     </Setter>
                 </Style>
             </StackPanel.Resources>

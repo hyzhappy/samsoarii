@@ -26,6 +26,7 @@ using SamSoarII.Extend.FuncBlockModel;
 using ICSharpCode.AvalonEdit.Document;
 using System.Text.RegularExpressions;
 using ICSharpCode.AvalonEdit;
+using SamSoarII.LadderInstViewModel;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -187,7 +188,6 @@ namespace SamSoarII.AppMain.Project
         {
             InitializeComponent();
             ProgramName = name;
-            InitializeComponent();
             model = new FuncBlockModel(String.Empty);
             IHighlightingDefinition customHighlighting;
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -203,7 +203,7 @@ namespace SamSoarII.AppMain.Project
             }
             HighlightingManager.Instance.RegisterHighlighting("Custom Highlighting", new string[] { ".cool" }, customHighlighting);
             FuncBlockName = name;
-            CodeTextBox.DataContext = this;
+            //CodeTextBox.DataContext = this;
             CodeTextBox.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             CodeTextBox.TextArea.TextEntered += textEditer_TextArea_TextEntered;
             CodeTextBox.TextArea.CodeCompleteKeyDown += textEditer_TextArea_CodeCompleteKeyDown;
@@ -231,9 +231,7 @@ namespace SamSoarII.AppMain.Project
                 Grid.SetColumn(ccstblocks[i], 0);
                 CodeCompletePanel.Children.Add(ccstblocks[i]);
             }
-
         }
-
         #region TextEditer Events
 
         /// <summary>

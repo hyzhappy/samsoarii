@@ -4,17 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
+             xmlns:inst="clr-namespace:SamSoarII.LadderInstViewModel;assembly=SamSoarII.LadderInstViewModel"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
              xmlns:Text="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetFunc"/>
+    </UserControl.Resources>
     <UserControl.Content>
         <Border BorderBrush="Orange" BorderThickness="1">
             <Border.Child>
                 <Grid>
-                    <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" 
-                                         FontFamily="Consolas" FontSize="12pt" 
-                                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" DataContext="{StaticResource FontData}"
+                                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                     FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}">
                     </Text:TextEditor>
                     <Canvas>
                         <Canvas.Children>

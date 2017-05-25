@@ -66,12 +66,19 @@ namespace SamSoarII.LadderInstViewModel
         static public Brush Parse(string text)
         {
             string[] args = text.Split(' ');
-            Color color = new Color();
-            color.A = byte.Parse(args[0]);
-            color.R = byte.Parse(args[1]);
-            color.G = byte.Parse(args[2]);
-            color.B = byte.Parse(args[3]);
-            return new SolidColorBrush(color);
+            if (args.Count() == 4)
+            {
+                Color color = new Color();
+                color.A = byte.Parse(args[0]);
+                color.R = byte.Parse(args[1]);
+                color.G = byte.Parse(args[2]);
+                color.B = byte.Parse(args[3]);
+                return new SolidColorBrush(color);
+            }
+            else
+            {
+                return new SolidColorBrush(Colors.Black);
+            }
         }
 
         static public string ToString(Brush brush)
