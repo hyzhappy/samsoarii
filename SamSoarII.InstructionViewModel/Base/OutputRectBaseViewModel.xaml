@@ -56,7 +56,7 @@
                 </Style>
             </Canvas.Resources>
             <Border Canvas.Left="20" Canvas.Top="20" Width="280" Height="280" 
-                    BorderThickness="4">
+                    BorderThickness="4" BorderBrush="Black">
             </Border>
             <Line X1="0" Y1="100" X2="20" Y2="100" 
                   Stroke="Black" StrokeThickness="4">
