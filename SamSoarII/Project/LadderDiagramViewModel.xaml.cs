@@ -330,7 +330,7 @@ namespace SamSoarII.AppMain.Project
             _projectModel = _parent;
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
-            this.Loaded += OnLoaded;
+            //this.Loaded += OnLoaded;
             _commandManager = new LadderCommand.CommandManager(this);
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));

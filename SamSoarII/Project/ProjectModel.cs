@@ -124,6 +124,7 @@ namespace SamSoarII.AppMain.Project
             get
             {
                 List<FuncModel> result = new List<FuncModel>();
+                result.AddRange(LibFuncBlock.Funcs);
                 foreach (FuncBlockViewModel fbvmodel in FuncBlocks)
                 {
                     result.AddRange(fbvmodel.Funcs);
