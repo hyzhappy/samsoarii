@@ -1,3 +1,60 @@
+#include <stdint.h>
+
+#ifdef BUILD_DLL
+#define DLL_EXPORT __declspec(dllexport)
+#else
+#define DLL_EXPORT __declspec(dllimport)
+#endif // BUILD_DLL
+
+#ifdef __cplusplus
+#define EXPORT extern "C" DLL_EXPORT __stdcall
+#else
+#define EXPORT DLL_EXPORT __stdcall
+#endif
+
+int _Assert(char* name, int size, void** addr, int* offset);
+// Get the BIT value from targeted bit register (X/Y/M/C/T/S)
+EXPORT int GetBit(char* name, int size, uint32_t* output);
+// Get the WORD value from targeted register (D/CV/TV)
+EXPORT int GetWord(char* name, int size, uint32_t* output);
+// Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
+EXPORT int GetDoubleWord(char* name, int size, uint64_t* output);
+// Get the FLOAT value from targeted register (D)
+EXPORT int GetFloat(char* name, int size, double* output);
+// Get the signal frequency
+EXPORT int GetFeq(char* name, uint64_t* output);
+// Set the signal frequency
+EXPORT int SetFeq(char* name, uint64_t input);
+// Set the Bit value to targeted bit register (X/Y/M/C/T/S)
+EXPORT int SetBit(char* name, int size, uint32_t* input);
+// Set the WORD value to targeted register (D/CV/TV)
+EXPORT int SetWord(char* name, int size, uint32_t* input);
+// Set the DWORD value to targeted register (D)
+EXPORT int SetDoubleWord(char* name, int size, uint64_t* input);
+// Set the FLOAT value to targeted register (D)
+EXPORT int SetFloat(char* name, int size, double* input);
+// Set the writeable enable value of targeted register
+EXPORT void SetEnable(char* name, int size, int value);
+
+EXPORT void SetBaseBit(int _basebit);
+
+EXPORT void InitClock(int _counttimems);
+
+void UpdateClock();
+
+EXPORT int GetClock();
+
+EXPORT void SetClockRate(int _timerate);
+
+void InitRegisters();
+
+EXPORT void InitRunLadder();
+
+EXPORT void BeforeRunLadder();
+
+EXPORT void AfterRunLadder();
+
+EXPORT void RunLadder();
 // get a result (32-bit integer) by add a couple of 32-bit integers
 int32_t _addw(int32_t ia, int32_t ib);
 // get a result (64-bit integer) by add a couple of 64-bit integers
