@@ -104,6 +104,7 @@ namespace SamSoarII.AppMain.Project
         public LadderDiagramViewModel MainRoutine { get; set; }
         public ObservableCollection<LadderDiagramViewModel> SubRoutines { get; set; } = new ObservableCollection<LadderDiagramViewModel>();
         public Dictionary<LadderDiagramViewModel, ObservableCollection<string>> RefNetworksBrief { get; set; } = new Dictionary<LadderDiagramViewModel, ObservableCollection<string>>();
+        public FuncBlockViewModel LibFuncBlock { get; set; }
         public ObservableCollection<FuncBlockViewModel> FuncBlocks { get; set; } = new ObservableCollection<FuncBlockViewModel>();
         public ModbusTableViewModel MTVModel { get; set; }
         public MonitorManager MMonitorManager { get; private set; }

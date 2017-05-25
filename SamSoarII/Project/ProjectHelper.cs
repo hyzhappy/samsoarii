@@ -2,6 +2,7 @@
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -202,6 +203,12 @@ namespace SamSoarII.AppMain.Project
 
         public static ProjectModel LoadProject(string filepath, ProjectModel model)
         {
+            StreamReader sr = new StreamReader(
+                String.Format(@"{0:s}\simug\simuflib.c", Environment.CurrentDirectory));
+            FuncBlockViewModel libfuncblock = new FuncBlockViewModel("库函数");
+            libfuncblock.Code = sr.ReadToEnd();
+            libfuncblock.IsReadOnly = true;
+            model.LibFuncBlock = libfuncblock;
             //ProjectModel model = new ProjectModel();
             XDocument xdoc = XDocument.Load(filepath);
             XElement xele_r = xdoc.Element("Root");

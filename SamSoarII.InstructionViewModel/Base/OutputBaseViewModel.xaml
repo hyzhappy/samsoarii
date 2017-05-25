@@ -49,7 +49,8 @@
                   Data="M200,50 A60,60 0 0 1 200,150">
             </Path>
             <TextBlock x:Name="ValueTextBlock"  
-                       Canvas.Top="0" Canvas.Left="0" Height="50" Width="300" TextAlignment="Center">
+                       Canvas.Top="0" Canvas.Left="0" Height="50" Width="300" TextAlignment="Center"
+                       Style="{StaticResource LadderFontStyle}">
             </TextBlock>
             <Canvas Name="CenterCanvas" Width="100" Height="100" Canvas.Top="50" Canvas.Left="100">
                 <Rectangle Width="60" Height="60" Canvas.Top="20" Canvas.Left="20" Fill="Blue" Visibility="Hidden" Opacity="0.5"></Rectangle>
