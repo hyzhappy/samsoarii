@@ -59,8 +59,8 @@
         </ScrollViewer>
         <DataGrid x:Name="ElementDataGrid" RowDetailsVisibilityMode="Collapsed" SelectionMode="Extended" 
                   Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" AutoGenerateColumns="False" RowHeaderWidth="0"
-                  ColumnHeaderHeight="24" VerticalScrollBarVisibility="Auto" ItemsSource="{Binding ElementCollection}" 
-                  Background="Gray" HorizontalScrollBarVisibility="Auto" RowBackground="LightYellow" 
+                  ColumnHeaderHeight="24" VerticalScrollBarVisibility="Auto" ItemsSource="{Binding ElementCollection}" EnableRowVirtualization="True"
+                  Background="Gray" HorizontalScrollBarVisibility="Auto" RowBackground="LightYellow" EnableColumnVirtualization="True"
                   AlternatingRowBackground="LightBlue" CanUserResizeColumns="False" CellEditEnding="DataGrid_CellEditEnding">
             <DataGrid.Resources>
                 <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
@@ -79,9 +79,9 @@
             </DataGrid.Resources>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <Border Margin="5" Padding="5" BorderBrush="SteelBlue" BorderThickness="1.5" CornerRadius="2" Background="#FFF7EFE4" MaxHeight="90">
+                    <Border MaxHeight="90">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <local:ELementStackPanel Grid.Row="1" ItemsSource="{Binding MappedModels}">
+                            <local:ELementStackPanel x:Name="eLementStackPanel" Grid.Row="1" ItemsSource="{Binding MappedModels}">
                                 <local:ELementStackPanel.Resources>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -90,7 +90,7 @@
                                             </Trigger>
                                         </Style.Triggers>
                                         <Setter Property="FontSize" Value="14"></Setter>
-                                        <Setter Property="Margin" Value="1"></Setter>
+                                        <Setter Property="Margin" Value="4,5,-2,0"></Setter>
                                         <Setter Property="FontFamily" Value="Arial"></Setter>
                                         <EventSetter Event="MouseLeftButtonDown" Handler="NavigateMouseLeftButtonClick"></EventSetter>
                                     </Style>

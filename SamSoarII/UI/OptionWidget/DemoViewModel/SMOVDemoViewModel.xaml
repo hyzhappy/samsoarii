@@ -21,19 +21,23 @@
                   Stroke="Black" StrokeThickness="4">
             </Line>
             <Label Canvas.Left="30" Canvas.Top="80" FontSize="25">EN</Label>
-            <TextBlock Canvas.Left="25" Canvas.Top="120" TextAlignment="Left" Text="D0"
+            <TextBlock Canvas.Left="25" Canvas.Top="20" TextAlignment="Center" Text="SMOV"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock Canvas.Left="25" Canvas.Top="150" TextAlignment="Left" Text="K1"
+
+            <TextBlock Canvas.Left="25" Canvas.Top="120" TextAlignment="Left" Text="SV:D0"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock Canvas.Left="25" Canvas.Top="180" TextAlignment="Left" Text="K2"
+            <TextBlock Canvas.Left="25" Canvas.Top="150" TextAlignment="Left" Text="SS:K1"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock Canvas.Left="25" Canvas.Top="210" TextAlignment="Left" Text="D1"
+            <TextBlock Canvas.Left="25" Canvas.Top="180" TextAlignment="Left" Text="SC:K2"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock Canvas.Left="25" Canvas.Top="250" TextAlignment="Right" Text="K3"
+            <TextBlock Canvas.Left="25" Canvas.Top="210" TextAlignment="Left" Text="TS:D1"
+                       DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
+                       FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
+            <TextBlock Canvas.Left="25" Canvas.Top="250" TextAlignment="Right" Text="DV:K3"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
         </Canvas>

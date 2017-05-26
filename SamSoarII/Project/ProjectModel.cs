@@ -177,6 +177,12 @@ namespace SamSoarII.AppMain.Project
             MMonitorManager.MMWindow.Manager = MMonitorManager;
             PManager = new SerialPortManager();
             UManager = new USBManager();
+            StreamReader sr = new StreamReader(
+                String.Format(@"{0:s}\simug\simuflib.c", Environment.CurrentDirectory));
+            FuncBlockViewModel libfuncblock = new FuncBlockViewModel("库函数");
+            libfuncblock.Code = sr.ReadToEnd();
+            libfuncblock.IsReadOnly = true;
+            LibFuncBlock = libfuncblock;
         }
         public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {

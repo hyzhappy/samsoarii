@@ -1,0 +1,78 @@
+﻿using SamSoarII.AppMain.Project;
+using SamSoarII.LadderInstViewModel;
+using SamSoarII.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SamSoarII.AppMain.LadderGraphModule
+{
+    public class LadderLogicModule
+    {
+        public int startY
+        {
+            get
+            {
+                return LadderElements.OrderBy(x => { return x.Y; }).First().Y;
+            }
+        }
+        public int endY
+        {
+            get
+            {
+                return LadderElements.OrderBy(x => { return x.Y; }).Last().Y;
+            }
+        }
+        public LadderNetworkViewModel Parent { get; set; }
+        public List<BaseViewModel> LadderElements { get; set; }
+        public List<VerticalLineViewModel> LadderVerticalLines { get; set; }
+        public LadderLogicModule(LadderNetworkViewModel parent, List<BaseViewModel> ladderElements, List<VerticalLineViewModel> ladderVerticalLines)
+        {
+            Parent = parent;
+            LadderElements = ladderElements;
+            LadderVerticalLines = ladderVerticalLines;
+        }
+        public BaseViewModel ReplaceElement(BaseViewModel model)
+        {
+            LadderElements.Add(model);
+            var movedele = Parent.ReplaceElement(model);
+            LadderElements.Remove(movedele);
+            return movedele;
+        }
+        public void RemoveElement(int _x,int _y)
+        {
+            BaseViewModel removedmodel = null;
+            foreach (var ele in LadderElements)
+            {
+                if (ele.X == _x && ele.Y == _y)
+                {
+                    removedmodel = ele;
+                    break;
+                }
+            }
+            LadderElements.Remove(removedmodel);
+            Parent.RemoveElement(_x,_y);
+        }
+        public void ReplaceVerticalLine(VerticalLineViewModel vline)
+        {
+            LadderVerticalLines.Add(vline);
+            Parent.ReplaceVerticalLine(vline);
+        }
+        public void RemoveVerticalLine(int _x, int _y)
+        {
+            VerticalLineViewModel removedvline = null;
+            foreach (var vline in LadderVerticalLines)
+            {
+                if (vline.X == _x && vline.Y == _y)
+                {
+                    removedvline = vline;
+                    break;
+                }
+            }
+            LadderVerticalLines.Remove(removedvline);
+            Parent.RemoveVerticalLine(_x,_y);
+        }
+    }
+}

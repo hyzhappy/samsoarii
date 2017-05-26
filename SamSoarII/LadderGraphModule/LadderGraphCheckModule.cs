@@ -47,6 +47,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
                 else
                 {
+                    network.InitializeLadderLogicModules();
                     LadderGraphRelocationModule.Execute(network);
                 }
             }
@@ -67,10 +68,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
             {
                 return ErrorType.Open;
             }
-            if (!IsAllLinkedToRoot(ladderNetwork))
-            {
-                return ErrorType.Open;
-            }
+            //if (!IsAllLinkedToRoot(ladderNetwork))
+            //{
+            //    return ErrorType.Open;
+            //}
             if (IsLadderGraphShort(ladderNetwork))
             {
                 return ErrorType.Short;
@@ -397,50 +398,50 @@ namespace SamSoarII.AppMain.LadderGraphModule
             return result;
         }
         //检测根元素的非NULL元素集合是否相交
-        private static bool IsAllLinkedToRoot(LadderNetworkViewModel ladderNetwork)
-        {
-            var rootElements = ladderNetwork.LadderElements.Values.Where(x => { return x.Type == ElementType.Output; });
-            var tempList = new List<BaseViewModel>();
-            tempList = GetRootLinkedEles(ladderNetwork, rootElements.ElementAt(0));
-            for (int x = 1; x < rootElements.Count(); x++)
-            {
-                tempList = tempList.Intersect(GetRootLinkedEles(ladderNetwork,rootElements.ElementAt(x))).ToList();
-                if (tempList.Count == 0)
-                {
-                    ladderNetwork.ErrorModels.Clear();
-                    ladderNetwork.ErrorModels.Add(rootElements.First());//add error element
-                    return false;
-                }
-            }
-            return true;
-        }
+        //private static bool IsAllLinkedToRoot(LadderNetworkViewModel ladderNetwork)
+        //{
+        //    var rootElements = ladderNetwork.LadderElements.Values.Where(x => { return x.Type == ElementType.Output; });
+        //    var tempList = new List<BaseViewModel>();
+        //    tempList = GetRootLinkedEles(ladderNetwork, rootElements.ElementAt(0));
+        //    for (int x = 1; x < rootElements.Count(); x++)
+        //    {
+        //        tempList = tempList.Intersect(GetRootLinkedEles(ladderNetwork,rootElements.ElementAt(x))).ToList();
+        //        if (tempList.Count == 0)
+        //        {
+        //            ladderNetwork.ErrorModels.Clear();
+        //            ladderNetwork.ErrorModels.Add(rootElements.First());//add error element
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
         //得到与根元素相关的最后一个非NULL元素集合
-        private static List<BaseViewModel> GetRootLinkedEles(LadderNetworkViewModel ladderNetwork,BaseViewModel rootElement)
-        {
-            ladderNetwork.ClearSearchedFlag();
-            List<BaseViewModel> tempList = new List<BaseViewModel>();
-            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElement.NextElements);
-            while (tempQueue.Count > 0)
-            {
-                var ele = tempQueue.Dequeue();
-                if (!ele.IsSearched)
-                {
-                    ele.IsSearched = true;
-                    if (ele.NextElements.Exists(x => { return x.Type == ElementType.Null; }))
-                    {
-                        tempList.Add(ele);
-                    }
-                    else
-                    {
-                        foreach (var item in ele.NextElements)
-                        {
-                            tempQueue.Enqueue(item);
-                        }
-                    }
-                }
-            }
-            return tempList;
-        }
+        //private static List<BaseViewModel> GetRootLinkedEles(LadderNetworkViewModel ladderNetwork,BaseViewModel rootElement)
+        //{
+        //    ladderNetwork.ClearSearchedFlag();
+        //    List<BaseViewModel> tempList = new List<BaseViewModel>();
+        //    Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElement.NextElements);
+        //    while (tempQueue.Count > 0)
+        //    {
+        //        var ele = tempQueue.Dequeue();
+        //        if (!ele.IsSearched)
+        //        {
+        //            ele.IsSearched = true;
+        //            if (ele.NextElements.Exists(x => { return x.Type == ElementType.Null; }))
+        //            {
+        //                tempList.Add(ele);
+        //            }
+        //            else
+        //            {
+        //                foreach (var item in ele.NextElements)
+        //                {
+        //                    tempQueue.Enqueue(item);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return tempList;
+        //}
         private static bool CheckElements(LadderNetworkViewModel ladderNetwork)
         {
             var tempElements = ladderNetwork.LadderElements.Values.ToList();

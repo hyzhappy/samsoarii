@@ -29,6 +29,9 @@ using System.Xml;
 using SamSoarII.HelpDocument.HelpDocComponet;
 using SamSoarII.HelpDocument;
 using SamSoarII.AppMain.UI.Monitor;
+using System.Threading;
+using System.Windows.Threading;
+using SamSoarII.ValueModel;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -182,6 +185,23 @@ namespace SamSoarII.AppMain.UI
                 GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 3700;
             }
             MainScroll = GetMainScroll();
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += backgroundWorker_DoWork;
+            worker.RunWorkerAsync();
+        }
+        private void Initialize()
+        {
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                ElementList.InitializeElementCollection();
+                InstructionCommentManager.MappedMessageChanged += ElementList.InstructionCommentManager_MappedMessageChanged;
+                ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
+                ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
+            });
+        }
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Initialize();
         }
         private int GetMenuItemIndex(string item)
         {

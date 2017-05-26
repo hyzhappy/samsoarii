@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -132,15 +134,11 @@ namespace SamSoarII.AppMain.UI
             this.Comment = Comment;
             this.Alias = Alias;
             _mappedModels = new List<TextBlock>();
-            TextBlock textblock = new TextBlock();
-            textblock.Text = (new VerticalLineViewModel()).ToString();
-            _mappedModels.Add(textblock);
         }
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }
     public partial class ElementList : Window, INotifyPropertyChanged
     {
-        private bool _showSpecialRegister = false;
         private bool _hasUsed = false;
         private bool _hasComment = false;
         private bool _showDetails = false;
@@ -272,10 +270,6 @@ namespace SamSoarII.AppMain.UI
                             break;
                     }
                 }
-                if (_showSpecialRegister)
-                {
-                    tempList = tempList.Where(x => { return x.IsSpecialRegister; }).ToList();
-                }
                 if (_hasUsed)
                 {
                     tempList = tempList.Where(x => { return InstructionCommentManager.ContainValueString(x.Name); }).ToList();
@@ -293,7 +287,6 @@ namespace SamSoarII.AppMain.UI
         #region InitializeElementCollection
         public static void InitializeElementCollection()
         {
-            Device.InitializeSpecialRegisters();
             Device device = Device.MaxRangeDevice;
             for (uint i = device.XRange.Start; i < device.XRange.End; i++)
             {
@@ -301,11 +294,7 @@ namespace SamSoarII.AppMain.UI
             }
             for (uint i = device.YRange.Start; i < device.YRange.End; i++)
             {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("Y"),i ,string.Empty, string.Empty));
-            }
-            for (uint i = device.MRange.Start; i < device.MRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("M"), i, string.Empty, string.Empty));
+                _elementCollection.Add(new ValueCommentAlias(string.Format("Y"), i, string.Empty, string.Empty));
             }
             for (uint i = device.SRange.Start; i < device.SRange.End; i++)
             {
@@ -318,18 +307,6 @@ namespace SamSoarII.AppMain.UI
             for (uint i = device.TRange.Start; i < device.TRange.End; i++)
             {
                 _elementCollection.Add(new ValueCommentAlias(string.Format("T"), i, string.Empty, string.Empty));
-            }
-            for (uint i = device.DRange.Start; i < device.DRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("D"), i, string.Empty, string.Empty));
-            }
-            for (uint i = device.CVRange.Start; i < device.CVRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("CV"), i, string.Empty, string.Empty));
-            }
-            for (uint i = device.TVRange.Start; i < device.TVRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("TV"), i, string.Empty, string.Empty));
             }
             for (uint i = device.VRange.Start; i < device.VRange.End; i++)
             {
@@ -347,30 +324,29 @@ namespace SamSoarII.AppMain.UI
             {
                 _elementCollection.Add(new ValueCommentAlias(string.Format("AO"), i, string.Empty, string.Empty));
             }
-            //InitializeElementDescribe();
         }
-        //private static void InitializeElementDescribe()
-        //{
-        //    foreach (var item in _elementCollection)
-        //    {
-        //        foreach (var register in Device.SpecialRegisters)
-        //        {
-        //            if (item.Base == register.Base && item.Offset == register.Offset)
-        //            {
-        //                item.Describe = register.Describe;
-        //                item.IsSpecialRegister = true;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
         #endregion
         public ElementList()
         {
             InitializeComponent();
             PLCDeviceManager.GetPLCDeviceManager().PropertyChanged += PLCDeviceType_PropertyChanged;
             DataContext = this;
-            FilterCollectionByDeviceType(_elementCollection,PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+            Loaded += ElementList_Loaded;
+        }
+        private void ElementList_Loaded(object sender, RoutedEventArgs e)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += backgroundWorker_DoWork;
+            worker.RunWorkerAsync();
+        }
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            LoadElements();
+        }
+        private void LoadElements()
+        {
+            LoadElement();
+            FilterCollectionByDeviceType(_elementCollection, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             RangePropertyChanged();
             UpdateElementCollection();
         }
@@ -488,7 +464,26 @@ namespace SamSoarII.AppMain.UI
             UpdateElementCollection();
             RangePropertyChanged();
         }
-
+        private void LoadElement()
+        {
+            Device device = Device.MaxRangeDevice;
+            for (uint i = device.MRange.Start; i < device.MRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("M"), i, string.Empty, string.Empty));
+            }
+            for (uint i = device.DRange.Start; i < device.DRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("D"), i, string.Empty, string.Empty));
+            }
+            for (uint i = device.CVRange.Start; i < device.CVRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("CV"), i, string.Empty, string.Empty));
+            }
+            for (uint i = device.TVRange.Start; i < device.TVRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("TV"), i, string.Empty, string.Empty));
+            }
+        }
         public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
         {
             IEnumerable<ValueCommentAlias> fit = _elementCollection.Where(x => { return x.Name == e.ValueString; });
@@ -547,11 +542,7 @@ namespace SamSoarII.AppMain.UI
                     break;
                 case MappedMessageChangedType.RemoveLast:
                     valueCommentAlias.MappedModels.Clear();
-                    mappedModels = new List<TextBlock>(valueCommentAlias.MappedModels);
-                    TextBlock textblock3 = new TextBlock();
-                    textblock3.Text = (new VerticalLineViewModel()).ToString();
-                    mappedModels.Add(textblock3);
-                    valueCommentAlias.MappedModels = mappedModels;
+                    valueCommentAlias.MappedModels = new List<TextBlock>();
                     break;
                 case MappedMessageChangedType.Clear:
                     ClearMappedModels();

@@ -38,7 +38,7 @@ namespace SamSoarII.PLCDevice
         {
             _defaultDevice = new BroadDevice();
             _maxRangeDevice = new MaxRangeDevice(PLCDeviceType.FGs_64MT_D);
-            SpecialRegisters = new List<SpecialRegister>();
+            //SpecialRegisters = new List<SpecialRegister>();
         }
         public static void InitializeSpecialRegisters()
         {

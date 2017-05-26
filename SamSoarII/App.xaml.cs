@@ -10,8 +10,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SamSoarII.AppMain
 {
@@ -25,15 +27,6 @@ namespace SamSoarII.AppMain
             SpecialValueManager.Initialize();
             ValueCommentManager.Initialize();
             ValueAliasManager.Initialize();
-            ElementList.InitializeElementCollection();
-            InstructionCommentManager.MappedMessageChanged += ElementList.InstructionCommentManager_MappedMessageChanged;
-            ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
-            ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
-            foreach (SpecialValue svalue in SpecialValueManager.Values)
-            {
-                ValueCommentManager.UpdateComment(svalue.Name, svalue.Describe);
-                ValueAliasManager.UpdateAlias(svalue.Name, svalue.NickName);
-            }
             SettingManager.Load();
             this.Exit += App_Exit;
         }
@@ -48,5 +41,6 @@ namespace SamSoarII.AppMain
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
+        
     }
 }

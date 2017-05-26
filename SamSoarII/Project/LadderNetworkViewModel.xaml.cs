@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.AppMain.LadderGraphModule;
 using SamSoarII.AppMain.UI;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstModel;
@@ -242,7 +243,7 @@ namespace SamSoarII.AppMain.Project
             = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines 
             = new SortedDictionary<IntPoint, VerticalLineViewModel>();
-
+        public Dictionary<int, LadderLogicModule> LadderLogicModules { get; set; }
         private InstructionNetworkViewModel _invmodel;
         public InstructionNetworkViewModel INVModel
         {
@@ -563,6 +564,58 @@ namespace SamSoarII.AppMain.Project
             return _ladderVerticalLines.Values;
         }
 
+        #region generate LadderLogicModule
+        public void InitializeLadderLogicModules()
+        {
+            int cnt = 0;
+            List<BaseViewModel> models = new List<BaseViewModel>();
+            List<VerticalLineViewModel> vlines = new List<VerticalLineViewModel>();
+            LadderLogicModules = new Dictionary<int, LadderLogicModule>();
+            for (int i = 0; i <= GetMaxY(); i++)
+            {
+                var tempmodels = GetElements().Where(x => { return x.Y == i; });
+                var tempvlines = GetVerticalLines().Where(x => { return x.Y == i; });
+                if (tempmodels.Count() > 0)
+                {
+                    models.AddRange(tempmodels);
+                    if (tempvlines.Count() > 0)
+                    {
+                        vlines.AddRange(tempvlines);
+                    }
+                    else
+                    {
+                        LadderLogicModules.Add(cnt,new LadderLogicModule(this,models,vlines));
+                        if (i < GetMaxY())
+                        {
+                            cnt++;
+                            models = new List<BaseViewModel>();
+                            vlines = new List<VerticalLineViewModel>();
+                        }
+                    }
+                }
+                else if (tempvlines.Count() > 0)
+                {
+                    vlines.AddRange(tempvlines);
+                }
+            }
+        }
+
+        public int GetKeyByLadderLogicModule(LadderLogicModule ladderLogicModule)
+        {
+            foreach (var item in LadderLogicModules)
+            {
+                if (item.Value == ladderLogicModule)
+                {
+                    return item.Key;
+                }
+            }
+            return -1;
+        }
+        public LadderLogicModule GetLadderLogicModuleByKey(int key)
+        {
+            return LadderLogicModules[key];
+        }
+        #endregion
         #region Ladder content modification methods
         public BaseViewModel ReplaceElement(BaseViewModel element)
         {
@@ -885,12 +938,7 @@ namespace SamSoarII.AppMain.Project
         //返回最后一行的Y坐标
         public int GetMaxY()
         {
-            int maxY = 0;
-            while (_ladderVerticalLines.Values.ToList().Exists(x => { return x.Y == maxY; }))
-            {
-                maxY++;
-            }
-            return maxY;
+            return LadderElements.Values.OrderBy(x => { return x.Y; }).Last().Y;
         }
         #region Event handlers
 

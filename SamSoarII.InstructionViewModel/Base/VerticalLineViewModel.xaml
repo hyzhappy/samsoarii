@@ -9,16 +9,10 @@
     <local:BaseViewModel.Resources>
         <ObjectDataProvider x:Key="LadderColor" ObjectType="{x:Type local:ColorManager}" MethodName="GetLadder">
         </ObjectDataProvider>
-        <Style x:Key="LadderLineStyle" TargetType="Line">
-            <Setter Property="Stroke" 
-                    Value="{Binding Source={StaticResource LadderColor}, Path=Foreground}">
-            </Setter>
-        </Style>
     </local:BaseViewModel.Resources>
     <Canvas Width="40" Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Height}">
-        <Line X1="20" Y1="0" X2="20" Y2="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Height}" 
-              Style="{StaticResource LadderLineStyle}"
-              StrokeThickness="4">
+        <Line X1="20" Y1="0" X2="20" Y2="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Height}"
+              StrokeThickness="4" Stroke="Black">
         </Line>
     </Canvas>
 </local:BaseViewModel>

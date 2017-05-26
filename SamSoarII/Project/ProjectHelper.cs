@@ -182,33 +182,8 @@ namespace SamSoarII.AppMain.Project
             return result;
         }
 
-        //public static XElement CreateXElementByLadderVariable(IVariableValue variable)
-        //{
-        //    XElement result = new XElement("Variable");
-        //    result.SetAttributeValue("VarName", variable.VarName);
-        //    result.SetElementValue("Value", variable.MappedValue.ValueString);
-        //    result.SetElementValue("ValueType", (int)variable.Type);
-        //    result.SetElementValue("Comment", variable.Comment);
-        //    return result;
-        //}
-
-        //public static IVariableValue CreateLadderVariableByXElement(XElement xEle)
-        //{
-        //    string name = xEle.Attribute("VarName").Value;
-        //    string valueString = xEle.Element("Value").Value;
-        //    LadderValueType valuetype = (LadderValueType)(int.Parse(xEle.Element("ValueType").Value));
-        //    string comment = xEle.Element("Comment").Value;
-        //    return ValueParser.CreateVariableValue(name, valueString, valuetype, comment);
-        //}
-
         public static ProjectModel LoadProject(string filepath, ProjectModel model)
         {
-            StreamReader sr = new StreamReader(
-                String.Format(@"{0:s}\simug\simuflib.c", Environment.CurrentDirectory));
-            FuncBlockViewModel libfuncblock = new FuncBlockViewModel("库函数");
-            libfuncblock.Code = sr.ReadToEnd();
-            libfuncblock.IsReadOnly = true;
-            model.LibFuncBlock = libfuncblock;
             //ProjectModel model = new ProjectModel();
             XDocument xdoc = XDocument.Load(filepath);
             XElement xele_r = xdoc.Element("Root");
@@ -222,29 +197,6 @@ namespace SamSoarII.AppMain.Project
                 return null;
             }
         }
-
-        //public static void LoadGlobalVariableListByXElement(XElement xEle)
-        //{
-        //    if (xEle != null)
-        //    {
-        //        foreach (XElement xele in xEle.Elements("Variable"))
-        //        {
-        //            var variable = CreateLadderVariableByXElement(xele);
-        //            VariableManager.AddVariable(variable);
-        //        }
-        //    }
-        //}
-
-        //public static XElement CreateXElementByGlobalVariableList()
-        //{
-        //    XElement xEle = new XElement("GlobalVariableList");
-        //    foreach (var variable in VariableManager.VariableCollection)
-        //    {
-        //        xEle.Add(CreateXElementByLadderVariable(variable));
-        //    }
-        //    return xEle;
-        //}
-
         public static XElement CreateXElementByValueComments()
         {
             XElement result = new XElement("ValueComments");

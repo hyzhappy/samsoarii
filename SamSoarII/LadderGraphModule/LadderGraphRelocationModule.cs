@@ -14,67 +14,69 @@ namespace SamSoarII.AppMain.LadderGraphModule
     {
         public static void Execute(LadderNetworkViewModel ladderNetwork)
         {
-            HorizontalScan(ladderNetwork);
-            VerticalScan(ladderNetwork);
+            foreach (var KVPair in ladderNetwork.LadderLogicModules.OrderBy(x => { return x.Key; }))
+            {
+                HorizontalScan(KVPair.Value);
+                VerticalScan(KVPair.Value);
+            }
             RemoveEmptyLines(ladderNetwork);
         }
-        private static void HorizontalScan(LadderNetworkViewModel ladderNetwork)
+        private static void HorizontalScan(LadderLogicModule ladderLogicModule)
         {
-            InitializeCountLevel(ladderNetwork);
-            int MaxLine = ladderNetwork.GetMaxY() + 1;
-            if (ladderNetwork.LadderVerticalLines.Values.Count == 0)
+            InitializeCountLevel(ladderLogicModule);
+            if (ladderLogicModule.LadderVerticalLines.Count == 0)
             {
                 //TODO movement
-                Movement(ladderNetwork);
+                Movement(ladderLogicModule);
             }
             //针对每一层级的VLine进行移动
             for (int level = 1; level < GlobalSetting.LadderXCapacity; level++)
             {
-                var tempVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.CountLevel == level; }).ToList();
+                var tempVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.CountLevel == level; }).ToList();
                 if (tempVLines.Count() != 0)
                 {
-                    Movement(ladderNetwork,tempVLines);
+                    Movement(ladderLogicModule, tempVLines);
                 }
             }
-            MoveResidueEle(ladderNetwork);
+            MoveResidueEle(ladderLogicModule);
         }
-        private static void VerticalScan(LadderNetworkViewModel ladderNetwork)
+        private static void VerticalScan(LadderLogicModule ladderLogicModule)
         {
-            PreScan(ladderNetwork);
+            PreScan(ladderLogicModule);
             int emptyLineCnt = 0;
-            int line = ladderNetwork.GetMaxY() + 1;
-            for (int i = 0; i < line; i++)
+            int line = ladderLogicModule.endY + 1;
+            for (int i = ladderLogicModule.startY; i < line; i++)
             {
-                var tempList = ladderNetwork.LadderElements.Values.Where(x => { return x.Y == i; }).ToList();
+                var tempList = ladderLogicModule.LadderElements.Where(x => { return x.Y == i; }).ToList();
                 if (tempList.Count() == 0 || tempList.All(x => { return x.Type == ElementType.HLine; }))
                 {
                     if (tempList.Count() != 0)
                     {
                         for (int j = 0; j < tempList.Count(); j++)
                         {
-                            ladderNetwork.RemoveElement(tempList[j]);
+                            ladderLogicModule.RemoveElement(tempList[j].X, tempList[j].Y);
                         }
                     }
-                    var VLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y <= i - 1 && x.Y >= i - 1 - emptyLineCnt; }).ToList();
+                    var VLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y <= i - 1 && x.Y >= i - 1 - emptyLineCnt; }).ToList();
                     for (int j = 0; j < VLines.Count(); j++)
                     {
-                        ladderNetwork.RemoveVerticalLine(VLines[j]);
+                        ladderLogicModule.RemoveVerticalLine(VLines[j].X, VLines[j].Y);
                     }
                     emptyLineCnt++;
                 }
                 else
                 {
-                    MoveHorizontalLineEle(ladderNetwork,emptyLineCnt, tempList);
+                    MoveHorizontalLineEle(ladderLogicModule, emptyLineCnt, tempList);
                 }
             }
-            line = ladderNetwork.GetMaxY() + 1;
-            for (int i = 0; i < line; i++)
+            line = ladderLogicModule.endY + 1;
+            for (int i = ladderLogicModule.startY; i < line; i++)
             {
-                var VLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == i; }).OrderBy(x => { return x.X; }).ToList();
-                MoveLadderBlocks(ladderNetwork,VLines);
+                var VLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == i; }).OrderBy(x => { return x.X; }).ToList();
+                MoveLadderBlocks(ladderLogicModule, VLines);
             }
         }
-        private static void MoveHorizontalLineEle(LadderNetworkViewModel ladderNetwork,int index, List<BaseViewModel> models)
+        private static void MoveHorizontalLineEle(LadderLogicModule ladderLogicModule, int index, List<BaseViewModel> models)
         {
             BaseViewModel model;
             VerticalLineViewModel VLine;
@@ -84,22 +86,22 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 for (int i = 0; i < models.Count; i++)
                 {
                     model = models[i];
-                    ladderNetwork.RemoveElement(model);
+                    ladderLogicModule.RemoveElement(model.X,model.Y);
                     model.Y -= index;
-                    ladderNetwork.ReplaceElement(model);
+                    ladderLogicModule.ReplaceElement(model);
                 }
                 //对每一行，只保留其上一行的VLine(保持图的基本连通性)，并一起移动
-                var VLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == line - 1; }).ToList();
+                var VLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == line - 1; }).ToList();
                 for (int i = 0; i < VLines.Count(); i++)
                 {
                     VLine = VLines[i];
-                    ladderNetwork.RemoveVerticalLine(VLine);
+                    ladderLogicModule.RemoveVerticalLine(VLine.X,VLine.Y);
                     VLine.Y -= index;
-                    ladderNetwork.ReplaceVerticalLine(VLine);
+                    ladderLogicModule.ReplaceVerticalLine(VLine);
                 }
             }
         }
-        private static void MoveLadderBlocks(LadderNetworkViewModel ladderNetwork,List<VerticalLineViewModel> VLines)
+        private static void MoveLadderBlocks(LadderLogicModule ladderLogicModule, List<VerticalLineViewModel> VLines)
         {
             int indexY;
             List<BaseViewModel> block;
@@ -108,13 +110,13 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 if (i == 0)
                 {
                     indexY = 1 + VLines[i].Y;
-                    block = ladderNetwork.LadderElements.Values.Where(x => { return x.Y == indexY && x.X <= VLines[i].X; }).ToList();
+                    block = ladderLogicModule.LadderElements.Where(x => { return x.Y == indexY && x.X <= VLines[i].X; }).ToList();
                     while (block.Count() == 0)
                     {
-                        if (ladderNetwork.LadderVerticalLines.Keys.ToList().Exists(x => { return x.X == VLines[i].X && x.Y == indexY; }))
+                        if (ladderLogicModule.LadderVerticalLines.Exists(x => {return x.X == VLines[i].X && x.Y == indexY; }))
                         {
                             indexY++;
-                            block = ladderNetwork.LadderElements.Values.Where(x => { return x.Y == indexY && x.X <= VLines[i].X; }).ToList();
+                            block = ladderLogicModule.LadderElements.Where(x => { return x.Y == indexY && x.X <= VLines[i].X; }).ToList();
                         }
                         else
                         {
@@ -123,19 +125,19 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     }
                     if (block.Count() > 0 && indexY > VLines[i].Y + 1)
                     {
-                        MoveLadderBlock(ladderNetwork, block, VLines[i].Y + 1);
+                        MoveLadderBlock(ladderLogicModule, block, VLines[i].Y + 1);
                     }
                 }
                 if (i == VLines.Count - 1)
                 {
                     indexY = 1 + VLines[i].Y;
-                    block = ladderNetwork.LadderElements.Values.Where(x => { return x.Y == indexY && x.X > VLines[i].X; }).ToList();
+                    block = ladderLogicModule.LadderElements.Where(x => { return x.Y == indexY && x.X > VLines[i].X; }).ToList();
                     while (block.Count() == 0)
                     {
-                        if (ladderNetwork.LadderVerticalLines.Keys.ToList().Exists(x => { return x.X == VLines[i].X && x.Y == indexY; }))
+                        if (ladderLogicModule.LadderVerticalLines.Exists(x => {return x.X == VLines[i].X && x.Y == indexY; }))
                         {
                             indexY++;
-                            block = ladderNetwork.LadderElements.Values.Where(x => { return x.Y == indexY && x.X > VLines[i].X; }).ToList();
+                            block = ladderLogicModule.LadderElements.Where(x => { return x.Y == indexY && x.X > VLines[i].X; }).ToList();
                         }
                         else
                         {
@@ -144,19 +146,19 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     }
                     if (block.Count() > 0 && indexY > VLines[i].Y + 1)
                     {
-                        MoveLadderBlock(ladderNetwork, block, VLines[i].Y + 1);
+                        MoveLadderBlock(ladderLogicModule, block, VLines[i].Y + 1);
                     }
                 }
                 if (i < VLines.Count - 1)
                 {
                     indexY = 1 + VLines[i].Y;
-                    block = ladderNetwork.LadderElements.Values.Where(x => { return x.Y == indexY && x.X > VLines[i].X && x.X <= VLines[i + 1].X; }).ToList();
+                    block = ladderLogicModule.LadderElements.Where(x => { return x.Y == indexY && x.X > VLines[i].X && x.X <= VLines[i + 1].X; }).ToList();
                     while (block.Count() == 0)
                     {
-                        if (ladderNetwork.LadderVerticalLines.Keys.ToList().Exists(x => { return x.X == VLines[i].X && x.Y == indexY; }) && ladderNetwork.LadderVerticalLines.Keys.ToList().Exists(x => { return x.X == VLines[i + 1].X && x.Y == indexY; }))
+                        if (ladderLogicModule.LadderVerticalLines.Exists(x => { return x.X == VLines[i].X && x.Y == indexY; }) && ladderLogicModule.LadderVerticalLines.Exists(x => { return x.X == VLines[i + 1].X && x.Y == indexY; }))
                         {
                             indexY++;
-                            block = ladderNetwork.LadderElements.Values.Where(x => { return x.Y == indexY && x.X > VLines[i].X && x.X <= VLines[i + 1].X; }).ToList();
+                            block = ladderLogicModule.LadderElements.Where(x => { return x.Y == indexY && x.X > VLines[i].X && x.X <= VLines[i + 1].X; }).ToList();
                         }
                         else
                         {
@@ -165,12 +167,12 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     }
                     if (block.Count() > 0 && indexY > VLines[i].Y + 1)
                     {
-                        MoveLadderBlock(ladderNetwork, block, VLines[i].Y + 1);
+                        MoveLadderBlock(ladderLogicModule, block, VLines[i].Y + 1);
                     }
                 }
             }
         }
-        private static void MoveLadderBlock(LadderNetworkViewModel ladderNetwork,IEnumerable<BaseViewModel> block,int desY)
+        private static void MoveLadderBlock(LadderLogicModule ladderLogicModule, IEnumerable<BaseViewModel> block,int desY)
         {
             block = block.OrderBy(x => { return x.X; });
             int indexY = block.First().Y;
@@ -178,35 +180,36 @@ namespace SamSoarII.AppMain.LadderGraphModule
             int endX = block.Last().X;
             foreach (var ele in block)
             {
-                ladderNetwork.RemoveElement(ele);
+                ladderLogicModule.RemoveElement(ele.X,ele.Y);
                 ele.Y = desY;
-                ladderNetwork.ReplaceElement(ele);
+                ladderLogicModule.ReplaceElement(ele);
             }
-            var tempVlines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == indexY && x.X >= startX && x.X < endX; });
+            var tempVlines = new List<VerticalLineViewModel>(ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == indexY && x.X >= startX && x.X < endX; }));
             if (tempVlines.Count() > 0)
             {
                 foreach (var VLine in tempVlines)
                 {
                     for (int i = 1; i <= indexY - desY; i++)
                     {
-                        ladderNetwork.ReplaceVerticalLine(new VerticalLineViewModel() { X = VLine.X, Y = VLine.Y - i });
+                        ladderLogicModule.ReplaceVerticalLine(new VerticalLineViewModel() { X = VLine.X, Y = VLine.Y - i });
                     }
                 }
             }
-            RemoveVLines(ladderNetwork, desY, startX - 1, indexY - 1);
-            RemoveVLines(ladderNetwork, desY, endX, indexY - 1);
+            RemoveVLines(ladderLogicModule, desY, startX - 1, indexY - 1);
+            RemoveVLines(ladderLogicModule, desY, endX, indexY - 1);
         }
-        private static void RemoveVLines(LadderNetworkViewModel ladderNetwork,int desY,int x,int y)
+        private static void RemoveVLines(LadderLogicModule ladderLogicModule, int desY,int x,int y)
         {
             IntPoint p = new IntPoint();
             VerticalLineViewModel vline;
             p.X = x;
             p.Y = y;
-            while (ladderNetwork.LadderVerticalLines.TryGetValue(p, out vline))
+            while (ladderLogicModule.LadderVerticalLines.Exists(a => { return a.X == p.X && a.Y == p.Y; }))
             {
-                if (!ladderNetwork.CheckVerticalLine(vline))
+                vline = ladderLogicModule.LadderVerticalLines.Where(a => { return a.X == p.X && a.Y == p.Y; }).First();
+                if (!ladderLogicModule.Parent.CheckVerticalLine(vline))
                 {
-                    ladderNetwork.RemoveVerticalLine(vline);
+                    ladderLogicModule.RemoveVerticalLine(vline.X,vline.Y);
                 }
                 p.Y--;
                 if (p.Y < desY)
@@ -215,52 +218,56 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
             }
         }
-        private static void PreScan(LadderNetworkViewModel ladderNetwork)
+        private static void PreScan(LadderLogicModule ladderLogicModule)
         {
-            var rootElements = ladderNetwork.LadderElements.Values.Where(x => { return x.Type == ElementType.Output; });
-            int minY = rootElements.First().Y;
-            foreach (var rootElement in rootElements)
+            int minY = ladderLogicModule.startY;
+            int key = ladderLogicModule.Parent.GetKeyByLadderLogicModule(ladderLogicModule);
+            if (key == 0)
             {
-                if (rootElement.Y < minY)
+                if (minY > 0)
                 {
-                    minY = rootElement.Y;
+                    MoveAllElements(ladderLogicModule, minY);
                 }
             }
-            if (minY > 0)
+            else
             {
-                MoveAllElements(ladderNetwork,minY);
+                int upEndY = ladderLogicModule.Parent.GetLadderLogicModuleByKey(key - 1).endY;
+                if (minY - upEndY > 1)
+                {
+                    MoveAllElements(ladderLogicModule, minY - upEndY - 1);
+                }
             }
         }
-        private static void MoveAllElements(LadderNetworkViewModel ladderNetwork,int index)
+        private static void MoveAllElements(LadderLogicModule ladderLogicModule, int index)
         {
-            var allElements = new List<BaseViewModel>(ladderNetwork.LadderElements.Values);
-            allElements.AddRange(ladderNetwork.LadderVerticalLines.Values);
+            var allElements = new List<BaseViewModel>(ladderLogicModule.LadderElements);
+            allElements.AddRange(ladderLogicModule.LadderVerticalLines);
             foreach (var ele in allElements)
             {
                 if (ele.Type == ElementType.VLine)
                 {
-                    ladderNetwork.RemoveVerticalLine(ele.X,ele.Y);
+                    ladderLogicModule.RemoveVerticalLine(ele.X,ele.Y);
                     ele.Y -= index;
-                    ladderNetwork.ReplaceVerticalLine(ele as VerticalLineViewModel);
+                    ladderLogicModule.ReplaceVerticalLine(ele as VerticalLineViewModel);
                 }
                 else
                 {
-                    ladderNetwork.RemoveElement(ele.X,ele.Y);
+                    ladderLogicModule.RemoveElement(ele.X,ele.Y);
                     ele.Y -= index;
-                    ladderNetwork.ReplaceElement(ele);
+                    ladderLogicModule.ReplaceElement(ele);
                 }
             }
         }
         //移动每行最大层级VLine之后的元素
-        private static void MoveResidueEle(LadderNetworkViewModel ladderNetwork)
+        private static void MoveResidueEle(LadderLogicModule ladderLogicModule)
         {
-            for (int i = 0; i <= ladderNetwork.GetMaxY(); i++)
+            for (int i = ladderLogicModule.startY; i <= ladderLogicModule.endY; i++)
             {
-                var VLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == i - 1 || x.Y == i; }).OrderBy(x => { return x.CountLevel; });
+                var VLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == i - 1 || x.Y == i; }).OrderBy(x => { return x.CountLevel; });
                 if (VLines.Count() > 0)
                 {
                     var VLine = VLines.Last();
-                    var tempList = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine && x.Y == i && x.X > VLine.X; }).OrderBy(x => { return x.X; }).ToList();
+                    var tempList = ladderLogicModule.LadderElements.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine && x.Y == i && x.X > VLine.X; }).OrderBy(x => { return x.X; }).ToList();
                     for (int j = 0; j < tempList.Count; j++)
                     {
                         if (tempList[j].X != j + VLine.X + 1)
@@ -268,17 +275,17 @@ namespace SamSoarII.AppMain.LadderGraphModule
                             HorizontalLineViewModel HLine = new HorizontalLineViewModel();
                             HLine.X = tempList[j].X;
                             HLine.Y = tempList[j].Y;
-                            var oldele = ladderNetwork.ReplaceElement(HLine);
+                            var oldele = ladderLogicModule.ReplaceElement(HLine);
                             oldele.X = j + VLine.X + 1;
-                            ladderNetwork.ReplaceElement(oldele);
+                            ladderLogicModule.ReplaceElement(oldele);
                         }
                     }
                 }
             }
         }
-        private static void Movement(LadderNetworkViewModel ladderNetwork)
+        private static void Movement(LadderLogicModule ladderLogicModule)
         {
-            var tempList = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine; }).OrderBy(x => { return x.X; }).ToList();
+            var tempList = ladderLogicModule.LadderElements.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine; }).OrderBy(x => { return x.X; }).ToList();
             for (int i = 0; i < tempList.Count; i++)
             {
                 if (tempList[i].X != i)
@@ -286,30 +293,30 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     HorizontalLineViewModel HLine = new HorizontalLineViewModel();
                     HLine.X = tempList[i].X;
                     HLine.Y = tempList[i].Y;
-                    var oldele = ladderNetwork.ReplaceElement(HLine);
+                    var oldele = ladderLogicModule.ReplaceElement(HLine);
                     oldele.X = i;
-                    ladderNetwork.ReplaceElement(oldele);
+                    ladderLogicModule.ReplaceElement(oldele);
                 }
             }
         }
-        private static void Movement(LadderNetworkViewModel ladderNetwork,List<VerticalLineViewModel> VLines)
+        private static void Movement(LadderLogicModule ladderLogicModule, List<VerticalLineViewModel> VLines)
         {
             //移动之前先移动此层级和上一层级之间的元素
-            MoveElements(ladderNetwork,VLines[0].CountLevel);
+            MoveElements(ladderLogicModule, VLines[0].CountLevel);
             //为确保相同层级的VLine的X坐标相同，计算同一层级中前面所需的最大元素间隔数量
-            int cnt = GetCount(ladderNetwork,VLines[0]);
+            int cnt = GetCount(ladderLogicModule, VLines[0]);
             for (int i = 1; i < VLines.Count; i++)
             {
-                int temp = GetCount(ladderNetwork,VLines[i]);
+                int temp = GetCount(ladderLogicModule, VLines[i]);
                 if (cnt < temp)
                 {
                     cnt = temp;
                 }
             }
-            MoveVerticalLines(ladderNetwork,VLines, cnt);
+            MoveVerticalLines(ladderLogicModule, VLines, cnt);
         }
         //检查VLine周边元素的分布
-        private static DirectionStatus CheckVLine(LadderNetworkViewModel ladderNetwork,VerticalLineViewModel VLine)
+        private static DirectionStatus CheckVLine(LadderLogicModule ladderLogicModule, VerticalLineViewModel VLine)
         {
             IntPoint p = new IntPoint();
             IntPoint p1 = new IntPoint();
@@ -327,7 +334,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     |              -->    |  
                     |                     |
              */
-            if (!ladderNetwork.LadderElements.ContainsKey(p1) && ladderNetwork.LadderElements.ContainsKey(p2))
+            if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == p1.X && x.Y == p1.Y; }) && ladderLogicModule.LadderElements.Exists(x => { return x.X == p2.X && x.Y == p2.Y; }))
             {
                 return DirectionStatus.Up_Inc;
             }
@@ -338,7 +345,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                                |   -->        |
                                |              |
              */
-            if (ladderNetwork.LadderElements.ContainsKey(p1) && !ladderNetwork.LadderElements.ContainsKey(p2))
+            if (ladderLogicModule.LadderElements.Exists(x => { return x.X == p1.X && x.Y == p1.Y; }) && !ladderLogicModule.LadderElements.Exists(x => { return x.X == p2.X && x.Y == p2.Y; }))
             {
                 return DirectionStatus.Up_Dec;
             }
@@ -351,7 +358,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     |              -->    |  
                     |__________           |______________
              */
-            if (!ladderNetwork.LadderElements.ContainsKey(p1) && ladderNetwork.LadderElements.ContainsKey(p2))
+            if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == p1.X && x.Y == p1.Y; }) && ladderLogicModule.LadderElements.Exists(x => { return x.X == p2.X && x.Y == p2.Y; }))
             {
                 return DirectionStatus.Down_Inc;
             }
@@ -362,13 +369,13 @@ namespace SamSoarII.AppMain.LadderGraphModule
                                |   -->        |    
                      __________|          ____|
              */
-            if (ladderNetwork.LadderElements.ContainsKey(p1) && !ladderNetwork.LadderElements.ContainsKey(p2))
+            if (ladderLogicModule.LadderElements.Exists(x => { return x.X == p1.X && x.Y == p1.Y; }) && !ladderLogicModule.LadderElements.Exists(x => { return x.X == p2.X && x.Y == p2.Y; }))
             {
                 return DirectionStatus.Down_Dec;
             }
             return DirectionStatus.None;
         }
-        private static void MoveVerticalLines(LadderNetworkViewModel ladderNetwork,List<VerticalLineViewModel> VLines, int cnt)
+        private static void MoveVerticalLines(LadderLogicModule ladderLogicModule, List<VerticalLineViewModel> VLines, int cnt)
         {
             for (int j = 0; j < VLines.Count(); j++)
             {
@@ -380,7 +387,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     if (tempVLine.X > cnt - 1)
                     {
                         //检查VLine周围元素的分布关系，判断是否在移动时需要添加或减少HLine
-                        DirectionStatus status = CheckVLine(ladderNetwork,tempVLine);
+                        DirectionStatus status = CheckVLine(ladderLogicModule, tempVLine);
                         if (status == DirectionStatus.Down_Inc || status == DirectionStatus.Up_Inc)
                         {
                             if (status == DirectionStatus.Down_Inc)
@@ -394,12 +401,12 @@ namespace SamSoarII.AppMain.LadderGraphModule
                             for (int k = cnt; k <= tempVLine.X; k++)
                             {
                                 point.X = k;
-                                if (!ladderNetwork.LadderElements.ContainsKey(point))
+                                if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == point.X && x.Y == point.Y; }))
                                 {
                                     HorizontalLineViewModel HLine = new HorizontalLineViewModel();
                                     HLine.X = point.X;
                                     HLine.Y = point.Y;
-                                    ladderNetwork.ReplaceElement(HLine);
+                                    ladderLogicModule.ReplaceElement(HLine);
                                 }
                             }
                         }
@@ -416,7 +423,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                             for (int k = cnt; k <= tempVLine.X; k++)
                             {
                                 point.X = k;
-                                ladderNetwork.RemoveElement(point);
+                                ladderLogicModule.RemoveElement(point.X,point.Y);
                             }
                         }
                     }
@@ -426,39 +433,39 @@ namespace SamSoarII.AppMain.LadderGraphModule
                         {
                             point.X = k;
                             point.Y = tempVLine.Y + 1;
-                            if (!ladderNetwork.LadderElements.ContainsKey(point))
+                            if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == point.X && x.Y == point.Y; }))
                             {
                                 HorizontalLineViewModel HLine = new HorizontalLineViewModel();
                                 HLine.X = point.X;
                                 HLine.Y = point.Y;
-                                ladderNetwork.ReplaceElement(HLine);
+                                ladderLogicModule.ReplaceElement(HLine);
                             }
                         }
                     }
-                    ladderNetwork.RemoveVerticalLine(tempVLine);
+                    ladderLogicModule.RemoveVerticalLine(tempVLine.X,tempVLine.Y);
                     tempVLine.X = cnt - 1;
-                    ladderNetwork.ReplaceVerticalLine(tempVLine);
+                    ladderLogicModule.ReplaceVerticalLine(tempVLine);
                 }
             }
         }
         //移动相应层级之前的元素
-        private static void MoveElements(LadderNetworkViewModel ladderNetwork,int countlevel)
+        private static void MoveElements(LadderLogicModule ladderLogicModule, int countlevel)
         {
-            for (int i = 0; i <= ladderNetwork.GetMaxY(); i++)
+            for (int i = ladderLogicModule.startY; i <= ladderLogicModule.endY; i++)
             {
-                var VLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.CountLevel == countlevel && x.Y == i - 1; }).OrderBy(x => { return x.CountLevel; }).ToList();
+                var VLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.CountLevel == countlevel && x.Y == i - 1; }).OrderBy(x => { return x.CountLevel; }).ToList();
                 if (VLines.Count == 0)
                 {
-                    VLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.CountLevel == countlevel && x.Y == i; }).OrderBy(x => { return x.CountLevel; }).ToList();
+                    VLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.CountLevel == countlevel && x.Y == i; }).OrderBy(x => { return x.CountLevel; }).ToList();
                 }
                 if (VLines.Count != 0)
                 {
                     var VLine = VLines.First();
-                    var tempVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.CountLevel < countlevel && (x.Y == i || x.Y == i - 1); }).OrderBy(x => { return x.CountLevel; }).ToList();
+                    var tempVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.CountLevel < countlevel && (x.Y == i || x.Y == i - 1); }).OrderBy(x => { return x.CountLevel; }).ToList();
                     //若此层级VLine之前没有前一层级的VLine，则直接移动元素
                     if (tempVLines.Count == 0)
                     {
-                        var tempList = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.HLine && x.Type != ElementType.Output && x.Y == i && x.X <= VLine.X; }).OrderBy(x => { return x.X; }).ToList();
+                        var tempList = ladderLogicModule.LadderElements.Where(x => { return x.Type != ElementType.HLine && x.Type != ElementType.Output && x.Y == i && x.X <= VLine.X; }).OrderBy(x => { return x.X; }).ToList();
                         for (int j = 0; j < tempList.Count; j++)
                         {
                             if (tempList[j].X != j)
@@ -466,16 +473,16 @@ namespace SamSoarII.AppMain.LadderGraphModule
                                 HorizontalLineViewModel HLine = new HorizontalLineViewModel();
                                 HLine.X = tempList[j].X;
                                 HLine.Y = tempList[j].Y;
-                                var oldele = ladderNetwork.ReplaceElement(HLine);
+                                var oldele = ladderLogicModule.ReplaceElement(HLine);
                                 oldele.X = j;
-                                ladderNetwork.ReplaceElement(oldele);
+                                ladderLogicModule.ReplaceElement(oldele);
                             }
                         }
                     }//否则，元素在两个层级VLine之间移动
                     else
                     {
                         var tempVLine = tempVLines.Last();
-                        var tempList = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.HLine && x.Type != ElementType.Output && x.Y == i && x.X <= VLine.X && x.X > tempVLine.X; }).OrderBy(x => { return x.X; }).ToList();
+                        var tempList = ladderLogicModule.LadderElements.Where(x => { return x.Type != ElementType.HLine && x.Type != ElementType.Output && x.Y == i && x.X <= VLine.X && x.X > tempVLine.X; }).OrderBy(x => { return x.X; }).ToList();
                         for (int j = 0; j < tempList.Count; j++)
                         {
                             if (tempList[j].X != j + tempVLine.X + 1)
@@ -483,9 +490,9 @@ namespace SamSoarII.AppMain.LadderGraphModule
                                 HorizontalLineViewModel HLine = new HorizontalLineViewModel();
                                 HLine.X = tempList[j].X;
                                 HLine.Y = tempList[j].Y;
-                                var oldele = ladderNetwork.ReplaceElement(HLine);
+                                var oldele = ladderLogicModule.ReplaceElement(HLine);
                                 oldele.X = j + tempVLine.X + 1;
-                                ladderNetwork.ReplaceElement(oldele);
+                                ladderLogicModule.ReplaceElement(oldele);
                             }
                         }
                     }
@@ -493,12 +500,12 @@ namespace SamSoarII.AppMain.LadderGraphModule
             }
         }
         //对网络中的VLine进行分层，即若两条VLine之间存在非HLine元素，则后者level是前者中最大的level加一
-        private static void InitializeCountLevel(LadderNetworkViewModel ladderNetwork)
+        private static void InitializeCountLevel(LadderLogicModule ladderLogicModule)
         {
-            var tempElements = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.HLine; }).ToList();
+            var tempElements = ladderLogicModule.LadderElements.Where(x => { return x.Type != ElementType.HLine; }).ToList();
             for (int i = 0; i < GlobalSetting.LadderXCapacity - 1; i++)
             {
-                var tempVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.X == i; }).OrderBy(x => { return x.Y; });//进行层级分配时，是从上到下扫描
+                var tempVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.X == i; }).OrderBy(x => { return x.Y; });//进行层级分配时，是从上到下扫描
                 if (i == 0)
                 {
                     foreach (var VLine in tempVLines)
@@ -512,9 +519,9 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     {
                         int tempCountLevel = 0;
                         int cnt = 1;
-                        var upVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y - 1 && x.X <= VLine.X; });
-                        var downVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; });
-                        var eqVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y && x.X < VLine.X; });
+                        var upVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y - 1 && x.X <= VLine.X; });
+                        var downVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; });
+                        var eqVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y && x.X < VLine.X; });
                         //由于扫描从上至下，故如下情况时，需移动downVLine
                         /* _______________________
                          *                  |_____
@@ -540,7 +547,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                             }
                             while (downVLine.CountLevel == 0 && downVLine.X == VLine.X)
                             {
-                                downVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1 + cnt && x.X <= VLine.X; });
+                                downVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y + 1 + cnt && x.X <= VLine.X; });
                                 if (downVLines.Count() != 0)
                                 {
                                     downVLine = downVLines.OrderBy(x => { return x.X; }).Last();
@@ -563,7 +570,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                                      * __________|          ←× 错误
                                      * 
                                      */
-                                    if (ladderNetwork.LadderElements.Values.Where(x => { return x.Y == downVLine.Y && x.X > downVLine.X && x.X <= VLine.X; }).Count() == VLine.X - downVLine.X)
+                                    if (ladderLogicModule.LadderElements.Where(x => { return x.Y == downVLine.Y && x.X > downVLine.X && x.X <= VLine.X; }).Count() == VLine.X - downVLine.X)
                                     {
                                         cnt++;
                                     }
@@ -574,7 +581,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                                 }
                             }
                         }
-                        downVLines = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + cnt && x.X <= VLine.X; });
+                        downVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y + cnt && x.X <= VLine.X; });
                         if (upVLines.Count() == 0 && downVLines.Count() == 0 && eqVLines.Count() == 0)
                         {
                             VLine.CountLevel = 1;
@@ -666,14 +673,14 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
             }
         }
-        private static int GetCount(LadderNetworkViewModel ladderNetwork,VerticalLineViewModel VLine)
+        private static int GetCount(LadderLogicModule ladderLogicModule, VerticalLineViewModel VLine)
         {
             int cnt;
-            var tempEle = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine; });
+            var tempEle = ladderLogicModule.LadderElements.Where(x => { return x.Type != ElementType.Output && x.Type != ElementType.HLine; });
             //前一层级的VLine有三个方向，上，同一层，下
-            var tempList1 = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y - 1 && x.CountLevel < VLine.CountLevel; });
-            var tempList2 = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y && x.CountLevel < VLine.CountLevel; });
-            var tempList3 = ladderNetwork.LadderVerticalLines.Values.Where(x => { return x.Y == VLine.Y + 1 && x.CountLevel < VLine.CountLevel; });
+            var tempList1 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y - 1 && x.CountLevel < VLine.CountLevel; });
+            var tempList2 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y && x.CountLevel < VLine.CountLevel; });
+            var tempList3 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y + 1 && x.CountLevel < VLine.CountLevel; });
             cnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X; }).Count();
             int tempCnt = 0;
             tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; }).Count();

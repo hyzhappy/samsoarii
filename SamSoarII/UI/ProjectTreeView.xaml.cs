@@ -84,7 +84,6 @@ namespace SamSoarII.AppMain.UI
             _elementInitWind = new ElementInitializeWindow();
             DataContext = Project;
             Project.MTVModel.ModelChanged += OnModbusChanged;
-            
             ReinitializeComponent();
             if (xele != null)
             {
