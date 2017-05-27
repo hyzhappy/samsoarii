@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.Project;
+using SamSoarII.AppMain.UI;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
 using System;
@@ -46,6 +47,17 @@ namespace SamSoarII.AppMain.LadderCommand
                 bvmodel.AcceptNewValues(pstring_new, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             }
             lnvmodel.INVModel.Setup(lnvmodel);
+            // 导航到修改参数的元件
+            lnvmodel.AcquireSelectRect();
+            LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+            ldvmodel.SelectionRect.X = bvmodel.X;
+            ldvmodel.SelectionRect.Y = bvmodel.Y;
+            ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                new NavigateToNetworkEventArgs(
+                    lnvmodel.NetworkNumber,
+                    ldvmodel.ProgramName,
+                    ldvmodel.SelectionRect.X,
+                    ldvmodel.SelectionRect.Y));
         }
 
         public void Redo()
@@ -73,6 +85,17 @@ namespace SamSoarII.AppMain.LadderCommand
                 bvmodel.AcceptNewValues(pstring_old, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             }
             lnvmodel.INVModel.Setup(lnvmodel);
+            // 导航到修改参数的元件
+            lnvmodel.AcquireSelectRect();
+            LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+            ldvmodel.SelectionRect.X = bvmodel.X;
+            ldvmodel.SelectionRect.Y = bvmodel.Y;
+            ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                new NavigateToNetworkEventArgs(
+                    lnvmodel.NetworkNumber,
+                    ldvmodel.ProgramName,
+                    ldvmodel.SelectionRect.X,
+                    ldvmodel.SelectionRect.Y));
         }
     }
 }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.AppMain.Project;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.AppMain.UI;
+
 namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkRemoveElementsCommand : IUndoableCommand
@@ -56,6 +58,22 @@ namespace SamSoarII.AppMain.LadderCommand
                 _network.ReplaceVerticalLine(vline);
             }
             _network.INVModel.Setup(_network);
+            if (_elements.Count() + _vlines.Count() == 1)
+            {
+                // 将梯形图光标移到新生成的单个元件
+                BaseViewModel bvmodel = _elements.Count() == 1
+                    ? _elements.First() : _vlines.First();
+                _network.AcquireSelectRect();
+                LadderDiagramViewModel ldvmodel = _network.LDVModel;
+                ldvmodel.SelectionRect.X = bvmodel.X;
+                ldvmodel.SelectionRect.Y = bvmodel.Y;
+                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                    new NavigateToNetworkEventArgs(
+                        _network.NetworkNumber,
+                        ldvmodel.ProgramName,
+                        ldvmodel.SelectionRect.X,
+                        ldvmodel.SelectionRect.Y));
+            }
         }
     }
 }

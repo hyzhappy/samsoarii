@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.Project;
+using SamSoarII.AppMain.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,20 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_removedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
+            if (_replacedNetworks.Count() > 0)
+            {
+                // 将梯形图光标移到新生成的行的头部
+                LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
+                LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+                ldvmodel.SelectionRect.X = 0;
+                ldvmodel.SelectionRect.Y = 0;
+                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                    new NavigateToNetworkEventArgs(
+                        lnvmodel.NetworkNumber,
+                        ldvmodel.ProgramName,
+                        ldvmodel.SelectionRect.X,
+                        ldvmodel.SelectionRect.Y));
+            }
         }
 
         public void Redo()
@@ -73,6 +88,20 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_replacedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
+            if (_removedNetworks.Count() > 0)
+            {
+                // 将梯形图光标移到新生成的行的头部
+                LadderNetworkViewModel lnvmodel = _removedNetworks.First();
+                LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+                ldvmodel.SelectionRect.X = 0;
+                ldvmodel.SelectionRect.Y = 0;
+                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                    new NavigateToNetworkEventArgs(
+                        lnvmodel.NetworkNumber,
+                        ldvmodel.ProgramName,
+                        ldvmodel.SelectionRect.X,
+                        ldvmodel.SelectionRect.Y));
+            }
         }
     }
 }

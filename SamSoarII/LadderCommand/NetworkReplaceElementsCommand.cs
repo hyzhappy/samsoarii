@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.Project;
+using SamSoarII.AppMain.UI;
 using SamSoarII.LadderInstViewModel;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,22 @@ namespace SamSoarII.AppMain.LadderCommand
                 _network.ReplaceVerticalLine(vline);
             }
             _network.INVModel.Setup(_network);
+            if (_elements.Count() + _vlines.Count() == 1)
+            {
+                // 将梯形图光标移到新生成的单个元件
+                BaseViewModel bvmodel = _elements.Count() == 1
+                    ? _elements.First() : _vlines.First();
+                _network.AcquireSelectRect();
+                LadderDiagramViewModel ldvmodel = _network.LDVModel;
+                ldvmodel.SelectionRect.X = bvmodel.X;
+                ldvmodel.SelectionRect.Y = bvmodel.Y;
+                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                    new NavigateToNetworkEventArgs(
+                        _network.NetworkNumber,
+                        ldvmodel.ProgramName,
+                        ldvmodel.SelectionRect.X,
+                        ldvmodel.SelectionRect.Y));
+            }
         }
 
         public virtual void Redo()
@@ -99,6 +116,22 @@ namespace SamSoarII.AppMain.LadderCommand
                 _network.ReplaceVerticalLine(oldvline);
             }
             _network.INVModel.Setup(_network);
+            if (_oldelements.Count() + _oldvlines.Count() == 1)
+            {
+                // 将梯形图光标移到新生成的单个元件
+                BaseViewModel bvmodel = _oldelements.Count() == 1
+                    ? _oldelements.First() : _oldvlines.First();
+                _network.AcquireSelectRect();
+                LadderDiagramViewModel ldvmodel = _network.LDVModel;
+                ldvmodel.SelectionRect.X = bvmodel.X;
+                ldvmodel.SelectionRect.Y = bvmodel.Y;
+                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                    new NavigateToNetworkEventArgs(
+                        _network.NetworkNumber,
+                        ldvmodel.ProgramName,
+                        ldvmodel.SelectionRect.X,
+                        ldvmodel.SelectionRect.Y));
+            }
         }
     }
     
