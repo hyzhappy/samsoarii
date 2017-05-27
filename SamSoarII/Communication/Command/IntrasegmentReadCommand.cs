@@ -85,7 +85,7 @@ namespace SamSoarII.Communication.Command
                 addrType2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), element.IntrasegmentType), element.IntrasegmentAddr);
                 startLowAddr2 = (byte)element.IntrasegmentAddr;
             }
-            GenerateCommand();
+            //GenerateCommand();
         }
         public void UpdataValues()
         {
@@ -130,6 +130,7 @@ namespace SamSoarII.Communication.Command
         }
         public byte[] GetBytes()
         {
+            GenerateCommand();
             return command;
         }
         private void CheckRetData()

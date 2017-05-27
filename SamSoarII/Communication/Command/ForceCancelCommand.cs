@@ -22,7 +22,7 @@ namespace SamSoarII.Communication.Command
             this.isAll = isAll;
             this.RefElement = RefElement;
             InitializeCommandByElement();
-            GenerateCommand();
+            //GenerateCommand();
         }
         public void InitializeCommandByElement()
         {
@@ -70,6 +70,7 @@ namespace SamSoarII.Communication.Command
         }
         public byte[] GetBytes()
         {
+            GenerateCommand();
             return command;
         }
         private void CheckRetData()

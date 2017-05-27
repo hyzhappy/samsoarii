@@ -1098,13 +1098,13 @@ namespace SamSoarII.AppMain
         }
         public bool MonitorProject()
         {
-            if (CommunicationTest())
-            {
-                _projectModel.LadderMode = LadderMode.Monitor;
+            //if (CommunicationTest())
+            //{
                 _projectModel.MMonitorManager.Initialize(_projectModel);
+                _projectModel.LadderMode = LadderMode.Monitor;
                 return true;
-            }
-            return false;
+            //}
+            //return false;
         }
         public bool CommunicationTest()
         {

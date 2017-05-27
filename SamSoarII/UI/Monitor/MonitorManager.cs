@@ -108,6 +108,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     bool hasrecv = false;
                     if (CurrentCommand != null)
                     {
+
                         while (_Thread_Alive && _Thread_Active)
                         {
                             if (Send(CurrentCommand))
@@ -144,9 +145,13 @@ namespace SamSoarII.AppMain.UI.Monitor
         
         public void Start()
         {
-            if (!_Thread_IsAlive 
-             && (ComThread == null || !ComThread.IsAlive))
+            if (!_Thread_IsAlive
+             && (ComThread == null || !_Thread_IsAlive))
             {
+                if (ComThread != null && ComThread.IsAlive)
+                {
+                    ComThread.Abort();
+                }
                 ComThread = new Thread(_Thread_Run);
                 _Thread_Alive = true;
                 _Thread_Active = true;

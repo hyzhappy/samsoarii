@@ -119,7 +119,7 @@ namespace SamSoarII.Communication.Command
                 startLowAddr2 = startaddr[0];
                 startHighAddr2 = startaddr[1];
             }
-            GenerateCommand();
+            //GenerateCommand();
         }
         public void UpdataValues()
         {
@@ -217,6 +217,7 @@ namespace SamSoarII.Communication.Command
         }
         public byte[] GetBytes()
         {
+            GenerateCommand();
             return command;
         }
         private void CheckRetData()
