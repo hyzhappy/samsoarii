@@ -14,19 +14,28 @@ namespace SamSoarII.AppMain.LadderCommand
         private LadderNetworkViewModel _network;
         private HashSet<BaseViewModel> _elements;
         private HashSet<VerticalLineViewModel> _vlines;
+        private NetworkChangeElementArea _area;
 
-        public NetworkRemoveElementsCommand(LadderNetworkViewModel network, IEnumerable<BaseViewModel> elements, IEnumerable<VerticalLineViewModel> vlines)
+        public NetworkRemoveElementsCommand(
+            LadderNetworkViewModel network, 
+            IEnumerable<BaseViewModel> elements, IEnumerable<VerticalLineViewModel> vlines,
+            NetworkChangeElementArea area = null)
         {
             _network = network;
             _elements = new HashSet<BaseViewModel>(elements);
             _vlines = new HashSet<VerticalLineViewModel>(vlines);
+            _area = area;
         }
 
-        public NetworkRemoveElementsCommand(LadderNetworkViewModel network, IEnumerable<BaseViewModel> elements)
+        public NetworkRemoveElementsCommand(
+            LadderNetworkViewModel network, 
+            IEnumerable<BaseViewModel> elements,
+            NetworkChangeElementArea area = null)
         {
             _network = network;
             _elements = new HashSet<BaseViewModel>(elements);
             _vlines = new HashSet<VerticalLineViewModel>();
+            _area = area;
         }
 
         public void Execute()
@@ -73,6 +82,10 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.ProgramName,
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
+            }
+            else if (_area != null)
+            {
+                _area.Select(_network);
             }
         }
     }

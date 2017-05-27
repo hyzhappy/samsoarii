@@ -15,37 +15,59 @@ namespace SamSoarII.AppMain.LadderCommand
         // 保证网络排序
         private SortedSet<LadderNetworkViewModel> _replacedNetworks;
         private SortedSet<LadderNetworkViewModel> _removedNetworks;
+        private NetworkChangeElementArea _oldarea;
+        private NetworkChangeElementArea _area;
         private int _index;
-        public LadderDiagramReplaceNetworksCommand(LadderDiagramViewModel ld, IEnumerable<LadderNetworkViewModel> replacedNets, IEnumerable<LadderNetworkViewModel> removedNets, int index)
+        public LadderDiagramReplaceNetworksCommand(
+            LadderDiagramViewModel ld, 
+            IEnumerable<LadderNetworkViewModel> replacedNets, IEnumerable<LadderNetworkViewModel> removedNets, int index,
+            NetworkChangeElementArea area = null, NetworkChangeElementArea oldarea = null)
         {
             _ladderDiagram = ld;
             _replacedNetworks = new SortedSet<LadderNetworkViewModel>(replacedNets);
             _removedNetworks = new SortedSet<LadderNetworkViewModel>(removedNets);
             _index = index;
+            _oldarea = oldarea;
+            _area = area;
         }
 
-        public LadderDiagramReplaceNetworksCommand(LadderDiagramViewModel ld, IEnumerable<LadderNetworkViewModel> replacedNets, int index)
+        public LadderDiagramReplaceNetworksCommand(
+            LadderDiagramViewModel ld, 
+            IEnumerable<LadderNetworkViewModel> replacedNets, int index,
+            NetworkChangeElementArea area = null, NetworkChangeElementArea oldarea = null)
         {
             _ladderDiagram = ld;
             _replacedNetworks = new SortedSet<LadderNetworkViewModel>(replacedNets);
             _removedNetworks = new SortedSet<LadderNetworkViewModel>();
             _index = index;
+            _oldarea = oldarea;
+            _area = area;
         }
 
-        public LadderDiagramReplaceNetworksCommand(LadderDiagramViewModel ld, LadderNetworkViewModel net, int index)
+        public LadderDiagramReplaceNetworksCommand(
+            LadderDiagramViewModel ld, 
+            LadderNetworkViewModel net, int index,
+            NetworkChangeElementArea area = null, NetworkChangeElementArea oldarea = null)
         {
             _ladderDiagram = ld;
             _replacedNetworks = new SortedSet<LadderNetworkViewModel>() { net };
             _removedNetworks = new SortedSet<LadderNetworkViewModel>();
             _index = index;
+            _oldarea = oldarea;
+            _area = area;
         }
 
-        public LadderDiagramReplaceNetworksCommand(LadderDiagramViewModel ld, LadderNetworkViewModel replacedNet, IEnumerable<LadderNetworkViewModel> removedNets, int index)
+        public LadderDiagramReplaceNetworksCommand(
+            LadderDiagramViewModel ld, 
+            LadderNetworkViewModel replacedNet, IEnumerable<LadderNetworkViewModel> removedNets, int index,
+            NetworkChangeElementArea area = null, NetworkChangeElementArea oldarea = null)
         {
             _ladderDiagram = ld;
             _replacedNetworks = new SortedSet<LadderNetworkViewModel>() { replacedNet };
             _removedNetworks = new SortedSet<LadderNetworkViewModel>(removedNets);
             _index = index;
+            _oldarea = oldarea;
+            _area = area;
         }
         public void Execute()
         {
@@ -70,6 +92,11 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.ProgramName,
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
+            }
+            else if (_area != null)
+            {
+                LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
+                _area.Select(lnvmodel);
             }
         }
 
@@ -101,6 +128,11 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.ProgramName,
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
+            }
+            else if (_oldarea != null)
+            {
+                LadderNetworkViewModel lnvmodel = _removedNetworks.First();
+                _area.Select(lnvmodel);
             }
         }
     }

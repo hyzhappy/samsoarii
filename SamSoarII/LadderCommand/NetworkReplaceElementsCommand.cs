@@ -16,23 +16,39 @@ namespace SamSoarII.AppMain.LadderCommand
         private HashSet<VerticalLineViewModel> _vlines;
         private HashSet<BaseViewModel> _oldelements;
         private HashSet<VerticalLineViewModel> _oldvlines;
+        private NetworkChangeElementArea _area;
+        private NetworkChangeElementArea _oldarea;
 
-        public NetworkReplaceElementsCommand(LadderNetworkViewModel network, IEnumerable<BaseViewModel> elements, IEnumerable<VerticalLineViewModel> vlines, IEnumerable<BaseViewModel> oldelements, IEnumerable<VerticalLineViewModel> oldvlines)
+        public NetworkReplaceElementsCommand(
+            LadderNetworkViewModel network, 
+            IEnumerable<BaseViewModel> elements, IEnumerable<VerticalLineViewModel> vlines, 
+            IEnumerable<BaseViewModel> oldelements, IEnumerable<VerticalLineViewModel> oldvlines,
+            NetworkChangeElementArea area = null,
+            NetworkChangeElementArea oldarea = null)
         {
             _network = network;
             _elements = new HashSet<BaseViewModel>(elements);
             _vlines = new HashSet<VerticalLineViewModel>(vlines);
             _oldelements = new HashSet<BaseViewModel>(oldelements);
             _oldvlines = new HashSet<VerticalLineViewModel>(oldvlines);
+            _area = area;
+            _oldarea = oldarea;
         }
 
-        public NetworkReplaceElementsCommand(LadderNetworkViewModel network, IEnumerable<BaseViewModel> elements, IEnumerable<BaseViewModel> oldelements)
+        public NetworkReplaceElementsCommand(
+            LadderNetworkViewModel network, 
+            IEnumerable<BaseViewModel> elements, 
+            IEnumerable<BaseViewModel> oldelements,
+            NetworkChangeElementArea area = null,
+            NetworkChangeElementArea oldarea = null)
         {
             _network = network;
             _elements = new HashSet<BaseViewModel>(elements);
             _oldelements = new HashSet<BaseViewModel>(oldelements);
             _vlines = new HashSet<VerticalLineViewModel>();
             _oldvlines = new HashSet<VerticalLineViewModel>();
+            _area = area;
+            _oldarea = oldarea;
         }
 
         public BaseViewModel PopOldElement()
@@ -90,6 +106,10 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
             }
+            else if (_area != null)
+            {
+                _area.Select(_network);
+            }
         }
 
         public virtual void Redo()
@@ -131,6 +151,10 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.ProgramName,
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
+            }
+            else if (_oldarea != null)
+            {
+                _oldarea.Select(_network);
             }
         }
     }
