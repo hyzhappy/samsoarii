@@ -49,6 +49,12 @@
   <ItemGroup>
     <Compile Include="HelpDocComponet\BrowsingHistoryManager.cs" />
     <Compile Include="HelpDocComponet\Controls\CanAnimationScroll.cs" />
+    <Compile Include="HelpDocComponet\Controls\SubtitleParagraph.xaml.cs">
+      <DependentUpon>SubtitleParagraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpDocComponet\Controls\TitleParagraph.xaml.cs">
+      <DependentUpon>TitleParagraph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HelpDocComponet\FavoriteManager.cs" />
     <Compile Include="HelpDocComponet\HelpDocCommand.cs" />
     <Compile Include="HelpDocComponet\HelpDocFavorite.xaml.cs">
@@ -664,6 +670,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="HelpDocComponet\Controls\SubtitleParagraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="HelpDocComponet\Controls\TitleParagraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="HelpDocComponet\HelpDocFavorite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

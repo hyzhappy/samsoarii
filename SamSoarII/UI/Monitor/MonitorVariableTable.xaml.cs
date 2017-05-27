@@ -127,22 +127,98 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             using (ElementValueModifyDialog dialog = new ElementValueModifyDialog())
             {
-                ((TextBlock)dialog.FindName("ElementNameTextBlock")).Text = element.ShowName;
-                if (element.AddrType == "X" || element.AddrType == "Y")
+                dialog.VarName = element.ShowName;
+                dialog.VarType = element.ShowType;
+                dialog.Value = element.CurrentValue;
+                dialog.ValueModify += (sender, e) =>
                 {
-                    InitializeForceDialog(dialog, element);
-                }
-                else if(IsBitAddr((ElementAddressType)Enum.Parse(typeof(ElementAddressType),element.AddrType)))
-                {
-                    InitializeBitDialog(dialog, element);
-                }
-                else
-                {
-                    InitializeWordDialog(dialog, element);
-                }
+                    element.ShowType = dialog.VarType;
+                    _parent.Manager.Handle(element, e);
+                    if (!element.SetValue.Equals(String.Empty))
+                        dialog.Value = element.SetValue;
+                };
                 dialog.ShowDialog();
             }
         }
+        private void Force(ElementModel element, byte value)
+        {
+            if (_parent.Manager.CanLock)
+            {
+                _parent.Manager.Lock(element);
+            }
+            else
+            {
+                GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
+                command.RefElements_A.Add(element);
+                _parent.Manager.Add(command);
+            }
+        }
+        private void Write(ElementModel element, byte value)
+        {
+            if (element.IsIntrasegment)
+            {
+                IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { value }, element);
+                command.RefElement = element;
+                _parent.Manager.Add(command);
+            }
+            else
+            {
+                GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
+                command.RefElements_A.Add(element);
+                _parent.Manager.Add(command);
+            }
+        }
+        private void Write(ElementModel element)
+        {
+            string value = element.SetValue;
+            byte[] data;
+            element.SetValue = value;
+            switch (element.ShowType)
+            {
+                case "WORD":
+                    data = ValueConverter.GetBytes(
+                        (UInt16)(Int16.Parse(value)));
+                    break;
+                case "UWORD":
+                    data = ValueConverter.GetBytes(
+                        UInt16.Parse(value));
+                    break;
+                case "BCD":
+                    data = ValueConverter.GetBytes(
+                        ValueConverter.ToUINT16(
+                            UInt16.Parse(value)));
+                    break;
+                case "DWORD":
+                    data = ValueConverter.GetBytes(
+                        (UInt32)(Int32.Parse(value)));
+                    break;
+                case "UDWORD":
+                    data = ValueConverter.GetBytes(
+                        UInt32.Parse(value));
+                    break;
+                case "FLOAT":
+                    data = ValueConverter.GetBytes(
+                        ValueConverter.FloatToUInt(
+                            float.Parse(value)));
+                    break;
+                default:
+                    data = new byte[0];
+                    break;
+            }
+            if (element.IsIntrasegment)
+            {
+                IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, element);
+                command.RefElement = element;
+                _parent.Manager.Add(command);
+            }
+            else
+            {
+                GeneralWriteCommand command = new GeneralWriteCommand(data, element);
+                command.RefElements_A.Add(element);
+                _parent.Manager.Add(command);
+            }
+        }
+
         private bool IsBitAddr(ElementAddressType Type)
         {
             switch (Type)
@@ -157,108 +233,6 @@ namespace SamSoarII.AppMain.UI.Monitor
                 default:
                     return false;
             }
-        }
-        private void InitializeForceDialog(ElementValueModifyDialog dialog, ElementModel element)
-        {
-            ((Grid)dialog.FindName("Content1")).Visibility = Visibility.Visible;
-            dialog.ForceButtonClick += (sender1, e1) =>
-            {
-                byte value;
-                if (sender1 == dialog.FindName("ForceON") || sender1 == dialog.FindName("ForceOFF"))
-                {
-                    if (sender1 == dialog.FindName("ForceON"))
-                    {
-                        value = 0x01;
-                        element.SetValue = "ON";
-                    }
-                    else
-                    {
-                        value = 0x00;
-                        element.SetValue = "OFF";
-                    }
-                    if (_parent.Manager.CanLock)
-                    {
-                        _parent.Manager.Lock(element);
-                    }
-                    else
-                    {
-                        GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
-                        command.RefElements_A.Add(element);
-                        _parent.Manager.Add(command);
-                    }
-                }
-                else if (sender1 == dialog.FindName("UndoForce"))
-                {
-                    element.SetValue = String.Empty;
-                    ForceCancelCommand command = new ForceCancelCommand(false,element);
-                    _parent.Manager.Add(command);
-                }
-                else
-                {
-                    element.SetValue = String.Empty;
-                    ForceCancelCommand command = new ForceCancelCommand(true,element);
-                    _parent.Manager.Add(command);
-                }
-            };
-        }
-        private void InitializeBitDialog(ElementValueModifyDialog dialog, ElementModel element)
-        {
-            ((StackPanel)dialog.FindName("Content2")).Visibility = Visibility.Visible;
-            dialog.BitButtonClick += (sender1, e1) =>
-            {
-                byte bitvalue;
-                if (sender1 == dialog.FindName("WriteON")) bitvalue = 0x01;
-                else bitvalue = 0x00;
-                if (element.IsIntrasegment)
-                {
-                    IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { bitvalue },element);
-                    command.RefElement = element;
-                    _parent.Manager.Add(command);
-                }
-                else
-                {
-                    GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { bitvalue },element);
-                    command.RefElements_A.Add(element);
-                    _parent.Manager.Add(command);
-                }
-            };
-        }
-        private void InitializeWordDialog(ElementValueModifyDialog dialog, ElementModel element)
-        {
-            ((StackPanel)dialog.FindName("Content3")).Visibility = Visibility.Visible;
-            WordType type = (WordType)Enum.ToObject(typeof(WordType), element.DataType);
-            ((TextBlock)dialog.FindName("DataTypeTextBlock")).Text = type.ToString();
-            //((ComboBox)dialog.FindName("DataTypeCombox")).SelectedIndex = element.DataType - 1;
-            dialog.WordButtonClick += (sender1, e1) =>
-            {
-                var obj = ParseValueByDataType(((TextBox)dialog.FindName("ValueTextBox")).Text, type);
-                if (obj != null)
-                {
-                    uint value = (uint)obj;
-                    byte[] data;
-                    element.SetValue = value.ToString();
-                    if (type == WordType.BCD || type == WordType.INT16 || type == WordType.POS_INT16)
-                    {
-                        data = ValueConverter.GetBytes((ushort)value);
-                    }
-                    else
-                    {
-                        data = ValueConverter.GetBytes(value);
-                    }
-                    if (element.IsIntrasegment)
-                    {
-                        IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data,element);
-                        command.RefElement = element;
-                        _parent.Manager.Add(command);
-                    }
-                    else
-                    {
-                        GeneralWriteCommand command = new GeneralWriteCommand(data,element);
-                        command.RefElements_A.Add(element);
-                        _parent.Manager.Add(command);
-                    }
-                }
-            };
         }
         private uint? ParseValueByDataType(string value,WordType type)
         {

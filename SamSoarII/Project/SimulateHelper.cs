@@ -48,6 +48,10 @@ namespace SamSoarII.AppMain.Project
             get { return smodel; }
         }
         static private SimulateMonitorManager smmanager;
+        static public SimulateMonitorManager SMManager
+        {
+            get { return smmanager; }
+        }
         
         public const int SIMULATE_OK = SimulateDllModel.LOADDLL_OK;
         public const int SIMULATE_LADDER_ERROR = 0x0100;
@@ -186,7 +190,7 @@ namespace SamSoarII.AppMain.Project
                             break;
                     }
                     svunit.CanClose = false;
-                    SimuMoniValueModel smvmodel = new SimuMoniValueModel(svunit);
+                    SimuMoniValueModel smvmodel = new SimuMoniValueModel(svunit, smodel);
                     bvmodel.SetValueModel(i, smvmodel);
                 }
             }

@@ -84,6 +84,7 @@ namespace SamSoarII.AppMain.UI
             _elementInitWind = new ElementInitializeWindow();
             DataContext = Project;
             Project.MTVModel.ModelChanged += OnModbusChanged;
+            
             ReinitializeComponent();
             if (xele != null)
             {
@@ -438,10 +439,10 @@ namespace SamSoarII.AppMain.UI
                         TabItemOpened(ptvitem.RelativeObject, new ShowTabItemEventArgs(TabType.Modbus));
                         break;
                     case ProjectTreeViewItem.TYPE_ELEMENTLIST:
-                        _elementList.Show();
+                        Project.IFacade.MainWindow.LACElemList.Show();
                         break;
                     case ProjectTreeViewItem.TYPE_ELEMENTINITIALIZE:
-                        _elementInitWind.Show();
+                        Project.IFacade.MainWindow.LACElemInit.Show();
                         break;
                     case ProjectTreeViewItem.TYPE_INSTRUCTION:
                         ProjectTreeViewEventArgs _e2 = new ProjectTreeViewEventArgs(
@@ -1115,18 +1116,6 @@ namespace SamSoarII.AppMain.UI
                         break;
                 }
             }
-        }
-        public void OpenElementList()
-        {
-            _elementList.Show();
-        }
-        public void OpenEleInitialize()
-        {
-            _elementInitWind.Show();
-        }
-        public XElement CreatXElementByElementInitWind()
-        {
-            return _elementInitWind.CreatXElementByElements();
         }
         public void LoadElementInitWindByXElement(XElement rootNode)
         {

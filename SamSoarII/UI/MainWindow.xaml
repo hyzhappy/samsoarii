@@ -34,6 +34,8 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="ShowMainMonitorCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogExecute" CanExecute="ShowCommunicationSettingDialogCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" Executed="OnShowErrorListExecute" CanExecute="ShowErrorListCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowElemListCommand}" Executed="OnShowElemListExecute" CanExecute="ShowElemListCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowElemInitCommand}" Executed="OnShowElemInitExecute" CanExecute="ShowElemInitCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"/>
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
@@ -225,6 +227,8 @@
                 </MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="工程资源管理器" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}"></MenuItem>
+                <MenuItem Header="软元件管理器" Command="{x:Static app:GlobalCommand.ShowElemListCommand}"></MenuItem>
+                <MenuItem Header="软元件初始化" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}"></MenuItem>
                 <MenuItem Header="错误列表" Command="{x:Static app:GlobalCommand.ShowErrorListCommand}"></MenuItem>
                 <MenuItem Header="监视列表" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
             </MenuItem>
@@ -234,13 +238,6 @@
                 <MenuItem Header="添加Modbus表格" Command="{x:Static app:GlobalCommand.AddNewModbusCommand}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="属性" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
-            </MenuItem>
-            <MenuItem Header="生成(_B)" Margin="0,-5,0,0">
-                <MenuItem Header="编译" Command="{x:Static app:GlobalCommand.CompileCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="/Resources/Image/Compile.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
             </MenuItem>
             <MenuItem Header="工具(_T)" Margin="0,-5,0,0">
                 <MenuItem Header="上载">
@@ -344,10 +341,10 @@
                 </Button>
             </ToolBar>
             <ToolBar>
-                <Button ToolTip="软元件表" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.EleListOpenCommand}">
+                <Button ToolTip="软元件表" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowElemListCommand}">
                     <Image Source="/Resources/Image/ElementTable.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="软元件初始化" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.EleInitializeCommand}">
+                <Button ToolTip="软元件初始化" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}">
                     <Image Source="/Resources/Image/ElementInitialize.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
@@ -420,6 +417,16 @@
                                 </Grid>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAElemList" Title="软元件管理器">
+                                <local:ElementList></local:ElementList>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAElemInit" Title="软元件初始化">
+                                <local:ElementInitializeWindow x:Name="ElemInitWind"></local:ElementInitializeWindow>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.LeftSide>
                 <ad:LayoutRoot.BottomSide>
@@ -439,9 +446,9 @@
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>
-                                <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                                </ad:LayoutAnchorable>
-                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
                             </ad:LayoutAnchorable>

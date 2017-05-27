@@ -35,18 +35,11 @@ namespace SamSoarII.AppMain.UI
             get
             {
                 FontData fdat = null;
-                ColorData cdat = null;
                 switch (Type)
                 {
                     case TYPE_FONT:
                         fdat = (FontData)Relative;
                         return ((SolidColorBrush)fdat.FontColor).Color;
-                    case TYPE_BACKGROUND:
-                        cdat = (ColorData)Relative;
-                        return ((SolidColorBrush)cdat.Background).Color;
-                    case TYPE_FOREGROUND:
-                        cdat = (ColorData)Relative;
-                        return ((SolidColorBrush)cdat.Foreground).Color;
                     default:
                         return Colors.Black;
                 }
@@ -66,20 +59,11 @@ namespace SamSoarII.AppMain.UI
         private void B_Ensure_Click(object sender, RoutedEventArgs e)
         {
             FontData fdat = null;
-            ColorData cdat = null;
             switch (Type)
             {
                 case TYPE_FONT:
                     fdat = (FontData)Relative;
                     fdat.FontColor = new SolidColorBrush(CP_Color.SelectedColor);
-                    break;
-                case TYPE_BACKGROUND:
-                    cdat = (ColorData)Relative;
-                    cdat.Background = new SolidColorBrush(CP_Color.SelectedColor);
-                    break;
-                case TYPE_FOREGROUND:
-                    cdat = (ColorData)Relative;
-                    cdat.Foreground = new SolidColorBrush(CP_Color.SelectedColor);
                     break;
             }
             Close();

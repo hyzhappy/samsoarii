@@ -57,7 +57,8 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             get
             {
-                return !IsBeingMonitored;
+                return true;
+                //return !IsBeingMonitored;
             }
         }
         public bool IsEnableStart

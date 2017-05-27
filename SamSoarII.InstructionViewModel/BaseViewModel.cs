@@ -166,6 +166,10 @@ namespace SamSoarII.LadderInstViewModel
                 _values[id].ValueChanged += OnValueChanged;
             }
         }
+        public IMoniValueModel GetValueModel(int id)
+        {
+            return _values[id];
+        }
 
         protected virtual void OnAbort(object sender, RoutedEventArgs e)
         {

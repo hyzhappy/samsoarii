@@ -197,6 +197,7 @@
       <DependentUpon>MainMonitor.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Monitor\MonitorCommand.cs" />
+    <Compile Include="UI\Monitor\MonitorContextMenu.cs" />
     <Compile Include="UI\Monitor\MonitorManager.cs" />
     <Compile Include="UI\Monitor\MonitorVariableTable.xaml.cs">
       <DependentUpon>MonitorVariableTable.xaml</DependentUpon>

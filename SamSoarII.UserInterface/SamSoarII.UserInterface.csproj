@@ -75,8 +75,14 @@
     <Compile Include="ElementPropertyDialog.xaml.cs">
       <DependentUpon>ElementPropertyDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ElementValueModifyDialog.xaml.cs">
+    <Compile Include="ElementValueModify\ElementValueModifyDialog.xaml.cs">
       <DependentUpon>ElementValueModifyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ElementValueModify\ElementValueModifyPanel.xaml.cs">
+      <DependentUpon>ElementValueModifyPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ElementValueModify\ElementValueMultiplyModifyDialog.xaml.cs">
+      <DependentUpon>ElementValueMultiplyModifyDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="InstructionInputDialog.xaml.cs">
       <DependentUpon>InstructionInputDialog.xaml</DependentUpon>
@@ -161,7 +167,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ElementValueModifyDialog.xaml">
+    <Page Include="ElementValueModify\ElementValueModifyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ElementValueModify\ElementValueModifyPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ElementValueModify\ElementValueMultiplyModifyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -101,6 +101,30 @@ namespace SamSoarII.AppMain.UI.Monitor
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ShowTypes"));
             }
         }
+        public string ShowType
+        {
+            get
+            {
+                switch (DataType)
+                {
+                    case 0:  return "BIT";
+                    case 1:  return "WORD";
+                    case 3:  return "DWORD";
+                    case 6:  return "FLOAT";
+                    default: return "null";
+                }
+            }
+            set
+            {
+                switch (value)
+                {
+                    case "BIT":   DataType = 0; break;
+                    case "WORD":  DataType = 1; break;
+                    case "DWORD": DataType = 3; break;
+                    case "FLOAT": DataType = 6; break;
+                }
+            }
+        }
         public int DataType { get; set; }
         public int ByteCount
         {
@@ -171,11 +195,13 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             if (DataType == 0)
             {
-                ShowTypes = Enum.GetNames(typeof(BitType));
+                ShowTypes = new string[] { "BOOL" };
+                //ShowTypes = Enum.GetNames(typeof(BitType));
             }
             else
             {
-                ShowTypes = Enum.GetNames(typeof(WordType));
+                ShowTypes = new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT" };
+                //ShowTypes = Enum.GetNames(typeof(WordType));
             }
         }
         public XElement CreateXElementBySelf()

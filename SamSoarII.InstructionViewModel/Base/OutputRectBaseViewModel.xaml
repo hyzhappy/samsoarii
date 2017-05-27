@@ -11,10 +11,6 @@
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="CommentFont" ObjectType="{x:Type local:FontManager}" MethodName="GetComment">
         </ObjectDataProvider>
-        <ObjectDataProvider x:Key="LadderColor" ObjectType="{x:Type local:ColorManager}" MethodName="GetLadder">
-        </ObjectDataProvider>
-        <ObjectDataProvider x:Key="CommentColor" ObjectType="{x:Type local:ColorManager}" MethodName="GetComment">
-        </ObjectDataProvider>
         <Style x:Key="LadderFontStyle" TargetType="TextBlock">
             <Setter Property="FontSize" 
                     Value="{Binding Source={StaticResource LadderFont}, Path=FontSize}">
@@ -35,11 +31,6 @@
             </Setter>
             <Setter Property="Foreground" 
                     Value="{Binding Source={StaticResource CommentFont}, Path=FontColor}">
-            </Setter>
-        </Style>
-        <Style x:Key="LadderLineStyle" TargetType="Line">
-            <Setter Property="Stroke" 
-                    Value="{Binding Source={StaticResource LadderColor}, Path=Foreground}">
             </Setter>
         </Style>
     </local:BaseViewModel.Resources>
@@ -65,19 +56,15 @@
                 </Style>
             </Canvas.Resources>
             <Border Canvas.Left="20" Canvas.Top="20" Width="280" Height="280" 
-                    BorderBrush="Black" 
-                    BorderThickness="4"
-                    Background="{Binding Source={StaticResource LadderColor}, Path=Background}">
+                    BorderThickness="4" BorderBrush="Black">
             </Border>
             <Line X1="0" Y1="100" X2="20" Y2="100" 
-                  Stroke="Black" StrokeThickness="4"
-                  Style="{StaticResource LadderLineStyle}">
+                  Stroke="Black" StrokeThickness="4">
             </Line>
-            <Label Canvas.Left="30" Canvas.Top="80" FontSize="25"
-                   Foreground="{Binding Source={StaticResource LadderColor}, Path=Foreground}">
+            <Label Canvas.Left="30" Canvas.Top="80" FontSize="25">
                 EN
             </Label>
-            <TextBlock x:Name="TopTextBlock"
+            <TextBlock x:Name="TopTextBlock" 
                        Canvas.Left="25" Canvas.Top="20" TextAlignment="Center"
                        Style="{StaticResource LadderFontStyle}">
             </TextBlock>
@@ -110,8 +97,7 @@
                        Style="{StaticResource LadderFontStyle}">
             </TextBlock>
         </Canvas>
-        <StackPanel x:Name="CommentArea" Width="300" Height="200"
-                    Background="{Binding Source={StaticResource CommentColor}, Path=Background}">
+        <StackPanel x:Name="CommentArea" Width="300" Height="200">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="FontSize" 
@@ -127,7 +113,7 @@
                             Value="Wrap">
                     </Setter>
                     <Setter Property="Margin" 
-                            Value="20, 5, 0, 0">
+                            Value="20, 20, 0, 0">
                     </Setter>
                 </Style>
             </StackPanel.Resources>

@@ -23,7 +23,7 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// ElementInitializeWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class ElementInitializeWindow : Window, INotifyPropertyChanged
+    public partial class ElementInitializeWindow : UserControl, INotifyPropertyChanged
     {
         private bool isTypeChanged = false;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -124,7 +124,7 @@ namespace SamSoarII.AppMain.UI
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            //Close();
         }
 
         public string[] DataTypes
@@ -161,12 +161,6 @@ namespace SamSoarII.AppMain.UI
                 isTypeChanged = true;
                 textBox.Text = 0.ToString();
             }
-        }
-        public void OnClosing(object sender, CancelEventArgs e)
-        {
-            Window window = sender as Window;
-            e.Cancel = true;
-            window.Hide();
         }
         private void OnCellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
