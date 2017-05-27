@@ -73,13 +73,22 @@ namespace SamSoarII.AppMain.UI.Monitor
         private bool _Thread_IsActive = false;
         public event RoutedEventHandler ThreadResume = delegate { };
         public event RoutedEventHandler ThreadPause = delegate { };
+        private void _Thread_WaitForActive()
+        {
+            _Thread_IsActive = false;
+            ThreadPause(this, new RoutedEventArgs());
+            while (_Thread_Alive && !_Thread_Active)
+            {
+                Thread.Sleep(10);
+            }
+            _Thread_IsActive = true;
+            ThreadResume(this, new RoutedEventArgs());
+        }
         private void _Thread_Run()
         {
             _Thread_IsAlive = true;
             while (_Thread_Alive)
             {
-                _Thread_IsActive = true;
-                ThreadResume(this, new RoutedEventArgs());
                 while (_Thread_Alive && _Thread_Active)
                 {
                     if (CurrentCommand == null)
@@ -108,7 +117,6 @@ namespace SamSoarII.AppMain.UI.Monitor
                     bool hasrecv = false;
                     if (CurrentCommand != null)
                     {
-
                         while (_Thread_Alive && _Thread_Active)
                         {
                             if (Send(CurrentCommand))
@@ -116,6 +124,16 @@ namespace SamSoarII.AppMain.UI.Monitor
                                 hassend = true;
                                 break;
                             }
+                        }
+                        if (!_Thread_Active)
+                        {
+
+                            _Thread_IsActive = false;
+                            while (hassend && !_Thread_Active)
+                            {
+
+                            }
+                            _Thread_IsActive = true;
                         }
                         while (_Thread_Alive && _Thread_Active)
                         {
@@ -131,12 +149,6 @@ namespace SamSoarII.AppMain.UI.Monitor
                         Execute(CurrentCommand);
                         CurrentCommand = null;
                     }
-                    Thread.Sleep(10);
-                }
-                _Thread_IsActive = false;
-                ThreadPause(this, new RoutedEventArgs());
-                while (_Thread_Alive && !_Thread_Active)
-                {
                     Thread.Sleep(10);
                 }
             }

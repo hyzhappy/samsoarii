@@ -230,6 +230,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     {
                         Unlock(_emodel);
                     }
+                    smodel.SManager.UnlockAll();
                 }
                 else
                 {
