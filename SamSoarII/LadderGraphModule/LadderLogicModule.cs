@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.AppMain.LadderGraphModule
 {
+    /// <summary>
+    /// author:zheyuYang
+    /// describe:代表梯形图中的最小逻辑单元,不可分割!
+    /// </summary>
     public class LadderLogicModule
     {
         public int startY

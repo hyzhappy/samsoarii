@@ -824,6 +824,17 @@ namespace SamSoarII.AppMain.UI
                         MessageBox.Show("通信失败！请检查参数设置。");
                     }
                 };
+                dialog.CommunicationTest += (sender1, e1) => 
+                {
+                    if (!_interactionFacade.CommunicationTest())
+                    {
+                        MessageBox.Show("通信失败！请检查参数设置。");
+                    }
+                    else
+                    {
+                        MessageBox.Show("通信成功!");
+                    }
+                };
                 dialog.ShowDialog();
             }
             else if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Monitor)
@@ -1058,9 +1069,28 @@ namespace SamSoarII.AppMain.UI
                 CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
                 dialog1.ShowDialog();
             };
-            dialog.Ensure += (sender2, e2) =>
+            dialog.Ensure += (sender1, e1) =>
             {
+                if (!_interactionFacade.CommunicationTest())
+                {
+                    MessageBox.Show("通信失败！请检查参数设置。");
+                }
+                else
+                {
+                    MessageBox.Show("通信成功!");
+                }
                 dialog.Close();
+            };
+            dialog.CommunicationTest += (sender1, e1) =>
+            {
+                if (!_interactionFacade.CommunicationTest())
+                {
+                    MessageBox.Show("通信失败！请检查参数设置。");
+                }
+                else
+                {
+                    MessageBox.Show("通信成功!");
+                }
             };
             dialog.ShowDialog();
         }

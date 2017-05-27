@@ -1097,6 +1097,16 @@ namespace SamSoarII.AppMain
         }
         public bool MonitorProject()
         {
+            if (CommunicationTest())
+            {
+                _projectModel.LadderMode = LadderMode.Monitor;
+                _projectModel.MMonitorManager.Initialize(_projectModel);
+                return true;
+            }
+            return false;
+        }
+        public bool CommunicationTest()
+        {
             if (!CheckLadder(false))
             {
                 return false;
@@ -1123,8 +1133,6 @@ namespace SamSoarII.AppMain
                     return false;
                 }
             }
-            _projectModel.LadderMode = LadderMode.Monitor;
-            _projectModel.MMonitorManager.Initialize(_projectModel);
             return true;
         }
         public void EditProject()

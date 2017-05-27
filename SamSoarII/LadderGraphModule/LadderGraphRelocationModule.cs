@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.AppMain.LadderGraphModule
 {
+    /// <summary>
+    /// author:zheyuYang
+    /// describe:梯形图重摆模块
+    /// </summary>
     public class LadderGraphRelocationModule
     {
         public static void Execute(LadderNetworkViewModel ladderNetwork)
@@ -21,6 +25,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
             }
             RemoveEmptyLines(ladderNetwork);
         }
+        /// <summary>
+        /// describe:网络横向扫描
+        /// </summary>
+        /// <param name="ladderLogicModule"></param>
         private static void HorizontalScan(LadderLogicModule ladderLogicModule)
         {
             InitializeCountLevel(ladderLogicModule);
@@ -40,6 +48,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
             }
             MoveResidueEle(ladderLogicModule);
         }
+        /// <summary>
+        /// describe:网络纵向扫描
+        /// </summary>
+        /// <param name="ladderLogicModule"></param>
         private static void VerticalScan(LadderLogicModule ladderLogicModule)
         {
             PreScan(ladderLogicModule);
@@ -218,6 +230,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
             }
         }
+        /// <summary>
+        /// describe:使网络中的逻辑单元之间不保留任何空行
+        /// </summary>
+        /// <param name="ladderLogicModule"></param>
         private static void PreScan(LadderLogicModule ladderLogicModule)
         {
             int minY = ladderLogicModule.startY;
@@ -499,7 +515,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
             }
         }
-        //对网络中的VLine进行分层，即若两条VLine之间存在非HLine元素，则后者level是前者中最大的level加一
+        /// <summary>
+        /// describe:进行梯形图扫描前的核心操作,对逻辑单元中的VLine进行分层。
+        /// </summary>
+        /// <param name="ladderLogicModule"></param>
         private static void InitializeCountLevel(LadderLogicModule ladderLogicModule)
         {
             var tempElements = ladderLogicModule.LadderElements.Where(x => { return x.Type != ElementType.HLine; }).ToList();

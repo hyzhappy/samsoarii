@@ -31,6 +31,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
         Empty,
         None
     }
+    /// <summary>
+    /// author:zheyuYang
+    /// describe:梯形图检查模块
+    /// </summary>
     public class LadderGraphCheckModule
     {
         public static ErrorMessage Execute(LadderDiagramViewModel ladderDiagram)
@@ -38,6 +42,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
             ErrorType error = ErrorType.None;
             foreach (var network in ladderDiagram.GetNetworks().Where(x => { return !x.IsMasked; }))
             {
+                if (!network.ladderExpander.IsExpand)
+                {
+                    network.ladderExpander.IsExpand = true;
+                }
                 error = CheckNetwork(network);
                 if (error != ErrorType.None)
                 {
