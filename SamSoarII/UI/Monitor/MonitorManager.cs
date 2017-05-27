@@ -149,6 +149,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 ComThread = new Thread(_Thread_Run);
                 _Thread_Alive = true;
+                _Thread_Active = true;
                 ComThread.Start();
                 IsRunning = true;
                 Started(this, new RoutedEventArgs());
