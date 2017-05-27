@@ -212,6 +212,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
     public class SimuMoniValueModel : IMoniValueModel
     {
         private SimulateVariableUnit svunit;
+        private SimulateModel smodel;
 
         public event RoutedEventHandler ValueChanged = delegate { };
 
@@ -223,10 +224,64 @@ namespace SamSoarII.Simulation.Core.VariableModel
             }
         }
 
-        public SimuMoniValueModel(SimulateVariableUnit _svunit)
+        public SimuMoniValueModel(
+            SimulateVariableUnit _svunit,
+            SimulateModel _smodel)
         {
             svunit = _svunit;
+            smodel = _smodel;
             svunit.ValueChanged += OnValueChanged;
+        }
+
+        public void Lock(string value = null, string type = null)
+        {
+            if (value != null) Write(value, type);
+            smodel.SManager.Lock(svunit);
+        }
+
+        public void Unlock()
+        {
+            smodel.SManager.Unlock(svunit);
+        }
+
+        public void UnlockAll()
+        {
+
+        }
+
+        public void Write(string value, string type = null)
+        {
+            if (svunit is SimulateBitUnit)
+            {
+                switch (value)
+                {
+                    case "0": case "OFF": case "FALSE":
+                        svunit.Value = 0;
+                        break;
+                    case "1": case "ON": case "TRUE":
+                        svunit.Value = 1;
+                        break;
+                }
+            }
+            else if (svunit is SimulateWordUnit)
+            {
+                if (type.Equals("UWORD"))
+                    svunit.Value = (Int32)(UInt32.Parse(value));
+                else
+                    svunit.Value = Int32.Parse(value);
+            }
+            else if (svunit is SimulateDWordUnit)
+            {
+                if (type.Equals("UDWORD"))
+                    svunit.Value = (Int64)(UInt64.Parse(value));
+                else
+                    svunit.Value = Int64.Parse(value);
+            }
+            else if (svunit is SimulateFloatUnit)
+            {
+                svunit.Value = double.Parse(value);
+            }
+            svunit.Set(smodel.SManager.DllModel);
         }
         
         private void OnValueChanged(object sender, RoutedEventArgs e)

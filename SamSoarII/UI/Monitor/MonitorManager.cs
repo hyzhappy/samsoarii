@@ -4,6 +4,7 @@ using SamSoarII.Communication.Command;
 using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.LadderInstViewModel.Monitor;
+using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using SamSoarII.ValueModel;
 using System;
@@ -34,6 +35,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         void Remove(IEnumerable<ElementModel> emodel);
         void Add(ICommunicationCommand cmd);
         void Remove(ICommunicationCommand cmd);
+        void Handle(IMoniValueModel mvmodel, ElementValueModifyEventArgs e);
     }
 
     public enum MonitorManager_ElementModelHandle
@@ -290,6 +292,126 @@ namespace SamSoarII.AppMain.UI.Monitor
                     return 6;
                 default:
                     return -1;
+            }
+        }
+
+        #endregion
+        
+        #region Value Modify Handle
+
+        public void Handle(IMoniValueModel mvmodel, ElementValueModifyEventArgs e)
+        {
+            ElementModel element = (ElementModel)mvmodel;
+            element.ShowType = e.VarType;
+            byte bvalue = 0;
+            ICommunicationCommand command = null;
+            switch (e.Type)
+            {
+                case ElementValueModifyEventType.ForceON:
+                    bvalue = 0x01;
+                    element.SetValue = "ON";
+                    Force(element, bvalue);
+                    break;
+                case ElementValueModifyEventType.ForceOFF:
+                    bvalue = 0x01;
+                    element.SetValue = "OFF";
+                    Force(element, bvalue);
+                    break;
+                case ElementValueModifyEventType.ForceCancel:
+                    element.SetValue = String.Empty;
+                    command = new ForceCancelCommand(false, element);
+                    Add(command);
+                    break;
+                case ElementValueModifyEventType.AllCancel:
+                    element.SetValue = String.Empty;
+                    command = new ForceCancelCommand(true, element);
+                    Add(command);
+                    break;
+                case ElementValueModifyEventType.WriteOFF:
+                    bvalue = 0x00;
+                    element.SetValue = "OFF";
+                    Write(element, bvalue);
+                    break;
+                case ElementValueModifyEventType.WriteON:
+                    bvalue = 0x00;
+                    element.SetValue = "ON";
+                    Write(element, bvalue);
+                    break;
+                case ElementValueModifyEventType.Write:
+                    element.SetValue = e.Value;
+                    Write(element);
+                    break;
+            }
+        }
+        private void Force(ElementModel element, byte value)
+        {
+            GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
+            command.RefElements_A.Add(element);
+            Add(command);
+        }
+        private void Write(ElementModel element, byte value)
+        {
+            if (element.IsIntrasegment)
+            {
+                IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { value }, element);
+                command.RefElement = element;
+                Add(command);
+            }
+            else
+            {
+                GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
+                command.RefElements_A.Add(element);
+                Add(command);
+            }
+        }
+
+        private void Write(ElementModel element, string value)
+        {
+            byte[] data;
+            element.SetValue = value;
+            switch (element.ShowType)
+            {
+                case "WORD":
+                    data = ValueConverter.GetBytes(
+                        (UInt16)(Int16.Parse(value)));
+                    break;
+                case "UWORD":
+                    data = ValueConverter.GetBytes(
+                        UInt16.Parse(value));
+                    break;
+                case "BCD":
+                    data = ValueConverter.GetBytes(
+                        ValueConverter.ToUINT16(
+                            UInt16.Parse(value)));
+                    break;
+                case "DWORD":
+                    data = ValueConverter.GetBytes(
+                        (UInt32)(Int32.Parse(value)));
+                    break;
+                case "UDWORD":
+                    data = ValueConverter.GetBytes(
+                        UInt32.Parse(value));
+                    break;
+                case "FLOAT":
+                    data = ValueConverter.GetBytes(
+                        ValueConverter.FloatToUInt(
+                            float.Parse(value)));
+                    break;
+                default:
+                    data = new byte[0];
+                    break;
+            }
+            if (element.IsIntrasegment)
+            {
+                IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, element);
+                command.RefElement = element;
+                Add(command);
+            }
+            else
+            {
+                GeneralWriteCommand command = new GeneralWriteCommand(data, element);
+                command.RefElements_A.Add(element);
+                Add(command);
             }
         }
 

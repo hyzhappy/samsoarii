@@ -1054,7 +1054,8 @@ namespace SamSoarII.AppMain
                 _projectTreeView.TabItemOpened += OnTabOpened;
                 _projectTreeView.PTVHandle += OnGotPTVHandle;
                 _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
-                _projectTreeView.LoadElementInitWindByXElement(_projectModel.EleInitializeData);
+                //_projectTreeView.LoadElementInitWindByXElement(_projectModel.EleInitializeData);
+                _mainWindow.ElemInitWind.LoadElementsByXElement(_projectModel.EleInitializeData);
                 _projectModel.EleInitializeData = null;
                 InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
                 _mainTabControl.Reset();

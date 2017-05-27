@@ -388,7 +388,7 @@ namespace Xceed.Wpf.AvalonDock.Global
 
         static public void Load()
         {
-            XDocument xdoc = XDocument.Load("layoutconfig.xml");
+            XDocument xdoc = XDocument.Load("LayoutConfig.xml");
             XElement node_Root = xdoc.Element("LayoutSetting");
             XElement nodes_ID = node_Root.Element("IsDock");
             XElement nodes_DW = node_Root.Element("DockWidth");

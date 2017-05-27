@@ -9,7 +9,8 @@
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              xmlns:inst="clr-namespace:SamSoarII.LadderInstViewModel;assembly=SamSoarII.LadderInstViewModel"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="{x:Static app:GlobalSetting.WholeWidth}" x:Name="LadderNetworkUserControl">
+             d:DesignHeight="300" d:DesignWidth="{x:Static app:GlobalSetting.WholeWidth}" x:Name="LadderNetworkUserControl"
+             ContextMenuOpening="LadderNetworkUserControl_ContextMenuOpening">
     <UserControl.Resources>
         <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetTitle"/>
         <util:BoolToVisibilityConverter2 x:Key="converter"></util:BoolToVisibilityConverter2>
@@ -53,7 +54,7 @@
                         PreviewMouseDown="OnCanvasMouseDown" 
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                         <Canvas.ContextMenu>
-                            <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu x:Name="CM_Edit" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                                 <MenuItem Header="图元剪切"></MenuItem>
                                 <MenuItem Header="图元复制"></MenuItem>
                                 <MenuItem Header="图元粘贴"></MenuItem>

@@ -1,6 +1,8 @@
 ﻿using SamSoarII.AppMain.LadderCommand;
 using SamSoarII.AppMain.LadderGraphModule;
 using SamSoarII.AppMain.UI;
+using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Communication;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
@@ -8,6 +10,7 @@ using SamSoarII.LadderInstViewModel.Interrupt;
 using SamSoarII.LadderInstViewModel.Monitor;
 using SamSoarII.PLCCompiler;
 using SamSoarII.PLCDevice;
+using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using SamSoarII.ValueModel;
@@ -57,7 +60,10 @@ namespace SamSoarII.AppMain.Project
     public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
     {
         #region Canvas System
-        
+        //private ContextMenu CM_Ladder;
+        private MonitorContextMenu CM_Monitor
+            = new MonitorContextMenu();
+
         private LadderMode laddermode;
         public LadderMode LadderMode
         {
@@ -70,14 +76,17 @@ namespace SamSoarII.AppMain.Project
                     switch (laddermode)
                     {
                         case LadderMode.Demo:
+                            LadderCanvas.ContextMenu = null;
                             bvmodel.IsMonitorMode = false;
                             bvmodel.CanModify = false;
                             break;
                         case LadderMode.Edit:
+                            LadderCanvas.ContextMenu = CM_Edit;
                             bvmodel.IsMonitorMode = false;
                             bvmodel.CanModify = true;
                             break;
                         default:
+                            LadderCanvas.ContextMenu = CM_Monitor;
                             bvmodel.IsMonitorMode = true;
                             bvmodel.CanModify = false;
                             break;
@@ -85,7 +94,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-
+        
         #endregion
 
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
@@ -498,8 +507,9 @@ namespace SamSoarII.AppMain.Project
             ladderExpander.expandButton.IsExpandChanged += ExpandButton_IsExpandChanged;
             ThumbnailButton.ToolTipOpening += ThumbnailButton_ToolTipOpening;
             ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
+            CM_Monitor.ValueModify += OnMonitorValueModify;
         }
-
+        
         public IEnumerable<BaseViewModel> GetElements()
         {
             return _ladderElements.Values;
@@ -1543,5 +1553,63 @@ namespace SamSoarII.AppMain.Project
             }
         }
         #endregion
+
+        #region Monitor ContextMenu
+
+        private void LadderNetworkUserControl_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            IMonitorManager cmanager = null;
+            if (LadderMode == LadderMode.Simulate)
+            {
+                cmanager = SimulateHelper.SMManager;
+            }
+            else if (LadderMode == LadderMode.Monitor)
+            {
+                cmanager = _ladderDiagram.ProjectModel.MMonitorManager;
+            }
+            switch (_ladderDiagram.SelectionStatus)
+            {
+                case SelectStatus.Idle:
+                case SelectStatus.SingleSelected:
+                    Point pos = Mouse.GetPosition(this);
+                    if (cmanager != null 
+                     && cmanager.IsRunning 
+                     && AcquireSelectRect(pos))
+                        CM_Monitor.BVModel = _ladderDiagram.SelectionRect.CurrentElement;
+                    else
+                        CM_Monitor.BVModel = null;
+                    break;
+                default:
+                    CM_Monitor.BVModel = null;
+                    break;
+            }
+        }
+        
+        private void OnMonitorValueModify(object sender, ElementValueModifyEventArgs e)
+        {
+            BaseViewModel bvmodel = _ladderDiagram.SelectionRect.CurrentElement;
+            BaseModel bmodel = bvmodel.Model;
+            if (bmodel == null) return;
+            int id = 0;
+            for (; id < bmodel.ParaCount; id++)
+            {
+                if (bmodel.GetPara(id).ValueString.Equals(e.VarName))
+                    break;
+            }
+            if (id >= bmodel.ParaCount) return;
+            IMoniValueModel mvmodel = bvmodel.GetValueModel(id);
+            if (LadderMode == LadderMode.Simulate)
+            {
+                SimulateHelper.SMManager.Handle(mvmodel, e);
+            }
+            else if (LadderMode == LadderMode.Monitor)
+            {
+                _ladderDiagram.ProjectModel.MMonitorManager.Handle(mvmodel, e);
+            }
+        }
+
+        #endregion
+
+
     }
 }

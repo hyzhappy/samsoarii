@@ -238,7 +238,7 @@ namespace SamSoarII.AppMain.Project
             rootNode.Add(ProjectPropertyManager.CreateProjectPropertyXElement());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             rootNode.Add(MMonitorManager.MMWindow.CreateXElementByTables());
-            rootNode.Add(IFacade.PTView.CreatXElementByElementInitWind());
+             rootNode.Add(IFacade.MainWindow.ElemInitWind.CreatXElementByElements());
             foreach (var ldmodel in SubRoutines)
             {
                 rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(ldmodel));

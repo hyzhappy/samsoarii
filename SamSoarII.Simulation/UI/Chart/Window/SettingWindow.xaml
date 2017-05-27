@@ -98,7 +98,7 @@
                         </StackPanel>        
                     </TabItem.Content>
                 </TabItem>
-                    <TabItem Header="时间轴" Margin="-2,0,-2,-3">
+                    <TabItem Header="时间轴">
                     <TabItem.Content>
                         <StackPanel Orientation="Vertical">
                             <Grid x:Name="G_Divide">

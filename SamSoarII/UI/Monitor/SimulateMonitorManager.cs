@@ -9,6 +9,8 @@ using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.Simulation.Core;
 using System.Windows;
 using SamSoarII.Communication.Command;
+using SamSoarII.LadderInstViewModel.Monitor;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.AppMain.UI.Monitor
 {
@@ -52,21 +54,21 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         public void Start()
         {
+            IsRunning = true;
             foreach (KeyValuePair<SimulateVariableUnit, ElementModel> kvp in dict)
             {
-                kvp.Value.CurrentValue = kvp.Key.Value.ToString();
+                UpdateValue(kvp.Value, kvp.Key);
             }
-            IsRunning = true;
             Started(this, new RoutedEventArgs());
         }
 
         public void Abort()
         {
+            IsRunning = false;
             foreach (KeyValuePair<SimulateVariableUnit, ElementModel> kvp in dict)
             {
-                kvp.Value.CurrentValue = "???";
+                UpdateValue(kvp.Value, kvp.Key);
             }
-            IsRunning = false;
             Aborted(this, new RoutedEventArgs());
         }
 
@@ -81,8 +83,10 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             else
             {
-                dict[svunit].RefCount++;
+                emodel = dict[svunit];
+                emodel.RefCount++;
             }
+            UpdateValue(emodel, svunit);
         }
 
         public void Add(IEnumerable<ElementModel> emodels)
@@ -116,7 +120,12 @@ namespace SamSoarII.AppMain.UI.Monitor
             foreach (MonitorVariableTable table in mmonitor.tables)
             {
                 Add(table.Elements);
+                for (int i = 0; i < table.Elements.Count(); i++)
+                {
+                    table.Elements[i] = Get(table.Elements[i]);
+                }
             }
+            
         }
 
         public void Initialize(ProjectModel pmodel)
@@ -175,7 +184,8 @@ namespace SamSoarII.AppMain.UI.Monitor
                         case "0": case "OFF": case "FALSE":
                             svunit.Value = 0; break;
                         case "1": case "ON": case "TRUE":
-                            svunit.Value = 1; break;
+                            svunit.Value = 1;
+                            break;
                     }
                     break;
                 case "WORD":
@@ -186,7 +196,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     svunit.Value = double.Parse(emodel.SetValue); break;
             }
             svunit.Set(smodel.SManager.DllModel);
-            emodel.CurrentValue = svunit.Value.ToString();
+            //emodel.CurrentValue = svunit.Value.ToString();
         }
 
         public void Write(IEnumerable<ElementModel> emodels)
@@ -234,6 +244,70 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         #endregion
 
+        public void Handle(IMoniValueModel mvmodel, ElementValueModifyEventArgs e)
+        {
+            if (mvmodel is SimuMoniValueModel)
+            {
+                SimuMoniValueModel smvmodel = (SimuMoniValueModel)mvmodel;
+                switch (e.Type)
+                {
+                    case ElementValueModifyEventType.ForceON:
+                    case ElementValueModifyEventType.ForceOFF:
+                        smvmodel.Lock(e.Value, e.VarType);
+                        break;
+                    case ElementValueModifyEventType.WriteON:
+                    case ElementValueModifyEventType.WriteOFF:
+                    case ElementValueModifyEventType.Write:
+                        smvmodel.Write(e.Value, e.VarType);
+                        break;
+                    case ElementValueModifyEventType.ForceCancel:
+                        smvmodel.Unlock();
+                        break;
+                    case ElementValueModifyEventType.AllCancel:
+                        smvmodel.UnlockAll();
+                        break;
+                }
+            }
+            if (mvmodel is ElementModel)
+            {
+                ElementModel element = (ElementModel)mvmodel;
+                ICommunicationCommand command = null;
+                switch (e.Type)
+                {
+                    case ElementValueModifyEventType.ForceON:
+                        element.SetValue = "ON";
+                        Lock(element);
+                        break;
+                    case ElementValueModifyEventType.ForceOFF:
+                        element.SetValue = "OFF";
+                        Lock(element);
+                        break;
+                    case ElementValueModifyEventType.ForceCancel:
+                        element.SetValue = String.Empty;
+                        command = new ForceCancelCommand(false, element);
+                        Add(command);
+                        break;
+                    case ElementValueModifyEventType.AllCancel:
+                        element.SetValue = String.Empty;
+                        command = new ForceCancelCommand(true, element);
+                        Add(command);
+                        break;
+                    case ElementValueModifyEventType.WriteOFF:
+                        element.SetValue = "OFF";
+                        Write(element);
+                        break;
+                    case ElementValueModifyEventType.WriteON:
+                        element.SetValue = "ON";
+                        Write(element);
+                        break;
+                    case ElementValueModifyEventType.Write:
+                        element.SetValue = e.Value;
+                        Write(element);
+                        break;
+                }
+            }
+        }
+
         #region Event Handler
 
         private void OnValueChanged(object sender, RoutedEventArgs e)
@@ -244,6 +318,36 @@ namespace SamSoarII.AppMain.UI.Monitor
                 SimulateVariableUnit svunit = (SimulateVariableUnit)sender;
                 if (!dict.ContainsKey(svunit)) return;
                 ElementModel emodel = dict[svunit];
+                UpdateValue(emodel, svunit);
+            }
+        }
+
+        private void UpdateValue(ElementModel emodel, SimulateVariableUnit svunit)
+        {
+            if (!IsRunning)
+            {
+                emodel.CurrentValue = "????";
+                emodel.SetValue = String.Empty;
+                return;
+            }
+            if (svunit.Type.Equals("BIT"))
+            {
+                switch (svunit.Value.ToString())
+                {
+                    case "0":
+                    case "OFF":
+                    case "FALSE":
+                        emodel.CurrentValue = "OFF";
+                        break;
+                    case "1":
+                    case "ON":
+                    case "TRUE":
+                        emodel.CurrentValue = "ON";
+                        break;
+                }
+            }
+            else
+            {
                 emodel.CurrentValue = svunit.Value.ToString();
             }
         }

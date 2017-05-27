@@ -137,7 +137,7 @@ namespace SamSoarII.AppMain.UI
         }
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }
-    public partial class ElementList : Window, INotifyPropertyChanged
+    public partial class ElementList : UserControl, INotifyPropertyChanged
     {
         private bool _hasUsed = false;
         private bool _hasComment = false;
@@ -832,12 +832,6 @@ namespace SamSoarII.AppMain.UI
                     }
                 }
             }
-        }
-        public void OnClosing(object sender, CancelEventArgs e)
-        {
-            Window window = sender as Window;
-            e.Cancel = true;
-            window.Hide();
         }
         private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
         {

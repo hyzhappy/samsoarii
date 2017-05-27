@@ -48,6 +48,8 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACReplace { get { return LAReplace?.AnchorControl; } }
         public LayoutAnchorControl LACMonitor { get { return LAMonitor?.AnchorControl; } }
         public LayoutAnchorControl LACErrorList { get { return LAErrorList?.AnchorControl; } }
+        public LayoutAnchorControl LACElemList { get { return LAElemList?.AnchorControl; } }
+        public LayoutAnchorControl LACElemInit { get { return LAElemInit?.AnchorControl; } }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
         public MainWindow()
         {
@@ -68,16 +70,6 @@ namespace SamSoarII.AppMain.UI
         {
             foreach (Window window in Application.Current.Windows)
             {
-                if (window is ElementList)
-                {
-                    window.Closing -= ((ElementList)window).OnClosing;
-                    window.Close();
-                }
-                if (window is ElementInitializeWindow)
-                {
-                    window.Closing -= ((ElementInitializeWindow)window).OnClosing;
-                    window.Close();
-                }
                 if (window is OptionDialog)
                 {
                     window.Closing -= ((OptionDialog)window).OnClosing;
@@ -97,7 +89,10 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAReplace);
             InitializeAvalonDock(LAMonitor);
             InitializeAvalonDock(LAErrorList);
+            InitializeAvalonDock(LAElemList);
+            InitializeAvalonDock(LAElemInit);
         }
+
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
         {
             AnchorSide side;
@@ -534,6 +529,32 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
+
+        private void ShowElemListCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+
+        private void ShowElemInitCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null)
+            {
+                e.CanExecute = _interactionFacade.ProjectLoaded;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
         private void DownloadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
 
@@ -617,11 +638,11 @@ namespace SamSoarII.AppMain.UI
         #region Command Execute
         private void OnEleInitializeCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            _interactionFacade.PTView.OpenEleInitialize();
+            LACElemInit.Show();
         }
         private void OnEleListOpenCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            _interactionFacade.PTView.OpenElementList();
+            LACElemList.Show();
         }
         private void OnCloseProjectCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -665,6 +686,16 @@ namespace SamSoarII.AppMain.UI
         private void OnShowErrorListExecute(object sender, RoutedEventArgs e)
         {
             LACErrorList.Show();
+        }
+
+        private void OnShowElemListExecute(object sender, RoutedEventArgs e)
+        {
+            LACElemList.Show();
+        }
+
+        private void OnShowElemInitExecute(object sender, RoutedEventArgs e)
+        {
+            LACElemInit.Show();
         }
 
         private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -866,6 +897,7 @@ namespace SamSoarII.AppMain.UI
                 if (SimulateHelper.Close() == SimulateHelper.CLOSE_OK)
                 {
                     SimuToolBarTray.Visibility = Visibility.Collapsed;
+                    SimulateModeButton.IsChecked = false;
                 }
                 else
                 {
@@ -1064,7 +1096,6 @@ namespace SamSoarII.AppMain.UI
             };
             dialog.ShowDialog();
         }
-        
     }
 }
 
