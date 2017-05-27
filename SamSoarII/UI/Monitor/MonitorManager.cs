@@ -115,33 +115,28 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                     bool hassend = false;
                     bool hasrecv = false;
+                    int sendtime = 0;
+                    int recvtime = 0;
                     if (CurrentCommand != null)
                     {
-                        while (_Thread_Alive && _Thread_Active)
+                        while (_Thread_Alive && _Thread_Active && sendtime < 10)
                         {
                             if (Send(CurrentCommand))
                             {
                                 hassend = true;
                                 break;
                             }
+                            sendtime++;
                         }
-                        if (!_Thread_Active)
-                        {
-
-                            _Thread_IsActive = false;
-                            while (hassend && !_Thread_Active)
-                            {
-
-                            }
-                            _Thread_IsActive = true;
-                        }
-                        while (_Thread_Alive && _Thread_Active)
+                        _Thread_WaitForActive();
+                        while (_Thread_Alive && _Thread_Active && recvtime < 10)
                         {
                             if (Recv(CurrentCommand))
                             {
                                 hasrecv = true;
                                 break;
                             }
+                            recvtime++;
                         }
                     }
                     if (hassend && hasrecv)
@@ -151,6 +146,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                     Thread.Sleep(10);
                 }
+                _Thread_WaitForActive();
             }
             _Thread_IsAlive = false;
         }
