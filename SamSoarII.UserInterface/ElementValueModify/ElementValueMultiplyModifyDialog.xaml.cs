@@ -20,7 +20,8 @@ namespace SamSoarII.UserInterface
     /// </summary>
     public partial class ElementValueMultiplyModifyDialog : Window, IDisposable
     {
-        public ElementValueMultiplyModifyDialog(string[] varnames, string[] vartypes)
+        public ElementValueMultiplyModifyDialog(
+            string[] varnames, string[] vartypes, string[] values)
         {
             InitializeComponent();
             Count = varnames.Length;
@@ -30,6 +31,7 @@ namespace SamSoarII.UserInterface
                 PN_Values[i] = new ElementValueModifyPanel();
                 PN_Values[i].VarName = varnames[i];
                 PN_Values[i].VarType = vartypes[i];
+                PN_Values[i].Value = values[i];
                 PN_Values[i].ValueModify += OnValueModify;
                 TabItem titem = new TabItem();
                 titem.Header = varnames[i];
