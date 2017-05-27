@@ -1062,15 +1062,15 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.NetworkRemoveRow(this, _ladderDiagram.SelectionRect.Y);
             }
         }
+        
         private void OnAppendNewRow(object sender, RoutedEventArgs e)
         {
-            if(IsSingleSelected())
+            if (IsSingleSelected())
             {
-                //AppendRow();
                 _ladderDiagram.NetworkAddRow(this, RowCount);
             }
         }
-
+        
         private void OnAppendNewNetwork(object sender, RoutedEventArgs e)
         {
             if(IsSingleSelected())

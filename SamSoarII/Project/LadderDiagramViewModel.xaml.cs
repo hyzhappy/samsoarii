@@ -1421,6 +1421,15 @@ namespace SamSoarII.AppMain.Project
             if(e.Key == Key.Enter)
             {
                 if (LadderMode != LadderMode.Edit) return;
+                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    if (SelectionRect.NetworkParent != null)
+                    {
+                        NetworkAddRow(SelectionRect.NetworkParent, SelectionRect.NetworkParent.RowCount);
+                        //SelectionRect.NetworkParent.AppendNewRow();
+                        return;
+                    }
+                }
                 if (_selectRectOwner != null)
                 {
                     var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
@@ -1438,6 +1447,15 @@ namespace SamSoarII.AppMain.Project
             if(e.Key == Key.Delete)
             {
                 if (LadderMode != LadderMode.Edit) return;
+                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    if (SelectionRect.NetworkParent != null)
+                    {
+                        NetworkRemoveRow(SelectionRect.NetworkParent, SelectionRect.Y);
+                        return;
+                    }
+
+                }
                 if (SelectionStatus == SelectStatus.SingleSelected)
                 {
                     var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
