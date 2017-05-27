@@ -55,6 +55,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         public MonitorVariableTable(string tableName,MainMonitor parent)
         {
             InitializeComponent();
+            DataContext = this;
             TableName = tableName;
             if (tableName == "table_0")
             {
@@ -64,7 +65,6 @@ namespace SamSoarII.AppMain.UI.Monitor
                 Elements.Add(model);
             }
             _parent = parent;
-            DataContext = this;
         }
         public void AddElement(ElementModel ele)
         {
@@ -72,10 +72,10 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 Elements.Add(ele);
             }
-            else
-            {
-                MessageBox.Show(string.Format("{0}元件已添加!",ele.ShowName));
-            }
+            //else
+            //{
+            //    MessageBox.Show(string.Format("{0}元件已添加!",ele.ShowName));
+            //}
         }
         public void DeleteElement(ElementModel ele)
         {

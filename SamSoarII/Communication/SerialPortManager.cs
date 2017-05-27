@@ -14,7 +14,13 @@ namespace SamSoarII.Communication
 {
     public class SerialPortManager : ICommunicationManager
     {
-        static private string[] PORTNAMES = SerialPort.GetPortNames();
+        static private string[] PORTNAMES
+        {
+            get
+            {
+                return SerialPort.GetPortNames();
+            }
+        }
         static private int[] BAUDRATES = { 4800, 9600, 19200, 38400, 57600, 115200 };
         static private int[] DATABITS = { 8 };
         static private int[] STOPBITS = { 1, 2 };
@@ -138,7 +144,10 @@ namespace SamSoarII.Communication
                 {
                     InitializePort();
                 }
-                port.Open();
+                if (!port.IsOpen)
+                {
+                    port.Open();
+                }
             }
             catch (Exception)
             {
@@ -206,11 +215,17 @@ namespace SamSoarII.Communication
         {
             foreach (string _portname in PORTNAMES)
             {
-                port = new SerialPort(_portname);
+                if (port != null && port.PortName != _portname)
+                {
+                    port = new SerialPort(_portname);
+                }
                 try
                 {
-                    port.Open();
-                    port.Close();
+                    if (!port.IsOpen)
+                    {
+                        port.Open();
+                        port.Close();
+                    }
                     return true;
                 }
                 catch (Exception)

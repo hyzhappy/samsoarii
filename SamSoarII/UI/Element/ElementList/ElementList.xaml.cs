@@ -324,6 +324,22 @@ namespace SamSoarII.AppMain.UI
             {
                 _elementCollection.Add(new ValueCommentAlias(string.Format("AO"), i, string.Empty, string.Empty));
             }
+            for (uint i = device.MRange.Start; i < device.MRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("M"), i, string.Empty, string.Empty));
+            }
+            for (uint i = device.DRange.Start; i < device.DRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("D"), i, string.Empty, string.Empty));
+            }
+            for (uint i = device.CVRange.Start; i < device.CVRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("CV"), i, string.Empty, string.Empty));
+            }
+            for (uint i = device.TVRange.Start; i < device.TVRange.End; i++)
+            {
+                _elementCollection.Add(new ValueCommentAlias(string.Format("TV"), i, string.Empty, string.Empty));
+            }
         }
         #endregion
         public ElementList()
@@ -345,7 +361,6 @@ namespace SamSoarII.AppMain.UI
         }
         private void LoadElements()
         {
-            LoadElement();
             FilterCollectionByDeviceType(_elementCollection, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             RangePropertyChanged();
             UpdateElementCollection();
@@ -463,26 +478,6 @@ namespace SamSoarII.AppMain.UI
             FilterCollectionByDeviceType(_elementCollection, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             UpdateElementCollection();
             RangePropertyChanged();
-        }
-        private void LoadElement()
-        {
-            Device device = Device.MaxRangeDevice;
-            for (uint i = device.MRange.Start; i < device.MRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("M"), i, string.Empty, string.Empty));
-            }
-            for (uint i = device.DRange.Start; i < device.DRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("D"), i, string.Empty, string.Empty));
-            }
-            for (uint i = device.CVRange.Start; i < device.CVRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("CV"), i, string.Empty, string.Empty));
-            }
-            for (uint i = device.TVRange.Start; i < device.TVRange.End; i++)
-            {
-                _elementCollection.Add(new ValueCommentAlias(string.Format("TV"), i, string.Empty, string.Empty));
-            }
         }
         public static void InstructionCommentManager_MappedMessageChanged(MappedMessageChangedEventArgs e)
         {
