@@ -86,17 +86,16 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 OutputValue = WordValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
-
             var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
             dialog.ShowLine3("IN:", InputValue);
             dialog.ShowLine5("OUT:", OutputValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = InputValue.ValueString;

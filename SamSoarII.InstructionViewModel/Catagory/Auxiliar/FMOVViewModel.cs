@@ -95,9 +95,8 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             {
                 CountValue = WordValue.Null;
             }
-
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
 
@@ -108,7 +107,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             dialog.ShowLine6("CT:", CountValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = SourceValue.ValueString;

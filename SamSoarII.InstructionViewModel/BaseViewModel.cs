@@ -57,11 +57,38 @@ namespace SamSoarII.LadderInstViewModel
             e.Handled = true;
         }
 
-        public abstract IPropertyDialog PreparePropertyDialog();
+        public virtual IPropertyDialog PreparePropertyDialog()
+        {
+            BasePropModel bpmodel = null;
+            if (this is InputBaseViewModel)
+                bpmodel = new InputPropModel();
+            if (this is OutputBaseViewModel)
+                bpmodel = new OutputPropModel();
+            if (this is OutputRectBaseViewModel)
+                bpmodel = new OutRecPropModel();
+            if (bpmodel == null)
+                return null;
+            bpmodel.InstructionName = InstructionName;
+            bpmodel.Count = Model.ParaCount;
+            if (bpmodel.Count >= 1)
+                bpmodel.ValueString1 = Model.GetPara(0).ValueString;
+            if (bpmodel.Count >= 2)
+                bpmodel.ValueString2 = Model.GetPara(1).ValueString;
+            if (bpmodel.Count >= 3)
+                bpmodel.ValueString3 = Model.GetPara(2).ValueString;
+            if (bpmodel.Count >= 4)
+                bpmodel.ValueString4 = Model.GetPara(3).ValueString;
+            if (bpmodel.Count >= 5)
+                bpmodel.ValueString5 = Model.GetPara(4).ValueString;
+            ElementPropertyDialog_New epdialog = new ElementPropertyDialog_New();
+            epdialog.BPModel = bpmodel;
+            return epdialog;
+        }
 
         public void BeginShowPropertyDialog()
         {
             if (!CanModify) return;
+
             var dialog = PreparePropertyDialog();
             if (dialog is ElementPropertyDialog)
             {

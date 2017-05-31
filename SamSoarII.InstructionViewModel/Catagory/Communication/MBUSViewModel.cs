@@ -90,10 +90,9 @@ namespace SamSoarII.LadderInstViewModel
             }
 
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
-
             var dialog = new ElementPropertyDialog(3, ElementPropertyDialog.INST_MBUS);
             dialog.Title = InstructionName;
             dialog.ShowLine2("COM:", COMPort);
@@ -102,7 +101,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine6("WR:", Message);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = COMPort.ValueString;

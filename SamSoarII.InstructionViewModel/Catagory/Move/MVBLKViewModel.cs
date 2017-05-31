@@ -76,7 +76,7 @@ namespace SamSoarII.LadderInstViewModel
             CommentArea.Children.Add(_commentTextBlocks[1]);
             CommentArea.Children.Add(_commentTextBlocks[2]);
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(3);
@@ -86,6 +86,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine6("N",Count);
             return dialog;
         }
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = SourceValue.ValueString;

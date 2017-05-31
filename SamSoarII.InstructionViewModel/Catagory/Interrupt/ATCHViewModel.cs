@@ -77,7 +77,7 @@ namespace SamSoarII.LadderInstViewModel.Interrupt
             }
             FuncName = valueStrings[2];
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(2, ElementPropertyDialog.INST_ATCH);
@@ -86,7 +86,7 @@ namespace SamSoarII.LadderInstViewModel.Interrupt
             dialog.ValueString5 = FuncName;
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = IDValue.ValueString;

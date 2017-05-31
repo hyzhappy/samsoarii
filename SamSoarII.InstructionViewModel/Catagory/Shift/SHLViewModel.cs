@@ -134,7 +134,7 @@ namespace SamSoarII.LadderInstViewModel
                 DestinationValue = WordValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(3);
@@ -144,6 +144,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine4("OUT", DestinationValue);
             return dialog;
         }
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = SourceValue.ValueString;

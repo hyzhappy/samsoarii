@@ -68,7 +68,7 @@ namespace SamSoarII.LadderInstViewModel
             CommentArea.Children.Add(_commentTextBlocks[0]);
             CommentArea.Children.Add(_commentTextBlocks[1]);
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(2);
@@ -77,7 +77,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine5("Count", Count);
             return dialog;
         }
-
+        */
         public override BaseViewModel Clone()
         {
             return new SETIMViewModel();

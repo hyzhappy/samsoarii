@@ -75,6 +75,7 @@ namespace SamSoarII.LadderInstViewModel
         {
             FunctionName = valueStrings[0];
         }
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(1, ElementPropertyDialog.INST_CALL);
@@ -83,5 +84,6 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ValueString4 = FunctionName;
             return dialog;
         }
+        */
     }
 }

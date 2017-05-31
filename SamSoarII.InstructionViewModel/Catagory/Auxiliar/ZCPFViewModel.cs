@@ -106,7 +106,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
                 OutputValue = BitValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(4);
@@ -117,7 +117,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             dialog.ShowLine7("OUT:", OutputValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
 

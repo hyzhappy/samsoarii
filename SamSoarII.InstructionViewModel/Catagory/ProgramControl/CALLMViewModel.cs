@@ -189,7 +189,7 @@ namespace SamSoarII.LadderInstViewModel
             Value3 = values[2];
             Value4 = values[3];
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             int argcount = 5;
@@ -237,7 +237,7 @@ namespace SamSoarII.LadderInstViewModel
             }
             return dialog;
         }
-        
+        */
         public void AcceptNewValues(string _funcname, ArgumentValue[] _values)
         {
             var oldvaluestring1 = FuncName;

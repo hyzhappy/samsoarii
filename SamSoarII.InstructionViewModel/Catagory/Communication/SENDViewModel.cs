@@ -98,10 +98,9 @@ namespace SamSoarII.LadderInstViewModel
             }
 
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
-
             var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
             dialog.ShowLine2("COM:", COMPort);
@@ -109,7 +108,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine6("LEN:", CountValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = COMPort.ValueString;

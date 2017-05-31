@@ -106,7 +106,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
                 OutputValue = BitValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(4);
@@ -116,7 +116,7 @@ namespace SamSoarII.LadderInstViewModel.Pulse
             dialog.ShowLine7("OUT:", OutputValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = BackValue.ValueString;

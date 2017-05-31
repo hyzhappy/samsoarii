@@ -44,15 +44,14 @@ namespace SamSoarII.LadderInstViewModel
         }
 
         public override string InstructionName { get { return "OUT"; } }
-
-
+        
         private TextBlock _commentTextBlock1 = new TextBlock();
         public OUTViewModel()
         {
             Model = new OUTModel();
             CommentArea.Children.Add(_commentTextBlock1);
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(1);
@@ -60,7 +59,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine4("Bit", Value);
             return dialog;
         }
-
+        */
         public override BaseViewModel Clone()
         {
             return new OUTViewModel();

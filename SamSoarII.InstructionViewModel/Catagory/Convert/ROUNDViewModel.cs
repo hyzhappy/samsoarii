@@ -108,7 +108,7 @@ namespace SamSoarII.LadderInstViewModel
                 OutputValue = DoubleWordValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(2);
@@ -117,6 +117,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine5("Out",OutputValue);
             return dialog;
         }
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = InputValue.ValueString;

@@ -49,8 +49,7 @@ namespace SamSoarII.LadderInstViewModel
             Model = new LDModel();
             CommentArea.Children.Add(_commentTextBlock);
         }
-
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(1);
@@ -58,7 +57,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine4("Bit", Value);
             return dialog;
         }
-
+        */
         public override BaseViewModel Clone()
         {
             return new LDViewModel();

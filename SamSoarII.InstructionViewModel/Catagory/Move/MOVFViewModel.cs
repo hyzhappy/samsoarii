@@ -74,7 +74,7 @@ namespace SamSoarII.LadderInstViewModel
         {
             return CatalogID;
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(2);
@@ -83,6 +83,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine5("D",DestinationValue);
             return dialog;
         }
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = SourceValue.ValueString;

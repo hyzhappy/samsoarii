@@ -109,6 +109,7 @@ namespace SamSoarII.LadderInstViewModel
             result.Add(Value2);
             return result;
         }
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(2);
@@ -117,6 +118,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine5("DW2",Value2);
             return dialog;
         }
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = Value1.ValueString;

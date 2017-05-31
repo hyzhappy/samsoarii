@@ -677,6 +677,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         private MonitorManager_CommunicationCommandHandle H_Command
             = MonitorManager_CommunicationCommandHandle.NULL;
         private ICommunicationCommand O_Command = null;
+        
         public void Add(ICommunicationCommand cmd)
         {
             if (cmd is GeneralReadCommand
