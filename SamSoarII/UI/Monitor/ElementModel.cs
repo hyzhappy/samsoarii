@@ -76,7 +76,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 _currentValue = value;
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
-                //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
             }
         }
         public string SetValue

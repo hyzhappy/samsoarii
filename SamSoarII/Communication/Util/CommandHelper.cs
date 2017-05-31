@@ -147,29 +147,26 @@ namespace SamSoarII.Communication
             foreach (var segment in Segments)
             {
                 uint span = segment.Model.StartAddr - startAddr;
-                int index = (int)span / 8;
-                int offset = (int)span % 8;
                 if (typeLen == 1)
                 {
+                    int index = (int)span / 8;
+                    int offset = (int)span % 8;
                     if (((data[index] >> offset) & 0x01) == 0x00)
                     {
                         segment.Model.CurrentValue = string.Format("OFF");
-                        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () {  });
                     }
                     else
                     {
                         segment.Model.CurrentValue = string.Format("ON");
-                        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () {  });
                     }
-                    
                 }
                 else
                 {
                     WordType type = (WordType)Enum.ToObject(typeof(WordType), segment.Model.DataType);
-                    byte[] value = new byte[typeLen];
-                    for (int i = 0; i < typeLen; i++)
+                    byte[] value = new byte[segment.Model.ByteCount];
+                    for (int i = 0; i < segment.Model.ByteCount; i++)
                     {
-                        value[i] = data[typeLen * index + i];
+                        value[i] = data[typeLen * span + i];
                     }
                     uint showValue = ValueConverter.GetValue(value);
                     switch (type)

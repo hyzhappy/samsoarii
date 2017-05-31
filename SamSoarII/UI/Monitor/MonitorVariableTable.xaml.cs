@@ -101,7 +101,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 ElementModel elementModel = new ElementModel();
                 elementModel.LoadSelfByXElement(ele);
-                Elements.Add(elementModel);
+                AddElement(elementModel);
             }
         }
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)

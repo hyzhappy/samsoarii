@@ -160,6 +160,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 {
                     ComThread.Abort();
                 }
+                Arrange();
                 ComThread = new Thread(_Thread_Run);
                 _Thread_Alive = true;
                 _Thread_Active = true;
@@ -267,14 +268,13 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         private void Initialize(MonitorVariableTable mvtable)
         {
-            ObservableCollection<ElementModel> _elements =
-                new ObservableCollection<ElementModel>();
-            foreach (ElementModel emodel in mvtable.Elements)
+            ElementModel[] _emodels = mvtable.Elements.ToArray();
+            mvtable.Elements.Clear();
+            foreach (ElementModel emodel in _emodels)
             {
                 _Add(emodel, false);
-                _elements.Add(Get(emodel));
+                mvtable.Elements.Add(Get(emodel));
             }
-            mvtable.Elements = _elements;
         }
 
         private bool AssertValueModel(IValueModel model)
@@ -840,8 +840,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                                 {
                                     ReadCommands.Add(icmd);
                                     icmd = new IntrasegmentReadCommand();
-                                    iisFirst = false;
-                                }
+                                }else iisFirst = false;
                                 icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
                                 istart = elements[i].StartAddr;
                                 istartele = elements[i];
@@ -858,11 +857,11 @@ namespace SamSoarII.AppMain.UI.Monitor
                                 else ArrangeCmd(gcmd, ref gIndex, elements[i]);
                             }
                         }
-                        else if (!elements[i].IsIntrasegment && elements[i].StartAddr - gstart < GetMaxRange(gstartele))
+                        else if (!elements[i].IsIntrasegment && GetAddrSpan(elements[i],gstart) < GetMaxRange(gstartele))
                         {
                             gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
                         }
-                        else if (elements[i].IsIntrasegment && elements[i].StartAddr - istart < GetMaxRange(istartele) && IsSameIntraBase(istartele, elements[i]))
+                        else if (elements[i].IsIntrasegment && GetAddrSpan(elements[i], istart) < GetMaxRange(istartele) && IsSameIntraBase(istartele, elements[i]))
                         {
                             icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
                         }
@@ -919,6 +918,17 @@ namespace SamSoarII.AppMain.UI.Monitor
             else
             {
                 return 32;
+            }
+        }
+        private uint GetAddrSpan(ElementModel element,uint startAddr)
+        {
+            if (element.ByteCount == 4 && !(element.AddrType == "CV" && element.StartAddr >= 200))
+            {
+                return element.StartAddr - startAddr + 1;
+            }
+            else
+            {
+                return element.StartAddr - startAddr;
             }
         }
         private AddrSegment GenerateAddrSegmentByElement(ElementModel element)

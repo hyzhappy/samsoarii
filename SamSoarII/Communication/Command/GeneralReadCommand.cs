@@ -63,7 +63,12 @@ namespace SamSoarII.Communication.Command
             {
                 command[3 + 4 * i] = SegmentsGroup[i].First().Type;
                 var group = SegmentsGroup[i].OrderBy(x => { return x.Model.StartAddr; });
-                command[4 + 4 * i] = (byte)(group.Last().Model.StartAddr - group.First().Model.StartAddr + 1);
+                var model = group.Last().Model;
+                command[4 + 4 * i] = (byte)(model.StartAddr - group.First().Model.StartAddr + 1);
+                if (model.ByteCount == 4 && !(model.AddrType == "CV" && model.StartAddr >= 200))
+                {
+                    command[4 + 4 * i]++;
+                }
                 command[5 + 4 * i] = group.First().AddrLow;
                 command[6 + 4 * i] = group.First().AddrHigh;
             }

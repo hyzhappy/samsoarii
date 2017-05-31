@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml.Linq;
 
 namespace SamSoarII.AppMain.UI.Monitor
@@ -403,6 +405,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 MonitorVariableTable table = new MonitorVariableTable(node.Attribute("TableName").Value,this);
                 table.LoadElementsByXElment(node);
                 tables.Add(table);
+                InitializeTableCommand(table);
             }
         }
 
@@ -474,7 +477,18 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         private void OnStopCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            ResetShowValue();
             Stop();
+        }
+        private void ResetShowValue()
+        {
+            foreach (var table in tables)
+            {
+                foreach (var ele in table.Elements)
+                {
+                    ele.CurrentValue = string.Format("????");
+                }
+            }
         }
         #endregion
 
