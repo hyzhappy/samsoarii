@@ -241,7 +241,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private CrossNetworkState _crossNetState;
+        //private CrossNetworkState _crossNetState;
         public CrossNetworkState CrossNetState
         {
             get;set;
@@ -1421,6 +1421,15 @@ namespace SamSoarII.AppMain.Project
             if(e.Key == Key.Enter)
             {
                 if (LadderMode != LadderMode.Edit) return;
+                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    if (SelectionRect.NetworkParent != null)
+                    {
+                        NetworkAddRow(SelectionRect.NetworkParent, SelectionRect.NetworkParent.RowCount);
+                        //SelectionRect.NetworkParent.AppendNewRow();
+                        return;
+                    }
+                }
                 if (_selectRectOwner != null)
                 {
                     var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
@@ -1438,6 +1447,15 @@ namespace SamSoarII.AppMain.Project
             if(e.Key == Key.Delete)
             {
                 if (LadderMode != LadderMode.Edit) return;
+                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    if (SelectionRect.NetworkParent != null)
+                    {
+                        NetworkRemoveRow(SelectionRect.NetworkParent, SelectionRect.Y);
+                        return;
+                    }
+
+                }
                 if (SelectionStatus == SelectStatus.SingleSelected)
                 {
                     var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
@@ -1916,7 +1934,8 @@ namespace SamSoarII.AppMain.Project
                             var pp = IntPoint.GetIntpointByDouble(p.X, p.Y, WidthUnit, HeightUnit);
                             _selectStartNetwork.SelectAreaOriginSX = pp.X;
                             _selectStartNetwork.IsSelectAllMode = false;
-                            if (pp.X == _selectStartNetwork.SelectAreaOriginFX && pp.Y == _selectStartNetwork.SelectAreaOriginFY)
+                            if (pp.X == _selectStartNetwork.SelectAreaOriginFX
+                             && pp.Y == _selectStartNetwork.SelectAreaOriginFY)
                             {
                                 SelectionRect.X = pp.X;
                                 SelectionRect.Y = pp.Y;
@@ -2042,7 +2061,7 @@ namespace SamSoarII.AppMain.Project
                         var command = new LadderCommand.NetworkRemoveElementsCommand(_selectRectOwner, listele, new List<VerticalLineViewModel>());
                         _commandManager.Execute(command);
                     }
-                    var xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(listele, new List<VerticalLineViewModel>(), _selectRect.X, _selectRect.Y, 1, 1);
+                    XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(listele, new List<VerticalLineViewModel>(), _selectRect.X, _selectRect.Y, 1, 1);
                     Clipboard.SetData("LadderContent", xEle.ToString());
                 }
             }
@@ -2050,6 +2069,28 @@ namespace SamSoarII.AppMain.Project
             {
                 if (SelectionStatus == SelectStatus.MultiSelected)
                 {
+                    NetworkChangeElementArea area = new NetworkChangeElementArea();
+                    area.SU_Select = SelectionStatus;
+                    area.SU_Cross = CrossNetState;
+                    switch (CrossNetState)
+                    {
+                        case CrossNetworkState.CrossDown:
+                            area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
+                            area.NetworkNumberEnd = area.NetworkNumberStart + _selectAllNetworks.Count();
+                            break;
+                        case CrossNetworkState.CrossUp:
+                            area.NetworkNumberEnd = _selectStartNetwork.NetworkNumber;
+                            area.NetworkNumberStart = area.NetworkNumberEnd - _selectAllNetworks.Count();
+                            break;
+                        case CrossNetworkState.NoCross:
+                            area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
+                            area.NetworkNumberEnd = area.NetworkNumberStart;
+                            area.X1 = _selectStartNetwork.SelectAreaFirstX;
+                            area.Y1 = _selectStartNetwork.SelectAreaFirstY;
+                            area.X2 = _selectStartNetwork.SelectAreaSecondX;
+                            area.Y2 = _selectStartNetwork.SelectAreaSecondY;
+                            break;
+                    }
                     // 多网络复制
                     if (CrossNetState == CrossNetworkState.CrossDown || CrossNetState == CrossNetworkState.CrossUp)
                     {
@@ -2073,15 +2114,19 @@ namespace SamSoarII.AppMain.Project
                             if(removednets.Count == _ladderNetworks.Count)
                             {
                                 //全选，补回一个空网络
-                                _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(this, new LadderNetworkViewModel(this, 0), removednets, index));
+                                _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
+                                    this, new LadderNetworkViewModel(this, 0), removednets, index));
 
                             }
                             else
                             {
-                                _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(this, removednets, index));
+                                _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(
+                                    this, removednets, index));
                             }
-
                         }
+                        XElement xele_area = new XElement("Area");
+                        area.Save(xele_area);
+                        xEle.Add(xele_area);
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
                     }
@@ -2097,21 +2142,36 @@ namespace SamSoarII.AppMain.Project
                                                                                                     xBegin, yBegin, xEnd - xBegin + 1, yEnd - yBegin + 1);
                         if(!copy)
                         {
-                            var command = new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines());
+                            var command = new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines(), area);
                             _commandManager.Execute(command);
                         }
+                        XElement xele_area = new XElement("Area");
+                        area.Save(xele_area);
+                        xEle.Add(xele_area);
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
                     }
-
                 }
             }
         }
 
         private void PasteNetworksExecute(XElement xEle)
         {
+            NetworkChangeElementArea area = null;
+            NetworkChangeElementArea newarea = null;
+            XElement xele_area = xEle.Element("Area");
+            if (xele_area != null)
+            {
+                area = new NetworkChangeElementArea();
+                area.Load(xele_area);
+                newarea = new NetworkChangeElementArea();
+                newarea.SU_Select = area.SU_Select;
+                newarea.SU_Cross = area.SU_Cross;
+            }
             if (_selectRectOwner != null)
             {
+                newarea.NetworkNumberStart = _selectRectOwner.NetworkNumber;
+                newarea.NetworkNumberEnd = area.NetworkNumberEnd + newarea.NetworkNumberStart - area.NetworkNumberStart; 
                 // TODO 命令化
                 var replacednets = new SortedSet<LadderNetworkViewModel>();
                 var removednets = new SortedSet<LadderNetworkViewModel>();            
@@ -2122,7 +2182,8 @@ namespace SamSoarII.AppMain.Project
                     replacednets.Add(net);
                 }
                 int index = removednets.First().NetworkNumber;
-                var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, replacednets, removednets, index);
+                var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
+                    this, replacednets, removednets, index, newarea, area);
                 _commandManager.Execute(command);
             }
             else
@@ -2143,7 +2204,8 @@ namespace SamSoarII.AppMain.Project
                         removednets.Add(net);
                     }
                     int index = removednets.First().NetworkNumber;
-                    var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, replacednets, removednets, index);
+                    var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
+                        this, replacednets, removednets, index, newarea, area);
                     _commandManager.Execute(command);
                 }
             }
@@ -2151,10 +2213,17 @@ namespace SamSoarII.AppMain.Project
 
         private void PasteElementsExecute(XElement xEle)
         {
+            NetworkChangeElementArea area = null;
+            XElement xele_area = xEle.Element("Area");
+            if (xele_area != null)
+            {
+                area = new NetworkChangeElementArea();
+                area.Load(xele_area);
+            }
             //获取复制区域的大小
             int xBegin = int.Parse(xEle.Attribute("XBegin").Value);
             int yBegin = int.Parse(xEle.Attribute("YBegin").Value);
-            int width = int.Parse(xEle.Attribute("Width").Value);
+            int width  = int.Parse(xEle.Attribute("Width").Value);
             int height = int.Parse(xEle.Attribute("Height").Value);
             int xStart = 0;
             int yStart = 0;
@@ -2221,7 +2290,21 @@ namespace SamSoarII.AppMain.Project
                 vline.X = xStart + vline.X - xBegin;
                 vline.Y = yStart + vline.Y - yBegin;
             }
-            LadderCommand.NetworkReplaceElementsCommand command = new LadderCommand.NetworkReplaceElementsCommand(targetNetwork, elements, vlines, oldelements, oldvlines);
+            NetworkChangeElementArea newarea = new NetworkChangeElementArea();
+            newarea.SU_Cross = area.SU_Cross;
+            newarea.SU_Select = area.SU_Select;
+            newarea.NetworkNumberStart = targetNetwork.NetworkNumber;
+            newarea.NetworkNumberEnd = targetNetwork.NetworkNumber;
+            newarea.X1 = xStart;
+            newarea.Y1 = yStart;
+            newarea.X2 = xStart + width - 1;
+            newarea.Y2 = yStart + width - 1;
+            LadderCommand.NetworkReplaceElementsCommand command 
+                = new LadderCommand.NetworkReplaceElementsCommand(
+                    targetNetwork, 
+                    elements, vlines, 
+                    oldelements, oldvlines,
+                    newarea, area);
             _commandManager.Execute(command);
         }
 
@@ -2350,6 +2433,7 @@ namespace SamSoarII.AppMain.Project
             e.CanExecute = LadderMode == LadderMode.Edit;
         }
         #endregion
+
         #region ReloadPTVByLadderDiagram
         public delegate void LDNetwordsChangedEventHandler(LadderDiagramViewModel LDView);
 
@@ -2359,6 +2443,7 @@ namespace SamSoarII.AppMain.Project
             _projectModel.IFacade.ReplaceNetwork(this);
         }
         #endregion
+
         #region Selection state transfers
         private void EnterIdleState()
         {
@@ -2420,6 +2505,65 @@ namespace SamSoarII.AppMain.Project
             {
                 _selectRectOwner.ReleaseSelectRect();
                 _selectRectOwner = null;
+            }
+        }
+
+        public void AcquireArea(NetworkChangeElementArea area)
+        {
+            SelectionStatus = SelectStatus.Idle;
+            CrossNetState = CrossNetworkState.NoCross;
+            SelectionStatus = area.SU_Select;
+            CrossNetState = area.SU_Cross;
+            NavigateToNetworkByNum(area.NetworkNumberStart);
+            _selectAllNetworks.Clear();
+            _selectAllNetworkCache.Clear();
+            switch (area.SU_Select)
+            {
+                case SelectStatus.SingleSelected:
+                    LadderNetworkViewModel lnvmodel = GetNetworkByNumber(area.NetworkNumberStart);
+                    lnvmodel.AcquireSelectRect();
+                    SelectionRect.X = area.X1;
+                    SelectionRect.Y = area.X2;
+                    break;
+                case SelectStatus.MultiSelected:
+                    if (area.SU_Cross != CrossNetworkState.NoCross)
+                    {
+                        for (int nn = area.NetworkNumberStart; nn <= area.NetworkNumberEnd; nn++)
+                        {
+                            LadderNetworkViewModel _lnvmodel = GetNetworkByNumber(nn);
+                            _lnvmodel.IsSelectAllMode = true;
+                            if (nn == area.NetworkNumberStart
+                             && area.SU_Cross == CrossNetworkState.CrossDown)
+                            {
+                                continue;
+                            }
+                            if (nn == area.NetworkNumberEnd
+                             && area.SU_Cross == CrossNetworkState.CrossUp)
+                            {
+                                continue;
+                            }
+                            _selectAllNetworks.Add(_lnvmodel);
+                            _selectAllNetworkCache.Add(_lnvmodel);
+                        }
+                    }
+                    switch (area.SU_Cross)
+                    {
+                        case CrossNetworkState.CrossUp:
+                            _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberEnd);
+                            break;
+                        case CrossNetworkState.CrossDown:
+                            _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
+                            break;
+                        case CrossNetworkState.NoCross:
+                            _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
+                            _selectStartNetwork.SelectAreaFirstX = area.X1;
+                            _selectStartNetwork.SelectAreaFirstY = area.Y1;
+                            _selectStartNetwork.SelectAreaSecondX = area.X2;
+                            _selectStartNetwork.SelectAreaSecondY = area.Y2;
+                            break;
+                    }
+                    EnterMultiSelectingState();
+                    break;
             }
         }
 

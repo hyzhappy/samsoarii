@@ -145,6 +145,7 @@ namespace SamSoarII.LadderInstViewModel
                     case true:
                         valuetextblock_oldtext = ValueTextBlock.Text;
                         counttextblock_oldtext = CountTextBlock.Text;
+                        UpdateMonitor();
                         break;
                     case false:
                         ValueTextBlock.Text = valuetextblock_oldtext;

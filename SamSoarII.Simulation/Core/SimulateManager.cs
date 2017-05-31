@@ -721,7 +721,18 @@ namespace SamSoarII.Simulation.Core
             // 重启更新线程
             UpdateStart();
         }
-
+        /// <summary>
+        /// 解锁所有的单元
+        /// </summary>
+        public void UnlockAll()
+        {
+            foreach (string name in ldict.Keys.ToArray())
+            {
+                SimulateVariableUnit svunit = ldict[name].FirstOrDefault();
+                if (svunit != null) Unlock(svunit);
+            }
+        }
+    
         public void Lock(SimulateDataModel sdmodel)
         {
             UpdateStop();

@@ -73,6 +73,18 @@ namespace SamSoarII.UserInterface
                 if (id >= 0) CB_Type.SelectedIndex = id;
             }
         }
+
+        public string Value
+        {
+            get
+            {
+                return TB_Value.Text;
+            }
+            set
+            {
+                TB_Value.Text = value;
+            }
+        }
         
         private void InitializeForce()
         {

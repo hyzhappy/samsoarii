@@ -135,6 +135,10 @@ namespace SamSoarII.LadderInstViewModel
             = String.Empty;
         private string middletextblock5_oldtext
             = String.Empty;
+        private string bottomtextblock1_oldtext
+            = String.Empty;
+        private string bottomtextblock2_oldtext
+            = String.Empty;
         private bool ismonitormode;
         public override bool IsMonitorMode
         {
@@ -153,6 +157,8 @@ namespace SamSoarII.LadderInstViewModel
                         middletextblock3_oldtext = MiddleTextBlock3.Text;
                         middletextblock4_oldtext = MiddleTextBlock4.Text;
                         middletextblock5_oldtext = MiddleTextBlock5.Text;
+                        bottomtextblock1_oldtext = BottomTextBlock.Text;
+                        bottomtextblock2_oldtext = BottomTextBlock2.Text;
                         UpdateMonitor();
                         break;
                     case false:
@@ -161,6 +167,8 @@ namespace SamSoarII.LadderInstViewModel
                         MiddleTextBlock3.Text = middletextblock3_oldtext;
                         MiddleTextBlock4.Text = middletextblock4_oldtext;
                         MiddleTextBlock5.Text = middletextblock5_oldtext;
+                        BottomTextBlock.Text = bottomtextblock1_oldtext;
+                        BottomTextBlock2.Text = bottomtextblock2_oldtext;
                         break;
                 }
             }
@@ -173,6 +181,8 @@ namespace SamSoarII.LadderInstViewModel
             UpdateMonitor_MiddleTextBlock3();
             UpdateMonitor_MiddleTextBlock4();
             UpdateMonitor_MiddleTextBlock5();
+            BottomTextBlock.Text = String.Empty;
+            BottomTextBlock2.Text = String.Empty;
         }
 
         private void UpdateMonitor_MiddleTextBlock1()

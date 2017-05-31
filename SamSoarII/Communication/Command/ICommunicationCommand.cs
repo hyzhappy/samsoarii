@@ -46,8 +46,8 @@ namespace SamSoarII.Communication.Command
         public bool Merge(ElementModel emodel)
         {
             //if (emodel.IsIntrasegment) return false;
-            int addrdelta = (int)((int)Addr + Length - emodel.StartAddr);
-            if (addrdelta > 8) return false;
+            //int addrdelta = (int)((int)Addr + Length - emodel.StartAddr);
+            //if (addrdelta > 8) return false;
             int _length = (int)(emodel.StartAddr + emodel.ByteCount - (int)Addr);
             if (_length > 32) return false;
             Length = (byte)_length;
@@ -58,8 +58,11 @@ namespace SamSoarII.Communication.Command
     public class IntraSegment
     {
         #region Numbers
+
         public AddrSegment Base { get; private set; }
+
         public AddrSegment Intra { get; private set; }
+
         #endregion
 
         public IntraSegment(AddrSegment _base, AddrSegment _intra)

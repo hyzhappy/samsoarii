@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.Project;
+using SamSoarII.AppMain.UI;
 using SamSoarII.LadderInstViewModel;
 using System;
 using System.Collections.Generic;
@@ -11,19 +12,25 @@ namespace SamSoarII.AppMain.LadderCommand
     public class NetworkRemoveRowCommand : IUndoableCommand
     {
         private LadderNetworkViewModel _network;
-
         private int _rowNumber;
-
         private HashSet<BaseViewModel> _removedElements;
-
         private HashSet<VerticalLineViewModel> _removedVerticalLines;
-
         private int _oldRowCount;
+        private NetworkChangeElementArea _oldarea;
 
         public NetworkRemoveRowCommand(LadderNetworkViewModel network, int rowNumber)
         {
             _network = network;
             _rowNumber = rowNumber;
+            _oldarea = new NetworkChangeElementArea();
+            _oldarea.SU_Select = SelectStatus.MultiSelected;
+            _oldarea.SU_Cross = CrossNetworkState.NoCross;
+            _oldarea.NetworkNumberStart = network.NetworkNumber;
+            _oldarea.NetworkNumberEnd = _oldarea.NetworkNumberStart;
+            _oldarea.X1 = 0;
+            _oldarea.X2 = 11;
+            _oldarea.Y1 = rowNumber;
+            _oldarea.Y2 = _oldarea.Y1;
         }
 
         public void Execute()
@@ -70,6 +77,17 @@ namespace SamSoarII.AppMain.LadderCommand
             _oldRowCount = _network.RowCount;
             _network.RowCount--;
             _network.INVModel.Setup(_network);
+            // 将梯形图光标移到删除的行的位置
+            _network.AcquireSelectRect();
+            LadderDiagramViewModel ldvmodel = _network.LDVModel;
+            ldvmodel.SelectionRect.X = 0;
+            ldvmodel.SelectionRect.Y = (_rowNumber < _network.RowCount ? _rowNumber : _rowNumber - 1);
+            ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                new NavigateToNetworkEventArgs(
+                    _network.NetworkNumber,
+                    ldvmodel.ProgramName,
+                    ldvmodel.SelectionRect.X,
+                    ldvmodel.SelectionRect.Y));
         }
 
         public void Undo()
@@ -99,6 +117,21 @@ namespace SamSoarII.AppMain.LadderCommand
                 _network.ReplaceVerticalLine(vline);
             }
             _network.INVModel.Setup(_network);
+            // 将梯形图光标移到新生成的行的头部
+            _network.AcquireSelectRect();
+            LadderDiagramViewModel ldvmodel = _network.LDVModel;
+            ldvmodel.SelectionRect.X = 0;
+            ldvmodel.SelectionRect.Y = _rowNumber;
+            ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
+                new NavigateToNetworkEventArgs(
+                    _network.NetworkNumber,
+                    ldvmodel.ProgramName,
+                    ldvmodel.SelectionRect.X,
+                    ldvmodel.SelectionRect.Y));
+            if (_oldarea != null)
+            {
+                _oldarea.Select(_network);
+            }
         }
     }
 }

@@ -73,13 +73,22 @@ namespace SamSoarII.AppMain.UI.Monitor
         private bool _Thread_IsActive = false;
         public event RoutedEventHandler ThreadResume = delegate { };
         public event RoutedEventHandler ThreadPause = delegate { };
+        private void _Thread_WaitForActive()
+        {
+            _Thread_IsActive = false;
+            ThreadPause(this, new RoutedEventArgs());
+            while (_Thread_Alive && !_Thread_Active)
+            {
+                Thread.Sleep(10);
+            }
+            _Thread_IsActive = true;
+            ThreadResume(this, new RoutedEventArgs());
+        }
         private void _Thread_Run()
         {
             _Thread_IsAlive = true;
             while (_Thread_Alive)
             {
-                _Thread_IsActive = true;
-                ThreadResume(this, new RoutedEventArgs());
                 while (_Thread_Alive && _Thread_Active)
                 {
                     if (CurrentCommand == null)
@@ -106,23 +115,28 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                     bool hassend = false;
                     bool hasrecv = false;
+                    int sendtime = 0;
+                    int recvtime = 0;
                     if (CurrentCommand != null)
                     {
-                        while (_Thread_Alive && _Thread_Active)
+                        while (_Thread_Alive && _Thread_Active && sendtime < 10)
                         {
                             if (Send(CurrentCommand))
                             {
                                 hassend = true;
                                 break;
                             }
+                            sendtime++;
                         }
-                        while (_Thread_Alive && _Thread_Active)
+                        _Thread_WaitForActive();
+                        while (_Thread_Alive && _Thread_Active && recvtime < 10)
                         {
                             if (Recv(CurrentCommand))
                             {
                                 hasrecv = true;
                                 break;
                             }
+                            recvtime++;
                         }
                     }
                     if (hassend && hasrecv)
@@ -132,21 +146,20 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                     Thread.Sleep(10);
                 }
-                _Thread_IsActive = false;
-                ThreadPause(this, new RoutedEventArgs());
-                while (_Thread_Alive && !_Thread_Active)
-                {
-                    Thread.Sleep(10);
-                }
+                _Thread_WaitForActive();
             }
             _Thread_IsAlive = false;
         }
         
         public void Start()
         {
-            if (!_Thread_IsAlive 
-             && (ComThread == null || !ComThread.IsAlive))
+            if (!_Thread_IsAlive
+             && (ComThread == null || !_Thread_IsAlive))
             {
+                if (ComThread != null && ComThread.IsAlive)
+                {
+                    ComThread.Abort();
+                }
                 ComThread = new Thread(_Thread_Run);
                 _Thread_Alive = true;
                 _Thread_Active = true;

@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
+using SamSoarII.LadderInstViewModel.Monitor;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -17,6 +18,7 @@ namespace SamSoarII.AppMain.UI
         public MenuItem[] MI_Values { get; private set; }
             = { new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem(), };
         public IValueModel[] values = new IValueModel[5];
+        public IMoniValueModel[] mvalues = new IMoniValueModel[5];
         
         public int Count { get; private set; }
 
@@ -57,6 +59,7 @@ namespace SamSoarII.AppMain.UI
                 for (int i = 0; i < bmodel.ParaCount; i++)
                 {
                     values[Count] = bmodel.GetPara(i);
+                    mvalues[Count] = bvmodel.GetValueModel(i);
                     if (!IsVariable(values[Count])
                      || values.Where(
                         (_value) => { return _value != null && _value.ValueString.Equals(values[Count]); }
@@ -97,27 +100,21 @@ namespace SamSoarII.AppMain.UI
             if (Count == 0) return;
             string[] varnames = new string[Count];
             string[] vartypes = new string[Count];
+            string[] varvalues = new string[Count];
             for (int i = 0; i < Count; i++)
             {
                 varnames[i] = values[i].ValueString;
+                varvalues[i] = mvalues[i].Value;
                 if (values[i] is BitValue)
-                {
                     vartypes[i] = "BIT";
-                }
                 else if (values[i] is WordValue)
-                {
                     vartypes[i] = "WORD";
-                }
                 else if (values[i] is DWordValue)
-                {
                     vartypes[i] = "DWORD";
-                }
                 else if (values[i] is FloatValue)
-                {
                     vartypes[i] = "FLOAT";
-                }
             }
-            using (ElementValueMultiplyModifyDialog dialog = new ElementValueMultiplyModifyDialog(varnames, vartypes))
+            using (ElementValueMultiplyModifyDialog dialog = new ElementValueMultiplyModifyDialog(varnames, vartypes, varvalues))
             {
                 dialog.SelectedIndex = select;
                 dialog.ValueModify += OnValueModify;

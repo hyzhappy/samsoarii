@@ -382,7 +382,7 @@ namespace SamSoarII.Extend.Utility
                     // 需要和前面与运算时
                     if ((flag & FLAG_CALAND) != 0)
                     {
-                        InstHelper.AddInst(insts, "ANB");
+                        InstHelper.AddInst(insts, "ANDB");
                     }
                     return;
                 }
@@ -412,7 +412,7 @@ namespace SamSoarII.Extend.Utility
                     // 需要和前面与运算时
                     if ((flag & FLAG_CALAND) != 0)
                     {
-                        InstHelper.AddInst(insts, "ANB");
+                        InstHelper.AddInst(insts, "ANDB");
                     }
                     return;
                 }

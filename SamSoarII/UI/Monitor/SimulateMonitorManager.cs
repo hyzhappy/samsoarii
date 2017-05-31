@@ -184,8 +184,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                         case "0": case "OFF": case "FALSE":
                             svunit.Value = 0; break;
                         case "1": case "ON": case "TRUE":
-                            svunit.Value = 1;
-                            break;
+                            svunit.Value = 1; break;
                     }
                     break;
                 case "WORD":
@@ -230,6 +229,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     {
                         Unlock(_emodel);
                     }
+                    smodel.SManager.UnlockAll();
                 }
                 else
                 {

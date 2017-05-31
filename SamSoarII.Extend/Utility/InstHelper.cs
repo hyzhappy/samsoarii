@@ -961,7 +961,8 @@ namespace SamSoarII.Extend.Utility
                 /*
                  * 将当前栈顶的值赋值给线圈
                  */
-                case "OUT": sw.Write("{0:s} = _stack_{1:d};\n", inst[1], stackTop); break;
+                case "OUT": case "OUTIM":
+                    sw.Write("{0:s} = _stack_{1:d};\n", inst[1], stackTop); break;
                 // 置位和复位
                 /*
                  * 需要用if来判断栈顶是否为1

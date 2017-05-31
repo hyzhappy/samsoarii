@@ -246,7 +246,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         public void UnlockAll()
         {
-
+            smodel.SManager.UnlockAll();
         }
 
         public void Write(string value, string type = null)
