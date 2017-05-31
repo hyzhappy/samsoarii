@@ -75,7 +75,7 @@ namespace SamSoarII.LadderInstViewModel.Interrupt
                 IDValue = WordValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(1);
@@ -83,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel.Interrupt
             dialog.ShowLine4("EVENT:", IDValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = IDValue.ValueString;

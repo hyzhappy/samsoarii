@@ -84,7 +84,7 @@ namespace SamSoarII.LadderInstViewModel
                 Count = WordValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(1);
@@ -92,6 +92,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine4("N",Count);
             return dialog;
         }
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring = Count.ValueString;

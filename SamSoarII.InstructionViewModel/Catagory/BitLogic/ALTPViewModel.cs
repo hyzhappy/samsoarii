@@ -83,7 +83,7 @@ namespace SamSoarII.LadderInstViewModel
                 Value = BitValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(1);
@@ -91,6 +91,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine4("Bit", Value);
             return dialog;
         }
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring = Value.ValueString;

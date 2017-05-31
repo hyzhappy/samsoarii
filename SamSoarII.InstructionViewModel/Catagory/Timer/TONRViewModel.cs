@@ -86,7 +86,7 @@ namespace SamSoarII.LadderInstViewModel
                 EndValue = WordValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(3);
@@ -95,7 +95,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine5("SV:", EndValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = TimerValue.ValueString;

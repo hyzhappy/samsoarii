@@ -102,7 +102,7 @@ namespace SamSoarII.LadderInstViewModel
                 MoveValue = WordValue.Null;
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(4);
@@ -113,7 +113,7 @@ namespace SamSoarII.LadderInstViewModel
             dialog.ShowLine7("N2", MoveValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = SourceValue.ValueString;

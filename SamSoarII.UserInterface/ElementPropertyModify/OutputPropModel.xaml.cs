@@ -121,9 +121,9 @@ namespace SamSoarII.UserInterface
                 UpdateComment(value);
             }
         }
-        public override string ValueString3 { get; set; }
-        public override string ValueString4 { get; set; }
-        public override string ValueString5 { get; set; }
+        public override string ValueString3 { get; set; } = String.Empty;
+        public override string ValueString4 { get; set; } = String.Empty;
+        public override string ValueString5 { get; set; } = String.Empty;
 
         private void ValueTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {

@@ -41,6 +41,11 @@ namespace SamSoarII.UserInterface
                 this.bpmodel = value;
                 bpmodel.Dialog = this;
                 bpmodel.PropertyChanged += OnPropertyChanged;
+                if (bpmodel is OutRecPropModel)
+                {
+                    OutRecPropModel orpmodel = (OutRecPropModel)bpmodel;
+                    orpmodel.CollectionPopup += OnShowCollectionPopup;
+                }
                 if (bpmodel != null)
                 {
                     Grid.SetRow(bpmodel, 0);
@@ -166,6 +171,8 @@ namespace SamSoarII.UserInterface
         
         private void OnShowCollectionPopup(object sender, CollectionPopupEventArgs e)
         {
+            if (PopupType != CollectionPopupType.FREE)
+                return;
             e.TB_Value.TextChanged += OnPopupTextBoxTextChanged;
             e.TB_Value.LostFocus += OnPopupTextBoxLostFocus;
             PU_Collection.PlacementTarget = e.TB_Value;
@@ -286,6 +293,17 @@ namespace SamSoarII.UserInterface
             {
                 this.functions = value;
                 functionlabels = value.Select(msgs => { return _StringToLabel(msgs[1]); });
+                IEnumerable<string[]> fit = functions.Where(
+                    (string[] _msg) =>
+                    {
+                        return bpmodel.InstructionName.Equals("CALLM")
+                            && bpmodel.ValueString1.Equals(_msg[1]);
+                    });
+                if (fit.Count() > 0)
+                {
+                    string[] msg = fit.First();
+                    bpmodel.Count = msg.Length / 2;
+                }
             }
         }
         public IEnumerable<Label> FunctionLabels
@@ -444,16 +462,16 @@ namespace SamSoarII.UserInterface
                     string argname = msg[bpmodel.SelectedIndex * 2 + 1];
                     switch (argtype)
                     {
-                        case "BIT":
+                        case "BIT*":
                             TB_Detail.Text = String.Format("[位]{0:s}(X/Y/M/C/T/S)", argname);
                             break;
-                        case "WORD":
+                        case "WORD*":
                             TB_Detail.Text = String.Format("[单字]{0:s}(D/CV/TV)", argname);
                             break;
-                        case "DWORD":
+                        case "DWORD*":
                             TB_Detail.Text = String.Format("[双字]{0:s}(D)", argname);
                             break;
-                        case "FLOAT":
+                        case "FLOAT*":
                             TB_Detail.Text = String.Format("[浮点]{0:s}(D)", argname);
                             break;
                         default:

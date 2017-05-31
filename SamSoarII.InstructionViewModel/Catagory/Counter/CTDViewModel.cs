@@ -87,7 +87,7 @@ namespace SamSoarII.LadderInstViewModel.Counter
                 }
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(2);
@@ -96,7 +96,7 @@ namespace SamSoarII.LadderInstViewModel.Counter
             dialog.ShowLine5("SV:", StartValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = CountValue.ValueString;

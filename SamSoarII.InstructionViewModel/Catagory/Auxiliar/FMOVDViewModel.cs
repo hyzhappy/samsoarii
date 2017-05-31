@@ -97,10 +97,9 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             }
 
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
-
             var dialog = new ElementPropertyDialog(3);
             dialog.Title = InstructionName;
             dialog.ShowLine2("SV:", SourceValue);
@@ -108,7 +107,7 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
             dialog.ShowLine6("CT:", CountValue);
             return dialog;
         }
-
+        */
         public override void AcceptNewValues(IList<string> valueStrings, Device contextDevice)
         {
             var oldvaluestring1 = SourceValue.ValueString;

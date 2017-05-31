@@ -81,7 +81,7 @@ namespace SamSoarII.LadderInstViewModel.Counter
                 }
             }
         }
-
+        /*
         public override IPropertyDialog PreparePropertyDialog()
         {
             var dialog = new ElementPropertyDialog(2);
@@ -90,6 +90,7 @@ namespace SamSoarII.LadderInstViewModel.Counter
             dialog.ShowLine5("SV:", EndValue);
             return dialog;
         }
+        */
         public override IEnumerable<IValueModel> GetValueModels()
         {
             List<IValueModel> result = new List<IValueModel>();
