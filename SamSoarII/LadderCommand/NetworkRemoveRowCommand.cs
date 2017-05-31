@@ -12,19 +12,25 @@ namespace SamSoarII.AppMain.LadderCommand
     public class NetworkRemoveRowCommand : IUndoableCommand
     {
         private LadderNetworkViewModel _network;
-
         private int _rowNumber;
-
         private HashSet<BaseViewModel> _removedElements;
-
         private HashSet<VerticalLineViewModel> _removedVerticalLines;
-
         private int _oldRowCount;
+        private NetworkChangeElementArea _oldarea;
 
         public NetworkRemoveRowCommand(LadderNetworkViewModel network, int rowNumber)
         {
             _network = network;
             _rowNumber = rowNumber;
+            _oldarea = new NetworkChangeElementArea();
+            _oldarea.SU_Select = SelectStatus.MultiSelected;
+            _oldarea.SU_Cross = CrossNetworkState.NoCross;
+            _oldarea.NetworkNumberStart = network.NetworkNumber;
+            _oldarea.NetworkNumberEnd = _oldarea.NetworkNumberStart;
+            _oldarea.X1 = 0;
+            _oldarea.X2 = 11;
+            _oldarea.Y1 = rowNumber;
+            _oldarea.Y2 = _oldarea.Y1;
         }
 
         public void Execute()
@@ -122,6 +128,10 @@ namespace SamSoarII.AppMain.LadderCommand
                     ldvmodel.ProgramName,
                     ldvmodel.SelectionRect.X,
                     ldvmodel.SelectionRect.Y));
+            if (_oldarea != null)
+            {
+                _oldarea.Select(_network);
+            }
         }
     }
 }

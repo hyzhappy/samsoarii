@@ -2076,11 +2076,11 @@ namespace SamSoarII.AppMain.Project
                     {
                         case CrossNetworkState.CrossDown:
                             area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
-                            area.NetworkNumberEnd = area.NetworkNumberStart + _selectAllNetworks.Count() - 1;
+                            area.NetworkNumberEnd = area.NetworkNumberStart + _selectAllNetworks.Count();
                             break;
                         case CrossNetworkState.CrossUp:
                             area.NetworkNumberEnd = _selectStartNetwork.NetworkNumber;
-                            area.NetworkNumberStart = area.NetworkNumberEnd - _selectAllNetworks.Count() + 1;
+                            area.NetworkNumberStart = area.NetworkNumberEnd - _selectAllNetworks.Count();
                             break;
                         case CrossNetworkState.NoCross:
                             area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
@@ -2510,9 +2510,13 @@ namespace SamSoarII.AppMain.Project
 
         public void AcquireArea(NetworkChangeElementArea area)
         {
+            SelectionStatus = SelectStatus.Idle;
+            CrossNetState = CrossNetworkState.NoCross;
             SelectionStatus = area.SU_Select;
             CrossNetState = area.SU_Cross;
             NavigateToNetworkByNum(area.NetworkNumberStart);
+            _selectAllNetworks.Clear();
+            _selectAllNetworkCache.Clear();
             switch (area.SU_Select)
             {
                 case SelectStatus.SingleSelected:
@@ -2524,11 +2528,21 @@ namespace SamSoarII.AppMain.Project
                 case SelectStatus.MultiSelected:
                     if (area.SU_Cross != CrossNetworkState.NoCross)
                     {
-                        _selectAllNetworkCache.Clear();
                         for (int nn = area.NetworkNumberStart; nn <= area.NetworkNumberEnd; nn++)
                         {
                             LadderNetworkViewModel _lnvmodel = GetNetworkByNumber(nn);
                             _lnvmodel.IsSelectAllMode = true;
+                            if (nn == area.NetworkNumberStart
+                             && area.SU_Cross == CrossNetworkState.CrossDown)
+                            {
+                                continue;
+                            }
+                            if (nn == area.NetworkNumberEnd
+                             && area.SU_Cross == CrossNetworkState.CrossUp)
+                            {
+                                continue;
+                            }
+                            _selectAllNetworks.Add(_lnvmodel);
                             _selectAllNetworkCache.Add(_lnvmodel);
                         }
                     }
@@ -2541,9 +2555,7 @@ namespace SamSoarII.AppMain.Project
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
                             break;
                         case CrossNetworkState.NoCross:
-                            _selectAllNetworks.Clear();
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
-                            //_selectStartNetwork.IsSelectAreaMode = true;
                             _selectStartNetwork.SelectAreaFirstX = area.X1;
                             _selectStartNetwork.SelectAreaFirstY = area.Y1;
                             _selectStartNetwork.SelectAreaSecondX = area.X2;

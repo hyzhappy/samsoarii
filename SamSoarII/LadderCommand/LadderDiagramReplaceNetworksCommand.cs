@@ -79,7 +79,12 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_removedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
-            if (_replacedNetworks.Count() > 0)
+            if (_area != null)
+            {
+                LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
+                _area.Select(lnvmodel);
+            }
+            else if (_replacedNetworks.Count() > 0)
             {
                 // 将梯形图光标移到新生成的行的头部
                 LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
@@ -93,11 +98,7 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
             }
-            else if (_area != null)
-            {
-                LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
-                _area.Select(lnvmodel);
-            }
+            
         }
 
         public void Redo()
@@ -115,7 +116,12 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_replacedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
-            if (_removedNetworks.Count() > 0)
+            if (_oldarea != null)
+            {
+                LadderNetworkViewModel lnvmodel = _removedNetworks.First();
+                _oldarea.Select(lnvmodel);
+            }
+            else if (_removedNetworks.Count() > 0)
             {
                 // 将梯形图光标移到新生成的行的头部
                 LadderNetworkViewModel lnvmodel = _removedNetworks.First();
@@ -129,11 +135,7 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
             }
-            else if (_oldarea != null)
-            {
-                LadderNetworkViewModel lnvmodel = _removedNetworks.First();
-                _area.Select(lnvmodel);
-            }
+            
         }
     }
 }
