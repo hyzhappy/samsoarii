@@ -65,15 +65,42 @@ namespace SamSoarII.UserInterface
                     : Visibility.Hidden;
             }
         }
-        
+
+        public override int SelectedIndex
+        {
+            get
+            {
+                return base.SelectedIndex;
+            }
+            set
+            {
+                base.SelectedIndex = value;
+                switch (SelectedIndex)
+                {
+                    case 0:
+                        ValueTextBox.Focus();
+                        Keyboard.Focus(ValueTextBox);
+                        break;
+                    case 1:
+                        CountTextBox.Focus();
+                        Keyboard.Focus(CountTextBox);
+                        break;
+                }
+            }
+        }
+
         public override string ValueString1
         {
             get
             {
+                if (ValueTextBox == null)
+                    return String.Empty;
                 return ValueTextBox.Text;
             }
             set
             {
+                if (ValueTextBox == null)
+                    return;
                 ValueTextBox.Text = value;
                 UpdateComment(value);
             }
@@ -82,10 +109,14 @@ namespace SamSoarII.UserInterface
         {
             get
             {
+                if (CountTextBox == null)
+                    return String.Empty;
                 return CountTextBox.Text;
             }
             set
             {
+                if (CountTextBox == null)
+                    return;
                 CountTextBox.Text = value;
                 UpdateComment(value);
             }
@@ -98,10 +129,17 @@ namespace SamSoarII.UserInterface
         {
             UpdateComment(ValueTextBox.Text);
         }
-
         private void CountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateComment(CountTextBox.Text);
+        }
+        private void ValueTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            base.SelectedIndex = 0;
+        }
+        private void CountTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            base.SelectedIndex = 1;
         }
     }
 }

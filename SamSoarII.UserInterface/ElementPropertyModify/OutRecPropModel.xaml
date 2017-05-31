@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Canvas Width="300" Height="300">
         <Border Canvas.Left="20" Canvas.Top="20" Width="280" Height="280" 
-                    BorderThickness="4" BorderBrush="Black">
+                BorderThickness="4" BorderBrush="Black">
         </Border>
         <Line X1="0" Y1="100" X2="20" Y2="100" 
                   Stroke="Black" StrokeThickness="4">
@@ -25,6 +25,7 @@
                  Canvas.Left="32" Canvas.Top="120" Width="140" Height="30"
                  VerticalContentAlignment="Center"
                  FontSize="18"
+                 GotFocus="MiddleTextBox1_GotFocus"
                  TextChanged="MiddleTextBox1_TextChanged">
             D0
         </TextBox>
@@ -32,6 +33,7 @@
                  Canvas.Left="32" Canvas.Top="150" Width="140" Height="30"
                  VerticalContentAlignment="Center"
                  FontSize="18"
+                 GotFocus="MiddleTextBox2_GotFocus"
                  TextChanged="MiddleTextBox2_TextChanged">
             D1
         </TextBox>
@@ -39,6 +41,7 @@
                  Canvas.Left="32" Canvas.Top="180" Width="140" Height="30"
                  VerticalContentAlignment="Center"
                  FontSize="18"
+                 GotFocus="MiddleTextBox3_GotFocus"
                  TextChanged="MiddleTextBox3_TextChanged">
             D2
         </TextBox>
@@ -46,6 +49,7 @@
                  Canvas.Left="32" Canvas.Top="210" Width="140" Height="30"
                  VerticalContentAlignment="Center"
                  FontSize="18"
+                 GotFocus="MiddleTextBox4_GotFocus"
                  TextChanged="MiddleTextBox4_TextChanged">
             D3
         </TextBox>
@@ -53,6 +57,7 @@
                  Canvas.Left="32" Canvas.Top="240" Width="140" Height="30"
                  VerticalContentAlignment="Center"
                  FontSize="18"
+                 GotFocus="MiddleTextBox5_GotFocus"
                  TextChanged="MiddleTextBox5_TextChanged">
             D4
         </TextBox>

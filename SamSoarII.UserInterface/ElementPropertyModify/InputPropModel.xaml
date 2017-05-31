@@ -23,6 +23,7 @@
                  Canvas.Top="5" Canvas.Left="80" Height="32" Width="140"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                  FontSize="18"
+                 GotFocus="ValueTextBox_GotFocus"
                  TextChanged="ValueTextBox_TextChanged">
             D0
         </TextBox>
@@ -37,6 +38,7 @@
                  Canvas.Top="160" Canvas.Left="80" Height="32" Width="140"
                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                  FontSize="18"
+                 GotFocus="Value2TextBox_GotFocus"
                  TextChanged="Value2TextBox_TextChanged">
             D1
         </TextBox>

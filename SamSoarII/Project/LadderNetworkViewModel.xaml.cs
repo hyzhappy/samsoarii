@@ -978,66 +978,120 @@ namespace SamSoarII.AppMain.Project
         private void OnShowPropertyDialog(BaseViewModel sender, ShowPropertyDialogEventArgs e)
         {
             var dialog = e.Dialog;
-            ElementPropertyDialog epdialog = (ElementPropertyDialog)(dialog);
-            switch (epdialog.InstMode)
+            if (dialog is ElementPropertyDialog)
             {
-                case ElementPropertyDialog.INST_CALL:
-                case ElementPropertyDialog.INST_ATCH:
-                    epdialog.SubRoutines = _ladderDiagram.ProjectModel.SubRoutines.Select(
-                        (LadderDiagramViewModel ldvmodel) =>
-                        {
-                            return ldvmodel.ProgramName;
-                        }
-                    );
-                    break;
-                case ElementPropertyDialog.INST_CALLM:
-                    epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Where(
-                        (FuncModel fmodel) => { return fmodel.CanCALLM(); }  
-                    ).Select(
-                        (FuncModel fmodel) =>
-                        {
-                            string[] result = new string[fmodel.ArgCount * 2 + 2];
-                            result[0] = fmodel.ReturnType;
-                            result[1] = fmodel.Name;
-                            for (int i = 0; i < fmodel.ArgCount; i++)
-                            {
-                                result[i * 2 + 2] = fmodel.GetArgType(i);
-                                result[i * 2 + 3] = fmodel.GetArgName(i);
-                            }
-                            return result;
-                        }
-                    );
-                    break;
-                case ElementPropertyDialog.INST_MBUS:
-                    epdialog.ModbusTables = _ladderDiagram.ProjectModel.MTVModel.Models.Select(
-                        (ModbusTableModel mtmodel) =>
-                        {
-                            return mtmodel.Name;
-                        }
-                    );
-                    break;
-            }
-            dialog.Commit += (sender1, e1) =>
-            {
-                try
+                ElementPropertyDialog epdialog = (ElementPropertyDialog)(dialog);
+                switch (epdialog.InstMode)
                 {
-                    if (dialog is ElementPropertyDialog)
+                    case ElementPropertyDialog.INST_CALL:
+                    case ElementPropertyDialog.INST_ATCH:
+                        epdialog.SubRoutines = _ladderDiagram.ProjectModel.SubRoutines.Select(
+                            (LadderDiagramViewModel ldvmodel) =>
+                            {
+                                return ldvmodel.ProgramName;
+                            }
+                        );
+                        break;
+                    case ElementPropertyDialog.INST_CALLM:
+                        epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Where(
+                            (FuncModel fmodel) => { return fmodel.CanCALLM(); }
+                        ).Select(
+                            (FuncModel fmodel) =>
+                            {
+                                string[] result = new string[fmodel.ArgCount * 2 + 2];
+                                result[0] = fmodel.ReturnType;
+                                result[1] = fmodel.Name;
+                                for (int i = 0; i < fmodel.ArgCount; i++)
+                                {
+                                    result[i * 2 + 2] = fmodel.GetArgType(i);
+                                    result[i * 2 + 3] = fmodel.GetArgName(i);
+                                }
+                                return result;
+                            }
+                        );
+                        break;
+                    case ElementPropertyDialog.INST_MBUS:
+                        epdialog.ModbusTables = _ladderDiagram.ProjectModel.MTVModel.Models.Select(
+                            (ModbusTableModel mtmodel) =>
+                            {
+                                return mtmodel.Name;
+                            }
+                        );
+                        break;
+                }
+                dialog.Commit += (sender1, e1) =>
+                {
+                    try
                     {
                         ElementReplaceArgumentCommand eracommand = new ElementReplaceArgumentCommand(
                             this, sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
                         _ladderDiagram.CommandExecute(eracommand);
+                        dialog.Close();
                     }
-                    else
+                    catch (ValueParseException ex)
                     {
-                        sender.AcceptNewValues(dialog.PropertyStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                        MessageBox.Show(ex.Message);
                     }
-                    dialog.Close();
-                }
-                catch (ValueParseException ex)
+                };
+            }
+            if (dialog is ElementPropertyDialog_New)
+            {
+                ElementPropertyDialog_New epdialog = (ElementPropertyDialog_New)dialog;
+                epdialog.Details = _ladderDiagram.InstrutionNameAndToolTips[epdialog.BPModel.InstructionName];
+                IList<string> props_old = epdialog.PropertyStrings;
+                switch (epdialog.BPModel.InstructionName)
                 {
-                    MessageBox.Show(ex.Message);
+                    case "CALL":
+                    case "ATCH":
+                        epdialog.SubRoutines = _ladderDiagram.ProjectModel.SubRoutines.Select(
+                            (LadderDiagramViewModel ldvmodel) =>
+                            {
+                                return ldvmodel.ProgramName;
+                            }
+                        );
+                        break;
+                    case "CALLM":
+                        epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Where(
+                            (FuncModel fmodel) => { return fmodel.CanCALLM(); }
+                        ).Select(
+                            (FuncModel fmodel) =>
+                            {
+                                string[] result = new string[fmodel.ArgCount * 2 + 2];
+                                result[0] = fmodel.ReturnType;
+                                result[1] = fmodel.Name;
+                                for (int i = 0; i < fmodel.ArgCount; i++)
+                                {
+                                    result[i * 2 + 2] = fmodel.GetArgType(i);
+                                    result[i * 2 + 3] = fmodel.GetArgName(i);
+                                }
+                                return result;
+                            }
+                        );
+                        break;
+                    case "MBUS":
+                        epdialog.ModbusTables = _ladderDiagram.ProjectModel.MTVModel.Models.Select(
+                            (ModbusTableModel mtmodel) =>
+                            {
+                                return mtmodel.Name;
+                            }
+                        );
+                        break;
                 }
-            };
+                epdialog.Ensure += (sender1, e1) =>
+                {
+                    try
+                    {
+                        ElementReplaceArgumentCommand eracommand = new ElementReplaceArgumentCommand(
+                            this, sender, props_old, epdialog.PropertyStrings);
+                        _ladderDiagram.CommandExecute(eracommand);
+                        dialog.Close();
+                    }
+                    catch (ValueParseException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                };
+            }
             dialog.ShowDialog();
         }
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)

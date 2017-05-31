@@ -34,9 +34,7 @@ namespace SamSoarII.AppMain
         {
             SettingManager.Save();
             if (SimulateHelper.SModel != null)
-            {
                 SimulateHelper.SModel.Dispose();
-            }
             SamSoarII.Simulation.Core.SimulateDllModel.FreeDll();
             GC.Collect();
             GC.WaitForPendingFinalizers();

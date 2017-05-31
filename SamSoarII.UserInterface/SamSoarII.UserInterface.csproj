@@ -79,6 +79,9 @@
     <Compile Include="ElementPropertyModify\ElementPropertyDialog_New.xaml.cs">
       <DependentUpon>ElementPropertyDialog_New.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ElementPropertyModify\OutRecPropModel.xaml.cs">
+      <DependentUpon>OutRecPropModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ElementValueModify\ElementValueModifyDialog.xaml.cs">
       <DependentUpon>ElementValueModifyDialog.xaml</DependentUpon>
     </Compile>
@@ -106,9 +109,6 @@
     </Compile>
     <Compile Include="ElementPropertyModify\OutputPropModel.xaml.cs">
       <DependentUpon>OutputPropModel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="OutRecPropModel.xaml.cs">
-      <DependentUpon>OutRecPropModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ProgressBarWindow.xaml.cs">
       <DependentUpon>ProgressBarWindow.xaml</DependentUpon>
@@ -184,6 +184,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ElementPropertyModify\OutRecPropModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ElementValueModify\ElementValueModifyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -217,10 +221,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ElementPropertyModify\OutputPropModel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="OutRecPropModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
-        Title="ElementPropertyDialog_New" Height="396" Width="300">
+        Title="元件参数设置" Height="466" Width="360">
     <Grid x:Name="GD_Main">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -13,12 +13,12 @@
             <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="8,4,200,4" 
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="-60,4,200,4" 
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    FontSize="14">
             参数描述：
         </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="0" Margin="8,4,200,4"
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="-60,4,200,4"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    FontSize="14">
             元件注释：
@@ -26,19 +26,34 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="90,4,8,4"
                    x:Name="TB_Detail"
                    VerticalAlignment="Center">
-            [单字]参数(D/AI/AO/TV/CV)
         </TextBlock>
         <TextBox Grid.Row="2" Grid.Column="0" Margin="90,4,8,4"
-                 x:Name="TB_Comment">
-            这是一个元件
+                 x:Name="TB_Comment"
+                 TextChanged="TB_Comment_TextChanged">
         </TextBox>
-        <Button Grid.Row="3" Grid.Column="0" Margin="8,4,160,4"
+        <Button Grid.Row="3" Grid.Column="0" Margin="12,4.333,189.333,3.667"
                 Click="OnEnsureButtonClick">
             确定
         </Button>
-        <Button Grid.Row="3" Grid.Column="0" Margin="160,4,8,4"
+        <Button Grid.Row="3" Grid.Column="0" Margin="188,4.333,12.333,3.667"
                 Click="OnCancelButtonClick">
             取消
         </Button>
+        <local:PopupNotTop x:Name="PU_Collection" Placement="Bottom" HorizontalOffset="0" VerticalOffset="0" Width="300" IsOpen="True" Topmost="False">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="SV_Collection" CanContentScroll="True">
+                <local:CollectionStackPanel Background="White" x:Name="SP_Collection" ItemsSource="{Binding CollectionSource}">
+                    <local:CollectionStackPanel.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="Height" Value="20"></Setter>
+                            <Setter Property="FontSize" Value="14"></Setter>
+                            <Setter Property="Padding" Value="0"></Setter>
+                            <EventSetter Event="MouseLeftButtonDown" Handler="OnLeftDown"></EventSetter>
+                            <EventSetter Event="MouseEnter" Handler="OnMouseEnter"></EventSetter>
+                            <EventSetter Event="MouseLeave" Handler="OnMouseLeave"></EventSetter>
+                        </Style>
+                    </local:CollectionStackPanel.Resources>
+                </local:CollectionStackPanel>
+            </ScrollViewer>
+        </local:PopupNotTop>
     </Grid>
 </Window>

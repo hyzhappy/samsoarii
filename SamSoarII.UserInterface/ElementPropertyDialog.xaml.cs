@@ -687,37 +687,27 @@ namespace SamSoarII.UserInterface
                                 ShowLine1("FUNC");
                                 ValueString1 = msgs[1];
                                 ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
-                                //ValueString2 = String.Empty;
                                 break;
                             case 3:
                                 ShowLine1("FUNC");
                                 ValueString1 = msgs[1];
                                 ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
-                                //ValueString2 = String.Empty;
                                 ShowLine3(msgs[4].Remove(msgs[4].Length - 1));
-                                //ValueString3 = String.Empty;
                                 break;
                             case 4:
                                 ShowLine1("FUNC");
                                 ValueString1 = msgs[1];
                                 ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
-                                //ValueString2 = String.Empty;
                                 ShowLine3(msgs[4].Remove(msgs[4].Length - 1));
-                                //ValueString3 = String.Empty;
                                 ShowLine4(msgs[6].Remove(msgs[6].Length - 1));
-                                //ValueString4 = String.Empty;
                                 break;
                             case 5:
                                 ShowLine1("FUNC");
                                 ValueString1 = msgs[1];
                                 ShowLine2(msgs[2].Remove(msgs[2].Length - 1));
-                                //ValueString2 = String.Empty;
                                 ShowLine3(msgs[4].Remove(msgs[4].Length - 1));
-                                //ValueString3 = String.Empty;
                                 ShowLine4(msgs[6].Remove(msgs[6].Length - 1));
-                                //ValueString4 = String.Empty;
                                 ShowLine5(msgs[8].Remove(msgs[8].Length - 1));
-                                //ValueString5 = String.Empty;
                                 break;
                             default:
                                 throw new ArgumentException("Error Function Messages Array");
@@ -1048,12 +1038,12 @@ namespace SamSoarII.UserInterface
                 }
             }
         }
-
-
+        
         void IPropertyDialog.ShowDialog()
         {
             ShowDialog();
         }
+
         void IPropertyDialog.Close()
         {
             Close();

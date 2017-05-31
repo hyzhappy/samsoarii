@@ -143,7 +143,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         public bool IsMainLadder { get; set; }
-        private Dictionary<string, List<string>> InstrutionNameAndToolTips;
+        public Dictionary<string, List<string>> InstrutionNameAndToolTips { get; private set; }
         public int NetworkCount
         {
             get

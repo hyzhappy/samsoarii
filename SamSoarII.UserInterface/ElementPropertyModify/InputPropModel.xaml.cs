@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -218,14 +219,41 @@ namespace SamSoarII.UserInterface
             }
         }
 
+        public override int SelectedIndex
+        {
+            get
+            {
+                return base.SelectedIndex;
+            }
+            set
+            {
+                base.SelectedIndex = value;
+                switch (SelectedIndex)
+                {
+                    case 0:
+                        Value2TextBox.Focus();
+                        Keyboard.Focus(Value2TextBox);
+                        break;
+                    case 1:
+                        Value2TextBox.Focus();
+                        Keyboard.Focus(Value2TextBox);
+                        break;
+                }
+            }
+        }
+
         public override string ValueString1
         {
             get
             {
+                if (ValueTextBox == null)
+                    return String.Empty;
                 return ValueTextBox.Text;
             }
             set
             {
+                if (ValueTextBox == null)
+                    return;
                 ValueTextBox.Text = value;
                 UpdateComment(value);
             }
@@ -234,10 +262,14 @@ namespace SamSoarII.UserInterface
         {
             get
             {
+                if (Value2TextBox == null)
+                    return String.Empty;
                 return Value2TextBox.Text;
             }
             set
             {
+                if (Value2TextBox == null)
+                    return;
                 Value2TextBox.Text = value;
                 UpdateComment(value);
             }
@@ -245,7 +277,7 @@ namespace SamSoarII.UserInterface
         public override string ValueString3 { get; set; }
         public override string ValueString4 { get; set; }
         public override string ValueString5 { get; set; }
-
+        
         private void ValueTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateComment(ValueString1);
@@ -253,6 +285,14 @@ namespace SamSoarII.UserInterface
         private void Value2TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateComment(ValueString2);
+        }
+        private void ValueTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            base.SelectedIndex = 0;
+        }
+        private void Value2TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            base.SelectedIndex = 1;
         }
     }
 }
