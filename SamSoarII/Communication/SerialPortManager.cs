@@ -128,13 +128,16 @@ namespace SamSoarII.Communication
         }
         public void InitializePort()
         {
-            CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
-            PortName = PORTNAMES[paras.SerialPortIndex];
-            BaudRate = BAUDRATES[paras.BaudRateIndex];
-            DataBits = DATABITS[paras.DataBitIndex];
-            StopBits = STOPBITS[paras.StopBitIndex];
-            Timeout = paras.Timeout;
-            Parity = PARITYS[paras.CheckCodeIndex];
+            if (!port.IsOpen)
+            {
+                CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
+                PortName = PORTNAMES[paras.SerialPortIndex];
+                BaudRate = BAUDRATES[paras.BaudRateIndex];
+                DataBits = DATABITS[paras.DataBitIndex];
+                StopBits = STOPBITS[paras.StopBitIndex];
+                Timeout = paras.Timeout;
+                Parity = PARITYS[paras.CheckCodeIndex];
+            }
         }
         public int Start()
         {
@@ -183,14 +186,23 @@ namespace SamSoarII.Communication
             return 0;
         }
 
-        static byte[] readbuffer = new byte[1024];
+        static byte[] readbuffer;
         public int Read(ICommunicationCommand cmd)
         {
             try
             {
-                int count = port.Read(readbuffer, 0, 1024);
-                byte[] data = new byte[count];
-                readbuffer.CopyTo(data, count);
+                int cnt = 0;
+                readbuffer = new byte[port.BytesToRead];
+                while (port.BytesToRead > 0)
+                {
+                    readbuffer[cnt++] = (byte)port.ReadByte();
+                }
+                //int count = port.Read(readbuffer, 0, 4096);
+                byte[] data = new byte[readbuffer.Length];
+                for (int i = 0; i < readbuffer.Length; i++)
+                {
+                    data[i] = readbuffer[i];
+                }
                 cmd.RetData = data;
             }
             catch (Exception)

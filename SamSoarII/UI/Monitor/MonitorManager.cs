@@ -149,6 +149,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 ComThread = new Thread(_Thread_Run);
                 _Thread_Alive = true;
+                _Thread_Active = true;
                 ComThread.Start();
                 IsRunning = true;
                 Started(this, new RoutedEventArgs());
@@ -663,7 +664,6 @@ namespace SamSoarII.AppMain.UI.Monitor
         private MonitorManager_CommunicationCommandHandle H_Command
             = MonitorManager_CommunicationCommandHandle.NULL;
         private ICommunicationCommand O_Command = null;
-        
         public void Add(ICommunicationCommand cmd)
         {
             if (cmd is GeneralReadCommand
@@ -719,81 +719,205 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
 
         }
-
+        public void ArrangeOld()
+        {
+            //ElementModel prev = null;
+            //ICommunicationCommand prevcmd = null;
+            //foreach (ElementModel next in ReadModels.Values)
+            //{
+            //    bool canmerge = (prev != null);
+            //    if (canmerge)
+            //    {
+            //        canmerge &= (prev.AddrType == next.AddrType);
+            //        //canmerge &= !(prev.IsIntrasegment ^ next.IsIntrasegment);
+            //        canmerge &= (prev.IntrasegmentType == next.IntrasegmentType);
+            //        canmerge &= (prev.IntrasegmentAddr == next.IntrasegmentAddr);
+            //    }
+            //    if (canmerge)
+            //    {
+            //        if (prevcmd is GeneralReadCommand)
+            //        {
+            //            GeneralReadCommand grcmd = (GeneralReadCommand)prevcmd;
+            //            AddrSegment seg1 = grcmd.AddrSeg1;
+            //            AddrSegment seg2 = grcmd.AddrSeg2;
+            //            if (!seg1.Merge(next) && !seg2.Merge(next))
+            //            {
+            //                canmerge = false;
+            //            }
+            //            grcmd.AddrSeg1 = seg1;
+            //            grcmd.AddrSeg2 = seg2;
+            //        }
+            //        else if (prevcmd is IntrasegmentReadCommand)
+            //        {
+            //            IntrasegmentReadCommand ircmd = (IntrasegmentReadCommand)prevcmd;
+            //            IntraSegment iseg = ircmd.IntraSeg;
+            //            if (!iseg.Base.Merge(next))
+            //            {
+            //                canmerge = false;
+            //            }
+            //            ircmd.IntraSeg = iseg;
+            //        }
+            //    }
+            //    if (!canmerge)
+            //    {
+            //        if (next.IsIntrasegment)
+            //        {
+            //            IntrasegmentReadCommand ircmd = new IntrasegmentReadCommand();
+            //            byte addrtype1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.AddrType), next.StartAddr);
+            //            byte[] startaddr = ValueConverter.GetBytes((ushort)next.StartAddr);
+            //            byte startLowAddr1 = startaddr[0];
+            //            byte startHighAddr = startaddr[1];
+            //            byte addrtype2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.IntrasegmentType), next.IntrasegmentAddr);
+            //            byte startLowAddr2 = (byte)next.IntrasegmentAddr;
+            //            AddrSegment bseg = new AddrSegment(
+            //                addrtype1, (byte)(next.ByteCount), startLowAddr1, startHighAddr);
+            //            AddrSegment iseg = new AddrSegment(
+            //                addrtype2, 1, startLowAddr2, 0);
+            //            ircmd.IntraSeg = new IntraSegment(
+            //                bseg, iseg);
+            //            ReadCommands.Add(ircmd);
+            //        }
+            //        else
+            //        {
+            //            GeneralReadCommand grcmd = new GeneralReadCommand();
+            //            byte addrtype = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.AddrType), next.StartAddr);
+            //            byte[] startaddr = ValueConverter.GetBytes((ushort)next.StartAddr);
+            //            byte startLowAddr = startaddr[0];
+            //            byte startHighAddr = startaddr[1];
+            //            grcmd.AddrSeg1 = new AddrSegment(
+            //                addrtype, (byte)(next.ByteCount), startLowAddr, startHighAddr);
+            //            ReadCommands.Add(grcmd);
+            //        }
+            //    }
+            //    prev = next;
+            //}
+        }
         public void Arrange()
         {
-            ElementModel prev = null;
-            ICommunicationCommand prevcmd = null;
-            foreach (ElementModel next in ReadModels.Values)
+            ReadCommands.Clear();
+            Queue<string> tempQueue_Base = new Queue<string>();
+            foreach (var ele in ReadModels.Values)
             {
-                bool canmerge = (prev != null);
-                if (canmerge)
+                if (!tempQueue_Base.Contains(ele.AddrType))
                 {
-                    canmerge &= (prev.AddrType == next.AddrType);
-                    //canmerge &= !(prev.IsIntrasegment ^ next.IsIntrasegment);
-                    canmerge &= (prev.IntrasegmentType == next.IntrasegmentType);
-                    canmerge &= (prev.IntrasegmentAddr == next.IntrasegmentAddr);
+                    tempQueue_Base.Enqueue(ele.AddrType);
                 }
-                if (canmerge)
+            }
+            string addrType;
+            int gIndex = 0;
+            bool gisFirst = true,iisFirst = true;
+            GeneralReadCommand gcmd = new GeneralReadCommand();
+            gcmd.SegmentsGroup[gIndex] = new List<AddrSegment>();
+            IntrasegmentReadCommand icmd = new IntrasegmentReadCommand();
+            while (tempQueue_Base.Count > 0)
+            {
+                uint gstart = 0,istart = 0;
+                ElementModel gstartele = null,istartele = null;
+                addrType = tempQueue_Base.Dequeue();
+                List<ElementModel> elements = ReadModels.Values.Where(x => { return x.AddrType == addrType; }).OrderBy(x => { return x.StartAddr; }).ToList();
+                if (elements.Count > 0)
                 {
-                    if (prevcmd is GeneralReadCommand)
+                    for (int i = 0; i < elements.Count; i++)
                     {
-                        GeneralReadCommand grcmd = (GeneralReadCommand)prevcmd;
-                        AddrSegment seg1 = grcmd.AddrSeg1;
-                        AddrSegment seg2 = grcmd.AddrSeg2;
-                        if (!seg1.Merge(next) && !seg2.Merge(next))
+                        if (i == 0)
                         {
-                            canmerge = false;
+                            if (elements[i].IsIntrasegment)
+                            {
+                                if (!iisFirst)
+                                {
+                                    ReadCommands.Add(icmd);
+                                    icmd = new IntrasegmentReadCommand();
+                                    iisFirst = false;
+                                }
+                                icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
+                                istart = elements[i].StartAddr;
+                                istartele = elements[i];
+                            }
+                            else
+                            {
+                                gstart = elements[i].StartAddr;
+                                gstartele = elements[i];
+                                if (gisFirst)
+                                {
+                                    gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
+                                    gisFirst = false;
+                                }
+                                else ArrangeCmd(gcmd, ref gIndex, elements[i]);
+                            }
                         }
-                        grcmd.AddrSeg1 = seg1;
-                        grcmd.AddrSeg2 = seg2;
-                    }
-                    else if (prevcmd is IntrasegmentReadCommand)
-                    {
-                        IntrasegmentReadCommand ircmd = (IntrasegmentReadCommand)prevcmd;
-                        IntraSegment iseg = ircmd.IntraSeg;
-                        if (!iseg.Base.Merge(next))
+                        else if (!elements[i].IsIntrasegment && elements[i].StartAddr - gstart < GetMaxRange(gstartele))
                         {
-                            canmerge = false;
+                            gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
                         }
-                        ircmd.IntraSeg = iseg;
+                        else if (elements[i].IsIntrasegment && elements[i].StartAddr - istart < GetMaxRange(istartele) && IsSameIntraBase(istartele, elements[i]))
+                        {
+                            icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
+                        }
+                        else
+                        {
+                            if (elements[i].IsIntrasegment)
+                            {
+                                ReadCommands.Add(icmd);
+                                icmd = new IntrasegmentReadCommand();
+                                icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
+                                istart = elements[i].StartAddr;
+                                istartele = elements[i];
+                            }
+                            else
+                            {
+                                gstart = elements[i].StartAddr;
+                                gstartele = elements[i];
+                                ArrangeCmd(gcmd,ref gIndex,elements[i]);
+                            }
+                        }
                     }
                 }
-                if (!canmerge)
-                {
-                    if (next.IsIntrasegment)
-                    {
-                        IntrasegmentReadCommand ircmd = new IntrasegmentReadCommand();
-                        byte addrtype1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.AddrType), next.StartAddr);
-                        byte[] startaddr = ValueConverter.GetBytes((ushort)next.StartAddr);
-                        byte startLowAddr1 = startaddr[0];
-                        byte startHighAddr = startaddr[1];
-                        byte addrtype2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.IntrasegmentType), next.IntrasegmentAddr);
-                        byte startLowAddr2 = (byte)next.IntrasegmentAddr;
-                        AddrSegment bseg = new AddrSegment(
-                            addrtype1, (byte)(next.ByteCount), startLowAddr1, startHighAddr);
-                        AddrSegment iseg = new AddrSegment(
-                            addrtype2, 1, startLowAddr2, 0);
-                        ircmd.IntraSeg = new IntraSegment(
-                            bseg, iseg);
-                        ReadCommands.Add(ircmd);
-                    }
-                    else
-                    {
-                        GeneralReadCommand grcmd = new GeneralReadCommand();
-                        byte addrtype = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.AddrType), next.StartAddr);
-                        byte[] startaddr = ValueConverter.GetBytes((ushort)next.StartAddr);
-                        byte startLowAddr = startaddr[0];
-                        byte startHighAddr = startaddr[1];
-                        grcmd.AddrSeg1 = new AddrSegment(
-                            addrtype, (byte)(next.ByteCount), startLowAddr, startHighAddr);
-                        ReadCommands.Add(grcmd);
-                    }
-                }
-                prev = next;
+            }
+            //添加剩余命令
+            if (!gisFirst) ReadCommands.Add(gcmd);
+            if (!iisFirst) ReadCommands.Add(icmd);
+        }
+        private void ArrangeCmd(GeneralReadCommand command,ref int index,ElementModel element)
+        {
+            if (index < CommunicationDataDefine.MAX_ADDRESS_TYPE - 1) index++;
+            else
+            {
+                index = 0;
+                ReadCommands.Add(command);
+                command = new GeneralReadCommand();
+            }
+            command.SegmentsGroup[index] = new List<AddrSegment>();
+            command.SegmentsGroup[index].Add(GenerateAddrSegmentByElement(element));
+        }
+        private bool IsSameIntraBase(ElementModel one,ElementModel two)
+        {
+            return one.IntrasegmentAddr == two.IntrasegmentAddr && one.IntrasegmentType == two.IntrasegmentType;
+        }
+        public int GetMaxRange(ElementModel ele)
+        {
+            if (ele == null)
+            {
+                return 32;
+            }
+            if (ele.AddrType == "CV" && ele.StartAddr >= 200)
+            {
+                return 16;
+            }
+            else
+            {
+                return 32;
             }
         }
-        
+        private AddrSegment GenerateAddrSegmentByElement(ElementModel element)
+        {
+            return new AddrSegment(element);
+        }
+        private IntraSegment GenerateIntraSegmentByElement(ElementModel element)
+        {
+            AddrSegment bseg = new AddrSegment(element);
+            AddrSegment iseg = new AddrSegment(element,true);
+            return new IntraSegment(bseg, iseg);
+        }
         #endregion
 
         #region Event Handler

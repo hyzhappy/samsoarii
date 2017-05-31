@@ -11,7 +11,9 @@ namespace SamSoarII.Communication.Command
     public class IntrasegmentReadCommand : ICommunicationCommand
     {
         private byte[] command;
+        public List<IntraSegment> Segments = new List<IntraSegment>();
         public bool IsSuccess { get; set; }
+        private bool Initialized = false;
         //返回的数据
         private byte[] _retData;
         public byte[] RetData
@@ -33,103 +35,47 @@ namespace SamSoarII.Communication.Command
         private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
         private const byte commandType = CommunicationDataDefine.FGS_READ;
         private byte addrTypeNum = 0x00;
-        private byte addrType1;
-        private byte addrType2;
-        private byte length;
-        private byte startLowAddr1;
-        private byte startLowAddr2;
-        private byte startHighAddr;
-        public IntraSegment IntraSeg
-        {
-            get
-            {
-                AddrSegment _base = new AddrSegment
-                (
-                    addrType1,
-                    length,
-                    startLowAddr1,
-                    startHighAddr
-                );
-                AddrSegment _intra = new AddrSegment
-                (
-                    addrType2,
-                    1,
-                    startLowAddr2,
-                    0
-                );
-                return new IntraSegment(_base, _intra);
-            }
-            set
-            {
-                if (value == null) return;
-                addrType1 = value.Base.Type;
-                length = value.Base.Length;
-                startLowAddr1 = value.Base.AddrLow;
-                startHighAddr = value.Base.AddrHigh;
-                addrType2 = value.Intra.Type;
-                startLowAddr2 = value.Intra.AddrLow;
-            }
-        }
-        public List<ElementModel> RefElements { get; set; } = new List<ElementModel>();
+        
         public IntrasegmentReadCommand(){}
         public void InitializeCommandByElement()
         {
-            if (RefElements.Count > 0)
-            {
-                ElementModel element = RefElements.First();
-                addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), element.AddrType), element.StartAddr);
-                length = (byte)RefElements.Count;
-                byte[] startaddr = ValueConverter.GetBytes((ushort)element.StartAddr);
-                startLowAddr1 = startaddr[0];
-                startHighAddr = startaddr[1];
-                addrType2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), element.IntrasegmentType), element.IntrasegmentAddr);
-                startLowAddr2 = (byte)element.IntrasegmentAddr;
-            }
+            command = new byte[11];
             GenerateCommand();
         }
         public void UpdataValues()
         {
-            List<byte[]> retData = GetRetData();
-            CommandHelper.UpdataElements(RefElements, retData[0], length);
-        }
-        public IntrasegmentReadCommand(byte[] addrType, byte length, byte[] startLowAddr, byte startHighAddr)
-        {
-            if (length > CommunicationDataDefine.MAX_ELEM_NUM)
-            {
-                return;
-            }
-            addrType1 = addrType[0];
-            addrType2 = addrType[1];
-            startLowAddr1 = startLowAddr[0];
-            startLowAddr2 = startLowAddr[1];
-            this.startHighAddr = startHighAddr;
-            this.length = length;
-            GenerateCommand();
+            byte[] retData = GetRetData();
+            CommandHelper.UpdateElementsByIntra(Segments,retData);
         }
         private void GenerateCommand()
         {
-            command = new byte[11];
+            command[0] = slaveNum;
+            command[1] = commandType;
+            command[2] = addrTypeNum;
+            command[3] = Segments.First().Base.Type;
+            var group = Segments.OrderBy(x => { return x.Base.Model.StartAddr; });
+            command[4] = (byte)(group.Last().Base.Model.StartAddr - group.First().Base.Model.StartAddr + 1);
+            command[5] = group.First().Base.AddrLow;
+            command[6] = group.First().Base.AddrHigh;
+            command[7] = group.First().Intra.Type;
+            command[8] = group.First().Intra.AddrLow;
             byte[] commandCache = new byte[command.Length - 2];
             byte[] CRCCode;
-            commandCache[0] = slaveNum;
-            commandCache[1] = commandType;
-            commandCache[2] = addrTypeNum;
-            commandCache[3] = addrType1;
-            commandCache[4] = length;
-            commandCache[5] = startLowAddr1;
-            commandCache[6] = startHighAddr;
-            commandCache[7] = addrType2;
-            commandCache[8] = startLowAddr2;
-            CRCCode = CRC16.GetCRC(commandCache);
             for (int i = 0; i < commandCache.Length; i++)
             {
-                command[i] = commandCache[i];
+                commandCache[i] = command[i];
             }
-            command[9] = CRCCode[0];
-            command[10] = CRCCode[1];
+            CRCCode = CRC16.GetCRC(commandCache);
+            command[command.Length - 2] = CRCCode[0];
+            command[command.Length - 1] = CRCCode[1];
         }
         public byte[] GetBytes()
         {
+            if (!Initialized)
+            {
+                InitializeCommandByElement();
+                Initialized = true;
+            }
             return command;
         }
         private void CheckRetData()
@@ -162,31 +108,20 @@ namespace SamSoarII.Communication.Command
             }
         }
         //Can be call after assign value for Property of RetData
-        private List<byte[]> GetRetData()
+        private byte[] GetRetData()
         {
-            List<byte[]> templist = new List<byte[]>(2);
-            if (IsSuccess)
+            int typeLen = CommandHelper.GetLengthByAddrType(command[3]);
+            int dataLen = typeLen * command[4];
+            if (typeLen == 1)
             {
-                int type1Len = CommandHelper.GetLengthByAddrType(addrType1);
-                int type2Len = CommandHelper.GetLengthByAddrType(addrType2);
-                byte[] data1 = new byte[length * type1Len];
-                byte[] data2 = new byte[type2Len];
-                for (int i = 0; i < data1.Length; i++)
-                {
-                    data1[i] = RetData[i + 5];
-                }
-                for (int i = 0; i < data2.Length; i++)
-                {
-                    data2[i] = RetData[i + 6 + data1.Length];
-                }
-                templist.Add(data1);
-                templist.Add(data2);
-                return templist;
+                dataLen = dataLen / 8 + dataLen % 8 == 0 ? 0 : 1;
             }
-            else
+            byte[] data = new byte[dataLen];
+            for (int j = 0; j < data.Length; j++)
             {
-                return null;
+                data[j] = RetData[5 + j];
             }
+            return data;
         }
     }
 }

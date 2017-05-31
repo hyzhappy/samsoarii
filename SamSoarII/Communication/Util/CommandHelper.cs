@@ -6,6 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Communication.Command;
+using System.Windows;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace SamSoarII.Communication
 {
@@ -135,66 +139,80 @@ namespace SamSoarII.Communication
                     return null;
             }
         }
-        public static void UpdataElements(List<ElementModel> elements, byte[] retData, byte length)
+        public static void UpdateElements(List<AddrSegment> Segments,byte[] data)
         {
-            if (elements.Count != 0)
+            byte addrType = Segments.First().Type;
+            uint startAddr = Segments.OrderBy(x => { return x.Model.StartAddr; }).First().Model.StartAddr;
+            int typeLen = GetLengthByAddrType(addrType);
+            foreach (var segment in Segments)
             {
-                int typelen = retData.Length / length;
-                for (int i = 0; i < length; i++)
+                uint span = segment.Model.StartAddr - startAddr;
+                int index = (int)span / 8;
+                int offset = (int)span % 8;
+                if (typeLen == 1)
                 {
-                    if (typelen == 1)
+                    if (((data[index] >> offset) & 0x01) == 0x00)
                     {
-                        if (retData[i] == 0x00)
-                        {
-                            elements[i].CurrentValue = string.Format("OFF");
-                        }
-                        else
-                        {
-                            elements[i].CurrentValue = string.Format("ON");
-                        }
+                        segment.Model.CurrentValue = string.Format("OFF");
+                        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () {  });
                     }
                     else
                     {
-                        WordType type = (WordType)Enum.ToObject(typeof(WordType), elements.First().DataType);
-                        byte[] data = new byte[typelen];
-                        for (int j = 0; j < typelen; j++)
-                        {
-                            data[j] = retData[i * typelen + j];
-                        }
-                        uint value = ValueConverter.GetValue(data);
-                        switch (type)
-                        {
-                            case WordType.INT16:
-                                elements[i].CurrentValue = string.Format("{0}", (short)value);
-                                break;
-                            case WordType.POS_INT16:
-                                elements[i].CurrentValue = string.Format("{0}", (ushort)value);
-                                break;
-                            case WordType.INT32:
-                                elements[i].CurrentValue = string.Format("{0}", (int)value);
-                                break;
-                            case WordType.POS_INT32:
-                                elements[i].CurrentValue = string.Format("{0}", value);
-                                break;
-                            case WordType.BCD:
-                                if (value > 9999)
-                                {
-                                    elements[i].CurrentValue = string.Format("????");
-                                }
-                                else
-                                {
-                                    elements[i].CurrentValue = string.Format("{0}", ValueConverter.ToBCD((ushort)value));
-                                }
-                                break;
-                            case WordType.FLOAT:
-                                elements[i].CurrentValue = string.Format("{0}", ValueConverter.UIntToFloat(value));
-                                break;
-                            default:
-                                break;
-                        }
+                        segment.Model.CurrentValue = string.Format("ON");
+                        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () {  });
+                    }
+                    
+                }
+                else
+                {
+                    WordType type = (WordType)Enum.ToObject(typeof(WordType), segment.Model.DataType);
+                    byte[] value = new byte[typeLen];
+                    for (int i = 0; i < typeLen; i++)
+                    {
+                        value[i] = data[typeLen * index + i];
+                    }
+                    uint showValue = ValueConverter.GetValue(value);
+                    switch (type)
+                    {
+                        case WordType.INT16:
+                            segment.Model.CurrentValue = string.Format("{0}", (short)showValue);
+                            break;
+                        case WordType.POS_INT16:
+                            segment.Model.CurrentValue = string.Format("{0}", (ushort)showValue);
+                            break;
+                        case WordType.INT32:
+                            segment.Model.CurrentValue = string.Format("{0}", (int)showValue);
+                            break;
+                        case WordType.POS_INT32:
+                            segment.Model.CurrentValue = string.Format("{0}", showValue);
+                            break;
+                        case WordType.BCD:
+                            if (showValue > 9999)
+                            {
+                                segment.Model.CurrentValue = string.Format("????");
+                            }
+                            else
+                            {
+                                segment.Model.CurrentValue = string.Format("{0}", ValueConverter.ToBCD((ushort)showValue));
+                            }
+                            break;
+                        case WordType.FLOAT:
+                            segment.Model.CurrentValue = string.Format("{0}", ValueConverter.UIntToFloat(showValue));
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
+        }
+        public static void UpdateElementsByIntra(List<IntraSegment> Segments, byte[] data)
+        {
+            List<AddrSegment> segments = new List<AddrSegment>();
+            foreach (var segment in Segments)
+            {
+                segments.Add(segment.Base);
+            }
+            UpdateElements(segments,data);
         }
     }
 }

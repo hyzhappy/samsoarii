@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Windows;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace SamSoarII.AppMain.UI.Monitor
 {
@@ -73,7 +75,8 @@ namespace SamSoarII.AppMain.UI.Monitor
             set
             {
                 _currentValue = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
+                //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
             }
         }
         public string SetValue

@@ -17,38 +17,14 @@ namespace SamSoarII.Communication.Command
         private byte length1;
         private byte startLowAddr1;
         private byte startHighAddr1;
-        public AddrSegment AddrSeg1
-        {
-            get
-            {
-                return new AddrSegment
-                (
-                    addrType1,
-                    length1,
-                    startLowAddr1,
-                    startHighAddr1
-                );
-            }
-        }
+        
         private byte[] data1; 
         //当某数据类型长度超过32或有两个数据类型同时请求时使用
         private byte addrType2 = 0;
         private byte length2 = 0;
         private byte startLowAddr2 = 0;
         private byte startHighAddr2 = 0;
-        public AddrSegment AddrSeg2
-        {
-            get
-            {
-                return new AddrSegment
-                (
-                    addrType2,
-                    length2,
-                    startLowAddr2,
-                    startHighAddr2
-                );
-            }
-        }
+        
         private byte[] data2 = new byte[0];
         private byte[] command;
         //返回的数据

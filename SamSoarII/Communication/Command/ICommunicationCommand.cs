@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,15 +23,26 @@ namespace SamSoarII.Communication.Command
             }
         }
         #endregion
-
-        public AddrSegment(byte _type, byte _length, byte _addrLow, byte _addrHigh)
+        public ElementModel Model { get; set; }
+        public AddrSegment(ElementModel model,bool isIntra = false)
         {
-            Type = _type;
-            Length = _length;
-            AddrLow = _addrLow;
-            AddrHigh = _addrHigh;
+            Model = model;
+            if (isIntra)
+            {
+                Type = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), model.IntrasegmentType), model.IntrasegmentAddr);
+                AddrLow = (byte)model.IntrasegmentAddr;
+                AddrHigh = 0;
+                Length = 1;
+            }
+            else
+            {
+                Type = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), model.AddrType), model.StartAddr);
+                byte[] startaddr = ValueConverter.GetBytes((ushort)model.StartAddr);
+                AddrLow = startaddr[1];
+                AddrHigh = startaddr[0];
+                Length = (byte)model.ByteCount;
+            }
         }
-
         public bool Merge(ElementModel emodel)
         {
             //if (emodel.IsIntrasegment) return false;
