@@ -77,6 +77,7 @@ namespace SamSoarII.Communication.Command
         byte[] RetData { get; set; }
         bool IsSuccess { get; set; }
         byte[] GetBytes();
+        void UpdataValues();
     }
 
 

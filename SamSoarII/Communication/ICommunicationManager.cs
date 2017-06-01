@@ -1,4 +1,5 @@
-﻿using SamSoarII.Communication.Command;
+﻿using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Communication.Command;
 
 namespace SamSoarII.Communication
 {
@@ -8,5 +9,6 @@ namespace SamSoarII.Communication
         int Abort();
         int Read(ICommunicationCommand cmd);
         int Write(ICommunicationCommand cmd);
+        MonitorManager Manager { get; set; }
     }
 }

@@ -261,7 +261,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                         ele.IntrasegmentType = dialog.IntrasegmentType;
                         ele.IntrasegmentAddr = dialog.IntrasegmentAddr;
                         Manager.Add(ele);
-                        ele = Manager.Get(ele);
+                        //ele = Manager.Get(ele);
                         CurrentTable.AddElement(ele);
                     }
                     dialog.Close();
@@ -477,8 +477,8 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         private void OnStopCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            ResetShowValue();
             Stop();
+            ResetShowValue();
         }
         private void ResetShowValue()
         {

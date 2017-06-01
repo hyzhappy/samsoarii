@@ -28,10 +28,6 @@ namespace SamSoarII.Communication.Command
             {
                 _retData = value;
                 CheckRetData();
-                if (IsSuccess)
-                {
-                    UpdataValues();
-                }
             }
         }
         public bool IsSuccess { get; set; }

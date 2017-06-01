@@ -11,7 +11,7 @@ namespace SamSoarII.Communication.Command
     public class IntrasegmentWriteCommand : ICommunicationCommand
     {
         private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
-        private const byte commandType = CommunicationDataDefine.FGS_READ;
+        private const byte commandType = CommunicationDataDefine.FGS_WRITE;
         private byte addrTypeNum = 0x00;
         private byte addrType1;
         private byte addrType2;
@@ -53,27 +53,8 @@ namespace SamSoarII.Communication.Command
             addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), RefElement.AddrType), RefElement.StartAddr);
             length = 0x01;
             byte[] startaddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr);
-            startLowAddr1 = startaddr[0];
-            startHighAddr = startaddr[1];
-        }
-        public IntrasegmentWriteCommand(byte[] addrType, byte length, byte[] startLowAddr, byte startHighAddr,byte[] data)
-        {
-            if (length > CommunicationDataDefine.MAX_ELEM_NUM)
-            {
-                return;
-            }
-            if (length * CommandHelper.GetLengthByAddrType(addrType[0]) != data.Length)
-            {
-                return;
-            }
-            addrType1 = addrType[0];
-            addrType2 = addrType[1];
-            startLowAddr1 = startLowAddr[0];
-            startLowAddr2 = startLowAddr[1];
-            this.startHighAddr = startHighAddr;
-            this.data = data;
-            this.length = length;
-            GenerateCommand();
+            startLowAddr1 = startaddr[1];
+            startHighAddr = startaddr[0];
         }
         public void GenerateCommand()
         {
@@ -81,15 +62,6 @@ namespace SamSoarII.Communication.Command
             command = new byte[11 + cnt];
             byte[] commandCache = new byte[command.Length - 2];
             byte[] CRCCode;
-            commandCache[0] = slaveNum;
-            commandCache[1] = commandType;
-            commandCache[2] = addrTypeNum;
-            commandCache[3] = addrType2;
-            commandCache[4] = startLowAddr2;
-            commandCache[5] = addrType1;
-            commandCache[6] = length;
-            commandCache[7] = startLowAddr1;
-            commandCache[8] = startHighAddr;
             for (int i = 0; i < commandCache.Length; i++)
             {
                 if(i == 0) commandCache[i] = slaveNum;
@@ -138,6 +110,11 @@ namespace SamSoarII.Communication.Command
                 IsSuccess = false;
                 //抛出相应异常
             }
+        }
+
+        public void UpdataValues()
+        {
+            //to do nothing
         }
     }
 }

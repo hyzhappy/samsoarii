@@ -207,7 +207,7 @@ namespace SamSoarII.UserInterface
                 }
                 TB_Value.Background = Brushes.White;
             }
-            catch (FormatException)
+            catch (Exception)
             {
                 TB_Value.Background = Brushes.Red;
             }

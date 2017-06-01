@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.Communication.Command;
 using System.Runtime.InteropServices;
+using SamSoarII.AppMain.UI.Monitor;
 
 namespace SamSoarII.Communication
 {
@@ -41,6 +42,16 @@ namespace SamSoarII.Communication
         }
 
         private byte[] readbuffer = new byte[1024];
+        public USBManager(MonitorManager manager)
+        {
+            Manager = manager;
+        }
+        public MonitorManager Manager
+        {
+            get;
+            set;
+        }
+
         public int Read(ICommunicationCommand cmd)
         {
             return Transfer(readbuffer, 1024);   

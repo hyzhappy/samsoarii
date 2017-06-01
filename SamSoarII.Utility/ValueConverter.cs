@@ -44,7 +44,7 @@ namespace SamSoarII.Utility
         {
             byte byte1 = (byte)(value & 0x000000FF);
             byte byte2 = (byte)((value & 0x0000FF00) >> 8);
-            byte byte3 = (byte)(value & 0x00FF0000 >> 16);
+            byte byte3 = (byte)((value & 0x00FF0000) >> 16);
             byte byte4 = (byte)((value & 0xFF000000) >> 24);
             return new byte[] {byte2,byte1,byte4,byte3 };
         }
@@ -52,11 +52,11 @@ namespace SamSoarII.Utility
         {
             if (data.Length == 2)
             {
-                return (uint)(data[0] >> 8 + data[1]);
+                return (uint)((data[0] << 8) + data[1]);
             }
             else
             {
-                return (uint)(data[0] >> 8 + data[1] + data[2] >> 24 + data[3] >> 16);
+                return (uint)((data[0] << 8) + data[1] + (data[2] << 24) + (data[3] << 16));
             }
         }
         unsafe

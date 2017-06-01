@@ -26,10 +26,6 @@ namespace SamSoarII.Communication.Command
             {
                 _retData = value;
                 CheckRetData();
-                if (IsSuccess)
-                {
-                    UpdataValues();
-                }
             }
         }
         private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
