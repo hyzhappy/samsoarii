@@ -510,6 +510,7 @@ namespace SamSoarII.AppMain.Project
         
         public void SetPosition(int line, int column)
         {
+            //CCSProfix = String.Empty;
             CodeTextBox.SetPosition(line, column);
             ScrollViewer sv = CodeTextBox.ScrollViewer;
             if (sv == null) return;
@@ -521,9 +522,22 @@ namespace SamSoarII.AppMain.Project
             sv.ScrollToHorizontalOffset(x);
         }
 
-        public void SetOffset(int offset)
+        public TextViewPosition? GetPosition(int offset = -1)
         {
-            CodeTextBox.CaretOffset = offset;
+            if (offset == -1)
+            {
+                offset = CodeTextBox.CaretOffset;
+            }
+            return CodeTextBox.GetPositionFromOffset(offset);
+        }
+
+        public void SetOffset(int offset, int count = 0)
+        {
+            //CCSProfix = String.Empty;
+            if (count > 0)
+                CodeTextBox.Select(offset, count);
+            else
+                CodeTextBox.CaretOffset = offset;
             int line = CodeTextBox.Row;
             int column = CodeTextBox.Column;
             ScrollViewer sv = CodeTextBox.ScrollViewer;
@@ -534,7 +548,6 @@ namespace SamSoarII.AppMain.Project
             double x = column * 16 - sv.ViewportWidth / 2;
             x = Math.Max(0, x);
             sv.ScrollToHorizontalOffset(x);
-
         }
 
         /// <summary>

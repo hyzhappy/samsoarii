@@ -1173,6 +1173,17 @@ namespace ICSharpCode.AvalonEdit
 			TextView textView = this.TextArea.TextView;
 			return textView.GetPosition(TranslatePoint(point, textView) + textView.ScrollOffset);
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public TextViewPosition? GetPositionFromOffset(int offset)
+        {
+            if (this.Document == null)
+                return null;
+            return new TextViewPosition(Document.GetLocation(offset));
+        }
 
         /// <summary>
         /// Scrolls to the specified line.

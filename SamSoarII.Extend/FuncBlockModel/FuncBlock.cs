@@ -513,12 +513,13 @@ namespace SamSoarII.Extend.FuncBlockModel
             }
             // 设置位移标记
             InnerOffset += offset;
-            end += offset;
+            end += offset; 
             CastOffset();
             // 从前到后扫描
             for (int i = start; i <= end; i++)
             {
                 Match blankMatch = null;
+                if (i >= text.Length) break;
                 // 注意标志符号
                 switch (text[i])
                 {
@@ -1031,13 +1032,13 @@ namespace SamSoarII.Extend.FuncBlockModel
             if (texts.Length == 2)
             {
                 Match m1 = Regex.Match(texts[0], @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
-                Match m2 = Regex.Match(texts[1], @"^\s*\d+\s*;\s*$");
-                Match m3 = Regex.Match(texts[1], @"^\s*\d*\.\d+\s*;\s*$");
-                Match m4 = Regex.Match(texts[1], @"^\s*0x[\da-fA-F]{1,8}\s*;\s*$");
+                Match m2 = Regex.Match(texts[1], @"^\s*[^;]*;\s*$");
+                //Match m3 = Regex.Match(texts[1], @"^\s*\d*\.\d+\s*;\s*$");
+                //Match m4 = Regex.Match(texts[1], @"^\s*0x[\da-fA-F]{1,8}\s*;\s*$");
                 bool result = false;
                 result |= m2.Success;
-                result |= m3.Success;
-                result |= m4.Success;
+                //result |= m3.Success;
+                //result |= m4.Success;
                 result &= m1.Success;
                 return result;
             }

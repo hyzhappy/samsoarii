@@ -39,9 +39,9 @@ namespace SamSoarII.AppMain.UI.Monitor
                 switch (comboBox.SelectedIndex)
                 {
                     case 0:case 1:case 2:case 3:case 4:case 5:
-                        return Enum.GetNames(typeof(BitType));
+                        return new string[] { "BOOL" };
                     case 6:case 7:case 8:case 9:case 10:case 11:case 12:
-                        return Enum.GetNames(typeof(WordType));
+                        return new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT" };
                     default:
                         return null;
                 }

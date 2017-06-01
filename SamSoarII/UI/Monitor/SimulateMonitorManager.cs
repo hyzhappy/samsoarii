@@ -11,6 +11,7 @@ using System.Windows;
 using SamSoarII.Communication.Command;
 using SamSoarII.LadderInstViewModel.Monitor;
 using SamSoarII.UserInterface;
+using SamSoarII.Utility;
 
 namespace SamSoarII.AppMain.UI.Monitor
 {
@@ -36,8 +37,8 @@ namespace SamSoarII.AppMain.UI.Monitor
             switch (datatype)
             {
                 case 0: return "BIT";
-                case 1: return "WORD";
-                case 3: return "DWORD";
+                case 1: case 2: case 5: return "WORD";
+                case 3: case 4: return "DWORD";
                 case 6: return "FLOAT";
                 default: return String.Empty;
             }
@@ -125,7 +126,6 @@ namespace SamSoarII.AppMain.UI.Monitor
                     table.Elements[i] = Get(table.Elements[i]);
                 }
             }
-            
         }
 
         public void Initialize(ProjectModel pmodel)
@@ -155,6 +155,12 @@ namespace SamSoarII.AppMain.UI.Monitor
                     svunit.ValueChanged -= OnValueChanged;
                 }
             }
+        }
+
+        public void Replace(ElementModel emodel_old, ElementModel emodel_new)
+        {
+            Remove(emodel_old);
+            Add(emodel_new);
         }
 
         public void Remove(IEnumerable<ElementModel> emodels)
@@ -348,7 +354,34 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             else
             {
-                emodel.CurrentValue = svunit.Value.ToString();
+                switch (emodel.ShowType)
+                {
+                    case "WORD":
+                        emodel.CurrentValue = String.Format("{0}",
+                            (Int16)((Int32)(svunit.Value)));
+                        break;
+                    case "UWORD":
+                        emodel.CurrentValue = String.Format("{0}",
+                            (UInt16)((Int32)(svunit.Value)));
+                        break;
+                    case "DWORD":
+                        emodel.CurrentValue = String.Format("{0}",
+                            (Int32)((Int64)(svunit.Value)));
+                        break;
+                    case "UDWORD":
+                        emodel.CurrentValue = String.Format("{0}",
+                            (UInt32)((Int64)(svunit.Value)));
+                        break;
+                    case "BCD":
+                        emodel.CurrentValue = String.Format("{0}",
+                            ValueConverter.ToBCD(
+                                (UInt16)((Int32)(svunit.Value))));
+                        break;
+                    case "FLOAT":
+                        emodel.CurrentValue = String.Format("{0}",
+                            (double)(svunit.Value));
+                        break;
+                }
             }
         }
 

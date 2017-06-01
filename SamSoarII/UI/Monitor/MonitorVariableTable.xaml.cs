@@ -335,22 +335,34 @@ namespace SamSoarII.AppMain.UI.Monitor
                 dialog.textBox1.Text = element.IntrasegmentAddr.ToString();
             }
         }
-        private void OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            ComboBox combox = sender as ComboBox;
-            _selectIndex = combox.SelectedIndex;
-        }
-        private void OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            if (_parent.IsBeingMonitored)
-            {
-                MessageBox.Show("监视时无法改变数据类型!");
-                ((ComboBox)sender).SelectedIndex = _selectIndex;
-            }
-        }
         private void OnDeleteAllElementCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Elements.Count > 0;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox cbox = (ComboBox)sender;
+            if (cbox.Parent is DataGridCell)
+            {
+                DataGridCell dgcell = (DataGridCell)(cbox.Parent);
+                if (dgcell.DataContext is ElementModel)
+                {
+                    ElementModel emodel_old = (ElementModel)(dgcell.DataContext);
+                    ElementModel emodel_new = new ElementModel(emodel_old);
+                    if (e.AddedItems.Count <= 0
+                     || emodel_new.ShowType.Equals(e.AddedItems[0].ToString()))
+                    {
+                        return;
+                    }
+                    emodel_new.ShowType = e.AddedItems[0].ToString();
+                    _parent.Manager.Replace(emodel_old, emodel_new);
+                    emodel_new = _parent.Manager.Get(emodel_new);
+                    int id = Elements.IndexOf(emodel_old);
+                    Elements[id] = emodel_new;
+                    dgcell.DataContext = emodel_new;
+                }
+            }
         }
     }
 }
