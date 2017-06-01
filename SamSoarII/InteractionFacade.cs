@@ -1169,6 +1169,7 @@ namespace SamSoarII.AppMain
             }
         }
 
+        public event SelectionChangedEventHandler CurrentTabChanged = delegate { };
         private void OnTabItemChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_mainTabControl.SelectedItem is LadderDiagramViewModel)
@@ -1179,6 +1180,7 @@ namespace SamSoarII.AppMain
                     CurrentLadder = ldmodel;
                 }
             }
+            CurrentTabChanged(_mainTabControl, e);
         }
         public event ProjectTreeViewEventHandler PTVEvent = delegate { };
         private void OnGotPTVHandle(object sender, ProjectTreeViewEventArgs e)

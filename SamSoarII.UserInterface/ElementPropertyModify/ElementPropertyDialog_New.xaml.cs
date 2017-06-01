@@ -23,6 +23,7 @@ namespace SamSoarII.UserInterface
         public ElementPropertyDialog_New()
         {
             InitializeComponent();
+            DataContext = this;
         }
         
         private BasePropModel bpmodel;
@@ -293,17 +294,8 @@ namespace SamSoarII.UserInterface
             {
                 this.functions = value;
                 functionlabels = value.Select(msgs => { return _StringToLabel(msgs[1]); });
-                IEnumerable<string[]> fit = functions.Where(
-                    (string[] _msg) =>
-                    {
-                        return bpmodel.InstructionName.Equals("CALLM")
-                            && bpmodel.ValueString1.Equals(_msg[1]);
-                    });
-                if (fit.Count() > 0)
-                {
-                    string[] msg = fit.First();
-                    bpmodel.Count = msg.Length / 2;
-                }
+                if (bpmodel is OutRecPropModel)
+                    ((OutRecPropModel)bpmodel).UpdateCALLM();
             }
         }
         public IEnumerable<Label> FunctionLabels
@@ -324,7 +316,7 @@ namespace SamSoarII.UserInterface
         }
         public IEnumerable<Label> ModbusLabels
         {
-            get { return this.ModbusLabels; }
+            get { return this.modbuslabels; }
         }
 
         #endregion

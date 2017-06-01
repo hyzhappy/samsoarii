@@ -54,8 +54,7 @@
                         <Style TargetType="ComboBox">
                             <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
                             <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
-                            <EventSetter Event="GotFocus" Handler="OnGotFocus"></EventSetter>
-                            <EventSetter Event="LostFocus" Handler="OnLostFocus"></EventSetter>
+                            <EventSetter Event="SelectionChanged" Handler="ComboBox_SelectionChanged"></EventSetter>
                         </Style>
                     </DataGridComboBoxColumn.EditingElementStyle>
                     <DataGridComboBoxColumn.ElementStyle>

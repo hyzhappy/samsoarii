@@ -244,6 +244,12 @@
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Style\IconManager.cs" />
+    <Compile Include="UI\TextFindWindow.xaml.cs">
+      <DependentUpon>TextFindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TextReplaceWindow.xaml.cs">
+      <DependentUpon>TextReplaceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Util\ElementAddressHelper.cs" />
     <Compile Include="UserSetting\SettingManager.cs" />
     <Compile Include="UI\InstrucionTreeItem.cs" />
@@ -587,6 +593,14 @@
     <Page Include="UI\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\TextFindWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\TextReplaceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

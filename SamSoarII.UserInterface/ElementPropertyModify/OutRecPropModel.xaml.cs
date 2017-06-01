@@ -185,6 +185,25 @@ namespace SamSoarII.UserInterface
 
         public event CollectionPopupEventHandler CollectionPopup = delegate { };
 
+        public void UpdateCALLM()
+        {
+            if (Dialog == null
+             || !InstructionName.Equals("CALLM"))
+            {
+                return;
+            }
+            IEnumerable<string[]> fit = Dialog.Functions.Where(
+                (string[] _msg) =>
+                {
+                    return ValueString1.Equals(_msg[1]);
+                });
+            if (fit.Count() > 0)
+            {
+                string[] msg = fit.First();
+                Count = msg.Length / 2;
+            }
+        }
+
         private void MiddleTextBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateComment(MiddleTextBox1.Text);
@@ -194,6 +213,7 @@ namespace SamSoarII.UserInterface
                     CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.SUBROUTINES, MiddleTextBox1));
                     break;
                 case "CALLM":
+                    UpdateCALLM();
                     CollectionPopup(this, new CollectionPopupEventArgs(CollectionPopupType.FUNCBLOCKS, MiddleTextBox1));
                     break;
             }

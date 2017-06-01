@@ -15,7 +15,8 @@ namespace SamSoarII.Communication
         FGs_ADDRESS_ERR,           //元件寻址错误
         FGs_ADDRESS_TYPE_ERR,	   //地址种类错误
         FGs_DES_ERR,                //上载条形码密钥校验错误
-        FGs_ADDRESS_BEYOND_ERR	   //地址越界错误(用于VZ偏移地址越界)
+        FGs_ADDRESS_BEYOND_ERR,	   //地址越界错误(用于VZ偏移地址越界)
+        FGs_ISNOTANERRCODE      // 非错误代码
     }
     public class CommunicationDataDefine
     {

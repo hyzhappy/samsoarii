@@ -27,6 +27,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         ElementModel Get(ElementModel emodel);
         void Add(ElementModel emodel);
         void Remove(ElementModel emodel);
+        void Replace(ElementModel emodel_old, ElementModel emodel_new);
         void Write(ElementModel emodel);
         bool CanLock { get; }
         void Lock(ElementModel emodel);
@@ -40,7 +41,7 @@ namespace SamSoarII.AppMain.UI.Monitor
 
     public enum MonitorManager_ElementModelHandle
     {
-        NULL = 0x00, ADD, REMOVE, WRITE, MULTIADD, MULTIREMOVE, MULTIWRITE
+        NULL = 0x00, ADD, REMOVE, REPLACE, WRITE, MULTIADD, MULTIREMOVE, MULTIWRITE
     }
     
     public enum MonitorManager_CommunicationCommandHandle
@@ -73,14 +74,14 @@ namespace SamSoarII.AppMain.UI.Monitor
         private bool _Thread_IsActive = false;
         public event RoutedEventHandler ThreadResume = delegate { };
         public event RoutedEventHandler ThreadPause = delegate { };
-        private void _Thread_WaitForActive()
+        private void _Thread_WaitForActive(int itvtime = 10)
         {
             _Thread_IsActive = false;
             ThreadPause(this, new RoutedEventArgs());
-            while (_Thread_Alive && !_Thread_Active)
+            do
             {
-                Thread.Sleep(10);
-            }
+                Thread.Sleep(itvtime);
+            } while (_Thread_Alive && !_Thread_Active);
             _Thread_IsActive = true;
             ThreadResume(this, new RoutedEventArgs());
         }
@@ -119,7 +120,8 @@ namespace SamSoarII.AppMain.UI.Monitor
                     int recvtime = 0;
                     if (CurrentCommand != null)
                     {
-                        while (_Thread_Alive && _Thread_Active && sendtime < 10)
+                        while (_Thread_Alive && _Thread_Active 
+                            && sendtime < 5)
                         {
                             if (Send(CurrentCommand))
                             {
@@ -128,7 +130,13 @@ namespace SamSoarII.AppMain.UI.Monitor
                             }
                             sendtime++;
                         }
-                        Thread.Sleep(10);
+                        int itvtime = 10;
+                        if (CurrentCommand is GeneralWriteCommand
+                         || CurrentCommand is IntrasegmentWriteCommand)
+                        {
+                            itvtime = 100;
+                        }
+                        _Thread_WaitForActive(itvtime);
                         while (_Thread_Alive && hassend)
                         {
                             if (Recv(CurrentCommand))
@@ -139,7 +147,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             recvtime++;
                         }
                     }
-                    if (_Thread_Alive && hassend && hasrecv)
+                    if (hassend && hasrecv)
                     {
                         Execute(CurrentCommand);
                         CurrentCommand = null;
@@ -327,7 +335,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     Force(element, bvalue);
                     break;
                 case ElementValueModifyEventType.ForceOFF:
-                    bvalue = 0x00;
+                    bvalue = 0x01;
                     element.SetValue = "OFF";
                     Force(element, bvalue);
                     break;
@@ -347,20 +355,20 @@ namespace SamSoarII.AppMain.UI.Monitor
                     Write(element, bvalue);
                     break;
                 case ElementValueModifyEventType.WriteON:
-                    bvalue = 0x01;
+                    bvalue = 0x00;
                     element.SetValue = "ON";
                     Write(element, bvalue);
                     break;
                 case ElementValueModifyEventType.Write:
                     element.SetValue = e.Value;
-                    Write(element,e.Value);
+                    Write(element);
                     break;
             }
         }
         private void Force(ElementModel element, byte value)
         {
             GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
-            //command.RefElements_A.Add(element);
+            command.RefElements_A.Add(element);
             Add(command);
         }
         private void Write(ElementModel element, byte value)
@@ -368,16 +376,17 @@ namespace SamSoarII.AppMain.UI.Monitor
             if (element.IsIntrasegment)
             {
                 IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { value }, element);
-                //command.RefElement = element;
+                command.RefElement = element;
                 Add(command);
             }
             else
             {
                 GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
-                //command.RefElements_A.Add(element);
+                command.RefElements_A.Add(element);
                 Add(command);
             }
         }
+
         private void Write(ElementModel element, string value)
         {
             byte[] data;
@@ -417,13 +426,13 @@ namespace SamSoarII.AppMain.UI.Monitor
             if (element.IsIntrasegment)
             {
                 IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, element);
-                //command.RefElement = element;
+                command.RefElement = element;
                 Add(command);
             }
             else
             {
                 GeneralWriteCommand command = new GeneralWriteCommand(data, element);
-                //command.RefElements_A.Add(element);
+                command.RefElements_A.Add(element);
                 Add(command);
             }
         }
@@ -470,6 +479,25 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             else
             {
+                switch (H_Model)
+                {
+                    case MonitorManager_ElementModelHandle.ADD:
+                        if (flagname.Equals(O_Model.FlagName))
+                            return O_Model;
+                        break;
+                    case MonitorManager_ElementModelHandle.REPLACE:
+                        if (flagname.Equals(A_Models[1].FlagName))
+                            return A_Models[1];
+                        break;
+                    case MonitorManager_ElementModelHandle.MULTIADD:
+                        IEnumerable<ElementModel> fit = A_Models.Where
+                        (
+                            (model) => { return flagname.Equals(model.FlagName); }
+                        );
+                        if (fit.Count() > 0)
+                            return fit.First();
+                        break;
+                }
                 return null;
             }
         }
@@ -637,6 +665,32 @@ namespace SamSoarII.AppMain.UI.Monitor
             if (arrange) Arrange();
         }
 
+        public void Replace(ElementModel emodel_old, ElementModel emodel_new)
+        {
+            if (_Thread_IsActive)
+            {
+                if (H_Model == MonitorManager_ElementModelHandle.NULL)
+                {
+                    A_Models = new ElementModel[2];
+                    A_Models[0] = emodel_old;
+                    A_Models[1] = emodel_new;
+                    H_Model = MonitorManager_ElementModelHandle.REPLACE;
+                    _Thread_Active = false;
+                }
+            }
+            else
+            {
+                _Replace(emodel_old, emodel_new);
+            }
+        }
+
+        private void _Replace(ElementModel emodel_old, ElementModel emodel_new, bool arrange = true)
+        {
+            _Remove(emodel_old, false);
+            _Add(emodel_new, false);
+            if (arrange) Arrange();
+        }
+
         public void Write(IEnumerable<ElementModel> emodels)
         {
             if (_Thread_IsActive)
@@ -730,84 +784,9 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         private void Execute(ICommunicationCommand cmd)
         {
-            if (cmd.IsSuccess)
-            {
-                cmd.UpdataValues();
-            }
+
         }
-        public void ArrangeOld()
-        {
-            //ElementModel prev = null;
-            //ICommunicationCommand prevcmd = null;
-            //foreach (ElementModel next in ReadModels.Values)
-            //{
-            //    bool canmerge = (prev != null);
-            //    if (canmerge)
-            //    {
-            //        canmerge &= (prev.AddrType == next.AddrType);
-            //        //canmerge &= !(prev.IsIntrasegment ^ next.IsIntrasegment);
-            //        canmerge &= (prev.IntrasegmentType == next.IntrasegmentType);
-            //        canmerge &= (prev.IntrasegmentAddr == next.IntrasegmentAddr);
-            //    }
-            //    if (canmerge)
-            //    {
-            //        if (prevcmd is GeneralReadCommand)
-            //        {
-            //            GeneralReadCommand grcmd = (GeneralReadCommand)prevcmd;
-            //            AddrSegment seg1 = grcmd.AddrSeg1;
-            //            AddrSegment seg2 = grcmd.AddrSeg2;
-            //            if (!seg1.Merge(next) && !seg2.Merge(next))
-            //            {
-            //                canmerge = false;
-            //            }
-            //            grcmd.AddrSeg1 = seg1;
-            //            grcmd.AddrSeg2 = seg2;
-            //        }
-            //        else if (prevcmd is IntrasegmentReadCommand)
-            //        {
-            //            IntrasegmentReadCommand ircmd = (IntrasegmentReadCommand)prevcmd;
-            //            IntraSegment iseg = ircmd.IntraSeg;
-            //            if (!iseg.Base.Merge(next))
-            //            {
-            //                canmerge = false;
-            //            }
-            //            ircmd.IntraSeg = iseg;
-            //        }
-            //    }
-            //    if (!canmerge)
-            //    {
-            //        if (next.IsIntrasegment)
-            //        {
-            //            IntrasegmentReadCommand ircmd = new IntrasegmentReadCommand();
-            //            byte addrtype1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.AddrType), next.StartAddr);
-            //            byte[] startaddr = ValueConverter.GetBytes((ushort)next.StartAddr);
-            //            byte startLowAddr1 = startaddr[0];
-            //            byte startHighAddr = startaddr[1];
-            //            byte addrtype2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.IntrasegmentType), next.IntrasegmentAddr);
-            //            byte startLowAddr2 = (byte)next.IntrasegmentAddr;
-            //            AddrSegment bseg = new AddrSegment(
-            //                addrtype1, (byte)(next.ByteCount), startLowAddr1, startHighAddr);
-            //            AddrSegment iseg = new AddrSegment(
-            //                addrtype2, 1, startLowAddr2, 0);
-            //            ircmd.IntraSeg = new IntraSegment(
-            //                bseg, iseg);
-            //            ReadCommands.Add(ircmd);
-            //        }
-            //        else
-            //        {
-            //            GeneralReadCommand grcmd = new GeneralReadCommand();
-            //            byte addrtype = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), next.AddrType), next.StartAddr);
-            //            byte[] startaddr = ValueConverter.GetBytes((ushort)next.StartAddr);
-            //            byte startLowAddr = startaddr[0];
-            //            byte startHighAddr = startaddr[1];
-            //            grcmd.AddrSeg1 = new AddrSegment(
-            //                addrtype, (byte)(next.ByteCount), startLowAddr, startHighAddr);
-            //            ReadCommands.Add(grcmd);
-            //        }
-            //    }
-            //    prev = next;
-            //}
-        }
+   
         public void Arrange()
         {
             ReadCommands.Clear();
@@ -822,20 +801,20 @@ namespace SamSoarII.AppMain.UI.Monitor
             string addrType;
             int gIndex = 0;
             bool gisFirst = true,iisFirst = true;
-            uint gstart = 0, istart = 0;
-            ElementModel gstartele = null, istartele = null;
             GeneralReadCommand gcmd = new GeneralReadCommand();
             gcmd.SegmentsGroup[gIndex] = new List<AddrSegment>();
             IntrasegmentReadCommand icmd = new IntrasegmentReadCommand();
             while (tempQueue_Base.Count > 0)
             {
+                uint gstart = 0,istart = 0;
+                ElementModel gstartele = null,istartele = null;
                 addrType = tempQueue_Base.Dequeue();
                 List<ElementModel> elements = ReadModels.Values.Where(x => { return x.AddrType == addrType; }).OrderBy(x => { return x.StartAddr; }).ToList();
                 if (elements.Count > 0)
                 {
                     for (int i = 0; i < elements.Count; i++)
                     {
-                        if ((iisFirst && elements[i].IsIntrasegment) || (gisFirst && !elements[i].IsIntrasegment))
+                        if (i == 0)
                         {
                             if (elements[i].IsIntrasegment)
                             {
@@ -843,8 +822,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                                 {
                                     ReadCommands.Add(icmd);
                                     icmd = new IntrasegmentReadCommand();
-                                }
-                                else iisFirst = false;
+                                }else iisFirst = false;
                                 icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
                                 istart = elements[i].StartAddr;
                                 istartele = elements[i];
@@ -863,25 +841,11 @@ namespace SamSoarII.AppMain.UI.Monitor
                         }
                         else if (!elements[i].IsIntrasegment && GetAddrSpan(elements[i],gstart) < GetMaxRange(gstartele))
                         {
-                            if (elements[i].AddrType == gstartele.AddrType) gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
-                            else
-                            {
-                                gstart = elements[i].StartAddr;
-                                gstartele = elements[i];
-                                ArrangeCmd(gcmd, ref gIndex, elements[i]);
-                            }
+                            gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
                         }
                         else if (elements[i].IsIntrasegment && GetAddrSpan(elements[i], istart) < GetMaxRange(istartele) && IsSameIntraBase(istartele, elements[i]))
                         {
-                            if(elements[i].AddrType == istartele.AddrType) icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
-                            else
-                            {
-                                ReadCommands.Add(icmd);
-                                icmd = new IntrasegmentReadCommand();
-                                icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
-                                istart = elements[i].StartAddr;
-                                istartele = elements[i];
-                            }
+                            icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
                         }
                         else
                         {
@@ -972,6 +936,9 @@ namespace SamSoarII.AppMain.UI.Monitor
                     break;
                 case MonitorManager_ElementModelHandle.REMOVE:
                     _Remove(O_Model);
+                    break;
+                case MonitorManager_ElementModelHandle.REPLACE:
+                    _Replace(A_Models[0], A_Models[1]);
                     break;
                 case MonitorManager_ElementModelHandle.WRITE:
                     _Write(O_Model);

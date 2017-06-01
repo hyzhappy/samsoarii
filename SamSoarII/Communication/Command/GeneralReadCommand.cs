@@ -30,6 +30,7 @@ namespace SamSoarII.Communication.Command
                 CheckRetData();
             }
         }
+        public bool IsComplete { get; set; }
         public bool IsSuccess { get; set; }
         public GeneralReadCommand(){}
         public void InitializeCommandByElement()
@@ -89,32 +90,45 @@ namespace SamSoarII.Communication.Command
         }
         private void CheckRetData()
         {
+            if (RetData.Length < 3)
+            {
+                IsComplete = false;
+                IsSuccess = false;
+                return;
+            }
             if (RetData.Length == 3)
             {
                 IsSuccess = false;
                 FGs_ERR_CODE errCodeType = CommandHelper.GetERRCODEType(RetData[2]);
-                //抛出相应异常
+                IsComplete = (errCodeType != FGs_ERR_CODE.FGs_ISNOTANERRCODE);
+                return;
             }
-            else
+            int cplen = command.Length;
+            for (int i = 0; i < addrTypeNum; i++)
             {
-                byte[] commandCache = new byte[RetData.Length - 2];
-                byte[] CRCCode = new byte[2];
-                for (int i = 0; i < commandCache.Length; i++)
-                {
-                    commandCache[i] = RetData[i];
-                }
-                CRCCode[0] = RetData[RetData.Length - 2];
-                CRCCode[1] = RetData[RetData.Length - 1];
-                if (!CRC16.CheckCRC(commandCache,CRCCode))
-                {
-                    IsSuccess = false;
-                    //抛出CRC校验异常
-                }
-                else
-                {
-                    IsSuccess = true;
-                }
+                AddrSegment seg = SegmentsGroup[i].First();
+                int bytelen = CommandHelper.GetLengthByAddrType(seg.Type);
+                int bitlen = (bytelen == 1 ? 1 : bytelen * 8);
+                bitlen *= seg.Length;
+                bytelen = (bitlen - 1) / 8 + 1;
+                cplen += bytelen;
             }
+            if (RetData.Length < cplen)
+            {
+                IsComplete = false;
+                IsSuccess = false;
+                return;
+            }
+            IsComplete = true;
+            byte[] commandCache = new byte[RetData.Length - 2];
+            byte[] CRCCode = new byte[2];
+            for (int i = 0; i < commandCache.Length; i++)
+            {
+                commandCache[i] = RetData[i];
+            }
+            CRCCode[0] = RetData[RetData.Length - 2];
+            CRCCode[1] = RetData[RetData.Length - 1];
+            IsSuccess = CRC16.CheckCRC(commandCache, CRCCode);
         }
         //Can be call after assign value for Property of RetData
         private List<byte[]> GetRetData()

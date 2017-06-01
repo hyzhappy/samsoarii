@@ -36,7 +36,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         private string _currentValue = string.Format("????");
         private string _setValue = string.Empty;
         private string[] _showTypes;
-        public bool IsModify { get; set; } = true;
+        
         public bool IsIntrasegment { get; set; }
         public string ShowName
         {
@@ -58,11 +58,11 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 if (!IsIntrasegment)
                 {
-                    return String.Format("{0}_{1}", AddrType, StartAddr);
+                    return String.Format("{0}_{1}_{2}", AddrType, StartAddr, DataType);
                 }
                 else
                 {
-                    return String.Format("{0}_{1}{2}_{3}", AddrType, IntrasegmentType, IntrasegmentAddr, StartAddr);
+                    return String.Format("{0}_{1}{2}_{3}_{4}", AddrType, IntrasegmentType, IntrasegmentAddr, StartAddr, DataType);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 _currentValue = value;
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
-                ValueChanged.Invoke(this, new RoutedEventArgs());
+                //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
             }
         }
         public string SetValue
@@ -89,7 +89,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 _setValue = value;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SetValue"));
-                
+                ValueChanged.Invoke(this, new RoutedEventArgs());
             }
         }
         public string[] ShowTypes
@@ -110,9 +110,12 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 switch (DataType)
                 {
-                    case 0:  return "BIT";
+                    case 0:  return "BOOL";
                     case 1:  return "WORD";
+                    case 2:  return "UWORD";
                     case 3:  return "DWORD";
+                    case 4:  return "UDWORD";
+                    case 5:  return "BCD";
                     case 6:  return "FLOAT";
                     default: return "null";
                 }
@@ -121,9 +124,12 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 switch (value)
                 {
-                    case "BIT":   DataType = 0; break;
+                    case "BOOL":  DataType = 0; break;
                     case "WORD":  DataType = 1; break;
+                    case "UWORD": DataType = 2; break;
                     case "DWORD": DataType = 3; break;
+                    case "UDWORD":DataType = 4; break;
+                    case "BCD":   DataType = 5; break;
                     case "FLOAT": DataType = 6; break;
                 }
             }
@@ -135,8 +141,10 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 switch (DataType)
                 {
-                    case 1: case 2: case 5: return 2;
-                    case 3: case 4: case 6: return 4;
+                    case 0: return 1;
+                    case 1: return 2;
+                    case 3: return 4;
+                    case 6: return 4;
                     default: return 1;
                 }
             }
@@ -161,7 +169,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     if (DataType != value + 1)
                     {
                         DataType = value + 1;
-                        IsModify = true;
+                        //IsModify = true;
                     }
                 }
             }
@@ -192,6 +200,19 @@ namespace SamSoarII.AppMain.UI.Monitor
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SelectIndex"));
         }
         public ElementModel() { }
+
+        public ElementModel(ElementModel emodel)
+        {
+            AddrType = emodel.AddrType;
+            StartAddr = emodel.StartAddr;
+            IsIntrasegment = emodel.IsIntrasegment;
+            IntrasegmentType = emodel.IntrasegmentType;
+            IntrasegmentAddr = emodel.IntrasegmentAddr;
+            DataType = emodel.DataType;
+            RefCount = 1;
+            SetShowTypes();
+        }
+
         public void SetShowTypes()
         {
             if (DataType == 0)

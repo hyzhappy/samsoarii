@@ -43,16 +43,6 @@ namespace SamSoarII.Communication.Command
                 Length = (byte)model.ByteCount;
             }
         }
-        public bool Merge(ElementModel emodel)
-        {
-            //if (emodel.IsIntrasegment) return false;
-            //int addrdelta = (int)((int)Addr + Length - emodel.StartAddr);
-            //if (addrdelta > 8) return false;
-            int _length = (int)(emodel.StartAddr + emodel.ByteCount - (int)Addr);
-            if (_length > 32) return false;
-            Length = (byte)_length;
-            return true;
-        }
     }
 
     public class IntraSegment
@@ -75,6 +65,7 @@ namespace SamSoarII.Communication.Command
     public interface ICommunicationCommand
     {
         byte[] RetData { get; set; }
+        bool IsComplete { get; set; }
         bool IsSuccess { get; set; }
         byte[] GetBytes();
         void UpdataValues();

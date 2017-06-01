@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
-using SamSoarII.AppMain.UI.Monitor;
 
 namespace SamSoarII.Communication
 {
@@ -28,7 +27,7 @@ namespace SamSoarII.Communication
         static private string[] PARITYS = { "NONE", "ODD", "EVEN" };
 
         private SerialPort port = new SerialPort();
-        Queue<ICommunicationCommand> commands;
+
         public string PortName
         {
             get
@@ -127,38 +126,6 @@ namespace SamSoarII.Communication
                 }
             }
         }
-
-        public MonitorManager Manager
-        {
-            get;
-            set;
-        }
-
-        public SerialPortManager(MonitorManager manager)
-        {
-            commands = new Queue<ICommunicationCommand>();
-            //port.DataReceived += Port_DataReceived;
-            Manager = manager;
-        }
-        private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            if (commands.Count > 0)
-            {
-                var cmd = commands.Dequeue();
-                int cnt = 0;
-                readbuffer = new byte[port.BytesToRead];
-                while (port.BytesToRead > 0)
-                {
-                    readbuffer[cnt++] = (byte)port.ReadByte();
-                }
-                byte[] data = new byte[readbuffer.Length];
-                for (int i = 0; i < readbuffer.Length; i++)
-                {
-                    data[i] = readbuffer[i];
-                }
-                cmd.RetData = data;
-            }
-        }
         public void InitializePort()
         {
             if (!port.IsOpen)
@@ -219,32 +186,29 @@ namespace SamSoarII.Communication
             return 0;
         }
 
-        static byte[] readbuffer;
+        static byte[] readbuffer = new byte[4096];
+        static int readbuffercount = 0;
         public int Read(ICommunicationCommand cmd)
         {
-            //commands.Enqueue(cmd);
             try
             {
-                int cnt = 0;
-                readbuffer = new byte[port.BytesToRead];
-                while (port.BytesToRead > 0)
-                {
-                    readbuffer[cnt++] = (byte)port.ReadByte();
-                }
-                byte[] data = new byte[readbuffer.Length];
-                for (int i = 0; i < readbuffer.Length; i++)
-                {
+                int count = port.Read(readbuffer, readbuffercount, 4096 - readbuffercount);
+                readbuffercount += count;
+                byte[] data = new byte[readbuffercount];
+                for (int i = 0; i < readbuffercount; i++)
                     data[i] = readbuffer[i];
-                }
                 cmd.RetData = data;
             }
             catch (Exception)
             {
                 return 1;
             }
+            if (!cmd.IsComplete)
+                return 1;
+            readbuffercount = 0;
             return 0;
         }
-
+        
         //public void Load()
         //{
         //    CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
@@ -255,7 +219,7 @@ namespace SamSoarII.Communication
         //    Timeout = paras.Timeout;
         //    Parity = PARITYS[paras.CheckCodeIndex];
         //}
-
+        
         public bool AutoCheck()
         {
             foreach (string _portname in PORTNAMES)

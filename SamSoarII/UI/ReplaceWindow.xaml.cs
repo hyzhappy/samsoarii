@@ -81,6 +81,7 @@ namespace SamSoarII.AppMain.UI
             InitializeComponent();
             DataContext = this;
             parent = _parent;
+            parent.CurrentTabChanged += OnCurrentTabChanged;
             Mode = MODE_CURRENT;
             TB_Input.Background = Brushes.Red;
             TB_Change.Background = Brushes.Red;
@@ -88,10 +89,11 @@ namespace SamSoarII.AppMain.UI
         
         private void Find()
         {
+            items.Clear();
+            if (RF_Input.Type == ReplaceFormat.TYPE_INVALID)
+                return;
             string text = TB_Input.Text;
             string[] args = text.Split(' ');
-
-            items.Clear();
             switch (Mode)
             {
                 case MODE_CURRENT:
@@ -304,6 +306,11 @@ namespace SamSoarII.AppMain.UI
             int network = int.Parse(fele.Network);
             NavigateToNetworkEventArgs _e = new NavigateToNetworkEventArgs(network, diagram, x, y);
             parent.NavigateToNetwork(_e);
+        }
+        
+        private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Find();
         }
 
         private void UndoCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -823,10 +830,10 @@ namespace SamSoarII.AppMain.UI
     
     public class NetworkReplaceElementsCommand_ForReplaceWindow : IUndoableCommand
     {
-        private LadderNetworkViewModel lnvmodel;
-        public  ReplaceElement Element { get; private set; }
-        private BaseViewModel BVM_old;
-        private BaseViewModel BVM_new;
+        private LadderNetworkViewModel  lnvmodel;
+        public  ReplaceElement          Element { get; private set; }
+        private BaseViewModel           BVM_old;
+        private BaseViewModel           BVM_new;
         
         public NetworkReplaceElementsCommand_ForReplaceWindow
         (

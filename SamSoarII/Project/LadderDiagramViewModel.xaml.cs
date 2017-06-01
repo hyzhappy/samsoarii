@@ -27,6 +27,7 @@ using SamSoarII.AppMain.LadderCommand;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.AppMain.UI;
 using System.Collections.Specialized;
+using System.Runtime.InteropServices;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -1311,7 +1312,20 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Event handler
-        
+
+        [DllImport("user32.dll", EntryPoint = "GetKeyboardState")]
+        public static extern int GetKeyboardState(byte[] pbKeyState);
+
+        public static bool CapsLockStatus
+        {
+            get
+            {
+                byte[] bs = new byte[256];
+                GetKeyboardState(bs);
+                return (bs[0x14] == 1);
+            }
+        }
+
         public bool IsPressingCtrl
         {
             get; private set;
@@ -1381,7 +1395,6 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }
-
             if(e.Key == Key.Up)
             {         
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
@@ -1398,27 +1411,31 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }      
-            if(e.Key >= Key.A && e.Key <= Key.Z)
+            if (e.Key >= Key.A && e.Key <= Key.Z)
             {
                 if (LadderMode != LadderMode.Edit) return;
-                if((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.None)
+                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.None)
                 {
                     char c;
-                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-                    {
-
-                        c = (char)((int)e.Key + 21);
-                    }
-                    else
-                    {
-                        c = (char)((int)e.Key + 53);
-                    }
+                    bool isupper = CapsLockStatus;
+                    isupper ^= ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
+                    c = (char)((int)e.Key + (isupper ? 21 : 53));
                     string s = new string(c, 1);
                     ShowInstructionInputDialog(s);
                 }
-
             }
-            if(e.Key == Key.Enter)
+            if (LadderMode == LadderMode.Edit
+             && (e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                switch (e.Key)
+                {
+                    case Key.OemPlus:   ShowInstructionInputDialog("ADD"); break;
+                    case Key.OemMinus:  ShowInstructionInputDialog("SUB"); break;
+                    case Key.D8:        ShowInstructionInputDialog("MUL"); break;
+                    case Key.Oem5:      ShowInstructionInputDialog("DIV"); break;
+                }
+            }
+            if (e.Key == Key.Enter)
             {
                 if (LadderMode != LadderMode.Edit) return;
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
@@ -1426,14 +1443,13 @@ namespace SamSoarII.AppMain.Project
                     if (SelectionRect.NetworkParent != null)
                     {
                         NetworkAddRow(SelectionRect.NetworkParent, SelectionRect.NetworkParent.RowCount);
-                        //SelectionRect.NetworkParent.AppendNewRow();
                         return;
                     }
                 }
                 if (_selectRectOwner != null)
                 {
                     var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
-                    if(viewmodel != null && viewmodel.Type != LadderInstModel.ElementType.HLine)
+                    if (viewmodel != null && viewmodel.Type != LadderInstModel.ElementType.HLine)
                     {
                         viewmodel.BeginShowPropertyDialog();
                     }
@@ -1444,7 +1460,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }
-            if(e.Key == Key.Delete)
+            if (e.Key == Key.Delete)
             {
                 if (LadderMode != LadderMode.Edit) return;
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
@@ -1454,7 +1470,6 @@ namespace SamSoarII.AppMain.Project
                         NetworkRemoveRow(SelectionRect.NetworkParent, SelectionRect.Y);
                         return;
                     }
-
                 }
                 if (SelectionStatus == SelectStatus.SingleSelected)
                 {
@@ -1470,9 +1485,9 @@ namespace SamSoarII.AppMain.Project
                 else
                 {
                     // 多选删除
-                    if(SelectionStatus == SelectStatus.MultiSelected)
+                    if (SelectionStatus == SelectStatus.MultiSelected)
                     {
-                        if(CrossNetState == CrossNetworkState.NoCross)
+                        if (CrossNetState == CrossNetworkState.NoCross)
                         {
                             // 图元多选
                             _commandManager.Execute(new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines()));
@@ -1494,9 +1509,7 @@ namespace SamSoarII.AppMain.Project
                             {
                                 _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(this, _selectAllNetworks, index));
                             }
-                           
                         }
-
                     }
                 }
             }

@@ -211,7 +211,6 @@ namespace SamSoarII.AppMain.UI
         protected override void OnActualHeightChanged()
         {
             base.OnActualHeightChanged();
-
             ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(this);
             foreach (ITabItem tab in TabItemCollection)
             {
@@ -249,7 +248,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-
+        
         private void OnTabGotFocus(object sender, RoutedEventArgs e)
         {
             GotFocus(this, e);

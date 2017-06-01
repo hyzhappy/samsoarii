@@ -56,7 +56,8 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
-        private ReplaceFormat RF_Input { get; set; } = new ReplaceFormat();
+        private ReplaceFormat RF_Input { get; set; } 
+            = new ReplaceFormat();
 
         #endregion
 
@@ -68,15 +69,18 @@ namespace SamSoarII.AppMain.UI
             InitializeComponent();
             DataContext = this;
             parent = _parent;
+            parent.CurrentTabChanged += OnCurrentTabChanged;
             Mode = MODE_CURRENT;
             TB_Input.Background = Brushes.Red;
         }
 
         private void Find()
         {
+            items.Clear();
+            if (RF_Input.Type == ReplaceFormat.TYPE_INVALID)
+                return;
             string text = TB_Input.Text;
             string[] args = text.Split(' ');
-            items.Clear();
             switch (Mode)
             {
                 case MODE_CURRENT:
@@ -170,6 +174,11 @@ namespace SamSoarII.AppMain.UI
             parent.NavigateToNetwork(_e);
         }
 
+        private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Find();
+        }
+
         #endregion
     }
 
@@ -189,6 +198,4 @@ namespace SamSoarII.AppMain.UI
         {
         }
     }
-
-
 }
