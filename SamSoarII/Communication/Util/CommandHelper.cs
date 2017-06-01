@@ -95,7 +95,7 @@ namespace SamSoarII.Communication
                 case 0x26:
                     return FGs_ERR_CODE.FGs_ADDRESS_BEYOND_ERR;
                 default:
-                    return FGs_ERR_CODE.FGs_CARRY_OK;
+                    return FGs_ERR_CODE.FGs_ISNOTANERRCODE;
             }
         }
         public static byte? GetAddrType(ElementAddressType type,uint offset)

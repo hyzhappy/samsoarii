@@ -54,6 +54,7 @@ namespace SamSoarII.Communication.Command
             command[5] = CRCCode[0];
             command[6] = CRCCode[1];
         }
+        public bool IsComplete { get; set; }
         public bool IsSuccess { get; set; }
         private byte[] _retData;
         public byte[] RetData

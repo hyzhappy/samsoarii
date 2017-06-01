@@ -23,6 +23,7 @@ namespace SamSoarII.Communication.Command
         
         private byte[] data;
         private byte[] command;
+        public bool IsComplete { get; set; }
         public bool IsSuccess { get; set; }
         //返回的数据
         private byte[] _retData;
@@ -120,23 +121,24 @@ namespace SamSoarII.Communication.Command
         }
         private void CheckRetData()
         {
+            if (RetData.Length < 3)
+            {
+                IsComplete = false;
+                IsSuccess = false;
+                return;
+            }
             if (RetData.Length == 3)
             {
                 FGs_ERR_CODE errCodeType = CommandHelper.GetERRCODEType(RetData[2]);
-                if (errCodeType == FGs_ERR_CODE.FGs_CARRY_OK)
-                {
-                    IsSuccess = true;
-                }
-                else
-                {
-                    IsSuccess = false;
-                    //抛出相应异常
-                }
+                IsComplete = true;
+                IsSuccess = (errCodeType == FGs_ERR_CODE.FGs_CARRY_OK);
+                return;
             }
-            else
+            if (RetData.Length > 3)
             {
+                IsComplete = true;
                 IsSuccess = false;
-                //抛出相应异常
+                return;
             }
         }
     }
