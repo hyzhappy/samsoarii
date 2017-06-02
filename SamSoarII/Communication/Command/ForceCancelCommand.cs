@@ -24,6 +24,10 @@ namespace SamSoarII.Communication.Command
             InitializeCommandByElement();
             //GenerateCommand();
         }
+        public int RecvDataLen
+        {
+            get { return 3; } set { }
+        }
         public void InitializeCommandByElement()
         {
             addrType = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), RefElement.AddrType), RefElement.StartAddr);

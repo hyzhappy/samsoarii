@@ -39,6 +39,10 @@ namespace SamSoarII.Communication.Command
             command = new byte[11];
             GenerateCommand();
         }
+        public int RecvDataLen
+        {
+            get; set;
+        }
         public void UpdataValues()
         {
             byte[] retData = GetRetData();
@@ -46,6 +50,7 @@ namespace SamSoarII.Communication.Command
         }
         private void GenerateCommand()
         {
+            RecvDataLen = 8;
             command[0] = slaveNum;
             command[1] = commandType;
             command[2] = addrTypeNum;
@@ -57,6 +62,13 @@ namespace SamSoarII.Communication.Command
             {
                 command[4]++;
             }
+            int typeLen = CommandHelper.GetLengthByAddrType(command[3]);
+            int dataLen = typeLen * command[4];
+            if (typeLen == 1)
+            {
+                dataLen = dataLen / 8 + ((dataLen % 8 == 0) ? 0 : 1);
+            }
+            RecvDataLen += 2 + dataLen;
             command[5] = group.First().Base.AddrLow;
             command[6] = group.First().Base.AddrHigh;
             command[7] = group.First().Intra.Type;
@@ -96,20 +108,13 @@ namespace SamSoarII.Communication.Command
                 IsSuccess = false;
                 return;
             }
-            int cplen = command.Length;
-            var group = Segments.OrderBy(x => { return x.Base.Model.StartAddr; });
-            AddrSegment seg = group.First().Base;
-            int bytelen = CommandHelper.GetLengthByAddrType(seg.Type);
-            int bitlen = (bytelen == 1 ? 1 : bytelen * 8);
-            bitlen *= seg.Length;
-            bytelen = (bitlen - 1) / 8 + 1;
-            cplen += bytelen;
-            if (RetData.Length < cplen)
+            if (RetData.Length != RecvDataLen)
             {
                 IsComplete = false;
                 IsSuccess = false;
                 return;
             }
+            IsComplete = true;
             byte[] commandCache = new byte[RetData.Length - 2];
             byte[] CRCCode = new byte[2];
             for (int i = 0; i < commandCache.Length; i++)
@@ -127,7 +132,7 @@ namespace SamSoarII.Communication.Command
             int dataLen = typeLen * command[4];
             if (typeLen == 1)
             {
-                dataLen = dataLen / 8 + dataLen % 8 == 0 ? 0 : 1;
+                dataLen = dataLen / 8 + ((dataLen % 8 == 0) ? 0 : 1);
             }
             byte[] data = new byte[dataLen];
             for (int j = 0; j < data.Length; j++)

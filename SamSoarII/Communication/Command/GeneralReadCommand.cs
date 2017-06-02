@@ -32,6 +32,12 @@ namespace SamSoarII.Communication.Command
         }
         public bool IsComplete { get; set; }
         public bool IsSuccess { get; set; }
+
+        public int RecvDataLen
+        {
+            get;set;
+        }
+
         public GeneralReadCommand(){}
         public void InitializeCommandByElement()
         {
@@ -56,6 +62,7 @@ namespace SamSoarII.Communication.Command
             command[0] = slaveNum;
             command[1] = commandType;
             command[2] = addrTypeNum;
+            RecvDataLen = 5;
             for (int i = 0; i < addrTypeNum; i++)
             {
                 command[3 + 4 * i] = SegmentsGroup[i].First().Type;
@@ -66,6 +73,13 @@ namespace SamSoarII.Communication.Command
                 {
                     command[4 + 4 * i]++;
                 }
+                var typeLen = CommandHelper.GetLengthByAddrType(command[3 + 4 * i]);
+                var dataLen = command[4 + 4 * i] * typeLen;
+                if (typeLen == 1)
+                {
+                    dataLen = dataLen / 8 + ((dataLen % 8 == 0) ? 0 : 1);
+                }
+                RecvDataLen += 2 + dataLen;
                 command[5 + 4 * i] = group.First().AddrLow;
                 command[6 + 4 * i] = group.First().AddrHigh;
             }
@@ -103,17 +117,7 @@ namespace SamSoarII.Communication.Command
                 IsComplete = (errCodeType != FGs_ERR_CODE.FGs_ISNOTANERRCODE);
                 return;
             }
-            int cplen = command.Length;
-            for (int i = 0; i < addrTypeNum; i++)
-            {
-                AddrSegment seg = SegmentsGroup[i].First();
-                int bytelen = CommandHelper.GetLengthByAddrType(seg.Type);
-                int bitlen = (bytelen == 1 ? 1 : bytelen * 8);
-                bitlen *= seg.Length;
-                bytelen = (bitlen - 1) / 8 + 1;
-                cplen += bytelen;
-            }
-            if (RetData.Length < cplen)
+            if (RetData.Length != RecvDataLen)
             {
                 IsComplete = false;
                 IsSuccess = false;
@@ -141,7 +145,7 @@ namespace SamSoarII.Communication.Command
                 int dataLen = typeLen * command[4 + 4 * i];
                 if (typeLen == 1)
                 {
-                    dataLen = dataLen / 8 + dataLen % 8 == 0 ? 0: 1;
+                    dataLen = dataLen / 8 + ((dataLen % 8 == 0) ? 0: 1);
                 }
                 byte[] data = new byte[dataLen];
                 pos += 2;

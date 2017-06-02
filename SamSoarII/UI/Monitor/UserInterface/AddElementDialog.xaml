@@ -34,7 +34,7 @@
                 <TextBlock Margin="30,0,0,0">软元件地址</TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <ComboBox x:Name="comboBox" Width="45" Height="20" Margin="30,0,0,0" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" SelectionChanged="OnSelectionChanged"></ComboBox>
-                    <usr:OnlyNumsTextBox x:Name="textBox" IsNumsOnly="True" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
+                    <usr:OnlyNumsTextBox x:Name="textBox" LowRange="0" TopRange="8191" IsNumsOnly="True" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -51,7 +51,7 @@
                     <ComboBoxItem>V</ComboBoxItem>
                     <ComboBoxItem>Z</ComboBoxItem>
                 </ComboBox>
-                <usr:OnlyNumsTextBox x:Name="textBox1" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Text="0" Width="80" Margin="5,0,0,0"></usr:OnlyNumsTextBox>
+                <usr:OnlyNumsTextBox x:Name="textBox1" LowRange="0" TopRange="8191" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Text="0" Width="80" Margin="5,0,0,0"></usr:OnlyNumsTextBox>
             </StackPanel>
         </StackPanel>
         <StackPanel x:Name="stackpanel" Orientation="Horizontal" Grid.Row="3" Margin="0,18,0,0">

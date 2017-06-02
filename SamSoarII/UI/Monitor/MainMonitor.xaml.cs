@@ -253,6 +253,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 dialog.EnsureButtonClick += (sender1, e1) => 
                 {
+                    List<ElementModel> emb = new List<ElementModel>();
                     for (int i = 0; i < dialog.AddNums; i++)
                     {
                         ElementModel ele = new ElementModel(dialog.IntrasegmentType != string.Empty,dialog.DataType);
@@ -260,9 +261,13 @@ namespace SamSoarII.AppMain.UI.Monitor
                         ele.StartAddr = (uint)(dialog.StartAddr + i);
                         ele.IntrasegmentType = dialog.IntrasegmentType;
                         ele.IntrasegmentAddr = dialog.IntrasegmentAddr;
-                        Manager.Add(ele);
-                        //ele = Manager.Get(ele);
-                        CurrentTable.AddElement(ele);
+                        emb.Add(ele);
+                    }
+                    Manager.Add(emb);
+                    foreach (ElementModel ele in emb)
+                    {
+                        CurrentTable.AddElement(
+                            Manager.Get(ele));
                     }
                     dialog.Close();
                 };

@@ -41,6 +41,11 @@ namespace SamSoarII.Communication.Command
                 CheckRetData();
             }
         }
+        public int RecvDataLen
+        {
+            get { return 3; }
+            set { }
+        }
         public bool IsComplete { get; set; }
         public bool IsSuccess { get; set; }
         public List<ElementModel> RefElements_A { get; set; } = new List<ElementModel>();

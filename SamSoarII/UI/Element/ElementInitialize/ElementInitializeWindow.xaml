@@ -25,7 +25,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontSize="16">软元件地址</TextBlock>
                     <ComboBox x:Name="EleTypeCombox" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" VerticalAlignment="Top" Width="50" Height="20" SelectionChanged="OnSelectionChanged"></ComboBox>
-                    <usr:OnlyNumsTextBox x:Name="textBox" IsNumsOnly="True" VerticalAlignment="Top" Height="20" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
+                    <usr:OnlyNumsTextBox x:Name="textBox" LowRange="0" TopRange="8191" IsNumsOnly="True" VerticalAlignment="Top" Height="20" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
                     <StackPanel Orientation="Horizontal" Margin="80,0,0,0">
                         <Button x:Name="AddButton" Content="添加" Height="20" Width="60"></Button>
                         <Button x:Name="CloseButton" Content="关闭" Height="20" Width="60" Margin="30,0,0,0"></Button>
@@ -41,7 +41,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                     <TextBlock FontSize="16">软元件长度</TextBlock>
-                    <usr:OnlyNumsTextBox x:Name="LengthTextbox" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Width="80" Text="1"></usr:OnlyNumsTextBox>
+                    <usr:OnlyNumsTextBox x:Name="LengthTextbox" LowRange="1" TopRange="8191" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Width="80" Text="1"></usr:OnlyNumsTextBox>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

@@ -175,8 +175,8 @@ namespace SamSoarII.AppMain.Project
             MMonitorManager = new MonitorManager(this);
             MTVModel = new ModbusTableViewModel(this);
             MMonitorManager.MMWindow.Manager = MMonitorManager;
-            PManager = new SerialPortManager(MMonitorManager);
-            UManager = new USBManager(MMonitorManager);
+            PManager = new SerialPortManager();
+            UManager = new USBManager();
             StreamReader sr = new StreamReader(
                 String.Format(@"{0:s}\simug\simuflib.c", Environment.CurrentDirectory));
             FuncBlockViewModel libfuncblock = new FuncBlockViewModel("库函数");

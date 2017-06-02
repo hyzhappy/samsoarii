@@ -9,6 +9,5 @@ namespace SamSoarII.Communication
         int Abort();
         int Read(ICommunicationCommand cmd);
         int Write(ICommunicationCommand cmd);
-        MonitorManager Manager { get; set; }
     }
 }

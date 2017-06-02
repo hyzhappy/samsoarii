@@ -39,6 +39,11 @@ namespace SamSoarII.Communication.Command
                 CheckRetData();
             }
         }
+        public int RecvDataLen
+        {
+            get { return 3; }
+            set { }
+        }
         public ElementModel RefElement { get; set; }
         public IntrasegmentWriteCommand(byte[] data, ElementModel RefElement)
         {

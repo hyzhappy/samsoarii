@@ -68,6 +68,10 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         public void AddElement(ElementModel ele)
         {
+            if (ele == null)
+            {
+                return;
+            }
             if (!Elements.ToList().Exists(x => { return x.ShowName == ele.ShowName; }))
             {
                 Elements.Add(ele);

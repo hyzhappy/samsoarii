@@ -60,7 +60,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"></RowDefinition>
-                <RowDefinition x:Name="Row2" Height="auto"></RowDefinition>
+                <RowDefinition x:Name="Row2" Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
                 <StackPanel Height="35" Orientation="Horizontal">

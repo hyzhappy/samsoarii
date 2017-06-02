@@ -24,7 +24,6 @@ namespace SamSoarII.AppMain.UI.Monitor
     public partial class AddElementDialog : Window,INotifyPropertyChanged, IDisposable
     {
         private bool isTypeChanged = false;
-        private string oldValue;
         public string AddrType { get; set; }
         public uint StartAddr { get; set; }
         public int DataType { get; set; }

@@ -136,8 +136,9 @@ namespace SamSoarII.AppMain.UI.Monitor
                         {
                             itvtime = 100;
                         }
-                        _Thread_WaitForActive(itvtime);
-                        while (_Thread_Alive && hassend)
+                        //_Thread_WaitForActive(itvtime);
+                        Thread.Sleep(itvtime);
+                        while (hassend)
                         {
                             if (Recv(CurrentCommand))
                             {
@@ -147,7 +148,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             recvtime++;
                         }
                     }
-                    if (hassend && hasrecv)
+                    if (_Thread_Alive && hassend && hasrecv)
                     {
                         Execute(CurrentCommand);
                         CurrentCommand = null;
@@ -183,6 +184,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             _Thread_Alive = false;
             IsRunning = false;
             Aborted(this, new RoutedEventArgs());
+
         }
 
         #endregion
@@ -335,7 +337,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     Force(element, bvalue);
                     break;
                 case ElementValueModifyEventType.ForceOFF:
-                    bvalue = 0x01;
+                    bvalue = 0x00;
                     element.SetValue = "OFF";
                     Force(element, bvalue);
                     break;
@@ -355,34 +357,43 @@ namespace SamSoarII.AppMain.UI.Monitor
                     Write(element, bvalue);
                     break;
                 case ElementValueModifyEventType.WriteON:
-                    bvalue = 0x00;
+                    bvalue = 0x01;
                     element.SetValue = "ON";
                     Write(element, bvalue);
                     break;
                 case ElementValueModifyEventType.Write:
                     element.SetValue = e.Value;
-                    Write(element);
+                    Write(element,element.SetValue);
                     break;
             }
         }
         private void Force(ElementModel element, byte value)
         {
-            GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
-            command.RefElements_A.Add(element);
-            Add(command);
+            if (element.IsIntrasegment)
+            {
+                IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { value }, element);
+                //command.RefElement = element;
+                Add(command);
+            }
+            else
+            {
+                GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
+                //command.RefElements_A.Add(element);
+                Add(command);
+            }
         }
         private void Write(ElementModel element, byte value)
         {
             if (element.IsIntrasegment)
             {
                 IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { value }, element);
-                command.RefElement = element;
+                //command.RefElement = element;
                 Add(command);
             }
             else
             {
                 GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
-                command.RefElements_A.Add(element);
+                //command.RefElements_A.Add(element);
                 Add(command);
             }
         }
@@ -426,13 +437,13 @@ namespace SamSoarII.AppMain.UI.Monitor
             if (element.IsIntrasegment)
             {
                 IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, element);
-                command.RefElement = element;
+                //command.RefElement = element;
                 Add(command);
             }
             else
             {
                 GeneralWriteCommand command = new GeneralWriteCommand(data, element);
-                command.RefElements_A.Add(element);
+                //command.RefElements_A.Add(element);
                 Add(command);
             }
         }
@@ -784,7 +795,10 @@ namespace SamSoarII.AppMain.UI.Monitor
 
         private void Execute(ICommunicationCommand cmd)
         {
-
+            if (cmd.IsSuccess)
+            {
+                cmd.UpdataValues();
+            }
         }
    
         public void Arrange()
@@ -801,20 +815,20 @@ namespace SamSoarII.AppMain.UI.Monitor
             string addrType;
             int gIndex = 0;
             bool gisFirst = true,iisFirst = true;
+            uint gstart = 0, istart = 0;
+            ElementModel gstartele = null, istartele = null;
             GeneralReadCommand gcmd = new GeneralReadCommand();
             gcmd.SegmentsGroup[gIndex] = new List<AddrSegment>();
             IntrasegmentReadCommand icmd = new IntrasegmentReadCommand();
             while (tempQueue_Base.Count > 0)
             {
-                uint gstart = 0,istart = 0;
-                ElementModel gstartele = null,istartele = null;
                 addrType = tempQueue_Base.Dequeue();
                 List<ElementModel> elements = ReadModels.Values.Where(x => { return x.AddrType == addrType; }).OrderBy(x => { return x.StartAddr; }).ToList();
                 if (elements.Count > 0)
                 {
                     for (int i = 0; i < elements.Count; i++)
                     {
-                        if (i == 0)
+                        if ((iisFirst && elements[i].IsIntrasegment) || (gisFirst && !elements[i].IsIntrasegment))
                         {
                             if (elements[i].IsIntrasegment)
                             {
@@ -841,11 +855,31 @@ namespace SamSoarII.AppMain.UI.Monitor
                         }
                         else if (!elements[i].IsIntrasegment && GetAddrSpan(elements[i],gstart) < GetMaxRange(gstartele))
                         {
-                            gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
+                            if (elements[i].AddrType == gstartele.AddrType)
+                            {
+                                gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
+                            }
+                            else
+                            {
+                                gstart = elements[i].StartAddr;
+                                gstartele = elements[i];
+                                ArrangeCmd(gcmd, ref gIndex, elements[i]);
+                            }
                         }
                         else if (elements[i].IsIntrasegment && GetAddrSpan(elements[i], istart) < GetMaxRange(istartele) && IsSameIntraBase(istartele, elements[i]))
                         {
-                            icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
+                            if (elements[i].AddrType == istartele.AddrType)
+                            {
+                                icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
+                            }
+                            else
+                            {
+                                ReadCommands.Add(icmd);
+                                icmd = new IntrasegmentReadCommand();
+                                icmd.Segments.Add(GenerateIntraSegmentByElement(elements[i]));
+                                istart = elements[i].StartAddr;
+                                istartele = elements[i];
+                            }
                         }
                         else
                         {

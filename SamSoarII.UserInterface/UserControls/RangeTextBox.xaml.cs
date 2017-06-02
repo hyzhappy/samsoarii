@@ -96,38 +96,53 @@ namespace SamSoarII.UserInterface
                 textbox.Text = DefaultValue.ToString();
             }
         }
-
-        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            TextBox textbox = sender as TextBox;
-            int oldvalue = textbox.Text == string.Empty ? 0 : int.Parse(textbox.Text);
-            if (oldvalue == 0 && KeyInputHelper.NumAssert(e.Key) && textbox.Text != string.Empty)
-            {
-                e.Handled = true;
-            }
-            if (KeyInputHelper.CanInputAssert(e.Key))
-            {
-                int newvalue;
-                if (KeyInputHelper.NumAssert(e.Key))
-                {
-                    newvalue = 10 * oldvalue + KeyInputHelper.GetKeyValue(e.Key);
-                    if (!AssertRange(newvalue))
-                    {
-                        e.Handled = true;
-                    }
-                }
-            }
-            else
-            {
-                e.Handled = true;
-            }
-        }
+        //private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        //{
+        //    TextBox textbox = sender as TextBox;
+        //    int oldvalue = textbox.Text == string.Empty ? 0 : int.Parse(textbox.Text);
+        //    if (oldvalue == 0 && KeyInputHelper.NumAssert(e.Key) && textbox.Text != string.Empty)
+        //    {
+        //        e.Handled = true;
+        //    }
+        //    if (KeyInputHelper.CanInputAssert(e.Key))
+        //    {
+        //        int newvalue;
+        //        if (KeyInputHelper.NumAssert(e.Key))
+        //        {
+        //            newvalue = 10 * oldvalue + KeyInputHelper.GetKeyValue(e.Key);
+        //            if (!AssertRange(newvalue))
+        //            {
+        //                e.Handled = true;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        e.Handled = true;
+        //    }
+        //}
         public TextBox GetTextBox()
         {
             return textbox;
         }
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            try
+            {
+                int value = int.Parse(textbox.Text);
+                if (!AssertRange(value))
+                {
+                    textbox.Background = Brushes.OrangeRed;
+                }
+                else
+                {
+                    textbox.Background = Brushes.Transparent;
+                }
+            }
+            catch (Exception)
+            {
+                textbox.Background = Brushes.OrangeRed;
+            }
             PropertyChanged.Invoke(this,new PropertyChangedEventArgs("CanUp"));
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CanDown"));
         }

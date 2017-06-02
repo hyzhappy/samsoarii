@@ -13,7 +13,7 @@ namespace SamSoarII.Utility
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double newvalue = (double)value - 130;
+            double newvalue = (double)value - 103.5;
             return newvalue;
         }
 

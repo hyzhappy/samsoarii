@@ -36,9 +36,9 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Visibility="{Binding ElementName=combox1,Path=SelectedIndex,Converter={StaticResource converter1}}">
                 <TextBlock FontSize="14" Margin="16,0,0,0">网络号范围</TextBlock>
-                <usr:OnlyNumsTextBox x:Name="textbox1" IsEnabled="False" Margin="70,0,0,0" Width="40" IsNumsOnly="True" Text="0"></usr:OnlyNumsTextBox>
+                <usr:OnlyNumsTextBox x:Name="textbox1" LowRange="0" TopRange="1000" IsEnabled="False" Margin="70,0,0,0" Width="40" IsNumsOnly="True" Text="0"></usr:OnlyNumsTextBox>
                 <TextBlock>~</TextBlock>
-                <usr:OnlyNumsTextBox x:Name="textbox2" IsEnabled="False" Width="40" IsNumsOnly="True" Text="0"></usr:OnlyNumsTextBox>
+                <usr:OnlyNumsTextBox x:Name="textbox2" LowRange="0" TopRange="1000" IsEnabled="False" Width="40" IsNumsOnly="True" Text="0"></usr:OnlyNumsTextBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">

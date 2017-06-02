@@ -7,22 +7,46 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SamSoarII.UserInterface
 {
     public class OnlyNumsTextBox : TextBox
     {
+        public static readonly DependencyProperty TopRangeProperty;
+        public static readonly DependencyProperty LowRangeProperty;
         public static readonly DependencyProperty IsNumsOnlyProperty;
         private int oldvalue;
         static OnlyNumsTextBox()
         {
             IsNumsOnlyProperty = DependencyProperty.Register("IsNumsOnly",typeof(bool), typeof(OnlyNumsTextBox));
+            TopRangeProperty = DependencyProperty.Register("TopRange", typeof(int), typeof(OnlyNumsTextBox));
+            LowRangeProperty = DependencyProperty.Register("LowRange", typeof(int), typeof(OnlyNumsTextBox));
         }
         public OnlyNumsTextBox() : base()
         {
-            PreviewKeyDown += OnlyNumsTextBox_PreviewKeyDown;
             GotFocus += OnlyNumsTextBox_GotFocus;
             LostFocus += OnlyNumsTextBox_LostFocus;
+            TextChanged += OnlyNumsTextBox_TextChanged;
+        }
+
+        private void OnlyNumsTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsNumsOnly)
+            {
+                try
+                {
+                    int value = int.Parse(Text);
+                    if (!AssertRange(value))
+                        Background = Brushes.OrangeRed;
+                    else
+                        Background = Brushes.Transparent;
+                }
+                catch (Exception)
+                {
+                    Background = Brushes.OrangeRed;
+                }
+            }
         }
 
         private void OnlyNumsTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -36,21 +60,9 @@ namespace SamSoarII.UserInterface
         {
             oldvalue = int.Parse((sender as OnlyNumsTextBox).Text);
         }
-
-        private void OnlyNumsTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private bool AssertRange(int value)
         {
-            if (IsNumsOnly)
-            {
-                int oldvalue = Text == string.Empty ? 0 : int.Parse(Text);
-                if (oldvalue == 0 && KeyInputHelper.NumAssert(e.Key) && Text != string.Empty)
-                {
-                    e.Handled = true;
-                }
-                if (!KeyInputHelper.CanInputAssert(e.Key))
-                {
-                    e.Handled = true;
-                }
-            }
+            return value >= LowRange && value <= TopRange;
         }
 
         public bool IsNumsOnly
@@ -62,6 +74,28 @@ namespace SamSoarII.UserInterface
             set
             {
                 SetValue(IsNumsOnlyProperty,value);
+            }
+        }
+        public int TopRange
+        {
+            get
+            {
+                return (int)GetValue(TopRangeProperty);
+            }
+            set
+            {
+                SetValue(TopRangeProperty, value);
+            }
+        }
+        public int LowRange
+        {
+            get
+            {
+                return (int)GetValue(LowRangeProperty);
+            }
+            set
+            {
+                SetValue(LowRangeProperty, value);
             }
         }
     }
