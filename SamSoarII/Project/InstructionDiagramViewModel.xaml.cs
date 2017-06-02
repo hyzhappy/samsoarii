@@ -35,16 +35,16 @@ namespace SamSoarII.AppMain.Project
 
         protected InstructionNetworkViewModel invmodelcursor;
 
-        protected Dictionary<string, PLCOriginInst> cvdict
+        protected static Dictionary<string, PLCOriginInst> cvdict
             = new Dictionary<string, PLCOriginInst>();
 
-        protected Dictionary<string, PLCOriginInst> tvdict
+        protected static Dictionary<string, PLCOriginInst> tvdict
             = new Dictionary<string, PLCOriginInst>();
 
-        protected Dictionary<string, PLCOriginInst> lbdict
+        protected static Dictionary<string, PLCOriginInst> lbdict
             = new Dictionary<string, PLCOriginInst>();
 
-        protected Dictionary<string, PLCOriginInst> outdict
+        protected static Dictionary<string, PLCOriginInst> outdict
             = new Dictionary<string, PLCOriginInst>();
 
         public InstructionDiagramViewModel()
@@ -107,12 +107,16 @@ namespace SamSoarII.AppMain.Project
             invmodels.Add(invmodel);
         }
         
-        public IEnumerable<ErrorReportElement> Check()
+        static public void CheckInitialize()
         {
             cvdict.Clear();
             tvdict.Clear();
             lbdict.Clear();
             outdict.Clear();
+        }
+        
+        public IEnumerable<ErrorReportElement> Check()
+        {
             int forcount = 0;
             int stkcount = 0;
             int outcount = 0;
@@ -406,6 +410,10 @@ namespace SamSoarII.AppMain.Project
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
                                     inst.Message = String.Format("找不到子程序{0:s}", inst[id]);
                                 }
+                                if (inst.Type.Equals("ATCH"))
+                                {
+                                    fit.First().IsInterruptCalled = true;
+                                }
                             }
                             break;
                     }
@@ -469,6 +477,59 @@ namespace SamSoarII.AppMain.Project
                 {
                     if (inst.Status == PLCOriginInst.STATUS_WARNING)
                         result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
+                }
+            }
+            return result;
+        }
+
+        public IEnumerable<ErrorReportElement> CheckForInterrrupt()
+        {
+            List<ErrorReportElement> result =
+                new List<ErrorReportElement>();
+            if (!ldvmodel.IsInterruptCalled)
+                return result;
+            foreach (InstructionNetworkViewModel invmodel in invmodels)
+            {
+                foreach (PLCOriginInst inst in invmodel.Insts)
+                {
+                    if (inst.Status == PLCOriginInst.STATUS_ERROR)
+                        continue;
+                    switch (inst.Type)
+                    {
+                        case "OUT":
+                        case "OUTIM":
+                            inst.Status = PLCOriginInst.STATUS_ERROR;
+                            inst.Message = "禁止在中断子程序中使用输出线圈。";
+                            result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
+                            break;
+                        case "LDP":
+                        case "LDF":
+                        case "MEP":
+                        case "MEF":
+                            inst.Status = PLCOriginInst.STATUS_ERROR;
+                            inst.Message = "禁止在中断子程序中使用边沿条件判断。";
+                            result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
+                            break;
+                        case "TON":
+                        case "TONR":
+                        case "TOF":
+                            inst.Status = PLCOriginInst.STATUS_ERROR;
+                            inst.Message = "禁止在中断子程序中使用计时器。";
+                            result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
+                            break;
+                        case "CTU":
+                        case "CTD":
+                        case "CTUD":
+                            inst.Status = PLCOriginInst.STATUS_ERROR;
+                            inst.Message = "禁止在中断子程序中使用计数器。";
+                            result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
+                            break;
+                        case "ALTP":
+                            inst.Status = PLCOriginInst.STATUS_ERROR;
+                            inst.Message = "禁止在中断子程序中使用该指令。";
+                            result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
+                            break;
+                    }
                 }
             }
             return result;

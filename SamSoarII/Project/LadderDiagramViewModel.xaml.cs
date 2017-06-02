@@ -86,6 +86,7 @@ namespace SamSoarII.AppMain.Project
                 _message = message;
             }
         }
+
         private LadderMode _laddermode = LadderMode.Edit;
         public LadderMode LadderMode
         {
@@ -115,7 +116,7 @@ namespace SamSoarII.AppMain.Project
                 SelectionStatus = SelectStatus.Idle;
             }
         }
-
+        
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         private int HeightUnit { get { return _isCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
         private bool _isExpand = true;
@@ -130,6 +131,7 @@ namespace SamSoarII.AppMain.Project
                 _isExpand = value;
             }
         }
+
         public string TabHeader
         {
             get
@@ -144,6 +146,8 @@ namespace SamSoarII.AppMain.Project
             }
         }
         public bool IsMainLadder { get; set; }
+        public bool IsInterruptCalled { get; set; }
+
         public Dictionary<string, List<string>> InstrutionNameAndToolTips { get; private set; }
         public int NetworkCount
         {

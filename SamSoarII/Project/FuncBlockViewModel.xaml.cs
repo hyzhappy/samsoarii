@@ -21,7 +21,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
-
 using SamSoarII.Extend.FuncBlockModel;
 using ICSharpCode.AvalonEdit.Document;
 using System.Text.RegularExpressions;
