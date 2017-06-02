@@ -25,8 +25,9 @@ namespace SamSoarII.UserInterface
             InitializeComponent();
             KeyDown += ElementValueModifyDialog_KeyDown;
             PN_Main.ValueModify += OnValueModify;
+            PN_Main.Closing += OnPanelClosing;
         }
-
+        
         public string VarName
         {
             get { return PN_Main.VarName; }
@@ -53,6 +54,11 @@ namespace SamSoarII.UserInterface
         private void OnValueModify(object sender, ElementValueModifyEventArgs e)
         {
             ValueModify(this, e);
+        }
+        
+        private void OnPanelClosing(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         private void ElementValueModifyDialog_KeyDown(object sender, KeyEventArgs e)

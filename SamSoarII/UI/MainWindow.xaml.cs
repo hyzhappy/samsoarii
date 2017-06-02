@@ -59,10 +59,10 @@ namespace SamSoarII.AppMain.UI
             this.Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
-            FindWindow findwindow = new FindWindow(_interactionFacade);
-            LAFind.Content = findwindow;
-            ReplaceWindow replacewindow = new ReplaceWindow(_interactionFacade);
-            LAReplace.Content = replacewindow;
+            //FindWindow findwindow = new FindWindow(_interactionFacade);
+            //LAFind.Content = findwindow;
+            //ReplaceWindow replacewindow = new ReplaceWindow(_interactionFacade);
+            //LAReplace.Content = replacewindow;
             SysSettingDialog = new OptionDialog(_interactionFacade);
         }
 

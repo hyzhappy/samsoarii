@@ -494,6 +494,7 @@ namespace SamSoarII.AppMain.Project
             }
             InstructionCommentManager.RaiseMappedMessageChangedEvent();
         }
+
         public void AddNewNetworkBefore(LadderNetworkViewModel network)
         {
             _projectModel.IFacade.CreateNetwork(
@@ -877,10 +878,14 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectLeftWithLine()
         {
-            if (LadderMode != LadderMode.Edit) return;
-            SelectRectLeft();
+            if (LadderMode != LadderMode.Edit)
+            {
+                SelectRectLeft();
+                return;
+            }
             if (_selectRectOwner != null)
             {
+                SelectRectLeft();
                 var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
                 if (model != null)
                 {
@@ -901,10 +906,13 @@ namespace SamSoarII.AppMain.Project
 
         private void SelectRectRightWithLine()
         {
-            if (LadderMode != LadderMode.Edit) return;
+            if (LadderMode != LadderMode.Edit)
+            {
+                SelectRectRight();
+                return;
+            }
             int x = _selectRect.X;
             int y = _selectRect.Y;
-            SelectRectRight();  
             if (_selectRectOwner != null)
             {
                 var model = _selectRectOwner.SearchElement(x, y);
@@ -922,21 +930,26 @@ namespace SamSoarII.AppMain.Project
                 {
                     ReplaceSingleElement(_selectRectOwner, new HorizontalLineViewModel() { X = x, Y = y });
                 }
+                SelectRectRight();
             }
         }
 
         private void SelectRectUpWithLine()
         {
-            if (LadderMode != LadderMode.Edit) return;
+            if (LadderMode != LadderMode.Edit)
+            {
+                SelectRectUp();
+                return;
+            }
             int x = _selectRect.X - 1;
             int y = _selectRect.Y - 1;
             if (_selectRectOwner != null)
             {
                 if (y >= 0)
                 {
-                    SelectRectUp();
                     if(x >= 0)
                     {
+                        SelectRectUp();
                         var vline = _selectRectOwner.SearchVerticalLine(x, y);
                         if (vline != null)
                         {
@@ -949,12 +962,15 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
             }
-
         }
 
         private void SelectRectDownWithLine()
         {
-            if (LadderMode != LadderMode.Edit) return;
+            if (LadderMode != LadderMode.Edit)
+            {
+                SelectRectDown();
+                return;
+            }
             int x = _selectRect.X - 1;
             int y = _selectRect.Y;
             if (_selectRectOwner != null)
@@ -974,8 +990,8 @@ namespace SamSoarII.AppMain.Project
                     {
                         ReplaceSingleVerticalLine(_selectRectOwner, new VerticalLineViewModel() { X = x, Y = y });
                     }
+                    SelectRectDown();
                 }
-                SelectRectDown();
             }
         }
 
@@ -1108,13 +1124,15 @@ namespace SamSoarII.AppMain.Project
                 try
                 {
                     NetworkReplaceElementsCommand command = null;
+                    int rectX = _selectRect.X;
                     RegisterInstructionInput(
                         dialog.InstructionInput.Trim(),
                         _selectRect.X, 
                         _selectRect.Y, 
                         _selectRectOwner,
-                        ref command);
+                        ref command, ref rectX);
                     _commandManager.Execute(command);
+                    _selectRect.X = rectX;
                     dialog.Close();
                 }
                 catch (ValueParseException exce2)
@@ -1131,7 +1149,7 @@ namespace SamSoarII.AppMain.Project
 
         public void RegisterInstructionInput(
             string input, int x, int y, LadderNetworkViewModel lnvmodel,
-            ref NetworkReplaceElementsCommand command)
+            ref NetworkReplaceElementsCommand command, ref int rectX)
         {
             LadderDiagramViewModel selectedSubdiagram = null;
             FuncModel selectedFunction = null;
@@ -1285,7 +1303,7 @@ namespace SamSoarII.AppMain.Project
                     viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                 }
                 eles_new.Add(viewmodel);
-                _selectRect.X = GlobalSetting.LadderXCapacity - 1;
+                rectX = GlobalSetting.LadderXCapacity - 1;
                 command = new LadderCommand.NetworkReplaceElementsCommand(lnvmodel, eles_new, eles_old);
                 //_commandManager.Execute(command);
             }
@@ -1302,9 +1320,9 @@ namespace SamSoarII.AppMain.Project
                 eles_new.Add(viewmodel);
                 command = new LadderCommand.NetworkReplaceElementsCommand(lnvmodel, eles_new, eles_old);
                 //_commandManager.Execute(command);
-                if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
+                if (rectX < GlobalSetting.LadderXCapacity - 1)
                 {
-                    _selectRect.X++;
+                    rectX++;
                 }
             }
         }
@@ -2311,7 +2329,7 @@ namespace SamSoarII.AppMain.Project
             newarea.X1 = xStart;
             newarea.Y1 = yStart;
             newarea.X2 = xStart + width - 1;
-            newarea.Y2 = yStart + width - 1;
+            newarea.Y2 = yStart + height - 1;
             LadderCommand.NetworkReplaceElementsCommand command 
                 = new LadderCommand.NetworkReplaceElementsCommand(
                     targetNetwork, 
@@ -2373,20 +2391,14 @@ namespace SamSoarII.AppMain.Project
                 net.IsSelectAllMode = true;
             }
         }
-
-        //public event ExecutedRoutedEventHandler FindCommandExecute = delegate { };
         
         private void OnFindCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            //FindCommandExecute(sender, e);   
             ProjectModel.IFacade.MainWindow.LACFind.Show();
         }
-
-        //public event ExecutedRoutedEventHandler ReplaceCommandExecute = delegate { };
-
+        
         private void OnReplaceCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            //ReplaceCommandExecute(sender, e);
             ProjectModel.IFacade.MainWindow.LACReplace.Show();
         }
         #endregion

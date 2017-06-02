@@ -310,7 +310,17 @@ namespace SamSoarII.AppMain.UI
         
         private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
-            Find();
+            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            if (currenttab is MainTabDiagramItem
+             || currenttab is LadderDiagramViewModel)
+            {
+                Visibility = Visibility.Visible;
+                Find();
+            }
+            else
+            {
+                Visibility = Visibility.Hidden;
+            }
         }
 
         private void UndoCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -736,8 +746,9 @@ namespace SamSoarII.AppMain.UI
                 }
             }
             NetworkReplaceElementsCommand command = null;
+            int rectX = ldvmodel.SelectionRect.X;
             ldvmodel.RegisterInstructionInput(
-               output, x, y, lnvmodel, ref command);
+               output, x, y, lnvmodel, ref command, ref rectX);
             return command;
         }
     }

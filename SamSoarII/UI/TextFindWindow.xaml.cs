@@ -25,6 +25,8 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class TextFindWindow : UserControl, INotifyPropertyChanged
     {
+        static string[] SPECIALLABELS = {"\\", ".", "^", "$", "(", ")", "[", "]", "{", "}"};
+
         #region Numbers
 
         private InteractionFacade parent;
@@ -93,14 +95,25 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
-        public TextFindWindow()
+        public TextFindWindow(InteractionFacade _parent)
         {
             InitializeComponent();
+            DataContext = this;
+            parent = _parent;
+            parent.CurrentTabChanged += OnCurrentTabChanged;
+            Mode = MODE_CURRENT;
         }
-        
+
+        public void Initialize()
+        {
+            items.Clear();
+        }
+
         private void Find()
         {
             items.Clear();
+            if (TB_Input.Text.Length <= 0)
+                return;
             switch (Mode)
             {
                 case MODE_CURRENT:
@@ -126,13 +139,20 @@ namespace SamSoarII.AppMain.UI
         {
             string text = fbvmodel.Code;
             string word = TB_Input.Text;
-            Match match = Regex.Match(
-                text,
-                IsRegex ? @word : word,
-                IgnoreCase ? RegexOptions.IgnoreCase : 0);
+            RegexOptions opt = RegexOptions.None;
+            opt |= RegexOptions.Singleline;
+            if (IgnoreCase) opt |= RegexOptions.IgnoreCase;
+            if (!IsRegex)
+            {
+                foreach (string slabel in SPECIALLABELS)
+                {
+                    word = word.Replace(slabel, "\\" + slabel);
+                }
+            }
+            Match match = Regex.Match(text, word, opt);
             while (match != null && match.Success)
             {
-                items.Add(new TextFindElement(fbvmodel, match.Index, match.Value));
+                items.Add(new TextFindElement(this, fbvmodel, match.Index, match.Value));
                 match = match.NextMatch();
             }
         }
@@ -167,16 +187,85 @@ namespace SamSoarII.AppMain.UI
                 parent.MainWindow.LAFind.ToggleAutoHide();
             }
             if (DG_List.SelectedIndex < 0) return;
+            TextFindElement element = null;
+            if (e.AddedItems.Count > 0)
+                element = (TextFindElement)(e.AddedItems[0]);
+            else if (e.RemovedItems.Count > 0)
+                element = (TextFindElement)(e.RemovedItems[0]);
+            else
+                return;
+            FuncBlockViewModel fbvmodel = element.FBVModel;
+            int offset = element.Offset;
+            int count = element.Word.Length;
+            parent.NavigateToFuncBlock(fbvmodel, offset);
+            fbvmodel.SetOffset(offset, count);
         }
+
+        private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            if (currenttab is FuncBlockViewModel)
+            {
+                Visibility = Visibility.Visible;
+                if (Mode == MODE_CURRENT) Find();
+            }
+            else
+            {
+                Visibility = Visibility.Hidden;
+            }
+        }
+
+        #region Config
+        private bool _isregex;
+        private bool _ignorecase;
+
+        private void OnConfigClick(object sender, RoutedEventArgs e)
+        {
+            G_Main.Visibility = Visibility.Hidden;
+            G_Config.Visibility = Visibility.Visible;
+            _isregex = IsRegex;
+            _ignorecase = IgnoreCase;
+        }
+
+        private void BC_Ensure_Click(object sender, RoutedEventArgs e)
+        {
+            G_Main.Visibility = Visibility.Visible;
+            G_Config.Visibility = Visibility.Hidden;
+        }
+
+        private void BC_Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            G_Main.Visibility = Visibility.Visible;
+            G_Config.Visibility = Visibility.Hidden;
+            IsRegex = _isregex;
+            IgnoreCase = _ignorecase;
+        }
+
+        #endregion
 
         #endregion
     }
 
     public class TextFindElement : TextReplaceElement
     {
-        public TextFindElement(FuncBlockViewModel _fbvmodel, int _textoffset, string _word) 
-            : base(_fbvmodel, _textoffset, _word)
+        private TextFindWindow tfwindow;
+
+        public TextFindElement
+        (
+            TextFindWindow      _tfwindow,
+            FuncBlockViewModel  _fbvmodel, 
+            int                 _textoffset, 
+            string              _word
+        ) 
+        : base(null, _fbvmodel, _textoffset, _word)
         {
+            tfwindow = _tfwindow;
+        }
+
+        protected override void OnTextChanged(object sender, RoutedEventArgs e)
+        {
+            //base.OnTextChanged(sender, e);
+            tfwindow.Initialize();
         }
     }
 }

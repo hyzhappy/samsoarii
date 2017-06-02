@@ -19,6 +19,13 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <DataTemplate x:Key="DGC_Line">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Profix}"></TextBlock>
+                <TextBlock Text="{Binding Word}" FontWeight="Heavy"></TextBlock>
+                <TextBlock Text="{Binding Suffix}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -55,8 +62,7 @@
                 <Image Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
             </Button>
         </Grid>
-        <Grid x:Name="G_Main" Visibility="Visible"
-              Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" x:Name="G_Main">
             <Grid.RowDefinitions>
                 <RowDefinition Height="32"/>
                 <RowDefinition Height="32"/>
@@ -116,9 +122,9 @@
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="DGTC_Detail" IsReadOnly="True" Binding="{Binding Detail}"
-                                    Header="内容" Width="*">
-                    </DataGridTextColumn>
+                    <DataGridTemplateColumn x:Name="DGTC_Detail" IsReadOnly="True" CellTemplate="{StaticResource DGC_Line}"
+                                            Header="内容" Width="*">
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="DGTC_FuncBlock" IsReadOnly="True" Binding="{Binding FuncBlock}"
                                     Header="函数块" Width="80">
                     </DataGridTextColumn>
@@ -128,13 +134,24 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <Grid x:Name="G_Config" Visibility="Hidden"
-              Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" x:Name="G_Config" Visibility="Hidden">
             <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="32"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="1" Grid.Column="0">
+            <CheckBox Grid.Row="0" Grid.Column="0" Margin="12,5,240,8"
+                      IsChecked="{Binding IsRegex, Mode=TwoWay}"></CheckBox>
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="36,5,30,4">
+                使用正则表达式
+            </TextBlock>
+            <CheckBox Grid.Row="1" Grid.Column="0" Margin="12,5,240,8"
+                      IsChecked="{Binding IgnoreCase, Mode=TwoWay}"></CheckBox>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="36,5,30,4">
+                忽视大小写
+            </TextBlock>
+            <Grid Grid.Row="3" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>

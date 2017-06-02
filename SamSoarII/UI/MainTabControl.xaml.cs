@@ -90,6 +90,7 @@ namespace SamSoarII.AppMain.UI
         
         public void ShowItem(ITabItem item)
         {
+            bool isnew = false;
             LayoutDocument ldoc = null;
             if (item is FuncBlockViewModel)
             {
@@ -124,6 +125,7 @@ namespace SamSoarII.AppMain.UI
                 ldoc.IsActiveChanged += OnActiveChanged;
                 Children.Add(ldoc);
                 _lDocDict.Add(item, ldoc);
+                isnew = true;
             }
             else
             {
@@ -132,6 +134,10 @@ namespace SamSoarII.AppMain.UI
             int ldocid = Children.IndexOf(ldoc);
             SelectedItem = item;
             SelectedContentIndex = ldocid;
+            if (isnew)
+            {
+                SelectionChanged(this, null);
+            }
         }
 
         public void RenameItem(ITabItem item)
@@ -151,17 +157,6 @@ namespace SamSoarII.AppMain.UI
                 Children.Remove(ldoc);
                 _lDocDict.Remove(item);
                 TabItemCollection.Remove(item);
-                /*
-                if (item is LadderDiagramViewModel)
-                {
-                    MainTabDiagramItem[] fit = DiagramCollection.Where(
-                        (MainTabDiagramItem mtditem) => { return mtditem.LDVM_ladder == item; }).ToArray();
-                    foreach (MainTabDiagramItem mtditem in fit)
-                    {
-                        DiagramCollection.Remove(mtditem);
-                    }
-                }
-                */
             }
         }
 

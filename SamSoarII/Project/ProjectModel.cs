@@ -179,7 +179,7 @@ namespace SamSoarII.AppMain.Project
             UManager = new USBManager();
             StreamReader sr = new StreamReader(
                 String.Format(@"{0:s}\simug\simuflib.c", Environment.CurrentDirectory));
-            FuncBlockViewModel libfuncblock = new FuncBlockViewModel("库函数");
+            FuncBlockViewModel libfuncblock = new FuncBlockViewModel("库函数", this);
             libfuncblock.Code = sr.ReadToEnd();
             libfuncblock.IsReadOnly = true;
             LibFuncBlock = libfuncblock;
@@ -238,7 +238,7 @@ namespace SamSoarII.AppMain.Project
             rootNode.Add(ProjectPropertyManager.CreateProjectPropertyXElement());
             rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(MainRoutine));
             rootNode.Add(MMonitorManager.MMWindow.CreateXElementByTables());
-             rootNode.Add(IFacade.MainWindow.ElemInitWind.CreatXElementByElements());
+            //rootNode.Add(IFacade.MainWindow.ElemInitWind.CreatXElementByElements());
             foreach (var ldmodel in SubRoutines)
             {
                 rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(ldmodel));
@@ -284,7 +284,7 @@ namespace SamSoarII.AppMain.Project
             var fbnodes = rootNode.Elements("FuncBlock");
             foreach (XElement fbnode in fbnodes)
             {
-                var fbmodel = ProjectHelper.CreateFuncBlockByXElement(fbnode);
+                var fbmodel = ProjectHelper.CreateFuncBlockByXElement(fbnode, this);
                 FuncBlocks.Add(fbmodel);
             }
             var mtnodes = rootNode.Element("Modbus");

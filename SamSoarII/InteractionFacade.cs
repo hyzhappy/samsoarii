@@ -73,7 +73,6 @@ namespace SamSoarII.AppMain
             }
         }
         private ProjectTreeView _projectTreeView;
-        private MainTabControl _mainTabControl;
         public ProjectTreeView PTView
         {
             get
@@ -81,6 +80,7 @@ namespace SamSoarII.AppMain
                 return _projectTreeView;
             }
         }
+        private MainTabControl _mainTabControl;
         public MainTabControl MainTabControl
         {
             get { return this._mainTabControl; }
@@ -104,6 +104,11 @@ namespace SamSoarII.AppMain
             get;
             private set;
         }
+        private FindWindow _fwindow;
+        private ReplaceWindow _rwindow;
+        private TextFindWindow _tfwindow;
+        private TextReplaceWindow _trwindow;
+
         public InteractionFacade(MainWindow mainwindow)
         {
             this._mainWindow = mainwindow;
@@ -119,6 +124,14 @@ namespace SamSoarII.AppMain
             _mainTabControl = _mainWindow.MainTab;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             _erwindow = new ErrorReportWindow(this);
+            _fwindow = new FindWindow(this);
+            _rwindow = new ReplaceWindow(this);
+            _tfwindow = new TextFindWindow(this);
+            _trwindow = new TextReplaceWindow(this);
+            mainwindow.GD_Find.Children.Add(_fwindow);
+            mainwindow.GD_Find.Children.Add(_tfwindow);
+            mainwindow.GD_Replace.Children.Add(_rwindow);
+            mainwindow.GD_Replace.Children.Add(_trwindow);
             mainwindow.LAErrorList.Content = _erwindow;
         }
 
@@ -585,7 +598,7 @@ namespace SamSoarII.AppMain
             ProjectTreeViewEventArgs e = null
         )
         {
-            FuncBlockViewModel fbvmodel = new FuncBlockViewModel(String.Empty);
+            FuncBlockViewModel fbvmodel = new FuncBlockViewModel(String.Empty, ProjectModel);
             _projectModel.Add(fbvmodel);
             _mainWindow.LACProj.Show();
             if (e == null)
@@ -1149,6 +1162,7 @@ namespace SamSoarII.AppMain
         }
 
         #region Event handler
+
         private void OnEditTabOpened(object sender, ShowTabItemEventArgs e)
         {
             
@@ -1182,6 +1196,7 @@ namespace SamSoarII.AppMain
             }
             CurrentTabChanged(_mainTabControl, e);
         }
+
         public event ProjectTreeViewEventHandler PTVEvent = delegate { };
         private void OnGotPTVHandle(object sender, ProjectTreeViewEventArgs e)
         {

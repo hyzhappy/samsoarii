@@ -25,7 +25,7 @@ namespace SamSoarII.UserInterface
         {
             InitializeComponent();
         }
-
+        
         private string varname = String.Empty;
         public string VarName
         {
@@ -110,7 +110,8 @@ namespace SamSoarII.UserInterface
             CB_Type.Items.Add("FLOAT");
             BT_Write.Visibility = Visibility.Visible;
         }
-        
+
+        public event RoutedEventHandler Closing = delegate { };
         public event ElementValueModifyEventHandler ValueModify = delegate { };
         private void OnButtonClick(object sender, RoutedEventArgs e)
         {
@@ -160,10 +161,30 @@ namespace SamSoarII.UserInterface
             vartype = e.AddedItems[0].ToString();
             CheckValue();
         }
+
         private void TB_Value_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValue();
         }
+
+        private void TB_Value_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    if (BT_Write.Visibility == Visibility.Visible
+                     && TB_Value.Background != Brushes.Red)
+                    {
+                        OnButtonClick(BT_Write, new RoutedEventArgs());
+                        Closing(this, new RoutedEventArgs());
+                    }
+                    break;
+                case Key.Escape:
+                    Closing(this, new RoutedEventArgs());
+                    break;
+            }
+        }
+
         private void CheckValue()
         {
             try
@@ -207,7 +228,7 @@ namespace SamSoarII.UserInterface
                 }
                 TB_Value.Background = Brushes.White;
             }
-            catch (Exception)
+            catch (FormatException)
             {
                 TB_Value.Background = Brushes.Red;
             }

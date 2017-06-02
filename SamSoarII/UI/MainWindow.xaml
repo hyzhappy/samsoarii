@@ -447,10 +447,12 @@
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="LAFind" Title="查找" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                                <Grid x:Name="GD_Find"></Grid>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="LAReplace" Title="替换" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                                <Grid x:Name="GD_Replace"></Grid>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
