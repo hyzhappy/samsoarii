@@ -41,9 +41,16 @@ namespace SamSoarII.AppMain.LadderCommand
             get { return UndoStack.Count > 0; }
         }
 
+        public void Initialize()
+        {
+            UndoStack.Clear();
+            RedoStack.Clear();
+        }
+
         public void Execute(IUndoableCommand command)
         {
-            if (ldvmodel.LadderMode != LadderMode.Edit)
+            if (ldvmodel != null 
+             && ldvmodel.LadderMode != LadderMode.Edit)
             {
                 MessageBox.Show("当前模式不能对梯形图进行修改，请先切换到编辑模式！");
                 return;
@@ -57,7 +64,8 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
-            if (ldvmodel.LadderMode != LadderMode.Edit)
+            if (ldvmodel != null
+             && ldvmodel.LadderMode != LadderMode.Edit)
             {
                 MessageBox.Show("当前模式不能对梯形图进行修改，请先切换到编辑模式！");
                 return;
@@ -74,7 +82,8 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Redo()
         {
-            if (ldvmodel.LadderMode != LadderMode.Edit)
+            if (ldvmodel != null
+             && ldvmodel.LadderMode != LadderMode.Edit)
             {
                 MessageBox.Show("当前模式不能对梯形图进行修改，请先切换到编辑模式！");
                 return;

@@ -33,6 +33,7 @@ namespace SamSoarII.UserInterface
                 PN_Values[i].VarType = vartypes[i];
                 PN_Values[i].Value = values[i];
                 PN_Values[i].ValueModify += OnValueModify;
+                PN_Values[i].Closing += OnPanelClosing;
                 TabItem titem = new TabItem();
                 titem.Header = varnames[i];
                 titem.Content = PN_Values[i];
@@ -58,6 +59,11 @@ namespace SamSoarII.UserInterface
         private void OnValueModify(object sender, ElementValueModifyEventArgs e)
         {
             ValueModify(this, e);
+        }
+
+        private void OnPanelClosing(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         public void Dispose()

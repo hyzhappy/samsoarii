@@ -59,7 +59,7 @@ namespace SamSoarII.AppMain.UI
             ldvmodel.ladderExpander.IsEnabled = false;
             ldvmodel.IsCommentMode = true;
 
-            fbvmodel = new FuncBlockViewModel("效果展示");
+            fbvmodel = new FuncBlockViewModel("效果展示", null);
             fbvmodel.Code = "void Func(WORD* w1, WORD* w2, WORD* w3)\n{\n\tw3[0] = w1[0] + w2[0];\n}\n";
             fbvmodel.CodeTextBox.IsReadOnly = true;
             GD_Main.Children.Add(fbvmodel);

@@ -626,6 +626,7 @@ namespace SamSoarII.AppMain.Project
             return LadderLogicModules[key];
         }
         #endregion
+
         #region Ladder content modification methods
         public BaseViewModel ReplaceElement(BaseViewModel element)
         {

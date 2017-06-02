@@ -42,15 +42,7 @@ namespace SamSoarII.Communication
         }
 
         private byte[] readbuffer = new byte[1024];
-        public USBManager(MonitorManager manager)
-        {
-            Manager = manager;
-        }
-        public MonitorManager Manager
-        {
-            get;
-            set;
-        }
+        public USBManager() { }
 
         public int Read(ICommunicationCommand cmd)
         {

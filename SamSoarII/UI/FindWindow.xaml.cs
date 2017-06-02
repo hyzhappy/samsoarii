@@ -176,7 +176,17 @@ namespace SamSoarII.AppMain.UI
 
         private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
-            Find();
+            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            if (currenttab is MainTabDiagramItem
+             || currenttab is LadderDiagramViewModel)
+            {
+                Visibility = Visibility.Visible;
+                Find();
+            }
+            else
+            {
+                Visibility = Visibility.Hidden;
+            }
         }
 
         #endregion

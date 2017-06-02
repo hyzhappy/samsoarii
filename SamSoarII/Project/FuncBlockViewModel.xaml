@@ -9,6 +9,11 @@
              xmlns:Text="http://icsharpcode.net/sharpdevelop/avalonedit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static ApplicationCommands.Find}" CanExecute="FindCommandCanExecute" Executed="OnFindCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Replace}" CanExecute="ReplaceCommandCanExecute" Executed="OnReplaceCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
+    </UserControl.CommandBindings>
     <UserControl.Resources>
         <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetFunc"/>
     </UserControl.Resources>
@@ -77,4 +82,15 @@
             </Border.Child>
         </Border>
     </UserControl.Content>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="撤销" Command="{x:Static ApplicationCommands.Undo}"></MenuItem>
+            <MenuItem Header="重做" Command="{x:Static ApplicationCommands.Redo}"></MenuItem>
+            <Separator></Separator>
+            <MenuItem Header="剪切" Command="{x:Static ApplicationCommands.Cut}"></MenuItem>
+            <MenuItem Header="复制" Command="{x:Static ApplicationCommands.Copy}"></MenuItem>
+            <MenuItem Header="粘贴" Command="{x:Static ApplicationCommands.Paste}"></MenuItem>
+            <MenuItem Header="全选" Command="{x:Static ApplicationCommands.SelectAll}"></MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 </UserControl>

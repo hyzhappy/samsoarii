@@ -50,6 +50,14 @@ namespace SamSoarII.AppMain.Project
         #region Numbers
 
         /// <summary>
+        /// 父类
+        /// </summary>
+        private ProjectModel parent;
+        /// <summary>
+        /// 交互类
+        /// </summary>
+        private InteractionFacade ifacade;
+        /// <summary>
         /// 函数块的逻辑模型
         /// </summary>
         private FuncBlockModel model;
@@ -197,9 +205,10 @@ namespace SamSoarII.AppMain.Project
         /// 初始化构造函数
         /// </summary>
         /// <param name="name">函数块名称</param>
-        public FuncBlockViewModel(string name)
+        public FuncBlockViewModel(string name, ProjectModel _pmodel)
         {
             InitializeComponent();
+            parent = _pmodel;
             ProgramName = name;
             model = new FuncBlockModel(String.Empty);
             IHighlightingDefinition customHighlighting;
@@ -999,6 +1008,31 @@ namespace SamSoarII.AppMain.Project
         #region Event Handler
 
         public event RoutedEventHandler TextChanged = delegate { };
+
+        private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void OnFindCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            parent.IFacade.MainWindow.LACFind.Show();
+        }
+
+        private void OnReplaceCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            parent.IFacade.MainWindow.LACReplace.Show();
+        }
+        
+        private void OnSelectAllCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            CodeTextBox.SelectAll();
+        }
 
         #endregion
 

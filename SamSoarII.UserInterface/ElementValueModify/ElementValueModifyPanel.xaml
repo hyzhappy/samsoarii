@@ -41,7 +41,8 @@
                      x:Name="TB_Value" 
                      Height="25" VerticalAlignment="Center" Margin="12,0,12,0"
                      VerticalContentAlignment="Center"
-                     TextChanged="TB_Value_TextChanged">
+                     TextChanged="TB_Value_TextChanged"
+                     KeyDown="TB_Value_KeyDown">
             </TextBox>
             <Button Grid.Row="1" Grid.Column="2"
                     x:Name="BT_Write"

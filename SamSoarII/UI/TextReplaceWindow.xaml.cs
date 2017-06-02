@@ -28,6 +28,8 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class TextReplaceWindow : UserControl, INotifyPropertyChanged
     {
+        static string[] SPECIALLABELS = { "\\", ".", "^", "$", "(", ")", "[", "]", "{", "}" };
+
         #region Numbers
 
         private InteractionFacade parent;
@@ -96,14 +98,29 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
-        public TextReplaceWindow()
+        public TextReplaceWindow(InteractionFacade _parent)
         {
             InitializeComponent();
+            DataContext = this;
+            parent = _parent;
+            parent.CurrentTabChanged += OnCurrentTabChanged;
+            Mode = MODE_CURRENT;
+            //TB_Input.Background = Brushes.Red;
         }
 
-        private void Find()
+        public void Initialize()
         {
             items.Clear();
+            _cmdmanager.Initialize();
+        }
+
+        public void Find(string word = null)
+        {
+            if (word != null)
+                TB_Input.Text = word;
+            items.Clear();
+            if (TB_Input.Text.Length <= 0)
+                return;
             switch (Mode)
             {
                 case MODE_CURRENT:
@@ -129,13 +146,21 @@ namespace SamSoarII.AppMain.UI
         {
             string text = fbvmodel.Code;
             string word = TB_Input.Text;
-            Match match = Regex.Match(
-                text,
-                IsRegex ? @word : word,
-                IgnoreCase ? RegexOptions.IgnoreCase : 0);
+            RegexOptions opt = RegexOptions.None;
+            opt |= RegexOptions.Singleline;
+            if (IgnoreCase)
+                opt |= RegexOptions.IgnoreCase;
+            if (!IsRegex)
+            {
+                foreach (string slabel in SPECIALLABELS)
+                {
+                    word = word.Replace(slabel, "\\" + slabel);
+                }
+            }
+            Match match = Regex.Match(text, word, opt);
             while (match != null && match.Success)
             {
-                items.Add(new TextReplaceElement(fbvmodel, match.Index, match.Value));
+                items.Add(new TextReplaceElement(this, fbvmodel, match.Index, match.Value));
                 match = match.NextMatch();
             }
         }
@@ -224,7 +249,18 @@ namespace SamSoarII.AppMain.UI
                 parent.MainWindow.LAReplace.ToggleAutoHide();
             }
             if (DG_List.SelectedIndex < 0) return;
-
+            TextFindElement element = null;
+            if (e.AddedItems.Count > 0)
+                element = (TextFindElement)(e.AddedItems[0]);
+            else if (e.RemovedItems.Count > 0)
+                element = (TextFindElement)(e.RemovedItems[0]);
+            else
+                return;
+            FuncBlockViewModel fbvmodel = element.FBVModel;
+            int offset = element.Offset;
+            int count = element.Word.Length;
+            parent.NavigateToFuncBlock(fbvmodel, offset);
+            fbvmodel.SetOffset(offset, count);
         }
 
         private void UndoCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -246,11 +282,32 @@ namespace SamSoarII.AppMain.UI
         {
             _cmdmanager.Redo();
         }
+        
+        private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            if (currenttab is FuncBlockViewModel)
+            {
+                Visibility = Visibility.Visible;
+                if (Mode == MODE_CURRENT) Find();
+            }
+            else
+            {
+                Visibility = Visibility.Hidden;
+            }
+        }
+        
+        #region Config
+
+        private bool _isregex;
+        private bool _ignorecase;
 
         private void OnConfigClick(object sender, RoutedEventArgs e)
         {
             G_Main.Visibility = Visibility.Hidden;
             G_Config.Visibility = Visibility.Visible;
+            _isregex = IsRegex;
+            _ignorecase = IgnoreCase;
         }
 
         private void BC_Ensure_Click(object sender, RoutedEventArgs e)
@@ -263,7 +320,11 @@ namespace SamSoarII.AppMain.UI
         {
             G_Main.Visibility = Visibility.Visible;
             G_Config.Visibility = Visibility.Hidden;
+            IsRegex = _isregex;
+            IgnoreCase = _ignorecase;
         }
+
+        #endregion
 
         #endregion
     }
@@ -272,6 +333,7 @@ namespace SamSoarII.AppMain.UI
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        private TextReplaceWindow tpwindow;
         private FuncBlockViewModel fbvmodel;
         private string line;
         private string word;
@@ -279,17 +341,74 @@ namespace SamSoarII.AppMain.UI
         private int textoffset;
         private int textrow;
         private int textcolumn;
-        
+
+        public FuncBlockViewModel FBVModel
+        {
+            get
+            {
+                return this.fbvmodel;
+            }
+        }
+        public int Offset
+        {
+            get
+            {
+                return this.textoffset;
+            }
+            set
+            {
+                this.textoffset = value;
+                if (fbvmodel != null)
+                {
+                    TextViewPosition? tvpos = fbvmodel.GetPosition(textoffset);
+                    if (tvpos.HasValue)
+                    {
+                        textrow = tvpos.Value.Line;
+                        textcolumn = tvpos.Value.Column;
+                        PropertyChanged(this, new PropertyChangedEventArgs("Position"));
+                    }
+                }
+            }
+        }
         public string Line
         {
             get
             {
-                return line;
+                return this.line;
+            }
+            set
+            {
+                this.line = value;
+            }
+        }
+        public int LineOffset
+        {
+            get
+            {
+                return this.lineoffset;
+            }
+            set
+            {
+                this.lineoffset = value;
             }
         }
         public string Word
         {
             get { return word; }
+        }
+        public string Profix
+        {
+            get
+            {
+                return line.Substring(0, lineoffset);
+            }
+        }
+        public string Suffix
+        {
+            get
+            {
+                return line.Substring(lineoffset + word.Length);
+            }
         }
         public string FuncBlock
         {
@@ -306,32 +425,29 @@ namespace SamSoarII.AppMain.UI
                     textrow, textcolumn);
             }
         }
-
+        
         public TextReplaceElement
         (
+            TextReplaceWindow   _tpwindow,
             FuncBlockViewModel  _fbvmodel,
             int                 _textoffset,
             string              _word
         )
         {
+            tpwindow = _tpwindow;
             fbvmodel = _fbvmodel;
-            textoffset = _textoffset;
+            fbvmodel.TextChanged += OnTextChanged;    
+            Offset = _textoffset;
             word = _word;
-            TextViewPosition? tvpos = fbvmodel.GetPosition(textoffset);
-            if (tvpos.HasValue)
-            {
-                textrow = tvpos.Value.Line;
-                textcolumn = tvpos.Value.Column;
-            }
             string text = fbvmodel.Code;
-            int start = textoffset;
-            int end = textoffset;
+            int start = textoffset - 1;
+            int end = textoffset + word.Length;
             while (start >= 0 && text[start] != '\n') start--;
             while (end < text.Length && text[end] != '\n') end++;
-            line = text.Substring(start + 1, end - start - 1);
+            Line = text.Substring(start + 1, end - start - 1);
             lineoffset = textoffset - start - 1;
         }
-
+        
         public void Replace(string newword)
         {
             fbvmodel.Code = fbvmodel.Code
@@ -342,6 +458,12 @@ namespace SamSoarII.AppMain.UI
                 .Insert(lineoffset, newword);
             word = newword;
             PropertyChanged(this, new PropertyChangedEventArgs("Line"));
+            PropertyChanged(this, new PropertyChangedEventArgs("Word"));
+        }
+
+        protected virtual void OnTextChanged(object sender, RoutedEventArgs e)
+        {
+            tpwindow.Initialize();
         }
     }
 
@@ -350,12 +472,20 @@ namespace SamSoarII.AppMain.UI
         private TextReplaceElement tpelement;
         private string oldword;
         private string newword;
-
+        
         public TextReplaceElement Element
         {
             get { return tpelement; }
         }
-
+        public string NewWord
+        {
+            get { return this.newword; }
+        }
+        public string OldWord
+        {
+            get { return this.oldword; }
+        }
+        
         public FuncBlockReplaceWordCommand
         (
             TextReplaceElement  _tpelement,
@@ -385,8 +515,8 @@ namespace SamSoarII.AppMain.UI
 
     public class FuncBlockReplaceWordCommand_Group : IUndoableCommand
     {
-        private List<IUndoableCommand> items
-            = new List<IUndoableCommand>();
+        private List<FuncBlockReplaceWordCommand> items
+            = new List<FuncBlockReplaceWordCommand>();
         private TextReplaceWindow parent;
         private IEnumerable<TextReplaceElement> eles_all;
         private List<TextReplaceElement> eles_replaced
@@ -410,10 +540,20 @@ namespace SamSoarII.AppMain.UI
 
         public void Execute()
         {
-            foreach (IUndoableCommand cmd in items)
+            items.Sort((cmd1, cmd2) =>
             {
+                return cmd1.Element.Offset.CompareTo(cmd2.Element.Offset);
+            });
+            int offset = 0;
+            string word = null;
+            foreach (FuncBlockReplaceWordCommand cmd in items)
+            {
+                cmd.Element.Offset += offset;
                 cmd.Execute();
+                offset += cmd.NewWord.Length - cmd.OldWord.Length;
+                word = cmd.OldWord;
             }
+            parent.Find(word);
         }
 
         public void Redo()
@@ -423,10 +563,16 @@ namespace SamSoarII.AppMain.UI
 
         public void Undo()
         {
-            foreach (IUndoableCommand cmd in items)
+            int offset = 0;
+            string word = null;
+            foreach (FuncBlockReplaceWordCommand cmd in items)
             {
+                cmd.Element.Offset -= offset;
                 cmd.Undo();
+                offset += cmd.NewWord.Length - cmd.OldWord.Length;
+                word = cmd.OldWord;
             }
+            parent.Find(word);
         }
     }
 }

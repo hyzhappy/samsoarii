@@ -38,7 +38,6 @@
                  Margin="60,4,4,4"
                  TextChanged="TB_Input_TextChanged"
                  KeyDown="TB_Input_KeyDown">
-
         </TextBox>
         <DataGrid x:Name="DG_List" ItemsSource="{Binding Items}"
                   Grid.Row="2" Grid.Column="0"

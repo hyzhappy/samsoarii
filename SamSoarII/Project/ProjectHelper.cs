@@ -175,9 +175,9 @@ namespace SamSoarII.AppMain.Project
             return result;
         }
 
-        public static FuncBlockViewModel CreateFuncBlockByXElement(XElement xEle)
+        public static FuncBlockViewModel CreateFuncBlockByXElement(XElement xEle, ProjectModel pmodel)
         {
-            FuncBlockViewModel result = new FuncBlockViewModel(xEle.Attribute("Name").Value);
+            FuncBlockViewModel result = new FuncBlockViewModel(xEle.Attribute("Name").Value, pmodel);
             result.Code = xEle.Value;
             return result;
         }

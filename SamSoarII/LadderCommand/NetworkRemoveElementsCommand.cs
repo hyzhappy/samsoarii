@@ -76,6 +76,8 @@ namespace SamSoarII.AppMain.LadderCommand
                 LadderDiagramViewModel ldvmodel = _network.LDVModel;
                 ldvmodel.SelectionRect.X = bvmodel.X;
                 ldvmodel.SelectionRect.Y = bvmodel.Y;
+                if (bvmodel is VerticalLineViewModel)
+                    ldvmodel.SelectionRect.X++;
                 ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
                     new NavigateToNetworkEventArgs(
                         _network.NetworkNumber,
