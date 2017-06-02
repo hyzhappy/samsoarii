@@ -22,8 +22,9 @@
             <Border.Child>
                 <Grid>
                     <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" DataContext="{StaticResource FontData}"
-                                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                                     FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}">
+                                     HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                     FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}"
+                                     ShowLineNumbers="True">
                     </Text:TextEditor>
                     <Canvas>
                         <Canvas.Children>
