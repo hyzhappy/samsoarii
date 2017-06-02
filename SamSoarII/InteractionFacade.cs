@@ -145,11 +145,24 @@ namespace SamSoarII.AppMain
         {
             List<ErrorReportElement> weinsts = new List<ErrorReportElement>();
             IEnumerable<ErrorReportElement> _weinsts = null;
+            InstructionDiagramViewModel.CheckInitialize();
+            _projectModel.MainRoutine.IsInterruptCalled = false;
+            foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
+            {
+                ldvmodel.IsInterruptCalled = false;
+            }
             _weinsts = _projectModel.MainRoutine.IDVModel.Check();
             weinsts.AddRange(_weinsts);
             foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
             {
                 _weinsts = ldvmodel.IDVModel.Check();
+                weinsts.AddRange(_weinsts);
+            }
+            _weinsts = _projectModel.MainRoutine.IDVModel.CheckForInterrrupt();
+            weinsts.AddRange(_weinsts);
+            foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
+            {
+                _weinsts = ldvmodel.IDVModel.CheckForInterrrupt();
                 weinsts.AddRange(_weinsts);
             }
             int ecount = 0;
