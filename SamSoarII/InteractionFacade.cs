@@ -911,96 +911,77 @@ namespace SamSoarII.AppMain
         }
         public void CreateProject(string name, string fullFileName)
         {
-            if (_projectModel != null && _projectModel.IsModify)
+            //if (_projectModel != null && _projectModel.IsModify)
+            //{
+            //    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+            //    switch (mbret)
+            //    {
+            //        case MessageBoxResult.Yes:
+            //            SaveProject();
+            //            _projectModel.IsModify = false;
+            //            CreateProject(name, fullFileName);
+            //            return;
+            //        case MessageBoxResult.No:
+            //            _projectModel.IsModify = false;
+            //            CreateProject(name, fullFileName);
+            //            return;
+            //        case MessageBoxResult.Cancel:
+            //        default:
+            //            return;
+            //    }
+            //}
+            //else
+            //{
+                
+            //}
+            _projectModel = new ProjectModel(name);
+            _projectModel.IFacade = this;
+            _projectModel.autoSavedManager = new AutoSavedManager(this);
+            if (GlobalSetting.IsSavedByTime)
             {
-                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                switch (mbret)
-                {
-                    case MessageBoxResult.Yes:
-                        SaveProject();
-                        _projectModel.IsModify = false;
-                        CreateProject(name, fullFileName);
-                        return;
-                    case MessageBoxResult.No:
-                        _projectModel.IsModify = false;
-                        CreateProject(name, fullFileName);
-                        return;
-                    case MessageBoxResult.Cancel:
-                    default:
-                        return;
-                }
+                _projectModel.autoSavedManager.Start();
             }
-            else
+            if (fullFileName != string.Empty)
+                ProjectFileManager.Update(name, fullFileName);
+            ValueAliasManager.Clear();
+            ValueCommentManager.Clear();
+            InstructionCommentManager.Clear();
+            if (_projectTreeView != null)
             {
-                _projectModel = new ProjectModel(name);
-                _projectModel.IFacade = this;
-                _projectModel.autoSavedManager = new AutoSavedManager(this);
-                if (GlobalSetting.IsSavedByTime)
-                {
-                    _projectModel.autoSavedManager.Start();
-                }
-                ProjectFileManager.Update(name,fullFileName);
-                ValueAliasManager.Clear();
-                ValueCommentManager.Clear();
-                InstructionCommentManager.Clear();
-                if (_projectTreeView != null)
-                {
-                    _projectTreeView.Dispose();
-                    _projectTreeView = null;
-                }
-                _projectTreeView = new ProjectTreeView(_projectModel);
-                _projectTreeView.TabItemOpened += OnTabOpened;
-                _projectTreeView.PTVHandle += OnGotPTVHandle;
-                _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
-                InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
-                _mainTabControl.SelectionChanged += OnTabItemChanged;
-                _mainTabControl.ShowEditItem += OnTabOpened;
-                _mainTabControl.Reset();
-                _mainTabControl.ShowItem(_projectModel.MainRoutine);
-                CurrentLadder = _projectModel.MainRoutine;
-                _mainWindow.SetProjectTreeView(_projectTreeView);
-                _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
-                ProjectFullFileName = fullFileName;
-                _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
-                UpdateRefNetworksBrief(_projectModel);
+                _projectTreeView.Dispose();
+                _projectTreeView = null;
             }
+            _projectTreeView = new ProjectTreeView(_projectModel);
+            _projectTreeView.TabItemOpened += OnTabOpened;
+            _projectTreeView.PTVHandle += OnGotPTVHandle;
+            _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+            InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
+            _mainTabControl.SelectionChanged += OnTabItemChanged;
+            _mainTabControl.ShowEditItem += OnTabOpened;
+            _mainTabControl.Reset();
+            _mainTabControl.ShowItem(_projectModel.MainRoutine);
+            CurrentLadder = _projectModel.MainRoutine;
+            _mainWindow.SetProjectTreeView(_projectTreeView);
+            _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
+            ProjectFullFileName = fullFileName;
+            _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+            UpdateRefNetworksBrief(_projectModel);
         }
         public void CloseCurrentProject()
         {
-            if (_projectModel != null && _projectModel.IsModify)
-            {
-                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                switch (mbret)
-                {
-                    case MessageBoxResult.Yes:
-                        SaveProject();
-                        _projectModel.IsModify = false;
-                        CloseCurrentProject();
-                        return;
-                    case MessageBoxResult.No:
-                        _projectModel.IsModify = false;
-                        CloseCurrentProject();
-                        return;
-                    case MessageBoxResult.Cancel:
-                    default:
-                        return;
-                }
-            }
-            else
-            {
-                _projectTreeView.TabItemOpened -= OnTabOpened;
-                _projectTreeView.PTVHandle += OnGotPTVHandle;
-                _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
-                _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
-                ProjectFullFileName = string.Empty;
-                _mainTabControl.SelectionChanged -= OnTabItemChanged;
-                _mainWindow.ClearProjectTreeView();
-                _mainWindow.ClearProjectMonitor();
-                _mainTabControl.Reset();
-                _projectTreeView = null;
-                _projectModel.autoSavedManager.Abort();
-                _projectModel = null;
-            }
+            _projectTreeView.TabItemOpened -= OnTabOpened;
+            _projectTreeView.PTVHandle += OnGotPTVHandle;
+            _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
+            _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
+            ProjectFullFileName = string.Empty;
+            _mainTabControl.SelectionChanged -= OnTabItemChanged;
+            _mainWindow.ClearProjectTreeView();
+            _mainWindow.ClearProjectMonitor();
+            _mainTabControl.Reset();
+            _projectTreeView = null;
+            _projectModel.autoSavedManager.Abort();
+            _projectModel = null;
+            MainWindow.LACProj.Hide();
         }
         public void SaveProject()
         {
@@ -1022,67 +1003,47 @@ namespace SamSoarII.AppMain
         }
         public bool LoadProject(string fileName)
         {
-            if (_projectModel != null && _projectModel.IsModify)
+            if (_projectModel != null)
             {
-                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                switch (mbret)
-                {
-                    case MessageBoxResult.Yes:
-                        SaveProject();
-                        _projectModel.IsModify = false;
-                        return LoadProject(fileName);
-                    case MessageBoxResult.No:
-                        _projectModel.IsModify = false;
-                        return LoadProject(fileName);
-                    case MessageBoxResult.Cancel:
-                    default:
-                        return false;
-                }
+                _projectModel.autoSavedManager.Abort();
             }
-            else
+            _projectModel = ProjectHelper.LoadProject(fileName, new ProjectModel(String.Empty));
+            _projectModel.IFacade = this;
+            _projectModel.autoSavedManager = new AutoSavedManager(this);
+            if (GlobalSetting.IsSavedByTime)
             {
-                if (_projectModel != null)
-                {
-                    _projectModel.autoSavedManager.Abort();
-                }
-                _projectModel = ProjectHelper.LoadProject(fileName, new ProjectModel(String.Empty));
-                _projectModel.IFacade = this;
-                _projectModel.autoSavedManager = new AutoSavedManager(this);
-                if (GlobalSetting.IsSavedByTime)
-                {
-                    _projectModel.autoSavedManager.Start();
-                }
-                XDocument xdoc = XDocument.Load(fileName);
-                XElement xele_r = xdoc.Element("Root");
-                XElement xele_rtv = xele_r.Element("ProjectTreeView");
-                InstructionCommentManager.UpdateAllComment();
-                _mainTabControl.SelectionChanged -= OnTabItemChanged;
-                _mainTabControl.ShowEditItem -= OnTabOpened;
-                if (_projectTreeView != null)
-                {
-                    _projectTreeView.Dispose();
-                    _projectTreeView = null;
-                }
-                _projectTreeView = new ProjectTreeView(_projectModel, xele_rtv);
-                _projectTreeView.TabItemOpened += OnTabOpened;
-                _projectTreeView.PTVHandle += OnGotPTVHandle;
-                _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
-                //_projectTreeView.LoadElementInitWindByXElement(_projectModel.EleInitializeData);
-                _mainWindow.ElemInitWind.LoadElementsByXElement(_projectModel.EleInitializeData);
-                _projectModel.EleInitializeData = null;
-                InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
-                _mainTabControl.Reset();
-                _mainTabControl.SelectionChanged += OnTabItemChanged;
-                _mainTabControl.ShowEditItem += OnTabOpened;
-                _mainTabControl.ShowItem(_projectModel.MainRoutine);
-                CurrentLadder = _projectModel.MainRoutine;
-                _mainWindow.SetProjectTreeView(_projectTreeView);
-                _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
-                ProjectFullFileName = fileName;
-                _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
-                UpdateRefNetworksBrief(_projectModel);
-                return true;
+                _projectModel.autoSavedManager.Start();
             }
+            XDocument xdoc = XDocument.Load(fileName);
+            XElement xele_r = xdoc.Element("Root");
+            XElement xele_rtv = xele_r.Element("ProjectTreeView");
+            InstructionCommentManager.UpdateAllComment();
+            _mainTabControl.SelectionChanged -= OnTabItemChanged;
+            _mainTabControl.ShowEditItem -= OnTabOpened;
+            if (_projectTreeView != null)
+            {
+                _projectTreeView.Dispose();
+                _projectTreeView = null;
+            }
+            _projectTreeView = new ProjectTreeView(_projectModel, xele_rtv);
+            _projectTreeView.TabItemOpened += OnTabOpened;
+            _projectTreeView.PTVHandle += OnGotPTVHandle;
+            _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
+            //_projectTreeView.LoadElementInitWindByXElement(_projectModel.EleInitializeData);
+            _mainWindow.ElemInitWind.LoadElementsByXElement(_projectModel.EleInitializeData);
+            _projectModel.EleInitializeData = null;
+            InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
+            _mainTabControl.Reset();
+            _mainTabControl.SelectionChanged += OnTabItemChanged;
+            _mainTabControl.ShowEditItem += OnTabOpened;
+            _mainTabControl.ShowItem(_projectModel.MainRoutine);
+            CurrentLadder = _projectModel.MainRoutine;
+            _mainWindow.SetProjectTreeView(_projectTreeView);
+            _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
+            ProjectFullFileName = fileName;
+            _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+            UpdateRefNetworksBrief(_projectModel);
+            return true;
         }
         private void UpdateRefNetworksBrief(ProjectModel projectModel)
         {

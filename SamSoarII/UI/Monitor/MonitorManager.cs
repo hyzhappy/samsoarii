@@ -184,7 +184,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             _Thread_Alive = false;
             IsRunning = false;
             Aborted(this, new RoutedEventArgs());
-
         }
 
         #endregion

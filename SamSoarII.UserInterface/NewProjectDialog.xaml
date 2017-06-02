@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:dev="clr-namespace:SamSoarII.PLCDevice;assembly=SamSoarII.PLCDevice"
         mc:Ignorable="d"
-        Title="New Project" Height="360" Width="600">
+        Title="New Project" Height="360" Width="560" ResizeMode="NoResize">
     <Window.Resources>
         <ObjectDataProvider x:Key="PLCTypeList" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
             <ObjectDataProvider.MethodParameters>
@@ -17,13 +17,20 @@
     </Window.Resources>
     <Canvas>
         <Label Canvas.Top="40" Canvas.Left="89">PLC型号</Label>
-        <Label Canvas.Top="115" Canvas.Left="89">工程名字</Label>
-        <Label Canvas.Left="100" Canvas.Top="185">路径</Label>
-        <TextBox x:Name="NameTextBox" Width="121" Height="25" Canvas.Left="193" Canvas.Top="115"></TextBox>
-        <TextBox x:Name="PathTextBox" Width="200" Height="25" Canvas.Left="193" Canvas.Top="185"></TextBox>
-        <ComboBox x:Name="PLCTypeComboBox" Width="120" Height="25" Canvas.Left="193" Canvas.Top="40" ItemsSource="{Binding Source={StaticResource PLCTypeList}}" SelectedIndex="0"></ComboBox>
+        <ComboBox x:Name="PLCTypeComboBox" Width="120" Height="25" Canvas.Left="193" Canvas.Top="40" ItemsSource="{Binding Source={StaticResource PLCTypeList}}" SelectedIndex="0"/>
+        <GroupBox Header="工程名设定" Height="160" Width="380" Canvas.Top="80" Canvas.Left="90">
+            <Canvas>
+                <CheckBox x:Name="setting" Canvas.Top="10" Canvas.Left="20" IsThreeState="False">设置</CheckBox>
+                <Canvas IsEnabled="{Binding ElementName=setting,Path=IsChecked}">
+                    <Label Canvas.Top="40" Canvas.Left="30">工程名字</Label>
+                    <Label Canvas.Left="30" Canvas.Top="80">路径</Label>
+                    <TextBox x:Name="NameTextBox" Width="121" Height="25" Canvas.Left="100" Canvas.Top="40"></TextBox>
+                    <TextBox x:Name="PathTextBox" Width="160" Height="25" Canvas.Left="100" Canvas.Top="80"></TextBox>
+                    <Button x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="280" Canvas.Top="80"></Button>
+                </Canvas>
+            </Canvas>
+        </GroupBox>
         <Button x:Name="EnsureButton" Content="确定" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
         <Button x:Name="CancelButton" Content="取消" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
-        <Button x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="429" Canvas.Top="185"></Button>
     </Canvas>
 </Window>

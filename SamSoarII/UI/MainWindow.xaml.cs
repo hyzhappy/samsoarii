@@ -59,10 +59,6 @@ namespace SamSoarII.AppMain.UI
             this.Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
-            //FindWindow findwindow = new FindWindow(_interactionFacade);
-            //LAFind.Content = findwindow;
-            //ReplaceWindow replacewindow = new ReplaceWindow(_interactionFacade);
-            //LAReplace.Content = replacewindow;
             SysSettingDialog = new OptionDialog(_interactionFacade);
         }
 
@@ -113,26 +109,10 @@ namespace SamSoarII.AppMain.UI
         }
 	    protected override void OnClosing(CancelEventArgs e)
         {
-            if (_interactionFacade.ProjectModel != null
-             && _interactionFacade.ProjectModel.IsModify)
-            {
-                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                switch (mbret)
-                {
-                    case MessageBoxResult.Yes:
-                        OnSaveProjectExecute(this, new RoutedEventArgs());
-                        _interactionFacade.ProjectModel.IsModify = false;
-                        break;
-                    case MessageBoxResult.No:
-                        _interactionFacade.ProjectModel.IsModify = false;
-                        break;
-                    case MessageBoxResult.Cancel:
-                    default:
-                        e.Cancel = true;
-                        return;
-                }
-            }
-            base.OnClosing(e);
+            handled = false;
+            if (!CurrentProjectHandle(false, false))
+                e.Cancel = true;
+            else base.OnClosing(e);
         }
         protected override void OnClosed(EventArgs e)
         {
@@ -219,11 +199,15 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
-                    _interactionFacade.LoadProject(projectMessage.Value.Item2);
-                    ProjectFileManager.Update(projectMessage.Value.Item1, projectMessage.Value.Item2);
-                    LadderModeButton.IsChecked = true;
-                    InstModeButton.IsChecked = false;
-                    LACProj.Show();
+                    handled = false;
+                    if (CurrentProjectHandle(false, false))
+                    {
+                        _interactionFacade.LoadProject(projectMessage.Value.Item2);
+                        ProjectFileManager.Update(projectMessage.Value.Item1, projectMessage.Value.Item2);
+                        LadderModeButton.IsChecked = true;
+                        InstModeButton.IsChecked = false;
+                        LACProj.Show();
+                    }
                 }
             }
             e.Handled = true;
@@ -271,11 +255,6 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Project
-        private void CreateMainRoutine(string name)
-        {
-
-        }
-
         private void CreateProject(string name, string fullFileName)
         {
             _interactionFacade.CreateProject(name, fullFileName);
@@ -284,7 +263,13 @@ namespace SamSoarII.AppMain.UI
             InstModeButton.IsChecked = false;
             LACProj.Show();
         }
-
+        private void CreateProject()
+        {
+            _interactionFacade.CreateProject(string.Format("工程项目"), string.Empty);
+            LadderModeButton.IsChecked = true;
+            InstModeButton.IsChecked = false;
+            LACProj.Show();
+        }
         private bool OpenProject(string fullFileName)
         {
             bool ret = _interactionFacade.LoadProject(fullFileName);
@@ -714,89 +699,127 @@ namespace SamSoarII.AppMain.UI
         {
             _interactionFacade.CreateModbus();
         }
-
-        private void OnNewProjectExecute(object sender, RoutedEventArgs e)
+        private bool handled = false;
+        private bool CurrentProjectHandle(bool CreateNewProject,bool OpenProject)
         {
             if (_interactionFacade.ProjectModel != null
-             && _interactionFacade.ProjectModel.IsModify)
+             && _interactionFacade.ProjectModel.IsModify && _interactionFacade.ProjectFullFileName != string.Empty)
             {
+                handled = true;
                 MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
                 switch (mbret)
                 {
                     case MessageBoxResult.Yes:
-                        OnSaveProjectExecute(sender, e);
+                        OnSaveProjectExecute(this, new RoutedEventArgs());
                         _interactionFacade.ProjectModel.IsModify = false;
-                        OnNewProjectExecute(sender, e);
-                        return;
+                        if(CreateNewProject)
+                            OnNewProjectExecute(this, new RoutedEventArgs());
+                        if(OpenProject)
+                            OnOpenProjectExecute(this, new RoutedEventArgs());
+                        return true;
                     case MessageBoxResult.No:
                         _interactionFacade.ProjectModel.IsModify = false;
-                        OnNewProjectExecute(sender, e);
-                        return;
+                        if (CreateNewProject)
+                            OnNewProjectExecute(this, new RoutedEventArgs());
+                        if (OpenProject)
+                            OnOpenProjectExecute(this, new RoutedEventArgs());
+                        return true;
                     case MessageBoxResult.Cancel:
                     default:
-                        return;
+                        return false;
                 }
             }
-            NewProjectDialog newProjectDialog;
-            using (newProjectDialog = new NewProjectDialog())
+            if (_interactionFacade.ProjectModel != null
+             && _interactionFacade.ProjectFullFileName == string.Empty)
             {
-                newProjectDialog.EnsureButtonClick += (sender1, e1) =>
+                handled = true;
+                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                switch (mbret)
                 {
-                    string name = newProjectDialog.NameContent;
-                    string dir = newProjectDialog.PathContent;
-                    if (!Directory.Exists(dir))
+                    case MessageBoxResult.Yes:
+                        SaveFileDialog saveFileDialog = new SaveFileDialog();
+                        saveFileDialog.Filter = "ssp文件|*.ssp";
+                        if (saveFileDialog.ShowDialog() == true)
+                        {
+                            _interactionFacade.SaveAsProject(saveFileDialog.FileName);
+                        }
+                        _interactionFacade.CloseCurrentProject();
+                        if (CreateNewProject)
+                            OnNewProjectExecute(this, new RoutedEventArgs());
+                        if (OpenProject)
+                            OnOpenProjectExecute(this, new RoutedEventArgs());
+                        return true;
+                    case MessageBoxResult.No:
+                        _interactionFacade.CloseCurrentProject();
+                        if (CreateNewProject)
+                            OnNewProjectExecute(this, new RoutedEventArgs());
+                        if (OpenProject)
+                            OnOpenProjectExecute(this, new RoutedEventArgs());
+                        return true;
+                    case MessageBoxResult.Cancel:
+                    default:
+                        return false;
+                }
+            }
+            return !handled;
+        }
+        private void OnNewProjectExecute(object sender, RoutedEventArgs e)
+        {
+            if (CurrentProjectHandle(true, false))
+            {
+                NewProjectDialog newProjectDialog;
+                using (newProjectDialog = new NewProjectDialog())
+                {
+                    newProjectDialog.EnsureButtonClick += (sender1, e1) =>
                     {
-                        MessageBox.Show("指定路径不存在");
-                        return;
-                    }
-                    if (name == string.Empty)
-                    {
-                        MessageBox.Show("文件名不能为空");
-                        return;
-                    }
-                    string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
-                    if (File.Exists(fullFileName))
-                    {
-                        MessageBox.Show("指定路径已存在同名文件");
-                        return;
-                    }
-                    PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
-                    CreateProject(name, fullFileName);
-                    newProjectDialog.Close();
-                };
-                newProjectDialog.ShowDialog();
+                        PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
+                        if (newProjectDialog.IsSettingChecked)
+                        {
+                            string name = newProjectDialog.NameContent;
+                            string dir = newProjectDialog.PathContent;
+                            if (!Directory.Exists(dir))
+                            {
+                                MessageBox.Show("指定路径不存在");
+                                return;
+                            }
+                            if (name == string.Empty)
+                            {
+                                MessageBox.Show("文件名不能为空");
+                                return;
+                            }
+                            string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
+                            if (File.Exists(fullFileName))
+                            {
+                                MessageBox.Show("指定路径已存在同名文件");
+                                return;
+                            }
+                            CreateProject(name, fullFileName);
+                        }
+                        else
+                        {
+                            CreateProject();
+                        }
+                        newProjectDialog.Close();
+                        handled = false;
+                    };
+                    newProjectDialog.ShowDialog();
+                }
             }
         }
 
         private void OnOpenProjectExecute(object sender, RoutedEventArgs e)
         {
-            if (_interactionFacade.ProjectModel != null
-             && _interactionFacade.ProjectModel.IsModify)
+            if (CurrentProjectHandle(false, true))
             {
-                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                switch (mbret)
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "ssp文件|*.ssp";
+                if (openFileDialog.ShowDialog() == true)
                 {
-                    case MessageBoxResult.Yes:
-                        OnSaveProjectExecute(sender, e);
-                        _interactionFacade.ProjectModel.IsModify = false;
-                        OnOpenProjectExecute(sender, e);
-                        return;
-                    case MessageBoxResult.No:
-                        _interactionFacade.ProjectModel.IsModify = false;
-                        OnOpenProjectExecute(sender, e);
-                        return;
-                    case MessageBoxResult.Cancel:
-                    default:
-                        return;
-                }
-            }
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "ssp文件|*.ssp";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                if (!OpenProject(openFileDialog.FileName))
-                {
-                    MessageBox.Show("不正确的工程文件，工程文件已损坏!");
+                    if (!OpenProject(openFileDialog.FileName))
+                    {
+                        MessageBox.Show("不正确的工程文件，工程文件已损坏!");
+                    }
+                    handled = false;
                 }
             }
         }

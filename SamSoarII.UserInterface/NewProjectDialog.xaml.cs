@@ -64,6 +64,13 @@ namespace SamSoarII.UserInterface
                 }
             }
         }
+        public bool IsSettingChecked
+        {
+            get
+            {
+                return (bool)setting.IsChecked;
+            }
+        }
         public string NameContent
         {
             get { return NameTextBox.Text; }
@@ -99,7 +106,7 @@ namespace SamSoarII.UserInterface
 
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(PathContent + @"\" + NameContent + ".ssp"))
+            if (IsSettingChecked && File.Exists(PathContent + @"\" + NameContent + ".ssp"))
             {
                 string title = "是否覆盖";
                 string text = String.Format("{0:s}在当前目录已经存在，是否覆盖？", NameContent);
@@ -133,7 +140,6 @@ namespace SamSoarII.UserInterface
                 }
             }
         }
-
         public void Dispose()
         {
             this.Close();
