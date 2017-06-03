@@ -55,6 +55,7 @@ namespace SamSoarII.AppMain.UI
                 DemoFontManager.GetLadder());
             FontManager.GetFunc().Setup(
                 DemoFontManager.GetFunc());
+            EnsureButtonClick.Invoke(this,new RoutedEventArgs(ButtonBase.ClickEvent));
             Close();
         }
 

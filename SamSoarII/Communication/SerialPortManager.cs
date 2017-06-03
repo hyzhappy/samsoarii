@@ -290,7 +290,7 @@ namespace SamSoarII.Communication
         }
         private bool ParamsTest()
         {
-            for (int i = 0; i < BAUDRATES.Length; i++)
+            for (int i = BAUDRATES.Length - 1; i > 0 ; i--)
             {
                 BaudRate = BAUDRATES[i];
                 for (int j = 0; j < PARITYS.Length; j++)

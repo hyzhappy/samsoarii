@@ -998,7 +998,10 @@ namespace SamSoarII.AppMain
         }
         public void SaveProject()
         {
-            SaveAsProject(ProjectFullFileName);
+            if (ProjectFullFileName != string.Empty)
+            {
+                SaveAsProject(ProjectFullFileName);
+            }
         }
         public void SaveAsProject(string fileName)
         {

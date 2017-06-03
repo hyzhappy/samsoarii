@@ -109,7 +109,6 @@ namespace SamSoarII.AppMain.UI
         }
 	    protected override void OnClosing(CancelEventArgs e)
         {
-            handled = false;
             if (!CurrentProjectHandle(false, false))
                 e.Cancel = true;
             else base.OnClosing(e);
@@ -199,7 +198,6 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
-                    handled = false;
                     if (CurrentProjectHandle(false, false))
                     {
                         _interactionFacade.LoadProject(projectMessage.Value.Item2);
@@ -699,136 +697,153 @@ namespace SamSoarII.AppMain.UI
         {
             _interactionFacade.CreateModbus();
         }
-        private bool handled = false;
         private bool CurrentProjectHandle(bool CreateNewProject,bool OpenProject)
         {
-            if (_interactionFacade.ProjectModel != null
-             && _interactionFacade.ProjectModel.IsModify && _interactionFacade.ProjectFullFileName != string.Empty)
+            if (_interactionFacade.ProjectModel == null)
             {
-                handled = true;
-                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                switch (mbret)
+                if (CreateNewProject) NewProjectCreated();
+                if (OpenProject) ProjectOpen();
+            }
+            else
+            {
+                if (_interactionFacade.ProjectModel.IsModify && _interactionFacade.ProjectFullFileName != string.Empty)
                 {
-                    case MessageBoxResult.Yes:
-                        OnSaveProjectExecute(this, new RoutedEventArgs());
-                        _interactionFacade.ProjectModel.IsModify = false;
-                        if(CreateNewProject)
-                            OnNewProjectExecute(this, new RoutedEventArgs());
-                        if(OpenProject)
-                            OnOpenProjectExecute(this, new RoutedEventArgs());
-                        return true;
-                    case MessageBoxResult.No:
-                        _interactionFacade.ProjectModel.IsModify = false;
-                        if (CreateNewProject)
-                            OnNewProjectExecute(this, new RoutedEventArgs());
-                        if (OpenProject)
-                            OnOpenProjectExecute(this, new RoutedEventArgs());
-                        return true;
-                    case MessageBoxResult.Cancel:
-                    default:
-                        return false;
+                    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                    switch (mbret)
+                    {
+                        case MessageBoxResult.Yes:
+                            OnSaveProjectExecute(this, new RoutedEventArgs());
+                            _interactionFacade.ProjectModel.IsModify = false;
+                            if (CreateNewProject)
+                                NewProjectCreated();
+                            if (OpenProject)
+                                ProjectOpen();
+                            return true;
+                        case MessageBoxResult.No:
+                            _interactionFacade.ProjectModel.IsModify = false;
+                            if (CreateNewProject)
+                                NewProjectCreated();
+                            if (OpenProject)
+                                ProjectOpen();
+                            return true;
+                        case MessageBoxResult.Cancel:
+                        default:
+                            return false;
+                    }
+                }
+                else if(_interactionFacade.ProjectFullFileName != string.Empty)
+                {
+                    if (CreateNewProject) NewProjectCreated();
+                    if (OpenProject) ProjectOpen();
+                }
+                else
+                {
+                    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                    switch (mbret)
+                    {
+                        case MessageBoxResult.Yes:
+                            SaveFileDialog saveFileDialog = new SaveFileDialog();
+                            saveFileDialog.Filter = "ssp文件|*.ssp";
+                            if (saveFileDialog.ShowDialog() == true)
+                            {
+                                _interactionFacade.ProjectFullFileName = saveFileDialog.FileName;
+                                _interactionFacade.SaveProject();
+                            }
+                            else return false;
+                            if (CreateNewProject)
+                                NewProjectCreated();
+                            if (OpenProject)
+                                ProjectOpen();
+                            return true;
+                        case MessageBoxResult.No:
+                            if (CreateNewProject)
+                                NewProjectCreated();
+                            if (OpenProject)
+                                ProjectOpen();
+                            return true;
+                        case MessageBoxResult.Cancel:
+                        default:
+                            return false;
+                    }
                 }
             }
-            if (_interactionFacade.ProjectModel != null
-             && _interactionFacade.ProjectFullFileName == string.Empty)
+            return true;
+        }
+        private void NewProjectCreated()
+        {
+            NewProjectDialog newProjectDialog;
+            using (newProjectDialog = new NewProjectDialog())
             {
-                handled = true;
-                MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-                switch (mbret)
+                newProjectDialog.EnsureButtonClick += (sender1, e1) =>
                 {
-                    case MessageBoxResult.Yes:
-                        SaveFileDialog saveFileDialog = new SaveFileDialog();
-                        saveFileDialog.Filter = "ssp文件|*.ssp";
-                        if (saveFileDialog.ShowDialog() == true)
+                    PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
+                    if (newProjectDialog.IsSettingChecked)
+                    {
+                        string name = newProjectDialog.NameContent;
+                        string dir = newProjectDialog.PathContent;
+                        if (!Directory.Exists(dir))
                         {
-                            _interactionFacade.SaveAsProject(saveFileDialog.FileName);
+                            MessageBox.Show("指定路径不存在");
+                            return;
                         }
-                        _interactionFacade.CloseCurrentProject();
-                        if (CreateNewProject)
-                            OnNewProjectExecute(this, new RoutedEventArgs());
-                        if (OpenProject)
-                            OnOpenProjectExecute(this, new RoutedEventArgs());
-                        return true;
-                    case MessageBoxResult.No:
-                        _interactionFacade.CloseCurrentProject();
-                        if (CreateNewProject)
-                            OnNewProjectExecute(this, new RoutedEventArgs());
-                        if (OpenProject)
-                            OnOpenProjectExecute(this, new RoutedEventArgs());
-                        return true;
-                    case MessageBoxResult.Cancel:
-                    default:
-                        return false;
-                }
+                        if (name == string.Empty)
+                        {
+                            MessageBox.Show("文件名不能为空");
+                            return;
+                        }
+                        string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
+                        if (File.Exists(fullFileName))
+                        {
+                            MessageBox.Show("指定路径已存在同名文件");
+                            return;
+                        }
+                        CreateProject(name, fullFileName);
+                    }
+                    else
+                    {
+                        CreateProject();
+                    }
+                    newProjectDialog.Close();
+                };
+                newProjectDialog.ShowDialog();
             }
-            return !handled;
         }
         private void OnNewProjectExecute(object sender, RoutedEventArgs e)
         {
-            if (CurrentProjectHandle(true, false))
+            CurrentProjectHandle(true, false);
+        }
+        private void ProjectOpen()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "ssp文件|*.ssp";
+            if (openFileDialog.ShowDialog() == true)
             {
-                NewProjectDialog newProjectDialog;
-                using (newProjectDialog = new NewProjectDialog())
+                if (!OpenProject(openFileDialog.FileName))
                 {
-                    newProjectDialog.EnsureButtonClick += (sender1, e1) =>
-                    {
-                        PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
-                        if (newProjectDialog.IsSettingChecked)
-                        {
-                            string name = newProjectDialog.NameContent;
-                            string dir = newProjectDialog.PathContent;
-                            if (!Directory.Exists(dir))
-                            {
-                                MessageBox.Show("指定路径不存在");
-                                return;
-                            }
-                            if (name == string.Empty)
-                            {
-                                MessageBox.Show("文件名不能为空");
-                                return;
-                            }
-                            string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
-                            if (File.Exists(fullFileName))
-                            {
-                                MessageBox.Show("指定路径已存在同名文件");
-                                return;
-                            }
-                            CreateProject(name, fullFileName);
-                        }
-                        else
-                        {
-                            CreateProject();
-                        }
-                        newProjectDialog.Close();
-                        handled = false;
-                    };
-                    newProjectDialog.ShowDialog();
+                    MessageBox.Show("不正确的工程文件，工程文件已损坏!");
                 }
             }
         }
-
         private void OnOpenProjectExecute(object sender, RoutedEventArgs e)
         {
-            if (CurrentProjectHandle(false, true))
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "ssp文件|*.ssp";
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    if (!OpenProject(openFileDialog.FileName))
-                    {
-                        MessageBox.Show("不正确的工程文件，工程文件已损坏!");
-                    }
-                    handled = false;
-                }
-            }
+            CurrentProjectHandle(false, true);
         }
 
         private void OnSaveProjectExecute(object sender, RoutedEventArgs e)
         {
-            _interactionFacade.SaveProject();
+            if (_interactionFacade.ProjectFullFileName == string.Empty)
+            {
+                SaveProject();
+            }
+            else
+            {
+                _interactionFacade.SaveProject();
+            }
         }
-
+        public void SaveProject()
+        {
+            CurrentProjectHandle(false, false);
+        }
         private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();

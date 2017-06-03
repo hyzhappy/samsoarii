@@ -45,7 +45,7 @@ namespace SamSoarII.AppMain.Project
             while (GlobalSetting.IsSavedByTime)
             {
                 Thread.Sleep(TimeSpan.FromMinutes(GlobalSetting.SaveTimeSpan));
-                _iFacade.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { _iFacade.SaveProject(); });
+                _iFacade.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { _iFacade.MainWindow.SaveProject(); });
             }
         }
     }
