@@ -61,8 +61,7 @@ namespace SamSoarII.AppMain.Project
     {
         #region Canvas System
         //private ContextMenu CM_Ladder;
-        private MonitorContextMenu CM_Monitor
-            = new MonitorContextMenu();
+        private MonitorContextMenu CM_Monitor;
 
         private LadderMode laddermode;
         public LadderMode LadderMode
@@ -205,8 +204,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-
-
+        
         private bool _isCommendMode;
         public bool IsCommentMode
         {
@@ -231,10 +229,6 @@ namespace SamSoarII.AppMain.Project
             {
                 return _ladderElements;
             }
-            set
-            {
-                _ladderElements = value;
-            }
         }
         public SortedDictionary<IntPoint, VerticalLineViewModel> LadderVerticalLines
         {
@@ -242,9 +236,12 @@ namespace SamSoarII.AppMain.Project
             {
                 return _ladderVerticalLines;
             }
-            set
+        }
+        public SortedDictionary<IntPoint, BreakpointRect> LadderBreakpoints
+        {
+            get
             {
-                _ladderVerticalLines = value;
+                return _ladderBreakpoints;
             }
         }
         public HashSet<BaseViewModel> ErrorModels { get; set; } = new HashSet<BaseViewModel>();
@@ -252,6 +249,8 @@ namespace SamSoarII.AppMain.Project
             = new SortedDictionary<IntPoint, BaseViewModel>();
         private SortedDictionary<IntPoint, VerticalLineViewModel> _ladderVerticalLines 
             = new SortedDictionary<IntPoint, VerticalLineViewModel>();
+        private SortedDictionary<IntPoint, BreakpointRect> _ladderBreakpoints
+            = new SortedDictionary<IntPoint, BreakpointRect>();
         public Dictionary<int, LadderLogicModule> LadderLogicModules { get; set; }
         private InstructionNetworkViewModel _invmodel;
         public InstructionNetworkViewModel INVModel
@@ -486,6 +485,7 @@ namespace SamSoarII.AppMain.Project
         public LadderNetworkViewModel(LadderDiagramViewModel parent, int number)
         {
             InitializeComponent();
+            CM_Monitor = new MonitorContextMenu(this);
             LadderMode = LadderMode.Edit;
             _ladderDiagram = parent;
             RowCount = 1;
@@ -509,6 +509,7 @@ namespace SamSoarII.AppMain.Project
             ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
             CM_Monitor.ValueModify += OnMonitorValueModify;
         }
+        
         public IEnumerable<BaseViewModel> GetElements()
         {
             return _ladderElements.Values;
@@ -687,6 +688,42 @@ namespace SamSoarII.AppMain.Project
                 VerticalLineChanged(this, e);
             }
         }
+
+        public void ReplaceBreakpoint(BreakpointRect rect)
+        {
+            IntPoint p;
+            if (rect.BVModel == null)
+            {
+                p = new IntPoint()
+                {
+                    X = _ladderDiagram.SelectionRect.X,
+                    Y = _ladderDiagram.SelectionRect.Y
+                };
+                if (_ladderElements.ContainsKey(p))
+                    rect.BVModel = _ladderElements[p];
+                else
+                    return;
+            }
+            p = new IntPoint()
+            {
+                X = rect.BVModel.X,
+                Y = rect.BVModel.Y
+            };
+            BreakpointRect rect_old = null;
+            if (_ladderBreakpoints.ContainsKey(p))
+            {
+                rect_old = _ladderBreakpoints[p];
+                LadderCanvas.Children.Remove(rect_old);
+                _ladderBreakpoints[p] = rect;
+            }
+            else
+            {
+                _ladderBreakpoints.Add(p, rect);
+            }
+            LadderCanvas.Children.Add(rect);
+            BreakpointChanged(this, new BreakpointChangedEventArgs(
+                this, rect_old, rect));
+        }
         public void RemoveElement(IntPoint pos)
         {
             if (_ladderElements.ContainsKey(pos))
@@ -744,6 +781,31 @@ namespace SamSoarII.AppMain.Project
             {
                 return false;
             }
+        }
+        public bool RemoveBreakpoint(IntPoint pos)
+        {
+            if (_ladderBreakpoints.ContainsKey(pos))
+            {
+                BreakpointRect rect = _ladderBreakpoints[pos];
+                _ladderBreakpoints.Remove(pos);
+                LadderCanvas.Children.Remove(rect);
+                BreakpointChanged(this, new BreakpointChangedEventArgs(
+                    this, rect, null));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool RemoveBreakpoint(int x, int y)
+        {
+            return RemoveBreakpoint(new IntPoint() { X = x, Y = y });
+        }
+        public bool RemoveBreakpoint(BreakpointRect rect)
+        {
+            if (rect.BVModel == null) return false;
+            return RemoveBreakpoint(rect.BVModel.X, rect.BVModel.Y);
         }
         #endregion
 
@@ -955,6 +1017,7 @@ namespace SamSoarII.AppMain.Project
         #region Relative to Element changed
         public event LadderElementChangedHandler ElementChanged = delegate { };
         public event LadderElementChangedHandler VerticalLineChanged = delegate { };
+        public event BreakpointChangedEventHandler BreakpointChanged = delegate { };
         #endregion
 
         #region Update NetworkNum and LadderName of BaseViewModel
@@ -1162,6 +1225,7 @@ namespace SamSoarII.AppMain.Project
         {
             EditComment();
         }
+
         public void EditComment()
         {
             if (!IsMasked)
@@ -1442,7 +1506,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch(KeyNotFoundException)
                     {
-                    }
+                    } 
                 }
             }
             return result;
@@ -1672,5 +1736,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
+
+
     }
 }

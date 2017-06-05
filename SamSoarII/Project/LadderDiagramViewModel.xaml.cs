@@ -28,6 +28,8 @@ using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.AppMain.UI;
 using System.Collections.Specialized;
 using System.Runtime.InteropServices;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock.Controls;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -49,6 +51,7 @@ namespace SamSoarII.AppMain.Project
         CrossDown,
         NoCross
     }
+
     public partial class LadderDiagramViewModel : UserControl, IProgram
     {
         private ProjectModel _projectModel;
@@ -117,6 +120,27 @@ namespace SamSoarII.AppMain.Project
             }
         }
         
+        #region Floating
+
+        public bool IsFloat { get; set; }
+        public LayoutFloatingWindow FloatWindow { get; set; }
+        private LayoutFloatingWindowControl floatcontrol;
+        public LayoutFloatingWindowControl FloatControl
+        {
+            get { return this.floatcontrol; }
+            set
+            {
+                this.floatcontrol = value;
+                floatcontrol.Closed += OnFloatClosed;
+            }
+        }
+        public event RoutedEventHandler FloatClosed = delegate { };
+        private void OnFloatClosed(object sender, EventArgs e)
+        {
+            FloatClosed(this, new RoutedEventArgs());
+        }
+        #endregion
+
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         private int HeightUnit { get { return _isCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
         private bool _isExpand = true;
@@ -335,6 +359,7 @@ namespace SamSoarII.AppMain.Project
             _projectModel = _parent;
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
+            //this.Loaded += OnLoaded;
             _commandManager = new LadderCommand.CommandManager(this);
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
@@ -357,6 +382,7 @@ namespace SamSoarII.AppMain.Project
         private void InitializeInstructionNameAndToolTips()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
+            //Console.WriteLine(assembly.GetManifestResourceNames());
             Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.InstructionPopup.xml");
             Dictionary<string, List<string>> tempDic = new Dictionary<string, List<string>>();
             XDocument xDoc = XDocument.Load(stream);
@@ -475,6 +501,10 @@ namespace SamSoarII.AppMain.Project
             }
             var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
             _commandManager.Execute(command);
+        }
+        public void ReplaceBreakpoint(LadderNetworkViewModel lnvmodel, BreakpointRect brect)
+        {
+            
         }
         public void UpdateModelMessageByNetwork()
         {
@@ -2081,8 +2111,17 @@ namespace SamSoarII.AppMain.Project
         /// <param name="copy">False = 剪切，True = 复制</param>
         private void CutCopyExecute(bool copy)
         {
+            NetworkChangeElementArea area = new NetworkChangeElementArea();
             if (SelectionStatus == SelectStatus.SingleSelected)
             {
+                area.SU_Select = SelectStatus.SingleSelected;
+                area.SU_Cross = CrossNetworkState.NoCross;
+                area.NetworkNumberStart = _selectRectOwner.NetworkNumber;
+                area.NetworkNumberEnd = area.NetworkNumberStart;
+                area.X1 = _selectRect.X;
+                area.Y1 = _selectRect.Y;
+                area.X2 = area.X1;
+                area.Y2 = area.Y1;
                 // 单元素复制
                 List<BaseViewModel> listele = new List<BaseViewModel>();
                 var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
@@ -2095,6 +2134,9 @@ namespace SamSoarII.AppMain.Project
                         _commandManager.Execute(command);
                     }
                     XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(listele, new List<VerticalLineViewModel>(), _selectRect.X, _selectRect.Y, 1, 1);
+                    XElement xele_area = new XElement("Area");
+                    area.Save(xele_area);
+                    xEle.Add(xele_area);
                     Clipboard.SetData("LadderContent", xEle.ToString());
                 }
             }
@@ -2102,7 +2144,6 @@ namespace SamSoarII.AppMain.Project
             {
                 if (SelectionStatus == SelectStatus.MultiSelected)
                 {
-                    NetworkChangeElementArea area = new NetworkChangeElementArea();
                     area.SU_Select = SelectionStatus;
                     area.SU_Cross = CrossNetState;
                     switch (CrossNetState)

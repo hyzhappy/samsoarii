@@ -322,8 +322,64 @@ namespace SamSoarII.Simulation.Core
         [DllImport("simu.dll", EntryPoint = "SetBaseBit")]
         private static extern void SetBaseBit(int basebit);
 
-        #endregion
+        /// <summary>
+        /// 得到子函数调用的次数
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("simu.dll", EntryPoint = "GetCallCount")]
+        private static extern int GetCallCount();
+
+        /// <summary>
+        /// 获得当前的断点地址
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("simu.dll", EntryPoint = "GetBPAddr")]
+        private static extern int GetBPAddr();
+
+        /// <summary>
+        /// 设置或取消一个普通断点
+        /// </summary>
+        /// <param name="bpaddr">断点地址</param>
+        /// <param name="islock">设置(1)或取消(0)</param>
+        [DllImport("simu.dll", EntryPoint = "SetBPAddr")]
+        private static extern void SetBPAddr(int bpaddr, int islock);
         
+        /// <summary>
+        /// 设置一个条件断点
+        /// </summary>
+        /// <param name="cpaddr">断点地址</param>
+        /// <param name="cpmsg">条件信息</param>
+        [DllImport("simu.dll", EntryPoint = "SetCPAddr")]
+        private static extern void SetCPAddr(int cpaddr, int cpmsg);
+
+        /// <summary>
+        /// 获取当前断点状态
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("simu.dll", EntryPoint = "GetBPPause")]
+        private static extern int GetBPPause();
+
+        /// <summary>
+        /// 设置当前断点状态（可以继续运行）
+        /// </summary>
+        /// <param name="bppause"></param>
+        [DllImport("simu.dll", EntryPoint = "SetBPPause")]
+        private static extern void SetBPPause(int bppause);
+
+        /// <summary>
+        /// 单步运行（不进入子程序）
+        /// </summary>
+        [DllImport("simu.dll", EntryPoint = "MoveStep")]
+        private static extern void MoveStep();
+
+        /// <summary>
+        /// 单步运行（进入子程序）
+        /// </summary>
+        [DllImport("simu.dll", EntryPoint = "CallStep")]
+        private static extern void CallStep();
+
+        #endregion
+
         /// <summary>
         /// 初始化构造函数
         /// </summary>

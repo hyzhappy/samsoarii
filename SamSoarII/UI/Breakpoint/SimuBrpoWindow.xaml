@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="SamSoarII.Simulation.UI.Breakpoint.SimuBrpoWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Breakpoint"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type local:SimuBrpoWindow}" MethodName="SelectedConditions">
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="5,4,5,4"></Setter>
+                    <Setter Property="FontSize" Value="16"></Setter>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0">
+                跳转
+            </Button>
+            <Button Grid.Row="0" Grid.Column="1">
+                启用/禁用
+            </Button>
+            <Button Grid.Row="0" Grid.Column="2">
+                解除
+            </Button>
+            <Button Grid.Row="0" Grid.Column="3">
+                全部解除
+            </Button>
+        </Grid>
+        <ScrollViewer Grid.Row="1" Grid.Column="0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <DataGrid ItemsSource="{Binding Items}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="启用/禁用" 
+                                        Binding="{Binding ActiveInfo}" IsReadOnly="True">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="程序" Width="120"
+                                        Binding="{Binding ProgramName}" IsReadOnly="True">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="指令" Width="200"
+                                        Binding="{Binding Instruction}" IsReadOnly="True">
+                    </DataGridTextColumn>
+                    <DataGridComboBoxColumn Header="中断条件" Width="60"
+                                            TextBinding="{Binding Condition, Mode=TwoWay}" IsReadOnly="True"
+                                            ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
+                    </DataGridComboBoxColumn>
+                    <DataGridTextColumn Header="执行次数" Width="60"
+                                        Binding="{Binding BreakTime, Mode=TwoWay}">
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

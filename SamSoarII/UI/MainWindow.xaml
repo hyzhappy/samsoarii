@@ -435,6 +435,10 @@
                             <ad:LayoutAnchorable x:Name="LAErrorList" Title="错误列表" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
+                        <ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorable x:Name="LABreakpoint" Title="断点">
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorGroup>
                     </ad:LayoutAnchorSide>
                 </ad:LayoutRoot.BottomSide>
                 <ad:LayoutRoot.RightSide>

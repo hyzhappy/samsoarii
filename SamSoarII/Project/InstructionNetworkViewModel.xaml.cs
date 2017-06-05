@@ -17,50 +17,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.AvalonDock.Controls;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace SamSoarII.AppMain.Project
 {
     /// <summary>
     /// InstructionViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class InstructionNetworkViewModel : UserControl, ITabItem
+    public partial class InstructionNetworkViewModel : UserControl
     {
-        public string TabHeader
-        {
-            get;
-            set;
-        }
-
-        protected double actualheight;
-        double ITabItem.ActualHeight
-        {
-            get
-            {
-                //return this.actualheight;
-                if (insts == null) return 20;
-                return 20 + 20 * insts.Count();
-            }
-
-            set
-            {
-                this.actualheight = value;
-            }
-        }
-
-        protected double actualwidth;
-        double ITabItem.ActualWidth
-        {
-            get
-            {
-                return this.actualwidth;
-            }
-
-            set
-            {
-                this.actualwidth = value;
-            }
-        }
-
         public const int STATUS_ACCEPT = 0x00;
         public const int STATUS_OPEN = 0x01;
         public const int STATUS_SHORT = 0x02;

@@ -19,6 +19,7 @@ using SamSoarII.Extend.FuncBlockModel;
 using System.Xml.Linq;
 using SamSoarII.Extend.Utility;
 using SamSoarII.UserInterface;
+using SamSoarII.Simulation.UI.Breakpoint;
 
 namespace SamSoarII.AppMain
 {
@@ -108,6 +109,11 @@ namespace SamSoarII.AppMain
         private ReplaceWindow _rwindow;
         private TextFindWindow _tfwindow;
         private TextReplaceWindow _trwindow;
+        private SimuBrpoWindow _bpwindow;
+        public SimuBrpoWindow BPWindow
+        {
+            get { return _bpwindow; }
+        }
 
         public InteractionFacade(MainWindow mainwindow)
         {
@@ -128,11 +134,13 @@ namespace SamSoarII.AppMain
             _rwindow = new ReplaceWindow(this);
             _tfwindow = new TextFindWindow(this);
             _trwindow = new TextReplaceWindow(this);
+            _bpwindow = new SimuBrpoWindow();
             mainwindow.GD_Find.Children.Add(_fwindow);
             mainwindow.GD_Find.Children.Add(_tfwindow);
             mainwindow.GD_Replace.Children.Add(_rwindow);
             mainwindow.GD_Replace.Children.Add(_trwindow);
             mainwindow.LAErrorList.Content = _erwindow;
+            mainwindow.LABreakpoint.Content = _bpwindow;
         }
 
         #region Check

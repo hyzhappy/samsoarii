@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.AvalonDock;
+using Xceed.Wpf.AvalonDock.Controls;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -23,14 +25,57 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class MainTabDiagramItem : UserControl, ITabItem, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        private static event PropertyChangedEventHandler StaticPropertyChanged;
+        private static event PropertyChangedEventHandler StaticPropertyChanged = delegate { };
 
         private void OnStaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             PropertyChanged(this, e);
         }
+
+        #region Floating
+
+        private bool isfloat;
+        public bool IsFloat {
+            get { return this.isfloat; }
+            set
+            {
+                this.isfloat = value;
+                if (LDVM_ladder != null)
+                    LDVM_ladder.IsFloat = value;
+            }
+        }
+        private LayoutFloatingWindow floatwindow;
+        public LayoutFloatingWindow FloatWindow
+        {
+            get { return this.floatwindow; }
+            set
+            {
+                this.floatwindow = value;
+                if (LDVM_ladder != null)
+                    LDVM_ladder.FloatWindow = value;
+            }
+        }
+        private LayoutFloatingWindowControl floatcontrol;
+        public LayoutFloatingWindowControl FloatControl
+        {
+            get { return this.floatcontrol; }
+            set
+            {
+                this.floatcontrol = value;
+                floatcontrol.Closed += OnFloatClosed;
+                if (LDVM_ladder != null)
+                    LDVM_ladder.FloatControl = value;
+            }
+        }
+        public event RoutedEventHandler FloatClosed = delegate { };
+        private void OnFloatClosed(object sender, EventArgs e)
+        {
+            FloatClosed(this, new RoutedEventArgs());
+        }
+
+        #endregion
 
         #region Numbers
 

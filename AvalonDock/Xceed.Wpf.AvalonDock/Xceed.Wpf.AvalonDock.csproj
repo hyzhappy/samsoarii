@@ -256,6 +256,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="TabItem\IProgram.cs" />
+    <Compile Include="TabItem\ITabItem.cs" />
     <Compile Include="Themes\GenericTheme.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Win32Helper.cs" />

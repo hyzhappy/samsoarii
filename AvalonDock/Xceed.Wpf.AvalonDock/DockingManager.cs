@@ -34,6 +34,7 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using Xceed.Wpf.AvalonDock.Commands;
 using Xceed.Wpf.AvalonDock.Themes;
+using SamSoarII.AppMain.Project;
 
 namespace Xceed.Wpf.AvalonDock
 {
@@ -1520,6 +1521,12 @@ namespace Xceed.Wpf.AvalonDock
 
         internal void StartDraggingFloatingWindowForContent(LayoutContent contentModel, bool startDrag = true)
         {
+            ITabItem titem = null;
+            if (contentModel.Content is ITabItem)
+            {
+                titem = (ITabItem)(contentModel.Content);
+                titem.IsFloat = true;
+            }
             if (!contentModel.CanFloat)
                 return;
             var contentModelAsAnchorable = contentModel as LayoutAnchorable;
@@ -1618,6 +1625,11 @@ namespace Xceed.Wpf.AvalonDock
 
             UpdateLayout();
 
+            if (titem != null)
+            {
+                titem.FloatWindow = fw;
+                titem.FloatControl = fwc;
+            }
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (startDrag)

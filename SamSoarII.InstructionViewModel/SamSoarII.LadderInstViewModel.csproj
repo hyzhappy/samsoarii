@@ -36,6 +36,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,6 +65,9 @@
     </Compile>
     <Compile Include="Base\VerticalLineViewModel.xaml.cs">
       <DependentUpon>VerticalLineViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BreakpointRect.xaml.cs">
+      <DependentUpon>BreakpointRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Catagory\Auxiliar\CMLDViewModel.cs" />
     <Compile Include="Catagory\Auxiliar\CMLViewModel.cs" />
@@ -277,6 +281,10 @@
     <Page Include="Base\VerticalLineViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BreakpointRect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Micro\MicroDiagramViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>

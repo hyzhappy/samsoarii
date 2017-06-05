@@ -100,6 +100,7 @@
     <Compile Include="Communication\USBManager.cs" />
     <Compile Include="Communication\Util\CommandHelper.cs" />
     <Compile Include="Communication\Util\CRC16.cs" />
+    <Compile Include="Event\BreakpointChangedEventArgs.cs" />
     <Compile Include="Event\LadderElementChangedArgs.cs" />
     <Compile Include="Event\RoutineChangedEventArgs.cs" />
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
     <Compile Include="LadderCommand\NetworkAddRowCommand.cs" />
     <Compile Include="LadderCommand\NetworkChangeElementArea.cs" />
+    <Compile Include="LadderCommand\NetworkReplaceBreakpointCommand.cs" />
     <Compile Include="LadderCommand\NetworkReplaceElementsCommand.cs" />
     <Compile Include="LadderCommand\CommandManager.cs" />
     <Compile Include="LadderCommand\NetworkRemoveRowCommand.cs" />
@@ -139,8 +141,6 @@
     <Compile Include="Project\InstructionNetworkViewModel.xaml.cs">
       <DependentUpon>InstructionNetworkViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\IProgram.cs" />
-    <Compile Include="Project\ITabItem.cs" />
     <Compile Include="Project\LadderDiagramViewModel.xaml.cs">
       <DependentUpon>LadderDiagramViewModel.xaml</DependentUpon>
     </Compile>
@@ -163,6 +163,10 @@
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="UI\Breakpoint\SimuBrpoElement.cs" />
+    <Compile Include="UI\Breakpoint\SimuBrpoWindow.xaml.cs">
+      <DependentUpon>SimuBrpoWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\CanExpandButton.cs" />
     <Compile Include="UI\Controls\LadderExpander.xaml.cs">
       <DependentUpon>LadderExpander.xaml</DependentUpon>
@@ -449,6 +453,10 @@
     <Page Include="Resources\ResourceDictionary\TabControlDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Breakpoint\SimuBrpoWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Controls\LadderExpander.xaml">
       <SubType>Designer</SubType>

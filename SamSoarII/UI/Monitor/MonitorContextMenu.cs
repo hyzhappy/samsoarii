@@ -10,6 +10,7 @@ using System.Windows;
 using SamSoarII.UserInterface;
 using SamSoarII.ValueModel;
 using SamSoarII.LadderInstViewModel.Monitor;
+using SamSoarII.AppMain.Project;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -17,6 +18,7 @@ namespace SamSoarII.AppMain.UI
     {
         public MenuItem[] MI_Values { get; private set; }
             = { new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem(), };
+        public MenuItem MI_Breakpoint = new MenuItem();
         public IValueModel[] values = new IValueModel[5];
         public IMoniValueModel[] mvalues = new IMoniValueModel[5];
         
@@ -37,6 +39,7 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private LadderNetworkViewModel lnvmodel;
         private BaseViewModel bvmodel;
         public BaseViewModel BVModel
         {
@@ -71,17 +74,31 @@ namespace SamSoarII.AppMain.UI
                     MI_Values[Count++].Header = String.Format("修改{0:s}", bmodel.GetPara(i).ValueString);
                 }
                 if (Count == 0) return;
+                if (lnvmodel.LadderMode == LadderMode.Simulate)
+                {
+                    MI_Breakpoint.Header = bvmodel.BPRect == null
+                        ? "添加断点" : "删除断点";
+                    MI_Breakpoint.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    MI_Breakpoint.Visibility = Visibility.Collapsed;
+                }
                 Visibility = System.Windows.Visibility.Visible;
             }
         }
         
-        public MonitorContextMenu()
+        public MonitorContextMenu(LadderNetworkViewModel _lnvmodel)
         {
+            lnvmodel = _lnvmodel;
             foreach (MenuItem MI_Value in MI_Values)
             {
                 Items.Add(MI_Value);
                 MI_Value.Click += OnMenuItemClick;
             }
+            Items.Add(new Separator());
+            Items.Add(MI_Breakpoint);
+            MI_Breakpoint.Click += OnMenuItemClick;
         }
 
         private void OnMenuItemClick(object sender, RoutedEventArgs e)
@@ -91,6 +108,18 @@ namespace SamSoarII.AppMain.UI
                 if (sender == MI_Values[i])
                 {
                     ShowModifyDialog(i);
+                }
+            }
+            if (sender == MI_Breakpoint)
+            {
+                switch (MI_Breakpoint.Header)
+                {
+                    case "添加断点":
+                        
+                        break;
+                    case "删除断点":
+
+                        break;
                 }
             }
         }

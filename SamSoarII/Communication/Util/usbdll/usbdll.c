@@ -9,11 +9,11 @@
 /** \def SAMSOAR_PLC_VENDOR
  * the VENDOR id of the currently linking PLC Device
  */
-#define SAMSOAR_PLC_VENDOR 0xffff
+#define SAMSOAR_PLC_VENDOR 0x04E8
 /** \def SAMSOAR_PLC_PRODUCT
  * the PRODUCT id of the currently linking PLC Device
  */
-#define SAMSOAR_PLC_PRODUCT 0xffff
+#define SAMSOAR_PLC_PRODUCT 0x5189
 
 /** \def DEVICE_ACTIVE
  * Error code : happened when (device != NULL) and try to create a new one.
@@ -68,6 +68,11 @@
  */
 #define ERROR_INIT 0x0d
 
+/** \def CANNOT_CLAIM_INTERFACE
+ * Error code : happened when cannot claim the interface
+ */
+#define CANNOT_CLAIM_INTERFACE 0x0e
+
 /** \def CANNOT_TRANSFER
  * The allowed maxinum time when Transfer.
  */
@@ -118,6 +123,10 @@ EXPORT int Open()
 		return CANNOT_GET_HANDLE;
 	}
 	libusb_free_device_list(devicelist, 1);
+	if (libusb_claim_interface(handle, 0) < 0)
+	{
+		return CANNOT_CLAIM_INTERFACE;
+	}
 	// normally return
 	return 0;
 }
@@ -134,41 +143,85 @@ EXPORT int Close()
 		return HANDLE_NULL;
 	}
 	libusb_close(handle);
+	libusb_exit(context);
 	handle = NULL;
 	return 0;
 }
 
-/** \name Transfer
- * Send / Receive a series of data to / from the PLC Device.
+/** \name Send
+ * Send a series of data to / from the PLC Device.
  *
  * \param data		the base address of data
  * \param length 	the length of data
  *
  * \return Error code when it happen, otherwise return 0 which means OK.  
  */
-EXPORT int Transfer(uint8_t* data, int len)
+EXPORT int Send(uint8_t* data, int len)
+{
+	Transfer(data, len, LIBUSB_ENDPOINT_OUT);
+}
+
+/** \name Receive
+ * Receive a series of data to / from the PLC Device.
+ *
+ * \param data		the base address of data
+ * \param length 	the length of data
+ *
+ * \return Error code when it happen, otherwise return 0 which means OK.  
+ */
+EXPORT int Receive(uint8_t* data, int len)
+{
+	Transfer(data, len, LIBUSB_ENDPOINT_IN);
+}
+
+/** \name Transfer
+ * Send & Receive a series of data to / from the PLC Device.
+ *
+ * \param data		the base address of data
+ * \param length 	the length of data
+ * \param endpoint  LIBUSB_ENDPOINT_OUT : send, LIBUSB_ENDPOINT_IN : receive
+ *
+ * \return Error code when it happen, otherwise return 0 which means OK.  
+ */
+EXPORT int Transfer(uint8_t* data, int len, int endpoint)
 {
 	if (handle == NULL)
 	{
 		return HANDLE_NULL;
 	}
+	if (libusb_kernel_driver_active(handle, 0) == 1)
+	{
+		libusb_detach_kernel_driver(handle, 0);
+	}
 	int retrycount = 0;		/* Retry count */
 	int pipe;				/* Pipe number */
 	int Transferred;		/* Transferred size of sent data*/
-	uint8_t endpoint = 0;	/* Endpoint */
+	int hastran = 0;
 	do /* Start of Transfer loop */
 	{
-		pipe = libusb_bulk_transfer(handle, endpoint, data, len, &Transferred, TIMEOUT);
+		pipe = libusb_bulk_transfer(handle, endpoint, data + hastran, len, &Transferred, TIMEOUT);
 		// Clear the endpoint halt
 		if (pipe == LIBUSB_ERROR_PIPE)
 		{
 			libusb_clear_halt(handle, endpoint);
+			retrycount++;
 		}
+		else
+		{
+			//data = data + Transferred;
+			len -= Transferred;
+			hastran += Transferred;
+			retrycount = 0;
+		}			
 	}
-	while ((pipe == LIBUSB_ERROR_PIPE) && (++retrycount <= RETRY_MAX));
+	while (len > 0 && retrycount <= RETRY_MAX);
 	// Retry it over the maxinum? 
 	if (retrycount > RETRY_MAX)
 	{
+		if (hastran == 3 && data[0] == 0x01 && data[1] == 0xfe)
+		{
+			return 0;
+		}
 		return CANNOT_TRANSFER;
 	}
 	return 0;
@@ -592,12 +645,12 @@ int _read
 		_get_crc((uint8_t*)rcmd2, sizeof(struct read_command2) - 2,
 			&(rcmd2->crc_low), &(rcmd2->crc_high));
 		// send the command
-		if (Transfer((uint8_t*)rcmd2, sizeof(struct read_command2)))
+		if (Send((uint8_t*)rcmd2, sizeof(struct read_command2)))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
 		// receive the report
-		if (Transfer((uint8_t*)rrpt2, sizeof(_rrpt2)))
+		if (Receive((uint8_t*)rrpt2, sizeof(_rrpt2)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -651,11 +704,11 @@ int _read
 		_get_crc((uint8_t*)rcmd2, sizeof(struct read_command1) - 2,
 			&(rcmd1->crc_low), &(rcmd1->crc_high));
 		// send the command, receive the report, get the info code
-		if (Transfer((uint8_t*)rcmd1, sizeof(struct read_command1)))
+		if (Send((uint8_t*)rcmd1, sizeof(struct read_command1)))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
-		if (Transfer((uint8_t*)rrpt1, sizeof(_rrpt1)))
+		if (Receive((uint8_t*)rrpt1, sizeof(_rrpt1)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -743,11 +796,11 @@ int _write
 		_get_crc((uint8_t*)wcmd2, cmd_length, cmd, cmd+1);
 		cmd_length += 2;
 		// USB Transfer
-		if (Transfer((uint8_t*)wcmd2, cmd_length))
+		if (Send((uint8_t*)wcmd2, cmd_length))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
-		if (Transfer((uint8_t*)wrpt2, sizeof(struct write_report2)))
+		if (Receive((uint8_t*)wrpt2, sizeof(struct write_report2)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -795,11 +848,11 @@ int _write
 			cmd, cmd+1);
 		cmd_length += 2;
 		// USB Transfers
-		if (Transfer((uint8_t*)wcmd1, cmd_length))
+		if (Send((uint8_t*)wcmd1, cmd_length))
 		{
 			return CANNOT_SEND_COMMAND;
 		}
-		if (Transfer((uint8_t*)wrpt1, sizeof(struct write_report1)))
+		if (Receive((uint8_t*)wrpt1, sizeof(struct write_report1)))
 		{
 			return CANNOT_RECV_REPORT;
 		}
@@ -1265,9 +1318,9 @@ EXPORT int Download
 	fclose(fbin);
 	fclose(fpro);
 	
-	ret = Transfer(data_bin, flbin);
+	ret = Send(data_bin, flbin);
 	if (ret != 0) return ret;
-	ret = Transfer(data_pro, flpro);
+	ret = Send(data_pro, flpro);
 	if (ret != 0) return ret;
 	return 0;
 }
