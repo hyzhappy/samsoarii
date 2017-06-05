@@ -26,6 +26,8 @@ using ICSharpCode.AvalonEdit.Document;
 using System.Text.RegularExpressions;
 using ICSharpCode.AvalonEdit;
 using SamSoarII.LadderInstViewModel;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock.Controls;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -52,10 +54,6 @@ namespace SamSoarII.AppMain.Project
         /// 父类
         /// </summary>
         private ProjectModel parent;
-        /// <summary>
-        /// 交互类
-        /// </summary>
-        private InteractionFacade ifacade;
         /// <summary>
         /// 函数块的逻辑模型
         /// </summary>
@@ -159,6 +157,28 @@ namespace SamSoarII.AppMain.Project
             }
         }
         
+        #region Floating
+
+        public bool IsFloat { get; set; }
+        public LayoutFloatingWindow FloatWindow { get; set; }
+        private LayoutFloatingWindowControl floatcontrol;
+        public LayoutFloatingWindowControl FloatControl
+        {
+            get { return this.floatcontrol; }
+            set
+            {
+                this.floatcontrol = value;
+                floatcontrol.Closed += OnFloatClosed;
+            }
+        }
+        public event RoutedEventHandler FloatClosed = delegate { };
+        private void OnFloatClosed(object sender, EventArgs e)
+        {
+            FloatClosed(this, new RoutedEventArgs());
+        }
+
+        #endregion
+
         /// <summary>
         /// 控件的实际宽度
         /// </summary>

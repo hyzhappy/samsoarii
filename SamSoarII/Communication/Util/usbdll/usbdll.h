@@ -15,7 +15,11 @@ EXPORT int Open();
 
 EXPORT int Close();
 
-EXPORT int Transfer(uint8_t* data, int len);
+EXPORT int Send(uint8_t* data, int len);
+
+EXPORT int Receive(uint8_t* data, int len);
+
+EXPORT int Transfer(uint8_t* data, int len, int endpoint);
 
 EXPORT void Config(int bit);
 

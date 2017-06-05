@@ -16,12 +16,12 @@ using SamSoarII.AppMain.UI.HelpDocComponet;
 using SamSoarII.HelpDocument.HelpDocComponet;
 using System.Windows.Media.Imaging;
 using SamSoarII.AppMain.UI.Style;
+using Xceed.Wpf.AvalonDock.Controls;
 
 namespace SamSoarII.AppMain.UI
 {
     public partial class MainTabControl : LayoutDocumentPane
     {
-
         #region Numbers
 
         #region View Mode
@@ -46,7 +46,9 @@ namespace SamSoarII.AppMain.UI
         #region Collections
 
         public ObservableCollection<ITabItem> TabItemCollection { get; set; } = new ObservableCollection<ITabItem>();
+        public ObservableCollection<ITabItem> FloatingCollection { get; set; } = new ObservableCollection<ITabItem>();
         public ObservableCollection<MainTabDiagramItem> DiagramCollection { get; set; } = new ObservableCollection<MainTabDiagramItem>();
+
         private Dictionary<ITabItem, LayoutDocument> _lDocDict = new Dictionary<ITabItem, LayoutDocument>();
 
         #endregion
@@ -82,6 +84,14 @@ namespace SamSoarII.AppMain.UI
 
         public void Reset()
         {
+            foreach (ITabItem item in TabItemCollection)
+            {
+                if (item.IsFloat)
+                {
+                    LayoutFloatingWindowControl fwctrl = item.FloatControl;
+                    fwctrl.Close();
+                }
+            }
             TabItemCollection.Clear();
             DiagramCollection.Clear();
             _lDocDict.Clear();
@@ -100,6 +110,7 @@ namespace SamSoarII.AppMain.UI
             if (!TabItemCollection.Contains(item))
             {
                 TabItemCollection.Add(item);
+                item.FloatClosed += OnTabFloatClosed;
                 ldoc = new LayoutDocument();
                 ldoc.Title = item.TabHeader;
                 if (item is LadderDiagramViewModel)
@@ -120,6 +131,12 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
+                    if (item.IsFloat)
+                    {
+                        LayoutFloatingWindowControl fwctrl = item.FloatControl;
+                        fwctrl.Focus();
+                        return;
+                    }
                     ldoc.Content = item;
                 }
                 ldoc.IsActiveChanged += OnActiveChanged;
@@ -153,13 +170,33 @@ namespace SamSoarII.AppMain.UI
         {
             if (_lDocDict.ContainsKey(item))
             {
+                item.FloatClosed -= OnTabFloatClosed;
                 LayoutDocument ldoc = _lDocDict[item];
-                Children.Remove(ldoc);
                 _lDocDict.Remove(item);
                 TabItemCollection.Remove(item);
+                if (item.IsFloat)
+                {
+                    LayoutFloatingWindowControl fwctrl = item.FloatControl;
+                    fwctrl.Close();
+                }
+                else
+                {
+                    Children.Remove(ldoc);
+                }
+                if (item is LadderDiagramViewModel)
+                {
+                    IEnumerable<MainTabDiagramItem> fit = DiagramCollection.Where(
+                        (MainTabDiagramItem _mtditem) => { return _mtditem.LDVM_ladder == item; });
+                    MainTabDiagramItem mtditem = null;
+                    if (fit.Count() > 0)
+                    { 
+                        mtditem = fit.First();
+                        DiagramCollection.Remove(mtditem);
+                    }
+                }
             }
         }
-
+        
         #region Event Handler
 
         public event Simulation.Shell.Event.ShowTabItemEventHandler ShowSimulateItem = delegate { };
@@ -218,6 +255,8 @@ namespace SamSoarII.AppMain.UI
             base.OnChildrenCollectionChanged();
             foreach (ITabItem tab in TabItemCollection)
             {
+                if (tab.IsFloat)
+                    continue;
                 if (!_lDocDict.ContainsKey(tab))
                     continue;
                 LayoutDocument ldoc = _lDocDict[tab];
@@ -247,6 +286,27 @@ namespace SamSoarII.AppMain.UI
         private void OnTabGotFocus(object sender, RoutedEventArgs e)
         {
             GotFocus(this, e);
+        }
+
+        private void OnTabFloatClosed(object sender, RoutedEventArgs e)
+        {
+            if (sender is MainTabDiagramItem)
+            {
+                MainTabDiagramItem mtditem = (MainTabDiagramItem)sender;
+                mtditem.IsFloat = false;
+                mtditem.FloatClosed -= OnTabFloatClosed;
+                DiagramCollection.Remove(mtditem);
+                TabItemCollection.Remove(mtditem.LDVM_ladder);
+                _lDocDict.Remove(mtditem.LDVM_ladder);
+            }
+            else
+            {
+                ITabItem titem = (ITabItem)sender;
+                titem.IsFloat = false;
+                titem.FloatClosed -= OnTabFloatClosed;
+                TabItemCollection.Remove(titem);
+                _lDocDict.Remove(titem);
+            }
         }
 
         #endregion

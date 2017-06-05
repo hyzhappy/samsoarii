@@ -50,7 +50,9 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACErrorList { get { return LAErrorList?.AnchorControl; } }
         public LayoutAnchorControl LACElemList { get { return LAElemList?.AnchorControl; } }
         public LayoutAnchorControl LACElemInit { get { return LAElemInit?.AnchorControl; } }
+        public LayoutAnchorControl LACBreakpoint { get { return LABreakpoint?.AnchorControl; } }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -77,7 +79,6 @@ namespace SamSoarII.AppMain.UI
         private void InitializeAvalonDock()
         {
             //DockManager.Theme = new VS2010Theme();
-
             LayoutSetting.Load();
             
             InitializeAvalonDock(LAProj);
@@ -87,6 +88,7 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAErrorList);
             InitializeAvalonDock(LAElemList);
             InitializeAvalonDock(LAElemInit);
+            InitializeAvalonDock(LABreakpoint);
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)

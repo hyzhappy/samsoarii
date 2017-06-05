@@ -838,10 +838,19 @@ namespace SamSoarII.Extend.Utility
         /// <param name="simumode">是否是仿真模式</param>
         static public void InstToCCode(StreamWriter sw, PLCInstruction inst, bool simumode = false)
         {
-            // 如果是仿真模式需要由写入使能作为条件
-            if (inst.EnBit != null && inst.EnBit.Length > 0)
+            int bp = 0;
+            // 如果是仿真模式
+            if (simumode)
             {
-                sw.Write("if (!({0:s})) \n{{\n", inst.EnBit);
+                // 断点循环
+                bp = BreakPointManager.Register();
+                inst.ProtoType.BPAddress = bp;
+                sw.Write("bpcycle({0});\n", bp);
+                // 需要由写入使能作为条件
+                if (inst.EnBit != null && inst.EnBit.Length > 0)
+                {
+                    sw.Write("if (!({0:s})) \n{{\n", inst.EnBit);
+                }
             }
             // 当前指令为LD类指令，记录栈内当前位置的合并方式
             if (inst.StackCalc != null)
@@ -1284,9 +1293,11 @@ namespace SamSoarII.Extend.Utility
                 break; 
             }
             // 如果是仿真模式需要对写入使能条件判断语句结尾
-            if (inst.EnBit != null && inst.EnBit.Length > 0)
+            if (simumode && inst.EnBit != null && inst.EnBit.Length > 0)
             {
                 sw.Write("}\n");
+                // 进入条件断点的循环
+                sw.Write("cpcycle({0}, _stack_{1});\n", bp, stackTop);
             }
         }
         /// <summary>

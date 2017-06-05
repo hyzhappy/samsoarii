@@ -151,6 +151,27 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
+        public void InitializeContextMenu()
+        {
+            ContextMenu = new ContextMenu();
+            if ((flags & ~0xf) != 0)
+            {
+                //this.ContextMenu = new ContextMenu();
+                ProjectMenuItem pmitem = null;
+                int _flags = FLAG_CREATEFOLDER;
+                while (_flags <= FLAG_CONFIG)
+                {
+                    if ((flags & _flags) != 0)
+                    {
+                        pmitem = new ProjectMenuItem(this, _flags);
+                        pmitem.Click += OnMenuItemClick;
+                        this.ContextMenu.Items.Add(pmitem);
+                    }
+                    _flags <<= 1;
+                }
+            }
+        }
+
         #region Flags
 
         public const int TYPE_ROOT = 0x0;
@@ -189,23 +210,6 @@ namespace SamSoarII.AppMain.UI
             set
             {
                 this.flags = value;
-                ContextMenu = new ContextMenu();
-                if ((flags & ~0xf) != 0)
-                {
-                    //this.ContextMenu = new ContextMenu();
-                    ProjectMenuItem pmitem = null;
-                    int _flags = FLAG_CREATEFOLDER;
-                    while (_flags <= FLAG_CONFIG)
-                    {
-                        if ((flags & _flags) != 0)
-                        {
-                            pmitem = new ProjectMenuItem(this, _flags);
-                            pmitem.Click += OnMenuItemClick;
-                            this.ContextMenu.Items.Add(pmitem);
-                        }
-                        _flags <<= 1;
-                    }
-                }
                 switch (flags & 0xf)
                 {
                     case TYPE_ROOT:
@@ -529,6 +533,8 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
         
+        
+
         public int CompareTo(ProjectTreeViewItem that)
         {
             int rank1 = 0;
@@ -651,6 +657,8 @@ namespace SamSoarII.AppMain.UI
         protected override void OnContextMenuOpening(ContextMenuEventArgs e)
         {
             base.OnContextMenuOpening(e);
+            if (ContextMenu == null)
+                InitializeContextMenu();
             if (ptview.Project.LadderMode != LadderMode.Edit
              || (Flags & ~0xf) == 0
              || HasRenaming)

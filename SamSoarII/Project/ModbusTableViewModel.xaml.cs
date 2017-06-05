@@ -21,6 +21,8 @@ using SamSoarII.ValueModel;
 using SamSoarII.PLCDevice;
 using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock.Controls;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -693,7 +695,29 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #endregion
-        
+
+        #region Floating
+
+        public bool IsFloat { get; set; }
+        public LayoutFloatingWindow FloatWindow { get; set; }
+        private LayoutFloatingWindowControl floatcontrol;
+        public LayoutFloatingWindowControl FloatControl
+        {
+            get { return this.floatcontrol; }
+            set
+            {
+                this.floatcontrol = value;
+                floatcontrol.Closed += OnFloatClosed;
+            }
+        }
+        public event RoutedEventHandler FloatClosed = delegate { };
+        private void OnFloatClosed(object sender, EventArgs e)
+        {
+            FloatClosed(this, new RoutedEventArgs());
+        }
+
+        #endregion
+
     }
 
     public class ModbusTableComboBoxItems

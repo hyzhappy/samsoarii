@@ -46,6 +46,9 @@ namespace SamSoarII.LadderInstViewModel
         public virtual string RefLadderName { get { return _refLadderName; } set { _refLadderName = value; } }
         public static NullViewModel Null { get { return _nullViewModel; } }
         private static NullViewModel _nullViewModel = new NullViewModel();
+        public int BPAddress { get; set; }
+        public BreakpointRect BPRect { get; set; }
+
         public BaseViewModel()
         {
             MouseDoubleClick += BaseViewModel_MouseDoubleClick;
