@@ -51,7 +51,7 @@
                 <Grid>
                     <Canvas x:Name="LadderCanvas" 
                         HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
-                        PreviewMouseDown="OnCanvasMouseDown" 
+                        PreviewMouseDown="OnCanvasMouseDown"
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                         <Canvas.ContextMenu>
                             <ContextMenu x:Name="CM_Edit" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">

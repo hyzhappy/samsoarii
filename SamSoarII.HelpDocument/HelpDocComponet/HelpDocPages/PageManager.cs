@@ -97,17 +97,36 @@ namespace SamSoarII.HelpDocument.HelpDocComponet.HelpDocPages
             _helpDocWindow.Loaded += _helpDocWindow_Loaded;
             _helpDocWindow.FuncGrid.SizeChanged += FuncGrid_SizeChanged;
         }
-        private void PrintPage_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void PrintExecute(object source,bool isRecursion)
         {
             PrintDialog dialog = new PrintDialog();
             if (dialog.ShowDialog() == true)
             {
-                
+
+            }
+        }
+        private void PrintPage_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            using (PrintWindow window = new PrintWindow())
+            {
+                window.EnsureButtonClick += (sender1, e1) =>
+                {
+                    PrintExecute(sender,window.IsRecursion);
+                    window.Close();
+                };
+                window.ShowDialog();
             }
         }
         private void PrintPage_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (sender == _helpDocWindow)
+                e.CanExecute = _helpDocWindow.MainTab.SelectedItem != null;
+            else if (sender == _helpDocTreeView)
+                e.CanExecute = _helpDocTreeView.CurrentItem != null;
+            else if (sender == _helpDocSearch)
+                e.CanExecute = _helpDocSearch.CurrentItem != null;
+            else
+                e.CanExecute = _helpDocFavorite.CurrentItem != null;
         }
         private void CollectCommand_CanExecute2(object sender, CanExecuteRoutedEventArgs e)
         {

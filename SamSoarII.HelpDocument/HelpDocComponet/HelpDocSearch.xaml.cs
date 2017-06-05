@@ -44,7 +44,13 @@ namespace SamSoarII.HelpDocument.HelpDocComponet
             InitializeComponent();
             DataContext = this;
         }
-
+        public HelpDocFrame CurrentItem
+        {
+            get
+            {
+                return CollectList.SelectedItem as HelpDocFrame;
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public event MouseButtonEventHandler ItemDoubleClick = delegate { };
         private void OnSearchTextChanged(object sender, TextChangedEventArgs e)

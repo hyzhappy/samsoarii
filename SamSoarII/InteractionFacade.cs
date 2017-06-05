@@ -924,29 +924,7 @@ namespace SamSoarII.AppMain
         }
         public void CreateProject(string name, string fullFileName)
         {
-            //if (_projectModel != null && _projectModel.IsModify)
-            //{
-            //    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
-            //    switch (mbret)
-            //    {
-            //        case MessageBoxResult.Yes:
-            //            SaveProject();
-            //            _projectModel.IsModify = false;
-            //            CreateProject(name, fullFileName);
-            //            return;
-            //        case MessageBoxResult.No:
-            //            _projectModel.IsModify = false;
-            //            CreateProject(name, fullFileName);
-            //            return;
-            //        case MessageBoxResult.Cancel:
-            //        default:
-            //            return;
-            //    }
-            //}
-            //else
-            //{
-                
-            //}
+            MainWindow.ResetDock();
             _projectModel = new ProjectModel(name);
             _projectModel.IFacade = this;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
@@ -982,6 +960,7 @@ namespace SamSoarII.AppMain
         }
         public void CloseCurrentProject()
         {
+            MainWindow.ResetDock();
             _projectTreeView.TabItemOpened -= OnTabOpened;
             _projectTreeView.PTVHandle += OnGotPTVHandle;
             _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
@@ -1019,6 +998,7 @@ namespace SamSoarII.AppMain
         }
         public bool LoadProject(string fileName)
         {
+            MainWindow.ResetDock();
             if (_projectModel != null)
             {
                 _projectModel.autoSavedManager.Abort();

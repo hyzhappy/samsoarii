@@ -23,7 +23,7 @@
             <Button x:Name="HelpButton" Width="70" Height="24" Margin="15,0,0,0" Click="OnHelpButtonClick">帮助</Button>
         </StackPanel>
         <Grid>
-            <local:PopupNotTop x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" HorizontalOffset="0" IsOpen="False" Topmost="False">
+            <local:PopupNotTop x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" VerticalOffset="-29" HorizontalOffset="-5" IsOpen="False" Topmost="False">
                 <Border BorderBrush="Beige" BorderThickness="3" Width="600" Height="150">
                     <Grid x:Name="TBPGrid" Background="Ivory">
                         <Grid.Resources>
@@ -56,7 +56,7 @@
                     </Grid>
                 </Border>
             </local:PopupNotTop>
-            <local:PopupNotTop x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="40" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
+            <local:PopupNotTop x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="44" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
                     <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
                         <local:CollectionStackPanel.Resources>

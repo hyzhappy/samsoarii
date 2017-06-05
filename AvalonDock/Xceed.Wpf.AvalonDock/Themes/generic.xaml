@@ -453,7 +453,7 @@
     </Style>
 
     <DataTemplate x:Key="DocumentHeaderTemplate">
-        <TextBlock Text="{Binding Title}"></TextBlock>
+        <TextBlock HorizontalAlignment="Center" Text="{Binding Title}"></TextBlock>
     </DataTemplate>
 
     <DataTemplate x:Key="AnchorableHeaderTemplate">

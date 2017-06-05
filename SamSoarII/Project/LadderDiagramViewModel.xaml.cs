@@ -335,7 +335,6 @@ namespace SamSoarII.AppMain.Project
             _projectModel = _parent;
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
-            //this.Loaded += OnLoaded;
             _commandManager = new LadderCommand.CommandManager(this);
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
@@ -358,7 +357,6 @@ namespace SamSoarII.AppMain.Project
         private void InitializeInstructionNameAndToolTips()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            //Console.WriteLine(assembly.GetManifestResourceNames());
             Stream stream = assembly.GetManifestResourceStream("SamSoarII.AppMain.Resources.InstructionPopup.xml");
             Dictionary<string, List<string>> tempDic = new Dictionary<string, List<string>>();
             XDocument xDoc = XDocument.Load(stream);
@@ -1104,7 +1102,7 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Instruction relative
-        private void ShowInstructionInputDialog(string initialString)
+        public void ShowInstructionInputDialog(string initialString)
         {
             IEnumerable<string> subdiagramNames = _projectModel.SubRoutines.Select(
                 (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName; });

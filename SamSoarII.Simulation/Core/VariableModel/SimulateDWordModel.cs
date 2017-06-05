@@ -41,14 +41,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         {
             try
             {
-                if (ValueParser.ParseDoubleWordValue(_name) != DoubleWordValue.Null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
             catch (ValueParseException e)
             {

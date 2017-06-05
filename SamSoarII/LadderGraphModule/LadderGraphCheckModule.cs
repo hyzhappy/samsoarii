@@ -123,7 +123,6 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     tempQueue.Enqueue(item);
                 }
             }
-            //return !(IsAllLinkedToRoot(ladderNetwork) && CheckSpecialModel(ladderNetwork) && CheckSelfLoop(ladderNetwork) && CheckHybridLink(ladderNetwork) && CheckElements(ladderNetwork));
             return false;
         }
         //短路检测

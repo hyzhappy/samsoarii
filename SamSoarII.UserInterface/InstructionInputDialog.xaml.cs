@@ -139,7 +139,7 @@ namespace SamSoarII.UserInterface
             DataContext = this;
             OpenTimer.Interval = TimeSpan.FromSeconds(0.7);
             OpenTimer.Tick += OpenTimer_Tick;
-            Loaded += OnWindowLoaded; 
+            Loaded += OnWindowLoaded;
         }
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
@@ -232,12 +232,12 @@ namespace SamSoarII.UserInterface
             if (TextBoxPopup.IsOpen)
             {
                 TextBoxPopup.Placement = PlacementMode.Absolute;
-                TextBoxPopup.VerticalOffset = window.Top - 60;
-                TextBoxPopup.HorizontalOffset = window.Left + 128;
+                TextBoxPopup.VerticalOffset = window.Top - 150;
+                TextBoxPopup.HorizontalOffset = window.Left;
             }
             SelectCollectionPopup.Placement = PlacementMode.Absolute;
             SelectCollectionPopup.VerticalOffset = window.Top + 69;
-            SelectCollectionPopup.HorizontalOffset = window.Left + 40;
+            SelectCollectionPopup.HorizontalOffset = window.Left + 44;
             ItemPopup.IsOpen = false;
         }
         
@@ -351,7 +351,7 @@ namespace SamSoarII.UserInterface
                     }
                     if (!TextBoxPopup.IsOpen)
                     {
-                        TextBoxPopup.VerticalOffset = -29;
+                        //TextBoxPopup.VerticalOffset = -29;
                         TextBoxPopup.IsOpen = true;
                     }
                 }
@@ -390,17 +390,8 @@ namespace SamSoarII.UserInterface
             if (label != null)
             {
                 RemovePopup();
-                System.Windows.Media.Color color = new System.Windows.Media.Color();
-                color.A = 255;
-                color.R = 255;
-                color.G = 255;
-                color.B = 255;
-                label.Background = new SolidColorBrush(color);
-                color.A = 255;
-                color.R = 0;
-                color.G = 0;
-                color.B = 0;
-                label.Foreground = new SolidColorBrush(color);
+                label.Background = System.Windows.Media.Brushes.White;
+                label.Foreground = System.Windows.Media.Brushes.Black;
                 label.FontWeight = FontWeights.Normal;
             }
         }
@@ -507,7 +498,7 @@ namespace SamSoarII.UserInterface
                 int interval = index - offset;
                 ItemPopup.PlacementTarget = window;
                 ItemPopup.Placement = PlacementMode.Absolute;
-                ItemPopup.HorizontalOffset = window.Left + 340;
+                ItemPopup.HorizontalOffset = window.Left + 344;
                 ItemPopup.VerticalOffset = window.Top + 69 + interval * 20;
                 SetPopupOpen(label);
             }

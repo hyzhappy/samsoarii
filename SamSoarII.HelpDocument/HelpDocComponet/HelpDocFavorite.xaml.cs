@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.HelpDocument.HelpDocComponet.HelpDocPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,13 @@ namespace SamSoarII.HelpDocument.HelpDocComponet
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ItemDoubleClick.Invoke(sender, e);
+        }
+        public HelpDocFrame CurrentItem
+        {
+            get
+            {
+                return CollectList.SelectedItem as HelpDocFrame;
+            }
         }
     }
 }

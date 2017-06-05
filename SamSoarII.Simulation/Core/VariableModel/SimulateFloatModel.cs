@@ -33,19 +33,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
 
         protected override bool _Check_Name(string _name)
         {
-            Match m1 = Regex.Match(_name, @"^(K|D)(\d+)$");
-            if (!m1.Success) return false;
-            string _base = m1.Groups[1].Value;
-            int _offset = int.Parse(m1.Groups[2].Value);
-            switch (_base)
-            {
-                case "K":
-                    return true;
-                case "D":
-                    return true;
-                default:
-                    return false;
-            }
+            return true;
         }
 
         public override string ToString()

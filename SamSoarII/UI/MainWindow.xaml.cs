@@ -194,7 +194,7 @@ namespace SamSoarII.AppMain.UI
             {
                 if (_interactionFacade.ProjectLoaded && projectMessage.Value.Item1 == _interactionFacade.ProjectModel.ProjectName)
                 {
-                    MessageBox.Show(string.Format("the opening project is current project"));
+                    MessageBox.Show("工程文件已加载!");
                 }
                 else
                 {
@@ -276,7 +276,13 @@ namespace SamSoarII.AppMain.UI
             LACProj.Show();
             return ret;
         }
-
+        public void ResetDock()
+        {
+            foreach (var window in new List<Window>(DockManager.FloatingWindows))
+            {
+                window.Close();
+            }
+        }
         public MessageBoxResult ShowSaveYesNoCancelDialog()
         {
             string title = "确认保存";
@@ -818,6 +824,11 @@ namespace SamSoarII.AppMain.UI
             openFileDialog.Filter = "ssp文件|*.ssp";
             if (openFileDialog.ShowDialog() == true)
             {
+                if (_interactionFacade.ProjectFullFileName == openFileDialog.FileName)
+                {
+                    MessageBox.Show("工程文件已加载!");
+                    return;
+                }
                 if (!OpenProject(openFileDialog.FileName))
                 {
                     MessageBox.Show("不正确的工程文件，工程文件已损坏!");

@@ -509,7 +509,6 @@ namespace SamSoarII.AppMain.Project
             ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
             CM_Monitor.ValueModify += OnMonitorValueModify;
         }
-        
         public IEnumerable<BaseViewModel> GetElements()
         {
             return _ladderElements.Values;
@@ -577,11 +576,11 @@ namespace SamSoarII.AppMain.Project
         #region generate LadderLogicModule
         public void InitializeLadderLogicModules()
         {
-            int cnt = 0;
+            int cnt = 0,maxY = GetMaxY();
             List<BaseViewModel> models = new List<BaseViewModel>();
             List<VerticalLineViewModel> vlines = new List<VerticalLineViewModel>();
             LadderLogicModules = new Dictionary<int, LadderLogicModule>();
-            for (int i = 0; i <= GetMaxY(); i++)
+            for (int i = 0; i <= maxY; i++)
             {
                 var tempmodels = GetElements().Where(x => { return x.Y == i; });
                 var tempvlines = GetVerticalLines().Where(x => { return x.Y == i; });
@@ -595,7 +594,7 @@ namespace SamSoarII.AppMain.Project
                     else
                     {
                         LadderLogicModules.Add(cnt,new LadderLogicModule(this,models,vlines));
-                        if (i < GetMaxY())
+                        if (i < maxY)
                         {
                             cnt++;
                             models = new List<BaseViewModel>();
@@ -1163,7 +1162,6 @@ namespace SamSoarII.AppMain.Project
         {
             EditComment();
         }
-
         public void EditComment()
         {
             if (!IsMasked)
@@ -1185,6 +1183,16 @@ namespace SamSoarII.AppMain.Project
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
             AcquireSelectRect(e);
+            if (e.ClickCount == 2 && LadderMode == LadderMode.Edit)
+            {
+                var pos = e.GetPosition(LadderCanvas);
+                var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
+                var ele = GetElementByPosition(intPoint.X,intPoint.Y);
+                if (ele == null || ele.Type == ElementType.HLine || ele.Type == ElementType.Special)
+                {
+                    _ladderDiagram.ShowInstructionInputDialog("");
+                }
+            }
         }
 
         protected override void OnDragOver(DragEventArgs e)
@@ -1434,7 +1442,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch(KeyNotFoundException)
                     {
-                    } 
+                    }
                 }
             }
             return result;
@@ -1664,7 +1672,5 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-
-
     }
 }

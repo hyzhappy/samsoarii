@@ -32,21 +32,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
         }
         protected override bool _Check_Name(string _name)
         {
-            try
-            {
-                if (ValueParser.ParseWordValue(_name) != WordValue.Null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (ValueParseException e)
-            {
-                return false;
-            }
+            return true;
         }
         public override string ToString()
         {

@@ -26,6 +26,13 @@ namespace SamSoarII.HelpDocument.HelpDocComponet
         {
             InitializeComponent();
         }
+        public HelpDocTreeItem CurrentItem
+        {
+            get
+            {
+                return HelpDocTree.SelectedItem as HelpDocTreeItem;
+            }
+        }
         private void OnOpenAll(object sender, RoutedEventArgs e)
         {
             foreach (var item in HelpDocTree.Items)

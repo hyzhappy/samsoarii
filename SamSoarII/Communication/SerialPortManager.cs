@@ -327,9 +327,16 @@ namespace SamSoarII.Communication
                 while (readbuffercount != 8 && recvcount < 5);
                 if (readbuffercount == 8)
                 {
-                    port.Read(new byte[8],0, readbuffercount);
+                    byte[] tempdata = new byte[8];
+                    port.Read(tempdata, 0, readbuffercount);
                     readbuffercount = 0;
-                    return true;
+                    if (tempdata[0] == 0x01 && tempdata[1] == 0xFE && tempdata[2] == 0x01 && tempdata[3] == 0x00 && tempdata[4] == 0x01)
+                        return true;
+                    else
+                    {
+                        port.Close();
+                        return false;
+                    }
                 }
             }
             catch (TimeoutException)

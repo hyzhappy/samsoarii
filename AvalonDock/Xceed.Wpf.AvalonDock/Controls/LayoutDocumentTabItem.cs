@@ -36,6 +36,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         public LayoutDocumentTabItem()
         {
+            
         }
 
         #region Model
