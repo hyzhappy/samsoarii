@@ -40,9 +40,10 @@ namespace SamSoarII.Utility
             count += ChineseCharCount(value);
             if (count > MaxCapacity)
             {
-                int TruncNum = count - MaxCapacity + 3;
+                bool isUNCPath = IsUNCPath(value);
+                int TruncNum = isUNCPath ? count - MaxCapacity + 5 : count - MaxCapacity + 3;
                 List<string> segments = value.Split(new char[] { Path.DirectorySeparatorChar },StringSplitOptions.RemoveEmptyEntries).ToList();
-                string first = segments.First();
+                string first = isUNCPath ? @"\\" + segments.First(): segments.First();
                 string last = segments.Last();
                 if (segments.Count == 2)
                 {
@@ -87,6 +88,10 @@ namespace SamSoarII.Utility
                 }
             }
             return value;
+        }
+        private static bool IsUNCPath(string path)
+        {
+            return path.StartsWith(@"\\");
         }
         private static int ChineseCharCount(string value)
         {

@@ -350,7 +350,7 @@
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray DockPanel.Dock="Top" Height="25">
-            <ToolBar Style="{x:Null}" x:Name="ShortCutToolBar">
+            <ToolBar x:Name="ShortCutToolBar">
                 <Button VerticalAlignment="Top" Tag="200" Click="OnClick" ToolTip="常开触点" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource OpenContact}"></Button>
                 <Button VerticalAlignment="Top" Tag="202" Click="OnClick" ToolTip="立即常开" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource OpenContactIM}"></Button>
                 <Button VerticalAlignment="Top" Tag="201" Click="OnClick" ToolTip="常闭" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource CloseContact}"></Button>
@@ -367,7 +367,7 @@
                 <Button VerticalAlignment="Top" Tag="10" Click="OnClick" ToolTip="横线删除" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource HLineCancel}"></Button>
                 <Button VerticalAlignment="Top" Tag="11" Click="OnClick" ToolTip="竖线删除" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource VLineCancel}"></Button>
             </ToolBar>
-            <ToolBar Style="{x:Null}" x:Name="SettingToolBar">
+            <ToolBar x:Name="SettingToolBar">
                 <Button ToolTip="通信设置" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}">
                     <Image Source="/Resources/Image/CommunicationSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
