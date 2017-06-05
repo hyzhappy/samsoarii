@@ -155,8 +155,8 @@ namespace SamSoarII.AppMain.UI
             if (!GlobalSetting.LoadLadderScaleSuccess())
             {
                 ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(MainTab);
-                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 3700;
-                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 3700;
+                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 4400;
+                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 4400;
             }
             MainScroll = GetMainScroll();
             BackgroundWorker worker = new BackgroundWorker();

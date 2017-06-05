@@ -29,7 +29,9 @@ namespace SamSoarII.AppMain.UI
                 rootNode.Add(new XElement("SimulateSetting"));
                 xDoc.Add(rootNode);
                 Directory.CreateDirectory(dir);
-                xDoc.Save(File.Create(path));
+                FileStream stream = File.Create(path);
+                xDoc.Save(stream);
+                stream.Close();
             }
         }
         public static void Load()

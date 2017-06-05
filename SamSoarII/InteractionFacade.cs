@@ -1039,6 +1039,7 @@ namespace SamSoarII.AppMain
             ProjectFullFileName = fileName;
             _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
             UpdateRefNetworksBrief(_projectModel);
+            ProjectFileManager.Update(_projectModel.ProjectName, ProjectFullFileName);
             return true;
         }
         private void UpdateRefNetworksBrief(ProjectModel projectModel)

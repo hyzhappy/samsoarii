@@ -45,7 +45,9 @@ namespace SamSoarII.Communication
 
         public int Read(ICommunicationCommand cmd)
         {
-            return Transfer(readbuffer, 1024);   
+            int retcode = Transfer(readbuffer, 1024);
+            cmd.RetData = readbuffer;
+            return retcode;
         }
     }
 }

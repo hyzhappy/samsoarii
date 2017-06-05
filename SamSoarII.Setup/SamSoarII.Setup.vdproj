@@ -753,12 +753,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_561AA6C225394430ADE223B0698B7905"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_571CC2E7CFB34F60B7E2E8B2511BCC27"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -820,12 +814,6 @@
         "Entry"
         {
         "MsmKey" = "8:_5D4744E3A82B4FA5876DF977A9B20C28"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5E40F2B96BF645238B6D79F5AE066A8D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1791,6 +1779,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_DCC47B7D9F1F48668B73DA9684FC0E6C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DDC7D518C37B4B8C9A8F7D96F180972E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1882,12 +1876,6 @@
         "Entry"
         {
         "MsmKey" = "8:_E71FE81329A249D58D471CDEA0A6630C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E7465E2FE86348938933AFE0EE89FC1D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -4758,26 +4746,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_561AA6C225394430ADE223B0698B7905"
-            {
-            "SourcePath" = "8:..\\..\\..\\Samkoon\\SamSoarII\\Debug\\UserSetting\\FavoritePages.xml"
-            "TargetName" = "8:FavoritePages.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_E63359F38B574070878A28ECE2A49049"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_571CC2E7CFB34F60B7E2E8B2511BCC27"
             {
             "SourcePath" = "8:..\\..\\..\\..\\软件\\tcc\\include\\stdbool.h"
@@ -4984,26 +4952,6 @@
             "TargetName" = "8:ld.exe"
             "Tag" = "8:"
             "Folder" = "8:_FE0D0B4C6BB2487297376CFFD1203FA9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5E40F2B96BF645238B6D79F5AE066A8D"
-            {
-            "SourcePath" = "8:..\\..\\..\\Samkoon\\SamSoarII\\Debug\\plcusb.dll"
-            "TargetName" = "8:plcusb.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8126,6 +8074,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DCC47B7D9F1F48668B73DA9684FC0E6C"
+            {
+            "SourcePath" = "8:..\\..\\..\\Samkoon\\SamSoarII\\Debug\\plcusb.dll"
+            "TargetName" = "8:plcusb.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DDC7D518C37B4B8C9A8F7D96F180972E"
             {
             "SourcePath" = "8:..\\..\\..\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\libgen.h"
@@ -8432,26 +8400,6 @@
             "TargetName" = "8:math.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E7465E2FE86348938933AFE0EE89FC1D"
-            {
-            "SourcePath" = "8:..\\..\\..\\Samkoon\\SamSoarII\\Debug\\UserSetting\\UserSetting.xml"
-            "TargetName" = "8:UserSetting.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_E63359F38B574070878A28ECE2A49049"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
