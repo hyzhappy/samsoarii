@@ -844,8 +844,11 @@ namespace SamSoarII.Extend.Utility
             {
                 // 断点循环
                 bp = BreakPointManager.Register();
-                inst.ProtoType.BPAddress = bp;
-                sw.Write("bpcycle({0});\n", bp);
+                if (inst.ProtoType != null)
+                {
+                    inst.ProtoType.BPAddress = bp;
+                    sw.Write("bpcycle({0});\n", bp);
+                }
                 // 需要由写入使能作为条件
                 if (inst.EnBit != null && inst.EnBit.Length > 0)
                 {
@@ -1297,7 +1300,8 @@ namespace SamSoarII.Extend.Utility
             {
                 sw.Write("}\n");
                 // 进入条件断点的循环
-                sw.Write("cpcycle({0}, _stack_{1});\n", bp, stackTop);
+                if (inst.ProtoType != null)
+                    sw.Write("cpcycle({0}, _stack_{1});\n", bp, stackTop);
             }
         }
         /// <summary>

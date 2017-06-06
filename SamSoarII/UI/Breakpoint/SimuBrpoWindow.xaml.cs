@@ -37,7 +37,5 @@ namespace SamSoarII.Simulation.UI.Breakpoint
         {
             get { return new string[]{"无", "0", "1", "上升沿", "下降沿", "边沿" }; }
         }
-
-        
     }
 }

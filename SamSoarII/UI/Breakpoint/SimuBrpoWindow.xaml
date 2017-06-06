@@ -58,7 +58,7 @@
                     </DataGridTextColumn>
                     <DataGridComboBoxColumn Header="中断条件" Width="60"
                                             TextBinding="{Binding Condition, Mode=TwoWay}" IsReadOnly="True"
-                                            ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
+                                            ItemsSource="{Binding SelectedConditions,Mode=OneWay}">
                     </DataGridComboBoxColumn>
                     <DataGridTextColumn Header="执行次数" Width="60"
                                         Binding="{Binding BreakTime, Mode=TwoWay}">

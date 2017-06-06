@@ -20,6 +20,7 @@ namespace SamSoarII.Communication
     }
     public class CommunicationDataDefine
     {
+        public const byte USB_MAX_READ_LEN = 0x40;
         /* FGs_Connect Macro Define
          * 
          */

@@ -184,7 +184,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             _Thread_Alive = false;
             IsRunning = false;
             Aborted(this, new RoutedEventArgs());
-
         }
 
         #endregion
@@ -370,32 +369,16 @@ namespace SamSoarII.AppMain.UI.Monitor
         private void Force(ElementModel element, byte value)
         {
             if (element.IsIntrasegment)
-            {
-                IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { value }, element);
-                //command.RefElement = element;
-                Add(command);
-            }
+                Add(new IntrasegmentWriteCommand(new byte[] { value }, element));
             else
-            {
-                GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
-                //command.RefElements_A.Add(element);
-                Add(command);
-            }
+                Add(new GeneralWriteCommand(new byte[] { value }, element));
         }
         private void Write(ElementModel element, byte value)
         {
             if (element.IsIntrasegment)
-            {
-                IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(new byte[] { value }, element);
-                //command.RefElement = element;
-                Add(command);
-            }
+                Add(new IntrasegmentWriteCommand(new byte[] { value }, element));
             else
-            {
-                GeneralWriteCommand command = new GeneralWriteCommand(new byte[] { value }, element);
-                //command.RefElements_A.Add(element);
-                Add(command);
-            }
+                Add(new GeneralWriteCommand(new byte[] { value }, element));
         }
 
         private void Write(ElementModel element, string value)
@@ -437,13 +420,11 @@ namespace SamSoarII.AppMain.UI.Monitor
             if (element.IsIntrasegment)
             {
                 IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, element);
-                //command.RefElement = element;
                 Add(command);
             }
             else
             {
                 GeneralWriteCommand command = new GeneralWriteCommand(data, element);
-                //command.RefElements_A.Add(element);
                 Add(command);
             }
         }
@@ -750,7 +731,8 @@ namespace SamSoarII.AppMain.UI.Monitor
                 throw new NotSupportedException("Unsupported operation : directly add a read command.");
             }
             if (cmd is GeneralWriteCommand
-             || cmd is IntrasegmentWriteCommand)
+             || cmd is IntrasegmentWriteCommand
+             || cmd is ForceCancelCommand)
             {
                 if (_Thread_IsActive)
                 {

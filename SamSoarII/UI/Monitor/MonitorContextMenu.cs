@@ -112,7 +112,7 @@ namespace SamSoarII.AppMain.UI
             }
             if (sender == MI_Breakpoint)
             {
-                switch (MI_Breakpoint.Header)
+                switch (MI_Breakpoint.Header.ToString())
                 {
                     case "添加断点":
                         

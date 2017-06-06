@@ -26,7 +26,7 @@ namespace SamSoarII.Communication.Command
         }
         public int RecvDataLen
         {
-            get { return 3; } set { }
+            get { return 2; } set { }
         }
         public void InitializeCommandByElement()
         {
@@ -37,7 +37,7 @@ namespace SamSoarII.Communication.Command
             }
             else
             {
-                startLowAddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr)[0];
+                startLowAddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr)[1];
             }
         }
         private void GenerateCommand()
