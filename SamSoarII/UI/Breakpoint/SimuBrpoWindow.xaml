@@ -6,49 +6,80 @@
              xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Breakpoint"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:SimuBrpoWindow.JumpCommand}" 
+                        CanExecute="OnJumpCommandCanExecuted" 
+                        Executed="OnJumpCommandExecuted">
+        </CommandBinding>
+        <CommandBinding Command="{x:Static local:SimuBrpoWindow.ActiveSwapCommand}" 
+                        CanExecute="OnActiveSwapCommandCanExecuted" 
+                        Executed="OnActiveSwapCommandExecuted">
+        </CommandBinding>
+        <CommandBinding Command="{x:Static local:SimuBrpoWindow.ReleaseCommand}"
+                        CanExecute="OnReleaseCommandCanExecuted"
+                        Executed="OnReleaseCommandExecuted">
+        </CommandBinding>
+        <CommandBinding Command="{x:Static local:SimuBrpoWindow.ReleaseAllCommand}"
+                        CanExecute="OnReleaseAllCommandCanExecuted"
+                        Executed="OnReleaseAllCommandExecuted">
+        </CommandBinding>
+    </UserControl.CommandBindings>
     <UserControl.Resources>
-        <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type local:SimuBrpoWindow}" MethodName="SelectedConditions">
+        <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type local:SimuBrpoConditionProvider}" MethodName="SelectedConditions">
         </ObjectDataProvider>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="28"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.Resources>
                 <Style TargetType="{x:Type Button}">
-                    <Setter Property="Margin" Value="5,4,5,4"></Setter>
-                    <Setter Property="FontSize" Value="16"></Setter>
+                    <Setter Property="Height" Value="20"></Setter>
+                    <Setter Property="Width" Value="80"></Setter>
+                    <Setter Property="FontSize" Value="12"></Setter>
+                    <Setter Property="Margin" Value="10,0,10,0"></Setter>
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="0">
+            <Button Grid.Row="0" Grid.Column="0" 
+                    Command="{x:Static local:SimuBrpoWindow.JumpCommand}">
                 跳转
             </Button>
-            <Button Grid.Row="0" Grid.Column="1">
+            <Button Grid.Row="0" Grid.Column="1" 
+                    Command="{x:Static local:SimuBrpoWindow.ActiveSwapCommand}">
                 启用/禁用
             </Button>
-            <Button Grid.Row="0" Grid.Column="2">
+            <Button Grid.Row="0" Grid.Column="2"
+                    Command="{x:Static local:SimuBrpoWindow.ReleaseCommand}">
                 解除
             </Button>
-            <Button Grid.Row="0" Grid.Column="3">
+            <Button Grid.Row="0" Grid.Column="3"
+                    Command="{x:Static local:SimuBrpoWindow.ReleaseAllCommand}">
                 全部解除
             </Button>
         </Grid>
         <ScrollViewer Grid.Row="1" Grid.Column="0"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
-            <DataGrid ItemsSource="{Binding Items}">
+            <DataGrid x:Name="DG_Main" ItemsSource="{Binding Items}"
+                      AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False"
+                      SelectionChanged="DG_Main_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="启用/禁用" 
                                         Binding="{Binding ActiveInfo}" IsReadOnly="True">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Setter Property="Foreground" Value="{Binding ActiveBrush}"></Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="程序" Width="120"
                                         Binding="{Binding ProgramName}" IsReadOnly="True">
@@ -57,8 +88,8 @@
                                         Binding="{Binding Instruction}" IsReadOnly="True">
                     </DataGridTextColumn>
                     <DataGridComboBoxColumn Header="中断条件" Width="60"
-                                            TextBinding="{Binding Condition, Mode=TwoWay}" IsReadOnly="True"
-                                            ItemsSource="{Binding SelectedConditions,Mode=OneWay}">
+                                            TextBinding="{Binding Condition}" IsReadOnly="False"
+                                            ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
                     </DataGridComboBoxColumn>
                     <DataGridTextColumn Header="执行次数" Width="60"
                                         Binding="{Binding BreakTime, Mode=TwoWay}">

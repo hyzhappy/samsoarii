@@ -47,14 +47,21 @@ namespace SamSoarII.AppMain.LadderCommand
             RedoStack.Clear();
         }
 
-        public void Execute(IUndoableCommand command)
+        public bool AssertEdit(IUndoableCommand command)
         {
-            if (ldvmodel != null 
-             && ldvmodel.LadderMode != LadderMode.Edit)
+            if (ldvmodel != null
+             && ldvmodel.LadderMode != LadderMode.Edit
+             && !(command is NetworkReplaceBreakpointCommand))
             {
                 MessageBox.Show("当前模式不能对梯形图进行修改，请先切换到编辑模式！");
-                return;
+                return false;
             }
+            return true;
+        }
+
+        public void Execute(IUndoableCommand command)
+        {
+            if (!AssertEdit(command)) return;
             command.Execute();
             InvokeLDNetworksChangedEvent(command);
             UndoStack.Push(command);
@@ -64,15 +71,11 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
-            if (ldvmodel != null
-             && ldvmodel.LadderMode != LadderMode.Edit)
-            {
-                MessageBox.Show("当前模式不能对梯形图进行修改，请先切换到编辑模式！");
-                return;
-            }
             if (CanUndo)
             {
-                var command = UndoStack.Pop();
+                var command = UndoStack.Last();
+                if (!AssertEdit(command)) return;
+                UndoStack.Pop();
                 RedoStack.Push(command);
                 command.Undo();
                 InvokeLDNetworksChangedEvent(command);
@@ -82,15 +85,11 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Redo()
         {
-            if (ldvmodel != null
-             && ldvmodel.LadderMode != LadderMode.Edit)
-            {
-                MessageBox.Show("当前模式不能对梯形图进行修改，请先切换到编辑模式！");
-                return;
-            }
             if (CanRedo)
             {
-                var command = RedoStack.Pop();
+                var command = RedoStack.Last();
+                if (!AssertEdit(command)) return;
+                RedoStack.Pop();
                 UndoStack.Push(command);
                 command.Redo();
                 InvokeLDNetworksChangedEvent(command);

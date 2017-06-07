@@ -47,7 +47,34 @@ namespace SamSoarII.LadderInstViewModel
         public static NullViewModel Null { get { return _nullViewModel; } }
         private static NullViewModel _nullViewModel = new NullViewModel();
         public int BPAddress { get; set; }
-        public BreakpointRect BPRect { get; set; }
+        private BreakpointRect bprect;
+        public BreakpointRect BPRect
+        {
+            get
+            {
+                return this.bprect;
+            }
+            set
+            {
+                BreakpointRect _bprect = bprect;
+                this.bprect = value;
+                if (_bprect != null)
+                {
+                    _bprect.BVModel = null;
+                }
+                if (bprect != null && bprect.BVModel != this)
+                {
+                    bprect.BVModel = this;
+                }
+                if (bprect != null)
+                {
+                    double cx = Canvas.GetLeft(this);
+                    double cy = Canvas.GetTop(this);
+                    Canvas.SetLeft(bprect, cx);
+                    Canvas.SetTop(bprect, cy);
+                }
+            }
+        }
 
         public BaseViewModel()
         {

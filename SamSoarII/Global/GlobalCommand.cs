@@ -27,6 +27,7 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand ShowErrorListCommand { get; set; }
         public static RoutedUICommand ShowElemListCommand { get; set; }
         public static RoutedUICommand ShowElemInitCommand { get; set; }
+        public static RoutedUICommand ShowBreakpointCommand { get; set; }
         public static RoutedUICommand LadderModeToggleCommand { get; set; }
         public static RoutedUICommand InstModeToggleCommand { get; set; }
         public static RoutedUICommand CommentModeToggleCommand { get; set; }
@@ -40,8 +41,13 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand SimuStartCommand { get; set; }
         public static RoutedUICommand SimuPauseCommand { get; set; }
         public static RoutedUICommand SimuStopCommand { get; set; }
+        public static RoutedUICommand BrpoStepCommand { get; set; }
+        public static RoutedUICommand BrpoCallCommand { get; set; }
+        public static RoutedUICommand BrpoNowCommand { get; set; }
+        public static RoutedUICommand BrpoOutCommand { get; set; }
         public static RoutedUICommand EleListOpenCommand { get; set; }
         public static RoutedUICommand EleInitializeCommand { get; set; }
+
         static GlobalCommand()
         {
             AddNewFuncBlockCommand = new RoutedUICommand();
@@ -57,6 +63,7 @@ namespace SamSoarII.AppMain
             ShowErrorListCommand = new RoutedUICommand();
             ShowElemListCommand = new RoutedUICommand();
             ShowElemInitCommand = new RoutedUICommand();
+            ShowBreakpointCommand = new RoutedUICommand();
             CompileCommand = new RoutedUICommand();
             MonitorCommand = new RoutedUICommand();
             EditCommand = new RoutedUICommand();
@@ -75,6 +82,10 @@ namespace SamSoarII.AppMain
             SimuStartCommand = new RoutedUICommand();
             SimuStopCommand = new RoutedUICommand();
             SimuPauseCommand = new RoutedUICommand();
+            BrpoStepCommand = new RoutedUICommand();
+            BrpoCallCommand = new RoutedUICommand();
+            BrpoNowCommand = new RoutedUICommand();
+            BrpoOutCommand = new RoutedUICommand();
             EleListOpenCommand = new RoutedUICommand();
             EleInitializeCommand = new RoutedUICommand();
         }

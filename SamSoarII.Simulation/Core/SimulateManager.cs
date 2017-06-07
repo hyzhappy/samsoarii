@@ -12,6 +12,7 @@ using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Chart;
 using System.Collections.ObjectModel;
 using SamSoarII.Simulation.UI;
+using SamSoarII.Simulation.Core.Event;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -26,7 +27,7 @@ using SamSoarII.Simulation.UI;
 
 namespace SamSoarII.Simulation.Core
 {
-    public class SimulateManager
+    public class SimulateManager : IDisposable
     {
         #region Numbers
         /// <summary>
@@ -47,11 +48,11 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 未锁定的变量单元的字典，根据名称来获得匹配集合
         /// </summary>
-        private Dictionary<string, List<SimulateVariableUnit> > udict;
+        private Dictionary<string, List<SimulateVariableUnit>> udict;
         /// <summary>
         /// 已锁定的变量单元的字典，根据名称来获得匹配集合
         /// </summary>
-        private Dictionary<string, List<SimulateVariableUnit> > ldict;
+        private Dictionary<string, List<SimulateVariableUnit>> ldict;
         /// <summary>
         /// 变量名称和别名的字典
         /// </summary>
@@ -74,8 +75,8 @@ namespace SamSoarII.Simulation.Core
             // 初始化成员
             dllmodel = new SimulateDllModel();
             vlist = new ObservableCollection<SimulateVariableModel>();
-            udict = new Dictionary<string, List<SimulateVariableUnit> >();
-            ldict = new Dictionary<string, List<SimulateVariableUnit> >();
+            udict = new Dictionary<string, List<SimulateVariableUnit>>();
+            ldict = new Dictionary<string, List<SimulateVariableUnit>>();
             vndict = new Dictionary<string, string>();
             lddict = new Dictionary<string, SimulateDataModel>();
             vddict = new Dictionary<string, SimulateDataModel>();
@@ -91,7 +92,12 @@ namespace SamSoarII.Simulation.Core
             dllmodel.SimulateAbort += OnSimulateAbort;
             dllmodel.SimulateException += OnSimulateException;
         }
-        
+
+        public void Dispose()
+        {
+            UpdateStop();
+        }
+
         /// <summary>
         /// 所有变量模型
         /// </summary>
@@ -130,6 +136,7 @@ namespace SamSoarII.Simulation.Core
         }
 
         #region Update Control
+        
         /// <summary>
         /// 更新线程
         /// </summary>
@@ -139,10 +146,20 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         private bool updateactive;
         /// <summary>
+        /// 之前的断点暂停状态
+        /// </summary>
+        private int _pause_old = 0;
+        /// <summary>
+        /// 之后的断点暂停状态
+        /// </summary>
+        private int _pause_new = 0;
+        /// <summary>
         /// 更新线程运行的更新方法
         /// </summary>
         private void Update()
         {
+            _pause_old = 0;
+            _pause_new = 0;
             // 存活时运行循环
             while (updateactive)
             {
@@ -167,6 +184,20 @@ namespace SamSoarII.Simulation.Core
                         svunit.Set(dllmodel);
                     }
                 }
+                // 若检查到暂停状态的改变则进行处理
+                _pause_new = SimulateDllModel.GetBPPause();
+                isbppause = (_pause_new == 1);
+                if (_pause_old == 0 && _pause_new == 1)
+                {
+                    OnBreakpointPause(new BreakpointPauseEventArgs(
+                        SimulateDllModel.GetBPAddr(), bpstatus));
+                }
+                if (_pause_old == 1 && _pause_new == 0)
+                {
+                    OnBreakpointResume(new BreakpointPauseEventArgs(
+                        SimulateDllModel.GetBPAddr(), bpstatus));
+                }
+                _pause_old = _pause_new;
                 // 等待
                 Thread.Sleep(50);
             }
@@ -226,9 +257,18 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         public void Start()
         {
-            // 已处于仿真状态则忽略
+            // 已处于仿真状态
             if (SimuStatus == SIMU_RUNNING)
+            {
+                // 从断点暂停中继续
+                if (ISBPPause)
+                {
+                    SimulateDllModel.SetBPPause(0);
+                    BreakpointResume(this, new BreakpointPauseEventArgs(bpaddr, bpstatus));
+                    _pause_old = 0;
+                }
                 return;
+            }
             // 开始仿真
             //SimuStatus = SIMU_RUNNING;
             dllmodel.Start();
@@ -255,6 +295,14 @@ namespace SamSoarII.Simulation.Core
             // 已处于停止状态则忽略
             if (SimuStatus == SIMU_STOP)
                 return;
+            // 取消断点暂停
+            if (ISBPPause)
+            {
+                SimulateDllModel.SetBPPause(0);
+                SimulateDllModel.SetBPEnable(0);
+                BreakpointResume(this, new BreakpointPauseEventArgs(bpaddr, bpstatus));
+                _pause_old = 0;
+            }
             // 停止仿真
             //SimuStatus = SIMU_STOP;
             dllmodel.Abort();
@@ -500,7 +548,7 @@ namespace SamSoarII.Simulation.Core
                     Lock(newUnit);
                 }
             }
-            
+
             // 重启更新线程
             //UpdateStart();
         }
@@ -551,7 +599,7 @@ namespace SamSoarII.Simulation.Core
             // 重启更新线程
             UpdateStart();
         }
-        
+
         /// <summary>
         /// 获得第一个符合参数条件的变量单元
         /// </summary>
@@ -732,7 +780,7 @@ namespace SamSoarII.Simulation.Core
                 if (svunit != null) Unlock(svunit);
             }
         }
-    
+
         public void Lock(SimulateDataModel sdmodel)
         {
             UpdateStop();
@@ -744,7 +792,7 @@ namespace SamSoarII.Simulation.Core
             }
             UpdateStart();
         }
-        
+
         public void View(SimulateDataModel sdmodel)
         {
             UpdateStop();
@@ -768,7 +816,7 @@ namespace SamSoarII.Simulation.Core
             }
             UpdateStart();
         }
-        
+
         public void Unview(SimulateDataModel sdmodel)
         {
             UpdateStop();
@@ -781,6 +829,8 @@ namespace SamSoarII.Simulation.Core
             UpdateStart();
         }
         #endregion
+
+        #region Drawing Data Chart
 
         public void RunData(double timestart, double timeend)
         {
@@ -805,7 +855,7 @@ namespace SamSoarII.Simulation.Core
                 SimulateDataModel sdmodel = vddict[name];
                 switch (sdmodel.Type)
                 {
-                    case "BIT": 
+                    case "BIT":
                         vs = new BitSegment();
                         vs.Value = Int32.Parse(args[2]);
                         break;
@@ -847,10 +897,76 @@ namespace SamSoarII.Simulation.Core
             }
         }
 
+        #endregion
+
+        #region Breakpoint Control
+
+        private bool isbppause = false;
+        public bool ISBPPause { get { return this.isbppause; } }
+
+        private BreakpointStatus bpstatus = BreakpointStatus.NORMAL;
+        public BreakpointStatus BPStatus { get { return this.bpstatus; } }
+
+        private int bpaddr = 0;
+
+        public event BreakpointPauseEventHandler BreakpointPause = delegate { };
+        private void OnBreakpointPause(BreakpointPauseEventArgs e)
+        {
+            if (SimulateDllModel.GetCallCount() > 256)
+                e = new BreakpointPauseEventArgs(e.Address, BreakpointStatus.SOF);
+            BreakpointPause(this, e);
+            bpaddr = e.Address;
+            bpstatus = e.Status;
+        }
+
+        public event BreakpointPauseEventHandler BreakpointResume = delegate { };
+        private void OnBreakpointResume(BreakpointPauseEventArgs e)
+        {
+            BreakpointResume(this, e);
+            bpstatus = BreakpointStatus.NORMAL;
+        }
+
+        public void StepMove()
+        {
+            bpstatus = BreakpointStatus.STEP;
+            SimulateDllModel.MoveStep();
+            if (SimuStatus != SIMU_RUNNING) Start();
+            BreakpointResume(this, new BreakpointPauseEventArgs(bpaddr, bpstatus));
+            _pause_old = 0;
+        }
+
+        public void CallMove()
+        {
+            bpstatus = BreakpointStatus.CALL;
+            SimulateDllModel.CallStep();
+            if (SimuStatus != SIMU_RUNNING) Start();
+            BreakpointResume(this, new BreakpointPauseEventArgs(bpaddr, bpstatus));
+            _pause_old = 0;
+        }
+
+        public void JumpTo(int bpaddr)
+        {
+            bpstatus = BreakpointStatus.JUMP;
+            SimulateDllModel.JumpTo(bpaddr);
+            if (SimuStatus != SIMU_RUNNING) Start();
+            BreakpointResume(this, new BreakpointPauseEventArgs(bpaddr, bpstatus));
+            _pause_old = 0;
+        }
+
+        public void JumpOut()
+        {
+            bpstatus = BreakpointStatus.OUT;
+            SimulateDllModel.JumpOut();
+            BreakpointResume(this, new BreakpointPauseEventArgs(bpaddr, bpstatus));
+            _pause_old = 0;
+        }
+
+        #endregion
+
         #region Event Handler
 
         #region Simulate Control
-        
+
         private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
             SimuStatus = SIMU_RUNNING;

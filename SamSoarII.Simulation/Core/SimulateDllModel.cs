@@ -327,14 +327,14 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         /// <returns></returns>
         [DllImport("simu.dll", EntryPoint = "GetCallCount")]
-        private static extern int GetCallCount();
+        public static extern int GetCallCount();
 
         /// <summary>
         /// 获得当前的断点地址
         /// </summary>
         /// <returns></returns>
         [DllImport("simu.dll", EntryPoint = "GetBPAddr")]
-        private static extern int GetBPAddr();
+        public static extern int GetBPAddr();
 
         /// <summary>
         /// 设置或取消一个普通断点
@@ -342,7 +342,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="bpaddr">断点地址</param>
         /// <param name="islock">设置(1)或取消(0)</param>
         [DllImport("simu.dll", EntryPoint = "SetBPAddr")]
-        private static extern void SetBPAddr(int bpaddr, int islock);
+        public static extern void SetBPAddr(int bpaddr, int islock);
         
         /// <summary>
         /// 设置一个条件断点
@@ -350,33 +350,53 @@ namespace SamSoarII.Simulation.Core
         /// <param name="cpaddr">断点地址</param>
         /// <param name="cpmsg">条件信息</param>
         [DllImport("simu.dll", EntryPoint = "SetCPAddr")]
-        private static extern void SetCPAddr(int cpaddr, int cpmsg);
+        public static extern void SetCPAddr(int cpaddr, int cpmsg);
 
         /// <summary>
         /// 获取当前断点状态
         /// </summary>
         /// <returns></returns>
         [DllImport("simu.dll", EntryPoint = "GetBPPause")]
-        private static extern int GetBPPause();
+        public static extern int GetBPPause();
 
         /// <summary>
         /// 设置当前断点状态（可以继续运行）
         /// </summary>
         /// <param name="bppause"></param>
         [DllImport("simu.dll", EntryPoint = "SetBPPause")]
-        private static extern void SetBPPause(int bppause);
+        public static extern void SetBPPause(int bppause);
+        
+        /// <summary>
+        /// 设置断点使能
+        /// </summary>
+        /// <param name="bpenable"></param>
+        [DllImport("simu.dll", EntryPoint = "SetBPEnable")]
+        public static extern void SetBPEnable(int bpenable);
 
         /// <summary>
         /// 单步运行（不进入子程序）
         /// </summary>
         [DllImport("simu.dll", EntryPoint = "MoveStep")]
-        private static extern void MoveStep();
+        public static extern void MoveStep();
 
         /// <summary>
         /// 单步运行（进入子程序）
         /// </summary>
         [DllImport("simu.dll", EntryPoint = "CallStep")]
-        private static extern void CallStep();
+        public static extern void CallStep();
+
+        /// <summary>
+        /// 跳转到断点
+        /// </summary>
+        /// <param name="bpaddr">断点地址</param>
+        [DllImport("simu.dll", EntryPoint = "JumpTo")]
+        public static extern void JumpTo(int bpaddr);
+        
+        /// <summary>
+        /// 从子程序中跳出
+        /// </summary>
+        [DllImport("simu.dll", EntryPoint = "JumpOut")]
+        public static extern void JumpOut();
 
         #endregion
 
@@ -493,6 +513,7 @@ namespace SamSoarII.Simulation.Core
         {
             PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             SetBaseBit(device.BitNumber);
+            SetBPEnable(1);
             SetClockRate(50);
             // 初始化
             InitRunLadder();
@@ -630,16 +651,11 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         public void Abort()
         {
-            // 取消存活和运行状态
+            // 关闭线程并设为null
             simulateActive = false;
             simulateRunning = false;
-            // 关闭线程并设为null
-            if (simulateThread != null)
-            {
-                simulateThread.Abort();
-                simulateThread = null;
-            }
-            SimulateAbort(this, new RoutedEventArgs());
+            simulateThread = null;
+            //SimulateAbort(this, new RoutedEventArgs());
         }
 
         /// <summary>
@@ -872,7 +888,7 @@ namespace SamSoarII.Simulation.Core
         }
 
         #endregion
-
+        
         #region Event Handler
 
         #region Thread

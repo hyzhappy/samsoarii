@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <math.h>
+#include <math.h>
 #include <time.h>
 #include <Windows.h>
 
@@ -49,6 +49,7 @@ static int deltatime;
 static int counttime;
 static int counttimems;
 static int timerate = 50;
+static double innertimerate = 1.0;
 static int scanperiod = 1000;
 // temporary variable
 static int32_t _tempw;
@@ -461,6 +462,144 @@ EXPORT void SetClockRate(int _timerate)
 	timerate = _timerate;
 }
 
+int32_t bpenable = 1;
+int32_t bpdatas[1<<13];
+int32_t bpaddr;
+int32_t bpstep = 0;
+int32_t bpjump = -1;
+int32_t bpostep = 0;
+int32_t bpcstep = 0;
+int32_t bppause = 0;
+int32_t cpdatas[1<<16];
+int32_t cpstack[1<<8];
+int32_t cpsttop = 0;
+int32_t cpenable;
+int32_t callcount = 0;
+
+void callinto()
+{
+	callcount++;
+	bpostep = bpstep;
+	bpstep = 0;
+	if (bpenable && callcount > 256)
+	{
+		bppause = 1;
+		while (bpenable && bppause) ;
+	}
+}
+
+void callleave()
+{
+	callcount--;
+	bpstep |= bpostep;
+}
+
+void bpcycle(int32_t _bpaddr)
+{
+	bpaddr = _bpaddr;
+	if (!bpenable) return;
+	if (bpstep
+	|| bpcstep
+	|| bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31)))
+	|| bpjump == bpaddr)
+	{
+		bpjump = -1;
+		bpstep = 0;
+		bpcstep = 0;
+		bppause = 1;
+		while (bpenable && bppause) ;
+	}
+}
+
+void cpcycle(int32_t _bpaddr, int32_t value)
+{
+	if (!bpenable || !cpenable) return;
+	bpaddr = _bpaddr;
+	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 7);
+	if (cpmsg <= 0) return;
+	int32_t prevalue = cpstack[cpsttop++];
+	int32_t cond = 0;
+	if (cpmsg & 0x01)
+		cond |= (value == 0);
+	if (cpmsg & 0x02)
+		cond |= (value == 1);
+	if (cpmsg & 0x04)
+		cond |= (prevalue == 0 && value == 1);
+	if (cpmsg & 0x08)
+		cond |= (prevalue == 1 && value == 0);
+	if (bpjump >= 0)
+		cond &= (bpjump == bpaddr);
+	if (cond)
+	{
+		bpjump = -1;
+		bppause = 2;
+		while (bpenable && bppause);	
+	}
+}
+
+EXPORT int GetCallCount()
+{
+	return callcount;
+}
+
+EXPORT int GetBPAddr()
+{
+	return bpaddr;
+}
+
+EXPORT void SetBPAddr(int32_t _bpaddr, int32_t islock)
+{
+	if (islock)
+		bpdatas[_bpaddr>>5] |= (1<<(_bpaddr&31));
+	else
+		bpdatas[_bpaddr>>5] &= ~(1<<(_bpaddr&31));
+}
+
+EXPORT void SetBPEnable(int _bpenable)
+{
+	bpenable = _bpenable;
+}
+	
+EXPORT int GetBPPause()
+{
+	return bppause;
+}
+
+EXPORT void SetBPPause(int _bppause)
+{
+	bppause = _bppause;
+}
+
+EXPORT void MoveStep()
+{
+	bpstep = 1;
+	bppause = 0;
+}
+
+EXPORT void CallStep()
+{
+	bpcstep = 1;
+	bppause = 0;
+}
+
+EXPORT void JumpTo(int _bpaddr)
+{
+	bpjump = _bpaddr;
+}
+
+EXPORT void JumpOut()
+{
+	bpostep = 1;
+	bppause = 0;
+}
+
+EXPORT void SetCPAddr(int32_t _cpaddr, int32_t _cpmsg)
+{
+	cpdatas[_cpaddr>>3] &= ~(15<<((_cpaddr&7)<<2));
+	cpdatas[_cpaddr>>3] |= _cpmsg<<((_cpaddr&7)<<2);
+	cpenable = 0;
+}
+
 void InitRegisters()
 {
 	memset(XBit, 0, sizeof(XBit));
@@ -480,7 +619,11 @@ void InitRegisters()
 
 EXPORT void BeforeRunLadder()
 {
+	cpsttop = 0;
+	cpenable = 1;
+	
 	UpdateClock();
+	innertimerate = (double)(currenttime - beforetime) / deltatime;
 	beforetime = currenttime;
 	
 	MBit[8158] = ((counttimems / 5) & 1);
@@ -494,7 +637,7 @@ EXPORT void AfterRunLadder()
 	UpdateClock();
 	aftertime = currenttime;
 	deltatime = aftertime - beforetime;
-	counttime += deltatime;
+	counttime += (int32_t)(deltatime * innertimerate);
 	counttimems = counttime / 1000;
 }
 
@@ -1969,7 +2112,6 @@ void _fmovw(int32_t source, int32_t* dest, int32_t* enable, int32_t size)
 	}
 }
 
-
 // set a series of 32-bit memeory to the targeted value
 void _fmovd(int64_t source, int64_t* dest, int32_t* enable, int32_t size)
 {
@@ -1988,3 +2130,4 @@ void _smov(int32_t source, int32_t sb1, int32_t sb2, int32_t* target, int32_t tb
 	*target |= ((source >> ((sb1 - 1) * 4))&((1 << ((sb2 - sb1 + 1) * 4)) - 1)) << ((tb1 - 1) * 4);
 	*target = _BCD_to_WORD(*target);
 }
+

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,15 +10,25 @@ namespace SamSoarII.Extend.Utility
     public class BreakPointManager
     {
         static private int count = 0;
-
+        static private Dictionary<int, BaseViewModel> bvmodels
+            = new Dictionary<int, BaseViewModel>();
+        
         static public void Initialize()
         {
             count = 0;
+            bvmodels.Clear();
         }
 
-        static public int Register()
+        static public void Register(BaseViewModel bvmodel)
         {
-            return count++;
+            bvmodel.BPAddress = ++count;
+            bvmodels.Add(bvmodel.BPAddress, bvmodel);
+        }
+
+        static public BaseViewModel GetBVModel(int bpaddr)
+        {
+            return bvmodels.ContainsKey(bpaddr)
+                ? bvmodels[bpaddr] : null;
         }
     }
 }

@@ -36,6 +36,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" Executed="OnShowErrorListExecute" CanExecute="ShowErrorListCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowElemListCommand}" Executed="OnShowElemListExecute" CanExecute="ShowElemListCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowElemInitCommand}" Executed="OnShowElemInitExecute" CanExecute="ShowElemInitCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowBreakpointCommand}" Executed="OnShowBreakpointExecute" CanExecute="ShowBreakpointCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"/>
         <!--Project Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
@@ -63,6 +64,10 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuStartCommand}" Executed="OnSimuStartCommandExecute" CanExecute="SimuStartCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Executed="OnSimuPauseCommandExecute" CanExecute="SimuPauseCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.SimuStopCommand}" Executed="OnSimuStopCommandExecute" CanExecute="SimuStopCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoNowCommand}" Executed="OnBPNowCommandExecute" CanExecute="BPNowCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoStepCommand}" Executed="OnBPStepCommandExecute" CanExecute="BPStepCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoCallCommand}" Executed="OnBPCallCommandExecute" CanExecute="BPCallCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoOutCommand}" Executed="OnBPOutCommandExecute" CanExecute="BPOutCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.EleInitializeCommand}" Executed="OnEleInitializeCommandExecute" CanExecute="OnEleInitializeCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.EleListOpenCommand}" Executed="OnEleListOpenCommandExecute" CanExecute="OnEleListOpenCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ClosePage}" Executed="ClosePageExecuteCommand" CanExecute="ClosePageCanExecuteCommand"></CommandBinding>
@@ -231,6 +236,7 @@
                 <MenuItem Header="软元件初始化" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}"></MenuItem>
                 <MenuItem Header="错误列表" Command="{x:Static app:GlobalCommand.ShowErrorListCommand}"></MenuItem>
                 <MenuItem Header="监视列表" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
+                <MenuItem Header="断点列表" Command="{x:Static app:GlobalCommand.ShowBreakpointCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="工程(_P)" Margin="0,-5,0,0">
                 <MenuItem Header="添加子程序" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
@@ -388,6 +394,24 @@
                 <ToggleButton ToolTip="仿真停止" x:Name="SimuStopButton" Command="{x:Static app:GlobalCommand.SimuStopCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Stop.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
+            </ToolBar>
+            <ToolBar>
+                <Button ToolTip="当前断点" x:Name="BrpoNowButton" Height="24" Width="24" Margin="0,0,0,16"
+                        Command="{x:Static app:GlobalCommand.BrpoNowCommand}">
+                    <Image Source="/Resources/Image/Breakpoint/BPNow.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button ToolTip="逐过程" x:Name="BrpoStepButton" Height="24" Width="24" Margin="0,0,0,16"
+                        Command="{x:Static app:GlobalCommand.BrpoStepCommand}">
+                    <Image Source="/Resources/Image/Breakpoint/BPStep.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button ToolTip="逐语句" x:Name="BrpoCallButton" Height="24" Width="24" Margin="0,0,0,16"
+                        Command="{x:Static app:GlobalCommand.BrpoCallCommand}">
+                    <Image Source="/Resources/Image/Breakpoint/BPCall.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button ToolTip="跳出" x:Name="BropOutButton" Height="24" Width="24" Margin="0,0,0,16"
+                        Command="{x:Static app:GlobalCommand.BrpoOutCommand}">
+                    <Image Source="/Resources/Image/Breakpoint/BPOut.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
             </ToolBar>
             <ToolBar>
                 <ComboBox SelectedIndex="0" Margin="0, -12, 0, 0" Width="80" Height="24" 

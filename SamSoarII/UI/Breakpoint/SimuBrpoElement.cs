@@ -3,6 +3,7 @@ using SamSoarII.LadderInstViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             {
                 this.isactive = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("ActiveInfo"));
+                PropertyChanged(this, new PropertyChangedEventArgs("ActiveBrush"));
             }
         }
         public string ActiveInfo
@@ -31,6 +33,13 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             get
             {
                 return IsActive ? "启用" : "禁用";
+            }
+        }
+        public Brush ActiveBrush
+        {
+            get
+            {
+                return IsActive ? Brushes.Red : Brushes.Gray;
             }
         }
 
@@ -97,6 +106,19 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             }
         }
 
+        private BreakpointRect bprect;
+        public BreakpointRect BPRect
+        {
+            get
+            {
+                return this.bprect;
+            }
+            set
+            {
+                this.bprect = value;
+            }
+        }
+
         private string condition;
         public string Condition
         {
@@ -124,6 +146,5 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                 PropertyChanged(this, new PropertyChangedEventArgs("BreakTime"));
             }
         }
-
     }
 }

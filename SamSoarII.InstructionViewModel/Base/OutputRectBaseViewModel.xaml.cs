@@ -94,10 +94,14 @@ namespace SamSoarII.LadderInstViewModel
             if (_isCommentMode)
             {
                 Canvas.SetTop(this, _y * 500);
+                if (BPRect != null)
+                    Canvas.SetTop(BPRect, _y * 500);
             }
             else
             {
                 Canvas.SetTop(this, _y * 300);
+                if (BPRect != null)
+                    Canvas.SetTop(BPRect, _y * 300);
             }
         }
 

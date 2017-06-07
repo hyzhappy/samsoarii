@@ -103,6 +103,7 @@ namespace SamSoarII.AppMain.UI
 
         private void OnMenuItemClick(object sender, RoutedEventArgs e)
         {
+            LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
             for (int i = 0; i < Count; i++)
             {
                 if (sender == MI_Values[i])
@@ -115,10 +116,12 @@ namespace SamSoarII.AppMain.UI
                 switch (MI_Breakpoint.Header.ToString())
                 {
                     case "添加断点":
-                        
+                        BreakpointRect brect = new BreakpointRect(String.Empty);
+                        brect.BVModel = bvmodel;
+                        ldvmodel.ReplaceBreakpoint(lnvmodel, brect);
                         break;
                     case "删除断点":
-
+                        ldvmodel.RemoveBreakpoint(lnvmodel, bvmodel.BPRect);
                         break;
                 }
             }

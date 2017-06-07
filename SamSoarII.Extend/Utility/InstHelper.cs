@@ -779,6 +779,8 @@ namespace SamSoarII.Extend.Utility
             //sw.Write("static uint16_t _mstack[256];\n");        // 辅助栈
             //sw.Write("static uint16_t _mstacktop;\n");          // 辅助栈的栈顶
             sw.Write("static int32_t _global[{0:d}];\n", globalTotal); // 全局变量
+            if (simumode)
+                sw.Write("static int32_t _signal;\n");
             // 先声明所有的子函数
             foreach (PLCInstruction inst in insts)
             {
@@ -787,6 +789,8 @@ namespace SamSoarII.Extend.Utility
             }
             // 建立扫描的主函数
             sw.Write("void RunLadder()\n{\n");
+            if (simumode)
+                sw.Write("callinto();\n");
             sw.Write("_itr_invoke();\n");
             // 建立局部的栈和辅助栈
             for (int i = 1; i <= stackTotal; i++)
@@ -807,9 +811,13 @@ namespace SamSoarII.Extend.Utility
                 {
                     // 函数头部
                     case "FUNC":
+                        if (simumode)
+                            sw.Write("callleave();\n");
                         sw.Write("}\n\n");
                         sw.Write("void _SBR_{0:s}()", inst[1]);
                         sw.Write("{\n");
+                        if (simumode)
+                            sw.Write("callinto();\n");
                         // 建立局部的栈和辅助栈
                         for (int i = 1; i <= stackTotal; i++)
                         {
@@ -828,6 +836,8 @@ namespace SamSoarII.Extend.Utility
                         break;
                 }
             }
+            if (simumode)
+                sw.Write("callleave();\n");
             sw.Write("}\n");
         }
         /// <summary>
@@ -843,10 +853,10 @@ namespace SamSoarII.Extend.Utility
             if (simumode)
             {
                 // 断点循环
-                bp = BreakPointManager.Register();
                 if (inst.ProtoType != null)
                 {
-                    inst.ProtoType.BPAddress = bp;
+                    BreakPointManager.Register(inst.ProtoType);
+                    bp = inst.ProtoType.BPAddress;
                     sw.Write("bpcycle({0});\n", bp);
                 }
                 // 需要由写入使能作为条件
@@ -1299,60 +1309,37 @@ namespace SamSoarII.Extend.Utility
             if (simumode && inst.EnBit != null && inst.EnBit.Length > 0)
             {
                 sw.Write("}\n");
-                // 进入条件断点的循环
-                if (inst.ProtoType != null)
-                    sw.Write("cpcycle({0}, _stack_{1});\n", bp, stackTop);
+            }
+            // 进入条件断点的循环
+            if (simumode && inst.ProtoType != null)
+            {
+                _CalcSignal(sw, true);
+                sw.Write("cpcycle({0}, _signal);\n", bp);
             }
         }
         /// <summary>
         /// 通过栈记录计算当前信号
         /// </summary>
         /// <param name="sw">文件输出流</param>
-        static private void _CalcSignal(StreamWriter sw)
+        static private void _CalcSignal(StreamWriter sw, bool calccond = false)
         {
-            sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount, stackTop);
+            string signvalue = calccond
+                ? "_signal"
+                : String.Format("_global[{0:d}]", globalCount++);
+            sw.Write("{0:s} = _stack_{1:d};\n", signvalue, stackTop);
             for (int i = stackTop; i > 0; i--)
             {
                 if (stackcalcs[i-1] == "POP") break;
                 switch (stackcalcs[i-1])
                 {
                     case "ANDB":
-                        sw.Write("_global[{0:d}] &= _stack_{1:d};\n", globalCount, stackTop - 1);
+                        sw.Write("{0:s} &= _stack_{1:d};\n", signvalue, stackTop - 1);
                         break;
                     case "ORB":
                         //sw.Write("_global[{0:d}] |= _stack_{1:d};\n", globalCount, stackTop - 1);
                         break;
                 }
             }
-            globalCount++;
-        }
-
-        static private string _GetBit(string flag)
-        {
-            string[] flags = flag.Split(' ');
-            return String.Format("(({0:s}>>{1:s})&1)", flags[0], flags[1]);
-        }
-        /// <summary>
-        /// 生成设置特定的位的c代码
-        /// </summary>
-        /// <param name="flag">位所在的整数以及位的位置，中间用空格分开</param>
-        /// <param name="value">设定值（0或1）</param>
-        /// <returns>c代码</returns>
-        static private string _SetBit(string flag, string value)
-        {
-            string[] flags = flag.Split(' ');
-            return String.Format("{0:s}&=(~(1<<{1:s}))|({2:s}<<{1:s})", flags[0], flags[1], value);         
-        }
-        /// <summary>
-        /// 生成异或特定的位的c代码
-        /// </summary>
-        /// <param name="flag">位所在的整数以及位的位置，中间用空格分开</param>
-        /// <param name="value">设定值（0或1）</param>
-        /// <returns>c代码</returns>
-        static private string _XorBit(string flag)
-        {
-            string[] flags = flag.Split(' ');
-            return String.Format("{0:s}^=1<<{1:s}", flags[0], flags[1]);
         }
     }
 }

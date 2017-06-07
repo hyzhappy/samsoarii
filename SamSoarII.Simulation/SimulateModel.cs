@@ -202,12 +202,13 @@ namespace SamSoarII.Simulation
         /// <summary>
         /// 终止析构函数
         /// </summary>
+        private bool isdisposed = false;
         public void Dispose()
         {
+            isdisposed = true;
             // 仿真停止
             smanager.Stop();
-            // 释放外部的dll资源
-            SimulateDllModel.FreeDll();
+            smanager.Dispose();
         }
 
         #region Event handler
@@ -279,6 +280,16 @@ namespace SamSoarII.Simulation
         private void OnSimulateAbort(object sender, RoutedEventArgs e)
         {
             SimulateAbort(this, e);
+            if (isdisposed)
+            {
+                dllmodel.SimulateAbort -= OnSimulateAbort;
+                dllmodel.SimulateStart -= OnSimulateStart;
+                dllmodel.SimulatePause -= OnSimulatePause;
+                dllmodel.SimulateProgress -= OnSimulateProgress;
+                dllmodel = null;
+                SimulateDllModel.FreeDll();
+                return;
+            }
             if (dllmodel.SimuMode == SimulateDllModel.SIMUMODE_CHART)
             {
                 if (pbwin != null)

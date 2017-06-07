@@ -135,7 +135,7 @@ namespace SamSoarII.AppMain
             _rwindow = new ReplaceWindow(this);
             _tfwindow = new TextFindWindow(this);
             _trwindow = new TextReplaceWindow(this);
-            _bpwindow = new SimuBrpoWindow();
+            _bpwindow = new SimuBrpoWindow(this);
             mainwindow.GD_Find.Children.Add(_fwindow);
             mainwindow.GD_Find.Children.Add(_tfwindow);
             mainwindow.GD_Replace.Children.Add(_rwindow);
@@ -906,12 +906,43 @@ namespace SamSoarII.AppMain
             tempItem.NavigateToNetworkByNum(e.NetworkNum);
             _mainTabControl.ShowItem(tempItem);
         }
+        public bool NavigateToNetwork(BaseViewModel bvmodel)
+        {
+            if (_projectModel.LadderMode != LadderMode.Simulate)
+            {
+                return false;
+            }
+            if (NavigateToNetwork(bvmodel, _projectModel.MainRoutine))
+            {
+                return true;
+            }
+            foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
+            {
+                if (NavigateToNetwork(bvmodel, ldvmodel))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private bool NavigateToNetwork(BaseViewModel bvmodel, LadderDiagramViewModel ldvmodel)
+        {
+            foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
+            {
+                if (lnvmodel.ContainBPAddr(bvmodel.BPAddress))
+                {
+                    NavigateToNetwork(new NavigateToNetworkEventArgs(
+                        lnvmodel.NetworkNumber, ldvmodel.ProgramName, bvmodel.X, bvmodel.Y));
+                    return true;
+                }
+            }
+            return false;
+        }
         public void NavigateToFuncBlock(FuncBlockViewModel fbvmodel, int line, int column)
         {
             _mainTabControl.ShowItem(fbvmodel);
             fbvmodel.SetPosition(line, column);
         }
-
         public void NavigateToFuncBlock(FuncBlockViewModel fbvmodel, int offset)
         {
             _mainTabControl.ShowItem(fbvmodel);
