@@ -701,6 +701,8 @@ namespace SamSoarII.AppMain.Project
                 if (_ladderElements.Keys.Contains(p))
                 {
                     oldele = _ladderElements[p];
+                    if (oldele.BPRect != null)
+                        RemoveBreakpoint(oldele.BPRect);
                     InstructionCommentManager.Unregister(oldele);
                     oldele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
                     _ladderElements.Remove(p);
@@ -711,6 +713,8 @@ namespace SamSoarII.AppMain.Project
                 LadderCanvas.Children.Add(element);
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
+                if (element.BPRect != null)
+                    ReplaceBreakpoint(element.BPRect);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = oldele;
                 e.BVModel_new = element;
@@ -773,6 +777,8 @@ namespace SamSoarII.AppMain.Project
             if (_ladderElements.ContainsKey(pos))
             {
                 var ele = _ladderElements[pos];
+                if (ele.BPRect != null)
+                    RemoveBreakpoint(ele.BPRect);
                 LadderCanvas.Children.Remove(ele);
                 _ladderElements.Remove(pos);
                 InstructionCommentManager.Unregister(ele);

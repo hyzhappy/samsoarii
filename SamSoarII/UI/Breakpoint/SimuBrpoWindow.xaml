@@ -88,7 +88,7 @@
                                         Binding="{Binding Instruction}" IsReadOnly="True">
                     </DataGridTextColumn>
                     <DataGridComboBoxColumn Header="中断条件" Width="60"
-                                            TextBinding="{Binding Condition}" IsReadOnly="True"
+                                            TextBinding="{Binding Condition}" IsReadOnly="False"
                                             ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
                     </DataGridComboBoxColumn>
                     <DataGridTextColumn Header="执行次数" Width="60"
