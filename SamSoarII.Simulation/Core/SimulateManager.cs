@@ -86,6 +86,7 @@ namespace SamSoarII.Simulation.Core
             // 初始化更新线程
             updateactive = false;
             updatethread = null;
+            UpdateStart();
 
             dllmodel.SimulateStart += OnSimulateStart;
             dllmodel.SimulatePause += OnSimulatePause;

@@ -131,7 +131,7 @@ namespace SamSoarII.Simulation.UI.Breakpoint
         }
         public void Unroute(LadderNetworkViewModel lnvmodel)
         {
-            lnvmodel.BreakpointChanged += OnBreakpointChanged;
+            lnvmodel.BreakpointChanged -= OnBreakpointChanged;
         }
 
         public void Active(SimuBrpoElement ele)
@@ -273,19 +273,33 @@ namespace SamSoarII.Simulation.UI.Breakpoint
 
         private void DG_Main_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0)
+            Dispatcher.Invoke(() =>
             {
-                Dispatcher.Invoke(() =>
+                SimuBrpoElement ele = (SimuBrpoElement)(DG_Main.SelectedItem);
+                if (ele != null)
                 {
-                    SimuBrpoElement ele = (SimuBrpoElement)(e.AddedItems[0]);
+                    if (e.OriginalSource is ComboBox
+                     && e.AddedItems.Count == 1)
+                    {
+                        ele.Condition = e.AddedItems[0].ToString();
+                        switch (ele.Condition)
+                        {
+                            case "无": ele.BPRect.Label = String.Empty; break;
+                            case "0": ele.BPRect.Label = "0"; break;
+                            case "1": ele.BPRect.Label = "1"; break;
+                            case "上升沿": ele.BPRect.Label = "↑"; break;
+                            case "下降沿": ele.BPRect.Label = "↓"; break;
+                        }
+                        Active(ele);
+                    }
                     ifacade.NavigateToNetwork(
                         new NavigateToNetworkEventArgs(
                             ele.LNVModel.NetworkNumber,
                             ele.LDVModel.ProgramName,
                             ele.BVModel.X,
                             ele.BVModel.Y));
-                });
-            }
+                }
+            });
         }
     }
 
@@ -294,9 +308,9 @@ namespace SamSoarII.Simulation.UI.Breakpoint
         static private string[] selectedconditions
             = { "无", "0", "1", "上升沿", "下降沿" };
 
-        public IEnumerable<string> SelectedConditions
+        public IEnumerable<string> SelectedConditions()
         {
-            get { return selectedconditions; }
+            return selectedconditions;
         }
     }
 }

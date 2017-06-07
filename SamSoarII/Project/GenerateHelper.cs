@@ -20,6 +20,7 @@ using SamSoarII.LadderInstModel.Auxiliar;
 using System.IO;
 using SamSoarII.Simulation.Core;
 using SamSoarII.Extend.FuncBlockModel;
+using System.Diagnostics;
 //using SamSoarII.GenerateModel;
 
 namespace SamSoarII.AppMain.Project
@@ -880,7 +881,6 @@ namespace SamSoarII.AppMain.Project
             string simulibHFile = String.Format(@"{0:s}\simug\simulib.h", currentPath);
             string simulibCFile = String.Format(@"{0:s}\simug\simulib.c", currentPath);
             string outputDllFile = String.Format(@"{0:s}\simuc.dll", currentPath);
-            string outputAFile = String.Format(@"{0:s}\simuc.a", currentPath);
             // 生成梯形图的c语言
             StreamWriter sw = new StreamWriter(ladderCFile);
             InstHelper.InstToSimuCode(sw, nets.ToArray());
@@ -892,6 +892,7 @@ namespace SamSoarII.AppMain.Project
             sw.Write("typedef int32_t _WORD;\r\n");
             sw.Write("typedef int64_t D_WORD;\r\n");
             sw.Write("typedef double _FLOAT;\r\n");
+            GenerateCHeader(pmodel.LibFuncBlock, sw);
             foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
             {
                 GenerateCHeader(fbvmodel, sw);
@@ -899,14 +900,34 @@ namespace SamSoarII.AppMain.Project
             sw.Close();
             // 生成用户函数的c语言
             sw = new StreamWriter(funcBlockCFile);
+            sw.Write("#include <math.h>\r\n");
             sw.Write("#include \"simuf.h\"\r\n");
+            GenerateCCode(pmodel.LibFuncBlock, sw);
             foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
             {
                 GenerateCCode(fbvmodel, sw);
             }
             sw.Close();
-            // 生成仿真dll
-            SimulateDllModel.CreateDll(ladderCFile, funcBlockCFile, outputDllFile, outputAFile);
+            SimulateDllModel.CreateSource();
+            Process cmd = null;
+            cmd = new Process();
+            cmd.StartInfo.FileName 
+                = String.Format(@"{0:s}\Compiler\tcc\tcc", currentPath);
+            cmd.StartInfo.Arguments
+                = String.Format("{0:s} {1:s} {2:s} -o {3:s} -shared -DBUILD_DLL",
+                    simulibCFile, ladderCFile, funcBlockCFile, outputDllFile);
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            File.Delete(ladderHFile);
+            File.Delete(ladderCFile);
+            File.Delete(simulibHFile);
+            File.Delete(simulibCFile);
+            File.Delete(funcBlockHFile);
+            File.Delete(funcBlockCFile);
             return SimulateDllModel.LoadDll(outputDllFile);
         }
         

@@ -990,9 +990,16 @@ namespace SamSoarII.Extend.Utility
                  * 需要用if来判断栈顶是否为1
                  */
                 case "SET": case "SETIM":
-                    sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit); break;
+                    if (simumode)
+                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit);
+                    else
+                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, {2:s});\n", stackTop, inst[1], inst[2]);
+                    break;
                 case "RST": case "RSTIM":
-                    sw.Write("if (_stack_{0:d}) \n{{\n_bitrst(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit);
+                    if (simumode)
+                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit);
+                    else
+                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, {2:s});\n", stackTop, inst[1], inst[2]);
                     /*
                      * 注意如果复位的是计数器位，那么计数器值也要跟着复原
                      * 考虑到向下计数器(CTD)复原时需要载入预设值
@@ -1012,43 +1019,56 @@ namespace SamSoarII.Extend.Utility
                 case "ALT": sw.Write("if (_stack_{0:d}) {1:s}^=1;\n", stackTop, inst[1]); break;
                 // 上升沿交替
                 case "ALTP":
-                    sw.Write("if (_global[{0:d}]==0&&_stack_{1:d}==1) ", globalCount, stackTop);
+                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1) ", globalCount, stackTop);
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 // 当栈顶为1时运行的计时器
                 case "TON":
-                    sw.Write("_ton(&{0:s}, &{2:s}, _stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
-                        inst[1], inst[2], inst[3], globalCount, stackTop);
+                    if (simumode)
+                        sw.Write("_ton(&{0:s}, &{2:s}, _stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
+                            inst[1], inst[2], inst[3], globalCount, stackTop);
+                    else
+                        sw.Write("_ton(&{0:s}, &{2:s}, _stack_{3:d}, {1:s});\n",
+                            inst[1], inst[2], inst[3], stackTop);
                     globalCount += 1;
                     break;
                 // 当栈顶为0时运行的计时器
                 case "TOF":
-                    sw.Write("_ton(&{0:s}, &{2:s}, !_stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
-                        inst[1], inst[2], inst[3], globalCount, stackTop);
+                    if (simumode)
+                        sw.Write("_ton(&{0:s}, &{2:s}, !_stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
+                            inst[1], inst[2], inst[3], globalCount, stackTop);
+                    else
+                        sw.Write("_ton(&{0:s}, &{2:s}, !_stack_{3:d}, {1:s});\n",
+                            inst[1], inst[2], inst[3], stackTop);
+
                     globalCount += 1;
                     break;
                 // 当栈顶为1时运行，为0时保留当前计时的计时器
                 case "TONR":
-                    sw.Write("_tonr(&{0:s}, &{2:s}, _stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
-                        inst[1], inst[2], inst[3], globalCount, stackTop);
+                    if (simumode)
+                        sw.Write("_tonr(&{0:s}, &{2:s}, _stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
+                            inst[1], inst[2], inst[3], globalCount, stackTop);
+                    else
+                        sw.Write("_tonr(&{0:s}, &{2:s}, _stack_{3:d}, {1:s});\n",
+                            inst[1], inst[2], inst[3], stackTop);
                     globalCount += 1;
                     break;
                 // 向上计数器，每次栈顶上升跳变时加1
                 // 当计数到达目标后计数开关设为1
                 case "CTU":
-                    sw.Write("if (_global[{0:d}]==0&&_stack_{1:d}==1&&!{2:s})\n", globalCount, stackTop, inst[3]);
+                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3]);
                     sw.Write("if (++{0:s}>={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 向下计数器
                 case "CTD":
-                    sw.Write("if (_global[{0:d}]==0&&_stack_{1:d}==1&&!{2:s})\n", globalCount, stackTop, inst[3]);
+                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3]);
                     sw.Write("if (--{0:s}<={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 向上向下计数器，当当前计数小于目标则加1，大于目标则减1
                 case "CTUD":
-                    sw.Write("if (_global[{0:d}]==0&&_stack_{1:d}==1&&!{2:s})\n", globalCount, stackTop, inst[3]);
+                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3]);
                     sw.Write("if (({0:s}<{1:s}?{0:s}++:{0:s}--)=={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
@@ -1098,14 +1118,24 @@ namespace SamSoarII.Extend.Utility
                         case "ROUND": sw.Write("{1:s} = _DWORD_to_ROUND({0:s});\n", inst[1], inst[2]); break;
                         case "TRUNC": sw.Write("{1:s} = _DWORD_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
                         // 位运算指令
-                        case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]);break;
-                        case "ANDW": case "ANDD": sw.Write("{2:s} = {0:s}&{1:s}", inst[1], inst[2], inst[3]);break;
+                        case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]); break;
+                        case "ANDW": case "ANDD": sw.Write("{2:s} = {0:s}&{1:s}", inst[1], inst[2], inst[3]); break;
                         case "ORW": case "ORD": sw.Write("{2:s} = {0:s}|{1:s}", inst[1], inst[2], inst[3]); break;
                         case "XORW": case "XORD": sw.Write("{2:s} = {0:s}^{1:s}", inst[1], inst[2], inst[3]); break;
                         // 寄存器移动指令
                         case "MOV": case "MOVD": case "MOVF": sw.Write("{1:s} = {0:s};\n", inst[1], inst[2]);break;
-                        case "MVBLK": sw.Write("_mvwblk(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);break;
-                        case "MVDBLK": sw.Write("_mvdblk(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);break;
+                        case "MVBLK":
+                            if (simumode)
+                                sw.Write("_mvwblk(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
+                            else
+                                sw.Write("_mvwblk(&{0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
+                            break;
+                        case "MVDBLK":
+                            if (simumode)
+                                sw.Write("_mvdblk(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
+                            else
+                                sw.Write("_mvdblk(&{0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
+                            break;
                         // 数学运算指令
                         case "ADD": sw.Write("{2:s} = _addw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "ADDD": sw.Write("{2:s} = _addd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
@@ -1139,8 +1169,18 @@ namespace SamSoarII.Extend.Utility
                         case "ROR": sw.Write("{2:s} = _rorw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "ROLD": sw.Write("{2:s} = _rold({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "RORD": sw.Write("{2:s} = _rord({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
-                        case "SHLB": sw.Write("_bitshl(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit); break;
-                        case "SHRB": sw.Write("_bitshr(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit); break;
+                        case "SHLB":
+                            if (simumode)
+                                sw.Write("_bitshl(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                            else
+                                sw.Write("_bitshl(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
+                            break;
+                        case "SHRB":
+                            if (simumode)
+                                sw.Write("_bitshr(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                            else
+                                sw.Write("_bitshr(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
+                            break;
                         // 辅助功能
                         case "LOG":sw.Write("{1:d} = _log({0:d});\n", inst[1], inst[2]);break;
                         case "POW":sw.Write("{2:d} = _pow({0:d}, {1:d});\n", inst[1], inst[2], inst[3]);break;
@@ -1158,8 +1198,18 @@ namespace SamSoarII.Extend.Utility
                         case "XCHF": sw.Write("_xchf(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
                         case "CML": sw.Write("{1:d} = _cmlw({0:d});\n", inst[1], inst[2]); break;
                         case "CMLD": sw.Write("{1:d} = _cmld({0:d});\n", inst[1], inst[2]); break;
-                        case "FMOV": sw.Write("_fmovw({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit); break;
-                        case "FMOVD": sw.Write("_fmovd({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit); break;
+                        case "FMOV":
+                            if (simumode)
+                                sw.Write("_fmovw({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
+                            else
+                                sw.Write("_fmovw({0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
+                            break;
+                        case "FMOVD":
+                            if (simumode)
+                                sw.Write("_fmovd({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
+                            else
+                                sw.Write("_fmovd({0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
+                            break;
                         case "SMOV": sw.Write("_smov({0:s}, {1:s}, {2:s}, &{3:s}, {4:s});\n", inst[1], inst[2], inst[3], inst[4], inst[5]); break;
                         // CALL指令，调用子函数
                         case "CALL":

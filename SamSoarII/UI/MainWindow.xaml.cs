@@ -649,12 +649,7 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
                 return;
             }
-            if (SimuStartButton.IsChecked == true)
-            {
-                e.CanExecute = false;
-                return;
-            }
-            e.CanExecute = true;
+            e.CanExecute = SimulateHelper.SModel.SManager.ISBPPause;
         }
 
         private void BPCallCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -662,13 +657,9 @@ namespace SamSoarII.AppMain.UI
             if (SimulateHelper.SModel == null)
             {
                 e.CanExecute = false;
-            }
-            if (SimuStartButton.IsChecked == true)
-            {
-                e.CanExecute = false;
                 return;
             }
-            e.CanExecute = true;
+            e.CanExecute = SimulateHelper.SModel.SManager.ISBPPause;
         }
 
         private void BPOutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -676,13 +667,9 @@ namespace SamSoarII.AppMain.UI
             if (SimulateHelper.SModel == null)
             {
                 e.CanExecute = false;
-            }
-            if (SimuPauseButton.IsChecked == false)
-            {
-                e.CanExecute = false;
                 return;
             }
-            e.CanExecute = true;
+            e.CanExecute = SimulateHelper.SModel.SManager.ISBPPause;
         }
 
         private void OnCloseProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)

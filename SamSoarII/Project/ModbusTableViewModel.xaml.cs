@@ -720,7 +720,7 @@ namespace SamSoarII.AppMain.Project
 
     }
 
-    public class ModbusTableComboBoxItems
+    public class ModbusTableComboBoxItems 
     {
         static private string[] selectedhandlecodes = {
             "0x01（读位）", "0x02（读位）", "0x03（读字）",  "0x04（读字）",
@@ -918,7 +918,7 @@ namespace SamSoarII.AppMain.Project
 
     }
 
-    public class ModbusTableModel
+    public class ModbusTableModel 
     {
         public ModbusTableModel()
         {
@@ -1127,6 +1127,5 @@ namespace SamSoarII.AppMain.Project
         
         #endregion
     }
-
-
+    
 }

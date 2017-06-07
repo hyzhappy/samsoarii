@@ -33,24 +33,10 @@ namespace SamSoarII.Simulation.Core
     {
         #region Import DLL
         /// <summary>
-        /// 动态库接口：根据工程源码创建仿真dll
+        /// 动态库接口：创建仿真代码的编译环境
         /// </summary>
-        /// <param name="simucPath">simuc.c的文件路径</param>
-        /// <param name="simufPath">simuf.c的文件路径</param>
-        /// <param name="simudllPath">simuc.dll的输出路径</param>
-        /// <param name="simuaPath">simua.a的输出路径</param>
-        [DllImport("simu.dll", EntryPoint = "CreateDll")]
-        public static extern void CreateDll
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simucPath,
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simufPath,
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simudllPath,
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simuaPath
-        );
+        [DllImport("simu.dll", EntryPoint = "CreateSource")]
+        public static extern void CreateSource();
 
         /// <summary> LoadDll返回结果：成功</summary>
         public const int LOADDLL_OK = 0x00;
