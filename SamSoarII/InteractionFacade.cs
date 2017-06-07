@@ -20,6 +20,7 @@ using System.Xml.Linq;
 using SamSoarII.Extend.Utility;
 using SamSoarII.UserInterface;
 using SamSoarII.Simulation.UI.Breakpoint;
+using System.Threading;
 
 namespace SamSoarII.AppMain
 {
@@ -920,13 +921,7 @@ namespace SamSoarII.AppMain
         #endregion
 
         #region Project
-
-        public MessageBoxResult ShowSaveYesNoCancelDialog()
-        {
-            string title = "确认保存";
-            string text = String.Format("{0:s}已经更改，是否保存？", _projectModel.ProjectName);
-            return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-        }
+        
         private void InitializeLDNetwordsChangedHandle(LadderDiagramViewModel ldvmodel)
         {
         }
@@ -1033,7 +1028,6 @@ namespace SamSoarII.AppMain
             _projectTreeView.TabItemOpened += OnTabOpened;
             _projectTreeView.PTVHandle += OnGotPTVHandle;
             _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
-            //_projectTreeView.LoadElementInitWindByXElement(_projectModel.EleInitializeData);
             _mainWindow.ElemInitWind.LoadElementsByXElement(_projectModel.EleInitializeData);
             _projectModel.EleInitializeData = null;
             InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
@@ -1115,8 +1109,16 @@ namespace SamSoarII.AppMain
             }
             return true;
         }
+        private void MonitorAbort()
+        {
+            _projectModel.MMonitorManager.MMWindow.OnStopCommandExecute(null,null);
+            Thread.Sleep(10);
+            _projectModel.UManager.Abort();
+            _projectModel.PManager.Abort();
+        }
         public void EditProject()
         {
+            MonitorAbort();
             _projectModel.LadderMode = LadderMode.Edit;
         }
 

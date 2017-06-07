@@ -902,20 +902,14 @@ namespace SamSoarII.AppMain.UI
                         dialog.Close();
                     }
                     else
-                    {
                         MessageBox.Show("通信失败！请检查参数设置。");
-                    }
                 };
                 dialog.CommunicationTest += (sender1, e1) => 
                 {
                     if (!_interactionFacade.CommunicationTest())
-                    {
                         MessageBox.Show("通信失败！请检查参数设置。");
-                    }
                     else
-                    {
                         MessageBox.Show("通信成功!");
-                    }
                 };
                 dialog.ShowDialog();
             }

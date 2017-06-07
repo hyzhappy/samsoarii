@@ -111,13 +111,15 @@ namespace SamSoarII.Communication
             if (!ReferenceEquals(writer, null))
                 writer.Dispose();
             if (!ReferenceEquals(USBDevice, null))
+            {
                 USBDevice.Close();
+                USBDevice = null;
+            }
         }
         private bool FindAndOpenUSB(int VID, int PID)
         {
             UsbDeviceFinder usbFinder = new UsbDeviceFinder(VID, PID);
             UsbRegistry usbRegistry = UsbDevice.AllDevices.Find(usbFinder);
-            int cnt = UsbDevice.AllDevices.Count;
             if (ReferenceEquals(usbRegistry, null))
                 return false;
             // Open this usb device.

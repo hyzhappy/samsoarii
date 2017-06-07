@@ -480,9 +480,10 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             Start();
         }
-        private void OnStopCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        public void OnStopCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             Stop();
+            Thread.Sleep(5);
             ResetShowValue();
         }
         private void ResetShowValue()
@@ -496,7 +497,6 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
         }
         #endregion
-
         #endregion
     }
 }

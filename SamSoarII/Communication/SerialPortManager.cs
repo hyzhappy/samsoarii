@@ -219,7 +219,9 @@ namespace SamSoarII.Communication
         {
             try
             {
-                port.Close();
+                IsSuccess = false;
+                readbuffercount = 0;
+                if(port.IsOpen) port.Close();
             }
             catch (Exception)
             {

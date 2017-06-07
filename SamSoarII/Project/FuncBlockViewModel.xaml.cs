@@ -448,6 +448,7 @@ namespace SamSoarII.AppMain.Project
         /// </summary>
         /// <param name="sender">发送源</param>
         /// <param name="e">事件</param>
+        private int oldTime1 = -1,oldTime2 = -1;
         void textEditer_TextArea_TextEntered(object sender, TextCompositionEventArgs e)
         {
             int tabhigh = 0;
@@ -469,15 +470,25 @@ namespace SamSoarII.AppMain.Project
                         CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
                         model = new FuncBlockModel(CodeTextBox.Text);
                         CodeTextBox.CaretOffset += tabhigh + 2;
+                        oldTime1 = e.Timestamp;
                         break;
                     case '(':
                         inserttext = ")";
                         CodeTextBox.Text = CodeTextBox.Text.Insert(CodeTextBox.CaretOffset, inserttext);
                         model.Current.InnerOffset += inserttext.Length;
+                        oldTime2 = e.Timestamp;
                         break;
                     case ')':
+                        if (oldTime2 > 0 && e.Timestamp - oldTime2 < 100)
+                            CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset-- - 1, 1);
+                        if(CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset) == ')' && CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset - 1) == ')')
+                            CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset - 1, 1);
                         break;
                     case '}':
+                        if (oldTime1 > 0 && e.Timestamp - oldTime1 < 100)
+                            CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset-- - 1, 1);
+                        if (CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset) == '}' && CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset - 1) == '}')
+                            CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset - 1, 1);
                         break;
                     case ';':
                         break;
@@ -533,7 +544,6 @@ namespace SamSoarII.AppMain.Project
             }
             //OutputDebug();
         }
-
         #endregion
         
         public void SetPosition(int line, int column)
