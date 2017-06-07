@@ -18,6 +18,7 @@
 
 typedef void(*vDllfun)(void);
 typedef void(*viDllfun)(int);
+typedef void(*viiDllfun)(int, int);
 typedef int(*isii32Dllfun)(char*, int, int32_t*);
 typedef int(*isii64Dllfun)(char*, int, int64_t*);
 typedef int(*isi64Dllfun)(char*, int64_t*);
@@ -52,6 +53,17 @@ static viDllfun dfInitClock;
 static iDllfun dfGetClock;
 static viDllfun dfSetClockRate;
 static viDllfun dfSetBaseBit;
+static iDllfun dfGetCallCount;
+static iDllfun dfGetBPAddr;
+static viiDllfun dfSetBPAddr;
+static viiDllfun dfSetCPAddr;
+static viDllfun dfSetBPEnable;
+static iDllfun dfGetBPPause;
+static viDllfun dfSetBPPause;
+static vDllfun dfMoveStep;
+static vDllfun dfCallStep;
+static viDllfun dfJumpTo;
+static vDllfun dfJumpOut;
 
 EXPORT void CreateDll(char* simucPath, char* simufPath, char* simudllPath, char* simuaPath)
 {
@@ -184,6 +196,72 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeLibrary(hdll);
 		return 20;
 	}
+	dfGetCallCount = (iDllfun)GetProcAddress(hdll, "_GetCallCount@0");
+	if (dfGetCallCount == NULL)
+	{
+		FreeLibrary(hdll);
+		return 21;
+	}
+	dfGetBPAddr = (iDllfun)GetProcAddress(hdll, "_GetBPAddr@0");
+	if (dfGetBPAddr == NULL)
+	{
+		FreeLibrary(hdll);
+		return 22;
+	}
+	dfSetBPAddr = (viiDllfun)GetProcAddress(hdll, "_SetBPAddr@8");
+	if (dfSetBPAddr == NULL)
+	{
+		FreeLibrary(hdll);
+		return 23;
+	}
+	dfSetCPAddr = (viiDllfun)GetProcAddress(hdll, "_SetCPAddr@8");
+	if (dfSetCPAddr == NULL)
+	{
+		FreeLibrary(hdll);
+		return 24;
+	}
+	dfGetBPPause = (iDllfun)GetProcAddress(hdll, "_GetBPPause@0");
+	if (dfGetBPPause == NULL)
+	{
+		FreeLibrary(hdll);
+		return 25;
+	}
+	dfSetBPPause = (viDllfun)GetProcAddress(hdll, "_SetBPPause@4");
+	if (dfSetBPPause == NULL)
+	{
+		FreeLibrary(hdll);
+		return 26;
+	}
+	dfMoveStep = (vDllfun)GetProcAddress(hdll, "_MoveStep@0");
+	if (dfMoveStep == NULL)
+	{
+		FreeLibrary(hdll);
+		return 27;
+	}
+	dfCallStep = (vDllfun)GetProcAddress(hdll, "_CallStep@0");
+	if (dfCallStep == NULL)
+	{
+		FreeLibrary(hdll);
+		return 28;
+	}
+	dfJumpTo = (viDllfun)GetProcAddress(hdll, "_JumpTo@4");
+	if (dfJumpTo == NULL)
+	{
+		FreeLibrary(hdll);
+		return 29;
+	}
+	dfJumpOut = (vDllfun)GetProcAddress(hdll, "_JumpOut@0");
+	if (dfJumpOut == NULL)
+	{
+		FreeLibrary(hdll);
+		return 30;
+	}
+	dfSetBPEnable = (viDllfun)GetProcAddress(hdll, "_SetBPEnable@4");
+	if (dfSetBPEnable == NULL)
+	{
+		FreeLibrary(hdll);
+		return 31;
+	}
 	return 0;
 }
 
@@ -287,4 +365,59 @@ EXPORT void SetClockRate(int _rate)
 EXPORT void SetBaseBit(int _basebit)
 {
 	dfSetBaseBit(_basebit);
+}
+
+EXPORT int GetCallCount()
+{
+	return dfGetCallCount();
+}
+
+EXPORT int GetBPAddr()
+{
+	return dfGetBPAddr();
+}
+
+EXPORT void SetBPAddr(int bpaddr, int islock)
+{
+	dfSetBPAddr(bpaddr, islock);
+}
+
+EXPORT void SetCPAddr(int cpaddr, int cpmsg)
+{
+	dfSetCPAddr(cpaddr, cpmsg);
+}
+
+EXPORT void SetBPEnable(int bpenable)
+{
+	dfSetBPEnable(bpenable);
+}
+
+EXPORT int GetBPPause()
+{
+	return dfGetBPPause();
+}
+
+EXPORT void SetBPPause(int bppause)
+{
+	dfSetBPPause(bppause);
+}
+
+EXPORT void MoveStep()
+{
+	dfMoveStep();
+}
+
+EXPORT void CallStep()
+{
+	dfCallStep();
+}
+
+EXPORT void JumpTo(int _bpaddr)
+{
+	dfJumpTo(_bpaddr);
+}
+
+EXPORT void JumpOut()
+{
+	dfJumpOut();
 }

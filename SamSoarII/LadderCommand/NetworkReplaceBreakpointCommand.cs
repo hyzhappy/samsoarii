@@ -44,6 +44,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _newarea.Select(_network);
             }
+            
         }
 
         public void Redo()

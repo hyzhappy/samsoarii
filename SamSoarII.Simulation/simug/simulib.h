@@ -46,6 +46,34 @@ EXPORT int GetClock();
 
 EXPORT void SetClockRate(int _timerate);
 
+void callinto();
+
+void callleave();
+
+void bpcycle(int32_t _bpaddr);
+
+void cpcycle(int32_t _bpaddr, int32_t value);
+
+EXPORT int GetCallCount();
+
+EXPORT int GetBPAddr();
+
+EXPORT void SetBPAddr(int32_t _bpaddr, int32_t islock);
+
+EXPORT int GetBPPause();
+
+EXPORT void SetBPPause(int _bppause);
+
+EXPORT void MoveStep();
+
+EXPORT void CallStep();
+
+EXPORT void JumpTo();
+
+EXPORT void JumpOut();
+
+EXPORT void SetCPAddr(int32_t _cpaddr, int32_t _cpmsg);
+
 void InitRegisters();
 
 EXPORT void InitRunLadder();
@@ -55,6 +83,7 @@ EXPORT void BeforeRunLadder();
 EXPORT void AfterRunLadder();
 
 EXPORT void RunLadder();
+
 // get a result (32-bit integer) by add a couple of 32-bit integers
 int32_t _addw(int32_t ia, int32_t ib);
 // get a result (64-bit integer) by add a couple of 64-bit integers
@@ -252,3 +281,14 @@ void _mvdblk(int64_t* source, int64_t* dest, int32_t* enable, int32_t len);
 void _fmovw(int32_t source, int32_t* dest, int32_t* enable, int32_t size);
 // set a series of 32-bit memeory to the targeted value
 void _fmovd(int64_t source, int64_t* dest, int32_t* enable, int32_t size);
+/*
+double asinf(double d);
+
+double acosf(double d);
+
+double atanf(double d);
+
+double log10(double d);
+
+double logf(double d);
+*/

@@ -32,6 +32,7 @@ using SamSoarII.AppMain.UI.Monitor;
 using System.Threading;
 using System.Windows.Threading;
 using SamSoarII.ValueModel;
+using SamSoarII.Simulation.Core.Event;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -89,6 +90,7 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAElemList);
             InitializeAvalonDock(LAElemInit);
             InitializeAvalonDock(LABreakpoint);
+            
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -164,6 +166,9 @@ namespace SamSoarII.AppMain.UI
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += backgroundWorker_DoWork;
             worker.RunWorkerAsync();
+            LACProj.Show();
+            LAProj.Hide();
+            this.Loaded -= MainWindow_Loaded;
         }
         private void Initialize()
         {
@@ -375,7 +380,7 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
             }
         }
-	private void AddNewModbusCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+	    private void AddNewModbusCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
@@ -546,6 +551,20 @@ namespace SamSoarII.AppMain.UI
             }
         }
 
+        private void ShowBreakpointCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (_interactionFacade != null
+             && _interactionFacade.ProjectLoaded
+             && _interactionFacade.ProjectModel.LadderMode == LadderMode.Simulate)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
         private void DownloadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
 
@@ -613,6 +632,59 @@ namespace SamSoarII.AppMain.UI
             }
         }
         
+        private void BPNowCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel == null)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = SimulateHelper.SModel.SManager.ISBPPause;
+        }
+
+        private void BPStepCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel == null)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            if (SimuStartButton.IsChecked == true)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = true;
+        }
+
+        private void BPCallCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel == null)
+            {
+                e.CanExecute = false;
+            }
+            if (SimuStartButton.IsChecked == true)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = true;
+        }
+
+        private void BPOutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel == null)
+            {
+                e.CanExecute = false;
+            }
+            if (SimuPauseButton.IsChecked == false)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = true;
+        }
+
         private void OnCloseProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
@@ -687,6 +759,11 @@ namespace SamSoarII.AppMain.UI
         private void OnShowElemInitExecute(object sender, RoutedEventArgs e)
         {
             LACElemInit.Show();
+        }
+
+        private void OnShowBreakpointExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            LACBreakpoint.Show();
         }
 
         private void OnAddNewSubRoutineCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -946,6 +1023,8 @@ namespace SamSoarII.AppMain.UI
                     SimulateHelper.SModel.SimulateStart += OnSimulateStart;
                     SimulateHelper.SModel.SimulatePause += OnSimulatePause;
                     SimulateHelper.SModel.SimulateAbort += OnSimulateAbort;
+                    SimulateHelper.SModel.SManager.BreakpointPause += OnBreakpointPause;
+                    SimulateHelper.SModel.SManager.BreakpointResume += OnBreakpointResume;
                     SimulateModeButton.IsChecked = true;
                     LACMonitor.Show();
                 }
@@ -967,6 +1046,18 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+
+        private void OnBreakpointResume(object sender, BreakpointPauseEventArgs e)
+        {
+            if (SimuStopButton.IsChecked != true)
+                OnSimulateStart(sender, new RoutedEventArgs());
+        }
+
+        private void OnBreakpointPause(object sender, BreakpointPauseEventArgs e)
+        {
+            OnSimulatePause(sender, new RoutedEventArgs());
+        }
+
         private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -1021,6 +1112,35 @@ namespace SamSoarII.AppMain.UI
             SimulateHelper.SModel.Stop();
         }
 
+        private void OnBPNowCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void OnBPStepCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel != null)
+            {
+                SimulateHelper.SModel.SManager.StepMove();
+            }
+        }
+
+        private void OnBPCallCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel != null)
+            {
+                SimulateHelper.SModel.SManager.CallMove();
+            }
+        }
+
+        private void OnBPOutCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (SimulateHelper.SModel != null)
+            {
+                SimulateHelper.SModel.SManager.JumpOut();
+            }
+        }
+        
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
         {
             ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel);

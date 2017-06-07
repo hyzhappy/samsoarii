@@ -70,6 +70,8 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 this.laddermode = value;
+                _ladderBPAddrBegin = 0x3fffffff;
+                _ladderBPAddrEnd = -0x3ffffffe;
                 foreach (BaseViewModel bvmodel in _ladderVerticalLines.Values.Union(_ladderElements.Values))
                 {
                     switch (laddermode)
@@ -88,8 +90,21 @@ namespace SamSoarII.AppMain.Project
                             LadderCanvas.ContextMenu = CM_Monitor;
                             bvmodel.IsMonitorMode = true;
                             bvmodel.CanModify = false;
+                            if (laddermode == LadderMode.Simulate)
+                            {
+                                _ladderBPAddrBegin = Math.Min(
+                                    _ladderBPAddrBegin, bvmodel.BPAddress);
+                                _ladderBPAddrEnd = Math.Max(
+                                    _ladderBPAddrEnd, bvmodel.BPAddress);
+                            }
                             break;
                     }
+                }
+                foreach (BreakpointRect brect in _ladderBreakpoints.Values)
+                {
+                    brect.Visibility = (laddermode == LadderMode.Simulate)
+                        ? Visibility.Visible
+                        : Visibility.Hidden;
                 }
             }
         }
@@ -163,7 +178,6 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this,new PropertyChangedEventArgs("NetworkMessage"));
             }
         }
-
         public string NetworkDescription
         {
             get
@@ -204,7 +218,6 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        
         private bool _isCommendMode;
         public bool IsCommentMode
         {
@@ -223,6 +236,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
         public SortedDictionary<IntPoint, BaseViewModel> LadderElements
         {
             get
@@ -262,7 +276,22 @@ namespace SamSoarII.AppMain.Project
                 _invmodel.Setup(this);
             }
         }
-         
+
+        #region Breakpoint Collection
+
+        //private Dictionary<int, BaseViewModel> _ladderBPAddresses
+        //    = new Dictionary<int, BaseViewModel>();
+        private int _ladderBPAddrBegin;
+        private int _ladderBPAddrEnd;
+
+        public bool ContainBPAddr(int bpaddr)
+        {
+            return (bpaddr >= _ladderBPAddrBegin
+                 && bpaddr <= _ladderBPAddrEnd);
+        }
+        
+        #endregion
+
         public BaseViewModel GetElementByPosition(int X, int Y)
         {
             IntPoint ip = new IntPoint();
@@ -574,6 +603,21 @@ namespace SamSoarII.AppMain.Project
             return _ladderVerticalLines.Values;
         }
 
+        public BreakpointRect SearchBreakpoint(int x, int y)
+        {
+            var p = new IntPoint() { X = x, Y = y };
+            if (_ladderBreakpoints.ContainsKey(p))
+            {
+                return _ladderBreakpoints[p];
+            }
+            return null;
+        }
+
+        public IEnumerable<BreakpointRect> GetBreakpoint()
+        {
+            return _ladderBreakpoints.Values;
+        }
+
         #region generate LadderLogicModule
         public void InitializeLadderLogicModules()
         {
@@ -791,6 +835,7 @@ namespace SamSoarII.AppMain.Project
                 LadderCanvas.Children.Remove(rect);
                 BreakpointChanged(this, new BreakpointChangedEventArgs(
                     this, rect, null));
+                rect.BVModel = null;
                 return true;
             }
             else

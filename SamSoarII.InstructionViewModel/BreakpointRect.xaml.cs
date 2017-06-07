@@ -47,7 +47,17 @@ namespace SamSoarII.LadderInstViewModel
             }
             set
             {
+                BaseViewModel _bvmodel = bvmodel;
                 this.bvmodel = value;
+                if (_bvmodel != null)
+                {
+                    _bvmodel.BPRect = null;
+                }
+                if (bvmodel != null && bvmodel.BPRect != this)
+                {
+                    bvmodel.BPRect = this;
+                }
+                
             }
         }
         

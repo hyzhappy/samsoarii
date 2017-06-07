@@ -336,6 +336,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\Image\Breakpoint\BPIcons.psd" />
+    <None Include="Resources\Image\Icons.psd" />
+    <None Include="Resources\Image\Lock\Thumbs.db" />
     <None Include="Resources\Image\TreeViewIcon\Icons.psd" />
   </ItemGroup>
   <ItemGroup>
@@ -616,43 +619,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Image\Compile.png" />
-    <Resource Include="Resources\Image\Copy.png" />
-    <Resource Include="Resources\Image\Cut.png" />
-    <Resource Include="Resources\Image\Download.png" />
-    <Resource Include="Resources\Image\New.png" />
-    <Resource Include="Resources\Image\Open.png" />
-    <Resource Include="Resources\Image\Paste.png" />
-    <Resource Include="Resources\Image\Save.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Simu.png" />
-    <Resource Include="Resources\Image\TreeViewIcon\MainProgram.ico" />
-    <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
-    <Resource Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
-    <Resource Include="Resources\Image\TreeViewIcon\Program.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\InstructionToolbar\LD.ico" />
-    <Resource Include="Resources\Image\InstructionToolbar\OUT.ico" />
-    <Resource Include="Resources\Image\InstructionToolbar\HLine.ico" />
-    <Resource Include="Resources\Image\InstructionToolbar\VLine.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Redo.png" />
-    <Resource Include="Resources\Image\Undo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Search.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Converter\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Comment.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Config.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\InstructionPopup.xml">
@@ -661,60 +628,57 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Image\Lock\LockOff.png" />
-    <Resource Include="Resources\Image\Lock\LockOn.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Expand\ExpandOff.png" />
-    <Resource Include="Resources\Image\Expand\ExpandOn.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Upload.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Inst.png" />
-    <Resource Include="Resources\Image\Ladder.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Pause.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Stop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Start.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\PLCSetting.png" />
-    <Resource Include="Resources\Image\SystemSetting.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\DeleteRow.png" />
-    <Resource Include="Resources\Image\InsertRow.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Image\Comment.png" />
     <Resource Include="Resources\Image\CommunicationSetting.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\SpecialRegisters.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\table.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\Monitor.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\expandOff.png" />
-    <Resource Include="Resources\Image\expandOn.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Image\Compile.png" />
+    <Resource Include="Resources\Image\Config.png" />
+    <Resource Include="Resources\Image\Copy.png" />
+    <Resource Include="Resources\Image\Cut.png" />
+    <Resource Include="Resources\Image\DeleteRow.png" />
+    <Resource Include="Resources\Image\Download.png" />
     <Resource Include="Resources\Image\ElementInitialize.png" />
     <Resource Include="Resources\Image\ElementTable.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Image\expandOff.png" />
+    <Resource Include="Resources\Image\expandOn.png" />
+    <Resource Include="Resources\Image\Expand\ExpandOff.png" />
+    <Resource Include="Resources\Image\Expand\ExpandOn.png" />
+    <Resource Include="Resources\Image\InsertRow.png" />
+    <Resource Include="Resources\Image\Inst.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\HLine.ico" />
+    <Resource Include="Resources\Image\InstructionToolbar\LD.ico" />
+    <Resource Include="Resources\Image\InstructionToolbar\OUT.ico" />
+    <Resource Include="Resources\Image\InstructionToolbar\VLine.ico" />
+    <Resource Include="Resources\Image\Ladder.png" />
+    <Resource Include="Resources\Image\Lock\LockOff.png" />
+    <Resource Include="Resources\Image\Lock\LockOn.png" />
+    <Resource Include="Resources\Image\MainStyle\folderClose.png" />
+    <Resource Include="Resources\Image\MainStyle\folderOpen.png" />
+    <Resource Include="Resources\Image\MainStyle\FUNC.png" />
+    <Resource Include="Resources\Image\MainStyle\FuncBlock.png" />
+    <Resource Include="Resources\Image\MainStyle\Instruction.png" />
+    <Resource Include="Resources\Image\MainStyle\ModBusTable.png" />
+    <Resource Include="Resources\Image\MainStyle\Network.png" />
+    <Resource Include="Resources\Image\MainStyle\Program.png" />
+    <Resource Include="Resources\Image\MainStyle\Project.png" />
+    <Resource Include="Resources\Image\MainStyle\Routines.png" />
+    <Resource Include="Resources\Image\MainStyle\TVFolder.png" />
+    <Resource Include="Resources\Image\Monitor.png" />
+    <Resource Include="Resources\Image\New.png" />
+    <Resource Include="Resources\Image\Open.png" />
+    <Resource Include="Resources\Image\Paste.png" />
+    <Resource Include="Resources\Image\Pause.png" />
+    <Resource Include="Resources\Image\PLCSetting.png" />
+    <Resource Include="Resources\Image\Redo.png" />
+    <Resource Include="Resources\Image\Save.png" />
+    <Resource Include="Resources\Image\Search.png" />
+    <Resource Include="Resources\Image\Simu.png" />
+    <Resource Include="Resources\Image\Start.png" />
+    <Resource Include="Resources\Image\Stop.png" />
+    <Resource Include="Resources\Image\SystemSetting.png" />
+    <Resource Include="Resources\Image\table.png" />
     <Resource Include="Resources\Image\TreeViewIcon\ElementList.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Func.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
     <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.png" />
     <Resource Include="Resources\Image\TreeViewIcon\FuncBlockFolder.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Instruction_Input1.png" />
@@ -722,29 +686,20 @@
     <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output1.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output2.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Ladders.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\MainProgram.ico" />
     <Resource Include="Resources\Image\TreeViewIcon\Modbus.png" />
     <Resource Include="Resources\Image\TreeViewIcon\ModbusFolder.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Network.png" />
     <Resource Include="Resources\Image\TreeViewIcon\NetworkFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Program.ico" />
     <Resource Include="Resources\Image\TreeViewIcon\Program.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Root.png" />
     <Resource Include="Resources\Image\TreeViewIcon\Routine.png" />
     <Resource Include="Resources\Image\TreeViewIcon\RoutineFolder.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\MainStyle\FUNC.png" />
-    <Resource Include="Resources\Image\MainStyle\FuncBlock.png" />
-    <Resource Include="Resources\Image\MainStyle\Instruction.png" />
-    <Resource Include="Resources\Image\MainStyle\ModBusTable.png" />
-    <Resource Include="Resources\Image\MainStyle\Network.png" />
-    <Resource Include="Resources\Image\MainStyle\Project.png" />
-    <Resource Include="Resources\Image\MainStyle\Program.png" />
-    <Resource Include="Resources\Image\MainStyle\Routines.png" />
-    <Resource Include="Resources\Image\MainStyle\TVFolder.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\MainStyle\folderClose.png" />
-    <Resource Include="Resources\Image\MainStyle\folderOpen.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
+    <Resource Include="Resources\Image\Undo.png" />
+    <Resource Include="Resources\Image\Upload.png" />
+    <Resource Include="Resources\SpecialRegisters.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Communication\Util\plcusb.dll" />
@@ -752,6 +707,21 @@
     <Content Include="Communication\Util\usbdll\libusb.h" />
     <Content Include="Communication\Util\usbdll\usbdll.c" />
     <Content Include="Communication\Util\usbdll\usbdll.h" />
+    <Resource Include="Resources\Image\Breakpoint\BPCall.png" />
+    <Resource Include="Resources\Image\Breakpoint\BPNow.png" />
+    <Resource Include="Resources\Image\Breakpoint\BPOut.png" />
+    <Resource Include="Resources\Image\Breakpoint\BPStep.png" />
+    <Resource Include="Resources\Image\folderClose.png" />
+    <Resource Include="Resources\Image\folderOpen.png" />
+    <Resource Include="Resources\Image\FUNC.png" />
+    <Resource Include="Resources\Image\FuncBlock.png" />
+    <Resource Include="Resources\Image\Instruction.png" />
+    <Resource Include="Resources\Image\ModBusTable.png" />
+    <Resource Include="Resources\Image\Network.png" />
+    <Resource Include="Resources\Image\Project.png" />
+    <Resource Include="Resources\Image\Routine.png" />
+    <Resource Include="Resources\Image\Routines.png" />
+    <Resource Include="Resources\Image\TVFolder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

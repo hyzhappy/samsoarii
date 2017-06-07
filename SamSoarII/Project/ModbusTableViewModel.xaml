@@ -64,7 +64,8 @@
                                     IsReadOnly="False" Binding="{Binding SlaveID}">
                 </DataGridTextColumn>
                 <DataGridComboBoxColumn x:Name="DGCBC_HandleCode" Header="功能码" Width="*"
-                                    IsReadOnly="False" TextBinding="{Binding HandleCode}" ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
+                                    IsReadOnly="False" TextBinding="{Binding HandleCode}" 
+                                    ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
                 </DataGridComboBoxColumn>
                 <DataGridTextColumn x:Name="DGTC_SlaveRegister" Header="从站寄存器" Width="*"
                                     IsReadOnly="False" Binding="{Binding SlaveRegister}">

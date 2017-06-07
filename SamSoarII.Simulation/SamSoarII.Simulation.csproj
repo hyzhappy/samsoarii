@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Core\DataModel\SimulateDataModel.cs" />
     <Compile Include="Core\DataModel\ValueSegment.cs" />
+    <Compile Include="Core\Event\BreakpointPauseEventArgs.cs" />
     <Compile Include="Core\Event\VariableUnitChangeEventArgs.cs" />
     <Compile Include="Core\FileHelper.cs" />
     <Compile Include="Core\Global\GlobalCommand.cs" />

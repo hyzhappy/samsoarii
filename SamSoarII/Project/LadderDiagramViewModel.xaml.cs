@@ -171,7 +171,6 @@ namespace SamSoarII.AppMain.Project
         }
         public bool IsMainLadder { get; set; }
         public bool IsInterruptCalled { get; set; }
-
         public Dictionary<string, List<string>> InstrutionNameAndToolTips { get; private set; }
         public int NetworkCount
         {
@@ -181,7 +180,8 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private LinkedList<LadderNetworkViewModel> _ladderNetworks = new LinkedList<LadderNetworkViewModel>();
+        private LinkedList<LadderNetworkViewModel> _ladderNetworks 
+            = new LinkedList<LadderNetworkViewModel>();
         public LinkedList<LadderNetworkViewModel> LadderNetworks
         {
             get
@@ -195,7 +195,6 @@ namespace SamSoarII.AppMain.Project
             }
         }
         private SelectRect _selectRect = new SelectRect();
-
         private LadderNetworkViewModel _selectStartNetwork;
         public LadderNetworkViewModel SelectStartNetwork
         {
@@ -204,7 +203,8 @@ namespace SamSoarII.AppMain.Project
                 return _selectStartNetwork;
             }
         }
-        private SortedSet<LadderNetworkViewModel> _selectAllNetworks = new SortedSet<LadderNetworkViewModel>();
+        private SortedSet<LadderNetworkViewModel> _selectAllNetworks
+            = new SortedSet<LadderNetworkViewModel>();
         public SortedSet<LadderNetworkViewModel> SelectAllNetworks
         {
             get
@@ -212,7 +212,8 @@ namespace SamSoarII.AppMain.Project
                 return _selectAllNetworks;
             }
         }
-        private SortedSet<LadderNetworkViewModel> _selectAllNetworkCache = new SortedSet<LadderNetworkViewModel>();
+        private SortedSet<LadderNetworkViewModel> _selectAllNetworkCache
+            = new SortedSet<LadderNetworkViewModel>();
         public SortedSet<LadderNetworkViewModel> SelectAllNetworkCache
         {
             get
@@ -231,7 +232,6 @@ namespace SamSoarII.AppMain.Project
                 _selectRect = value;
             }
         }
-
         private LadderNetworkViewModel _selectRectOwner = null;
         public LadderNetworkViewModel SelectRectOwner
         {
@@ -241,7 +241,6 @@ namespace SamSoarII.AppMain.Project
             }
         }
         private SelectStatus _selectStatus = SelectStatus.Idle;
-
         public SelectStatus SelectionStatus
         {
             get
@@ -405,12 +404,13 @@ namespace SamSoarII.AppMain.Project
             }
             InstrutionNameAndToolTips = tempDic;
         }
+        
         #region Network manipulation
         public LadderNetworkViewModel GetNetworkByNumber(int number)
         {
             return _ladderNetworks.ElementAt(number);
         }
-
+        
         /// <summary>
         /// 初始化，删除所有的网络，不要在用户交互中使用，仅仅在初始化的时候调用以初始化
         /// </summary>
@@ -493,7 +493,7 @@ namespace SamSoarII.AppMain.Project
             {
                 for (int i = Math.Max(SelectionRect.X,1); i < GlobalSetting.LadderXCapacity - 1; i++)
                 {
-                    if (_selectRectOwner.SearchElement(i,SelectionRect.Y) == null)
+                    if (_selectRectOwner.SearchElement(i, SelectionRect.Y) == null)
                     {
                         elements.Add(new HorizontalLineViewModel() {X = i,Y = SelectionRect.Y });
                     }
@@ -502,10 +502,23 @@ namespace SamSoarII.AppMain.Project
             var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
             _commandManager.Execute(command);
         }
+
         public void ReplaceBreakpoint(LadderNetworkViewModel lnvmodel, BreakpointRect brect)
         {
-            
+            var newrects = new List<BreakpointRect>();
+            var oldrects = new List<BreakpointRect>();
+            if (brect.BVModel != null)
+            {
+                int x = brect.BVModel.X;
+                int y = brect.BVModel.Y;
+                var oldrect = _selectRectOwner.SearchBreakpoint(x, y);
+                if (oldrect != null) oldrects.Add(oldrect);
+            }
+            newrects.Add(brect);
+            var command = new LadderCommand.NetworkReplaceBreakpointCommand(_selectRectOwner, oldrects, newrects);
+            _commandManager.Execute(command);
         }
+
         public void UpdateModelMessageByNetwork()
         {
             foreach (var net in LadderNetworks)
@@ -606,6 +619,15 @@ namespace SamSoarII.AppMain.Project
         {
             var vlines = new List<VerticalLineViewModel>() { vline };
             var command = new LadderCommand.NetworkRemoveElementsCommand(network, new List<BaseViewModel>(), vlines);
+            _commandManager.Execute(command);
+        }
+
+        public void RemoveBreakpoint(LadderNetworkViewModel network, BreakpointRect brect)
+        {
+            var oldrects = new BreakpointRect[] { brect };
+            var newrects = new BreakpointRect[] { };
+            var command = new LadderCommand.NetworkReplaceBreakpointCommand(
+                network, oldrects, newrects);
             _commandManager.Execute(command);
         }
 

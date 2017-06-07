@@ -27,9 +27,9 @@ void RPCF(FLOAT* in, FLOAT* out)
 // 反三角函数
 void ITF(FLOAT* in, FLOAT* out)
 {
-	out[0] = asinf(in[0]);
-	out[1] = acosf(in[1]);
-	out[2] = atanf(in[2]);
+	out[0] = asin(in[0]);
+	out[1] = acos(in[1]);
+	out[2] = atan(in[2]);
 }
 
 // 求阶乘
@@ -83,7 +83,7 @@ void NL10(FLOAT* in, FLOAT* out)
 // 以e为底的对数
 void NLO(FLOAT* in, FLOAT* out)
 {
-	*out = logf(*in);
+	*out = log(*in);
 }
 
 // 求直角三角形的斜边

@@ -32,6 +32,7 @@ using SamSoarII.LadderInstViewModel.Monitor;
 using SamSoarII.ValueModel;
 using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Simulation.UI.Breakpoint;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -75,6 +76,9 @@ namespace SamSoarII.AppMain.Project
                     smodel.ShowWindow();
                     pmodel.LadderMode = LadderMode.Simulate;
                     smmanager.Initialize();
+                    SimuBrpoWindow bpwindow = pmodel.IFacade.BPWindow;
+                    bpwindow.Route(pmodel);
+                    bpwindow.SManager = smodel.SManager;
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                     MessageBox.Show("Error : 找不到生成的dll文件\r\n");
@@ -140,9 +144,12 @@ namespace SamSoarII.AppMain.Project
             if (smodel != null)
             {
                 smodel.Dispose();
-                smodel = null;   
+                smodel = null;
             }
             pmodel.LadderMode = LadderMode.Edit;
+            SimuBrpoWindow bpwindow = pmodel.IFacade.BPWindow;
+            bpwindow.Unroute(pmodel);
+            bpwindow.SManager = null;
             return CLOSE_OK;
         }
         

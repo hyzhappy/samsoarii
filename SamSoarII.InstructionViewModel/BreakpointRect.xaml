@@ -8,13 +8,13 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Canvas>
         <Rectangle Width="300" Height="300" 
-                   Stroke="White" StrokeThickness="2">
+                   Stroke="#FF600808" StrokeThickness="2">
         </Rectangle>
         <Rectangle Canvas.Left="7" Canvas.Top="7" Width="286" Height="286"
-                   Stroke="White" StrokeThickness="2">
+                   Stroke="#FF600808" StrokeThickness="2">
         </Rectangle>
         <Rectangle Canvas.Left="252" Width="48" Height="48"
-                   Stroke="White" StrokeThickness="2">
+                   Stroke="#FF600808" StrokeThickness="2">
         </Rectangle>
         <Rectangle Canvas.Left="2" Canvas.Top="2" Width="296" Height="296"
                    Stroke="Red" StrokeThickness="5">
