@@ -61,11 +61,14 @@ namespace SamSoarII.AppMain.UI
         private ProjectTreeViewItem PTVI_Ladders;
         private ProjectTreeViewItem[] PTVI_Insts;
         static private string[] PTVIH_Insts
-        = { "位逻辑", "比较指令", "转换指令", "逻辑运算",
-            "传送指令", "浮点运算", "整数运算", "定时器",
-            "计数器", "程序控制", "移位指令", "中断指令",
-            "实时时钟", "通信指令", "脉冲输出", "高速计数",
-            "辅助指令"};
+        = { Properties.Resources.Inst_Bit, Properties.Resources.Inst_Compare, Properties.Resources.Inst_Convert,
+            Properties.Resources.Inst_LogicOperation,Properties.Resources.Inst_Move,
+            Properties.Resources.Inst_FloatCalculation, Properties.Resources.Inst_IntegerCalculation,
+            Properties.Resources.Inst_Timer,Properties.Resources.Inst_Counter, Properties.Resources.Inst_ProgramControl,
+            Properties.Resources.Inst_Shift, Properties.Resources.Inst_Interrupt,
+            Properties.Resources.Inst_RealTime, Properties.Resources.Inst_Communication,
+            Properties.Resources.Inst_Pulse, Properties.Resources.Inst_HighCount,
+            Properties.Resources.Inst_Auxiliar};
 
         #endregion
 
@@ -165,7 +168,7 @@ namespace SamSoarII.AppMain.UI
             PTVI_Program = CreatePTVItem(
                 PTVI_Root,
                 ProjectTreeViewItem.TYPE_PROGRAM,
-                "程序");
+                Properties.Resources.Routine);
 
             PTVI_MainRoutine = CreatePTVItem(
                 PTVI_Program,
@@ -178,14 +181,14 @@ namespace SamSoarII.AppMain.UI
                 ProjectTreeViewItem.TYPE_ROUTINEFLODER
               | ProjectTreeViewItem.FLAG_CREATEFOLDER
               | ProjectTreeViewItem.FLAG_CREATEROUTINE,
-                "子程序", true, true);
+                Properties.Resources.SubRoutine, true, true);
 
             PTVI_FuncBlocks = CreatePTVItem(
                 PTVI_Program,
                 ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER
               | ProjectTreeViewItem.FLAG_CREATEFOLDER
               | ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK,
-                "函数功能块", true, true);
+                Properties.Resources.FuncBlock, true, true);
 
             PTVI_LibFuncBlock = CreatePTVItem(
                 PTVI_FuncBlocks,
@@ -212,7 +215,7 @@ namespace SamSoarII.AppMain.UI
             PTVI_Ladders = CreatePTVItem(
                 PTVI_Root,
                 ProjectTreeViewItem.TYPE_LADDERS,
-                "指令");
+                Properties.Resources.Instruction);
 
             PTVI_Insts = new ProjectTreeViewItem[PTVIH_Insts.Length];
             for (int i = 0; i < PTVIH_Insts.Length; i++)
@@ -306,7 +309,7 @@ namespace SamSoarII.AppMain.UI
                 CreatePTVItem(
                     ptvitem,
                     ProjectTreeViewItem.TYPE_CONST,
-                    "没有函数");
+                    Properties.Resources.PTV_No_Function);
             }
             foreach (FuncModel fmodel in fbvmodel.Funcs)
             {
@@ -999,6 +1002,8 @@ namespace SamSoarII.AppMain.UI
             if ((DragItem.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
             {
                 LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)(DragItem.RelativeObject);
+                lnvmodel.ReleaseSelectRect();
+                lnvmodel.IsSelectAreaMode = false;
                 LadderDiagramViewModel ldvmodel = null;
                 int _networknumber = lnvmodel.NetworkNumber;
                 switch (CurrentItem.Flags & 0xf)
@@ -1116,10 +1121,6 @@ namespace SamSoarII.AppMain.UI
                         break;
                 }
             }
-        }
-        public void LoadElementInitWindByXElement(XElement rootNode)
-        {
-            _elementInitWind.LoadElementsByXElement(rootNode);
         }
         public void Load(XElement xele)
         {

@@ -1,99 +1,100 @@
-﻿<UserControl x:Class="SamSoarII.AppMain.UI.ElementList"
+﻿<UserControl x:Uid="elementList" x:Class="SamSoarII.AppMain.UI.ElementList"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+        xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
         x:Name="elementList" MinWidth="300" MinHeight="200">
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="12*"></RowDefinition>
-            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_1" Height="40"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_2" Height="*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_3" Height="12*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_4" Height="70"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.Resources>
-            <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
-                <Border CornerRadius="3" BorderBrush="#FF353980" BorderThickness="0.7" Background="{TemplateBinding Background}">
-                    <Grid>
-                        <Rectangle x:Name="FocusCue" Visibility="Hidden" Stroke="Black" StrokeThickness="0.7" StrokeDashArray="1 2" SnapsToDevicePixels="True"></Rectangle>
-                        <ContentPresenter Margin="{TemplateBinding Padding}" ContentSource="{Binding Button}"></ContentPresenter>
+            <ControlTemplate x:Uid="ControlTemplate_1" x:Key="ButtonTemplate" TargetType="Button">
+                <Border x:Uid="Border_1" CornerRadius="3" BorderBrush="#FF353980" BorderThickness="0.7" Background="{TemplateBinding Background}">
+                    <Grid x:Uid="Grid_2">
+                        <Rectangle x:Uid="FocusCue" x:Name="FocusCue" Visibility="Hidden" Stroke="Black" StrokeThickness="0.7" StrokeDashArray="1 2" SnapsToDevicePixels="True"></Rectangle>
+                        <ContentPresenter x:Uid="ContentPresenter_1" Margin="{TemplateBinding Padding}" ContentSource="{Binding Button}"></ContentPresenter>
                     </Grid>
                 </Border>
                 <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="FontWeight" Value="ExtraBlack"></Setter>
-                        <Setter Property="Foreground" Value="#FF272725"></Setter>
+                    <Trigger x:Uid="Trigger_1" Property="IsMouseOver" Value="True">
+                        <Setter x:Uid="Setter_1" Property="FontWeight" Value="ExtraBlack"></Setter>
+                        <Setter x:Uid="Setter_2" Property="Foreground" Value="#FF272725"></Setter>
                     </Trigger>
-                    <Trigger Property="IsKeyboardFocused" Value="true">
-                        <Setter TargetName="FocusCue" Property="Visibility" Value="Visible"></Setter>
+                    <Trigger x:Uid="Trigger_2" Property="IsKeyboardFocused" Value="true">
+                        <Setter x:Uid="Setter_3" TargetName="FocusCue" Property="Visibility" Value="Visible"></Setter>
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
-            <Style TargetType="Button">
-                <Setter Property="Padding" Value="3,3,0,0"></Setter>
-                <Setter Property="FontSize" Value="14"></Setter>
-                <Setter Property="Background" Value="#FFFFFFBF"></Setter>
-                <Setter Property="Template" Value="{StaticResource ButtonTemplate}"></Setter>
+            <Style x:Uid="Style_1" TargetType="Button">
+                <Setter x:Uid="Setter_4" Property="Padding" Value="3,3,0,0"></Setter>
+                <Setter x:Uid="Setter_5" Property="FontSize" Value="14"></Setter>
+                <Setter x:Uid="Setter_6" Property="Background" Value="#FFFFFFBF"></Setter>
+                <Setter x:Uid="Setter_7" Property="Template" Value="{StaticResource ButtonTemplate}"></Setter>
             </Style>
         </Grid.Resources>
-        <ScrollViewer Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto">
-            <Border Background="#FFE7E2DF" Margin="1" CornerRadius="2" BorderBrush="#FF293246" BorderThickness="1">
-                <WrapPanel>
-                    <TextBlock Margin="60,4,0,0" Width="40" Height="26" TextAlignment="Center" FontSize="16">搜索</TextBlock>
-                    <TextBox x:Name="SearchTextBox" Width="90" Height="26" BorderBrush="#FF282912" BorderThickness="1" MaxLines="1" TextChanged="OnSearchTextChanged" FontSize="16" FontFamily="Arial" Padding="0,2,0,0"></TextBox>
-                    <Label Height="35">
-                        <Image Source="/Resources/Image/Search.png"></Image>
+        <ScrollViewer x:Uid="ScrollViewer_1" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto">
+            <Border x:Uid="Border_2" Background="#FFE7E2DF" Margin="1" CornerRadius="2" BorderBrush="#FF293246" BorderThickness="1">
+                <WrapPanel x:Uid="WrapPanel_1">
+                    <TextBlock x:Uid="TextBlock_1" Margin="60,4,0,0" MinWidth="40" Height="26" TextAlignment="Center" FontSize="16" Text="{x:Static properties:Resources.Search}"/>
+                    <TextBox x:Uid="SearchTextBox" x:Name="SearchTextBox" Width="90" Height="26" BorderBrush="#FF282912" BorderThickness="1" MaxLines="1" TextChanged="OnSearchTextChanged" FontSize="16" FontFamily="Arial" Padding="0,2,0,0"></TextBox>
+                    <Label x:Uid="Label_1" Height="35">
+                        <Image x:Uid="Image_1" Source="/Resources/Image/Search.png"></Image>
                     </Label>
-                    <Button Margin="120,0,0,0" Width="110" Height="26" Click="OnDetailShowClick">显示所选项细节</Button>
-                    <Button Margin="30,0,0,0" Width="80" Height="26" Click="OnClearButtonClick">清空所选项</Button>
+                    <Button x:Uid="Button_1" Margin="120,0,0,0" MinWidth="110" Height="26" Click="OnDetailShowClick" Content="{x:Static properties:Resources.Displays_Details}"/>
+                    <Button x:Uid="Button_2" Margin="30,0,0,0" MinWidth="80" Height="26" Click="OnClearButtonClick" Content="{x:Static properties:Resources.Clear_Selected}"/>
                 </WrapPanel>
             </Border>
         </ScrollViewer>
-        <DataGrid x:Name="ElementDataGrid" RowDetailsVisibilityMode="Collapsed" SelectionMode="Extended" EnableRowVirtualization="True"
+        <DataGrid x:Uid="ElementDataGrid" x:Name="ElementDataGrid" RowDetailsVisibilityMode="Collapsed" SelectionMode="Extended" EnableRowVirtualization="True"
                   Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" AutoGenerateColumns="False" RowHeaderWidth="0"
                   ColumnHeaderHeight="24" VerticalScrollBarVisibility="Auto" ItemsSource="{Binding ElementCollection}" 
                   Background="Gray" HorizontalScrollBarVisibility="Auto" RowBackground="LightYellow" EnableColumnVirtualization="True"
                   AlternatingRowBackground="LightBlue" CanUserResizeColumns="False" CellEditEnding="DataGrid_CellEditEnding">
             <DataGrid.Resources>
-                <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
-                    <Border Background="White" BorderBrush="Black" BorderThickness="1">
-                        <ContentPresenter TextBlock.FontSize="18" TextBlock.TextAlignment="Center"></ContentPresenter>
+                <ControlTemplate x:Uid="ControlTemplate_2" x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
+                    <Border x:Uid="Border_3" Background="White" BorderBrush="Black" BorderThickness="1">
+                        <ContentPresenter x:Uid="ContentPresenter_2" TextBlock.FontSize="18" TextBlock.TextAlignment="Center"></ContentPresenter>
                     </Border>
                 </ControlTemplate>
-                <Style TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
-                    <Setter Property="TextWrapping" Value="Wrap"></Setter>
-                    <Setter Property="FontSize" Value="16"></Setter>
-                    <Setter Property="FontFamily" Value="Arial"></Setter>
+                <Style x:Uid="Style_2" TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
+                    <Setter x:Uid="Setter_8" Property="TextWrapping" Value="Wrap"></Setter>
+                    <Setter x:Uid="Setter_9" Property="FontSize" Value="16"></Setter>
+                    <Setter x:Uid="Setter_10" Property="FontFamily" Value="Arial"></Setter>
                 </Style>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
+                <Style x:Uid="Style_3" TargetType="DataGridColumnHeader">
+                    <Setter x:Uid="Setter_11" Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <Border MaxHeight="90">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <local:ELementStackPanel x:Name="eLementStackPanel" Grid.Row="1" ItemsSource="{Binding MappedModels}">
+                <DataTemplate x:Uid="DataTemplate_1">
+                    <Border x:Uid="Border_4" MaxHeight="90">
+                        <ScrollViewer x:Uid="ScrollViewer_2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <local:ELementStackPanel x:Uid="eLementStackPanel" x:Name="eLementStackPanel" Grid.Row="1" ItemsSource="{Binding MappedModels}">
                                 <local:ELementStackPanel.Resources>
-                                    <Style TargetType="TextBlock">
+                                    <Style x:Uid="Style_4" TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="FontWeight" Value="Heavy"></Setter>
+                                            <Trigger x:Uid="Trigger_3" Property="IsMouseOver" Value="True">
+                                                <Setter x:Uid="Setter_12" Property="FontWeight" Value="Heavy"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
-                                        <Setter Property="FontSize" Value="14"></Setter>
-                                        <Setter Property="Margin" Value="4,5,-2,0"></Setter>
-                                        <Setter Property="FontFamily" Value="Arial"></Setter>
-                                        <EventSetter Event="MouseLeftButtonDown" Handler="NavigateMouseLeftButtonClick"></EventSetter>
+                                        <Setter x:Uid="Setter_13" Property="FontSize" Value="14"></Setter>
+                                        <Setter x:Uid="Setter_14" Property="Margin" Value="4,5,-2,0"></Setter>
+                                        <Setter x:Uid="Setter_15" Property="FontFamily" Value="Arial"></Setter>
+                                        <EventSetter x:Uid="EventSetter_1" Event="MouseLeftButtonDown" Handler="NavigateMouseLeftButtonClick"></EventSetter>
                                     </Style>
                                 </local:ELementStackPanel.Resources>
                             </local:ELementStackPanel>
@@ -102,74 +103,74 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="elementName" CanUserSort="False" IsReadOnly="True" Width="1.1*" MinWidth="100" Header="软元件名称" Binding="{Binding Name}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Uid="elementName" x:Name="elementName" CanUserSort="False" IsReadOnly="True" Width="1.1*" MinWidth="100" Header="{x:Static properties:Resources.Element_Name}" Binding="{Binding Name}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="elementComment" CanUserSort="False" IsReadOnly="False" Width="1.5*" MinWidth="120" Header="软元件注释" Binding="{Binding Comment}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Uid="elementComment" x:Name="elementComment" CanUserSort="False" IsReadOnly="False" Width="1.5*" MinWidth="120" Header="{x:Static properties:Resources.Element_Comment}" Binding="{Binding Comment}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="elementAlias" CanUserSort="False" IsReadOnly="False" Width="1.3*" MinWidth="120" Header="软元件别名" Binding="{Binding Alias}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Uid="elementAlias" x:Name="elementAlias" CanUserSort="False" IsReadOnly="False" Width="1.3*" MinWidth="120" Header="{x:Static properties:Resources.Element_Alias}" Binding="{Binding Alias}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <ScrollViewer Grid.Column="3" Grid.RowSpan="3" VerticalScrollBarVisibility="Auto" BorderBrush="Black" BorderThickness="1">
-            <Border CornerRadius="2" BorderBrush="Black" BorderThickness="1" Background="#FFF9F9F3">
-                <Canvas Height="520" Width="220">
-                    <StackPanel Orientation="Vertical" Canvas.Top="10">
+        <ScrollViewer x:Uid="ScrollViewer_3" Grid.Column="3" Grid.RowSpan="3" VerticalScrollBarVisibility="Auto" BorderBrush="Black" BorderThickness="1">
+            <Border x:Uid="Border_5" CornerRadius="2" BorderBrush="Black" BorderThickness="1" Background="#FFF9F9F3">
+                <Canvas x:Uid="Canvas_1" Height="520" Width="220">
+                    <StackPanel x:Uid="StackPanel_1" Orientation="Vertical" Canvas.Top="10">
                         <StackPanel.Resources>
-                            <Style TargetType="Label">
-                                <Setter Property="Height" Value="24"></Setter>
-                                <Setter Property="FontSize" Value="16"></Setter>
-                                <Setter Property="Margin" Value="20,0,0,0"></Setter>
-                                <Setter Property="Padding" Value="0"></Setter>
+                            <Style x:Uid="Style_5" TargetType="Label">
+                                <Setter x:Uid="Setter_16" Property="Height" Value="24"></Setter>
+                                <Setter x:Uid="Setter_17" Property="FontSize" Value="16"></Setter>
+                                <Setter x:Uid="Setter_18" Property="Margin" Value="20,0,0,0"></Setter>
+                                <Setter x:Uid="Setter_19" Property="Padding" Value="0"></Setter>
                             </Style>
                         </StackPanel.Resources>
                     </StackPanel>
-                    <Border Canvas.Top="20" Margin="20,10,10,0" CornerRadius="2" BorderThickness="1" BorderBrush="Black">
-                        <Grid>
+                    <Border x:Uid="Border_6" Canvas.Top="20" Margin="20,10,10,0" CornerRadius="2" BorderThickness="1" BorderBrush="Black">
+                        <Grid x:Uid="Grid_3">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"></RowDefinition>
-                                <RowDefinition Height="10*"></RowDefinition>
+                                <RowDefinition x:Uid="RowDefinition_5" Height="*"></RowDefinition>
+                                <RowDefinition x:Uid="RowDefinition_6" Height="10*"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <TextBlock TextAlignment="Center" FontSize="18" Padding="0,5,0,0">选择软元件区间</TextBlock>
-                            <StackPanel Grid.Row="1" x:Name="stackpanel_textblock">
+                            <TextBlock x:Uid="TextBlock_2" TextAlignment="Center" FontSize="18" Padding="0,5,0,0" Text="{x:Static properties:Resources.Select_Element_Range}"/>
+                            <StackPanel x:Uid="stackpanel_textblock" Grid.Row="1" x:Name="stackpanel_textblock">
                                 <StackPanel.Resources>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Margin" Value="10,1,0,0"></Setter>
-                                        <Setter Property="FontSize" Value="16"></Setter>
-                                        <EventSetter Event="MouseLeftButtonDown" Handler="OnTextBlockMouseLeftButtonDown"></EventSetter>
+                                    <Style x:Uid="Style_6" TargetType="TextBlock">
+                                        <Setter x:Uid="Setter_20" Property="Margin" Value="10,1,0,0"></Setter>
+                                        <Setter x:Uid="Setter_21" Property="FontSize" Value="16"></Setter>
+                                        <EventSetter x:Uid="EventSetter_2" Event="MouseLeftButtonDown" Handler="OnTextBlockMouseLeftButtonDown"></EventSetter>
                                         <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="FontWeight" Value="Heavy"></Setter>
+                                            <Trigger x:Uid="Trigger_4" Property="IsMouseOver" Value="True">
+                                                <Setter x:Uid="Setter_22" Property="FontWeight" Value="Heavy"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Resources>
-                                <TextBlock Text="{Binding XRange}"></TextBlock>
-                                <TextBlock Text="{Binding YRange}"></TextBlock>
-                                <TextBlock Text="{Binding MRange}"></TextBlock>
-                                <TextBlock Text="{Binding SRange}"></TextBlock>
-                                <TextBlock Text="{Binding CRange}"></TextBlock>
-                                <TextBlock Text="{Binding TRange}"></TextBlock>
-                                <TextBlock Text="{Binding DRange}"></TextBlock>
-                                <TextBlock Text="{Binding VRange}"></TextBlock>
-                                <TextBlock Text="{Binding ZRange}"></TextBlock>
-                                <TextBlock Text="{Binding TVRange}"></TextBlock>
-                                <TextBlock Text="{Binding CV16Range}"></TextBlock>
-                                <TextBlock Text="{Binding CV32Range}"></TextBlock>
-                                <TextBlock Text="{Binding AIRange}"></TextBlock>
-                                <TextBlock Text="{Binding AORange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_3" Text="{Binding XRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_4" Text="{Binding YRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_5" Text="{Binding MRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_6" Text="{Binding SRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_7" Text="{Binding CRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_8" Text="{Binding TRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_9" Text="{Binding DRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_10" Text="{Binding VRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_11" Text="{Binding ZRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_12" Text="{Binding TVRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_13" Text="{Binding CV16Range}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_14" Text="{Binding CV32Range}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_15" Text="{Binding AIRange}"></TextBlock>
+                                <TextBlock x:Uid="TextBlock_16" Text="{Binding AORange}"></TextBlock>
                             </StackPanel>
                         </Grid>
                     </Border>
                 </Canvas>
             </Border>
         </ScrollViewer>
-        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto">
-            <Border Margin="1" CornerRadius="2" BorderBrush="#FF293246" BorderThickness="1" Background="#FFF9F8F7">
-                <WrapPanel Orientation="Horizontal">
+        <ScrollViewer x:Uid="ScrollViewer_4" Grid.Row="3" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto">
+            <Border x:Uid="Border_7" Margin="1" CornerRadius="2" BorderBrush="#FF293246" BorderThickness="1" Background="#FFF9F8F7">
+                <WrapPanel x:Uid="WrapPanel_2" Orientation="Horizontal">
                     <WrapPanel.Resources>
-                        <Style TargetType="Button">
+                        <Style x:Uid="Style_7" TargetType="Button">
                             <Setter Property="FontSize" Value="14"></Setter>
-                            <Setter Property="Width" Value="90"></Setter>
+                            <Setter Property="MinWidth" Value="90"></Setter>
                             <Setter Property="Height" Value="30"></Setter>
                             <Setter Property="Background" Value="#FFFFFFBF"></Setter>
                             <Setter Property="Margin" Value="20,20,40,0"></Setter>
@@ -179,10 +180,10 @@
                         </Style>
                     </WrapPanel.Resources>
                     <!--<Button x:Name="button1" Width="100">系统特殊寄存器</Button>-->
-                    <Button x:Name="button1">已使用软元件</Button>
-                    <Button x:Name="button2">已注释软元件</Button>
-                    <Button x:Name="button3" Padding="14,4,0,0">导入CSV</Button>
-                    <Button x:Name="button4" Padding="14,4,0,0">导出CSV</Button>
+                    <Button x:Name="button1" Content="{x:Static properties:Resources.Used_Element}"/>
+                    <Button x:Name="button2" Content="{x:Static properties:Resources.Annotated_Element}"></Button>
+                    <Button x:Name="button3" Padding="10,4,0,0" Content="{x:Static properties:Resources.Import_CSV}"/>
+                    <Button x:Name="button4" Padding="10,4,0,0" Content="{x:Static properties:Resources.Export_CSV}"></Button>
                 </WrapPanel>
             </Border>
         </ScrollViewer>

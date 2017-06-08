@@ -481,14 +481,10 @@ namespace SamSoarII.AppMain.Project
                     case ')':
                         if (oldTime2 > 0 && e.Timestamp - oldTime2 < 100)
                             CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset-- - 1, 1);
-                        if(CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset) == ')' && CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset - 1) == ')')
-                            CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset - 1, 1);
                         break;
                     case '}':
                         if (oldTime1 > 0 && e.Timestamp - oldTime1 < 100)
                             CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset-- - 1, 1);
-                        if (CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset) == '}' && CodeTextBox.Text.ElementAt(CodeTextBox.CaretOffset - 1) == '}')
-                            CodeTextBox.Text = CodeTextBox.Text.Remove(CodeTextBox.CaretOffset - 1, 1);
                         break;
                     case ';':
                         break;

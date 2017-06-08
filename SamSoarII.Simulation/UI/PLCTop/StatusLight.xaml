@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SamSoarII.Simulation.UI.PLCTop.StatusLight"
+﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.Simulation.UI.PLCTop.StatusLight"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,21 +7,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="32" d:DesignWidth="120">
     <UserControl.Content>
-        <Grid>
+        <Grid x:Uid="Grid_1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="3*"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="7*"/>
             </Grid.ColumnDefinitions>
             <Grid.Children>
 
-                <Canvas Grid.Row="0" Grid.Column="0">
+                <Canvas x:Uid="Canvas_1" Grid.Row="0" Grid.Column="0">
                     <Canvas.Children>
-                        <Border x:Name="RedLight" Canvas.Top="2" Canvas.Left="2" Height="30" Width="32" BorderThickness="2" BorderBrush="Black" Background="Red"></Border>
-                        <Border x:Name="GreenLight" Canvas.Top="2" Canvas.Left="2" Height="30" Width="32" BorderThickness="2" BorderBrush="Black" Background="Green"></Border>
-                        <Border x:Name="DarkLight" Canvas.Top="2" Canvas.Left="2" Height="30" Width="32" BorderThickness="2" BorderBrush="Black" Background="Gray"></Border>
+                        <Border x:Uid="RedLight" x:Name="RedLight" Canvas.Top="2" Canvas.Left="2" Height="30" Width="32" BorderThickness="2" BorderBrush="Black" Background="Red"></Border>
+                        <Border x:Uid="GreenLight" x:Name="GreenLight" Canvas.Top="2" Canvas.Left="2" Height="30" Width="32" BorderThickness="2" BorderBrush="Black" Background="Green"></Border>
+                        <Border x:Uid="DarkLight" x:Name="DarkLight" Canvas.Top="2" Canvas.Left="2" Height="30" Width="32" BorderThickness="2" BorderBrush="Black" Background="Gray"></Border>
                     </Canvas.Children>
                 </Canvas>
-                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="StatusName" VerticalAlignment="Center"></TextBlock>
+                <TextBlock x:Uid="StatusName" Grid.Row="0" Grid.Column="1" x:Name="StatusName" VerticalAlignment="Center"></TextBlock>
             </Grid.Children>
         </Grid>
     </UserControl.Content>

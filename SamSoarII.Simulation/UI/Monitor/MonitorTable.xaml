@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SamSoarII.Simulation.UI.Monitor.MonitorTable"
+﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.Simulation.UI.Monitor.MonitorTable"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,73 +7,73 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="320">
     <UserControl.Resources>
-        <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
+        <Style x:Uid="Style_1" x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
             <Style.Triggers>
-                <Trigger Property="IsReadOnly" Value="True">
-                    <Setter Property="Background" Value="Gray"/>
+                <Trigger x:Uid="Trigger_1" Property="IsReadOnly" Value="True">
+                    <Setter x:Uid="Setter_1" Property="Background" Value="Gray"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <ControlTemplate TargetType="{x:Type Button}" x:Key="MonitorItemCloseButtonTemplate">
-            <Canvas Name="ButtonCanvas" Width="24" Height="24" Opacity="0.3" Background="Transparent">
-                <Line Name="Line1" X1="4" Y1="4" X2="20" Y2="20" Stroke="Black" StrokeThickness="1"></Line>
-                <Line Name="Line2" X1="20" Y1="4" X2="4" Y2="20" Stroke="Black" StrokeThickness="1"></Line>
+        <ControlTemplate x:Uid="ControlTemplate_1" TargetType="{x:Type Button}" x:Key="MonitorItemCloseButtonTemplate">
+            <Canvas x:Uid="ButtonCanvas" Name="ButtonCanvas" Width="24" Height="24" Opacity="0.3" Background="Transparent">
+                <Line x:Uid="Line1" Name="Line1" X1="4" Y1="4" X2="20" Y2="20" Stroke="Black" StrokeThickness="1"></Line>
+                <Line x:Uid="Line2" Name="Line2" X1="20" Y1="4" X2="4" Y2="20" Stroke="Black" StrokeThickness="1"></Line>
             </Canvas>
             <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.8"></Setter>
-                    <Setter TargetName="Line1" Property="StrokeThickness" Value="2"></Setter>
-                    <Setter TargetName="Line2" Property="StrokeThickness" Value="2"></Setter>
+                <Trigger x:Uid="Trigger_2" Property="IsMouseOver" Value="True">
+                    <Setter x:Uid="Setter_2" TargetName="ButtonCanvas" Property="Opacity" Value="0.8"></Setter>
+                    <Setter x:Uid="Setter_3" TargetName="Line1" Property="StrokeThickness" Value="2"></Setter>
+                    <Setter x:Uid="Setter_4" TargetName="Line2" Property="StrokeThickness" Value="2"></Setter>
                 </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter TargetName="ButtonCanvas" Property="Opacity" Value="0.3"></Setter>
+                <Trigger x:Uid="Trigger_3" Property="IsPressed" Value="True">
+                    <Setter x:Uid="Setter_5" TargetName="ButtonCanvas" Property="Opacity" Value="0.3"></Setter>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
     <UserControl.Content>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <Grid x:Name="MainGrid">
+        <ScrollViewer x:Uid="ScrollViewer_1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid x:Uid="MainGrid" x:Name="MainGrid">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="24"/>
+                    <RowDefinition x:Uid="RowDefinition_1" Height="24"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50*"/>
-                    <ColumnDefinition Width="75*"/>
-                    <ColumnDefinition Width="75*"/>
-                    <ColumnDefinition Width="75*"/>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_1" Width="50*"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_2" Width="75*"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_3" Width="75*"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_4" Width="75*"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_5" Width="24"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_6" Width="24"/>
                 </Grid.ColumnDefinitions>
                 <Grid.Children>
-                    <Canvas x:Name="TopBar1" Grid.Row="0" Grid.Column="0">
-                        <Rectangle Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                    <Canvas x:Uid="TopBar1" x:Name="TopBar1" Grid.Row="0" Grid.Column="0">
+                        <Rectangle x:Uid="Rectangle_1" Width="{Binding ElementName=TopBar1, Path=ActualWidth}" Canvas.Top="0" Height="24" 
                                    Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
-                        <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">寄存器</TextBlock>
+                        <TextBlock x:Uid="TextBlock_1" Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">寄存器</TextBlock>
                     </Canvas>
-                    <Canvas x:Name="TopBar2" Grid.Row="0" Grid.Column="1">
-                        <Rectangle Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                    <Canvas x:Uid="TopBar2" x:Name="TopBar2" Grid.Row="0" Grid.Column="1">
+                        <Rectangle x:Uid="Rectangle_2" Width="{Binding ElementName=TopBar2, Path=ActualWidth}" Canvas.Top="0" Height="24" 
                                    Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
-                        <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">类型</TextBlock>
+                        <TextBlock x:Uid="TextBlock_2" Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">类型</TextBlock>
                     </Canvas>
-                    <Canvas x:Name="TopBar3" Grid.Row="0" Grid.Column="2">
-                        <Rectangle Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                    <Canvas x:Uid="TopBar3" x:Name="TopBar3" Grid.Row="0" Grid.Column="2">
+                        <Rectangle x:Uid="Rectangle_3" Width="{Binding ElementName=TopBar3, Path=ActualWidth}" Canvas.Top="0" Height="24" 
                                    Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
-                        <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">变量名称</TextBlock>
+                        <TextBlock x:Uid="TextBlock_3" Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">变量名称</TextBlock>
                     </Canvas>
-                    <Canvas x:Name="TopBar4" Grid.Row="0" Grid.Column="3">
-                        <Rectangle Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Canvas.Top="0" Height="24" 
+                    <Canvas x:Uid="TopBar4" x:Name="TopBar4" Grid.Row="0" Grid.Column="3">
+                        <Rectangle x:Uid="Rectangle_4" Width="{Binding ElementName=TopBar4, Path=ActualWidth}" Canvas.Top="0" Height="24" 
                                    Fill="AliceBlue" Stroke="Gray" StrokeThickness="2"></Rectangle>
-                        <TextBlock Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">数值</TextBlock>
+                        <TextBlock x:Uid="TextBlock_4" Canvas.Top="2" Canvas.Left="4" FontSize="14" TextAlignment="Center">数值</TextBlock>
                     </Canvas>
                 </Grid.Children>
                 <Grid.ContextMenu>
-                    <ContextMenu x:Name="RightClickMenu">
-                        <MenuItem Header="十进制" Click="OnVariableUnitBase"></MenuItem>
-                        <MenuItem Header="十六进制" Click="OnVariableUnitBase"></MenuItem>
-                        <Separator></Separator>
-                        <MenuItem Header="保存列表" Click="OnTableSave"></MenuItem>
-                        <MenuItem Header="读取列表" Click="OnTableLoad"></MenuItem>
+                    <ContextMenu x:Uid="RightClickMenu" x:Name="RightClickMenu">
+                        <MenuItem x:Uid="MenuItem_1" Header="十进制" Click="OnVariableUnitBase"></MenuItem>
+                        <MenuItem x:Uid="MenuItem_2" Header="十六进制" Click="OnVariableUnitBase"></MenuItem>
+                        <Separator x:Uid="Separator_1"></Separator>
+                        <MenuItem x:Uid="MenuItem_3" Header="保存列表" Click="OnTableSave"></MenuItem>
+                        <MenuItem x:Uid="MenuItem_4" Header="读取列表" Click="OnTableLoad"></MenuItem>
                     </ContextMenu>
                 </Grid.ContextMenu>
             </Grid>

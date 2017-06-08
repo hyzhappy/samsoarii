@@ -1,17 +1,17 @@
-﻿<Paragraph x:Class="SamSoarII.HelpDocument.HelpDocComponet.Controls.SubtitleParagraph"
+﻿<Paragraph x:Uid="PG_Main" x:Class="SamSoarII.HelpDocument.HelpDocComponet.Controls.SubtitleParagraph"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.HelpDocument.HelpDocComponet.Controls"
              mc:Ignorable="d" x:Name="PG_Main">
-    <Grid x:Name="GD_Main">
+    <Grid x:Uid="GD_Main" x:Name="GD_Main">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="4"/>
+            <RowDefinition x:Uid="RowDefinition_1" Height="*"/>
+            <RowDefinition x:Uid="RowDefinition_2" Height="4"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0">副标题</TextBlock>
-        <Line Grid.Row="1" Grid.Column="0" X1="0" X2="{Binding ElementName=GD_Main,Path=Width}"
+        <TextBlock x:Uid="TextBlock_1" Grid.Row="0" Grid.Column="0">副标题</TextBlock>
+        <Line x:Uid="Line_1" Grid.Row="1" Grid.Column="0" X1="0" X2="{Binding ElementName=GD_Main,Path=Width}"
               StrokeThickness="2" Stroke="Black">
             
         </Line>

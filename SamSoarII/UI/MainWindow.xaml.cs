@@ -1291,6 +1291,32 @@ namespace SamSoarII.AppMain.UI
             };
             dialog.ShowDialog();
         }
+        private void Click_zh_Hans(object sender, RoutedEventArgs e)
+        {
+            using (LanaEnsureDialog dialog = new LanaEnsureDialog())
+            {
+                dialog.EnsureButtonClick += (sender1, e1) => 
+                {
+                    GlobalSetting.IsOpenLSetting = true;
+                    GlobalSetting.LanagArea = string.Format("zh-Hans");
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            }
+        }
+        private void Click_en_US(object sender, RoutedEventArgs e)
+        {
+            using (LanaEnsureDialog dialog = new LanaEnsureDialog())
+            {
+                dialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    GlobalSetting.IsOpenLSetting = true;
+                    GlobalSetting.LanagArea = string.Format("en");
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            }
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-﻿<Window x:Class="SamSoarII.UserInterface.SimuArgsDialog"
+﻿<Window x:Uid="Window_1" x:Class="SamSoarII.UserInterface.SimuArgsDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,155 +6,155 @@
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
         Title="数值锁定" Height="180" Width="300">
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="0.5*"/>
-            <ColumnDefinition Width="4"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="4"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="20"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_5" Width="20"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_6" Width="0.5*"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_7" Width="4"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition x:Uid="RowDefinition_1" Height="24"/>
+            <RowDefinition x:Uid="RowDefinition_2" Height="24"/>
+            <RowDefinition x:Uid="RowDefinition_3" Height="24"/>
+            <RowDefinition x:Uid="RowDefinition_4" Height="24"/>
+            <RowDefinition x:Uid="RowDefinition_5" Height="24"/>
+            <RowDefinition x:Uid="RowDefinition_6" Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="LB_Arg1" 
+        <TextBlock x:Uid="LB_Arg1" x:Name="LB_Arg1" 
                    HorizontalAlignment="Left" VerticalAlignment="Center"
                    Grid.Row="0" Grid.Column="1">
             Argument1
         </TextBlock>
-        <TextBlock x:Name="LB_Arg2" 
+        <TextBlock x:Uid="LB_Arg2" x:Name="LB_Arg2" 
                    HorizontalAlignment="Left" VerticalAlignment="Center"
                    Grid.Row="1" Grid.Column="1">
             Argument2
         </TextBlock>
-        <TextBlock x:Name="LB_Arg3" 
+        <TextBlock x:Uid="LB_Arg3" x:Name="LB_Arg3" 
                    HorizontalAlignment="Left" VerticalAlignment="Center"
                    Grid.Row="2" Grid.Column="1">
             Argument3
         </TextBlock>
-        <TextBlock x:Name="LB_Arg4" 
+        <TextBlock x:Uid="LB_Arg4" x:Name="LB_Arg4" 
                    HorizontalAlignment="Left" VerticalAlignment="Center"
                    Grid.Row="3" Grid.Column="1">
             Argument4
         </TextBlock>
-        <TextBlock x:Name="LB_Arg5" 
+        <TextBlock x:Uid="LB_Arg5" x:Name="LB_Arg5" 
                    HorizontalAlignment="Left" VerticalAlignment="Center"
                    Grid.Row="4" Grid.Column="1">
             Argument5
         </TextBlock>
-        <TextBlock x:Name="LE_Arg1"
+        <TextBlock x:Uid="LE_Arg1" x:Name="LE_Arg1"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="0" Grid.Column="2">
             =
         </TextBlock>
-        <TextBlock x:Name="LE_Arg2"
+        <TextBlock x:Uid="LE_Arg2" x:Name="LE_Arg2"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="1" Grid.Column="2">
             =
         </TextBlock>
-        <TextBlock x:Name="LE_Arg3"
+        <TextBlock x:Uid="LE_Arg3" x:Name="LE_Arg3"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="2" Grid.Column="2">
             =
         </TextBlock>
-        <TextBlock x:Name="LE_Arg4"
+        <TextBlock x:Uid="LE_Arg4" x:Name="LE_Arg4"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="3" Grid.Column="2">
             =
         </TextBlock>
-        <TextBlock x:Name="LE_Arg5"
+        <TextBlock x:Uid="LE_Arg5" x:Name="LE_Arg5"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="4" Grid.Column="2">
             =
         </TextBlock>
-        <TextBox x:Name="TB_Arg1" TextChanged="TB_Arg1_TextChanged"
+        <TextBox x:Uid="TB_Arg1" x:Name="TB_Arg1" TextChanged="TB_Arg1_TextChanged"
                  VerticalAlignment="Center"
                  Grid.Row="0" Grid.Column="3">
             0
         </TextBox>
-        <TextBox x:Name="TB_Arg2" TextChanged="TB_Arg2_TextChanged"
+        <TextBox x:Uid="TB_Arg2" x:Name="TB_Arg2" TextChanged="TB_Arg2_TextChanged"
                  VerticalAlignment="Center"
                  Grid.Row="1" Grid.Column="3">
             0
         </TextBox>
-        <TextBox x:Name="TB_Arg3" TextChanged="TB_Arg3_TextChanged"
+        <TextBox x:Uid="TB_Arg3" x:Name="TB_Arg3" TextChanged="TB_Arg3_TextChanged"
                  VerticalAlignment="Center"
                  Grid.Row="2" Grid.Column="3">
             0
         </TextBox>
-        <TextBox x:Name="TB_Arg4" TextChanged="TB_Arg4_TextChanged"
+        <TextBox x:Uid="TB_Arg4" x:Name="TB_Arg4" TextChanged="TB_Arg4_TextChanged"
                  VerticalAlignment="Center"
                  Grid.Row="3" Grid.Column="3">
             0
         </TextBox>
-        <TextBox x:Name="TB_Arg5" TextChanged="TB_Arg5_TextChanged"
+        <TextBox x:Uid="TB_Arg5" x:Name="TB_Arg5" TextChanged="TB_Arg5_TextChanged"
                  VerticalAlignment="Center"
                  Grid.Row="4" Grid.Column="3">
             0
         </TextBox>
-        <CheckBox x:Name="CB_Lock1"
+        <CheckBox x:Uid="CB_Lock1" x:Name="CB_Lock1"
                  Grid.Row="0" Grid.Column="4"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center">
         </CheckBox>
-        <CheckBox x:Name="CB_Lock2"
+        <CheckBox x:Uid="CB_Lock2" x:Name="CB_Lock2"
                  Grid.Row="1" Grid.Column="4"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center">
         </CheckBox>
-        <CheckBox x:Name="CB_Lock3"
+        <CheckBox x:Uid="CB_Lock3" x:Name="CB_Lock3"
                  Grid.Row="2" Grid.Column="4"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center">
         </CheckBox>
-        <CheckBox x:Name="CB_Lock4"
+        <CheckBox x:Uid="CB_Lock4" x:Name="CB_Lock4"
                  Grid.Row="3" Grid.Column="4"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center">
         </CheckBox>
-        <CheckBox x:Name="CB_Lock5"
+        <CheckBox x:Uid="CB_Lock5" x:Name="CB_Lock5"
                  Grid.Row="4" Grid.Column="4"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center">
         </CheckBox>
-        <TextBlock x:Name="TB_Lock1" 
+        <TextBlock x:Uid="TB_Lock1" x:Name="TB_Lock1" 
                    Grid.Row="0" Grid.Column="5"
                    VerticalAlignment="Center">
             锁定
         </TextBlock>
-        <TextBlock x:Name="TB_Lock2"
+        <TextBlock x:Uid="TB_Lock2" x:Name="TB_Lock2"
                    Grid.Row="1" Grid.Column="5"
                    VerticalAlignment="Center">
             锁定
         </TextBlock>
-        <TextBlock x:Name="TB_Lock3"
+        <TextBlock x:Uid="TB_Lock3" x:Name="TB_Lock3"
                    Grid.Row="2" Grid.Column="5"
                    VerticalAlignment="Center">
             锁定
         </TextBlock>
-        <TextBlock x:Name="TB_Lock4"
+        <TextBlock x:Uid="TB_Lock4" x:Name="TB_Lock4"
                    Grid.Row="3" Grid.Column="5"
                    VerticalAlignment="Center">
             锁定
         </TextBlock>
-        <TextBlock x:Name="TB_Lock5"
+        <TextBlock x:Uid="TB_Lock5" x:Name="TB_Lock5"
                    Grid.Row="4" Grid.Column="5"
                    VerticalAlignment="Center">
             锁定
         </TextBlock>
-        <Button x:Name="B_OK" Width="80" Click="B_OK_Click"
+        <Button x:Uid="B_OK" x:Name="B_OK" Width="80" Click="B_OK_Click"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Grid.Row="5" Grid.Column="1">
             确定
         </Button>
-        <Button x:Name="B_Cancel" Width="80" Click="B_Cancel_Click"
+        <Button x:Uid="B_Cancel" x:Name="B_Cancel" Width="80" Click="B_Cancel_Click"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Grid.Row="5" Grid.Column="3">
             取消

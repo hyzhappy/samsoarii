@@ -1,4 +1,4 @@
-﻿<Window x:Class="SamSoarII.UserInterface.ElementValueMultiplyModifyDialog"
+﻿<Window x:Uid="Window_1" x:Class="SamSoarII.UserInterface.ElementValueMultiplyModifyDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:SamSoarII.UserInterface"
              mc:Ignorable="d" 
              Title="元件值修改" Height="250" Width="400">
-    <TabControl x:Name="TC_Main">
+    <TabControl x:Uid="TC_Main" x:Name="TC_Main">
     </TabControl>
 </Window>

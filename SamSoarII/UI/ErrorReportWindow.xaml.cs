@@ -90,7 +90,7 @@ namespace SamSoarII.AppMain.UI
             set
             {
                 this.errorcount = value;
-                H_Error.Text = String.Format("错误 {0:d}", value);
+                H_Error.Text = String.Format(Properties.Resources.ErrorReportWindow_Error + " {0:d}", value);
             }
         }
 
@@ -101,7 +101,7 @@ namespace SamSoarII.AppMain.UI
             set
             {
                 this.warningcount = value;
-                H_Warning.Text = String.Format("警告 {0:d}", value);
+                H_Warning.Text = String.Format(Properties.Resources.ErrorReportWindow_Warning + " {0:d}", value);
             }
         }
 
@@ -216,9 +216,9 @@ namespace SamSoarII.AppMain.UI
              && !parent.MainWindow.LAErrorList.IsDock)
             {
                 LayoutSetting.AddDefaultDockWidthAnchorable(
-                    "错误列表", parent.MainWindow.LAErrorList.AutoHideWidth.ToString());
+                    Properties.Resources.MainWindow_Error_List, parent.MainWindow.LAErrorList.AutoHideWidth.ToString());
                 LayoutSetting.AddDefaultDockHeighAnchorable(
-                    "错误列表", parent.MainWindow.LAErrorList.AutoHideHeight.ToString());
+                    Properties.Resources.MainWindow_Error_List, parent.MainWindow.LAErrorList.AutoHideHeight.ToString());
                 parent.MainWindow.LAErrorList.ToggleAutoHide();
             }
             if (DG_List.SelectedIndex < 0) return;
@@ -238,9 +238,9 @@ namespace SamSoarII.AppMain.UI
              && !parent.MainWindow.LAErrorList.IsDock)
             {
                 LayoutSetting.AddDefaultDockWidthAnchorable(
-                    "错误列表", parent.MainWindow.LAErrorList.AutoHideWidth.ToString());
+                    Properties.Resources.MainWindow_Error_List, parent.MainWindow.LAErrorList.AutoHideWidth.ToString());
                 LayoutSetting.AddDefaultDockHeighAnchorable(
-                    "错误列表", parent.MainWindow.LAErrorList.AutoHideHeight.ToString());
+                    Properties.Resources.MainWindow_Error_List, parent.MainWindow.LAErrorList.AutoHideHeight.ToString());
                 parent.MainWindow.LAErrorList.ToggleAutoHide();
             }
             if (DG_FList.SelectedIndex < 0) return;

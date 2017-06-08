@@ -68,6 +68,11 @@
     <Compile Include="Core\VariableModel\SimulateVInputModel.cs" />
     <Compile Include="Core\VariableModel\SimulateWordModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Shell\CtrlHelper.cs" />
     <Compile Include="Shell\Event\ShowTabItemEventArgs.cs" />
     <Compile Include="Shell\Event\ShowTabItemEventHandler.cs" />
@@ -389,6 +394,12 @@
     <Content Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
     <Content Include="Resources\simu.dll" />
     <Content Include="simug\simu.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

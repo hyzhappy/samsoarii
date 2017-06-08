@@ -1,4 +1,4 @@
-﻿<Window x:Class="SamSoarII.UserInterface.ElementValueModifyDialog"
+﻿<Window x:Uid="Window_1" x:Class="SamSoarII.UserInterface.ElementValueModifyDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
         xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
         mc:Ignorable="d"
         Title="元件值修改" Height="230" Width="400">
-    <local:ElementValueModifyPanel x:Name="PN_Main">
+    <local:ElementValueModifyPanel x:Uid="PN_Main" x:Name="PN_Main">
         
     </local:ElementValueModifyPanel>
 </Window>

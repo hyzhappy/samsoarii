@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SamSoarII.AppMain.UI.ProjectPropertyWidget.ExpansionModuleSettingWidget"
+﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.AppMain.UI.ProjectPropertyWidget.ExpansionModuleSettingWidget"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,82 +7,82 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.Resources>
-            <ObjectDataProvider x:Key="ModuleTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+            <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="ModuleTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="local:ModuleType"></x:Type>
+                    <x:Type x:Uid="x:Type_1" TypeName="local:ModuleType"></x:Type>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <Style TargetType="Label">
-                <Setter Property="FontSize" Value="16"></Setter>
+            <Style x:Uid="Style_1" TargetType="Label">
+                <Setter x:Uid="Setter_1" Property="FontSize" Value="16"></Setter>
             </Style>
-            <Style TargetType="StackPanel">
-                <Setter Property="Orientation" Value="Horizontal"></Setter>
-                <Setter Property="Margin" Value="20,5,0,0"></Setter>
+            <Style x:Uid="Style_2" TargetType="StackPanel">
+                <Setter x:Uid="Setter_2" Property="Orientation" Value="Horizontal"></Setter>
+                <Setter x:Uid="Setter_3" Property="Margin" Value="20,5,0,0"></Setter>
             </Style>
         </Grid.Resources>
-        <StackPanel Style="{x:Null}">
-            <StackPanel>
-                <Label>拓展模块设置</Label>
+        <StackPanel x:Uid="StackPanel_1" Style="{x:Null}">
+            <StackPanel x:Uid="StackPanel_2">
+                <Label x:Uid="Label_1">拓展模块设置</Label>
             </StackPanel>
-            <StackPanel>
-                <CheckBox x:Name="checkbox" Height="15" IsChecked="{Binding IsExpansion}"></CheckBox>
-                <Label>使用拓展功能</Label>
+            <StackPanel x:Uid="StackPanel_3">
+                <CheckBox x:Uid="checkbox" x:Name="checkbox" Height="15" IsChecked="{Binding IsExpansion}"></CheckBox>
+                <Label x:Uid="Label_2">使用拓展功能</Label>
             </StackPanel>
-            <StackPanel>
-                <Label>选择模块:</Label>
-                <ComboBox x:Name="combox" Height="20" Width="70" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectionChanged="OnSelectionChanged" SelectedIndex="{Binding ModuleIndex}">
-                    <ComboBoxItem>模块一</ComboBoxItem>
-                    <ComboBoxItem>模块二</ComboBoxItem>
-                    <ComboBoxItem>模块三</ComboBoxItem>
-                    <ComboBoxItem>模块四</ComboBoxItem>
-                    <ComboBoxItem>模块五</ComboBoxItem>
-                    <ComboBoxItem>模块六</ComboBoxItem>
-                    <ComboBoxItem>模块七</ComboBoxItem>
-                    <ComboBoxItem>模块八</ComboBoxItem>
+            <StackPanel x:Uid="StackPanel_4">
+                <Label x:Uid="Label_3">选择模块:</Label>
+                <ComboBox x:Uid="combox" x:Name="combox" Height="20" Width="70" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectionChanged="OnSelectionChanged" SelectedIndex="{Binding ModuleIndex}">
+                    <ComboBoxItem x:Uid="ComboBoxItem_1">模块一</ComboBoxItem>
+                    <ComboBoxItem x:Uid="ComboBoxItem_2">模块二</ComboBoxItem>
+                    <ComboBoxItem x:Uid="ComboBoxItem_3">模块三</ComboBoxItem>
+                    <ComboBoxItem x:Uid="ComboBoxItem_4">模块四</ComboBoxItem>
+                    <ComboBoxItem x:Uid="ComboBoxItem_5">模块五</ComboBoxItem>
+                    <ComboBoxItem x:Uid="ComboBoxItem_6">模块六</ComboBoxItem>
+                    <ComboBoxItem x:Uid="ComboBoxItem_7">模块七</ComboBoxItem>
+                    <ComboBoxItem x:Uid="ComboBoxItem_8">模块八</ComboBoxItem>
                 </ComboBox>
-                <Canvas Margin="20,0,0,0" Width="15">
+                <Canvas x:Uid="Canvas_1" Margin="20,0,0,0" Width="15">
                     <Canvas.Resources>
-                        <Style TargetType="CheckBox">
-                            <Setter Property="Height" Value="15"></Setter>
-                            <Setter Property="Canvas.Top" Value="8"></Setter>
-                            <Setter Property="Panel.ZIndex" Value="10"></Setter>
-                            <Setter Property="IsEnabled" Value="{Binding ElementName=checkbox,Path=IsChecked}"></Setter>
+                        <Style x:Uid="Style_3" TargetType="CheckBox">
+                            <Setter x:Uid="Setter_4" Property="Height" Value="15"></Setter>
+                            <Setter x:Uid="Setter_5" Property="Canvas.Top" Value="8"></Setter>
+                            <Setter x:Uid="Setter_6" Property="Panel.ZIndex" Value="10"></Setter>
+                            <Setter x:Uid="Setter_7" Property="IsEnabled" Value="{Binding ElementName=checkbox,Path=IsChecked}"></Setter>
                         </Style>
                     </Canvas.Resources>
-                    <CheckBox x:Name="checkbox0" IsChecked="{Binding Module1IsUsed}" Panel.ZIndex="11"></CheckBox>
-                    <CheckBox x:Name="checkbox1" IsChecked="{Binding Module2IsUsed}"></CheckBox>
-                    <CheckBox x:Name="checkbox2" IsChecked="{Binding Module3IsUsed}"></CheckBox>
-                    <CheckBox x:Name="checkbox3" IsChecked="{Binding Module4IsUsed}"></CheckBox>
-                    <CheckBox x:Name="checkbox4" IsChecked="{Binding Module5IsUsed}"></CheckBox>
-                    <CheckBox x:Name="checkbox5" IsChecked="{Binding Module6IsUsed}"></CheckBox>
-                    <CheckBox x:Name="checkbox6" IsChecked="{Binding Module7IsUsed}"></CheckBox>
-                    <CheckBox x:Name="checkbox7" IsChecked="{Binding Module8IsUsed}"></CheckBox>
+                    <CheckBox x:Uid="checkbox0" x:Name="checkbox0" IsChecked="{Binding Module1IsUsed}" Panel.ZIndex="11"></CheckBox>
+                    <CheckBox x:Uid="checkbox1" x:Name="checkbox1" IsChecked="{Binding Module2IsUsed}"></CheckBox>
+                    <CheckBox x:Uid="checkbox2" x:Name="checkbox2" IsChecked="{Binding Module3IsUsed}"></CheckBox>
+                    <CheckBox x:Uid="checkbox3" x:Name="checkbox3" IsChecked="{Binding Module4IsUsed}"></CheckBox>
+                    <CheckBox x:Uid="checkbox4" x:Name="checkbox4" IsChecked="{Binding Module5IsUsed}"></CheckBox>
+                    <CheckBox x:Uid="checkbox5" x:Name="checkbox5" IsChecked="{Binding Module6IsUsed}"></CheckBox>
+                    <CheckBox x:Uid="checkbox6" x:Name="checkbox6" IsChecked="{Binding Module7IsUsed}"></CheckBox>
+                    <CheckBox x:Uid="checkbox7" x:Name="checkbox7" IsChecked="{Binding Module8IsUsed}"></CheckBox>
                 </Canvas>
-                <Label>启用</Label>
+                <Label x:Uid="Label_4">启用</Label>
             </StackPanel>
-            <StackPanel>
+            <StackPanel x:Uid="StackPanel_5">
                 <StackPanel.Resources>
-                    <Style TargetType="ComboBox">
-                        <Setter Property="Height" Value="20"></Setter>
-                        <Setter Property="Width" Value="100"></Setter>
-                        <Setter Property="Canvas.Top" Value="6"></Setter>
-                        <Setter Property="Panel.ZIndex" Value="10"></Setter>
-                        <Setter Property="IsEnabled" Value="{Binding ElementName=checkbox,Path=IsChecked}"></Setter>
-                        <Setter Property="ItemsSource" Value="{Binding Source={StaticResource ModuleTypeProvider}}"></Setter>
+                    <Style x:Uid="Style_4" TargetType="ComboBox">
+                        <Setter x:Uid="Setter_8" Property="Height" Value="20"></Setter>
+                        <Setter x:Uid="Setter_9" Property="Width" Value="100"></Setter>
+                        <Setter x:Uid="Setter_10" Property="Canvas.Top" Value="6"></Setter>
+                        <Setter x:Uid="Setter_11" Property="Panel.ZIndex" Value="10"></Setter>
+                        <Setter x:Uid="Setter_12" Property="IsEnabled" Value="{Binding ElementName=checkbox,Path=IsChecked}"></Setter>
+                        <Setter x:Uid="Setter_13" Property="ItemsSource" Value="{Binding Source={StaticResource ModuleTypeProvider}}"></Setter>
                     </Style>
                 </StackPanel.Resources>
-                <Label>模块类型:</Label>
-                <Canvas Width="70">
-                    <ComboBox x:Name="combox1" Panel.ZIndex="11" SelectedIndex="{Binding Module1TypeIndex}"></ComboBox>
-                    <ComboBox x:Name="combox2" SelectedIndex="{Binding Module2TypeIndex}"></ComboBox>
-                    <ComboBox x:Name="combox3" SelectedIndex="{Binding Module3TypeIndex}"></ComboBox>
-                    <ComboBox x:Name="combox4" SelectedIndex="{Binding Module4TypeIndex}"></ComboBox>
-                    <ComboBox x:Name="combox5" SelectedIndex="{Binding Module5TypeIndex}"></ComboBox>
-                    <ComboBox x:Name="combox6" SelectedIndex="{Binding Module6TypeIndex}"></ComboBox>
-                    <ComboBox x:Name="combox7" SelectedIndex="{Binding Module7TypeIndex}"></ComboBox>
-                    <ComboBox x:Name="combox8" SelectedIndex="{Binding Module8TypeIndex}"></ComboBox>
+                <Label x:Uid="Label_5">模块类型:</Label>
+                <Canvas x:Uid="Canvas_2" Width="70">
+                    <ComboBox x:Uid="combox1" x:Name="combox1" Panel.ZIndex="11" SelectedIndex="{Binding Module1TypeIndex}"></ComboBox>
+                    <ComboBox x:Uid="combox2" x:Name="combox2" SelectedIndex="{Binding Module2TypeIndex}"></ComboBox>
+                    <ComboBox x:Uid="combox3" x:Name="combox3" SelectedIndex="{Binding Module3TypeIndex}"></ComboBox>
+                    <ComboBox x:Uid="combox4" x:Name="combox4" SelectedIndex="{Binding Module4TypeIndex}"></ComboBox>
+                    <ComboBox x:Uid="combox5" x:Name="combox5" SelectedIndex="{Binding Module5TypeIndex}"></ComboBox>
+                    <ComboBox x:Uid="combox6" x:Name="combox6" SelectedIndex="{Binding Module6TypeIndex}"></ComboBox>
+                    <ComboBox x:Uid="combox7" x:Name="combox7" SelectedIndex="{Binding Module7TypeIndex}"></ComboBox>
+                    <ComboBox x:Uid="combox8" x:Name="combox8" SelectedIndex="{Binding Module8TypeIndex}"></ComboBox>
                 </Canvas>
             </StackPanel>
         </StackPanel>

@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MainWindow_File" xml:space="preserve">
+    <value>文件(_F)</value>
+  </data>
+  <data name="MainWindow_Edit" xml:space="preserve">
+    <value>编辑(_E)</value>
+  </data>
+  <data name="MainWindow_View" xml:space="preserve">
+    <value>视图(_V)</value>
+  </data>
+  <data name="MainWindow_Proj" xml:space="preserve">
+    <value>工程(_P)</value>
+  </data>
+  <data name="MainWindow_Tool" xml:space="preserve">
+    <value>工具(_T)</value>
+  </data>
+  <data name="MainWindow_Language" xml:space="preserve">
+    <value>语言(_L)</value>
+  </data>
+  <data name="MainWindow_Help" xml:space="preserve">
+    <value>帮助(_H)</value>
+  </data>
+  <data name="MainWindow_New_Proj" xml:space="preserve">
+    <value>新建工程</value>
+  </data>
+  <data name="MainWindow_Open_Proj" xml:space="preserve">
+    <value>打开工程</value>
+  </data>
+  <data name="MainWindow_Save_Proj" xml:space="preserve">
+    <value>保存工程</value>
+  </data>
+  <data name="MainWindow_Save_As_Proj" xml:space="preserve">
+    <value>工程另存为</value>
+  </data>
+  <data name="MainWindow_Recent_Proj" xml:space="preserve">
+    <value>最近工程</value>
+  </data>
+  <data name="MainWindow_Close_Proj" xml:space="preserve">
+    <value>关闭当前工程</value>
+  </data>
+  <data name="MainWindow_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="MainWindow_Undo" xml:space="preserve">
+    <value>撤销</value>
+  </data>
+  <data name="MainWindow_Redo" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="MainWindow_Cut" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="MainWindow_Paste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="MainWindow_Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="MainWindow_Del" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="MainWindow_Select_All" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="MainWindow_Search" xml:space="preserve">
+    <value>查找</value>
+  </data>
+  <data name="MainWindow_Replace" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="MainWindow_Zoom_In" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="MainWindow_Zoom_Out" xml:space="preserve">
+    <value>缩小</value>
+  </data>
+  <data name="MainWindow_Comment_Mode" xml:space="preserve">
+    <value>注释模式</value>
+  </data>
+  <data name="MainWindow_Project_Explorer" xml:space="preserve">
+    <value>工程资源管理器</value>
+  </data>
+  <data name="MainWindow_Soft_Element_Manager" xml:space="preserve">
+    <value>软元件管理器</value>
+  </data>
+  <data name="MainWindow_Soft_Element_Init" xml:space="preserve">
+    <value>软元件初始化</value>
+  </data>
+  <data name="MainWindow_Error_List" xml:space="preserve">
+    <value>错误列表</value>
+  </data>
+  <data name="MainWindow_Monitor_List" xml:space="preserve">
+    <value>监视列表</value>
+  </data>
+  <data name="MainWindow_Breakpoint_List" xml:space="preserve">
+    <value>断点列表</value>
+  </data>
+  <data name="MainWindow_Add_SubRoutine" xml:space="preserve">
+    <value>添加子程序</value>
+  </data>
+  <data name="MainWindow_Add_FuncBlock" xml:space="preserve">
+    <value>添加函数功能块</value>
+  </data>
+  <data name="MainWindow_Add_Modbus_Table" xml:space="preserve">
+    <value>添加Modbus表格</value>
+  </data>
+  <data name="MainWindow_Property_Proj" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="MainWindow_Upload" xml:space="preserve">
+    <value>上载</value>
+  </data>
+  <data name="MainWindow_Download" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="MainWindow_Monitor" xml:space="preserve">
+    <value>监视</value>
+  </data>
+  <data name="MainWindow_Simulation" xml:space="preserve">
+    <value>仿真</value>
+  </data>
+  <data name="MainWindow_Ret_Edit_Mode" xml:space="preserve">
+    <value>返回编辑</value>
+  </data>
+  <data name="MainWindow_Proj_Check" xml:space="preserve">
+    <value>程序检测</value>
+  </data>
+  <data name="MainWindow_Ladder_Check" xml:space="preserve">
+    <value>梯形图检测</value>
+  </data>
+  <data name="MainWindow_Funcblock_Check" xml:space="preserve">
+    <value>函数功能块检测</value>
+  </data>
+  <data name="MainWindow_Option" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="MainWindow_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="MainWindow_English" xml:space="preserve">
+    <value>英语</value>
+  </data>
+  <data name="MainWindow_View_Help" xml:space="preserve">
+    <value>查看帮助</value>
+  </data>
+  <data name="MainWindow_Online_Upgrade" xml:space="preserve">
+    <value>在线升级</value>
+  </data>
+  <data name="MainWindow_About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="MainWindow_Compile" xml:space="preserve">
+    <value>编译</value>
+  </data>
+  <data name="MainWindow_Ladder_Mode" xml:space="preserve">
+    <value>梯形图模式</value>
+  </data>
+  <data name="MainWindow_Inst_Mode" xml:space="preserve">
+    <value>指令模式</value>
+  </data>
+  <data name="MainWindow_Row_Insert" xml:space="preserve">
+    <value>行插入</value>
+  </data>
+  <data name="MainWindow_Row_Delete" xml:space="preserve">
+    <value>行删除</value>
+  </data>
+  <data name="MainWindow_Element_List" xml:space="preserve">
+    <value>软元件表</value>
+  </data>
+  <data name="MainWindow_Normally_Open_Contact" xml:space="preserve">
+    <value>常开触点</value>
+  </data>
+  <data name="MainWindow_Immediately_Open" xml:space="preserve">
+    <value>立即常开</value>
+  </data>
+  <data name="MainWindow_Normally_Closed" xml:space="preserve">
+    <value>常闭</value>
+  </data>
+  <data name="MainWindow_Immediately_Close" xml:space="preserve">
+    <value>立即常闭</value>
+  </data>
+  <data name="MainWindow_Rising_Edge_Pulse" xml:space="preserve">
+    <value>上升沿脉冲</value>
+  </data>
+  <data name="MainWindow_Falling_Edge_Pulse" xml:space="preserve">
+    <value>下降沿脉冲</value>
+  </data>
+  <data name="MainWindow_Rising_Edge_Of_Result" xml:space="preserve">
+    <value>结果上升沿</value>
+  </data>
+  <data name="MainWindow_Falling_Edge_Of_Result" xml:space="preserve">
+    <value>结果下降沿</value>
+  </data>
+  <data name="MainWindow_Reversed_Result" xml:space="preserve">
+    <value>结果取反</value>
+  </data>
+  <data name="MainWindow_Output_Coil" xml:space="preserve">
+    <value>输出线圈</value>
+  </data>
+  <data name="MainWindow_Immediately_Output_Coil" xml:space="preserve">
+    <value>立即输出线圈</value>
+  </data>
+  <data name="MainWindow_Horizontal_Line" xml:space="preserve">
+    <value>横线</value>
+  </data>
+  <data name="MainWindow_Vertical_Line" xml:space="preserve">
+    <value>竖线</value>
+  </data>
+  <data name="MainWindow_Horizontal_Line_Delete" xml:space="preserve">
+    <value>横线删除</value>
+  </data>
+  <data name="MainWindow_Vertical_Line_Delete" xml:space="preserve">
+    <value>竖线删除</value>
+  </data>
+  <data name="MainWindow_Communication_Settings" xml:space="preserve">
+    <value>通信设置</value>
+  </data>
+  <data name="MainWindow_System_Settings" xml:space="preserve">
+    <value>系统设置</value>
+  </data>
+  <data name="MainWindow_PLC_Settings" xml:space="preserve">
+    <value>PLC设置</value>
+  </data>
+  <data name="MainWindow_Simulation_Run" xml:space="preserve">
+    <value>仿真运行</value>
+  </data>
+  <data name="MainWindow_Simulation_Pause" xml:space="preserve">
+    <value>仿真暂停</value>
+  </data>
+  <data name="MainWindow_Simulation_Stop" xml:space="preserve">
+    <value>仿真停止</value>
+  </data>
+  <data name="MainWindow_Current_Breakpoint" xml:space="preserve">
+    <value>当前断点</value>
+  </data>
+  <data name="MainWindow_By_Process" xml:space="preserve">
+    <value>逐过程</value>
+  </data>
+  <data name="MainWindow_By_Sentence" xml:space="preserve">
+    <value>逐语句</value>
+  </data>
+  <data name="MainWindow_Jump_Out" xml:space="preserve">
+    <value>跳出</value>
+  </data>
+  <data name="MainWindow_Breakpoint" xml:space="preserve">
+    <value>断点</value>
+  </data>
+  <data name="LadderDiagram_Edit_Program_Comment" xml:space="preserve">
+    <value>编辑程序注释</value>
+  </data>
+  <data name="LadderDiagram_Program_Comment" xml:space="preserve">
+    <value>程序注释</value>
+  </data>
+  <data name="LadderNetwork_Edit_Network_Comment" xml:space="preserve">
+    <value>编辑网络注释</value>
+  </data>
+  <data name="LadderNetwork_Element_Cut" xml:space="preserve">
+    <value>图元剪切</value>
+  </data>
+  <data name="LadderNetwork_Element_Paste" xml:space="preserve">
+    <value>图元粘贴</value>
+  </data>
+  <data name="LadderNetwork_Element_Copy" xml:space="preserve">
+    <value>图元复制</value>
+  </data>
+  <data name="LadderNetwork_Element_Delete" xml:space="preserve">
+    <value>图元删除</value>
+  </data>
+  <data name="LadderNetwork_Insert_before" xml:space="preserve">
+    <value>向前插入</value>
+  </data>
+  <data name="LadderNetwork_Insert_After" xml:space="preserve">
+    <value>向后插入</value>
+  </data>
+  <data name="LadderNetwork_Insert_End" xml:space="preserve">
+    <value>末尾追加</value>
+  </data>
+  <data name="LadderNetwork_Network_Insert" xml:space="preserve">
+    <value>网络插入</value>
+  </data>
+  <data name="LadderNetwork_Network_Cut" xml:space="preserve">
+    <value>网络剪切</value>
+  </data>
+  <data name="LadderNetwork_Network_Paste" xml:space="preserve">
+    <value>网络粘贴</value>
+  </data>
+  <data name="LadderNetwork_Network_Copy" xml:space="preserve">
+    <value>网络复制</value>
+  </data>
+  <data name="LadderNetwork_Network_Delete" xml:space="preserve">
+    <value>网络删除</value>
+  </data>
+  <data name="LadderNetwork_Shield_Network" xml:space="preserve">
+    <value>屏蔽网络</value>
+  </data>
+  <data name="Modbus_Slave_Station_Number" xml:space="preserve">
+    <value>从站号</value>
+  </data>
+  <data name="Modbus_Function_Code" xml:space="preserve">
+    <value>功能码</value>
+  </data>
+  <data name="Modbus_Slave_Register" xml:space="preserve">
+    <value>从站寄存器</value>
+  </data>
+  <data name="Modbus_Slave_Length" xml:space="preserve">
+    <value>从站长度</value>
+  </data>
+  <data name="Modbus_Master_Register" xml:space="preserve">
+    <value>主站寄存器</value>
+  </data>
+  <data name="Modbus_Current_Row_Up" xml:space="preserve">
+    <value>当前行上移</value>
+  </data>
+  <data name="Modbus_Current_Row_Down" xml:space="preserve">
+    <value>当前行下移</value>
+  </data>
+  <data name="Modbus_Create_New_Table" xml:space="preserve">
+    <value>新建表格</value>
+  </data>
+  <data name="Modbus_Delete_Table" xml:space="preserve">
+    <value>删除表格</value>
+  </data>
+  <data name="Modbus_Current_Table_Up" xml:space="preserve">
+    <value>当前表格上移</value>
+  </data>
+  <data name="Modbus_Current_Table_Down" xml:space="preserve">
+    <value>当前表格下移</value>
+  </data>
+  <data name="Report_Display_Output_Source" xml:space="preserve">
+    <value>显示输出来源：</value>
+  </data>
+  <data name="Report_All_Sources" xml:space="preserve">
+    <value>所有来源</value>
+  </data>
+  <data name="Report_Generate" xml:space="preserve">
+    <value>生成</value>
+  </data>
+  <data name="Report_Funcblock_Compilation" xml:space="preserve">
+    <value>函数块编译</value>
+  </data>
+  <data name="ErrorReportWindow_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="ErrorReportWindow_Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="ErrorReportWindow_Explanation" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="Routine" xml:space="preserve">
+    <value>程序</value>
+  </data>
+  <data name="Coordinate" xml:space="preserve">
+    <value>坐标</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>指令</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>网络</value>
+  </data>
+  <data name="Current_Routine" xml:space="preserve">
+    <value>当前程序</value>
+  </data>
+  <data name="All_Routine" xml:space="preserve">
+    <value>全部程序</value>
+  </data>
+  <data name="Element" xml:space="preserve">
+    <value>元件</value>
+  </data>
+  <data name="LadderDiagram" xml:space="preserve">
+    <value>梯形图</value>
+  </data>
+  <data name="Modbus_Table_Name" xml:space="preserve">
+    <value>表格名称</value>
+  </data>
+  <data name="Modbus_Table_Comment" xml:space="preserve">
+    <value>表格注释</value>
+  </data>
+  <data name="Ensure" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Font" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="Project_Setting" xml:space="preserve">
+    <value>工程设置</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="PLC_Device_Model" xml:space="preserve">
+    <value>设备型号</value>
+  </data>
+  <data name="PLC_Communication_Parameters" xml:space="preserve">
+    <value>通信参数</value>
+  </data>
+  <data name="PLC_Password_Setting" xml:space="preserve">
+    <value>密码设置</value>
+  </data>
+  <data name="PLC_Analog_Quantity" xml:space="preserve">
+    <value>模拟量</value>
+  </data>
+  <data name="PLC_Filter_Parameters" xml:space="preserve">
+    <value>滤波参数</value>
+  </data>
+  <data name="PLC_Retentive_Zone_Settings" xml:space="preserve">
+    <value>掉电保持</value>
+  </data>
+  <data name="PLC_Expansion_Module" xml:space="preserve">
+    <value>拓展模块</value>
+  </data>
+  <data name="Inst_Bit" xml:space="preserve">
+    <value>位逻辑</value>
+  </data>
+  <data name="Inst_Compare" xml:space="preserve">
+    <value>比较指令</value>
+  </data>
+  <data name="Inst_Convert" xml:space="preserve">
+    <value>转换指令</value>
+  </data>
+  <data name="Inst_LogicOperation" xml:space="preserve">
+    <value>逻辑运算</value>
+  </data>
+  <data name="Inst_Move" xml:space="preserve">
+    <value>传送</value>
+  </data>
+  <data name="Inst_FloatCalculation" xml:space="preserve">
+    <value>浮点运算</value>
+  </data>
+  <data name="Inst_IntegerCalculation" xml:space="preserve">
+    <value>整数运算</value>
+  </data>
+  <data name="Inst_Timer" xml:space="preserve">
+    <value>定时器</value>
+  </data>
+  <data name="Inst_Counter" xml:space="preserve">
+    <value>计数器</value>
+  </data>
+  <data name="Inst_ProgramControl" xml:space="preserve">
+    <value>程序控制</value>
+  </data>
+  <data name="Inst_Shift" xml:space="preserve">
+    <value>移位指令</value>
+  </data>
+  <data name="Inst_Interrupt" xml:space="preserve">
+    <value>中断指令</value>
+  </data>
+  <data name="Inst_RealTime" xml:space="preserve">
+    <value>实时时钟</value>
+  </data>
+  <data name="Inst_Communication" xml:space="preserve">
+    <value>通信指令</value>
+  </data>
+  <data name="Inst_Pulse" xml:space="preserve">
+    <value>脉冲输出</value>
+  </data>
+  <data name="Inst_HighCount" xml:space="preserve">
+    <value>高速计数</value>
+  </data>
+  <data name="Inst_Auxiliar" xml:space="preserve">
+    <value>辅助指令</value>
+  </data>
+  <data name="SubRoutine" xml:space="preserve">
+    <value>子程序</value>
+  </data>
+  <data name="FuncBlock" xml:space="preserve">
+    <value>函数功能块</value>
+  </data>
+  <data name="PTV_No_Function" xml:space="preserve">
+    <value>没有函数</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>工程</value>
+  </data>
+  <data name="MainRoutine" xml:space="preserve">
+    <value>主程序</value>
+  </data>
+  <data name="Modbus_Table" xml:space="preserve">
+    <value>Modbus表格</value>
+  </data>
+  <data name="PTV_New_Folder" xml:space="preserve">
+    <value>新建文件夹</value>
+  </data>
+  <data name="PTV_New_SubRoutine" xml:space="preserve">
+    <value>新建子程序</value>
+  </data>
+  <data name="PTV_New_Network" xml:space="preserve">
+    <value>新建网络</value>
+  </data>
+  <data name="PTV_New_Funcblock" xml:space="preserve">
+    <value>新建函数块</value>
+  </data>
+  <data name="PTV_New_Modbus_Table" xml:space="preserve">
+    <value>新建MODBUS表格</value>
+  </data>
+  <data name="PTV_Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="PTV_Folder" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="PTV_Table" xml:space="preserve">
+    <value>表格</value>
+  </data>
+  <data name="Library_Function" xml:space="preserve">
+    <value>库函数</value>
+  </data>
+  <data name="Replace_Result" xml:space="preserve">
+    <value>替换结果</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>内容</value>
+  </data>
+  <data name="Current_Text" xml:space="preserve">
+    <value>当前文本</value>
+  </data>
+  <data name="All_Text" xml:space="preserve">
+    <value>全部文本</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="Use_Regular_Expression" xml:space="preserve">
+    <value>使用正则表达式</value>
+  </data>
+  <data name="IgnoreCase" xml:space="preserve">
+    <value>忽视大小写</value>
+  </data>
+  <data name="Jump" xml:space="preserve">
+    <value>跳转</value>
+  </data>
+  <data name="Enable_Disable" xml:space="preserve">
+    <value>启用/禁用</value>
+  </data>
+  <data name="Release" xml:space="preserve">
+    <value>解除</value>
+  </data>
+  <data name="Release_All" xml:space="preserve">
+    <value>全部解除</value>
+  </data>
+  <data name="Interrupt_Condition" xml:space="preserve">
+    <value>中断条件</value>
+  </data>
+  <data name="Execution_Number" xml:space="preserve">
+    <value>执行次数</value>
+  </data>
+  <data name="Element_Address" xml:space="preserve">
+    <value>软元件地址</value>
+  </data>
+  <data name="Data_Type" xml:space="preserve">
+    <value>数据类型</value>
+  </data>
+  <data name="Element_Length" xml:space="preserve">
+    <value>软元件长度</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Delete_All" xml:space="preserve">
+    <value>全部删除</value>
+  </data>
+  <data name="On_Off_Value" xml:space="preserve">
+    <value>ON/OFF/值</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Displays_Details" xml:space="preserve">
+    <value>显示所选项细节</value>
+  </data>
+  <data name="Clear_Selected" xml:space="preserve">
+    <value>清空所选项</value>
+  </data>
+  <data name="Element_Name" xml:space="preserve">
+    <value>软元件名称</value>
+  </data>
+  <data name="Element_Comment" xml:space="preserve">
+    <value>软元件注释</value>
+  </data>
+  <data name="Element_Alias" xml:space="preserve">
+    <value>软元件别名</value>
+  </data>
+  <data name="Select_Element_Range" xml:space="preserve">
+    <value>选择软元件区间</value>
+  </data>
+  <data name="Used_Element" xml:space="preserve">
+    <value>已使用软元件</value>
+  </data>
+  <data name="Annotated_Element" xml:space="preserve">
+    <value>已注释软元件</value>
+  </data>
+  <data name="Import_CSV" xml:space="preserve">
+    <value>导入CSV</value>
+  </data>
+  <data name="Export_CSV" xml:space="preserve">
+    <value>导出CSV</value>
+  </data>
+</root>

@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="SamSoarII.AppMain.Project.LadderDiagramViewModel"
+﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.AppMain.Project.LadderDiagramViewModel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              xmlns:app="clr-namespace:SamSoarII.AppMain"
              xmlns:ui="clr-namespace:SamSoarII.AppMain.UI"
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
@@ -17,77 +18,77 @@
              PreviewKeyUp="OnLadderDiagramKeyUp"
              MouseUp="OnLadderDiagramMouseUp">
     <UserControl.CommandBindings>
-        <CommandBinding Command="{x:Static ApplicationCommands.Cut}"   CanExecute="CutCopyCommandCanExecute" Executed="OnCutCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Copy}"  CanExecute="CutCopyCommandCanExecute" Executed="OnCopyCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Paste}" CanExecute="PasteCommandCanExecute" Executed="OnPasteCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Undo}" CanExecute="UndoCommandCanExecute" Executed="OnUndoCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCommandCanExecute" Executed="OnRedoCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Find}" CanExecute="FindCommandCanExecute" Executed="OnFindCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Replace}" CanExecute="ReplaceCommandCanExecute" Executed="OnReplaceCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_1" Command="{x:Static ApplicationCommands.Cut}"   CanExecute="CutCopyCommandCanExecute" Executed="OnCutCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_2" Command="{x:Static ApplicationCommands.Copy}"  CanExecute="CutCopyCommandCanExecute" Executed="OnCopyCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_3" Command="{x:Static ApplicationCommands.Paste}" CanExecute="PasteCommandCanExecute" Executed="OnPasteCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_4" Command="{x:Static ApplicationCommands.Undo}" CanExecute="UndoCommandCanExecute" Executed="OnUndoCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_5" Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCommandCanExecute" Executed="OnRedoCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_6" Command="{x:Static ApplicationCommands.Find}" CanExecute="FindCommandCanExecute" Executed="OnFindCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_7" Command="{x:Static ApplicationCommands.Replace}" CanExecute="ReplaceCommandCanExecute" Executed="OnReplaceCommandExecute"></CommandBinding>
+        <CommandBinding x:Uid="CommandBinding_8" Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
     </UserControl.CommandBindings>
     <UserControl.Resources>
-        <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetTitle"/>
-        <util:DoubleConverter2 x:Key="converter"></util:DoubleConverter2>
-        <util:MutiConverter x:Key="converter1"></util:MutiConverter>
-        <util:BoolToVisibilityConverter2 x:Key="converter2"></util:BoolToVisibilityConverter2>
+        <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetTitle"/>
+        <util:DoubleConverter2 x:Uid="util:DoubleConverter2_1" x:Key="converter"></util:DoubleConverter2>
+        <util:MutiConverter x:Uid="util:MutiConverter_1" x:Key="converter1"></util:MutiConverter>
+        <util:BoolToVisibilityConverter2 x:Uid="util:BoolToVisibilityConverter2_1" x:Key="converter2"></util:BoolToVisibilityConverter2>
     </UserControl.Resources>
-    <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <StackPanel x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent" LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}"  PreviewMouseDown="OnLadderDiagramMouseDown" MouseMove="OnLadderDiagramMouseMove">
+    <ScrollViewer x:Uid="MainScrollViewer" x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel x:Uid="mainStackPanel" x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent" LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}"  PreviewMouseDown="OnLadderDiagramMouseDown" MouseMove="OnLadderDiagramMouseMove">
             <StackPanel.Resources>
-                <ContextMenu x:Key="CommentAreaContextMenu">
-                    <MenuItem Header="编辑程序注释" Click="OnEditComment"></MenuItem>
+                <ContextMenu x:Uid="ContextMenu_1" x:Key="CommentAreaContextMenu">
+                    <MenuItem x:Uid="MenuItem_1" Header="{x:Static properties:Resources.LadderDiagram_Edit_Program_Comment}" Click="OnEditComment"></MenuItem>
                 </ContextMenu>
             </StackPanel.Resources>
-            <StackPanel Orientation="Horizontal">
-                <ui:LadderExpander VerticalAlignment="Top" IsExpand="True" x:Name="ladderExpander" Background="Transparent">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
+                <ui:LadderExpander x:Uid="ladderExpander" VerticalAlignment="Top" IsExpand="True" x:Name="ladderExpander" Background="Transparent">
                     <ui:LadderExpander.Height>
-                        <MultiBinding Converter="{StaticResource converter1}">
-                            <Binding ElementName="MainBorder" Path="ActualHeight"></Binding>
-                            <Binding ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
+                        <MultiBinding x:Uid="MultiBinding_1" Converter="{StaticResource converter1}">
+                            <Binding x:Uid="Binding_1" ElementName="MainBorder" Path="ActualHeight"></Binding>
+                            <Binding x:Uid="Binding_2" ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
                         </MultiBinding>
                     </ui:LadderExpander.Height>
                 </ui:LadderExpander>
-                <Line x:Name="line1" Stroke="Black" Margin="-25,50,0,0" StrokeThickness="3" X1="0" Y1="0" X2="0" Y2="{Binding ElementName=MainBorder,Path=ActualHeight,Converter={StaticResource converter}}"></Line>
+                <Line x:Uid="line1" x:Name="line1" Stroke="Black" Margin="-25,50,0,0" StrokeThickness="3" X1="0" Y1="0" X2="0" Y2="{Binding ElementName=MainBorder,Path=ActualHeight,Converter={StaticResource converter}}"></Line>
             </StackPanel>
-            <Grid>
-                <Rectangle x:Name="Rect" VerticalAlignment="Top">
+            <Grid x:Uid="Grid_1">
+                <Rectangle x:Uid="Rect" x:Name="Rect" VerticalAlignment="Top">
                     <Rectangle.Height>
-                        <MultiBinding Converter="{StaticResource converter1}">
-                            <Binding ElementName="MainBorder" Path="ActualHeight"></Binding>
-                            <Binding ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
+                        <MultiBinding x:Uid="MultiBinding_2" Converter="{StaticResource converter1}">
+                            <Binding x:Uid="Binding_3" ElementName="MainBorder" Path="ActualHeight"></Binding>
+                            <Binding x:Uid="Binding_4" ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
                         </MultiBinding>
                     </Rectangle.Height>
                 </Rectangle>
-                <StackPanel x:Name="LadderDiagramStackPanel">
-                    <StackPanel Orientation="Horizontal">
-                        <Border x:Name="MainBorder" BorderThickness="2" BorderBrush="Red" Width="1500" Margin="20,0,0,20" HorizontalAlignment="Left" Background="AntiqueWhite">
-                            <Expander x:Name="CommentAreaExpander" MouseDoubleClick="OnCommentAreaMouseDoubleClick" ContextMenu="{StaticResource CommentAreaContextMenu}" Focusable="False">
+                <StackPanel x:Uid="LadderDiagramStackPanel" x:Name="LadderDiagramStackPanel">
+                    <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
+                        <Border x:Uid="MainBorder" x:Name="MainBorder" BorderThickness="2" BorderBrush="Red" Width="1500" Margin="20,0,0,20" HorizontalAlignment="Left" Background="AntiqueWhite">
+                            <Expander x:Uid="CommentAreaExpander" x:Name="CommentAreaExpander" MouseDoubleClick="OnCommentAreaMouseDoubleClick" ContextMenu="{StaticResource CommentAreaContextMenu}" Focusable="False">
                                 <Expander.Header>
-                                    <TextBlock x:Name="LadderTitleTextBlock" MinHeight="48" DataContext="{StaticResource FontData}" FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}">程序注释</TextBlock>
+                                    <TextBlock x:Uid="LadderTitleTextBlock" x:Name="LadderTitleTextBlock" MinHeight="48" DataContext="{StaticResource FontData}" FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}" Text="{x:Static properties:Resources.LadderDiagram_Program_Comment}"></TextBlock>
                                 </Expander.Header>
-                                <TextBlock x:Name="LadderCommentTextBlock" FontSize="28" Text="{Binding LadderComment, Mode=TwoWay}"></TextBlock>
+                                <TextBlock x:Uid="LadderCommentTextBlock" x:Name="LadderCommentTextBlock" FontSize="28" Text="{Binding LadderComment, Mode=TwoWay}"></TextBlock>
                             </Expander>
                         </Border>
-                        <Button x:Name="ThumbnailButton" Visibility="{Binding ElementName=ladderExpander,Path=IsExpand,Converter={StaticResource converter2}}"
+                        <Button x:Uid="ThumbnailButton" x:Name="ThumbnailButton" Visibility="{Binding ElementName=ladderExpander,Path=IsExpand,Converter={StaticResource converter2}}"
                                 VerticalAlignment="Top" Margin="20,0,0,0" Width="65" Height="55" Template="{StaticResource ThumbnailButton}" 
                                 MouseDoubleClick="OnMouseDoubleClick" MouseWheel="OnMouseWheel">
                         </Button>
                     </StackPanel>
-                    <StackPanel x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragEnter="OnDragEnter" MouseMove="OnMouseMove"/>
-                    <Line x:Name="line2" Stroke="Black" Margin="-25,0,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
+                    <StackPanel x:Uid="LadderNetworkStackPanel" x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragEnter="OnDragEnter" MouseMove="OnMouseMove"/>
+                    <Line x:Uid="line2" x:Name="line2" Stroke="Black" Margin="-25,0,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
                 </StackPanel>
             </Grid>
-            <StackPanel Orientation="Vertical">
-                <Line Stroke="Black" StrokeThickness="3" X1="0" X2="0" Y1="0" Margin="20,0,20,0">
+            <StackPanel x:Uid="StackPanel_3" Orientation="Vertical">
+                <Line x:Uid="Line_1" Stroke="Black" StrokeThickness="3" X1="0" X2="0" Y1="0" Margin="20,0,20,0">
                     <Line.Y2>
-                        <MultiBinding Converter="{StaticResource converter1}">
-                            <Binding ElementName="MainBorder" Path="ActualHeight"></Binding>
-                            <Binding ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
+                        <MultiBinding x:Uid="MultiBinding_3" Converter="{StaticResource converter1}">
+                            <Binding x:Uid="Binding_5" ElementName="MainBorder" Path="ActualHeight"></Binding>
+                            <Binding x:Uid="Binding_6" ElementName="LadderNetworkStackPanel" Path="ActualHeight"></Binding>
                         </MultiBinding>
                     </Line.Y2>
                 </Line>
-                <Line Stroke="Black" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
+                <Line x:Uid="Line_2" Stroke="Black" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

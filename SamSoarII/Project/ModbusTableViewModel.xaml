@@ -1,137 +1,130 @@
-﻿<UserControl x:Class="SamSoarII.AppMain.Project.ModbusTableViewModel"
+﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.AppMain.Project.ModbusTableViewModel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.Project"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
              Background="Transparent">
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="120"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="120"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <ListBox x:Name="LB_Tables"
+        <ScrollViewer x:Uid="ScrollViewer_1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ListBox x:Uid="LB_Tables" x:Name="LB_Tables"
                      Grid.Row="0" Grid.Column="0"
                      SelectionChanged="LB_Tables_SelectionChanged">
                 <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
+                    <Style x:Uid="Style_1" TargetType="ListBoxItem">
                         <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Blue"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="FontWeight" Value="Heavy"/>
+                            <Trigger x:Uid="Trigger_1" Property="IsSelected" Value="True">
+                                <Setter x:Uid="Setter_1" Property="Background" Value="Blue"/>
+                                <Setter x:Uid="Setter_2" Property="Foreground" Value="Black"/>
+                                <Setter x:Uid="Setter_3" Property="BorderThickness" Value="0"/>
+                                <Setter x:Uid="Setter_4" Property="FontWeight" Value="Heavy"/>
                             </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="FontWeight" Value="Light"/>
+                            <Trigger x:Uid="Trigger_2" Property="IsSelected" Value="False">
+                                <Setter x:Uid="Setter_5" Property="Background" Value="Transparent"/>
+                                <Setter x:Uid="Setter_6" Property="Foreground" Value="Black"/>
+                                <Setter x:Uid="Setter_7" Property="BorderThickness" Value="0"/>
+                                <Setter x:Uid="Setter_8" Property="FontWeight" Value="Light"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
         </ScrollViewer>
-        <DataGrid x:Name="DG_Table" ItemsSource="{Binding Tables}"
+        <DataGrid x:Uid="DG_Table" x:Name="DG_Table" ItemsSource="{Binding Tables}"
                   Grid.Row="0" Grid.Column="1"
                   AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False"
                   SelectionMode="Single"
                   SelectionChanged="DG_Table_SelectionChanged">
             <DataGrid.Resources>
-                <ObjectDataProvider x:Key="CBItems" ObjectType="{x:Type local:ModbusTableComboBoxItems}" MethodName="SelectedHandleCodes">
+                <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="CBItems" ObjectType="{x:Type local:ModbusTableComboBoxItems}" MethodName="SelectedHandleCodes">
                 </ObjectDataProvider>
             </DataGrid.Resources>
             <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="Selected" Handler="DataGridRow_Selected"></EventSetter>
-                    <EventSetter Event="Unselected" Handler="DataGridRow_Unselected"></EventSetter>
-                    <EventSetter Event="Loaded" Handler="DataGridRow_Loaded"></EventSetter>
+                <Style x:Uid="Style_2" TargetType="DataGridRow">
+                    <EventSetter x:Uid="EventSetter_1" Event="Selected" Handler="DataGridRow_Selected"></EventSetter>
+                    <EventSetter x:Uid="EventSetter_2" Event="Unselected" Handler="DataGridRow_Unselected"></EventSetter>
+                    <EventSetter x:Uid="EventSetter_3" Event="Loaded" Handler="DataGridRow_Loaded"></EventSetter>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <EventSetter Event="LostKeyboardFocus" Handler="DataGridCell_LostKeyboardFocus"></EventSetter>
+                <Style x:Uid="Style_3" TargetType="DataGridCell">
+                    <EventSetter x:Uid="EventSetter_4" Event="LostKeyboardFocus" Handler="DataGridCell_LostKeyboardFocus"></EventSetter>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="DGTC_SlaveID" Header="从站号" Width="*"
+                <DataGridTextColumn x:Uid="DGTC_SlaveID" x:Name="DGTC_SlaveID" Header="{x:Static properties:Resources.Modbus_Slave_Station_Number}" Width="*"
                                     IsReadOnly="False" Binding="{Binding SlaveID}">
                 </DataGridTextColumn>
-                <DataGridComboBoxColumn x:Name="DGCBC_HandleCode" Header="功能码" Width="*"
+                <DataGridComboBoxColumn x:Uid="DGCBC_HandleCode" x:Name="DGCBC_HandleCode" Header="{x:Static properties:Resources.Modbus_Function_Code}" Width="*"
                                     IsReadOnly="False" TextBinding="{Binding HandleCode}" 
                                     ItemsSource="{Binding Source={StaticResource CBItems}, Mode=OneWay}">
                 </DataGridComboBoxColumn>
-                <DataGridTextColumn x:Name="DGTC_SlaveRegister" Header="从站寄存器" Width="*"
+                <DataGridTextColumn x:Uid="DGTC_SlaveRegister" x:Name="DGTC_SlaveRegister" Header="{x:Static properties:Resources.Modbus_Slave_Register}" Width="*"
                                     IsReadOnly="False" Binding="{Binding SlaveRegister}">
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_SlaveCount" Header="从站长度" Width="*"
+                <DataGridTextColumn x:Uid="DGTC_SlaveCount" x:Name="DGTC_SlaveCount" Header="{x:Static properties:Resources.Modbus_Slave_Length}" Width="*"
                                     IsReadOnly="False" Binding="{Binding SlaveCount}">
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGTC_MasterRegister" Header="主站寄存器" Width="*"
+                <DataGridTextColumn x:Uid="DGTC_MasterRegister" x:Name="DGTC_MasterRegister" Header="{x:Static properties:Resources.Modbus_Master_Register}" Width="*"
                                     IsReadOnly="False" Binding="{Binding MasteRegister}">
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Grid x:Name="G_Tools"
+        <Grid x:Uid="G_Tools" x:Name="G_Tools"
               Grid.Row="0" Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="24"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition x:Uid="RowDefinition_1" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_2" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_3" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_4" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_5" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_6" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_7" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_8" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_9" Height="24"/>
+                <RowDefinition x:Uid="RowDefinition_10" Height="*"/>
             </Grid.RowDefinitions>
-            <Button x:Name="B_Insert"
+            <Button x:Uid="B_Insert" x:Name="B_Insert"
                     Grid.Row="0" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_Insert_Click">
-                插入行
-            </Button>
-            <Button x:Name="B_Remove"
+                    Click="B_Insert_Click" Content="{x:Static properties:Resources.MainWindow_Row_Insert}"/>
+
+            <Button x:Uid="B_Remove" x:Name="B_Remove"
                     Grid.Row="1" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_Remove_Click">
-                删除行
-            </Button>
-            <Button x:Name="B_Up"
+                    Click="B_Remove_Click" Content="{x:Static properties:Resources.MainWindow_Row_Delete}"/>
+
+            <Button x:Uid="B_Up" x:Name="B_Up"
                     Grid.Row="2" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_Up_Click">
-                当前行上移
-            </Button>
-            <Button x:Name="B_Down"
+                    Click="B_Up_Click" Content="{x:Static properties:Resources.Modbus_Current_Row_Up}"/>
+
+            <Button x:Uid="B_Down" x:Name="B_Down"
                     Grid.Row="3" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_Down_Click">
-                当前行下移
-            </Button>
-            <Button x:Name="B_AddModel"
+                    Click="B_Down_Click" Content="{x:Static properties:Resources.Modbus_Current_Row_Down}"/>
+
+            <Button x:Uid="B_AddModel" x:Name="B_AddModel"
                     Grid.Row="4" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_AddModel_Click">
-                新建表格
-            </Button>
-            <Button x:Name="B_RemoveModel"
+                    Click="B_AddModel_Click" Content="{x:Static properties:Resources.Modbus_Create_New_Table}"/>
+
+            <Button x:Uid="B_RemoveModel" x:Name="B_RemoveModel"
                     Grid.Row="5" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_RemoveModel_Click">
-                删除表格
-            </Button>
-            <Button x:Name="B_ModelUp"
+                    Click="B_RemoveModel_Click" Content="{x:Static properties:Resources.Modbus_Delete_Table}"/>
+
+            <Button x:Uid="B_ModelUp" x:Name="B_ModelUp"
                     Grid.Row="6" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_ModelUp_Click">
-                当前表格上移
-            </Button>
-            <Button x:Name="B_ModelDown"
+                    Click="B_ModelUp_Click" Content="{x:Static properties:Resources.Modbus_Current_Table_Up}"/>
+
+            <Button x:Uid="B_ModelDown" x:Name="B_ModelDown"
                     Grid.Row="7" Grid.Column="0" Margin="5,2,5,2"
-                    Click="B_ModelDown_Click">
-                当前表格下移
-            </Button>
+                    Click="B_ModelDown_Click" Content="{x:Static properties:Resources.Modbus_Current_Table_Down}"/>
+
         </Grid>
     </Grid>
 </UserControl>

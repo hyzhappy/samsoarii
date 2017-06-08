@@ -216,7 +216,7 @@ namespace SamSoarII.AppMain.UI
                         IconSource = "/Resources/Image/MainStyle/Project.png";
                         if (RelativeObject is ProjectModel)
                         {
-                            Text = String.Format("工程 - {0:s}", ((ProjectModel)RelativeObject).ProjectName);
+                            Text = String.Format("{0} - {1:s}",Properties.Resources.Project, ((ProjectModel)RelativeObject).ProjectName);
                         }
                         break;
                     case TYPE_ROUTINE:
@@ -226,7 +226,7 @@ namespace SamSoarII.AppMain.UI
                             string name = ((LadderDiagramViewModel)RelativeObject).ProgramName;
                             if (name.Equals("Main"))
                             {
-                                Text = String.Format("主程序 - {0}",name);
+                                Text = String.Format("{0} - {1}", Properties.Resources.MainRoutine, name);
                             }
                             else
                             {
@@ -254,7 +254,7 @@ namespace SamSoarII.AppMain.UI
                             if (lnvmodel.NetworkBrief == null 
                              || lnvmodel.NetworkBrief.Equals(String.Empty))
                             {
-                                Text = String.Format("网络 {0:d}", lnvmodel.NetworkNumber);
+                                Text = String.Format("{0} {1:d}", Properties.Resources.Network, lnvmodel.NetworkNumber);
                             }
                             else
                             {
@@ -319,19 +319,19 @@ namespace SamSoarII.AppMain.UI
                         {
                             IconSource = "/Resources/Image/MainStyle/folderClose.png";
                         }
-                        Text = "Modbus表格";
+                        Text = Properties.Resources.Modbus_Table;
                         break;
                     case TYPE_ELEMENTLIST:
                         IconSource = "/Resources/Image/ElementTable.png";
-                        Text = "软元件管理器";
+                        Text = Properties.Resources.MainWindow_Soft_Element_Manager;
                         break;
                     case TYPE_ELEMENTINITIALIZE:
                         IconSource = "/Resources/Image/ElementInitialize.png";
-                        Text = "软元件初始化";
+                        Text = Properties.Resources.MainWindow_Soft_Element_Init;
                         break;
                     case TYPE_PROGRAM:
                         IconSource = "/Resources/Image/MainStyle/Program.png";
-                        Text = "程序";
+                        Text = Properties.Resources.Routine;
                         break;
                     case TYPE_LADDERS:
                         IconSource = "/Resources/Image/MainStyle/Instruction.png";
@@ -641,7 +641,7 @@ namespace SamSoarII.AppMain.UI
                         if (lnvmodel.NetworkBrief == null
                          || lnvmodel.NetworkBrief.Equals(String.Empty))
                         {
-                            Text = String.Format("网络 {0:d}", lnvmodel.NetworkNumber);
+                            Text = String.Format("{0} {1:d}", Properties.Resources.Network, lnvmodel.NetworkNumber);
                         }
                         else
                         {
@@ -783,38 +783,38 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewItem.TYPE_MODBUSFLODER:
                 case ProjectTreeViewItem.TYPE_NETWORKFLODER:
                 case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
-                    profix = "文件夹"; break;
+                    profix = Properties.Resources.PTV_Folder; break;
                 case ProjectTreeViewItem.TYPE_ROUTINE:
-                    profix = "子程序"; break;
+                    profix = Properties.Resources.SubRoutine; break;
                 case ProjectTreeViewItem.TYPE_NETWORK:
-                    profix = "网络"; break;
+                    profix = Properties.Resources.Network; break;
                 case ProjectTreeViewItem.TYPE_FUNCBLOCK:
-                    profix = "函数块"; break;
+                    profix = Properties.Resources.FuncBlock; break;
                 case ProjectTreeViewItem.TYPE_MODBUS:
-                    profix = "表格"; break;
+                    profix = Properties.Resources.PTV_Table; break;
             }
             switch (Flags)
             {
                 case ProjectTreeViewItem.FLAG_CREATEFOLDER:
-                    Header = "新建文件夹"; break;
+                    Header = Properties.Resources.PTV_New_Folder; break;
                 case ProjectTreeViewItem.FLAG_CREATEROUTINE:
-                    Header = "新建子程序"; break;
+                    Header = Properties.Resources.PTV_New_SubRoutine; break;
                 case ProjectTreeViewItem.FLAG_CREATENETWORK:
-                    Header = "新建网络"; break;
+                    Header = Properties.Resources.PTV_New_Network; break;
                 case ProjectTreeViewItem.FLAG_CREATEFUNCBLOCK:
-                    Header = "新建函数块"; break;
+                    Header = Properties.Resources.PTV_New_Funcblock; break;
                 case ProjectTreeViewItem.FLAG_CREATEMODBUS:
-                    Header = "新建MODBUS表格"; break;
+                    Header = Properties.Resources.PTV_New_Modbus_Table; break;
                 case ProjectTreeViewItem.FLAG_RENAME:
-                    Header = profix + "重命名"; break;
+                    Header = profix + Properties.Resources.PTV_Rename; break;
                 case ProjectTreeViewItem.FLAG_REMOVE:
-                    Header = profix + "删除"; break;
+                    Header = profix + Properties.Resources.MainWindow_Del; break;
                 case ProjectTreeViewItem.FLAG_CREATENETWORKBEFORE:
-                    Header = "向前插入"; break;
+                    Header = Properties.Resources.LadderNetwork_Insert_before; break;
                 case ProjectTreeViewItem.FLAG_CREATENETWORKAFTER:
-                    Header = "向后插入"; break;
+                    Header = Properties.Resources.LadderNetwork_Insert_After; break;
                 case ProjectTreeViewItem.FLAG_CONFIG:
-                    Header = profix + "属性"; break;
+                    Header = profix + Properties.Resources.MainWindow_Property_Proj; break;
             }
         }
     }

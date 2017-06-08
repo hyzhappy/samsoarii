@@ -179,7 +179,7 @@ namespace SamSoarII.AppMain.Project
             UManager = new USBManager();
             StreamReader sr = new StreamReader(
                 String.Format(@"{0:s}\simug\simuflib.c", Environment.CurrentDirectory));
-            FuncBlockViewModel libfuncblock = new FuncBlockViewModel("库函数", this);
+            FuncBlockViewModel libfuncblock = new FuncBlockViewModel(Properties.Resources.Library_Function, this);
             libfuncblock.Code = sr.ReadToEnd();
             libfuncblock.IsReadOnly = true;
             LibFuncBlock = libfuncblock;

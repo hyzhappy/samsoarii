@@ -232,8 +232,7 @@ namespace SamSoarII.AppMain.UI
             ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(this);
             int unitwidth = GlobalSetting.LadderWidthUnit;
             int unitnumber = GlobalSetting.LadderXCapacity;
-            //GlobalSetting.LadderOriginScaleX = (_maintab.ActualWidth - 40) / (unitwidth * unitnumber);
-            //GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / (unitwidth * unitnumber);
+            
             foreach (ITabItem tab in TabItemCollection)
             {
                 tab.ActualWidth = _maintab.ActualWidth;

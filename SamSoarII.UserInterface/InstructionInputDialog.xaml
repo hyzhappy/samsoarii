@@ -1,4 +1,4 @@
-﻿<Window x:Class="SamSoarII.UserInterface.InstructionInputDialog"
+﻿<Window x:Uid="window" x:Class="SamSoarII.UserInterface.InstructionInputDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,87 +7,87 @@
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
         Title="指令输入" Height="90" Width="600" KeyDown="OnWindowKeyDown" ResizeMode="NoResize" x:Name="window" LocationChanged="OnLocationChanged">
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_1" Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="8*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <WindowsFormsHost x:Name="windowsFormsHost" Height="24" Width="350">
-            <wf:TextBox x:Name="InstructionInputTextBox" Multiline="False" TextChanged="OnTextChanged" KeyDown="OnKeyDown" MouseClick="OnMouseClick"></wf:TextBox>
+        <WindowsFormsHost x:Uid="windowsFormsHost" x:Name="windowsFormsHost" Height="24" Width="350">
+            <wf:TextBox x:Uid="InstructionInputTextBox" x:Name="InstructionInputTextBox" Multiline="False" TextChanged="OnTextChanged" KeyDown="OnKeyDown" MouseClick="OnMouseClick"></wf:TextBox>
         </WindowsFormsHost>
-        <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <Button x:Name="EnsureButton" Width="70" Height="24" Click="OnEnsureButtonClick">确定</Button>
-            <Button x:Name="HelpButton" Width="70" Height="24" Margin="15,0,0,0" Click="OnHelpButtonClick">帮助</Button>
+        <StackPanel x:Uid="StackPanel_1" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="70" Height="24" Click="OnEnsureButtonClick">确定</Button>
+            <Button x:Uid="HelpButton" x:Name="HelpButton" Width="70" Height="24" Margin="15,0,0,0" Click="OnHelpButtonClick">帮助</Button>
         </StackPanel>
-        <Grid>
-            <local:PopupNotTop x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" VerticalOffset="-29" HorizontalOffset="-5" IsOpen="False" Topmost="False">
-                <Border BorderBrush="Beige" BorderThickness="3" Width="600" Height="150">
-                    <Grid x:Name="TBPGrid" Background="Ivory">
+        <Grid x:Uid="Grid_2">
+            <local:PopupNotTop x:Uid="TextBoxPopup" x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" VerticalOffset="-29" HorizontalOffset="-5" IsOpen="False" Topmost="False">
+                <Border x:Uid="Border_1" BorderBrush="Beige" BorderThickness="3" Width="600" Height="150">
+                    <Grid x:Uid="TBPGrid" x:Name="TBPGrid" Background="Ivory">
                         <Grid.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="FontFamily" Value="Courier New,微软雅黑"></Setter>
-                                <Setter Property="FontSize" Value="14"></Setter>
-                                <Setter Property="FontWeight" Value="Light"></Setter>
-                                <Setter Property="Margin" Value="2,2,0,0"></Setter>
-                                <Setter Property="TextAlignment" Value="Left"></Setter>
+                            <Style x:Uid="Style_1" TargetType="TextBlock">
+                                <Setter x:Uid="Setter_1" Property="FontFamily" Value="Courier New,微软雅黑"></Setter>
+                                <Setter x:Uid="Setter_2" Property="FontSize" Value="14"></Setter>
+                                <Setter x:Uid="Setter_3" Property="FontWeight" Value="Light"></Setter>
+                                <Setter x:Uid="Setter_4" Property="Margin" Value="2,2,0,0"></Setter>
+                                <Setter x:Uid="Setter_5" Property="TextAlignment" Value="Left"></Setter>
                             </Style>
                         </Grid.Resources>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_2" Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_3" Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_4" Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_5" Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_6" Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_7" Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="60"></ColumnDefinition>
+                            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*"></ColumnDefinition>
+                            <ColumnDefinition x:Uid="ColumnDefinition_5" Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid.Children>
-                            <TextBlock x:Name="TB_Detail" FontSize="12" TextWrapping="Wrap"
+                            <TextBlock x:Uid="TB_Detail" x:Name="TB_Detail" FontSize="12" TextWrapping="Wrap"
                                        Grid.Row="0" Grid.RowSpan="6" Grid.Column="2">
                             </TextBlock>
                         </Grid.Children>
                     </Grid>
                 </Border>
             </local:PopupNotTop>
-            <local:PopupNotTop x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="44" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
-                    <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
+            <local:PopupNotTop x:Uid="SelectCollectionPopup" x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="44" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
+                <ScrollViewer x:Uid="scrollViewer" VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
+                    <local:CollectionStackPanel x:Uid="CollectionStack" Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
                         <local:CollectionStackPanel.Resources>
-                            <Style TargetType="Label">
-                                <Setter Property="Height" Value="20"></Setter>
-                                <Setter Property="FontSize" Value="14"></Setter>
-                                <Setter Property="Padding" Value="0"></Setter>
-                                <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
-                                <EventSetter Event="MouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>
+                            <Style x:Uid="Style_2" TargetType="Label">
+                                <Setter x:Uid="Setter_6" Property="Height" Value="20"></Setter>
+                                <Setter x:Uid="Setter_7" Property="FontSize" Value="14"></Setter>
+                                <Setter x:Uid="Setter_8" Property="Padding" Value="0"></Setter>
+                                <EventSetter x:Uid="EventSetter_1" Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
+                                <EventSetter x:Uid="EventSetter_2" Event="MouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>
                             </Style>
                         </local:CollectionStackPanel.Resources>
                     </local:CollectionStackPanel>
                 </ScrollViewer>
             </local:PopupNotTop>
-            <local:PopupNotTop MinWidth="130" Height="60" x:Name="ItemPopup" IsOpen="False" StaysOpen="True" AllowsTransparency="True" PopupAnimation="Fade" Topmost="False">
+            <local:PopupNotTop x:Uid="ItemPopup" MinWidth="130" Height="60" x:Name="ItemPopup" IsOpen="False" StaysOpen="True" AllowsTransparency="True" PopupAnimation="Fade" Topmost="False">
                 <local:PopupNotTop.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Height" Value="20"></Setter>
-                        <Setter Property="FontSize" Value="14"></Setter>
+                    <Style x:Uid="Style_3" TargetType="TextBlock">
+                        <Setter x:Uid="Setter_9" Property="Height" Value="20"></Setter>
+                        <Setter x:Uid="Setter_10" Property="FontSize" Value="14"></Setter>
                     </Style>
                 </local:PopupNotTop.Resources>
-                <Border BorderBrush="Black" BorderThickness="0.3" Background="#FFFCFFC1">
-                    <Grid>
+                <Border x:Uid="Border_2" BorderBrush="Black" BorderThickness="0.3" Background="#FFFCFFC1">
+                    <Grid x:Uid="Grid_3">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_8" Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_9" Height="*"></RowDefinition>
+                            <RowDefinition x:Uid="RowDefinition_10" Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock x:Name="PopupTextblock1"></TextBlock>
-                        <TextBlock x:Name="PopupTextblock2" Grid.Row="1"></TextBlock>
-                        <TextBlock x:Name="PopupTextblock3" Grid.Row="2"></TextBlock>
+                        <TextBlock x:Uid="PopupTextblock1" x:Name="PopupTextblock1"></TextBlock>
+                        <TextBlock x:Uid="PopupTextblock2" x:Name="PopupTextblock2" Grid.Row="1"></TextBlock>
+                        <TextBlock x:Uid="PopupTextblock3" x:Name="PopupTextblock3" Grid.Row="2"></TextBlock>
                     </Grid>
                 </Border>
             </local:PopupNotTop>

@@ -158,9 +158,9 @@ namespace SamSoarII.AppMain.UI
              && !parent.MainWindow.LAFind.IsDock)
             {
                 LayoutSetting.AddDefaultDockWidthAnchorable(
-                    "查找", parent.MainWindow.LAFind.AutoHideWidth.ToString());
+                    Properties.Resources.MainWindow_Search, parent.MainWindow.LAFind.AutoHideWidth.ToString());
                 LayoutSetting.AddDefaultDockHeighAnchorable(
-                    "查找", parent.MainWindow.LAFind.AutoHideHeight.ToString());
+                    Properties.Resources.MainWindow_Search, parent.MainWindow.LAFind.AutoHideHeight.ToString());
                 parent.MainWindow.LAFind.ToggleAutoHide();
             }
             if (DG_List.SelectedIndex < 0) return;

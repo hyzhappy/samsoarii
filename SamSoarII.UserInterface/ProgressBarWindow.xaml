@@ -1,4 +1,4 @@
-﻿<Window x:Class="SamSoarII.UserInterface.ProgressBarWindow"
+﻿<Window x:Uid="Window_1" x:Class="SamSoarII.UserInterface.ProgressBarWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,17 +6,17 @@
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
         Title="我是进度条窗口" Height="120" Width="400">
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition x:Uid="RowDefinition_1" Height="*"/>
+            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="TB_Message"
+        <TextBlock x:Uid="TB_Message" x:Name="TB_Message"
                    Grid.Row="0" Grid.Column="0"
                    Margin="16,8,0,0" FontSize="16">
             少女搞事中。。。
         </TextBlock>
-        <ProgressBar x:Name="PB_Prograss"
+        <ProgressBar x:Uid="PB_Prograss" x:Name="PB_Prograss"
                      Grid.Row="1" Grid.Column="0"
                      Margin="12,12,12,12">
         </ProgressBar>

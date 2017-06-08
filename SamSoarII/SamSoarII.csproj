@@ -52,6 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -83,9 +84,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AvalonDockTest.xaml.cs">
-      <DependentUpon>AvalonDockTest.xaml</DependentUpon>
     </Compile>
     <Compile Include="Communication\Command\ForceCancelCommand.cs" />
     <Compile Include="Communication\Command\GeneralReadCommand.cs" />
@@ -162,6 +160,11 @@
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\SimulateHelper.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="UI\Breakpoint\SimuBrpoElement.cs" />
     <Compile Include="UI\Breakpoint\SimuBrpoWindow.xaml.cs">
@@ -311,20 +314,15 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Project\CustomHighlighting.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -417,10 +415,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AvalonDockTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Project\FuncBlockViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -622,6 +616,7 @@
     <Folder Include="Converter\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.zh-Hans.resx" />
     <EmbeddedResource Include="Resources\InstructionPopup.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -707,6 +702,7 @@
     <Content Include="Communication\Util\usbdll\libusb.h" />
     <Content Include="Communication\Util\usbdll\usbdll.c" />
     <Content Include="Communication\Util\usbdll\usbdll.h" />
+    <Resource Include="Resources\Image\Warning.png" />
     <Resource Include="Resources\Image\Breakpoint\BPCall.png" />
     <Resource Include="Resources\Image\Breakpoint\BPNow.png" />
     <Resource Include="Resources\Image\Breakpoint\BPOut.png" />

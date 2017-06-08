@@ -1,4 +1,4 @@
-﻿<TreeViewItem x:Class="SamSoarII.AppMain.UI.ProjectTreeViewItem"
+﻿<TreeViewItem x:Uid="TreeViewItem_1" x:Class="SamSoarII.AppMain.UI.ProjectTreeViewItem"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,22 +10,22 @@
         
     </TreeViewItem.Resources>
     <TreeViewItem.Header>
-        <StackPanel Orientation="Vertical">
-            <StackPanel x:Name="SP_Title" Orientation="Horizontal">
-                <Image x:Name="Image" Source="{Binding IconSource}" Height="17"></Image>
-                <Grid Margin="6,0,0,0">
-                    <TextBlock x:Name="TBL_Text" Text="{Binding Text,Mode=TwoWay}"></TextBlock>
-                    <TextBlock x:Name="TBS_Text" Margin="60,0,0,0"></TextBlock>
-                    <TextBox x:Name="TBO_Text" Text="{Binding Text,Mode=TwoWay}" 
+        <StackPanel x:Uid="StackPanel_1" Orientation="Vertical">
+            <StackPanel x:Uid="SP_Title" x:Name="SP_Title" Orientation="Horizontal">
+                <Image x:Uid="Image" x:Name="Image" Source="{Binding IconSource}" Height="17"></Image>
+                <Grid x:Uid="Grid_1" Margin="6,0,0,0">
+                    <TextBlock x:Uid="TBL_Text" x:Name="TBL_Text" Text="{Binding Text,Mode=TwoWay}"></TextBlock>
+                    <TextBlock x:Uid="TBS_Text" x:Name="TBS_Text" Margin="60,0,0,0"></TextBlock>
+                    <TextBox x:Uid="TBO_Text" x:Name="TBO_Text" Text="{Binding Text,Mode=TwoWay}" 
                              Visibility="Hidden" Width="120" 
                              KeyDown="TextBox_KeyDown"
                              LostKeyboardFocus="TBO_Text_LostKeyboardFocus">
                     </TextBox>
                 </Grid>
             </StackPanel>
-            <Line x:Name="Underline" X1="0" X2="120" Visibility="Hidden" Stroke="BlueViolet" StrokeThickness="2">
+            <Line x:Uid="Underline" x:Name="Underline" X1="0" X2="120" Visibility="Hidden" Stroke="BlueViolet" StrokeThickness="2">
             </Line>
-            <TextBlock x:Name="TB_ErrorMsg" Visibility="Collapsed" Foreground="Red"></TextBlock>
+            <TextBlock x:Uid="TB_ErrorMsg" x:Name="TB_ErrorMsg" Visibility="Collapsed" Foreground="Red"></TextBlock>
         </StackPanel>
     </TreeViewItem.Header>
 </TreeViewItem>

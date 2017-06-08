@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SamSoarII.Simulation.UI.PLCTopPhoto"
+﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.Simulation.UI.PLCTopPhoto"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,53 +8,53 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Content>
-        <Grid>
+        <Grid x:Uid="Grid_1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition x:Uid="RowDefinition_1" Height="4*"/>
+                <RowDefinition x:Uid="RowDefinition_2" Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.Children>
-                <Grid Grid.Row="0" Grid.Column="0">
+                <Grid x:Uid="Grid_2" Grid.Row="0" Grid.Column="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="173*"/>
-                        <ColumnDefinition Width="127*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_1" Width="173*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_2" Width="127*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.Children>
-                        <plc:Trigger x:Name="RunTrigger" Grid.Row="0" Grid.Column="0"></plc:Trigger>
-                        <Grid Grid.Row="0" Grid.Column="1">
+                        <plc:Trigger x:Uid="RunTrigger" x:Name="RunTrigger" Grid.Row="0" Grid.Column="0"></plc:Trigger>
+                        <Grid x:Uid="Grid_3" Grid.Row="0" Grid.Column="1">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition x:Uid="RowDefinition_3" Height="1*"/>
+                                <RowDefinition x:Uid="RowDefinition_4" Height="1*"/>
+                                <RowDefinition x:Uid="RowDefinition_5" Height="1*"/>
                             </Grid.RowDefinitions>
                             <Grid.Children>
-                                <plc:StatusLight x:Name="ErrorLight" Grid.Row="0" Grid.Column="0"></plc:StatusLight>
-                                <plc:StatusLight x:Name="RunLight" Grid.Row="1" Grid.Column="0"></plc:StatusLight>
-                                <plc:StatusLight x:Name="StopLight" Grid.Row="2" Grid.Column="0"></plc:StatusLight>
+                                <plc:StatusLight x:Uid="ErrorLight" x:Name="ErrorLight" Grid.Row="0" Grid.Column="0"></plc:StatusLight>
+                                <plc:StatusLight x:Uid="RunLight" x:Name="RunLight" Grid.Row="1" Grid.Column="0"></plc:StatusLight>
+                                <plc:StatusLight x:Uid="StopLight" x:Name="StopLight" Grid.Row="2" Grid.Column="0"></plc:StatusLight>
                             </Grid.Children>
                         </Grid>
                     </Grid.Children>
                 </Grid>
-                <Grid Grid.Row="1" Grid.Column="0">
+                <Grid x:Uid="Grid_4" Grid.Row="1" Grid.Column="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_3" Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_4" Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_5" Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_6" Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_7" Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_8" Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_9" Width="1*"/>
+                        <ColumnDefinition x:Uid="ColumnDefinition_10" Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.Children>
-                        <plc:LEDLight x:Name="LEDLight_Y0" Grid.Row="0" Grid.Column="0"></plc:LEDLight>
-                        <plc:LEDLight x:Name="LEDLight_Y1" Grid.Row="0" Grid.Column="1"></plc:LEDLight>
-                        <plc:LEDLight x:Name="LEDLight_Y2" Grid.Row="0" Grid.Column="2"></plc:LEDLight>
-                        <plc:LEDLight x:Name="LEDLight_Y3" Grid.Row="0" Grid.Column="3"></plc:LEDLight>
-                        <plc:LEDLight x:Name="LEDLight_Y4" Grid.Row="0" Grid.Column="4"></plc:LEDLight>
-                        <plc:LEDLight x:Name="LEDLight_Y5" Grid.Row="0" Grid.Column="5"></plc:LEDLight>
-                        <plc:LEDLight x:Name="LEDLight_Y6" Grid.Row="0" Grid.Column="6"></plc:LEDLight>
-                        <plc:LEDLight x:Name="LEDLight_Y7" Grid.Row="0" Grid.Column="7"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y0" x:Name="LEDLight_Y0" Grid.Row="0" Grid.Column="0"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y1" x:Name="LEDLight_Y1" Grid.Row="0" Grid.Column="1"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y2" x:Name="LEDLight_Y2" Grid.Row="0" Grid.Column="2"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y3" x:Name="LEDLight_Y3" Grid.Row="0" Grid.Column="3"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y4" x:Name="LEDLight_Y4" Grid.Row="0" Grid.Column="4"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y5" x:Name="LEDLight_Y5" Grid.Row="0" Grid.Column="5"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y6" x:Name="LEDLight_Y6" Grid.Row="0" Grid.Column="6"></plc:LEDLight>
+                        <plc:LEDLight x:Uid="LEDLight_Y7" x:Name="LEDLight_Y7" Grid.Row="0" Grid.Column="7"></plc:LEDLight>
                     </Grid.Children>
                 </Grid>
             </Grid.Children>

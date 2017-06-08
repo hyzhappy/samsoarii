@@ -1,4 +1,4 @@
-﻿<Window x:Class="SamSoarII.UserInterface.ElementPropertyDialog"
+﻿<Window x:Uid="Window_1" x:Class="SamSoarII.UserInterface.ElementPropertyDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,98 +6,98 @@
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
         Title="ElementPropertyDialog" Height="400" Width="600" KeyDown="OnWindowKeyDown">
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.Resources>
-            <Style TargetType="{x:Type Label}">
-                <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-                <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                <Setter Property="Visibility" Value="Hidden"></Setter>
-                <Setter Property="FontSize" Value="14"></Setter>
+            <Style x:Uid="Style_1" TargetType="{x:Type Label}">
+                <Setter x:Uid="Setter_1" Property="HorizontalAlignment" Value="Right"></Setter>
+                <Setter x:Uid="Setter_2" Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter x:Uid="Setter_3" Property="Visibility" Value="Hidden"></Setter>
+                <Setter x:Uid="Setter_4" Property="FontSize" Value="14"></Setter>
             </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-                <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                <Setter Property="Height" Value="25"></Setter>
-                <Setter Property="Width" Value="150"></Setter>
-                <Setter Property="TextWrapping" Value="Wrap"></Setter>
-                <Setter Property="Visibility" Value="Hidden"></Setter>
+            <Style x:Uid="Style_2" TargetType="{x:Type TextBox}">
+                <Setter x:Uid="Setter_5" Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter x:Uid="Setter_6" Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter x:Uid="Setter_7" Property="Height" Value="25"></Setter>
+                <Setter x:Uid="Setter_8" Property="Width" Value="150"></Setter>
+                <Setter x:Uid="Setter_9" Property="TextWrapping" Value="Wrap"></Setter>
+                <Setter x:Uid="Setter_10" Property="Visibility" Value="Hidden"></Setter>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_1" Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_2" Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_3" Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_4" Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_5" Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_6" Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_7" Height="1*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_8" Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="1*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="1*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="3*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="1*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_5" Width="3*"></ColumnDefinition>
+            <ColumnDefinition x:Uid="ColumnDefinition_6" Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.Background>
-            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5, 1" >
-                <GradientStop Color="#FFFFFF" Offset="0.0"></GradientStop>
-                <GradientStop Color="#E0FFFF" Offset="1.0"></GradientStop>
+            <LinearGradientBrush x:Uid="LinearGradientBrush_1" StartPoint="0.5,0" EndPoint="0.5, 1" >
+                <GradientStop x:Uid="GradientStop_1" Color="#FFFFFF" Offset="0.0"></GradientStop>
+                <GradientStop x:Uid="GradientStop_2" Color="#E0FFFF" Offset="1.0"></GradientStop>
             </LinearGradientBrush>
         </Grid.Background>
-        <Label x:Name="label1" Grid.Row="0" Grid.Column="1"/>
-        <TextBox x:Name="ValueTextBox1" Grid.Column="2" Grid.Row="0" TextChanged="ValueTextBox1_TextChanged"/>
-        <Label x:Name="label1_c" Grid.Row="0" Grid.Column="3" Content="注释:"/>
-        <TextBox x:Name="CommentTextBox1" Grid.Column="4" Grid.Row="0"/>
+        <Label x:Uid="label1" x:Name="label1" Grid.Row="0" Grid.Column="1"/>
+        <TextBox x:Uid="ValueTextBox1" x:Name="ValueTextBox1" Grid.Column="2" Grid.Row="0" TextChanged="ValueTextBox1_TextChanged"/>
+        <Label x:Uid="label1_c" x:Name="label1_c" Grid.Row="0" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Uid="CommentTextBox1" x:Name="CommentTextBox1" Grid.Column="4" Grid.Row="0"/>
        
-        <Label x:Name="label2" Grid.Row="1" Grid.Column="1"/>
-        <TextBox x:Name="ValueTextBox2" Grid.Column="2" Grid.Row="1" TextChanged="ValueTextBox2_TextChanged"/>
-        <Label x:Name="label2_c" Grid.Row="1" Grid.Column="3" Content="注释:"/>
-        <TextBox x:Name="CommentTextBox2" Grid.Column="4" Grid.Row="1"/>
+        <Label x:Uid="label2" x:Name="label2" Grid.Row="1" Grid.Column="1"/>
+        <TextBox x:Uid="ValueTextBox2" x:Name="ValueTextBox2" Grid.Column="2" Grid.Row="1" TextChanged="ValueTextBox2_TextChanged"/>
+        <Label x:Uid="label2_c" x:Name="label2_c" Grid.Row="1" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Uid="CommentTextBox2" x:Name="CommentTextBox2" Grid.Column="4" Grid.Row="1"/>
         
-        <Label x:Name="label3" Grid.Row="2" Grid.Column="1"/>
-        <TextBox x:Name="ValueTextBox3" Grid.Column="2" Grid.Row="2" TextChanged="ValueTextBox3_TextChanged"/>
-        <Label x:Name="label3_c" Grid.Row="2" Grid.Column="3" Content="注释:"/>
-        <TextBox x:Name="CommentTextBox3" Grid.Column="4" Grid.Row="2"/>
+        <Label x:Uid="label3" x:Name="label3" Grid.Row="2" Grid.Column="1"/>
+        <TextBox x:Uid="ValueTextBox3" x:Name="ValueTextBox3" Grid.Column="2" Grid.Row="2" TextChanged="ValueTextBox3_TextChanged"/>
+        <Label x:Uid="label3_c" x:Name="label3_c" Grid.Row="2" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Uid="CommentTextBox3" x:Name="CommentTextBox3" Grid.Column="4" Grid.Row="2"/>
 
-        <Label x:Name="label4" Grid.Row="3" Grid.Column="1"/>
-        <TextBox x:Name="ValueTextBox4" Grid.Column="2" Grid.Row="3" TextChanged="ValueTextBox4_TextChanged"/>
-        <Label x:Name="label4_c" Grid.Row="3" Grid.Column="3" Content="注释:"/>
-        <TextBox x:Name="CommentTextBox4" Grid.Column="4" Grid.Row="3"/>
+        <Label x:Uid="label4" x:Name="label4" Grid.Row="3" Grid.Column="1"/>
+        <TextBox x:Uid="ValueTextBox4" x:Name="ValueTextBox4" Grid.Column="2" Grid.Row="3" TextChanged="ValueTextBox4_TextChanged"/>
+        <Label x:Uid="label4_c" x:Name="label4_c" Grid.Row="3" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Uid="CommentTextBox4" x:Name="CommentTextBox4" Grid.Column="4" Grid.Row="3"/>
 
-        <Label x:Name="label5" Grid.Row="4" Grid.Column="1"/>
-        <TextBox x:Name="ValueTextBox5" Grid.Column="2" Grid.Row="4" TextChanged="ValueTextBox5_TextChanged"/>
-        <Label x:Name="label5_c" Grid.Row="4" Grid.Column="3" Content="注释:"/>
-        <TextBox x:Name="CommentTextBox5" Grid.Column="4" Grid.Row="4"/>
+        <Label x:Uid="label5" x:Name="label5" Grid.Row="4" Grid.Column="1"/>
+        <TextBox x:Uid="ValueTextBox5" x:Name="ValueTextBox5" Grid.Column="2" Grid.Row="4" TextChanged="ValueTextBox5_TextChanged"/>
+        <Label x:Uid="label5_c" x:Name="label5_c" Grid.Row="4" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Uid="CommentTextBox5" x:Name="CommentTextBox5" Grid.Column="4" Grid.Row="4"/>
         
-        <Label x:Name="label6" Grid.Row="5" Grid.Column="1"/>
-        <TextBox x:Name="ValueTextBox6" Grid.Column="2" Grid.Row="5" TextChanged="ValueTextBox6_TextChanged"/>
-        <Label x:Name="label6_c" Grid.Row="5" Grid.Column="3" Content="注释:"/>
-        <TextBox x:Name="CommentTextBox6" Grid.Column="4" Grid.Row="5"/>
+        <Label x:Uid="label6" x:Name="label6" Grid.Row="5" Grid.Column="1"/>
+        <TextBox x:Uid="ValueTextBox6" x:Name="ValueTextBox6" Grid.Column="2" Grid.Row="5" TextChanged="ValueTextBox6_TextChanged"/>
+        <Label x:Uid="label6_c" x:Name="label6_c" Grid.Row="5" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Uid="CommentTextBox6" x:Name="CommentTextBox6" Grid.Column="4" Grid.Row="5"/>
         
-        <Label x:Name="label7" Grid.Row="6" Grid.Column="1"/>
-        <TextBox x:Name="ValueTextBox7" Grid.Column="2" Grid.Row="6" TextChanged="ValueTextBox7_TextChanged"/>
-        <Label x:Name="label7_c" Grid.Row="6" Grid.Column="3" Content="注释:"/>
-        <TextBox x:Name="CommentTextBox7" Grid.Column="4" Grid.Row="6"/>
+        <Label x:Uid="label7" x:Name="label7" Grid.Row="6" Grid.Column="1"/>
+        <TextBox x:Uid="ValueTextBox7" x:Name="ValueTextBox7" Grid.Column="2" Grid.Row="6" TextChanged="ValueTextBox7_TextChanged"/>
+        <Label x:Uid="label7_c" x:Name="label7_c" Grid.Row="6" Grid.Column="3" Content="注释:"/>
+        <TextBox x:Uid="CommentTextBox7" x:Name="CommentTextBox7" Grid.Column="4" Grid.Row="6"/>
         
-        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
-            <Button x:Name="CancelButton" Content="取消" Width="70" Height="25" Margin="50,0,0,0" Click="OnCancelButtonClick"></Button>
-            <Button x:Name="EnsureButton" Content="确定" Width="70" Height="25" Margin="50,0,0,0" Click="OnEnsureButtonClick"></Button>
+        <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
+            <Button x:Uid="CancelButton" x:Name="CancelButton" Content="取消" Width="70" Height="25" Margin="50,0,0,0" Click="OnCancelButtonClick"></Button>
+            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="确定" Width="70" Height="25" Margin="50,0,0,0" Click="OnEnsureButtonClick"></Button>
         </StackPanel>
         
-        <local:PopupNotTop x:Name="SelectCollectionPopup" Placement="Bottom" HorizontalOffset="0" VerticalOffset="0" Width="300" IsOpen="True" Topmost="False">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" CanContentScroll="True">
-                <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
+        <local:PopupNotTop x:Uid="SelectCollectionPopup" x:Name="SelectCollectionPopup" Placement="Bottom" HorizontalOffset="0" VerticalOffset="0" Width="300" IsOpen="True" Topmost="False">
+            <ScrollViewer x:Uid="scrollViewer" VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" CanContentScroll="True">
+                <local:CollectionStackPanel x:Uid="CollectionStack" Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
                     <local:CollectionStackPanel.Resources>
-                        <Style TargetType="Label">
-                            <Setter Property="Height" Value="20"></Setter>
-                            <Setter Property="FontSize" Value="14"></Setter>
-                            <Setter Property="Padding" Value="0"></Setter>
-                            <EventSetter Event="MouseLeftButtonDown" Handler="OnLeftDown"></EventSetter>
-                            <EventSetter Event="MouseEnter" Handler="OnMouseEnter"></EventSetter>
-                            <EventSetter Event="MouseLeave" Handler="OnMouseLeave"></EventSetter>
+                        <Style x:Uid="Style_3" TargetType="Label">
+                            <Setter x:Uid="Setter_11" Property="Height" Value="20"></Setter>
+                            <Setter x:Uid="Setter_12" Property="FontSize" Value="14"></Setter>
+                            <Setter x:Uid="Setter_13" Property="Padding" Value="0"></Setter>
+                            <EventSetter x:Uid="EventSetter_1" Event="MouseLeftButtonDown" Handler="OnLeftDown"></EventSetter>
+                            <EventSetter x:Uid="EventSetter_2" Event="MouseEnter" Handler="OnMouseEnter"></EventSetter>
+                            <EventSetter x:Uid="EventSetter_3" Event="MouseLeave" Handler="OnMouseLeave"></EventSetter>
                         </Style>
                     </local:CollectionStackPanel.Resources>
                 </local:CollectionStackPanel>

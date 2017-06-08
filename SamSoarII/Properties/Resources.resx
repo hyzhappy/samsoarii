@@ -117,4 +117,613 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MainWindow_File" xml:space="preserve">
+    <value>File(_F)</value>
+  </data>
+  <data name="MainWindow_Edit" xml:space="preserve">
+    <value>Edit(_E)</value>
+  </data>
+  <data name="MainWindow_View" xml:space="preserve">
+    <value>View(_V)</value>
+  </data>
+  <data name="MainWindow_Proj" xml:space="preserve">
+    <value>Project(_P)</value>
+  </data>
+  <data name="MainWindow_Tool" xml:space="preserve">
+    <value>Tool(_T)</value>
+  </data>
+  <data name="MainWindow_Language" xml:space="preserve">
+    <value>Language(_L)</value>
+  </data>
+  <data name="MainWindow_Help" xml:space="preserve">
+    <value>Help(_H)</value>
+  </data>
+  <data name="MainWindow_New_Proj" xml:space="preserve">
+    <value>New Project</value>
+  </data>
+  <data name="MainWindow_Open_Proj" xml:space="preserve">
+    <value>Open Project</value>
+  </data>
+  <data name="MainWindow_Save_Proj" xml:space="preserve">
+    <value>Save Project</value>
+  </data>
+  <data name="MainWindow_Save_As_Proj" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="MainWindow_Recent_Proj" xml:space="preserve">
+    <value>Recent Project</value>
+  </data>
+  <data name="MainWindow_Close_Proj" xml:space="preserve">
+    <value>Close Project</value>
+  </data>
+  <data name="MainWindow_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="MainWindow_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="MainWindow_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MainWindow_Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="MainWindow_Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="MainWindow_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="MainWindow_Del" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="MainWindow_Select_All" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="MainWindow_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="MainWindow_Replace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="MainWindow_Zoom_In" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="MainWindow_Zoom_Out" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+  <data name="MainWindow_Comment_Mode" xml:space="preserve">
+    <value>Comment Mode</value>
+  </data>
+  <data name="MainWindow_Project_Explorer" xml:space="preserve">
+    <value>Project Explorer</value>
+  </data>
+  <data name="MainWindow_Soft_Element_Manager" xml:space="preserve">
+    <value>Soft Element Manager</value>
+  </data>
+  <data name="MainWindow_Soft_Element_Init" xml:space="preserve">
+    <value>Soft Element Initialize</value>
+  </data>
+  <data name="MainWindow_Error_List" xml:space="preserve">
+    <value>Error_List</value>
+  </data>
+  <data name="MainWindow_Monitor_List" xml:space="preserve">
+    <value>Monitor List</value>
+  </data>
+  <data name="MainWindow_Breakpoint_List" xml:space="preserve">
+    <value>Breakpoint List</value>
+  </data>
+  <data name="MainWindow_Add_SubRoutine" xml:space="preserve">
+    <value>Add SubRoutine</value>
+  </data>
+  <data name="MainWindow_Add_FuncBlock" xml:space="preserve">
+    <value>Add FuncBlock</value>
+  </data>
+  <data name="MainWindow_Add_Modbus_Table" xml:space="preserve">
+    <value>Add Modbus Table</value>
+  </data>
+  <data name="MainWindow_Property_Proj" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="MainWindow_Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="MainWindow_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="MainWindow_Monitor" xml:space="preserve">
+    <value>Monitor</value>
+  </data>
+  <data name="MainWindow_Simulation" xml:space="preserve">
+    <value>Simulation</value>
+  </data>
+  <data name="MainWindow_Ret_Edit_Mode" xml:space="preserve">
+    <value>Return To Edit Mode</value>
+  </data>
+  <data name="MainWindow_Proj_Check" xml:space="preserve">
+    <value>Program Check</value>
+  </data>
+  <data name="MainWindow_Ladder_Check" xml:space="preserve">
+    <value>Ladder Check</value>
+  </data>
+  <data name="MainWindow_Funcblock_Check" xml:space="preserve">
+    <value>FuncBlock Check</value>
+  </data>
+  <data name="MainWindow_Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="MainWindow_Chinese" xml:space="preserve">
+    <value>Chinese</value>
+  </data>
+  <data name="MainWindow_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="MainWindow_View_Help" xml:space="preserve">
+    <value>View Help</value>
+  </data>
+  <data name="MainWindow_Online_Upgrade" xml:space="preserve">
+    <value>Online Upgrade</value>
+  </data>
+  <data name="MainWindow_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="MainWindow_Compile" xml:space="preserve">
+    <value>Compile</value>
+  </data>
+  <data name="MainWindow_Ladder_Mode" xml:space="preserve">
+    <value>Ladder Mode</value>
+  </data>
+  <data name="MainWindow_Inst_Mode" xml:space="preserve">
+    <value>Instruction Mode</value>
+  </data>
+  <data name="MainWindow_Row_Insert" xml:space="preserve">
+    <value>Row Insert</value>
+  </data>
+  <data name="MainWindow_Row_Delete" xml:space="preserve">
+    <value>Row Delete</value>
+  </data>
+  <data name="MainWindow_Element_List" xml:space="preserve">
+    <value>Soft Element List</value>
+  </data>
+  <data name="MainWindow_Normally_Open_Contact" xml:space="preserve">
+    <value>Normally Open Contact</value>
+  </data>
+  <data name="MainWindow_Immediately_Open" xml:space="preserve">
+    <value>Immediately Open</value>
+  </data>
+  <data name="MainWindow_Normally_Closed" xml:space="preserve">
+    <value>Normally Closed</value>
+  </data>
+  <data name="MainWindow_Immediately_Close" xml:space="preserve">
+    <value>Immediately Close</value>
+  </data>
+  <data name="MainWindow_Rising_Edge_Pulse" xml:space="preserve">
+    <value>Rising Edge Pulse</value>
+  </data>
+  <data name="MainWindow_Falling_Edge_Pulse" xml:space="preserve">
+    <value>Falling Edge Pulse</value>
+  </data>
+  <data name="MainWindow_Rising_Edge_Of_Result" xml:space="preserve">
+    <value>Rising Edge Of Result</value>
+  </data>
+  <data name="MainWindow_Falling_Edge_Of_Result" xml:space="preserve">
+    <value>Falling Edge Of Result</value>
+  </data>
+  <data name="MainWindow_Reversed_Result" xml:space="preserve">
+    <value>Reversed Result</value>
+  </data>
+  <data name="MainWindow_Output_Coil" xml:space="preserve">
+    <value>Output Coil</value>
+  </data>
+  <data name="MainWindow_Immediately_Output_Coil" xml:space="preserve">
+    <value>Immediately Output Coil</value>
+  </data>
+  <data name="MainWindow_Horizontal_Line" xml:space="preserve">
+    <value>Horizontal Line</value>
+  </data>
+  <data name="MainWindow_Vertical_Line" xml:space="preserve">
+    <value>Vertical Line</value>
+  </data>
+  <data name="MainWindow_Horizontal_Line_Delete" xml:space="preserve">
+    <value>Horizontal Line Delete</value>
+  </data>
+  <data name="MainWindow_Vertical_Line_Delete" xml:space="preserve">
+    <value>Vertical Line Delete</value>
+  </data>
+  <data name="MainWindow_Communication_Settings" xml:space="preserve">
+    <value>Communication Settings</value>
+  </data>
+  <data name="MainWindow_System_Settings" xml:space="preserve">
+    <value>System Settings</value>
+  </data>
+  <data name="MainWindow_PLC_Settings" xml:space="preserve">
+    <value>PLC Settings</value>
+  </data>
+  <data name="MainWindow_Simulation_Run" xml:space="preserve">
+    <value>Simulation Run</value>
+  </data>
+  <data name="MainWindow_Simulation_Pause" xml:space="preserve">
+    <value>Simulation Pause</value>
+  </data>
+  <data name="MainWindow_Simulation_Stop" xml:space="preserve">
+    <value>Simulation Stop</value>
+  </data>
+  <data name="MainWindow_Current_Breakpoint" xml:space="preserve">
+    <value>Current Breakpoint</value>
+  </data>
+  <data name="MainWindow_By_Process" xml:space="preserve">
+    <value>By Process</value>
+  </data>
+  <data name="MainWindow_By_Sentence" xml:space="preserve">
+    <value>By Sentence</value>
+  </data>
+  <data name="MainWindow_Jump_Out" xml:space="preserve">
+    <value>Jump Out</value>
+  </data>
+  <data name="MainWindow_Breakpoint" xml:space="preserve">
+    <value>Breakpoint</value>
+  </data>
+  <data name="LadderDiagram_Edit_Program_Comment" xml:space="preserve">
+    <value>Edit Program Comment</value>
+  </data>
+  <data name="LadderDiagram_Program_Comment" xml:space="preserve">
+    <value>Program Comment</value>
+  </data>
+  <data name="LadderNetwork_Edit_Network_Comment" xml:space="preserve">
+    <value>Edit Network Comment</value>
+  </data>
+  <data name="LadderNetwork_Element_Cut" xml:space="preserve">
+    <value>Element Cut</value>
+  </data>
+  <data name="LadderNetwork_Element_Paste" xml:space="preserve">
+    <value>Element Paste</value>
+  </data>
+  <data name="LadderNetwork_Element_Copy" xml:space="preserve">
+    <value>Element Copy</value>
+  </data>
+  <data name="LadderNetwork_Element_Delete" xml:space="preserve">
+    <value>Element Delete</value>
+  </data>
+  <data name="LadderNetwork_Insert_before" xml:space="preserve">
+    <value>Insert before</value>
+  </data>
+  <data name="LadderNetwork_Insert_After" xml:space="preserve">
+    <value>Insert After</value>
+  </data>
+  <data name="LadderNetwork_Insert_End" xml:space="preserve">
+    <value>Insert End</value>
+  </data>
+  <data name="LadderNetwork_Network_Insert" xml:space="preserve">
+    <value>Network Insert</value>
+  </data>
+  <data name="LadderNetwork_Network_Cut" xml:space="preserve">
+    <value>Network Cut</value>
+  </data>
+  <data name="LadderNetwork_Network_Paste" xml:space="preserve">
+    <value>Network Paste</value>
+  </data>
+  <data name="LadderNetwork_Network_Copy" xml:space="preserve">
+    <value>Network Copy</value>
+  </data>
+  <data name="LadderNetwork_Network_Delete" xml:space="preserve">
+    <value>Network Delete</value>
+  </data>
+  <data name="LadderNetwork_Shield_Network" xml:space="preserve">
+    <value>Shield Network</value>
+  </data>
+  <data name="Modbus_Slave_Station_Number" xml:space="preserve">
+    <value>Slave Number</value>
+  </data>
+  <data name="Modbus_Function_Code" xml:space="preserve">
+    <value>Function Code</value>
+  </data>
+  <data name="Modbus_Slave_Register" xml:space="preserve">
+    <value>Slave Register</value>
+  </data>
+  <data name="Modbus_Slave_Length" xml:space="preserve">
+    <value>Slave Length</value>
+  </data>
+  <data name="Modbus_Master_Register" xml:space="preserve">
+    <value>Master Register</value>
+  </data>
+  <data name="Modbus_Current_Row_Up" xml:space="preserve">
+    <value>Current Row Up</value>
+  </data>
+  <data name="Modbus_Current_Row_Down" xml:space="preserve">
+    <value>Current Row Down</value>
+  </data>
+  <data name="Modbus_Create_New_Table" xml:space="preserve">
+    <value>Create New Table</value>
+  </data>
+  <data name="Modbus_Delete_Table" xml:space="preserve">
+    <value>Delete Table</value>
+  </data>
+  <data name="Modbus_Current_Table_Up" xml:space="preserve">
+    <value>Current Table Up</value>
+  </data>
+  <data name="Modbus_Current_Table_Down" xml:space="preserve">
+    <value>Current Table Down</value>
+  </data>
+  <data name="Report_Display_Output_Source" xml:space="preserve">
+    <value>Display Output Source:</value>
+  </data>
+  <data name="Report_All_Sources" xml:space="preserve">
+    <value>All Sources</value>
+  </data>
+  <data name="Report_Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="Report_Funcblock_Compilation" xml:space="preserve">
+    <value>Funcblock Compilation</value>
+  </data>
+  <data name="ErrorReportWindow_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorReportWindow_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="ErrorReportWindow_Explanation" xml:space="preserve">
+    <value>Explanation</value>
+  </data>
+  <data name="Routine" xml:space="preserve">
+    <value>Routine</value>
+  </data>
+  <data name="Coordinate" xml:space="preserve">
+    <value>Coordinate</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Network</value>
+  </data>
+  <data name="Current_Routine" xml:space="preserve">
+    <value>Current Routine</value>
+  </data>
+  <data name="All_Routine" xml:space="preserve">
+    <value>All Routine</value>
+  </data>
+  <data name="Element" xml:space="preserve">
+    <value>Element</value>
+  </data>
+  <data name="LadderDiagram" xml:space="preserve">
+    <value>LadderDiagram</value>
+  </data>
+  <data name="Modbus_Table_Name" xml:space="preserve">
+    <value>Table Name</value>
+  </data>
+  <data name="Modbus_Table_Comment" xml:space="preserve">
+    <value>Table Comment</value>
+  </data>
+  <data name="Ensure" xml:space="preserve">
+    <value>Ensure</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Project_Setting" xml:space="preserve">
+    <value>Project Setting</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="PLC_Device_Model" xml:space="preserve">
+    <value>Device Model</value>
+  </data>
+  <data name="PLC_Communication_Parameters" xml:space="preserve">
+    <value>Communication Parameters</value>
+  </data>
+  <data name="PLC_Password_Setting" xml:space="preserve">
+    <value>Password Setting</value>
+  </data>
+  <data name="PLC_Analog_Quantity" xml:space="preserve">
+    <value>Analog Quantity</value>
+  </data>
+  <data name="PLC_Filter_Parameters" xml:space="preserve">
+    <value>Filter Parameters</value>
+  </data>
+  <data name="PLC_Retentive_Zone_Settings" xml:space="preserve">
+    <value>Retentive Zone Settings</value>
+  </data>
+  <data name="PLC_Expansion_Module" xml:space="preserve">
+    <value>Expansion Module</value>
+  </data>
+  <data name="Inst_Bit" xml:space="preserve">
+    <value>Bit</value>
+  </data>
+  <data name="Inst_Compare" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="Inst_Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Inst_LogicOperation" xml:space="preserve">
+    <value>LogicOperation</value>
+  </data>
+  <data name="Inst_Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="Inst_FloatCalculation" xml:space="preserve">
+    <value>FloatCalculation</value>
+  </data>
+  <data name="Inst_IntegerCalculation" xml:space="preserve">
+    <value>IntegerCalculation</value>
+  </data>
+  <data name="Inst_Timer" xml:space="preserve">
+    <value>Timer</value>
+  </data>
+  <data name="Inst_Counter" xml:space="preserve">
+    <value>Counter</value>
+  </data>
+  <data name="Inst_ProgramControl" xml:space="preserve">
+    <value>ProgramControl</value>
+  </data>
+  <data name="Inst_Shift" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="Inst_Interrupt" xml:space="preserve">
+    <value>Interrupt</value>
+  </data>
+  <data name="Inst_RealTime" xml:space="preserve">
+    <value>RealTime</value>
+  </data>
+  <data name="Inst_Communication" xml:space="preserve">
+    <value>Communication</value>
+  </data>
+  <data name="Inst_Pulse" xml:space="preserve">
+    <value>Pulse</value>
+  </data>
+  <data name="Inst_HighCount" xml:space="preserve">
+    <value>HighCount</value>
+  </data>
+  <data name="Inst_Auxiliar" xml:space="preserve">
+    <value>Auxiliar</value>
+  </data>
+  <data name="SubRoutine" xml:space="preserve">
+    <value>SubRoutine</value>
+  </data>
+  <data name="FuncBlock" xml:space="preserve">
+    <value>FuncBlock</value>
+  </data>
+  <data name="PTV_No_Function" xml:space="preserve">
+    <value>No Function</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="MainRoutine" xml:space="preserve">
+    <value>MainRoutine</value>
+  </data>
+  <data name="Modbus_Table" xml:space="preserve">
+    <value>Modbus Table</value>
+  </data>
+  <data name="PTV_New_Folder" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
+  <data name="PTV_New_SubRoutine" xml:space="preserve">
+    <value>New SubRoutine</value>
+  </data>
+  <data name="PTV_New_Network" xml:space="preserve">
+    <value>New Network</value>
+  </data>
+  <data name="PTV_New_Funcblock" xml:space="preserve">
+    <value>New Funcblock</value>
+  </data>
+  <data name="PTV_New_Modbus_Table" xml:space="preserve">
+    <value>New Modbus Table</value>
+  </data>
+  <data name="PTV_Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="PTV_Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="PTV_Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="Library_Function" xml:space="preserve">
+    <value>Library Function</value>
+  </data>
+  <data name="Replace_Result" xml:space="preserve">
+    <value>Replace Result</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Setting</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="Current_Text" xml:space="preserve">
+    <value>Current Text</value>
+  </data>
+  <data name="All_Text" xml:space="preserve">
+    <value>All Text</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Use_Regular_Expression" xml:space="preserve">
+    <value>Use Regular Expression</value>
+  </data>
+  <data name="IgnoreCase" xml:space="preserve">
+    <value>IgnoreCase</value>
+  </data>
+  <data name="Jump" xml:space="preserve">
+    <value>Jump</value>
+  </data>
+  <data name="Enable_Disable" xml:space="preserve">
+    <value>Enable/Disable</value>
+  </data>
+  <data name="Release" xml:space="preserve">
+    <value>Release</value>
+  </data>
+  <data name="Release_All" xml:space="preserve">
+    <value>Release All</value>
+  </data>
+  <data name="Interrupt_Condition" xml:space="preserve">
+    <value>Interrupt Condition</value>
+  </data>
+  <data name="Execution_Number" xml:space="preserve">
+    <value>Execution Number</value>
+  </data>
+  <data name="Element_Address" xml:space="preserve">
+    <value>Element Address</value>
+  </data>
+  <data name="Data_Type" xml:space="preserve">
+    <value>Data Type</value>
+  </data>
+  <data name="Element_Length" xml:space="preserve">
+    <value>Element Length</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Delete_All" xml:space="preserve">
+    <value>Delete All</value>
+  </data>
+  <data name="On_Off_Value" xml:space="preserve">
+    <value>ON/OFF/Value</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Displays_Details" xml:space="preserve">
+    <value>Displays Details</value>
+  </data>
+  <data name="Clear_Selected" xml:space="preserve">
+    <value>Clear Selected</value>
+  </data>
+  <data name="Element_Name" xml:space="preserve">
+    <value>Element Name</value>
+  </data>
+  <data name="Element_Comment" xml:space="preserve">
+    <value>Element Comment</value>
+  </data>
+  <data name="Element_Alias" xml:space="preserve">
+    <value>Element Alias</value>
+  </data>
+  <data name="Select_Element_Range" xml:space="preserve">
+    <value>Select Element Range</value>
+  </data>
+  <data name="Used_Element" xml:space="preserve">
+    <value>Used Element</value>
+  </data>
+  <data name="Annotated_Element" xml:space="preserve">
+    <value>Annotated Element</value>
+  </data>
+  <data name="Import_CSV" xml:space="preserve">
+    <value>Import CSV</value>
+  </data>
+  <data name="Export_CSV" xml:space="preserve">
+    <value>Export CSV</value>
+  </data>
 </root>

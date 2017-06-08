@@ -110,7 +110,8 @@ namespace SamSoarII.AppMain
         }
         public static bool IsSavedByTime { get; set; }
         public static int SaveTimeSpan { get; set; }
-        
+        public static bool IsOpenLSetting { get; set; }
+        public static string LanagArea { get; set; }
         public static XElement CreateXELementBySetting()
         {
             SaveColor();
@@ -126,6 +127,8 @@ namespace SamSoarII.AppMain
             rootNode.Add(new XElement("_B", _B));
             rootNode.Add(new XElement("IsSavedByTime", IsSavedByTime));
             rootNode.Add(new XElement("SaveTimeSpan", SaveTimeSpan));
+            rootNode.Add(new XElement("IsOpenLSetting", IsOpenLSetting));
+            rootNode.Add(new XElement("LanagArea", LanagArea));
             XElement xele_font = new XElement("Font");
             rootNode.Add(xele_font);
             XElement xele = null;
@@ -246,6 +249,22 @@ namespace SamSoarII.AppMain
             {
                 IsSavedByTime = false;
                 SaveTimeSpan = 1;
+            }
+            try
+            {
+                IsOpenLSetting = bool.Parse(rootNode.Element("IsOpenLSetting").Value);
+            }
+            catch (Exception)
+            {
+                IsOpenLSetting = false;
+            }
+            try
+            {
+                LanagArea = rootNode.Element("LanagArea").Value;
+            }
+            catch (Exception)
+            {
+                LanagArea = string.Empty;
             }
         }
         private static void SaveColor()
