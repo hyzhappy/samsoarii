@@ -557,7 +557,6 @@ namespace SamSoarII.AppMain.Project
         
         private void DG_Table_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
             if (Current != null)
             {
                 Current.Current = DG_Table.SelectedIndex;
@@ -573,7 +572,6 @@ namespace SamSoarII.AppMain.Project
                 if (tb.Parent is DataGridCell)
                 {
                     DataGridCell dgc = (DataGridCell)(tb.Parent);
-                    
                 }
             }
         }

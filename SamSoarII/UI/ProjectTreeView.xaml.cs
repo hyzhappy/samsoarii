@@ -43,10 +43,18 @@ namespace SamSoarII.AppMain.UI
         {
             get { return _projectModel; }
         }
-        
+        /*
         private ElementList _elementList;
+        public ElementList EleList
+        {
+            get { return _elementList; }
+        }
         private ElementInitializeWindow _elementInitWind;
-
+        public ElementInitializeWindow EleInit
+        {
+            get { return _elementInitWind; }
+        }
+        */
         #region Components
 
         private ProjectTreeViewItem PTVI_Root;
@@ -80,8 +88,8 @@ namespace SamSoarII.AppMain.UI
             _projectModel = project;
             InteractionFacade _ifacade = Project.IFacade;
             _ifacade.PTVEvent += OnGotPTVEvent;
-            _elementList = new ElementList();
-            _elementInitWind = new ElementInitializeWindow();
+            //_elementList = new ElementList();
+            //_elementInitWind = new ElementInitializeWindow();
             DataContext = Project;
             Project.MTVModel.ModelChanged += OnModbusChanged;
             
@@ -202,12 +210,12 @@ namespace SamSoarII.AppMain.UI
             PTVI_ElementList = CreatePTVItem(
                 PTVI_Root,
                 ProjectTreeViewItem.TYPE_ELEMENTLIST,
-                _elementList);
+                new object());
 
             PTVI_ELementInitWdow = CreatePTVItem(
                 PTVI_Root,
                 ProjectTreeViewItem.TYPE_ELEMENTINITIALIZE,
-                _elementInitWind);
+                new object());
 
             PTVI_Ladders = CreatePTVItem(
                 PTVI_Root,
@@ -1116,10 +1124,6 @@ namespace SamSoarII.AppMain.UI
                         break;
                 }
             }
-        }
-        public void LoadElementInitWindByXElement(XElement rootNode)
-        {
-            _elementInitWind.LoadElementsByXElement(rootNode);
         }
         public void Load(XElement xele)
         {

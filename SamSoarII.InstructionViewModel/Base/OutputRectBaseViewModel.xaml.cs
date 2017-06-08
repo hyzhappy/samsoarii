@@ -252,38 +252,41 @@ namespace SamSoarII.LadderInstViewModel
         protected override void OnStart(object sender, RoutedEventArgs e)
         {
             base.OnStart(sender, e);
-            UpdateMonitor();
+            Dispatcher.Invoke(() => { UpdateMonitor(); });
         }
 
         protected override void OnAbort(object sender, RoutedEventArgs e)
         {
             base.OnAbort(sender, e);
-            UpdateMonitor();
+            Dispatcher.Invoke(() => { UpdateMonitor(); });
         }
 
         protected override void OnValueChanged(object sender, RoutedEventArgs e)
         {
             base.OnValueChanged(sender, e);
-            if (sender == _values[0])
+            Dispatcher.Invoke(() =>
             {
-                UpdateMonitor_MiddleTextBlock1();
-            }
-            if (sender == _values[1])
-            {
-                UpdateMonitor_MiddleTextBlock2();
-            }
-            if (sender == _values[2])
-            {
-                UpdateMonitor_MiddleTextBlock3();
-            }
-            if (sender == _values[3])
-            {
-                UpdateMonitor_MiddleTextBlock4();
-            }
-            if (sender == _values[4])
-            {
-                UpdateMonitor_MiddleTextBlock5();
-            }
+                if (sender == _values[0])
+                {
+                    UpdateMonitor_MiddleTextBlock1();
+                }
+                if (sender == _values[1])
+                {
+                    UpdateMonitor_MiddleTextBlock2();
+                }
+                if (sender == _values[2])
+                {
+                    UpdateMonitor_MiddleTextBlock3();
+                }
+                if (sender == _values[3])
+                {
+                    UpdateMonitor_MiddleTextBlock4();
+                }
+                if (sender == _values[4])
+                {
+                    UpdateMonitor_MiddleTextBlock5();
+                }
+            });
         }
 
         #endregion

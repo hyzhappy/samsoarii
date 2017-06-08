@@ -329,7 +329,15 @@ namespace SamSoarII.Simulation.Core
         /// <param name="islock">设置(1)或取消(0)</param>
         [DllImport("simu.dll", EntryPoint = "SetBPAddr")]
         public static extern void SetBPAddr(int bpaddr, int islock);
-        
+
+        /// <summary>
+        /// 设置断点的运行次数
+        /// </summary>
+        /// <param name="bpaddr">断点地址</param>
+        /// <param name="maxcount">最大运行次数</param>
+        [DllImport("simu.dll", EntryPoint = "SetBPCount")]
+        public static extern void SetBPCount(int bpaddr, int maxcount);
+
         /// <summary>
         /// 设置一个条件断点
         /// </summary>
@@ -500,7 +508,7 @@ namespace SamSoarII.Simulation.Core
             PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             SetBaseBit(device.BitNumber);
             SetBPEnable(1);
-            SetClockRate(50);
+            SetClockRate(1);
             // 初始化
             InitRunLadder();
             // 存活状态下运行循环

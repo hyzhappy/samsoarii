@@ -223,19 +223,19 @@ namespace SamSoarII.LadderInstViewModel
         protected override void OnStart(object sender, RoutedEventArgs e)
         {
             base.OnStart(sender, e);
-            UpdateMonitor();
+            Dispatcher.Invoke(() => { UpdateMonitor(); });
         }
 
         protected override void OnAbort(object sender, RoutedEventArgs e)
         {
             base.OnAbort(sender, e);
-            UpdateMonitor();
+            Dispatcher.Invoke(() => { UpdateMonitor(); });
         }
 
         protected override void OnValueChanged(object sender, RoutedEventArgs e)
         {
             base.OnValueChanged(sender, e);
-            UpdateMonitor();
+            Dispatcher.Invoke(() => { UpdateMonitor(); });
         }
         #endregion
 

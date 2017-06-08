@@ -21,6 +21,7 @@ using System.IO;
 using SamSoarII.Simulation.Core;
 using SamSoarII.Extend.FuncBlockModel;
 using System.Diagnostics;
+using SamSoarII.AppMain.UI;
 //using SamSoarII.GenerateModel;
 
 namespace SamSoarII.AppMain.Project
@@ -883,7 +884,65 @@ namespace SamSoarII.AppMain.Project
             string outputDllFile = String.Format(@"{0:s}\simuc.dll", currentPath);
             // 生成梯形图的c语言
             StreamWriter sw = new StreamWriter(ladderCFile);
+            BreakPointManager.Initialize();
             InstHelper.InstToSimuCode(sw, nets.ToArray());
+            sw.Write("void InitUserRegisters()\r\n{\r\n");
+            ElementInitializeWindow eleinit = pmodel.IFacade.MainWindow.ElemInitWind;
+            foreach (IElementInitializeModel imodel in eleinit.Elements)
+            {
+                string varname = String.Empty;
+                switch (imodel.Base)
+                {
+                    case "X": case "Y": case "S": case "M": case "T": case "C":
+                        varname = String.Format("{0:s}Bit[{1:d}]",
+                            imodel.Base, imodel.Offset);
+                        break;
+                    case "D": case "TV": case "AI": case "AO": case "V": case "Z":
+                        varname = String.Format("{0:s}Word[{1:d}]",
+                            imodel.Base, imodel.Offset);
+                        break;
+                    case "CV":
+                        varname = String.Format("{0:s}{1:s}[{2:d}]",
+                            imodel.Base,
+                            (imodel.DataType == 3 || imodel.DataType == 4)
+                                ? "DoubleWord" : "Word",
+                            (imodel.DataType == 3 || imodel.DataType == 4)
+                                ? (imodel.Offset - 200) : imodel.Offset);
+                        break;
+                }
+                switch (imodel.DataType)
+                {
+                    case 0:
+                        sw.Write("{0:s} = {1:d};\r\n",
+                            varname, imodel.ShowValue.Equals("ON") ? 1 : 0);
+                        break;
+                    case 1:
+                        sw.Write("*((int32_t*)(&{0:s})) = {1:s};\r\n",
+                            varname, imodel.ShowValue);
+                        break;
+                    case 2:
+                        sw.Write("*((uint32_t*)(&{0:s})) = {1:s};\r\n",
+                            varname, imodel.ShowValue);
+                        break;
+                    case 3:
+                        sw.Write("*((int64_t*)(&{0:s})) = {1:s};\r\n",
+                            varname, imodel.ShowValue);
+                        break;
+                    case 4:
+                        sw.Write("*((uint64_t*)(&{0:s})) = {1:s};\r\n",
+                            varname, imodel.ShowValue);
+                        break;
+                    case 5:
+                        sw.Write("{0:s} = _BCD_to_WORD({1:s});\r\n",
+                            varname, imodel.ShowValue);
+                        break;
+                    case 6:
+                        sw.Write("*((double*)(&{0:s})) = {1:s};\r\n",
+                            varname, imodel.ShowValue);
+                        break;
+                }
+            }
+            sw.Write("}\r\n");
             sw.Close();
             // 生成用户函数的c语言头
             sw = new StreamWriter(funcBlockHFile);

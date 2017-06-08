@@ -138,13 +138,21 @@ namespace SamSoarII.AppMain.UI
                 varnames[i] = values[i].ValueString;
                 varvalues[i] = mvalues[i].Value;
                 if (values[i] is BitValue)
+                {
                     vartypes[i] = "BIT";
+                    switch (mvalues[i].Value)
+                    {
+                        case "0": varvalues[i] = "OFF"; break;
+                        case "1": varvalues[i] = "ON"; break;
+                    }
+                }
                 else if (values[i] is WordValue)
                     vartypes[i] = "WORD";
                 else if (values[i] is DWordValue)
                     vartypes[i] = "DWORD";
                 else if (values[i] is FloatValue)
                     vartypes[i] = "FLOAT";
+                
             }
             using (ElementValueMultiplyModifyDialog dialog = new ElementValueMultiplyModifyDialog(varnames, vartypes, varvalues))
             {

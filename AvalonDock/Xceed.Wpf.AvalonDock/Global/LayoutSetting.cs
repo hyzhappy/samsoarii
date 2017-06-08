@@ -176,9 +176,37 @@ namespace Xceed.Wpf.AvalonDock.Global
         #endregion
 
         #region Default FloatWindow Size of Anchorable
+        static private Dictionary<string, string> _defaultFloatTopAnchorable = new Dictionary<string, string>();
+
+        static private Dictionary<string, string> _defaultFloatLeftAnchorable = new Dictionary<string, string>();
+
         static private Dictionary<string, string> _defaultFloatWidthAnchorable = new Dictionary<string, string>();
 
         static private Dictionary<string, string> _defaultFloatHeighAnchorable = new Dictionary<string, string>();
+        
+        static public void AddDefaultFloatTopAnchorable(string titlename, string floatwidth)
+        {
+            if (_defaultFloatTopAnchorable.ContainsKey(titlename))
+            {
+                _defaultFloatTopAnchorable[titlename] = floatwidth;
+            }
+            else
+            {
+                _defaultFloatTopAnchorable.Add(titlename, floatwidth);
+            }
+        }
+
+        static public void AddDefaultFloatLeftAnchorable(string titlename, string floatwidth)
+        {
+            if (_defaultFloatLeftAnchorable.ContainsKey(titlename))
+            {
+                _defaultFloatLeftAnchorable[titlename] = floatwidth;
+            }
+            else
+            {
+                _defaultFloatLeftAnchorable.Add(titlename, floatwidth);
+            }
+        }
 
         static public void AddDefaultFloatWidthAnchorable(string titlename, string floatwidth)
         {
@@ -206,8 +234,18 @@ namespace Xceed.Wpf.AvalonDock.Global
 
         static public double[] GetDefaultFloatSizeAnchorable(string titlename)
         {
+            double floattop = 0.0;
+            double floatleft = 0.0;
             double floatwidth = 0.0;
             double floatheigh = 0.0;
+            if (_defaultFloatTopAnchorable.ContainsKey(titlename))
+            {
+                floattop = double.Parse(_defaultFloatTopAnchorable[titlename]);
+            }
+            if (_defaultFloatLeftAnchorable.ContainsKey(titlename))
+            {
+                floatleft = double.Parse(_defaultFloatLeftAnchorable[titlename]);
+            }
             if (_defaultFloatWidthAnchorable.ContainsKey(titlename))
             {
                 floatwidth = double.Parse(_defaultFloatWidthAnchorable[titlename]);
@@ -216,7 +254,7 @@ namespace Xceed.Wpf.AvalonDock.Global
             {
                 floatheigh = double.Parse(_defaultFloatHeighAnchorable[titlename]);
             }
-            double[] ret = { floatwidth, floatheigh };
+            double[] ret = { floatleft, floattop, floatwidth, floatheigh };
             return ret;
         }
         #endregion
@@ -303,6 +341,8 @@ namespace Xceed.Wpf.AvalonDock.Global
             XElement node_DH = new XElement("DockHeight");
             XElement node_S = new XElement("Side");
             XElement node_IF = new XElement("IsFloat");
+            XElement node_FT = new XElement("FloatTop");
+            XElement node_FL = new XElement("FloatLeft");
             XElement node_FW = new XElement("FloatWidth");
             XElement node_FH = new XElement("FloatHeight");
             XElement node_AW = new XElement("AutoHideWidth");
@@ -312,6 +352,8 @@ namespace Xceed.Wpf.AvalonDock.Global
             node_Root.Add(node_DH);
             node_Root.Add(node_S);
             node_Root.Add(node_IF);
+            node_Root.Add(node_FT);
+            node_Root.Add(node_FL);
             node_Root.Add(node_FW);
             node_Root.Add(node_FH);
             node_Root.Add(node_AW);
@@ -353,6 +395,20 @@ namespace Xceed.Wpf.AvalonDock.Global
                 node_KVP.SetAttributeValue("Value", kvp.Value);
                 node_IF.Add(node_KVP);
             }
+            foreach (KeyValuePair<string, string> kvp in _defaultFloatTopAnchorable)
+            {
+                node_KVP = new XElement("KeyValuePair");
+                node_KVP.SetAttributeValue("Key", kvp.Key);
+                node_KVP.SetAttributeValue("Value", kvp.Value);
+                node_FT.Add(node_KVP);
+            }
+            foreach (KeyValuePair<string, string> kvp in _defaultFloatLeftAnchorable)
+            {
+                node_KVP = new XElement("KeyValuePair");
+                node_KVP.SetAttributeValue("Key", kvp.Key);
+                node_KVP.SetAttributeValue("Value", kvp.Value);
+                node_FL.Add(node_KVP);
+            }
             foreach (KeyValuePair<string, string> kvp in _defaultFloatWidthAnchorable)
             {
                 node_KVP = new XElement("KeyValuePair");
@@ -367,7 +423,6 @@ namespace Xceed.Wpf.AvalonDock.Global
                 node_KVP.SetAttributeValue("Value", kvp.Value);
                 node_FH.Add(node_KVP);
             }
-
             foreach (KeyValuePair<string, string> kvp in _defaultAutoHideWidthAnchorable)
             {
                 node_KVP = new XElement("KeyValuePair");
@@ -395,6 +450,8 @@ namespace Xceed.Wpf.AvalonDock.Global
             XElement nodes_DH = node_Root.Element("DockHeight");
             XElement nodes_S = node_Root.Element("Side");
             XElement nodes_IF = node_Root.Element("IsFloat");
+            XElement nodes_FL = node_Root.Element("FloatLeft");
+            XElement nodes_FT = node_Root.Element("FloatTop");
             XElement nodes_FW = node_Root.Element("FloatWidth");
             XElement nodes_FH = node_Root.Element("FloatHeight");
             XElement nodes_AW = node_Root.Element("AutoHideWidth");
@@ -428,6 +485,18 @@ namespace Xceed.Wpf.AvalonDock.Global
                 string key = node_KVP.Attribute("Key").Value as string;
                 bool value = bool.Parse(node_KVP.Attribute("Value").Value);
                 AddDefaultIsFloatAnchorable(key, value);
+            }
+            foreach (XElement node_KVP in nodes_FT.Elements("KeyValuePair"))
+            {
+                string key = node_KVP.Attribute("Key").Value as string;
+                string value = node_KVP.Attribute("Value").Value as string;
+                AddDefaultFloatTopAnchorable(key, value);
+            }
+            foreach (XElement node_KVP in nodes_FL.Elements("KeyValuePair"))
+            {
+                string key = node_KVP.Attribute("Key").Value as string;
+                string value = node_KVP.Attribute("Value").Value as string;
+                AddDefaultFloatLeftAnchorable(key, value);
             }
             foreach (XElement node_KVP in nodes_FW.Elements("KeyValuePair"))
             {

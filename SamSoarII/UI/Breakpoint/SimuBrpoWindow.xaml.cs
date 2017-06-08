@@ -148,8 +148,17 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                 case "↓": ele.Condition = "下降沿"; cpmsg = 8; break;
                 default: ele.Condition = "无"; break;
             }
+            int count = 1;
+            try
+            {
+                count = int.Parse(ele.BreakTime);
+            }
+            catch (Exception)
+            {
+            }
             SimulateDllModel.SetBPAddr(bpaddr, bpmsg);
             SimulateDllModel.SetCPAddr(bpaddr, cpmsg);
+            SimulateDllModel.SetBPCount(bpaddr, count);
         }
         public void Unactive(SimuBrpoElement ele)
         {
@@ -300,6 +309,13 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                             ele.BVModel.Y));
                 }
             });
+        }
+
+        private void DG_Main_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            SimuBrpoElement ele = (SimuBrpoElement)(DG_Main.SelectedItem);
+            if (ele != null && ele.IsActive)
+                Active(ele);
         }
     }
 

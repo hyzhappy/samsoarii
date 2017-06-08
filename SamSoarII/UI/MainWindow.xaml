@@ -443,7 +443,7 @@
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorable x:Name="LAElemList" Title="软元件管理器">
-                                <local:ElementList></local:ElementList>
+                                <local:ElementList x:Name="ElemList"></local:ElementList>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup>

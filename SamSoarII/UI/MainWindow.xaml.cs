@@ -90,7 +90,6 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAElemList);
             InitializeAvalonDock(LAElemInit);
             InitializeAvalonDock(LABreakpoint);
-            
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -106,8 +105,10 @@ namespace SamSoarII.AppMain.UI
 
             double[] floatsize;
             floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAnch.Title);
-            LAnch.FloatingWidth = floatsize[0];
-            LAnch.FloatingHeight = floatsize[1];
+            LAnch.FloatingLeft = floatsize[0];
+            LAnch.FloatingTop = floatsize[1];
+            LAnch.FloatingWidth = floatsize[2];
+            LAnch.FloatingHeight = floatsize[3];
 
             LAnch.Hide();
         }

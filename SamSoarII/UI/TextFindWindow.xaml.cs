@@ -126,6 +126,7 @@ namespace SamSoarII.AppMain.UI
                     break;
                 case MODE_ALL:
                     ProjectModel pmodel = parent.ProjectModel;
+                    Find(pmodel.LibFuncBlock);
                     foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
                     {
                         Find(fbvmodel);

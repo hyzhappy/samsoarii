@@ -133,6 +133,7 @@ namespace SamSoarII.AppMain.UI
                     break;
                 case MODE_ALL:
                     ProjectModel pmodel = parent.ProjectModel;
+                    Find(pmodel.LibFuncBlock);
                     foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
                     {
                         Find(fbvmodel);
@@ -249,11 +250,11 @@ namespace SamSoarII.AppMain.UI
                 parent.MainWindow.LAReplace.ToggleAutoHide();
             }
             if (DG_List.SelectedIndex < 0) return;
-            TextFindElement element = null;
+            TextReplaceElement element = null;
             if (e.AddedItems.Count > 0)
-                element = (TextFindElement)(e.AddedItems[0]);
+                element = (TextReplaceElement)(e.AddedItems[0]);
             else if (e.RemovedItems.Count > 0)
-                element = (TextFindElement)(e.RemovedItems[0]);
+                element = (TextReplaceElement)(e.RemovedItems[0]);
             else
                 return;
             FuncBlockViewModel fbvmodel = element.FBVModel;
@@ -442,8 +443,8 @@ namespace SamSoarII.AppMain.UI
             string text = fbvmodel.Code;
             int start = textoffset - 1;
             int end = textoffset + word.Length;
-            while (start >= 0 && text[start] != '\n') start--;
-            while (end < text.Length && text[end] != '\n') end++;
+            while (start >= 0 && text[start] != '\n' && text[start] != '\r') start--;
+            while (end < text.Length && text[end] != '\n' && text[end] != '\r') end++;
             Line = text.Substring(start + 1, end - start - 1);
             lineoffset = textoffset - start - 1;
         }
@@ -540,6 +541,12 @@ namespace SamSoarII.AppMain.UI
 
         public void Execute()
         {
+            IEnumerable<FuncBlockReplaceWordCommand> fit
+                = items.Where((cmd) => { return cmd.Element.FBVModel.IsReadOnly; });
+            if (fit.Count() > 0)
+            {
+                MessageBox.Show("当前文本为只读权限，不能进行更改！");
+            }
             items.Sort((cmd1, cmd2) =>
             {
                 return cmd1.Element.Offset.CompareTo(cmd2.Element.Offset);
@@ -563,6 +570,12 @@ namespace SamSoarII.AppMain.UI
 
         public void Undo()
         {
+            IEnumerable<FuncBlockReplaceWordCommand> fit
+                = items.Where((cmd) => { return cmd.Element.FBVModel.IsReadOnly; });
+            if (fit.Count() > 0)
+            {
+                MessageBox.Show("当前文本为只读权限，不能进行更改！");
+            }
             int offset = 0;
             string word = null;
             foreach (FuncBlockReplaceWordCommand cmd in items)

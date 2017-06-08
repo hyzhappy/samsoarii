@@ -123,11 +123,13 @@ namespace SamSoarII.UserInterface
             {
                 ValueModify(this, new ElementValueModifyEventArgs(
                     VarName, VarType, "ON", ElementValueModifyEventType.ForceON));
+                Value = "ON";
             }
             if (sender == BT_FOFF)
             {
                 ValueModify(this, new ElementValueModifyEventArgs(
                     VarName, VarType, "OFF", ElementValueModifyEventType.ForceOFF));
+                Value = "OFF";
             }
             if (sender == BT_CF)
             {
@@ -143,11 +145,13 @@ namespace SamSoarII.UserInterface
             {
                 ValueModify(this, new ElementValueModifyEventArgs(
                     VarName, VarType, "ON", ElementValueModifyEventType.WriteON));
+                Value = "ON";
             }
             if (sender == BT_WOFF)
             {
                 ValueModify(this, new ElementValueModifyEventArgs(
                     VarName, VarType, "OFF", ElementValueModifyEventType.WriteOFF));
+                Value = "OFF";
             }
             if (sender == BT_Write)
             {

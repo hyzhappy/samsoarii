@@ -29,6 +29,7 @@ using Xceed.Wpf.AvalonDock.Layout;
 using System.Diagnostics;
 using System.Windows.Documents;
 using Xceed.Wpf.AvalonDock.Themes;
+using Xceed.Wpf.AvalonDock.Global;
 
 namespace Xceed.Wpf.AvalonDock.Controls
 {
@@ -350,7 +351,40 @@ namespace Xceed.Wpf.AvalonDock.Controls
                 posElement.FloatingTop = Top;
                 posElement.FloatingWidth = Width;
                 posElement.FloatingHeight = Height;
+                if (posElement is LayoutAnchorable)
+                {
+                    UpdatePositionAndSizeOfPanes((LayoutAnchorable)posElement);
+                }
+                if (posElement is LayoutAnchorablePane)
+                {
+                    foreach (LayoutAnchorable lanch in ((LayoutAnchorablePane)posElement).Children)
+                    {
+                        UpdatePositionAndSizeOfPanes(lanch);
+                    }
+                }
+                if (posElement is LayoutAnchorablePaneGroup)
+                {
+                    foreach (LayoutAnchorablePane lapane in ((LayoutAnchorablePaneGroup)posElement).Children)
+                    {
+                        foreach (LayoutAnchorable lanch in lapane.Children)
+                        {
+                            UpdatePositionAndSizeOfPanes(lanch);
+                        }
+                    }
+                }
             }
+        }
+        
+        void UpdatePositionAndSizeOfPanes(LayoutAnchorable lanch)
+        {
+            LayoutSetting.AddDefaultFloatTopAnchorable(
+                lanch.Title, lanch.FloatingTop.ToString());
+            LayoutSetting.AddDefaultFloatLeftAnchorable(
+                lanch.Title, lanch.FloatingLeft.ToString());
+            LayoutSetting.AddDefaultFloatWidthAnchorable(
+                lanch.Title, lanch.FloatingWidth.ToString());
+            LayoutSetting.AddDefaultFloatHeighAnchorable(
+                lanch.Title, lanch.FloatingHeight.ToString());
         }
 
         void UpdateMaximizedState( bool isMaximized )
