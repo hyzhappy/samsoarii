@@ -30,6 +30,7 @@ namespace SamSoarII.AppMain.Project
         Modify,
         Clear
     }
+
     public class RefNetworksBriefChangedEventArgs : EventArgs
     {
         public ChangeType Type { get; set; }
@@ -41,6 +42,7 @@ namespace SamSoarII.AppMain.Project
         }
     }
     public delegate void RefNetworksBriefChangedEventHandler(RefNetworksBriefChangedEventArgs e);
+
     public class ProjectModel
     {
         public bool IsModify

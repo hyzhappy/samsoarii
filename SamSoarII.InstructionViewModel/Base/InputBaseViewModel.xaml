@@ -80,7 +80,7 @@
                             Value="Wrap">
                     </Setter>
                     <Setter Property="Margin" 
-                            Value="20, 20, 0, 0">
+                            Value="10, 4, 0, 0">
                     </Setter>
                 </Style>
             </StackPanel.Resources>

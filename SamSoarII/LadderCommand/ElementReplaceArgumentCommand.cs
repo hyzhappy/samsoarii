@@ -40,7 +40,8 @@ namespace SamSoarII.AppMain.LadderCommand
                         PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                     _values[i].Comment = pstring_new[i * 4 + 5];
                 }
-                ((CALLMViewModel)(bvmodel)).AcceptNewValues(pstring_new[0], _values);
+                ((CALLMViewModel)(bvmodel)).AcceptNewValues(
+                    pstring_new[0], pstring_new[1], _values);
             }
             else
             {
@@ -74,11 +75,12 @@ namespace SamSoarII.AppMain.LadderCommand
                 for (int i = 0; i < argcount; i++)
                 {
                     _values[i] = ArgumentValue.Create(
-                        pstring_old[i * 4 + 2], pstring_old[i * 4 + 3], pstring_old[i * 4 + 4],
+                        pstring_old[i * 4 + 3], pstring_old[i * 4 + 2], pstring_old[i * 4 + 4],
                         PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                     _values[i].Comment = pstring_old[i * 4 + 5];
                 }
-                   ((CALLMViewModel)(bvmodel)).AcceptNewValues(pstring_old[0], _values);
+                ((CALLMViewModel)(bvmodel)).AcceptNewValues(
+                    pstring_old[0], pstring_old[1], _values);
             }
             else
             {
