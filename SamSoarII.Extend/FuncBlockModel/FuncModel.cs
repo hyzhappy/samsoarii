@@ -111,13 +111,14 @@ namespace SamSoarII.Extend.FuncBlockModel
 
         public string[] GetMessageList()
         {
-            string[] ret = new string[ArgCount * 2 + 2];
+            string[] ret = new string[ArgCount * 2 + 3];
             ret[0] = ReturnType;
             ret[1] = Name;
+            ret[2] = Comment;
             for (int i = 0; i < ArgCount; i++)
             {
-                ret[i * 2 + 2] = GetArgType(i);
-                ret[i * 2 + 3] = GetArgName(i);
+                ret[i * 2 + 3] = GetArgType(i);
+                ret[i * 2 + 4] = GetArgName(i);
             }
             return ret;
         }

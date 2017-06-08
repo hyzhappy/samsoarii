@@ -89,7 +89,6 @@ namespace SamSoarII.LadderInstViewModel.Auxiliar
         /*
         public override IPropertyDialog PreparePropertyDialog()
         {
-
             var dialog = new ElementPropertyDialog(2);
             dialog.Title = InstructionName;
             dialog.ShowLine3("IN:", InputValue);

@@ -86,6 +86,7 @@ namespace SamSoarII.Simulation.Core
             // 初始化更新线程
             updateactive = false;
             updatethread = null;
+            UpdateStart();
 
             dllmodel.SimulateStart += OnSimulateStart;
             dllmodel.SimulatePause += OnSimulatePause;
@@ -753,7 +754,7 @@ namespace SamSoarII.Simulation.Core
             // 锁定变量列表不存在
             if (!svllist.Contains(svunit))
             {
-                throw new ArgumentException(String.Format("Cannot found {0:s} in variable unit collection.", svunit.ToString()));
+                //throw new ArgumentException(String.Format("Cannot found {0:s} in variable unit collection.", svunit.ToString()));
             }
             // 将锁定列表中的变量单元变为非锁定，并加入到非锁定列表中
             foreach (SimulateVariableUnit _svunit in svllist)

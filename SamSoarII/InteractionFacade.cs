@@ -327,14 +327,13 @@ namespace SamSoarII.AppMain
                 cmd.WaitForExit();
                 stdout = cmd.StandardOutput.ReadToEnd();
                 stderr = cmd.StandardError.ReadToEnd();
-                m1 = Regex.Match(stderr, @"[^\s](.+):(.+): error: (.+)\r\n");
-                m2 = Regex.Match(stderr, @"[^\s](.+):(.+): warning: (.+)\r\n");
+                m1 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): error: (.+)\r\n");
+                m2 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): warning: (.+)\r\n");
                 while (m1 != null && m1.Success)
                 {
-                    message = m1.Groups[3].Value;
+                    message = m1.Groups[4].Value;
                     line = int.Parse(m1.Groups[2].Value) - sline;
-                    //column = int.Parse(m1.Groups[3].Value);
-                    column = 0;
+                    column = int.Parse(m1.Groups[3].Value);
                     ewele = new ErrorReportElement_FB
                     (
                         ErrorReportElement_FB.STATUS_ERROR,
@@ -348,10 +347,9 @@ namespace SamSoarII.AppMain
                 }
                 while (m2 != null && m2.Success)
                 {
-                    message = m2.Groups[3].Value;
+                    message = m2.Groups[4].Value;
                     line = int.Parse(m2.Groups[2].Value) - sline;
-                    //column = int.Parse(m2.Groups[3].Value);
-                    column = 0;
+                    column = int.Parse(m2.Groups[3].Value);
                     ewele = new ErrorReportElement_FB
                     (
                         ErrorReportElement_FB.STATUS_WARNING,
@@ -364,7 +362,6 @@ namespace SamSoarII.AppMain
                     m2 = m2.NextMatch();
                 }
             }
-
             string bfile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
             cmd = new Process();
             cmd.StartInfo.FileName =

@@ -334,32 +334,32 @@ namespace SamSoarII.UserInterface
                     {
                         string[] msg = fit.First();
                         result.Add(bpmodel.ValueString1);
-                        result.Add(bpmodel.CommentString1);
+                        result.Add(msg[2]);
                         if (bpmodel.Count >= 2)
                         {
-                            result.Add(msg[2]);
                             result.Add(msg[3]);
+                            result.Add(msg[4]);
                             result.Add(bpmodel.ValueString2);
                             result.Add(bpmodel.CommentString2);
                         }
                         if (bpmodel.Count >= 3)
                         {
-                            result.Add(msg[4]);
                             result.Add(msg[5]);
+                            result.Add(msg[6]);
                             result.Add(bpmodel.ValueString3);
                             result.Add(bpmodel.CommentString3);
                         }
                         if (bpmodel.Count >= 4)
                         {
-                            result.Add(msg[6]);
                             result.Add(msg[7]);
+                            result.Add(msg[8]);
                             result.Add(bpmodel.ValueString4);
                             result.Add(bpmodel.CommentString4);
                         }
                         if (bpmodel.Count >= 5)
                         {
-                            result.Add(msg[8]);
                             result.Add(msg[9]);
+                            result.Add(msg[10]);
                             result.Add(bpmodel.ValueString5);
                             result.Add(bpmodel.CommentString5);
                         }
@@ -417,13 +417,46 @@ namespace SamSoarII.UserInterface
         private void ReadComment()
         {
             if (bpmodel == null) return;
-            switch (bpmodel.SelectedIndex)
+            if (bpmodel.InstructionName.Equals("CALLM")
+             && bpmodel.SelectedIndex == 0)
             {
-                case 0: TB_Comment.Text = bpmodel.CommentString1; break;
-                case 1: TB_Comment.Text = bpmodel.CommentString2; break;
-                case 2: TB_Comment.Text = bpmodel.CommentString3; break;
-                case 3: TB_Comment.Text = bpmodel.CommentString4; break;
-                case 4: TB_Comment.Text = bpmodel.CommentString5; break;
+                IEnumerable<string[]> fit = Functions.Where(
+                     (string[] _msg) => { return _msg[1].Equals(bpmodel.ValueString1); });
+                if (fit.Count() > 0)
+                {
+                    TB_Comment.Text = fit.First()[2];
+                    TB_Comment.IsReadOnly = true;
+                }
+            }
+            else
+            {
+                switch (bpmodel.SelectedIndex)
+                {
+                    case 0:
+                        TB_Comment.Text = bpmodel.CommentString1;
+                        TB_Comment.IsReadOnly = false;
+                        break;
+                    case 1:
+                        TB_Comment.Text = bpmodel.CommentString2;
+                        TB_Comment.IsReadOnly = false;
+                        break;
+                    case 2:
+                        TB_Comment.Text = bpmodel.CommentString3;
+                        TB_Comment.IsReadOnly = false;
+                        break;
+                    case 3:
+                        TB_Comment.Text = bpmodel.CommentString4;
+                        TB_Comment.IsReadOnly = false;
+                        break;
+                    case 4:
+                        TB_Comment.Text = bpmodel.CommentString5;
+                        TB_Comment.IsReadOnly = false;
+                        break;
+                    default:
+                        TB_Comment.Text = String.Empty;
+                        TB_Comment.IsReadOnly = true;
+                        break;
+                }
             }
         }
 
@@ -445,13 +478,17 @@ namespace SamSoarII.UserInterface
             if (bpmodel == null) return;
             if (bpmodel.InstructionName.Equals("CALLM"))
             {
+                if (bpmodel.SelectedIndex == 0)
+                {
+                    TB_Detail.Text = String.Empty;
+                }
                 IEnumerable<string[]> fit = Functions.Where(
                      (string[] _msg) => { return _msg[1].Equals(bpmodel.ValueString1); });
                 if (fit.Count() > 0 && bpmodel.SelectedIndex > 0)
                 {
                     string[] msg = fit.First();
-                    string argtype = msg[bpmodel.SelectedIndex * 2];
-                    string argname = msg[bpmodel.SelectedIndex * 2 + 1];
+                    string argtype = msg[bpmodel.SelectedIndex * 2 + 1];
+                    string argname = msg[bpmodel.SelectedIndex * 2 + 2];
                     switch (argtype)
                     {
                         case "BIT*":

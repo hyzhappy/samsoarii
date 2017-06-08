@@ -30,6 +30,8 @@ namespace SamSoarII.AppMain.UI.Monitor
             mmonitor = _mmonitor;
             mmonitor.Manager = this;
             smodel = _smodel;
+            smodel.SimulateStart += OnSimulateStart;
+            smodel.SimulateAbort += OnSimulateAbort;
         }
 
         private string _Type(int datatype)
@@ -45,6 +47,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         
         #region Interfaces
+
         public bool CanLock => true;
         
         public bool IsRunning { get; private set; }
@@ -383,6 +386,16 @@ namespace SamSoarII.AppMain.UI.Monitor
                         break;
                 }
             }
+        }
+
+        public void OnSimulateStart(object sender, RoutedEventArgs e)
+        {
+            if (!IsRunning) Start();
+        }
+
+        public void OnSimulateAbort(object sender, RoutedEventArgs e)
+        {
+            if (IsRunning) Abort();
         }
 
         #endregion

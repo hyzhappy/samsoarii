@@ -90,7 +90,6 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAElemList);
             InitializeAvalonDock(LAElemInit);
             InitializeAvalonDock(LABreakpoint);
-            
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -106,8 +105,10 @@ namespace SamSoarII.AppMain.UI
 
             double[] floatsize;
             floatsize = LayoutSetting.GetDefaultFloatSizeAnchorable(LAnch.Title);
-            LAnch.FloatingWidth = floatsize[0];
-            LAnch.FloatingHeight = floatsize[1];
+            LAnch.FloatingLeft = floatsize[0];
+            LAnch.FloatingTop = floatsize[1];
+            LAnch.FloatingWidth = floatsize[2];
+            LAnch.FloatingHeight = floatsize[3];
 
             LAnch.Hide();
         }
@@ -649,12 +650,7 @@ namespace SamSoarII.AppMain.UI
                 e.CanExecute = false;
                 return;
             }
-            if (SimuStartButton.IsChecked == true)
-            {
-                e.CanExecute = false;
-                return;
-            }
-            e.CanExecute = true;
+            e.CanExecute = SimulateHelper.SModel.SManager.ISBPPause;
         }
 
         private void BPCallCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -662,13 +658,9 @@ namespace SamSoarII.AppMain.UI
             if (SimulateHelper.SModel == null)
             {
                 e.CanExecute = false;
-            }
-            if (SimuStartButton.IsChecked == true)
-            {
-                e.CanExecute = false;
                 return;
             }
-            e.CanExecute = true;
+            e.CanExecute = SimulateHelper.SModel.SManager.ISBPPause;
         }
 
         private void BPOutCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -676,13 +668,9 @@ namespace SamSoarII.AppMain.UI
             if (SimulateHelper.SModel == null)
             {
                 e.CanExecute = false;
-            }
-            if (SimuPauseButton.IsChecked == false)
-            {
-                e.CanExecute = false;
                 return;
             }
-            e.CanExecute = true;
+            e.CanExecute = SimulateHelper.SModel.SManager.ISBPPause;
         }
 
         private void OnCloseProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)

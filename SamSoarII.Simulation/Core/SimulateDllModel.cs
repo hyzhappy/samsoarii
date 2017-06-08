@@ -33,24 +33,10 @@ namespace SamSoarII.Simulation.Core
     {
         #region Import DLL
         /// <summary>
-        /// 动态库接口：根据工程源码创建仿真dll
+        /// 动态库接口：创建仿真代码的编译环境
         /// </summary>
-        /// <param name="simucPath">simuc.c的文件路径</param>
-        /// <param name="simufPath">simuf.c的文件路径</param>
-        /// <param name="simudllPath">simuc.dll的输出路径</param>
-        /// <param name="simuaPath">simua.a的输出路径</param>
-        [DllImport("simu.dll", EntryPoint = "CreateDll")]
-        public static extern void CreateDll
-        (
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simucPath,
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simufPath,
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simudllPath,
-            [MarshalAs(UnmanagedType.LPStr)]
-            string simuaPath
-        );
+        [DllImport("simu.dll", EntryPoint = "CreateSource")]
+        public static extern void CreateSource();
 
         /// <summary> LoadDll返回结果：成功</summary>
         public const int LOADDLL_OK = 0x00;
@@ -343,7 +329,15 @@ namespace SamSoarII.Simulation.Core
         /// <param name="islock">设置(1)或取消(0)</param>
         [DllImport("simu.dll", EntryPoint = "SetBPAddr")]
         public static extern void SetBPAddr(int bpaddr, int islock);
-        
+
+        /// <summary>
+        /// 设置断点的运行次数
+        /// </summary>
+        /// <param name="bpaddr">断点地址</param>
+        /// <param name="maxcount">最大运行次数</param>
+        [DllImport("simu.dll", EntryPoint = "SetBPCount")]
+        public static extern void SetBPCount(int bpaddr, int maxcount);
+
         /// <summary>
         /// 设置一个条件断点
         /// </summary>
@@ -514,7 +508,7 @@ namespace SamSoarII.Simulation.Core
             PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             SetBaseBit(device.BitNumber);
             SetBPEnable(1);
-            SetClockRate(50);
+            SetClockRate(1);
             // 初始化
             InitRunLadder();
             // 存活状态下运行循环

@@ -557,7 +557,6 @@ namespace SamSoarII.AppMain.Project
         
         private void DG_Table_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
             if (Current != null)
             {
                 Current.Current = DG_Table.SelectedIndex;
@@ -573,7 +572,6 @@ namespace SamSoarII.AppMain.Project
                 if (tb.Parent is DataGridCell)
                 {
                     DataGridCell dgc = (DataGridCell)(tb.Parent);
-                    
                 }
             }
         }
@@ -720,7 +718,7 @@ namespace SamSoarII.AppMain.Project
 
     }
 
-    public class ModbusTableComboBoxItems
+    public class ModbusTableComboBoxItems 
     {
         static private string[] selectedhandlecodes = {
             "0x01（读位）", "0x02（读位）", "0x03（读字）",  "0x04（读字）",
@@ -918,7 +916,7 @@ namespace SamSoarII.AppMain.Project
 
     }
 
-    public class ModbusTableModel
+    public class ModbusTableModel 
     {
         public ModbusTableModel()
         {
@@ -1127,6 +1125,5 @@ namespace SamSoarII.AppMain.Project
         
         #endregion
     }
-
-
+    
 }

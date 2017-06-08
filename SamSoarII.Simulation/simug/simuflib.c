@@ -1,24 +1,24 @@
 #define PI 3.1415926
 
-// 计算整数半径的圆的面积
+// 整数半径的圆的面积
 void CACI(WORD* in, FLOAT* out)
 {
 	*out = (*in) * (*in) * PI;
 }
 
-// 计算整数半径的圆的周长
+// 整数半径的圆的周长
 void RPCI(WORD* in, FLOAT* out)
 {
 	*out = (*in) * 2 * PI;
 }
 
-// 计算浮点半径的圆的面积
+// 浮点半径的圆的面积
 void CACF(FLOAT* in, FLOAT* out)
 {
 	*out = (*in) * (*in) * PI;
 }
 
-// 计算浮点半径的圆的周长
+// 浮点半径的圆的周长
 void RPCF(FLOAT* in, FLOAT* out)
 {
 	*out = (*in) * 2 * PI;

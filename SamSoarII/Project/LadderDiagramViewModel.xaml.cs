@@ -1313,7 +1313,7 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
                 viewmodel = LadderInstViewModelPrototype.Clone("CALLM");
-                ((CALLMViewModel)(viewmodel)).AcceptNewValues(selectedFunction.Name, _values);
+                ((CALLMViewModel)(viewmodel)).AcceptNewValues(selectedFunction.Name, selectedFunction.Comment, _values);
             }
             else
             {
@@ -1340,6 +1340,7 @@ namespace SamSoarII.AppMain.Project
                     throw new InstructionExecption("输入的参数数量与指令不相符！");
                 }
             }
+            viewmodel.UpdateCommentContent();
             IEnumerable<BaseViewModel> eles_old = null;
             List<BaseViewModel> eles_new = null;
             if (viewmodel.Type == LadderInstModel.ElementType.Output)

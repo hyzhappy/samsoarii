@@ -68,7 +68,8 @@
                       HorizontalScrollBarVisibility="Auto">
             <DataGrid x:Uid="DG_Main" x:Name="DG_Main" ItemsSource="{Binding Items}"
                       AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False"
-                      SelectionChanged="DG_Main_SelectionChanged">
+                      SelectionChanged="DG_Main_SelectionChanged"
+                      CellEditEnding="DG_Main_CellEditEnding">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_1" Header="{x:Static properties:Resources.Enable_Disable}" 
                                         Binding="{Binding ActiveInfo}" IsReadOnly="True">

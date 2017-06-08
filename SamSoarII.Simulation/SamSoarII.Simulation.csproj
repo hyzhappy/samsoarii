@@ -372,14 +372,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="simug\gen_simu.bat" />
-    <None Include="simug\simuc.h" />
-    <None Include="simug\simuf.h" />
-    <None Include="simug\simug.c" />
-    <None Include="simug\simulib.c" />
-    <None Include="simug\simulib.h" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\Image\Expand\ExpandOff.png" />
     <Content Include="Resources\Image\Expand\ExpandOn.png" />
     <Content Include="Resources\Image\Lock\LockOff.png" />
@@ -394,6 +386,13 @@
     <Content Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
     <Content Include="Resources\simu.dll" />
     <Content Include="simug\simu.dll" />
+    <Content Include="simug\simuflib.c" />
+    <Content Include="simug\simuflib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="simug\simuc.o" />
+    <None Include="simug\simulib.o" />
+    <None Include="simug\_simulib.o" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

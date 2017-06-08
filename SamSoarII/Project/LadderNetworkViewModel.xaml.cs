@@ -1110,26 +1110,12 @@ namespace SamSoarII.AppMain.Project
                         epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Where(
                             (FuncModel fmodel) => { return fmodel.CanCALLM(); }
                         ).Select(
-                            (FuncModel fmodel) =>
-                            {
-                                string[] result = new string[fmodel.ArgCount * 2 + 2];
-                                result[0] = fmodel.ReturnType;
-                                result[1] = fmodel.Name;
-                                for (int i = 0; i < fmodel.ArgCount; i++)
-                                {
-                                    result[i * 2 + 2] = fmodel.GetArgType(i);
-                                    result[i * 2 + 3] = fmodel.GetArgName(i);
-                                }
-                                return result;
-                            }
+                            (FuncModel fmodel) => { return fmodel.GetMessageList(); }
                         );
                         break;
                     case ElementPropertyDialog.INST_MBUS:
                         epdialog.ModbusTables = _ladderDiagram.ProjectModel.MTVModel.Models.Select(
-                            (ModbusTableModel mtmodel) =>
-                            {
-                                return mtmodel.Name;
-                            }
+                            (ModbusTableModel mtmodel) => { return mtmodel.Name; }
                         );
                         break;
                 }
@@ -1152,7 +1138,6 @@ namespace SamSoarII.AppMain.Project
             {
                 ElementPropertyDialog_New epdialog = (ElementPropertyDialog_New)dialog;
                 epdialog.Details = _ladderDiagram.InstrutionNameAndToolTips[epdialog.BPModel.InstructionName];
-                IList<string> props_old = epdialog.PropertyStrings;
                 switch (epdialog.BPModel.InstructionName)
                 {
                     case "CALL":
@@ -1168,18 +1153,7 @@ namespace SamSoarII.AppMain.Project
                         epdialog.Functions = _ladderDiagram.ProjectModel.Funcs.Where(
                             (FuncModel fmodel) => { return fmodel.CanCALLM(); }
                         ).Select(
-                            (FuncModel fmodel) =>
-                            {
-                                string[] result = new string[fmodel.ArgCount * 2 + 2];
-                                result[0] = fmodel.ReturnType;
-                                result[1] = fmodel.Name;
-                                for (int i = 0; i < fmodel.ArgCount; i++)
-                                {
-                                    result[i * 2 + 2] = fmodel.GetArgType(i);
-                                    result[i * 2 + 3] = fmodel.GetArgName(i);
-                                }
-                                return result;
-                            }
+                            (FuncModel fmodel) => { return fmodel.GetMessageList(); }
                         );
                         break;
                     case "MBUS":
@@ -1191,6 +1165,7 @@ namespace SamSoarII.AppMain.Project
                         );
                         break;
                 }
+                IList<string> props_old = epdialog.PropertyStrings;
                 epdialog.Ensure += (sender1, e1) =>
                 {
                     try
@@ -1375,7 +1350,7 @@ namespace SamSoarII.AppMain.Project
                             fmodel.GetArgType(i),
                             ivmodel);
                     }
-                    vmodel.AcceptNewValues(fmodel.Name, avalues);
+                    vmodel.AcceptNewValues(fmodel.Name, fmodel.Comment, avalues);
                     vmodel.X = _ladderDiagram.SelectionRect.X;
                     vmodel.Y = _ladderDiagram.SelectionRect.Y;
                     _ladderDiagram.ReplaceSingleElement(this, vmodel);

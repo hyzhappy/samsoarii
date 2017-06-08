@@ -44,6 +44,9 @@ namespace SamSoarII.LadderInstViewModel
                 MiddleTextBlock1.Text = value;
             }
         }
+
+        public string FuncComment { get; set; }
+            = String.Empty;
         
         public ArgumentValue Value1
         {
@@ -120,7 +123,7 @@ namespace SamSoarII.LadderInstViewModel
                     MiddleTextBlock5.Text = String.Empty;
             }
         }
-
+        
         private TextBlock[] _commentTextBlock = new TextBlock[]
             {new TextBlock(), new TextBlock(), new TextBlock(), new TextBlock(), new TextBlock()};
 
@@ -238,15 +241,15 @@ namespace SamSoarII.LadderInstViewModel
             return dialog;
         }
         */
-        public void AcceptNewValues(string _funcname, ArgumentValue[] _values)
+        public void AcceptNewValues(string _funcname, string _funccomment, ArgumentValue[] _values)
         {
             var oldvaluestring1 = FuncName;
             var oldvaluestring2 = Value1.ValueString;
             var oldvaluestring3 = Value2.ValueString;
             var oldvaluestring4 = Value3.ValueString;
             var oldvaluestring5 = Value4.ValueString;
-            
             FuncName = _funcname;
+            FuncComment = _funccomment;
             if (_values.Length > 0)
             {
                 Value1 = _values[0];
@@ -287,11 +290,14 @@ namespace SamSoarII.LadderInstViewModel
             {
                 Value4 = ArgumentValue.Null;
             }
+            UpdateCommentContent();
         }
 
         public override void UpdateCommentContent()
         {
-            if (Value1 != ArgumentValue.Null)
+            _commentTextBlock[0].Text = String.Format("{0:s}:{1:s}",
+                FuncName, FuncComment);
+            if (Value1 != ArgumentValue.Null && Value1.ArgumentName.Length > 0)
             {
                 _commentTextBlock[1].Text = String.Format("{0:s}:{1:s}", Value1.ValueString, Value1.Comment);
             }
@@ -299,7 +305,7 @@ namespace SamSoarII.LadderInstViewModel
             {
                 _commentTextBlock[1].Text = String.Empty;
             }
-            if (Value2 != ArgumentValue.Null)
+            if (Value2 != ArgumentValue.Null && Value2.ArgumentName.Length > 0)
             {
                 _commentTextBlock[2].Text = String.Format("{0:s}:{1:s}", Value2.ValueString, Value2.Comment);
             }
@@ -307,7 +313,7 @@ namespace SamSoarII.LadderInstViewModel
             {
                 _commentTextBlock[2].Text = String.Empty;
             }
-            if (Value3 != ArgumentValue.Null)
+            if (Value3 != ArgumentValue.Null && Value3.ArgumentName.Length > 0)
             {
                 _commentTextBlock[3].Text = String.Format("{0:s}:{1:s}", Value3.ValueString, Value3.Comment);
             }
@@ -315,7 +321,7 @@ namespace SamSoarII.LadderInstViewModel
             {
                 _commentTextBlock[3].Text = String.Empty;
             }
-            if (Value4 != ArgumentValue.Null)
+            if (Value4 != ArgumentValue.Null && Value4.ArgumentName.Length > 0)
             {
                 _commentTextBlock[4].Text = String.Format("{0:s}:{1:s}", Value4.ValueString, Value4.Comment);
             }

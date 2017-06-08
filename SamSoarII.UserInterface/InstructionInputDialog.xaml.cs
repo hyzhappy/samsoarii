@@ -281,14 +281,15 @@ namespace SamSoarII.UserInterface
                             (string[] msgs) => { return msgs[1].Equals(InstructionInput[1]); });
                         if (fit.Count() > 0)
                         {
+                            //_tempList.Add(tempList[1]);
+                            string[] msgs = fit.First();
                             List<string> _tempList = new List<string>();
                             _tempList.Add(tempList[0]);
-                            _tempList.Add(tempList[1]);
-                            string[] msgs = fit.First();
-                            for (int i = 0; i < (msgs.Length-2)/2; i++)
+                            _tempList.Add(msgs[2]);
+                            for (int i = 0; i < (msgs.Length - 3)/2; i++)
                             {
-                                string argtype = msgs[i * 2 + 2];
-                                string argname = msgs[i * 2 + 3];
+                                string argtype = msgs[i * 2 + 3];
+                                string argname = msgs[i * 2 + 4];
                                 switch (argtype)
                                 {
                                     case "BIT":

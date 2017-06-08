@@ -29,6 +29,7 @@ namespace SamSoarII.AppMain.UI
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public ObservableCollection<IElementInitializeModel> Elements { get; set; } = new ObservableCollection<IElementInitializeModel>();
+
         public ElementInitializeWindow()
         {
             InitializeComponent();
