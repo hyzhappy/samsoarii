@@ -1001,6 +1001,7 @@ namespace SamSoarII.AppMain.UI
                 int ret = _interactionFacade.SimulateProject();
                 if (ret == SimulateHelper.SIMULATE_OK)
                 {
+                    EditToolBarTray.Visibility = Visibility.Collapsed;
                     SimuToolBarTray.Visibility = Visibility.Visible;
                     SimulateHelper.SModel.SimulateStart += OnSimulateStart;
                     SimulateHelper.SModel.SimulatePause += OnSimulatePause;
@@ -1019,6 +1020,7 @@ namespace SamSoarII.AppMain.UI
             {
                 if (SimulateHelper.Close() == SimulateHelper.CLOSE_OK)
                 {
+                    EditToolBarTray.Visibility = Visibility.Visible;
                     SimuToolBarTray.Visibility = Visibility.Collapsed;
                     SimulateModeButton.IsChecked = false;
                 }

@@ -615,6 +615,13 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+        public void RemoveSingleElement(LadderNetworkViewModel network, BaseViewModel bvmodel)
+        {
+            var eles = new List<BaseViewModel>() { bvmodel };
+            var command = new LadderCommand.NetworkRemoveElementsCommand(network, eles);
+            _commandManager.Execute(command);
+        }
+
         public void RemoveSingleVerticalLine(LadderNetworkViewModel network, VerticalLineViewModel vline)
         {
             var vlines = new List<VerticalLineViewModel>() { vline };

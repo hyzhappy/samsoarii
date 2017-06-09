@@ -832,21 +832,23 @@ namespace SamSoarII.AppMain
                 }
                 else if (catalogId == 10)
                 {
-                    if (CurrentLadder.SelectRectOwner.GetElementByPosition(CurrentLadder.SelectionRect.X, CurrentLadder.SelectionRect.Y) is HorizontalLineViewModel)
+                    if (CurrentLadder.SelectionRect.CurrentElement is HorizontalLineViewModel)
                     {
-                        CurrentLadder.SelectRectOwner.RemoveElement(CurrentLadder.SelectionRect.X, CurrentLadder.SelectionRect.Y);
+                        CurrentLadder.RemoveSingleElement(
+                            CurrentLadder.SelectRectOwner, 
+                            CurrentLadder.SelectionRect.CurrentElement);
                     }
                     SelectionRectRight();
                 }
                 else
                 {
-                    if (CurrentLadder.SelectionRect.X > 0)
+                    if (CurrentLadder.SelectionRect.CurrentElement is VerticalLineViewModel)
                     {
-                        if (CurrentLadder.SelectRectOwner.RemoveVerticalLine(CurrentLadder.SelectionRect.X - 1, CurrentLadder.SelectionRect.Y))
-                        {
-                            SelectionRectDown();
-                        }
+                        CurrentLadder.RemoveSingleElement(
+                            CurrentLadder.SelectRectOwner,
+                            CurrentLadder.SelectionRect.CurrentElement);
                     }
+                    SelectionRectDown();
                 }
             }
         }

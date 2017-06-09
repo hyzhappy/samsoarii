@@ -22,6 +22,17 @@ using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using static SamSoarII.AppMain.Project.LadderDiagramViewModel;
 
+/// <summary>
+/// Namespace : SamSoarII.AppMain.UI
+/// ClassName : ProjectTreeView
+/// Version   : 1.0
+/// Date      : 2017/6/9
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 工程资源管理器
+/// </remarks>
+
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
@@ -30,31 +41,20 @@ namespace SamSoarII.AppMain.UI
     public partial class ProjectTreeView : UserControl, INotifyPropertyChanged, IDisposable
     {
         #region Numbers
-
+        /// <summary> 所有子程序的对应的目录项 </summary>
         private Dictionary<string, ProjectTreeViewItem> dpdict
             = new Dictionary<string, ProjectTreeViewItem>();
-
+        /// <summary> 所有函数块的对应的目录项 </summary>
         private Dictionary<string, ProjectTreeViewItem> fpdict
             = new Dictionary<string, ProjectTreeViewItem>();
-
+        /// <summary> 工程模型 </summary>
         private ProjectModel _projectModel;
-
+        /// <summary> 工程模型 </summary>
         public ProjectModel Project
         {
             get { return _projectModel; }
         }
-        /*
-        private ElementList _elementList;
-        public ElementList EleList
-        {
-            get { return _elementList; }
-        }
-        private ElementInitializeWindow _elementInitWind;
-        public ElementInitializeWindow EleInit
-        {
-            get { return _elementInitWind; }
-        }
-        */
+
         #region Components
 
         private ProjectTreeViewItem PTVI_Root;
@@ -83,7 +83,11 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Initialize
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="project">工程</param>
+        /// <param name="xele">目录文档</param>
         public ProjectTreeView(ProjectModel project, XElement xele = null)
         {
             InitializeComponent();
@@ -91,17 +95,13 @@ namespace SamSoarII.AppMain.UI
             _projectModel = project;
             InteractionFacade _ifacade = Project.IFacade;
             _ifacade.PTVEvent += OnGotPTVEvent;
-            //_elementList = new ElementList();
-            //_elementInitWind = new ElementInitializeWindow();
             DataContext = Project;
             Project.MTVModel.ModelChanged += OnModbusChanged;
-            
+            // 构造目录
             ReinitializeComponent();
-            if (xele != null)
-            {
-                Load(xele);
-            }
+            if (xele != null) Load(xele);
             ProjectTreeViewItem ptvitem = null;
+            // 构造子程序的目录
             foreach (LadderDiagramViewModel ldvmodel in project.SubRoutines)
             {
                 ProjectTreeViewItem parent = null;
@@ -124,6 +124,7 @@ namespace SamSoarII.AppMain.UI
                 Rebuild(ptvitem, ldvmodel);
                 dpdict.Add(ldvmodel.ProgramName, ptvitem);
             }
+            // 构造函数块的目录
             foreach (FuncBlockViewModel fbvmodel in project.FuncBlocks)
             {
                 fbvmodel.TextChanged += OnFuncBlockTextChanged;
@@ -146,7 +147,6 @@ namespace SamSoarII.AppMain.UI
                 Rebuild(ptvitem, fbvmodel);
                 fpdict.Add(fbvmodel.ProgramName, ptvitem);
             }
-
             PTVI_Root.IsExpanded = true;
             PTVI_Program.IsExpanded = true;
             Rebuild(PTVI_MainRoutine, project.MainRoutine);
@@ -157,7 +157,9 @@ namespace SamSoarII.AppMain.UI
             dpdict.Add(project.MainRoutine.ProgramName, PTVI_MainRoutine);
             Rebuild(PTVI_Modbus, project.MTVModel);
         }
-
+        /// <summary>
+        /// 析构函数
+        /// </summary>
         public void Dispose()
         {
             _projectModel.IFacade.PTVEvent -= OnGotPTVEvent;
