@@ -1163,6 +1163,7 @@ namespace SamSoarII.AppMain.Project
         #region Instruction relative
         public void ShowInstructionInputDialog(string initialString)
         {
+            if (_selectRectOwner == null) return;
             IEnumerable<string> subdiagramNames = _projectModel.SubRoutines.Select(
                 (LadderDiagramViewModel ldvmodel) => { return ldvmodel.ProgramName; });
             IEnumerable<string[]> functionMessages = _projectModel.Funcs.Where(
@@ -1206,6 +1207,14 @@ namespace SamSoarII.AppMain.Project
                 }
             };
             dialog.ShowDialog();
+        }
+
+        public void QuickInsertElement(BaseViewModel bvmodel)
+        {
+            if (_selectRectOwner == null) return;
+            bvmodel.X = _selectRect.X;
+            bvmodel.Y = _selectRect.Y;
+            ReplaceSingleElement(_selectRectOwner, bvmodel);
         }
 
         public void RegisterInstructionInput(
@@ -1504,15 +1513,47 @@ namespace SamSoarII.AppMain.Project
                     ShowInstructionInputDialog(s);
                 }
             }
-            if (LadderMode == LadderMode.Edit
-             && (e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            if (LadderMode == LadderMode.Edit)
             {
-                switch (e.Key)
+                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
-                    case Key.OemPlus:   ShowInstructionInputDialog("ADD"); break;
-                    case Key.OemMinus:  ShowInstructionInputDialog("SUB"); break;
-                    case Key.D8:        ShowInstructionInputDialog("MUL"); break;
-                    case Key.Oem5:      ShowInstructionInputDialog("DIV"); break;
+                    switch (e.Key)
+                    {
+                        case Key.OemPlus: ShowInstructionInputDialog("ADD"); break;
+                        case Key.OemMinus: ShowInstructionInputDialog("SUB"); break;
+                        case Key.D8: ShowInstructionInputDialog("MUL"); break;
+                        case Key.Oem5: ShowInstructionInputDialog("DIV"); break;
+                        
+                        case Key.F2: ShowInstructionInputDialog("LDIM "); break;
+                        case Key.F3: ShowInstructionInputDialog("LDIIM "); break;
+                        case Key.F5: QuickInsertElement(new MEPViewModel()); break;
+                        case Key.F6: QuickInsertElement(new MEFViewModel()); break;
+                        case Key.F8: ShowInstructionInputDialog("OUTIM "); break;
+                        case Key.F9:
+                            if (_selectRect.CurrentElement is HorizontalLineViewModel)
+                                RemoveSingleElement(_selectRectOwner, _selectRect.CurrentElement);
+                            SelectRectRight();
+                            break;
+                        case Key.F10:
+                            if (_selectRect.CurrentElement is VerticalLineViewModel)
+                                RemoveSingleElement(_selectRectOwner, _selectRect.CurrentElement);
+                            SelectRectDown();
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (e.Key)
+                    {
+                        case Key.F2: ShowInstructionInputDialog("LD "); break;
+                        case Key.F3: ShowInstructionInputDialog("LDI "); break;
+                        case Key.F5: ShowInstructionInputDialog("LDP "); break;
+                        case Key.F6: ShowInstructionInputDialog("LDF "); break;
+                        case Key.F7: QuickInsertElement(new INVViewModel()); break;
+                        case Key.F8: ShowInstructionInputDialog("OUT "); break;
+                        case Key.F9: QuickInsertElement(new HorizontalLineViewModel()); break;
+                        case Key.F10: QuickInsertElement(new VerticalLineViewModel()); break;
+                    }
                 }
             }
             if (e.Key == Key.Enter)
