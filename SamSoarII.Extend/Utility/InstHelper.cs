@@ -780,6 +780,7 @@ namespace SamSoarII.Extend.Utility
             //sw.Write("static uint16_t _stacktop;\n");           // 数据栈的栈顶
             //sw.Write("static uint16_t _mstack[256];\n");        // 辅助栈
             //sw.Write("static uint16_t _mstacktop;\n");          // 辅助栈的栈顶
+            user_id = 0;
             sw.Write("static int32_t _global[{0:d}];\n", globalTotal); // 全局变量
             if (simumode)
                 sw.Write("static int32_t _signal;\n");
@@ -848,6 +849,7 @@ namespace SamSoarII.Extend.Utility
         /// <param name="sw">输出的C文件</param>
         /// <param name="inst">指令结构</param>
         /// <param name="simumode">是否是仿真模式</param>
+        static private int user_id = 0;
         static public void InstToCCode(StreamWriter sw, PLCInstruction inst, bool simumode = false)
         {
             int bp = 0;
@@ -993,15 +995,19 @@ namespace SamSoarII.Extend.Utility
                  */
                 case "SET": case "SETIM":
                     if (simumode)
-                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit);
+                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, &{3:s}, {2:s});\n", 
+                            stackTop, inst[1], inst[2], inst.EnBit);
                     else
-                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, {2:s});\n", stackTop, inst[1], inst[2]);
+                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, {2:s});\n", 
+                            stackTop, inst[1], inst[2]);
                     break;
                 case "RST": case "RSTIM":
                     if (simumode)
-                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, &{3:s}, {2:s});\n", stackTop, inst[1], inst[2], inst.EnBit);
+                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, &{3:s}, {2:s});\n", 
+                            stackTop, inst[1], inst[2], inst.EnBit);
                     else
-                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, {2:s});\n", stackTop, inst[1], inst[2]);
+                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, {2:s});\n", 
+                            stackTop, inst[1], inst[2]);
                     /*
                      * 注意如果复位的是计数器位，那么计数器值也要跟着复原
                      * 考虑到向下计数器(CTD)复原时需要载入预设值
@@ -1105,6 +1111,44 @@ namespace SamSoarII.Extend.Utility
                 case "MPS": sw.Write("_mstack_{0:d} = _stack_{1:d};\n", ++mstackTop, stackTop); break;
                 case "MRD": sw.Write("_stack_{0:d} = _mstack_{1:d};\n", stackTop, mstackTop); break;
                 case "MPP": sw.Write("_stack_{0:d} = _mstack_{1:d};\n", stackTop, mstackTop--); break;
+                // 可能会调用到下位接口的指令
+                case "PLSF": case "DPLSF":
+                    if (!simumode)
+                        sw.Write("CI_DPLSF(" +
+                            "(uint8_t)(_stack_{0:d}), " +
+                            "(uint32_t)({1:s}), " +
+                            "((&{2:s})-(&YBit[0]))/sizeof(int32_t), " +
+                            "{3:d});\n",
+                            stackTop, inst[1], inst[2], user_id++);
+                    break;
+                case "PWM": case "DPWM":
+                    if (!simumode)
+                        sw.Write("CI_DPWM(" +
+                            "(uint8_t)(_stack_{0:d}), " +
+                            "(uint32_t)({1:s}), " +
+                            "(uint32_t)({2:s}), " +
+                            "((&{3:s})-(&YBit[0]))/sizeof(int32_t), " +
+                            "{4:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], user_id++);
+                    break;
+                case "PLSY": case "DPLSY":
+                    if (!simumode)
+                        sw.Write("CI_DPLSY(" +
+                            "(uint8_t)(_stack_{0:d}), " +
+                            "(uint32_t)({1:s}), " +
+                            "(uint32_t)({2:s}), " +
+                            "((&{3:s})-(&YBit[0]))/sizeof(int32_t), " +
+                            "{4:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], user_id++);
+                    break;
+                case "HCNT":
+                    if (!simumode)
+                        sw.Write("CI_HCNT(" +
+                             "(uint8_t)(_stack_{0:d}), " +
+                             "((&{1:s})-(&YBit[0]))/sizeof(int32_t), " +
+                             "{2:s});\n",
+                             stackTop, inst[1], inst[2]);
+                    break;
                 // 默认的其他情况，一般之前要先判断栈顶
                 default:
                     sw.Write("if (_stack_{0:d}) {{\n", stackTop);
