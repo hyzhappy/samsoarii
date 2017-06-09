@@ -200,9 +200,7 @@ namespace SamSoarII.AppMain.UI
         #region Event Handler
 
         public event Simulation.Shell.Event.ShowTabItemEventHandler ShowSimulateItem = delegate { };
-
-        public event ShowTabItemEventHandler ShowEditItem = delegate { };
-
+        
         public event SelectionChangedEventHandler SelectionChanged = delegate { };
 
         public event RoutedEventHandler GotFocus = delegate { };
@@ -215,7 +213,6 @@ namespace SamSoarII.AppMain.UI
                 if (ldoc.Content != SelectedItem)
                 {
                     ITabItem _SelectedItem = SelectedItem;
-                    //LayoutDocument _ldoc = _lDocDict[_SelectedItem];
                     SelectedItem = (ITabItem)(ldoc.Content);
                     if (SelectionChanged != null)
                     {
