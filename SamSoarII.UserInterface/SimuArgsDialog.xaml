@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         mc:Ignorable="d"
-        Title="数值锁定" Height="180" Width="300">
+        Title="{x:Static properties:Resources.Number_Lock}" Height="180" Width="300">
     <Grid x:Uid="Grid_1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Uid="ColumnDefinition_1" Width="4"/>
@@ -126,38 +127,31 @@
         </CheckBox>
         <TextBlock x:Uid="TB_Lock1" x:Name="TB_Lock1" 
                    Grid.Row="0" Grid.Column="5"
-                   VerticalAlignment="Center">
-            锁定
-        </TextBlock>
+                   VerticalAlignment="Center" Text="{x:Static properties:Resources.Lock}"/>
+
         <TextBlock x:Uid="TB_Lock2" x:Name="TB_Lock2"
                    Grid.Row="1" Grid.Column="5"
-                   VerticalAlignment="Center">
-            锁定
-        </TextBlock>
+                   VerticalAlignment="Center" Text="{x:Static properties:Resources.Lock}"/>
+
         <TextBlock x:Uid="TB_Lock3" x:Name="TB_Lock3"
                    Grid.Row="2" Grid.Column="5"
-                   VerticalAlignment="Center">
-            锁定
-        </TextBlock>
+                   VerticalAlignment="Center" Text="{x:Static properties:Resources.Lock}"/>
+
         <TextBlock x:Uid="TB_Lock4" x:Name="TB_Lock4"
                    Grid.Row="3" Grid.Column="5"
-                   VerticalAlignment="Center">
-            锁定
-        </TextBlock>
+                   VerticalAlignment="Center" Text="{x:Static properties:Resources.Lock}"/>
+
         <TextBlock x:Uid="TB_Lock5" x:Name="TB_Lock5"
                    Grid.Row="4" Grid.Column="5"
-                   VerticalAlignment="Center">
-            锁定
-        </TextBlock>
+                   VerticalAlignment="Center" Text="{x:Static properties:Resources.Lock}"/>
+
         <Button x:Uid="B_OK" x:Name="B_OK" Width="80" Click="B_OK_Click"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
-                Grid.Row="5" Grid.Column="1">
-            确定
-        </Button>
+                Grid.Row="5" Grid.Column="1" Content="{x:Static properties:Resources.Ensure}"/>
+
         <Button x:Uid="B_Cancel" x:Name="B_Cancel" Width="80" Click="B_Cancel_Click"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
-                Grid.Row="5" Grid.Column="3">
-            取消
-        </Button>
+                Grid.Row="5" Grid.Column="3" Content="{x:Static properties:Resources.Cancel}"/>
+
     </Grid>
 </Window>

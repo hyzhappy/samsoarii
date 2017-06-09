@@ -589,7 +589,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (errormsg == null && HasRenaming)
             {
-                MessageBox.Show("已存在正在重命名的项目！");
+                MessageBox.Show(Properties.Resources.Message_Renamed_Error);
                 return;
             }
             _contextmenu = this.ContextMenu;

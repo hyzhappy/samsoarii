@@ -726,4 +726,439 @@
   <data name="Export_CSV" xml:space="preserve">
     <value>Export CSV</value>
   </data>
+  <data name="Add_Element" xml:space="preserve">
+    <value>Add Element</value>
+  </data>
+  <data name="Intra_Address" xml:space="preserve">
+    <value>Intra Address</value>
+  </data>
+  <data name="Offset_Element_Select" xml:space="preserve">
+    <value>Offset Element Select</value>
+  </data>
+  <data name="Batch" xml:space="preserve">
+    <value>Batch</value>
+  </data>
+  <data name="Number_Of_Additions" xml:space="preserve">
+    <value>Number Of Additions</value>
+  </data>
+  <data name="Quick_Add_Element" xml:space="preserve">
+    <value>Quick Add Element</value>
+  </data>
+  <data name="Routine_Range" xml:space="preserve">
+    <value>Routine Range</value>
+  </data>
+  <data name="Please_Select_Range" xml:space="preserve">
+    <value>Please Select Range:</value>
+  </data>
+  <data name="Network_Range" xml:space="preserve">
+    <value>Network Range</value>
+  </data>
+  <data name="All_Networks" xml:space="preserve">
+    <value>All Networks</value>
+  </data>
+  <data name="Network_Number_Range" xml:space="preserve">
+    <value>Network Number Range</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Quick_Add" xml:space="preserve">
+    <value>Quick Add</value>
+  </data>
+  <data name="Monitor_Start" xml:space="preserve">
+    <value>Monitor Start</value>
+  </data>
+  <data name="Monitor_Stop" xml:space="preserve">
+    <value>Monitor Stop</value>
+  </data>
+  <data name="Element_Delete" xml:space="preserve">
+    <value>Element Delete</value>
+  </data>
+  <data name="ON_OFF_CurrentValue" xml:space="preserve">
+    <value>ON/OFF/CurrentValue</value>
+  </data>
+  <data name="Set_Value" xml:space="preserve">
+    <value>Set Value</value>
+  </data>
+  <data name="Edit_Color" xml:space="preserve">
+    <value>Edit Color</value>
+  </data>
+  <data name="Font_Range" xml:space="preserve">
+    <value>Font Range</value>
+  </data>
+  <data name="Font_Size" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="Font_Style" xml:space="preserve">
+    <value>Font Style</value>
+  </data>
+  <data name="Font_Color" xml:space="preserve">
+    <value>Font Color</value>
+  </data>
+  <data name="Effect_Preview" xml:space="preserve">
+    <value>Effect Preview</value>
+  </data>
+  <data name="Timed_Save_Settings" xml:space="preserve">
+    <value>Timed Save Settings</value>
+  </data>
+  <data name="Timed_Save" xml:space="preserve">
+    <value>Timed Save</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>*Minute</value>
+  </data>
+  <data name="Baud_Rate" xml:space="preserve">
+    <value>Baud Rate</value>
+  </data>
+  <data name="Data_Bits" xml:space="preserve">
+    <value>Data Bit</value>
+  </data>
+  <data name="Stop_Bit" xml:space="preserve">
+    <value>Stop Bit</value>
+  </data>
+  <data name="Check_Code" xml:space="preserve">
+    <value>Check Code</value>
+  </data>
+  <data name="Free_Port_Communication" xml:space="preserve">
+    <value>Free Port Communication</value>
+  </data>
+  <data name="Modbus_Master_Station" xml:space="preserve">
+    <value>Modbus Master Station</value>
+  </data>
+  <data name="Modbus_Slaver_Station" xml:space="preserve">
+    <value>Modbus Slave Station</value>
+  </data>
+  <data name="Station_Number_Setting" xml:space="preserve">
+    <value>Station Number Setting</value>
+  </data>
+  <data name="Timeout" xml:space="preserve">
+    <value>Timeout</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Buffer_Bit" xml:space="preserve">
+    <value>Buffer Bit</value>
+  </data>
+  <data name="Input" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Average_Number_Of_Samples" xml:space="preserve">
+    <value>Average Number Of Samples</value>
+  </data>
+  <data name="Current_Value_Of_Samples" xml:space="preserve">
+    <value>Current Value Of Samples</value>
+  </data>
+  <data name="Digital_Quantity_Range" xml:space="preserve">
+    <value>Digital Quantity Range</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="Expand_Module_Settings" xml:space="preserve">
+    <value>Expand Module Settings</value>
+  </data>
+  <data name="Enable_Extension" xml:space="preserve">
+    <value>Enable Extension</value>
+  </data>
+  <data name="Select_Module" xml:space="preserve">
+    <value>Select Module</value>
+  </data>
+  <data name="Module_Type" xml:space="preserve">
+    <value>Module Type</value>
+  </data>
+  <data name="Module_One" xml:space="preserve">
+    <value>Module One</value>
+  </data>
+  <data name="Module_Two" xml:space="preserve">
+    <value>Module Two</value>
+  </data>
+  <data name="Module_Three" xml:space="preserve">
+    <value>Module Three</value>
+  </data>
+  <data name="Module_Four" xml:space="preserve">
+    <value>Module Four</value>
+  </data>
+  <data name="Module_Five" xml:space="preserve">
+    <value>Module Five</value>
+  </data>
+  <data name="Module_Six" xml:space="preserve">
+    <value>Module Six</value>
+  </data>
+  <data name="Module_Seven" xml:space="preserve">
+    <value>Module Seven</value>
+  </data>
+  <data name="Module_Eight" xml:space="preserve">
+    <value>Module Eight</value>
+  </data>
+  <data name="Filter_Setting" xml:space="preserve">
+    <value>Filter Setting</value>
+  </data>
+  <data name="Enable_Filter_Time" xml:space="preserve">
+    <value>Enable Filter Time</value>
+  </data>
+  <data name="Power-off_Retention_Area_Setting" xml:space="preserve">
+    <value>Power-off Retention Area Setting</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="Start_Address" xml:space="preserve">
+    <value>Start Address</value>
+  </data>
+  <data name="Not_Clear_While_Download" xml:space="preserve">
+    <value>Not Clear While Download</value>
+  </data>
+  <data name="Current_Color" xml:space="preserve">
+    <value>Current Color</value>
+  </data>
+  <data name="Preview_Color" xml:space="preserve">
+    <value>Preview Color</value>
+  </data>
+  <data name="Read_Bit" xml:space="preserve">
+    <value>Read Bit</value>
+  </data>
+  <data name="Read_Word" xml:space="preserve">
+    <value>Read Word</value>
+  </data>
+  <data name="Write_Bit" xml:space="preserve">
+    <value>Write Bit</value>
+  </data>
+  <data name="Write_Word" xml:space="preserve">
+    <value>Write Word</value>
+  </data>
+  <data name="Write_Bits" xml:space="preserve">
+    <value>Write Bits</value>
+  </data>
+  <data name="Write_Words" xml:space="preserve">
+    <value>Write Words</value>
+  </data>
+  <data name="Register_Range" xml:space="preserve">
+    <value>Register Address Range</value>
+  </data>
+  <data name="MessageBox_Communication_Failed" xml:space="preserve">
+    <value>Communication failed! Please check the parameter settings.</value>
+  </data>
+  <data name="MessageBox_Communication_Success" xml:space="preserve">
+    <value>Communication success!</value>
+  </data>
+  <data name="Message_Path" xml:space="preserve">
+    <value>Specified path does not exist!</value>
+  </data>
+  <data name="Message_File_Name" xml:space="preserve">
+    <value>The file name can not be empty</value>
+  </data>
+  <data name="Message_File_Exist" xml:space="preserve">
+    <value>Specifies that the path already exists with the same name file</value>
+  </data>
+  <data name="Message_Project_Loaded" xml:space="preserve">
+    <value>The project file has been loaded!</value>
+  </data>
+  <data name="Message_Project_Error" xml:space="preserve">
+    <value>Incorrect project file, project file is corrupt!</value>
+  </data>
+  <data name="Message_File_Moved" xml:space="preserve">
+    <value>File has been moved or deleted!</value>
+  </data>
+  <data name="Message_Confirm_Save" xml:space="preserve">
+    <value>Confirm Save</value>
+  </data>
+  <data name="Message_Changed" xml:space="preserve">
+    <value>has been changed,is it saved?</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="Message_Delete" xml:space="preserve">
+    <value>Can not be restored after deletion, is it OK?</value>
+  </data>
+  <data name="Message_Name_Needed" xml:space="preserve">
+    <value>Name is required!</value>
+  </data>
+  <data name="Message_illegal_Char" xml:space="preserve">
+    <value>There are illegal characters:</value>
+  </data>
+  <data name="Message_Fold_File_Exist" xml:space="preserve">
+    <value>With the name already exists under the folder</value>
+  </data>
+  <data name="Message_Name_Format_illegal" xml:space="preserve">
+    <value>Name format is illegal!</value>
+  </data>
+  <data name="Message_Subroutine_Exist" xml:space="preserve">
+    <value>SubRoutine already exists</value>
+  </data>
+  <data name="Message_Funcblock_Exist" xml:space="preserve">
+    <value>Funcblock already exists</value>
+  </data>
+  <data name="Message_Renamed_Error" xml:space="preserve">
+    <value>There are already renaming items!</value>
+  </data>
+  <data name="Message_Text" xml:space="preserve">
+    <value>The current text is read-only and can not be changed!</value>
+  </data>
+  <data name="Message_Missing_Parameters" xml:space="preserve">
+    <value>Missing parameters.</value>
+  </data>
+  <data name="Message_Intra_Error" xml:space="preserve">
+    <value>The index counter may overlap, so use it carefully.</value>
+  </data>
+  <data name="Counter" xml:space="preserve">
+    <value>Counter</value>
+  </data>
+  <data name="Message_Has_Been_Used" xml:space="preserve">
+    <value>Has been used!</value>
+  </data>
+  <data name="Message_Used_Error" xml:space="preserve">
+    <value>is tried to be used elsewhere.</value>
+  </data>
+  <data name="Message_FOR" xml:space="preserve">
+    <value>The FOR instruction can not be used in the same network with another output instruction.</value>
+  </data>
+  <data name="Message_LBL" xml:space="preserve">
+    <value>The LBL instruction can not be conditional.</value>
+  </data>
+  <data name="Message_NEXT" xml:space="preserve">
+    <value>The NEXT instruction can not be used in the same network with another output instruction.</value>
+  </data>
+  <data name="Message_FOR_Not_Found" xml:space="preserve">
+    <value>The corresponding FOR instruction was not found.</value>
+  </data>
+  <data name="Message_Intra_Coil_Error" xml:space="preserve">
+    <value>The index coil output may overlap, please use it carefully.</value>
+  </data>
+  <data name="Jump_Mark" xml:space="preserve">
+    <value>Jump mark</value>
+  </data>
+  <data name="Message_Multi_Coil" xml:space="preserve">
+    <value>Multi-coil output error!</value>
+  </data>
+  <data name="Message_Func_Not_Found" xml:space="preserve">
+    <value>User function not found</value>
+  </data>
+  <data name="User_Function" xml:space="preserve">
+    <value>User function</value>
+  </data>
+  <data name="Message_CALL" xml:space="preserve">
+    <value>Can not be called by the CALLM instruction.</value>
+  </data>
+  <data name="Message_Modbus_Table" xml:space="preserve">
+    <value>Modbus table not found</value>
+  </data>
+  <data name="is_illegal" xml:space="preserve">
+    <value>is illegal</value>
+  </data>
+  <data name="Message_SubRoutine_Not_Found" xml:space="preserve">
+    <value>Can not find subroutine</value>
+  </data>
+  <data name="Message_Stack" xml:space="preserve">
+    <value>The stack top value is missing as a condition.</value>
+  </data>
+  <data name="Message_NEXT_Not_Found" xml:space="preserve">
+    <value>The corresponding terminator NEXT was not found.</value>
+  </data>
+  <data name="Message_Jump_Not_Found" xml:space="preserve">
+    <value>Can not find the corresponding jump mark</value>
+  </data>
+  <data name="Message_Interrupt_1" xml:space="preserve">
+    <value>It is forbidden to use the output coil in the interrupt subroutine.</value>
+  </data>
+  <data name="Message_Interrupt_2" xml:space="preserve">
+    <value>It is forbidden to use edge conditional judgment in interrupt subroutine.</value>
+  </data>
+  <data name="Message_Interrupt_3" xml:space="preserve">
+    <value>It is forbidden to use the timers in the interrupt subroutine.</value>
+  </data>
+  <data name="Message_Interrupt_4" xml:space="preserve">
+    <value>It is forbidden to use the counter in the interrupt subroutine.</value>
+  </data>
+  <data name="Message_Interrupt_5" xml:space="preserve">
+    <value>It is forbidden to use this instruction in the interrupt subroutine.</value>
+  </data>
+  <data name="Message_LBL_Error" xml:space="preserve">
+    <value>The LBL instruction can not be used in the same network with another output instruction.</value>
+  </data>
+  <data name="Message_Input_Empty" xml:space="preserve">
+    <value>The input is empty.</value>
+  </data>
+  <data name="Message_Instruction_Not_Exist" xml:space="preserve">
+    <value>The input instruction does not exist!</value>
+  </data>
+  <data name="Message_Subroutine_Name_Required" xml:space="preserve">
+    <value>You must enter the subroutine name.</value>
+  </data>
+  <data name="Message_Func_Name_Required" xml:space="preserve">
+    <value>You must enter a function name.</value>
+  </data>
+  <data name="Message_CFunc_Not_Found" xml:space="preserve">
+    <value>Can not find C function</value>
+  </data>
+  <data name="Message_Modbus_Name_Requied" xml:space="preserve">
+    <value>You must enter the MODBUS table name.</value>
+  </data>
+  <data name="Message_Func_Params_Num_Error" xml:space="preserve">
+    <value>The number of input parameters does not match the function!</value>
+  </data>
+  <data name="Message_Input_Params_Num_Error" xml:space="preserve">
+    <value>The number of input parameters does not match the instruction!</value>
+  </data>
+  <data name="Message_Can_Not_CALL" xml:space="preserve">
+    <value>can not be called by CALLM instruction. Please check the number and type of parameters.</value>
+  </data>
+  <data name="Message_Modbus_Table_Error" xml:space="preserve">
+    <value>Modbus form is illegal, please check whether the form is complete.</value>
+  </data>
+  <data name="Message_Table_Exist" xml:space="preserve">
+    <value>Table exist!</value>
+  </data>
+  <data name="Message_Bit_Required" xml:space="preserve">
+    <value>Need to enter bit register!</value>
+  </data>
+  <data name="Message_Word_Requried" xml:space="preserve">
+    <value>Need to enter word register!</value>
+  </data>
+  <data name="Message_Table_Name_Exist" xml:space="preserve">
+    <value>Table name exist!</value>
+  </data>
+  <data name="Message_Tooltip" xml:space="preserve">
+    <value>Added element will be deleted, will it continue?</value>
+  </data>
+  <data name="Message_Network_Range_Error" xml:space="preserve">
+    <value>Network range error</value>
+  </data>
+  <data name="Message_Number_Error" xml:space="preserve">
+    <value>Numeric input error!</value>
+  </data>
+  <data name="Message_Element_Has_Added" xml:space="preserve">
+    <value>The element has been added!</value>
+  </data>
+  <data name="Variable_Modification" xml:space="preserve">
+    <value>Variable Modification</value>
+  </data>
+  <data name="Message_Can_Not_Be_Written" xml:space="preserve">
+    <value>This type of register can not be written!</value>
+  </data>
+  <data name="Message_Over_Max_Len" xml:space="preserve">
+    <value>Over the maximum length range, please re-enter!</value>
+  </data>
+  <data name="Invalid_Input" xml:space="preserve">
+    <value>Invalid input</value>
+  </data>
+  <data name="Message_Converter_Error" xml:space="preserve">
+    <value>Type can not be converted between!</value>
+  </data>
+  <data name="Message_File_Requried" xml:space="preserve">
+    <value>Please select the file</value>
+  </data>
+  <data name="Message_Alias_Exist" xml:space="preserve">
+    <value>Alias has already exist</value>
+  </data>
 </root>

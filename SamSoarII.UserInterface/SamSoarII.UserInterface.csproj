@@ -129,9 +129,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SelectDeviceDialog.xaml.cs">
-      <DependentUpon>SelectDeviceDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SimuArgsDialog.xaml.cs">
       <DependentUpon>SimuArgsDialog.xaml</DependentUpon>
     </Compile>
@@ -148,6 +145,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.zh-Hans.resx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -234,10 +232,6 @@
     <Page Include="ProgressBarWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SelectDeviceDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="SimuArgsDialog.xaml">
       <SubType>Designer</SubType>

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:dev="clr-namespace:SamSoarII.PLCDevice;assembly=SamSoarII.PLCDevice"
              mc:Ignorable="d" 
@@ -20,7 +21,10 @@
             <ColumnDefinition x:Uid="ColumnDefinition_1" Width="3*"/>
             <ColumnDefinition x:Uid="ColumnDefinition_2" Width="7*"/>
         </Grid.ColumnDefinitions>
-        <Grid x:Uid="ContentGrid" Grid.Column="1" x:Name="ContentGrid"></Grid>
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <TextBlock FontSize="20" HorizontalAlignment="Left" TextWrapping="Wrap" Width="300" Text="{x:Static properties:Resources.Register_Range}" Margin="50,0,0,0" Height="30" VerticalAlignment="Top"/>
+            <Grid x:Uid="ContentGrid" x:Name="ContentGrid"/>
+        </StackPanel>
         <ListBox x:Uid="MainList" x:Name="MainList" Grid.Column="0" ItemsSource="{Binding Source={StaticResource PLCTypeProvider}}" SelectionChanged="ListBox_SelectionChanged" SelectedIndex="{Binding SelectIndex,Mode=OneWay}">
             <ListBox.Resources>
                 <Style x:Uid="Style_1" TargetType="{x:Type ListBoxItem}">

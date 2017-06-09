@@ -532,7 +532,7 @@ namespace SamSoarII.AppMain.UI
                         break;
                     case ProjectTreeViewItem.FLAG_REMOVE:
                         MessageBoxResult result = MessageBox.Show(
-                            "删除后不能恢复，是否确定？", "重要", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                            Properties.Resources.Message_Delete, Properties.Resources.Important, MessageBoxButton.YesNo, MessageBoxImage.Warning);
                         if (result == MessageBoxResult.Yes)
                             RemoveAll(ptvitem);
                         break;
@@ -567,7 +567,7 @@ namespace SamSoarII.AppMain.UI
                 ProjectTreeViewEventArgs _e = null;
                 if (ptvitem.Text.Equals(String.Empty))
                 {
-                    ptvitem.Rename("名称不能为空！");
+                    ptvitem.Rename(Properties.Resources.Message_Name_Needed);
                     return;
                 }
                 for (int i = 0; i < ptvitem.Text.Length; i++)
@@ -575,7 +575,7 @@ namespace SamSoarII.AppMain.UI
                     switch (ptvitem.Text[i])
                     {
                         case '#': case '@':
-                            ptvitem.Rename(String.Format("存在非法字符：{0:c}", ptvitem.Text[i]));
+                            ptvitem.Rename(String.Format("{0}{1:c}", Properties.Resources.Message_illegal_Char, ptvitem.Text[i]));
                             return;
                     }
                 }
@@ -583,7 +583,7 @@ namespace SamSoarII.AppMain.UI
                 {
                     if (_ptvitem != ptvitem && _ptvitem.Text.Equals(ptvitem.Text))
                     {
-                        ptvitem.Rename(String.Format("同文件夹下已存在名称 {0:s}。", ptvitem.Text));
+                        ptvitem.Rename(String.Format("{0} {1:s}。", Properties.Resources.Message_Fold_File_Exist, ptvitem.Text));
                         return;
                     }
                 }
@@ -592,7 +592,7 @@ namespace SamSoarII.AppMain.UI
                     Match m = Regex.Match(ptvitem.Text, @"^[a-zA-Z_]\w*$");
                     if (!m.Success)
                     {
-                        ptvitem.Rename("名称格式非法！");
+                        ptvitem.Rename(Properties.Resources.Message_Name_Format_illegal);
                         return;
                     }
                     LadderDiagramViewModel ldvmodel = (LadderDiagramViewModel)(ptvitem.RelativeObject);
@@ -600,7 +600,7 @@ namespace SamSoarII.AppMain.UI
                     {
                         if (_ldvmodel != ldvmodel && _ldvmodel.ProgramName.Equals(ptvitem.Text))
                         {
-                            ptvitem.Rename(String.Format("已存在子程序 {0:s}。", ptvitem.Text));
+                            ptvitem.Rename(String.Format("{0} {1:s}。", Properties.Resources.Message_Subroutine_Exist, ptvitem.Text));
                             return;
                         }
                     }
@@ -620,7 +620,7 @@ namespace SamSoarII.AppMain.UI
                     {
                         if (_fbvmodel != fbvmodel && _fbvmodel.ProgramName.Equals(ptvitem.Text))
                         {
-                            ptvitem.Rename(String.Format("已存在函数功能块 {0:s}。", ptvitem.Text));
+                            ptvitem.Rename(String.Format("{0} {1:s}。", Properties.Resources.Message_Funcblock_Exist, ptvitem.Text));
                             return;
                         }
                     }
@@ -1143,14 +1143,14 @@ namespace SamSoarII.AppMain.UI
                 string name = xele_dp.Attribute("Name").Value;
                 string path = xele_dp.Attribute("Path").Value;
                 ProjectTreeViewItem ptvitem = ProjectTreeViewItem.GetPTVIFromPath(path);
-                dpdict.Add(name, ptvitem);
+                if (ptvitem != null) dpdict.Add(name, ptvitem);
             }
             foreach (XElement xele_fp in xele.Elements("FuncBlock"))
             {
                 string name = xele_fp.Attribute("Name").Value;
                 string path = xele_fp.Attribute("Path").Value;
                 ProjectTreeViewItem ptvitem = ProjectTreeViewItem.GetPTVIFromPath(path);
-                fpdict.Add(name, ptvitem);
+                if (ptvitem != null) fpdict.Add(name, ptvitem);
             }
         }
         

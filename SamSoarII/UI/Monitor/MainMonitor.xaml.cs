@@ -193,7 +193,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 if (textbox.Text.Equals(table.TableName,StringComparison.CurrentCultureIgnoreCase))
                 {
                     textbox.Text = oldTableName;
-                    MessageBox.Show("表格名称已存在!");
+                    MessageBox.Show(Properties.Resources.Message_Table_Name_Exist);
                     return;
                 }
             }
@@ -280,7 +280,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 dialog.EnsureButtonClick += (sender1, e1) => 
                 {
-                    MessageBoxResult result = MessageBox.Show("已添加软元件将会删除，是否继续?",string.Empty,MessageBoxButton.YesNo);
+                    MessageBoxResult result = MessageBox.Show(Properties.Resources.Message_Tooltip, string.Empty,MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
                         tables.Clear();
@@ -302,7 +302,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                                     int endIndex = int.Parse(dialog.textbox2.Text);
                                     if (startIndex > endIndex)
                                     {
-                                        MessageBox.Show(string.Format("网络范围输入错误!"));
+                                        MessageBox.Show(string.Format(Properties.Resources.Message_Network_Range_Error));
                                         return;
                                     }
                                     else

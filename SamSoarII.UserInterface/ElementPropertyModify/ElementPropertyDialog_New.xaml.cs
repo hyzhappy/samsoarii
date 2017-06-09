@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -24,8 +25,24 @@ namespace SamSoarII.UserInterface
         {
             InitializeComponent();
             DataContext = this;
+            KeyDown += ElementPropertyDialog_New_KeyDown;
         }
-        
+
+        private void ElementPropertyDialog_New_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                EnsureButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+            else
+            {
+                if (e.Key == Key.Escape)
+                {
+                    CancelButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                }
+            }
+        }
+
         private BasePropModel bpmodel;
         public BasePropModel BPModel
         {

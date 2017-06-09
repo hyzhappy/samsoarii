@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.UserInterface"
+             xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300">
@@ -16,7 +17,7 @@
             <RowDefinition x:Uid="RowDefinition_2" Height="3*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel x:Uid="StackPanel_1" Orientation="Vertical" Margin="5">
-            <TextBlock x:Uid="TextBlock_1">连接方式:</TextBlock>
+            <TextBlock x:Uid="TextBlock_1" Text="{x:Static properties:Resources.Connection_Mode}"/>
             <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
                 <RadioButton x:Uid="radiobutton" x:Name="radiobutton" Margin="30,30,0,0" IsChecked="{Binding IsCOMLinked}" Checked="OnChecked" Unchecked="OnUnchecked"></RadioButton>
                 <TextBlock x:Uid="TextBlock_2" Margin="0,30,0,0">COM</TextBlock>
@@ -25,11 +26,11 @@
             </StackPanel>
         </StackPanel>
         <StackPanel x:Uid="ParamsSettingStackPanel" x:Name="ParamsSettingStackPanel" Grid.Row="1" Orientation="Vertical" Margin="5" Visibility="Hidden">
-            <TextBlock x:Uid="TextBlock_4">通信参数设置</TextBlock>
+            <TextBlock x:Uid="TextBlock_4" Text="{x:Static properties:Resources.Communication_Parameter_Setting}"/>
             <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
                 <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="30,10,0,0" Checked="OnChecked" Unchecked="OnUnchecked" IsChecked="{Binding IsAutoCheck}"></CheckBox>
-                <TextBlock x:Uid="TextBlock_5" Margin="0,10,0,0">自动检测</TextBlock>
-                <Button x:Uid="SettingButton" x:Name="SettingButton" Margin="20,8,0,0" Width="60" Height="20">手动配置</Button>
+                <TextBlock x:Uid="TextBlock_5" Margin="0,10,0,0" Text="{x:Static properties:Resources.Auto_Check}"/>
+                <Button x:Uid="SettingButton" x:Name="SettingButton" Margin="20,8,0,0" Width="60" Height="20" Content="{x:Static properties:Resources.Manual}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

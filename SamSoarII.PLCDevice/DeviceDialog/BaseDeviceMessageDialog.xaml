@@ -18,14 +18,13 @@
         <StackPanel Orientation="Vertical">
             <StackPanel.Resources>
                 <Style TargetType="Label">
-                    <Setter Property="FontSize" Value="20"></Setter>
-                    <Setter Property="Height" Value="40"></Setter>
+                    <Setter Property="FontSize" Value="18"></Setter>
+                    <Setter Property="Height" Value="35"></Setter>
                     <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                     <Setter Property="VerticalAlignment" Value="Center"></Setter>
                     <Setter Property="Margin" Value="0,5,0,5"></Setter>
                 </Style>
             </StackPanel.Resources>
-            <Label x:Name="message_block">寄存器范围</Label>
             <Label x:Name="X_block"></Label>
             <Label x:Name="Y_block"></Label>
             <Label x:Name="M_block"></Label>

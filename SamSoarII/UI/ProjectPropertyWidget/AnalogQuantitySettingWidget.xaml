@@ -4,89 +4,93 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.ProjectPropertyWidget"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
-    <Grid x:Uid="Grid_1">
+    <Grid>
         <Grid.Resources>
-            <Style x:Uid="Style_1" TargetType="StackPanel">
-                <Setter x:Uid="Setter_1" Property="Margin" Value="20,5,0,0"></Setter>
-                <Setter x:Uid="Setter_2" Property="Orientation" Value="Horizontal"></Setter>
+            <Style TargetType="StackPanel">
+                <Setter Property="Margin" Value="20,10,0,0"></Setter>
+                <Setter Property="Orientation" Value="Horizontal"></Setter>
             </Style>
-            <Style x:Uid="Style_2" TargetType="Label">
-                <Setter x:Uid="Setter_3" Property="FontSize" Value="16"></Setter>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="15"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
             </Style>
-            <Style x:Uid="Style_3" TargetType="ComboBox">
-                <Setter x:Uid="Setter_4" Property="Height" Value="20"></Setter>
-                <Setter x:Uid="Setter_5" Property="IsEditable" Value="False"></Setter>
+            <Style TargetType="ComboBox">
+                <Setter Property="Height" Value="20"></Setter>
+                <Setter Property="IsEditable" Value="False"></Setter>
             </Style>
-            <Style x:Uid="Style_4" TargetType="TextBox">
-                <Setter x:Uid="Setter_6" Property="FontSize" Value="16"></Setter>
-                <Setter x:Uid="Setter_7" Property="Height" Value="20"></Setter>
+            <Style TargetType="TextBox">
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="Height" Value="20"></Setter>
             </Style>
         </Grid.Resources>
-        <StackPanel x:Uid="StackPanel_1" Style="{x:Null}">
-            <StackPanel x:Uid="StackPanel_2" Style="{x:Null}">
-                <StackPanel x:Uid="StackPanel_3">
-                    <Label x:Uid="Label_1">输入</Label>
+        <StackPanel Style="{x:Null}">
+            <StackPanel Style="{x:Null}">
+                <StackPanel>
+                    <TextBlock Text="{x:Static properties:Resources.Input}"/>
                 </StackPanel>
-                <StackPanel x:Uid="StackPanel_4">
-                    <Label x:Uid="Label_2">通道:</Label>
-                    <ComboBox x:Uid="InputCombox1" x:Name="InputCombox1" Width="70" SelectedIndex="{Binding InputPassIndex}">
-                        <ComboBoxItem x:Uid="ComboBoxItem_1">AI0</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_2">AI1</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_3">AI2</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_4">AI3</ComboBoxItem>
+                <StackPanel>
+                    <TextBlock Text="{x:Static properties:Resources.Channel}"/>
+                    <ComboBox x:Name="InputCombox1" Width="70" SelectedIndex="{Binding InputPassIndex}">
+                        <ComboBoxItem>AI0</ComboBoxItem>
+                        <ComboBoxItem>AI1</ComboBoxItem>
+                        <ComboBoxItem>AI2</ComboBoxItem>
+                        <ComboBoxItem>AI3</ComboBoxItem>
                     </ComboBox>
-                    <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="20,2,0,0" VerticalAlignment="Center" Height="15" IsChecked="{Binding IsUsed}"></CheckBox>
-                    <Label x:Uid="Label_3">启用</Label>
-                    <Label x:Uid="Label_4" Margin="20,0,0,0">模式:</Label>
-                    <ComboBox x:Uid="InputCombox2" x:Name="InputCombox2" Width="85" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectedIndex="{Binding InputModeIndex}">
+                    <CheckBox x:Name="checkbox" Margin="20,2,0,0" VerticalAlignment="Center" Height="15" IsChecked="{Binding IsUsed}"></CheckBox>
+                    <TextBlock Text="{x:Static properties:Resources.Enabled}"/>
+                    <TextBlock Margin="20,0,0,0" Text="{x:Static properties:Resources.Mode}"/>
+                    <ComboBox x:Name="InputCombox2" Width="85" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectedIndex="{Binding InputModeIndex}">
                         <ComboBoxItem x:Uid="ComboBoxItem_5">0-5V</ComboBoxItem>
                         <ComboBoxItem x:Uid="ComboBoxItem_6">4-20mA</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel x:Uid="StackPanel_5">
-                    <Label x:Uid="Label_5">平均采样次数:</Label>
-                    <ComboBox x:Uid="InputCombox3" x:Name="InputCombox3" Width="50" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectedIndex="{Binding SamplingtimesIndex}">
-                        <ComboBoxItem x:Uid="ComboBoxItem_7">4</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_8">8</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_9">16</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_10">32</ComboBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static properties:Resources.Average_Number_Of_Samples}"/>
+                    <ComboBox x:Name="InputCombox3" Width="50" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectedIndex="{Binding SamplingtimesIndex}">
+                        <ComboBoxItem>4</ComboBoxItem>
+                        <ComboBoxItem>8</ComboBoxItem>
+                        <ComboBoxItem>16</ComboBoxItem>
+                        <ComboBoxItem>32</ComboBoxItem>
                     </ComboBox>
-                    <Label x:Uid="Label_6" Margin="20,0,0,0">采样当前值:</Label>
-                    <TextBox x:Uid="TextBox_1" Width="20" IsReadOnly="True">D</TextBox>
-                    <TextBox x:Uid="InputTextbox1" x:Name="InputTextbox1" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" Margin="5,0,0,0" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" Text="{Binding SamplingValue}"></TextBox>
-                    <Label x:Uid="Label_7">(0 - 8191)</Label>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static properties:Resources.Current_Value_Of_Samples}"/>
+                    <TextBox Width="20" IsReadOnly="True">D</TextBox>
+                    <TextBox x:Name="InputTextbox1" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" Margin="5,0,0,0" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" Text="{Binding SamplingValue}"></TextBox>
+                    <TextBlock>(0 - 8191)</TextBlock>
                 </StackPanel>
                 <StackPanel x:Uid="StackPanel_6">
-                    <Label x:Uid="Label_8">数字量范围:</Label>
+                    <TextBlock Text="{x:Static properties:Resources.Digital_Quantity_Range}"/>
                     <TextBox x:Uid="InputTextbox2" x:Name="InputTextbox2" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" Text="{Binding InputStartRange}"></TextBox>
-                    <Label x:Uid="Label_9" Margin="10,0,10,0">—</Label>
+                    <TextBlock Margin="10,0,10,0">—</TextBlock>
                     <TextBox x:Uid="InputTextbox3" x:Name="InputTextbox3" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" Text="{Binding InputEndRange}"></TextBox>
                 </StackPanel>
             </StackPanel>
-            <StackPanel x:Uid="StackPanel_7" Style="{x:Null}" Margin="0,30,0,0">
-                <StackPanel x:Uid="StackPanel_8">
-                    <Label x:Uid="Label_10">输出</Label>
+            <StackPanel Style="{x:Null}" Margin="0,60,0,0">
+                <StackPanel>
+                    <TextBlock Text="{x:Static properties:Resources.Output}"/>
                 </StackPanel>
                 <StackPanel x:Uid="StackPanel_9">
-                    <Label x:Uid="Label_11">通道:</Label>
-                    <ComboBox x:Uid="OutputComboBox1" Width="70" x:Name="OutputComboBox1" SelectedIndex="{Binding OutputPassIndex}">
-                        <ComboBoxItem x:Uid="ComboBoxItem_11">AO0</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_12">AO1</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_13">AO2</ComboBoxItem>
-                        <ComboBoxItem x:Uid="ComboBoxItem_14">AO3</ComboBoxItem>
+                    <TextBlock Text="{x:Static properties:Resources.Channel}"/>
+                    <ComboBox Width="70" x:Name="OutputComboBox1" SelectedIndex="{Binding OutputPassIndex}">
+                        <ComboBoxItem>AO0</ComboBoxItem>
+                        <ComboBoxItem>AO1</ComboBoxItem>
+                        <ComboBoxItem>AO2</ComboBoxItem>
+                        <ComboBoxItem>AO3</ComboBoxItem>
                     </ComboBox>
-                    <Label x:Uid="Label_12" Margin="40,0,0,0">模式:</Label>
+                    <TextBlock Margin="40,0,0,0" Text="{x:Static properties:Resources.Mode}"/>
                     <ComboBox x:Uid="OutputComboBox2" Width="85" x:Name="OutputComboBox2" SelectedIndex="{Binding OutputModeIndex}">
                         <ComboBoxItem x:Uid="ComboBoxItem_15">0-5V</ComboBoxItem>
                         <ComboBoxItem x:Uid="ComboBoxItem_16">4-20mA</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel x:Uid="StackPanel_10">
-                    <Label x:Uid="Label_13">数字量范围:</Label>
+                <StackPanel>
+                    <TextBlock Text="{x:Static properties:Resources.Digital_Quantity_Range}"/>
                     <TextBox x:Uid="OutputTextBox1" x:Name="OutputTextBox1" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" Text="{Binding OutputStartRange}"></TextBox>
-                    <Label x:Uid="Label_14" Margin="10,0,10,0">—</Label>
+                    <TextBlock Margin="10,0,10,0">—</TextBlock>
                     <TextBox x:Uid="OutputTextBox2" x:Name="OutputTextBox2" LostFocus="OnLostFocus" GotFocus="OnGotFocus" PreviewKeyDown="OnPreviewKeyDown" Width="70" Text="{Binding OutputEndRange}"></TextBox>
                 </StackPanel>
             </StackPanel>

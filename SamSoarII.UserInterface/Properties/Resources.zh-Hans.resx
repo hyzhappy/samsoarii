@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,186 +112,186 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Ensure" xml:space="preserve">
-    <value>Ensure</value>
+    <value>确认</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="Element_Comment" xml:space="preserve">
-    <value>Element Comment</value>
+    <value>元件注释</value>
   </data>
   <data name="Parameter_Description" xml:space="preserve">
-    <value>Parameter Description</value>
+    <value>参数描述</value>
   </data>
   <data name="Element_Parameter_Setting" xml:space="preserve">
-    <value>Element Parameter Setting</value>
+    <value>元件参数设置</value>
   </data>
   <data name="Data_Type" xml:space="preserve">
-    <value>Data Type</value>
+    <value>数据类型</value>
   </data>
   <data name="Element_Value_Modify" xml:space="preserve">
-    <value>ElementValueModify</value>
+    <value>元件值修改</value>
   </data>
   <data name="Write_In" xml:space="preserve">
-    <value>Write In</value>
+    <value>写入</value>
   </data>
   <data name="Write_ON" xml:space="preserve">
-    <value>Write ON</value>
+    <value>写入ON</value>
   </data>
   <data name="Write_OFF" xml:space="preserve">
-    <value>Write OFF</value>
+    <value>写入OFF</value>
   </data>
   <data name="Force_ON" xml:space="preserve">
-    <value>Force ON</value>
+    <value>强制ON</value>
   </data>
   <data name="Force_OFF" xml:space="preserve">
-    <value>Force OFF</value>
+    <value>强制OFF</value>
   </data>
   <data name="Cancel_Force" xml:space="preserve">
-    <value>Cancel Force</value>
+    <value>取消强制</value>
   </data>
   <data name="Cancel_All_Force" xml:space="preserve">
-    <value>Cancel Al Force</value>
+    <value>取消全部强制</value>
   </data>
   <data name="Connection_Mode" xml:space="preserve">
-    <value>Connection Mode</value>
+    <value>连接方式</value>
   </data>
   <data name="Communication_Parameter_Setting" xml:space="preserve">
-    <value>Communication Parameter Setting</value>
+    <value>通信参数设置</value>
   </data>
   <data name="Auto_Check" xml:space="preserve">
-    <value>Auto Check</value>
+    <value>自动检测</value>
   </data>
   <data name="Manual" xml:space="preserve">
-    <value>Manual</value>
+    <value>手动配置</value>
   </data>
   <data name="AddNewSubRoutine" xml:space="preserve">
-    <value>AddNewSubRoutine</value>
+    <value>新建子程序</value>
   </data>
   <data name="SubRoutine_Name" xml:space="preserve">
-    <value>SubRoutine Name</value>
+    <value>子程序名</value>
   </data>
   <data name="CommunicationSetting" xml:space="preserve">
-    <value>Communication Setting</value>
+    <value>通信设置</value>
   </data>
   <data name="Communication_Test" xml:space="preserve">
-    <value>Communication Test</value>
+    <value>通信测试</value>
   </data>
   <data name="Timeout" xml:space="preserve">
-    <value>Timeout</value>
+    <value>超时时间</value>
   </data>
   <data name="Data_Bit" xml:space="preserve">
-    <value>Data Bit</value>
+    <value>数据位</value>
   </data>
   <data name="Stop_Bit" xml:space="preserve">
-    <value>Stop Bit</value>
+    <value>停止位</value>
   </data>
   <data name="Check_Code" xml:space="preserve">
-    <value>Check Code</value>
+    <value>校验码</value>
   </data>
   <data name="Baud_Rate" xml:space="preserve">
-    <value>Baud Rate</value>
+    <value>波特率</value>
   </data>
   <data name="Serialport" xml:space="preserve">
-    <value>Serialport</value>
+    <value>PC串口</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Browse</value>
+    <value>浏览</value>
   </data>
   <data name="Path" xml:space="preserve">
-    <value>Path</value>
+    <value>路径</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>导入</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Export</value>
+    <value>导出</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>文件选择</value>
   </data>
   <data name="File_Name" xml:space="preserve">
-    <value>File Name</value>
+    <value>文件名</value>
   </data>
   <data name="Separator_Select" xml:space="preserve">
-    <value>Separator Select</value>
+    <value>分隔符选择</value>
   </data>
   <data name="Parse_Error_By_Wrong_Separator" xml:space="preserve">
-    <value>Parse Error By Wrong Separator</value>
+    <value>分隔符不正确将导致解析错误</value>
   </data>
   <data name="CSV_Import" xml:space="preserve">
-    <value>CSV Import</value>
+    <value>CSV导入</value>
   </data>
   <data name="CSV_Export" xml:space="preserve">
-    <value>CSV Export</value>
+    <value>CSV导出</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>默认</value>
   </data>
   <data name="Message_Default" xml:space="preserve">
-    <value>Do you want to restore the default?</value>
+    <value>是否恢复默认值?</value>
   </data>
   <data name="Instruction_Input" xml:space="preserve">
-    <value>Instruction Input</value>
+    <value>指令输入</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Help</value>
+    <value>帮助</value>
   </data>
   <data name="LaddreDiagram" xml:space="preserve">
-    <value>LadderDiagram</value>
+    <value>梯形图</value>
   </data>
   <data name="Annotation_Edit" xml:space="preserve">
-    <value>Annotation Edit</value>
+    <value>注释编辑</value>
   </data>
   <data name="Detailed_Description" xml:space="preserve">
-    <value>Detailed Description</value>
+    <value>详细描述</value>
   </data>
   <data name="Language_Locale_Setting" xml:space="preserve">
-    <value>Language Locale Setting</value>
+    <value>语言区域设置</value>
   </data>
   <data name="Message_Lang" xml:space="preserve">
-    <value>Changes to language settings only take effect after program restart!</value>
+    <value>对语言设置的更改只有在程序重启后生效!</value>
   </data>
   <data name="Network_Number" xml:space="preserve">
-    <value>Network Number</value>
+    <value>网络号</value>
   </data>
   <data name="Brief_Description" xml:space="preserve">
-    <value>Brief Description</value>
+    <value>简要说明</value>
   </data>
   <data name="New_Project" xml:space="preserve">
-    <value>New Project</value>
+    <value>新工程</value>
   </data>
   <data name="PLC_Type" xml:space="preserve">
-    <value>PLC Type</value>
+    <value>PLC型号</value>
   </data>
   <data name="Project_Setting" xml:space="preserve">
-    <value>Project Setting</value>
+    <value>工程设置</value>
   </data>
   <data name="Setting" xml:space="preserve">
-    <value>Setting</value>
+    <value>设置</value>
   </data>
   <data name="Project_Name" xml:space="preserve">
-    <value>Project Name</value>
+    <value>工程名字</value>
   </data>
   <data name="Number_Lock" xml:space="preserve">
-    <value>Number Lock</value>
+    <value>数值锁定</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lock</value>
+    <value>锁定</value>
   </data>
   <data name="Message_Is_Override" xml:space="preserve">
-    <value>Whether it is covered</value>
+    <value>是否覆盖</value>
   </data>
   <data name="Message_Already_Exist" xml:space="preserve">
-    <value>already exists in the current directory</value>
+    <value>已在当前目录存在</value>
   </data>
   <data name="Valid_Range" xml:space="preserve">
-    <value>The valid range is</value>
+    <value>有效范围为</value>
   </data>
 </root>

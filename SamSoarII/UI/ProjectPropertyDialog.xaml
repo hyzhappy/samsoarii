@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
         mc:Ignorable="d"
         Title="{x:Static properties:Resources.Project_Setting}" Height="600" Width="800"
-        PreviewKeyDown="Window_PreviewKeyDown">
+        PreviewKeyDown="Window_PreviewKeyDown" ResizeMode="NoResize">
     <Grid x:Uid="Grid_1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Uid="ColumnDefinition_1" Width="1*"></ColumnDefinition>

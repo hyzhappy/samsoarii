@@ -143,6 +143,32 @@ namespace SamSoarII.AppMain.UI
             TreeViewGrid.Children.Clear();
         }
         #region Event handler
+        private void Click_zh_Hans(object sender, RoutedEventArgs e)
+        {
+            using (LanaEnsureDialog dialog = new LanaEnsureDialog())
+            {
+                dialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    GlobalSetting.IsOpenLSetting = true;
+                    GlobalSetting.LanagArea = string.Format("zh-Hans");
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            }
+        }
+        private void Click_en_US(object sender, RoutedEventArgs e)
+        {
+            using (LanaEnsureDialog dialog = new LanaEnsureDialog())
+            {
+                dialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    GlobalSetting.IsOpenLSetting = true;
+                    GlobalSetting.LanagArea = string.Format("en");
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            }
+        }
         private void OnCommentModeToggle(object sender, RoutedEventArgs e)
         {
             _interactionFacade.IsCommentMode = !_interactionFacade.IsCommentMode;
@@ -195,14 +221,14 @@ namespace SamSoarII.AppMain.UI
             var projectMessage = ProjectFileManager.RecentUsedProjectMessages.ElementAt(index);
             if (!File.Exists(projectMessage.Value.Item2))
             {
-                MessageBox.Show(string.Format("file has been moved or deleted"));
+                MessageBox.Show(string.Format("{0}",Properties.Resources.Message_File_Moved));
                 ProjectFileManager.Delete(index);
             }
             else
             {
                 if (_interactionFacade.ProjectLoaded && projectMessage.Value.Item1 == _interactionFacade.ProjectModel.ProjectName)
                 {
-                    MessageBox.Show("工程文件已加载!");
+                    MessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded));
                 }
                 else
                 {
@@ -271,7 +297,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void CreateProject()
         {
-            _interactionFacade.CreateProject(string.Format("工程项目"), string.Empty);
+            _interactionFacade.CreateProject(string.Format("{0}",Properties.Resources.Project), string.Empty);
             LadderModeButton.IsChecked = true;
             InstModeButton.IsChecked = false;
             LACProj.Show();
@@ -293,8 +319,8 @@ namespace SamSoarII.AppMain.UI
         }
         public MessageBoxResult ShowSaveYesNoCancelDialog()
         {
-            string title = "确认保存";
-            string text = String.Format("{0:s}已经更改，是否保存？", _interactionFacade.ProjectModel.ProjectName);
+            string title = Properties.Resources.Message_Confirm_Save;
+            string text = String.Format("{0:s}{1}", _interactionFacade.ProjectModel.ProjectName, Properties.Resources.Message_Changed);
             return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
         }
         #endregion
@@ -856,18 +882,18 @@ namespace SamSoarII.AppMain.UI
                         string dir = newProjectDialog.PathContent;
                         if (!Directory.Exists(dir))
                         {
-                            MessageBox.Show("指定路径不存在");
+                            MessageBox.Show(Properties.Resources.Message_Path);
                             return;
                         }
                         if (name == string.Empty)
                         {
-                            MessageBox.Show("文件名不能为空");
+                            MessageBox.Show(Properties.Resources.Message_File_Name);
                             return;
                         }
                         string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
                         if (File.Exists(fullFileName))
                         {
-                            MessageBox.Show("指定路径已存在同名文件");
+                            MessageBox.Show(Properties.Resources.Message_File_Exist);
                             return;
                         }
                         CreateProject(name, fullFileName);
@@ -893,12 +919,12 @@ namespace SamSoarII.AppMain.UI
             {
                 if (_interactionFacade.ProjectFullFileName == openFileDialog.FileName)
                 {
-                    MessageBox.Show("工程文件已加载!");
+                    MessageBox.Show(Properties.Resources.Message_Project_Loaded);
                     return;
                 }
                 if (!OpenProject(openFileDialog.FileName))
                 {
-                    MessageBox.Show("不正确的工程文件，工程文件已损坏!");
+                    MessageBox.Show(Properties.Resources.Message_Project_Error);
                 }
             }
         }
@@ -967,14 +993,14 @@ namespace SamSoarII.AppMain.UI
                         dialog.Close();
                     }
                     else
-                        MessageBox.Show("通信失败！请检查参数设置。");
+                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                 };
                 dialog.CommunicationTest += (sender1, e1) => 
                 {
                     if (!_interactionFacade.CommunicationTest())
-                        MessageBox.Show("通信失败！请检查参数设置。");
+                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                     else
-                        MessageBox.Show("通信成功!");
+                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
                 };
                 dialog.ShowDialog();
             }
@@ -1258,11 +1284,11 @@ namespace SamSoarII.AppMain.UI
             {
                 if (!_interactionFacade.CommunicationTest())
                 {
-                    MessageBox.Show("通信失败！请检查参数设置。");
+                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                 }
                 else
                 {
-                    MessageBox.Show("通信成功!");
+                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
                 }
                 dialog.Close();
             };
@@ -1270,41 +1296,16 @@ namespace SamSoarII.AppMain.UI
             {
                 if (!_interactionFacade.CommunicationTest())
                 {
-                    MessageBox.Show("通信失败！请检查参数设置。");
+                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                 }
                 else
                 {
-                    MessageBox.Show("通信成功!");
+                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
                 }
             };
             dialog.ShowDialog();
         }
-        private void Click_zh_Hans(object sender, RoutedEventArgs e)
-        {
-            using (LanaEnsureDialog dialog = new LanaEnsureDialog())
-            {
-                dialog.EnsureButtonClick += (sender1, e1) => 
-                {
-                    GlobalSetting.IsOpenLSetting = true;
-                    GlobalSetting.LanagArea = string.Format("zh-Hans");
-                    dialog.Close();
-                };
-                dialog.ShowDialog();
-            }
-        }
-        private void Click_en_US(object sender, RoutedEventArgs e)
-        {
-            using (LanaEnsureDialog dialog = new LanaEnsureDialog())
-            {
-                dialog.EnsureButtonClick += (sender1, e1) =>
-                {
-                    GlobalSetting.IsOpenLSetting = true;
-                    GlobalSetting.LanagArea = string.Format("en");
-                    dialog.Close();
-                };
-                dialog.ShowDialog();
-            }
-        }
+        
     }
 }
 

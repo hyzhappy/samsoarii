@@ -484,7 +484,7 @@
     <value>全部程序</value>
   </data>
   <data name="Element" xml:space="preserve">
-    <value>元件</value>
+    <value>软元件</value>
   </data>
   <data name="LadderDiagram" xml:space="preserve">
     <value>梯形图</value>
@@ -616,7 +616,7 @@
     <value>新建函数块</value>
   </data>
   <data name="PTV_New_Modbus_Table" xml:space="preserve">
-    <value>新建MODBUS表格</value>
+    <value>新建Modbus表格</value>
   </data>
   <data name="PTV_Rename" xml:space="preserve">
     <value>重命名</value>
@@ -725,5 +725,440 @@
   </data>
   <data name="Export_CSV" xml:space="preserve">
     <value>导出CSV</value>
+  </data>
+  <data name="Add_Element" xml:space="preserve">
+    <value>软元件添加</value>
+  </data>
+  <data name="Intra_Address" xml:space="preserve">
+    <value>变址</value>
+  </data>
+  <data name="Offset_Element_Select" xml:space="preserve">
+    <value>偏移元件选择</value>
+  </data>
+  <data name="Batch" xml:space="preserve">
+    <value>批量</value>
+  </data>
+  <data name="Number_Of_Additions" xml:space="preserve">
+    <value>添加个数</value>
+  </data>
+  <data name="Quick_Add_Element" xml:space="preserve">
+    <value>快速添加软元件</value>
+  </data>
+  <data name="Routine_Range" xml:space="preserve">
+    <value>程序范围</value>
+  </data>
+  <data name="Please_Select_Range" xml:space="preserve">
+    <value>请选择范围:</value>
+  </data>
+  <data name="Network_Range" xml:space="preserve">
+    <value>网络范围</value>
+  </data>
+  <data name="All_Networks" xml:space="preserve">
+    <value>全部网络</value>
+  </data>
+  <data name="Network_Number_Range" xml:space="preserve">
+    <value>网络号范围</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="Quick_Add" xml:space="preserve">
+    <value>快速添加</value>
+  </data>
+  <data name="Monitor_Start" xml:space="preserve">
+    <value>监视开始</value>
+  </data>
+  <data name="Monitor_Stop" xml:space="preserve">
+    <value>监视停止</value>
+  </data>
+  <data name="Element_Delete" xml:space="preserve">
+    <value>软元件删除</value>
+  </data>
+  <data name="ON_OFF_CurrentValue" xml:space="preserve">
+    <value>ON/OFF/当前值</value>
+  </data>
+  <data name="Set_Value" xml:space="preserve">
+    <value>设定值</value>
+  </data>
+  <data name="Edit_Color" xml:space="preserve">
+    <value>编辑颜色</value>
+  </data>
+  <data name="Font_Range" xml:space="preserve">
+    <value>字体范围</value>
+  </data>
+  <data name="Font_Size" xml:space="preserve">
+    <value>字体大小</value>
+  </data>
+  <data name="Font_Style" xml:space="preserve">
+    <value>字体风格</value>
+  </data>
+  <data name="Font_Color" xml:space="preserve">
+    <value>字体颜色</value>
+  </data>
+  <data name="Effect_Preview" xml:space="preserve">
+    <value>效果预览</value>
+  </data>
+  <data name="Timed_Save_Settings" xml:space="preserve">
+    <value>定时保存设置</value>
+  </data>
+  <data name="Timed_Save" xml:space="preserve">
+    <value>定时保存</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>*分钟</value>
+  </data>
+  <data name="Baud_Rate" xml:space="preserve">
+    <value>波特率</value>
+  </data>
+  <data name="Data_Bits" xml:space="preserve">
+    <value>数据位</value>
+  </data>
+  <data name="Stop_Bit" xml:space="preserve">
+    <value>停止位</value>
+  </data>
+  <data name="Check_Code" xml:space="preserve">
+    <value>校验码</value>
+  </data>
+  <data name="Free_Port_Communication" xml:space="preserve">
+    <value>自由口通信</value>
+  </data>
+  <data name="Modbus_Master_Station" xml:space="preserve">
+    <value>Modbus主站</value>
+  </data>
+  <data name="Modbus_Slaver_Station" xml:space="preserve">
+    <value>Modbus从站</value>
+  </data>
+  <data name="Station_Number_Setting" xml:space="preserve">
+    <value>站号设置</value>
+  </data>
+  <data name="Timeout" xml:space="preserve">
+    <value>超时时间</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>默认值</value>
+  </data>
+  <data name="Buffer_Bit" xml:space="preserve">
+    <value>缓冲位</value>
+  </data>
+  <data name="Input" xml:space="preserve">
+    <value>输入</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>模式</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>通道</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="Average_Number_Of_Samples" xml:space="preserve">
+    <value>平均采样次数</value>
+  </data>
+  <data name="Current_Value_Of_Samples" xml:space="preserve">
+    <value>采样当前值</value>
+  </data>
+  <data name="Digital_Quantity_Range" xml:space="preserve">
+    <value>数字量范围</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>输出</value>
+  </data>
+  <data name="Expand_Module_Settings" xml:space="preserve">
+    <value>拓展模块设置</value>
+  </data>
+  <data name="Enable_Extension" xml:space="preserve">
+    <value>使用拓展功能</value>
+  </data>
+  <data name="Select_Module" xml:space="preserve">
+    <value>选择模块</value>
+  </data>
+  <data name="Module_Type" xml:space="preserve">
+    <value>模块类型</value>
+  </data>
+  <data name="Module_One" xml:space="preserve">
+    <value>模块一</value>
+  </data>
+  <data name="Module_Two" xml:space="preserve">
+    <value>模块二</value>
+  </data>
+  <data name="Module_Three" xml:space="preserve">
+    <value>模块三</value>
+  </data>
+  <data name="Module_Four" xml:space="preserve">
+    <value>模块四</value>
+  </data>
+  <data name="Module_Five" xml:space="preserve">
+    <value>模块五</value>
+  </data>
+  <data name="Module_Six" xml:space="preserve">
+    <value>模块六</value>
+  </data>
+  <data name="Module_Seven" xml:space="preserve">
+    <value>模块七</value>
+  </data>
+  <data name="Module_Eight" xml:space="preserve">
+    <value>模块八</value>
+  </data>
+  <data name="Filter_Setting" xml:space="preserve">
+    <value>滤波设置</value>
+  </data>
+  <data name="Enable_Filter_Time" xml:space="preserve">
+    <value>启用滤波时间</value>
+  </data>
+  <data name="Power-off_Retention_Area_Setting" xml:space="preserve">
+    <value>断电保持区设置</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>长度</value>
+  </data>
+  <data name="Start_Address" xml:space="preserve">
+    <value>起始地址</value>
+  </data>
+  <data name="Not_Clear_While_Download" xml:space="preserve">
+    <value>下载时不清除</value>
+  </data>
+  <data name="Current_Color" xml:space="preserve">
+    <value>当前颜色</value>
+  </data>
+  <data name="Preview_Color" xml:space="preserve">
+    <value>上一种颜色</value>
+  </data>
+  <data name="Read_Bit" xml:space="preserve">
+    <value>读位</value>
+  </data>
+  <data name="Read_Word" xml:space="preserve">
+    <value>读字</value>
+  </data>
+  <data name="Write_Bit" xml:space="preserve">
+    <value>写位</value>
+  </data>
+  <data name="Write_Word" xml:space="preserve">
+    <value>写字</value>
+  </data>
+  <data name="Write_Bits" xml:space="preserve">
+    <value>写多位</value>
+  </data>
+  <data name="Write_Words" xml:space="preserve">
+    <value>写多字</value>
+  </data>
+  <data name="Register_Range" xml:space="preserve">
+    <value>寄存器地址范围</value>
+  </data>
+  <data name="MessageBox_Communication_Failed" xml:space="preserve">
+    <value>通信失败！请检查参数设置。</value>
+  </data>
+  <data name="MessageBox_Communication_Success" xml:space="preserve">
+    <value>通信成功!</value>
+  </data>
+  <data name="Message_Path" xml:space="preserve">
+    <value>指定路径不存在!</value>
+  </data>
+  <data name="Message_File_Name" xml:space="preserve">
+    <value>文件名不能为空!</value>
+  </data>
+  <data name="Message_File_Exist" xml:space="preserve">
+    <value>指定路径已存在同名文件!</value>
+  </data>
+  <data name="Message_Project_Loaded" xml:space="preserve">
+    <value>工程文件已加载!</value>
+  </data>
+  <data name="Message_Project_Error" xml:space="preserve">
+    <value>不正确的工程文件，工程文件已损坏！</value>
+  </data>
+  <data name="Message_File_Moved" xml:space="preserve">
+    <value>文件已移动或删除!</value>
+  </data>
+  <data name="Message_Confirm_Save" xml:space="preserve">
+    <value>确认保存</value>
+  </data>
+  <data name="Message_Changed" xml:space="preserve">
+    <value>已经更改,是否保存?</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>重要</value>
+  </data>
+  <data name="Message_Delete" xml:space="preserve">
+    <value>删除后不能恢复，是否确定？</value>
+  </data>
+  <data name="Message_Name_Needed" xml:space="preserve">
+    <value>名称不能为空！</value>
+  </data>
+  <data name="Message_illegal_Char" xml:space="preserve">
+    <value>存在非法字符：</value>
+  </data>
+  <data name="Message_Fold_File_Exist" xml:space="preserve">
+    <value>同文件夹下已存在名称</value>
+  </data>
+  <data name="Message_Name_Format_illegal" xml:space="preserve">
+    <value>名称格式非法！</value>
+  </data>
+  <data name="Message_Subroutine_Exist" xml:space="preserve">
+    <value>已存在子程序</value>
+  </data>
+  <data name="Message_Funcblock_Exist" xml:space="preserve">
+    <value>已存在函数功能块</value>
+  </data>
+  <data name="Message_Renamed_Error" xml:space="preserve">
+    <value>已存在正在重命名的项目！</value>
+  </data>
+  <data name="Message_Text" xml:space="preserve">
+    <value>当前文本为只读权限，不能进行更改！</value>
+  </data>
+  <data name="Message_Missing_Parameters" xml:space="preserve">
+    <value>缺少参数。</value>
+  </data>
+  <data name="Message_Intra_Error" xml:space="preserve">
+    <value>变址计数器可能会重合，请谨慎使用。</value>
+  </data>
+  <data name="Counter" xml:space="preserve">
+    <value>计数器</value>
+  </data>
+  <data name="Message_Has_Been_Used" xml:space="preserve">
+    <value>已被使用！</value>
+  </data>
+  <data name="Message_Used_Error" xml:space="preserve">
+    <value>被尝试在别的地方使用。</value>
+  </data>
+  <data name="Message_FOR" xml:space="preserve">
+    <value>FOR指令不能和别的输出指令在同一个网络下使用。</value>
+  </data>
+  <data name="Message_LBL" xml:space="preserve">
+    <value>LBL指令不能带条件。</value>
+  </data>
+  <data name="Message_NEXT" xml:space="preserve">
+    <value>NEXT指令不能和别的输出指令在同一个网络下使用。</value>
+  </data>
+  <data name="Message_FOR_Not_Found" xml:space="preserve">
+    <value>未找到对应的FOR指令。</value>
+  </data>
+  <data name="Message_Intra_Coil_Error" xml:space="preserve">
+    <value>变址线圈输出可能会重合，请谨慎使用。</value>
+  </data>
+  <data name="Jump_Mark" xml:space="preserve">
+    <value>跳转标记</value>
+  </data>
+  <data name="Message_Multi_Coil" xml:space="preserve">
+    <value>多线圈输出错误！</value>
+  </data>
+  <data name="Message_Func_Not_Found" xml:space="preserve">
+    <value>找不到用户函数</value>
+  </data>
+  <data name="User_Function" xml:space="preserve">
+    <value>用户函数</value>
+  </data>
+  <data name="Message_CALL" xml:space="preserve">
+    <value>不能被CALLM指令调用。</value>
+  </data>
+  <data name="Message_Modbus_Table" xml:space="preserve">
+    <value>找不到MODBUS表格</value>
+  </data>
+  <data name="is_illegal" xml:space="preserve">
+    <value>不合法</value>
+  </data>
+  <data name="Message_SubRoutine_Not_Found" xml:space="preserve">
+    <value>找不到子程序</value>
+  </data>
+  <data name="Message_Stack" xml:space="preserve">
+    <value>缺少栈顶值作为条件。</value>
+  </data>
+  <data name="Message_NEXT_Not_Found" xml:space="preserve">
+    <value>找不到对应的结束符NEXT。</value>
+  </data>
+  <data name="Message_Jump_Not_Found" xml:space="preserve">
+    <value>找不到对应的跳转标记</value>
+  </data>
+  <data name="Message_Interrupt_1" xml:space="preserve">
+    <value>禁止在中断子程序中使用输出线圈。</value>
+  </data>
+  <data name="Message_Interrupt_2" xml:space="preserve">
+    <value>禁止在中断子程序中使用边沿条件判断。</value>
+  </data>
+  <data name="Message_Interrupt_3" xml:space="preserve">
+    <value>禁止在中断子程序中使用计时器。</value>
+  </data>
+  <data name="Message_Interrupt_4" xml:space="preserve">
+    <value>禁止在中断子程序中使用计数器。</value>
+  </data>
+  <data name="Message_Interrupt_5" xml:space="preserve">
+    <value>禁止在中断子程序中使用该指令。</value>
+  </data>
+  <data name="Message_LBL_Error" xml:space="preserve">
+    <value>LBL指令不能和别的输出指令在同一个网络下使用。</value>
+  </data>
+  <data name="Message_Input_Empty" xml:space="preserve">
+    <value>输入为空.</value>
+  </data>
+  <data name="Message_Instruction_Not_Exist" xml:space="preserve">
+    <value>输入的指令不存在！</value>
+  </data>
+  <data name="Message_Subroutine_Name_Required" xml:space="preserve">
+    <value>必须输入子程序名称。</value>
+  </data>
+  <data name="Message_Func_Name_Required" xml:space="preserve">
+    <value>必须输入函数名称。</value>
+  </data>
+  <data name="Message_CFunc_Not_Found" xml:space="preserve">
+    <value>找不到C函数</value>
+  </data>
+  <data name="Message_Modbus_Name_Requied" xml:space="preserve">
+    <value>必须输入MODBUS表格名称。</value>
+  </data>
+  <data name="Message_Func_Params_Num_Error" xml:space="preserve">
+    <value>输入的参数数量与函数不相符！</value>
+  </data>
+  <data name="Message_Input_Params_Num_Error" xml:space="preserve">
+    <value>输入的参数数量与指令不相符！</value>
+  </data>
+  <data name="Message_Can_Not_CALL" xml:space="preserve">
+    <value>无法被CALLM指令调用，请检查参数的个数和类型。</value>
+  </data>
+  <data name="Message_Modbus_Table_Error" xml:space="preserve">
+    <value>Modbus表格非法，请检查表格项是否补全。</value>
+  </data>
+  <data name="Message_Table_Exist" xml:space="preserve">
+    <value>表格已存在</value>
+  </data>
+  <data name="Message_Bit_Required" xml:space="preserve">
+    <value>需要输入位寄存器！</value>
+  </data>
+  <data name="Message_Word_Requried" xml:space="preserve">
+    <value>需要输入单字寄存器！</value>
+  </data>
+  <data name="Message_Table_Name_Exist" xml:space="preserve">
+    <value>表格名已存在！</value>
+  </data>
+  <data name="Message_Tooltip" xml:space="preserve">
+    <value>已添加软元件将会删除，是否继续?</value>
+  </data>
+  <data name="Message_Network_Range_Error" xml:space="preserve">
+    <value>网络范围输入错误!</value>
+  </data>
+  <data name="Message_Number_Error" xml:space="preserve">
+    <value>数值输入错误!</value>
+  </data>
+  <data name="Message_Element_Has_Added" xml:space="preserve">
+    <value>该软元件已添加!</value>
+  </data>
+  <data name="Variable_Modification" xml:space="preserve">
+    <value>变量修改</value>
+  </data>
+  <data name="Message_Can_Not_Be_Written" xml:space="preserve">
+    <value>该类寄存器不可写入!</value>
+  </data>
+  <data name="Message_Over_Max_Len" xml:space="preserve">
+    <value>超过最大长度范围,请重新输入!</value>
+  </data>
+  <data name="Invalid_Input" xml:space="preserve">
+    <value>输入值非法!</value>
+  </data>
+  <data name="Message_Converter_Error" xml:space="preserve">
+    <value>类型之间无法转换!</value>
+  </data>
+  <data name="Message_File_Requried" xml:space="preserve">
+    <value>请选择文件</value>
+  </data>
+  <data name="Message_Alias_Exist" xml:space="preserve">
+    <value>别名已存在</value>
   </data>
 </root>

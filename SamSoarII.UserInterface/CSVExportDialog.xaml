@@ -4,20 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         mc:Ignorable="d"
-        Title="CSVExportDialog" Height="360" Width="600" ResizeMode="NoResize">
+        Title="{x:Static properties:Resources.CSV_Export}" Height="360" Width="600" ResizeMode="NoResize">
     <Canvas x:Uid="Canvas_1">
-        <Label x:Uid="Label_1" Canvas.Top="55" Canvas.Left="89">CSV文件名</Label>
-        <Label x:Uid="Label_2" Canvas.Left="100" Canvas.Top="125">路径</Label>
-        <Label x:Uid="Label_3" Canvas.Top="195" Canvas.Left="88">分隔符选择</Label>
+        <Label x:Uid="Label_1" Canvas.Top="55" Canvas.Left="89" Content="{x:Static properties:Resources.File_Name}"/>
+        <Label x:Uid="Label_2" Canvas.Left="100" Canvas.Top="125" Content="{x:Static properties:Resources.Path}"/>
+        <Label x:Uid="Label_3" Canvas.Top="195" Canvas.Left="88" Content="{x:Static properties:Resources.Separator_Select}"/>
         <TextBox x:Uid="NameTextBox" x:Name="NameTextBox" Width="121" Height="25" Canvas.Left="193" Canvas.Top="57" Padding="0,2,0,0"></TextBox>
         <TextBox x:Uid="PathTextBox" x:Name="PathTextBox" Width="200" Height="25" Canvas.Left="193" Canvas.Top="125" Padding="0,2,0,0"></TextBox>
         <ComboBox x:Uid="SeparatorComboBox" x:Name="SeparatorComboBox" Canvas.Left="193" Canvas.Top="195" Width="80" Height="25" IsEditable="False" SelectedIndex="0" Padding="4,4,0,0">
             <ComboBoxItem x:Uid="ComboBoxItem_1">,(default)</ComboBoxItem>
             <ComboBoxItem x:Uid="ComboBoxItem_2">;</ComboBoxItem>
         </ComboBox>
-        <Button x:Uid="ExportButton" x:Name="ExportButton" Content="导出" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
-        <Button x:Uid="CancelButton" x:Name="CancelButton" Content="取消" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
-        <Button x:Uid="BrowseButton" x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="429" Canvas.Top="125"></Button>
+        <Button x:Uid="ExportButton" x:Name="ExportButton" Content="{x:Static properties:Resources.Export}" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
+        <Button x:Uid="CancelButton" x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
+        <Button x:Uid="BrowseButton" x:Name="BrowseButton" Content="{x:Static properties:Resources.Browse}" Width="80" Height="25" Canvas.Left="429" Canvas.Top="125"></Button>
     </Canvas>
 </Window>

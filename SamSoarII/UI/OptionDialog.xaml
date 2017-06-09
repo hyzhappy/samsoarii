@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
         mc:Ignorable="d"
-        Title="OptionDialog" Height="600" Width="600" PreviewKeyDown="Window_PreviewKeyDown" Closing="OnClosing">
+        Title="OptionDialog" Height="600" ResizeMode="NoResize" Width="600" PreviewKeyDown="Window_PreviewKeyDown" Closing="OnClosing">
     <Grid x:Uid="Grid_1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Uid="ColumnDefinition_1" Width="1*"></ColumnDefinition>

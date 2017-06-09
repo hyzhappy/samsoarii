@@ -190,9 +190,9 @@ namespace SamSoarII.UserInterface
             string msg2 = String.Empty;
             switch (type)
             {
-                case "BIT": msg2 = "有效范围为(0~1)。"; break;
-                case "WORD": msg2 = "有效范围为(-(2^31)~(2^31)-1)。"; break;
-                case "DWORD": msg2 = "有效范围为(-(2^63)~(2^63)-1)。"; break;
+                case "BIT": msg2 = string.Format("{0}(0~1)。", Properties.Resources.Valid_Range); break;
+                case "WORD": msg2 = string.Format("{0}(-(2^31)~(2^31)-1)。", Properties.Resources.Valid_Range); break;
+                case "DWORD": msg2 = string.Format("{0}(-(2^63)~(2^63)-1)。", Properties.Resources.Valid_Range); break;
                 default: break;
             }
             MessageBox.Show(msg1 + msg2);

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.Monitor"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="300" x:Name="UserControl" Background="#FFFBFCF6">
@@ -17,9 +18,9 @@
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <ContextMenu x:Uid="ContextMenu_1" x:Key="ListBoxContextMenu">
-            <MenuItem x:Uid="MenuItem_1" Header="增加表格" Click="AddTableClick"></MenuItem>
-            <MenuItem x:Uid="MenuItem_2" Header="删除表格" Click="DeleteTableClick"></MenuItem>
-            <MenuItem x:Uid="MenuItem_3" Header="删除所有" Click="DeleteAllTables"></MenuItem>
+            <MenuItem x:Uid="MenuItem_1" Header="{x:Static properties:Resources.Modbus_Create_New_Table}" Click="AddTableClick"></MenuItem>
+            <MenuItem x:Uid="MenuItem_2" Header="{x:Static properties:Resources.Modbus_Delete_Table}" Click="DeleteTableClick"></MenuItem>
+            <MenuItem x:Uid="MenuItem_3" Header="{x:Static properties:Resources.Delete_All}" Click="DeleteAllTables"></MenuItem>
         </ContextMenu>
         <ControlTemplate x:Uid="ControlTemplate_1" x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
             <Grid x:Uid="Grid_1">
@@ -64,14 +65,14 @@
             </Grid.RowDefinitions>
             <StackPanel x:Uid="StackPanel_1" Orientation="Vertical" Grid.ColumnSpan="2">
                 <StackPanel x:Uid="StackPanel_2" Height="35" Orientation="Horizontal">
-                    <Button x:Uid="AddButton" x:Name="AddButton" Command="{x:Static local:MonitorCommand.AddElementCommand}">添加软元件</Button>
-                    <Button x:Uid="DeleteButton" x:Name="DeleteButton" Command="{x:Static local:MonitorCommand.DeleteElementsCommand}">删除软元件</Button>
-                    <Button x:Uid="StartMonitor" x:Name="StartMonitor" Command="{x:Static local:MonitorCommand.StartCommand}">监视开始</Button>
+                    <Button x:Uid="AddButton" x:Name="AddButton" Command="{x:Static local:MonitorCommand.AddElementCommand}" Content="{x:Static properties:Resources.Add_Element}"></Button>
+                    <Button x:Uid="DeleteButton" x:Name="DeleteButton" Command="{x:Static local:MonitorCommand.DeleteElementsCommand}" Content="{x:Static properties:Resources.Element_Delete}"/>
+                    <Button x:Uid="StartMonitor" x:Name="StartMonitor" Command="{x:Static local:MonitorCommand.StartCommand}" Content="{x:Static properties:Resources.Monitor_Start}"/>
                 </StackPanel>
                 <StackPanel x:Uid="StackPanel_3" Height="35" Orientation="Horizontal">
-                    <Button x:Uid="QuickButton" x:Name="QuickButton" Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}">快速添加</Button>
-                    <Button x:Uid="DeleteAllButton" x:Name="DeleteAllButton" Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}">全部删除</Button>
-                    <Button x:Uid="StopMonitor" x:Name="StopMonitor" Command="{x:Static local:MonitorCommand.StopCommand}">监视停止</Button>
+                    <Button x:Uid="QuickButton" x:Name="QuickButton" Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}" Content="{x:Static properties:Resources.Quick_Add}"/>
+                    <Button x:Uid="DeleteAllButton" x:Name="DeleteAllButton" Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}" Content="{x:Static properties:Resources.Delete_All}"/>
+                    <Button x:Uid="StopMonitor" x:Name="StopMonitor" Command="{x:Static local:MonitorCommand.StopCommand}" Content="{x:Static properties:Resources.Monitor_Stop}"/>
                 </StackPanel>
             </StackPanel>
             <ScrollViewer x:Uid="ScrollViewer_1" Margin="5,5,0,0" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">

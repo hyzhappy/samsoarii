@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.UserInterface"
+             xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
     <Grid x:Uid="GD_Main" x:Name="GD_Main">
@@ -23,9 +24,8 @@
                 <ColumnDefinition x:Uid="ColumnDefinition_3" Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Uid="TextBlock_1" Grid.Row="0" Grid.Column="0"
-                       VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,8,8,8" FontSize="16">
-                数据类型：
-            </TextBlock>
+                       VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,8,8,8" FontSize="16" Text="{x:Static properties:Resources.Data_Type}"/>
+
             <ComboBox x:Uid="CB_Type" Grid.Row="0" Grid.Column="1"
                      x:Name="CB_Type" 
                      Height="25" VerticalAlignment="Center" Margin="12,0,12,0"
@@ -48,9 +48,8 @@
                     x:Name="BT_Write"
                     Height="30" VerticalContentAlignment="Center"
                     Margin="8,0,8,0" Visibility="Hidden" Grid.RowSpan="2"
-                    Click="OnButtonClick">
-                写入
-            </Button>
+                    Click="OnButtonClick" Content="{x:Static properties:Resources.Write_In}"/>
+
         </Grid>
         <Grid x:Uid="GD_Ctrl" Grid.Row="1" Grid.Column="0"
               x:Name="GD_Ctrl">
@@ -71,34 +70,28 @@
             </Grid.RowDefinitions>
             <Button x:Uid="BT_FON" Grid.Row="0" Grid.Column="0"
                     x:Name="BT_FON" Visibility="Hidden"
-                    Click="OnButtonClick">
-                强制ON
-            </Button>
+                    Click="OnButtonClick" Content="{x:Static properties:Resources.Force_ON}"/>
+
             <Button x:Uid="BT_FOFF" Grid.Row="0" Grid.Column="1"
                     x:Name="BT_FOFF" Visibility="Hidden"
-                    Click="OnButtonClick">
-                强制OFF
-            </Button>
+                    Click="OnButtonClick" Content="{x:Static properties:Resources.Force_OFF}"/>
+
             <Button x:Uid="BT_CF" Grid.Row="1" Grid.Column="0"
                     x:Name="BT_CF" Visibility="Hidden"
-                    Click="OnButtonClick">
-                取消强制
-            </Button>
+                    Click="OnButtonClick" Content="{x:Static properties:Resources.Cancel_Force}"/>
+
             <Button x:Uid="BT_CFA" Grid.Row="1" Grid.Column="1"
                     x:Name="BT_CFA" Visibility="Hidden"
-                    Click="OnButtonClick">
-                取消全部强制
-            </Button>
+                    Click="OnButtonClick" Content="{x:Static properties:Resources.Cancel_All_Force}"/>
+
             <Button x:Uid="BT_WON" Grid.Row="0" Grid.Column="0"
                     x:Name="BT_WON" Visibility="Hidden"
-                    Click="OnButtonClick">
-                写入ON
-            </Button>
+                    Click="OnButtonClick" Content="{x:Static properties:Resources.Write_ON}"/>
+
             <Button x:Uid="BT_WOFF" Grid.Row="0" Grid.Column="1"
                     x:Name="BT_WOFF" Visibility="Hidden"
-                    Click="OnButtonClick">
-                写入OFF
-            </Button>
+                    Click="OnButtonClick" Content="{x:Static properties:Resources.Write_OFF}"/>
+
         </Grid>
     </Grid>
 </UserControl>

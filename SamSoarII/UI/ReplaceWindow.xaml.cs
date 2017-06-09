@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -227,8 +228,12 @@ namespace SamSoarII.AppMain.UI
                 catch (Exception exce2)
                 {
                     error++;
-                    errormsg += String.Format("在{0:s}的网络{1:d}的坐标({2:d},{3:d})处发生错误：{4:s}\r\n",
-                        ldvmodel.ProgramName, lnvmodel.NetworkNumber, x, y, exce2.Message);
+                    if (Thread.CurrentThread.CurrentUICulture.Name.Contains("zh-Hans"))
+                        errormsg += String.Format("在{0:s}的网络{1:d}的坐标({2:d},{3:d})处发生错误：{4:s}\r\n",
+                            ldvmodel.ProgramName, lnvmodel.NetworkNumber, x, y, exce2.Message);
+                    else
+                        errormsg += String.Format("An error occurred at the coordinates({2:d},{3:d})of the network {1:d} of {0:s}: {4:s}\r\n",
+                                ldvmodel.ProgramName, lnvmodel.NetworkNumber, x, y, exce2.Message);
                 }
             }
             // 执行替换
@@ -237,7 +242,11 @@ namespace SamSoarII.AppMain.UI
             if (showdialog || error > 0)
             {
                 ReplaceReportWindow report = new ReplaceReportWindow();
-                report.TB_Subtitle.Text = String.Format("总共进行了{0:d}次替换，{1:d}次成功，{2:d}次错误。"
+                if (Thread.CurrentThread.CurrentUICulture.Name.Contains("zh-Hans"))
+                    report.TB_Subtitle.Text = String.Format("总共进行了{0:d}次替换，{1:d}次成功，{2:d}次错误。"
+                        , success + error, success, error);
+                else
+                    report.TB_Subtitle.Text = string.Format("A total of {0:d} times, {1:d} success, {2:d} Fail."
                     , success + error, success, error);
                 report.TB_Message.Text = errormsg;
                 report.WindowStartupLocation = WindowStartupLocation.CenterScreen;

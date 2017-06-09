@@ -40,7 +40,7 @@ namespace SamSoarII.AppMain.Project
         {
             get
             {
-                return "Modbus表格";
+                return Properties.Resources.Modbus_Table;
             }
 
             set
@@ -196,10 +196,10 @@ namespace SamSoarII.AppMain.Project
                 switch (value)
                 {
                     case DIALOG_CREATE:
-                        dialog.Title = "新建表格";
+                        dialog.Title = Properties.Resources.Modbus_Create_New_Table;
                         break;
                     case DIALOG_RENAME:
-                        dialog.Title = "表格重命名";
+                        dialog.Title = Properties.Resources.PTV_Rename;
                         break;
                 }
             }
@@ -479,7 +479,7 @@ namespace SamSoarII.AppMain.Project
             string comment = dialog.TB_Comment.Text;
             if (name.Equals(String.Empty))
             {
-                MessageBox.Show("表格名称不能为空！");
+                MessageBox.Show(Properties.Resources.Message_Name_Needed);
                 return;
             }
             IEnumerable<ModbusTableModel> fit = models.Where(
@@ -489,7 +489,7 @@ namespace SamSoarII.AppMain.Project
                 case DIALOG_CREATE:
                     if (fit.Count() > 0)
                     {
-                        MessageBox.Show(String.Format("已存在表格{0:s}！", name));
+                        MessageBox.Show(Properties.Resources.Message_Table_Exist);
                     }
                     else
                     {
@@ -503,7 +503,7 @@ namespace SamSoarII.AppMain.Project
                 case DIALOG_RENAME:
                     if (fit.Count() > 0 && fit.First() != Current)
                     {
-                        MessageBox.Show(String.Format("已存在表格{0:s}！", name));
+                        MessageBox.Show(Properties.Resources.Message_Table_Exist);
                     }
                     else
                     {
@@ -614,19 +614,16 @@ namespace SamSoarII.AppMain.Project
             {
                 text = ((ComboBox)(dgcell.Content)).Text;
             }
-            switch (dgcolumn.Header.ToString())
-            {
-                case "从站号":
-                    mtable.SlaveID = text; break;
-                case "功能码":
-                    mtable.HandleCode = text; break;
-                case "从站寄存器":
-                    mtable.SlaveRegister = text; break;
-                case "从站长度":
-                    mtable.SlaveCount = text; break;
-                case "主站寄存器":
-                    mtable.MasteRegister = text; break;
-            }
+            if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Slave_Station_Number)
+                mtable.SlaveID = text;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Function_Code)
+                mtable.HandleCode = text;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Slave_Register)
+                mtable.SlaveRegister = text;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Slave_Length)
+                mtable.SlaveCount = text;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Master_Register)
+                mtable.MasteRegister = text;
             Update(dgcell);
         }
         
@@ -649,19 +646,16 @@ namespace SamSoarII.AppMain.Project
             ModbusTable mtable = (ModbusTable)(dgcell.DataContext);
             DataGridColumn dgcolumn = dgcell.Column;
             bool isvalid = false;
-            switch (dgcolumn.Header.ToString())
-            {
-                case "从站号":
-                    isvalid = mtable.SlaveID_IsValid; break;
-                case "功能码":
-                    isvalid = mtable.HandleCode_IsValid; break;
-                case "从站寄存器":
-                    isvalid = mtable.SlaveRegister_IsValid; break;
-                case "从站长度":
-                    isvalid = mtable.SlaveCount_IsValid; break;
-                case "主站寄存器":
-                    isvalid = mtable.MasterRegister_IsValid; break;
-            }
+            if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Slave_Station_Number)
+                isvalid = mtable.SlaveID_IsValid;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Function_Code)
+                isvalid = mtable.HandleCode_IsValid;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Slave_Register)
+                isvalid = mtable.SlaveRegister_IsValid;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Slave_Length)
+                isvalid = mtable.SlaveCount_IsValid;
+            else if (dgcolumn.Header.ToString() == Properties.Resources.Modbus_Master_Register)
+                isvalid = mtable.MasterRegister_IsValid;
             if (isselected == null)
                 isselected = dgcell.IsSelected;
             if (isselected == true && isvalid)
@@ -718,11 +712,13 @@ namespace SamSoarII.AppMain.Project
 
     }
 
-    public class ModbusTableComboBoxItems 
+    public class ModbusTableComboBoxItems
     {
-        static private string[] selectedhandlecodes = {
-            "0x01（读位）", "0x02（读位）", "0x03（读字）",  "0x04（读字）",
-            "0x05（写位）", "0x06（写字）", "0x0F（写多位）","0x10（写多字）" };
+        static public string[] selectedhandlecodes = {
+            string.Format("0x01({0})",Properties.Resources.Read_Bit), string.Format("0x02({0})",Properties.Resources.Read_Bit),
+            string.Format("0x03({0})",Properties.Resources.Read_Word),  string.Format("0x04({0})",Properties.Resources.Read_Word),
+            string.Format("0x05({0})",Properties.Resources.Write_Bit), string.Format("0x06({0})",Properties.Resources.Write_Word),
+            string.Format("0x0f({0})",Properties.Resources.Write_Bits),string.Format("0x10({0})",Properties.Resources.Write_Words) };
         
         public IEnumerable<string> SelectedHandleCodes()
         {
@@ -866,31 +862,55 @@ namespace SamSoarII.AppMain.Project
                             ValueParser.VerifyWordRegex1});
                     bool check2 = ValueParser.CheckValueString(MasteRegister, new Regex[] {
                             ValueParser.VerifyBitRegex1});
-                    switch (HandleCode)
+                    //switch (HandleCode)
+                    //{
+                    //    case "0x01（读位）":
+                    //    case "0x02（读位）":
+                    //    case "0x05（写位）":
+                    //    case "0x0F（写多位）":
+                    //        if (!check2)
+                    //        {
+                    //            throw new ValueParseException("需要输入位寄存器！");
+                    //        }
+                    //        ValueParser.ParseBitValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    //        break;
+                    //    case "0x03（读字）":
+                    //    case "0x04（读字）":
+                    //    case "0x06（写字）":
+                    //    case "0x10（写多字）":
+                    //        if (!check1)
+                    //        {
+                    //            throw new ValueParseException("需要输入单字寄存器！");
+                    //        }
+                    //        ValueParser.ParseWordValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    //        break;
+                    //    default:
+                    //        return false;
+                    //}
+                    if (HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[0]
+                        || HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[1]
+                        || HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[4]
+                        || HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[6])
                     {
-                        case "0x01（读位）":
-                        case "0x02（读位）":
-                        case "0x05（写位）":
-                        case "0x0F（写多位）":
-                            if (!check2)
-                            {
-                                throw new ValueParseException("需要输入位寄存器！");
-                            }
-                            ValueParser.ParseBitValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
-                            break;
-                        case "0x03（读字）":
-                        case "0x04（读字）":
-                        case "0x06（写字）":
-                        case "0x10（写多字）":
-                            if (!check1)
-                            {
-                                throw new ValueParseException("需要输入单字寄存器！");
-                            }
-                            ValueParser.ParseWordValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
-                            break;
-                        default:
-                            return false;
+                        if (!check2)
+                        {
+                            throw new ValueParseException(Properties.Resources.Message_Bit_Required);
+                        }
+                        ValueParser.ParseBitValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                     }
+                    else if (HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[2]
+                       || HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[3]
+                       || HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[5]
+                       || HandleCode == ModbusTableComboBoxItems.selectedhandlecodes[7])
+                    {
+                        if (!check1)
+                        {
+                            throw new ValueParseException(Properties.Resources.Message_Word_Requried);
+                        }
+                        ValueParser.ParseWordValue(MasteRegister, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
+                    }
+                    else
+                        return false;
                     return true;
                 }
                 catch (Exception)

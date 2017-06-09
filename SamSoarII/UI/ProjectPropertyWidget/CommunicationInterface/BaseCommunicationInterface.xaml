@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.ProjectPropertyWidget.CommunicationInterface"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              xmlns:ui="clr-namespace:SamSoarII.AppMain.UI"
              xmlns:usr="clr-namespace:SamSoarII.UserInterface;assembly=SamSoarII.UserInterface"
              mc:Ignorable="d" 
@@ -16,87 +17,83 @@
         <Grid.Resources>
             <Style x:Uid="Style_1" TargetType="StackPanel">
                 <Style.Triggers>
-                    <Trigger x:Uid="Trigger_1" Property="IsEnabled" Value="False">
-                        <Setter x:Uid="Setter_1" Property="Visibility" Value="Hidden"></Setter>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Visibility" Value="Hidden"></Setter>
                     </Trigger>
                 </Style.Triggers>
-                <Setter x:Uid="Setter_2" Property="Canvas.Left" Value="20"></Setter>
-                <Setter x:Uid="Setter_3" Property="Orientation" Value="Horizontal"></Setter>
+                <Setter Property="Canvas.Left" Value="20"></Setter>
+                <Setter Property="Orientation" Value="Horizontal"></Setter>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="15"></Setter>
+                <Setter Property="TextWrapping" Value="Wrap"></Setter>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="4*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_2" Height="2*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_3" Height="2*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_4" Height="*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Canvas x:Uid="Canvas_1">
-            <StackPanel x:Uid="StackPanel_1" Canvas.Top="10">
-                <TextBlock x:Uid="TextBlock_1" Text="波特率:" FontSize="16"></TextBlock>
-                <ComboBox x:Uid="Combox1" x:Name="Combox1" Margin="10,0,0,0" IsEditable="False" Width="80" SelectedIndex="{Binding BaudRateIndex}">
-                    <ComboBoxItem x:Uid="ComboBoxItem_1">4800</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_2">9600</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_3">19200</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_4">38400</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_5">57600</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_6">115200</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-            <StackPanel x:Uid="StackPanel_2" Canvas.Top="50">
-                <TextBlock x:Uid="TextBlock_2" Text="数据位:" FontSize="16"></TextBlock>
-                <ComboBox x:Uid="ComboBox_1" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding DataBitIndex}">
-                    <ComboBoxItem x:Uid="ComboBoxItem_7">8</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-            <StackPanel x:Uid="StackPanel_3" Canvas.Top="90">
-                <TextBlock x:Uid="TextBlock_3" Text="停止位:" FontSize="16"></TextBlock>
-                <ComboBox x:Uid="Combox3" x:Name="Combox3" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding StopBitIndex}">
-                    <ComboBoxItem x:Uid="ComboBoxItem_8">1</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_9">2</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-            <StackPanel x:Uid="StackPanel_4" Canvas.Top="130">
-                <TextBlock x:Uid="TextBlock_4" Text="校验码:" FontSize="16"></TextBlock>
-                <ComboBox x:Uid="Combox4" x:Name="Combox4" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding CheckCodeIndex}">
-                    <ComboBoxItem x:Uid="ComboBoxItem_10">NONE</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_11">EVEN</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_12">ODD</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-            <StackPanel x:Uid="StackPanel_5" Canvas.Top="170" IsEnabled="{Binding ElementName=FreeButton,Path=IsChecked}">
-                <TextBlock x:Uid="TextBlock_5" Text="缓冲位:" FontSize="16"></TextBlock>
-                <ComboBox x:Uid="Combox5" x:Name="Combox5" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding BufferBitIndex}">
-                    <ComboBoxItem x:Uid="ComboBoxItem_13">8</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_14">16</ComboBoxItem>
+        <Canvas>
+            <TextBlock Canvas.Top="10" Canvas.Left="20" Text="{x:Static properties:Resources.Baud_Rate}"></TextBlock>
+            <ComboBox Canvas.Top="10" Canvas.Left="120" x:Name="Combox1" Margin="10,0,0,0" IsEditable="False" Width="80" SelectedIndex="{Binding BaudRateIndex}">
+                <ComboBoxItem x:Uid="ComboBoxItem_1">4800</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_2">9600</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_3">19200</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_4">38400</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_5">57600</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_6">115200</ComboBoxItem>
+            </ComboBox>
+            <TextBlock Canvas.Top="50" Canvas.Left="20" Text="{x:Static properties:Resources.Data_Bits}"></TextBlock>
+            <ComboBox Canvas.Top="50" Canvas.Left="120" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding DataBitIndex}">
+                <ComboBoxItem x:Uid="ComboBoxItem_7">8</ComboBoxItem>
+            </ComboBox>
+            <TextBlock Canvas.Top="90" Canvas.Left="20" Text="{x:Static properties:Resources.Stop_Bit}"></TextBlock>
+            <ComboBox Canvas.Top="90" Canvas.Left="120" x:Name="Combox3" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding StopBitIndex}">
+                <ComboBoxItem x:Uid="ComboBoxItem_8">1</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_9">2</ComboBoxItem>
+            </ComboBox>
+            <TextBlock Canvas.Top="130" Canvas.Left="20" Text="{x:Static properties:Resources.Check_Code}"></TextBlock>
+            <ComboBox Canvas.Top="130" Canvas.Left="120" x:Name="Combox4" Margin="10,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding CheckCodeIndex}">
+                <ComboBoxItem x:Uid="ComboBoxItem_10">NONE</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_11">EVEN</ComboBoxItem>
+                <ComboBoxItem x:Uid="ComboBoxItem_12">ODD</ComboBoxItem>
+            </ComboBox>
+            <StackPanel Canvas.Top="170" IsEnabled="{Binding ElementName=FreeButton,Path=IsChecked}">
+                <TextBlock Text="{x:Static properties:Resources.Buffer_Bit}"></TextBlock>
+                <ComboBox x:Name="Combox5" Margin="43,0,0,0" Width="80" IsEditable="False" SelectedIndex="{Binding BufferBitIndex}">
+                    <ComboBoxItem>8</ComboBoxItem>
+                    <ComboBoxItem>16</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
         </Canvas>
         <Canvas x:Uid="Canvas_2" Grid.Row="1">
             <StackPanel x:Uid="StackPanel_6" Canvas.Top="10">
                 <RadioButton x:Uid="Master" x:Name="Master" Margin="0,2,5,0"></RadioButton>
-                <TextBlock x:Uid="TextBlock_6" Text="MODBUS 主站" FontSize="16"></TextBlock>
+                <TextBlock Width="130" Text="{x:Static properties:Resources.Modbus_Master_Station}"></TextBlock>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_7" Canvas.Top="55">
                 <RadioButton x:Uid="FreeButton" x:Name="FreeButton" Margin="0,2,5,0"></RadioButton>
-                <TextBlock x:Uid="TextBlock_7" Text="自由口通信" FontSize="16"></TextBlock>
+                <TextBlock Width="130" Text="{x:Static properties:Resources.Free_Port_Communication}"></TextBlock>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_8" Canvas.Top="10" Canvas.Left="190">
                 <RadioButton x:Uid="Slave" x:Name="Slave" Margin="0,2,5,0"></RadioButton>
-                <TextBlock x:Uid="TextBlock_8" Text="MODBUS 从站" FontSize="16"></TextBlock>
+                <TextBlock Width="130" Text="{x:Static properties:Resources.Modbus_Slaver_Station}"></TextBlock>
             </StackPanel>
         </Canvas>
         <Canvas x:Uid="Canvas_3" Grid.Row="2">
             <StackPanel x:Uid="StackPanel_9" Canvas.Top="10">
-                <TextBlock x:Uid="TextBlock_9" FontSize="16" Text="站号设置"></TextBlock>
+                <TextBlock FontSize="16" Text="{x:Static properties:Resources.Station_Number_Setting}"></TextBlock>
                 <usr:RangeTextBox x:Uid="rangeTextbox1" x:Name="rangeTextbox1" Margin="5,-2,0,0" LowRange="1" TopRange="128" DefaultValue="-1"></usr:RangeTextBox>
                 <TextBlock x:Uid="TextBlock_10" FontSize="16" Text="(1-128)"></TextBlock>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_10" Canvas.Top="50">
-                <TextBlock x:Uid="TextBlock_11" FontSize="16" Text="超时时间"></TextBlock>
+                <TextBlock x:Uid="TextBlock_11" FontSize="16" Text="{x:Static properties:Resources.Timeout}"></TextBlock>
                 <usr:RangeTextBox x:Uid="rangeTextbox2" x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="1" TopRange="255" DefaultValue="-1"></usr:RangeTextBox>
                 <TextBlock x:Uid="TextBlock_12" FontSize="16" Text="*10ms    (1-255)"></TextBlock>
             </StackPanel>
         </Canvas>
-        <Button x:Uid="Button_1" Grid.Row="3" Width="80" Height="24" HorizontalAlignment="Left" FontSize="16" Margin="20,0,0,0" Click="DefaultButtonClick">默认值</Button>
+        <Button x:Uid="Button_1" Grid.Row="3" Width="80" Height="24" HorizontalAlignment="Left" FontSize="16" Margin="20,0,0,0" Click="DefaultButtonClick" Content="{x:Static properties:Resources.Default}"/>
     </Grid>
 </UserControl>

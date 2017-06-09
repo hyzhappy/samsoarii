@@ -1329,7 +1329,7 @@ namespace SamSoarII.AppMain.Project
                     FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
                     if (!fmodel.CanCALLM())
                     {
-                        MessageBox.Show(String.Format("{0:s}无法被CALLM指令调用，请检查参数的个数和类型。", fmodel.Name));
+                        MessageBox.Show(String.Format("{0:s}{1}", fmodel.Name,Properties.Resources.Message_Can_Not_CALL));
                         return;
                     }
                     CALLMViewModel vmodel = new CALLMViewModel();
@@ -1396,7 +1396,7 @@ namespace SamSoarII.AppMain.Project
                     ModbusTableModel mtmodel = (ModbusTableModel)(ptvitem.RelativeObject);
                     if (!mtmodel.IsVaild)
                     {
-                        MessageBox.Show("Modbus表格非法，请检查表格项是否补全。");
+                        MessageBox.Show(Properties.Resources.Message_Modbus_Table_Error);
                         return;
                     }
                     MBUSViewModel vmodel = new MBUSViewModel();

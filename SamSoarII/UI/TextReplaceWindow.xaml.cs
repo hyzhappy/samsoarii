@@ -244,9 +244,9 @@ namespace SamSoarII.AppMain.UI
              && !parent.MainWindow.LAReplace.IsDock)
             {
                 LayoutSetting.AddDefaultDockWidthAnchorable(
-                    "替换", parent.MainWindow.LAReplace.AutoHideWidth.ToString());
+                    Properties.Resources.MainWindow_Replace, parent.MainWindow.LAReplace.AutoHideWidth.ToString());
                 LayoutSetting.AddDefaultDockHeighAnchorable(
-                    "替换", parent.MainWindow.LAReplace.AutoHideHeight.ToString());
+                    Properties.Resources.MainWindow_Replace, parent.MainWindow.LAReplace.AutoHideHeight.ToString());
                 parent.MainWindow.LAReplace.ToggleAutoHide();
             }
             if (DG_List.SelectedIndex < 0) return;
@@ -545,7 +545,7 @@ namespace SamSoarII.AppMain.UI
                 = items.Where((cmd) => { return cmd.Element.FBVModel.IsReadOnly; });
             if (fit.Count() > 0)
             {
-                MessageBox.Show("当前文本为只读权限，不能进行更改！");
+                MessageBox.Show(Properties.Resources.Message_Text);
             }
             items.Sort((cmd1, cmd2) =>
             {
@@ -574,7 +574,7 @@ namespace SamSoarII.AppMain.UI
                 = items.Where((cmd) => { return cmd.Element.FBVModel.IsReadOnly; });
             if (fit.Count() > 0)
             {
-                MessageBox.Show("当前文本为只读权限，不能进行更改！");
+                MessageBox.Show(Properties.Resources.Message_Text);
             }
             int offset = 0;
             string word = null;

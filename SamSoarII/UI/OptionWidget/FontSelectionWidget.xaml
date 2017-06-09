@@ -4,18 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              xmlns:Inst="clr-namespace:SamSoarII.LadderInstViewModel;assembly=SamSoarII.LadderInstViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="480">
-    <Grid x:Uid="Grid_1">
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="*"/>
-            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="40"/>
-            <RowDefinition x:Uid="RowDefinition_2" Height="40"/>
-            <RowDefinition x:Uid="RowDefinition_3" Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
             <Style x:Uid="Style_1" TargetType="{x:Type TextBlock}">
@@ -29,29 +30,25 @@
                         Value="14">
                 </Setter>
             </Style>
-            <Style x:Uid="Style_2" TargetType="{x:Type ComboBox}">
+            <Style TargetType="{x:Type ComboBox}">
                 <Setter x:Uid="Setter_4" Property="Margin" Value="80,10,10,10"></Setter>
             </Style>
             <Style x:Uid="Style_3" TargetType="{x:Type Button}">
                 <Setter x:Uid="Setter_5" Property="Margin" Value="24,6,24,6"></Setter>
             </Style>
         </Grid.Resources>
-        <TextBlock x:Uid="TextBlock_1" Grid.Row="0" Grid.Column="0">
-            字体范围：
-        </TextBlock>
-        <TextBlock x:Uid="TextBlock_2" Grid.Row="0" Grid.Column="1">
-            字体风格：
-        </TextBlock>
-        <TextBlock x:Uid="TextBlock_3" Grid.Row="1" Grid.Column="0">
-            字体大小：
-        </TextBlock>
-        <TextBlock x:Uid="TextBlock_4" Grid.Row="1" Grid.Column="1">
-            字体颜色：
-        </TextBlock>
-        <ComboBox x:Uid="CB_Range" Grid.Row="0" Grid.Column="0"
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static properties:Resources.Font_Range}"/>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Static properties:Resources.Font_Style}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0"  Text="{x:Static properties:Resources.Font_Size}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Static properties:Resources.Font_Color}"/>
+
+        <ComboBox Grid.Row="0" Grid.Column="0" Width="120" HorizontalAlignment="Right"
                   x:Name="CB_Range" SelectionChanged="ComboBox_SelectionChanged">
         </ComboBox>
-        <ComboBox x:Uid="CB_Family" Grid.Row="0" Grid.Column="1"
+        <ComboBox Grid.Row="0" Grid.Column="1"
                   x:Name="CB_Family" SelectionChanged="ComboBox_SelectionChanged">
             <ComboBox.ItemContainerStyle>
                 <Style x:Uid="Style_4">
@@ -59,13 +56,13 @@
                 </Style>
             </ComboBox.ItemContainerStyle>
         </ComboBox>
-        <ComboBox x:Uid="CB_Size" Grid.Row="1" Grid.Column="0"
+        <ComboBox Grid.Row="1" Grid.Column="0" Width="120" HorizontalAlignment="Right"
                   x:Name="CB_Size" SelectionChanged="ComboBox_SelectionChanged">
         </ComboBox>
         <Label x:Uid="BD_Color" Grid.Row="1" Grid.Column="1" Margin="80,10,10,10"
                 x:Name="BD_Color" Background="Black" PreviewMouseLeftButtonDown="OnMouseLeftButtonDown">
         </Label>
-        <GroupBox x:Uid="GroupBox_1" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="效果预览">
+        <GroupBox x:Uid="GroupBox_1" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static properties:Resources.Effect_Preview}">
             <local:DemoCanvas x:Uid="Demo" x:Name="Demo"/>
         </GroupBox>
     </Grid>

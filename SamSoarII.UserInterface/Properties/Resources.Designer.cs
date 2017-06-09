@@ -59,5 +59,536 @@ namespace SamSoarII.UserInterface.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   查找类似 AddNewSubRoutine 的本地化字符串。
+        /// </summary>
+        public static string AddNewSubRoutine {
+            get {
+                return ResourceManager.GetString("AddNewSubRoutine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Annotation Edit 的本地化字符串。
+        /// </summary>
+        public static string Annotation_Edit {
+            get {
+                return ResourceManager.GetString("Annotation_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Auto Check 的本地化字符串。
+        /// </summary>
+        public static string Auto_Check {
+            get {
+                return ResourceManager.GetString("Auto_Check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Baud Rate 的本地化字符串。
+        /// </summary>
+        public static string Baud_Rate {
+            get {
+                return ResourceManager.GetString("Baud_Rate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Brief Description 的本地化字符串。
+        /// </summary>
+        public static string Brief_Description {
+            get {
+                return ResourceManager.GetString("Brief_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Browse 的本地化字符串。
+        /// </summary>
+        public static string Browse {
+            get {
+                return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cancel 的本地化字符串。
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cancel Al Force 的本地化字符串。
+        /// </summary>
+        public static string Cancel_All_Force {
+            get {
+                return ResourceManager.GetString("Cancel_All_Force", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cancel Force 的本地化字符串。
+        /// </summary>
+        public static string Cancel_Force {
+            get {
+                return ResourceManager.GetString("Cancel_Force", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Check Code 的本地化字符串。
+        /// </summary>
+        public static string Check_Code {
+            get {
+                return ResourceManager.GetString("Check_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Communication Parameter Setting 的本地化字符串。
+        /// </summary>
+        public static string Communication_Parameter_Setting {
+            get {
+                return ResourceManager.GetString("Communication_Parameter_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Communication Test 的本地化字符串。
+        /// </summary>
+        public static string Communication_Test {
+            get {
+                return ResourceManager.GetString("Communication_Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Communication Setting 的本地化字符串。
+        /// </summary>
+        public static string CommunicationSetting {
+            get {
+                return ResourceManager.GetString("CommunicationSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Connection Mode 的本地化字符串。
+        /// </summary>
+        public static string Connection_Mode {
+            get {
+                return ResourceManager.GetString("Connection_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 CSV Export 的本地化字符串。
+        /// </summary>
+        public static string CSV_Export {
+            get {
+                return ResourceManager.GetString("CSV_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 CSV Import 的本地化字符串。
+        /// </summary>
+        public static string CSV_Import {
+            get {
+                return ResourceManager.GetString("CSV_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Data Bit 的本地化字符串。
+        /// </summary>
+        public static string Data_Bit {
+            get {
+                return ResourceManager.GetString("Data_Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Data Type 的本地化字符串。
+        /// </summary>
+        public static string Data_Type {
+            get {
+                return ResourceManager.GetString("Data_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Default 的本地化字符串。
+        /// </summary>
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Detailed Description 的本地化字符串。
+        /// </summary>
+        public static string Detailed_Description {
+            get {
+                return ResourceManager.GetString("Detailed_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Element Comment 的本地化字符串。
+        /// </summary>
+        public static string Element_Comment {
+            get {
+                return ResourceManager.GetString("Element_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Element Parameter Setting 的本地化字符串。
+        /// </summary>
+        public static string Element_Parameter_Setting {
+            get {
+                return ResourceManager.GetString("Element_Parameter_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ElementValueModify 的本地化字符串。
+        /// </summary>
+        public static string Element_Value_Modify {
+            get {
+                return ResourceManager.GetString("Element_Value_Modify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Ensure 的本地化字符串。
+        /// </summary>
+        public static string Ensure {
+            get {
+                return ResourceManager.GetString("Ensure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Export 的本地化字符串。
+        /// </summary>
+        public static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 File 的本地化字符串。
+        /// </summary>
+        public static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 File Name 的本地化字符串。
+        /// </summary>
+        public static string File_Name {
+            get {
+                return ResourceManager.GetString("File_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Force OFF 的本地化字符串。
+        /// </summary>
+        public static string Force_OFF {
+            get {
+                return ResourceManager.GetString("Force_OFF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Force ON 的本地化字符串。
+        /// </summary>
+        public static string Force_ON {
+            get {
+                return ResourceManager.GetString("Force_ON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Help 的本地化字符串。
+        /// </summary>
+        public static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Import 的本地化字符串。
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Instruction Input 的本地化字符串。
+        /// </summary>
+        public static string Instruction_Input {
+            get {
+                return ResourceManager.GetString("Instruction_Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 LadderDiagram 的本地化字符串。
+        /// </summary>
+        public static string LaddreDiagram {
+            get {
+                return ResourceManager.GetString("LaddreDiagram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Language Locale Setting 的本地化字符串。
+        /// </summary>
+        public static string Language_Locale_Setting {
+            get {
+                return ResourceManager.GetString("Language_Locale_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Lock 的本地化字符串。
+        /// </summary>
+        public static string Lock {
+            get {
+                return ResourceManager.GetString("Lock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Manual 的本地化字符串。
+        /// </summary>
+        public static string Manual {
+            get {
+                return ResourceManager.GetString("Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 already exists in the current directory 的本地化字符串。
+        /// </summary>
+        public static string Message_Already_Exist {
+            get {
+                return ResourceManager.GetString("Message_Already_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Do you want to restore the default? 的本地化字符串。
+        /// </summary>
+        public static string Message_Default {
+            get {
+                return ResourceManager.GetString("Message_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Whether it is covered 的本地化字符串。
+        /// </summary>
+        public static string Message_Is_Override {
+            get {
+                return ResourceManager.GetString("Message_Is_Override", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Changes to language settings only take effect after program restart! 的本地化字符串。
+        /// </summary>
+        public static string Message_Lang {
+            get {
+                return ResourceManager.GetString("Message_Lang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Network Number 的本地化字符串。
+        /// </summary>
+        public static string Network_Number {
+            get {
+                return ResourceManager.GetString("Network_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 New Project 的本地化字符串。
+        /// </summary>
+        public static string New_Project {
+            get {
+                return ResourceManager.GetString("New_Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Number Lock 的本地化字符串。
+        /// </summary>
+        public static string Number_Lock {
+            get {
+                return ResourceManager.GetString("Number_Lock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Parameter Description 的本地化字符串。
+        /// </summary>
+        public static string Parameter_Description {
+            get {
+                return ResourceManager.GetString("Parameter_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Parse Error By Wrong Separator 的本地化字符串。
+        /// </summary>
+        public static string Parse_Error_By_Wrong_Separator {
+            get {
+                return ResourceManager.GetString("Parse_Error_By_Wrong_Separator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Path 的本地化字符串。
+        /// </summary>
+        public static string Path {
+            get {
+                return ResourceManager.GetString("Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 PLC Type 的本地化字符串。
+        /// </summary>
+        public static string PLC_Type {
+            get {
+                return ResourceManager.GetString("PLC_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Project Name 的本地化字符串。
+        /// </summary>
+        public static string Project_Name {
+            get {
+                return ResourceManager.GetString("Project_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Project Setting 的本地化字符串。
+        /// </summary>
+        public static string Project_Setting {
+            get {
+                return ResourceManager.GetString("Project_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Separator Select 的本地化字符串。
+        /// </summary>
+        public static string Separator_Select {
+            get {
+                return ResourceManager.GetString("Separator_Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Serialport 的本地化字符串。
+        /// </summary>
+        public static string Serialport {
+            get {
+                return ResourceManager.GetString("Serialport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Setting 的本地化字符串。
+        /// </summary>
+        public static string Setting {
+            get {
+                return ResourceManager.GetString("Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Stop Bit 的本地化字符串。
+        /// </summary>
+        public static string Stop_Bit {
+            get {
+                return ResourceManager.GetString("Stop_Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 SubRoutine Name 的本地化字符串。
+        /// </summary>
+        public static string SubRoutine_Name {
+            get {
+                return ResourceManager.GetString("SubRoutine_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Timeout 的本地化字符串。
+        /// </summary>
+        public static string Timeout {
+            get {
+                return ResourceManager.GetString("Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The valid range is 的本地化字符串。
+        /// </summary>
+        public static string Valid_Range {
+            get {
+                return ResourceManager.GetString("Valid_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write In 的本地化字符串。
+        /// </summary>
+        public static string Write_In {
+            get {
+                return ResourceManager.GetString("Write_In", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write OFF 的本地化字符串。
+        /// </summary>
+        public static string Write_OFF {
+            get {
+                return ResourceManager.GetString("Write_OFF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write ON 的本地化字符串。
+        /// </summary>
+        public static string Write_ON {
+            get {
+                return ResourceManager.GetString("Write_ON", resourceCulture);
+            }
+        }
     }
 }

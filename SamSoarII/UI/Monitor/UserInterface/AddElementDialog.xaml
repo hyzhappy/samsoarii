@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI.Monitor"
+        xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
         xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:usr="clr-namespace:SamSoarII.UserInterface;assembly=SamSoarII.UserInterface"
         mc:Ignorable="d"
-        Title="软元件添加" Height="280" Width="450" ResizeMode="NoResize">
+        Title="{x:Static properties:Resources.Add_Element}" Height="280" Width="450" ResizeMode="NoResize">
     <Window.Resources>
         <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="ElementTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
             <ObjectDataProvider.MethodParameters>
@@ -28,25 +29,25 @@
             <RowDefinition x:Uid="RowDefinition_4" Height="*"></RowDefinition>
             <RowDefinition x:Uid="RowDefinition_5" Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock x:Uid="Themetextblock" x:Name="Themetextblock" Margin="20,20,0,0" Text="添加软元件"></TextBlock>
+        <TextBlock x:Uid="Themetextblock" x:Name="Themetextblock" Margin="20,20,0,0" Text="{x:Static properties:Resources.Add_Element}"></TextBlock>
         <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" Grid.Row="1" Grid.RowSpan="2" Margin="0,5,0,0">
             <StackPanel x:Uid="StackPanel_2" Orientation="Vertical">
-                <TextBlock x:Uid="TextBlock_1" Margin="30,0,0,0">软元件地址</TextBlock>
+                <TextBlock x:Uid="TextBlock_1" Margin="30,0,0,0" Text="{x:Static properties:Resources.Element_Address}"/>
                 <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
                     <ComboBox x:Uid="comboBox" x:Name="comboBox" Width="45" Height="20" Margin="30,0,0,0" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" SelectionChanged="OnSelectionChanged"></ComboBox>
                     <usr:OnlyNumsTextBox x:Uid="textBox" x:Name="textBox" LowRange="0" TopRange="8191" IsNumsOnly="True" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
                 </StackPanel>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_2" Margin="70,18,0,0">数据类型</TextBlock>
+                <TextBlock x:Uid="TextBlock_2" Margin="70,18,0,0" Text="{x:Static properties:Resources.Data_Type}"/>
                 <ComboBox x:Uid="DataTypeCombox" x:Name="DataTypeCombox" Height="20" VerticalAlignment="Top" Width="100" Margin="5,18,0,0" ItemsSource="{Binding DataTypes}" SelectedIndex="0"></ComboBox>
             </StackPanel>
         </StackPanel>
         <StackPanel x:Uid="stackpanel1" x:Name="stackpanel1" Orientation="Horizontal" Grid.Row="2" Margin="0,18,0,0">
             <CheckBox x:Uid="checkbox1" x:Name="checkbox1" Margin="30,1.3,0,0" IsChecked="False" IsThreeState="False"></CheckBox>
-            <TextBlock x:Uid="TextBlock_3">变址</TextBlock>
+            <TextBlock x:Uid="TextBlock_3" Text="{x:Static properties:Resources.Intra_Address}"/>
             <StackPanel x:Uid="StackPanel_5" Margin="80,0,0,0" Orientation="Horizontal" Visibility="{Binding ElementName=checkbox1,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
-                <TextBlock x:Uid="TextBlock_4" Margin="0,1,5,0">偏移元件选择</TextBlock>
+                <TextBlock x:Uid="TextBlock_4" Margin="0,1,5,0" Text="{x:Static properties:Resources.Offset_Element_Select}"/>
                 <ComboBox x:Uid="comboBox1" x:Name="comboBox1" Height="20" VerticalAlignment="Top" Width="40" SelectedIndex="0">
                     <ComboBoxItem x:Uid="ComboBoxItem_1">V</ComboBoxItem>
                     <ComboBoxItem x:Uid="ComboBoxItem_2">Z</ComboBoxItem>
@@ -56,16 +57,16 @@
         </StackPanel>
         <StackPanel x:Uid="stackpanel" x:Name="stackpanel" Orientation="Horizontal" Grid.Row="3" Margin="0,18,0,0">
             <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="30,1.3,0,0" IsChecked="False" IsThreeState="False"></CheckBox>
-            <TextBlock x:Uid="TextBlock_5">批量</TextBlock>
+            <TextBlock x:Uid="TextBlock_5" Text="{x:Static properties:Resources.Batch}"/>
             <StackPanel x:Uid="StackPanel_6" Margin="80,0,0,0" Orientation="Horizontal" Visibility="{Binding ElementName=checkbox,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
-                <TextBlock x:Uid="TextBlock_6" Margin="0,1,5,0">添加个数</TextBlock>
+                <TextBlock x:Uid="TextBlock_6" Margin="0,1,5,0" Text="{x:Static properties:Resources.Number_Of_Additions}"/>
                 <usr:RangeTextBox x:Uid="rangeTextBox" x:Name="rangeTextBox" VerticalAlignment="Top" LowRange="1" TopRange="64" DefaultValue="1"></usr:RangeTextBox>
                 <TextBlock x:Uid="TextBlock_7" Margin="5,1,0,0">(1 ~ 64)</TextBlock>
             </StackPanel>
         </StackPanel>
         <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Grid.Row="4">
-            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="确定" Height="20" Width="60" Margin="30,0,0,0"></Button>
-            <Button x:Uid="CancelButton" x:Name="CancelButton" Content="取消" Height="20" Width="60" Margin="180,0,0,0"></Button>
+            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="{x:Static properties:Resources.Ensure}" Height="20" Width="60" Margin="30,0,0,0"></Button>
+            <Button x:Uid="CancelButton" x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="20" Width="60" Margin="180,0,0,0"></Button>
         </StackPanel>
     </Grid>
 </Window>

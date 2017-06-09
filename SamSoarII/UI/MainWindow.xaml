@@ -447,8 +447,8 @@
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_2">
-                            <ad:LayoutAnchorable x:Uid="LAElemList" x:Name="LAElemList" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}">
-                                <local:ElementList x:Uid="local:ElementList_1"></local:ElementList>
+                            <ad:LayoutAnchorable x:Name="LAElemList" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}">
+                                <local:ElementList x:Name="ElemList"></local:ElementList>
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorGroup>
                         <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_3">

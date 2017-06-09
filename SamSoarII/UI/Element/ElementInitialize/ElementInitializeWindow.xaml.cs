@@ -54,11 +54,11 @@ namespace SamSoarII.AppMain.UI
             Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (EleTypeCombox.SelectedIndex == 0 || EleTypeCombox.SelectedIndex == 1 || EleTypeCombox.SelectedIndex == 13 || EleTypeCombox.SelectedIndex == 14)
             {
-                MessageBox.Show("该类寄存器不可写入!");
+                MessageBox.Show(Properties.Resources.Message_Can_Not_Be_Written);
             }
             else if(!ElementAddressHelper.AssertAddrRange(Type,uint.Parse(textBox.Text) + uint.Parse(LengthTextbox.Text), device))
             {
-                MessageBox.Show("超过最大长度范围,请重新输入!");
+                MessageBox.Show(Properties.Resources.Message_Over_Max_Len);
             }
             else
             {
@@ -174,7 +174,7 @@ namespace SamSoarII.AppMain.UI
                     if (model.ShowValue.Trim().ToUpper() != "ON" && model.ShowValue.Trim().ToUpper() != "OFF")
                     {
                         e.Cancel = true;
-                        MessageBox.Show("输入值非法!");
+                        MessageBox.Show(Properties.Resources.Invalid_Input);
                     }
                     else
                     {
@@ -198,7 +198,7 @@ namespace SamSoarII.AppMain.UI
                     catch (Exception ex)
                     {
                         e.Cancel = true;
-                        MessageBox.Show("输入值非法!");
+                        MessageBox.Show(Properties.Resources.Invalid_Input);
                     }
                 }
             }
@@ -216,7 +216,7 @@ namespace SamSoarII.AppMain.UI
                     catch (Exception ex)
                     {
                         e.Cancel = true;
-                        MessageBox.Show("类型之间无法转换!");
+                        MessageBox.Show(Properties.Resources.Message_Converter_Error);
                     }
                 }
             }

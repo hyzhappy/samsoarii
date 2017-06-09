@@ -35,7 +35,6 @@ namespace SamSoarII.AppMain.UI.Monitor
                 return GetHashCode();
             }
         }
-        private int _selectIndex;
         private string _tableName;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -266,7 +265,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             catch (Exception e)
             {
-                MessageBox.Show("数值输入错误!");
+                MessageBox.Show(Properties.Resources.Message_Number_Error);
                 return null;
             }
         }
@@ -300,7 +299,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                     else
                     {
-                        MessageBox.Show("该软元件已添加!");
+                        MessageBox.Show(Properties.Resources.Message_Element_Has_Added);
                     }
                 };
                 dialog.ShowDialog();
@@ -326,8 +325,8 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         private void ChangeDialogStyle(AddElementDialog dialog, ElementModel element)
         {
-            dialog.Title = string.Format("变量修改");
-            dialog.Themetextblock.Text = string.Format("变量修改");
+            dialog.Title = string.Format(Properties.Resources.Variable_Modification);
+            dialog.Themetextblock.Text = string.Format(Properties.Resources.Variable_Modification);
             dialog.stackpanel.Visibility = Visibility.Hidden;
             dialog.comboBox.SelectedIndex = (int)Enum.Parse(typeof(ElementAddressType),element.AddrType);
             dialog.textBox.Text = element.StartAddr.ToString();

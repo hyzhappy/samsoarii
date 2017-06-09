@@ -108,8 +108,8 @@ namespace SamSoarII.UserInterface
         {
             if (IsSettingChecked && File.Exists(PathContent + @"\" + NameContent + ".ssp"))
             {
-                string title = "是否覆盖";
-                string text = String.Format("{0:s}在当前目录已经存在，是否覆盖？", NameContent);
+                string title = Properties.Resources.Message_Is_Override;
+                string text = String.Format("{2:s}{0},{1}?",Properties.Resources.Message_Is_Override, Properties.Resources.Message_Already_Exist, NameContent);
                 MessageBoxResult mbret = MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 switch (mbret)
                 {

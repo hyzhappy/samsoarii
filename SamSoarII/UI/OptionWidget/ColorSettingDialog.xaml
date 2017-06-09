@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
+        xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
         xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
         xmlns:ColorPicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="编辑颜色" Height="250" Width="400">
+        Title="{x:Static properties:Resources.Edit_Color}" Height="250" Width="400">
     <Window.Resources>
         <util:ColorToBrushConverter x:Uid="util:ColorToBrushConverter_1" x:Key="ColorToBrushConverter"/>
     </Window.Resources>
@@ -31,16 +32,14 @@
                                  SelectedColor="{Binding Color}">
         </ColorPicker:ColorPicker>
         <StackPanel x:Uid="StackPanel_1" Margin="20,-30,0,0" Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-            <Label x:Uid="Label_1" BorderBrush="Black" BorderThickness="1,1,0,1" ToolTip="当前颜色" Background="{Binding ElementName=CP_Color,Path=SelectedColor,Converter={StaticResource ColorToBrushConverter}}" Height="20" Width="90" HorizontalAlignment="Left"></Label>
-            <Label x:Uid="label" BorderBrush="Black" BorderThickness="1" ToolTip="上一种颜色" x:Name="label" Height="20" Width="30" HorizontalAlignment="Left"></Label>
+            <Label x:Uid="Label_1" BorderBrush="Black" BorderThickness="1,1,0,1" ToolTip="{x:Static properties:Resources.Current_Color}" Background="{Binding ElementName=CP_Color,Path=SelectedColor,Converter={StaticResource ColorToBrushConverter}}" Height="20" Width="90" HorizontalAlignment="Left"></Label>
+            <Label x:Uid="label" BorderBrush="Black" BorderThickness="1" ToolTip="{x:Static properties:Resources.Preview_Color}" x:Name="label" Height="20" Width="30" HorizontalAlignment="Left"></Label>
         </StackPanel>
         <Button x:Uid="B_Ensure" Grid.Row="2" Grid.Column="0" Height="20" Width="80"
-                x:Name="B_Ensure" Click="B_Ensure_Click">
-            确定
-        </Button>
+                x:Name="B_Ensure" Click="B_Ensure_Click" Content="{x:Static properties:Resources.Ensure}"/>
+
         <Button x:Uid="B_Cancel" Grid.Row="2" Grid.Column="1" Height="20" Width="80"
-                x:Name="B_Cancel" Click="B_Cancel_Click">
-            取消
-        </Button>
+                x:Name="B_Cancel" Click="B_Cancel_Click" Content="{x:Static properties:Resources.Cancel}"/>
+
     </Grid>
 </Window>

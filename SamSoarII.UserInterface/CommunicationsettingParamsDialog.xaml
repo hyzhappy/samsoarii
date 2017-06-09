@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         xmlns:port="clr-namespace:System.IO.Ports;assembly=System"
         mc:Ignorable="d"
-        Title="通信参数设置" Height="200" Width="300">
+        Title="{x:Static properties:Resources.Communication_Parameter_Setting}" Height="200" Width="300">
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
             <RowDefinition x:Uid="RowDefinition_1" Height="5*"></RowDefinition>
@@ -26,15 +27,15 @@
         </Grid.Resources>
         <StackPanel x:Uid="StackPanel_1" Orientation="Vertical">
             <StackPanel x:Uid="StackPanel_2">
-                <TextBlock x:Uid="TextBlock_1">通信参数:</TextBlock>
+                <TextBlock x:Uid="TextBlock_1" Text="{x:Static properties:Resources.CommunicationSetting}"/>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_2" Margin="0,2,0,0">PC串口</TextBlock>
+                <TextBlock x:Uid="TextBlock_2" Margin="0,2,0,0" Text="{x:Static properties:Resources.Serialport}"/>
                 <ComboBox x:Uid="SerialPortComboBox" x:Name="SerialPortComboBox" Width="70" ItemsSource="{Binding Source={StaticResource SerialPortNamesProvider}}" SelectedIndex="{Binding SerialPortIndex}">
                 </ComboBox>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_3" Margin="0,2,0,0">波特率</TextBlock>
+                <TextBlock x:Uid="TextBlock_3" Margin="0,2,0,0" Text="{x:Static properties:Resources.Baud_Rate}"/>
                 <ComboBox x:Uid="BaudRateComboBox" x:Name="BaudRateComboBox" Width="70" SelectedIndex="{Binding BaudRateIndex}">
                     <ComboBoxItem x:Uid="ComboBoxItem_1">4800</ComboBoxItem>
                     <ComboBoxItem x:Uid="ComboBoxItem_2">9600</ComboBoxItem>
@@ -43,18 +44,18 @@
                     <ComboBoxItem x:Uid="ComboBoxItem_5">57600</ComboBoxItem>
                     <ComboBoxItem x:Uid="ComboBoxItem_6">115200</ComboBoxItem>
                 </ComboBox>
-                <TextBlock x:Uid="TextBlock_4" Text="停止位" Margin="20,2,0,0"></TextBlock>
+                <TextBlock x:Uid="TextBlock_4" Text="{x:Static properties:Resources.Stop_Bit}" Margin="20,2,0,0"></TextBlock>
                 <ComboBox x:Uid="StopBitComboBox" x:Name="StopBitComboBox" Width="50" SelectedIndex="{Binding StopBitIndex}">
                     <ComboBoxItem x:Uid="ComboBoxItem_7">1</ComboBoxItem>
                     <ComboBoxItem x:Uid="ComboBoxItem_8">2</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_5" Margin="0,2,0,0">数据位</TextBlock>
+                <TextBlock x:Uid="TextBlock_5" Margin="0,2,0,0" Text="{x:Static properties:Resources.Data_Bit}"/>
                 <ComboBox x:Uid="DataBitComboBox" x:Name="DataBitComboBox" Width="50" SelectedIndex="{Binding DataBitIndex}">
                     <ComboBoxItem x:Uid="ComboBoxItem_9">8</ComboBoxItem>
                 </ComboBox>
-                <TextBlock x:Uid="TextBlock_6" Margin="40,2,0,0">校验码</TextBlock>
+                <TextBlock x:Uid="TextBlock_6" Margin="40,2,0,0" Text="{x:Static properties:Resources.Check_Code}"/>
                 <ComboBox x:Uid="CheckCodeComboBox" x:Name="CheckCodeComboBox" Width="60" SelectedIndex="{Binding CheckCodeIndex}">
                     <ComboBoxItem x:Uid="ComboBoxItem_10">NONE</ComboBoxItem>
                     <ComboBoxItem x:Uid="ComboBoxItem_11">EVEN</ComboBoxItem>
@@ -62,14 +63,14 @@
                 </ComboBox>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_7" Margin="0,10,0,0">超时时间</TextBlock>
+                <TextBlock x:Uid="TextBlock_7" Margin="0,10,0,0" Text="{x:Static properties:Resources.Timeout}"/>
                 <local:RangeTextBox x:Uid="rangeTextbox" LowRange="1" TopRange="6000" DefaultValue="20" x:Name="rangeTextbox"></local:RangeTextBox>
                 <TextBlock x:Uid="TextBlock_8" Margin="5,10,0,0">*ms</TextBlock>
             </StackPanel>
         </StackPanel>
         <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Grid.Row="1">
-            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="50" Height="20" Margin="160,0,0,0">确定</Button>
-            <Button x:Uid="CancelButton" x:Name="CancelButton" Width="50" Height="20" Margin="10,0,0,0">取消</Button>
+            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="50" Height="20" Margin="160,0,0,0" Content="{x:Static properties:Resources.Ensure}"/>
+            <Button x:Uid="CancelButton" x:Name="CancelButton" Width="50" Height="20" Margin="10,0,0,0" Content="{x:Static properties:Resources.Cancel}"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -757,7 +757,7 @@ namespace SamSoarII.AppMain.UI
                         {
                             if (dialogImport.FileName == string.Empty)
                             {
-                                MessageBox.Show("请选择文件");
+                                MessageBox.Show(Properties.Resources.Message_File_Requried);
                                 return;
                             }
                             CSVFileHelper.ImportExcute(dialogImport.FileName, _elementCollection, dialogImport.Separator.Substring(0, 1));
@@ -776,18 +776,18 @@ namespace SamSoarII.AppMain.UI
                             string dir = dialogExport.Path;
                             if (!Directory.Exists(dir))
                             {
-                                MessageBox.Show("指定路径不存在");
+                                MessageBox.Show(Properties.Resources.Message_Path);
                                 return;
                             }
                             if (name == string.Empty)
                             {
-                                MessageBox.Show("文件名不能为空");
+                                MessageBox.Show(Properties.Resources.Message_File_Name);
                                 return;
                             }
                             string fullFileName = string.Format(@"{0}\{1}.csv", dir, name);
                             if (File.Exists(fullFileName))
                             {
-                                MessageBox.Show("指定路径已存在同名文件");
+                                MessageBox.Show(Properties.Resources.Message_File_Exist);
                                 return;
                             }
                             CSVFileHelper.ExportExcute(fullFileName,ElementCollection,dialogExport.Separator.Substring(0,1));
@@ -818,7 +818,7 @@ namespace SamSoarII.AppMain.UI
                 {
                     if (textBox.Text != string.Empty && !ValueAliasManager.CheckAlias(comment.Name,textBox.Text))
                     {
-                        MessageBox.Show("alias is already exist");
+                        MessageBox.Show(Properties.Resources.Message_Alias_Exist);
                         e.Cancel = true;
                     }
                     else

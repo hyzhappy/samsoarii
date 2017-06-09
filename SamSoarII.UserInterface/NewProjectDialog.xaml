@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:dev="clr-namespace:SamSoarII.PLCDevice;assembly=SamSoarII.PLCDevice"
         mc:Ignorable="d"
-        Title="New Project" Height="360" Width="560" ResizeMode="NoResize">
+        Title="{x:Static properties:Resources.New_Project}" Height="360" Width="560" ResizeMode="NoResize">
     <Window.Resources>
         <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="PLCTypeList" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
             <ObjectDataProvider.MethodParameters>
@@ -16,21 +17,21 @@
         </ObjectDataProvider>
     </Window.Resources>
     <Canvas x:Uid="Canvas_1">
-        <Label x:Uid="Label_1" Canvas.Top="40" Canvas.Left="89">PLC型号</Label>
+        <Label x:Uid="Label_1" Canvas.Top="40" Canvas.Left="89" Content="{x:Static properties:Resources.PLC_Type}"/>
         <ComboBox x:Uid="PLCTypeComboBox" x:Name="PLCTypeComboBox" Width="120" Height="25" Canvas.Left="193" Canvas.Top="40" ItemsSource="{Binding Source={StaticResource PLCTypeList}}" SelectedIndex="0"/>
-        <GroupBox x:Uid="GroupBox_1" Header="工程名设定" Height="160" Width="380" Canvas.Top="80" Canvas.Left="90">
+        <GroupBox x:Uid="GroupBox_1" Header="{x:Static properties:Resources.Project_Setting}" Height="160" Width="380" Canvas.Top="80" Canvas.Left="90">
             <Canvas x:Uid="Canvas_2">
-                <CheckBox x:Uid="setting" x:Name="setting" Canvas.Top="10" Canvas.Left="20" IsThreeState="False">设置</CheckBox>
+                <CheckBox x:Uid="setting" x:Name="setting" Canvas.Top="10" Canvas.Left="20" IsThreeState="False" Content="{x:Static properties:Resources.Setting}"/>
                 <Canvas x:Uid="Canvas_3" IsEnabled="{Binding ElementName=setting,Path=IsChecked}">
-                    <Label x:Uid="Label_2" Canvas.Top="40" Canvas.Left="30">工程名字</Label>
-                    <Label x:Uid="Label_3" Canvas.Left="30" Canvas.Top="80">路径</Label>
+                    <Label x:Uid="Label_2" Canvas.Top="40" Canvas.Left="15" Content="{x:Static properties:Resources.Project_Name}"/>
+                    <Label x:Uid="Label_3" Canvas.Left="15" Canvas.Top="80" Content="{x:Static properties:Resources.Path}"/>
                     <TextBox x:Uid="NameTextBox" x:Name="NameTextBox" Width="121" Height="25" Canvas.Left="100" Canvas.Top="40"></TextBox>
                     <TextBox x:Uid="PathTextBox" x:Name="PathTextBox" Width="160" Height="25" Canvas.Left="100" Canvas.Top="80"></TextBox>
-                    <Button x:Uid="BrowseButton" x:Name="BrowseButton" Content="浏览" Width="80" Height="25" Canvas.Left="280" Canvas.Top="80"></Button>
+                    <Button x:Uid="BrowseButton" x:Name="BrowseButton" Content="{x:Static properties:Resources.Browse}" Width="80" Height="25" Canvas.Left="280" Canvas.Top="80"></Button>
                 </Canvas>
             </Canvas>
         </GroupBox>
-        <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="确定" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
-        <Button x:Uid="CancelButton" x:Name="CancelButton" Content="取消" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
+        <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="{x:Static properties:Resources.Ensure}" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
+        <Button x:Uid="CancelButton" x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
     </Canvas>
 </Window>

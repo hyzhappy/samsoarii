@@ -149,7 +149,7 @@ namespace SamSoarII.AppMain.Project
                         if (inst[i].Equals("???"))
                         {
                             inst.Status = PLCOriginInst.STATUS_ERROR;
-                            inst.Message = String.Format("缺少参数。");
+                            inst.Message = String.Format(Properties.Resources.Message_Missing_Parameters);
                             break;
                         }
                     }
@@ -173,7 +173,7 @@ namespace SamSoarII.AppMain.Project
                             if (!match.Success)
                             {
                                 inst.Status = PLCOriginInst.STATUS_WARNING;
-                                inst.Message = String.Format("变址计数器可能会重合，请谨慎使用。");
+                                inst.Message = String.Format(Properties.Resources.Message_Intra_Error);
                                 break;
                             }
                             if (!cvdict.ContainsKey(inst[1]))
@@ -183,12 +183,12 @@ namespace SamSoarII.AppMain.Project
                             else
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("计数器{0:s}已被使用！", inst[1]);
+                                inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Has_Been_Used);
                                 _inst = cvdict[inst[1]];
                                 if (_inst.Status == PLCOriginInst.STATUS_ACCEPT)
                                 {
                                     _inst.Status = PLCOriginInst.STATUS_WARNING;
-                                    _inst.Message = String.Format("计数器{0:s}被尝试在别的地方使用。", inst[1]);
+                                    _inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Used_Error);
                                 }
                             }
                             break;
@@ -199,7 +199,7 @@ namespace SamSoarII.AppMain.Project
                             if (!match.Success)
                             {
                                 inst.Status = PLCOriginInst.STATUS_WARNING;
-                                inst.Message = String.Format("变址计时器可能会重合，请谨慎使用。");
+                                inst.Message = String.Format(Properties.Resources.Message_Intra_Error);
                                 break;
                             }
                             if (!tvdict.ContainsKey(inst[1]))
@@ -209,12 +209,12 @@ namespace SamSoarII.AppMain.Project
                             else
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("计时器{0:s}已被使用！", inst[1]);
+                                inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Has_Been_Used);
                                 _inst = tvdict[inst[1]];
                                 if (_inst.Status == PLCOriginInst.STATUS_ACCEPT)
                                 {
                                     _inst.Status = PLCOriginInst.STATUS_WARNING;
-                                    _inst.Message = String.Format("计时器{0:s}被尝试在别的地方使用。", inst[1]);
+                                    _inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Counter, inst[1], Properties.Resources.Message_Used_Error);
                                 }
                             }
                             break;
@@ -222,7 +222,7 @@ namespace SamSoarII.AppMain.Project
                             if (outcount > 1)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("FOR指令不能和别的输出指令在同一个网络下使用。");
+                                inst.Message = String.Format(Properties.Resources.Message_FOR);
                             }
                             forcount++;
                             break;
@@ -230,17 +230,17 @@ namespace SamSoarII.AppMain.Project
                             if (stkcount > 0)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("LBL指令不能带条件。");
+                                inst.Message = String.Format(Properties.Resources.Message_LBL);
                             }
                             if (outcount > 1)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("NEXT指令不能和别的输出指令在同一个网络下使用。");
+                                inst.Message = String.Format(Properties.Resources.Message_NEXT);
                             }
                             if (forcount == 0)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("未找到对应的FOR指令。");
+                                inst.Message = String.Format(Properties.Resources.Message_FOR_Not_Found);
                             }
                             else
                             {
@@ -251,12 +251,12 @@ namespace SamSoarII.AppMain.Project
                             if (stkcount > 0)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("LBL指令不能带条件。");
+                                inst.Message = String.Format(Properties.Resources.Message_LBL);
                             }
                             if (outcount > 1)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("LBL指令不能和别的输出指令在同一个网络下使用。");
+                                inst.Message = String.Format(Properties.Resources.Message_LBL_Error);
                             }
                             if (!lbdict.ContainsKey(inst[1]))
                             {
@@ -265,7 +265,7 @@ namespace SamSoarII.AppMain.Project
                             else
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("跳转标记{0:s}已被使用！", inst[1]);
+                                inst.Message = String.Format("{0}{1:s}{2}",Properties.Resources.Jump_Mark, inst[1], Properties.Resources.Message_Has_Been_Used);
                             }
                             break;
                         case "OUT":
@@ -274,7 +274,7 @@ namespace SamSoarII.AppMain.Project
                             if (!match.Success)
                             {
                                 inst.Status = PLCOriginInst.STATUS_WARNING;
-                                inst.Message = String.Format("变址线圈输出可能会重合，请谨慎使用。");
+                                inst.Message = String.Format(Properties.Resources.Message_Intra_Coil_Error);
                                 break;
                             }
                             if (!outdict.ContainsKey(inst[1]))
@@ -284,10 +284,10 @@ namespace SamSoarII.AppMain.Project
                             else
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("{0:s}多线圈输出错误！", inst[1]);
+                                inst.Message = String.Format("{0:s}{1}", inst[1], Properties.Resources.Message_Multi_Coil);
                                 _inst = outdict[inst[1]];
                                 _inst.Status = PLCOriginInst.STATUS_WARNING;
-                                _inst.Message = String.Format("{0:s}被尝试在别的地方线圈输入。", inst[1]);
+                                _inst.Message = String.Format("{0:s}{1}", inst[1], Properties.Resources.Message_Used_Error);
                             }
                             break;
                         case "SET":
@@ -298,7 +298,7 @@ namespace SamSoarII.AppMain.Project
                             if (!match.Success)
                             {
                                 inst.Status = PLCOriginInst.STATUS_WARNING;
-                                inst.Message = String.Format("变址线圈输出可能会重合，请谨慎使用。");
+                                inst.Message = String.Format(Properties.Resources.Message_Intra_Coil_Error);
                                 break;
                             }
                             int count = int.Parse(((PLCInstruction)inst)[2]);
@@ -312,10 +312,10 @@ namespace SamSoarII.AppMain.Project
                                 if (outdict.ContainsKey(name))
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
-                                    inst.Message = String.Format("多线圈输出错误！");
+                                    inst.Message = String.Format(Properties.Resources.Message_Multi_Coil);
                                     _inst = outdict[inst[1]];
                                     _inst.Status = PLCOriginInst.STATUS_WARNING;
-                                    _inst.Message = String.Format("{0:s}被尝试在别的地方线圈输入。", inst[1]);
+                                    _inst.Message = String.Format("{0:s}{1}", inst[1], Properties.Resources.Message_Used_Error);
                                     break;
                                 }
                             }
@@ -328,14 +328,14 @@ namespace SamSoarII.AppMain.Project
                                 if (fit.Count() <= 0)
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
-                                    inst.Message = String.Format("找不到用户函数{0:s}。", inst[1]);
+                                    inst.Message = String.Format("{0}{1:s}。", Properties.Resources.Message_Func_Not_Found, inst[1]);
                                     break;
                                 }
                                 FuncModel fmodel = fit.First();
                                 if (!fmodel.CanCALLM())
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
-                                    inst.Message = String.Format("用户函数{0:s}不能被CALLM指令调用。", inst[1]);
+                                    inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.User_Function, inst[1],Properties.Resources.Message_CALL);
                                     break;
                                 }
                                 for (int i = 0; i < fmodel.ArgCount; i++)
@@ -363,7 +363,7 @@ namespace SamSoarII.AppMain.Project
                                         inst.Status = PLCOriginInst.STATUS_ERROR;
                                         if (inst[i + 2].Equals(String.Empty))
                                         {
-                                            inst.Message = String.Format("缺少参数。");
+                                            inst.Message = String.Format(Properties.Resources.Message_Missing_Parameters);
                                         }
                                         else
                                         {
@@ -385,13 +385,13 @@ namespace SamSoarII.AppMain.Project
                                 if (fit.Count() <= 0)
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
-                                    inst.Message = String.Format("找不到MODBUS表格{0:s}。", inst[2]);
+                                    inst.Message = String.Format("{0}{1:s}。", Properties.Resources.Message_Modbus_Table, inst[2]);
                                 }
                                 ModbusTableModel mtmodel = fit.First();
                                 if (!mtmodel.IsVaild)
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
-                                    inst.Message = String.Format("MUDBUS表格{0:s}不合法。", inst[2]);
+                                    inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Modbus_Table, inst[2], Properties.Resources.is_illegal);
                                 }
                             }
                             break;
@@ -408,7 +408,7 @@ namespace SamSoarII.AppMain.Project
                                 if (fit.Count() <= 0)
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
-                                    inst.Message = String.Format("找不到子程序{0:s}", inst[id]);
+                                    inst.Message = String.Format("{0}{1:s}", Properties.Resources.Message_SubRoutine_Not_Found, inst[id]);
                                 }
                                 if (inst.Type.Equals("ATCH"))
                                 {
@@ -426,7 +426,7 @@ namespace SamSoarII.AppMain.Project
                             if (stkcount == 0)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("缺少栈顶值作为条件。");
+                                inst.Message = String.Format(Properties.Resources.Message_Stack);
                             }
                             break;
                     }
@@ -446,7 +446,7 @@ namespace SamSoarII.AppMain.Project
                             if (forcount > 0)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("找不到对应的结束符NEXT。");
+                                inst.Message = String.Format(Properties.Resources.Message_NEXT_Not_Found);
                                 forcount--;
                             }
                             break;
@@ -454,7 +454,7 @@ namespace SamSoarII.AppMain.Project
                             if (!lbdict.ContainsKey(inst[1]))
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
-                                inst.Message = String.Format("找不到对应的跳转标记{0:s}", inst[1]);
+                                inst.Message = String.Format("{0}{1:s}", Properties.Resources.Message_Jump_Not_Found, inst[1]);
                             }
                             break;
                     }
@@ -499,7 +499,7 @@ namespace SamSoarII.AppMain.Project
                         case "OUT":
                         case "OUTIM":
                             inst.Status = PLCOriginInst.STATUS_ERROR;
-                            inst.Message = "禁止在中断子程序中使用输出线圈。";
+                            inst.Message = Properties.Resources.Message_Interrupt_1;
                             result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
                             break;
                         case "LDP":
@@ -507,26 +507,26 @@ namespace SamSoarII.AppMain.Project
                         case "MEP":
                         case "MEF":
                             inst.Status = PLCOriginInst.STATUS_ERROR;
-                            inst.Message = "禁止在中断子程序中使用边沿条件判断。";
+                            inst.Message = Properties.Resources.Message_Interrupt_2;
                             result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
                             break;
                         case "TON":
                         case "TONR":
                         case "TOF":
                             inst.Status = PLCOriginInst.STATUS_ERROR;
-                            inst.Message = "禁止在中断子程序中使用计时器。";
+                            inst.Message = Properties.Resources.Message_Interrupt_3;
                             result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
                             break;
                         case "CTU":
                         case "CTD":
                         case "CTUD":
                             inst.Status = PLCOriginInst.STATUS_ERROR;
-                            inst.Message = "禁止在中断子程序中使用计数器。";
+                            inst.Message = Properties.Resources.Message_Interrupt_4;
                             result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
                             break;
                         case "ALTP":
                             inst.Status = PLCOriginInst.STATUS_ERROR;
-                            inst.Message = "禁止在中断子程序中使用该指令。";
+                            inst.Message = Properties.Resources.Message_Interrupt_5;
                             result.Add(new ErrorReportElement(inst, invmodel.LNVModel, ldvmodel));
                             break;
                     }

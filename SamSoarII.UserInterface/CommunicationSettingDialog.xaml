@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         mc:Ignorable="d"
-        Title="通信设置" Height="250" Width="400">
+        Title="{x:Static properties:Resources.CommunicationSetting}" Height="250" Width="400">
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
             <RowDefinition x:Uid="RowDefinition_1" Height="5*"></RowDefinition>
@@ -13,9 +14,9 @@
         </Grid.RowDefinitions>
         <local:BaseSetting x:Uid="baseSetting" x:Name="baseSetting"></local:BaseSetting>
         <StackPanel x:Uid="StackPanel_1" Grid.Row="2" Orientation="Horizontal">
-            <Button x:Uid="CommunicationTestButton" x:Name="CommunicationTestButton" Width="60" Height="20" Margin="5,0,0,0">通信测试</Button>
-            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="50" Height="20" Margin="200,0,0,0">确定</Button>
-            <Button x:Uid="CancelButton" x:Name="CancelButton" Width="50" Height="20" Margin="10,0,0,0">取消</Button>
+            <Button x:Uid="CommunicationTestButton" x:Name="CommunicationTestButton" Width="auto" MinWidth="60" Height="20" Margin="5,0,0,0" Content="{x:Static properties:Resources.Communication_Test}"/>
+            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="50" Height="20" Margin="200,0,0,0" Content="{x:Static properties:Resources.Ensure}"/>
+            <Button x:Uid="CancelButton" x:Name="CancelButton" Width="50" Height="20" Margin="10,0,0,0" Content="{x:Static properties:Resources.Cancel}"/>
         </StackPanel>
     </Grid>
 </Window>

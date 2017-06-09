@@ -1220,13 +1220,13 @@ namespace SamSoarII.AppMain.Project
             }
             if (InstructionInput.Count == 0)
             {
-                throw new InstructionExecption(string.Format("输入为空."));
+                throw new InstructionExecption(string.Format(Properties.Resources.Message_Input_Empty));
             }
             else
             {
                 if (!LadderInstViewModelPrototype.CheckInstructionName(InstructionInput[0]))
                 {
-                    throw new InstructionExecption(string.Format("输入的指令不存在！"));
+                    throw new InstructionExecption(string.Format(Properties.Resources.Message_Instruction_Not_Exist));
                 }
             }
             switch (InstructionInput[0])
@@ -1234,7 +1234,7 @@ namespace SamSoarII.AppMain.Project
                 case "CALL":
                     if (InstructionInput.Count() < 2)
                     {
-                        throw new InstructionExecption("必须输入子程序名称。");
+                        throw new InstructionExecption(Properties.Resources.Message_Subroutine_Name_Required);
                     }
                     try
                     {
@@ -1243,13 +1243,13 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch (InvalidOperationException)
                     {
-                        throw new InstructionExecption(String.Format("找不到子程序{0:s}", InstructionInput[1]));
+                        throw new InstructionExecption(String.Format("{0}{1:s}", Properties.Resources.Message_SubRoutine_Not_Found, InstructionInput[1]));
                     }
                     break;
                 case "ATCH":
                     if (InstructionInput.Count() < 3)
                     {
-                        throw new InstructionExecption("必须输入子程序名称。");
+                        throw new InstructionExecption(Properties.Resources.Message_Subroutine_Name_Required);
                     }
                     try
                     {
@@ -1258,13 +1258,13 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch (InvalidOperationException)
                     {
-                        throw new InstructionExecption(String.Format("找不到子程序{0:s}", InstructionInput[2]));
+                        throw new InstructionExecption(String.Format("{0}{1:s}", Properties.Resources.Message_SubRoutine_Not_Found, InstructionInput[2]));
                     }
                     break;
                 case "CALLM":
                     if (InstructionInput.Count() < 2)
                     {
-                        throw new FormatException("必须输入函数名称。");
+                        throw new FormatException(Properties.Resources.Message_Func_Name_Required);
                     }
                     try
                     {
@@ -1273,13 +1273,13 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch (InvalidOperationException)
                     {
-                        throw new InstructionExecption(String.Format("找不到C函数{0:s}", InstructionInput[1]));
+                        throw new InstructionExecption(String.Format("{0}{1:s}", Properties.Resources.Message_CFunc_Not_Found, InstructionInput[1]));
                     }
                     break;
                 case "MBUS":
                     if (InstructionInput.Count() < 3)
                     {
-                        throw new InstructionExecption("必须输入MODBUS表格名称。");
+                        throw new InstructionExecption(Properties.Resources.Message_Modbus_Name_Requied);
                     }
                     try
                     {
@@ -1288,7 +1288,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch (InvalidOperationException)
                     {
-                        throw new InstructionExecption(String.Format("找不到MODBUS表格{0:s}", InstructionInput[2]));
+                        throw new InstructionExecption(String.Format("{0}{1:s}", Properties.Resources.Message_Modbus_Table, InstructionInput[2]));
                     }
                     break;
             }
@@ -1298,7 +1298,7 @@ namespace SamSoarII.AppMain.Project
                 ArgumentValue[] _values = new ArgumentValue[selectedFunction.ArgCount];
                 if (InstructionInput.Count() - 2 != selectedFunction.ArgCount)
                 {
-                    throw new FormatException("输入的参数数量与函数不相符！");
+                    throw new FormatException(Properties.Resources.Message_Func_Params_Num_Error);
                 }
                 for (int i = 0; i < selectedFunction.ArgCount; i++)
                 {
@@ -1337,7 +1337,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 else if (selectedFunction == null)
                 {
-                    throw new InstructionExecption("输入的参数数量与指令不相符！");
+                    throw new InstructionExecption(Properties.Resources.Message_Input_Params_Num_Error);
                 }
             }
             viewmodel.UpdateCommentContent();

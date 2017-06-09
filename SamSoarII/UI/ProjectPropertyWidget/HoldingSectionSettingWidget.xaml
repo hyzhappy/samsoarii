@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.ProjectPropertyWidget"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid x:Uid="Grid_1">
@@ -18,11 +19,11 @@
         </Grid.Resources>
         <StackPanel x:Uid="StackPanel_1" Style="{x:Null}">
             <StackPanel x:Uid="StackPanel_2">
-                <Label x:Uid="Label_1" FontSize="16">断电保持区设置</Label>
+                <Label x:Uid="Label_1" FontSize="16" Content="{x:Static properties:Resources.Power_off_Retention_Area_Setting}"/>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_3">
-                <Label x:Uid="Label_2">数据起始地址</Label>
-                <Label x:Uid="Label_3" Margin="30,0,0,0">长度</Label>
+                <Label x:Uid="Label_2" Content="{x:Static properties:Resources.Start_Address}"/>
+                <Label x:Uid="Label_3" Margin="60,0,0,0" Content="{x:Static properties:Resources.Length}"/>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_4">
                 <Label x:Uid="Label_4">M</Label>
@@ -78,10 +79,10 @@
             </StackPanel>
             <StackPanel x:Uid="StackPanel_8">
                 <CheckBox x:Uid="CheckBox1" x:Name="CheckBox1" Margin="8,0,0,0" VerticalAlignment="Center" IsChecked="{Binding NotClear}"></CheckBox>
-                <Label x:Uid="Label_8">下载时不清除</Label>
+                <Label x:Uid="Label_8" Content="{x:Static properties:Resources.Not_Clear_While_Download}"/>
             </StackPanel>
             <StackPanel x:Uid="StackPanel_9">
-                <Button x:Uid="Button_1" Width="70" Height="24" Margin="135,0,0,0" FontSize="16" Click="DefaultButtonClick">默认值</Button>
+                <Button x:Uid="Button_1" Width="70" Height="24" Margin="135,0,0,0" FontSize="16" Click="DefaultButtonClick" Content="{x:Static properties:Resources.Default}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

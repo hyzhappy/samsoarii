@@ -70,6 +70,24 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Add Element 的本地化字符串。
+        /// </summary>
+        public static string Add_Element {
+            get {
+                return ResourceManager.GetString("Add_Element", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 All Networks 的本地化字符串。
+        /// </summary>
+        public static string All_Networks {
+            get {
+                return ResourceManager.GetString("All_Networks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 All Routine 的本地化字符串。
         /// </summary>
         public static string All_Routine {
@@ -97,11 +115,65 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Average Number Of Samples 的本地化字符串。
+        /// </summary>
+        public static string Average_Number_Of_Samples {
+            get {
+                return ResourceManager.GetString("Average_Number_Of_Samples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Batch 的本地化字符串。
+        /// </summary>
+        public static string Batch {
+            get {
+                return ResourceManager.GetString("Batch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Baud Rate 的本地化字符串。
+        /// </summary>
+        public static string Baud_Rate {
+            get {
+                return ResourceManager.GetString("Baud_Rate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Buffer Bit 的本地化字符串。
+        /// </summary>
+        public static string Buffer_Bit {
+            get {
+                return ResourceManager.GetString("Buffer_Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Cancel 的本地化字符串。
         /// </summary>
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Channel 的本地化字符串。
+        /// </summary>
+        public static string Channel {
+            get {
+                return ResourceManager.GetString("Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Check Code 的本地化字符串。
+        /// </summary>
+        public static string Check_Code {
+            get {
+                return ResourceManager.GetString("Check_Code", resourceCulture);
             }
         }
         
@@ -142,6 +214,24 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Counter 的本地化字符串。
+        /// </summary>
+        public static string Counter {
+            get {
+                return ResourceManager.GetString("Counter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Current Color 的本地化字符串。
+        /// </summary>
+        public static string Current_Color {
+            get {
+                return ResourceManager.GetString("Current_Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Current Routine 的本地化字符串。
         /// </summary>
         public static string Current_Routine {
@@ -160,11 +250,47 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Current Value Of Samples 的本地化字符串。
+        /// </summary>
+        public static string Current_Value_Of_Samples {
+            get {
+                return ResourceManager.GetString("Current_Value_Of_Samples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Custom 的本地化字符串。
+        /// </summary>
+        public static string Custom {
+            get {
+                return ResourceManager.GetString("Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Data Bit 的本地化字符串。
+        /// </summary>
+        public static string Data_Bits {
+            get {
+                return ResourceManager.GetString("Data_Bits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Data Type 的本地化字符串。
         /// </summary>
         public static string Data_Type {
             get {
                 return ResourceManager.GetString("Data_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Default 的本地化字符串。
+        /// </summary>
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
             }
         }
         
@@ -178,11 +304,38 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Digital Quantity Range 的本地化字符串。
+        /// </summary>
+        public static string Digital_Quantity_Range {
+            get {
+                return ResourceManager.GetString("Digital_Quantity_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Displays Details 的本地化字符串。
         /// </summary>
         public static string Displays_Details {
             get {
                 return ResourceManager.GetString("Displays_Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Edit Color 的本地化字符串。
+        /// </summary>
+        public static string Edit_Color {
+            get {
+                return ResourceManager.GetString("Edit_Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Effect Preview 的本地化字符串。
+        /// </summary>
+        public static string Effect_Preview {
+            get {
+                return ResourceManager.GetString("Effect_Preview", resourceCulture);
             }
         }
         
@@ -223,6 +376,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Element Delete 的本地化字符串。
+        /// </summary>
+        public static string Element_Delete {
+            get {
+                return ResourceManager.GetString("Element_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Element Length 的本地化字符串。
         /// </summary>
         public static string Element_Length {
@@ -246,6 +408,33 @@ namespace SamSoarII.AppMain.Properties {
         public static string Enable_Disable {
             get {
                 return ResourceManager.GetString("Enable_Disable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Enable Extension 的本地化字符串。
+        /// </summary>
+        public static string Enable_Extension {
+            get {
+                return ResourceManager.GetString("Enable_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Enable Filter Time 的本地化字符串。
+        /// </summary>
+        public static string Enable_Filter_Time {
+            get {
+                return ResourceManager.GetString("Enable_Filter_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Enabled 的本地化字符串。
+        /// </summary>
+        public static string Enabled {
+            get {
+                return ResourceManager.GetString("Enabled", resourceCulture);
             }
         }
         
@@ -295,6 +484,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Expand Module Settings 的本地化字符串。
+        /// </summary>
+        public static string Expand_Module_Settings {
+            get {
+                return ResourceManager.GetString("Expand_Module_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Export CSV 的本地化字符串。
         /// </summary>
         public static string Export_CSV {
@@ -304,11 +502,65 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Filter Setting 的本地化字符串。
+        /// </summary>
+        public static string Filter_Setting {
+            get {
+                return ResourceManager.GetString("Filter_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Font 的本地化字符串。
         /// </summary>
         public static string Font {
             get {
                 return ResourceManager.GetString("Font", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Font Color 的本地化字符串。
+        /// </summary>
+        public static string Font_Color {
+            get {
+                return ResourceManager.GetString("Font_Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Font Range 的本地化字符串。
+        /// </summary>
+        public static string Font_Range {
+            get {
+                return ResourceManager.GetString("Font_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Font Size 的本地化字符串。
+        /// </summary>
+        public static string Font_Size {
+            get {
+                return ResourceManager.GetString("Font_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Font Style 的本地化字符串。
+        /// </summary>
+        public static string Font_Style {
+            get {
+                return ResourceManager.GetString("Font_Style", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Free Port Communication 的本地化字符串。
+        /// </summary>
+        public static string Free_Port_Communication {
+            get {
+                return ResourceManager.GetString("Free_Port_Communication", resourceCulture);
             }
         }
         
@@ -345,6 +597,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Import_CSV {
             get {
                 return ResourceManager.GetString("Import_CSV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Important 的本地化字符串。
+        /// </summary>
+        public static string Important {
+            get {
+                return ResourceManager.GetString("Important", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Input 的本地化字符串。
+        /// </summary>
+        public static string Input {
+            get {
+                return ResourceManager.GetString("Input", resourceCulture);
             }
         }
         
@@ -520,11 +790,47 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Intra Address 的本地化字符串。
+        /// </summary>
+        public static string Intra_Address {
+            get {
+                return ResourceManager.GetString("Intra_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Invalid input 的本地化字符串。
+        /// </summary>
+        public static string Invalid_Input {
+            get {
+                return ResourceManager.GetString("Invalid_Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 is illegal 的本地化字符串。
+        /// </summary>
+        public static string is_illegal {
+            get {
+                return ResourceManager.GetString("is_illegal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Jump 的本地化字符串。
         /// </summary>
         public static string Jump {
             get {
                 return ResourceManager.GetString("Jump", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Jump mark 的本地化字符串。
+        /// </summary>
+        public static string Jump_Mark {
+            get {
+                return ResourceManager.GetString("Jump_Mark", resourceCulture);
             }
         }
         
@@ -678,6 +984,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string LadderNetwork_Shield_Network {
             get {
                 return ResourceManager.GetString("LadderNetwork_Shield_Network", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Length 的本地化字符串。
+        /// </summary>
+        public static string Length {
+            get {
+                return ResourceManager.GetString("Length", resourceCulture);
             }
         }
         
@@ -1438,6 +1753,600 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Alias has already exist 的本地化字符串。
+        /// </summary>
+        public static string Message_Alias_Exist {
+            get {
+                return ResourceManager.GetString("Message_Alias_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Need to enter bit register! 的本地化字符串。
+        /// </summary>
+        public static string Message_Bit_Required {
+            get {
+                return ResourceManager.GetString("Message_Bit_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Can not be called by the CALLM instruction. 的本地化字符串。
+        /// </summary>
+        public static string Message_CALL {
+            get {
+                return ResourceManager.GetString("Message_CALL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 This type of register can not be written! 的本地化字符串。
+        /// </summary>
+        public static string Message_Can_Not_Be_Written {
+            get {
+                return ResourceManager.GetString("Message_Can_Not_Be_Written", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 can not be called by CALLM instruction. Please check the number and type of parameters. 的本地化字符串。
+        /// </summary>
+        public static string Message_Can_Not_CALL {
+            get {
+                return ResourceManager.GetString("Message_Can_Not_CALL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Can not find C function 的本地化字符串。
+        /// </summary>
+        public static string Message_CFunc_Not_Found {
+            get {
+                return ResourceManager.GetString("Message_CFunc_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 has been changed,is it saved? 的本地化字符串。
+        /// </summary>
+        public static string Message_Changed {
+            get {
+                return ResourceManager.GetString("Message_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Confirm Save 的本地化字符串。
+        /// </summary>
+        public static string Message_Confirm_Save {
+            get {
+                return ResourceManager.GetString("Message_Confirm_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Type can not be converted between! 的本地化字符串。
+        /// </summary>
+        public static string Message_Converter_Error {
+            get {
+                return ResourceManager.GetString("Message_Converter_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Can not be restored after deletion, is it OK? 的本地化字符串。
+        /// </summary>
+        public static string Message_Delete {
+            get {
+                return ResourceManager.GetString("Message_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The element has been added! 的本地化字符串。
+        /// </summary>
+        public static string Message_Element_Has_Added {
+            get {
+                return ResourceManager.GetString("Message_Element_Has_Added", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Specifies that the path already exists with the same name file 的本地化字符串。
+        /// </summary>
+        public static string Message_File_Exist {
+            get {
+                return ResourceManager.GetString("Message_File_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 File has been moved or deleted! 的本地化字符串。
+        /// </summary>
+        public static string Message_File_Moved {
+            get {
+                return ResourceManager.GetString("Message_File_Moved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The file name can not be empty 的本地化字符串。
+        /// </summary>
+        public static string Message_File_Name {
+            get {
+                return ResourceManager.GetString("Message_File_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Please select the file 的本地化字符串。
+        /// </summary>
+        public static string Message_File_Requried {
+            get {
+                return ResourceManager.GetString("Message_File_Requried", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 With the name already exists under the folder 的本地化字符串。
+        /// </summary>
+        public static string Message_Fold_File_Exist {
+            get {
+                return ResourceManager.GetString("Message_Fold_File_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The FOR instruction can not be used in the same network with another output instruction. 的本地化字符串。
+        /// </summary>
+        public static string Message_FOR {
+            get {
+                return ResourceManager.GetString("Message_FOR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The corresponding FOR instruction was not found. 的本地化字符串。
+        /// </summary>
+        public static string Message_FOR_Not_Found {
+            get {
+                return ResourceManager.GetString("Message_FOR_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 You must enter a function name. 的本地化字符串。
+        /// </summary>
+        public static string Message_Func_Name_Required {
+            get {
+                return ResourceManager.GetString("Message_Func_Name_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 User function not found 的本地化字符串。
+        /// </summary>
+        public static string Message_Func_Not_Found {
+            get {
+                return ResourceManager.GetString("Message_Func_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The number of input parameters does not match the function! 的本地化字符串。
+        /// </summary>
+        public static string Message_Func_Params_Num_Error {
+            get {
+                return ResourceManager.GetString("Message_Func_Params_Num_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Funcblock already exists 的本地化字符串。
+        /// </summary>
+        public static string Message_Funcblock_Exist {
+            get {
+                return ResourceManager.GetString("Message_Funcblock_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Has been used! 的本地化字符串。
+        /// </summary>
+        public static string Message_Has_Been_Used {
+            get {
+                return ResourceManager.GetString("Message_Has_Been_Used", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 There are illegal characters: 的本地化字符串。
+        /// </summary>
+        public static string Message_illegal_Char {
+            get {
+                return ResourceManager.GetString("Message_illegal_Char", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The input is empty. 的本地化字符串。
+        /// </summary>
+        public static string Message_Input_Empty {
+            get {
+                return ResourceManager.GetString("Message_Input_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The number of input parameters does not match the instruction! 的本地化字符串。
+        /// </summary>
+        public static string Message_Input_Params_Num_Error {
+            get {
+                return ResourceManager.GetString("Message_Input_Params_Num_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The input instruction does not exist! 的本地化字符串。
+        /// </summary>
+        public static string Message_Instruction_Not_Exist {
+            get {
+                return ResourceManager.GetString("Message_Instruction_Not_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 It is forbidden to use the output coil in the interrupt subroutine. 的本地化字符串。
+        /// </summary>
+        public static string Message_Interrupt_1 {
+            get {
+                return ResourceManager.GetString("Message_Interrupt_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 It is forbidden to use edge conditional judgment in interrupt subroutine. 的本地化字符串。
+        /// </summary>
+        public static string Message_Interrupt_2 {
+            get {
+                return ResourceManager.GetString("Message_Interrupt_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 It is forbidden to use the timers in the interrupt subroutine. 的本地化字符串。
+        /// </summary>
+        public static string Message_Interrupt_3 {
+            get {
+                return ResourceManager.GetString("Message_Interrupt_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 It is forbidden to use the counter in the interrupt subroutine. 的本地化字符串。
+        /// </summary>
+        public static string Message_Interrupt_4 {
+            get {
+                return ResourceManager.GetString("Message_Interrupt_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 It is forbidden to use this instruction in the interrupt subroutine. 的本地化字符串。
+        /// </summary>
+        public static string Message_Interrupt_5 {
+            get {
+                return ResourceManager.GetString("Message_Interrupt_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The index coil output may overlap, please use it carefully. 的本地化字符串。
+        /// </summary>
+        public static string Message_Intra_Coil_Error {
+            get {
+                return ResourceManager.GetString("Message_Intra_Coil_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The index counter may overlap, so use it carefully. 的本地化字符串。
+        /// </summary>
+        public static string Message_Intra_Error {
+            get {
+                return ResourceManager.GetString("Message_Intra_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Can not find the corresponding jump mark 的本地化字符串。
+        /// </summary>
+        public static string Message_Jump_Not_Found {
+            get {
+                return ResourceManager.GetString("Message_Jump_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The LBL instruction can not be conditional. 的本地化字符串。
+        /// </summary>
+        public static string Message_LBL {
+            get {
+                return ResourceManager.GetString("Message_LBL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The LBL instruction can not be used in the same network with another output instruction. 的本地化字符串。
+        /// </summary>
+        public static string Message_LBL_Error {
+            get {
+                return ResourceManager.GetString("Message_LBL_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Missing parameters. 的本地化字符串。
+        /// </summary>
+        public static string Message_Missing_Parameters {
+            get {
+                return ResourceManager.GetString("Message_Missing_Parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 You must enter the MODBUS table name. 的本地化字符串。
+        /// </summary>
+        public static string Message_Modbus_Name_Requied {
+            get {
+                return ResourceManager.GetString("Message_Modbus_Name_Requied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Modbus table not found 的本地化字符串。
+        /// </summary>
+        public static string Message_Modbus_Table {
+            get {
+                return ResourceManager.GetString("Message_Modbus_Table", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Modbus form is illegal, please check whether the form is complete. 的本地化字符串。
+        /// </summary>
+        public static string Message_Modbus_Table_Error {
+            get {
+                return ResourceManager.GetString("Message_Modbus_Table_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Multi-coil output error! 的本地化字符串。
+        /// </summary>
+        public static string Message_Multi_Coil {
+            get {
+                return ResourceManager.GetString("Message_Multi_Coil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Name format is illegal! 的本地化字符串。
+        /// </summary>
+        public static string Message_Name_Format_illegal {
+            get {
+                return ResourceManager.GetString("Message_Name_Format_illegal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Name is required! 的本地化字符串。
+        /// </summary>
+        public static string Message_Name_Needed {
+            get {
+                return ResourceManager.GetString("Message_Name_Needed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Network range error 的本地化字符串。
+        /// </summary>
+        public static string Message_Network_Range_Error {
+            get {
+                return ResourceManager.GetString("Message_Network_Range_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The NEXT instruction can not be used in the same network with another output instruction. 的本地化字符串。
+        /// </summary>
+        public static string Message_NEXT {
+            get {
+                return ResourceManager.GetString("Message_NEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The corresponding terminator NEXT was not found. 的本地化字符串。
+        /// </summary>
+        public static string Message_NEXT_Not_Found {
+            get {
+                return ResourceManager.GetString("Message_NEXT_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Numeric input error! 的本地化字符串。
+        /// </summary>
+        public static string Message_Number_Error {
+            get {
+                return ResourceManager.GetString("Message_Number_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Over the maximum length range, please re-enter! 的本地化字符串。
+        /// </summary>
+        public static string Message_Over_Max_Len {
+            get {
+                return ResourceManager.GetString("Message_Over_Max_Len", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Specified path does not exist! 的本地化字符串。
+        /// </summary>
+        public static string Message_Path {
+            get {
+                return ResourceManager.GetString("Message_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Incorrect project file, project file is corrupt! 的本地化字符串。
+        /// </summary>
+        public static string Message_Project_Error {
+            get {
+                return ResourceManager.GetString("Message_Project_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The project file has been loaded! 的本地化字符串。
+        /// </summary>
+        public static string Message_Project_Loaded {
+            get {
+                return ResourceManager.GetString("Message_Project_Loaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 There are already renaming items! 的本地化字符串。
+        /// </summary>
+        public static string Message_Renamed_Error {
+            get {
+                return ResourceManager.GetString("Message_Renamed_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The stack top value is missing as a condition. 的本地化字符串。
+        /// </summary>
+        public static string Message_Stack {
+            get {
+                return ResourceManager.GetString("Message_Stack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 SubRoutine already exists 的本地化字符串。
+        /// </summary>
+        public static string Message_Subroutine_Exist {
+            get {
+                return ResourceManager.GetString("Message_Subroutine_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 You must enter the subroutine name. 的本地化字符串。
+        /// </summary>
+        public static string Message_Subroutine_Name_Required {
+            get {
+                return ResourceManager.GetString("Message_Subroutine_Name_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Can not find subroutine 的本地化字符串。
+        /// </summary>
+        public static string Message_SubRoutine_Not_Found {
+            get {
+                return ResourceManager.GetString("Message_SubRoutine_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Table exist! 的本地化字符串。
+        /// </summary>
+        public static string Message_Table_Exist {
+            get {
+                return ResourceManager.GetString("Message_Table_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Table name exist! 的本地化字符串。
+        /// </summary>
+        public static string Message_Table_Name_Exist {
+            get {
+                return ResourceManager.GetString("Message_Table_Name_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The current text is read-only and can not be changed! 的本地化字符串。
+        /// </summary>
+        public static string Message_Text {
+            get {
+                return ResourceManager.GetString("Message_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Added element will be deleted, will it continue? 的本地化字符串。
+        /// </summary>
+        public static string Message_Tooltip {
+            get {
+                return ResourceManager.GetString("Message_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 is tried to be used elsewhere. 的本地化字符串。
+        /// </summary>
+        public static string Message_Used_Error {
+            get {
+                return ResourceManager.GetString("Message_Used_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Need to enter word register! 的本地化字符串。
+        /// </summary>
+        public static string Message_Word_Requried {
+            get {
+                return ResourceManager.GetString("Message_Word_Requried", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Communication failed! Please check the parameter settings. 的本地化字符串。
+        /// </summary>
+        public static string MessageBox_Communication_Failed {
+            get {
+                return ResourceManager.GetString("MessageBox_Communication_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Communication success! 的本地化字符串。
+        /// </summary>
+        public static string MessageBox_Communication_Success {
+            get {
+                return ResourceManager.GetString("MessageBox_Communication_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 *Minute 的本地化字符串。
+        /// </summary>
+        public static string Minute {
+            get {
+                return ResourceManager.GetString("Minute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Create New Table 的本地化字符串。
         /// </summary>
         public static string Modbus_Create_New_Table {
@@ -1510,6 +2419,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Modbus Master Station 的本地化字符串。
+        /// </summary>
+        public static string Modbus_Master_Station {
+            get {
+                return ResourceManager.GetString("Modbus_Master_Station", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Slave Length 的本地化字符串。
         /// </summary>
         public static string Modbus_Slave_Length {
@@ -1533,6 +2451,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Modbus_Slave_Station_Number {
             get {
                 return ResourceManager.GetString("Modbus_Slave_Station_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Modbus Slave Station 的本地化字符串。
+        /// </summary>
+        public static string Modbus_Slaver_Station {
+            get {
+                return ResourceManager.GetString("Modbus_Slaver_Station", resourceCulture);
             }
         }
         
@@ -1564,11 +2491,173 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Mode 的本地化字符串。
+        /// </summary>
+        public static string Mode {
+            get {
+                return ResourceManager.GetString("Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Eight 的本地化字符串。
+        /// </summary>
+        public static string Module_Eight {
+            get {
+                return ResourceManager.GetString("Module_Eight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Five 的本地化字符串。
+        /// </summary>
+        public static string Module_Five {
+            get {
+                return ResourceManager.GetString("Module_Five", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Four 的本地化字符串。
+        /// </summary>
+        public static string Module_Four {
+            get {
+                return ResourceManager.GetString("Module_Four", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module One 的本地化字符串。
+        /// </summary>
+        public static string Module_One {
+            get {
+                return ResourceManager.GetString("Module_One", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Seven 的本地化字符串。
+        /// </summary>
+        public static string Module_Seven {
+            get {
+                return ResourceManager.GetString("Module_Seven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Six 的本地化字符串。
+        /// </summary>
+        public static string Module_Six {
+            get {
+                return ResourceManager.GetString("Module_Six", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Three 的本地化字符串。
+        /// </summary>
+        public static string Module_Three {
+            get {
+                return ResourceManager.GetString("Module_Three", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Two 的本地化字符串。
+        /// </summary>
+        public static string Module_Two {
+            get {
+                return ResourceManager.GetString("Module_Two", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Module Type 的本地化字符串。
+        /// </summary>
+        public static string Module_Type {
+            get {
+                return ResourceManager.GetString("Module_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Monitor Start 的本地化字符串。
+        /// </summary>
+        public static string Monitor_Start {
+            get {
+                return ResourceManager.GetString("Monitor_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Monitor Stop 的本地化字符串。
+        /// </summary>
+        public static string Monitor_Stop {
+            get {
+                return ResourceManager.GetString("Monitor_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Network 的本地化字符串。
         /// </summary>
         public static string Network {
             get {
                 return ResourceManager.GetString("Network", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Network Number Range 的本地化字符串。
+        /// </summary>
+        public static string Network_Number_Range {
+            get {
+                return ResourceManager.GetString("Network_Number_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Network Range 的本地化字符串。
+        /// </summary>
+        public static string Network_Range {
+            get {
+                return ResourceManager.GetString("Network_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Not Clear While Download 的本地化字符串。
+        /// </summary>
+        public static string Not_Clear_While_Download {
+            get {
+                return ResourceManager.GetString("Not_Clear_While_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Number Of Additions 的本地化字符串。
+        /// </summary>
+        public static string Number_Of_Additions {
+            get {
+                return ResourceManager.GetString("Number_Of_Additions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Offset Element Select 的本地化字符串。
+        /// </summary>
+        public static string Offset_Element_Select {
+            get {
+                return ResourceManager.GetString("Offset_Element_Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ON/OFF/CurrentValue 的本地化字符串。
+        /// </summary>
+        public static string ON_OFF_CurrentValue {
+            get {
+                return ResourceManager.GetString("ON_OFF_CurrentValue", resourceCulture);
             }
         }
         
@@ -1587,6 +2676,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Other {
             get {
                 return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Output 的本地化字符串。
+        /// </summary>
+        public static string Output {
+            get {
+                return ResourceManager.GetString("Output", resourceCulture);
             }
         }
         
@@ -1654,11 +2752,38 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Please Select Range: 的本地化字符串。
+        /// </summary>
+        public static string Please_Select_Range {
+            get {
+                return ResourceManager.GetString("Please_Select_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Position 的本地化字符串。
         /// </summary>
         public static string Position {
             get {
                 return ResourceManager.GetString("Position", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Power-off Retention Area Setting 的本地化字符串。
+        /// </summary>
+        public static string Power_off_Retention_Area_Setting {
+            get {
+                return ResourceManager.GetString("Power-off_Retention_Area_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Preview Color 的本地化字符串。
+        /// </summary>
+        public static string Preview_Color {
+            get {
+                return ResourceManager.GetString("Preview_Color", resourceCulture);
             }
         }
         
@@ -1762,6 +2887,51 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Quick Add 的本地化字符串。
+        /// </summary>
+        public static string Quick_Add {
+            get {
+                return ResourceManager.GetString("Quick_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Quick Add Element 的本地化字符串。
+        /// </summary>
+        public static string Quick_Add_Element {
+            get {
+                return ResourceManager.GetString("Quick_Add_Element", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Read Bit 的本地化字符串。
+        /// </summary>
+        public static string Read_Bit {
+            get {
+                return ResourceManager.GetString("Read_Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Read Word 的本地化字符串。
+        /// </summary>
+        public static string Read_Word {
+            get {
+                return ResourceManager.GetString("Read_Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Register Address Range 的本地化字符串。
+        /// </summary>
+        public static string Register_Range {
+            get {
+                return ResourceManager.GetString("Register_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Release 的本地化字符串。
         /// </summary>
         public static string Release {
@@ -1834,6 +3004,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Routine Range 的本地化字符串。
+        /// </summary>
+        public static string Routine_Range {
+            get {
+                return ResourceManager.GetString("Routine_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Search 的本地化字符串。
         /// </summary>
         public static string Search {
@@ -1852,6 +3031,24 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Select Module 的本地化字符串。
+        /// </summary>
+        public static string Select_Module {
+            get {
+                return ResourceManager.GetString("Select_Module", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Set Value 的本地化字符串。
+        /// </summary>
+        public static string Set_Value {
+            get {
+                return ResourceManager.GetString("Set_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Setting 的本地化字符串。
         /// </summary>
         public static string Setting {
@@ -1861,11 +3058,65 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Start Address 的本地化字符串。
+        /// </summary>
+        public static string Start_Address {
+            get {
+                return ResourceManager.GetString("Start_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Station Number Setting 的本地化字符串。
+        /// </summary>
+        public static string Station_Number_Setting {
+            get {
+                return ResourceManager.GetString("Station_Number_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Stop Bit 的本地化字符串。
+        /// </summary>
+        public static string Stop_Bit {
+            get {
+                return ResourceManager.GetString("Stop_Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 SubRoutine 的本地化字符串。
         /// </summary>
         public static string SubRoutine {
             get {
                 return ResourceManager.GetString("SubRoutine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Timed Save 的本地化字符串。
+        /// </summary>
+        public static string Timed_Save {
+            get {
+                return ResourceManager.GetString("Timed_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Timed Save Settings 的本地化字符串。
+        /// </summary>
+        public static string Timed_Save_Settings {
+            get {
+                return ResourceManager.GetString("Timed_Save_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Timeout 的本地化字符串。
+        /// </summary>
+        public static string Timeout {
+            get {
+                return ResourceManager.GetString("Timeout", resourceCulture);
             }
         }
         
@@ -1884,6 +3135,60 @@ namespace SamSoarII.AppMain.Properties {
         public static string Used_Element {
             get {
                 return ResourceManager.GetString("Used_Element", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 User function 的本地化字符串。
+        /// </summary>
+        public static string User_Function {
+            get {
+                return ResourceManager.GetString("User_Function", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Variable Modification 的本地化字符串。
+        /// </summary>
+        public static string Variable_Modification {
+            get {
+                return ResourceManager.GetString("Variable_Modification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write Bit 的本地化字符串。
+        /// </summary>
+        public static string Write_Bit {
+            get {
+                return ResourceManager.GetString("Write_Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write Bits 的本地化字符串。
+        /// </summary>
+        public static string Write_Bits {
+            get {
+                return ResourceManager.GetString("Write_Bits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write Word 的本地化字符串。
+        /// </summary>
+        public static string Write_Word {
+            get {
+                return ResourceManager.GetString("Write_Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write Words 的本地化字符串。
+        /// </summary>
+        public static string Write_Words {
+            get {
+                return ResourceManager.GetString("Write_Words", resourceCulture);
             }
         }
     }

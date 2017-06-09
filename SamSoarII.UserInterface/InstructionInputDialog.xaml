@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
+        xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         mc:Ignorable="d"
-        Title="指令输入" Height="90" Width="600" KeyDown="OnWindowKeyDown" ResizeMode="NoResize" x:Name="window" LocationChanged="OnLocationChanged">
+        Title="{x:Static properties:Resources.Instruction_Input}" Height="90" Width="600" KeyDown="OnWindowKeyDown" ResizeMode="NoResize" x:Name="window" LocationChanged="OnLocationChanged">
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
             <RowDefinition x:Uid="RowDefinition_1" Height="*"></RowDefinition>
@@ -19,8 +20,8 @@
             <wf:TextBox x:Uid="InstructionInputTextBox" x:Name="InstructionInputTextBox" Multiline="False" TextChanged="OnTextChanged" KeyDown="OnKeyDown" MouseClick="OnMouseClick"></wf:TextBox>
         </WindowsFormsHost>
         <StackPanel x:Uid="StackPanel_1" Grid.Column="1" Orientation="Horizontal">
-            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="70" Height="24" Click="OnEnsureButtonClick">确定</Button>
-            <Button x:Uid="HelpButton" x:Name="HelpButton" Width="70" Height="24" Margin="15,0,0,0" Click="OnHelpButtonClick">帮助</Button>
+            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="70" Height="24" Click="OnEnsureButtonClick" Content="{x:Static properties:Resources.Ensure}"/>
+            <Button x:Uid="HelpButton" x:Name="HelpButton" Width="70" Height="24" Margin="15,0,0,0" Click="OnHelpButtonClick" Content="{x:Static properties:Resources.Help}"/>
         </StackPanel>
         <Grid x:Uid="Grid_2">
             <local:PopupNotTop x:Uid="TextBoxPopup" x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" VerticalOffset="-29" HorizontalOffset="-5" IsOpen="False" Topmost="False">
