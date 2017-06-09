@@ -95,8 +95,6 @@ namespace SamSoarII.Extend.FuncBlockModel
             return ret;
         }
         
-
-
         public void Move(int index)
         {
             CurrentIndex = index;

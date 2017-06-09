@@ -989,7 +989,7 @@ namespace SamSoarII.AppMain.Project
             File.Delete(funcBlockCFile);
             return SimulateDllModel.LoadDll(outputDllFile);
         }
-        
+
         public static void GenerateFinal(ProjectModel pmodel, string plclibAFile)
         {
             List<InstHelper.PLCInstNetwork> nets =
@@ -1011,6 +1011,8 @@ namespace SamSoarII.AppMain.Project
             string sectionsLDFile = String.Format(@"{0:s}\downg\sections.ld", currentPath);
             string outputElfFile = String.Format(@"{0:s}\downc.elf", currentPath);
             string outputBinFile = String.Format(@"{0:s}\downc.bin", currentPath);
+            string aaMapFile = String.Format(@"{0:s}\aa.map", currentPath);
+            plclibAFile = String.Format(@"{0:s}\{1:s}", currentPath, plclibAFile);
             // 生成梯形图的c语言
             StreamWriter sw = new StreamWriter(ladderCFile);
             ModbusTableViewModel mtvmodel = pmodel.MTVModel;
@@ -1050,15 +1052,17 @@ namespace SamSoarII.AppMain.Project
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.FileName
-                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc", currentPath);
+                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc", 
+                    currentPath);
             cmd.StartInfo.Arguments
                 = String.Format("{0:s} {1:s} {2:s} " +
                 "-o {3:s} -mcpu=cortex-m3 -mthumb -munaligned-access -std=gnu11 -O2 " +
                 "-fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fsingle-precision-constant -nostartfiles " +
-                "-Wl,-Map,aa.map -Wl,--whole-archive libF103PLC.a -Wl,--no-whole-archive -T \"{4:s}\" -T \"{5:s}\" -T \"{6:s}\" -L\"ldscripts\" " +
+                "-Wl,-Map,\"{8:s}\" -Wl,--whole-archive \"{7:s}\" -Wl,--no-whole-archive -T \"{4:s}\" -T \"{5:s}\" -T \"{6:s}\" -L\"ldscripts\" " +
                 "-Xlinker -gc-sections --specs=nano.specs -L \"./ \"",
                     downlibOFile, ladderCFile, funcBlockCFile, outputElfFile,
-                    memLDFile, libsLDFile, sectionsLDFile);
+                    memLDFile, libsLDFile, sectionsLDFile, 
+                    plclibAFile, aaMapFile);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;

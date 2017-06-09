@@ -1145,7 +1145,7 @@ namespace SamSoarII.Extend.Utility
                     if (!simumode)
                         sw.Write("CI_HCNT(" +
                              "(uint8_t)(_stack_{0:d}), " +
-                             "((&{1:s})-(&YBit[0]))/sizeof(int32_t), " +
+                             "((&{1:s})-(&CVDoubleWord[0]))/sizeof(int32_t), " +
                              "{2:s});\n",
                              stackTop, inst[1], inst[2]);
                     break;

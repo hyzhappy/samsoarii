@@ -656,6 +656,18 @@ namespace SamSoarII.AppMain.UI
             ProjectTreeViewItem deleteitem = null;
             string rname = null;
             string tname = null;
+            switch (e.Flags & ~0xf)
+            {
+                case ProjectTreeViewEventArgs.FLAG_CREATE:
+                case ProjectTreeViewEventArgs.FLAG_CREATEBEFORE:
+                case ProjectTreeViewEventArgs.FLAG_CREATEAFTER:
+                    if (ProjectTreeViewItem.HasRenaming)
+                    {
+                        MessageBox.Show("存在正在被命名的项目，不能进行添加操作！");
+                        return;
+                    }
+                    break;
+            }
             if (e.TargetedObject is ProjectTreeViewItem)
             {
                 selectitem = (ProjectTreeViewItem)e.TargetedObject;
@@ -1143,14 +1155,14 @@ namespace SamSoarII.AppMain.UI
                 string name = xele_dp.Attribute("Name").Value;
                 string path = xele_dp.Attribute("Path").Value;
                 ProjectTreeViewItem ptvitem = ProjectTreeViewItem.GetPTVIFromPath(path);
-                dpdict.Add(name, ptvitem);
+                if (ptvitem != null) dpdict.Add(name, ptvitem);
             }
             foreach (XElement xele_fp in xele.Elements("FuncBlock"))
             {
                 string name = xele_fp.Attribute("Name").Value;
                 string path = xele_fp.Attribute("Path").Value;
                 ProjectTreeViewItem ptvitem = ProjectTreeViewItem.GetPTVIFromPath(path);
-                fpdict.Add(name, ptvitem);
+                if (ptvitem != null) fpdict.Add(name, ptvitem);
             }
         }
         
