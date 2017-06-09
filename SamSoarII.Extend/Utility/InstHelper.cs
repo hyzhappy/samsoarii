@@ -684,10 +684,12 @@ namespace SamSoarII.Extend.Utility
         /// </summary>
         /// <param name="sw">文件输出流</param>
         /// <param name="networks">PLC代码的NETWORK集</param>
-        static public void InstToCCode(StreamWriter sw, PLCInstNetwork[] networks)
+        static public void InstToDownCode(StreamWriter sw, PLCInstNetwork[] networks)
         {
-            sw.Write("#include \"lib.h\"\n");
-            sw.Write("#include \"main.h\"\n\n");
+            sw.Write("#include <stdint.h>\r\n");
+            sw.Write("#include \"downlib.h\"\n");
+            sw.Write("#include \"downf.h\"\r\n");
+            sw.Write("#include \"downc.h\"\n");
             _InstToCCode(sw, networks, false);
         }
         /// <summary>

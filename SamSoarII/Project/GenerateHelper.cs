@@ -990,9 +990,96 @@ namespace SamSoarII.AppMain.Project
             return SimulateDllModel.LoadDll(outputDllFile);
         }
         
-        public static void GenerateFinal()
+        public static void GenerateFinal(ProjectModel pmodel, string plclibAFile)
         {
-
+            List<InstHelper.PLCInstNetwork> nets =
+                new List<InstHelper.PLCInstNetwork>();
+            Generate(pmodel.MainRoutine, nets);
+            foreach (LadderDiagramViewModel ldvmodel in pmodel.SubRoutines)
+            {
+                Generate(ldvmodel, nets);
+            }
+            // 建立仿真的c环境的路径
+            string currentPath = Environment.CurrentDirectory;
+            string ladderHFile = String.Format(@"{0:s}\downg\downc.h", currentPath);
+            string ladderCFile = String.Format(@"{0:s}\downg\downc.c", currentPath);
+            string funcBlockHFile = String.Format(@"{0:s}\downg\downf.h", currentPath);
+            string funcBlockCFile = String.Format(@"{0:s}\downg\downf.c", currentPath);
+            string downlibOFile = String.Format(@"{0:s}\downg\downlib.o", currentPath);
+            string memLDFile = String.Format(@"{0:s}\downg\mem.ld", currentPath);
+            string libsLDFile = String.Format(@"{0:s}\downg\libs.ld", currentPath);
+            string sectionsLDFile = String.Format(@"{0:s}\downg\sections.ld", currentPath);
+            string outputElfFile = String.Format(@"{0:s}\downc.elf", currentPath);
+            string outputBinFile = String.Format(@"{0:s}\downc.bin", currentPath);
+            // 生成梯形图的c语言
+            StreamWriter sw = new StreamWriter(ladderCFile);
+            ModbusTableViewModel mtvmodel = pmodel.MTVModel;
+            ModbusTableModel[] mtmodels = mtvmodel.Models.ToArray();
+            for (int i = 0; i < mtmodels.Count(); i++)
+            {
+                sw.Write("struct ModbusTable _modbus_{0:d}[{1:d}]\r\n{\r\n",
+                    i, mtmodels[i].Tables.Count());
+                foreach (ModbusTable mtable in mtmodels[i].Tables)
+                {
+                    int nPort = 0;
+                    int nCode = 0;
+                    int nSlaveAddr = 0;
+                    int nSlaveCount = 0;
+                    int nMasteAddr = 0;
+                    sw.Write("\t{{{0:d}, {1:d}, {2:d}, {3:d}, {4:d}}},\r\n",
+                        nPort, nCode, nSlaveAddr, nSlaveCount, nMasteAddr);
+                }
+                sw.Write("};");
+            }
+            InstHelper.InstToDownCode(sw, nets.ToArray());
+            sw.Close();
+            // 生成用户函数的c语言
+            sw = new StreamWriter(funcBlockCFile);
+            sw.Write("#include \"downf.h\"\r\n");
+            GenerateCHeader(pmodel.LibFuncBlock, sw);
+            foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
+            {
+                GenerateCHeader(fbvmodel, sw);
+            }
+            GenerateCCode(pmodel.LibFuncBlock, sw);
+            foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
+            {
+                GenerateCCode(fbvmodel, sw);
+            }
+            sw.Close();
+            Process cmd = null;
+            cmd = new Process();
+            cmd.StartInfo.FileName
+                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc", currentPath);
+            cmd.StartInfo.Arguments
+                = String.Format("{0:s} {1:s} {2:s} " +
+                "-o {3:s} -mcpu=cortex-m3 -mthumb -munaligned-access -std=gnu11 -O2 " +
+                "-fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fsingle-precision-constant -nostartfiles " +
+                "-Wl,-Map,aa.map -Wl,--whole-archive libF103PLC.a -Wl,--no-whole-archive -T \"{4:s}\" -T \"{5:s}\" -T \"{6:s}\" -L\"ldscripts\" " +
+                "-Xlinker -gc-sections --specs=nano.specs -L \"./ \"",
+                    downlibOFile, ladderCFile, funcBlockCFile, outputElfFile,
+                    memLDFile, libsLDFile, sectionsLDFile);
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            cmd.StartInfo.FileName
+                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-objcopy");
+            cmd.StartInfo.Arguments
+                = String.Format("-O binary {0:s} {1:s}", 
+                    outputElfFile, outputBinFile);
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            //File.Delete(ladderHFile);
+            File.Delete(ladderCFile);
+            //File.Delete(funcBlockHFile);
+            File.Delete(funcBlockCFile);
         }
         
         private static void Generate(
