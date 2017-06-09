@@ -379,9 +379,7 @@ namespace SamSoarII.AppMain.Project
                                 IEnumerable<ModbusTableModel> fit =
                                     ldvmodel.ProjectModel.MTVModel.Models.Where(
                                         (ModbusTableModel _mtmodel) =>
-                                        {
-                                            return _mtmodel.Name.Equals(inst[2]);
-                                        });
+                                        { return _mtmodel.Name.Equals(inst[2]); });
                                 if (fit.Count() <= 0)
                                 {
                                     inst.Status = PLCOriginInst.STATUS_ERROR;
@@ -403,7 +401,7 @@ namespace SamSoarII.AppMain.Project
                                     ldvmodel.ProjectModel.SubRoutines.Where(
                                         (LadderDiagramViewModel _ldvmodel) =>
                                         {
-                                            return _ldvmodel.Name.Equals(inst[id]);
+                                            return _ldvmodel.ProgramName.Equals(inst[id]);
                                         });
                                 if (fit.Count() <= 0)
                                 {

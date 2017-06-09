@@ -182,7 +182,6 @@ namespace SamSoarII.Simulation
             unit.Name = name;
             return unit;
         }
-        
         /// <summary>
         /// 初始化构造函数
         /// </summary>
@@ -198,17 +197,30 @@ namespace SamSoarII.Simulation
             FuncBlocks = new List<SimuViewFuncBlockModel>();
             SubCharts = new List<SimuViewTabModel>();
         }
-
+        /// <summary>
+        /// 是否已经释放
+        /// </summary>
+        private bool isdisposed = false;
+        /// <summary>
+        /// 是否已经释放
+        /// </summary>
+        public bool IsDisposed { get { return this.isdisposed; } }
         /// <summary>
         /// 终止析构函数
         /// </summary>
-        private bool isdisposed = false;
         public void Dispose()
         {
             isdisposed = true;
             // 仿真停止
-            smanager.Stop();
-            smanager.Dispose();
+            if (dllmodel.SimulateStatus != SimulateDllModel.SIMULATE_STOP)
+            {
+                smanager.Stop();
+                smanager.Dispose();
+            }
+            else
+            {
+                OnSimulateAbort(this, new RoutedEventArgs());
+            }
         }
 
         #region Event handler
