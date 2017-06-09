@@ -22,33 +22,19 @@ namespace SamSoarII.Extend.FuncBlockModel
         static private string[] CALLMTYPES = {"BIT*", "WORD*", "DWORD*", "FLOAT*"}; 
 
         #region Number
-        /// <summary>
-        /// 文本坐标
-        /// </summary>
+        /// <summary> 文本坐标 </summary>
         public int Offset { get; set; }
-        /// <summary>
-        /// 函数名称
-        /// </summary>
+        /// <summary> 函数名称 </summary>
         public string Name { get; set; }
-        /// <summary>
-        /// 标题注释
-        /// </summary>
+        /// <summary> 标题注释 </summary>
         public string Comment { get; set; }
-        /// <summary>
-        /// 返回类型
-        /// </summary>
+        /// <summary> 返回类型 </summary>
         public string ReturnType { get; set;}
-        /// <summary>
-        /// 所有参数的类型
-        /// </summary>
+        /// <summary> 所有参数的类型 </summary>
         private string[] argtypes = new string[0];
-        /// <summary>
-        /// 所有参数的名称
-        /// </summary>
+        /// <summary> 所有参数的名称 </summary>
         private string[] argnames = new string[0];
-        /// <summary>
-        /// 参数个数
-        /// </summary>
+        /// <summary> 参数个数 </summary>
         public int ArgCount
         {
             get { return argtypes.Length; }

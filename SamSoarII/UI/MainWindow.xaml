@@ -343,14 +343,6 @@
                     <Image x:Uid="Image_29" Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
             </ToolBar>
-            <ToolBar x:Uid="ToolBar_5">
-                <Button x:Uid="Button_13" ToolTip="{x:Static properties:Resources.MainWindow_Row_Insert}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.InsertRowCommand}">
-                    <Image x:Uid="Image_30" Source="/Resources/Image/InsertRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
-                </Button>
-                <Button x:Uid="Button_14" ToolTip="{x:Static properties:Resources.MainWindow_Row_Delete}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.DeleteRowCommand}">
-                    <Image x:Uid="Image_31" Source="/Resources/Image/DeleteRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
-                </Button>
-            </ToolBar>
             <ToolBar x:Uid="ToolBar_6">
                 <Button x:Uid="Button_15" ToolTip="{x:Static properties:Resources.MainWindow_Element_List}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowElemListCommand}">
                     <Image x:Uid="Image_32" Source="/Resources/Image/ElementTable.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
@@ -358,25 +350,6 @@
                 <Button x:Uid="Button_16" ToolTip="{x:Static properties:Resources.MainWindow_Soft_Element_Init}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}">
                     <Image x:Uid="Image_33" Source="/Resources/Image/ElementInitialize.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-            </ToolBar>
-        </ToolBarTray>
-        <ToolBarTray x:Uid="ToolBarTray_1" DockPanel.Dock="Top" Height="25">
-            <ToolBar x:Uid="ShortCutToolBar" x:Name="ShortCutToolBar">
-                <Button x:Uid="Button_17" VerticalAlignment="Top" Tag="200" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Open_Contact}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource OpenContact}"></Button>
-                <Button x:Uid="Button_18" VerticalAlignment="Top" Tag="202" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Open}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource OpenContactIM}"></Button>
-                <Button x:Uid="Button_19" VerticalAlignment="Top" Tag="201" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Closed}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource CloseContact}"></Button>
-                <Button x:Uid="Button_20" VerticalAlignment="Top" Tag="203" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Close}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource CloseContactIM}"></Button>
-                <Button x:Uid="Button_21" VerticalAlignment="Top" Tag="204" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource UpPulse}"></Button>
-                <Button x:Uid="Button_22" VerticalAlignment="Top" Tag="205" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource DownPulse}"></Button>
-                <Button x:Uid="Button_23" VerticalAlignment="Top" Tag="206" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource ResultUp}"></Button>
-                <Button x:Uid="Button_24" VerticalAlignment="Top" Tag="207" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource ResultDown}"></Button>
-                <Button x:Uid="Button_25" VerticalAlignment="Top" Tag="208" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Reversed_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource ResultReverse}"></Button>
-                <Button x:Uid="Button_26" VerticalAlignment="Top" Tag="209" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource Coil}"></Button>
-                <Button x:Uid="Button_27" VerticalAlignment="Top" Tag="210" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource CoilIM}"></Button>
-                <Button x:Uid="Button_28" VerticalAlignment="Top" Tag="100" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource HLine}"></Button>
-                <Button x:Uid="Button_29" VerticalAlignment="Top" Tag="101" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource VLine}"></Button>
-                <Button x:Uid="Button_30" VerticalAlignment="Top" Tag="10" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource HLineCancel}"></Button>
-                <Button x:Uid="Button_31" VerticalAlignment="Top" Tag="11" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" Template="{StaticResource VLineCancel}"></Button>
             </ToolBar>
             <ToolBar x:Uid="SettingToolBar" x:Name="SettingToolBar">
                 <Button x:Uid="Button_32" ToolTip="{x:Static properties:Resources.MainWindow_Communication_Settings}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}">
@@ -386,6 +359,63 @@
                     <Image x:Uid="Image_35" Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
                 <Button x:Uid="Button_34" ToolTip="{x:Static properties:Resources.MainWindow_PLC_Settings}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Template="{StaticResource PLCSettingButton}"></Button>
+            </ToolBar>
+        </ToolBarTray>
+        <ToolBarTray x:Name="EditToolBarTray" DockPanel.Dock="Top" Height="25">
+            <ToolBar x:Uid="ShortCutToolBar" x:Name="ShortCutToolBar">
+                <Button x:Uid="Button_17" VerticalAlignment="Top" Tag="200" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Open_Contact}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/LD.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_18" VerticalAlignment="Top" Tag="202" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Open}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/LDI.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_19" VerticalAlignment="Top" Tag="201" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Closed}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/LDIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_20" VerticalAlignment="Top" Tag="203" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Close}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/LDIIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_21" VerticalAlignment="Top" Tag="204" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/LDP.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_22" VerticalAlignment="Top" Tag="205" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/LDF.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_23" VerticalAlignment="Top" Tag="206" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/MEP.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_24" VerticalAlignment="Top" Tag="207" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/MEF.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_25" VerticalAlignment="Top" Tag="208" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Reversed_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/INV.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_26" VerticalAlignment="Top" Tag="209" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/OUT.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_27" VerticalAlignment="Top" Tag="210" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/OUTIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_28" VerticalAlignment="Top" Tag="100" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/HLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_29" VerticalAlignment="Top" Tag="101" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/VLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_30" VerticalAlignment="Top" Tag="10" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/DHLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+                <Button x:Uid="Button_31" VerticalAlignment="Top" Tag="11" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                    <Image Source="/Resources/Image/InstructionToolBar/DVLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                </Button>
+            </ToolBar>
+            <ToolBar x:Uid="ToolBar_5">
+                <Button x:Uid="Button_13" ToolTip="{x:Static properties:Resources.MainWindow_Row_Insert}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.InsertRowCommand}">
+                    <Image x:Uid="Image_30" Source="/Resources/Image/InsertRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
+                <Button x:Uid="Button_14" ToolTip="{x:Static properties:Resources.MainWindow_Row_Delete}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.DeleteRowCommand}">
+                    <Image x:Uid="Image_31" Source="/Resources/Image/DeleteRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray x:Uid="SimuToolBarTray" x:Name="SimuToolBarTray" DockPanel.Dock="Top" Height="25" Visibility="Collapsed">

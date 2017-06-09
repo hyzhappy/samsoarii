@@ -1183,6 +1183,12 @@ namespace SamSoarII.AppMain.Project
             }
             dialog.ShowDialog();
         }
+
+        private void OnDeleteElement(object sender, RoutedEventArgs e)
+        {
+            _ladderDiagram.DeleteElementExecute();
+        }
+
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)
         {
             if(IsSingleSelected())

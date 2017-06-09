@@ -438,7 +438,7 @@ namespace Xceed.Wpf.AvalonDock.Global
                 node_AH.Add(node_KVP);
             }
             xdoc.Add(node_Root);
-            xdoc.Save("layoutconfig.xml");
+            xdoc.Save("LayoutConfig.xml");
         }
 
         static public void Load()

@@ -232,6 +232,7 @@ namespace SamSoarII.AppMain.UI
         }
         public void LoadElementsByXElement(XElement rootNode)
         {
+            Elements.Clear();
             foreach (var node in rootNode.Elements("EleModel"))
             {
                 string type = node.Attribute("Type").Value;

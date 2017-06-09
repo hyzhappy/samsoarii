@@ -222,14 +222,14 @@ namespace Xceed.Wpf.AvalonDock.Controls
                             if (isDraggingAnchorables && _gridDocumentPaneFullDropTargets != null)
                             {
                                 var dropAreaDocumentPane = visibleArea as DropArea<LayoutDocumentPaneControl>;
-                                if (_documentPaneFullDropTargetLeft.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetLeft.GetScreenArea(), DropTargetType.DocumentPaneDockLeft);
-                                if (_documentPaneFullDropTargetTop.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetTop.GetScreenArea(), DropTargetType.DocumentPaneDockTop);
-                                if (_documentPaneFullDropTargetRight.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetRight.GetScreenArea(), DropTargetType.DocumentPaneDockRight);
-                                if (_documentPaneFullDropTargetBottom.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetBottom.GetScreenArea(), DropTargetType.DocumentPaneDockBottom);
+                                //if (_documentPaneFullDropTargetLeft.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetLeft.GetScreenArea(), DropTargetType.DocumentPaneDockLeft);
+                                //if (_documentPaneFullDropTargetTop.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetTop.GetScreenArea(), DropTargetType.DocumentPaneDockTop);
+                                //if (_documentPaneFullDropTargetRight.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetRight.GetScreenArea(), DropTargetType.DocumentPaneDockRight);
+                                //if (_documentPaneFullDropTargetBottom.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetBottom.GetScreenArea(), DropTargetType.DocumentPaneDockBottom);
                                 if (_documentPaneFullDropTargetInto.IsVisible)
                                     yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneFullDropTargetInto.GetScreenArea(), DropTargetType.DocumentPaneDockInside);
 
@@ -252,27 +252,27 @@ namespace Xceed.Wpf.AvalonDock.Controls
                                         yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, newAreaTabItemScreenArea, DropTargetType.DocumentPaneDockInside, parentPaneModel.Children.Count);
                                 }
 
-                                if (_documentPaneDropTargetLeftAsAnchorablePane.IsVisible)
-                                    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetLeftAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableLeft);
-                                if (_documentPaneDropTargetTopAsAnchorablePane.IsVisible)
-                                    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetTopAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableTop);
-                                if (_documentPaneDropTargetRightAsAnchorablePane.IsVisible)
-                                    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetRightAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableRight);
-                                if (_documentPaneDropTargetBottomAsAnchorablePane.IsVisible)
-                                    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetBottomAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableBottom);
+                                //if (_documentPaneDropTargetLeftAsAnchorablePane.IsVisible)
+                                //    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetLeftAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableLeft);
+                                //if (_documentPaneDropTargetTopAsAnchorablePane.IsVisible)
+                                //    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetTopAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableTop);
+                                //if (_documentPaneDropTargetRightAsAnchorablePane.IsVisible)
+                                //    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetRightAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableRight);
+                                //if (_documentPaneDropTargetBottomAsAnchorablePane.IsVisible)
+                                //    yield return new DocumentPaneDropAsAnchorableTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetBottomAsAnchorablePane.GetScreenArea(), DropTargetType.DocumentPaneDockAsAnchorableBottom);
                             }
                             else
                             {
 
                                 var dropAreaDocumentPane = visibleArea as DropArea<LayoutDocumentPaneControl>;
-                                if (_documentPaneDropTargetLeft.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetLeft.GetScreenArea(), DropTargetType.DocumentPaneDockLeft);
-                                if (_documentPaneDropTargetTop.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetTop.GetScreenArea(), DropTargetType.DocumentPaneDockTop);
-                                if (_documentPaneDropTargetRight.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetRight.GetScreenArea(), DropTargetType.DocumentPaneDockRight);
-                                if (_documentPaneDropTargetBottom.IsVisible)
-                                    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetBottom.GetScreenArea(), DropTargetType.DocumentPaneDockBottom);
+                                //if (_documentPaneDropTargetLeft.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetLeft.GetScreenArea(), DropTargetType.DocumentPaneDockLeft);
+                                //if (_documentPaneDropTargetTop.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetTop.GetScreenArea(), DropTargetType.DocumentPaneDockTop);
+                                //if (_documentPaneDropTargetRight.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetRight.GetScreenArea(), DropTargetType.DocumentPaneDockRight);
+                                //if (_documentPaneDropTargetBottom.IsVisible)
+                                //    yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetBottom.GetScreenArea(), DropTargetType.DocumentPaneDockBottom);
                                 if (_documentPaneDropTargetInto.IsVisible)
                                     yield return new DocumentPaneDropTarget(dropAreaDocumentPane.AreaElement, _documentPaneDropTargetInto.GetScreenArea(), DropTargetType.DocumentPaneDockInside);
 

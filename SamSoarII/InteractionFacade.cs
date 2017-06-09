@@ -26,6 +26,17 @@ namespace SamSoarII.AppMain
 {
     public class InteractionFacade
     {
+        public bool ProjectLoaded
+        {
+            get { return _projectModel != null; }
+        }
+        public string ProjectFullFileName { get; set; }
+        private ProjectModel _projectModel;
+        public ProjectModel ProjectModel
+        {
+            get { return _projectModel; }
+        }
+        
         private bool _isCommentMode;
         public bool IsCommentMode
         {
@@ -38,49 +49,37 @@ namespace SamSoarII.AppMain
         }
         public bool IsLadderMode
         {
-            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0; }
+            get
+            {
+                return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0;
+            }
             set
             {
                 if (value == true)
-                {
                     _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_LADDER;
-                }
                 if (value == false)
-                {
                     _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_LADDER;
-                }
             }
         }
         public bool IsInstMode
         {
-            get { return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_INST) != 0; }
+            get
+            {
+                return (_mainTabControl.ViewMode & MainTabControl.VIEWMODE_INST) != 0;
+            }
             set
             {
                 if (value == true)
-                {
                     _mainTabControl.ViewMode |= MainTabControl.VIEWMODE_INST;
-                }
                 if (value == false)
-                {
                     _mainTabControl.ViewMode &= ~MainTabControl.VIEWMODE_INST;
-                }
             }
         }
-        private ProjectModel _projectModel;
-        public ProjectModel ProjectModel
-        {
-            get
-            {
-                return _projectModel;
-            }
-        }
+
         private ProjectTreeView _projectTreeView;
         public ProjectTreeView PTView
         {
-            get
-            {
-                return _projectTreeView;
-            }
+            get { return _projectTreeView; }
         }
         private MainTabControl _mainTabControl;
         public MainTabControl MainTabControl
@@ -93,14 +92,6 @@ namespace SamSoarII.AppMain
             get { return _mainWindow; }
         }
         private ErrorReportWindow _erwindow;
-        public bool ProjectLoaded
-        {
-            get
-            {
-                return _projectModel != null;
-            }
-        }
-        public string ProjectFullFileName { get; set; }
         public LadderDiagramViewModel CurrentLadder
         {
             get;
@@ -129,6 +120,7 @@ namespace SamSoarII.AppMain
             mainwindow.CheckFuncBlockCommand.CanExecute += CheckFuncBlockCommand_CanExecute;
             mainwindow.CheckFuncBlockCommand.Executed += CheckFuncBlock_Executed;
             _mainTabControl = _mainWindow.MainTab;
+            _mainTabControl.SelectionChanged += OnTabItemChanged;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             _erwindow = new ErrorReportWindow(this);
             _fwindow = new FindWindow(this);
@@ -840,21 +832,23 @@ namespace SamSoarII.AppMain
                 }
                 else if (catalogId == 10)
                 {
-                    if (CurrentLadder.SelectRectOwner.GetElementByPosition(CurrentLadder.SelectionRect.X, CurrentLadder.SelectionRect.Y) is HorizontalLineViewModel)
+                    if (CurrentLadder.SelectionRect.CurrentElement is HorizontalLineViewModel)
                     {
-                        CurrentLadder.SelectRectOwner.RemoveElement(CurrentLadder.SelectionRect.X, CurrentLadder.SelectionRect.Y);
+                        CurrentLadder.RemoveSingleElement(
+                            CurrentLadder.SelectRectOwner, 
+                            CurrentLadder.SelectionRect.CurrentElement);
                     }
                     SelectionRectRight();
                 }
                 else
                 {
-                    if (CurrentLadder.SelectionRect.X > 0)
+                    if (CurrentLadder.SelectionRect.CurrentElement is VerticalLineViewModel)
                     {
-                        if (CurrentLadder.SelectRectOwner.RemoveVerticalLine(CurrentLadder.SelectionRect.X - 1, CurrentLadder.SelectionRect.Y))
-                        {
-                            SelectionRectDown();
-                        }
+                        CurrentLadder.RemoveSingleElement(
+                            CurrentLadder.SelectRectOwner,
+                            CurrentLadder.SelectionRect.CurrentElement);
                     }
+                    SelectionRectDown();
                 }
             }
         }
@@ -950,9 +944,6 @@ namespace SamSoarII.AppMain
 
         #region Project
         
-        private void InitializeLDNetwordsChangedHandle(LadderDiagramViewModel ldvmodel)
-        {
-        }
         public void CreateProject(string name, string fullFileName)
         {
             MainWindow.ResetDock();
@@ -977,9 +968,6 @@ namespace SamSoarII.AppMain
             _projectTreeView.TabItemOpened += OnTabOpened;
             _projectTreeView.PTVHandle += OnGotPTVHandle;
             _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
-            InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
-            _mainTabControl.SelectionChanged += OnTabItemChanged;
-            _mainTabControl.ShowEditItem += OnTabOpened;
             _mainTabControl.Reset();
             _mainTabControl.ShowItem(_projectModel.MainRoutine);
             CurrentLadder = _projectModel.MainRoutine;
@@ -997,7 +985,6 @@ namespace SamSoarII.AppMain
             _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
             _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
             ProjectFullFileName = string.Empty;
-            _mainTabControl.SelectionChanged -= OnTabItemChanged;
             _mainWindow.ClearProjectTreeView();
             _mainWindow.ClearProjectMonitor();
             _mainTabControl.Reset();
@@ -1045,8 +1032,6 @@ namespace SamSoarII.AppMain
             XElement xele_r = xdoc.Element("Root");
             XElement xele_rtv = xele_r.Element("ProjectTreeView");
             InstructionCommentManager.UpdateAllComment();
-            _mainTabControl.SelectionChanged -= OnTabItemChanged;
-            _mainTabControl.ShowEditItem -= OnTabOpened;
             if (_projectTreeView != null)
             {
                 _projectTreeView.Dispose();
@@ -1058,10 +1043,7 @@ namespace SamSoarII.AppMain
             _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
             _mainWindow.ElemInitWind.LoadElementsByXElement(_projectModel.EleInitializeData);
             _projectModel.EleInitializeData = null;
-            InitializeLDNetwordsChangedHandle(_projectModel.MainRoutine);
             _mainTabControl.Reset();
-            _mainTabControl.SelectionChanged += OnTabItemChanged;
-            _mainTabControl.ShowEditItem += OnTabOpened;
             _mainTabControl.ShowItem(_projectModel.MainRoutine);
             CurrentLadder = _projectModel.MainRoutine;
             _mainWindow.SetProjectTreeView(_projectTreeView);

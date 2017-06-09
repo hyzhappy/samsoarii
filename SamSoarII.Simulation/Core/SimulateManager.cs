@@ -138,25 +138,15 @@ namespace SamSoarII.Simulation.Core
 
         #region Update Control
         
-        /// <summary>
-        /// 更新线程
-        /// </summary>
+        /// <summary> 更新线程 </summary>
         private Thread updatethread;
-        /// <summary>
-        /// 更新线程是否存活
-        /// </summary>
+        /// <summary> 更新线程是否存活 </summary>
         private bool updateactive;
-        /// <summary>
-        /// 之前的断点暂停状态
-        /// </summary>
+        /// <summary> 之前的断点暂停状态 </summary>
         private int _pause_old = 0;
-        /// <summary>
-        /// 之后的断点暂停状态
-        /// </summary>
+        /// <summary> 之后的断点暂停状态 </summary>
         private int _pause_new = 0;
-        /// <summary>
-        /// 更新线程运行的更新方法
-        /// </summary>
+        /// <summary> 更新线程运行的更新方法 </summary>
         private void Update()
         {
             _pause_old = 0;
@@ -190,6 +180,8 @@ namespace SamSoarII.Simulation.Core
                 isbppause = (_pause_new == 1);
                 if (_pause_old == 0 && _pause_new == 1)
                 {
+                    if (SimulateDllModel.GetCallCount() > 256)
+                        bpstatus = BreakpointStatus.SOF;
                     OnBreakpointPause(new BreakpointPauseEventArgs(
                         SimulateDllModel.GetBPAddr(), bpstatus));
                 }
@@ -203,9 +195,7 @@ namespace SamSoarII.Simulation.Core
                 Thread.Sleep(50);
             }
         }
-        /// <summary>
-        /// 更新线程开始
-        /// </summary>
+        /// <summary> 更新线程开始 </summary>
         private void UpdateStart()
         {
             // 已经处于运行状态则忽略
@@ -219,9 +209,7 @@ namespace SamSoarII.Simulation.Core
                 updatethread.Start();
             }
         }
-        /// <summary>
-        /// 更新线程终止
-        /// </summary>
+        /// <summary> 更新线程终止 </summary>
         private void UpdateStop()
         {
             // 终止更新线程
@@ -913,11 +901,11 @@ namespace SamSoarII.Simulation.Core
         public event BreakpointPauseEventHandler BreakpointPause = delegate { };
         private void OnBreakpointPause(BreakpointPauseEventArgs e)
         {
-            if (SimulateDllModel.GetCallCount() > 256)
-                e = new BreakpointPauseEventArgs(e.Address, BreakpointStatus.SOF);
             BreakpointPause(this, e);
             bpaddr = e.Address;
             bpstatus = e.Status;
+            if (bpstatus == BreakpointStatus.SOF)
+                OnSimulateException(new StackOverflowException("子程序 & 用户函数嵌套调用超过了上限（256）。"), new RoutedEventArgs());
         }
 
         public event BreakpointPauseEventHandler BreakpointResume = delegate { };
@@ -993,6 +981,9 @@ namespace SamSoarII.Simulation.Core
                 Exception exc = (Exception)sender;
                 SimulateExceptionDialog dialog = new SimulateExceptionDialog();
                 dialog.TB_Message.Text = exc.Message;
+                bool iscritical = (sender is StackOverflowException);
+                dialog.B_Continue.IsEnabled = !iscritical;
+                dialog.B_Pause.IsEnabled = !iscritical;
                 dialog.B_Continue.Click += (_sender, _e) =>
                 {
                     dllmodel.Start();

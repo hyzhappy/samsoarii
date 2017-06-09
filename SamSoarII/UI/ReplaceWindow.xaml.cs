@@ -1207,13 +1207,18 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public class NetworkReplaceElementsCommandGroup : IUndoableCommand
     {
+        /// <summary> 包含的命令集合 </summary>
         private List<IUndoableCommand> items
             = new List<IUndoableCommand>();
+        /// <summary> 控制替换的主窗口 </summary>
         private ReplaceWindow parent;
+        /// <summary> 替换之前的所有元素 </summary>
         private IEnumerable<ReplaceElement> eles_all;
+        /// <summary> 被替换的所有元素 </summary>
         private List<ReplaceElement> eles_replaced
             = new List<ReplaceElement>();
 
+        /// <summary> 初始化构造函数 </summary>
         public NetworkReplaceElementsCommandGroup
         (
             ReplaceWindow _parent,
@@ -1223,18 +1228,29 @@ namespace SamSoarII.AppMain.UI
             parent = _parent;
             eles_all = _eles_all;
         }
-
+        
+        /// <summary>
+        /// 添加新的替换命令
+        /// </summary>
+        /// <param name="command">替换命令</param>
         public void Add(NetworkReplaceElementsCommand command)
         {
             items.Add(command);
         }
 
+        /// <summary>
+        /// 添加新的替换命令
+        /// </summary>
+        /// <param name="command">替换命令</param>
         public void Add(NetworkReplaceElementsCommand_ForReplaceWindow command)
         {
             items.Add(command);
             eles_replaced.Add(command.Element);
         }
 
+        /// <summary>
+        /// 执行
+        /// </summary>
         public void Execute()
         {
             parent.Items = eles_all;
@@ -1245,11 +1261,17 @@ namespace SamSoarII.AppMain.UI
             
         }
 
+        /// <summary>
+        /// 恢复
+        /// </summary>
         public void Redo()
         {
             Execute();
         }
 
+        /// <summary>
+        /// 取消
+        /// </summary>
         public void Undo()
         {
             parent.Items = eles_all;

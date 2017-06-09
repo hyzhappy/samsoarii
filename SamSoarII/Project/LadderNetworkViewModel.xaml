@@ -56,10 +56,10 @@
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                         <Canvas.ContextMenu>
                             <ContextMenu x:Uid="CM_Edit" x:Name="CM_Edit" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                                <MenuItem x:Uid="MenuItem_2" Header="{x:Static properties:Resources.LadderNetwork_Element_Cut}"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_3" Header="{x:Static properties:Resources.LadderNetwork_Element_Copy}"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_4" Header="{x:Static properties:Resources.LadderNetwork_Element_Paste}"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_5" Header="{x:Static properties:Resources.LadderNetwork_Element_Delete}"></MenuItem>
+                                <MenuItem x:Uid="MenuItem_2" Header="{x:Static properties:Resources.LadderNetwork_Element_Cut}" Command="ApplicationCommands.Cut"></MenuItem>
+                                <MenuItem x:Uid="MenuItem_3" Header="{x:Static properties:Resources.LadderNetwork_Element_Copy}" Command="ApplicationCommands.Copy"></MenuItem>
+                                <MenuItem x:Uid="MenuItem_4" Header="{x:Static properties:Resources.LadderNetwork_Element_Paste}" Command="ApplicationCommands.Paste"></MenuItem>
+                                <MenuItem x:Uid="MenuItem_5" Header="{x:Static properties:Resources.LadderNetwork_Element_Delete}" Click="OnDeleteElement"></MenuItem>
                                 <MenuItem x:Uid="MenuItem_6" Header="{x:Static properties:Resources.MainWindow_Row_Insert}">
                                     <MenuItem x:Uid="MenuItem_7" Header="{x:Static properties:Resources.LadderNetwork_Insert_before}" Click="OnAddNewRowBefore"></MenuItem>
                                     <MenuItem x:Uid="MenuItem_8" Header="{x:Static properties:Resources.LadderNetwork_Insert_After}" Click="OnAddNewRowAfter"></MenuItem>

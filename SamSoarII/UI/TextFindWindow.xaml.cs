@@ -18,6 +18,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.AvalonDock.Global;
 
+/// <summary>
+/// Namespace : SamSoarII.AppMain.UI
+/// ClassName : FuncModel
+/// Version   : 1.0
+/// Date      : 2017/6/9
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 对文本（函数块）进行查找的窗口
+/// </remarks>
+
 namespace SamSoarII.AppMain.UI
 {
     /// <summary>
@@ -25,17 +36,17 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public partial class TextFindWindow : UserControl, INotifyPropertyChanged
     {
+        /// <summary> 正则表达式中的特殊符 </summary>
         static string[] SPECIALLABELS = {"\\", ".", "^", "$", "(", ")", "[", "]", "{", "}"};
 
         #region Numbers
 
+        /// <summary> 主交互类 </summary>
         private InteractionFacade parent;
-
-        private LadderCommand.CommandManager _cmdmanager
-            = new LadderCommand.CommandManager();
-
+        /// <summary> 所有查找到的元素 </summary>
         private ObservableCollection<TextFindElement> items
             = new ObservableCollection<TextFindElement>();
+        /// <summary> 所有查找到的元素 </summary>
         public IEnumerable<TextFindElement> Items
         {
             get
@@ -52,10 +63,13 @@ namespace SamSoarII.AppMain.UI
                 PropertyChanged(this, new PropertyChangedEventArgs("Items"));
             }
         }
-
+        /// <summary> 模式：当前文本 </summary>
         public const int MODE_CURRENT = 0x00;
+        /// <summary> 模式：所有文本 </summary>
         public const int MODE_ALL = 0x01;
+        /// <summary> 当前模式 </summary>
         private int mode;
+        /// <summary> 当前模式 </summary>
         public int Mode
         {
             get { return this.mode; }
@@ -68,10 +82,12 @@ namespace SamSoarII.AppMain.UI
         }
 
         #endregion
-        
+
         #region Config
 
+        /// <summary> 用户选项：是否使用正则表达式 </summary>
         private bool isregex;
+        /// <summary> 用户选项：是否使用正则表达式 </summary>
         public bool IsRegex
         {
             get { return this.isregex; }
@@ -81,8 +97,9 @@ namespace SamSoarII.AppMain.UI
                 PropertyChanged(this, new PropertyChangedEventArgs("IsRegex"));
             }
         }
-
+        /// <summary> 用户选项：是否忽视大小写 </summary>
         private bool ignorecase;
+        /// <summary> 用户选项：是否忽视大小写 </summary>
         public bool IgnoreCase
         {
             get { return this.ignorecase; }
@@ -95,6 +112,10 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="_parent">交互</param>
         public TextFindWindow(InteractionFacade _parent)
         {
             InitializeComponent();
@@ -103,12 +124,16 @@ namespace SamSoarII.AppMain.UI
             parent.CurrentTabChanged += OnCurrentTabChanged;
             Mode = MODE_CURRENT;
         }
-
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public void Initialize()
         {
             items.Clear();
         }
-
+        /// <summary>
+        /// 查找
+        /// </summary>
         private void Find()
         {
             items.Clear();
@@ -116,6 +141,7 @@ namespace SamSoarII.AppMain.UI
                 return;
             switch (Mode)
             {
+                // 当前文本
                 case MODE_CURRENT:
                     ITabItem currenttab = parent.MainTabControl.CurrentTab;
                     if (currenttab is FuncBlockViewModel)
@@ -124,6 +150,7 @@ namespace SamSoarII.AppMain.UI
                         Find(fbvmodel);
                     }
                     break;
+                // 所有文本
                 case MODE_ALL:
                     ProjectModel pmodel = parent.ProjectModel;
                     Find(pmodel.LibFuncBlock);
@@ -135,14 +162,20 @@ namespace SamSoarII.AppMain.UI
             }
             PropertyChanged(this, new PropertyChangedEventArgs("Items"));
         }
-
+        /// <summary>
+        /// 在函数块中查找
+        /// </summary>
+        /// <param name="fbvmodel"></param>
         private void Find(FuncBlockViewModel fbvmodel)
         {
+            // 函数文本和要查找的单词
             string text = fbvmodel.Code;
             string word = TB_Input.Text;
+            // 正则匹配选项
             RegexOptions opt = RegexOptions.None;
             opt |= RegexOptions.Singleline;
             if (IgnoreCase) opt |= RegexOptions.IgnoreCase;
+            // 非正则匹配时替换掉特殊符
             if (!IsRegex)
             {
                 foreach (string slabel in SPECIALLABELS)
@@ -150,6 +183,7 @@ namespace SamSoarII.AppMain.UI
                     word = word.Replace(slabel, "\\" + slabel);
                 }
             }
+            // 开始查找并添加到元素集
             Match match = Regex.Match(text, word, opt);
             while (match != null && match.Success)
             {
@@ -160,22 +194,38 @@ namespace SamSoarII.AppMain.UI
 
         #region Event Handler
 
+        /// <summary>
+        /// 值更改时触发
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
+        /// <summary>
+        /// 输入文本更改时触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TB_Input_TextChanged(object sender, TextChangedEventArgs e)
         {
             TB_Input.Background = TB_Input.Text.Length > 0
                 ? Brushes.LightGreen
                 : Brushes.White;
         }
-
+        /// <summary>
+        /// 在输入框内按下按键时触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TB_Input_KeyDown(object sender, KeyEventArgs e)
         {
+            // 按下Enter键开始查找
             if (e.Key != Key.Enter) return;
             Find();
             TB_Input.Background = Brushes.White;
         }
-
+        /// <summary>
+        /// 当在查找列表中选择时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DG_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!parent.MainWindow.LAFind.IsFloat
@@ -201,7 +251,11 @@ namespace SamSoarII.AppMain.UI
             parent.NavigateToFuncBlock(fbvmodel, offset);
             fbvmodel.SetOffset(offset, count);
         }
-
+        /// <summary>
+        /// 当当前TAB界面更换时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
             ITabItem currenttab = parent.MainTabControl.CurrentTab;
