@@ -1215,6 +1215,7 @@ namespace SamSoarII.AppMain.Project
             bvmodel.X = _selectRect.X;
             bvmodel.Y = _selectRect.Y;
             ReplaceSingleElement(_selectRectOwner, bvmodel);
+            SelectRectRight();
         }
 
         public void RegisterInstructionInput(
