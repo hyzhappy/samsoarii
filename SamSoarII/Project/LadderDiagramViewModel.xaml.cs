@@ -1584,55 +1584,13 @@ namespace SamSoarII.AppMain.Project
             }
             if (e.Key == Key.Delete)
             {
-                if (LadderMode != LadderMode.Edit) return;
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    if (SelectionRect.NetworkParent != null)
-                    {
-                        NetworkRemoveRow(SelectionRect.NetworkParent, SelectionRect.Y);
-                        return;
-                    }
-                }
-                if (SelectionStatus == SelectStatus.SingleSelected)
-                {
-                    var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
-                    if (model != null)
-                    {
-                        var elements = new List<BaseViewModel>();
-                        elements.Add(model);
-                        var command = new LadderCommand.NetworkRemoveElementsCommand(_selectRectOwner, elements);
-                        _commandManager.Execute(command);
-                    }
+                    DeleteRowExecute();
                 }
                 else
                 {
-                    // 多选删除
-                    if (SelectionStatus == SelectStatus.MultiSelected)
-                    {
-                        if (CrossNetState == CrossNetworkState.NoCross)
-                        {
-                            // 图元多选
-                            _commandManager.Execute(new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines()));
-                        }
-                        else
-                        {
-                            // 网络多选
-                            if(_selectStartNetwork != null)
-                            {
-                                _selectAllNetworks.Add(_selectStartNetwork);
-                            }
-                            int index = _selectAllNetworks.ElementAt(0).NetworkNumber;
-                            if(_selectAllNetworks.Count == _ladderNetworks.Count)
-                            {
-                                //全选, 补回一个网络
-                                _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(this, new LadderNetworkViewModel(this, 0), _selectAllNetworks, index));
-                            }
-                            else
-                            {
-                                _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(this, _selectAllNetworks, index));
-                            }
-                        }
-                    }
+                    DeleteElementExecute();
                 }
             }
         }
@@ -2172,16 +2130,12 @@ namespace SamSoarII.AppMain.Project
                 ShowInstructionInputDialog("");
             }
         }
-        
+
         #endregion
 
-        #region Command execute
+        #region Selected Area
 
-        /// <summary>
-        /// 执行梯形图复制剪切
-        /// </summary>
-        /// <param name="copy">False = 剪切，True = 复制</param>
-        private void CutCopyExecute(bool copy)
+        public NetworkChangeElementArea GetElementArea()
         {
             NetworkChangeElementArea area = new NetworkChangeElementArea();
             if (SelectionStatus == SelectStatus.SingleSelected)
@@ -2194,6 +2148,106 @@ namespace SamSoarII.AppMain.Project
                 area.Y1 = _selectRect.Y;
                 area.X2 = area.X1;
                 area.Y2 = area.Y1;
+            }
+            else if (SelectionStatus == SelectStatus.MultiSelected)
+            {
+                area.SU_Select = SelectionStatus;
+                area.SU_Cross = CrossNetState;
+                switch (CrossNetState)
+                {
+                    case CrossNetworkState.CrossDown:
+                        area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
+                        area.NetworkNumberEnd = area.NetworkNumberStart + _selectAllNetworks.Count();
+                        break;
+                    case CrossNetworkState.CrossUp:
+                        area.NetworkNumberEnd = _selectStartNetwork.NetworkNumber;
+                        area.NetworkNumberStart = area.NetworkNumberEnd - _selectAllNetworks.Count();
+                        break;
+                    case CrossNetworkState.NoCross:
+                        area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
+                        area.NetworkNumberEnd = area.NetworkNumberStart;
+                        area.X1 = _selectStartNetwork.SelectAreaFirstX;
+                        area.Y1 = _selectStartNetwork.SelectAreaFirstY;
+                        area.X2 = _selectStartNetwork.SelectAreaSecondX;
+                        area.Y2 = _selectStartNetwork.SelectAreaSecondY;
+                        break;
+                }
+            }
+            return area;
+        }
+
+        #endregion
+
+        #region Command execute
+        public void DeleteRowExecute()
+        {
+            if (LadderMode != LadderMode.Edit) return;
+            if (SelectionRect.NetworkParent != null)
+            {
+                NetworkRemoveRow(SelectionRect.NetworkParent, SelectionRect.Y);
+                return;
+            }
+        }
+        public void DeleteElementExecute()
+        {
+            if (LadderMode != LadderMode.Edit) return;
+            if (SelectionStatus == SelectStatus.SingleSelected)
+            {
+                var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
+                if (model != null)
+                {
+                    var elements = new List<BaseViewModel>();
+                    elements.Add(model);
+                    var command = new LadderCommand.NetworkRemoveElementsCommand(_selectRectOwner, elements);
+                    _commandManager.Execute(command);
+                }
+            }
+            else
+            {
+                // 多选删除
+                if (SelectionStatus == SelectStatus.MultiSelected)
+                {
+                    if (CrossNetState == CrossNetworkState.NoCross)
+                    {
+                        // 图元多选
+                        _commandManager.Execute(new LadderCommand.NetworkRemoveElementsCommand(
+                            _selectStartNetwork,
+                            _selectStartNetwork.GetSelectedElements(),
+                            _selectStartNetwork.GetSelectedVerticalLines(),
+                            GetElementArea()));
+                    }
+                    else
+                    {
+                        // 网络多选
+                        if (_selectStartNetwork != null)
+                        {
+                            _selectAllNetworks.Add(_selectStartNetwork);
+                        }
+                        int index = _selectAllNetworks.ElementAt(0).NetworkNumber;
+                        if (_selectAllNetworks.Count == _ladderNetworks.Count)
+                        {
+                            //全选, 补回一个网络
+                            _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
+                                this, new LadderNetworkViewModel(this, 0), _selectAllNetworks, index));
+                        }
+                        else
+                        {
+                            _commandManager.Execute(new LadderCommand.LadderDiagramRemoveNetworksCommand(
+                                this, _selectAllNetworks, index));
+                        }
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 执行梯形图复制剪切
+        /// </summary>
+        /// <param name="copy">False = 剪切，True = 复制</param>
+        private void CutCopyExecute(bool copy)
+        {
+            NetworkChangeElementArea area = GetElementArea();
+            if (SelectionStatus == SelectStatus.SingleSelected)
+            {
                 // 单元素复制
                 List<BaseViewModel> listele = new List<BaseViewModel>();
                 var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
@@ -2216,27 +2270,6 @@ namespace SamSoarII.AppMain.Project
             {
                 if (SelectionStatus == SelectStatus.MultiSelected)
                 {
-                    area.SU_Select = SelectionStatus;
-                    area.SU_Cross = CrossNetState;
-                    switch (CrossNetState)
-                    {
-                        case CrossNetworkState.CrossDown:
-                            area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
-                            area.NetworkNumberEnd = area.NetworkNumberStart + _selectAllNetworks.Count();
-                            break;
-                        case CrossNetworkState.CrossUp:
-                            area.NetworkNumberEnd = _selectStartNetwork.NetworkNumber;
-                            area.NetworkNumberStart = area.NetworkNumberEnd - _selectAllNetworks.Count();
-                            break;
-                        case CrossNetworkState.NoCross:
-                            area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
-                            area.NetworkNumberEnd = area.NetworkNumberStart;
-                            area.X1 = _selectStartNetwork.SelectAreaFirstX;
-                            area.Y1 = _selectStartNetwork.SelectAreaFirstY;
-                            area.X2 = _selectStartNetwork.SelectAreaSecondX;
-                            area.Y2 = _selectStartNetwork.SelectAreaSecondY;
-                            break;
-                    }
                     // 多网络复制
                     if (CrossNetState == CrossNetworkState.CrossDown || CrossNetState == CrossNetworkState.CrossUp)
                     {

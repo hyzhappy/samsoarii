@@ -73,7 +73,7 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             if (CanUndo)
             {
-                var command = UndoStack.Last();
+                var command = UndoStack.First();
                 if (!AssertEdit(command)) return;
                 UndoStack.Pop();
                 RedoStack.Push(command);
@@ -87,7 +87,7 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             if (CanRedo)
             {
-                var command = RedoStack.Last();
+                var command = RedoStack.First();
                 if (!AssertEdit(command)) return;
                 RedoStack.Pop();
                 UndoStack.Push(command);

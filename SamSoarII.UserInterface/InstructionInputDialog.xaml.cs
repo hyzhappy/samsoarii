@@ -171,6 +171,7 @@ namespace SamSoarII.UserInterface
                 temp.Content = name;
                 _modbusSource.Add(temp);
             }
+            Loaded -= OnWindowLoaded;
         }
 
         private void OpenTimer_Tick(object sender, EventArgs e)
