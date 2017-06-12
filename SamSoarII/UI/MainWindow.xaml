@@ -151,16 +151,16 @@
                 <Rectangle x:Uid="Rectangle_3" Height="6" Width="12" Fill="Transparent"/>
             </StackPanel>
         </ControlTemplate>
-        <Style x:Uid="Style_3" x:Key="DockManagerStyle" TargetType="{x:Type ad:DockingManager}">
-            <Setter x:Uid="Setter_6" Property="AnchorTemplate" Value="{StaticResource SamSoarIIAnchorTemplate}"/>
+        <Style x:Key="DockManagerStyle" TargetType="{x:Type ad:DockingManager}">
+            <Setter Property="AnchorTemplate" Value="{StaticResource SamSoarIIAnchorTemplate}"/>
         </Style>
     </Window.Resources>
-    <DockPanel x:Uid="MainDockPanel" x:Name="MainDockPanel">
-        <Menu x:Uid="Menu_1" DockPanel.Dock="Top" Height="27" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
-            <MenuItem x:Uid="MenuItem_1" Header="{x:Static properties:Resources.MainWindow_File}" Margin="0,-5,0,0">
-                <MenuItem x:Uid="MenuItem_2" Header="{x:Static properties:Resources.MainWindow_New_Proj}" Command="ApplicationCommands.New">
+    <DockPanel x:Name="MainDockPanel">
+        <Menu DockPanel.Dock="Top" Height="27" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
+            <MenuItem Header="{x:Static properties:Resources.MainWindow_File}" Margin="0,-5,0,0">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_New_Proj}" Command="ApplicationCommands.New">
                     <MenuItem.Icon>
-                        <Image x:Uid="Image_1" Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Uid="MenuItem_3" Header="{x:Static properties:Resources.MainWindow_Open_Proj}" Command="ApplicationCommands.Open">
@@ -257,21 +257,21 @@
                         <Image x:Uid="Image_11" Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Uid="MenuItem_36" Header="{x:Static properties:Resources.MainWindow_Simulation}" Command="{x:Static app:GlobalCommand.SimulateCommand}">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Simulation}" Command="{x:Static app:GlobalCommand.SimulateCommand}">
                     <MenuItem.Icon>
-                        <Image x:Uid="Image_12" Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Uid="MI_Monitor" Header="{x:Static properties:Resources.MainWindow_Monitor}" x:Name="MI_Monitor" Command="{x:Static app:GlobalCommand.MonitorCommand}"></MenuItem>
-                <MenuItem x:Uid="MI_Edit" Header="{x:Static properties:Resources.MainWindow_Ret_Edit_Mode}" x:Name="MI_Edit" Command="{x:Static app:GlobalCommand.EditCommand}"></MenuItem>
-                <MenuItem x:Uid="MenuItem_37" Header="{x:Static properties:Resources.MainWindow_Proj_Check}">
-                    <MenuItem x:Uid="MenuItem_38" Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
-                    <MenuItem x:Uid="MenuItem_39" Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Monitor}" x:Name="MI_Monitor" Command="{x:Static app:GlobalCommand.MonitorCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Ret_Edit_Mode}" x:Name="MI_Edit" Command="{x:Static app:GlobalCommand.EditCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Proj_Check}">
+                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
+                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></MenuItem>
                 </MenuItem>
-                <Separator x:Uid="Separator_10"></Separator>
-                <MenuItem x:Uid="MenuItem_40" Header="{x:Static properties:Resources.MainWindow_Option}" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
+                <Separator ></Separator>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Option}" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
                     <MenuItem.Icon>
-                        <Image x:Uid="Image_13" Source="/Resources/Image/Config.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        <Image Source="/Resources/Image/Config.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -279,9 +279,9 @@
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Chinese}" Click="Click_zh_Hans"/>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_English}" Click="Click_en_US"/>
             </MenuItem>
-            <MenuItem x:Uid="MenuItem_41" Header="{x:Static properties:Resources.MainWindow_Help}" Margin="0,-5,0,0">
-                <MenuItem x:Uid="MenuItem_42" Header="{x:Static properties:Resources.MainWindow_View_Help}" Click="OnShowHelpDocWindow"></MenuItem>
-                <MenuItem x:Uid="MenuItem_43" Header="{x:Static properties:Resources.MainWindow_Online_Upgrade}"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.MainWindow_Help}" Margin="0,-5,0,0">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_View_Help}" Click="OnShowHelpDocWindow"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Online_Upgrade}" Click="OnUpdateClick"></MenuItem>
                 <Separator x:Uid="Separator_11"></Separator>
                 <MenuItem x:Uid="MenuItem_44" Header="{x:Static properties:Resources.MainWindow_About}" Click="OnShowAboutDialog"></MenuItem>
             </MenuItem>

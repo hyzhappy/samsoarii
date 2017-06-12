@@ -1308,7 +1308,10 @@ namespace SamSoarII.AppMain.UI
             };
             dialog.ShowDialog();
         }
-        
+        private void OnUpdateClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
 

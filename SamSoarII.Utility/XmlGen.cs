@@ -106,5 +106,9 @@ namespace SamSoarII.Utility
                 SysRegisters.Add(new Tuple<string, int>("M", i));
             }
         }
+        public static void GenUpdateXML()
+        {
+
+        }
     }
 }
