@@ -366,6 +366,13 @@ namespace SamSoarII.Simulation.Core
         /// <param name="bpenable"></param>
         [DllImport("simu.dll", EntryPoint = "SetBPEnable")]
         public static extern void SetBPEnable(int bpenable);
+        
+        /// <summary>
+        /// 获得当前栈地址
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("simu.dll", EntryPoint = "GetRBP")]
+        unsafe public static extern void* GetRBP();
 
         /// <summary>
         /// 单步运行（不进入子程序）
