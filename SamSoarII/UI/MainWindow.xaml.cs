@@ -33,6 +33,7 @@ using System.Threading;
 using System.Windows.Threading;
 using SamSoarII.ValueModel;
 using SamSoarII.Simulation.Core.Event;
+using System.Globalization;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -320,7 +321,7 @@ namespace SamSoarII.AppMain.UI
         public MessageBoxResult ShowSaveYesNoCancelDialog()
         {
             string title = Properties.Resources.Message_Confirm_Save;
-            string text = String.Format("{0:s}{1}", _interactionFacade.ProjectModel.ProjectName, Properties.Resources.Message_Changed);
+            string text = String.Format("{0:s} {1}", _interactionFacade.ProjectModel.ProjectName, Properties.Resources.Message_Changed);
             return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
         }
         #endregion

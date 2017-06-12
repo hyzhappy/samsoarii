@@ -9,29 +9,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="300" x:Name="UserControl" Background="#FFFBFCF6">
     <UserControl.CommandBindings>
-        <CommandBinding x:Uid="CommandBinding_1" Command="{x:Static local:MonitorCommand.AddElementCommand}" CanExecute="OnAddElementCommandCanExecute" Executed="OnAddElementCommandExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_2" Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}" CanExecute="OnQuickAddElementsCommandCanExecute" Executed="OnQuickAddElementsCommandExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_3" Command="{x:Static local:MonitorCommand.DeleteElementsCommand}" CanExecute="OnDeleteElementsCommandCanExecute" Executed="OnDeleteElementsCommandExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_4" Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}" CanExecute="OnDeleteAllElementCommandCanExecute" Executed="OnDeleteAllElementCommandExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_5" Command="{x:Static local:MonitorCommand.StartCommand}" CanExecute="OnStartCommandCanExecute" Executed="OnStartCommandExecute"/>
-        <CommandBinding x:Uid="CommandBinding_6" Command="{x:Static local:MonitorCommand.StopCommand}" CanExecute="OnStopCommandCanExecute" Executed="OnStopCommandExecute"/>
+        <CommandBinding Command="{x:Static local:MonitorCommand.AddElementCommand}" CanExecute="OnAddElementCommandCanExecute" Executed="OnAddElementCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static local:MonitorCommand.QuickAddElementsCommand}" CanExecute="OnQuickAddElementsCommandCanExecute" Executed="OnQuickAddElementsCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static local:MonitorCommand.DeleteElementsCommand}" CanExecute="OnDeleteElementsCommandCanExecute" Executed="OnDeleteElementsCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static local:MonitorCommand.DeleteAllElementCommand}" CanExecute="OnDeleteAllElementCommandCanExecute" Executed="OnDeleteAllElementCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static local:MonitorCommand.StartCommand}" CanExecute="OnStartCommandCanExecute" Executed="OnStartCommandExecute"/>
+        <CommandBinding Command="{x:Static local:MonitorCommand.StopCommand}" CanExecute="OnStopCommandCanExecute" Executed="OnStopCommandExecute"/>
     </UserControl.CommandBindings>
     <UserControl.Resources>
-        <ContextMenu x:Uid="ContextMenu_1" x:Key="ListBoxContextMenu">
-            <MenuItem x:Uid="MenuItem_1" Header="{x:Static properties:Resources.Modbus_Create_New_Table}" Click="AddTableClick"></MenuItem>
-            <MenuItem x:Uid="MenuItem_2" Header="{x:Static properties:Resources.Modbus_Delete_Table}" Click="DeleteTableClick"></MenuItem>
-            <MenuItem x:Uid="MenuItem_3" Header="{x:Static properties:Resources.Delete_All}" Click="DeleteAllTables"></MenuItem>
+        <ContextMenu x:Key="ListBoxContextMenu">
+            <MenuItem Header="{x:Static properties:Resources.Modbus_Create_New_Table}" Click="AddTableClick"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.Modbus_Delete_Table}" Click="DeleteTableClick"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.Delete_All}" Click="DeleteAllTables"></MenuItem>
         </ContextMenu>
-        <ControlTemplate x:Uid="ControlTemplate_1" x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
-            <Grid x:Uid="Grid_1">
-                <Border x:Uid="Border" x:Name="Border">
-                    <Grid x:Uid="Grid_2">
+        <ControlTemplate x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
+            <Grid>
+                <Border x:Name="Border">
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="20"></ColumnDefinition>
-                            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Image x:Uid="Image_1" Source="pack://application:,,,/SamSoarII;component/Resources/Image/table.png" Width="14"></Image>
-                        <ContentPresenter x:Uid="ContentSite" HorizontalAlignment="Left" Name="ContentSite" Content="{Binding TableName}" VerticalAlignment="Center" Grid.Column="1"></ContentPresenter>
+                        <Image Source="pack://application:,,,/SamSoarII;component/Resources/Image/table.png" Width="14"></Image>
+                        <ContentPresenter HorizontalAlignment="Left" Name="ContentSite" Content="{Binding TableName}" VerticalAlignment="Center" Grid.Column="1"></ContentPresenter>
                     </Grid>
                 </Border>
             </Grid>
@@ -44,13 +44,13 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        <util:DoubleConverter1 x:Uid="util:DoubleConverter1_1" x:Key="DoubleConverter1"></util:DoubleConverter1>
-        <util:BoolConverter x:Uid="util:BoolConverter_1" x:Key="ReverseBool"></util:BoolConverter>
-        <Style x:Uid="Style_1" TargetType="Button">
-            <Setter x:Uid="Setter_3" Property="Height" Value="20"></Setter>
-            <Setter x:Uid="Setter_4" Property="Width" Value="70"></Setter>
-            <Setter x:Uid="Setter_5" Property="FontSize" Value="12"></Setter>
-            <Setter x:Uid="Setter_6" Property="Margin" Value="10,0,20,0"></Setter>
+        <util:DoubleConverter1 x:Key="DoubleConverter1"></util:DoubleConverter1>
+        <util:BoolConverter x:Key="ReverseBool"></util:BoolConverter>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="20"></Setter>
+            <Setter Property="MinWidth" Value="70"></Setter>
+            <Setter Property="FontSize" Value="12"></Setter>
+            <Setter Property="Margin" Value="10,0,20,0"></Setter>
         </Style>
     </UserControl.Resources>
     <Border x:Uid="Border_1" BorderBrush="Black" BorderThickness="1.5">

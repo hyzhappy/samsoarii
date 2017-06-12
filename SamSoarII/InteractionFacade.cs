@@ -189,14 +189,24 @@ namespace SamSoarII.AppMain
                 {
                     result = (ecount == 0);
                     if (showreport || !result)
-                        MessageBox.Show(
-                            String.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                                ecount, wcount));
+                    {
+                        if (App.CultureIsZH_CH())
+                            MessageBox.Show(
+                                String.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                                    ecount, wcount));
+                        else
+                        {
+                            MessageBox.Show(
+                                String.Format("There are {0} errors and {1} warnings in the program.",
+                                    ecount, wcount));
+                            
+                        }
+                    }
                 }
                 else
                 {
                     if (showreport)
-                        MessageBox.Show("程序正确!");
+                        MessageBox.Show(Properties.Resources.Program_Correct);
                     result = true;
                 }
                 if (!result)
@@ -205,10 +215,15 @@ namespace SamSoarII.AppMain
                     _erwindow.Update(weinsts);
                     _mainWindow.LACErrorList.Show();
                 }
+                else
+                    _projectModel.IsModify = false;
             }
             else if (errorMessage.Error == ErrorType.Empty)
             {
-                MessageBox.Show(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber));
+                if (App.CultureIsZH_CH())
+                    MessageBox.Show(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber));
+                else
+                    MessageBox.Show(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber));
                 result = false;
             }
             else
@@ -221,19 +236,19 @@ namespace SamSoarII.AppMain
                 switch (errorMessage.Error)
                 {
                     case ErrorType.Open:
-                        MessageBox.Show("光标处开路错误!");
+                        MessageBox.Show(Properties.Resources.Open_Error);
                         break;
                     case ErrorType.Short:
-                        MessageBox.Show("光标处短路错误!");
+                        MessageBox.Show(Properties.Resources.Short_Error);
                         break;
                     case ErrorType.SelfLoop:
-                        MessageBox.Show("光标处自环错误!");
+                        MessageBox.Show(Properties.Resources.Selfloop_Error);
                         break;
                     case ErrorType.HybridLink:
-                        MessageBox.Show("光标处混联错误!");
+                        MessageBox.Show(Properties.Resources.HybridLink_Error);
                         break;
                     case ErrorType.Special:
-                        MessageBox.Show("光标处特殊指令错误!");
+                        MessageBox.Show(Properties.Resources.Special_Instruction_Error);
                         break;
                     default:
                         break;
@@ -419,11 +434,14 @@ namespace SamSoarII.AppMain
             {
                 if (ecount == 0 && wcount == 0)
                 {
-                    MessageBox.Show("函数块全部正确！");
+                    MessageBox.Show(Properties.Resources.Function_Block_Correct);
                 }
                 else
                 {
-                    MessageBox.Show(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount));
+                    if(App.CultureIsZH_CH())
+                        MessageBox.Show(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount));
+                    else
+                        MessageBox.Show(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount));
                     _erwindow.Mode = ErrorReportWindow.MODE_FUNC;
                     _erwindow.Update(eweles);
                     _mainWindow.LACErrorList.Show();

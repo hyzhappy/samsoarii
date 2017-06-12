@@ -43,6 +43,9 @@ namespace SamSoarII.AppMain
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
-        
+        public static bool CultureIsZH_CH()
+        {
+            return Thread.CurrentThread.CurrentUICulture.Name == string.Format("zh_Hans");
+        }
     }
 }
