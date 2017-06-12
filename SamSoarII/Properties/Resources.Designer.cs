@@ -574,11 +574,29 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Funcblocks all correct! 的本地化字符串。
+        /// </summary>
+        public static string Function_Block_Correct {
+            get {
+                return ResourceManager.GetString("Function_Block_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Help 的本地化字符串。
         /// </summary>
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 HybridLink error in the cursor 的本地化字符串。
+        /// </summary>
+        public static string HybridLink_Error {
+            get {
+                return ResourceManager.GetString("HybridLink_Error", resourceCulture);
             }
         }
         
@@ -2653,7 +2671,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 ON/OFF/CurrentValue 的本地化字符串。
+        ///   查找类似 CurrentValue 的本地化字符串。
         /// </summary>
         public static string ON_OFF_CurrentValue {
             get {
@@ -2667,6 +2685,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string On_Off_Value {
             get {
                 return ResourceManager.GetString("On_Off_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Open error in the cursor 的本地化字符串。
+        /// </summary>
+        public static string Open_Error {
+            get {
+                return ResourceManager.GetString("Open_Error", resourceCulture);
             }
         }
         
@@ -2784,6 +2811,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Preview_Color {
             get {
                 return ResourceManager.GetString("Preview_Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Program Correct! 的本地化字符串。
+        /// </summary>
+        public static string Program_Correct {
+            get {
+                return ResourceManager.GetString("Program_Correct", resourceCulture);
             }
         }
         
@@ -3040,6 +3076,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Selfloop error in the cursor 的本地化字符串。
+        /// </summary>
+        public static string Selfloop_Error {
+            get {
+                return ResourceManager.GetString("Selfloop_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Set Value 的本地化字符串。
         /// </summary>
         public static string Set_Value {
@@ -3054,6 +3099,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Setting {
             get {
                 return ResourceManager.GetString("Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Short error in the cursor 的本地化字符串。
+        /// </summary>
+        public static string Short_Error {
+            get {
+                return ResourceManager.GetString("Short_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Special instruction error in the cursor 的本地化字符串。
+        /// </summary>
+        public static string Special_Instruction_Error {
+            get {
+                return ResourceManager.GetString("Special_Instruction_Error", resourceCulture);
             }
         }
         

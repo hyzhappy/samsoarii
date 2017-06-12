@@ -1161,4 +1161,25 @@
   <data name="Message_Alias_Exist" xml:space="preserve">
     <value>别名已存在</value>
   </data>
+  <data name="Program_Correct" xml:space="preserve">
+    <value>程序正确！</value>
+  </data>
+  <data name="Open_Error" xml:space="preserve">
+    <value>光标处开路错误</value>
+  </data>
+  <data name="Short_Error" xml:space="preserve">
+    <value>光标处短路错误</value>
+  </data>
+  <data name="Selfloop_Error" xml:space="preserve">
+    <value>光标处自环错误</value>
+  </data>
+  <data name="HybridLink_Error" xml:space="preserve">
+    <value>光标处混联错误</value>
+  </data>
+  <data name="Special_Instruction_Error" xml:space="preserve">
+    <value>光标处特殊指令错误</value>
+  </data>
+  <data name="Function_Block_Correct" xml:space="preserve">
+    <value>函数块全部正确！</value>
+  </data>
 </root>

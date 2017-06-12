@@ -775,7 +775,7 @@
     <value>Element Delete</value>
   </data>
   <data name="ON_OFF_CurrentValue" xml:space="preserve">
-    <value>ON/OFF/CurrentValue</value>
+    <value>CurrentValue</value>
   </data>
   <data name="Set_Value" xml:space="preserve">
     <value>Set Value</value>
@@ -1160,5 +1160,26 @@
   </data>
   <data name="Message_Alias_Exist" xml:space="preserve">
     <value>Alias has already exist</value>
+  </data>
+  <data name="Program_Correct" xml:space="preserve">
+    <value>Program Correct!</value>
+  </data>
+  <data name="Open_Error" xml:space="preserve">
+    <value>Open error in the cursor</value>
+  </data>
+  <data name="Short_Error" xml:space="preserve">
+    <value>Short error in the cursor</value>
+  </data>
+  <data name="Selfloop_Error" xml:space="preserve">
+    <value>Selfloop error in the cursor</value>
+  </data>
+  <data name="HybridLink_Error" xml:space="preserve">
+    <value>HybridLink error in the cursor</value>
+  </data>
+  <data name="Special_Instruction_Error" xml:space="preserve">
+    <value>Special instruction error in the cursor</value>
+  </data>
+  <data name="Function_Block_Correct" xml:space="preserve">
+    <value>Funcblocks all correct!</value>
   </data>
 </root>
