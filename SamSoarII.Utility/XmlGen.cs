@@ -106,9 +106,52 @@ namespace SamSoarII.Utility
                 SysRegisters.Add(new Tuple<string, int>("M", i));
             }
         }
-        public static void GenUpdateXML()
+        public static void GenUpdateXML(string dir)
         {
-
+            XDocument xDoc = new XDocument();
+            XElement rootNode = new XElement("AppUpdate");
+            xDoc.Add(rootNode);
+            foreach (var path in Directory.GetFileSystemEntries(@"C:\Users\yangzheyu\软件\Setup"))
+            {
+                if (!File.Exists(path) && (path.EndsWith("Compiler") || path.EndsWith("zh-Hans")))
+                {
+                    continue;
+                }
+                GenXElementsByDir(path, rootNode);
+            }
+            xDoc.Save(dir + @"\AppUpdate.xml");
+        }
+        private static void GenXElementsByDir(string path, XElement node)
+        {
+            if (File.Exists(path))
+            {
+                FileInfo file = new FileInfo(path);
+                XElement filenode = new XElement("file");
+                node.Add(filenode);
+                filenode.SetAttributeValue("filename",file.Name);
+                filenode.SetAttributeValue("relativepath",GetRelativePath(file.DirectoryName, @"C:\Users\yangzheyu\软件\Setup"));
+                filenode.SetAttributeValue("md5",FileHelper.GetMD5(path));
+                filenode.SetAttributeValue("version",1);
+            }
+            else
+            {
+                foreach (var dir in Directory.GetFileSystemEntries(path))
+                {
+                    GenXElementsByDir(dir,node);
+                }
+            }
+        }
+        private static string GetRelativePath(string fullpath,string relative)
+        {
+            int index = fullpath.IndexOf(relative);
+            if (index >= 0)
+            {
+                return fullpath.Substring(index + relative.Length);
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 }

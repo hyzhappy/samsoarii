@@ -34,6 +34,8 @@ using System.Windows.Threading;
 using SamSoarII.ValueModel;
 using SamSoarII.Simulation.Core.Event;
 using System.Globalization;
+using SamSoarII.Utility;
+using System.IO.Pipes;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -54,7 +56,7 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACElemInit { get { return LAElemInit?.AnchorControl; } }
         public LayoutAnchorControl LACBreakpoint { get { return LABreakpoint?.AnchorControl; } }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
-
+        private NamedPipeServerStream serverPipe;
         public MainWindow()
         {
             InitializeComponent();
@@ -64,8 +66,8 @@ namespace SamSoarII.AppMain.UI
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
+            serverPipe = new NamedPipeServerStream("SamSoarII.Update",PipeDirection.InOut);
         }
-
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             foreach (Window window in Application.Current.Windows)
@@ -1310,7 +1312,37 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnUpdateClick(object sender, RoutedEventArgs e)
         {
-
+            Process process = new Process();
+            process.StartInfo.FileName = Directory.GetCurrentDirectory() + @"\Update\SamSoarII.Update.exe";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+            serverPipe.WaitForConnection();
+            if (serverPipe.IsConnected)
+            {
+                StreamReader reader = new StreamReader(serverPipe);
+                string message = reader.ReadLine();
+                if (message == string.Format("N"))
+                {
+                    MessageBox.Show("已是最新版本！");
+                }
+                else if(message == string.Format("Y"))
+                {
+                    StreamWriter writer = new StreamWriter(serverPipe);
+                    MessageBoxResult ret = MessageBox.Show("存在新版本可更新，是否更新？(更新过程会关闭程序，请确保文件已正确保存！)","是否更新",MessageBoxButton.OKCancel,MessageBoxImage.Warning);
+                    if (ret == MessageBoxResult.OK)
+                        writer.WriteLine("Update");
+                    else
+                        writer.WriteLine("Cancel");
+                    writer.Flush();
+                    serverPipe.WaitForPipeDrain();
+                }
+                else
+                {
+                    MessageBox.Show("连接失败，请检查您的网络设置！");
+                }
+            }
+            serverPipe.Disconnect();
         }
     }
 }
