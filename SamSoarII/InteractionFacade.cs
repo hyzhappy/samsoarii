@@ -842,11 +842,14 @@ namespace SamSoarII.AppMain
                 }
                 else
                 {
-                    if (CurrentLadder.SelectionRect.CurrentElement is VerticalLineViewModel)
+                    VerticalLineViewModel vlvmodel =
+                            CurrentLadder.SelectRectOwner.GetVerticalLineByPosition(
+                                CurrentLadder.SelectionRect.X - 1,
+                                CurrentLadder.SelectionRect.Y);
+                    if (vlvmodel != null)
                     {
-                        CurrentLadder.RemoveSingleElement(
-                            CurrentLadder.SelectRectOwner,
-                            CurrentLadder.SelectionRect.CurrentElement);
+                        CurrentLadder.RemoveSingleVerticalLine(
+                            CurrentLadder.SelectRectOwner, vlvmodel);
                     }
                     SelectionRectDown();
                 }
