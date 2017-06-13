@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="SamSoarII.Simulation.UI.Breakpoint.LocalVarWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Simulation.UI.Breakpoint"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="800">
+    <ScrollViewer x:Uid="ScrollViewer_1" Grid.Row="1" Grid.Column="0"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+        <DataGrid x:Uid="DG_Main" x:Name="DG_Main" ItemsSource="{Binding Items}"
+                      AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False"
+                      SelectionChanged="DG_Main_SelectionChanged"
+                      CellEditEnding="DG_Main_CellEditEnding">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Uid="DataGridTextColumn_1" Header="名称" MinWidth="80"
+                                    Binding="{Binding Name}" IsReadOnly="True">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Uid="DataGridTextColumn_2" Header="描述" MinWidth="200"
+                                    Binding="{Binding Describe}" IsReadOnly="True">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Uid="DataGridTextColumn_3" Header="值" MinWidth="80"
+                                    Binding="{Binding Value}" IsReadOnly="True">
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Uid="DataGridTextColumn_4" Header="类型" MinWidth="80"
+                                    Binding="{Binding Type}" IsReadOnly="True">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </ScrollViewer>
+</UserControl>

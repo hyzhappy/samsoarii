@@ -375,6 +375,18 @@ namespace SamSoarII.Simulation.Core
         unsafe public static extern void* GetRBP();
 
         /// <summary>
+        /// 获得调用信息栈
+        /// </summary>
+        /// <param name="data">保存的空间</param>
+        /// <returns>长度</returns>
+        [DllImport("simu.dll", EntryPoint = "GetBackTrace")]
+        public static extern int GetBackTrace
+        (
+            [MarshalAs(UnmanagedType.LPArray)]
+            int[] data
+        );
+
+        /// <summary>
         /// 单步运行（不进入子程序）
         /// </summary>
         [DllImport("simu.dll", EntryPoint = "MoveStep")]

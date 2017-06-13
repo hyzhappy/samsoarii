@@ -295,46 +295,46 @@ namespace SamSoarII.AppMain.Project
             MTVModel = mtmodel;
             return true;
         }
-        public void Compile()
+       
+        public LadderNetworkViewModel GetNetwork(BaseViewModel bvmodel)
         {
-            string ladderFile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
-            string funcBlockFile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
-            string outputBinaryFile = SamSoarII.Utility.FileHelper.GetTempFile(".bin");
-            File.WriteAllText(ladderFile, GenerateCodeFromLadder());
-            File.WriteAllText(funcBlockFile, GenerateCodeFromFuncBlock());
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = string.Format(@"{0}\plcc.exe", Environment.CurrentDirectory);
-            cmd.StartInfo.Arguments = string.Format(" {0} {1} {2} {3}", "FGs16MR", ladderFile, funcBlockFile, "aa.bin");
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.RedirectStandardError = true;
-            cmd.Start();
-            cmd.WaitForExit();
-            string s = string.Format("stdout : {0}\r\nstderr: {1}\r\n", cmd.StandardOutput.ReadToEnd(), cmd.StandardError.ReadToEnd());
-            //MessageBox.Show(s);
-        }
-        private string GenerateCodeFromLadder()
-        {
-            string code = string.Empty;
-            code += string.Format("#include \"plc.h\"\r\n");
-            code += MainRoutine.GenerateDeclarationCode("RunLadder");
-            foreach (var sub in SubRoutines)
+            if (LadderMode != LadderMode.Simulate)
+                return null;
+            LadderNetworkViewModel lnvmodel = null;
+            lnvmodel = GetNetwork(bvmodel, MainRoutine);
+            if (lnvmodel != null)
+                return lnvmodel;
+            foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
             {
-                code += sub.GenerateDeclarationCode(sub.ProgramName);
+                lnvmodel = GetNetwork(bvmodel, ldvmodel);
+                if (lnvmodel != null)
+                    return lnvmodel;
             }
-            code += MainRoutine.GenerateCode("RunLadder");
-            foreach (var sub in SubRoutines)
-            {
-                code += sub.GenerateCode(sub.ProgramName);
-            }
-            return code;
+            return null;
         }
 
-        private string GenerateCodeFromFuncBlock()
+        public LadderNetworkViewModel GetNetwork(BaseViewModel bvmodel, LadderDiagramViewModel ldvmodel)
         {
-            string result = string.Empty;
-            return result;
+            foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
+            {
+                if (lnvmodel.ContainBPAddr(bvmodel.BPAddress))
+                {
+                    return lnvmodel;
+                }
+            }
+            return null;
+        }
+        
+        public FuncBlockViewModel GetFuncBlock(FuncBlock fblock)
+        {
+            if (LibFuncBlock.Model == fblock.Model)
+                return LibFuncBlock;
+            foreach (FuncBlockViewModel fbvmodel in FuncBlocks)
+            {
+                if (fbvmodel.Model == fblock.Model)
+                    return fbvmodel;
+            }
+            return null;
         }
 
     }

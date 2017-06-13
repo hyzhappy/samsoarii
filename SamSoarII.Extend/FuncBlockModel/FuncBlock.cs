@@ -43,6 +43,13 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// </summary>
         protected FuncBlockModel model;
         /// <summary>
+        /// 总控模型
+        /// </summary>
+        public FuncBlockModel Model
+        {
+            get { return this.model; }
+        }
+        /// <summary>
         /// 变量索引表
         /// </summary>
         protected Dictionary<string, SortedList<int, FuncBlock_Assignment>> Assigns
@@ -97,6 +104,13 @@ namespace SamSoarII.Extend.FuncBlockModel
         {
             get { return this.indexend; }
             set { this.indexend = value; }
+        }
+        /// <summary>
+        /// 这个元素的长度
+        /// </summary>
+        public int Length
+        {
+            get { return indexend - indexstart + 1; }
         }
         /// <summary>
         /// 判断是否包含这个位置
@@ -249,6 +263,77 @@ namespace SamSoarII.Extend.FuncBlockModel
 
         #endregion
 
+        #region Breakpoint System
+        /// <summary>
+        /// 是否是断点
+        /// </summary>
+        public bool IsBreakpoint { get; set; }
+
+        /// <summary>
+        /// 断点地址
+        /// </summary>
+        public int BPAddress { get; set; }
+        /// <summary>
+        /// 获得所有局部变量
+        /// </summary>
+        public IList<FuncBlock_Assignment> LocalVars
+        {
+            get
+            {
+                List<FuncBlock> parents = new List<FuncBlock>();
+                parents.Add(this);
+                FuncBlock _parent = Parent;
+                while (_parent != null)
+                {
+                    parents.Add(_parent);
+                    _parent = _parent.Parent;
+                }
+                List<FuncBlock_Assignment> assigns = new List<FuncBlock_Assignment>();
+                for (int i = parents.Count() - 1; i >= 0; i--)
+                {
+                    _parent = parents[i];
+                    foreach (FuncBlock child in _parent.Childrens)
+                    {
+                        if (child is FuncBlock_Assignment)
+                        {
+                            assigns.Add((FuncBlock_Assignment)child);
+                        }
+                        if (child is FuncBlock_AssignmentSeries)
+                        {
+                            foreach (FuncBlock_Assignment assign in ((FuncBlock_AssignmentSeries)child).Defines)
+                            {
+                                assigns.Add(assign);
+                            }
+                        }
+                    }
+                }
+                return assigns;
+            }
+        }
+
+        /// <summary>
+        /// 获得所有函数参数
+        /// </summary>
+        public IList<FuncBlock_Assignment> Parameters
+        {
+            get
+            {
+                FuncBlock _parent = this;
+                while (_parent != null)
+                {
+                    if (_parent is FuncBlock_Local)
+                    {
+                        FuncBlock_Local fblockl = (FuncBlock_Local)_parent;
+                        if (fblockl.VirtualAssigns != null)
+                            return fblockl.VirtualAssigns.ToArray();
+                    }
+                    _parent = _parent.Parent;
+                }
+                return new FuncBlock_Assignment[0];
+            }
+        }
+        #endregion
+
         #endregion
 
         /// <summary>
@@ -257,6 +342,8 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// <param name="newchild">新的子节点</param>
         public virtual void AddChildren(FuncBlock newchild)
         {
+            // 可注释的元素
+            IFuncBlock_IsCommentable fbic = null;
             // 函数头元素
             FuncBlock_FuncHeader fbfh = null;
             // 局部区域元素
@@ -325,28 +412,28 @@ namespace SamSoarII.Extend.FuncBlockModel
                 fbl.Header = fbfh;
                 fbfh.Block = fbl;
             }
-            fbfh = null;
+            fbic = null;
             fbc = null;
-            // 如果新节点为一行注释，后面的是函数头
+            // 如果新节点为一行注释，后面的是可注释的元素
             if (Current.Value is FuncBlock_Comment
              && Current.Next != null
-             && Current.Next.Value is FuncBlock_FuncHeader)
+             && Current.Next.Value is IFuncBlock_IsCommentable)
             {
-                fbfh = (FuncBlock_FuncHeader)(Current.Next.Value);
+                fbic = (IFuncBlock_IsCommentable)(Current.Next.Value);
                 fbc = (FuncBlock_Comment)(Current.Value);
             }
-            // 如果新节点为函数头，前面的是注释
-            if (Current.Value is FuncBlock_FuncHeader
+            // 如果新节点为是可注释的元素，前面的是注释
+            if (Current.Value is IFuncBlock_IsCommentable
              && Current.Previous != null
              && Current.Previous.Value is FuncBlock_Comment)
             {
-                fbfh = (FuncBlock_FuncHeader)(Current.Value);
+                fbic = (IFuncBlock_IsCommentable)(Current.Value);
                 fbc = (FuncBlock_Comment)(Current.Previous.Value);
             }
-            // 上述两种情况可以组成函数
-            if (fbc != null && fbfh != null)
+            // 上述两种情况可以组成已注释的元素
+            if (fbc != null && fbic != null)
             {
-                fbfh.Comment = fbc;
+                fbic.Comment = fbc;
             }
         }
         /// <summary>
@@ -400,8 +487,8 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// <param name="end"></param>
         public virtual void Build(string text, int start, int end, int offset = 0)
         {
-            // 当前括号的层数
-            int bracketcount = 0;
+            // 括号栈
+            Stack<char> bracketstack = new Stack<char>();
             // 当前括号的起点
             int bracketstart = 0;
             // 当前括号的终点
@@ -526,25 +613,20 @@ namespace SamSoarII.Extend.FuncBlockModel
                     // 括号头部设置括号起点，并且增加括号层数
                     case '{':
                         // 如果当前为注释区域，则不处理这个括号符号，下同
-                        if (comment != null)
-                        {
-                            break;
-                        }
-                        if (bracketcount == 0)
-                        {
+                        if (comment != null) break;
+                        // 如果之前没有其他括号，则视为区域的头部
+                        if (bracketstack.Count() == 0)
                             bracketstart = i;
-                        }
-                        bracketcount++;
+                        bracketstack.Push('{');
                         break;
                     // 括号尾部设置括号终点，减少括号层数
                     case '}':
-                        if (comment != null)
-                        {
-                            break;
-                        }
-                        bracketcount--;
+                        if (comment != null) break;
+                        // 不断从括号栈中弹出括号，直到栈内为空，或者找到匹配的括号为止
+                        while (bracketstack.Count() > 0
+                            && bracketstack.Pop() != '{') ;
                         // 最外层括号结尾建立新的局部区域
-                        if (bracketcount == 0)
+                        if (bracketstack.Count() == 0)
                         {
                             bracketend = i;
                             child = new FuncBlock_Local(model);
@@ -561,15 +643,17 @@ namespace SamSoarII.Extend.FuncBlockModel
                     // 其他括号的开头
                     case '(':
                     case '[':
-                        //bracketcount++;
+                        if (comment != null) break;
+                        bracketstack.Push(text[i]);
                         break;
-                    // 圆括号结尾可能是函数头部
+                    // 圆括号结尾可能是函数 & for & while头部
                     case ')':
-                        if (comment != null)
-                        {
-                            break;
-                        }
-                        if (this is FuncBlock_Root && bracketcount == 0)
+                        if (comment != null) break;
+                        // 不断从括号栈中弹出括号，直到栈内为空，或者找到匹配的括号为止
+                        while (bracketstack.Count() > 0
+                            && bracketstack.Pop() != '(') ;
+                        // 检查是否为函数头部
+                        if (this is FuncBlock_Root && bracketstack.Count() == 0)
                         {
                             int hstart = dividelabel + 1;
                             int hend = i;
@@ -627,10 +711,89 @@ namespace SamSoarII.Extend.FuncBlockModel
                                 }
                             }
                         }
+                        // 检查是否为for & while循环头部
+                        if (this is FuncBlock_Local && bracketstack.Count() == 0)
+                        {
+                            int hstart = dividelabel + 1;
+                            int hend = i;
+                            string htext = text.Substring(hstart, hend - hstart + 1);
+                            Match m1 = Regex.Match(htext, @"for\s*\(\s*([^;]*;)\s*([^;]*;)\s*([^\)]*)\s*\)\s*$");
+                            Match m2 = Regex.Match(htext, @"while\s*\(\s*([^\)]*)\s*\)\s*$");
+                            Match m3 = Regex.Match(htext, @"if\s*\(\s*([^\)]*)\s*\)\s*$");
+                            // for循环头部
+                            if (m1.Success)
+                            {
+                                FuncBlock_ForHeader newblock = new FuncBlock_ForHeader(model);
+                                newblock.Parent = this;
+                                newblock.Namespace = Namespace;
+                                newblock.IndexStart = hstart + m1.Index;
+                                newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
+                                AddChildren(newblock);
+                                if (m1.Groups[1].Length > 0)
+                                {
+                                    newblock.Start = new FuncBlock_Statement(model);
+                                    newblock.Start.Parent = newblock;
+                                    newblock.Start.Namespace = Namespace;
+                                    newblock.Start.IndexStart = hstart + m1.Groups[1].Index;
+                                    newblock.Start.IndexEnd = newblock.Start.IndexStart + m1.Groups[1].Length - 1;
+                                }
+                                if (m1.Groups[2].Length > 0)
+                                {
+                                    newblock.Cond = new FuncBlock_Statement(model);
+                                    newblock.Cond.Parent = newblock;
+                                    newblock.Cond.Namespace = Namespace;
+                                    newblock.Cond.IndexStart = hstart + m1.Groups[2].Index;
+                                    newblock.Cond.IndexEnd = newblock.Cond.IndexStart + m1.Groups[2].Length - 1;
+                                }
+                                if (m1.Groups[3].Length > 0)
+                                {
+                                    newblock.Next = new FuncBlock_Statement(model);
+                                    newblock.Next.Parent = newblock;
+                                    newblock.Next.Namespace = Namespace;
+                                    newblock.Next.IndexStart = hstart + m1.Groups[3].Index;
+                                    newblock.Next.IndexEnd = newblock.Next.IndexStart + m1.Groups[3].Length - 1;
+                                }
+                            }
+                            // while循环头部
+                            if (m2.Success)
+                            {
+                                FuncBlock_WhileHeader newblock = new FuncBlock_WhileHeader(model);
+                                newblock.IndexStart = hstart + m1.Index;
+                                newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
+                                AddChildren(newblock);
+                                if (m1.Groups[1].Length > 0)
+                                {
+                                    newblock.Cond = new FuncBlock_Statement(model);
+                                    newblock.Cond.Parent = newblock;
+                                    newblock.Cond.Namespace = Namespace;
+                                    newblock.Cond.IndexStart = hstart + m1.Groups[1].Index;
+                                    newblock.Cond.IndexEnd = newblock.Cond.IndexStart + m1.Groups[1].Length - 1;
+                                }
+                            }
+                            // if循环头部
+                            if (m3.Success)
+                            {
+                                FuncBlock_IfHeader newblock = new FuncBlock_IfHeader(model);
+                                newblock.IndexStart = hstart + m1.Index;
+                                newblock.IndexEnd = newblock.IndexStart + m1.Value.Length - 1;
+                                AddChildren(newblock);
+                                if (m1.Groups[1].Length > 0)
+                                {
+                                    newblock.Cond = new FuncBlock_Statement(model);
+                                    newblock.Cond.Parent = newblock;
+                                    newblock.Cond.Namespace = Namespace;
+                                    newblock.Cond.IndexStart = hstart + m1.Groups[1].Index;
+                                    newblock.Cond.IndexEnd = newblock.Cond.IndexStart + m1.Groups[1].Length - 1;
+                                }
+                            }
+                        }
                         //bracketcount--;
                         break;
                     case ']':
-                        //bracketcount--;
+                        if (comment != null) break;
+                        // 不断从括号栈中弹出括号，直到栈内为空，或者找到匹配的括号为止
+                        while (bracketstack.Count() > 0
+                            && bracketstack.Pop() != '[') ;
                         break;
                     // 分号表示一条语句的末尾
                     case ';':
@@ -638,7 +801,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                         {
                             break;
                         }
-                        if (bracketcount == 0)
+                        if (bracketstack.Count() == 0)
                         {
                             stmtstart = dividelabel + 1;
                             stmtend = i;
@@ -654,6 +817,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                             {
                                 child = new FuncBlock_Assignment(model, this, statement);
                             }
+                            // 检查是否符合连续变量声明语句的格式，并建立对应的语句
                             else if (FuncBlock_AssignmentSeries.TextSuit(statement))
                             {
                                 child = new FuncBlock_AssignmentSeries(model);
@@ -662,7 +826,27 @@ namespace SamSoarII.Extend.FuncBlockModel
                             }
                             else
                             {
-                                child = new FuncBlock_Statement(model);
+                                // 检查是否符合while循环尾部的格式，并建立对应的语句
+                                Match m1 = Regex.Match(statement, @"^\s*while\s*\(\s*([^\)]*)\s*\)\s*;\s*$");
+                                if (m1.Success)
+                                {
+                                    FuncBlock_WhileEnd childwe = new FuncBlock_WhileEnd(model);
+                                    childwe.Parent = this;
+                                    childwe.Namespace = Namespace;
+                                    if (m1.Groups[1].Length > 0)
+                                    {
+                                        childwe.Cond = new FuncBlock_Statement(model);
+                                        childwe.Cond.Parent = childwe;
+                                        childwe.Cond.Namespace = Namespace;
+                                        childwe.Cond.IndexStart = stmtstart + m1.Groups[1].Index;
+                                        childwe.Cond.IndexEnd = childwe.IndexStart + m1.Groups[1].Length - 1;
+                                    }
+                                    child = childwe;
+                                }
+                                else
+                                {
+                                    child = new FuncBlock_Statement(model);
+                                }
                             }
                             child.IndexStart = stmtstart;
                             child.IndexEnd = stmtend;
@@ -673,7 +857,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                     // 出现斜杠符
                     case '/':
                         // 如果在括号内则忽略
-                        if (bracketcount > 0)
+                        if (bracketstack.Count() > 0)
                         {
                             break;
                         }
@@ -702,7 +886,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                     // 出现星符
                     case '*':
                         // 如果在括号内则忽略
-                        if (bracketcount > 0)
+                        if (bracketstack.Count() > 0)
                         {
                             break;
                         }
@@ -719,7 +903,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                     // 出现换行符
                     case '\n':
                         // 如果在括号内则忽略
-                        if (bracketcount > 0)
+                        if (bracketstack.Count() > 0)
                         {
                             break;
                         }
@@ -746,8 +930,8 @@ namespace SamSoarII.Extend.FuncBlockModel
                 comment = null;
                 return;
             }
-            // 如果出现括号缺省，视为括号在最后，将剩余部分视为区域来处理
-            if (bracketcount > 0)
+            // 如果出现区域括号的缺省，视为后面已经有匹配的括号，后面的部分视为区域处理
+            if (bracketstack.Count() > 0 && bracketstack.Contains('{'))
             {
                 bracketend = end + 1;
                 child = new FuncBlock_Local(model);
@@ -777,6 +961,14 @@ namespace SamSoarII.Extend.FuncBlockModel
         {
             return String.Format("[{0:d}-{1:d}](I={2:d})(O={3:d})", IndexStart, IndexEnd, InnerOffset, OuterOffset);
         }
+    }
+
+    /// <summary>
+    /// 表示能够注释说明的元素
+    /// </summary>
+    public interface IFuncBlock_IsCommentable
+    {
+        FuncBlock_Comment Comment { get; set; }
     }
 
     /// <summary>
@@ -842,7 +1034,14 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// <summary>
         /// 当前区域如果是函数区域，则设置函数参数对应的虚拟的声明变量元素
         /// </summary>
-        protected List<FuncBlock_Assignment> virtualassigns = new List<FuncBlock_Assignment>();        
+        protected List<FuncBlock_Assignment> virtualassigns;
+        /// <summary>
+        /// 虚拟的声明变量元素
+        /// </summary>
+        public IEnumerable<FuncBlock_Assignment> VirtualAssigns
+        {
+            get { return this.virtualassigns; }
+        }
         /// <summary>
         /// 当前区域如果是函数区域，则设置函数头部
         /// </summary>
@@ -851,6 +1050,10 @@ namespace SamSoarII.Extend.FuncBlockModel
             get { return this.header; }
             set
             {
+                if (virtualassigns == null)
+                {
+                    virtualassigns = new List<FuncBlock_Assignment>();
+                }
                 // 删除之前的虚拟声明变量
                 foreach (FuncBlock_Assignment vassign in virtualassigns)
                 {
@@ -860,6 +1063,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                 this.header = value;
                 if (value == null)
                 {
+                    virtualassigns = null;
                     return;
                 }
                 FuncModel fmodel = value.Model;
@@ -898,12 +1102,18 @@ namespace SamSoarII.Extend.FuncBlockModel
     /// <summary>
     /// 表示变量声明语句
     /// </summary>
-    public class FuncBlock_Assignment : FuncBlock
+    public class FuncBlock_Assignment : FuncBlock, IFuncBlock_IsCommentable
     {
         /// <summary>
         /// ID总数
         /// </summary>
         static private int IDCount = 0;
+
+        /// <summary>
+        /// 对应的注释块
+        /// </summary>
+        public FuncBlock_Comment Comment { get; set; }
+        
         /// <summary>
         /// 初始化构造函数
         /// </summary>
@@ -971,6 +1181,24 @@ namespace SamSoarII.Extend.FuncBlockModel
             private set { this.id = value; }
         }
         /// <summary>
+        /// 变量类型
+        /// </summary>
+        protected string type = String.Empty;
+        /// <summary>
+        /// 变量类型
+        /// </summary>
+        public string Type
+        {
+            get
+            {
+                return this.type;
+            }
+            private set
+            {
+                this.type = value;
+            }
+        }
+        /// <summary>
         /// 变量名称
         /// </summary>
         protected string name = String.Empty;
@@ -1017,6 +1245,30 @@ namespace SamSoarII.Extend.FuncBlockModel
             }
         }
         /// <summary>
+        /// 变量所占用的内存空间
+        /// </summary>
+        public int Sizeof
+        {
+            get
+            {
+                if (type.EndsWith("*"))
+                    return 4;
+                switch (type)
+                {
+                    case "BIT":
+                        return 4;
+                    case "WORD": case "UWORD":
+                        return 4;
+                    case "DWORD": case "UDWORD":
+                        return 8;
+                    case "FLOAT": case "UFLOAT":
+                        return 8;
+                    default:
+                        return 4;
+                }
+            }
+        }
+        /// <summary>
         /// 判断一段代码文本是否符合这个元素
         /// </summary>
         /// <param name="text">代码文本</param>
@@ -1049,9 +1301,19 @@ namespace SamSoarII.Extend.FuncBlockModel
     /// <summary>
     /// 表示连续一组变量声明的语句(int i, j...)
     /// </summary>
-    public class FuncBlock_AssignmentSeries : FuncBlock
+    public class FuncBlock_AssignmentSeries : FuncBlock, IFuncBlock_IsCommentable
     {
         private List<FuncBlock_Assignment> defines = new List<FuncBlock_Assignment>();
+
+        public IEnumerable<FuncBlock_Assignment> Defines
+        {
+            get { return this.defines; }
+        }
+
+        /// <summary>
+        /// 对应的注释块
+        /// </summary>
+        public FuncBlock_Comment Comment { get; set; }
 
         public FuncBlock_AssignmentSeries(FuncBlockModel _model) : base(_model)
         {
@@ -1141,11 +1403,11 @@ namespace SamSoarII.Extend.FuncBlockModel
             return (text.Length > 0 && text.Last() == ';');
         }
     }
-
+    
     /// <summary>
     /// 表示函数头部
     /// </summary>
-    public class FuncBlock_FuncHeader : FuncBlock
+    public class FuncBlock_FuncHeader : FuncBlock, IFuncBlock_IsCommentable
     {
         /// <summary>
         /// 对应的函数信息模型
@@ -1188,6 +1450,67 @@ namespace SamSoarII.Extend.FuncBlockModel
     }
 
     /// <summary>
+    /// 表示关键字
+    /// </summary>
+    public class FuncBlock_Keyword : FuncBlock
+    {
+        public FuncBlock_Keyword(FuncBlockModel _model) : base(_model)
+        {
+        }
+    }
+
+    /// <summary>
+    /// 表示for循环的头部
+    /// </summary>
+    public class FuncBlock_ForHeader : FuncBlock
+    {
+        public FuncBlock_Statement Start { get; set; }
+        public FuncBlock_Statement Cond { get; set; }
+        public FuncBlock_Statement Next { get; set; }
+
+        public FuncBlock_ForHeader(FuncBlockModel _model) : base(_model)
+        {
+        }
+
+    }
+
+    /// <summary>
+    /// 表示while循环的头部
+    /// </summary>
+    public class FuncBlock_WhileHeader : FuncBlock
+    {
+        public FuncBlock_Statement Cond { get; set; }
+
+        public FuncBlock_WhileHeader(FuncBlockModel _model) : base(_model)
+        {
+        }
+    }
+
+    /// <summary>
+    /// 表示while循环的末尾（do { ... } while 格式）
+    /// </summary>
+    public class FuncBlock_WhileEnd : FuncBlock
+    {
+        public FuncBlock_Statement Cond { get; set; }
+
+        public FuncBlock_WhileEnd(FuncBlockModel _model) : base(_model)
+        {
+        }
+    }
+
+    /// <summary>
+    /// 表示if的开头
+    /// </summary>
+    public class FuncBlock_IfHeader : FuncBlock
+    {
+        public FuncBlock_Statement Cond { get; set; }
+
+        public FuncBlock_IfHeader(FuncBlockModel _model) : base(_model)
+        {
+        }
+    }
+    
+    /// <summary>
     /// 表示一行注释部分
     /// </summary>
     public class FuncBlock_Comment : FuncBlock
@@ -1229,7 +1552,6 @@ namespace SamSoarII.Extend.FuncBlockModel
     /// </summary>
     public class FuncBlock_CommentParagraph : FuncBlock_Comment
     {
-
         /// <summary>
         /// 初始化构造函数
         /// </summary>
@@ -1259,4 +1581,5 @@ namespace SamSoarII.Extend.FuncBlockModel
             return ret;
         }
     }
+    
 }

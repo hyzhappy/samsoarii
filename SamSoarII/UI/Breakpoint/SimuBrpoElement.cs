@@ -74,6 +74,7 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             set
             {
                 this.lnvmodel = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("NetworkNumber"));
 
             }
         }
@@ -145,6 +146,12 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                 this.breaktime = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("BreakTime"));
             }
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}:{1}:{2}",
+                ProgramName, NetworkNumber, Instruction);
         }
     }
 }

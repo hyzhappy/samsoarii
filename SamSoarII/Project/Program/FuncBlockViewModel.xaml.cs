@@ -1,5 +1,4 @@
-﻿
-using ICSharpCode.AvalonEdit.CodeCompletion;
+﻿using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System;
@@ -58,6 +57,10 @@ namespace SamSoarII.AppMain.Project
         /// 函数块的逻辑模型
         /// </summary>
         private FuncBlockModel model;
+        /// <summary>
+        /// 函数块的逻辑模型
+        /// </summary>
+        public FuncBlockModel Model;
         /// <summary>
         /// 工程的名称
         /// </summary>
@@ -145,6 +148,9 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+        /// <summary>
+        /// 设置是否只读
+        /// </summary>
         public bool IsReadOnly
         {
             get
@@ -273,6 +279,7 @@ namespace SamSoarII.AppMain.Project
                 CodeCompletePanel.Children.Add(ccstblocks[i]);
             }
         }
+
         #region TextEditer Events
 
         /// <summary>
@@ -596,6 +603,7 @@ namespace SamSoarII.AppMain.Project
                 foldingStrategy.UpdateFoldings(foldingManager, CodeTextBox.Document);
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -604,6 +612,7 @@ namespace SamSoarII.AppMain.Project
         #region Code Completion
 
         #region Selected List
+
         /// <summary>
         /// 代码补全的词语列表
         /// </summary>
@@ -797,6 +806,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
         #endregion
 
         #region Selected Cursor

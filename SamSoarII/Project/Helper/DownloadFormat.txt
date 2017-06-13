@@ -1,0 +1,45 @@
+梯形图程序：
+	0xff [Package Size(Low, High)] 
+		[ProgramName Size] [PragramName]
+		[Network Package 1]
+		[Network Package 2]
+		...
+梯形图网络：
+	0xfe [Package Size(Low, High)]
+		[Comment Size][Comment]
+		[RowCount]
+			[HVHVHVHV][HVHVHVHV]
+			[HVHVHVHV][HVHVHVHV]
+			...
+		[Ladder Package1]
+		[Ladder Package2]
+		...
+梯形图元件：
+	[X] [Y] [Instruction Number]
+		[Parameter1 id]
+		[Parameter2 id]
+		...
+函数功能块：
+	0xfd
+		[ProgramName Size] [PragramName]
+		[Code Size(low, high)] [Code]
+		
+已使用的软元件表：
+	0xfc [Register Number(Low, High)]
+		[Register Package 1]
+		[Register Package 2]
+		...
+		
+已使用的软元件项：
+	[Register Addr][Register Offset(Low, High)][Intrasegment Addr][Intrasegment Offset] (for register)
+	[K/H/F][value(2/4 byte)] (for constant)
+	[STR][Text Size][Text] (for string)
+	[Comment Size][Comment]
+
+Modbus表格注释：
+	0xfb [Package Size(Low, High)]
+		[Modbus Package 1]
+		[Modbus Package 2]
+		...
+单个表格注释
+	[Number][Comment Size][Comment]

@@ -14,9 +14,11 @@ namespace SamSoarII.LadderInstViewModel
 {
     public class LadderInstViewModelPrototype
     {
-        private static Dictionary<int, BaseViewModel> _elementCatalog = new Dictionary<int, BaseViewModel>();
-
-        private static Dictionary<string, BaseViewModel> _elementName = new Dictionary<string, BaseViewModel>();
+        private static SortedList<int, BaseViewModel> _elementCatalog 
+            = new SortedList<int, BaseViewModel>();
+        private static Dictionary<string, BaseViewModel> _elementName 
+            = new Dictionary<string, BaseViewModel>();
+        private static IList<int> _elementCatalogList;
 
         static LadderInstViewModelPrototype()
         {
@@ -194,6 +196,9 @@ namespace SamSoarII.LadderInstViewModel
             Add(new SMOVViewModel());
             Add(new FMOVViewModel());
             Add(new FMOVDViewModel());
+
+            _elementCatalogList = _elementCatalog.Keys.ToArray();
+            
         }
 
         private static void Add(BaseViewModel viewmodel)
@@ -209,7 +214,6 @@ namespace SamSoarII.LadderInstViewModel
             }
             if (_elementName.ContainsKey(viewmodel.InstructionName))
             {
-
                 Console.Write("Already contain Name {0:s} {1:s}\n",
                      viewmodel.InstructionName, viewmodel.ToString());
             }
@@ -226,6 +230,14 @@ namespace SamSoarII.LadderInstViewModel
         public static bool CheckInstructionName(string InstructionName)
         {
             return _elementName.Keys.Contains(InstructionName);
+        }
+        public static int GetOrderFromCatalog(int catalog)
+        {
+            return _elementCatalog.IndexOfKey(catalog);
+        }
+        public static int GetCatalogFromOrder(int order)
+        {
+            return _elementCatalogList[order];
         }
         public static BaseViewModel Clone(int id)
         {

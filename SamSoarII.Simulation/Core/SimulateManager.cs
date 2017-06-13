@@ -191,8 +191,23 @@ namespace SamSoarII.Simulation.Core
                         SimulateDllModel.GetBPAddr(), bpstatus));
                 }
                 _pause_old = _pause_new;
+                // 测试dll系统栈的访问
+                //TestRBP();
                 // 等待
                 Thread.Sleep(50);
+            }
+        }
+        unsafe private void TestRBP()
+        {
+            int call = SimulateDllModel.GetCallCount();
+            void* rbp = SimulateDllModel.GetRBP();
+            byte[] data = new byte[64];
+            if ((int)(rbp) > 0x08)
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    data[i] = *(((byte*)(rbp)) + i - 32);
+                }
             }
         }
         /// <summary> 更新线程开始 </summary>
