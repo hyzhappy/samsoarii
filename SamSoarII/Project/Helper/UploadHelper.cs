@@ -174,6 +174,11 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
                 regs.Add(ivmodel);
+                if ((option & OPTION_COMMENT) != 0)
+                {
+                    string comment = ReadTextE8();
+                    ValueCommentManager.UpdateComment(ivmodel, comment);
+                }
             }     
         }
         private void Read(LadderDiagramViewModel ldvmodel)
@@ -232,7 +237,26 @@ namespace SamSoarII.AppMain.Project
                 BaseViewModel bvmodel = null;
                 int x = edata[eid++];
                 int y = edata[eid++];
-                int id = edata[eid++];
+                int catalog = LadderInstViewModelPrototype.GetCatalogFromOrder(edata[eid++]);
+                bvmodel = LadderInstViewModelPrototype.Clone(catalog);
+                bvmodel.X = x;
+                bvmodel.Y = y;
+                for (int i = 0; i < bvmodel.Model.ParaCount; i++)
+                {
+                    IValueModel ivmold = bvmodel.Model.GetPara(i);
+                    IValueModel ivmnew = regs[ReadE16()];
+                    if (ivmnew is DWordValue || ivmnew is DDoubleWordValue || ivmnew is DFloatValue)
+                    {
+                        if (ivmold is WordValue)
+                            ivmnew = new DWordValue(ivmnew.Index, ivmnew.Offset);
+                        if (ivmold is DoubleWordValue)
+                            ivmnew = new DDoubleWordValue(ivmnew.Index, ivmnew.Offset);
+                        if (ivmold is FloatValue)
+                            ivmnew = new DFloatValue(ivmnew.Index, ivmnew.Offset);
+                    }
+                    bvmodel.Model.SetPara(i, ivmnew);
+                }
+                lnvmodel.ReplaceElement(bvmodel);
             }
         }
         private void Read(FuncBlockViewModel fbvmodel)

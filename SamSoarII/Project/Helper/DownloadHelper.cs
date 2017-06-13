@@ -1,8 +1,11 @@
 ﻿using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.Utility;
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +60,32 @@ namespace SamSoarII.AppMain.Project
                 Write(fbvmdoel, option);
             }
             Write(pmodel.MTVModel, option);
+            string tempfile1 = FileHelper.GetTempFile(".bin");
+            string tempfile2 = FileHelper.GetTempFile(".rar");
+            BinaryWriter bw = new BinaryWriter(
+                new FileStream(tempfile1, FileMode.CreateNew));
+            bw.Write(edata.ToArray());
+            string currentpath = Environment.CurrentDirectory;
+            Process cmd = null;
+            cmd = new Process();
+            cmd.StartInfo.FileName
+                = String.Format(@"{0:s}\rar\Rar", currentpath);
+            cmd.StartInfo.Arguments
+                = String.Format("m5 \"{0:s}\" \"{1:s}\"",
+                    tempfile1, tempfile2);
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            BinaryReader br = new BinaryReader(
+                new FileStream(tempfile2, FileMode.Open));
+            edata.Clear();
+            while (br.BaseStream.CanRead)
+            {
+                edata.Add(br.ReadByte());
+            }
         }
         unsafe private void WriteRegisters(int option)
         {
@@ -172,6 +201,11 @@ namespace SamSoarII.AppMain.Project
                         edata.Add(0x00);
                     }
                 }
+                if ((option & OPTION_COMMENT) != 0)
+                {
+                    string comment = ValueCommentManager.GetComment(ivmodel);
+                    Write(comment);
+                }
             }
         }
         private void Write(LadderDiagramViewModel ldvmodel, int option)
@@ -232,7 +266,7 @@ namespace SamSoarII.AppMain.Project
             }
             edata.Add(Int32_Low(bvmodel.X));
             edata.Add(Int32_Low(bvmodel.Y));
-            edata.Add(Int32_Low(bvmodel.GetCatalogID()));
+            edata.Add(Int32_Low(LadderInstViewModelPrototype.GetOrderFromCatalog(bvmodel.GetCatalogID())));
             for (int i = 0; i < bvmodel.Model.ParaCount; i++)
             {
                 IValueModel ivmodel = bvmodel.Model.GetPara(i);

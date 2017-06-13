@@ -128,29 +128,29 @@
     <Compile Include="LadderGraphModule\LadderLogicModule.cs" />
     <Compile Include="Project\AutoSavedManager.cs" />
     <Compile Include="Project\BraceFoldingStrategy.cs" />
-    <Compile Include="Project\ExtendHelper.cs" />
-    <Compile Include="Project\FuncBlockViewModel.xaml.cs">
+    <Compile Include="Project\Helper\DownloadHelper.cs" />
+    <Compile Include="Project\Program\FuncBlockViewModel.xaml.cs">
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\GenerateHelper.cs" />
-    <Compile Include="Project\InstructionDiagramViewModel.xaml.cs">
+    <Compile Include="Project\Helper\GenerateHelper.cs" />
+    <Compile Include="Project\Program\InstructionDiagramViewModel.xaml.cs">
       <DependentUpon>InstructionDiagramViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\InstructionNetworkViewModel.xaml.cs">
+    <Compile Include="Project\Program\InstructionNetworkViewModel.xaml.cs">
       <DependentUpon>InstructionNetworkViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\LadderDiagramViewModel.xaml.cs">
+    <Compile Include="Project\Program\LadderDiagramViewModel.xaml.cs">
       <DependentUpon>LadderDiagramViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\LadderHelper.cs" />
-    <Compile Include="Project\LadderNetworkViewModel.xaml.cs">
+    <Compile Include="Project\Helper\LadderHelper.cs" />
+    <Compile Include="Project\Program\LadderNetworkViewModel.xaml.cs">
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Project\ProjectFileManager.cs" />
-    <Compile Include="Project\ModbusTableViewModel.xaml.cs">
+    <Compile Include="Project\Program\ModbusTableViewModel.xaml.cs">
       <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\ProjectHelper.cs" />
+    <Compile Include="Project\Helper\ProjectHelper.cs" />
     <Compile Include="Project\ProjectModel.cs" />
     <Compile Include="Project\ProjectRecentUseTime.cs" />
     <Compile Include="Project\ReportOutputModel.xaml.cs">
@@ -159,7 +159,8 @@
     <Compile Include="Project\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Project\SimulateHelper.cs" />
+    <Compile Include="Project\Helper\SimulateHelper.cs" />
+    <Compile Include="Project\Helper\UploadHelper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -426,27 +427,27 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Project\FuncBlockViewModel.xaml">
+    <Page Include="Project\Program\FuncBlockViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Project\InstructionDiagramViewModel.xaml">
+    <Page Include="Project\Program\InstructionDiagramViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Project\InstructionNetworkViewModel.xaml">
+    <Page Include="Project\Program\InstructionNetworkViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Project\LadderDiagramViewModel.xaml">
+    <Page Include="Project\Program\LadderDiagramViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Project\LadderNetworkViewModel.xaml">
+    <Page Include="Project\Program\LadderNetworkViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Project\ModbusTableViewModel.xaml">
+    <Page Include="Project\Program\ModbusTableViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
