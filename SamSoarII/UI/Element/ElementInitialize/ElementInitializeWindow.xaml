@@ -1,4 +1,4 @@
-﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.AppMain.UI.ElementInitializeWindow"
+﻿<UserControl x:Class="SamSoarII.AppMain.UI.ElementInitializeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,16 +10,16 @@
         xmlns:usr="clr-namespace:SamSoarII.UserInterface;assembly=SamSoarII.UserInterface"
         mc:Ignorable="d">
     <UserControl.Resources>
-        <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="ElementTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+        <ObjectDataProvider x:Key="ElementTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
             <ObjectDataProvider.MethodParameters>
-                <x:Type x:Uid="x:Type_1" TypeName="util:ElementAddressType"></x:Type>
+                <x:Type TypeName="util:ElementAddressType"></x:Type>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
-    <Grid x:Uid="Grid_1">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="100"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_2" Height="*"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"></ColumnDefinition>
@@ -27,16 +27,16 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_1" FontSize="16" Text="{x:Static properties:Resources.Element_Address}"/>
-                <ComboBox x:Uid="EleTypeCombox" x:Name="EleTypeCombox" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" VerticalAlignment="Top" Width="50" Height="20" SelectionChanged="OnSelectionChanged"></ComboBox>
-                <usr:OnlyNumsTextBox x:Uid="textBox" x:Name="textBox" LowRange="0" TopRange="8191" IsNumsOnly="True" VerticalAlignment="Top" Height="20" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
+                <TextBlock FontSize="14" Text="{x:Static properties:Resources.Element_Address}"/>
+                <ComboBox x:Name="EleTypeCombox" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" VerticalAlignment="Top" Width="50" Height="20" SelectionChanged="OnSelectionChanged"></ComboBox>
+                <usr:OnlyNumsTextBox x:Name="textBox" LowRange="0" TopRange="8191" IsNumsOnly="True" VerticalAlignment="Top" Height="20" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
             </StackPanel>
             <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_2" FontSize="16" VerticalAlignment="Top" Text="{x:Static properties:Resources.Data_Type}"/>
+                <TextBlock FontSize="14" VerticalAlignment="Top" Text="{x:Static properties:Resources.Data_Type}"/>
                 <ComboBox x:Name="DataTypeCombox" Height="20" VerticalAlignment="Top" Width="100" Margin="5,0,0,0" ItemsSource="{Binding DataTypes}" SelectedIndex="0"></ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <TextBlock x:Uid="TextBlock_3" FontSize="16" Text="{x:Static properties:Resources.Element_Length}"/>
+                <TextBlock FontSize="14" Text="{x:Static properties:Resources.Element_Length}"/>
                 <usr:OnlyNumsTextBox x:Uid="LengthTextbox" x:Name="LengthTextbox" LowRange="1" TopRange="8191" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Width="80" Text="1"></usr:OnlyNumsTextBox>
             </StackPanel>
         </StackPanel>

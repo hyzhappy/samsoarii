@@ -19,21 +19,21 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <Style x:Uid="Style_1" TargetType="{x:Type TextBlock}">
-                <Setter x:Uid="Setter_1" Property="VerticalAlignment" 
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" 
                         Value="Center">
                 </Setter>
-                <Setter x:Uid="Setter_2" Property="Margin" 
+                <Setter Property="Margin" 
                         Value="8,0,0,0">
                 </Setter>
-                <Setter x:Uid="Setter_3" Property="FontSize"
+                <Setter Property="FontSize"
                         Value="14">
                 </Setter>
             </Style>
             <Style TargetType="{x:Type ComboBox}">
-                <Setter x:Uid="Setter_4" Property="Margin" Value="80,10,10,10"></Setter>
+                <Setter Property="Margin" Value="80,10,10,10"></Setter>
             </Style>
-            <Style x:Uid="Style_3" TargetType="{x:Type Button}">
+            <Style TargetType="{x:Type Button}">
                 <Setter x:Uid="Setter_5" Property="Margin" Value="24,6,24,6"></Setter>
             </Style>
         </Grid.Resources>
@@ -51,8 +51,8 @@
         <ComboBox Grid.Row="0" Grid.Column="1"
                   x:Name="CB_Family" SelectionChanged="ComboBox_SelectionChanged">
             <ComboBox.ItemContainerStyle>
-                <Style x:Uid="Style_4">
-                    <Setter x:Uid="Setter_6" Property="TextBlock.FontFamily" Value="{Binding Family}"></Setter>
+                <Style>
+                    <Setter Property="TextBlock.FontFamily" Value="{Binding Family}"></Setter>
                 </Style>
             </ComboBox.ItemContainerStyle>
         </ComboBox>

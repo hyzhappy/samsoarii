@@ -54,15 +54,10 @@ namespace SamSoarII.AppMain.UI
                     }
                 }
                 BD_Color.Background = current.Data.FontColor;
-                switch (current.Data.Name)
-                {
-                    case "函数块":
-                        Demo.ShowFuncBlock();
-                        break;
-                    default:
-                        Demo.ShowDiagram();
-                        break;
-                }
+                if (current.Data.Name == Properties.Resources.FuncBlock)
+                    Demo.ShowFuncBlock();
+                else
+                    Demo.ShowDiagram();
             }
         }
 
@@ -74,16 +69,18 @@ namespace SamSoarII.AppMain.UI
         
         private void Initialize()
         {
+            FontManager.GetLadder().Name = Properties.Resources.Element;
+            FontManager.GetTitle().Name = Properties.Resources.Ladder_Title;
+            FontManager.GetComment().Name = Properties.Resources.Comment;
+            FontManager.GetFunc().Name = Properties.Resources.FuncBlock;
             DemoFontManager.GetLadder().Setup(FontManager.GetLadder());
             DemoFontManager.GetTitle().Setup(FontManager.GetTitle());
             DemoFontManager.GetComment().Setup(FontManager.GetComment());
             DemoFontManager.GetFunc().Setup(FontManager.GetFunc());
-            //DemoFontManager.GetInst().Setup(FontManager.GetInst());
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetLadder()));
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetTitle()));
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetComment()));
             CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetFunc()));
-            //CB_Range.Items.Add(new FontDataItem(DemoFontManager.GetInst()));
             foreach (var fontFamily in (new InstalledFontCollection()).Families)
             {
                 FontFamilyItem ffitem = new FontFamilyItem(fontFamily);

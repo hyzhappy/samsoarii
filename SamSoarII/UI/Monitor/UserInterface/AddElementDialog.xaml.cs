@@ -79,17 +79,17 @@ namespace SamSoarII.AppMain.UI.Monitor
             Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (Type == ElementAddressType.H || Type == ElementAddressType.K)
             {
-                MessageBox.Show("常量不可监视!");
+                MessageBox.Show(Properties.Resources.Constant_Monitor);
             }
             else if (ElementAddressHelper.AssertAddrRange(Type, uint.Parse(textBox.Text), device))
             {
                 if ((bool)checkbox1.IsChecked && !ElementAddressHelper.AssertAddrRange(ElementAddressHelper.GetIntrasegmentAddrType(comboBox1.SelectedIndex), uint.Parse(textBox1.Text), device))
                 {
-                    MessageBox.Show("变址寄存器地址越界!");
+                    MessageBox.Show(Properties.Resources.Intra_Cross);
                 }
                 else if ((bool)checkbox.IsChecked && !ElementAddressHelper.AssertAddrRange(Type, uint.Parse(textBox.Text) + uint.Parse(rangeTextBox.GetTextBox().Text) - 1, device))
                 {
-                    MessageBox.Show("添加的变量超过该寄存器地址限制!");
+                    MessageBox.Show(Properties.Resources.Exceed_Adddress);
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             else
             {
-                MessageBox.Show("地址范围越界!");
+                MessageBox.Show(Properties.Resources.Address_Cross);
             }
         }
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -113,13 +113,13 @@ namespace SamSoarII.Utility
             xDoc.Add(rootNode);
             foreach (var path in Directory.GetFileSystemEntries(@"C:\Users\yangzheyu\软件\Setup"))
             {
-                if (!File.Exists(path) && (path.EndsWith("Compiler") || path.EndsWith("zh-Hans")))
+                if (!File.Exists(path) && (path.EndsWith("Compiler") || path.EndsWith("zh-Hans") || path.EndsWith("Update")))
                 {
                     continue;
                 }
                 GenXElementsByDir(path, rootNode);
             }
-            xDoc.Save(dir + @"\AppUpdate.xml");
+            xDoc.Save(dir + @"\Update\AppUpdate.xml");
         }
         private static void GenXElementsByDir(string path, XElement node)
         {
@@ -132,6 +132,7 @@ namespace SamSoarII.Utility
                 filenode.SetAttributeValue("relativepath",GetRelativePath(file.DirectoryName, @"C:\Users\yangzheyu\软件\Setup"));
                 filenode.SetAttributeValue("md5",FileHelper.GetMD5(path));
                 filenode.SetAttributeValue("version",1);
+                filenode.SetAttributeValue("size",file.Length);
             }
             else
             {

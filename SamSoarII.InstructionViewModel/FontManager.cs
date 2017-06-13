@@ -23,8 +23,6 @@ namespace SamSoarII.LadderInstViewModel
             = new FontData("注释");
         static private FontData Func 
             = new FontData("函数块");
-        static private FontData Inst
-            = new FontData("PLC指令");
 
         static public FontData GetTitle()
         {
@@ -41,10 +39,6 @@ namespace SamSoarII.LadderInstViewModel
         static public FontData GetFunc()
         {
             return Func;
-        }
-        static public FontData GetInst()
-        {
-            return Inst;
         }
 
         static public void LoadFontDataByXElement(FontData fdat, XElement xele)
@@ -71,8 +65,6 @@ namespace SamSoarII.LadderInstViewModel
             = new FontData("注释");
         static private FontData Func
             = new FontData("函数块");
-        static private FontData Inst
-            = new FontData("PLC指令");
 
         static public FontData GetTitle()
         {
@@ -89,10 +81,6 @@ namespace SamSoarII.LadderInstViewModel
         static public FontData GetFunc()
         {
             return Func;
-        }
-        static public FontData GetInst()
-        {
-            return Inst;
         }
     }
 

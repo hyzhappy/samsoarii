@@ -1149,9 +1149,6 @@
   <data name="Message_Over_Max_Len" xml:space="preserve">
     <value>超过最大长度范围,请重新输入!</value>
   </data>
-  <data name="Invalid_Input" xml:space="preserve">
-    <value>输入值非法!</value>
-  </data>
   <data name="Message_Converter_Error" xml:space="preserve">
     <value>类型之间无法转换!</value>
   </data>
@@ -1181,5 +1178,467 @@
   </data>
   <data name="Function_Block_Correct" xml:space="preserve">
     <value>函数块全部正确！</value>
+  </data>
+  <data name="Constant_Monitor" xml:space="preserve">
+    <value>常量不可监视!</value>
+  </data>
+  <data name="Intra_Cross" xml:space="preserve">
+    <value>变址寄存器地址越界!</value>
+  </data>
+  <data name="Exceed_Adddress" xml:space="preserve">
+    <value>添加的变量超过该寄存器地址限制!</value>
+  </data>
+  <data name="Address_Cross" xml:space="preserve">
+    <value>地址范围越界!</value>
+  </data>
+  <data name="New_Version" xml:space="preserve">
+    <value>已是最新版本！</value>
+  </data>
+  <data name="Update_Whether" xml:space="preserve">
+    <value>是否更新</value>
+  </data>
+  <data name="Update_Or_Not" xml:space="preserve">
+    <value>存在新版本可更新，是否更新？</value>
+  </data>
+  <data name="Update_Process" xml:space="preserve">
+    <value>更新过程会关闭程序，请确保文件已正确保存！</value>
+  </data>
+  <data name="Update_Size" xml:space="preserve">
+    <value>更新文件大小为:</value>
+  </data>
+  <data name="Connect_Failed" xml:space="preserve">
+    <value>连接失败，请检查您的网络设置！</value>
+  </data>
+  <data name="Invalid_Input" xml:space="preserve">
+    <value>无效输入</value>
+  </data>
+  <data name="Ladder_Title" xml:space="preserve">
+    <value>梯形图标题</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>注释</value>
+  </data>
+  <data name="Demo_Message_Element_Comment" xml:space="preserve">
+    <value>X3:这里是元件注释</value>
+  </data>
+  <data name="Element_Comment_D0" xml:space="preserve">
+    <value>D0:元件注释(D0)</value>
+  </data>
+  <data name="Element_Comment_D1" xml:space="preserve">
+    <value>D1:元件注释(D1)</value>
+  </data>
+  <data name="Element_Comment_K0" xml:space="preserve">
+    <value>K0:元件注释(K0)</value>
+  </data>
+  <data name="Element_Comment_K1" xml:space="preserve">
+    <value>K1:元件注释(K1)</value>
+  </data>
+  <data name="Element_Comment_K2" xml:space="preserve">
+    <value>K2:元件注释(K2)</value>
+  </data>
+  <data name="Word_Equal" xml:space="preserve">
+    <value>单字相等</value>
+  </data>
+  <data name="Word_Not_Equal" xml:space="preserve">
+    <value>单字不等</value>
+  </data>
+  <data name="Word_Less" xml:space="preserve">
+    <value>单字小于</value>
+  </data>
+  <data name="Word_More" xml:space="preserve">
+    <value>单字大于</value>
+  </data>
+  <data name="Word_Not_Less" xml:space="preserve">
+    <value>单字大于等于</value>
+  </data>
+  <data name="Word_Not_More" xml:space="preserve">
+    <value>单字小于等于</value>
+  </data>
+  <data name="DWord_Equal" xml:space="preserve">
+    <value>双字相等</value>
+  </data>
+  <data name="DWord_Less" xml:space="preserve">
+    <value>双字小于</value>
+  </data>
+  <data name="DWord_More" xml:space="preserve">
+    <value>双字大于</value>
+  </data>
+  <data name="DWord_Not_Equal" xml:space="preserve">
+    <value>双字不等</value>
+  </data>
+  <data name="DWord_Not_Less" xml:space="preserve">
+    <value>双字大于等于</value>
+  </data>
+  <data name="DWord_Not_More" xml:space="preserve">
+    <value>双字小于等于</value>
+  </data>
+  <data name="Float_Equal" xml:space="preserve">
+    <value>浮点相等</value>
+  </data>
+  <data name="Float_Not_Equal" xml:space="preserve">
+    <value>浮点不等</value>
+  </data>
+  <data name="Float_More_Than" xml:space="preserve">
+    <value>浮点大于</value>
+  </data>
+  <data name="Float_Less_Than" xml:space="preserve">
+    <value>浮点小于</value>
+  </data>
+  <data name="Float_Not_Less_Than" xml:space="preserve">
+    <value>浮点大于等于</value>
+  </data>
+  <data name="Float_Not_More_Than" xml:space="preserve">
+    <value>浮点小于等于</value>
+  </data>
+  <data name="Set_Coil" xml:space="preserve">
+    <value>置位线圈</value>
+  </data>
+  <data name="Set_Immediately" xml:space="preserve">
+    <value>立即置位</value>
+  </data>
+  <data name="Reset_Coil" xml:space="preserve">
+    <value>复位线圈</value>
+  </data>
+  <data name="Reset_Immediately" xml:space="preserve">
+    <value>立即复位</value>
+  </data>
+  <data name="Alternating_Output" xml:space="preserve">
+    <value>交替输出</value>
+  </data>
+  <data name="Pulse_Alternation" xml:space="preserve">
+    <value>脉冲交替</value>
+  </data>
+  <data name="Word_To_DWord" xml:space="preserve">
+    <value>单字转双字</value>
+  </data>
+  <data name="DWord_To_Word" xml:space="preserve">
+    <value>双字转单字</value>
+  </data>
+  <data name="DWord_To_Float" xml:space="preserve">
+    <value>双子转浮点</value>
+  </data>
+  <data name="BCD_Code_To_Integer" xml:space="preserve">
+    <value>BCD码转整数</value>
+  </data>
+  <data name="Integer_To_BCD_Code" xml:space="preserve">
+    <value>整数转BCD码</value>
+  </data>
+  <data name="Trunc" xml:space="preserve">
+    <value>截位取整</value>
+  </data>
+  <data name="Round" xml:space="preserve">
+    <value>四舍五入</value>
+  </data>
+  <data name="Word_Reverse" xml:space="preserve">
+    <value>反转单字</value>
+  </data>
+  <data name="DWord_Reverse" xml:space="preserve">
+    <value>反转双字</value>
+  </data>
+  <data name="Word_And" xml:space="preserve">
+    <value>单字相与</value>
+  </data>
+  <data name="Word_Or" xml:space="preserve">
+    <value>单字相或</value>
+  </data>
+  <data name="DWord_And" xml:space="preserve">
+    <value>双字相与</value>
+  </data>
+  <data name="DWord_Or" xml:space="preserve">
+    <value>双字相或</value>
+  </data>
+  <data name="DWord_XOR" xml:space="preserve">
+    <value>双字异或</value>
+  </data>
+  <data name="Word_XOR" xml:space="preserve">
+    <value>单字异或</value>
+  </data>
+  <data name="Move_Word" xml:space="preserve">
+    <value>传送单字</value>
+  </data>
+  <data name="Move_DWord" xml:space="preserve">
+    <value>传送双字</value>
+  </data>
+  <data name="Move_Float" xml:space="preserve">
+    <value>传送浮点</value>
+  </data>
+  <data name="Move_Blocks_Word" xml:space="preserve">
+    <value>成块移动单字</value>
+  </data>
+  <data name="Move_Blocks_DWord" xml:space="preserve">
+    <value>成块移动双字</value>
+  </data>
+  <data name="Word_Add" xml:space="preserve">
+    <value>单字相加</value>
+  </data>
+  <data name="DWord_Add" xml:space="preserve">
+    <value>双字相加</value>
+  </data>
+  <data name="Float_Add" xml:space="preserve">
+    <value>浮点相加</value>
+  </data>
+  <data name="Word_Minus" xml:space="preserve">
+    <value>单字相减</value>
+  </data>
+  <data name="DWord_Minus" xml:space="preserve">
+    <value>双字相减</value>
+  </data>
+  <data name="Float_Minus" xml:space="preserve">
+    <value>浮点相减</value>
+  </data>
+  <data name="Multiply" xml:space="preserve">
+    <value>相乘</value>
+  </data>
+  <data name="Divide" xml:space="preserve">
+    <value>相除</value>
+  </data>
+  <data name="Word_Multiply" xml:space="preserve">
+    <value>单字相乘</value>
+  </data>
+  <data name="DWord_Multiply" xml:space="preserve">
+    <value>双字相乘</value>
+  </data>
+  <data name="Float_Multiply" xml:space="preserve">
+    <value>浮点相乘</value>
+  </data>
+  <data name="Word_Divide" xml:space="preserve">
+    <value>单子相除</value>
+  </data>
+  <data name="DWord_Divide" xml:space="preserve">
+    <value>双字相除</value>
+  </data>
+  <data name="Float_Divide" xml:space="preserve">
+    <value>浮点相除</value>
+  </data>
+  <data name="DWord_Add_One" xml:space="preserve">
+    <value>双字加一</value>
+  </data>
+  <data name="Word_Add_One" xml:space="preserve">
+    <value>单字加一</value>
+  </data>
+  <data name="Word_Minus_One" xml:space="preserve">
+    <value>单字减一</value>
+  </data>
+  <data name="DWord_Minus_One" xml:space="preserve">
+    <value>双字减一</value>
+  </data>
+  <data name="Sin_Operation" xml:space="preserve">
+    <value>正弦运算</value>
+  </data>
+  <data name="Cos_Operation" xml:space="preserve">
+    <value>余弦运算</value>
+  </data>
+  <data name="Tan_Operation" xml:space="preserve">
+    <value>正切运算</value>
+  </data>
+  <data name="Sqrt_Operation" xml:space="preserve">
+    <value>求平方根</value>
+  </data>
+  <data name="EXP_Operation" xml:space="preserve">
+    <value>自然指数</value>
+  </data>
+  <data name="LN_Operation" xml:space="preserve">
+    <value>自然对数</value>
+  </data>
+  <data name="TON_Inst" xml:space="preserve">
+    <value>接通延时定时器</value>
+  </data>
+  <data name="TONR_Inst" xml:space="preserve">
+    <value>接通延时保护定时器</value>
+  </data>
+  <data name="TOF_Inst" xml:space="preserve">
+    <value>断开延时定时器</value>
+  </data>
+  <data name="CTU_Inst" xml:space="preserve">
+    <value>向上计数器</value>
+  </data>
+  <data name="CTD_Inst" xml:space="preserve">
+    <value>向下计数器</value>
+  </data>
+  <data name="CTUD_Inst" xml:space="preserve">
+    <value>向上向下计数器</value>
+  </data>
+  <data name="FOR_Inst" xml:space="preserve">
+    <value>循环开始</value>
+  </data>
+  <data name="NEXT_Inst" xml:space="preserve">
+    <value>循环结束</value>
+  </data>
+  <data name="JMP_Inst" xml:space="preserve">
+    <value>程序跳转</value>
+  </data>
+  <data name="LBL_Inst" xml:space="preserve">
+    <value>跳转标签</value>
+  </data>
+  <data name="CALL_Inst" xml:space="preserve">
+    <value>子程序调用</value>
+  </data>
+  <data name="CALLM_Inst" xml:space="preserve">
+    <value>函数块调用</value>
+  </data>
+  <data name="SHL_Inst" xml:space="preserve">
+    <value>单字左移</value>
+  </data>
+  <data name="SHR_Inst" xml:space="preserve">
+    <value>单字右移</value>
+  </data>
+  <data name="SHLD_Inst" xml:space="preserve">
+    <value>双字左移</value>
+  </data>
+  <data name="SHRD_Inst" xml:space="preserve">
+    <value>双字右移</value>
+  </data>
+  <data name="SHLB_Inst" xml:space="preserve">
+    <value>位左移</value>
+  </data>
+  <data name="SHRB_Inst" xml:space="preserve">
+    <value>位右移</value>
+  </data>
+  <data name="ROL_Inst" xml:space="preserve">
+    <value>单字循环左移</value>
+  </data>
+  <data name="ROR_Inst" xml:space="preserve">
+    <value>单字循环右移</value>
+  </data>
+  <data name="ROLD_Inst" xml:space="preserve">
+    <value>双字循环左移</value>
+  </data>
+  <data name="RORD_Inst" xml:space="preserve">
+    <value>双字循环右移</value>
+  </data>
+  <data name="ATCH_Inst" xml:space="preserve">
+    <value>中断绑定</value>
+  </data>
+  <data name="DTCH_Inst" xml:space="preserve">
+    <value>中断释放</value>
+  </data>
+  <data name="EI_Inst" xml:space="preserve">
+    <value>中断允许</value>
+  </data>
+  <data name="DI_Inst" xml:space="preserve">
+    <value>中断禁止</value>
+  </data>
+  <data name="TRD_Inst" xml:space="preserve">
+    <value>实时读取</value>
+  </data>
+  <data name="TWR_Inst" xml:space="preserve">
+    <value>实时写入</value>
+  </data>
+  <data name="MBUS_Inst" xml:space="preserve">
+    <value>Modbus通信</value>
+  </data>
+  <data name="SEND_Inst" xml:space="preserve">
+    <value>自由发送</value>
+  </data>
+  <data name="REV_Inst" xml:space="preserve">
+    <value>自由接收</value>
+  </data>
+  <data name="PLSF_Inst" xml:space="preserve">
+    <value>单字变频脉冲</value>
+  </data>
+  <data name="DPLSF_Inst" xml:space="preserve">
+    <value>双字变频脉冲</value>
+  </data>
+  <data name="PWM_Inst" xml:space="preserve">
+    <value>单字脉宽调制</value>
+  </data>
+  <data name="DPWM_Inst" xml:space="preserve">
+    <value>双字脉宽调制</value>
+  </data>
+  <data name="PLSY_Inst" xml:space="preserve">
+    <value>单字单段无加减速脉冲</value>
+  </data>
+  <data name="DPLSY_Inst" xml:space="preserve">
+    <value>双字单段无加减速脉冲</value>
+  </data>
+  <data name="PLSR_Inst" xml:space="preserve">
+    <value>单字单向多段脉冲</value>
+  </data>
+  <data name="DPLSR_Inst" xml:space="preserve">
+    <value>双字单向多段脉冲</value>
+  </data>
+  <data name="PLSRD_Inst" xml:space="preserve">
+    <value>单字双向多段脉冲</value>
+  </data>
+  <data name="DPLSRD_Inst" xml:space="preserve">
+    <value>双字双向多段脉冲</value>
+  </data>
+  <data name="PLSNEXT_Inst" xml:space="preserve">
+    <value>脉冲跳转</value>
+  </data>
+  <data name="PLSSTOP_Inst" xml:space="preserve">
+    <value>脉冲停止</value>
+  </data>
+  <data name="ZRN_Inst" xml:space="preserve">
+    <value>单字回归原点</value>
+  </data>
+  <data name="DZRN_Inst" xml:space="preserve">
+    <value>双字回归原点</value>
+  </data>
+  <data name="PTO_Inst" xml:space="preserve">
+    <value>双字相对位置多段脉冲控制</value>
+  </data>
+  <data name="DRVI_Inst" xml:space="preserve">
+    <value>单字相对位置单段脉冲输出</value>
+  </data>
+  <data name="DDRVI_Inst" xml:space="preserve">
+    <value>双字相对位置单段脉冲输出</value>
+  </data>
+  <data name="LOG_Inst" xml:space="preserve">
+    <value>10的对数</value>
+  </data>
+  <data name="POW_Inst" xml:space="preserve">
+    <value>幂级数</value>
+  </data>
+  <data name="FACT_Inst" xml:space="preserve">
+    <value>整数阶乘</value>
+  </data>
+  <data name="CMP_Inst" xml:space="preserve">
+    <value>单字比较</value>
+  </data>
+  <data name="CMPD_Inst" xml:space="preserve">
+    <value>双字比较</value>
+  </data>
+  <data name="CMPF_Inst" xml:space="preserve">
+    <value>浮点比较</value>
+  </data>
+  <data name="ZCP_Inst" xml:space="preserve">
+    <value>单字区间比较</value>
+  </data>
+  <data name="ZCPD_Inst" xml:space="preserve">
+    <value>双字区间比较</value>
+  </data>
+  <data name="ZCPF_Inst" xml:space="preserve">
+    <value>浮点区间比较</value>
+  </data>
+  <data name="NEG_Inst" xml:space="preserve">
+    <value>单字求补</value>
+  </data>
+  <data name="NEGD_Inst" xml:space="preserve">
+    <value>双字求补</value>
+  </data>
+  <data name="XCH_Inst" xml:space="preserve">
+    <value>单字交换</value>
+  </data>
+  <data name="XCHD_Inst" xml:space="preserve">
+    <value>双字交换</value>
+  </data>
+  <data name="XCHF_Inst" xml:space="preserve">
+    <value>浮点交换</value>
+  </data>
+  <data name="CML_Inst" xml:space="preserve">
+    <value>单字取反传送</value>
+  </data>
+  <data name="CMLD_Inst" xml:space="preserve">
+    <value>双字取反传送</value>
+  </data>
+  <data name="SMOV_Inst" xml:space="preserve">
+    <value>移位传送</value>
+  </data>
+  <data name="FMOV_Inst" xml:space="preserve">
+    <value>单字多点传送</value>
+  </data>
+  <data name="FMOVD_Inst" xml:space="preserve">
+    <value>双字多点传送</value>
   </data>
 </root>

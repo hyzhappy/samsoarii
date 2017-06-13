@@ -235,9 +235,6 @@
     <Compile Include="UI\OptionWidget\DemoCanvas.xaml.cs">
       <DependentUpon>DemoCanvas.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\OptionWidget\DemoInstructionViewModel.xaml.cs">
-      <DependentUpon>DemoInstructionViewModel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\ProjectTreeViewItem.xaml.cs">
       <DependentUpon>ProjectTreeViewItem.xaml</DependentUpon>
     </Compile>
@@ -520,10 +517,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\OptionWidget\DemoCanvas.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\OptionWidget\DemoInstructionViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

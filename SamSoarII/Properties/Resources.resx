@@ -205,7 +205,7 @@
     <value>Soft Element Initialize</value>
   </data>
   <data name="MainWindow_Error_List" xml:space="preserve">
-    <value>Error_List</value>
+    <value>Error List</value>
   </data>
   <data name="MainWindow_Monitor_List" xml:space="preserve">
     <value>Monitor List</value>
@@ -1181,5 +1181,464 @@
   </data>
   <data name="Function_Block_Correct" xml:space="preserve">
     <value>Funcblocks all correct!</value>
+  </data>
+  <data name="Constant_Monitor" xml:space="preserve">
+    <value>Constant can not be monitored!</value>
+  </data>
+  <data name="Intra_Cross" xml:space="preserve">
+    <value>Intra register address crossed!</value>
+  </data>
+  <data name="Exceed_Adddress" xml:space="preserve">
+    <value>Added variable exceeds this register address limit!</value>
+  </data>
+  <data name="Address_Cross" xml:space="preserve">
+    <value>Address range is crossed!</value>
+  </data>
+  <data name="New_Version" xml:space="preserve">
+    <value>Is the latest version!</value>
+  </data>
+  <data name="Update_Whether" xml:space="preserve">
+    <value>Whether to update</value>
+  </data>
+  <data name="Update_Or_Not" xml:space="preserve">
+    <value>Is there a new version updated, is it updated?</value>
+  </data>
+  <data name="Update_Process" xml:space="preserve">
+    <value>The update process will close the program, please make sure the file is saved correctly!</value>
+  </data>
+  <data name="Update_Size" xml:space="preserve">
+    <value>The update file size is:</value>
+  </data>
+  <data name="Connect_Failed" xml:space="preserve">
+    <value>Connection failed, please check your network settings!</value>
+  </data>
+  <data name="Ladder_Title" xml:space="preserve">
+    <value>Ladder title</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Demo_Message_Element_Comment" xml:space="preserve">
+    <value>X3:Here is an element comment</value>
+  </data>
+  <data name="Element_Comment_D0" xml:space="preserve">
+    <value>D0:Element comment</value>
+  </data>
+  <data name="Element_Comment_D1" xml:space="preserve">
+    <value>D1:Element comment</value>
+  </data>
+  <data name="Element_Comment_K0" xml:space="preserve">
+    <value>K0:Element comment</value>
+  </data>
+  <data name="Element_Comment_K1" xml:space="preserve">
+    <value>K1:Element comment</value>
+  </data>
+  <data name="Element_Comment_K2" xml:space="preserve">
+    <value>K2:Element comment</value>
+  </data>
+  <data name="Word_Equal" xml:space="preserve">
+    <value>Word equal</value>
+  </data>
+  <data name="Word_Not_Equal" xml:space="preserve">
+    <value>Word not equal</value>
+  </data>
+  <data name="Word_Less" xml:space="preserve">
+    <value>Word less than</value>
+  </data>
+  <data name="Word_More" xml:space="preserve">
+    <value>Word more than</value>
+  </data>
+  <data name="Word_Not_Less" xml:space="preserve">
+    <value>Word not less than</value>
+  </data>
+  <data name="Word_Not_More" xml:space="preserve">
+    <value>Word not more than</value>
+  </data>
+  <data name="DWord_Equal" xml:space="preserve">
+    <value>DWord equal</value>
+  </data>
+  <data name="DWord_Less" xml:space="preserve">
+    <value>DWord less than</value>
+  </data>
+  <data name="DWord_More" xml:space="preserve">
+    <value>DWord more than</value>
+  </data>
+  <data name="DWord_Not_Equal" xml:space="preserve">
+    <value>DWord not equal</value>
+  </data>
+  <data name="DWord_Not_Less" xml:space="preserve">
+    <value>DWord not less than</value>
+  </data>
+  <data name="DWord_Not_More" xml:space="preserve">
+    <value>DWord not more than</value>
+  </data>
+  <data name="Float_Equal" xml:space="preserve">
+    <value>Float equal</value>
+  </data>
+  <data name="Float_Not_Equal" xml:space="preserve">
+    <value>Float not equal</value>
+  </data>
+  <data name="Float_More_Than" xml:space="preserve">
+    <value>Float more than</value>
+  </data>
+  <data name="Float_Less_Than" xml:space="preserve">
+    <value>Float less than</value>
+  </data>
+  <data name="Float_Not_Less_Than" xml:space="preserve">
+    <value>Float not less than</value>
+  </data>
+  <data name="Float_Not_More_Than" xml:space="preserve">
+    <value>Float not more than</value>
+  </data>
+  <data name="Set_Coil" xml:space="preserve">
+    <value>Set coil</value>
+  </data>
+  <data name="Set_Immediately" xml:space="preserve">
+    <value>Set immediately</value>
+  </data>
+  <data name="Reset_Coil" xml:space="preserve">
+    <value>Reset coil</value>
+  </data>
+  <data name="Reset_Immediately" xml:space="preserve">
+    <value>Reset immediately</value>
+  </data>
+  <data name="Alternating_Output" xml:space="preserve">
+    <value>Alternating output</value>
+  </data>
+  <data name="Pulse_Alternation" xml:space="preserve">
+    <value>Pulse alternation</value>
+  </data>
+  <data name="Word_To_DWord" xml:space="preserve">
+    <value>Word to DWord</value>
+  </data>
+  <data name="DWord_To_Word" xml:space="preserve">
+    <value>DWord to Word</value>
+  </data>
+  <data name="DWord_To_Float" xml:space="preserve">
+    <value>DWord to Float</value>
+  </data>
+  <data name="BCD_Code_To_Integer" xml:space="preserve">
+    <value>BCD code to integer</value>
+  </data>
+  <data name="Integer_To_BCD_Code" xml:space="preserve">
+    <value>Integer to BCD code</value>
+  </data>
+  <data name="Trunc" xml:space="preserve">
+    <value>Trunc</value>
+  </data>
+  <data name="Round" xml:space="preserve">
+    <value>Round</value>
+  </data>
+  <data name="Word_Reverse" xml:space="preserve">
+    <value>Word reverse</value>
+  </data>
+  <data name="DWord_Reverse" xml:space="preserve">
+    <value>DWord reverse</value>
+  </data>
+  <data name="Word_And" xml:space="preserve">
+    <value>Word(and)</value>
+  </data>
+  <data name="Word_Or" xml:space="preserve">
+    <value>Word(or)</value>
+  </data>
+  <data name="DWord_And" xml:space="preserve">
+    <value>DWord(and)</value>
+  </data>
+  <data name="DWord_Or" xml:space="preserve">
+    <value>DWord(or)</value>
+  </data>
+  <data name="DWord_XOR" xml:space="preserve">
+    <value>DWord(XOR)</value>
+  </data>
+  <data name="Word_XOR" xml:space="preserve">
+    <value>Word(XOR)</value>
+  </data>
+  <data name="Move_Word" xml:space="preserve">
+    <value>Move Word</value>
+  </data>
+  <data name="Move_DWord" xml:space="preserve">
+    <value>Move DWord</value>
+  </data>
+  <data name="Move_Float" xml:space="preserve">
+    <value>Move Float</value>
+  </data>
+  <data name="Move_Blocks_Word" xml:space="preserve">
+    <value>Move blocks of Word</value>
+  </data>
+  <data name="Move_Blocks_DWord" xml:space="preserve">
+    <value>Move blocks of DWord</value>
+  </data>
+  <data name="Word_Add" xml:space="preserve">
+    <value>Word add</value>
+  </data>
+  <data name="DWord_Add" xml:space="preserve">
+    <value>DWord add</value>
+  </data>
+  <data name="Float_Add" xml:space="preserve">
+    <value>Float add</value>
+  </data>
+  <data name="Word_Minus" xml:space="preserve">
+    <value>Word minus</value>
+  </data>
+  <data name="DWord_Minus" xml:space="preserve">
+    <value>DWord minus</value>
+  </data>
+  <data name="Float_Minus" xml:space="preserve">
+    <value>Float minus</value>
+  </data>
+  <data name="Multiply" xml:space="preserve">
+    <value>Multiply</value>
+  </data>
+  <data name="Divide" xml:space="preserve">
+    <value>Divide</value>
+  </data>
+  <data name="Word_Multiply" xml:space="preserve">
+    <value>Word multiply</value>
+  </data>
+  <data name="DWord_Multiply" xml:space="preserve">
+    <value>DWord multiply</value>
+  </data>
+  <data name="Float_Multiply" xml:space="preserve">
+    <value>Float multiply</value>
+  </data>
+  <data name="Word_Divide" xml:space="preserve">
+    <value>Word divide</value>
+  </data>
+  <data name="DWord_Divide" xml:space="preserve">
+    <value>DWord divide</value>
+  </data>
+  <data name="Float_Divide" xml:space="preserve">
+    <value>Float divide</value>
+  </data>
+  <data name="DWord_Add_One" xml:space="preserve">
+    <value>DWord(add one)</value>
+  </data>
+  <data name="Word_Add_One" xml:space="preserve">
+    <value>Word(add one)</value>
+  </data>
+  <data name="Word_Minus_One" xml:space="preserve">
+    <value>Word(minus one)</value>
+  </data>
+  <data name="DWord_Minus_One" xml:space="preserve">
+    <value>DWord(minus one)</value>
+  </data>
+  <data name="Sin_Operation" xml:space="preserve">
+    <value>sin(Operation)</value>
+  </data>
+  <data name="Cos_Operation" xml:space="preserve">
+    <value>Cos(Operation)</value>
+  </data>
+  <data name="Tan_Operation" xml:space="preserve">
+    <value>Tan(Operation)</value>
+  </data>
+  <data name="Sqrt_Operation" xml:space="preserve">
+    <value>Sqrt(Operation)</value>
+  </data>
+  <data name="EXP_Operation" xml:space="preserve">
+    <value>EXP(Operation)</value>
+  </data>
+  <data name="LN_Operation" xml:space="preserve">
+    <value>LN(Operation)</value>
+  </data>
+  <data name="TON_Inst" xml:space="preserve">
+    <value>Turn on delay timer</value>
+  </data>
+  <data name="TONR_Inst" xml:space="preserve">
+    <value>Turn on delay protection timer</value>
+  </data>
+  <data name="TOF_Inst" xml:space="preserve">
+    <value>Turn off delay timer</value>
+  </data>
+  <data name="CTU_Inst" xml:space="preserve">
+    <value>Counter(Up)</value>
+  </data>
+  <data name="CTD_Inst" xml:space="preserve">
+    <value>Counter(Down)</value>
+  </data>
+  <data name="CTUD_Inst" xml:space="preserve">
+    <value>Counter(Up&amp;Down)</value>
+  </data>
+  <data name="FOR_Inst" xml:space="preserve">
+    <value>Cycle begin</value>
+  </data>
+  <data name="NEXT_Inst" xml:space="preserve">
+    <value>Cycle end</value>
+  </data>
+  <data name="JMP_Inst" xml:space="preserve">
+    <value>Program jump</value>
+  </data>
+  <data name="LBL_Inst" xml:space="preserve">
+    <value>Jump label</value>
+  </data>
+  <data name="CALL_Inst" xml:space="preserve">
+    <value>Subroutine call</value>
+  </data>
+  <data name="CALLM_Inst" xml:space="preserve">
+    <value>Funcblock call</value>
+  </data>
+  <data name="SHL_Inst" xml:space="preserve">
+    <value>Word left shift</value>
+  </data>
+  <data name="SHR_Inst" xml:space="preserve">
+    <value>Word right shift</value>
+  </data>
+  <data name="SHLD_Inst" xml:space="preserve">
+    <value>DWord left shift</value>
+  </data>
+  <data name="SHRD_Inst" xml:space="preserve">
+    <value>DWord right shift</value>
+  </data>
+  <data name="SHLB_Inst" xml:space="preserve">
+    <value>Bit left shift</value>
+  </data>
+  <data name="SHRB_Inst" xml:space="preserve">
+    <value>Bit right shift</value>
+  </data>
+  <data name="ROL_Inst" xml:space="preserve">
+    <value>Word loop left</value>
+  </data>
+  <data name="ROR_Inst" xml:space="preserve">
+    <value>Word loop right</value>
+  </data>
+  <data name="ROLD_Inst" xml:space="preserve">
+    <value>DWord loop left</value>
+  </data>
+  <data name="RORD_Inst" xml:space="preserve">
+    <value>DWord loop right</value>
+  </data>
+  <data name="ATCH_Inst" xml:space="preserve">
+    <value>Interrupt binding</value>
+  </data>
+  <data name="DTCH_Inst" xml:space="preserve">
+    <value>Interrupt release</value>
+  </data>
+  <data name="EI_Inst" xml:space="preserve">
+    <value>Interrupt enable</value>
+  </data>
+  <data name="DI_Inst" xml:space="preserve">
+    <value>Interrupt disabled</value>
+  </data>
+  <data name="TRD_Inst" xml:space="preserve">
+    <value>Real-time reading</value>
+  </data>
+  <data name="TWR_Inst" xml:space="preserve">
+    <value>Real-time write</value>
+  </data>
+  <data name="MBUS_Inst" xml:space="preserve">
+    <value>Modbus communication</value>
+  </data>
+  <data name="SEND_Inst" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="REV_Inst" xml:space="preserve">
+    <value>Receive</value>
+  </data>
+  <data name="PLSF_Inst" xml:space="preserve">
+    <value>Frequency pulse(Word)</value>
+  </data>
+  <data name="DPLSF_Inst" xml:space="preserve">
+    <value>Frequency pulse(DWord)</value>
+  </data>
+  <data name="PWM_Inst" xml:space="preserve">
+    <value>Pulse width modulation(Word)</value>
+  </data>
+  <data name="DPWM_Inst" xml:space="preserve">
+    <value>Pulse width modulation(DWord)</value>
+  </data>
+  <data name="PLSY_Inst" xml:space="preserve">
+    <value>Single-stage no acceleration and deceleration pulse(Word)</value>
+  </data>
+  <data name="DPLSY_Inst" xml:space="preserve">
+    <value>Single-stage no acceleration and deceleration pulse(DWord)</value>
+  </data>
+  <data name="PLSR_Inst" xml:space="preserve">
+    <value>One-way multi-stage pulse(Word)</value>
+  </data>
+  <data name="DPLSR_Inst" xml:space="preserve">
+    <value>One-way multi-stage pulse(DWord)</value>
+  </data>
+  <data name="PLSRD_Inst" xml:space="preserve">
+    <value>Two-way multi-stage pulse(Word)</value>
+  </data>
+  <data name="DPLSRD_Inst" xml:space="preserve">
+    <value>Two-way multi-stage pulse(DWord)</value>
+  </data>
+  <data name="PLSNEXT_Inst" xml:space="preserve">
+    <value>Pulse jump</value>
+  </data>
+  <data name="PLSSTOP_Inst" xml:space="preserve">
+    <value>Pulse stop</value>
+  </data>
+  <data name="ZRN_Inst" xml:space="preserve">
+    <value>Return to origin(Word)</value>
+  </data>
+  <data name="DZRN_Inst" xml:space="preserve">
+    <value>Return to origin(DWord)</value>
+  </data>
+  <data name="PTO_Inst" xml:space="preserve">
+    <value>Relative position multi - stage pulse control(DWord)</value>
+  </data>
+  <data name="DRVI_Inst" xml:space="preserve">
+    <value>Relative position single pulse output(Word)</value>
+  </data>
+  <data name="DDRVI_Inst" xml:space="preserve">
+    <value>Relative position single pulse output(DWord)</value>
+  </data>
+  <data name="LOG_Inst" xml:space="preserve">
+    <value>Logarithm(10)</value>
+  </data>
+  <data name="POW_Inst" xml:space="preserve">
+    <value>Power series</value>
+  </data>
+  <data name="FACT_Inst" xml:space="preserve">
+    <value>factorial</value>
+  </data>
+  <data name="CMP_Inst" xml:space="preserve">
+    <value>Compare(Word)</value>
+  </data>
+  <data name="CMPD_Inst" xml:space="preserve">
+    <value>Compare(DWord)</value>
+  </data>
+  <data name="CMPF_Inst" xml:space="preserve">
+    <value>Compare(Float)</value>
+  </data>
+  <data name="ZCP_Inst" xml:space="preserve">
+    <value>Zone Compare(Word)</value>
+  </data>
+  <data name="ZCPD_Inst" xml:space="preserve">
+    <value>Zone Compare(DWord)</value>
+  </data>
+  <data name="ZCPF_Inst" xml:space="preserve">
+    <value>Zone Compare(Float)</value>
+  </data>
+  <data name="NEG_Inst" xml:space="preserve">
+    <value>complement(Word)</value>
+  </data>
+  <data name="NEGD_Inst" xml:space="preserve">
+    <value>complement(DWord)</value>
+  </data>
+  <data name="XCH_Inst" xml:space="preserve">
+    <value>exchange(Word)</value>
+  </data>
+  <data name="XCHD_Inst" xml:space="preserve">
+    <value>exchange(DWord)</value>
+  </data>
+  <data name="XCHF_Inst" xml:space="preserve">
+    <value>exchange(Float)</value>
+  </data>
+  <data name="CML_Inst" xml:space="preserve">
+    <value>Reverse and move(Word)</value>
+  </data>
+  <data name="CMLD_Inst" xml:space="preserve">
+    <value>Reverse and move(DWord)</value>
+  </data>
+  <data name="SMOV_Inst" xml:space="preserve">
+    <value>Shift and move</value>
+  </data>
+  <data name="FMOV_Inst" xml:space="preserve">
+    <value>multicast(Word)</value>
+  </data>
+  <data name="FMOVD_Inst" xml:space="preserve">
+    <value>multicast(DWord)</value>
   </data>
 </root>

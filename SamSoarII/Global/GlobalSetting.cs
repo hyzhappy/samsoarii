@@ -140,10 +140,6 @@ namespace SamSoarII.AppMain
             FontManager.SaveFontDataToXElement(
                 FontManager.GetFunc(), xele);
             xele_font.Add(xele);
-            xele = new XElement("Inst");
-            FontManager.SaveFontDataToXElement(
-                FontManager.GetInst(), xele);
-            xele_font.Add(xele);
             xele = new XElement("Ladder");
             FontManager.SaveFontDataToXElement(
                 FontManager.GetLadder(), xele);
@@ -200,9 +196,6 @@ namespace SamSoarII.AppMain
                 FontManager.LoadFontDataByXElement(
                     FontManager.GetFunc(),
                     xele_font.Element("Func"));
-                FontManager.LoadFontDataByXElement(
-                    FontManager.GetInst(),
-                    xele_font.Element("Inst"));
                 XElement xele_color = rootNode.Element("Color");
             }
             catch (Exception)
@@ -219,9 +212,6 @@ namespace SamSoarII.AppMain
                 FontManager.GetFunc().FontSize = 16;
                 FontManager.GetFunc().FontFamily = new FontFamily("Courier New");
                 FontManager.GetFunc().FontColor = ColorManager.Parse("255 0 0 0");
-                FontManager.GetInst().FontSize = 20;
-                FontManager.GetInst().FontFamily = new FontFamily("Courier New");
-                FontManager.GetInst().FontColor = ColorManager.Parse("255 0 0 0");
             }
             try
             {

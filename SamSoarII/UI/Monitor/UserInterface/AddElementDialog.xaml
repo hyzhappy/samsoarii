@@ -23,50 +23,66 @@
     </Window.Resources>
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_2" Height="*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_3" Height="*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_4" Height="*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_5" Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock x:Uid="Themetextblock" x:Name="Themetextblock" Margin="20,20,0,0" Text="{x:Static properties:Resources.Add_Element}"></TextBlock>
-        <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" Grid.Row="1" Grid.RowSpan="2" Margin="0,5,0,0">
-            <StackPanel x:Uid="StackPanel_2" Orientation="Vertical">
-                <TextBlock x:Uid="TextBlock_1" Margin="30,0,0,0" Text="{x:Static properties:Resources.Element_Address}"/>
-                <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                    <ComboBox x:Uid="comboBox" x:Name="comboBox" Width="45" Height="20" Margin="30,0,0,0" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" SelectionChanged="OnSelectionChanged"></ComboBox>
-                    <usr:OnlyNumsTextBox x:Uid="textBox" x:Name="textBox" LowRange="0" TopRange="8191" IsNumsOnly="True" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
+        <TextBlock x:Name="Themetextblock" Margin="20,20,0,0" Text="{x:Static properties:Resources.Add_Element}"></TextBlock>
+        <Grid Grid.Row="1" Grid.RowSpan="2" Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Margin="30,0,0,0" Text="{x:Static properties:Resources.Element_Address}"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="comboBox" Width="45" Height="20" Margin="30,0,0,0" ItemsSource="{Binding Source={StaticResource ElementTypeProvider}}" SelectedIndex="0" SelectionChanged="OnSelectionChanged"></ComboBox>
+                    <usr:OnlyNumsTextBox x:Name="textBox" LowRange="0" TopRange="8191" IsNumsOnly="True" Text="0" Width="80" Margin="5,0,0,0" TextChanged="OnTextChanged"></usr:OnlyNumsTextBox>
                 </StackPanel>
             </StackPanel>
-            <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock_2" Margin="70,18,0,0" Text="{x:Static properties:Resources.Data_Type}"/>
-                <ComboBox x:Uid="DataTypeCombox" x:Name="DataTypeCombox" Height="20" VerticalAlignment="Top" Width="100" Margin="5,18,0,0" ItemsSource="{Binding DataTypes}" SelectedIndex="0"></ComboBox>
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+                <TextBlock Text="{x:Static properties:Resources.Data_Type}"/>
+                <ComboBox x:Name="DataTypeCombox" HorizontalAlignment="Left" Height="20" Width="100" ItemsSource="{Binding DataTypes}" SelectedIndex="0"></ComboBox>
             </StackPanel>
-        </StackPanel>
-        <StackPanel x:Uid="stackpanel1" x:Name="stackpanel1" Orientation="Horizontal" Grid.Row="2" Margin="0,18,0,0">
-            <CheckBox x:Uid="checkbox1" x:Name="checkbox1" Margin="30,1.3,0,0" IsChecked="False" IsThreeState="False"></CheckBox>
-            <TextBlock x:Uid="TextBlock_3" Text="{x:Static properties:Resources.Intra_Address}"/>
-            <StackPanel x:Uid="StackPanel_5" Margin="80,0,0,0" Orientation="Horizontal" Visibility="{Binding ElementName=checkbox1,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
-                <TextBlock x:Uid="TextBlock_4" Margin="0,1,5,0" Text="{x:Static properties:Resources.Offset_Element_Select}"/>
-                <ComboBox x:Uid="comboBox1" x:Name="comboBox1" Height="20" VerticalAlignment="Top" Width="40" SelectedIndex="0">
-                    <ComboBoxItem x:Uid="ComboBoxItem_1">V</ComboBoxItem>
-                    <ComboBoxItem x:Uid="ComboBoxItem_2">Z</ComboBoxItem>
-                </ComboBox>
-                <usr:OnlyNumsTextBox x:Uid="textBox1" x:Name="textBox1" LowRange="0" TopRange="8191" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Text="0" Width="80" Margin="5,0,0,0"></usr:OnlyNumsTextBox>
+        </Grid>
+        <Grid x:Name="stackpanel1" Grid.Row="2" Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="checkbox1" Margin="30,2,0,0" IsChecked="False" IsThreeState="False"></CheckBox>
+            <TextBlock Margin="47,0,0,0" Text="{x:Static properties:Resources.Intra_Address}"/>
+            <StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding ElementName=checkbox1,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Margin="0,1,5,0" Text="{x:Static properties:Resources.Offset_Element_Select}"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="comboBox1" Height="20" VerticalAlignment="Top" Width="40" SelectedIndex="0">
+                        <ComboBoxItem>V</ComboBoxItem>
+                        <ComboBoxItem>Z</ComboBoxItem>
+                    </ComboBox>
+                    <usr:OnlyNumsTextBox x:Name="textBox1" LowRange="0" TopRange="8191" IsNumsOnly="True" Height="20" VerticalAlignment="Top" Text="0" Width="80" Margin="5,0,0,0"></usr:OnlyNumsTextBox>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-        <StackPanel x:Uid="stackpanel" x:Name="stackpanel" Orientation="Horizontal" Grid.Row="3" Margin="0,18,0,0">
-            <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="30,1.3,0,0" IsChecked="False" IsThreeState="False"></CheckBox>
-            <TextBlock x:Uid="TextBlock_5" Text="{x:Static properties:Resources.Batch}"/>
-            <StackPanel x:Uid="StackPanel_6" Margin="80,0,0,0" Orientation="Horizontal" Visibility="{Binding ElementName=checkbox,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
-                <TextBlock x:Uid="TextBlock_6" Margin="0,1,5,0" Text="{x:Static properties:Resources.Number_Of_Additions}"/>
-                <usr:RangeTextBox x:Uid="rangeTextBox" x:Name="rangeTextBox" VerticalAlignment="Top" LowRange="1" TopRange="64" DefaultValue="1"></usr:RangeTextBox>
-                <TextBlock x:Uid="TextBlock_7" Margin="5,1,0,0">(1 ~ 64)</TextBlock>
+        </Grid>
+        <Grid x:Name="stackpanel" Grid.Row="3" Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="checkbox" Margin="30,2,0,0" IsChecked="False" IsThreeState="False"></CheckBox>
+            <TextBlock Margin="47,0,0,0" Text="{x:Static properties:Resources.Batch}"/>
+            <StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding ElementName=checkbox,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Margin="0,1,5,0" Text="{x:Static properties:Resources.Number_Of_Additions}"/>
+                <StackPanel Orientation="Horizontal">
+                    <usr:RangeTextBox x:Name="rangeTextBox" VerticalAlignment="Top" LowRange="1" TopRange="64" DefaultValue="1"></usr:RangeTextBox>
+                    <TextBlock Margin="5,1,0,0">(1 ~ 64)</TextBlock>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-        <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" Grid.Row="4">
-            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="{x:Static properties:Resources.Ensure}" Height="20" Width="60" Margin="30,0,0,0"></Button>
-            <Button x:Uid="CancelButton" x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="20" Width="60" Margin="180,0,0,0"></Button>
+        </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="4">
+            <Button x:Name="EnsureButton" Content="{x:Static properties:Resources.Ensure}" Height="20" Width="60" Margin="30,0,0,0"></Button>
+            <Button x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="20" Width="60" Margin="180,0,0,0"></Button>
         </StackPanel>
     </Grid>
 </Window>

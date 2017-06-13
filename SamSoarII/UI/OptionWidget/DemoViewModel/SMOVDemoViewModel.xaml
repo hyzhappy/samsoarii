@@ -5,48 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:inst="clr-namespace:SamSoarII.LadderInstViewModel;assembly=SamSoarII.LadderInstViewModel"
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI.OptionWidget.DemoViewModel"
+             xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="300" Width="300" Height="500" Background="Transparent">
     <UserControl.Resources>
-        <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="LadderFontData" ObjectType="{x:Type inst:DemoFontManager}" MethodName="GetLadder"/>
-        <ObjectDataProvider x:Uid="ObjectDataProvider_2" x:Key="CommentFontData" ObjectType="{x:Type inst:DemoFontManager}" MethodName="GetComment"/>
+        <ObjectDataProvider x:Key="LadderFontData" ObjectType="{x:Type inst:DemoFontManager}" MethodName="GetLadder"/>
+        <ObjectDataProvider x:Key="CommentFontData" ObjectType="{x:Type inst:DemoFontManager}" MethodName="GetComment"/>
     </UserControl.Resources>
-    <StackPanel x:Uid="StackPanel_1">
-        <Canvas x:Uid="Canvas_1" Width="300" Height="300">
-            <Border x:Uid="Border_1" Canvas.Left="20" Canvas.Top="20" Width="280" Height="280" 
+    <StackPanel>
+        <Canvas Width="300" Height="300">
+            <Border Canvas.Left="20" Canvas.Top="20" Width="280" Height="280" 
                     BorderBrush="Black"
                     BorderThickness="4">
             </Border>
-            <Line x:Uid="Line_1" X1="0" Y1="100" X2="20" Y2="100" 
+            <Line X1="0" Y1="100" X2="20" Y2="100" 
                   Stroke="Black" StrokeThickness="4">
             </Line>
-            <Label x:Uid="Label_1" Canvas.Left="30" Canvas.Top="80" FontSize="25">EN</Label>
-            <TextBlock x:Uid="TextBlock_1" Canvas.Left="25" Canvas.Top="20" TextAlignment="Center" Text="SMOV"
+            <Label Canvas.Left="30" Canvas.Top="80" FontSize="25">EN</Label>
+            <TextBlock Canvas.Left="25" Canvas.Top="20" TextAlignment="Center" Text="SMOV"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
 
-            <TextBlock x:Uid="TextBlock_2" Canvas.Left="25" Canvas.Top="120" TextAlignment="Left" Text="SV:D0"
+            <TextBlock Canvas.Left="25" Canvas.Top="120" TextAlignment="Left" Text="SV:D0"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock x:Uid="TextBlock_3" Canvas.Left="25" Canvas.Top="150" TextAlignment="Left" Text="SS:K1"
+            <TextBlock Canvas.Left="25" Canvas.Top="150" TextAlignment="Left" Text="SS:K1"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock x:Uid="TextBlock_4" Canvas.Left="25" Canvas.Top="180" TextAlignment="Left" Text="SC:K2"
+            <TextBlock Canvas.Left="25" Canvas.Top="180" TextAlignment="Left" Text="SC:K2"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock x:Uid="TextBlock_5" Canvas.Left="25" Canvas.Top="210" TextAlignment="Left" Text="TS:D1"
+            <TextBlock Canvas.Left="25" Canvas.Top="210" TextAlignment="Left" Text="TS:D1"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
-            <TextBlock x:Uid="TextBlock_6" Canvas.Left="25" Canvas.Top="250" TextAlignment="Right" Text="DV:K3"
+            <TextBlock Canvas.Left="25" Canvas.Top="250" TextAlignment="Right" Text="DV:K3"
                        DataContext="{StaticResource LadderFontData}" FontFamily="{Binding FontFamily}"
                        FontSize="{Binding FontSize}" Foreground="{Binding FontColor}"/>
         </Canvas>
-        <StackPanel x:Uid="StackPanel_2" Width="300" Height="200">
-            <TextBlock x:Uid="TextBlock_7" TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="D0:元件注释1"/>
-            <TextBlock x:Uid="TextBlock_8" TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="K0:元件注释2"/>
-            <TextBlock x:Uid="TextBlock_9" TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="K1:元件注释3"/>
-            <TextBlock x:Uid="TextBlock_10" TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="D1:元件注释4"/>
-            <TextBlock x:Uid="TextBlock_11" TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="K2:元件注释5"/>
+        <StackPanel Width="300" Height="200">
+            <TextBlock TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="{x:Static properties:Resources.Element_Comment_D0}"/>
+            <TextBlock TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="{x:Static properties:Resources.Element_Comment_K0}"/>
+            <TextBlock TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="{x:Static properties:Resources.Element_Comment_K1}"/>
+            <TextBlock TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="{x:Static properties:Resources.Element_Comment_D1}"/>
+            <TextBlock TextWrapping="Wrap" Margin="20,5,0,0" DataContext="{StaticResource CommentFontData}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" Foreground="{Binding FontColor}" Text="{x:Static properties:Resources.Element_Comment_K2}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

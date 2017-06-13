@@ -79,6 +79,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Address range is crossed! 的本地化字符串。
+        /// </summary>
+        public static string Address_Cross {
+            get {
+                return ResourceManager.GetString("Address_Cross", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 All Networks 的本地化字符串。
         /// </summary>
         public static string All_Networks {
@@ -106,11 +115,29 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Alternating output 的本地化字符串。
+        /// </summary>
+        public static string Alternating_Output {
+            get {
+                return ResourceManager.GetString("Alternating_Output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Annotated Element 的本地化字符串。
         /// </summary>
         public static string Annotated_Element {
             get {
                 return ResourceManager.GetString("Annotated_Element", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Interrupt binding 的本地化字符串。
+        /// </summary>
+        public static string ATCH_Inst {
+            get {
+                return ResourceManager.GetString("ATCH_Inst", resourceCulture);
             }
         }
         
@@ -142,11 +169,38 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 BCD code to integer 的本地化字符串。
+        /// </summary>
+        public static string BCD_Code_To_Integer {
+            get {
+                return ResourceManager.GetString("BCD_Code_To_Integer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Buffer Bit 的本地化字符串。
         /// </summary>
         public static string Buffer_Bit {
             get {
                 return ResourceManager.GetString("Buffer_Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Subroutine call 的本地化字符串。
+        /// </summary>
+        public static string CALL_Inst {
+            get {
+                return ResourceManager.GetString("CALL_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Funcblock call 的本地化字符串。
+        /// </summary>
+        public static string CALLM_Inst {
+            get {
+                return ResourceManager.GetString("CALLM_Inst", resourceCulture);
             }
         }
         
@@ -196,6 +250,78 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Reverse and move(Word) 的本地化字符串。
+        /// </summary>
+        public static string CML_Inst {
+            get {
+                return ResourceManager.GetString("CML_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Reverse and move(DWord) 的本地化字符串。
+        /// </summary>
+        public static string CMLD_Inst {
+            get {
+                return ResourceManager.GetString("CMLD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Compare(Word) 的本地化字符串。
+        /// </summary>
+        public static string CMP_Inst {
+            get {
+                return ResourceManager.GetString("CMP_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Compare(DWord) 的本地化字符串。
+        /// </summary>
+        public static string CMPD_Inst {
+            get {
+                return ResourceManager.GetString("CMPD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Compare(Float) 的本地化字符串。
+        /// </summary>
+        public static string CMPF_Inst {
+            get {
+                return ResourceManager.GetString("CMPF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Comment 的本地化字符串。
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Connection failed, please check your network settings! 的本地化字符串。
+        /// </summary>
+        public static string Connect_Failed {
+            get {
+                return ResourceManager.GetString("Connect_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Constant can not be monitored! 的本地化字符串。
+        /// </summary>
+        public static string Constant_Monitor {
+            get {
+                return ResourceManager.GetString("Constant_Monitor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Content 的本地化字符串。
         /// </summary>
         public static string Content {
@@ -214,11 +340,47 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Cos(Operation) 的本地化字符串。
+        /// </summary>
+        public static string Cos_Operation {
+            get {
+                return ResourceManager.GetString("Cos_Operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Counter 的本地化字符串。
         /// </summary>
         public static string Counter {
             get {
                 return ResourceManager.GetString("Counter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Counter(Down) 的本地化字符串。
+        /// </summary>
+        public static string CTD_Inst {
+            get {
+                return ResourceManager.GetString("CTD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Counter(Up) 的本地化字符串。
+        /// </summary>
+        public static string CTU_Inst {
+            get {
+                return ResourceManager.GetString("CTU_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Counter(Up&amp;Down) 的本地化字符串。
+        /// </summary>
+        public static string CTUD_Inst {
+            get {
+                return ResourceManager.GetString("CTUD_Inst", resourceCulture);
             }
         }
         
@@ -286,6 +448,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Relative position single pulse output(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DDRVI_Inst {
+            get {
+                return ResourceManager.GetString("DDRVI_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Default 的本地化字符串。
         /// </summary>
         public static string Default {
@@ -300,6 +471,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Delete_All {
             get {
                 return ResourceManager.GetString("Delete_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 X3:Here is an element comment 的本地化字符串。
+        /// </summary>
+        public static string Demo_Message_Element_Comment {
+            get {
+                return ResourceManager.GetString("Demo_Message_Element_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Interrupt disabled 的本地化字符串。
+        /// </summary>
+        public static string DI_Inst {
+            get {
+                return ResourceManager.GetString("DI_Inst", resourceCulture);
             }
         }
         
@@ -322,6 +511,249 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Divide 的本地化字符串。
+        /// </summary>
+        public static string Divide {
+            get {
+                return ResourceManager.GetString("Divide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Frequency pulse(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DPLSF_Inst {
+            get {
+                return ResourceManager.GetString("DPLSF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 One-way multi-stage pulse(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DPLSR_Inst {
+            get {
+                return ResourceManager.GetString("DPLSR_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Two-way multi-stage pulse(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DPLSRD_Inst {
+            get {
+                return ResourceManager.GetString("DPLSRD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Single-stage no acceleration and deceleration pulse(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DPLSY_Inst {
+            get {
+                return ResourceManager.GetString("DPLSY_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Pulse width modulation(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DPWM_Inst {
+            get {
+                return ResourceManager.GetString("DPWM_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Relative position single pulse output(Word) 的本地化字符串。
+        /// </summary>
+        public static string DRVI_Inst {
+            get {
+                return ResourceManager.GetString("DRVI_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Interrupt release 的本地化字符串。
+        /// </summary>
+        public static string DTCH_Inst {
+            get {
+                return ResourceManager.GetString("DTCH_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord add 的本地化字符串。
+        /// </summary>
+        public static string DWord_Add {
+            get {
+                return ResourceManager.GetString("DWord_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord(add one) 的本地化字符串。
+        /// </summary>
+        public static string DWord_Add_One {
+            get {
+                return ResourceManager.GetString("DWord_Add_One", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord(and) 的本地化字符串。
+        /// </summary>
+        public static string DWord_And {
+            get {
+                return ResourceManager.GetString("DWord_And", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord divide 的本地化字符串。
+        /// </summary>
+        public static string DWord_Divide {
+            get {
+                return ResourceManager.GetString("DWord_Divide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord equal 的本地化字符串。
+        /// </summary>
+        public static string DWord_Equal {
+            get {
+                return ResourceManager.GetString("DWord_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord less than 的本地化字符串。
+        /// </summary>
+        public static string DWord_Less {
+            get {
+                return ResourceManager.GetString("DWord_Less", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord minus 的本地化字符串。
+        /// </summary>
+        public static string DWord_Minus {
+            get {
+                return ResourceManager.GetString("DWord_Minus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord(minus one) 的本地化字符串。
+        /// </summary>
+        public static string DWord_Minus_One {
+            get {
+                return ResourceManager.GetString("DWord_Minus_One", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord more than 的本地化字符串。
+        /// </summary>
+        public static string DWord_More {
+            get {
+                return ResourceManager.GetString("DWord_More", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord multiply 的本地化字符串。
+        /// </summary>
+        public static string DWord_Multiply {
+            get {
+                return ResourceManager.GetString("DWord_Multiply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord not equal 的本地化字符串。
+        /// </summary>
+        public static string DWord_Not_Equal {
+            get {
+                return ResourceManager.GetString("DWord_Not_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord not less than 的本地化字符串。
+        /// </summary>
+        public static string DWord_Not_Less {
+            get {
+                return ResourceManager.GetString("DWord_Not_Less", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord not more than 的本地化字符串。
+        /// </summary>
+        public static string DWord_Not_More {
+            get {
+                return ResourceManager.GetString("DWord_Not_More", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord(or) 的本地化字符串。
+        /// </summary>
+        public static string DWord_Or {
+            get {
+                return ResourceManager.GetString("DWord_Or", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord reverse 的本地化字符串。
+        /// </summary>
+        public static string DWord_Reverse {
+            get {
+                return ResourceManager.GetString("DWord_Reverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord to Float 的本地化字符串。
+        /// </summary>
+        public static string DWord_To_Float {
+            get {
+                return ResourceManager.GetString("DWord_To_Float", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord to Word 的本地化字符串。
+        /// </summary>
+        public static string DWord_To_Word {
+            get {
+                return ResourceManager.GetString("DWord_To_Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord(XOR) 的本地化字符串。
+        /// </summary>
+        public static string DWord_XOR {
+            get {
+                return ResourceManager.GetString("DWord_XOR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Return to origin(DWord) 的本地化字符串。
+        /// </summary>
+        public static string DZRN_Inst {
+            get {
+                return ResourceManager.GetString("DZRN_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Edit Color 的本地化字符串。
         /// </summary>
         public static string Edit_Color {
@@ -336,6 +768,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Effect_Preview {
             get {
                 return ResourceManager.GetString("Effect_Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Interrupt enable 的本地化字符串。
+        /// </summary>
+        public static string EI_Inst {
+            get {
+                return ResourceManager.GetString("EI_Inst", resourceCulture);
             }
         }
         
@@ -372,6 +813,51 @@ namespace SamSoarII.AppMain.Properties {
         public static string Element_Comment {
             get {
                 return ResourceManager.GetString("Element_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 D0:Element comment 的本地化字符串。
+        /// </summary>
+        public static string Element_Comment_D0 {
+            get {
+                return ResourceManager.GetString("Element_Comment_D0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 D1:Element comment 的本地化字符串。
+        /// </summary>
+        public static string Element_Comment_D1 {
+            get {
+                return ResourceManager.GetString("Element_Comment_D1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 K0:Element comment 的本地化字符串。
+        /// </summary>
+        public static string Element_Comment_K0 {
+            get {
+                return ResourceManager.GetString("Element_Comment_K0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 K1:Element comment 的本地化字符串。
+        /// </summary>
+        public static string Element_Comment_K1 {
+            get {
+                return ResourceManager.GetString("Element_Comment_K1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 K2:Element comment 的本地化字符串。
+        /// </summary>
+        public static string Element_Comment_K2 {
+            get {
+                return ResourceManager.GetString("Element_Comment_K2", resourceCulture);
             }
         }
         
@@ -475,11 +961,29 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Added variable exceeds this register address limit! 的本地化字符串。
+        /// </summary>
+        public static string Exceed_Adddress {
+            get {
+                return ResourceManager.GetString("Exceed_Adddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Execution Number 的本地化字符串。
         /// </summary>
         public static string Execution_Number {
             get {
                 return ResourceManager.GetString("Execution_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 EXP(Operation) 的本地化字符串。
+        /// </summary>
+        public static string EXP_Operation {
+            get {
+                return ResourceManager.GetString("EXP_Operation", resourceCulture);
             }
         }
         
@@ -502,11 +1006,128 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 factorial 的本地化字符串。
+        /// </summary>
+        public static string FACT_Inst {
+            get {
+                return ResourceManager.GetString("FACT_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Filter Setting 的本地化字符串。
         /// </summary>
         public static string Filter_Setting {
             get {
                 return ResourceManager.GetString("Filter_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float add 的本地化字符串。
+        /// </summary>
+        public static string Float_Add {
+            get {
+                return ResourceManager.GetString("Float_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float divide 的本地化字符串。
+        /// </summary>
+        public static string Float_Divide {
+            get {
+                return ResourceManager.GetString("Float_Divide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float equal 的本地化字符串。
+        /// </summary>
+        public static string Float_Equal {
+            get {
+                return ResourceManager.GetString("Float_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float less than 的本地化字符串。
+        /// </summary>
+        public static string Float_Less_Than {
+            get {
+                return ResourceManager.GetString("Float_Less_Than", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float minus 的本地化字符串。
+        /// </summary>
+        public static string Float_Minus {
+            get {
+                return ResourceManager.GetString("Float_Minus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float more than 的本地化字符串。
+        /// </summary>
+        public static string Float_More_Than {
+            get {
+                return ResourceManager.GetString("Float_More_Than", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float multiply 的本地化字符串。
+        /// </summary>
+        public static string Float_Multiply {
+            get {
+                return ResourceManager.GetString("Float_Multiply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float not equal 的本地化字符串。
+        /// </summary>
+        public static string Float_Not_Equal {
+            get {
+                return ResourceManager.GetString("Float_Not_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float not less than 的本地化字符串。
+        /// </summary>
+        public static string Float_Not_Less_Than {
+            get {
+                return ResourceManager.GetString("Float_Not_Less_Than", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Float not more than 的本地化字符串。
+        /// </summary>
+        public static string Float_Not_More_Than {
+            get {
+                return ResourceManager.GetString("Float_Not_More_Than", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 multicast(Word) 的本地化字符串。
+        /// </summary>
+        public static string FMOV_Inst {
+            get {
+                return ResourceManager.GetString("FMOV_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 multicast(DWord) 的本地化字符串。
+        /// </summary>
+        public static string FMOVD_Inst {
+            get {
+                return ResourceManager.GetString("FMOVD_Inst", resourceCulture);
             }
         }
         
@@ -552,6 +1173,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Font_Style {
             get {
                 return ResourceManager.GetString("Font_Style", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cycle begin 的本地化字符串。
+        /// </summary>
+        public static string FOR_Inst {
+            get {
+                return ResourceManager.GetString("FOR_Inst", resourceCulture);
             }
         }
         
@@ -799,6 +1429,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Integer to BCD code 的本地化字符串。
+        /// </summary>
+        public static string Integer_To_BCD_Code {
+            get {
+                return ResourceManager.GetString("Integer_To_BCD_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Interrupt Condition 的本地化字符串。
         /// </summary>
         public static string Interrupt_Condition {
@@ -813,6 +1452,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Intra_Address {
             get {
                 return ResourceManager.GetString("Intra_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Intra register address crossed! 的本地化字符串。
+        /// </summary>
+        public static string Intra_Cross {
+            get {
+                return ResourceManager.GetString("Intra_Cross", resourceCulture);
             }
         }
         
@@ -835,6 +1483,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Program jump 的本地化字符串。
+        /// </summary>
+        public static string JMP_Inst {
+            get {
+                return ResourceManager.GetString("JMP_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Jump 的本地化字符串。
         /// </summary>
         public static string Jump {
@@ -849,6 +1506,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Jump_Mark {
             get {
                 return ResourceManager.GetString("Jump_Mark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Ladder title 的本地化字符串。
+        /// </summary>
+        public static string Ladder_Title {
+            get {
+                return ResourceManager.GetString("Ladder_Title", resourceCulture);
             }
         }
         
@@ -1006,6 +1672,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Jump label 的本地化字符串。
+        /// </summary>
+        public static string LBL_Inst {
+            get {
+                return ResourceManager.GetString("LBL_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Length 的本地化字符串。
         /// </summary>
         public static string Length {
@@ -1020,6 +1695,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Library_Function {
             get {
                 return ResourceManager.GetString("Library_Function", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 LN(Operation) 的本地化字符串。
+        /// </summary>
+        public static string LN_Operation {
+            get {
+                return ResourceManager.GetString("LN_Operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Logarithm(10) 的本地化字符串。
+        /// </summary>
+        public static string LOG_Inst {
+            get {
+                return ResourceManager.GetString("LOG_Inst", resourceCulture);
             }
         }
         
@@ -1222,7 +1915,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Error_List 的本地化字符串。
+        ///   查找类似 Error List 的本地化字符串。
         /// </summary>
         public static string MainWindow_Error_List {
             get {
@@ -1767,6 +2460,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string MainWindow_Zoom_Out {
             get {
                 return ResourceManager.GetString("MainWindow_Zoom_Out", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Modbus communication 的本地化字符串。
+        /// </summary>
+        public static string MBUS_Inst {
+            get {
+                return ResourceManager.GetString("MBUS_Inst", resourceCulture);
             }
         }
         
@@ -2617,6 +3319,78 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Move blocks of DWord 的本地化字符串。
+        /// </summary>
+        public static string Move_Blocks_DWord {
+            get {
+                return ResourceManager.GetString("Move_Blocks_DWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Move blocks of Word 的本地化字符串。
+        /// </summary>
+        public static string Move_Blocks_Word {
+            get {
+                return ResourceManager.GetString("Move_Blocks_Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Move DWord 的本地化字符串。
+        /// </summary>
+        public static string Move_DWord {
+            get {
+                return ResourceManager.GetString("Move_DWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Move Float 的本地化字符串。
+        /// </summary>
+        public static string Move_Float {
+            get {
+                return ResourceManager.GetString("Move_Float", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Move Word 的本地化字符串。
+        /// </summary>
+        public static string Move_Word {
+            get {
+                return ResourceManager.GetString("Move_Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Multiply 的本地化字符串。
+        /// </summary>
+        public static string Multiply {
+            get {
+                return ResourceManager.GetString("Multiply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 complement(Word) 的本地化字符串。
+        /// </summary>
+        public static string NEG_Inst {
+            get {
+                return ResourceManager.GetString("NEG_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 complement(DWord) 的本地化字符串。
+        /// </summary>
+        public static string NEGD_Inst {
+            get {
+                return ResourceManager.GetString("NEGD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Network 的本地化字符串。
         /// </summary>
         public static string Network {
@@ -2640,6 +3414,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Network_Range {
             get {
                 return ResourceManager.GetString("Network_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Is the latest version! 的本地化字符串。
+        /// </summary>
+        public static string New_Version {
+            get {
+                return ResourceManager.GetString("New_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cycle end 的本地化字符串。
+        /// </summary>
+        public static string NEXT_Inst {
+            get {
+                return ResourceManager.GetString("NEXT_Inst", resourceCulture);
             }
         }
         
@@ -2788,11 +3580,74 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Frequency pulse(Word) 的本地化字符串。
+        /// </summary>
+        public static string PLSF_Inst {
+            get {
+                return ResourceManager.GetString("PLSF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Pulse jump 的本地化字符串。
+        /// </summary>
+        public static string PLSNEXT_Inst {
+            get {
+                return ResourceManager.GetString("PLSNEXT_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 One-way multi-stage pulse(Word) 的本地化字符串。
+        /// </summary>
+        public static string PLSR_Inst {
+            get {
+                return ResourceManager.GetString("PLSR_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Two-way multi-stage pulse(Word) 的本地化字符串。
+        /// </summary>
+        public static string PLSRD_Inst {
+            get {
+                return ResourceManager.GetString("PLSRD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Pulse stop 的本地化字符串。
+        /// </summary>
+        public static string PLSSTOP_Inst {
+            get {
+                return ResourceManager.GetString("PLSSTOP_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Single-stage no acceleration and deceleration pulse(Word) 的本地化字符串。
+        /// </summary>
+        public static string PLSY_Inst {
+            get {
+                return ResourceManager.GetString("PLSY_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Position 的本地化字符串。
         /// </summary>
         public static string Position {
             get {
                 return ResourceManager.GetString("Position", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Power series 的本地化字符串。
+        /// </summary>
+        public static string POW_Inst {
+            get {
+                return ResourceManager.GetString("POW_Inst", resourceCulture);
             }
         }
         
@@ -2838,6 +3693,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Project_Setting {
             get {
                 return ResourceManager.GetString("Project_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Relative position multi - stage pulse control(DWord) 的本地化字符串。
+        /// </summary>
+        public static string PTO_Inst {
+            get {
+                return ResourceManager.GetString("PTO_Inst", resourceCulture);
             }
         }
         
@@ -2919,6 +3783,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string PTV_Table {
             get {
                 return ResourceManager.GetString("PTV_Table", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Pulse alternation 的本地化字符串。
+        /// </summary>
+        public static string Pulse_Alternation {
+            get {
+                return ResourceManager.GetString("Pulse_Alternation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Pulse width modulation(Word) 的本地化字符串。
+        /// </summary>
+        public static string PWM_Inst {
+            get {
+                return ResourceManager.GetString("PWM_Inst", resourceCulture);
             }
         }
         
@@ -3031,6 +3913,78 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Reset coil 的本地化字符串。
+        /// </summary>
+        public static string Reset_Coil {
+            get {
+                return ResourceManager.GetString("Reset_Coil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Reset immediately 的本地化字符串。
+        /// </summary>
+        public static string Reset_Immediately {
+            get {
+                return ResourceManager.GetString("Reset_Immediately", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Receive 的本地化字符串。
+        /// </summary>
+        public static string REV_Inst {
+            get {
+                return ResourceManager.GetString("REV_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word loop left 的本地化字符串。
+        /// </summary>
+        public static string ROL_Inst {
+            get {
+                return ResourceManager.GetString("ROL_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord loop left 的本地化字符串。
+        /// </summary>
+        public static string ROLD_Inst {
+            get {
+                return ResourceManager.GetString("ROLD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word loop right 的本地化字符串。
+        /// </summary>
+        public static string ROR_Inst {
+            get {
+                return ResourceManager.GetString("ROR_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord loop right 的本地化字符串。
+        /// </summary>
+        public static string RORD_Inst {
+            get {
+                return ResourceManager.GetString("RORD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Round 的本地化字符串。
+        /// </summary>
+        public static string Round {
+            get {
+                return ResourceManager.GetString("Round", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Routine 的本地化字符串。
         /// </summary>
         public static string Routine {
@@ -3085,6 +4039,33 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Send 的本地化字符串。
+        /// </summary>
+        public static string SEND_Inst {
+            get {
+                return ResourceManager.GetString("SEND_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Set coil 的本地化字符串。
+        /// </summary>
+        public static string Set_Coil {
+            get {
+                return ResourceManager.GetString("Set_Coil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Set immediately 的本地化字符串。
+        /// </summary>
+        public static string Set_Immediately {
+            get {
+                return ResourceManager.GetString("Set_Immediately", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Set Value 的本地化字符串。
         /// </summary>
         public static string Set_Value {
@@ -3103,6 +4084,33 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Word left shift 的本地化字符串。
+        /// </summary>
+        public static string SHL_Inst {
+            get {
+                return ResourceManager.GetString("SHL_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Bit left shift 的本地化字符串。
+        /// </summary>
+        public static string SHLB_Inst {
+            get {
+                return ResourceManager.GetString("SHLB_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord left shift 的本地化字符串。
+        /// </summary>
+        public static string SHLD_Inst {
+            get {
+                return ResourceManager.GetString("SHLD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Short error in the cursor 的本地化字符串。
         /// </summary>
         public static string Short_Error {
@@ -3112,11 +4120,65 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Word right shift 的本地化字符串。
+        /// </summary>
+        public static string SHR_Inst {
+            get {
+                return ResourceManager.GetString("SHR_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Bit right shift 的本地化字符串。
+        /// </summary>
+        public static string SHRB_Inst {
+            get {
+                return ResourceManager.GetString("SHRB_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord right shift 的本地化字符串。
+        /// </summary>
+        public static string SHRD_Inst {
+            get {
+                return ResourceManager.GetString("SHRD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 sin(Operation) 的本地化字符串。
+        /// </summary>
+        public static string Sin_Operation {
+            get {
+                return ResourceManager.GetString("Sin_Operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Shift and move 的本地化字符串。
+        /// </summary>
+        public static string SMOV_Inst {
+            get {
+                return ResourceManager.GetString("SMOV_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Special instruction error in the cursor 的本地化字符串。
         /// </summary>
         public static string Special_Instruction_Error {
             get {
                 return ResourceManager.GetString("Special_Instruction_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Sqrt(Operation) 的本地化字符串。
+        /// </summary>
+        public static string Sqrt_Operation {
+            get {
+                return ResourceManager.GetString("Sqrt_Operation", resourceCulture);
             }
         }
         
@@ -3157,6 +4219,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Tan(Operation) 的本地化字符串。
+        /// </summary>
+        public static string Tan_Operation {
+            get {
+                return ResourceManager.GetString("Tan_Operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Timed Save 的本地化字符串。
         /// </summary>
         public static string Timed_Save {
@@ -3180,6 +4251,96 @@ namespace SamSoarII.AppMain.Properties {
         public static string Timeout {
             get {
                 return ResourceManager.GetString("Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Turn off delay timer 的本地化字符串。
+        /// </summary>
+        public static string TOF_Inst {
+            get {
+                return ResourceManager.GetString("TOF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Turn on delay timer 的本地化字符串。
+        /// </summary>
+        public static string TON_Inst {
+            get {
+                return ResourceManager.GetString("TON_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Turn on delay protection timer 的本地化字符串。
+        /// </summary>
+        public static string TONR_Inst {
+            get {
+                return ResourceManager.GetString("TONR_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Real-time reading 的本地化字符串。
+        /// </summary>
+        public static string TRD_Inst {
+            get {
+                return ResourceManager.GetString("TRD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Trunc 的本地化字符串。
+        /// </summary>
+        public static string Trunc {
+            get {
+                return ResourceManager.GetString("Trunc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Real-time write 的本地化字符串。
+        /// </summary>
+        public static string TWR_Inst {
+            get {
+                return ResourceManager.GetString("TWR_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Is there a new version updated, is it updated? 的本地化字符串。
+        /// </summary>
+        public static string Update_Or_Not {
+            get {
+                return ResourceManager.GetString("Update_Or_Not", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The update process will close the program, please make sure the file is saved correctly! 的本地化字符串。
+        /// </summary>
+        public static string Update_Process {
+            get {
+                return ResourceManager.GetString("Update_Process", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The update file size is: 的本地化字符串。
+        /// </summary>
+        public static string Update_Size {
+            get {
+                return ResourceManager.GetString("Update_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Whether to update 的本地化字符串。
+        /// </summary>
+        public static string Update_Whether {
+            get {
+                return ResourceManager.GetString("Update_Whether", resourceCulture);
             }
         }
         
@@ -3220,6 +4381,159 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Word add 的本地化字符串。
+        /// </summary>
+        public static string Word_Add {
+            get {
+                return ResourceManager.GetString("Word_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word(add one) 的本地化字符串。
+        /// </summary>
+        public static string Word_Add_One {
+            get {
+                return ResourceManager.GetString("Word_Add_One", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word(and) 的本地化字符串。
+        /// </summary>
+        public static string Word_And {
+            get {
+                return ResourceManager.GetString("Word_And", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word divide 的本地化字符串。
+        /// </summary>
+        public static string Word_Divide {
+            get {
+                return ResourceManager.GetString("Word_Divide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word equal 的本地化字符串。
+        /// </summary>
+        public static string Word_Equal {
+            get {
+                return ResourceManager.GetString("Word_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word less than 的本地化字符串。
+        /// </summary>
+        public static string Word_Less {
+            get {
+                return ResourceManager.GetString("Word_Less", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word minus 的本地化字符串。
+        /// </summary>
+        public static string Word_Minus {
+            get {
+                return ResourceManager.GetString("Word_Minus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word(minus one) 的本地化字符串。
+        /// </summary>
+        public static string Word_Minus_One {
+            get {
+                return ResourceManager.GetString("Word_Minus_One", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word more than 的本地化字符串。
+        /// </summary>
+        public static string Word_More {
+            get {
+                return ResourceManager.GetString("Word_More", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word multiply 的本地化字符串。
+        /// </summary>
+        public static string Word_Multiply {
+            get {
+                return ResourceManager.GetString("Word_Multiply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word not equal 的本地化字符串。
+        /// </summary>
+        public static string Word_Not_Equal {
+            get {
+                return ResourceManager.GetString("Word_Not_Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word not less than 的本地化字符串。
+        /// </summary>
+        public static string Word_Not_Less {
+            get {
+                return ResourceManager.GetString("Word_Not_Less", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word not more than 的本地化字符串。
+        /// </summary>
+        public static string Word_Not_More {
+            get {
+                return ResourceManager.GetString("Word_Not_More", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word(or) 的本地化字符串。
+        /// </summary>
+        public static string Word_Or {
+            get {
+                return ResourceManager.GetString("Word_Or", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word reverse 的本地化字符串。
+        /// </summary>
+        public static string Word_Reverse {
+            get {
+                return ResourceManager.GetString("Word_Reverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word to DWord 的本地化字符串。
+        /// </summary>
+        public static string Word_To_DWord {
+            get {
+                return ResourceManager.GetString("Word_To_DWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word(XOR) 的本地化字符串。
+        /// </summary>
+        public static string Word_XOR {
+            get {
+                return ResourceManager.GetString("Word_XOR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Write Bit 的本地化字符串。
         /// </summary>
         public static string Write_Bit {
@@ -3252,6 +4566,69 @@ namespace SamSoarII.AppMain.Properties {
         public static string Write_Words {
             get {
                 return ResourceManager.GetString("Write_Words", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 exchange(Word) 的本地化字符串。
+        /// </summary>
+        public static string XCH_Inst {
+            get {
+                return ResourceManager.GetString("XCH_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 exchange(DWord) 的本地化字符串。
+        /// </summary>
+        public static string XCHD_Inst {
+            get {
+                return ResourceManager.GetString("XCHD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 exchange(Float) 的本地化字符串。
+        /// </summary>
+        public static string XCHF_Inst {
+            get {
+                return ResourceManager.GetString("XCHF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Zone Compare(Word) 的本地化字符串。
+        /// </summary>
+        public static string ZCP_Inst {
+            get {
+                return ResourceManager.GetString("ZCP_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Zone Compare(DWord) 的本地化字符串。
+        /// </summary>
+        public static string ZCPD_Inst {
+            get {
+                return ResourceManager.GetString("ZCPD_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Zone Compare(Float) 的本地化字符串。
+        /// </summary>
+        public static string ZCPF_Inst {
+            get {
+                return ResourceManager.GetString("ZCPF_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Return to origin(Word) 的本地化字符串。
+        /// </summary>
+        public static string ZRN_Inst {
+            get {
+                return ResourceManager.GetString("ZRN_Inst", resourceCulture);
             }
         }
     }

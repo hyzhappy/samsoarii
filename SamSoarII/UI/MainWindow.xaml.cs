@@ -1312,6 +1312,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnUpdateClick(object sender, RoutedEventArgs e)
         {
+            //XmlGen.GenUpdateXML(Directory.GetCurrentDirectory());
             Process process = new Process();
             process.StartInfo.FileName = Directory.GetCurrentDirectory() + @"\Update\SamSoarII.Update.exe";
             process.StartInfo.UseShellExecute = false;
@@ -1324,12 +1325,13 @@ namespace SamSoarII.AppMain.UI
                 string message = reader.ReadLine();
                 if (message == string.Format("N"))
                 {
-                    MessageBox.Show("已是最新版本！");
+                    MessageBox.Show(Properties.Resources.New_Version);
                 }
-                else if(message == string.Format("Y"))
+                else if (message == string.Format("Y"))
                 {
+                    long filesize = long.Parse(reader.ReadLine());
+                    MessageBoxResult ret = MessageBox.Show(string.Format(Properties.Resources.Update_Or_Not + "(" + Properties.Resources.Update_Process + ")\n" + Properties.Resources.Update_Size +"{0:f3}MB", filesize / (1024 * 1024 * 1.0)), Properties.Resources.Update_Whether, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                     StreamWriter writer = new StreamWriter(serverPipe);
-                    MessageBoxResult ret = MessageBox.Show("存在新版本可更新，是否更新？(更新过程会关闭程序，请确保文件已正确保存！)","是否更新",MessageBoxButton.OKCancel,MessageBoxImage.Warning);
                     if (ret == MessageBoxResult.OK)
                         writer.WriteLine("Update");
                     else
@@ -1339,7 +1341,7 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
-                    MessageBox.Show("连接失败，请检查您的网络设置！");
+                    MessageBox.Show(Properties.Resources.Connect_Failed);
                 }
             }
             serverPipe.Disconnect();
