@@ -920,35 +920,12 @@ namespace SamSoarII.AppMain
         }
         public bool NavigateToNetwork(BaseViewModel bvmodel)
         {
-            if (_projectModel.LadderMode != LadderMode.Simulate)
-            {
-                return false;
-            }
-            if (NavigateToNetwork(bvmodel, _projectModel.MainRoutine))
-            {
-                return true;
-            }
-            foreach (LadderDiagramViewModel ldvmodel in _projectModel.SubRoutines)
-            {
-                if (NavigateToNetwork(bvmodel, ldvmodel))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private bool NavigateToNetwork(BaseViewModel bvmodel, LadderDiagramViewModel ldvmodel)
-        {
-            foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
-            {
-                if (lnvmodel.ContainBPAddr(bvmodel.BPAddress))
-                {
-                    NavigateToNetwork(new NavigateToNetworkEventArgs(
-                        lnvmodel.NetworkNumber, ldvmodel.ProgramName, bvmodel.X, bvmodel.Y));
-                    return true;
-                }
-            }
-            return false;
+            LadderNetworkViewModel lnvmodel = _projectModel.GetNetwork(bvmodel);
+            if (lnvmodel == null) return false;
+            LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
+            NavigateToNetwork(new NavigateToNetworkEventArgs(
+                lnvmodel.NetworkNumber, ldvmodel.ProgramName, bvmodel.X, bvmodel.Y));
+            return true;
         }
         public void NavigateToFuncBlock(FuncBlockViewModel fbvmodel, int line, int column)
         {
@@ -1085,7 +1062,7 @@ namespace SamSoarII.AppMain
         }
         public void CompileProject()
         {
-            _projectModel.Compile();
+            //_projectModel.Compile();
         }
         public int SimulateProject()
         {

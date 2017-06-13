@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
+using SamSoarII.Extend.FuncBlockModel;
 
 /// <summary>
 /// ClassName : LCNode
@@ -1436,6 +1437,112 @@ namespace SamSoarII.Extend.Utility
                         break;
                 }
             }
+        }
+
+        static public void FuncToCCode(
+            StreamWriter sw, 
+            FuncBlockModel.FuncBlockModel fbmodel, 
+            string code, 
+            bool simumode = false)
+        {
+            if (simumode)
+                FuncToCCode(sw, fbmodel.Root, code);
+            else
+                sw.Write(ReplaceType(code, 0, code.Length));
+        }
+
+        static private void FuncToCCode(
+            StreamWriter sw,
+            FuncBlock fblock,
+            string code)
+        {
+            string text = String.Empty;
+            string divi = String.Empty;
+            int bp = 0;
+            int prev = fblock.IndexStart;
+            if (fblock is FuncBlock_Root
+             || fblock is FuncBlock_Local)
+            {
+                if (fblock is FuncBlock_Local)
+                    sw.Write("{\n");
+                foreach (FuncBlock child in fblock.Childrens)
+                {
+                    if (prev < child.IndexStart)
+                    {
+                        sw.Write(code.Substring(prev, child.IndexStart - prev));
+                    }
+                    if (child is FuncBlock_Local)
+                    {
+                        FuncToCCode(sw, child, code);
+                    }
+                }
+                BreakPointManager.Register(fblock);
+                bp = fblock.BPAddress;
+                sw.Write("bpcycle({0});\n", bp);
+                if (fblock is FuncBlock_Local)
+                    sw.Write("}\n");
+            }
+            else if (fblock is FuncBlock_ForHeader)
+            {
+                FuncBlock_ForHeader fblockfh = (FuncBlock_ForHeader)fblock;
+                sw.Write("for (");
+                if (fblockfh.Start != null)
+                {
+                    BreakPointManager.Register(fblockfh.Start);
+                    bp = fblockfh.Start.BPAddress;
+                    sw.Write("bpcycle({0}),{1}",
+                        bp, ReplaceType(code, fblockfh.Start.IndexStart, fblockfh.Start.Length));
+                }
+                //sw.Write(";");
+                if (fblockfh.Cond != null)
+                {
+                    BreakPointManager.Register(fblockfh.Cond);
+                    bp = fblockfh.Cond.BPAddress;
+                    sw.Write("bpcycle({0}),{1}",
+                        bp, ReplaceType(code, fblockfh.Cond.IndexStart, fblockfh.Cond.Length));
+                }
+                //sw.Write(";");
+                if (fblockfh.Next != null)
+                {
+                    BreakPointManager.Register(fblockfh.Next);
+                    bp = fblockfh.Next.BPAddress;
+                    sw.Write("bpcycle({0}),{1}", 
+                        bp, ReplaceType(code, fblockfh.Next.IndexStart, fblockfh.Next.Length));
+                }
+                sw.Write(")");
+            }
+            else if (fblock is FuncBlock_WhileHeader)
+            {
+                FuncBlock_WhileHeader fblockwh = (FuncBlock_WhileHeader)fblock;
+                sw.Write("while (");
+                if (fblockwh.Cond != null)
+                {
+                    BreakPointManager.Register(fblockwh.Cond);
+                    bp = fblockwh.Cond.BPAddress;
+                    sw.Write("bpcycle({0}),{1}",
+                        bp, ReplaceType(code, fblockwh.Cond.IndexStart, fblockwh.Cond.Length));
+                }
+                sw.Write(")");
+            }
+            else
+            {
+                if (!(fblock is FuncBlock_Root))
+                {
+                    BreakPointManager.Register(fblock);
+                    bp = fblock.BPAddress;
+                    sw.Write("bpcycle({0});\n", bp);
+                }
+                sw.Write("{0}\n", ReplaceType(code, fblock.IndexStart, fblock.Length));
+            }
+        }
+
+        static private string ReplaceType(string code, int start, int length)
+        {
+            string text = code.Substring(start, length);
+            text = text.Replace("BIT", "_BIT");
+            text = text.Replace("WORD", "_WORD");
+            text = text.Replace("FLOAT", "_FLOAT");
+            return text;
         }
     }
 }

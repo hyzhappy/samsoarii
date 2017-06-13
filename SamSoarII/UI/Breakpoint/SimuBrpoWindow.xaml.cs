@@ -74,6 +74,7 @@ namespace SamSoarII.Simulation.UI.Breakpoint
         {
             get { return this.items; }
         }
+
         private BaseViewModel breakpoint;
         public BaseViewModel Breakpoint
         {
@@ -310,7 +311,6 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                 }
             });
         }
-
         private void DG_Main_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             SimuBrpoElement ele = (SimuBrpoElement)(DG_Main.SelectedItem);

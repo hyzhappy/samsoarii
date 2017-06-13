@@ -39,7 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -166,6 +166,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="UI\Breakpoint\BackTraceElement.cs" />
+    <Compile Include="UI\Breakpoint\BackTraceWindow.xaml.cs">
+      <DependentUpon>BackTraceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Breakpoint\FuncBrpoElement.cs" />
+    <Compile Include="UI\Breakpoint\LocalVarWindow.xaml.cs">
+      <DependentUpon>LocalVarWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Breakpoint\SimuBrpoElement.cs" />
     <Compile Include="UI\Breakpoint\SimuBrpoWindow.xaml.cs">
       <DependentUpon>SimuBrpoWindow.xaml</DependentUpon>
@@ -190,6 +198,9 @@
     </Compile>
     <Compile Include="UI\FindWindow.xaml.cs">
       <DependentUpon>FindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Breakpoint\FuncBrpoWindow.xaml.cs">
+      <DependentUpon>FuncBrpoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MainTabControl.xaml.cs">
       <DependentUpon>MainTabControl.xaml</DependentUpon>
@@ -455,6 +466,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Breakpoint\BackTraceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Breakpoint\LocalVarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Breakpoint\SimuBrpoWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -476,6 +495,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\FindWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Breakpoint\FuncBrpoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
