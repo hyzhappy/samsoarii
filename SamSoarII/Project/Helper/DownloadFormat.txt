@@ -5,7 +5,7 @@
 		[Network Package 2]
 		...
 梯形图网络：
-	0xfe [Package Size]
+	0xfe [Package Size(Low, High)]
 		[Comment Size][Comment]
 		[RowCount]
 			[HVHVHVHV][HVHVHVHV]
@@ -28,10 +28,11 @@
 	0xfc [Register Number(Low, High)]
 		[Register Package 1]
 		[Register Package 2]
+		...
 		
 已使用的软元件项：
 	[Register Addr][Register Offset(Low, High)][Intrasegment Addr][Intrasegment Offset] (for register)
-	[K/H/F][value(4 byte)] (for constant)
+	[K/H/F][value(2/4 byte)] (for constant)
 	[STR][Text Size][Text] (for string)
 	[Comment Size][Comment]
 

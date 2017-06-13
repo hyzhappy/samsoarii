@@ -12,7 +12,7 @@ namespace SamSoarII.AppMain.Project
     public enum DownloadRegisterType
     {
         NULL = 0x00,
-        K, H, F, STR,
+        K, K32, H, H32, F, STR,
         X, Y, S, M, C, T,
         D, TV, CV, AI, AO, V, Z,
         CV32
@@ -65,14 +65,44 @@ namespace SamSoarII.AppMain.Project
             edata.Add(Int32_High(regs.Count()));
             foreach (IValueModel ivmodel in regs)
             {
-                if (ivmodel is KWordValue)
+                if (ivmodel is KWordValue
+                 || ivmodel is KDoubleWordValue)
                 {
-                    edata.Add((byte)(DownloadRegisterType.K));
-                    int value = int.Parse(((KWordValue)ivmodel).ValueString.Substring(1));
+                    if (ivmodel is KWordValue)
+                        edata.Add((byte)(DownloadRegisterType.K));
+                    else
+                        edata.Add((byte)(DownloadRegisterType.K32));
+                    int value = int.Parse(ivmodel.ValueString.Substring(1));
                     for (int i = 0; i < 4; i++)
                     {
                         edata.Add((byte)(value & 0xff));
                         value >>= 8;
+                    }
+                }
+                else if (ivmodel is HWordValue
+                      || ivmodel is HDoubleWordValue)
+                {
+                    if (ivmodel is HWordValue)
+                        edata.Add((byte)(DownloadRegisterType.H));
+                    else
+                        edata.Add((byte)(DownloadRegisterType.H32));
+                    string value = ivmodel.ValueString;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int p = value.Length - i * 2 - 2;
+                        byte valueb = p < 1
+                            ? (byte)(0x00)
+                            : char.IsDigit(value[p])
+                                ? (byte)(value[p] - '0')
+                                : (byte)(char.ToUpper(value[p]) - 'A' + 10);
+                        p = value.Length - i * 2 - 1;
+                        valueb <<= 4;
+                        valueb |= p < 1
+                            ? (byte)(0x00)
+                            : char.IsDigit(value[p])
+                                ? (byte)(value[p] - '0')
+                                : (byte)(char.ToUpper(value[p]) - 'A' + 10);
+                        edata.Add(valueb);
                     }
                 }
                 else if (ivmodel is KFloatValue)
@@ -85,29 +115,6 @@ namespace SamSoarII.AppMain.Project
                         edata.Add((byte)(value & 0xff));
                         value >>= 8;
                     }
-                }
-                else if (ivmodel is HWordValue)
-                {
-                    edata.Add((byte)(DownloadRegisterType.H));
-                    string value = ivmodel.ValueString;
-                    for (int i = 0; i < 4; i++)
-                    {
-                        int p = value.Length - i * 2 - 2;
-                        byte valueb = p < 1 
-                            ? (byte)(0x00) 
-                            : char.IsDigit(value[p]) 
-                                ? (byte)(value[p] - '0') 
-                                : (byte)(char.ToUpper(value[p]) - 'A' + 10);
-                        p = value.Length - i * 2 - 1;
-                        valueb <<= 4;
-                        valueb |= p < 1
-                            ? (byte)(0x00)
-                            : char.IsDigit(value[p])
-                                ? (byte)(value[p] - '0')
-                                : (byte)(char.ToUpper(value[p]) - 'A' + 10);
-                        edata.Add(valueb);
-                    }
-                    continue;
                 }
                 else if (ivmodel is StringValue)
                 {
