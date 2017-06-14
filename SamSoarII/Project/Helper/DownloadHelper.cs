@@ -40,7 +40,7 @@ namespace SamSoarII.AppMain.Project
         static private Dictionary<string, int> regids 
             = new Dictionary<string, int>(); 
 
-        public void Write(ProjectModel pmodel, string filename, int option)
+        static public void Write(ProjectModel pmodel, string filename, int option)
         {
             odata.Clear();
             edata.Clear();
@@ -63,19 +63,20 @@ namespace SamSoarII.AppMain.Project
                 Write(fbvmdoel, option);
             }
             Write(pmodel.MTVModel, option);
-            string tempfile1 = FileHelper.GetTempFile(".bin");
-            string tempfile2 = FileHelper.GetTempFile(".rar");
-            BinaryWriter bw = new BinaryWriter(
-                new FileStream(tempfile1, FileMode.CreateNew));
-            bw.Write(edata.ToArray());
             string currentpath = Environment.CurrentDirectory;
+            string datafile = String.Format(@"{0:s}\downe.bin", currentpath);
+            string packfile = String.Format(@"{0:s}\downe.rar", currentpath);
+            BinaryWriter bw = new BinaryWriter(
+                new FileStream(datafile, FileMode.Create));
+            bw.Write(edata.ToArray());
+            bw.Close();
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.FileName
                 = String.Format(@"{0:s}\rar\Rar", currentpath);
             cmd.StartInfo.Arguments
-                = String.Format("m5 \"{0:s}\" \"{1:s}\"",
-                    tempfile1, tempfile2);
+                = String.Format("a -m5 -ep \"{0:s}\" \"{1:s}\"",
+                    packfile, datafile);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
@@ -83,14 +84,22 @@ namespace SamSoarII.AppMain.Project
             cmd.Start();
             cmd.WaitForExit();
             BinaryReader br = new BinaryReader(
-                new FileStream(tempfile2, FileMode.Open));
+                new FileStream(packfile, FileMode.Open));
             edata.Clear();
             while (br.BaseStream.CanRead)
             {
-                edata.Add(br.ReadByte());
+                try
+                {
+                    edata.Add(br.ReadByte());
+                }
+                catch (EndOfStreamException)
+                {
+                    break;
+                }
             }
+            br.Close();
         }
-        unsafe private void WriteRegisters(int option)
+        unsafe static private void WriteRegisters(int option)
         {
             edata.Add(0xfc);
             edata.Add(Int32_Low(regs.Count()));
@@ -211,7 +220,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private void Write(LadderDiagramViewModel ldvmodel, int option)
+        static private void Write(LadderDiagramViewModel ldvmodel, int option)
         {
             if ((option & OPTION_PROGRAM) == 0) return;
             edata.Add(0xff);
@@ -226,7 +235,7 @@ namespace SamSoarII.AppMain.Project
             edata[szid] = Int32_Low(sz);
             edata[szid+1] = Int32_High(sz);
         }
-        private void Write(LadderNetworkViewModel lnvmodel, int option)
+        static private void Write(LadderNetworkViewModel lnvmodel, int option)
         {
             edata.Add(0xfe);
             int szid = edata.Count();
@@ -260,7 +269,7 @@ namespace SamSoarII.AppMain.Project
                 edata[st + p1] |= (byte)(1 << p2);
             }
         }
-        private void Write(BaseViewModel bvmodel)
+        static private void Write(BaseViewModel bvmodel)
         {
             if (bvmodel is HorizontalLineViewModel
              || bvmodel is VerticalLineViewModel)
@@ -286,7 +295,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private void Write(FuncBlockViewModel fbvmodel, int option)
+        static private void Write(FuncBlockViewModel fbvmodel, int option)
         {
             edata.Add(0xfd);
             Write(fbvmodel.ProgramName);
@@ -323,7 +332,7 @@ namespace SamSoarII.AppMain.Project
             edata[szid] = Int32_Low(sz);
             edata[szid + 1] = Int32_High(sz);
         }
-        private void Write(ModbusTableViewModel mtvmodel, int option)
+        static private void Write(ModbusTableViewModel mtvmodel, int option)
         {
             if ((option & OPTION_COMMENT) == 0)
             {
@@ -343,7 +352,7 @@ namespace SamSoarII.AppMain.Project
             edata[szid] = Int32_Low(sz);
             edata[szid] = Int32_High(sz);
         }
-        private void Write(string text)
+        static private void Write(string text)
         {
             edata.Add(Int32_Low(text.Count()));
             //edata.Add(Int32_High(text.Count()));
@@ -352,7 +361,7 @@ namespace SamSoarII.AppMain.Project
                 edata.Add((byte)(text[i]));
             }
         }
-        private void Write32(string text)
+        static private void Write32(string text)
         {
             edata.Add(Int32_Low(text.Count()));
             edata.Add(Int32_High(text.Count()));
@@ -362,15 +371,15 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private byte Int32_Low(int i)
+        static private byte Int32_Low(int i)
         {
             return (byte)(i & 0xff);
         }
-        private byte Int32_High(int i)
+        static private byte Int32_High(int i)
         {
             return (byte)((i >> 8) & 0xff);
         }
-        private void GetRegisters(LadderDiagramViewModel ldvmodel)
+        static private void GetRegisters(LadderDiagramViewModel ldvmodel)
         {
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
@@ -390,7 +399,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private void GetComments(FuncBlock fblock, List<FuncBlock_Comment> comments)
+        static private void GetComments(FuncBlock fblock, List<FuncBlock_Comment> comments)
         {
             if (fblock is FuncBlock_Comment)
             {

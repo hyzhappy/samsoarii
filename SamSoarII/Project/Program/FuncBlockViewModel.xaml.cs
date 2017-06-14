@@ -60,7 +60,10 @@ namespace SamSoarII.AppMain.Project
         /// <summary>
         /// 函数块的逻辑模型
         /// </summary>
-        public FuncBlockModel Model;
+        public FuncBlockModel Model
+        {
+            get { return this.model; }
+        }
         /// <summary>
         /// 工程的名称
         /// </summary>

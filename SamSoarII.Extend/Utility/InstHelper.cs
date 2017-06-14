@@ -445,7 +445,6 @@ namespace SamSoarII.Extend.Utility
                     else
                         sw.Write("_ton(&{0:s}, &{2:s}, !_stack_{3:d}, {1:s});\n",
                             inst[1], inst[2], inst[3], stackTop);
-
                     globalCount += 1;
                     break;
                 // 当栈顶为1时运行，为0时保留当前计时的计时器

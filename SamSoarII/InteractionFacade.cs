@@ -1070,7 +1070,9 @@ namespace SamSoarII.AppMain
             {
                 return DownloadHelper.DOWNLOAD_LADDER_ERROR;
             }
-            GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
+            //GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
+            DownloadHelper.Write(_projectModel, "p.bin",
+                DownloadHelper.OPTION_PROGRAM | DownloadHelper.OPTION_COMMENT);
             return 0;
         }
         public int SimulateProject()

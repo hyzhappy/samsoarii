@@ -596,9 +596,6 @@ namespace SamSoarII.Extend.Utility
         /// 每条指令对应的辅助栈的长度
         /// </summary>
         //private static int[] instMStackCount;
-        
-        
-
         /// <summary>
         /// 将PLC指令列表指定区间内转换为表达式（未考虑辅助栈）
         /// </summary>
