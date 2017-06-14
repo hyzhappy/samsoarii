@@ -12,8 +12,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+/// <summary>
+/// Namespace : SamSoarII.AppMain.Project
+/// ClassName : DownloadHelper
+/// Version   : 1.0
+/// Date      : 2017/6/14
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 处理工程相关信息，打包成二进制数据并传到下位PLC
+/// </remarks>
+
 namespace SamSoarII.AppMain.Project
 {
+    /// <summary> 寄存器类型 </summary>
     public enum DownloadRegisterType
     {
         NULL = 0x00,
@@ -23,58 +35,85 @@ namespace SamSoarII.AppMain.Project
         CV32
     }
 
+    /// <summary> 下载的帮助类 </summary>
     public class DownloadHelper
     {
+        /// <summary> 错误码：梯形图检查错误 </summary>
         public const int DOWNLOAD_LADDER_ERROR = 0x01;
+        /// <summary> 错误码：函数功能块检查错误 </summary>
         public const int DOWNLOAD_FUNCBLOCK_ERROR = 0x02;
 
+        /// <summary> 选项：是否包含程序 </summary>
         public const int OPTION_PROGRAM = 0x01;
+        /// <summary> 选项：是否包含注释 </summary>
         public const int OPTION_COMMENT = 0x02;
+        /// <summary> 选项：是否包含初始化 </summary>
         public const int OPTION_INITIALIZE = 0x04;
+        /// <summary> 选项：是否包含设置 </summary>
         public const int OPTION_SETTING = 0x08;
 
+        /// <summary> 未压缩的原数据，通常需要PLC去识别分析 </summary>
         static private List<byte> odata 
             = new List<byte>();
+        /// <summary> 压缩为rar包的数据 </summary>
         static private List<byte> edata 
             = new List<byte>();
+        /// <summary> 软元件表 </summary>
         static private List<IValueModel> regs
             = new List<IValueModel>();
+        /// <summary> 软元件ID表 </summary>
         static private Dictionary<string, int> regids 
             = new Dictionary<string, int>(); 
 
+        /// <summary>
+        /// 将工程文件写入二进制数据，保存在根目录下的down.bin中
+        /// </summary>
+        /// <param name="pmodel">工程类</param>
+        /// <param name="option">选项</param>
         static public void Write(ProjectModel pmodel, int option)
         {
+            // 初始化，清空所有记录
             odata.Clear();
             edata.Clear();
             regs.Clear();
             regids.Clear();
+            // 保存选项
             edata.Add(Int32_Low(option));
+            // 写入设置参数
             WriteParameters(pmodel);
+            // 获取所有已经使用的软元件
             GetRegisters(pmodel.MainRoutine);
             foreach (LadderDiagramViewModel ldvmodel in pmodel.SubRoutines)
             {
                 GetRegisters(ldvmodel);
             }
+            // 写入所有软元件
             WriteRegisters(option);
+            // 写入所有梯形图
             Write(pmodel.MainRoutine, option);
             foreach (LadderDiagramViewModel ldvmodel in pmodel.SubRoutines)
             {
                 Write(ldvmodel, option);
             }
+            // 写入所有函数功能块
             foreach (FuncBlockViewModel fbvmdoel in pmodel.FuncBlocks)
             {
                 Write(fbvmdoel, option);
             }
             Write(pmodel.MTVModel, option);
+            // 写入工程树
             ProjectTreeView ptview = pmodel.IFacade.PTView;
             Write(ptview, option);
+            // 设置路径
             string currentpath = Environment.CurrentDirectory;
             string datafile = String.Format(@"{0:s}\downe.bin", currentpath);
             string packfile = String.Format(@"{0:s}\downe.rar", currentpath);
+            // 写入待压缩的压缩数据
             BinaryWriter bw = new BinaryWriter(
                 new FileStream(datafile, FileMode.Create));
             bw.Write(edata.ToArray());
             bw.Close();
+            // 后台调用Rar进行压缩
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.FileName
@@ -88,6 +127,7 @@ namespace SamSoarII.AppMain.Project
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
+            // 获得压缩后的数据
             BinaryReader br = new BinaryReader(
                 new FileStream(packfile, FileMode.Open));
             edata.Clear();
@@ -104,17 +144,28 @@ namespace SamSoarII.AppMain.Project
             }
             br.Close();
         }
+        /// <summary>
+        /// 写入所有参数设置
+        /// </summary>
+        /// <param name="pmodel">工程类</param>
         unsafe static private void WriteParameters(ProjectModel pmodel)
         {
 
         }
+        /// <summary>
+        /// 写入所有软元件的信息
+        /// </summary>
+        /// <param name="option">选项</param>
         unsafe static private void WriteRegisters(int option)
         {
+            // 头标志（0xfc）和长度
             edata.Add(0xfc);
             edata.Add(Int32_Low(regs.Count()));
             edata.Add(Int32_High(regs.Count()));
+            // 将表中的所有软元件逐一写入
             foreach (IValueModel ivmodel in regs)
             {
+                // 整数常量（包括单字和双字）
                 if (ivmodel is KWordValue
                  || ivmodel is KDoubleWordValue)
                 {
@@ -129,6 +180,7 @@ namespace SamSoarII.AppMain.Project
                         value >>= 8;
                     }
                 }
+                // 16进制表示的整数常量（包括单字和双字）
                 else if (ivmodel is HWordValue
                       || ivmodel is HDoubleWordValue)
                 {
@@ -155,6 +207,7 @@ namespace SamSoarII.AppMain.Project
                         edata.Add(valueb);
                     }
                 }
+                // 浮点常量
                 else if (ivmodel is KFloatValue)
                 {
                     edata.Add((byte)(DownloadRegisterType.F));
@@ -166,16 +219,20 @@ namespace SamSoarII.AppMain.Project
                         value >>= 8;
                     }
                 }
+                // 字符串
                 else if (ivmodel is StringValue)
                 {
                     edata.Add((byte)(DownloadRegisterType.STR));
                     Write(ivmodel.ValueString);
                 }
+                // 寄存器
                 else
                 {
+                    // 函数参数获取原型
                     IValueModel _ivmodel = ivmodel;
                     if (_ivmodel is ArgumentValue)
                         _ivmodel = ((ArgumentValue)_ivmodel).Argument;
+                    // 判断基地址并写入
                     if (_ivmodel is XBitValue)
                         edata.Add((byte)(DownloadRegisterType.X));
                     if (_ivmodel is YBitValue)
@@ -204,8 +261,10 @@ namespace SamSoarII.AppMain.Project
                         edata.Add((byte)(DownloadRegisterType.Z));
                     if (_ivmodel is CV32DoubleWordValue)
                         edata.Add((byte)(DownloadRegisterType.CV32));
+                    // 写入下标位置
                     edata.Add(Int32_Low((int)(_ivmodel.Index)));
                     edata.Add(Int32_High((int)(_ivmodel.Index)));
+                    // 写入变址信息（基地址，下标）
                     if (_ivmodel.IsVariable)
                     {
                         if (_ivmodel.Offset is VWordValue)
@@ -216,12 +275,14 @@ namespace SamSoarII.AppMain.Project
                             edata.Add(0x00);
                         edata.Add(Int32_Low((int)(_ivmodel.Offset.Index)));
                     }
+                    // 非变址软元件则写入空数据
                     else
                     {
                         edata.Add(0x00);
                         edata.Add(0x00);
                     }
                 }
+                // 根据选项选择是否写入注释
                 if ((option & OPTION_COMMENT) != 0)
                 {
                     string comment = ValueCommentManager.GetComment(ivmodel);
@@ -229,31 +290,48 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        /// <summary>
+        /// 写入一个梯形图程序
+        /// </summary>
+        /// <param name="ldvmodel">梯形图程序</param>
+        /// <param name="option">选项</param>
         static private void Write(LadderDiagramViewModel ldvmodel, int option)
         {
             if ((option & OPTION_PROGRAM) == 0) return;
+            // 写入头标志
             edata.Add(0xff);
+            // 记录长度的位置，待写入
             int szid = edata.Count();
             edata.Add(0x00);
             edata.Add(0x00);
+            // 依次写入所有网络
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
                 Write(lnvmodel, option);
             }
+            // 计算长度，写入之前记录的位置
             int sz = edata.Count() - szid - 2;
             edata[szid] = Int32_Low(sz);
             edata[szid+1] = Int32_High(sz);
         }
+        /// <summary>
+        /// 写入一个梯形图网络
+        /// </summary>
+        /// <param name="lnvmodel">梯形图网络</param>
+        /// <param name="option">选项</param>
         static private void Write(LadderNetworkViewModel lnvmodel, int option)
         {
+            // 头标志和长度
             edata.Add(0xfe);
             int szid = edata.Count();
             edata.Add(0x00);
             edata.Add(0x00);
+            // 是否写入网络注释？
             if ((option & OPTION_COMMENT) != 0)
             {
                 Write(lnvmodel.NetworkBrief);
             }
+            // 行数和每格的行列联通信息
             edata.Add(Int32_Low(lnvmodel.RowCount));
             int st = edata.Count();
             int le = (lnvmodel.RowCount * GlobalSetting.LadderXCapacity) >> 2;
@@ -266,6 +344,7 @@ namespace SamSoarII.AppMain.Project
                 int p1 = p >> 2;
                 int p2 = (p & 3) * 2;
                 edata[st + p1] |= (byte)(1 << p2);
+                // 写入一个梯形图元件
                 Write(bvmodel);
             }
             foreach (VerticalLineViewModel vlvmodel in lnvmodel.GetVerticalLines())
@@ -278,25 +357,34 @@ namespace SamSoarII.AppMain.Project
                 edata[st + p1] |= (byte)(1 << p2);
             }
         }
+        /// <summary>
+        /// 写入一个梯形图元件
+        /// </summary>
+        /// <param name="bvmodel">元件</param>
         static private void Write(BaseViewModel bvmodel)
         {
+            // 连线不必写入
             if (bvmodel is HorizontalLineViewModel
              || bvmodel is VerticalLineViewModel)
             {
                 return;
             }
+            // 坐标，指令ID
             edata.Add(Int32_Low(bvmodel.X));
             edata.Add(Int32_Low(bvmodel.Y));
             edata.Add(Int32_Low(LadderInstViewModelPrototype.GetOrderFromCatalog(bvmodel.GetCatalogID())));
+            // 写入每个软元件参数
             for (int i = 0; i < bvmodel.Model.ParaCount; i++)
             {
                 IValueModel ivmodel = bvmodel.Model.GetPara(i);
+                // 在软元件表中找到，写入ID
                 if (regids.ContainsKey(ivmodel.ValueString))
                 {
                     int regid = regids[ivmodel.ValueString];
                     edata.Add(Int32_Low(regid));
                     edata.Add(Int32_High(regid));
                 }
+                // 写入0xFFFF表示空参数
                 else
                 {
                     edata.Add(0xFF);
@@ -304,6 +392,11 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        /// <summary>
+        /// 写入函数块内的代码文本
+        /// </summary>
+        /// <param name="fbvmodel">函数块</param>
+        /// <param name="option">选项</param>
         static private void Write(FuncBlockViewModel fbvmodel, int option)
         {
             edata.Add(0xfd);
@@ -341,6 +434,11 @@ namespace SamSoarII.AppMain.Project
             edata[szid] = Int32_Low(sz);
             edata[szid + 1] = Int32_High(sz);
         }
+        /// <summary>
+        /// 写入Modbus表格
+        /// </summary>
+        /// <param name="mtvmodel">Modbus表格</param>
+        /// <param name="option">选项</param>
         static private void Write(ModbusTableViewModel mtvmodel, int option)
         {
             if ((option & OPTION_COMMENT) == 0)
@@ -361,6 +459,11 @@ namespace SamSoarII.AppMain.Project
             edata[szid] = Int32_Low(sz);
             edata[szid] = Int32_High(sz);
         }
+        /// <summary>
+        /// 写入工程树
+        /// </summary>
+        /// <param name="ptview">工程资源管理器</param>
+        /// <param name="option">选项</param>
         static private void Write(ProjectTreeView ptview, int option)
         {
             XElement xele = new XElement("ProjectTreeView");
@@ -369,6 +472,10 @@ namespace SamSoarII.AppMain.Project
             edata.Add(0xfa);
             Write32(xtext);
         }
+        /// <summary>
+        /// 写入一段字符串（长度保证不超过256）
+        /// </summary>
+        /// <param name="text">字符串</param>
         static private void Write(string text)
         {
             edata.Add(Int32_Low(text.Count()));
@@ -378,6 +485,10 @@ namespace SamSoarII.AppMain.Project
                 edata.Add((byte)(text[i]));
             }
         }
+        /// <summary>
+        /// 写入一段字符串（长度保证不超过65536）
+        /// </summary>
+        /// <param name="text">字符串</param>
         static private void Write32(string text)
         {
             edata.Add(Int32_Low(text.Count()));
@@ -387,15 +498,26 @@ namespace SamSoarII.AppMain.Project
                 edata.Add((byte)(text[i]));
             }
         }
-
+        /// <summary>
+        /// 写入一个32位整数的低位
+        /// </summary>
+        /// <param name="i">整数</param>
         static private byte Int32_Low(int i)
         {
             return (byte)(i & 0xff);
         }
+        /// <summary>
+        /// 写入一个32位整数的高位
+        /// </summary>
+        /// <param name="i">整数</param>
         static private byte Int32_High(int i)
         {
             return (byte)((i >> 8) & 0xff);
         }
+        /// <summary>
+        /// 获得一个梯形图程序中所有已经使用的软元件
+        /// </summary>
+        /// <param name="ldvmodel">梯形图程序</param>
         static private void GetRegisters(LadderDiagramViewModel ldvmodel)
         {
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
@@ -416,6 +538,10 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        /// <summary>
+        /// 获得一个函数块程序中所有的注释块
+        /// </summary>
+        /// <param name="ldvmodel">梯形图程序</param>
         static private void GetComments(FuncBlock fblock, List<FuncBlock_Comment> comments)
         {
             if (fblock is FuncBlock_Comment)

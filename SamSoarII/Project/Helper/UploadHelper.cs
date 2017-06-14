@@ -7,8 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Namespace : SamSoarII.AppMain.Project
+/// ClassName : DownloadHelper
+/// Version   : 1.0
+/// Date      : 2017/6/14
+/// Author    : Morenan
+/// </summary>
+/// <remarks>
+/// 将从PLC传入的数据进行解析，生成新的工程
+/// </remarks>
+
 namespace SamSoarII.AppMain.Project
 {
+    /// <summary> 寄存器类型 </summary>
     public enum UploadRegisterType
     {
         NULL = 0x00,
@@ -18,20 +30,32 @@ namespace SamSoarII.AppMain.Project
         CV32
     }
 
+    /// <summary> 上载的帮助类 </summary>
     public class UploadHelper
     {
+        /// <summary> 选项：是否包含程序 </summary>
         public const int OPTION_PROGRAM = 0x01;
+        /// <summary> 选项：是否包含注释 </summary>
         public const int OPTION_COMMENT = 0x02;
+        /// <summary> 选项：是否包含初始化 </summary>
         public const int OPTION_INITIALIZE = 0x04;
+        /// <summary> 选项：是否包含设置 </summary>
         public const int OPTION_SETTING = 0x08;
 
+        /// <summary> 数据选项 </summary>
         static private int option;
+        /// <summary> 未压缩的原数据，通常需要PLC去识别分析 </summary>
         static private IList<byte> odata;
+        /// <summary> 原数据读取到的位置 </summary>
         static private int oid;
+        /// <summary> 压缩为rar包的数据 </summary>
         static private IList<byte> edata;
+        /// <summary> 压缩数据读取到的位置 </summary>
         static private int eid;
+        /// <summary> 软元件表 </summary>
         static private List<IValueModel> regs
             = new List<IValueModel>();
+        /// <summary> 软元件ID表 </summary>
         //static private Dictionary<string, int> regids
         //    = new Dictionary<string, int>();
 
