@@ -2,6 +2,7 @@
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,28 @@ namespace SamSoarII.AppMain.Project
         //static private Dictionary<string, int> regids
         //    = new Dictionary<string, int>();
 
-        public void Read(ProjectModel pmodel, IList<byte> _odata, IList<byte> _edata)
+        static public void Read(ref ProjectModel pmodel)
+        {
+            string currentpath = Environment.CurrentDirectory;
+            string packfile = String.Format(@"{0:s}\downe.rar", currentpath);
+            Process cmd = null;
+            cmd = new Process();
+            cmd.StartInfo.FileName
+                = String.Format(@"{0:s}\rar\Unrar", currentpath);
+            cmd.StartInfo.Arguments
+                = String.Format("p \"{0:s}\"",
+                    packfile);
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            string edatas = cmd.StandardOutput.ReadToEnd();
+            Read(pmodel, new byte[0], edatas.Select((c) => { return (byte)(c); }).ToArray());
+        }
+        
+        static private void Read(ProjectModel pmodel, IList<byte> _odata, IList<byte> _edata)
         {
             odata = _odata;
             oid = 0;
@@ -80,7 +102,7 @@ namespace SamSoarII.AppMain.Project
 
             }
         }
-        unsafe private void ReadRegisters()
+        unsafe static private void ReadRegisters()
         {
             int sz = ReadE32();
             for (int i = 0; i < sz; i++)
@@ -181,7 +203,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }     
         }
-        private void Read(LadderDiagramViewModel ldvmodel)
+        static private void Read(LadderDiagramViewModel ldvmodel)
         {
             int sz = ReadE32();
             sz += eid;
@@ -203,7 +225,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private void Read(LadderNetworkViewModel lnvmodel)
+        static private void Read(LadderNetworkViewModel lnvmodel)
         {
             int sz = ReadE32();
             sz += eid;
@@ -259,18 +281,18 @@ namespace SamSoarII.AppMain.Project
                 lnvmodel.ReplaceElement(bvmodel);
             }
         }
-        private void Read(FuncBlockViewModel fbvmodel)
+        static private void Read(FuncBlockViewModel fbvmodel)
         {
             fbvmodel.ProgramName = ReadTextE8();
             fbvmodel.Code = ReadTextE16();
         }
-        private short ReadE16()
+        static private short ReadE16()
         {
             short ret = edata[eid++];
             ret |= (short)(((int)edata[eid++]) << 8);
             return ret;
         }
-        private int ReadE32()
+        static private int ReadE32()
         {
             int ret = 0, bit = 0;
             for (int i = 0; i < 4; i++)
@@ -280,15 +302,15 @@ namespace SamSoarII.AppMain.Project
             }
             return ret;
         }
-        private string ReadTextE8()
+        static private string ReadTextE8()
         {
             return ReadTextE(edata[eid++]);
         }
-        private string ReadTextE16()
+        static private string ReadTextE16()
         {
             return ReadTextE(ReadE16());
         }
-        private string ReadTextE(int sz)
+        static private string ReadTextE(int sz)
         {
             char[] str = new char[sz];
             for (int i = 0; i < sz; i++)

@@ -611,15 +611,7 @@ namespace SamSoarII.AppMain.UI
 
         private void UploadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (_interactionFacade != null
-             && _interactionFacade.ProjectLoaded)
-            {
-                e.CanExecute = true;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
+            e.CanExecute = true;
         }
 
         private void SimulateCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -1184,7 +1176,7 @@ namespace SamSoarII.AppMain.UI
         
         private void OnUploadCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-
+            _interactionFacade.UploadProject();
         }
 
         private void OnDownloadCommandExecute(object sender, ExecutedRoutedEventArgs e)

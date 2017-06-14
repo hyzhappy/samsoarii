@@ -1,4 +1,5 @@
-﻿using SamSoarII.Extend.FuncBlockModel;
+﻿using SamSoarII.AppMain.UI;
+using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.Utility;
 using SamSoarII.ValueModel;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -40,13 +42,14 @@ namespace SamSoarII.AppMain.Project
         static private Dictionary<string, int> regids 
             = new Dictionary<string, int>(); 
 
-        static public void Write(ProjectModel pmodel, string filename, int option)
+        static public void Write(ProjectModel pmodel, int option)
         {
             odata.Clear();
             edata.Clear();
             regs.Clear();
             regids.Clear();
             edata.Add(Int32_Low(option));
+            WriteParameters(pmodel);
             GetRegisters(pmodel.MainRoutine);
             foreach (LadderDiagramViewModel ldvmodel in pmodel.SubRoutines)
             {
@@ -63,6 +66,8 @@ namespace SamSoarII.AppMain.Project
                 Write(fbvmdoel, option);
             }
             Write(pmodel.MTVModel, option);
+            ProjectTreeView ptview = pmodel.IFacade.PTView;
+            Write(ptview, option);
             string currentpath = Environment.CurrentDirectory;
             string datafile = String.Format(@"{0:s}\downe.bin", currentpath);
             string packfile = String.Format(@"{0:s}\downe.rar", currentpath);
@@ -98,6 +103,10 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             br.Close();
+        }
+        unsafe static private void WriteParameters(ProjectModel pmodel)
+        {
+
         }
         unsafe static private void WriteRegisters(int option)
         {
@@ -351,6 +360,14 @@ namespace SamSoarII.AppMain.Project
             int sz = edata.Count() - szid - 2;
             edata[szid] = Int32_Low(sz);
             edata[szid] = Int32_High(sz);
+        }
+        static private void Write(ProjectTreeView ptview, int option)
+        {
+            XElement xele = new XElement("ProjectTreeView");
+            ptview.Save(xele);
+            string xtext = xele.ToString();
+            edata.Add(0xfa);
+            Write32(xtext);
         }
         static private void Write(string text)
         {
