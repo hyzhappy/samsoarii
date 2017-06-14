@@ -249,20 +249,25 @@ namespace SamSoarII.Extend.Utility
             // 然后向后查找所有的分歧点
             for (i = left+1; i <= right; i++)
             {
-                string expr1 = terminates[i - 1].Expr;
+                string expr1 = terminates[i-1].Expr;
                 string expr2 = terminates[i].Expr;
+                /*
+                 * 两个表达式都到达末尾的情况下
+                 * 由于表达式的末尾都是原型不同的常量1，所以无需比较默认相同
+                 */
+                bool isend1 = !expr1.Substring(padding + 1).Contains('&');
+                bool isend2 = !expr2.Substring(padding + 1).Contains('&');
+                if (isend1 && isend2) continue;
                 // 向后查找直到到达and运算符为止
                 for (j = padding + 1; j < expr1.Length && j < expr2.Length; j++)
                 {
-                    if (expr1[j] != expr2[j])
-                        break;
-                    if (expr1[j] == '&')
-                        break;
+                    if (!expr1[j].Equals(expr2[j])) break;
+                    if (expr1[j] == '&') break;
                 }
                 /* 若不相同则为分歧点
                  * 当下标超过某个表达式的长度时，不视为分歧点
                  */
-                if (j < expr1.Length && j < expr2.Length && expr1[j] != expr2[j])
+                if (j < expr1.Length && j < expr2.Length && !expr1[j].Equals(expr2[j]))
                 {
                     difpoints.Add(i);
                 }
@@ -270,14 +275,25 @@ namespace SamSoarII.Extend.Utility
             // CASE 1 : 若未找到新的公共前缀
             if (old_padding >= padding)
             {
-                // 根据分歧点将所有终点进行划分，然后分别处理
-                _GenInst(insts, terminates, left, difpoints[0]-1, padding, flag);
-                for (i=1; i < difpoints.Count; i++)
+                // 如果不存在分歧点，直接输出所有结果指令
+                if (difpoints.Count() == 0)
                 {
-                    _GenInst(insts, terminates, difpoints[i-1], difpoints[i]-1, padding, flag);
+                    for (i = left; i <= right; i++)
+                    {
+                        _GenInst(insts, terminates, i, i, padding, flag);
+                    }
                 }
-                _GenInst(insts, terminates, difpoints[i - 1], right, padding, flag);
-                return;
+                else
+                {
+                    // 根据分歧点将所有终点进行划分，然后分别处理
+                    _GenInst(insts, terminates, left, difpoints[0] - 1, padding, flag);
+                    for (i = 1; i < difpoints.Count; i++)
+                    {
+                        _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding, flag);
+                    }
+                    _GenInst(insts, terminates, difpoints[i - 1], right, padding, flag);
+                    return;
+                }
             }
             // CASE 2 : 找到新的公共前缀时，需要将前缀内的结果用辅助栈存起来
             // 根据分歧点将所有终点进行划分，然后分别处理
@@ -325,22 +341,33 @@ namespace SamSoarII.Extend.Utility
                     // 直接计算当前前缀的表达式
                     _GenInst(insts, terminates[left].Expr, old_padding, padding - 2, flag);
                 }
-                // 以下为涉及到辅助栈的PLC代码生成
-                // 将计算结果暂存进辅助栈
-                InstHelper.AddInst(insts, "MPS");
-                // 生成第一组终点的PLC指令程序
-                _GenInst(insts, terminates, left, difpoints[0] - 1, padding + 1, flag | FLAG_CALAND);
-                for (i = 1; i < difpoints.Count; i++)
+                // 如果不存在分歧点，直接输出所有结果指令
+                if (difpoints.Count() == 0)
                 {
-                    // 中间结果从辅助栈中取出来，恢复现场
-                    InstHelper.AddInst(insts, "MRD");
-                    // 依次生成下一组
-                    _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding + 1, flag | FLAG_CALAND);
+                    for (i = left; i <= right; i++)
+                    {
+                        _GenInst(insts, terminates, i, i, padding + 1, flag | FLAG_CALAND);
+                    }
                 }
-                // 最后一次用到辅助栈，所以直接弹出
-                InstHelper.AddInst(insts, "MPP");
-                // 生成最后一组
-                _GenInst(insts, terminates, difpoints[i - 1], right, padding + 1, flag | FLAG_CALAND);
+                // 以下为涉及到辅助栈的PLC代码生成
+                else
+                {
+                    // 将计算结果暂存进辅助栈
+                    InstHelper.AddInst(insts, "MPS");
+                    // 生成第一组终点的PLC指令程序
+                    _GenInst(insts, terminates, left, difpoints[0] - 1, padding + 1, flag | FLAG_CALAND);
+                    for (i = 1; i < difpoints.Count; i++)
+                    {
+                        // 中间结果从辅助栈中取出来，恢复现场
+                        InstHelper.AddInst(insts, "MRD");
+                        // 依次生成下一组
+                        _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding + 1, flag | FLAG_CALAND);
+                    }
+                    // 最后一次用到辅助栈，所以直接弹出
+                    InstHelper.AddInst(insts, "MPP");
+                    // 生成最后一组
+                    _GenInst(insts, terminates, difpoints[i - 1], right, padding + 1, flag | FLAG_CALAND);
+                }
             }
         }
         /// <summary>
@@ -370,19 +397,23 @@ namespace SamSoarII.Extend.Utility
                 }
                 if (uend >= start && expr[uend] == '|')
                 {
-                    // 先计算或运算符前的部分
-                    _GenInst(insts, expr, start, uend - 2);
-                    // 将或运算符前的部分和后面进行或运算
-                    _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_CALOR);
-                    // 需要和前面或运算时
-                    if ((flag&FLAG_CALOR) != 0)
+                    // 如果前面需要与合并，可以拆掉括号逐一运算
+                    if ((flag & FLAG_CALOR) != 0)
                     {
-                        InstHelper.AddInst(insts, "ORB");
+                        _GenInst(insts, expr, start, uend - 2, FLAG_CALOR);
+                        _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_CALOR);
                     }
-                    // 需要和前面与运算时
-                    if ((flag & FLAG_CALAND) != 0)
+                    else
                     {
-                        InstHelper.AddInst(insts, "ANDB");
+                        // 先计算或运算符前的部分
+                        _GenInst(insts, expr, start, uend - 2);
+                        // 将或运算符前的部分和后面进行或运算
+                        _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_CALOR);
+                        // 需要和前面与运算时
+                        if ((flag & FLAG_CALAND) != 0)
+                        {
+                            InstHelper.AddInst(insts, "ANDB");
+                        }
                     }
                     return;
                 }
@@ -400,19 +431,23 @@ namespace SamSoarII.Extend.Utility
                 }
                 if (uend >= start && expr[uend] == '&')
                 {
-                    // 先计算与运算符前的部分
-                    _GenInst(insts, expr, start, uend - 2, FLAG_HASOR);
-                    // 将与运算符前的部分和后面进行与运算
-                    _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_HASAND | FLAG_CALAND);
-                    // 需要和前面或运算时
-                    if ((flag & FLAG_CALOR) != 0)
-                    {
-                        InstHelper.AddInst(insts, "ORB");
-                    }
-                    // 需要和前面与运算时
+                    // 如果前面需要与合并，可以拆掉括号逐一运算
                     if ((flag & FLAG_CALAND) != 0)
                     {
-                        InstHelper.AddInst(insts, "ANDB");
+                        _GenInst(insts, expr, start, uend - 2, FLAG_HASOR | FLAG_CALAND);
+                        _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_HASAND | FLAG_CALAND);
+                    }
+                    else
+                    {
+                        // 先计算与运算符前的部分
+                        _GenInst(insts, expr, start, uend - 2, FLAG_HASOR);
+                        // 将与运算符前的部分和后面进行与运算
+                        _GenInst(insts, expr, uend + 1, end, FLAG_HASOR | FLAG_HASAND | FLAG_CALAND);
+                        // 需要和前面或运算时
+                        if ((flag & FLAG_CALOR) != 0)
+                        {
+                            InstHelper.AddInst(insts, "ORB");
+                        }
                     }
                     return;
                 }
@@ -560,7 +595,9 @@ namespace SamSoarII.Extend.Utility
         /// <summary>
         /// 每条指令对应的辅助栈的长度
         /// </summary>
-        private static int[] instMStackCount;
+        //private static int[] instMStackCount;
+        
+        
 
         /// <summary>
         /// 将PLC指令列表指定区间内转换为表达式（未考虑辅助栈）
