@@ -1060,9 +1060,18 @@ namespace SamSoarII.AppMain
                 projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
             }
         }
-        public void CompileProject()
+        public int DownloadProject()
         {
-            //_projectModel.Compile();
+            if (!CheckFuncBlock(false))
+            {
+                return DownloadHelper.DOWNLOAD_FUNCBLOCK_ERROR;
+            }
+            if (!CheckLadder(false))
+            {
+                return DownloadHelper.DOWNLOAD_LADDER_ERROR;
+            }
+            GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
+            return 0;
         }
         public int SimulateProject()
         {

@@ -1011,10 +1011,11 @@ namespace SamSoarII.AppMain.Project
             string sectionsLDFile = String.Format(@"{0:s}\downg\sections.ld", currentPath);
             string outputElfFile = String.Format(@"{0:s}\downc.elf", currentPath);
             string outputBinFile = String.Format(@"{0:s}\downc.bin", currentPath);
-            string aaMapFile = String.Format(@"{0:s}\aa.map", currentPath);
-            plclibAFile = String.Format(@"{0:s}\{1:s}", currentPath, plclibAFile);
+            string aaMapFile = String.Format(@"{0:s}\downg\aa.map", currentPath);
+            plclibAFile = String.Format(@"{0:s}\downg\{1:s}", currentPath, plclibAFile);
             // 生成梯形图的c语言
             StreamWriter sw = new StreamWriter(ladderCFile);
+            /*
             ModbusTableViewModel mtvmodel = pmodel.MTVModel;
             ModbusTableModel[] mtmodels = mtvmodel.Models.ToArray();
             for (int i = 0; i < mtmodels.Count(); i++)
@@ -1033,16 +1034,26 @@ namespace SamSoarII.AppMain.Project
                 }
                 sw.Write("};");
             }
+            */
             InstHelper.InstToDownCode(sw, nets.ToArray());
             sw.Close();
-            // 生成用户函数的c语言
-            sw = new StreamWriter(funcBlockCFile);
-            sw.Write("#include \"downf.h\"\r\n");
+            // 生成用户函数的头文件
+            sw = new StreamWriter(funcBlockHFile);
+            sw.Write("#include <stdint.h>\n");
+            sw.Write("typedef int32_t _BIT;\n");
+            sw.Write("typedef int16_t _WORD;\n");
+            sw.Write("typedef int32_t D_WORD;\n");
+            sw.Write("typedef float _FLOAT;\n");
             GenerateCHeader(pmodel.LibFuncBlock, sw);
             foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
             {
                 GenerateCHeader(fbvmodel, sw);
             }
+            sw.Close();
+            // 生成用户函数的c语言
+            sw = new StreamWriter(funcBlockCFile);
+            sw.Write("#include \"downf.h\"\n");
+            sw.Write("#include <math.h>\n");
             GenerateCCode(pmodel.LibFuncBlock, sw);
             foreach (FuncBlockViewModel fbvmodel in pmodel.FuncBlocks)
             {
@@ -1055,11 +1066,11 @@ namespace SamSoarII.AppMain.Project
                 = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc", 
                     currentPath);
             cmd.StartInfo.Arguments
-                = String.Format("{0:s} {1:s} {2:s} " +
+                = String.Format("\"{0:s}\" \"{1:s}\" \"{2:s}\" " +
                 "-o {3:s} -mcpu=cortex-m3 -mthumb -munaligned-access -std=gnu11 -O2 " +
                 "-fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fsingle-precision-constant -nostartfiles " +
                 "-Wl,-Map,\"{8:s}\" -Wl,--whole-archive \"{7:s}\" -Wl,--no-whole-archive -T \"{4:s}\" -T \"{5:s}\" -T \"{6:s}\" -L\"ldscripts\" " +
-                "-Xlinker -gc-sections --specs=nano.specs -L \"./ \"",
+                "-Xlinker -gc-sections --specs=nano.specs -L \"./\"",
                     downlibOFile, ladderCFile, funcBlockCFile, outputElfFile,
                     memLDFile, libsLDFile, sectionsLDFile, 
                     plclibAFile, aaMapFile);
@@ -1069,8 +1080,10 @@ namespace SamSoarII.AppMain.Project
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
+            cmd = new Process();
             cmd.StartInfo.FileName
-                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-objcopy");
+                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-objcopy",
+                    currentPath);
             cmd.StartInfo.Arguments
                 = String.Format("-O binary {0:s} {1:s}", 
                     outputElfFile, outputBinFile);

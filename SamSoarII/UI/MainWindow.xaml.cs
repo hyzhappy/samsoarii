@@ -145,6 +145,7 @@ namespace SamSoarII.AppMain.UI
         {
             TreeViewGrid.Children.Clear();
         }
+
         #region Event handler
         private void Click_zh_Hans(object sender, RoutedEventArgs e)
         {
@@ -597,12 +598,28 @@ namespace SamSoarII.AppMain.UI
 
         private void DownloadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-
+            if (_interactionFacade != null
+             && _interactionFacade.ProjectLoaded)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
 
         private void UploadCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-
+            if (_interactionFacade != null
+             && _interactionFacade.ProjectLoaded)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
 
         private void SimulateCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -960,22 +977,7 @@ namespace SamSoarII.AppMain.UI
                 _interactionFacade.SaveAsProject(saveFileDialog.FileName);
             }
         }
-
-        private void OnCompileCommandExecute(object sender, RoutedEventArgs e)
-        {
-            _interactionFacade.CompileProject();
-        }
-
-        private void OnDownloadCommandExecute(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OnUploadCommandExecute(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        
         private void OnMonitorCommandExecute(object sender, RoutedEventArgs e)
         {
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
@@ -1179,10 +1181,15 @@ namespace SamSoarII.AppMain.UI
         {
             Application.Current.Shutdown();
         }
+        
+        private void OnUploadCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
 
         private void OnDownloadCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-
+            _interactionFacade.DownloadProject();
         }
         
         #endregion

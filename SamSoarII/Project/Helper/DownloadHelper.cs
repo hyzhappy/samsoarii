@@ -23,6 +23,9 @@ namespace SamSoarII.AppMain.Project
 
     public class DownloadHelper
     {
+        public const int DOWNLOAD_LADDER_ERROR = 0x01;
+        public const int DOWNLOAD_FUNCBLOCK_ERROR = 0x02;
+
         public const int OPTION_PROGRAM = 0x01;
         public const int OPTION_COMMENT = 0x02;
         public const int OPTION_INITIALIZE = 0x04;
