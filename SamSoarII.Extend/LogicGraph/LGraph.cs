@@ -211,6 +211,10 @@ namespace SamSoarII.Extend.LogicGraph
             return false;
         }
         /// <summary>
+        /// 记录访问路径中的点的标记数据
+        /// </summary>
+        static private int[,] btflag;
+        /// <summary>
         /// 检查是否混联错误
         /// </summary>
         /// <returns>是否存在混联错误</returns>
@@ -224,6 +228,7 @@ namespace SamSoarII.Extend.LogicGraph
         /// </detail>
         public bool CheckFusionCircuit()
         {
+            btflag = new int[vertexs.Count(), 4];
             // 枚举每个点作为环的原点
             foreach (LGVertex lgv1 in vertexs)
             {
@@ -272,8 +277,11 @@ namespace SamSoarII.Extend.LogicGraph
                             lgv2[2]--;
                     }
                 }
+                // 初始化访问标记
+                for (int i = 0; i < vertexs.Count(); i++)
+                    for (int j = 0; j < 4; j++)
+                        btflag[i, j] = 0;
                 // 调用内部的判断方法
-                //Console.Write("start {0:d}\n", lgv1.Id);
                 if (!_CheckFusionCircuit(lgv1, lgv1))
                     return true;
             }
@@ -357,7 +365,7 @@ namespace SamSoarII.Extend.LogicGraph
         /// <param name="lgvs"> 环的原点</param>
         /// <returns> 是否存在非法环</returns>
         private bool _CheckFusionCircuit(LGVertex lgv, LGVertex lgvs)
-        {
+        { 
             // 下一个节点的标记3
             int _lgvn3 = lgv.Id == lgvs.Id ? 0 : lgv[3] + lgv.BackEdges.Count - lgv.Edges.Count;
             //Console.Write("check {0:d} {1:d} {2:d}\n", lgv.Id, lgv[3], _lgvn3);
@@ -365,6 +373,28 @@ namespace SamSoarII.Extend.LogicGraph
             foreach (LGEdge lgen in lgv.Edges)
             {
                 LGVertex lgvn = lgen.Destination;
+                /*
+                 * 若访问到该点的路径，和之前访问到该点的路径重合
+                 * 则放弃对该点的分析
+                 */
+                bool isnet = false;
+                for (int i = 0; i < 4; i++)
+                {
+                    // 判断两条路径是否重合（不包含当前点）
+                    if ((btflag[lgv.Id-1, i] & btflag[lgvn.Id-1, i]) != 0)
+                    {
+                        isnet = true;
+                        break;
+                    }
+                    // 判断当前点是否在之前的路径中
+                    if (lgv.Id-1 >= i*32 && lgv.Id-1 < (i+1)*32
+                     && (btflag[lgvn.Id-1, i] & (1<<((lgv.Id-1)&31))) != 0)
+                    {
+                        isnet = true;
+                        break;
+                    }
+                }
+                if (isnet) continue;
                 /*
                  * 若该点未被访问的情况下
                  * 访问该点，作相应的标记
@@ -374,6 +404,11 @@ namespace SamSoarII.Extend.LogicGraph
                     lgvn[1]++;
                     //lgvn[2] = lgvn.BackEdges.Count - lgvs.Edges.Count;
                     lgvn[3] = _lgvn3;
+                    if (lgv.Id != lgvs.Id)
+                    {
+                        int p = (lgv.Id-1) >> 5;
+                        btflag[lgvn.Id-1, p] = btflag[lgv.Id-1, p] | (1<<((lgv.Id-1)&31));
+                    }
                     //Console.Write("visit1 {0:d} {1:d}\n", lgvn.Id, lgvn[2]);
                     if (!_CheckFusionCircuit(lgvn, lgvs))
                         return false;

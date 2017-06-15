@@ -43,3 +43,7 @@ Modbus表格注释：
 		...
 单个表格注释
 	[Number][Comment Size][Comment]
+	
+工程资源管理器：
+	0xfa [Package Size(Low, High)]
+		[XML Text]

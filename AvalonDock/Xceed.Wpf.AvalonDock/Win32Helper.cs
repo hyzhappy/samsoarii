@@ -23,10 +23,17 @@ using System.Windows;
 
 namespace Xceed.Wpf.AvalonDock
 {
-    internal static class Win32Helper
+    public static class Win32Helper
     {
+        [DllImport("user32.dll", EntryPoint = "CreateWindow", CharSet = CharSet.Unicode)]
+        static public extern IntPtr CreateWindow(
+            string lpszClassName, string lpszWindowName,
+            int style, int x, int y, int width, int height,
+            IntPtr hwndParent, IntPtr hMenu, IntPtr hInst,
+            [MarshalAs(UnmanagedType.AsAny)] object pvParam);
+
         [DllImport("user32.dll", EntryPoint = "CreateWindowEx", CharSet = CharSet.Unicode)]
-        internal static extern IntPtr CreateWindowEx(int dwExStyle,
+        static public extern IntPtr CreateWindowEx(int dwExStyle,
                                                       string lpszClassName,
                                                       string lpszWindowName,
                                                       int style,
@@ -36,7 +43,7 @@ namespace Xceed.Wpf.AvalonDock
                                                       IntPtr hMenu,
                                                       IntPtr hInst,
                                                       [MarshalAs(UnmanagedType.AsAny)] object pvParam);
-        internal const int
+        public const int
               WS_CHILD = 0x40000000,
               WS_VISIBLE = 0x10000000,
               WS_VSCROLL = 0x00200000,
@@ -51,7 +58,7 @@ namespace Xceed.Wpf.AvalonDock
         /// SetWindowPos Flags
         /// </summary>
         [Flags()]
-        internal enum SetWindowPosFlags : uint
+        public enum SetWindowPosFlags : uint
         {
             /// <summary>If the calling thread and the thread that owns the window are attached to different input queues,
             /// the system posts the request to the thread that owns the window. This prevents the calling thread from
@@ -114,13 +121,13 @@ namespace Xceed.Wpf.AvalonDock
         /// <summary>
         ///     Special window handles
         /// </summary>
-        internal static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-        internal static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
-        internal static readonly IntPtr HWND_TOP = new IntPtr(0);
-        internal static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        public static readonly IntPtr HWND_TOP = new IntPtr(0);
+        public static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
 
         [StructLayout(LayoutKind.Sequential)]
-        internal class WINDOWPOS
+        public class WINDOWPOS
         {
             public IntPtr hwnd;
             public IntPtr hwndInsertAfter;
@@ -133,63 +140,63 @@ namespace Xceed.Wpf.AvalonDock
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        internal static extern bool IsChild(IntPtr hWndParent, IntPtr hwnd);
+        public static extern bool IsChild(IntPtr hWndParent, IntPtr hwnd);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr SetFocus(IntPtr hWnd);
+        public static extern IntPtr SetFocus(IntPtr hWnd);
 
-        internal const int WM_WINDOWPOSCHANGED = 0x0047;
-        internal const int WM_WINDOWPOSCHANGING = 0x0046;
-        internal const int WM_NCMOUSEMOVE = 0xa0;
-        internal const int WM_NCLBUTTONDOWN = 0xA1;
-        internal const int WM_NCLBUTTONUP = 0xA2;
-        internal const int WM_NCLBUTTONDBLCLK = 0xA3;
-        internal const int WM_NCRBUTTONDOWN = 0xA4;
-        internal const int WM_NCRBUTTONUP = 0xA5;
-        internal const int WM_CAPTURECHANGED = 0x0215;
-        internal const int WM_EXITSIZEMOVE = 0x0232;
-        internal const int WM_ENTERSIZEMOVE = 0x0231;
-        internal const int WM_MOVE = 0x0003;
-        internal const int WM_MOVING = 0x0216;
-        internal const int WM_KILLFOCUS = 0x0008;
-        internal const int WM_SETFOCUS = 0x0007;
-        internal const int WM_ACTIVATE = 0x0006;
-        internal const int WM_NCHITTEST = 0x0084;
-        internal const int WM_INITMENUPOPUP = 0x0117;
-        internal const int WM_KEYDOWN = 0x0100;
-        internal const int WM_KEYUP = 0x0101;
+        public const int WM_WINDOWPOSCHANGED = 0x0047;
+        public const int WM_WINDOWPOSCHANGING = 0x0046;
+        public const int WM_NCMOUSEMOVE = 0xa0;
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int WM_NCLBUTTONUP = 0xA2;
+        public const int WM_NCLBUTTONDBLCLK = 0xA3;
+        public const int WM_NCRBUTTONDOWN = 0xA4;
+        public const int WM_NCRBUTTONUP = 0xA5;
+        public const int WM_CAPTURECHANGED = 0x0215;
+        public const int WM_EXITSIZEMOVE = 0x0232;
+        public const int WM_ENTERSIZEMOVE = 0x0231;
+        public const int WM_MOVE = 0x0003;
+        public const int WM_MOVING = 0x0216;
+        public const int WM_KILLFOCUS = 0x0008;
+        public const int WM_SETFOCUS = 0x0007;
+        public const int WM_ACTIVATE = 0x0006;
+        public const int WM_NCHITTEST = 0x0084;
+        public const int WM_INITMENUPOPUP = 0x0117;
+        public const int WM_KEYDOWN = 0x0100;
+        public const int WM_KEYUP = 0x0101;
 
-        internal const int WA_INACTIVE = 0x0000;
+        public const int WA_INACTIVE = 0x0000;
 
-        internal const int WM_SYSCOMMAND = 0x0112;
+        public const int WM_SYSCOMMAND = 0x0112;
         // These are the wParam of WM_SYSCOMMAND
-        internal const int SC_MAXIMIZE = 0xF030;
-        internal const int SC_RESTORE = 0xF120;
+        public const int SC_MAXIMIZE = 0xF030;
+        public const int SC_RESTORE = 0xF120;
 
-        internal const int
+        public const int
             WM_CREATE = 0x0001;
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr SetActiveWindow(IntPtr hWnd);
 
         [DllImport("user32.dll", EntryPoint = "DestroyWindow", CharSet = CharSet.Unicode)]
-        internal static extern bool DestroyWindow(IntPtr hwnd);
+        public static extern bool DestroyWindow(IntPtr hwnd);
 
-        internal const int HT_CAPTION = 0x2;
+        public const int HT_CAPTION = 0x2;
 
         [DllImportAttribute("user32.dll")]
-        internal static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+        public static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
         [DllImportAttribute("user32.dll")]
-        internal static extern int PostMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+        public static extern int PostMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
 
         [DllImport("user32.dll")]
         static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
         [DllImport("user32.dll")]
-        internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
         // Hook Types  
         public enum HookType : int
@@ -232,7 +239,7 @@ namespace Xceed.Wpf.AvalonDock
             int code, IntPtr wParam, IntPtr lParam);
 
         [Serializable, StructLayout(LayoutKind.Sequential)]
-        internal struct RECT
+        public struct RECT
         {
             public int Left;
             public int Top; 
@@ -266,13 +273,13 @@ namespace Xceed.Wpf.AvalonDock
             #endregion
         }
 
-        internal static RECT GetClientRect(IntPtr hWnd)
+        public static RECT GetClientRect(IntPtr hWnd)
         {
             RECT result = new RECT();
             GetClientRect(hWnd, out result);
             return result;
         }
-        internal static RECT GetWindowRect(IntPtr hWnd)
+        public static RECT GetWindowRect(IntPtr hWnd)
         {
             RECT result = new RECT();
             GetWindowRect(hWnd, out result);
@@ -280,16 +287,16 @@ namespace Xceed.Wpf.AvalonDock
         }
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetTopWindow(IntPtr hWnd);
+        public static extern IntPtr GetTopWindow(IntPtr hWnd);
 
-        internal const uint GW_HWNDNEXT = 2;
-        internal const uint GW_HWNDPREV = 3;
+        public const uint GW_HWNDNEXT = 2;
+        public const uint GW_HWNDPREV = 3;
 
 
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
+        public static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
 
-        internal enum GetWindow_Cmd : uint
+        public enum GetWindow_Cmd : uint
         {
             GW_HWNDFIRST = 0,
             GW_HWNDLAST = 1,
@@ -300,7 +307,7 @@ namespace Xceed.Wpf.AvalonDock
             GW_ENABLEDPOPUP = 6
         } 
 
-        internal static int MakeLParam(int LoWord, int HiWord)
+        public static int MakeLParam(int LoWord, int HiWord)
         {
 
           //System.Diagnostics.Trace.WriteLine("LoWord: " + LoWord2(((HiWord << 16) |
@@ -310,31 +317,31 @@ namespace Xceed.Wpf.AvalonDock
         }
 
 
-        internal const int WM_MOUSEMOVE = 0x200;
-        internal const int WM_LBUTTONDOWN = 0x201;
-        internal const int WM_LBUTTONUP = 0x202;
-        internal const int WM_LBUTTONDBLCLK = 0x203;
-        internal const int WM_RBUTTONDOWN = 0x204;
-        internal const int WM_RBUTTONUP = 0x205;
-        internal const int WM_RBUTTONDBLCLK = 0x206;
-        internal const int WM_MBUTTONDOWN = 0x207;
-        internal const int WM_MBUTTONUP = 0x208;
-        internal const int WM_MBUTTONDBLCLK = 0x209;
-        internal const int WM_MOUSEWHEEL = 0x20A;
-        internal const int WM_MOUSEHWHEEL = 0x20E;
+        public const int WM_MOUSEMOVE = 0x200;
+        public const int WM_LBUTTONDOWN = 0x201;
+        public const int WM_LBUTTONUP = 0x202;
+        public const int WM_LBUTTONDBLCLK = 0x203;
+        public const int WM_RBUTTONDOWN = 0x204;
+        public const int WM_RBUTTONUP = 0x205;
+        public const int WM_RBUTTONDBLCLK = 0x206;
+        public const int WM_MBUTTONDOWN = 0x207;
+        public const int WM_MBUTTONUP = 0x208;
+        public const int WM_MBUTTONDBLCLK = 0x209;
+        public const int WM_MOUSEWHEEL = 0x20A;
+        public const int WM_MOUSEHWHEEL = 0x20E;
 
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetCursorPos(ref Win32Point pt);
+        public static extern bool GetCursorPos(ref Win32Point pt);
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct Win32Point
+        public struct Win32Point
         {
             public Int32 X;
             public Int32 Y;
         };
-        internal static Point GetMousePosition()
+        public static Point GetMousePosition()
         {
             Win32Point w32Mouse = new Win32Point();
             GetCursorPos(ref w32Mouse);
@@ -344,23 +351,23 @@ namespace Xceed.Wpf.AvalonDock
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool IsWindowVisible(IntPtr hWnd);
+        public static extern bool IsWindowVisible(IntPtr hWnd);
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool IsWindowEnabled(IntPtr hWnd);
+        public static extern bool IsWindowEnabled(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetFocus();
+        public static extern IntPtr GetFocus();
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool BringWindowToTop(IntPtr hWnd);
+        public static extern bool BringWindowToTop(IntPtr hWnd);
 
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+        public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
-        internal static extern IntPtr GetParent(IntPtr hWnd);
+        public static extern IntPtr GetParent(IntPtr hWnd);
 
         /// <summary>
         /// Changes an attribute of the specified window. The function also sets the 32-bit (long) value at the specified offset into the extra window memory.

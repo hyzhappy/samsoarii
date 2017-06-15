@@ -47,8 +47,6 @@
         <CommandBinding x:Uid="CommandBinding_27" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" CanExecute="OnInstShortCutOpenCommandCanExecute"></CommandBinding>
         <CommandBinding x:Uid="InsertRowCommand" x:Name="InsertRowCommand" Command="{x:Static app:GlobalCommand.InsertRowCommand}"></CommandBinding>
         <CommandBinding x:Uid="DeleteRowCommand" x:Name="DeleteRowCommand" Command="{x:Static app:GlobalCommand.DeleteRowCommand}"></CommandBinding>
-        <!-- Build Command -->
-        <CommandBinding x:Uid="CommandBinding_28" Command="{x:Static app:GlobalCommand.CompileCommand}" Executed="OnCompileCommandExecute" CanExecute="CompileCommandCanExecute"></CommandBinding>
         <!-- Tool Command-->
         <CommandBinding x:Uid="CommandBinding_29" Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
         <CommandBinding x:Uid="CheckLadderCommand" x:Name="CheckLadderCommand" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></CommandBinding>
@@ -247,12 +245,12 @@
                 <MenuItem x:Uid="MenuItem_32" Header="{x:Static properties:Resources.MainWindow_Property_Proj}" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
             </MenuItem>
             <MenuItem x:Uid="MenuItem_33" Header="{x:Static properties:Resources.MainWindow_Tool}" Margin="0,-5,0,0">
-                <MenuItem x:Uid="MenuItem_34" Header="{x:Static properties:Resources.MainWindow_Upload}">
+                <MenuItem x:Uid="MenuItem_34" Header="{x:Static properties:Resources.MainWindow_Upload}" Command="{x:Static app:GlobalCommand.UploadCommand}">
                     <MenuItem.Icon>
                         <Image x:Uid="Image_10" Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Uid="MenuItem_35" Header="{x:Static properties:Resources.MainWindow_Download}">
+                <MenuItem x:Uid="MenuItem_35" Header="{x:Static properties:Resources.MainWindow_Download}" Command="{x:Static app:GlobalCommand.DownloadCommand}">
                     <MenuItem.Icon>
                         <Image x:Uid="Image_11" Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
@@ -316,9 +314,6 @@
                 </Button>
             </ToolBar>
             <ToolBar x:Uid="ToolBar_3">
-                <Button x:Uid="Button_10" ToolTip="{x:Static properties:Resources.MainWindow_Compile}" Command="{x:Static app:GlobalCommand.CompileCommand}" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_22" Source="/Resources/Image/Compile.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
-                </Button>
                 <Button x:Uid="Button_11" ToolTip="{x:Static properties:Resources.MainWindow_Download}" Command="{x:Static app:GlobalCommand.DownloadCommand}" Height="24" Width="24" Margin="0,0,0,16">
                     <Image x:Uid="Image_23" Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>

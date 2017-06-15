@@ -97,6 +97,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
             InvalidateMeasure();
             UpdateWindowPos();
             Trace.WriteLine("LayoutAutoHideWindowControl.Show()");
+
         }
 
         internal void Hide()
@@ -158,7 +159,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
             {
                 if (_internalHost_ContentRendered)
                 {
-                    Win32Helper.SetWindowPos(_internalHwndSource.Handle, Win32Helper.HWND_TOP, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize);
+                    Win32Helper.SetWindowPos(_internalHwndSource.Handle, Win32Helper.HWND_TOPMOST, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize);
                 }
             }
             return base.WndProc(hwnd, msg, wParam, lParam, ref handled);

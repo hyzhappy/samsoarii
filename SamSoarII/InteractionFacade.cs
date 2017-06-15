@@ -1125,9 +1125,26 @@ namespace SamSoarII.AppMain
                 projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
             }
         }
-        public void CompileProject()
+        public int DownloadProject()
         {
-            //_projectModel.Compile();
+            if (!CheckFuncBlock(false))
+            {
+                return DownloadHelper.DOWNLOAD_FUNCBLOCK_ERROR;
+            }
+            if (!CheckLadder(false))
+            {
+                return DownloadHelper.DOWNLOAD_LADDER_ERROR;
+            }
+            //GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
+            DownloadHelper.Write(_projectModel,
+                DownloadHelper.OPTION_PROGRAM | DownloadHelper.OPTION_COMMENT);
+            return 0;
+        }
+        public int UploadProject()
+        {
+            UploadHelper.Read(ref _projectModel);
+            LoadProject(String.Format(@"{0:s}\upload.xml", Environment.CurrentDirectory));
+            return 0;
         }
         public int SimulateProject()
         {
