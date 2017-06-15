@@ -342,6 +342,8 @@ namespace SamSoarII.Extend.FuncBlockModel
         /// <param name="newchild">新的子节点</param>
         public virtual void AddChildren(FuncBlock newchild)
         {
+            if (newchild.IndexEnd <= newchild.IndexStart)
+                return;
             // 可注释的元素
             IFuncBlock_IsCommentable fbic = null;
             // 函数头元素
