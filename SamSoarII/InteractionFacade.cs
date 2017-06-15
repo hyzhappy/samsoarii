@@ -21,6 +21,8 @@ using SamSoarII.Extend.Utility;
 using SamSoarII.UserInterface;
 using SamSoarII.Simulation.UI.Breakpoint;
 using System.Threading;
+using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace SamSoarII.AppMain
 {
@@ -142,7 +144,7 @@ namespace SamSoarII.AppMain
         {
             CheckLadder(true);
         }
-        public bool CheckLadder(bool showreport = false)
+        public void CheckLadderWork(LoadingWindowHandle handle, bool showreport,ref bool result)
         {
             List<ErrorReportElement> weinsts = new List<ErrorReportElement>();
             IEnumerable<ErrorReportElement> _weinsts = null;
@@ -168,7 +170,7 @@ namespace SamSoarII.AppMain
             }
             int ecount = 0;
             int wcount = 0;
-            bool result = false;
+            
             foreach (ErrorReportElement inst in weinsts)
             {
                 switch (inst.Status)
@@ -191,22 +193,28 @@ namespace SamSoarII.AppMain
                     if (showreport || !result)
                     {
                         if (App.CultureIsZH_CH())
-                            MessageBox.Show(
-                                String.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                                    ecount, wcount));
+                            ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                                    ecount, wcount),handle);
+                            //MessageBox.Show(
+                            //    String.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                            //        ecount, wcount));
                         else
                         {
-                            MessageBox.Show(
-                                String.Format("There are {0} errors and {1} warnings in the program.",
-                                    ecount, wcount));
-                            
+                            ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
+                                    ecount, wcount),handle);
+                            //MessageBox.Show(
+                            //    string.Format("There are {0} errors and {1} warnings in the program.",
+                            //        ecount, wcount));
                         }
                     }
                 }
                 else
                 {
                     if (showreport)
-                        MessageBox.Show(Properties.Resources.Program_Correct);
+                        ShowMessage(Properties.Resources.Program_Correct, handle);
+                        //MessageBox.Show(Properties.Resources.Program_Correct);
+                    else
+                        handle.Abort();
                     result = true;
                 }
                 if (!result)
@@ -221,9 +229,11 @@ namespace SamSoarII.AppMain
             else if (errorMessage.Error == ErrorType.Empty)
             {
                 if (App.CultureIsZH_CH())
-                    MessageBox.Show(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber));
+                    ShowMessage(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber), handle);
+                    //MessageBox.Show(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber));
                 else
-                    MessageBox.Show(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber));
+                    ShowMessage(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber), handle);
+                    //MessageBox.Show(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber));
                 result = false;
             }
             else
@@ -233,29 +243,54 @@ namespace SamSoarII.AppMain
                 CurrentLadder.SelectionRect.Y = errorMessage.RefNetworks.Last().ErrorModels.First().Y;
                 CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
                 CurrentLadder.VScrollToRect(errorMessage.RefNetworks.First().NetworkNumber, CurrentLadder.SelectionRect.Y);
+                result = false;
                 switch (errorMessage.Error)
                 {
                     case ErrorType.Open:
-                        MessageBox.Show(Properties.Resources.Open_Error);
+                        ShowMessage(Properties.Resources.Open_Error, handle);
+                        //MessageBox.Show(Properties.Resources.Open_Error);
                         break;
                     case ErrorType.Short:
-                        MessageBox.Show(Properties.Resources.Short_Error);
+                        ShowMessage(Properties.Resources.Short_Error, handle);
+                        //MessageBox.Show(Properties.Resources.Short_Error);
                         break;
                     case ErrorType.SelfLoop:
-                        MessageBox.Show(Properties.Resources.Selfloop_Error);
+                        ShowMessage(Properties.Resources.Selfloop_Error, handle);
+                        //MessageBox.Show(Properties.Resources.Selfloop_Error);
                         break;
                     case ErrorType.HybridLink:
-                        MessageBox.Show(Properties.Resources.HybridLink_Error);
+                        ShowMessage(Properties.Resources.HybridLink_Error, handle);
+                        //MessageBox.Show(Properties.Resources.HybridLink_Error);
                         break;
                     case ErrorType.Special:
-                        MessageBox.Show(Properties.Resources.Special_Instruction_Error);
+                        ShowMessage(Properties.Resources.Special_Instruction_Error, handle);
+                        //MessageBox.Show(Properties.Resources.Special_Instruction_Error);
                         break;
                     default:
                         break;
                 }
-                result = false;
+            }
+            handle.Completed = true;
+        }
+        public bool CheckLadder(bool showreport = false)
+        {
+            bool result = false;
+            LoadingWindowHandle handle = new LoadingWindowHandle("梯形图检测中...");
+            MainWindow.Dispatcher.Invoke(() =>
+            {
+                handle.Start();
+                CheckLadderWork(handle, showreport,ref result);
+            });
+            while (!handle.Completed)
+            {
+                Thread.Sleep(10);
             }
             return result;
+        }
+        private void ShowMessage(string message,LoadingWindowHandle handle)
+        {
+            handle.Abort();
+            MessageBox.Show(message);
         }
         private void CheckLadderCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -269,13 +304,8 @@ namespace SamSoarII.AppMain
         {
             CheckFuncBlock(true);
         }
-        public bool CheckFuncBlock(bool showreport = false)
+        private void CheckFuncBlockWork(LoadingWindowHandle handle,bool showreport,ref bool result)
         {
-            bool result = true;
-            if (_projectModel.FuncBlocks.Count() == 0)
-            {
-                return result;
-            }
             List<string> cfiles = new List<string>();
             List<string> ofiles = new List<string>();
             List<FuncBlockViewModel> fbvmodels = new List<FuncBlockViewModel>();
@@ -434,18 +464,42 @@ namespace SamSoarII.AppMain
             {
                 if (ecount == 0 && wcount == 0)
                 {
-                    MessageBox.Show(Properties.Resources.Function_Block_Correct);
+                    ShowMessage(Properties.Resources.Function_Block_Correct,handle);
+                    //MessageBox.Show(Properties.Resources.Function_Block_Correct);
                 }
                 else
                 {
-                    if(App.CultureIsZH_CH())
-                        MessageBox.Show(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount));
+                    if (App.CultureIsZH_CH())
+                        ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle);
+                        //MessageBox.Show(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount));
                     else
-                        MessageBox.Show(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount));
+                        ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle);
+                        //MessageBox.Show(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount));
                     _erwindow.Mode = ErrorReportWindow.MODE_FUNC;
                     _erwindow.Update(eweles);
                     _mainWindow.LACErrorList.Show();
                 }
+            }
+            else
+                handle.Abort();
+            handle.Completed = true;
+        }
+        public bool CheckFuncBlock(bool showreport = false)
+        {
+            bool result = true;
+            if (_projectModel.FuncBlocks.Count() == 0)
+            {
+                return result;
+            }
+            LoadingWindowHandle handle = new LoadingWindowHandle("函数块检测中...");
+            MainWindow.Dispatcher.Invoke(() =>
+            {
+                handle.Start();
+                CheckFuncBlockWork(handle, showreport, ref result);
+            });
+            while (!handle.Completed)
+            {
+                Thread.Sleep(10);
             }
             return result;
         }
@@ -1012,21 +1066,17 @@ namespace SamSoarII.AppMain
             xdoc.Save(fileName);
             _projectModel.IsModify = false;
         }
-        public bool LoadProject(string fileName)
+        private void LoadProjectWork(LoadingWindowHandle handle)
         {
             MainWindow.ResetDock();
             if (_projectModel != null)
-            {
                 _projectModel.autoSavedManager.Abort();
-            }
-            _projectModel = ProjectHelper.LoadProject(fileName, new ProjectModel(String.Empty));
+            _projectModel = ProjectHelper.LoadProject(ProjectFullFileName, new ProjectModel(String.Empty));
             _projectModel.IFacade = this;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
             if (GlobalSetting.IsSavedByTime)
-            {
                 _projectModel.autoSavedManager.Start();
-            }
-            XDocument xdoc = XDocument.Load(fileName);
+            XDocument xdoc = XDocument.Load(ProjectFullFileName);
             XElement xele_r = xdoc.Element("Root");
             XElement xele_rtv = xele_r.Element("ProjectTreeView");
             InstructionCommentManager.UpdateAllComment();
@@ -1046,10 +1096,25 @@ namespace SamSoarII.AppMain
             CurrentLadder = _projectModel.MainRoutine;
             _mainWindow.SetProjectTreeView(_projectTreeView);
             _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
-            ProjectFullFileName = fileName;
             _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
             UpdateRefNetworksBrief(_projectModel);
             ProjectFileManager.Update(_projectModel.ProjectName, ProjectFullFileName);
+            handle.Abort();
+            handle.Completed = true;
+        }
+        public bool LoadProject(string fileName)
+        {
+            ProjectFullFileName = fileName;
+            LoadingWindowHandle handle = new LoadingWindowHandle("工程加载中...");
+            MainWindow.Dispatcher.Invoke(() =>
+            {
+                handle.Start();
+                LoadProjectWork(handle);
+            });
+            while (!handle.Completed)
+            {
+                Thread.Sleep(10);
+            }
             return true;
         }
         private void UpdateRefNetworksBrief(ProjectModel projectModel)

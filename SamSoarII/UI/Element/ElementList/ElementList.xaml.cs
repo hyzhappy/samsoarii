@@ -527,7 +527,8 @@ namespace SamSoarII.AppMain.UI
                     mappedModels = new List<TextBlock>(valueCommentAlias.MappedModels);
                     foreach (var model in mappedModels)
                     {
-                        if (model.Text == e.MappedValueModel.ToString())
+                        var index = e.MappedValueModel.ToString().LastIndexOf("(I=");
+                        if (model.Text.Contains(e.MappedValueModel.ToString().Substring(0, index)))
                         {
                             mappedModels.Remove(model);
                             break;
@@ -548,31 +549,20 @@ namespace SamSoarII.AppMain.UI
         }
         private static void ClearMappedModels()
         {
-            List<TextBlock> mappedModels;
-            foreach (var item in _elementCollection.Where(x => { return x.MappedModels.Count > 1; }))
-            {
-                item.MappedModels.Clear();
-                mappedModels = new List<TextBlock>(item.MappedModels);
-                TextBlock textblock4 = new TextBlock();
-                textblock4.Text = (new VerticalLineViewModel()).ToString();
-                mappedModels.Add(textblock4);
-                item.MappedModels = mappedModels;
-            }
+            foreach (var item in _elementCollection.Where(x => { return x.MappedModels.Count > 0; }))
+                item.MappedModels = new List<TextBlock>();
         }
         private static void RefreshMappedModels()
         {
             foreach (var item in _elementCollection)
             {
                 if (InstructionCommentManager.ValueRelatedModel.ContainsKey(item.Name))
-                {
                     RefreshMappedModelsByItem(item);
-                }
             }
         }
         private static void RefreshMappedModelsByItem(ValueCommentAlias item)
         {
-            item.MappedModels.Clear();
-            List<TextBlock> mappedModels = new List<TextBlock>(item.MappedModels);
+            List<TextBlock> mappedModels = new List<TextBlock>();
             IEnumerable<BaseViewModel> models = InstructionCommentManager.ValueRelatedModel[item.Name].Where(x => { return x.NetWorkNum != -1; });
             if (models.Count() > 0)
             {
@@ -585,15 +575,8 @@ namespace SamSoarII.AppMain.UI
                     textblock.Text = model.ToString();
                     mappedModels.Add(textblock);
                 }
-                item.MappedModels = mappedModels;
             }
-            else
-            {
-                TextBlock textblock = new TextBlock();
-                textblock.Text = (new VerticalLineViewModel()).ToString();
-                mappedModels.Add(textblock);
-                item.MappedModels = mappedModels;
-            }
+            item.MappedModels = mappedModels;
         }
         public static void ValueAliasManager_ValueAliasChanged(ValueAliasChangedEventArgs e)
         {

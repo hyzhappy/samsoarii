@@ -111,9 +111,7 @@ namespace SamSoarII.LadderInstViewModel
                         MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.RemoveLast,oldvalueString, viewmodel));
                     }
                     else
-                    {
                         MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Remove, oldvalueString, viewmodel));
-                    }
                 }
                 if (newvalueString != string.Empty)
                 {

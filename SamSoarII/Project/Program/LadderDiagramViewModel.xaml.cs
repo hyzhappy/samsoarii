@@ -194,7 +194,7 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             }
         }
-        private SelectRect _selectRect = new SelectRect();
+        private SelectRect _selectRect;
         private LadderNetworkViewModel _selectStartNetwork;
         public LadderNetworkViewModel SelectStartNetwork
         {
@@ -354,6 +354,7 @@ namespace SamSoarII.AppMain.Project
         public LadderDiagramViewModel(string name, ProjectModel _parent)
         {
             InitializeComponent();
+            _selectRect = new SelectRect();
             InitializeInstructionNameAndToolTips();
             _projectModel = _parent;
             ProgramName = name;
