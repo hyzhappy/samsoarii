@@ -9,16 +9,31 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="480">
     <Grid x:Uid="Grid_1">
-        <StackPanel x:Uid="StackPanel_1" Margin="20,20,0,0">
-            <TextBlock x:Uid="TextBlock_1" FontSize="20" Text="{x:Static properties:Resources.Timed_Save_Settings}"></TextBlock>
-            <StackPanel x:Uid="StackPanel_2" Margin="0,10,0,5" Orientation="Horizontal">
-                <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
-                <TextBlock x:Uid="TextBlock_2" FontSize="16" Text="{x:Static properties:Resources.Timed_Save}"></TextBlock>
-            </StackPanel>
-            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                <usr:RangeTextBox x:Uid="timespantextbox" x:Name="timespantextbox" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" LowRange="1" TopRange="20" DefaultValue="-1"></usr:RangeTextBox>
-                <TextBlock x:Uid="TextBlock_3" Margin="5,0,0,0" FontSize="16" Text="{x:Static properties:Resources.Minute}"></TextBlock>
-            </StackPanel>
+        <StackPanel x:Uid="StackPanel_1" Margin="20,20,20,20">
+            <GroupBox x:Uid="GroupBox_1" Header="{x:Static properties:Resources.Timed_Save_Settings}">
+                <StackPanel x:Uid="StackPanel_4" Margin="10,0,0,10">
+                    <StackPanel x:Uid="StackPanel_2" Margin="0,10,0,5" Orientation="Horizontal">
+                        <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
+                        <TextBlock x:Uid="TextBlock_2" FontSize="16" Text="{x:Static properties:Resources.Timed_Save}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                        <usr:RangeTextBox x:Uid="timespantextbox" x:Name="timespantextbox" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" LowRange="1" TopRange="20" DefaultValue="-1"></usr:RangeTextBox>
+                        <TextBlock x:Uid="TextBlock_3" Margin="5,0,0,0" FontSize="16" Text="{x:Static properties:Resources.Minute}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox x:Uid="GroupBox_2" Header="定时更新PLC指令设置">
+                <StackPanel x:Uid="StackPanel_5" Margin="10,0,0,10">
+                    <StackPanel x:Uid="StackPanel_6" Margin="0,10,0,5" Orientation="Horizontal">
+                        <CheckBox x:Uid="CheckBox_2" x:Name="CB_Inst" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
+                        <TextBlock x:Uid="TextBlock_3" FontSize="16" Text="定时更新"></TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
+                        <usr:RangeTextBox x:Uid="RangeTextBox_2" x:Name="TB_Inst" IsEnabled="{Binding ElementName=CB_Inst,Path=IsChecked}" LowRange="1" TopRange="20" DefaultValue="-1"></usr:RangeTextBox>
+                        <TextBlock x:Uid="TextBlock_3" Margin="5,0,0,0" FontSize="16" Text="秒"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </Grid>
 </UserControl>

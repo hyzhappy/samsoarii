@@ -34,17 +34,22 @@ namespace SamSoarII.AppMain.Project
         public const int STATUS_WARNING = 0x04;
         public const int STATUS_ERROR = 0x05;
         public int Status { get; private set; }
-
+        
         private LadderNetworkViewModel lnvmodel;
-
         public LadderNetworkViewModel LNVModel
         {
             get { return this.lnvmodel; }
         }
+        
+        private bool ismodified;
+        public bool IsModified
+        {
+            get { return this.ismodified; }
+        }
 
         private LadderChart lchart;
 
-        private LGraph lgraph;
+        private LadderGraph lgraph;
 
         private List<PLCOriginInst> insts;
 
@@ -97,6 +102,7 @@ namespace SamSoarII.AppMain.Project
 
         public void Update()
         {
+            ismodified = false;
             int rowid = 0;
             RowDefinition rdef;
             NetworkHeader.Text = String.Format("Network {0:d}", lnvmodel?.NetworkNumber);
@@ -245,12 +251,14 @@ namespace SamSoarII.AppMain.Project
 
         private void OnElementChanged(object sender, LadderElementChangedArgs e)
         {
-            Update();
+            //Update();
+            ismodified = true;
         }
 
         private void OnVerticalLineChanged(object sender, LadderElementChangedArgs e)
         {
-            Update();
+            //Update();
+            ismodified = true;
         }
         
         #region Cursor

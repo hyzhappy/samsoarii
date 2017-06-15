@@ -110,6 +110,8 @@ namespace SamSoarII.AppMain
         }
         public static bool IsSavedByTime { get; set; }
         public static int SaveTimeSpan { get; set; }
+        public static bool IsInstByTime { get; set; }
+        public static int InstTimeSpan { get; set; }
         public static bool IsOpenLSetting { get; set; }
         public static string LanagArea { get; set; }
         public static XElement CreateXELementBySetting()
@@ -127,6 +129,8 @@ namespace SamSoarII.AppMain
             rootNode.Add(new XElement("_B", _B));
             rootNode.Add(new XElement("IsSavedByTime", IsSavedByTime));
             rootNode.Add(new XElement("SaveTimeSpan", SaveTimeSpan));
+            rootNode.Add(new XElement("IsInstByTime", IsInstByTime));
+            rootNode.Add(new XElement("InstTimeSpan", InstTimeSpan));
             rootNode.Add(new XElement("IsOpenLSetting", IsOpenLSetting));
             rootNode.Add(new XElement("LanagArea", LanagArea));
             XElement xele_font = new XElement("Font");
@@ -239,6 +243,17 @@ namespace SamSoarII.AppMain
             {
                 IsSavedByTime = false;
                 SaveTimeSpan = 1;
+            }
+            try
+            {
+                IsInstByTime = bool.Parse(rootNode.Element("IsInstByTime").Value);
+                InstTimeSpan = int.Parse(rootNode.Element("InstTimeSpan").Value);
+                
+            }
+            catch (Exception)
+            {
+                IsInstByTime = true;
+                InstTimeSpan = 10;
             }
             try
             {

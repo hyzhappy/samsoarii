@@ -998,10 +998,25 @@ namespace SamSoarII.AppMain
         
         public void CreateProject(string name, string fullFileName)
         {
+            if (_projectModel != null)
+            {
+                if (_projectModel.AutoInstManager != null
+                 && _projectModel.AutoInstManager.IsAlive)
+                {
+                    _projectModel.AutoInstManager.Aborted += (sender, e) =>
+                    {
+                        _projectModel.AutoInstManager = null;
+                        CreateProject(name, fullFileName);
+                    };
+                    _projectModel.AutoInstManager.Abort();
+                    return;
+                }
+            }
             MainWindow.ResetDock();
             _projectModel = new ProjectModel(name);
             _projectModel.IFacade = this;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
+            _projectModel.AutoInstManager = new AutoInstManager(this);
             if (GlobalSetting.IsSavedByTime)
             {
                 _projectModel.autoSavedManager.Start();
@@ -1028,9 +1043,21 @@ namespace SamSoarII.AppMain
             ProjectFullFileName = fullFileName;
             _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
             UpdateRefNetworksBrief(_projectModel);
+            _projectModel.AutoInstManager.Start();
         }
         public void CloseCurrentProject()
         {
+            if (_projectModel.AutoInstManager != null
+             && _projectModel.AutoInstManager.IsAlive)
+            {
+                _projectModel.AutoInstManager.Aborted += (sender, e) =>
+                {
+                    _projectModel.AutoInstManager = null;
+                    CloseCurrentProject();
+                };
+                _projectModel.AutoInstManager.Abort();
+                return;
+            }
             MainWindow.ResetDock();
             _projectTreeView.TabItemOpened -= OnTabOpened;
             _projectTreeView.PTVHandle += OnGotPTVHandle;
@@ -1068,12 +1095,27 @@ namespace SamSoarII.AppMain
         }
         private void LoadProjectWork(LoadingWindowHandle handle)
         {
+            if (_projectModel != null)
+            {
+                if (_projectModel.AutoInstManager != null
+                 && _projectModel.AutoInstManager.IsAlive)
+                {
+                    _projectModel.AutoInstManager.Aborted += (sender, e) =>
+                    {
+                        _projectModel.AutoInstManager = null;
+                        LoadProjectWork(handle);
+                    };
+                    _projectModel.AutoInstManager.Abort();
+                    return;
+                }
+            }
             MainWindow.ResetDock();
             if (_projectModel != null)
                 _projectModel.autoSavedManager.Abort();
             _projectModel = ProjectHelper.LoadProject(ProjectFullFileName, new ProjectModel(String.Empty));
             _projectModel.IFacade = this;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
+            _projectModel.AutoInstManager = new AutoInstManager(this);
             if (GlobalSetting.IsSavedByTime)
                 _projectModel.autoSavedManager.Start();
             XDocument xdoc = XDocument.Load(ProjectFullFileName);
@@ -1099,6 +1141,7 @@ namespace SamSoarII.AppMain
             _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
             UpdateRefNetworksBrief(_projectModel);
             ProjectFileManager.Update(_projectModel.ProjectName, ProjectFullFileName);
+            _projectModel.AutoInstManager.Start();
             handle.Abort();
             handle.Completed = true;
         }

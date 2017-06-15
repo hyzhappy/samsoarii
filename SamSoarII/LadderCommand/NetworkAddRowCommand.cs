@@ -42,7 +42,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 vline.Y++;
                 _network.ReplaceVerticalLine(vline);
             }
-            _network.INVModel.Setup(_network);
+            //_network.INVModel.Setup(_network);
             // 将梯形图光标移到新生成的行的头部
             _network.AcquireSelectRect();
             LadderDiagramViewModel ldvmodel = _network.LDVModel;
@@ -79,7 +79,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 vline.Y--;
                 _network.ReplaceVerticalLine(vline);
             }
-            _network.INVModel.Setup(_network);
+            //_network.INVModel.Setup(_network);
             // 将梯形图光标移到删除的行的位置
             _network.AcquireSelectRect();
             LadderDiagramViewModel ldvmodel = _network.LDVModel;

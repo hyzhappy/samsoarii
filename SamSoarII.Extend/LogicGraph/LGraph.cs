@@ -19,7 +19,7 @@ using SamSoarII.Extend.Utility;
 
 namespace SamSoarII.Extend.LogicGraph
 {
-    public class LGraph
+    public class LadderGraph
     {
         /// <summary>
         /// 内部成员变量
@@ -35,7 +35,7 @@ namespace SamSoarII.Extend.LogicGraph
         /// <summary>
         /// 初始化
         /// </summary>
-        public LGraph(LadderChart lchart, int size)
+        public LadderGraph(LadderChart lchart, int size)
         {
             this.lchart = lchart;
             vertexs = new List<LGVertex>();
@@ -46,7 +46,7 @@ namespace SamSoarII.Extend.LogicGraph
             for (int i = 1; i <= size; i++)
                 vertexs.Add(new LGVertex(i));
         }
-        public LGraph()
+        public LadderGraph()
         {
             this.lchart = null;
             vertexs = new List<LGVertex>();

@@ -111,7 +111,7 @@ namespace SamSoarII.Simulation.UI
         private SimulateModel _root;
 
         private LadderChart _lchart;
-        private LGraph _lgraph;
+        private LadderGraph _lgraph;
         private List<PLCInstruction> _plcinsts;
 
         private SortedDictionary<IntPoint, SimuViewBaseModel> _elements;

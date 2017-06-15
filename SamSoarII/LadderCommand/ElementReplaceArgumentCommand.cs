@@ -47,7 +47,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 bvmodel.AcceptNewValues(pstring_new, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             }
-            lnvmodel.INVModel.Setup(lnvmodel);
+            //lnvmodel.INVModel.Setup(lnvmodel);
             // 导航到修改参数的元件
             lnvmodel.AcquireSelectRect();
             LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
@@ -86,7 +86,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 bvmodel.AcceptNewValues(pstring_old, PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
             }
-            lnvmodel.INVModel.Setup(lnvmodel);
+            //lnvmodel.INVModel.Setup(lnvmodel);
             // 导航到修改参数的元件
             lnvmodel.AcquireSelectRect();
             LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
