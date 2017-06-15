@@ -56,7 +56,7 @@ namespace SamSoarII.AppMain.Project
         static private List<byte> odata 
             = new List<byte>();
         /// <summary> 压缩为rar包的数据 </summary>
-        static private List<byte> edata 
+        static private List<byte> edata
             = new List<byte>();
         /// <summary> 软元件表 </summary>
         static private List<IValueModel> regs

@@ -247,6 +247,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
+      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
+      <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamSoarII.HelpDocument\SamSoarII.HelpDocument.csproj">
       <Project>{932DAF07-5116-44DF-9091-BD4CDC7CD01E}</Project>
       <Name>SamSoarII.HelpDocument</Name>
@@ -264,6 +268,7 @@
       <Name>SamSoarII.ValueModel</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -107,6 +107,12 @@ namespace SamSoarII.AppMain.UI
                 FuncBlockViewModel fbvmodel = (FuncBlockViewModel)item;
                 fbvmodel.CodeTextBox.Focus();
             }
+            if (item.IsFloat)
+            {
+                LayoutFloatingWindowControl fwctrl = item.FloatControl;
+                fwctrl.Focus();
+                return;
+            }
             if (!TabItemCollection.Contains(item))
             {
                 TabItemCollection.Add(item);
@@ -131,12 +137,6 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
-                    if (item.IsFloat)
-                    {
-                        LayoutFloatingWindowControl fwctrl = item.FloatControl;
-                        fwctrl.Focus();
-                        return;
-                    }
                     ldoc.Content = item;
                 }
                 ldoc.IsActiveChanged += OnActiveChanged;
@@ -178,6 +178,7 @@ namespace SamSoarII.AppMain.UI
                 {
                     LayoutFloatingWindowControl fwctrl = item.FloatControl;
                     fwctrl.Close();
+                    item.IsFloat = false;
                 }
                 else
                 {
