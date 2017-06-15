@@ -8,15 +8,15 @@
         Title="我是进度条窗口" Height="120" Width="400">
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="*"/>
-            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Uid="TB_Message" x:Name="TB_Message"
+        <TextBlock x:Name="TB_Message"
                    Grid.Row="0" Grid.Column="0"
                    Margin="16,8,0,0" FontSize="16">
             少女搞事中。。。
         </TextBlock>
-        <ProgressBar x:Uid="PB_Prograss" x:Name="PB_Prograss"
+        <ProgressBar x:Name="PB_Prograss"
                      Grid.Row="1" Grid.Column="0"
                      Margin="12,12,12,12">
         </ProgressBar>

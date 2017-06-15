@@ -115,8 +115,8 @@ namespace SamSoarII.Extend.Utility
                     insts.Add(inst);
                 }
                 // 每个NETWORK结束后弹出最后的栈内容
-                if (net2.Insts.Count() > 1)
-                    insts.Add(new PLCInstruction("POP"));
+                //if (net2.Insts.Count() > 1)
+                //    insts.Add(new PLCInstruction("POP"));
                 net1 = net2;
             }
             stackTop = 0;

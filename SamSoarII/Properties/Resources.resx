@@ -1641,4 +1641,13 @@
   <data name="FMOVD_Inst" xml:space="preserve">
     <value>multicast(DWord)</value>
   </data>
+  <data name="Project_Load" xml:space="preserve">
+    <value>Project Loading ...</value>
+  </data>
+  <data name="Funcblock_Check" xml:space="preserve">
+    <value>Funcblock is being Checked ...</value>
+  </data>
+  <data name="LadderDiagram_check" xml:space="preserve">
+    <value>LadderDiagram is being Checked ...</value>
+  </data>
 </root>

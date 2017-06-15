@@ -452,7 +452,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
                     IntPtr wRestore = new IntPtr( Win32Helper.SC_RESTORE );
                     if( wParam == wMaximize || wParam == wRestore )
                     {
-                      UpdateMaximizedState( wParam == wMaximize );
+                        UpdateMaximizedState( wParam == wMaximize );
                     }
                     break;
             }

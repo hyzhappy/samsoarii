@@ -275,7 +275,7 @@ namespace SamSoarII.AppMain
         public bool CheckLadder(bool showreport = false)
         {
             bool result = false;
-            LoadingWindowHandle handle = new LoadingWindowHandle("梯形图检测中...");
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.LadderDiagram_check);
             MainWindow.Dispatcher.Invoke(() =>
             {
                 handle.Start();
@@ -287,6 +287,7 @@ namespace SamSoarII.AppMain
             }
             return result;
         }
+
         private void ShowMessage(string message,LoadingWindowHandle handle)
         {
             handle.Abort();
@@ -491,7 +492,7 @@ namespace SamSoarII.AppMain
             {
                 return result;
             }
-            LoadingWindowHandle handle = new LoadingWindowHandle("函数块检测中...");
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
             MainWindow.Dispatcher.Invoke(() =>
             {
                 handle.Start();
@@ -1105,7 +1106,7 @@ namespace SamSoarII.AppMain
         public bool LoadProject(string fileName)
         {
             ProjectFullFileName = fileName;
-            LoadingWindowHandle handle = new LoadingWindowHandle("工程加载中...");
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
             MainWindow.Dispatcher.Invoke(() =>
             {
                 handle.Start();

@@ -36,6 +36,8 @@ using SamSoarII.Simulation.Core.Event;
 using System.Globalization;
 using SamSoarII.Utility;
 using System.IO.Pipes;
+using System.Windows.Interop;
+using Xceed.Wpf.AvalonDock;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -1344,6 +1346,19 @@ namespace SamSoarII.AppMain.UI
                 }
             }
             serverPipe.Disconnect();
+        }
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //var hnwd = new WindowInteropHelper(this).Handle;
+            //Win32Helper.BringWindowToTop(hnwd);
+            
+            //foreach (var win in DockManager.FloatingWindows)
+            //{
+            //    var hnwd2 = new WindowInteropHelper(win).Handle;
+            //    var hnwd1 = Win32Helper.GetTopWindow(hnwd2);
+            //    Win32Helper.SetWindowPos(hnwd, hnwd1, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreResize | Win32Helper.SetWindowPosFlags.IgnoreZOrder);
+            //}
+            
         }
     }
 }

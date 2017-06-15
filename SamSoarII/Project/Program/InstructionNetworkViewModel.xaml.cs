@@ -132,12 +132,12 @@ namespace SamSoarII.AppMain.Project
                 tberr.Text = String.Format("Network {0:d} 的梯形图存在短路错误！", lnvmodel.NetworkNumber);
                 return;
             }
-            if (lgraph.CheckFusionCircuit())
-            {
-                Status = STATUS_FUSION;
-                tberr.Text = String.Format("Network {0:d} 的梯形图存在混连错误！", lnvmodel.NetworkNumber);
-                return;
-            }
+            //if (lgraph.CheckFusionCircuit())
+            //{
+            //    Status = STATUS_FUSION;
+            //    tberr.Text = String.Format("Network {0:d} 的梯形图存在混连错误！", lnvmodel.NetworkNumber);
+            //    return;
+            //}
             Status = STATUS_ACCEPT;
             List<PLCInstruction> _insts = lgraph.GenInst();
             foreach (PLCInstruction inst in _insts)

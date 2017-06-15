@@ -1204,6 +1204,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Funcblock is being Checked ... 的本地化字符串。
+        /// </summary>
+        public static string Funcblock_Check {
+            get {
+                return ResourceManager.GetString("Funcblock_Check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Funcblocks all correct! 的本地化字符串。
         /// </summary>
         public static string Function_Block_Correct {
@@ -1524,6 +1533,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string LadderDiagram {
             get {
                 return ResourceManager.GetString("LadderDiagram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 LadderDiagram is being Checked ... 的本地化字符串。
+        /// </summary>
+        public static string LadderDiagram_check {
+            get {
+                return ResourceManager.GetString("LadderDiagram_check", resourceCulture);
             }
         }
         
@@ -3684,6 +3702,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Project Loading ... 的本地化字符串。
+        /// </summary>
+        public static string Project_Load {
+            get {
+                return ResourceManager.GetString("Project_Load", resourceCulture);
             }
         }
         

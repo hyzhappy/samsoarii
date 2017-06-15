@@ -1641,4 +1641,13 @@
   <data name="FMOVD_Inst" xml:space="preserve">
     <value>双字多点传送</value>
   </data>
+  <data name="Project_Load" xml:space="preserve">
+    <value>工程加载中...</value>
+  </data>
+  <data name="Funcblock_Check" xml:space="preserve">
+    <value>函数块检测中...</value>
+  </data>
+  <data name="LadderDiagram_check" xml:space="preserve">
+    <value>梯形图检测中...</value>
+  </data>
 </root>

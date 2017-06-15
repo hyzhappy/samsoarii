@@ -51,6 +51,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 {
                     List<LadderNetworkViewModel> templist = new List<LadderNetworkViewModel>();
                     templist.Add(network);
+                    InstructionCommentManager.RaiseMappedMessageChangedEvent();
                     return new ErrorMessage(error,templist);
                 }
                 else
@@ -63,6 +64,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             {
                 error = ErrorType.InstPair;
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             return new ErrorMessage(error,null);
         }
         private static ErrorType CheckNetwork(LadderNetworkViewModel ladderNetwork)

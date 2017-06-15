@@ -41,7 +41,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         public BaseViewModel ReplaceElement(BaseViewModel model)
         {
             LadderElements.Add(model);
-            var movedele = Parent.ReplaceElement(model);
+            var movedele = Parent.ReplaceEle(model);
             LadderElements.Remove(movedele);
             return movedele;
         }
@@ -57,12 +57,12 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
             }
             LadderElements.Remove(removedmodel);
-            Parent.RemoveElement(_x,_y);
+            Parent.RemoveEle(_x,_y);
         }
         public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
             LadderVerticalLines.Add(vline);
-            Parent.ReplaceVerticalLine(vline);
+            Parent.ReplaceVLine(vline);
         }
         public void RemoveVerticalLine(int _x, int _y)
         {
@@ -76,7 +76,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
             }
             LadderVerticalLines.Remove(removedvline);
-            Parent.RemoveVerticalLine(_x,_y);
+            Parent.RemoveVLine(_x,_y);
         }
     }
 }

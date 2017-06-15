@@ -672,6 +672,7 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Ladder content modification methods
+        
         public BaseViewModel ReplaceElement(BaseViewModel element)
         {
             BaseViewModel oldele = null;
@@ -736,7 +737,7 @@ namespace SamSoarII.AppMain.Project
                 VerticalLineChanged(this, e);
             }
         }
-
+        
         public void ReplaceBreakpoint(BreakpointRect rect)
         {
             IntPoint p;
@@ -772,6 +773,7 @@ namespace SamSoarII.AppMain.Project
             BreakpointChanged(this, new BreakpointChangedEventArgs(
                 this, rect_old, rect));
         }
+        
         public void RemoveElement(IntPoint pos)
         {
             if (_ladderElements.ContainsKey(pos))
@@ -800,6 +802,7 @@ namespace SamSoarII.AppMain.Project
                 RemoveElement(element.X, element.Y);
             }
         }
+        
         public bool RemoveVerticalLine(IntPoint pos)
         {
             if (_ladderVerticalLines.ContainsKey(pos))
@@ -857,6 +860,52 @@ namespace SamSoarII.AppMain.Project
         {
             if (rect.BVModel == null) return false;
             return RemoveBreakpoint(rect.BVModel.X, rect.BVModel.Y);
+        }
+        #endregion
+
+        #region Element Manipulate only for relocation(more efficiency)
+        public void RemoveVLine(int x, int y)
+        {
+            IntPoint pos = new IntPoint() { X = x, Y = y };
+            if (_ladderVerticalLines.ContainsKey(pos))
+            {
+                LadderCanvas.Children.Remove(_ladderVerticalLines[pos]);
+                _ladderVerticalLines.Remove(pos);
+            }
+        }
+        public void ReplaceVLine(VerticalLineViewModel vline)
+        {
+            IntPoint p = new IntPoint() { X = vline.X, Y = vline.Y };
+            if (!_ladderVerticalLines.ContainsKey(p))
+            {
+                vline.IsCommentMode = _isCommendMode;
+                _ladderVerticalLines.Add(p, vline);
+                LadderCanvas.Children.Add(vline);
+            }
+        }
+        public void RemoveEle(int x, int y)
+        {
+            IntPoint pos = new IntPoint() { X = x, Y = y };
+            if (_ladderElements.ContainsKey(pos))
+            {
+                LadderCanvas.Children.Remove(_ladderElements[pos]);
+                _ladderElements.Remove(pos);
+            }
+        }
+        public BaseViewModel ReplaceEle(BaseViewModel element)
+        {
+            BaseViewModel oldele = null;
+            IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
+            if (_ladderElements.Keys.Contains(p))
+            {
+                oldele = _ladderElements[p];
+                _ladderElements.Remove(p);
+                LadderCanvas.Children.Remove(oldele);
+            }
+            element.IsCommentMode = _isCommendMode;
+            _ladderElements.Add(p, element);
+            LadderCanvas.Children.Add(element);
+            return oldele;
         }
         #endregion
 
