@@ -126,6 +126,7 @@
     <Compile Include="LadderGraphModule\LadderGraphCheckModule.cs" />
     <Compile Include="LadderGraphModule\LadderGraphRelocationModule.cs" />
     <Compile Include="LadderGraphModule\LadderLogicModule.cs" />
+    <Compile Include="Project\AutoInstManager.cs" />
     <Compile Include="Project\AutoSavedManager.cs" />
     <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\Helper\DownloadHelper.cs" />

@@ -26,13 +26,17 @@ namespace SamSoarII.AppMain.UI
             InitializeComponent();
             this._interactionFacade = _interactionFacade;
             timespantextbox.GetTextBox().Text = GlobalSetting.SaveTimeSpan.ToString();
+            TB_Inst.GetTextBox().Text = GlobalSetting.InstTimeSpan.ToString();
             checkbox.IsChecked = GlobalSetting.IsSavedByTime;
+            CB_Inst.IsChecked = GlobalSetting.IsInstByTime;
             OptionDialog.EnsureButtonClick += OptionDialog_EnsureButtonClick;
         }
         private void OptionDialog_EnsureButtonClick(object sender, RoutedEventArgs e)
         {
             GlobalSetting.SaveTimeSpan = int.Parse(timespantextbox.GetTextBox().Text);
+            GlobalSetting.InstTimeSpan = int.Parse(TB_Inst.GetTextBox().Text);
             GlobalSetting.IsSavedByTime = (bool)checkbox.IsChecked;
+            GlobalSetting.IsInstByTime = (bool)CB_Inst.IsChecked;
             if (_interactionFacade.ProjectLoaded && GlobalSetting.IsSavedByTime)
             {
                 _interactionFacade.ProjectModel.autoSavedManager.Start();

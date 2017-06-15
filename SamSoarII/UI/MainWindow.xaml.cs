@@ -923,6 +923,17 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnNewProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (_interactionFacade.ProjectModel != null)
+            {
+                if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Simulate)
+                {
+                    OnSimulateCommandExecute(sender, e);
+                }
+                if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Monitor)
+                {
+                    OnMonitorCommandExecute(sender, e);
+                }
+            }
             CurrentProjectHandle(true, false);
         }
         private void ProjectOpen()
@@ -944,6 +955,17 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnOpenProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (_interactionFacade.ProjectModel != null)
+            {
+                if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Simulate)
+                {
+                    OnSimulateCommandExecute(sender, e);
+                }
+                if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Monitor)
+                {
+                    OnMonitorCommandExecute(sender, e);
+                }
+            }
             CurrentProjectHandle(false, true);
         }
 

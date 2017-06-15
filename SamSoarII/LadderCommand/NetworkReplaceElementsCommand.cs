@@ -89,7 +89,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
-            _network.INVModel.Setup(_network);
+            //_network.INVModel.Setup(_network);
             if (_elements.Count() + _vlines.Count() == 1)
             {
                 // 将梯形图光标移到新生成的单个元件
@@ -137,7 +137,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(oldvline);
             }
-            _network.INVModel.Setup(_network);
+            //_network.INVModel.Setup(_network);
             if (_oldelements.Count() + _oldvlines.Count() == 1)
             {
                 // 将梯形图光标移到新生成的单个元件

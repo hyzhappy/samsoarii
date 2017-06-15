@@ -124,6 +124,14 @@ namespace SamSoarII.AppMain.Project
 
             foreach (InstructionNetworkViewModel invmodel in invmodels)
             {
+                if (invmodel.IsModified)
+                {
+                    invmodel.Dispatcher.Invoke(() =>
+                    {
+                        invmodel.Update();
+                    });
+                }
+
                 stkcount = 0;
                 outcount = 0;
                 if (invmodel.Status == InstructionNetworkViewModel.STATUS_OPEN

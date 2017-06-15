@@ -202,7 +202,7 @@ namespace SamSoarII.Extend.LadderChartModel
         /// <summary>
         /// 生成逻辑图
         /// </summary>
-        public LGraph Generate()
+        public LadderGraph Generate()
         {
             // 初始化元件的ID和相邻线路的信息
             int nodeid = 0;
@@ -231,7 +231,7 @@ namespace SamSoarII.Extend.LadderChartModel
                 }
             }
             // 初始化逻辑图
-            LGraph lgraph = new LGraph(this, LGVCount);
+            LadderGraph lgraph = new LadderGraph(this, LGVCount);
             // 添加边，每个元件对应逻辑图的边
             foreach (LCNode node in nodes)
             {

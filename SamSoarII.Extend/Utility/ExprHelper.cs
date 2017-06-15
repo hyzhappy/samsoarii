@@ -729,10 +729,10 @@ namespace SamSoarII.Extend.Utility
         /// <param name="lgvstart">给定逻辑图起点（默认为空则新建一个）</param>
         /// <param name="lgvend">给定逻辑图终点（默认为空则新建一个）</param>
         /// <returns>输出的逻辑图，带有梯度图绑定</returns>
-        static public LGraph GenLGraph(string expr)
+        static public LadderGraph GenLadderGraph(string expr)
         {
             lgvtop = 0;
-            return _GenLGraph(expr);
+            return _GenLadderGraph(expr);
         }
         /// <summary>
         /// 当前最大的逻辑图节点编号
@@ -746,11 +746,11 @@ namespace SamSoarII.Extend.Utility
         /// <param name="lgvend"></param>
         /// <param name="flag"></param>
         /// <returns></returns>
-        static private LGraph _GenLGraph(string expr, LGVertex lgvstart = null, LGVertex lgvend = null, int flag = 0)
+        static private LadderGraph _GenLadderGraph(string expr, LGVertex lgvstart = null, LGVertex lgvend = null, int flag = 0)
         {
             int estart = 0, eend = expr.Length - 1;
             LadderChart lchart = new LadderChart();
-            LGraph lgraph = new LGraph();
+            LadderGraph lgraph = new LadderGraph();
             lgraph.LChart = lchart;
             // 若起始点未给定则添加
             if (lgvstart == null)
@@ -781,9 +781,9 @@ namespace SamSoarII.Extend.Utility
                 if (uend <= eend && expr[uend] == '|')
                 {
                     // 先生成或运算符前的部分的逻辑图
-                    LGraph lg1 = _GenLGraph(expr.Substring(0, uend), lgvstart, lgvend, flag | FLAG_HASOR);
+                    LadderGraph lg1 = _GenLadderGraph(expr.Substring(0, uend), lgvstart, lgvend, flag | FLAG_HASOR);
                     // 再生成或运算符后的部分的逻辑图
-                    LGraph lg2 = _GenLGraph(expr.Substring(uend + 2), lgvstart, lgvend, flag);
+                    LadderGraph lg2 = _GenLadderGraph(expr.Substring(uend + 2), lgvstart, lgvend, flag);
                     // 合并两个逻辑图
                     lgraph.Vertexs = lg1.Vertexs.Union(lg2.Vertexs).ToList();
                     lgraph.Starts = lg1.Starts;
@@ -968,9 +968,9 @@ namespace SamSoarII.Extend.Utility
                     // 添加中间点
                     LGVertex lgvmidium = new LGVertex(++lgvtop);
                     // 先生成或运算符前的部分的逻辑图
-                    LGraph lg1 = _GenLGraph(expr.Substring(0, uend), lgvstart, lgvmidium, flag | FLAG_HASOR);
+                    LadderGraph lg1 = _GenLadderGraph(expr.Substring(0, uend), lgvstart, lgvmidium, flag | FLAG_HASOR);
                     // 再生成或运算符后的部分的逻辑图
-                    LGraph lg2 = _GenLGraph(expr.Substring(uend + 2), lgvmidium, lgvend, flag);
+                    LadderGraph lg2 = _GenLadderGraph(expr.Substring(uend + 2), lgvmidium, lgvend, flag);
                     // 合并两个逻辑图
                     lgraph.Vertexs = lg1.Vertexs.Union(lg2.Vertexs).ToList();
                     lgraph.Starts = lg1.Starts;
