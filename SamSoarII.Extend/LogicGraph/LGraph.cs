@@ -414,7 +414,7 @@ namespace SamSoarII.Extend.LogicGraph
                         return false;
                 }
                 /*
-                 * 该点访问过一次的情况下
+                 * 该点访问过多次的情况下
                  * 两条路径构成了一个环，判断这个环的方法为以下表达式是否成立
                  *     in(T) - out(S) + sum(in(a) - out(a)) == 0
                  * 其中节点lgvn的 flag2 = in(T) - out(S)，
@@ -422,7 +422,7 @@ namespace SamSoarII.Extend.LogicGraph
                  *     变量_lgvn3的值为 sum(a2)
                  * 所以需要判断in(T) - out(S) + sum(a1) + sum(a2)是否为0
                  */
-                else if (lgvn[1] == 1)
+                else// if (lgvn[1] == 1)
                 {
                     lgvn[1]++;
                     //Console.Write("visit2 {0:d} {1:d} {2:d}\n", lgvn.Id, lgvn[2], lgvn[3]);
@@ -440,6 +440,7 @@ namespace SamSoarII.Extend.LogicGraph
                  * 可得sum(a1) == sum(a2) == sum(a3)
                  * 所以这里需要判断所有的sum是否相等，之前访问时用到的sum(a2)需要存在flag4里
                  */
+                /*
                 else
                 {
                     lgvn[1]++;
@@ -447,6 +448,7 @@ namespace SamSoarII.Extend.LogicGraph
                     if (_lgvn3 != lgvn[3] || lgvn[3] != lgvn[4])
                         return false;
                 }
+                */
             }
             return true;
         }

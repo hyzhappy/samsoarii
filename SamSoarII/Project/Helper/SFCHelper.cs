@@ -15,6 +15,8 @@ namespace SamSoarII.AppMain.Project.Helper
     {
         static private SFCTimerModel[] timers
             = new SFCTimerModel[256];
+        static private SFCStatusModel[] status
+            = new SFCStatusModel[1000];
         
         static public void Initialize(ProjectModel pmodel)
         {
@@ -23,19 +25,45 @@ namespace SamSoarII.AppMain.Project.Helper
                 timers[i] = null;
             }
             Initialize(pmodel.MainRoutine);
-            
         }
+
         static private void Initialize(LadderDiagramViewModel ldvmodel)
         {
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
-                foreach (TONViewModel bvmodel in lnvmodel.GetElements())
+                foreach (BaseViewModel bvmodel in lnvmodel.GetElements())
                 {
-                    IValueModel ivmodel = ((TONModel)(bvmodel.Model)).TimerValue;
-                    if (ivmodel is TVWordValue)
+                    BaseModel bmodel = bvmodel.Model;
+                    if (bmodel == null) continue;
+                    if (bmodel is TONModel)
                     {
-                        int offset = (int)(ivmodel.Index);
-                        // TO BE CONTINUE...
+                        TONModel tmodel = (TONModel)(bmodel);
+                        IValueModel ivmodel = tmodel.TimerValue;
+                        if (ivmodel.IsVariable) continue;
+                        if (ivmodel is TVWordValue)
+                        {
+                            int index = (int)(ivmodel.Index);
+                            timers[index] = new SFCTimerModel(tmodel);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < bmodel.ParaCount; i++)
+                        {
+                            IValueModel ivmodel = bmodel.GetPara(i);
+                            if (ivmodel is SBitValue)
+                            {
+                                int index = (int)(ivmodel.Index);
+                                if (status[index] == null)
+                                {
+                                    status[index] = new SFCStatusModel(ldvmodel);
+                                }
+                                else if (status[index].LDVModel != ldvmodel)
+                                {
+                                    status[index] = new SFCInvalidStatusModel();
+                                }
+                            }
+                        }
                     }
                 }
             }

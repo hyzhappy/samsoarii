@@ -147,6 +147,9 @@
     <Compile Include="Project\Program\LadderNetworkViewModel.xaml.cs">
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Project\Program\SFC\Base\SFCCondTranModel.cs" />
+    <Compile Include="Project\Program\SFC\Base\SFCParallelTranModel.cs" />
+    <Compile Include="Project\Program\SFC\Base\SFCSingleTranModel.cs" />
     <Compile Include="Project\Program\SFC\SFCStatusModel.cs" />
     <Compile Include="Project\Program\SFC\SFCTimerModel.cs" />
     <Compile Include="Project\ProjectFileManager.cs" />
@@ -634,6 +637,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converter\" />
+    <Folder Include="Project\Program\SFC\View\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.zh-Hans.resx" />
