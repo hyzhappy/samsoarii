@@ -129,6 +129,7 @@
     <Compile Include="Project\AutoSavedManager.cs" />
     <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\Helper\DownloadHelper.cs" />
+    <Compile Include="Project\Helper\SFCHelper.cs" />
     <Compile Include="Project\Program\FuncBlockViewModel.xaml.cs">
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
@@ -146,6 +147,8 @@
     <Compile Include="Project\Program\LadderNetworkViewModel.xaml.cs">
       <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Project\Program\SFC\SFCStatusModel.cs" />
+    <Compile Include="Project\Program\SFC\SFCTimerModel.cs" />
     <Compile Include="Project\ProjectFileManager.cs" />
     <Compile Include="Project\Program\ModbusTableViewModel.xaml.cs">
       <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>

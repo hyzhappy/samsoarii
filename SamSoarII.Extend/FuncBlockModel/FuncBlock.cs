@@ -489,6 +489,8 @@ namespace SamSoarII.Extend.FuncBlockModel
         {
             // 括号栈
             Stack<char> bracketstack = new Stack<char>();
+            // 匹配到的左括号
+            char leftbracket = '\0';
             // 当前括号的起点
             int bracketstart = 0;
             // 当前括号的终点
@@ -623,10 +625,11 @@ namespace SamSoarII.Extend.FuncBlockModel
                     case '}':
                         if (comment != null) break;
                         // 不断从括号栈中弹出括号，直到栈内为空，或者找到匹配的括号为止
+                        leftbracket = '\0';
                         while (bracketstack.Count() > 0
-                            && bracketstack.Pop() != '{') ;
+                            && (leftbracket = bracketstack.Pop()) != '{') ;
                         // 最外层括号结尾建立新的局部区域
-                        if (bracketstack.Count() == 0)
+                        if (bracketstack.Count() == 0 && leftbracket == '{')
                         {
                             bracketend = i;
                             child = new FuncBlock_Local(model);
@@ -650,10 +653,11 @@ namespace SamSoarII.Extend.FuncBlockModel
                     case ')':
                         if (comment != null) break;
                         // 不断从括号栈中弹出括号，直到栈内为空，或者找到匹配的括号为止
+                        leftbracket = '\0';
                         while (bracketstack.Count() > 0
-                            && bracketstack.Pop() != '(') ;
+                            && (leftbracket = bracketstack.Pop()) != '(') ;
                         // 检查是否为函数头部
-                        if (this is FuncBlock_Root && bracketstack.Count() == 0)
+                        if (this is FuncBlock_Root && bracketstack.Count() == 0 && leftbracket == '(')
                         {
                             int hstart = dividelabel + 1;
                             int hend = i;
@@ -712,7 +716,7 @@ namespace SamSoarII.Extend.FuncBlockModel
                             }
                         }
                         // 检查是否为for & while循环头部
-                        if (this is FuncBlock_Local && bracketstack.Count() == 0)
+                        if (this is FuncBlock_Local && bracketstack.Count() == 0 && leftbracket == '(')
                         {
                             int hstart = dividelabel + 1;
                             int hend = i;
@@ -791,9 +795,10 @@ namespace SamSoarII.Extend.FuncBlockModel
                         break;
                     case ']':
                         if (comment != null) break;
+                        leftbracket = '\0';
                         // 不断从括号栈中弹出括号，直到栈内为空，或者找到匹配的括号为止
                         while (bracketstack.Count() > 0
-                            && bracketstack.Pop() != '[') ;
+                            && (leftbracket = bracketstack.Pop()) != '[') ;
                         break;
                     // 分号表示一条语句的末尾
                     case ';':
@@ -856,11 +861,6 @@ namespace SamSoarII.Extend.FuncBlockModel
                         break;
                     // 出现斜杠符
                     case '/':
-                        // 如果在括号内则忽略
-                        if (bracketstack.Count() > 0)
-                        {
-                            break;
-                        }
                         // 行注释的开始符(//)
                         if (comment == null)
                         {
@@ -885,11 +885,6 @@ namespace SamSoarII.Extend.FuncBlockModel
                         break;
                     // 出现星符
                     case '*':
-                        // 如果在括号内则忽略
-                        if (bracketstack.Count() > 0)
-                        {
-                            break;
-                        }
                         // 段注释的开始符(/*)
                         if (comment == null)
                         {

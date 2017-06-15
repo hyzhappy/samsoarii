@@ -217,157 +217,169 @@ namespace SamSoarII.Extend.Utility
                     if (term.TPoints[i].enable)
                         term.TPoints[i].PLCUnit.GenInst(insts, flag);
                 }
-                return;
             }
-            // 扩展公共前缀
-            bool allequal = true;                   // 判断所有表达式在当前位是否相等
-            //bool allinside = true;                // 判断当前位是否至少被一个表达式包含
-            List<int> difpoints = new List<int>(); // 分歧点队列
-            int old_padding = padding;
-            int andpos = padding;                  // 这里需要记录最后的与运算符的位置
-            /*
-             * 开始查找下一个分歧点
-             * 注意当前检查的位置超过其中一个表达式的长度时，两个表达式比较时视为相等
-             */
-            while (allequal)
+            else
             {
-                for (i = left+1; i <= right; i++)
+                // 扩展公共前缀
+                bool allequal = true;                  // 判断所有表达式在当前位是否相等
+                //bool allinside = true;               // 判断当前位是否至少被一个表达式包含
+                List<int> difpoints = new List<int>(); // 分歧点队列
+                int old_padding = padding;
+                int andpos = padding;                  // 这里需要记录最后的与运算符的位置
+                /*
+                 * 开始查找下一个分歧点
+                 * 注意当前检查的位置超过其中一个表达式的长度时，两个表达式比较时视为相等
+                */
+                while (allequal)
+                {
+                    for (i = left + 1; i <= right; i++)
+                    {
+                        string expr1 = terminates[i - 1].Expr;
+                        string expr2 = terminates[i].Expr;
+                        if (expr1[padding] != expr2[padding])
+                        {
+                            allequal = false;
+                            break;
+                        }
+                    }
+                    if (allequal == true)
+                        padding++;
+                }
+                // 向前修正前缀末尾为and计算符
+                while (padding > old_padding && terminates[left].Expr[padding] != '&') padding--;
+                // 然后向后查找所有的分歧点
+                for (i = left + 1; i <= right; i++)
                 {
                     string expr1 = terminates[i - 1].Expr;
                     string expr2 = terminates[i].Expr;
-                    if (expr1[padding] != expr2[padding])
+                    /*
+                     * 两个表达式都到达末尾的情况下
+                     * 由于表达式的末尾都是原型不同的常量1，所以无需比较默认相同
+                     */
+                    bool isend1 = !expr1.Substring(padding + 1).Contains('&');
+                    bool isend2 = !expr2.Substring(padding + 1).Contains('&');
+                    if (isend1 && isend2) continue;
+                    // 向后查找直到到达and运算符为止
+                    for (j = padding + 1; j < expr1.Length && j < expr2.Length; j++)
                     {
-                        allequal = false;
-                        break;
+                        if (!expr1[j].Equals(expr2[j])) break;
+                        if (expr1[j] == '&') break;
+                    }
+                    /* 若不相同则为分歧点
+                     * 当下标超过某个表达式的长度时，不视为分歧点
+                     */
+                    if (j < expr1.Length && j < expr2.Length && !expr1[j].Equals(expr2[j]))
+                    {
+                        difpoints.Add(i);
                     }
                 }
-                if (allequal == true)
-                    padding++;
-            }
-            // 向前修正前缀末尾为and计算符
-            while (padding > old_padding && terminates[left].Expr[padding] != '&') padding--;
-            // 然后向后查找所有的分歧点
-            for (i = left+1; i <= right; i++)
-            {
-                string expr1 = terminates[i-1].Expr;
-                string expr2 = terminates[i].Expr;
-                /*
-                 * 两个表达式都到达末尾的情况下
-                 * 由于表达式的末尾都是原型不同的常量1，所以无需比较默认相同
-                 */
-                bool isend1 = !expr1.Substring(padding + 1).Contains('&');
-                bool isend2 = !expr2.Substring(padding + 1).Contains('&');
-                if (isend1 && isend2) continue;
-                // 向后查找直到到达and运算符为止
-                for (j = padding + 1; j < expr1.Length && j < expr2.Length; j++)
+                // CASE 1 : 若未找到新的公共前缀
+                if (old_padding >= padding)
                 {
-                    if (!expr1[j].Equals(expr2[j])) break;
-                    if (expr1[j] == '&') break;
-                }
-                /* 若不相同则为分歧点
-                 * 当下标超过某个表达式的长度时，不视为分歧点
-                 */
-                if (j < expr1.Length && j < expr2.Length && !expr1[j].Equals(expr2[j]))
-                {
-                    difpoints.Add(i);
-                }
-            }
-            // CASE 1 : 若未找到新的公共前缀
-            if (old_padding >= padding)
-            {
-                // 如果不存在分歧点，直接输出所有结果指令
-                if (difpoints.Count() == 0)
-                {
-                    for (i = left; i <= right; i++)
+                    // 如果不存在分歧点，直接输出所有结果指令
+                    if (difpoints.Count() == 0)
                     {
-                        _GenInst(insts, terminates, i, i, padding, flag);
+                        for (i = left; i <= right; i++)
+                        {
+                            _GenInst(insts, terminates, i, i, padding, flag);
+                        }
                     }
-                }
-                else
-                {
-                    // 根据分歧点将所有终点进行划分，然后分别处理
-                    _GenInst(insts, terminates, left, difpoints[0] - 1, padding, flag);
-                    for (i = 1; i < difpoints.Count; i++)
+                    else
                     {
-                        _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding, flag);
+                        // 根据分歧点将所有终点进行划分，然后分别处理
+                        _GenInst(insts, terminates, left, difpoints[0] - 1, padding, flag);
+                        for (i = 1; i < difpoints.Count; i++)
+                        {
+                            _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding, flag);
+                        }
+                        _GenInst(insts, terminates, difpoints[i - 1], right, padding, flag);
                     }
-                    _GenInst(insts, terminates, difpoints[i - 1], right, padding, flag);
+                    // 分割成子块来处理，所以不需要POP
                     return;
                 }
-            }
-            // CASE 2 : 找到新的公共前缀时，需要将前缀内的结果用辅助栈存起来
-            // 根据分歧点将所有终点进行划分，然后分别处理
-            // 并根据分歧点的数量来决定辅助栈的操作
-            else
-            {
-                //_GenInst(insts, terminates[left].Expr, old_padding, padding - 2, flag);
-                /*
-                 * 如果更新的这一段前缀中包含其中一些终点的坐标
-                 * 如果不考虑这些坐标，相应的终点就会被忽略
-                 * 需要分以下步骤来解决这个问题
-                 *      1. 将所有坐标升序排序
-                 *      2. 将这段前缀按照坐标进行分段，然后每一段算出结果后执行终点指令
-                 */
-                // 查询所有符合条件的tpoint
-                List<TPoint> tpoints = new List<TPoint>();
-                for (i = left; i <= right; i++)
-                    foreach (TPoint tp in terminates[i].TPoints)
-                    {
-                        if (tp.ExprIndex >= old_padding && tp.ExprIndex <= padding - 2)
-                            tpoints.Add(tp);
-                    }
-                // 如果存在
-                if (tpoints.Count > 0)
-                {
-                    // 所有找到的坐标进行排序
-                    tpoints.Sort();
-                    // 计算第一个坐标前面的值，并运行对应的第一个终点指令
-                    _GenInst(insts, terminates[left].Expr, old_padding, tpoints[0].ExprIndex, flag);
-                    tpoints[0].PLCUnit.GenInst(insts, flag);
-                    tpoints[0].enable = false;
-                    for (i = 1; i < tpoints.Count; i++)
-                    {
-                        // 依次计算坐标间隔的表达式的值，并执行终点指令
-                        _GenInst(insts, terminates[left].Expr, tpoints[i - 1].ExprIndex + 3, tpoints[i].ExprIndex, flag | FLAG_CALAND);
-                        tpoints[i].PLCUnit.GenInst(insts, flag);
-                        tpoints[i].enable = false;
-                    }
-                    // 计算最后一个坐标后到找到的前缀之间的表达式的值
-                    _GenInst(insts, terminates[left].Expr, tpoints[i - 1].ExprIndex + 3, padding - 2, flag | FLAG_CALAND);
-                }
-                // 如果没有
+                // CASE 2 : 找到新的公共前缀时，需要将前缀内的结果用辅助栈存起来
+                // 根据分歧点将所有终点进行划分，然后分别处理
+                // 并根据分歧点的数量来决定辅助栈的操作
                 else
                 {
-                    // 直接计算当前前缀的表达式
-                    _GenInst(insts, terminates[left].Expr, old_padding, padding - 2, flag);
-                }
-                // 如果不存在分歧点，直接输出所有结果指令
-                if (difpoints.Count() == 0)
-                {
+                    //_GenInst(insts, terminates[left].Expr, old_padding, padding - 2, flag);
+                    /*
+                     * 如果更新的这一段前缀中包含其中一些终点的坐标
+                     * 如果不考虑这些坐标，相应的终点就会被忽略
+                     * 需要分以下步骤来解决这个问题
+                     *      1. 将所有坐标升序排序
+                     *      2. 将这段前缀按照坐标进行分段，然后每一段算出结果后执行终点指令
+                     */
+                    // 查询所有符合条件的tpoint
+                    List<TPoint> tpoints = new List<TPoint>();
                     for (i = left; i <= right; i++)
+                        foreach (TPoint tp in terminates[i].TPoints)
+                        {
+                            if (tp.ExprIndex >= old_padding && tp.ExprIndex <= padding - 2)
+                                tpoints.Add(tp);
+                        }
+                    // 如果存在
+                    if (tpoints.Count > 0)
                     {
-                        _GenInst(insts, terminates, i, i, padding + 1, flag | FLAG_CALAND);
+                        // 所有找到的坐标进行排序
+                        tpoints.Sort();
+                        // 计算第一个坐标前面的值，并运行对应的第一个终点指令
+                        _GenInst(insts, terminates[left].Expr, old_padding, tpoints[0].ExprIndex, flag);
+                        tpoints[0].PLCUnit.GenInst(insts, flag);
+                        tpoints[0].enable = false;
+                        for (i = 1; i < tpoints.Count; i++)
+                        {
+                            // 依次计算坐标间隔的表达式的值，并执行终点指令
+                            _GenInst(insts, terminates[left].Expr, tpoints[i - 1].ExprIndex + 3, tpoints[i].ExprIndex, flag | FLAG_CALAND);
+                            tpoints[i].PLCUnit.GenInst(insts, flag);
+                            tpoints[i].enable = false;
+                        }
+                        // 计算最后一个坐标后到找到的前缀之间的表达式的值
+                        _GenInst(insts, terminates[left].Expr, tpoints[i - 1].ExprIndex + 3, padding - 2, flag | FLAG_CALAND);
+                    }
+                    // 如果没有
+                    else
+                    {
+                        // 直接计算当前前缀的表达式
+                        _GenInst(insts, terminates[left].Expr, old_padding, padding - 2, flag);
+                    }
+                    // 如果不存在分歧点，直接输出所有结果指令
+                    if (difpoints.Count() == 0)
+                    {
+                        for (i = left; i <= right; i++)
+                        {
+                            _GenInst(insts, terminates, i, i, padding + 1, flag | FLAG_CALAND);
+                        }
+                    }
+                    // 以下为涉及到辅助栈的PLC代码生成
+                    else
+                    {
+                        // 将计算结果暂存进辅助栈
+                        InstHelper.AddInst(insts, "MPS");
+                        // 生成第一组终点的PLC指令程序
+                        _GenInst(insts, terminates, left, difpoints[0] - 1, padding + 1, flag | FLAG_CALAND);
+                        for (i = 1; i < difpoints.Count; i++)
+                        {
+                            // 中间结果从辅助栈中取出来，恢复现场
+                            InstHelper.AddInst(insts, "MRD");
+                            // 依次生成下一组
+                            _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding + 1, flag | FLAG_CALAND);
+                        }
+                        // 最后一次用到辅助栈，所以直接弹出
+                        InstHelper.AddInst(insts, "MPP");
+                        // 生成最后一组
+                        _GenInst(insts, terminates, difpoints[i - 1], right, padding + 1, flag | FLAG_CALAND);
                     }
                 }
-                // 以下为涉及到辅助栈的PLC代码生成
-                else
-                {
-                    // 将计算结果暂存进辅助栈
-                    InstHelper.AddInst(insts, "MPS");
-                    // 生成第一组终点的PLC指令程序
-                    _GenInst(insts, terminates, left, difpoints[0] - 1, padding + 1, flag | FLAG_CALAND);
-                    for (i = 1; i < difpoints.Count; i++)
-                    {
-                        // 中间结果从辅助栈中取出来，恢复现场
-                        InstHelper.AddInst(insts, "MRD");
-                        // 依次生成下一组
-                        _GenInst(insts, terminates, difpoints[i - 1], difpoints[i] - 1, padding + 1, flag | FLAG_CALAND);
-                    }
-                    // 最后一次用到辅助栈，所以直接弹出
-                    InstHelper.AddInst(insts, "MPP");
-                    // 生成最后一组
-                    _GenInst(insts, terminates, difpoints[i - 1], right, padding + 1, flag | FLAG_CALAND);
-                }
+            }
+            /*
+             * 前面没有与运算和或运算的链接，这时需要将栈顶弹出
+             * 要注意一些特殊的标志指令，这些指令不涉及到栈的操作
+             */
+            if ((flag & FLAG_CALAND) == 0 && (flag & FLAG_CALOR) == 0
+             && insts.Count() > 0  && !insts.Last().Type.Equals("LBL") && !insts.Last().Type.Equals("NEXT"))
+            {
+                InstHelper.AddInst(insts, "POP");
             }
         }
         /// <summary>
@@ -381,7 +393,7 @@ namespace SamSoarII.Extend.Utility
         static private void _GenInst(List<PLCInstruction> insts, string expr, int start, int end, int flag=0)
         {
             if (start > end) return;
-            Console.WriteLine(expr.Substring(start, end - start + 1));
+            //Console.WriteLine(expr.Substring(start, end - start + 1));
             int bracket = 0;
             // 当前单元的结尾
             int uend = end;
