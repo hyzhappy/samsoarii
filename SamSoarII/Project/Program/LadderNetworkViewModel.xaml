@@ -19,15 +19,15 @@
     <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
         <ui:LadderExpander x:Uid="ladderExpander" x:Name="ladderExpander" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}" IsExpand="True" Margin="-50,0,0,0"/>
         <Grid x:Uid="Grid_1">
-            <Rectangle x:Uid="Rect" x:Name="Rect" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}"/>
-            <StackPanel x:Uid="mainstack" x:Name="mainstack" Margin="0,0,0,20">
+            <Rectangle x:Name="Rect" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}"/>
+            <StackPanel x:Name="mainstack" Margin="0,0,0,20">
                 <StackPanel.Resources>
                     <ContextMenu x:Uid="ContextMenu_1" x:Key="CommentAreaContextMenu" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.Tag}">
                         <MenuItem x:Uid="MenuItem_1" Header="{x:Static properties:Resources.LadderNetwork_Edit_Network_Comment}" Click="OnEditComment"></MenuItem>
                     </ContextMenu>
                 </StackPanel.Resources>
-                <Grid x:Uid="CommentAreaGrid" x:Name="CommentAreaGrid" Background="Transparent">
-                    <Border x:Uid="CommentAreaBorder" x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
+                <Grid x:Name="CommentAreaGrid" Background="Transparent">
+                    <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
                         <Expander x:Uid="CommentAreaExpander" x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
                             <Expander.Header>
                                 <Grid x:Uid="Grid_2" Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
@@ -49,38 +49,38 @@
                             Visibility="{Binding ElementName=ladderExpander,Path=IsExpand,Converter={StaticResource converter}}"
                             Template="{StaticResource ThumbnailButton}" MouseDoubleClick="OnMouseDoubleClick" MouseWheel="OnMouseWheel"/>
                 </Grid>
-                <Grid x:Uid="Grid_3">
-                    <Canvas x:Uid="LadderCanvas" x:Name="LadderCanvas" 
+                <Grid>
+                    <Canvas x:Name="LadderCanvas" 
                         HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
-                        PreviewMouseDown="OnCanvasMouseDown"
+                        PreviewMouseDown="OnCanvasMouseDown" PreviewMouseUp="OnCanvasMouseUp"
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                         <Canvas.ContextMenu>
                             <ContextMenu x:Uid="CM_Edit" x:Name="CM_Edit" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                                <MenuItem x:Uid="MenuItem_2" Header="{x:Static properties:Resources.LadderNetwork_Element_Cut}" Command="ApplicationCommands.Cut"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_3" Header="{x:Static properties:Resources.LadderNetwork_Element_Copy}" Command="ApplicationCommands.Copy"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_4" Header="{x:Static properties:Resources.LadderNetwork_Element_Paste}" Command="ApplicationCommands.Paste"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_5" Header="{x:Static properties:Resources.LadderNetwork_Element_Delete}" Click="OnDeleteElement"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_6" Header="{x:Static properties:Resources.MainWindow_Row_Insert}">
-                                    <MenuItem x:Uid="MenuItem_7" Header="{x:Static properties:Resources.LadderNetwork_Insert_before}" Click="OnAddNewRowBefore"></MenuItem>
-                                    <MenuItem x:Uid="MenuItem_8" Header="{x:Static properties:Resources.LadderNetwork_Insert_After}" Click="OnAddNewRowAfter"></MenuItem>
-                                    <MenuItem x:Uid="MenuItem_9" Header="{x:Static properties:Resources.LadderNetwork_Insert_End}" Click="OnAppendNewRow"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Cut}" Command="ApplicationCommands.Cut"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Copy}" Command="ApplicationCommands.Copy"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Paste}" Command="ApplicationCommands.Paste"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Delete}" Click="OnDeleteElement"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Row_Insert}">
+                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_before}" Click="OnAddNewRowBefore"></MenuItem>
+                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_After}" Click="OnAddNewRowAfter"></MenuItem>
+                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_End}" Click="OnAppendNewRow"></MenuItem>
                                 </MenuItem>
-                                <MenuItem x:Uid="MenuItem_10" Header="{x:Static properties:Resources.MainWindow_Row_Delete}" Click="OnDeleteRow"></MenuItem>
-                                <Separator x:Uid="Separator_1"></Separator>
-                                <MenuItem x:Uid="MenuItem_11" Header="{x:Static properties:Resources.LadderNetwork_Network_Insert}">
-                                    <MenuItem x:Uid="MenuItem_12" Header="{x:Static properties:Resources.LadderNetwork_Insert_before}" Click="OnAddNewNetworkBefore"></MenuItem>
-                                    <MenuItem x:Uid="MenuItem_13" Header="{x:Static properties:Resources.LadderNetwork_Insert_After}" Click="OnAddNewNetworkAfter"></MenuItem>
-                                    <MenuItem x:Uid="MenuItem_14" Header="{x:Static properties:Resources.LadderNetwork_Insert_End}" Click="OnAppendNewNetwork"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Row_Delete}" Click="OnDeleteRow"></MenuItem>
+                                <Separator ></Separator>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Insert}">
+                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_before}" Click="OnAddNewNetworkBefore"></MenuItem>
+                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_After}" Click="OnAddNewNetworkAfter"></MenuItem>
+                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_End}" Click="OnAppendNewNetwork"></MenuItem>
                                 </MenuItem>
-                                <MenuItem x:Uid="MenuItem_15" Header="{x:Static properties:Resources.LadderNetwork_Network_Delete}" Click="OnRemoveNetwork"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_16" Header="{x:Static properties:Resources.LadderNetwork_Network_Cut}"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_17" Header="{x:Static properties:Resources.LadderNetwork_Network_Copy}"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_18" Header="{x:Static properties:Resources.LadderNetwork_Network_Paste}"></MenuItem>
-                                <Separator x:Uid="Separator_2"></Separator>
-                                <MenuItem x:Uid="MenuItem_19" Header="{x:Static properties:Resources.LadderNetwork_Shield_Network}" IsCheckable="True" IsChecked="{Binding IsMasked}"></MenuItem>
-                                <Separator x:Uid="Separator_3"></Separator>
-                                <MenuItem x:Uid="MenuItem_20" Header="{x:Static properties:Resources.MainWindow_Zoom_In}" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
-                                <MenuItem x:Uid="MenuItem_21" Header="{x:Static properties:Resources.MainWindow_Zoom_Out}" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Delete}" Click="OnRemoveNetwork"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Cut}"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Copy}"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Paste}"></MenuItem>
+                                <Separator/>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Shield_Network}" IsCheckable="True" IsChecked="{Binding IsMasked}"></MenuItem>
+                                <Separator ></Separator>
+                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_In}" Command="{x:Static app:GlobalCommand.ZoomInCommand}"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_Out}" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
                             </ContextMenu>
                         </Canvas.ContextMenu>
                     </Canvas>

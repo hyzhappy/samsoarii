@@ -72,9 +72,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.AvalonDock.resources">
-      <HintPath>\\Mac\Home\Downloads\AvalonDock_2_0_2000\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -361,13 +358,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ColorPicker\ColorPicker.csproj">
-      <Project>{827f8c33-8118-48c7-ab3c-4864298396ad}</Project>
-      <Name>ColorPicker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
       <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
       <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ColorPicker\ColorPicker.csproj">
+      <Project>{827f8c33-8118-48c7-ab3c-4864298396ad}</Project>
+      <Name>ColorPicker</Name>
     </ProjectReference>
     <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
       <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>

@@ -179,7 +179,7 @@ namespace Xceed.Wpf.AvalonDock.Layout
                     if (element.Parent == this)
                         element.Parent = null;
                 }
-            } 
+            }
 
             if (e.NewItems != null && (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace))

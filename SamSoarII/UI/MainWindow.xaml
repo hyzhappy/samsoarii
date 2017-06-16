@@ -12,66 +12,66 @@
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:mon="clr-namespace:SamSoarII.AppMain.UI.Monitor"
         mc:Ignorable="d"
-        Title="SamSoarII" Height="400" Width="600" WindowState="Maximized" PreviewMouseDown="OnMouseDown">
+        Title="SamSoarII" Height="400" Width="600" WindowState="Maximized">
     <Window.CommandBindings>
         <!--File Commands-->
-        <CommandBinding x:Uid="CommandBinding_1" Command="ApplicationCommands.New" Executed="OnNewProjectExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_2" Command="ApplicationCommands.Save" Executed="OnSaveProjectExecute" CanExecute="SaveCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_3" Command="ApplicationCommands.Open" Executed="OnOpenProjectExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_4" Command="ApplicationCommands.SaveAs" Executed="OnSaveAsProjectExecute"  CanExecute="SaveCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_5" Command="ApplicationCommands.Close" Executed="OnProcessExitExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.New" Executed="OnNewProjectExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="OnSaveProjectExecute" CanExecute="SaveCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="OnOpenProjectExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="OnSaveAsProjectExecute"  CanExecute="SaveCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="OnProcessExitExecute"></CommandBinding>
         <!--Edit Commands-->
-        <CommandBinding x:Uid="CommandBinding_6" Command="ApplicationCommands.Undo"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_7" Command="ApplicationCommands.Redo"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_8" Command="ApplicationCommands.Cut"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_9" Command="ApplicationCommands.Copy"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_10" Command="ApplicationCommands.Paste"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_11" Command="ApplicationCommands.Delete"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_12" Command="ApplicationCommands.SelectAll"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Undo"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Redo"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Cut"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Copy"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Paste"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.Delete"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.SelectAll"></CommandBinding>
         <!--View Command-->
-        <CommandBinding x:Uid="CommandBinding_13" Command="{x:Static app:GlobalCommand.ZoomInCommand}" Executed="OnZoomInCommandExecute" CanExecute="ZoomInCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ZoomInCommand}" Executed="OnZoomInCommandExecute" CanExecute="ZoomInCommandCanExecute"></CommandBinding>
         <CommandBinding x:Uid="CommandBinding_14" Command="{x:Static app:GlobalCommand.ZoomOutCommand}" Executed="OnZoomOutCommandExecute" CanExecute="ZoomOutCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_15" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_16" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="ShowMainMonitorCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_17" Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogExecute" CanExecute="ShowCommunicationSettingDialogCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_18" Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" Executed="OnShowErrorListExecute" CanExecute="ShowErrorListCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_19" Command="{x:Static app:GlobalCommand.ShowElemListCommand}" Executed="OnShowElemListExecute" CanExecute="ShowElemListCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_20" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}" Executed="OnShowElemInitExecute" CanExecute="ShowElemInitCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_21" Command="{x:Static app:GlobalCommand.ShowBreakpointCommand}" Executed="OnShowBreakpointExecute" CanExecute="ShowBreakpointCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_22" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"/>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="ShowMainMonitorCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogExecute" CanExecute="ShowCommunicationSettingDialogCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" Executed="OnShowErrorListExecute" CanExecute="ShowErrorListCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowElemListCommand}" Executed="OnShowElemListExecute" CanExecute="ShowElemListCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowElemInitCommand}" Executed="OnShowElemInitExecute" CanExecute="ShowElemInitCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowBreakpointCommand}" Executed="OnShowBreakpointExecute" CanExecute="ShowBreakpointCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"/>
         <!--Project Command-->
-        <CommandBinding x:Uid="CommandBinding_23" Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_24" Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_25" Command="{x:Static app:GlobalCommand.AddNewModbusCommand}" Executed="OnAddNewModbusCommandExecute" CanExecute="AddNewModbusCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_26" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Executed="OnShowPropertyDialogCommandExecute" CanExecute="ShowPropertyDialogCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_27" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" CanExecute="OnInstShortCutOpenCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="InsertRowCommand" x:Name="InsertRowCommand" Command="{x:Static app:GlobalCommand.InsertRowCommand}"></CommandBinding>
-        <CommandBinding x:Uid="DeleteRowCommand" x:Name="DeleteRowCommand" Command="{x:Static app:GlobalCommand.DeleteRowCommand}"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewModbusCommand}" Executed="OnAddNewModbusCommandExecute" CanExecute="AddNewModbusCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Executed="OnShowPropertyDialogCommandExecute" CanExecute="ShowPropertyDialogCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}" CanExecute="OnInstShortCutOpenCommandCanExecute"></CommandBinding>
+        <CommandBinding x:Name="InsertRowCommand" Command="{x:Static app:GlobalCommand.InsertRowCommand}"></CommandBinding>
+        <CommandBinding x:Name="DeleteRowCommand" Command="{x:Static app:GlobalCommand.DeleteRowCommand}"></CommandBinding>
         <!-- Tool Command-->
-        <CommandBinding x:Uid="CommandBinding_29" Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CheckLadderCommand" x:Name="CheckLadderCommand" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></CommandBinding>
-        <CommandBinding x:Uid="CheckFuncBlockCommand" x:Name="CheckFuncBlockCommand" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_30" Command="{x:Static app:GlobalCommand.MonitorCommand}" Executed="OnMonitorCommandExecute" CanExecute="MonitorCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_31" Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_32" Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_33" Command="{x:Static app:GlobalCommand.EditCommand}" Executed="OnEditCommandExecute" CanExecute="EditCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_34" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_35" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_36" Command="{x:Static app:GlobalCommand.LadderModeToggleCommand}" Executed="OnLadderModeToggle" CanExecute="LadderModeCanToggle"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_37" Command="{x:Static app:GlobalCommand.InstModeToggleCommand}" Executed="OnInstModeToggle" CanExecute="InstModeCanToggle"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_38" Command="{x:Static app:GlobalCommand.SimulateCommand}" Executed="OnSimulateCommandExecute" CanExecute="SimulateCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_39" Command="{x:Static app:GlobalCommand.SimuStartCommand}" Executed="OnSimuStartCommandExecute" CanExecute="SimuStartCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_40" Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Executed="OnSimuPauseCommandExecute" CanExecute="SimuPauseCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_41" Command="{x:Static app:GlobalCommand.SimuStopCommand}" Executed="OnSimuStopCommandExecute" CanExecute="SimuStopCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_42" Command="{x:Static app:GlobalCommand.BrpoNowCommand}" Executed="OnBPNowCommandExecute" CanExecute="BPNowCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_43" Command="{x:Static app:GlobalCommand.BrpoStepCommand}" Executed="OnBPStepCommandExecute" CanExecute="BPStepCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_44" Command="{x:Static app:GlobalCommand.BrpoCallCommand}" Executed="OnBPCallCommandExecute" CanExecute="BPCallCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_45" Command="{x:Static app:GlobalCommand.BrpoOutCommand}" Executed="OnBPOutCommandExecute" CanExecute="BPOutCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_46" Command="{x:Static app:GlobalCommand.EleInitializeCommand}" Executed="OnEleInitializeCommandExecute" CanExecute="OnEleInitializeCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_47" Command="{x:Static app:GlobalCommand.EleListOpenCommand}" Executed="OnEleListOpenCommandExecute" CanExecute="OnEleListOpenCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_48" Command="{x:Static hdoc:HelpDocCommand.ClosePage}" Executed="ClosePageExecuteCommand" CanExecute="ClosePageCanExecuteCommand"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_49" Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}" Executed="ScrollToLeftCommandExecute" CanExecute="ScrollToLeftCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_50" Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}" Executed="ScrollToRightCommandExecute" CanExecute="ScrollToRightCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.CloseProjectCommand}" Executed="OnCloseProjectCommand" CanExecute="OnCloseProjectCanExecute"></CommandBinding>
+        <CommandBinding x:Name="CheckLadderCommand" Command="{x:Static app:GlobalCommand.CheckNetworkErrorCommand}"></CommandBinding>
+        <CommandBinding x:Name="CheckFuncBlockCommand" Command="{x:Static app:GlobalCommand.CheckFuncBlockCommand}"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.MonitorCommand}" Executed="OnMonitorCommandExecute" CanExecute="MonitorCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.DownloadCommand}" Executed="OnDownloadCommandExecute" CanExecute="DownloadCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.UploadCommand}" Executed="OnUploadCommandExecute" CanExecute="UploadCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.EditCommand}" Executed="OnEditCommandExecute" CanExecute="EditCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Executed="OnCommentModeToggle" CanExecute="CommentModeCanToggle"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.LadderModeToggleCommand}" Executed="OnLadderModeToggle" CanExecute="LadderModeCanToggle"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.InstModeToggleCommand}" Executed="OnInstModeToggle" CanExecute="InstModeCanToggle"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimulateCommand}" Executed="OnSimulateCommandExecute" CanExecute="SimulateCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimuStartCommand}" Executed="OnSimuStartCommandExecute" CanExecute="SimuStartCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Executed="OnSimuPauseCommandExecute" CanExecute="SimuPauseCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.SimuStopCommand}" Executed="OnSimuStopCommandExecute" CanExecute="SimuStopCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoNowCommand}" Executed="OnBPNowCommandExecute" CanExecute="BPNowCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoStepCommand}" Executed="OnBPStepCommandExecute" CanExecute="BPStepCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoCallCommand}" Executed="OnBPCallCommandExecute" CanExecute="BPCallCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.BrpoOutCommand}" Executed="OnBPOutCommandExecute" CanExecute="BPOutCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.EleInitializeCommand}" Executed="OnEleInitializeCommandExecute" CanExecute="OnEleInitializeCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.EleListOpenCommand}" Executed="OnEleListOpenCommandExecute" CanExecute="OnEleListOpenCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ClosePage}" Executed="ClosePageExecuteCommand" CanExecute="ClosePageCanExecuteCommand"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToLeft}" Executed="ScrollToLeftCommandExecute" CanExecute="ScrollToLeftCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}" Executed="ScrollToRightCommandExecute" CanExecute="ScrollToRightCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
         <ad:BoolToVisibilityConverter x:Uid="ad:BoolToVisibilityConverter_1" x:Key="BoolToVisibilityConverter" />

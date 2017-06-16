@@ -851,12 +851,12 @@ namespace SamSoarII.AppMain.Project
         public void VScrollToRect(int networkNumber, int row)
         {
             double scale = GlobalSetting.LadderScaleY;
-            double offset = scale * (MainBorder.ActualHeight + 20) / 3.6;
+            double offset = scale * (MainBorder.ActualHeight + 20) / 4;
             foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < networkNumber; }))
             {
-                offset += scale * (item.ActualHeight + 20) / 3.035;
+                offset += scale * (item.ActualHeight + 20) / 3.455;
             }
-            offset += scale * (_selectRect.ActualHeight * row + 20) / 2.89;
+            offset += scale * (_selectRect.ActualHeight * row + 20) / 3.41;
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
@@ -1974,7 +1974,6 @@ namespace SamSoarII.AppMain.Project
         {
             EditCommentReact();
         }
-        
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
         {
             currentItem = GetNetworkByMouse();
@@ -1983,12 +1982,7 @@ namespace SamSoarII.AppMain.Project
                 dragItem.Opacity = 1;
             }
             Point _p = e.GetPosition(this);
-            if (_p.X > _actualWidth - 30
-             || _p.Y > _actualHeight - 50)
-            {
-                return;
-            }
-            if(_selectStatus == SelectStatus.SingleSelected)
+            if (_selectStatus == SelectStatus.SingleSelected)
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
@@ -2077,25 +2071,24 @@ namespace SamSoarII.AppMain.Project
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var p1 = e.GetPosition(MainScrollViewer);
-                if ((MainScrollViewer.ViewportHeight - p1.Y) < 35 * GlobalSetting.LadderScaleY)
+                if (MainScrollViewer.ViewportHeight < p1.Y)
                 {
-                    MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + 30 * GlobalSetting.LadderScaleY);
+                    MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + (p1.Y - MainScrollViewer.ViewportHeight) * GlobalSetting.LadderScaleY * 0.2);
                 }
-                else if(p1.Y < 15 * GlobalSetting.LadderScaleY)
+                else if (p1.Y < 0)
                 {
-                    MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset - 30 * GlobalSetting.LadderScaleY);
+                    MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + p1.Y * GlobalSetting.LadderScaleY * 0.2);
                 }
-                else if (p1.X < 15 * GlobalSetting.LadderScaleX)
+                else if (p1.X < 0)
                 {
-                    MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset - 30 * GlobalSetting.LadderScaleX);
+                    MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + p1.X * GlobalSetting.LadderScaleX * 0.8);
                 }
-                else if ((MainScrollViewer.ViewportWidth - p1.X) < 35 * GlobalSetting.LadderScaleX)
+                else if (MainScrollViewer.ViewportWidth < p1.X)
                 {
-                    MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + 30 * GlobalSetting.LadderScaleX);
+                    MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + (p1.X - MainScrollViewer.ViewportWidth) * GlobalSetting.LadderScaleX * 0.8);
                 }
             }
         }
-
         private void OnLadderDiagramMouseUp(object sender, MouseButtonEventArgs e)
         {
             // 如果处于选择模式则关闭
@@ -2103,11 +2096,6 @@ namespace SamSoarII.AppMain.Project
             {
                 SelectionStatus = SelectStatus.MultiSelected;
             }
-        }
-
-        private void OnLadderDiagramLostFocus(object sender, RoutedEventArgs e)
-        {
-            SelectionStatus = SelectStatus.Idle;
         }
 
         private void OnInstructionCursorChanged(object sender, RoutedEventArgs e)
@@ -2286,7 +2274,7 @@ namespace SamSoarII.AppMain.Project
                             {
                                 removednets.Add(net);
                             }
-                            xEle.Add(ProjectHelper.CreateXElemnetByLadderNetwork(net));
+                            xEle.Add(ProjectHelper.CreateXElementByLadderNetwork(net));
                         }
                         if(!copy)
                         {
@@ -2826,7 +2814,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         #endregion
-
+        
         #region network drag(only is isExpand)
         private LadderNetworkViewModel dragItem;
         private LadderNetworkViewModel currentItem;
@@ -2834,6 +2822,7 @@ namespace SamSoarII.AppMain.Project
         {
             this.Focus();
             Keyboard.Focus(this);
+            
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 SelectionStatus = SelectStatus.Idle;

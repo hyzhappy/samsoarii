@@ -22,13 +22,13 @@ namespace SamSoarII.AppMain.Project
             }
             foreach (var net in ldmodel.GetNetworks())
             {
-                var netEle = CreateXElemnetByLadderNetwork(net);
+                var netEle = CreateXElementByLadderNetwork(net);
                 result.Add(netEle);
             }
             return result;
         }
 
-        public static XElement CreateXElemnetByLadderNetwork(LadderNetworkViewModel netmodel)
+        public static XElement CreateXElementByLadderNetwork(LadderNetworkViewModel netmodel)
         {
             XElement result = new XElement("Network");
             result.SetAttributeValue("Number", netmodel.NetworkNumber);

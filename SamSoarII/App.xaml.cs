@@ -33,7 +33,7 @@ namespace SamSoarII.AppMain
             {
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GlobalSetting.LanagArea);
             }
-            this.Exit += App_Exit;
+            Exit += App_Exit;
         }
         private void App_Exit(object sender, ExitEventArgs e)
         {

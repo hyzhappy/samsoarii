@@ -1327,6 +1327,7 @@ namespace SamSoarII.AppMain.Project
 
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
+            LadderCanvas.CaptureMouse();
             AcquireSelectRect(e);
             if (e.ClickCount == 2 && LadderMode == LadderMode.Edit)
             {
@@ -1334,12 +1335,15 @@ namespace SamSoarII.AppMain.Project
                 var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
                 var ele = GetElementByPosition(intPoint.X,intPoint.Y);
                 if (ele == null || ele.Type == ElementType.HLine || ele.Type == ElementType.Special)
-                {
                     _ladderDiagram.ShowInstructionInputDialog("");
-                }
+                else
+                    ele.BeginShowPropertyDialog();
             }
         }
-
+        private void OnCanvasMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            LadderCanvas.ReleaseMouseCapture();
+        }
         protected override void OnDragOver(DragEventArgs e)
         {
             base.OnDragOver(e);
@@ -1816,8 +1820,8 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+
         #endregion
-
-
+        
     }
 }

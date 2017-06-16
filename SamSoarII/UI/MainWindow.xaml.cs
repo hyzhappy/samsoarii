@@ -69,6 +69,7 @@ namespace SamSoarII.AppMain.UI
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
             serverPipe = new NamedPipeServerStream("SamSoarII.Update",PipeDirection.InOut);
+            //DockManager.Theme = new VS2010Theme();
         }
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
@@ -86,7 +87,7 @@ namespace SamSoarII.AppMain.UI
         {
             //DockManager.Theme = new VS2010Theme();
             LayoutSetting.Load();
-            
+
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
@@ -102,7 +103,7 @@ namespace SamSoarII.AppMain.UI
             AnchorSide side;
             side = LayoutSetting.GetDefaultSideAnchorable(LAnch.Title);
             LAnch.ReplaceSide(side);
-
+            
             double[] autohidesize;
             autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAnch.Title);
             LAnch.AutoHideWidth = autohidesize[0];
@@ -1369,19 +1370,42 @@ namespace SamSoarII.AppMain.UI
             }
             serverPipe.Disconnect();
         }
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //var hnwd = new WindowInteropHelper(this).Handle;
-            //Win32Helper.BringWindowToTop(hnwd);
-            
-            //foreach (var win in DockManager.FloatingWindows)
-            //{
-            //    var hnwd2 = new WindowInteropHelper(win).Handle;
-            //    var hnwd1 = Win32Helper.GetTopWindow(hnwd2);
-            //    Win32Helper.SetWindowPos(hnwd, hnwd1, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreResize | Win32Helper.SetWindowPosFlags.IgnoreZOrder);
-            //}
-            
-        }
+        
+        //private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (_interactionFacade.ProjectLoaded)
+        //        (_interactionFacade.CurrentLadder.mainStackPanel).CaptureMouse();
+        //    _canScroll = true;
+        //}
+        //private void OnMouseUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (_interactionFacade.ProjectLoaded)
+        //        (_interactionFacade.CurrentLadder.mainStackPanel).ReleaseMouseCapture();
+        //    _canScroll = false;
+        //}
+        //private void OnMouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if (_canScroll && _interactionFacade.ProjectLoaded)
+        //    {
+        //        var p1 = e.GetPosition(_interactionFacade.CurrentLadder.MainScrollViewer);
+        //        if (_interactionFacade.CurrentLadder.MainScrollViewer.ViewportHeight < p1.Y)
+        //        {
+        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToVerticalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.VerticalOffset + 30 * GlobalSetting.LadderScaleY);
+        //        }
+        //        else if (p1.Y < 0)
+        //        {
+        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToVerticalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.VerticalOffset - 30 * GlobalSetting.LadderScaleY);
+        //        }
+        //        else if (p1.X < 0)
+        //        {
+        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToHorizontalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.HorizontalOffset - 30 * GlobalSetting.LadderScaleX);
+        //        }
+        //        else if (_interactionFacade.CurrentLadder.MainScrollViewer.ViewportWidth < p1.X)
+        //        {
+        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToHorizontalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.HorizontalOffset + 30 * GlobalSetting.LadderScaleX);
+        //        }
+        //    }
+        //}
     }
 }
 
