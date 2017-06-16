@@ -1,5 +1,6 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.AppMain.UI;
+using SamSoarII.LadderInstViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,85 @@ namespace SamSoarII.AppMain.LadderCommand
             ldvmodel.AcquireArea(this);
             ifacade.MainTabControl.ShowItem(ldvmodel);
         }
+
+        static public NetworkChangeElementArea Create(
+            LadderNetworkViewModel lnvmodel,
+            IEnumerable<BaseViewModel> elements,
+            IEnumerable<VerticalLineViewModel> vlines)
+        {
+            NetworkChangeElementArea area = null;
+            foreach (BaseViewModel bvmodel in elements)
+            {
+                Analyze(lnvmodel, bvmodel, ref area);
+            }
+            foreach (VerticalLineViewModel vlvmodel in vlines)
+            {
+                Analyze(lnvmodel, vlvmodel, ref area);
+            }
+            return area;
+        }
+
+        static public NetworkChangeElementArea Create(
+            LadderDiagramViewModel ldvmodel,
+            IEnumerable<LadderNetworkViewModel> lnvmodels)
+        {
+            NetworkChangeElementArea area = null;
+            foreach (LadderNetworkViewModel lnvmodel in lnvmodels)
+            {
+                Analyze(ldvmodel, lnvmodel, ref area);
+            }
+            return area;
+        }
+        
+        static private void Analyze(
+            LadderNetworkViewModel lnvmodel,
+            BaseViewModel bvmodel, 
+            ref NetworkChangeElementArea area)
+        {
+            if (area == null)
+            {
+                area = new NetworkChangeElementArea();
+                area.SU_Select = SelectStatus.SingleSelected;
+                area.SU_Cross = CrossNetworkState.NoCross;
+                area.NetworkNumberStart = lnvmodel.NetworkNumber;
+                area.NetworkNumberEnd = lnvmodel.NetworkNumber;
+                area.X1 = area.X2 = bvmodel.X;
+                area.Y1 = area.Y2 = bvmodel.Y;
+            }
+            else
+            {
+                area.SU_Select = SelectStatus.MultiSelected;
+                area.X1 = Math.Min(area.X1, bvmodel.X);
+                area.X2 = Math.Max(area.X2, bvmodel.X);
+                area.Y1 = Math.Min(area.Y1, bvmodel.Y);
+                area.Y2 = Math.Max(area.Y2, bvmodel.Y);
+            }
+        }
+
+        static private void Analyze(
+            LadderDiagramViewModel ldvmodel,
+            LadderNetworkViewModel lnvmodel,
+            ref NetworkChangeElementArea area)
+        {
+            if (area == null)
+            {
+                area = new NetworkChangeElementArea();
+                area.SU_Select = SelectStatus.MultiSelected;
+                area.SU_Cross = CrossNetworkState.CrossDown;
+                area.NetworkNumberStart = lnvmodel.NetworkNumber;
+                area.NetworkNumberEnd = lnvmodel.NetworkNumber;
+            }
+            else
+            {
+                area.NetworkNumberStart = Math.Min(
+                    area.NetworkNumberStart, 
+                    lnvmodel.NetworkNumber);
+                area.NetworkNumberEnd = Math.Min(
+                    area.NetworkNumberEnd,
+                    lnvmodel.NetworkNumber);
+            }
+        }
+             
 
         public void Save(XElement xele)
         {

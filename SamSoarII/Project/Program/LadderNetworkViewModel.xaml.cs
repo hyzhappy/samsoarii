@@ -672,7 +672,6 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Ladder content modification methods
-        
         public BaseViewModel ReplaceElement(BaseViewModel element)
         {
             BaseViewModel oldele = null;
@@ -737,7 +736,7 @@ namespace SamSoarII.AppMain.Project
                 VerticalLineChanged(this, e);
             }
         }
-        
+
         public void ReplaceBreakpoint(BreakpointRect rect)
         {
             IntPoint p;
@@ -773,7 +772,6 @@ namespace SamSoarII.AppMain.Project
             BreakpointChanged(this, new BreakpointChangedEventArgs(
                 this, rect_old, rect));
         }
-        
         public void RemoveElement(IntPoint pos)
         {
             if (_ladderElements.ContainsKey(pos))
@@ -802,7 +800,6 @@ namespace SamSoarII.AppMain.Project
                 RemoveElement(element.X, element.Y);
             }
         }
-        
         public bool RemoveVerticalLine(IntPoint pos)
         {
             if (_ladderVerticalLines.ContainsKey(pos))
@@ -1176,6 +1173,10 @@ namespace SamSoarII.AppMain.Project
                             this, sender, epdialog.PropertyStrings_Old, epdialog.PropertyStrings_New);
                         _ladderDiagram.CommandExecute(eracommand);
                         dialog.Close();
+                        LadderElementChangedArgs _e = new LadderElementChangedArgs();
+                        _e.BVModel_old = sender;
+                        _e.BVModel_new = sender;
+                        ElementChanged(this, _e);
                     }
                     catch (ValueParseException ex)
                     {
@@ -1223,6 +1224,10 @@ namespace SamSoarII.AppMain.Project
                             this, sender, props_old, epdialog.PropertyStrings);
                         _ladderDiagram.CommandExecute(eracommand);
                         dialog.Close();
+                        LadderElementChangedArgs _e = new LadderElementChangedArgs();
+                        _e.BVModel_old = sender;
+                        _e.BVModel_new = sender;
+                        ElementChanged(this, _e);
                     }
                     catch (ValueParseException ex)
                     {

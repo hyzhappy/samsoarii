@@ -490,6 +490,9 @@ namespace SamSoarII.AppMain.Project
             {
                 oldelements.Add(oldele);
             }
+
+            NetworkChangeElementArea oldarea = NetworkChangeElementArea.Create(
+                network, new BaseViewModel[] { element }, new VerticalLineViewModel[] { });
             if (element.Type == ElementType.Output)
             {
                 for (int i = Math.Max(SelectionRect.X,1); i < GlobalSetting.LadderXCapacity - 1; i++)
@@ -500,7 +503,11 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
             }
-            var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements);
+            NetworkChangeElementArea area = NetworkChangeElementArea.Create(
+                network, new BaseViewModel[] { element }, new VerticalLineViewModel[] { });
+            area.SU_Select = SelectStatus.SingleSelected;
+            area.SU_Cross = CrossNetworkState.NoCross;
+            var command = new LadderCommand.NetworkReplaceElementsCommand(_selectRectOwner, elements, oldelements, area, oldarea);
             _commandManager.Execute(command);
         }
 
@@ -1363,6 +1370,10 @@ namespace SamSoarII.AppMain.Project
             List<BaseViewModel> eles_new = null;
             if (viewmodel.Type == LadderInstModel.ElementType.Output)
             {
+                viewmodel.X = x;
+                viewmodel.Y = y;
+                NetworkChangeElementArea oldarea = NetworkChangeElementArea.Create(
+                    lnvmodel, new BaseViewModel[] { viewmodel }, new VerticalLineViewModel[] { });
                 eles_old = lnvmodel.GetElements().Where(ele => ele.Y == y && ele.X >= x);
                 eles_new = new List<BaseViewModel>();
                 for (int i = x; i < GlobalSetting.LadderXCapacity - 1; i++)
@@ -1370,14 +1381,16 @@ namespace SamSoarII.AppMain.Project
                     eles_new.Add(new HorizontalLineViewModel() { X = i, Y = y });
                 }
                 viewmodel.X = GlobalSetting.LadderXCapacity - 1;
-                viewmodel.Y = y;
+                //viewmodel.Y = y;
                 if (valueStrings.Count == viewmodel.GetValueString().Count() * 2)
                 {
                     viewmodel.AcceptNewValues(valueStrings, PLCDeviceManager.GetPLCDeviceManager().SelectDevice);
                 }
                 eles_new.Add(viewmodel);
                 rectX = GlobalSetting.LadderXCapacity - 1;
-                command = new LadderCommand.NetworkReplaceElementsCommand(lnvmodel, eles_new, eles_old);
+                NetworkChangeElementArea area = NetworkChangeElementArea.Create(
+                    lnvmodel, new BaseViewModel[] { viewmodel }, new VerticalLineViewModel[] { });
+                command = new LadderCommand.NetworkReplaceElementsCommand(lnvmodel, eles_new, eles_old, area, oldarea);
                 //_commandManager.Execute(command);
             }
             else
@@ -2313,9 +2326,9 @@ namespace SamSoarII.AppMain.Project
                             var command = new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines(), area);
                             _commandManager.Execute(command);
                         }
-                        XElement xele_area = new XElement("Area");
-                        area.Save(xele_area);
-                        xEle.Add(xele_area);
+                        //XElement xele_area = new XElement("Area");
+                        //area.Save(xele_area);
+                        //xEle.Add(xele_area);
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
                     }
@@ -2381,13 +2394,6 @@ namespace SamSoarII.AppMain.Project
 
         private void PasteElementsExecute(XElement xEle)
         {
-            NetworkChangeElementArea area = null;
-            XElement xele_area = xEle.Element("Area");
-            if (xele_area != null)
-            {
-                area = new NetworkChangeElementArea();
-                area.Load(xele_area);
-            }
             //获取复制区域的大小
             int xBegin = int.Parse(xEle.Attribute("XBegin").Value);
             int yBegin = int.Parse(xEle.Attribute("YBegin").Value);
@@ -2458,21 +2464,11 @@ namespace SamSoarII.AppMain.Project
                 vline.X = xStart + vline.X - xBegin;
                 vline.Y = yStart + vline.Y - yBegin;
             }
-            NetworkChangeElementArea newarea = new NetworkChangeElementArea();
-            newarea.SU_Cross = area.SU_Cross;
-            newarea.SU_Select = area.SU_Select;
-            newarea.NetworkNumberStart = targetNetwork.NetworkNumber;
-            newarea.NetworkNumberEnd = targetNetwork.NetworkNumber;
-            newarea.X1 = xStart;
-            newarea.Y1 = yStart;
-            newarea.X2 = xStart + width - 1;
-            newarea.Y2 = yStart + height - 1;
             LadderCommand.NetworkReplaceElementsCommand command 
                 = new LadderCommand.NetworkReplaceElementsCommand(
                     targetNetwork, 
                     elements, vlines, 
-                    oldelements, oldvlines,
-                    newarea, area);
+                    oldelements, oldvlines);
             _commandManager.Execute(command);
         }
 
@@ -2685,7 +2681,7 @@ namespace SamSoarII.AppMain.Project
                     LadderNetworkViewModel lnvmodel = GetNetworkByNumber(area.NetworkNumberStart);
                     lnvmodel.AcquireSelectRect();
                     SelectionRect.X = area.X1;
-                    SelectionRect.Y = area.X2;
+                    SelectionRect.Y = area.Y1;
                     break;
                 case SelectStatus.MultiSelected:
                     if (area.SU_Cross != CrossNetworkState.NoCross)

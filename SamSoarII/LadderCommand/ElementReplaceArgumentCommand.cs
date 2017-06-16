@@ -31,6 +31,11 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             if (bvmodel.InstructionName.Equals("CALLM"))
             {
+                if (pstring_new.Count() == 0)
+                {
+                    throw new ValueParseException(
+                         String.Format(Properties.Resources.Message_Invalid_Function_Name));
+                }
                 int argcount = (pstring_new.Count() - 2) / 4;
                 ArgumentValue[] _values = new ArgumentValue[argcount];
                 for (int i = 0; i < argcount; i++)

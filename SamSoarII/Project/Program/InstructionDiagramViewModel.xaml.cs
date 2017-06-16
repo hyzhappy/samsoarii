@@ -82,6 +82,8 @@ namespace SamSoarII.AppMain.Project
                 if (invmodeldict.ContainsKey(lnvmodel))
                 {
                     invmodel = invmodeldict[lnvmodel];
+                    invmodel.NetworkHeader.Text 
+                        = String.Format("Network {0:d}", lnvmodel.NetworkNumber); 
                 }
                 else
                 {
@@ -89,7 +91,6 @@ namespace SamSoarII.AppMain.Project
                     invmodel.CursorChanged += OnNetworkCursorChanged;
                     invmodel.CursorEdit += OnNetworkCursorEdit;
                     lnvmodel.INVModel = invmodel;
-                    //invmodel.Setup(lnvmodel);
                     invmodeldict.Add(lnvmodel, invmodel);
                 }
                 MainStack.Children.Add(invmodel);

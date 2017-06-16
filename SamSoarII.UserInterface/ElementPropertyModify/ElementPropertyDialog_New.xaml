@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         mc:Ignorable="d"
-        Title="{x:Static properties:Resources.Element_Parameter_Setting}" Height="466" Width="360">
+        Title="{x:Static properties:Resources.Element_Parameter_Setting}" 
+        Height="466" Width="360"
+        MinHeight="466" MinWidth="360">
     <Grid x:Uid="GD_Main" x:Name="GD_Main">
         <Grid.RowDefinitions>
             <RowDefinition x:Uid="RowDefinition_1" Height="*"/>
@@ -17,12 +19,11 @@
         <TextBlock x:Uid="TextBlock_1" TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" Margin="20,4,200,4" 
                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"
                    FontSize="14" Text="{x:Static properties:Resources.Parameter_Description}"/>
-
         <TextBlock x:Uid="TextBlock_2" Grid.Row="2" TextWrapping="Wrap" Grid.Column="0" Margin="20,4,200,4"
                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"
                    FontSize="14" Text="{x:Static properties:Resources.Element_Comment}"/>
 
-        <TextBlock x:Uid="TB_Detail" Grid.Row="1" Height="25" Grid.Column="0" Margin="120,4,8,4"
+        <TextBlock x:Uid="TB_Detail" Grid.Row="1" Height="25" Grid.Column="0" Margin="120,8,8,4"
                    x:Name="TB_Detail"
                    VerticalAlignment="Center">
         </TextBlock>
@@ -30,11 +31,18 @@
                  x:Name="TB_Comment" Height="25"
                  TextChanged="TB_Comment_TextChanged">
         </TextBox>
-        <Button x:Uid="Button_1" x:Name="EnsureButton" Grid.Row="3" Grid.Column="0" Margin="12,4.333,189.333,3.667"
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Uid="Button_1" x:Name="EnsureButton" Grid.Row="0" Grid.Column="0" Margin="15,4,15,4"
                 Click="OnEnsureButtonClick" Content="{x:Static properties:Resources.Ensure}"/>
 
-        <Button x:Uid="Button_2" x:Name="CancelButton" Grid.Row="3" Grid.Column="0" Margin="188,4.333,12.333,3.667"
+            <Button x:Uid="Button_2" x:Name="CancelButton" Grid.Row="0" Grid.Column="1" Margin="15,4,15,4"
                 Click="OnCancelButtonClick" Content="{x:Static properties:Resources.Cancel}"/>
+
+        </Grid>
 
         <local:PopupNotTop x:Uid="PU_Collection" x:Name="PU_Collection" Placement="Bottom" HorizontalOffset="0" VerticalOffset="0" Width="300" IsOpen="True" Topmost="False">
             <ScrollViewer x:Uid="SV_Collection" VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="SV_Collection" CanContentScroll="True">

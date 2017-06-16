@@ -29,6 +29,16 @@ namespace SamSoarII.AppMain.LadderCommand
             _index = index;
             _oldarea = oldarea;
             _area = area;
+            if (_oldarea == null)
+            {
+                _oldarea = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _removedNetworks);
+            }
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _replacedNetworks);
+            }
         }
 
         public LadderDiagramReplaceNetworksCommand(
@@ -42,6 +52,16 @@ namespace SamSoarII.AppMain.LadderCommand
             _index = index;
             _oldarea = oldarea;
             _area = area;
+            if (_oldarea == null)
+            {
+                _oldarea = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _removedNetworks);
+            }
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _replacedNetworks);
+            }
         }
 
         public LadderDiagramReplaceNetworksCommand(
@@ -55,6 +75,16 @@ namespace SamSoarII.AppMain.LadderCommand
             _index = index;
             _oldarea = oldarea;
             _area = area;
+            if (_oldarea == null)
+            {
+                _oldarea = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _removedNetworks);
+            }
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _replacedNetworks);
+            }
         }
 
         public LadderDiagramReplaceNetworksCommand(
@@ -68,6 +98,16 @@ namespace SamSoarII.AppMain.LadderCommand
             _index = index;
             _oldarea = oldarea;
             _area = area;
+            if (_oldarea == null)
+            {
+                _oldarea = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _removedNetworks);
+            }
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _replacedNetworks);
+            }
         }
         public void Execute()
         {
@@ -84,21 +124,6 @@ namespace SamSoarII.AppMain.LadderCommand
                 LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
                 _area.Select(lnvmodel);
             }
-            else if (_replacedNetworks.Count() > 0)
-            {
-                // 将梯形图光标移到新生成的行的头部
-                LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
-                LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
-                ldvmodel.SelectionRect.X = 0;
-                ldvmodel.SelectionRect.Y = 0;
-                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
-                    new NavigateToNetworkEventArgs(
-                        lnvmodel.NetworkNumber,
-                        ldvmodel.ProgramName,
-                        ldvmodel.SelectionRect.X,
-                        ldvmodel.SelectionRect.Y));
-            }
-            
         }
 
         public void Redo()
@@ -121,21 +146,6 @@ namespace SamSoarII.AppMain.LadderCommand
                 LadderNetworkViewModel lnvmodel = _removedNetworks.First();
                 _oldarea.Select(lnvmodel);
             }
-            else if (_removedNetworks.Count() > 0)
-            {
-                // 将梯形图光标移到新生成的行的头部
-                LadderNetworkViewModel lnvmodel = _removedNetworks.First();
-                LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
-                ldvmodel.SelectionRect.X = 0;
-                ldvmodel.SelectionRect.Y = 0;
-                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
-                    new NavigateToNetworkEventArgs(
-                        lnvmodel.NetworkNumber,
-                        ldvmodel.ProgramName,
-                        ldvmodel.SelectionRect.X,
-                        ldvmodel.SelectionRect.Y));
-            }
-            
         }
     }
 }

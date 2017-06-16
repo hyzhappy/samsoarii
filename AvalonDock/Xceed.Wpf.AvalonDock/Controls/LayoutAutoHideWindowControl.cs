@@ -157,6 +157,19 @@ namespace Xceed.Wpf.AvalonDock.Controls
         {
             if (msg == Win32Helper.WM_WINDOWPOSCHANGING)
             {
+                /*
+                if (_manager != null)
+                {
+                    foreach (var win in _manager.FloatingWindows)
+                    {
+                        if (win.Handle.HasValue)
+                        {
+                            IntPtr hnwd = win.Handle.Value;
+                            Win32Helper.SetWindowPos(hnwd, Win32Helper.HWND_NOTOPMOST, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize);
+                        }
+                    }
+                }
+                */
                 if (_internalHost_ContentRendered)
                 {
                     Win32Helper.SetWindowPos(_internalHwndSource.Handle, Win32Helper.HWND_TOPMOST, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize);

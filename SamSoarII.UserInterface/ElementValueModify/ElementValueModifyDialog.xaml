@@ -8,7 +8,9 @@
         xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
         xmlns:properties="clr-namespace:SamSoarII.UserInterface.Properties"
         mc:Ignorable="d"
-        Title="{x:Static properties:Resources.Element_Value_Modify}" Height="230" Width="400">
+        Title="{x:Static properties:Resources.Element_Value_Modify}" 
+        Height="230" Width="400"
+        MinHeight="220" MinWidth="380">
     <local:ElementValueModifyPanel x:Uid="PN_Main" x:Name="PN_Main">
         
     </local:ElementValueModifyPanel>

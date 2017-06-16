@@ -69,7 +69,6 @@ namespace SamSoarII.AppMain.UI
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
             serverPipe = new NamedPipeServerStream("SamSoarII.Update",PipeDirection.InOut);
-            //DockManager.Theme = new VS2010Theme();
         }
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
@@ -87,7 +86,7 @@ namespace SamSoarII.AppMain.UI
         {
             //DockManager.Theme = new VS2010Theme();
             LayoutSetting.Load();
-
+            
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
@@ -103,7 +102,7 @@ namespace SamSoarII.AppMain.UI
             AnchorSide side;
             side = LayoutSetting.GetDefaultSideAnchorable(LAnch.Title);
             LAnch.ReplaceSide(side);
-            
+
             double[] autohidesize;
             autohidesize = LayoutSetting.GetDefaultAutoHideSizeAnchorable(LAnch.Title);
             LAnch.AutoHideWidth = autohidesize[0];
@@ -126,6 +125,18 @@ namespace SamSoarII.AppMain.UI
         }
         protected override void OnClosed(EventArgs e)
         {
+            if (_interactionFacade.ProjectModel != null)
+            {
+                if (_interactionFacade.ProjectModel.AutoInstManager.IsAlive)
+                {
+                    _interactionFacade.ProjectModel.AutoInstManager.Aborted += (sender1, e1) =>
+                    {
+                        OnClosed(e);
+                    };
+                    _interactionFacade.ProjectModel.AutoInstManager.Abort();
+                    return;
+                }
+            }
             LayoutSetting.Save();
             base.OnClosed(e);
             Application.Current.Shutdown();
@@ -972,6 +983,11 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSaveProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             if (_interactionFacade.ProjectFullFileName == string.Empty)
             {
                 SaveProject();
@@ -983,10 +999,17 @@ namespace SamSoarII.AppMain.UI
         }
         public void SaveProject()
         {
+            if (ProjectTreeViewItem.HasRenaming)
+                return;
             CurrentProjectHandle(false, false);
         }
         private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "ssp文件|*.ssp";
             if (saveFileDialog.ShowDialog() == true)
@@ -997,6 +1020,11 @@ namespace SamSoarII.AppMain.UI
         
         private void OnMonitorCommandExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
                 CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
@@ -1044,6 +1072,11 @@ namespace SamSoarII.AppMain.UI
         
         private void OnSimulateCommandExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
                 int ret = _interactionFacade.SimulateProject();
@@ -1206,6 +1239,11 @@ namespace SamSoarII.AppMain.UI
 
         private void OnDownloadCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             _interactionFacade.DownloadProject();
         }
         
@@ -1371,41 +1409,6 @@ namespace SamSoarII.AppMain.UI
             serverPipe.Disconnect();
         }
         
-        //private void OnMouseDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (_interactionFacade.ProjectLoaded)
-        //        (_interactionFacade.CurrentLadder.mainStackPanel).CaptureMouse();
-        //    _canScroll = true;
-        //}
-        //private void OnMouseUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (_interactionFacade.ProjectLoaded)
-        //        (_interactionFacade.CurrentLadder.mainStackPanel).ReleaseMouseCapture();
-        //    _canScroll = false;
-        //}
-        //private void OnMouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if (_canScroll && _interactionFacade.ProjectLoaded)
-        //    {
-        //        var p1 = e.GetPosition(_interactionFacade.CurrentLadder.MainScrollViewer);
-        //        if (_interactionFacade.CurrentLadder.MainScrollViewer.ViewportHeight < p1.Y)
-        //        {
-        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToVerticalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.VerticalOffset + 30 * GlobalSetting.LadderScaleY);
-        //        }
-        //        else if (p1.Y < 0)
-        //        {
-        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToVerticalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.VerticalOffset - 30 * GlobalSetting.LadderScaleY);
-        //        }
-        //        else if (p1.X < 0)
-        //        {
-        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToHorizontalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.HorizontalOffset - 30 * GlobalSetting.LadderScaleX);
-        //        }
-        //        else if (_interactionFacade.CurrentLadder.MainScrollViewer.ViewportWidth < p1.X)
-        //        {
-        //            _interactionFacade.CurrentLadder.MainScrollViewer.ScrollToHorizontalOffset(_interactionFacade.CurrentLadder.MainScrollViewer.HorizontalOffset + 30 * GlobalSetting.LadderScaleX);
-        //        }
-        //    }
-        //}
     }
 }
 

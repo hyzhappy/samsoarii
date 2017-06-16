@@ -116,18 +116,6 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
-            //_network.INVModel.Setup(_network);
-            // 将梯形图光标移到新生成的行的头部
-            _network.AcquireSelectRect();
-            LadderDiagramViewModel ldvmodel = _network.LDVModel;
-            ldvmodel.SelectionRect.X = 0;
-            ldvmodel.SelectionRect.Y = _rowNumber;
-            ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
-                new NavigateToNetworkEventArgs(
-                    _network.NetworkNumber,
-                    ldvmodel.ProgramName,
-                    ldvmodel.SelectionRect.X,
-                    ldvmodel.SelectionRect.Y));
             if (_oldarea != null)
             {
                 _oldarea.Select(_network);

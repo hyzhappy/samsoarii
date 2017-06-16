@@ -244,10 +244,12 @@ namespace SamSoarII.AppMain.Project
             rootNode.Add(IFacade.MainWindow.ElemInitWind.CreatXElementByElements());
             foreach (var ldmodel in SubRoutines)
             {
+                if (ldmodel.ProgramName.Length == 0) continue;
                 rootNode.Add(ProjectHelper.CreateXElementByLadderDiagram(ldmodel));
             }
             foreach (var fbmodel in FuncBlocks)
             {
+                if (fbmodel.ProgramName.Length == 0) continue;
                 rootNode.Add(ProjectHelper.CreateXElementByFuncBlock(fbmodel));
             }
             var mtnode = new XElement("Modbus");
