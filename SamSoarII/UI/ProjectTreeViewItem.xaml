@@ -19,7 +19,8 @@
                     <TextBox x:Uid="TBO_Text" x:Name="TBO_Text" Text="{Binding Text,Mode=TwoWay}" 
                              Visibility="Hidden" Width="120" 
                              KeyDown="TextBox_KeyDown"
-                             LostKeyboardFocus="TBO_Text_LostKeyboardFocus">
+                             LostKeyboardFocus="TBO_Text_LostKeyboardFocus"
+                             Loaded="TBO_Text_Loaded">
                     </TextBox>
                 </Grid>
             </StackPanel>

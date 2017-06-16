@@ -604,13 +604,13 @@ namespace SamSoarII.AppMain.UI
             {
                 TB_ErrorMsg.Visibility = Visibility.Visible;
                 TB_ErrorMsg.Text = errormsg;
+                TBO_Text.Focus();
+                TBO_Text.SelectAll();
             }
             else
             {
                 TB_ErrorMsg.Visibility = Visibility.Collapsed;
             }
-            TBO_Text.Focus();
-            TBO_Text.SelectAll();
         }
 
         public void RenameClose()
@@ -747,7 +747,14 @@ namespace SamSoarII.AppMain.UI
                 e.Handled = true;
             }
         }
+
+        private void TBO_Text_Loaded(object sender, RoutedEventArgs e)
+        {
+            TBO_Text.Focus();
+            TBO_Text.SelectAll();
+        }
         #endregion
+
 
     }
 

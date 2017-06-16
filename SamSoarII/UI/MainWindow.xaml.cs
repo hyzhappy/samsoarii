@@ -983,6 +983,11 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSaveProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             if (_interactionFacade.ProjectFullFileName == string.Empty)
             {
                 SaveProject();
@@ -994,10 +999,17 @@ namespace SamSoarII.AppMain.UI
         }
         public void SaveProject()
         {
+            if (ProjectTreeViewItem.HasRenaming)
+                return;
             CurrentProjectHandle(false, false);
         }
         private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "ssp文件|*.ssp";
             if (saveFileDialog.ShowDialog() == true)
@@ -1008,6 +1020,11 @@ namespace SamSoarII.AppMain.UI
         
         private void OnMonitorCommandExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
                 CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
@@ -1055,6 +1072,11 @@ namespace SamSoarII.AppMain.UI
         
         private void OnSimulateCommandExecute(object sender, RoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
                 int ret = _interactionFacade.SimulateProject();
@@ -1217,6 +1239,11 @@ namespace SamSoarII.AppMain.UI
 
         private void OnDownloadCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                return;
+            }
             _interactionFacade.DownloadProject();
         }
         
