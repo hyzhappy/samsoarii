@@ -64,6 +64,9 @@ namespace SamSoarII.AppMain.LadderCommand
             BaseViewModel bvmodel, 
             ref NetworkChangeElementArea area)
         {
+            int x = bvmodel.X;
+            int y = bvmodel.Y;
+            if (bvmodel is VerticalLineViewModel) x++;
             if (area == null)
             {
                 area = new NetworkChangeElementArea();
@@ -71,16 +74,17 @@ namespace SamSoarII.AppMain.LadderCommand
                 area.SU_Cross = CrossNetworkState.NoCross;
                 area.NetworkNumberStart = lnvmodel.NetworkNumber;
                 area.NetworkNumberEnd = lnvmodel.NetworkNumber;
-                area.X1 = area.X2 = bvmodel.X;
-                area.Y1 = area.Y2 = bvmodel.Y;
+                area.X1 = area.X2 = x;
+                area.Y1 = area.Y2 = y;
+                 
             }
             else
             {
                 area.SU_Select = SelectStatus.MultiSelected;
-                area.X1 = Math.Min(area.X1, bvmodel.X);
-                area.X2 = Math.Max(area.X2, bvmodel.X);
-                area.Y1 = Math.Min(area.Y1, bvmodel.Y);
-                area.Y2 = Math.Max(area.Y2, bvmodel.Y);
+                area.X1 = Math.Min(area.X1, x);
+                area.X2 = Math.Max(area.X2, x);
+                area.Y1 = Math.Min(area.Y1, y);
+                area.Y2 = Math.Max(area.Y2, y);
             }
         }
 
