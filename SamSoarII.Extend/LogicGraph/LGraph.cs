@@ -221,7 +221,7 @@ namespace SamSoarII.Extend.LogicGraph
         /// <detail>
         /// 当存在入度不等于出度的环时，说明这个环存在分支，即符合混联错误的条件
         /// 入度大于出度时存在向内的分支，入度小于出度时存在向外的分支
-        /// 所以可以检查所有的环，判断是否都合法
+        /// 所以可以检查所有的联通分量，判断是否都合法
         /// 合法的条件为in(T)-out(S)+sum(in(a)-out(a)) == 0, a为环内不包含原终点的点
         /// in(T)是相对于终点T的出度，即所有能到达T的边的总数
         /// out(S)是相对于起点S的出度，即所有能从S到达该点的边的总数
@@ -236,54 +236,68 @@ namespace SamSoarII.Extend.LogicGraph
                 if (lgv1.Edges.Count <= 1)
                     continue;
                 /*
-                 *  对逻辑图中的每个点作标记
-                 *  标记1为这个点被访问过几次，即原点出发有多少条路径到达该点
-                 *  标记2为in(T) - out(S)
-                 *  标记3为内部的入出度的差的总和，即sum(in(a) - out(a))
-                 *  标记4的用途会解释
-                 */
-                foreach (LGVertex lgv2 in vertexs)
-                    lgv2[1] = lgv2[2] = lgv2[3] = lgv2[4] = 0;
-                /*
                  * in(T)和out(S)是无法直接获得的，需要从起点出发访问所有的边
-                 * 并且边上的四个标记以位的方式存储这条边是否到达某个节点
+                 * 并且点和边上的四个标记以位的方式存储这条边是否到达某个节点
                  * 标记1存储编号1-32，标记2存33-64，以此类推
                  * 对于每个相对于S的in(T)，找到标记过的后向边的数量
                  * 对于每个相对于T的out(S)，找出在对应位标记的前向边的数量
-                 * 点的标记这里暂时用来统计边的到达情况
                  */
+                foreach (LGVertex lgv2 in vertexs)
+                    lgv2[1] = lgv2[2] = lgv2[3] = lgv2[4] = 0;
                 foreach (LGEdge lge in edges)
-                    lge[1] = lge[2] = lge[3] = lge[4];
+                    lge[1] = lge[2] = lge[3] = lge[4] = 0;
                 _EdgeSearch(lgv1);
+                LGEdge flagedge = new LGEdge(null, null, null);
                 foreach (LGVertex lgv2 in vertexs)
                 {
-                    // 这里对点标记再次初始化，用于后面的环判断
-                    lgv2[1] = lgv2[2] = lgv2[3] = lgv2[4] = 0;
                     // 该点应不为起点
                     if (lgv2.Id == lgv1.Id)
                         continue;
+                    int sum = 0, sumin = 0, sumout = 0;
+                    flagedge[1] = flagedge[2] = flagedge[3] = flagedge[4] = ~0;
                     // 检查终点的所有后向边，统计in(T)
                     foreach (LGEdge lge in lgv2.BackEdges)
                     {
-                        // 若能到达则+1
-                        if (!_EdgeEmptyFlag(lge))
-                            lgv2[2]++;
+                        if (!_EdgeEmptyFlag(lge)) sumin++;
                     }
                     // 检查起点的所有前向边，统计out(S)
                     foreach (LGEdge lge in lgv1.Edges)
                     {
-                        // 若能到达则-1
                         if (_EdgeGetFlag(lge, lgv2.Id))
-                            lgv2[2]--;
+                        {
+                            sumout++;
+                            for (int i = 1; i <= 4; i++)
+                                flagedge[i] &= lge[i];
+                        }
                     }
+                    // 检查终点的所有前向边，剔除掉后面的桥点
+                    foreach (LGEdge lge in lgv2.Edges)
+                    {
+                        for (int i = 1; i <= 4; i++)
+                            flagedge[i] &= ~lge[i];
+                    }
+                    // 若不能构成两条以上的路径则忽略
+                    if (sumin < 2 || sumout < 2) continue;
+                    // 计算in(T)-out(S)
+                    sum = sumin - sumout;
+                    // 检查所有能够到达终点的点，统计sum(in(a)-out(a))
+                    bool hasbridge = false;
+                    foreach (LGVertex lgv3 in vertexs)
+                    {
+                        if (lgv3.Id == lgv1.Id) continue;
+                        if (lgv3.Id == lgv2.Id) continue;
+                        // 该点是连通分量的桥点
+                        if (_EdgeGetFlag(flagedge, lgv3.Id))
+                        {
+                            hasbridge = true;
+                            break;
+                        }
+                        if (_VertexGetFlag(lgv3, lgv2.Id))
+                            sum += lgv3.BackEdges.Count() - lgv3.Edges.Count();
+                    }
+                    // 如果不存在桥点，并且不满足等式则混连错误
+                    if (!hasbridge && sum != 0) return true;
                 }
-                // 初始化访问标记
-                for (int i = 0; i < vertexs.Count(); i++)
-                    for (int j = 0; j < 4; j++)
-                        btflag[i, j] = 0;
-                // 调用内部的判断方法
-                if (!_CheckFusionCircuit(lgv1, lgv1))
-                    return true;
             }
             return false;
         }
@@ -323,6 +337,19 @@ namespace SamSoarII.Extend.LogicGraph
         private bool _EdgeEmptyFlag(LGEdge lge)
         {
             return (lge[1] == 0 && lge[2] == 0 && lge[3] == 0 && lge[4] == 0);
+        } /// <summary>
+          /// 得到点标记中点标号的对应位
+          /// </summary>
+          /// <param name="lge">给定的边</param>
+          /// <param name="id">给定的点标号</param>
+          /// <returns>对应的位的值（0或1,1返回true）</returns>
+        private bool _VertexGetFlag(LGVertex lgv, int id)
+        {
+            if (id <= 32) return ((lgv[1] >> (id - 1)) & 1) != 0;
+            if (id <= 64) return ((lgv[2] >> (id - 33)) & 1) != 0;
+            if (id <= 96) return ((lgv[3] >> (id - 65)) & 1) != 0;
+            if (id <= 128) return ((lgv[4] >> (id - 97)) & 1) != 0;
+            throw new IndexOutOfRangeException();
         }
         /// <summary>
         /// 判断这个点的所有标记是否为空
@@ -358,101 +385,6 @@ namespace SamSoarII.Extend.LogicGraph
                 lgv[4] |= lge[4];
             }
         }
-        /// <summary>
-        /// 内部检查是否有不合法的环
-        /// </summary>
-        /// <param name="lgv"> 当前检查的节点</param>
-        /// <param name="lgvs"> 环的原点</param>
-        /// <returns> 是否存在非法环</returns>
-        private bool _CheckFusionCircuit(LGVertex lgv, LGVertex lgvs)
-        { 
-            // 下一个节点的标记3
-            int _lgvn3 = lgv.Id == lgvs.Id ? 0 : lgv[3] + lgv.BackEdges.Count - lgv.Edges.Count;
-            //Console.Write("check {0:d} {1:d} {2:d}\n", lgv.Id, lgv[3], _lgvn3);
-            // 访问所有前向相邻的节点
-            foreach (LGEdge lgen in lgv.Edges)
-            {
-                LGVertex lgvn = lgen.Destination;
-                /*
-                 * 若访问到该点的路径，和之前访问到该点的路径重合
-                 * 则放弃对该点的分析
-                 */
-                bool isnet = false;
-                for (int i = 0; i < 4; i++)
-                {
-                    // 判断两条路径是否重合（不包含当前点）
-                    if ((btflag[lgv.Id-1, i] & btflag[lgvn.Id-1, i]) != 0)
-                    {
-                        isnet = true;
-                        break;
-                    }
-                    // 判断当前点是否在之前的路径中
-                    if (lgv.Id-1 >= i*32 && lgv.Id-1 < (i+1)*32
-                     && (btflag[lgvn.Id-1, i] & (1<<((lgv.Id-1)&31))) != 0)
-                    {
-                        isnet = true;
-                        break;
-                    }
-                }
-                if (isnet) continue;
-                /*
-                 * 若该点未被访问的情况下
-                 * 访问该点，作相应的标记
-                 */
-                if (lgvn[1] == 0)
-                {
-                    lgvn[1]++;
-                    //lgvn[2] = lgvn.BackEdges.Count - lgvs.Edges.Count;
-                    lgvn[3] = _lgvn3;
-                    if (lgv.Id != lgvs.Id)
-                    {
-                        int p = (lgv.Id-1) >> 5;
-                        btflag[lgvn.Id-1, p] = btflag[lgv.Id-1, p] | (1<<((lgv.Id-1)&31));
-                    }
-                    //Console.Write("visit1 {0:d} {1:d}\n", lgvn.Id, lgvn[2]);
-                    if (!_CheckFusionCircuit(lgvn, lgvs))
-                        return false;
-                }
-                /*
-                 * 该点访问过多次的情况下
-                 * 两条路径构成了一个环，判断这个环的方法为以下表达式是否成立
-                 *     in(T) - out(S) + sum(in(a) - out(a)) == 0
-                 * 其中节点lgvn的 flag2 = in(T) - out(S)，
-                 *     节点lgvn的 flag3 = sum(a1)
-                 *     变量_lgvn3的值为 sum(a2)
-                 * 所以需要判断in(T) - out(S) + sum(a1) + sum(a2)是否为0
-                 */
-                else// if (lgvn[1] == 1)
-                {
-                    lgvn[1]++;
-                    //Console.Write("visit2 {0:d} {1:d} {2:d}\n", lgvn.Id, lgvn[2], lgvn[3]);
-                    if (lgvn[3] + _lgvn3 + lgvn[2] != 0)
-                        return false;
-                    lgvn[4] = _lgvn3;
-                }
-                /*
-                 * 该点访问过两次以上的情况下
-                 * 由于多条路径会构成多条环，以三条路径为例，会分别构成三条环，对应以下三个表达式
-                 * 设C = in(T) - out(S)
-                 * C + sum(a1) + sum(a2) == 0
-                 * C + sum(a1) + sum(a3) == 0
-                 * C + sum(a2) + sum(a3) == 0
-                 * 可得sum(a1) == sum(a2) == sum(a3)
-                 * 所以这里需要判断所有的sum是否相等，之前访问时用到的sum(a2)需要存在flag4里
-                 */
-                /*
-                else
-                {
-                    lgvn[1]++;
-                    //Console.Write("visit3 {0:d} {1:d} {2:d} {3:d}\n", lgvn.Id, lgvn[2], lgvn[3], lgvn[4]);
-                    if (_lgvn3 != lgvn[3] || lgvn[3] != lgvn[4])
-                        return false;
-                }
-                */
-            }
-            return true;
-        }
-             
         /// <summary>
         /// 生成PLC指令
         /// </summary>
