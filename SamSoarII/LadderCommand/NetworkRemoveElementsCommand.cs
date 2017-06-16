@@ -25,6 +25,11 @@ namespace SamSoarII.AppMain.LadderCommand
             _elements = new HashSet<BaseViewModel>(elements);
             _vlines = new HashSet<VerticalLineViewModel>(vlines);
             _area = area;
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _network, _elements, _vlines);
+            }
         }
 
         public NetworkRemoveElementsCommand(
@@ -36,6 +41,11 @@ namespace SamSoarII.AppMain.LadderCommand
             _elements = new HashSet<BaseViewModel>(elements);
             _vlines = new HashSet<VerticalLineViewModel>();
             _area = area;
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _network, _elements, _vlines);
+            }
         }
 
         public void Execute()

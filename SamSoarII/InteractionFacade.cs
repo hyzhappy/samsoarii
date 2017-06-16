@@ -279,7 +279,11 @@ namespace SamSoarII.AppMain
             MainWindow.Dispatcher.Invoke(() =>
             {
                 handle.Start();
+                _projectModel.AutoInstManager.Pause();
+                while (_projectModel.AutoInstManager.IsActive)
+                    Thread.Sleep(10);
                 CheckLadderWork(handle, showreport,ref result);
+                _projectModel.AutoInstManager.Start();
             });
             while (!handle.Completed)
             {

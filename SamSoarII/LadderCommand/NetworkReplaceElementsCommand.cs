@@ -33,6 +33,16 @@ namespace SamSoarII.AppMain.LadderCommand
             _oldvlines = new HashSet<VerticalLineViewModel>(oldvlines);
             _area = area;
             _oldarea = oldarea;
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _network, _elements, _vlines);
+            }
+            if (_oldarea == null)
+            {
+                _oldarea = NetworkChangeElementArea.Create(
+                    _network, _oldelements, _oldvlines);
+            }
         }
 
         public NetworkReplaceElementsCommand(
@@ -49,6 +59,16 @@ namespace SamSoarII.AppMain.LadderCommand
             _oldvlines = new HashSet<VerticalLineViewModel>();
             _area = area;
             _oldarea = oldarea;
+            if (_area == null)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _network, _elements, _vlines);
+            }
+            if (_oldarea == null)
+            {
+                _oldarea = NetworkChangeElementArea.Create(
+                    _network, _oldelements, _oldvlines);
+            }
         }
 
         public BaseViewModel PopOldElement()
@@ -90,6 +110,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 _network.ReplaceVerticalLine(vline);
             }
             //_network.INVModel.Setup(_network);
+            /*
             if (_elements.Count() + _vlines.Count() == 1)
             {
                 // 将梯形图光标移到新生成的单个元件
@@ -108,7 +129,8 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
             }
-            else if (_area != null)
+            else*/ 
+            if (_area != null)
             {
                 _area.Select(_network);
             }
@@ -138,7 +160,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 _network.ReplaceVerticalLine(oldvline);
             }
             //_network.INVModel.Setup(_network);
-            if (_oldelements.Count() + _oldvlines.Count() == 1)
+            /*if (_oldelements.Count() + _oldvlines.Count() == 1)
             {
                 // 将梯形图光标移到新生成的单个元件
                 BaseViewModel bvmodel = _oldelements.Count() == 1
@@ -156,7 +178,8 @@ namespace SamSoarII.AppMain.LadderCommand
                         ldvmodel.SelectionRect.X,
                         ldvmodel.SelectionRect.Y));
             }
-            else if (_oldarea != null)
+            else */
+            if (_oldarea != null)
             {
                 _oldarea.Select(_network);
             }

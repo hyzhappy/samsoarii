@@ -121,21 +121,27 @@ namespace SamSoarII.AppMain.Project
             if (lnvmodel == null)
             {
                 Status = STATUS_ERROR;
-                tberr.Text = "找不到 Network。";
+                tberr.Text = App.CultureIsZH_CH() 
+                    ? "找不到 Network。"
+                    : "Cannot found network.";
                 return;
             }
             this.lchart = GenerateHelper.CreateLadderChart(lnvmodel.GetElements().Union(lnvmodel.GetVerticalLines()));
             if (lchart.checkOpenCircuit())
             {
                 Status = STATUS_OPEN;
-                tberr.Text = String.Format("Network {0:d} 的梯形图存在断路错误！", lnvmodel.NetworkNumber);
+                tberr.Text = String.Format(
+                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在断路错误！" : "There have broken circuit in ladder of Network {0:d}", 
+                    lnvmodel.NetworkNumber);
                 return;
             }
             this.lgraph = lchart.Generate();
             if (lgraph.checkShortCircuit())
             {
                 Status = STATUS_SHORT;
-                tberr.Text = String.Format("Network {0:d} 的梯形图存在短路错误！", lnvmodel.NetworkNumber);
+                tberr.Text = String.Format(
+                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在短路错误！" : "There have broken circuit in ladder of Network {0:d}",
+                    lnvmodel.NetworkNumber);
                 return;
             }
             if (lgraph.CheckFusionCircuit())
@@ -238,7 +244,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 tb = new TextBlock();
                 tb.Text = inst.Message;
-                tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
+                //tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
                 Grid.SetRow(tb, rowid);
                 Grid.SetColumn(tb, 7);
                 G_Inst.Children.Add(tb);

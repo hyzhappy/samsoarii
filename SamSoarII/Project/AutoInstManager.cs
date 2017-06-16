@@ -91,7 +91,6 @@ namespace SamSoarII.AppMain.Project
             thactive = true;
             if (isalive) return;
             thalive = true;
-            thactive = true;
             thread = new Thread(_Thread_Run);
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
