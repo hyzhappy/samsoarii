@@ -154,9 +154,22 @@ namespace SamSoarII.AppMain.Project
             }
             Status = STATUS_ACCEPT;
             List<PLCInstruction> _insts = lgraph.GenInst();
+            SortedSet<int> prototypeids = new SortedSet<int>();     
             foreach (PLCInstruction inst in _insts)
             {
                 insts.Add(inst.ToOrigin());
+                if (inst.PrototypeID != -1)
+                {
+                    if (prototypeids.Contains(inst.PrototypeID))
+                    {
+                        Status = STATUS_FUSION;
+                        tberr.Text = String.Format(
+                            !App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
+                            lnvmodel.NetworkNumber);
+                        return;
+                    }
+                    prototypeids.Add(inst.PrototypeID);
+                }
             }
             G_Inst.RowDefinitions.Clear();
             G_Inst.Children.Clear();
