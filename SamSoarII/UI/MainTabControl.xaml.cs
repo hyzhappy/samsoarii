@@ -265,6 +265,20 @@ namespace SamSoarII.AppMain.UI
             }
             foreach (var child in Children)
             {
+                ITabItem tab = null;
+                if (child.Content is MainTabDiagramItem)
+                {
+                    tab = ((MainTabDiagramItem)(child.Content)).LDVM_ladder;
+                }
+                else if (child.Content is ITabItem)
+                {
+                    tab = (ITabItem)(child.Content);
+                }
+                if (tab != null && !TabItemCollection.Contains(tab))
+                {
+                    TabItemCollection.Add(tab);
+                    _lDocDict.Add(tab, (LayoutDocument)child);
+                }
                 if (child.IconSource == null && child.Content is MainTabDiagramItem)
                 {
                     child.ImageSource = IconManager.RoutineImage;

@@ -2797,6 +2797,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Invalid function name. 的本地化字符串。
+        /// </summary>
+        public static string Message_Invalid_Function_Name {
+            get {
+                return ResourceManager.GetString("Message_Invalid_Function_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Can not find the corresponding jump mark 的本地化字符串。
         /// </summary>
         public static string Message_Jump_Not_Found {

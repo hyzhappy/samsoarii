@@ -1650,4 +1650,7 @@
   <data name="LadderDiagram_check" xml:space="preserve">
     <value>梯形图检测中...</value>
   </data>
+  <data name="Message_Invalid_Function_Name" xml:space="preserve">
+    <value>函数名称无效。</value>
+  </data>
 </root>

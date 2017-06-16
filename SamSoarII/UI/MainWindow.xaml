@@ -12,7 +12,7 @@
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:mon="clr-namespace:SamSoarII.AppMain.UI.Monitor"
         mc:Ignorable="d"
-        Title="SamSoarII" Height="400" Width="600" WindowState="Maximized" PreviewMouseDown="OnMouseDown">
+        Title="SamSoarII" Height="400" Width="600" WindowState="Maximized">
     <Window.CommandBindings>
         <!--File Commands-->
         <CommandBinding x:Uid="CommandBinding_1" Command="ApplicationCommands.New" Executed="OnNewProjectExecute"></CommandBinding>

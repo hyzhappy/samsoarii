@@ -46,7 +46,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         {
             return new FloatingWindowContentHost(sender as LayoutFloatingWindowControl) { Content = content as UIElement };
         }
-
+        
         protected class FloatingWindowContentHost : HwndHost
         {
             LayoutFloatingWindowControl _owner;
@@ -60,7 +60,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
             HwndSource _wpfContentHost = null;
             Border _rootPresenter = null;
             DockingManager _manager = null;
-
+            
             protected override System.Runtime.InteropServices.HandleRef BuildWindowCore(System.Runtime.InteropServices.HandleRef hwndParent)
             {
                 _wpfContentHost = new HwndSource(new HwndSourceParameters()
@@ -228,14 +228,18 @@ namespace Xceed.Wpf.AvalonDock.Controls
 
         HwndSource _hwndSrc;
         HwndSourceHook _hwndSrcHook;
-
+        /*
+        public IntPtr? Handle
+        {
+            get { return _hwndSrc?.Handle; }
+        }
+        */
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             this.Loaded -= new RoutedEventHandler(OnLoaded);
 
             this.SetParentToMainWindowOf(Model.Root.Manager);
-
-
+            
             _hwndSrc = HwndSource.FromDependencyObject(this) as HwndSource;
             _hwndSrcHook = new HwndSourceHook(FilterMessage);
             _hwndSrc.AddHook(_hwndSrcHook);

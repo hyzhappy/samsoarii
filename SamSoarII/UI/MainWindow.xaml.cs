@@ -125,6 +125,18 @@ namespace SamSoarII.AppMain.UI
         }
         protected override void OnClosed(EventArgs e)
         {
+            if (_interactionFacade.ProjectModel != null)
+            {
+                if (_interactionFacade.ProjectModel.AutoInstManager.IsAlive)
+                {
+                    _interactionFacade.ProjectModel.AutoInstManager.Aborted += (sender1, e1) =>
+                    {
+                        OnClosed(e);
+                    };
+                    _interactionFacade.ProjectModel.AutoInstManager.Abort();
+                    return;
+                }
+            }
             LayoutSetting.Save();
             base.OnClosed(e);
             Application.Current.Shutdown();
@@ -1369,19 +1381,7 @@ namespace SamSoarII.AppMain.UI
             }
             serverPipe.Disconnect();
         }
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //var hnwd = new WindowInteropHelper(this).Handle;
-            //Win32Helper.BringWindowToTop(hnwd);
-            
-            //foreach (var win in DockManager.FloatingWindows)
-            //{
-            //    var hnwd2 = new WindowInteropHelper(win).Handle;
-            //    var hnwd1 = Win32Helper.GetTopWindow(hnwd2);
-            //    Win32Helper.SetWindowPos(hnwd, hnwd1, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreResize | Win32Helper.SetWindowPosFlags.IgnoreZOrder);
-            //}
-            
-        }
+        
     }
 }
 

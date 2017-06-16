@@ -1650,4 +1650,7 @@
   <data name="LadderDiagram_check" xml:space="preserve">
     <value>LadderDiagram is being Checked ...</value>
   </data>
+  <data name="Message_Invalid_Function_Name" xml:space="preserve">
+    <value>Invalid function name.</value>
+  </data>
 </root>
