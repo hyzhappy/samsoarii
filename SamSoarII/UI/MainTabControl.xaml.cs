@@ -305,7 +305,7 @@ namespace SamSoarII.AppMain.UI
             {
                 MainTabDiagramItem mtditem = (MainTabDiagramItem)sender;
                 mtditem.IsFloat = false;
-                mtditem.FloatClosed -= OnTabFloatClosed;
+                //mtditem.FloatClosed -= OnTabFloatClosed;
                 DiagramCollection.Remove(mtditem);
                 TabItemCollection.Remove(mtditem.LDVM_ladder);
                 _lDocDict.Remove(mtditem.LDVM_ladder);
@@ -314,7 +314,7 @@ namespace SamSoarII.AppMain.UI
             {
                 ITabItem titem = (ITabItem)sender;
                 titem.IsFloat = false;
-                titem.FloatClosed -= OnTabFloatClosed;
+                //titem.FloatClosed -= OnTabFloatClosed;
                 TabItemCollection.Remove(titem);
                 _lDocDict.Remove(titem);
             }
