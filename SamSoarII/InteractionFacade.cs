@@ -1184,11 +1184,15 @@ namespace SamSoarII.AppMain
                 return DownloadHelper.DOWNLOAD_LADDER_ERROR;
             }
             GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
+            CommunicationParams cparams =
+                (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(
-                (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"],
-                CommunicationSettingDialogMode.DOWNLOAD))
+                cparams, CommunicationSettingDialogMode.DOWNLOAD))
             {
                 BaseSetting baseSetting = dialog.GetBaseSetting();
+                DownloadHelper.Write(
+                    _projectModel, cparams.DownloadOption);
+                baseSetting.DataLen = DownloadHelper.DataLen;
                 baseSetting.SettingButtonClick += (sender1, e1) =>
                 {
                     CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog(

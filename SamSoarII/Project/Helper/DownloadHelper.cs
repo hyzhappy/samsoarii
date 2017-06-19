@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.UI;
+using SamSoarII.AppMain.UI.Monitor;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.Utility;
@@ -51,6 +52,8 @@ namespace SamSoarII.AppMain.Project
         public const int OPTION_INITIALIZE = 0x04;
         /// <summary> 选项：是否包含设置 </summary>
         public const int OPTION_SETTING = 0x08;
+        /// <summary> 选项：是否包含监视 </summary>
+        public const int OPTION_MONITOR = 0x10;
 
         /// <summary> 未压缩的原数据，通常需要PLC去识别分析 </summary>
         static private List<byte> odata 
@@ -64,6 +67,11 @@ namespace SamSoarII.AppMain.Project
         /// <summary> 软元件ID表 </summary>
         static private Dictionary<string, int> regids 
             = new Dictionary<string, int>(); 
+
+        static public int DataLen
+        {
+            get { return odata.Count() + edata.Count(); }
+        }
 
         /// <summary>
         /// 将工程文件写入二进制数据，保存在根目录下的down.bin中
@@ -87,6 +95,13 @@ namespace SamSoarII.AppMain.Project
             {
                 GetRegisters(ldvmodel);
             }
+            if ((option & OPTION_MONITOR) != 0)
+            {
+                foreach (MonitorVariableTable mvtable in pmodel.MMonitorManager.MMWindow.tables)
+                {
+                    GetRegisters(mvtable);
+                }
+            }
             // 写入所有软元件
             WriteRegisters(option);
             // 写入所有梯形图
@@ -101,6 +116,8 @@ namespace SamSoarII.AppMain.Project
                 Write(fbvmdoel, option);
             }
             Write(pmodel.MTVModel, option);
+            // 写入监视表
+            Write(pmodel.MMonitorManager.MMWindow, option);
             // 写入工程树
             ProjectTreeView ptview = pmodel.IFacade.PTView;
             Write(ptview, option);
@@ -356,6 +373,9 @@ namespace SamSoarII.AppMain.Project
                 int p2 = (p & 3) * 2 + 1;
                 edata[st + p1] |= (byte)(1 << p2);
             }
+            int sz = edata.Count() - szid - 2;
+            edata[szid] = Int32_Low(sz);
+            edata[szid + 1] = Int32_High(sz);
         }
         /// <summary>
         /// 写入一个梯形图元件
@@ -460,6 +480,41 @@ namespace SamSoarII.AppMain.Project
             edata[szid] = Int32_High(sz);
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mmoni"></param>
+        /// <param name="option"></param>
+        static private void Write(MainMonitor mmoni, int option)
+        {
+            edata.Add(0xf9);
+            int szid = edata.Count();
+            edata.Add(0x00);
+            edata.Add(0x00);
+            foreach (MonitorVariableTable mvtable in mmoni.tables)
+            {
+                Write(mvtable.TableName);
+                edata.Add(Int32_Low(mvtable.Elements.Count()));
+                foreach (ElementModel emodel in mvtable.Elements)
+                {
+                    string vname = emodel.ShowName;
+                    if (regids.ContainsKey(vname))
+                    {
+                        int id = regids[vname];
+                        edata.Add(Int32_Low(id));
+                        edata.Add(Int32_High(id));
+                    }
+                    else
+                    {
+                        edata.Add(0x00);
+                        edata.Add(0x00);
+                    }
+                }
+            }
+            int sz = edata.Count() - szid - 2;
+            edata[szid] = Int32_Low(sz);
+            edata[szid + 1] = Int32_High(sz);
+        }
+        /// <summary>
         /// 写入工程树
         /// </summary>
         /// <param name="ptview">工程资源管理器</param>
@@ -535,6 +590,38 @@ namespace SamSoarII.AppMain.Project
                             regids.Add(ivname, regids.Count());
                         }
                     }
+                }
+            }
+        }
+        /// <summary>
+        /// 获取一个监视表格内所有被监视的软元件
+        /// </summary>
+        /// <param name="table">监视表格</param>
+        static private void GetRegisters(MonitorVariableTable table)
+        {
+            foreach (ElementModel emodel in table.Elements)
+            {
+                string ivname = emodel.ShowName;
+                if (!regids.ContainsKey(ivname))
+                {
+                    IValueModel ivmodel = null;
+                    switch (emodel.ShowType)
+                    {
+                        case "BOOL":
+                            ivmodel = ValueParser.ParseBitValue(ivname);
+                            break;
+                        case "WORD": case "UWORD": case "BCD":
+                            ivmodel = ValueParser.ParseWordValue(ivname);
+                            break;
+                        case "DWORD": case "UDWORD":
+                            ivmodel = ValueParser.ParseDoubleWordValue(ivname);
+                            break;
+                        case "FLOAT":
+                            ivmodel = ValueParser.ParseFloatValue(ivname);
+                            break;
+                    }
+                    regs.Add(ivmodel);
+                    regids.Add(ivname, regids.Count());
                 }
             }
         }

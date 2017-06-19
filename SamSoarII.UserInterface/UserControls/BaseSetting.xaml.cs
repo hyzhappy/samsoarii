@@ -22,6 +22,23 @@ namespace SamSoarII.UserInterface
     {
         public event RoutedEventHandler SettingButtonClick = delegate { };
         public event RoutedEventHandler ModifyButtonClick = delegate { };
+
+        private int datalen;
+        public int DataLen
+        {
+            get
+            {
+                return this.datalen;
+            }
+            set
+            {
+                this.datalen = value;
+                TB_Memory.Text = String.Format("{0}{1} KB",
+                    Properties.Resources.Memory_Used,
+                    ((double)datalen) / 1024);
+            }
+        }
+
         public BaseSetting()
         {
             InitializeComponent();

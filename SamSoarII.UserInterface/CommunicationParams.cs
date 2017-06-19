@@ -147,12 +147,26 @@ namespace SamSoarII.UserInterface
             {
                 return (_downloadOption & OPTION_PROGRAM) != 0;
             }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_PROGRAM;
+                else
+                    _downloadOption &= ~OPTION_PROGRAM;
+            }
         }
         public bool IsDownloadComment
         {
             get
             {
                 return (_downloadOption & OPTION_COMMENT) != 0;
+            }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_COMMENT;
+                else
+                    _downloadOption &= ~OPTION_COMMENT;
             }
         }
         public bool IsDownloadInitialize
@@ -161,6 +175,13 @@ namespace SamSoarII.UserInterface
             {
                 return (_downloadOption & OPTION_INITIALIZE) != 0;
             }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_INITIALIZE;
+                else
+                    _downloadOption &= ~OPTION_INITIALIZE;
+            }
         }
         public bool IsDownloadMonitor
         {
@@ -168,12 +189,26 @@ namespace SamSoarII.UserInterface
             {
                 return (_downloadOption & OPTION_MONITOR) != 0;
             }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_MONITOR;
+                else
+                    _downloadOption &= ~OPTION_MONITOR;
+            }
         }
         public bool IsDownloadSetting
         {
             get
             {
                 return (_downloadOption & OPTION_SETTING) != 0;
+            }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_SETTING;
+                else
+                    _downloadOption &= ~OPTION_SETTING;
             }
         }
         public CommunicationParams()

@@ -45,24 +45,24 @@
                 </Grid.RowDefinitions>
                 <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal">
                     <CheckBox x:Uid="CheckBox_2" x:Name="CB_Program" Margin="2,6"
-                              IsChecked="{Binding DownloadProgram}"
+                              IsChecked="{Binding IsDownloadProgram}"
                               Checked="OnChecked" Unchecked="OnUnchecked">
                     </CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Program}"></TextBlock>
                     <CheckBox x:Uid="CheckBox_3" x:Name="CB_Comment" Margin="2,6"
-                              IsChecked="{Binding DownloadComment}"
+                              IsChecked="{Binding IsDownloadComment}"
                               Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Comment}"></TextBlock>
                     <CheckBox x:Uid="CheckBox_4" x:Name="CB_Initialize" Margin="2,6"
-                              IsChecked="{Binding DownloadInitialize}" 
+                              IsChecked="{Binding IsDownloadInitialize}" 
                               Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Initialize}"></TextBlock>
                     <CheckBox x:Uid="CheckBox_4" x:Name="CB_Monitor" Margin="2,6"
-                              IsChecked="{Binding DownloadMonitor}"  
+                              IsChecked="{Binding IsDownloadMonitor}"  
                               Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Monitor}"></TextBlock>
                     <CheckBox x:Uid="CheckBox_5" x:Name="CB_Setting" Margin="2,6" 
-                              IsChecked="{Binding DownloadSetting}" 
+                              IsChecked="{Binding IsDownloadSetting}" 
                               Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Setting}"></TextBlock>
                 </StackPanel>
