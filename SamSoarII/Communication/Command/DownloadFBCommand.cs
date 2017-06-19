@@ -15,7 +15,7 @@ namespace SamSoarII.Communication.Command
             set { this.retdata = value; }
         }
         public int RecvDataLen {
-            get { return 2; }
+            get { return 0; }
             set { }
         }
         public bool IsComplete {
