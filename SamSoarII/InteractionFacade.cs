@@ -1223,6 +1223,7 @@ namespace SamSoarII.AppMain
                                 : (ICommunicationManager)(_projectModel.UManager));
                             if (!ret) MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                             handle.Abort();
+                            handle.Completed = true;
                         });
                         while (!handle.Completed)
                         {
