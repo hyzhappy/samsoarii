@@ -33,6 +33,7 @@ namespace SamSoarII.Communication
         {
             byte[] tempbytes = new byte[] { 0X01, 0XFE, 0X01, 0X00, 0X01, 0X00, 0X00 };
             byte[] CRC = CRC16.GetCRC(tempbytes);
+            /*
             TESTBYTES = new byte[tempbytes.Length + 2];
             for (int i = 0; i < tempbytes.Length; i++)
             {
@@ -40,6 +41,8 @@ namespace SamSoarII.Communication
             }
             TESTBYTES[TESTBYTES.Length - 2] = CRC[0];
             TESTBYTES[TESTBYTES.Length - 1] = CRC[1];
+            */
+            TESTBYTES = new byte[] { 0xF5 };
         }
         private bool IsSuccess = false;
         public string PortName
@@ -314,6 +317,7 @@ namespace SamSoarII.Communication
         private bool PortTest()
         {
             port.Open();
+            /*
             port.Write(TESTBYTES, 0, TESTBYTES.Length);
             Thread.Sleep(10);
             try
@@ -348,6 +352,8 @@ namespace SamSoarII.Communication
             }
             port.Close();
             return false;
+            */
+            return true;
         }
     }
 }
