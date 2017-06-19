@@ -13,25 +13,71 @@
     </UserControl.Resources>
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="2*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_2" Height="3*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_1" Height="*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_2" Height="*"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_2" Height="1.5*"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel x:Uid="StackPanel_1" Orientation="Vertical" Margin="5">
-            <TextBlock x:Uid="TextBlock_1" Text="{x:Static properties:Resources.Connection_Mode}"/>
+        <GroupBox x:Uid="GroupBox_1" Grid.Row="0" Grid.Column="0"
+                  Header="{x:Static properties:Resources.Connection_Mode}">
             <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
-                <RadioButton x:Uid="radiobutton" x:Name="radiobutton" Margin="30,30,0,0" IsChecked="{Binding IsCOMLinked}" Checked="OnChecked" Unchecked="OnUnchecked"></RadioButton>
-                <TextBlock x:Uid="TextBlock_2" Margin="0,30,0,0">COM</TextBlock>
-                <RadioButton x:Uid="RadioButton_1" Margin="80,30,0,0" IsChecked="{Binding ElementName=radiobutton,Path=IsChecked,Converter={StaticResource BoolConverter}}"></RadioButton>
-                <TextBlock x:Uid="TextBlock_3" Margin="0,30,0,0">USB</TextBlock>
+                <RadioButton x:Uid="radiobutton" x:Name="radiobutton" Margin="30,10,0,0" IsChecked="{Binding IsCOMLinked}" Checked="OnChecked" Unchecked="OnUnchecked"></RadioButton>
+                <TextBlock x:Uid="TextBlock_2" Margin="2,10,0,0">COM</TextBlock>
+                <RadioButton x:Uid="RadioButton_1" Margin="80,10,0,0" IsChecked="{Binding ElementName=radiobutton,Path=IsChecked,Converter={StaticResource BoolConverter}}"></RadioButton>
+                <TextBlock x:Uid="TextBlock_3" Margin="2,10,0,0">USB</TextBlock>
             </StackPanel>
-        </StackPanel>
-        <StackPanel x:Uid="ParamsSettingStackPanel" x:Name="ParamsSettingStackPanel" Grid.Row="1" Orientation="Vertical" Margin="5" Visibility="Hidden">
-            <TextBlock x:Uid="TextBlock_4" Text="{x:Static properties:Resources.Communication_Parameter_Setting}"/>
-            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="30,10,0,0" Checked="OnChecked" Unchecked="OnUnchecked" IsChecked="{Binding IsAutoCheck}"></CheckBox>
-                <TextBlock x:Uid="TextBlock_5" Margin="0,10,0,0" Text="{x:Static properties:Resources.Auto_Check}"/>
-                <Button x:Uid="SettingButton" x:Name="SettingButton" Margin="20,8,0,0" Width="60" Height="20" Content="{x:Static properties:Resources.Manual}"/>
+        </GroupBox>
+        <GroupBox x:Uid="GroupBox_2" x:Name="ParamSettingGroupBox" Grid.Row="1" Grid.Column="0" Visibility="Hidden"
+                  Header="{x:Static properties:Resources.Communication_Parameter_Setting}">
+            <StackPanel x:Uid="ParamsSettingStackPanel" x:Name="ParamsSettingStackPanel" Grid.Row="1" Orientation="Vertical" Margin="5">
+                <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                    <CheckBox x:Uid="checkbox" x:Name="checkbox" Margin="24,8,0,0" Checked="OnChecked" Unchecked="OnUnchecked" IsChecked="{Binding IsAutoCheck}"></CheckBox>
+                    <TextBlock x:Uid="TextBlock_5" Margin="2,8,0,0" Text="{x:Static properties:Resources.Auto_Check}"/>
+                    <Button x:Uid="SettingButton" x:Name="SettingButton" Margin="20,6,0,0" Width="60" Height="20" Content="{x:Static properties:Resources.Manual}"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </GroupBox>
+        <GroupBox x:Uid="GroupBox_3" x:Name="DownloadDataGroupBox" Grid.Row="2" Grid.Column="0" Visibility="Hidden"
+                  Header="{x:Static properties:Resources.Communication_Download_Data}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal">
+                    <CheckBox x:Uid="CheckBox_2" x:Name="CB_Program" Margin="2,6"
+                              IsChecked="{Binding IsDownloadProgram}"
+                              Checked="OnChecked" Unchecked="OnUnchecked">
+                    </CheckBox>
+                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Program}"></TextBlock>
+                    <CheckBox x:Uid="CheckBox_3" x:Name="CB_Comment" Margin="2,6"
+                              IsChecked="{Binding IsDownloadComment}"
+                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
+                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Comment}"></TextBlock>
+                    <CheckBox x:Uid="CheckBox_4" x:Name="CB_Initialize" Margin="2,6"
+                              IsChecked="{Binding IsDownloadInitialize}" 
+                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
+                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Initialize}"></TextBlock>
+                    <CheckBox x:Uid="CheckBox_4" x:Name="CB_Monitor" Margin="2,6"
+                              IsChecked="{Binding IsDownloadMonitor}"  
+                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
+                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Monitor}"></TextBlock>
+                    <CheckBox x:Uid="CheckBox_5" x:Name="CB_Setting" Margin="2,6" 
+                              IsChecked="{Binding IsDownloadSetting}" 
+                              Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
+                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Setting}"></TextBlock>
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="2,6" x:Name="TB_Memory">所占内存：</TextBlock>
+                    <Button Grid.Column="1" Margin="6,6" Width="60" Height="20" 
+                            x:Name="BT_Modify" Click="BT_Modify_Click"
+                            Content="{x:Static properties:Resources.Modify}">
+                    </Button>
+                </Grid>
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>

@@ -1183,9 +1183,38 @@ namespace SamSoarII.AppMain
             {
                 return DownloadHelper.DOWNLOAD_LADDER_ERROR;
             }
-            //GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
-            DownloadHelper.Write(_projectModel,
-                DownloadHelper.OPTION_PROGRAM | DownloadHelper.OPTION_COMMENT);
+            GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
+            CommunicationParams cparams =
+                (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
+            using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(
+                cparams, CommunicationSettingDialogMode.DOWNLOAD))
+            {
+                BaseSetting baseSetting = dialog.GetBaseSetting();
+                DownloadHelper.Write(
+                    _projectModel, cparams.DownloadOption);
+                baseSetting.DataLen = DownloadHelper.DataLen;
+                baseSetting.SettingButtonClick += (sender1, e1) =>
+                {
+                    CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog(
+                        (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+                    dialog1.ShowDialog();
+                };
+                baseSetting.ModifyButtonClick += (sender2, e2) =>
+                {
+                    ProjectPropertyDialog dialog2 = new ProjectPropertyDialog(_projectModel);
+                    dialog2.EnsureButtonClick += (sender1, e1) =>
+                    {
+                        dialog2.Save();
+                        dialog2.Close();
+                    };
+                    dialog2.ShowDialog();
+                };
+                dialog.Ensure += (sender3, e3) =>
+                {
+
+                };
+                dialog.ShowDialog();
+            }
             return 0;
         }
         public int UploadProject()

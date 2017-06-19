@@ -11,6 +11,17 @@ namespace SamSoarII.UserInterface
 {
     public class CommunicationParams : INotifyPropertyChanged, IXEleCreateOrLoad
     {
+        /// <summary> 选项：是否包含程序 </summary>
+        public const int OPTION_PROGRAM = 0x01;
+        /// <summary> 选项：是否包含注释 </summary>
+        public const int OPTION_COMMENT = 0x02;
+        /// <summary> 选项：是否包含初始化 </summary>
+        public const int OPTION_INITIALIZE = 0x04;
+        /// <summary> 选项：是否包含设置 </summary>
+        public const int OPTION_SETTING = 0x08;
+        /// <summary> 选项：是否包含监视 </summary>
+        public const int OPTION_MONITOR = 0x10;
+
         public event PropertyChangedEventHandler PropertyChanged;
         private bool _isCOMLinked;
         private bool _isAutoCheck;
@@ -20,6 +31,8 @@ namespace SamSoarII.UserInterface
         private int _stopBitIndex;
         private int _checkCodeIndex;
         private int _timeout;
+        private int _downloadOption;
+
         public int SerialPortIndex
         {
             get
@@ -116,6 +129,88 @@ namespace SamSoarII.UserInterface
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsAutoCheck"));
             }
         }
+        public int DownloadOption
+        {
+            get
+            {
+                return this._downloadOption;
+            }
+            set
+            {
+                this._downloadOption = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("DownloadOption"));
+            }
+        }
+        public bool IsDownloadProgram
+        {
+            get
+            {
+                return (_downloadOption & OPTION_PROGRAM) != 0;
+            }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_PROGRAM;
+                else
+                    _downloadOption &= ~OPTION_PROGRAM;
+            }
+        }
+        public bool IsDownloadComment
+        {
+            get
+            {
+                return (_downloadOption & OPTION_COMMENT) != 0;
+            }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_COMMENT;
+                else
+                    _downloadOption &= ~OPTION_COMMENT;
+            }
+        }
+        public bool IsDownloadInitialize
+        {
+            get
+            {
+                return (_downloadOption & OPTION_INITIALIZE) != 0;
+            }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_INITIALIZE;
+                else
+                    _downloadOption &= ~OPTION_INITIALIZE;
+            }
+        }
+        public bool IsDownloadMonitor
+        {
+            get
+            {
+                return (_downloadOption & OPTION_MONITOR) != 0;
+            }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_MONITOR;
+                else
+                    _downloadOption &= ~OPTION_MONITOR;
+            }
+        }
+        public bool IsDownloadSetting
+        {
+            get
+            {
+                return (_downloadOption & OPTION_SETTING) != 0;
+            }
+            set
+            {
+                if (value)
+                    _downloadOption |= OPTION_SETTING;
+                else
+                    _downloadOption &= ~OPTION_SETTING;
+            }
+        }
         public CommunicationParams()
         {
             InitializeProperty();
@@ -131,6 +226,7 @@ namespace SamSoarII.UserInterface
             _timeout = 20;
             _isCOMLinked = false;
             _isAutoCheck = true;
+            _downloadOption = OPTION_PROGRAM | OPTION_INITIALIZE;
         }
 
         public XElement CreateRootXElement()
@@ -144,6 +240,7 @@ namespace SamSoarII.UserInterface
             rootNode.Add(new XElement("Timeout", Timeout));
             rootNode.Add(new XElement("IsCOMLinked", IsCOMLinked));
             rootNode.Add(new XElement("IsAutoCheck", IsAutoCheck));
+            rootNode.Add(new XElement("DownloadOption", DownloadOption));
             return rootNode;
         }
         public void LoadPropertyByXElement(XElement ele)
@@ -156,6 +253,7 @@ namespace SamSoarII.UserInterface
             Timeout = int.Parse(ele.Element("Timeout").Value);
             IsCOMLinked = bool.Parse(ele.Element("IsCOMLinked").Value);
             IsAutoCheck = bool.Parse(ele.Element("IsAutoCheck").Value);
+            DownloadOption = int.Parse(ele.Element("DownloadOption").Value);
         }
     }
 }

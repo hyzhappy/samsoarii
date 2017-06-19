@@ -20,7 +20,25 @@ namespace SamSoarII.UserInterface
     /// </summary>
     public partial class BaseSetting : UserControl
     {
-        public event RoutedEventHandler SettingButtonClick;
+        public event RoutedEventHandler SettingButtonClick = delegate { };
+        public event RoutedEventHandler ModifyButtonClick = delegate { };
+
+        private int datalen;
+        public int DataLen
+        {
+            get
+            {
+                return this.datalen;
+            }
+            set
+            {
+                this.datalen = value;
+                TB_Memory.Text = String.Format("{0}{1} KB",
+                    Properties.Resources.Memory_Used,
+                    ((double)datalen) / 1024);
+            }
+        }
+
         public BaseSetting()
         {
             InitializeComponent();
@@ -28,32 +46,36 @@ namespace SamSoarII.UserInterface
         }
         private void SettingButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SettingButtonClick != null)
-            {
-                SettingButtonClick.Invoke(sender ,new RoutedEventArgs());
-            }
+            SettingButtonClick.Invoke(sender ,new RoutedEventArgs());
+        }
+        private void BT_Modify_Click(object sender, RoutedEventArgs e)
+        {
+            ModifyButtonClick(this, new RoutedEventArgs());
         }
         private void OnChecked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox)
             {
-                SettingButton.IsEnabled = false;
+                if (sender == checkbox)
+                    SettingButton.IsEnabled = false;
             }
             else
             {
-                ParamsSettingStackPanel.Visibility = Visibility.Visible;
+                ParamSettingGroupBox.Visibility = Visibility.Visible;
             }
         }
         private void OnUnchecked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox)
             {
-                SettingButton.IsEnabled = true;
+                if (sender == checkbox)
+                    SettingButton.IsEnabled = true;
             }
             else
             {
-                ParamsSettingStackPanel.Visibility = Visibility.Hidden;
+                ParamSettingGroupBox.Visibility = Visibility.Hidden;
             }
         }
+        
     }
 }
