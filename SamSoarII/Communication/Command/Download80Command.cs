@@ -25,9 +25,9 @@ namespace SamSoarII.Communication.Command
 
         public Download80Command(int id, byte[] data)
         {
-            Encrypt(data);
             bytes = new byte[] { 0x80, (byte)(id&0xff) }
                 .Concat(data).ToArray();
+            Encrypt(bytes);
             bytes = bytes.Concat(CRC16.GetCRC(bytes)).ToArray();
         }
         
