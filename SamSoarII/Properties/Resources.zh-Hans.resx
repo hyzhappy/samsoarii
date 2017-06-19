@@ -906,7 +906,7 @@
   <data name="Enable_Filter_Time" xml:space="preserve">
     <value>启用滤波时间</value>
   </data>
-  <data name="Power-off_Retention_Area_Setting" xml:space="preserve">
+  <data name="Power_off_Retention_Area_Setting" xml:space="preserve">
     <value>断电保持区设置</value>
   </data>
   <data name="Length" xml:space="preserve">
@@ -1652,5 +1652,11 @@
   </data>
   <data name="Message_Invalid_Function_Name" xml:space="preserve">
     <value>函数名称无效。</value>
+  </data>
+  <data name="Item_Rename" xml:space="preserve">
+    <value>当前存在正在重命名的项目！</value>
+  </data>
+  <data name="Download_Failed" xml:space="preserve">
+    <value>下载失败，请检查网络，或联系我们的技术支持!</value>
   </data>
 </root>

@@ -137,7 +137,7 @@ namespace SamSoarII.UserInterface
             Font font = new Font("Arial", 12);
             InstructionInputTextBox.Font = font;
             DataContext = this;
-            OpenTimer.Interval = TimeSpan.FromSeconds(0.7);
+            OpenTimer.Interval = TimeSpan.FromSeconds(0.5);
             OpenTimer.Tick += OpenTimer_Tick;
             Loaded += OnWindowLoaded;
         }

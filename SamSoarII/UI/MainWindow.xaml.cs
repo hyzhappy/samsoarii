@@ -58,7 +58,7 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACElemInit { get { return LAElemInit?.AnchorControl; } }
         public LayoutAnchorControl LACBreakpoint { get { return LABreakpoint?.AnchorControl; } }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
-        private NamedPipeServerStream serverPipe;
+        private NamedPipeClientStream clientPipe;
         public MainWindow()
         {
             InitializeComponent();
@@ -68,7 +68,6 @@ namespace SamSoarII.AppMain.UI
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
-            serverPipe = new NamedPipeServerStream("SamSoarII.Update",PipeDirection.InOut);
         }
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
@@ -985,7 +984,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                MessageBox.Show(Properties.Resources.Item_Rename);
                 return;
             }
             if (_interactionFacade.ProjectFullFileName == string.Empty)
@@ -1007,7 +1006,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                MessageBox.Show(Properties.Resources.Item_Rename);
                 return;
             }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -1022,7 +1021,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                MessageBox.Show(Properties.Resources.Item_Rename);
                 return;
             }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
@@ -1074,7 +1073,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                MessageBox.Show(Properties.Resources.Item_Rename);
                 return;
             }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
@@ -1241,7 +1240,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show("当前存在正在重命名的项目，完成后才能继续！");
+                MessageBox.Show(Properties.Resources.Item_Rename);
                 return;
             }
             _interactionFacade.DownloadProject();
@@ -1380,10 +1379,11 @@ namespace SamSoarII.AppMain.UI
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.Start();
-            serverPipe.WaitForConnection();
-            if (serverPipe.IsConnected)
+            clientPipe = new NamedPipeClientStream(".", "SamSoarII.Update", PipeDirection.InOut);
+            clientPipe.Connect(6000);
+            if (clientPipe.IsConnected)
             {
-                StreamReader reader = new StreamReader(serverPipe);
+                StreamReader reader = new StreamReader(clientPipe);
                 string message = reader.ReadLine();
                 if (message == string.Format("N"))
                 {
@@ -1391,24 +1391,45 @@ namespace SamSoarII.AppMain.UI
                 }
                 else if (message == string.Format("Y"))
                 {
-                    long filesize = long.Parse(reader.ReadLine());
-                    MessageBoxResult ret = MessageBox.Show(string.Format(Properties.Resources.Update_Or_Not + "(" + Properties.Resources.Update_Process + ")\n" + Properties.Resources.Update_Size +"{0:f3}MB", filesize / (1024 * 1024 * 1.0)), Properties.Resources.Update_Whether, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-                    StreamWriter writer = new StreamWriter(serverPipe);
+                    message = reader.ReadLine();
+                    if (message == string.Format("WebException"))
+                    {
+                        MessageBox.Show(Properties.Resources.Connect_Failed);
+                        return;
+                    }
+                    else if (message == string.Format("Exception"))
+                    {
+                        MessageBox.Show(Properties.Resources.Download_Failed);
+                        return;
+                    }else if (message == string.Empty)
+                    {
+                        MessageBox.Show(Properties.Resources.Connect_Failed);
+                        return;
+                    }
+                    long filesize = long.Parse(message);
+                    MessageBoxResult ret = MessageBox.Show(string.Format(Properties.Resources.Update_Or_Not + "(" + Properties.Resources.Update_Process + ")\n" + Properties.Resources.Update_Size + "{0:f3}MB", filesize / (1024 * 1024 * 1.0)), Properties.Resources.Update_Whether, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                    StreamWriter writer = new StreamWriter(clientPipe);
                     if (ret == MessageBoxResult.OK)
                         writer.WriteLine("Update");
                     else
                         writer.WriteLine("Cancel");
                     writer.Flush();
-                    serverPipe.WaitForPipeDrain();
+                    clientPipe.WaitForPipeDrain();
                 }
-                else
+                else if (message == string.Format("WebException"))
                 {
                     MessageBox.Show(Properties.Resources.Connect_Failed);
                 }
+                else if (message == string.Format("Exception"))
+                {
+                    MessageBox.Show(Properties.Resources.Download_Failed);
+                }
             }
-            serverPipe.Disconnect();
+            else
+            {
+                MessageBox.Show(Properties.Resources.Connect_Failed);
+            }
         }
-        
     }
 }
 

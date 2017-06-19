@@ -520,6 +520,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Download failed,please check the network or contact our technical support！ 的本地化字符串。
+        /// </summary>
+        public static string Download_Failed {
+            get {
+                return ResourceManager.GetString("Download_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Frequency pulse(DWord) 的本地化字符串。
         /// </summary>
         public static string DPLSF_Inst {
@@ -1488,6 +1497,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string is_illegal {
             get {
                 return ResourceManager.GetString("is_illegal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 There is currently a item that is being renamed! 的本地化字符串。
+        /// </summary>
+        public static string Item_Rename {
+            get {
+                return ResourceManager.GetString("Item_Rename", resourceCulture);
             }
         }
         
@@ -3683,7 +3701,7 @@ namespace SamSoarII.AppMain.Properties {
         /// </summary>
         public static string Power_off_Retention_Area_Setting {
             get {
-                return ResourceManager.GetString("Power-off_Retention_Area_Setting", resourceCulture);
+                return ResourceManager.GetString("Power_off_Retention_Area_Setting", resourceCulture);
             }
         }
         
