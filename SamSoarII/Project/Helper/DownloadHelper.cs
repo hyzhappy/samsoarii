@@ -674,6 +674,7 @@ namespace SamSoarII.AppMain.Project
             DownloadFBCommand dFBCmd = new DownloadFBCommand();
             DownloadFCCommand dFCCmd = new DownloadFCCommand();
             Download80Command d80Cmd = null;
+            Download81Command d81Cmd = new Download81Command();
             if (!Handle(dFBCmd)) return false;
             if (!Handle(dFCCmd)) return false;
             byte[] data = odata.Concat(edata).ToArray();
@@ -694,6 +695,7 @@ namespace SamSoarII.AppMain.Project
                 d80Cmd = new Download80Command(len, pack);
                 if (!Handle(d80Cmd)) return false;
             }
+            if (!Handle(d81Cmd)) return false;
             return true;
         }
 

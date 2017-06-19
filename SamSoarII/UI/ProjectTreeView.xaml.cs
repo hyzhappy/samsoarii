@@ -1144,6 +1144,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+        
         public void Load(XElement xele)
         {
             XElement xele_sr = xele.Element("PTVI_SubRoutines");
