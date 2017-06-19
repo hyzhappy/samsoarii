@@ -90,7 +90,18 @@ namespace SamSoarII.AppMain.UI
                 EnsureButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
         }
-
         #endregion
+    }
+    public class ProjectPropertyException : Exception
+    {
+        private string _message;
+        public ProjectPropertyException(string message)
+        {
+            _message = message;
+        }
+        public override string Message
+        {
+            get => _message;
+        }
     }
 }

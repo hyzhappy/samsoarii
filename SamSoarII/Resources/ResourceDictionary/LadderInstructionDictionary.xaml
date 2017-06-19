@@ -571,13 +571,13 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <ControlTemplate x:Uid="ControlTemplate_17" x:Key="ExpandButton" TargetType="{x:Type control:CanExpandButton}">
-        <Image x:Uid="image" x:Name="image" Width="50" Height="50"></Image>
+        <Image x:Name="image" Width="50" Height="50"></Image>
         <ControlTemplate.Triggers>
             <Trigger x:Uid="Trigger_49" Property="IsExpand" Value="true">
-                <Setter x:Uid="Setter_53" TargetName="image" Property="Source" Value="pack://application:,,,/SamSoarII;component/Resources/Image/expandOff.png"></Setter>
+                <Setter x:Uid="Setter_53" TargetName="image" Property="Source" Value="pack://application:,,,/SamSoarII;component/Resources/Image/Expand.png"></Setter>
             </Trigger>
             <Trigger x:Uid="Trigger_50" Property="IsExpand" Value="false">
-                <Setter x:Uid="Setter_54" TargetName="image" Property="Source" Value="pack://application:,,,/SamSoarII;component/Resources/Image/expandOn.png"></Setter>
+                <Setter x:Uid="Setter_54" TargetName="image" Property="Source" Value="pack://application:,,,/SamSoarII;component/Resources/Image/Collapsed.png"></Setter>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

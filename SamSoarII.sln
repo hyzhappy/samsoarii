@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.ValueModel", "SamSoarII.ValueModel\SamSoarII.ValueModel.csproj", "{5357953A-ADC8-40EE-A685-3165F1BE99CC}"
 EndProject
@@ -25,8 +25,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorPicker", "ColorPicker\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.HelpDocument", "SamSoarII.HelpDocument\SamSoarII.HelpDocument.csproj", "{932DAF07-5116-44DF-9091-BD4CDC7CD01E}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SamSoarII.Setup", "SamSoarII.Setup\SamSoarII.Setup.vdproj", "{EED6AF25-EC18-40ED-AAE8-6911B36EAD46}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII", "SamSoarII\SamSoarII.csproj", "{AB0293B9-C85C-4F49-A4B6-7074C8ACC6B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSoarII.LadderInstModel", "SamSoarII.InstructionModel\SamSoarII.LadderInstModel.csproj", "{69569578-5258-4AEC-9E10-DDE7234D78FB}"
@@ -38,6 +36,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUsbDotNet", "LibUsbDotNet\LibUsbDotNet.csproj", "{186E0CC6-F452-4D5E-A9DB-0D7CE3AAEAE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.AvalonDock", "AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj", "{DB81988F-E0F2-45A0-A1FD-8C37F3D35244}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SamSoarII.Setup", "SamSoarII.Setup\SamSoarII.Setup.vdproj", "{A6AE7688-54BC-47F1-B316-AC430E595AD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,8 +89,6 @@ Global
 		{932DAF07-5116-44DF-9091-BD4CDC7CD01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{932DAF07-5116-44DF-9091-BD4CDC7CD01E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{932DAF07-5116-44DF-9091-BD4CDC7CD01E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EED6AF25-EC18-40ED-AAE8-6911B36EAD46}.Debug|Any CPU.ActiveCfg = Debug
-		{EED6AF25-EC18-40ED-AAE8-6911B36EAD46}.Release|Any CPU.ActiveCfg = Release
 		{AB0293B9-C85C-4F49-A4B6-7074C8ACC6B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB0293B9-C85C-4F49-A4B6-7074C8ACC6B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB0293B9-C85C-4F49-A4B6-7074C8ACC6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -115,6 +113,10 @@ Global
 		{DB81988F-E0F2-45A0-A1FD-8C37F3D35244}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB81988F-E0F2-45A0-A1FD-8C37F3D35244}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB81988F-E0F2-45A0-A1FD-8C37F3D35244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6AE7688-54BC-47F1-B316-AC430E595AD7}.Debug|Any CPU.ActiveCfg = Debug
+		{A6AE7688-54BC-47F1-B316-AC430E595AD7}.Debug|Any CPU.Build.0 = Debug
+		{A6AE7688-54BC-47F1-B316-AC430E595AD7}.Release|Any CPU.ActiveCfg = Release
+		{A6AE7688-54BC-47F1-B316-AC430E595AD7}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

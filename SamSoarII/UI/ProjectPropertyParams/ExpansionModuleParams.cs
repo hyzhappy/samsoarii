@@ -64,8 +64,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _isExpansion = value;
-                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("IsExpansion"));
+                if (_isExpansion != value)
+                {
+                    _isExpansion = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsExpansion"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int ModuleIndex
@@ -76,8 +80,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _moduleIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ModuleIndex"));
+                if (_moduleIndex != value)
+                {
+                    _moduleIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ModuleIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module1TypeIndex
@@ -88,8 +96,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module1TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module1TypeIndex"));
+                if (_module1TypeIndex != value)
+                {
+                    _module1TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module1TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module2TypeIndex
@@ -100,8 +112,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module2TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module2TypeIndex"));
+                if (_module2TypeIndex != value)
+                {
+                    _module2TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module2TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module3TypeIndex
@@ -112,8 +128,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module3TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module3TypeIndex"));
+                if (_module3TypeIndex != value)
+                {
+                    _module3TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module3TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module4TypeIndex
@@ -124,8 +144,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module4TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module4TypeIndex"));
+                if (_module4TypeIndex != value)
+                {
+                    _module4TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module4TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module5TypeIndex
@@ -136,8 +160,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module5TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module5TypeIndex"));
+                if (_module5TypeIndex != value)
+                {
+                    _module5TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module5TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module6TypeIndex
@@ -148,8 +176,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module6TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module6TypeIndex"));
+                if (_module6TypeIndex != value)
+                {
+                    _module6TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module6TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module7TypeIndex
@@ -160,8 +192,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module7TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module7TypeIndex"));
+                if (_module7TypeIndex != value)
+                {
+                    _module7TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module7TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Module8TypeIndex
@@ -172,8 +208,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module8TypeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module8TypeIndex"));
+                if (_module8TypeIndex != value)
+                {
+                    _module8TypeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module8TypeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module1IsUsed
@@ -184,8 +224,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module1IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module1IsUsed"));
+                if (_module1IsUsed != value)
+                {
+                    _module1IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module1IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module2IsUsed
@@ -196,8 +240,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module2IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module2IsUsed"));
+                if (_module2IsUsed != value)
+                {
+                    _module2IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module2IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module3IsUsed
@@ -208,8 +256,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module3IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module3IsUsed"));
+                if (_module3IsUsed != value)
+                {
+                    _module3IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module3IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module4IsUsed
@@ -220,8 +272,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module4IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module4IsUsed"));
+                if (_module4IsUsed != value)
+                {
+                    _module4IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module4IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module5IsUsed
@@ -232,8 +288,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module5IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module5IsUsed"));
+                if (_module5IsUsed != value)
+                {
+                    _module5IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module5IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module6IsUsed
@@ -244,8 +304,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module6IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module6IsUsed"));
+                if (_module6IsUsed != value)
+                {
+                    _module6IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module6IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module7IsUsed
@@ -256,8 +320,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module7IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module7IsUsed"));
+                if (_module7IsUsed != value)
+                {
+                    _module7IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module7IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool Module8IsUsed
@@ -268,8 +336,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _module8IsUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module8IsUsed"));
+                if (_module8IsUsed != value)
+                {
+                    _module8IsUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Module8IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public XElement CreateRootXElement()

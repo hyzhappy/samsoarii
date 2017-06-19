@@ -29,14 +29,15 @@ namespace SamSoarII.AppMain.UI
         private bool _isUsed;
         public int InputPassIndex
         {
-            get
-            {
-                return _inputPassIndex;
-            }
+            get => _inputPassIndex;
             set
             {
-                _inputPassIndex = value;
-                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("InputPassIndex"));
+                if (_inputPassIndex != value)
+                {
+                    _inputPassIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("InputPassIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int InputModeIndex
@@ -47,8 +48,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _inputModeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("InputModeIndex"));
+                if (_inputModeIndex != value)
+                {
+                    _inputModeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("InputModeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int SamplingtimesIndex
@@ -59,8 +64,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _samplingtimesIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SamplingtimesIndex"));
+                if (_samplingtimesIndex != value)
+                {
+                    _samplingtimesIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SamplingtimesIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int SamplingValue
@@ -71,8 +80,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _samplingValue = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SamplingValue"));
+                if (_samplingValue != value)
+                {
+                    _samplingValue = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SamplingValue"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int InputStartRange
@@ -83,8 +96,13 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _inputStartRange = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("InputStartRange"));
+
+                if (_inputStartRange != value)
+                {
+                    _inputStartRange = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("InputStartRange"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int InputEndRange
@@ -95,8 +113,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _inputEndRange = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("InputEndRange"));
+                if (_inputEndRange != value)
+                {
+                    _inputEndRange = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("InputEndRange"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int OutputPassIndex
@@ -107,8 +129,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _outputPassIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputPassIndex"));
+                if (_outputPassIndex != value)
+                {
+                    _outputPassIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputPassIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int OutputModeIndex
@@ -119,8 +145,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _outputModeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputModeIndex"));
+                if (_outputModeIndex != value)
+                {
+                    _outputModeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputModeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int OutputStartRange
@@ -131,8 +161,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _outputStartRange = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputStartRange"));
+                if (_outputStartRange != value)
+                {
+                    _outputStartRange = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputStartRange"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int OutputEndRange
@@ -143,8 +177,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _outputEndRange = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputEndRange"));
+                if (_outputEndRange != value)
+                {
+                    _outputEndRange = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("OutputEndRange"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool IsUsed
@@ -155,8 +193,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _isUsed = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsUsed"));
+                if (_isUsed != value)
+                {
+                    _isUsed = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsUsed"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         private void InitializeProperty()

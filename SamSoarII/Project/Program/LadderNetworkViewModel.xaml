@@ -45,7 +45,7 @@
                             <TextBlock x:Uid="NetworkDescriptionTextBlock" x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"></TextBlock>
                         </Expander>
                     </Border>
-                    <Button x:Uid="ThumbnailButton" x:Name="ThumbnailButton" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1540,0,0,0" Width="65" Height="55" 
+                    <Button x:Name="ThumbnailButton" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1540,0,0,0" Width="65" Height="55" 
                             Visibility="{Binding ElementName=ladderExpander,Path=IsExpand,Converter={StaticResource converter}}"
                             Template="{StaticResource ThumbnailButton}" MouseDoubleClick="OnMouseDoubleClick" MouseWheel="OnMouseWheel"/>
                 </Grid>

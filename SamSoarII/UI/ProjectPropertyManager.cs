@@ -19,6 +19,7 @@ namespace SamSoarII.AppMain.UI
     }
     public class ProjectPropertyManager
     {
+        public static bool IsModify { get; set; }
         public static Dictionary<string, IXEleCreateOrLoad> ProjectPropertyDic;
         private ProjectPropertyManager(){}
         static ProjectPropertyManager()
@@ -32,6 +33,7 @@ namespace SamSoarII.AppMain.UI
             ProjectPropertyDic.Add("AnalogQuantityParams", new AnalogQuantityParams());
             ProjectPropertyDic.Add("ExpanModuleParams", new ExpansionModuleParams());
             ProjectPropertyDic.Add("CommunicationParams",new CommunicationParams());
+            IsModify = false;
         }
         #region Save and Load ProjectProperty
         public static XElement CreateProjectPropertyXElement()
@@ -64,6 +66,7 @@ namespace SamSoarII.AppMain.UI
                     ProjectPropertyDic["CommunParams485"].LoadPropertyByXElement(item);
                 }
             }
+            ProjectPropertyDic["PasswordParams"].LoadPropertyByXElement(rootNode.Element("PasswordParams"));
             ProjectPropertyDic["FilterParams"].LoadPropertyByXElement(rootNode.Element("FilterParams"));
             ProjectPropertyDic["HoldingSectParams"].LoadPropertyByXElement(rootNode.Element("HoldingSectParams"));
             ProjectPropertyDic["AnalogQuantityParams"].LoadPropertyByXElement(rootNode.Element("AnalogQuantityParams"));

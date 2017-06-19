@@ -31,8 +31,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _isChecked = value;
-                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("IsChecked"));
+                if (_isChecked != value)
+                {
+                    _isChecked = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsChecked"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         private int _filterTimeIndex;
@@ -44,8 +48,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _filterTimeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("FilterTimeIndex"));
+                if (_filterTimeIndex != value)
+                {
+                    _filterTimeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("FilterTimeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public XElement CreateRootXElement()

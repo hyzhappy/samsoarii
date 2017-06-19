@@ -46,8 +46,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _mStartAddr = value;
-                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("MStartAddr"));
+                if (_mStartAddr != value)
+                {
+                    _mStartAddr = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("MStartAddr"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int MLength
@@ -58,8 +62,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _mLength = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("MLength"));
+                if (_mLength != value)
+                {
+                    _mLength = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("MLength"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int DStartAddr
@@ -70,8 +78,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _dStartAddr = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("DStartAddr"));
+                if (_dStartAddr != value)
+                {
+                    _dStartAddr = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("DStartAddr"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int DLength
@@ -82,8 +94,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _dLength = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("DLength"));
+                if (_dLength != value)
+                {
+                    _dLength = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("DLength"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int SStartAddr
@@ -94,8 +110,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _sStartAddr = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SStartAddr"));
+                if (_sStartAddr != value)
+                {
+                    _sStartAddr = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SStartAddr"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int SLength
@@ -106,8 +126,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _sLength = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SLength"));
+                if (_sLength != value)
+                {
+                    _sLength = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SLength"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int CVStartAddr
@@ -118,8 +142,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _cvStartAddr = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CVStartAddr"));
+                if (_cvStartAddr != value)
+                {
+                    _cvStartAddr = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CVStartAddr"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int CVLength
@@ -130,8 +158,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _cvLength = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CVLength"));
+                if (_cvLength != value)
+                {
+                    _cvLength = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CVLength"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public bool NotClear
@@ -142,8 +174,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _notClear = value;
-                PropertyChanged.Invoke(this,new PropertyChangedEventArgs("NotClear"));
+                if (_notClear != value)
+                {
+                    _notClear = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NotClear"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public XElement CreateRootXElement()

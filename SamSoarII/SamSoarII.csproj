@@ -35,7 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Samkoon\SamSoarII\Debug\</OutputPath>
+    <OutputPath>..\..\..\Samkoon\SamSoarII\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,6 +50,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -656,8 +660,6 @@
     <Resource Include="Resources\Image\Download.png" />
     <Resource Include="Resources\Image\ElementInitialize.png" />
     <Resource Include="Resources\Image\ElementTable.png" />
-    <Resource Include="Resources\Image\expandOff.png" />
-    <Resource Include="Resources\Image\expandOn.png" />
     <Resource Include="Resources\Image\Expand\ExpandOff.png" />
     <Resource Include="Resources\Image\Expand\ExpandOn.png" />
     <Resource Include="Resources\Image\InsertRow.png" />
@@ -725,6 +727,9 @@
     <Content Include="Communication\Util\usbdll\libusb.h" />
     <Content Include="Communication\Util\usbdll\usbdll.c" />
     <Content Include="Communication\Util\usbdll\usbdll.h" />
+    <Resource Include="Resources\Image\Collapsed.png" />
+    <Resource Include="Resources\Image\Expand.png" />
+    <SplashScreen Include="Resources\Image\SplashScreen.png" />
     <Resource Include="Resources\Image\InstructionToolbar\DHLine.png" />
     <Resource Include="Resources\Image\InstructionToolbar\DVLine.png" />
     <Resource Include="Resources\Image\InstructionToolbar\HLine.png" />

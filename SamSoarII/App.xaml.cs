@@ -23,6 +23,7 @@ namespace SamSoarII.AppMain
     /// </summary>
     public partial class App : Application
     {
+        public static SplashScreen splashScreen;
         public App()
         {
             SpecialValueManager.Initialize();
@@ -34,7 +35,15 @@ namespace SamSoarII.AppMain
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GlobalSetting.LanagArea);
             }
             Exit += App_Exit;
+            this.Startup += App_Startup;
         }
+
+        private void App_Startup(object sender, StartupEventArgs e)
+        {
+            splashScreen = new SplashScreen(@"Resources\Image\SplashScreen.png");
+            splashScreen.Show(false, true);
+        }
+
         private void App_Exit(object sender, ExitEventArgs e)
         {
             SettingManager.Save();

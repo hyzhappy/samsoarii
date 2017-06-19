@@ -55,6 +55,7 @@ namespace SamSoarII.AppMain.Project
                 {
                     ret |= ldvmodel.IsModify;
                 }
+                ret |= ProjectPropertyManager.IsModify;
                 return ret;
             }
             set
@@ -64,6 +65,7 @@ namespace SamSoarII.AppMain.Project
                 {
                     ldvmodel.IsModify = value;
                 }
+                ProjectPropertyManager.IsModify = value;
             }
         }
 

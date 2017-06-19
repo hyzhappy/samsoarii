@@ -520,6 +520,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Download Encryption 的本地化字符串。
+        /// </summary>
+        public static string Download_Encryption {
+            get {
+                return ResourceManager.GetString("Download_Encryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Download failed,please check the network or contact our technical support！ 的本地化字符串。
         /// </summary>
         public static string Download_Failed {
@@ -3346,6 +3355,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Monitor Encryption 的本地化字符串。
+        /// </summary>
+        public static string Monitor_Encryption {
+            get {
+                return ResourceManager.GetString("Monitor_Encryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Monitor Start 的本地化字符串。
         /// </summary>
         public static string Monitor_Start {
@@ -3549,6 +3567,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Output {
             get {
                 return ResourceManager.GetString("Output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Password: 的本地化字符串。
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Password can not be empty 的本地化字符串。
+        /// </summary>
+        public static string Password_Empty {
+            get {
+                return ResourceManager.GetString("Password_Empty", resourceCulture);
             }
         }
         
@@ -4395,6 +4431,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Update_Whether {
             get {
                 return ResourceManager.GetString("Update_Whether", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Upload Encryption 的本地化字符串。
+        /// </summary>
+        public static string Upload_Encryption {
+            get {
+                return ResourceManager.GetString("Upload_Encryption", resourceCulture);
             }
         }
         

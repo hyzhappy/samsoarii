@@ -32,8 +32,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _baudRateIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("BaudRateIndex"));
+                if (_baudRateIndex != value)
+                {
+                    _baudRateIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("BaudRateIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int DataBitIndex
@@ -44,8 +48,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _dataBitIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("DataBitIndex"));
+                if (_dataBitIndex != value)
+                {
+                    _dataBitIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("DataBitIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int StopBitIndex
@@ -56,8 +64,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _stopBitIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StopBitIndex"));
+                if (_stopBitIndex != value)
+                {
+                    _stopBitIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StopBitIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int BufferBitIndex
@@ -68,8 +80,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _bufferBitIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("BufferBitIndex"));
+                if (_bufferBitIndex != value)
+                {
+                    _bufferBitIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("BufferBitIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int CheckCodeIndex
@@ -80,8 +96,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _checkCodeIndex = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CheckCodeIndex"));
+                if (_checkCodeIndex != value)
+                {
+                    _checkCodeIndex = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CheckCodeIndex"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int StationNum
@@ -92,8 +112,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _stationNum = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StationNum"));
+                if (_stationNum != value)
+                {
+                    _stationNum = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StationNum"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public int Timeout
@@ -104,8 +128,12 @@ namespace SamSoarII.AppMain.UI
             }
             set
             {
-                _timeout = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Timeout"));
+                if (_timeout != value)
+                {
+                    _timeout = value;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Timeout"));
+                    ProjectPropertyManager.IsModify = true;
+                }
             }
         }
         public void InitializeProperty()

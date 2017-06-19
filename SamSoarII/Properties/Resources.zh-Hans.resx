@@ -1659,4 +1659,19 @@
   <data name="Download_Failed" xml:space="preserve">
     <value>下载失败，请检查网络，或联系我们的技术支持!</value>
   </data>
+  <data name="Upload_Encryption" xml:space="preserve">
+    <value>上载加密</value>
+  </data>
+  <data name="Download_Encryption" xml:space="preserve">
+    <value>下载加密</value>
+  </data>
+  <data name="Monitor_Encryption" xml:space="preserve">
+    <value>监视加密</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码：</value>
+  </data>
+  <data name="Password_Empty" xml:space="preserve">
+    <value>密码不能为空</value>
+  </data>
 </root>

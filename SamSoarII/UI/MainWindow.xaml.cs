@@ -68,7 +68,15 @@ namespace SamSoarII.AppMain.UI
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
+            Activated += MainWindow_Activated;
         }
+
+        private void MainWindow_Activated(object sender, EventArgs e)
+        {
+            App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
+            Activated -= MainWindow_Activated;
+        }
+
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             foreach (Window window in Application.Current.Windows)
@@ -212,7 +220,7 @@ namespace SamSoarII.AppMain.UI
             worker.RunWorkerAsync();
             LACProj.Show();
             LAProj.Hide();
-            this.Loaded -= MainWindow_Loaded;
+            Loaded -= MainWindow_Loaded;
         }
         private void Initialize()
         {
@@ -1210,8 +1218,15 @@ namespace SamSoarII.AppMain.UI
             ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel);
             dialog.EnsureButtonClick += (sender1, e1) =>
             {
-                dialog.Save();
-                dialog.Close();
+                try
+                {
+                    dialog.Save();
+                    dialog.Close();
+                }
+                catch (ProjectPropertyException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             };
             dialog.ShowDialog();
         }

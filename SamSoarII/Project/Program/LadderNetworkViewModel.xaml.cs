@@ -1704,7 +1704,7 @@ namespace SamSoarII.AppMain.Project
             if (_canScrollToolTip)
             {
                 ScrollViewer scroll = (ScrollViewer)((ToolTip)ThumbnailButton.ToolTip).Content;
-                scroll.ScrollToVerticalOffset(scroll.VerticalOffset + e.Delta / 20);
+                scroll.ScrollToVerticalOffset(scroll.VerticalOffset - e.Delta / 10);
                 e.Handled = true;
             }
         }
