@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 /// <summary>
 /// Namespace : SamSoarII.AppMain.Project
@@ -116,8 +117,6 @@ namespace SamSoarII.AppMain.Project
                             ModbusTableViewModel mtvmodel = new ModbusTableViewModel(pmodel);
                             Read(mtvmodel);
                             pmodel.MTVModel = mtvmodel;
-                            break;
-                        case 0xfa:
                             break;
                         case 0xf9:
                             MainMonitor mmoni = new MainMonitor(pmodel);

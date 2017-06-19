@@ -151,6 +151,24 @@ namespace SamSoarII.UserInterface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Comment 的本地化字符串。
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Download Data 的本地化字符串。
+        /// </summary>
+        public static string Communication_Download_Data {
+            get {
+                return ResourceManager.GetString("Communication_Download_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Communication Parameter Setting 的本地化字符串。
         /// </summary>
         public static string Communication_Parameter_Setting {
@@ -340,6 +358,15 @@ namespace SamSoarII.UserInterface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Initialize 的本地化字符串。
+        /// </summary>
+        public static string Initialize {
+            get {
+                return ResourceManager.GetString("Initialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Instruction Input 的本地化字符串。
         /// </summary>
         public static string Instruction_Input {
@@ -385,6 +412,15 @@ namespace SamSoarII.UserInterface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Memory Used: 的本地化字符串。
+        /// </summary>
+        public static string Memory_Used {
+            get {
+                return ResourceManager.GetString("Memory_Used", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 already exists in the current directory 的本地化字符串。
         /// </summary>
         public static string Message_Already_Exist {
@@ -417,6 +453,24 @@ namespace SamSoarII.UserInterface.Properties {
         public static string Message_Lang {
             get {
                 return ResourceManager.GetString("Message_Lang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Modify 的本地化字符串。
+        /// </summary>
+        public static string Modify {
+            get {
+                return ResourceManager.GetString("Modify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Monitor 的本地化字符串。
+        /// </summary>
+        public static string Monitor {
+            get {
+                return ResourceManager.GetString("Monitor", resourceCulture);
             }
         }
         
@@ -480,6 +534,15 @@ namespace SamSoarII.UserInterface.Properties {
         public static string PLC_Type {
             get {
                 return ResourceManager.GetString("PLC_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Program 的本地化字符串。
+        /// </summary>
+        public static string Program {
+            get {
+                return ResourceManager.GetString("Program", resourceCulture);
             }
         }
         

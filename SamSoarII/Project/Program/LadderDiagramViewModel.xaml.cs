@@ -2339,20 +2339,11 @@ namespace SamSoarII.AppMain.Project
         private void PasteNetworksExecute(XElement xEle)
         {
             NetworkChangeElementArea area = null;
-            NetworkChangeElementArea newarea = null;
-            XElement xele_area = xEle.Element("Area");
-            if (xele_area != null)
-            {
-                area = new NetworkChangeElementArea();
-                area.Load(xele_area);
-                newarea = new NetworkChangeElementArea();
-                newarea.SU_Select = area.SU_Select;
-                newarea.SU_Cross = area.SU_Cross;
-            }
+            area = new NetworkChangeElementArea();
+            area.SU_Select = SelectStatus.MultiSelected;
+            area.SU_Cross = CrossNetworkState.CrossDown;
             if (_selectRectOwner != null)
             {
-                newarea.NetworkNumberStart = _selectRectOwner.NetworkNumber;
-                newarea.NetworkNumberEnd = area.NetworkNumberEnd + newarea.NetworkNumberStart - area.NetworkNumberStart; 
                 // TODO 命令化
                 var replacednets = new SortedSet<LadderNetworkViewModel>();
                 var removednets = new SortedSet<LadderNetworkViewModel>();            
@@ -2362,9 +2353,11 @@ namespace SamSoarII.AppMain.Project
                     var net = ProjectHelper.CreateLadderNetworkByXElement(netEle, this);
                     replacednets.Add(net);
                 }
+                area.NetworkNumberStart = _selectRectOwner.NetworkNumber;
+                area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
                 int index = removednets.First().NetworkNumber;
                 var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
-                    this, replacednets, removednets, index, newarea, area);
+                    this, replacednets, removednets, index, area);
                 _commandManager.Execute(command);
             }
             else
@@ -2384,9 +2377,11 @@ namespace SamSoarII.AppMain.Project
                     {
                         removednets.Add(net);
                     }
+                    area.NetworkNumberStart = _selectRectOwner.NetworkNumber;
+                    area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
                     int index = removednets.First().NetworkNumber;
                     var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
-                        this, replacednets, removednets, index, newarea, area);
+                        this, replacednets, removednets, index, area);
                     _commandManager.Execute(command);
                 }
             }
@@ -2690,6 +2685,7 @@ namespace SamSoarII.AppMain.Project
                         {
                             LadderNetworkViewModel _lnvmodel = GetNetworkByNumber(nn);
                             _lnvmodel.IsSelectAllMode = true;
+                            //_lnvmodel.IsSelectAreaMode = true;
                             if (nn == area.NetworkNumberStart
                              && area.SU_Cross == CrossNetworkState.CrossDown)
                             {
@@ -2720,7 +2716,7 @@ namespace SamSoarII.AppMain.Project
                             _selectStartNetwork.SelectAreaSecondY = area.Y2;
                             break;
                     }
-                    EnterMultiSelectingState();
+                    EnterMultiSelectedState();
                     break;
             }
         }
