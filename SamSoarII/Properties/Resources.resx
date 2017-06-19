@@ -1659,6 +1659,12 @@
   <data name="Download_Failed" xml:space="preserve">
     <value>Download failed,please check the network or contact our technical support！</value>
   </data>
+  <data name="MessageBox_Download_Successd" xml:space="preserve">
+    <value>Project is downloaded successfully!</value>
+  </data>
+  <data name="Project_Download" xml:space="preserve">
+    <value>Project downloading...</value>
+  </data>
   <data name="Upload_Encryption" xml:space="preserve">
     <value>Upload Encryption</value>
   </data>
