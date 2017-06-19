@@ -1,5 +1,7 @@
 ﻿using SamSoarII.AppMain.UI;
 using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.Communication;
+using SamSoarII.Communication.Command;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.Utility;
@@ -10,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -73,6 +76,8 @@ namespace SamSoarII.AppMain.Project
             get { return odata.Count() + edata.Count(); }
         }
 
+        #region Generate Data
+
         /// <summary>
         /// 将工程文件写入二进制数据，保存在根目录下的down.bin中
         /// </summary>
@@ -123,6 +128,7 @@ namespace SamSoarII.AppMain.Project
             Write(ptview, option);
             // 设置路径
             string currentpath = Environment.CurrentDirectory;
+            string execfile = String.Format(@"{0:s}\downc.bin", currentpath);
             string datafile = String.Format(@"{0:s}\downe.bin", currentpath);
             string packfile = String.Format(@"{0:s}\downe.rar", currentpath);
             // 写入待压缩的压缩数据
@@ -144,8 +150,25 @@ namespace SamSoarII.AppMain.Project
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
+            BinaryReader br = null;
+            // 获得执行程序
+            br = new BinaryReader(
+                new FileStream(execfile, FileMode.Open));
+            odata.Clear();
+            while (br.BaseStream.CanRead)
+            {
+                try
+                {
+                    odata.Add(br.ReadByte());
+                }
+                catch (EndOfStreamException)
+                {
+                    break;
+                }
+            }
+            br.Close();
             // 获得压缩后的数据
-            BinaryReader br = new BinaryReader(
+            br = new BinaryReader(
                 new FileStream(packfile, FileMode.Open));
             edata.Clear();
             while (br.BaseStream.CanRead)
@@ -638,5 +661,72 @@ namespace SamSoarII.AppMain.Project
                 GetComments(child, comments);
             }
         }
+
+        #endregion
+
+        #region Download Communication
+
+        static private ICommunicationManager commanager;
+
+        static public bool Download(ICommunicationManager _commanager)
+        {
+            commanager = _commanager;
+            DownloadFBCommand dFBCmd = new DownloadFBCommand();
+            DownloadFCCommand dFCCmd = new DownloadFCCommand();
+            Download80Command d80Cmd = null;
+            if (!Handle(dFBCmd)) return false;
+            if (!Handle(dFCCmd)) return false;
+            byte[] data = odata.Concat(edata).ToArray();
+            byte[] pack = new byte[1024];
+            int len = data.Length / 1024;
+            int rem = data.Length % 1024;
+            for (int i = 0; i < len; i++)
+            {
+                for (int j = 0; j < 1024; j++)
+                    pack[j] = data[i * 1024 + j];
+                d80Cmd = new Download80Command(i, pack);
+                if (!Handle(d80Cmd)) return false;
+            }
+            if (rem > 0)
+            {
+                for (int j = 0; j < rem; j++)
+                    pack[j] = data[len * 1024 + j];
+                d80Cmd = new Download80Command(len, pack);
+                if (!Handle(d80Cmd)) return false;
+            }
+            return true;
+        }
+
+        static private bool Handle(ICommunicationCommand cmd, int waittime = 10)
+        {
+            bool hassend = false;
+            bool hasrecv = false;
+            int sendtime = 0;
+            int recvtime = 0;
+            while (sendtime < 5)
+            {
+                if (commanager.Write(cmd) == 0)
+                {
+                    hassend = true;
+                    break;
+                }
+                sendtime++;
+            }
+            if (!hassend) return false;
+            Thread.Sleep(waittime);
+            if (cmd.RecvDataLen == 0) return true;
+            while (true)
+            {
+                if (commanager.Read(cmd) == 0)
+                {
+                    hasrecv = true;
+                    break;
+                }
+                recvtime++;
+            }
+            return hasrecv && cmd.IsComplete && cmd.IsSuccess;
+        }
+
+        #endregion
     }
 }

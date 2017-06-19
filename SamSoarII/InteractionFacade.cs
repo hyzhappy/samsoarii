@@ -23,6 +23,7 @@ using SamSoarII.Simulation.UI.Breakpoint;
 using System.Threading;
 using System.Windows.Threading;
 using System.ComponentModel;
+using SamSoarII.Communication;
 
 namespace SamSoarII.AppMain
 {
@@ -1183,15 +1184,14 @@ namespace SamSoarII.AppMain
             {
                 return DownloadHelper.DOWNLOAD_LADDER_ERROR;
             }
-            GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
             CommunicationParams cparams =
                 (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
+            GenerateHelper.GenerateFinal(_projectModel, "libF103PLC.a");
+            DownloadHelper.Write(_projectModel, cparams.DownloadOption);
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(
                 cparams, CommunicationSettingDialogMode.DOWNLOAD))
             {
                 BaseSetting baseSetting = dialog.GetBaseSetting();
-                DownloadHelper.Write(
-                    _projectModel, cparams.DownloadOption);
                 baseSetting.DataLen = DownloadHelper.DataLen;
                 baseSetting.SettingButtonClick += (sender1, e1) =>
                 {
@@ -1211,7 +1211,29 @@ namespace SamSoarII.AppMain
                 };
                 dialog.Ensure += (sender3, e3) =>
                 {
-
+                    if (CommunicationTest())
+                    {
+                        CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
+                        LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
+                        MainWindow.Dispatcher.Invoke(() =>
+                        {
+                            handle.Start();
+                            bool ret = DownloadHelper.Download(paras.IsCOMLinked
+                                ? (ICommunicationManager)(_projectModel.PManager)
+                                : (ICommunicationManager)(_projectModel.UManager));
+                            if (!ret) MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                            handle.Abort();
+                        });
+                        while (!handle.Completed)
+                        {
+                            Thread.Sleep(10);
+                        }
+                        MessageBox.Show(Properties.Resources.MessageBox_Download_Successd);
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                    }
                 };
                 dialog.ShowDialog();
             }
