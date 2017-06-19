@@ -20,7 +20,8 @@ namespace SamSoarII.UserInterface
     /// </summary>
     public partial class BaseSetting : UserControl
     {
-        public event RoutedEventHandler SettingButtonClick;
+        public event RoutedEventHandler SettingButtonClick = delegate { };
+        public event RoutedEventHandler ModifyButtonClick = delegate { };
         public BaseSetting()
         {
             InitializeComponent();
@@ -28,32 +29,36 @@ namespace SamSoarII.UserInterface
         }
         private void SettingButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SettingButtonClick != null)
-            {
-                SettingButtonClick.Invoke(sender ,new RoutedEventArgs());
-            }
+            SettingButtonClick.Invoke(sender ,new RoutedEventArgs());
+        }
+        private void BT_Modify_Click(object sender, RoutedEventArgs e)
+        {
+            ModifyButtonClick(this, new RoutedEventArgs());
         }
         private void OnChecked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox)
             {
-                SettingButton.IsEnabled = false;
+                if (sender == checkbox)
+                    SettingButton.IsEnabled = false;
             }
             else
             {
-                ParamsSettingStackPanel.Visibility = Visibility.Visible;
+                ParamSettingGroupBox.Visibility = Visibility.Visible;
             }
         }
         private void OnUnchecked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox)
             {
-                SettingButton.IsEnabled = true;
+                if (sender == checkbox)
+                    SettingButton.IsEnabled = true;
             }
             else
             {
-                ParamsSettingStackPanel.Visibility = Visibility.Hidden;
+                ParamSettingGroupBox.Visibility = Visibility.Hidden;
             }
         }
+        
     }
 }

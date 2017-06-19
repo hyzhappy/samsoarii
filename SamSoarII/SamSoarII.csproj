@@ -83,6 +83,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Communication\Command\Download80Command.cs" />
+    <Compile Include="Communication\Command\DownloadFBCommand.cs" />
+    <Compile Include="Communication\Command\DownloadFCCommand.cs" />
     <Compile Include="Communication\Command\ForceCancelCommand.cs" />
     <Compile Include="Communication\Command\GeneralReadCommand.cs" />
     <Compile Include="Communication\Command\GeneralWriteCommand.cs" />
