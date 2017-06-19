@@ -314,6 +314,8 @@ namespace SamSoarII.Communication
         private bool PortTest()
         {
             port.Open();
+            return true;
+            /*
             port.Write(TESTBYTES, 0, TESTBYTES.Length);
             Thread.Sleep(10);
             try
@@ -347,7 +349,7 @@ namespace SamSoarII.Communication
                 return false;
             }
             port.Close();
-            return false;
+            return false;*/
         }
     }
 }

@@ -165,6 +165,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0D8D25FACF70484CB7EC03B4A518B18F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0F2D5BB6E217497FAA7A7CF0D4EC4BF8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -213,6 +219,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_15FC2FB277AB40AE99BC7DE6FCAF3DA9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_165E67F2B6E349A48FE8176B720E5BB0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -244,6 +256,12 @@
         "Entry"
         {
         "MsmKey" = "8:_18397DF8F54841AD94F7F3A09FDE1708"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_18D5494C1D6A40DCA7C6736D7D6CE078"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -327,6 +345,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_23EC4CF18C2A4CBF8AFD8AC4AA4E6DD7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2417715554D064F9C1598E52DA2CA3C6"
         "OwnerKey" = "8:_16FB922E6E58874DC6DB886401F2F198"
         "MsmSig" = "8:_UNDEFINED"
@@ -351,13 +375,31 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_286C2089CB4A4A8DB881B260AE7AFFCF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2906835FA5E04264A8C13AA0E19714D3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_295953C08BC64D94B0A7B8A405A8F43D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_29CC7980F8D64FAC9961E57CDEA568DE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_29CECB8C55B848C4A3C528A23B53DEAD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -459,6 +501,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_34D321C841FA44B4B38166E45985F03A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3524281CA72040699CDC2E6E235AA232"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -531,6 +579,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3E88525578534666A3FB082D3D428EAA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3FB059C711004D8F95AFBC8E17206B32"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -592,6 +646,12 @@
         "Entry"
         {
         "MsmKey" = "8:_46A841262D78498BAB0CBFC9396A5890"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_46B335A9D61741318C2E0AE583314362"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -825,6 +885,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5EBF6CC9F2004BBABA36CF3F566061E0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5F78B24C65B64E749F627BA2F8BAA561"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_600584B5385E4BDC8D8986BAD1C852F8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -927,6 +999,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_697D9653A1A94C0A8984FDE0C324E111"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6A53403B51D84335BD6C40FCFCBCCE59"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -993,6 +1071,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6EB9BCBCB086429D84781AABCD884D4D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6F716FB6F1984BF588DB080147EB1151"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1000,6 +1084,12 @@
         "Entry"
         {
         "MsmKey" = "8:_6F8EAFD68B384391BB249BFD5BF641E6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7016F5D47B7F4A61A7415E682AF618FF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1095,7 +1185,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_748284EEBEFC47ACAC6D4207DD711CC4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_74B44F1529F84845B9858D395A5FD181"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_74C976D6C8C84B9494D49FD073E6F74B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1131,6 +1233,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_76FC63D6A5DF461D8D0637895CB58DF1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_77473A4359462566FFC3F2A46495909B"
         "OwnerKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
         "MsmSig" = "8:_UNDEFINED"
@@ -1143,6 +1251,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_77BC88B941A44B5F8EDD03381D537150"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7838194F37D84FF891E7772AB0C84E27"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1150,6 +1264,12 @@
         "Entry"
         {
         "MsmKey" = "8:_78479956A84A4F939CA501D99D101B3B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_784F135DBD9A4AE9BEFC97160072A61E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1281,6 +1401,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8321210404FC4ED1A72BFE87970CE5FB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_851D8DAF12534BE0B64DA4051058A59A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1288,6 +1414,12 @@
         "Entry"
         {
         "MsmKey" = "8:_85F4EBFE7EB54C94BFD22180F98C69DE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_867D1D4DF94E4F6BB9A50B96A088F14E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1431,6 +1563,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_92F44EE22E454403829E026434152454"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_945A0FF9C2E74248BC9630B73AA9F2AC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1467,6 +1605,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9928C3E4C7EA4397AE527E6BB6961575"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_99B65489420E4D6FB629D8A52DBE941B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1486,6 +1630,18 @@
         "Entry"
         {
         "MsmKey" = "8:_9AB0DE03A4D541B1B17EEDE1933F22CC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9ACCEE9A9AF8414782B71303B5E75FFE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9B7CAF4217794F66A255F5D6017D49A8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1719,6 +1875,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BB6BE0E40B7B4F3082232185B8F62CCD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1803,6 +1965,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_CD5ADE84FA7D41219F937E67657DEAA3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CE77ECAA9B2C45E1B241CDD90DE6C2FC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1810,6 +1978,24 @@
         "Entry"
         {
         "MsmKey" = "8:_CF0DAA73BF8D482B968D4C5A2AFAE273"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D11F393824674926B0619CC1AEF181F7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D1414D4F2996483FBD4445DCFBCA331B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D1F1D9C068D945998B245803A21696C8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1834,6 +2020,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D5EACA3472B34FEA97C7C89EABDE0F69"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D62972596AA142DAAE7852250972A413"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1870,6 +2062,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D7590A5DF3EB4970B777A2254BD00726"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D791FB10613A41E68D82DB9528B2CB2D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1929,6 +2127,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_DB6F654B86EB4D51856006032F68C96E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DB922F3644CA481DB9E3B37476132563"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1942,6 +2146,12 @@
         "Entry"
         {
         "MsmKey" = "8:_DDA7769BEC514CE99BFBFACFE1C1C177"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DE0346F5A1B34CF6A9753AAAFAB298D5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1990,6 +2200,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E48E69CA628B4B5AB4A8675A3D0F5B59"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E4DBF22C43A543848149833B4B21E69E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2121,6 +2337,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F127D6BDE0DA47FFBFF06D6E56565249"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F174F7F8FFC3455A9ABE92AB92EBF4A3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2187,6 +2409,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F4954DF265C04377AE610679A60260B1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F55BB18EBC924F54A55864EB3FAB168A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2241,6 +2469,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FB07405347E744FC838642E82E089611"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FB2594CE926D4C12B00BA9A8FA01E526"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FB30B842B9624357BAAD192C5AF1330C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FB614FFBFF4C4BAA94494921AD1E8845"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2284,25 +2530,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_714127E60A79511404B8DFC458B389B6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_01638939359443EB84CD7A13359650A9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6875CEB175A04DDF82D7040EE4514218"
+        "OwnerKey" = "8:_6E53F52414840A84A0F4CE0668ECDB69"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_7217D1B834884010B12A7DEA247C0DA0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6875CEB175A04DDF82D7040EE4514218"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2320,7 +2560,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6E53F52414840A84A0F4CE0668ECDB69"
+        "OwnerKey" = "8:_01638939359443EB84CD7A13359650A9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2411,6 +2651,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_77473A4359462566FFC3F2A46495909B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_714127E60A79511404B8DFC458B389B6"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -2950,6 +3196,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D8D25FACF70484CB7EC03B4A518B18F"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include-fixed\\syslimits.h"
+            "TargetName" = "8:syslimits.h"
+            "Tag" = "8:"
+            "Folder" = "8:_B7D5573906FE4A94B924F5E0AED43AE3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F2D5BB6E217497FAA7A7CF0D4EC4BF8"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\utime.h"
@@ -3110,6 +3376,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_15FC2FB277AB40AE99BC7DE6FCAF3DA9"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\tgmath.h"
+            "TargetName" = "8:tgmath.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_165E67F2B6E349A48FE8176B720E5BB0"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\lib\\redboot.specs"
@@ -3207,6 +3493,26 @@
             "TargetName" = "8:fnmatch.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18D5494C1D6A40DCA7C6736D7D6CE078"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\rar\\7zxa.dll"
+            "TargetName" = "8:7zxa.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3481,6 +3787,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23EC4CF18C2A4CBF8AFD8AC4AA4E6DD7"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdalign.h"
+            "TargetName" = "8:stdalign.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2417715554D064F9C1598E52DA2CA3C6"
             {
             "AssemblyRegister" = "3:1"
@@ -3532,6 +3858,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_286C2089CB4A4A8DB881B260AE7AFFCF"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\iso646.h"
+            "TargetName" = "8:iso646.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2906835FA5E04264A8C13AA0E19714D3"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\tcc\\include\\sec_api\\string_s.h"
@@ -3552,12 +3898,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_295953C08BC64D94B0A7B8A405A8F43D"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdbool.h"
+            "TargetName" = "8:stdbool.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_29CC7980F8D64FAC9961E57CDEA568DE"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\unistd.h"
             "TargetName" = "8:unistd.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_29CECB8C55B848C4A3C528A23B53DEAD"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\libF103PLC.a"
+            "TargetName" = "8:libF103PLC.a"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3903,6 +4289,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_34D321C841FA44B4B38166E45985F03A"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdatomic.h"
+            "TargetName" = "8:stdatomic.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3524281CA72040699CDC2E6E235AA232"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\lib\\libnosys.a"
@@ -4143,6 +4549,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E88525578534666A3FB082D3D428EAA"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\downf.h"
+            "TargetName" = "8:downf.h"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3FB059C711004D8F95AFBC8E17206B32"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\nosys.specs"
@@ -4360,6 +4786,26 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_12364201BB8D477E9F2FCCD5C8B6D2C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_46B335A9D61741318C2E0AE583314362"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\arm_cmse.h"
+            "TargetName" = "8:arm_cmse.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5156,6 +5602,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5EBF6CC9F2004BBABA36CF3F566061E0"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdnoreturn.h"
+            "TargetName" = "8:stdnoreturn.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5F78B24C65B64E749F627BA2F8BAA561"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\varargs.h"
+            "TargetName" = "8:varargs.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_600584B5385E4BDC8D8986BAD1C852F8"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\ar.h"
@@ -5507,6 +5993,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_697D9653A1A94C0A8984FDE0C324E111"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdint-gcc.h"
+            "TargetName" = "8:stdint-gcc.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6A53403B51D84335BD6C40FCFCBCCE59"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\machine\\_arc4random.h"
@@ -5709,6 +6215,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6EB9BCBCB086429D84781AABCD884D4D"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\arm_neon.h"
+            "TargetName" = "8:arm_neon.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6F716FB6F1984BF588DB080147EB1151"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\wctype.h"
@@ -5735,6 +6261,26 @@
             "TargetName" = "8:setjmp.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7016F5D47B7F4A61A7415E682AF618FF"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\mmintrin.h"
+            "TargetName" = "8:mmintrin.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6071,12 +6617,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_748284EEBEFC47ACAC6D4207DD711CC4"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\_downg\\downlib.c"
+            "TargetName" = "8:downlib.c"
+            "Tag" = "8:"
+            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_74B44F1529F84845B9858D395A5FD181"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\tcc\\include\\memory.h"
             "TargetName" = "8:memory.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_74C976D6C8C84B9494D49FD073E6F74B"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\rar\\UNACEV2.DLL"
+            "TargetName" = "8:UNACEV2.DLL"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6191,6 +6777,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_76FC63D6A5DF461D8D0637895CB58DF1"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\downc.bin"
+            "TargetName" = "8:downc.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_77473A4359462566FFC3F2A46495909B"
             {
             "AssemblyRegister" = "3:1"
@@ -6242,6 +6848,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_77BC88B941A44B5F8EDD03381D537150"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include-fixed\\README"
+            "TargetName" = "8:README"
+            "Tag" = "8:"
+            "Folder" = "8:_B7D5573906FE4A94B924F5E0AED43AE3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7838194F37D84FF891E7772AB0C84E27"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\tcc\\include\\winapi\\winver.h"
@@ -6268,6 +6894,26 @@
             "TargetName" = "8:cpio.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_784F135DBD9A4AE9BEFC97160072A61E"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\rar\\Rar.exe"
+            "TargetName" = "8:Rar.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6633,6 +7279,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8321210404FC4ED1A72BFE87970CE5FB"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdarg.h"
+            "TargetName" = "8:stdarg.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_851D8DAF12534BE0B64DA4051058A59A"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\unctrl.h"
@@ -6659,6 +7325,26 @@
             "TargetName" = "8:tcclib.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_867D1D4DF94E4F6BB9A50B96A088F14E"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\libs.ld"
+            "TargetName" = "8:libs.ld"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7133,6 +7819,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_92F44EE22E454403829E026434152454"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdfix.h"
+            "TargetName" = "8:stdfix.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_945A0FF9C2E74248BC9630B73AA9F2AC"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\libc_nano.a"
@@ -7264,6 +7970,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9928C3E4C7EA4397AE527E6BB6961575"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\rar\\UnRAR.exe"
+            "TargetName" = "8:UnRAR.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_99B65489420E4D6FB629D8A52DBE941B"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\tcc\\include\\wctype.h"
@@ -7341,6 +8067,46 @@
             "TargetName" = "8:libm.a"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9ACCEE9A9AF8414782B71303B5E75FFE"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\_downg\\downlib.h"
+            "TargetName" = "8:downlib.h"
+            "Tag" = "8:"
+            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B7CAF4217794F66A255F5D6017D49A8"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\downlib.o"
+            "TargetName" = "8:downlib.o"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8088,6 +8854,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BB6BE0E40B7B4F3082232185B8F62CCD"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\unwind.h"
+            "TargetName" = "8:unwind.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BCFB86FE0970412AA153622B04F5D6B1"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\wchar.h"
@@ -8348,6 +9134,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CD5ADE84FA7D41219F937E67657DEAA3"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\_downg\\modbus.c"
+            "TargetName" = "8:modbus.c"
+            "Tag" = "8:"
+            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CE77ECAA9B2C45E1B241CDD90DE6C2FC"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\string.h"
@@ -8374,6 +9180,66 @@
             "TargetName" = "8:crti.o"
             "Tag" = "8:"
             "Folder" = "8:_A70A187254164B69917A3E25FEBDDB66"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D11F393824674926B0619CC1AEF181F7"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\arm_acle.h"
+            "TargetName" = "8:arm_acle.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1414D4F2996483FBD4445DCFBCA331B"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\downc.h"
+            "TargetName" = "8:downc.h"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1F1D9C068D945998B245803A21696C8"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\sections.ld"
+            "TargetName" = "8:sections.ld"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8454,6 +9320,26 @@
             "TargetName" = "8:ansi.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D62972596AA142DAAE7852250972A413"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stddef.h"
+            "TargetName" = "8:stddef.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8574,6 +9460,26 @@
             "TargetName" = "8:SamSoarII.Update.exe.config"
             "Tag" = "8:"
             "Folder" = "8:_12364201BB8D477E9F2FCCD5C8B6D2C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D791FB10613A41E68D82DB9528B2CB2D"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdint.h"
+            "TargetName" = "8:stdint.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8768,6 +9674,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DB6F654B86EB4D51856006032F68C96E"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\float.h"
+            "TargetName" = "8:float.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DB922F3644CA481DB9E3B37476132563"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\fastmath.h"
@@ -8814,6 +9740,26 @@
             "TargetName" = "8:librdimon.a"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DE0346F5A1B34CF6A9753AAAFAB298D5"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\downf.exe"
+            "TargetName" = "8:downf.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8974,6 +9920,26 @@
             "TargetName" = "8:libgcov.a"
             "Tag" = "8:"
             "Folder" = "8:_B39A3945F55D4B4990F595468FF19C4E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E4DBF22C43A543848149833B4B21E69E"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\mem.ld"
+            "TargetName" = "8:mem.ld"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9408,6 +10374,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F127D6BDE0DA47FFBFF06D6E56565249"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\downlib.h"
+            "TargetName" = "8:downlib.h"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F174F7F8FFC3455A9ABE92AB92EBF4A3"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\armv7-m\\libgcc.a"
@@ -9525,6 +10511,26 @@
             "TargetName" = "8:search_s.h"
             "Tag" = "8:"
             "Folder" = "8:_4EB4F104B13E450A8E2416550C196CAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F4954DF265C04377AE610679A60260B1"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\libF407PLC.a"
+            "TargetName" = "8:libF407PLC.a"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9719,6 +10725,66 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB07405347E744FC838642E82E089611"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\unwind-arm-common.h"
+            "TargetName" = "8:unwind-arm-common.h"
+            "Tag" = "8:"
+            "Folder" = "8:_26C95215DCD64F93A9F8FEAE51E242F9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB2594CE926D4C12B00BA9A8FA01E526"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\downg\\aa.map"
+            "TargetName" = "8:aa.map"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB30B842B9624357BAAD192C5AF1330C"
+            {
+            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include-fixed\\limits.h"
+            "TargetName" = "8:limits.h"
+            "Tag" = "8:"
+            "Folder" = "8:_B7D5573906FE4A94B924F5E0AED43AE3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB614FFBFF4C4BAA94494921AD1E8845"
             {
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Compiler\\arm\\arm-none-eabi\\include\\sys\\reent.h"
@@ -9882,6 +10948,39 @@
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_F7DB52CF3C2D4901A184A21879ECFB9D"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+                    {
+                    "Name" = "8:downg"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E53AB297A7864CF3A0C75174496BB466"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_8C692239B10C4BB2AB5A87CB341F9BE7"
+                            {
+                            "Name" = "8:_downg"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_1B4434B6678E4422AD2384BBBD1B79EA"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2E2B35B5B7AA4853BF394EA2549D8206"
+                    {
+                    "Name" = "8:rar"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_4BD223DEC0954EB4BA375283C0BF0511"
                         "Folders"
                         {
                         }
@@ -10127,6 +11226,17 @@
                                                             "Property" = "8:_38E2D01B67C04F889272BB478A11F057"
                                                                 "Folders"
                                                                 {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_26C95215DCD64F93A9F8FEAE51E242F9"
+                                                                    {
+                                                                    "Name" = "8:include"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_6881608D8A504A1CADB00EAECCA56674"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
                                                                     "{9EF0B969-E518-4E46-987F-47570745A589}:_82AF83BC3BB8453595D7CCC87AB08F9A"
                                                                     {
                                                                     "Name" = "8:armv7-m"
@@ -10145,6 +11255,17 @@
                                                                     "Condition" = "8:"
                                                                     "Transitive" = "11:FALSE"
                                                                     "Property" = "8:_ABE84C8CFD1A4D138ECE092EFA7C4638"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B7D5573906FE4A94B924F5E0AED43AE3"
+                                                                    {
+                                                                    "Name" = "8:include-fixed"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_DA6C27BFE5DE4784B7F8FEB1287EBE46"
                                                                         "Folders"
                                                                         {
                                                                         }

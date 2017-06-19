@@ -1674,4 +1674,10 @@
   <data name="Password_Empty" xml:space="preserve">
     <value>Password can not be empty</value>
   </data>
+  <data name="MessageBox_Download_Successd" xml:space="preserve">
+    <value>MessageBox Download Successd</value>
+  </data>
+  <data name="Project_Download" xml:space="preserve">
+    <value>Project Download</value>
+  </data>
 </root>

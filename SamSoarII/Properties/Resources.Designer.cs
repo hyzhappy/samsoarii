@@ -3112,6 +3112,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 MessageBox Download Successd 的本地化字符串。
+        /// </summary>
+        public static string MessageBox_Download_Successd {
+            get {
+                return ResourceManager.GetString("MessageBox_Download_Successd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 *Minute 的本地化字符串。
         /// </summary>
         public static string Minute {
@@ -3765,6 +3774,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Project Download 的本地化字符串。
+        /// </summary>
+        public static string Project_Download {
+            get {
+                return ResourceManager.GetString("Project_Download", resourceCulture);
             }
         }
         

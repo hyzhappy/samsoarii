@@ -1674,4 +1674,10 @@
   <data name="Password_Empty" xml:space="preserve">
     <value>密码不能为空</value>
   </data>
+  <data name="MessageBox_Download_Successd" xml:space="preserve">
+    <value>下载成功</value>
+  </data>
+  <data name="Project_Download" xml:space="preserve">
+    <value>工程下载</value>
+  </data>
 </root>
