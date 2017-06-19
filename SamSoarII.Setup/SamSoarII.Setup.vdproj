@@ -3181,7 +3181,7 @@
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Resources\\InstructionPopup.xml"
             "TargetName" = "8:InstructionPopup.xml"
             "Tag" = "8:"
-            "Folder" = "8:_95469B5921434A2F95DD8009C3BFBC38"
+            "Folder" = "8:_D3F1350112AF43CA9D9C1142C02F8001"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8759,7 +8759,7 @@
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Resources\\SpecialRegisters.xml"
             "TargetName" = "8:SpecialRegisters.xml"
             "Tag" = "8:"
-            "Folder" = "8:_95469B5921434A2F95DD8009C3BFBC38"
+            "Folder" = "8:_D3F1350112AF43CA9D9C1142C02F8001"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10983,6 +10983,17 @@
                     "Property" = "8:_4BD223DEC0954EB4BA375283C0BF0511"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_D3F1350112AF43CA9D9C1142C02F8001"
+                            {
+                            "Name" = "8:Resources"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_543817F4E6834CDB8BAAA217A05B89E9"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_55B4EF72A6ED462690DDB3CC3714A504"
@@ -11003,17 +11014,6 @@
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_516016EA77FB47B1A5A88821D236766F"
-                        "Folders"
-                        {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_95469B5921434A2F95DD8009C3BFBC38"
-                    {
-                    "Name" = "8:Resources"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_543817F4E6834CDB8BAAA217A05B89E9"
                         "Folders"
                         {
                         }
@@ -11422,7 +11422,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII.Setup"
         "ProductCode" = "8:{ABDCB673-14F5-4EFE-AD1B-756772B2A55E}"
-        "PackageCode" = "8:{81A634EB-7435-4C5F-BA17-CDA8C28F05AD}"
+        "PackageCode" = "8:{6F090994-8B16-450A-BE9A-86A142BCE330}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
