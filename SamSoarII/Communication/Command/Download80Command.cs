@@ -27,8 +27,8 @@ namespace SamSoarII.Communication.Command
         {
             bytes = new byte[] { 0x80, (byte)(id&0xff) }
                 .Concat(data).ToArray();
-            Encrypt(bytes);
             bytes = bytes.Concat(CRC16.GetCRC(bytes)).ToArray();
+            Encrypt(bytes);
         }
         
         private void Encrypt(byte[] data)
