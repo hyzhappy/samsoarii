@@ -1,4 +1,5 @@
-﻿using SamSoarII.LadderInstViewModel;
+﻿using SamSoarII.AppMain.UI.Monitor;
+using SamSoarII.LadderInstViewModel;
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
@@ -108,12 +109,26 @@ namespace SamSoarII.AppMain.Project
                             Read(fbvmodel);
                             pmodel.Add(fbvmodel);
                             break;
+                        case 0xfc:
+                            ReadRegisters();
+                            break;
+                        case 0xfb:
+                            ModbusTableViewModel mtvmodel = new ModbusTableViewModel(pmodel);
+                            Read(mtvmodel);
+                            pmodel.MTVModel = mtvmodel;
+                            break;
+                        case 0xfa:
+                            break;
+                        case 0xf9:
+                            MainMonitor mmoni = new MainMonitor(pmodel);
+                            Read(mmoni);
+                            pmodel.MMonitorManager.MMWindow = mmoni;
+                            break;
                         default:
                             throw new FormatException(
                                 String.Format("非法头标志符0x{0x2X}", head));
                     }
                 }
-                ReadRegisters();
                 pmodel.MainRoutine = new LadderDiagramViewModel("main", pmodel);
                 
             }
@@ -128,7 +143,7 @@ namespace SamSoarII.AppMain.Project
         }
         unsafe static private void ReadRegisters()
         {
-            int sz = ReadE32();
+            int sz = ReadE16();
             for (int i = 0; i < sz; i++)
             {
                 UploadRegisterType type = (UploadRegisterType)(edata[eid++]);
@@ -309,6 +324,47 @@ namespace SamSoarII.AppMain.Project
         {
             fbvmodel.ProgramName = ReadTextE8();
             fbvmodel.Code = ReadTextE16();
+        }
+        static private void Read(ModbusTableViewModel mtvmodel)
+        {
+            int sz = ReadE16();
+            sz += eid;
+            while (eid < sz)
+            {
+                int mid = (int)edata[eid++];
+                ModbusTableModel mtmodel = new ModbusTableModel();
+                mtmodel.Name = ReadTextE8();
+                if ((option & OPTION_COMMENT) != 0)
+                    mtmodel.Comment = ReadTextE8();
+            }
+        }
+        static private void Read(MainMonitor mmoni)
+        {
+            int sz = ReadE16();
+            sz += eid;
+            while (eid < sz)
+            {
+                string name = ReadTextE8();
+                MonitorVariableTable mvtable = new MonitorVariableTable(name, mmoni);
+                int count = (int)edata[eid++];
+                while (count-- > 0)
+                {
+                    int regid = ReadE16();
+                    IValueModel ivmodel = regs[regid];
+                    ElementModel emodel = new ElementModel();
+                    emodel.IsIntrasegment = ivmodel.IsVariable;
+                    if (ivmodel is BitValue)
+                        emodel.ShowType = "BOOL";
+                    if (ivmodel is WordValue)
+                        emodel.ShowType = "WORD";
+                    if (ivmodel is DoubleWordValue)
+                        emodel.ShowType = "DWORD";
+                    if (ivmodel is FloatValue)
+                        emodel.ShowType = "FLOAT";
+                    emodel.ShowName = ivmodel.ValueString;
+                    mvtable.AddElement(emodel);
+                }
+            }
         }
         static private short ReadE16()
         {

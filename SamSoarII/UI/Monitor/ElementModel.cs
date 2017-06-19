@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace SamSoarII.AppMain.UI.Monitor
 {
@@ -49,6 +50,29 @@ namespace SamSoarII.AppMain.UI.Monitor
                 else
                 {
                     return string.Format("{0}{1}{2}{3}", AddrType, StartAddr, IntrasegmentType, IntrasegmentAddr);
+                }
+            }
+            set
+            {
+                Match m1 = Regex.Match(value, @"([A-Z]{1,2})([0-9]+)");
+                if (m1.Success)
+                {
+                    IsIntrasegment = false;
+                    AddrType = m1.Groups[1].Value;
+                    StartAddr = uint.Parse(m1.Groups[2].Value);
+                    IntrasegmentType = String.Empty;
+                    IntrasegmentAddr = 0;
+                    return;
+                }
+                Match m2 = Regex.Match(value, @"([A-Z]{1,2})([0-9]+)([VZ])([0-9]+)");
+                if (m2.Success)
+                {
+                    IsIntrasegment = true;
+                    AddrType = m1.Groups[1].Value;
+                    StartAddr = uint.Parse(m1.Groups[2].Value);
+                    IntrasegmentType = m1.Groups[3].Value;
+                    IntrasegmentAddr = uint.Parse(m1.Groups[4].Value);
+                    return;
                 }
             }
         }

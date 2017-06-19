@@ -461,10 +461,6 @@ namespace SamSoarII.AppMain.Project
         /// <param name="option">选项</param>
         static private void Write(ModbusTableViewModel mtvmodel, int option)
         {
-            if ((option & OPTION_COMMENT) == 0)
-            {
-                return;
-            }
             edata.Add(0xfb);
             int szid = edata.Count();
             edata.Add(0x00);
@@ -472,8 +468,10 @@ namespace SamSoarII.AppMain.Project
             byte mtid = 0;
             foreach (ModbusTableModel mtmodel in mtvmodel.Models)
             {
-                edata.Add(mtid++); 
-                Write(mtmodel.Comment);
+                edata.Add(mtid++);
+                Write(mtmodel.Name);
+                if ((option & OPTION_COMMENT) != 0)
+                    Write(mtmodel.Comment);
             }
             int sz = edata.Count() - szid - 2;
             edata[szid] = Int32_Low(sz);
