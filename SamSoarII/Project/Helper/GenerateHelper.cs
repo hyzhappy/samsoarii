@@ -1063,17 +1063,10 @@ namespace SamSoarII.AppMain.Project
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.FileName
-                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc", 
+                = String.Format(@"{0:s}\Compiler\make\make", 
                     currentPath);
-            cmd.StartInfo.Arguments
-                = String.Format("\"{0:s}\" \"{1:s}\" \"{2:s}\" " +
-                "-o {3:s} -mcpu=cortex-m3 -mthumb -munaligned-access -std=gnu11 -O2 " +
-                "-fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fsingle-precision-constant -nostartfiles " +
-                "-Wl,-Map,\"{8:s}\" -Wl,--whole-archive \"{7:s}\" -Wl,--no-whole-archive -T \"{4:s}\" -T \"{5:s}\" -T \"{6:s}\" -L\"ldscripts\" " +
-                "-Xlinker -gc-sections --specs=nano.specs -L \"./\"",
-                    downlibOFile, ladderCFile, funcBlockCFile, outputElfFile,
-                    memLDFile, libsLDFile, sectionsLDFile, 
-                    plclibAFile, aaMapFile);
+            cmd.StartInfo.Arguments 
+                = String.Format(@"-C {0:s}\downg\.", currentPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
@@ -1082,21 +1075,16 @@ namespace SamSoarII.AppMain.Project
             cmd.WaitForExit();
             cmd = new Process();
             cmd.StartInfo.FileName
-                = String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-objcopy",
+                = String.Format(@"{0:s}\Compiler\make\make",
                     currentPath);
             cmd.StartInfo.Arguments
-                = String.Format("-O binary {0:s} {1:s}", 
-                    outputElfFile, outputBinFile);
+                = String.Format(@"-C {0:s}\downg\. clean", currentPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
-            //File.Delete(ladderHFile);
-            File.Delete(ladderCFile);
-            //File.Delete(funcBlockHFile);
-            File.Delete(funcBlockCFile);
         }
         
         private static void Generate(

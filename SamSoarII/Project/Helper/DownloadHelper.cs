@@ -42,6 +42,8 @@ namespace SamSoarII.AppMain.Project
     /// <summary> 下载的帮助类 </summary>
     public class DownloadHelper
     {
+        #region Constant Property
+        
         /// <summary> 错误码：梯形图检查错误 </summary>
         public const int DOWNLOAD_LADDER_ERROR = 0x01;
         /// <summary> 错误码：函数功能块检查错误 </summary>
@@ -57,7 +59,10 @@ namespace SamSoarII.AppMain.Project
         public const int OPTION_SETTING = 0x08;
         /// <summary> 选项：是否包含监视 </summary>
         public const int OPTION_MONITOR = 0x10;
+        
+        #endregion
 
+        #region Data
         /// <summary> 未压缩的原数据，通常需要PLC去识别分析 </summary>
         static private List<byte> odata 
             = new List<byte>();
@@ -75,6 +80,8 @@ namespace SamSoarII.AppMain.Project
         {
             get { return odata.Count() + edata.Count(); }
         }
+
+        #endregion
 
         #region Generate Data
 
@@ -171,6 +178,7 @@ namespace SamSoarII.AppMain.Project
             br = new BinaryReader(
                 new FileStream(packfile, FileMode.Open));
             edata.Clear();
+            /*
             while (br.BaseStream.CanRead)
             {
                 try
@@ -183,14 +191,71 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             br.Close();
+            */
         }
         /// <summary>
         /// 写入所有参数设置
         /// </summary>
         /// <param name="pmodel">工程类</param>
-        unsafe static private void WriteParameters(ProjectModel pmodel)
+        static private void WriteParameters(ProjectModel pmodel)
         {
+            int szid = odata.Count();
+            odata.Add(0x00);
+            odata.Add(0x00);
+            CommunicationInterfaceParams com232params =
+                (CommunicationInterfaceParams)(ProjectPropertyManager.ProjectPropertyDic["CommunParams232"]);
+            CommunicationInterfaceParams com485params =
+                (CommunicationInterfaceParams)(ProjectPropertyManager.ProjectPropertyDic["CommunParams485"]);
+            PasswordParams pwparams =
+                (PasswordParams)(ProjectPropertyManager.ProjectPropertyDic["PasswordParams"]);
+            FilterParams ftparams =
+                (FilterParams)(ProjectPropertyManager.ProjectPropertyDic["FilterParams"]);
+            HoldingSectionParams hsparams =
+                (HoldingSectionParams)(ProjectPropertyManager.ProjectPropertyDic["HoldingSectionParams"]);
+            odata.Add(Int32_Low(com232params.BaudRateIndex));
+            odata.Add(Int32_Low(com232params.DataBitIndex));
+            odata.Add(Int32_Low(com232params.StopBitIndex));
+            odata.Add(Int32_Low(com232params.CheckCodeIndex));
+            odata.Add(Int32_Low(com485params.BaudRateIndex));
+            odata.Add(Int32_Low(com485params.DataBitIndex));
+            odata.Add(Int32_Low(com485params.StopBitIndex));
+            odata.Add(Int32_Low(com485params.CheckCodeIndex));
 
+            odata.Add(Int32_Low(com232params.StationNum));
+            odata.Add(Int32_Low(Int32_Low(com232params.Timeout)));
+            odata.Add(Int32_Low(Int32_High(com232params.Timeout)));
+            odata.Add((byte)(pwparams.UPIsChecked ? 1 : 0));
+            Write(pwparams.UPassword);
+            odata.Add((byte)(com232params.CommuType));
+            odata.Add((byte)(com485params.CommuType));
+            
+            odata.Add((byte)(pwparams.DPIsChecked ? 1 : 0));
+            Write(pwparams.DPassword);
+            odata.Add((byte)(pwparams.MPIsChecked ? 1 : 0));
+            Write(pwparams.MPassword);
+            odata.Add((byte)(ftparams.IsChecked ? 1 : 0));
+            int fttime = 1 << (ftparams.FilterTimeIndex + 1);
+            odata.Add(Int32_Low(fttime));
+            odata.Add(Int32_High(fttime));
+            odata.Add(Int32_Low(hsparams.MStartAddr));
+            odata.Add(Int32_High(hsparams.MStartAddr));
+            odata.Add(Int32_Low(hsparams.MLength));
+            odata.Add(Int32_High(hsparams.MLength));
+            odata.Add(Int32_Low(hsparams.SStartAddr));
+            odata.Add(Int32_High(hsparams.SStartAddr));
+            odata.Add(Int32_Low(hsparams.SLength));
+            odata.Add(Int32_High(hsparams.SLength));
+            odata.Add(Int32_Low(hsparams.DStartAddr));
+            odata.Add(Int32_High(hsparams.DStartAddr));
+            odata.Add(Int32_Low(hsparams.DLength));
+            odata.Add(Int32_High(hsparams.DLength));
+            odata.Add(Int32_Low(hsparams.CVStartAddr));
+            odata.Add(Int32_High(hsparams.CVStartAddr));
+            odata.Add(Int32_Low(hsparams.CVLength));
+            odata.Add(Int32_High(hsparams.CVLength));
+            int sz = odata.Count() - szid - 2;
+            odata[szid] = Int32_Low(sz);
+            odata[szid + 1] = Int32_High(sz);
         }
         /// <summary>
         /// 写入所有软元件的信息
@@ -676,7 +741,8 @@ namespace SamSoarII.AppMain.Project
             Download80Command d80Cmd = null;
             Download81Command d81Cmd = new Download81Command();
             if (!Handle(dFBCmd)) return false;
-            if (!Handle(dFCCmd)) return false;
+            while (!Handle(dFCCmd)) ;
+            //if (!Handle(dFCCmd)) return false;
             byte[] data = odata.Concat(edata).ToArray();
             byte[] pack = new byte[1024];
             int len = data.Length / 1024;
@@ -690,6 +756,7 @@ namespace SamSoarII.AppMain.Project
             }
             if (rem > 0)
             {
+                pack = new byte[rem];
                 for (int j = 0; j < rem; j++)
                     pack[j] = data[len * 1024 + j];
                 d80Cmd = new Download80Command(len, pack);

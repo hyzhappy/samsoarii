@@ -170,8 +170,7 @@ namespace SamSoarII.AppMain.UI
         {
             PTVI_Root = CreatePTVItem(
                 null,
-                ProjectTreeViewItem.TYPE_ROOT
-              | ProjectTreeViewItem.FLAG_RENAME,
+                ProjectTreeViewItem.TYPE_ROOT,
                 _projectModel);
             TV_Main.Items.Add(PTVI_Root);
 
@@ -633,6 +632,24 @@ namespace SamSoarII.AppMain.UI
                     _e = new ProjectTreeViewEventArgs(
                         ProjectTreeViewEventArgs.TYPE_FUNCBLOCK | ProjectTreeViewEventArgs.FLAG_REPLACE,
                         fbvmodel, ptvitem.Text);
+                    PTVHandle(this, _e);
+                }
+                else if (ptvitem.RelativeObject is ModbusTableModel)
+                {
+                    ModbusTableModel mtmodel = (ModbusTableModel)(ptvitem.RelativeObject);
+                    foreach (ModbusTableModel _mtmodel in _projectModel.MTVModel.Models)
+                    {
+                        if (_mtmodel != mtmodel && _mtmodel.Name.Equals(ptvitem.Text))
+                        {
+                            ptvitem.Rename(String.Format("{0} {1:s}。", Properties.Resources.Message_Funcblock_Exist, ptvitem.Text));
+                            return;
+                        }
+                    }
+                    ptvitem.RenameClose();
+                    mtmodel.Name = ptvitem.Name;
+                    _e = new ProjectTreeViewEventArgs(
+                        ProjectTreeViewEventArgs.TYPE_MODBUS | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                        mtmodel, ptvitem.Text);
                     PTVHandle(this, _e);
                 }
                 else

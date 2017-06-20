@@ -415,7 +415,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-
+        
         #region Event Handler
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -529,16 +529,7 @@ namespace SamSoarII.AppMain.Project
             dialog = null;
         }
         #endregion
-
-        private void OnModelChanged(object sender, RoutedEventArgs e)
-        {
-            LB_Tables.Items.Clear();
-            foreach (ModbusTableModel model in Models)
-            {
-                LB_Tables.Items.Add(model.Name);
-            }
-        }
-
+        
         private void LB_Tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LB_Tables.SelectedItem != null)
@@ -575,6 +566,24 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+
+        #region ListBox Update
+
+        public void UpdateList()
+        {
+            LB_Tables.Items.Clear();
+            foreach (ModbusTableModel model in Models)
+            {
+                LB_Tables.Items.Add(model.Name);
+            }
+        }
+
+        private void OnModelChanged(object sender, RoutedEventArgs e)
+        {
+            UpdateList();
+        }
+
+        #endregion
 
         #region DataGrid Update
 
