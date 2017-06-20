@@ -732,6 +732,7 @@ namespace SamSoarII.AppMain
         #endregion
 
         #region Network
+
         public void CreateNetwork
         (
             LadderDiagramViewModel ldvmodel,
@@ -927,7 +928,7 @@ namespace SamSoarII.AppMain
         )
         {
             _mainTabControl.ShowItem(_projectModel.MTVModel);
-            //_projectModel.MTVModel.RemoveModel(mtmodel);
+            _projectModel.MTVModel.UpdateList();
         }
         #endregion
 
@@ -1347,7 +1348,7 @@ namespace SamSoarII.AppMain
                 baseSetting.SettingButtonClick += (sender1, e1) =>
                 {
                     CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog(
-                        (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+                        (CommunicationParams)(ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]));
                     dialog1.ShowDialog();
                 };
                 baseSetting.ModifyButtonClick += (sender2, e2) =>
@@ -1372,15 +1373,17 @@ namespace SamSoarII.AppMain
                             bool ret = DownloadHelper.Download(paras.IsCOMLinked
                                 ? (ICommunicationManager)(_projectModel.PManager)
                                 : (ICommunicationManager)(_projectModel.UManager));
-                            if (!ret) MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                             handle.Abort();
                             handle.Completed = true;
+                            if (!ret)
+                                MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                            else
+                                MessageBox.Show(Properties.Resources.MessageBox_Download_Successd);
                         });
                         while (!handle.Completed)
                         {
                             Thread.Sleep(10);
                         }
-                        MessageBox.Show(Properties.Resources.MessageBox_Download_Successd);
                     }
                     else
                     {
