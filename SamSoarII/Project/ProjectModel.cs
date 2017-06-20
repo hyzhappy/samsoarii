@@ -20,6 +20,7 @@ using SamSoarII.PLCDevice;
 using SamSoarII.UserInterface;
 using SamSoarII.AppMain.UI.Monitor;
 using SamSoarII.Communication;
+using System.Windows.Media;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -83,6 +84,23 @@ namespace SamSoarII.AppMain.Project
                 foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
                 {
                     ldvmodel.LadderMode = value;
+                }
+                switch (value)
+                {
+                    case LadderMode.Edit:
+                        IFacade.MainWindow.Main_SB.Background = Brushes.AliceBlue;
+                        IFacade.MainWindow.SB_FontColor = Brushes.Black;
+                        break;
+                    case LadderMode.Monitor:
+                        IFacade.MainWindow.Main_SB.Background = LadderHelper.MonitorBrush;
+                        IFacade.MainWindow.SB_FontColor = Brushes.White;
+                        break;
+                    case LadderMode.Simulate:
+                        IFacade.MainWindow.Main_SB.Background = LadderHelper.SimulateBrush;
+                        IFacade.MainWindow.SB_FontColor = Brushes.White;
+                        break;
+                    default:
+                        break;
                 }
             }
         }

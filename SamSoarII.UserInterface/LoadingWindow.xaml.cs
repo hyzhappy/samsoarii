@@ -113,7 +113,6 @@ namespace SamSoarII.UserInterface
         private LoadingWindow loadWin;
         private string _message;
         private bool _completed = false;
-        private object lockobj = new object();
         /// <summary>
         /// params="Completed"
         /// 表示整个耗时操作的完成!

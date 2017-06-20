@@ -36,7 +36,13 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// LadderDiagramViewModel.xaml 的交互逻辑
     /// </summary>
-
+    public enum LadderMode
+    {
+        Edit,
+        Monitor,
+        Simulate,
+        Demo
+    }
     public enum SelectStatus
     {
         Idle,

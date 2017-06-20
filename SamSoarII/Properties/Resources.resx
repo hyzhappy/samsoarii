@@ -1680,4 +1680,31 @@
   <data name="Project_Download" xml:space="preserve">
     <value>Project Download</value>
   </data>
+  <data name="SB_Program" xml:space="preserve">
+    <value>Project: </value>
+  </data>
+  <data name="SB_Routine" xml:space="preserve">
+    <value>Routine: </value>
+  </data>
+  <data name="SB_Func" xml:space="preserve">
+    <value>Func: </value>
+  </data>
+  <data name="SB_Modbus" xml:space="preserve">
+    <value>Table: </value>
+  </data>
+  <data name="SB_Network" xml:space="preserve">
+    <value>Network: </value>
+  </data>
+  <data name="SB_Column" xml:space="preserve">
+    <value>Column:</value>
+  </data>
+  <data name="SB_Row" xml:space="preserve">
+    <value>Row:</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Ready!</value>
+  </data>
+  <data name="Project_Preparing" xml:space="preserve">
+    <value>Project preparing</value>
+  </data>
 </root>

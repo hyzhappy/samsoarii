@@ -1680,4 +1680,31 @@
   <data name="Project_Download" xml:space="preserve">
     <value>工程下载</value>
   </data>
+  <data name="SB_Program" xml:space="preserve">
+    <value>工程： </value>
+  </data>
+  <data name="SB_Routine" xml:space="preserve">
+    <value>程序： </value>
+  </data>
+  <data name="SB_Func" xml:space="preserve">
+    <value>函数： </value>
+  </data>
+  <data name="SB_Modbus" xml:space="preserve">
+    <value>表名： </value>
+  </data>
+  <data name="SB_Network" xml:space="preserve">
+    <value>网络： </value>
+  </data>
+  <data name="SB_Column" xml:space="preserve">
+    <value>列：</value>
+  </data>
+  <data name="SB_Row" xml:space="preserve">
+    <value>行：</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>就绪！</value>
+  </data>
+  <data name="Project_Preparing" xml:space="preserve">
+    <value>工程准备中！</value>
+  </data>
 </root>

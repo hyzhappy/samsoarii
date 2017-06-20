@@ -296,8 +296,8 @@ namespace SamSoarII.AppMain.Project
             if (parent == null || parent.IFacade == null) return;
             if (parent.IFacade.StatusBarItem == StatusBarItem.Func)
             {
-                parent.IFacade.MainWindow.SB_X.Text = x.ToString();
-                parent.IFacade.MainWindow.SB_Y.Text = y.ToString();
+                parent.IFacade.MainWindow.SB_Column.Text = x.ToString();
+                parent.IFacade.MainWindow.SB_Row.Text = y.ToString();
             }
         }
         private void SetStatusBar(bool IsVisible)
@@ -305,13 +305,13 @@ namespace SamSoarII.AppMain.Project
             if (IsVisible)
             {
                 SetXY(CodeTextBox.TextArea.Caret.Column, CodeTextBox.TextArea.Caret.Line);
-                parent.IFacade.MainWindow.SB_SP_X.Visibility = Visibility.Visible;
-                parent.IFacade.MainWindow.SB_SP_Y.Visibility = Visibility.Visible;
+                parent.IFacade.MainWindow.SB_SP_Row.Visibility = Visibility.Visible;
+                parent.IFacade.MainWindow.SB_SP_Column.Visibility = Visibility.Visible;
             }
             else
             {
-                parent.IFacade.MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
-                parent.IFacade.MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                parent.IFacade.MainWindow.SB_SP_Row.Visibility = Visibility.Hidden;
+                parent.IFacade.MainWindow.SB_SP_Column.Visibility = Visibility.Hidden;
             }
         }
         #endregion

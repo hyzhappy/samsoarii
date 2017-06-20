@@ -24,6 +24,7 @@ using System.Threading;
 using System.Windows.Threading;
 using System.ComponentModel;
 using SamSoarII.Communication;
+using SamSoarII.AppMain.Project.Helper;
 
 namespace SamSoarII.AppMain
 {
@@ -205,15 +206,81 @@ namespace SamSoarII.AppMain
             {
                 StatusBarItem = StatusBarItem.Empty;
                 MainWindow.SB_Program.Text = string.Empty;
+                MainWindow.SB_SP_Program.ToolTip = string.Empty;
             }
             else
             {
                 StatusBarItem = StatusBarItem.Program;
                 MainWindow.SB_Program.Text = ProjectModel.ProjectName;
+                if(ProjectFullFileName == string.Empty)
+                    MainWindow.SB_Program.ToolTip = string.Empty;
+                else
+                    MainWindow.SB_SP_Program.ToolTip = ProjectFullFileName;
             }
         }
 
         private void InteractionFacade_CurrentTabChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateStatusBar();
+        }
+        private void SetStatusBar(StatusBarItem statusBarItem)
+        {
+            switch (statusBarItem)
+            {
+                case StatusBarItem.Empty:
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Row.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Column.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    break;
+                case StatusBarItem.Program:
+                case StatusBarItem.Modbus:
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Row.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Column.Visibility = Visibility.Hidden;
+                    break;
+                case StatusBarItem.Routine:
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Row.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Column.Visibility = Visibility.Hidden;
+                    break;
+                case StatusBarItem.Func:
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Row.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Column.Visibility = Visibility.Hidden;
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void OnPTVRenamed(object sender, RoutedEventArgs e)
+        {
+            UpdateStatusBar();
+        }
+        private void UpdateStatusBar()
         {
             if (_mainTabControl.ChildrenCount == 0 && _mainTabControl.TabItemCollection.Count == 0)
             {
@@ -241,52 +308,18 @@ namespace SamSoarII.AppMain
                 StatusBarItem = StatusBarItem.Modbus;
                 ProjectModel.MTVModel.RetStatusBar();
             }
+            SetMessage(Properties.Resources.Ready);
         }
-        private void SetStatusBar(StatusBarItem statusBarItem)
+        private void SetMessage(string message)
         {
-            switch (statusBarItem)
-            {
-                case StatusBarItem.Empty:
-                    MainWindow.SB_SP_Program.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
-                    break;
-                case StatusBarItem.Program:
-                case StatusBarItem.Modbus:
-                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
-                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
-                    break;
-                case StatusBarItem.Routine:
-                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
-                    MainWindow.SB_SP_Routine.Visibility = Visibility.Visible;
-                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
-                    break;
-                case StatusBarItem.Func:
-                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Func.Visibility = Visibility.Visible;
-                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
-                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
-                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
-                    break;
-                default:
-                    break;
-            }
+            MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                (ThreadStart)delegate ()
+                {
+                    MainWindow.SB_Message.Text = message;
+                }
+            );
         }
+        
         #endregion
 
 
@@ -1192,6 +1225,7 @@ namespace SamSoarII.AppMain
             _projectTreeView = new ProjectTreeView(_projectModel);
             _projectTreeView.TabItemOpened += OnTabOpened;
             _projectTreeView.PTVHandle += OnGotPTVHandle;
+            _projectTreeView.PTVRenamed += OnPTVRenamed;
             _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
             _mainTabControl.Reset();
             _mainTabControl.ShowItem(_projectModel.MainRoutine);
@@ -1203,6 +1237,7 @@ namespace SamSoarII.AppMain
             UpdateRefNetworksBrief(_projectModel);
             _projectModel.AutoInstManager.Start();
         }
+
         public void CloseCurrentProject()
         {
             if (_projectModel.AutoInstManager != null
@@ -1218,7 +1253,8 @@ namespace SamSoarII.AppMain
             }
             MainWindow.ResetDock();
             _projectTreeView.TabItemOpened -= OnTabOpened;
-            _projectTreeView.PTVHandle += OnGotPTVHandle;
+            _projectTreeView.PTVHandle -= OnGotPTVHandle;
+            _projectTreeView.PTVRenamed -= OnPTVRenamed;
             _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
             _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
             ProjectFullFileName = string.Empty;
@@ -1288,6 +1324,7 @@ namespace SamSoarII.AppMain
             _projectTreeView = new ProjectTreeView(_projectModel, xele_rtv);
             _projectTreeView.TabItemOpened += OnTabOpened;
             _projectTreeView.PTVHandle += OnGotPTVHandle;
+            _projectTreeView.PTVRenamed += OnPTVRenamed;
             _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
             _mainWindow.ElemInitWind.LoadElementsByXElement(_projectModel.EleInitializeData);
             _projectModel.EleInitializeData = null;

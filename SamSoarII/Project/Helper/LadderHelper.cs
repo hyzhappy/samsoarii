@@ -13,6 +13,8 @@ namespace SamSoarII.AppMain.Project
     public class LadderHelper
     {
         public static SolidColorBrush FoldingBrush;
+        public static SolidColorBrush SimulateBrush;
+        public static SolidColorBrush MonitorBrush;
         static LadderHelper()
         {
             Color color = new Color();
@@ -21,6 +23,20 @@ namespace SamSoarII.AppMain.Project
             color.G = 58;
             color.B = 58;
             FoldingBrush = new SolidColorBrush(color);
+            //#FF4CB2FA
+            color = new Color();
+            color.A = 255;
+            color.R = 0x4c;
+            color.G = 0xb2;
+            color.B = 0xfa;
+            MonitorBrush = new SolidColorBrush(color);
+            //# FFF79B5E
+            color = new Color();
+            color.A = 255;
+            color.R = 0xf7;
+            color.G = 0x9b;
+            color.B = 0x5e;
+            SimulateBrush = new SolidColorBrush(color);
         }
         public static ExpGraphNode CreateNodeByElement(BaseViewModel viewmodel)
         {

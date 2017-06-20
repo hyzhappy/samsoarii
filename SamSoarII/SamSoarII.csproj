@@ -137,6 +137,7 @@
     <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\Helper\DownloadHelper.cs" />
     <Compile Include="Project\Helper\SFCHelper.cs" />
+    <Compile Include="Project\Helper\StatusBarHepler.cs" />
     <Compile Include="Project\Program\FuncBlockViewModel.xaml.cs">
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>

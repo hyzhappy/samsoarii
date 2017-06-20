@@ -523,38 +523,55 @@
                 </ad:LayoutRoot>
             </ad:DockingManager>
             <StatusBar x:Name="Main_SB" Background="AliceBlue" Grid.Row="1">
+                <StatusBar.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter x:Name="TB_Color" Property="Foreground" Value="{Binding SB_FontColor}"></Setter>
+                    </Style>
+                </StatusBar.Resources>
                 <DockPanel LastChildFill="False" Margin="-3,-3,0,0" Height="{Binding ElementName=Main_SB,Path=ActualHeight}" Width="{Binding ElementName=Main_SB,Path=ActualWidth}">
                     <StackPanel x:Name="SB_SP_Program" Visibility="Hidden" Margin="0,0,10,0" DockPanel.Dock="Right" Orientation="Horizontal">
-                        <TextBlock Text="Program: "/>
+                        <TextBlock Text="{x:Static properties:Resources.SB_Program}"/>
                         <TextBlock MinWidth="60" x:Name="SB_Program"/>
                     </StackPanel>
                     <Grid DockPanel.Dock="Right" Margin="0,0,10,0">
                         <StackPanel x:Name="SB_SP_Routine" Visibility="Hidden" Margin="0,0,10,0" DockPanel.Dock="Right" Orientation="Horizontal">
-                            <TextBlock Text="Routine: "/>
+                            <TextBlock Text="{x:Static properties:Resources.SB_Routine}"/>
                             <TextBlock x:Name="SB_Routine"/>
                         </StackPanel>
                         <StackPanel Visibility="Collapsed" x:Name="SB_SP_Func" Orientation="Horizontal">
-                            <TextBlock Text="Func: "/>
+                            <TextBlock Text="{x:Static properties:Resources.SB_Func}"/>
                             <TextBlock MinWidth="20" x:Name="SB_Func"/>
                         </StackPanel>
                         <StackPanel Visibility="Collapsed" x:Name="SB_SP_Modbus" Orientation="Horizontal">
-                            <TextBlock Text="Table: "/>
+                            <TextBlock Text="{x:Static properties:Resources.SB_Modbus}"/>
                             <TextBlock MinWidth="20" x:Name="SB_Modbus"/>
                         </StackPanel>
                     </Grid>
                     <StackPanel x:Name="SB_SP_Network" Visibility="Hidden" DockPanel.Dock="Right" Margin="0,0,10,0" Orientation="Horizontal">
-                        <TextBlock Text="Network: "/>
+                        <TextBlock Text="{x:Static properties:Resources.SB_Network}"/>
                         <TextBlock MinWidth="20" x:Name="SB_Network"/>
                     </StackPanel>
-                    <StackPanel x:Name="SB_SP_Y" Visibility="Hidden" Margin="0,0,10,0" DockPanel.Dock="Right" Orientation="Horizontal">
-                        <TextBlock Text="Y:"/>
-                        <TextBlock MinWidth="20" x:Name="SB_Y"/>
-                    </StackPanel>
-                    <StackPanel x:Name="SB_SP_X" Visibility="Hidden" Orientation="Horizontal" DockPanel.Dock="Right" Margin="0,0,10,0">
-                        <TextBlock Text="X:"/>
-                        <TextBlock MinWidth="20" x:Name="SB_X"/>
-                    </StackPanel>
-                    <TextBlock DockPanel.Dock="Left" x:Name="SB_Message"/>
+                    <Grid Margin="0,0,10,0" DockPanel.Dock="Right">
+                        <StackPanel x:Name="SB_SP_Y" Visibility="Hidden" Orientation="Horizontal">
+                            <TextBlock Text="Y:"/>
+                            <TextBlock MinWidth="20" x:Name="SB_Y"/>
+                        </StackPanel>
+                        <StackPanel x:Name="SB_SP_Column" Visibility="Hidden" Orientation="Horizontal">
+                            <TextBlock Text="{x:Static properties:Resources.SB_Column}"/>
+                            <TextBlock MinWidth="20" x:Name="SB_Column"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid DockPanel.Dock="Right" Margin="0,0,10,0">
+                        <StackPanel x:Name="SB_SP_X" Visibility="Hidden" Orientation="Horizontal">
+                            <TextBlock Text="X:"/>
+                            <TextBlock MinWidth="20" x:Name="SB_X"/>
+                        </StackPanel>
+                        <StackPanel x:Name="SB_SP_Row" Visibility="Hidden" Orientation="Horizontal">
+                            <TextBlock Text="{x:Static properties:Resources.SB_Row}"/>
+                            <TextBlock MinWidth="20" x:Name="SB_Row"/>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Margin="10,0,0,0" DockPanel.Dock="Left" x:Name="SB_Message"/>
                 </DockPanel>
             </StatusBar>
         </Grid>

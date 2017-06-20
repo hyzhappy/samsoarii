@@ -3796,6 +3796,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Project preparing 的本地化字符串。
+        /// </summary>
+        public static string Project_Preparing {
+            get {
+                return ResourceManager.GetString("Project_Preparing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Project Setting 的本地化字符串。
         /// </summary>
         public static string Project_Setting {
@@ -3945,6 +3954,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Read_Word {
             get {
                 return ResourceManager.GetString("Read_Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Ready! 的本地化字符串。
+        /// </summary>
+        public static string Ready {
+            get {
+                return ResourceManager.GetString("Ready", resourceCulture);
             }
         }
         
@@ -4107,6 +4125,69 @@ namespace SamSoarII.AppMain.Properties {
         public static string Routine_Range {
             get {
                 return ResourceManager.GetString("Routine_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Column: 的本地化字符串。
+        /// </summary>
+        public static string SB_Column {
+            get {
+                return ResourceManager.GetString("SB_Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Func:  的本地化字符串。
+        /// </summary>
+        public static string SB_Func {
+            get {
+                return ResourceManager.GetString("SB_Func", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Table:  的本地化字符串。
+        /// </summary>
+        public static string SB_Modbus {
+            get {
+                return ResourceManager.GetString("SB_Modbus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Network:  的本地化字符串。
+        /// </summary>
+        public static string SB_Network {
+            get {
+                return ResourceManager.GetString("SB_Network", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Project:  的本地化字符串。
+        /// </summary>
+        public static string SB_Program {
+            get {
+                return ResourceManager.GetString("SB_Program", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Routine:  的本地化字符串。
+        /// </summary>
+        public static string SB_Routine {
+            get {
+                return ResourceManager.GetString("SB_Routine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Row: 的本地化字符串。
+        /// </summary>
+        public static string SB_Row {
+            get {
+                return ResourceManager.GetString("SB_Row", resourceCulture);
             }
         }
         

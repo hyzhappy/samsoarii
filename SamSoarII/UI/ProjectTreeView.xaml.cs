@@ -405,7 +405,9 @@ namespace SamSoarII.AppMain.UI
         public event NavigateToNetworkEventHandler NavigatedToNetwork = delegate { };
 
         public event ProjectTreeViewEventHandler PTVHandle = delegate { };
-        
+
+        public event RoutedEventHandler PTVRenamed = delegate { };
+
         public event MouseButtonEventHandler InstructionTreeItemDoubleClick = delegate { };
 
         private void OnPTVIDoubleClick(object sender, MouseButtonEventArgs e)
@@ -558,7 +560,7 @@ namespace SamSoarII.AppMain.UI
             ptvitem.Loaded -= OnCreateItemLoaded;
             ptvitem.Rename();
         }
-
+        
         private void OnPTVIRenamed(object sender, RoutedEventArgs e)
         {
             if (sender is ProjectTreeViewItem)
@@ -646,7 +648,7 @@ namespace SamSoarII.AppMain.UI
                         }
                     }
                     ptvitem.RenameClose();
-                    mtmodel.Name = ptvitem.Name;
+                    mtmodel.Name = ptvitem.Text;
                     _e = new ProjectTreeViewEventArgs(
                         ProjectTreeViewEventArgs.TYPE_MODBUS | ProjectTreeViewEventArgs.FLAG_REPLACE,
                         mtmodel, ptvitem.Text);
@@ -656,6 +658,7 @@ namespace SamSoarII.AppMain.UI
                 {
                     ptvitem.RenameClose();
                 }
+                PTVRenamed(this,null);
             }
         }
         

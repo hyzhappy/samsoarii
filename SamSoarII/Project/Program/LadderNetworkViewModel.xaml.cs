@@ -47,13 +47,6 @@ namespace SamSoarII.AppMain.Project
         Down_Inc,
         None
     }
-    public enum LadderMode
-    {
-        Edit,
-        Monitor,
-        Simulate,
-        Demo
-    }
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>

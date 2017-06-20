@@ -44,7 +44,7 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window,INotifyPropertyChanged
     {
         private OptionDialog SysSettingDialog;
         private InteractionFacade _interactionFacade;
@@ -58,10 +58,23 @@ namespace SamSoarII.AppMain.UI
         public LayoutAnchorControl LACElemInit { get { return LAElemInit?.AnchorControl; } }
         public LayoutAnchorControl LACBreakpoint { get { return LABreakpoint?.AnchorControl; } }
         public event RoutedEventHandler InstShortCutOpen = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         private NamedPipeClientStream clientPipe;
+        private SolidColorBrush _SB_FontColor = Brushes.Black;
+        public SolidColorBrush SB_FontColor
+        {
+            get => _SB_FontColor;
+            set
+            {
+                _SB_FontColor = value;
+                PropertyChanged(this,new PropertyChangedEventArgs("SB_FontColor"));
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
             InitializeAvalonDock();
             _interactionFacade = new InteractionFacade(this);
             this.Loaded += MainWindow_Loaded;
