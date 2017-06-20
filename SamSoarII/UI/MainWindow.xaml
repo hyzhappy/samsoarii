@@ -1,4 +1,4 @@
-﻿<Window x:Uid="Window_1" x:Class="SamSoarII.AppMain.UI.MainWindow"
+﻿<Window x:Class="SamSoarII.AppMain.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -74,47 +74,47 @@
         <CommandBinding Command="{x:Static hdoc:HelpDocCommand.ScrollToRight}" Executed="ScrollToRightCommandExecute" CanExecute="ScrollToRightCommandCanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
-        <ad:BoolToVisibilityConverter x:Uid="ad:BoolToVisibilityConverter_1" x:Key="BoolToVisibilityConverter" />
-        <ad:InverseBoolToVisibilityConverter x:Uid="ad:InverseBoolToVisibilityConverter_1" x:Key="InverseBoolToVisibilityConverter" />
-        <ad:AnchorSideToOrientationConverter x:Uid="ad:AnchorSideToOrientationConverter_1" x:Key="AnchorSideToOrientationConverter" />
-        <ad:AnchorSideToAngleConverter x:Uid="ad:AnchorSideToAngleConverter_1" x:Key="AnchorSideToAngleConverter" />
+        <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <ad:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+        <ad:AnchorSideToOrientationConverter x:Key="AnchorSideToOrientationConverter" />
+        <ad:AnchorSideToAngleConverter x:Key="AnchorSideToAngleConverter" />
         <ad:NullToDoNothingConverter x:Uid="ad:NullToDoNothingConverter_1" x:Key="NullToDoNothingConverter" />
-        <ad:LayoutItemFromLayoutModelConverter x:Uid="ad:LayoutItemFromLayoutModelConverter_1" x:Key="LayoutItemFromLayoutModelConverter" />
-        <ad:ActivateCommandLayoutItemFromLayoutModelConverter x:Uid="ad:ActivateCommandLayoutItemFromLayoutModelConverter_1" x:Key="ActivateCommandLayoutItemFromLayoutModelConverter" />
-        <ad:BoolToSideBrushConverter x:Uid="ad:BoolToSideBrushConverter_1" x:Key="BoolToSideBrushConverter" />
-        <Style x:Uid="Style_1" x:Key="ImageEnable" TargetType="Image">
+        <ad:LayoutItemFromLayoutModelConverter x:Key="LayoutItemFromLayoutModelConverter" />
+        <ad:ActivateCommandLayoutItemFromLayoutModelConverter x:Key="ActivateCommandLayoutItemFromLayoutModelConverter" />
+        <ad:BoolToSideBrushConverter x:Key="BoolToSideBrushConverter" />
+        <Style x:Key="ImageEnable" TargetType="Image">
             <Style.Triggers>
-                <Trigger x:Uid="Trigger_1" Property="IsEnabled" Value="False">
-                    <Setter x:Uid="Setter_1" Property="Opacity" Value="0.3"></Setter>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.3"></Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Uid="Style_2" x:Key="{x:Type ToolBar}" TargetType="{x:Type ToolBar}">
-            <Setter x:Uid="Setter_2" Property="SnapsToDevicePixels" Value="True"/>
-            <Setter x:Uid="Setter_3" Property="OverridesDefaultStyle" Value="False"/>
-            <Setter x:Uid="Setter_4" Property="Template">
+        <Style x:Key="{x:Type ToolBar}" TargetType="{x:Type ToolBar}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="False"/>
+            <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate x:Uid="ControlTemplate_1" TargetType="{x:Type ToolBar}">
-                        <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
-                            <Rectangle x:Uid="Rectangle_1" Width="4" Fill="Transparent"/>
-                            <ToolBarPanel x:Uid="PART_ToolBarPanel" x:Name="PART_ToolBarPanel" IsItemsHost="True"/>
-                            <Rectangle x:Uid="Rectangle_2" Width="4" Fill="Transparent"/>
-                            <Line x:Uid="Line_1" Y1="0" Y2="32" Stroke="Black" StrokeThickness="1"/>
+                    <ControlTemplate TargetType="{x:Type ToolBar}">
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="4" Fill="Transparent"/>
+                            <ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="True"/>
+                            <Rectangle Width="4" Fill="Transparent"/>
+                            <Line Y1="0" Y2="32" Stroke="Black" StrokeThickness="1"/>
                         </StackPanel>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <ControlTemplate x:Uid="ControlTemplate_2" x:Key="MainTabItemTemplate" TargetType="{x:Type TabItem}">
-            <Grid x:Uid="Grid_1" MouseDown="OnTabItemHeaderMouseDown">
-                <Border x:Uid="Border" Name="Border" BorderBrush="Black" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" Background="Transparent">
-                    <Grid x:Uid="Grid_2">
+        <ControlTemplate x:Key="MainTabItemTemplate" TargetType="{x:Type TabItem}">
+            <Grid MouseDown="OnTabItemHeaderMouseDown">
+                <Border Name="Border" BorderBrush="Black" BorderThickness="1,1,1,0" CornerRadius="5,5,0,0" Background="Transparent">
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="5*"></ColumnDefinition>
-                            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="5*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter x:Uid="ContentSite" Name="ContentSite" Content="{Binding TabHeader}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"></ContentPresenter>
-                        <Button x:Uid="Button_1" Grid.Column="1" Click="OnTabItemHeaderCancelButtonClick"></Button>
+                        <ContentPresenter Name="ContentSite" Content="{Binding TabHeader}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"></ContentPresenter>
+                        <Button Grid.Column="1" Click="OnTabItemHeaderCancelButtonClick"></Button>
                     </Grid>
                 </Border>
             </Grid>
@@ -124,13 +124,13 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        <ControlTemplate x:Uid="ControlTemplate_3" x:Key="SamSoarIIAnchorTemplate">
-            <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
-                <StackPanel x:Uid="SPanel" Name="SPanel" Orientation="{Binding Path=Model.Side,
+        <ControlTemplate x:Key="SamSoarIIAnchorTemplate">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Name="SPanel" Orientation="{Binding Path=Model.Side,
                                                                 RelativeSource={RelativeSource AncestorType={x:Type ad:LayoutAnchorSide},
                                                                                                Mode=FindAncestor},
                                                                 Converter={StaticResource AnchorSideToOrientationConverter}}">
-                    <TextBlock x:Uid="TBlock" Name="TBlock" TextAlignment="Center" Foreground="{Binding Path=IsMouseOver,
+                    <TextBlock Name="TBlock" TextAlignment="Center" Foreground="{Binding Path=IsMouseOver,
                                                                 RelativeSource={RelativeSource AncestorType={x:Type StackPanel},
                                                                                                Mode=FindAncestor},
                                                                 Converter={StaticResource BoolToSideBrushConverter}}"
@@ -154,27 +154,27 @@
         </Style>
     </Window.Resources>
     <DockPanel x:Name="MainDockPanel">
-        <Menu DockPanel.Dock="Top" Height="27" FontSize="13" Padding="6" FontFamily="微软雅黑" Background="Gainsboro">
+        <Menu DockPanel.Dock="Top" Height="22" FontSize="13" Padding="5,6,0,0" FontFamily="微软雅黑" Background="Gainsboro">
             <MenuItem Header="{x:Static properties:Resources.MainWindow_File}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_New_Proj}" Command="ApplicationCommands.New">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Uid="MenuItem_3" Header="{x:Static properties:Resources.MainWindow_Open_Proj}" Command="ApplicationCommands.Open">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Open_Proj}" Command="ApplicationCommands.Open">
                     <MenuItem.Icon>
-                        <Image x:Uid="Image_2" Source="/Resources/Image/Open.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        <Image Source="/Resources/Image/Open.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator x:Uid="Separator_1"/>
-                <MenuItem x:Uid="MenuItem_4" Header="{x:Static properties:Resources.MainWindow_Save_Proj}" Command="ApplicationCommands.Save">
+                <Separator/>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Save_Proj}" Command="ApplicationCommands.Save">
                     <MenuItem.Icon>
-                        <Image x:Uid="Image_3" Source="/Resources/Image/Save.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        <Image Source="/Resources/Image/Save.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Uid="MenuItem_5" Header="{x:Static properties:Resources.MainWindow_Save_As_Proj}" Command="ApplicationCommands.SaveAs"></MenuItem>
-                <Separator x:Uid="Separator_2"/>
-                <MenuItem x:Uid="RecentFileMenu" x:Name="RecentFileMenu" Style="{x:Null}" Header="{x:Static properties:Resources.MainWindow_Recent_Proj}" ItemsSource="{Binding ProjectUsedTimeMessage}">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Save_As_Proj}" Command="ApplicationCommands.SaveAs"></MenuItem>
+                <Separator/>
+                <MenuItem x:Name="RecentFileMenu" Style="{x:Null}" Header="{x:Static properties:Resources.MainWindow_Recent_Proj}" ItemsSource="{Binding ProjectUsedTimeMessage}">
                     <MenuItem.Resources>
                         <Style x:Uid="Style_4" TargetType="MenuItem">
                             <Setter x:Uid="Setter_7" Property="MaxWidth" Value="350"></Setter>
@@ -413,16 +413,16 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <ToolBarTray x:Uid="SimuToolBarTray" x:Name="SimuToolBarTray" DockPanel.Dock="Top" Height="25" Visibility="Collapsed">
-            <ToolBar x:Uid="ToolBar_7">
-                <ToggleButton x:Uid="SimuStartButton" ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Run}" x:Name="SimuStartButton" Command="{x:Static app:GlobalCommand.SimuStartCommand}" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_36" Source="/Resources/Image/Start.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+        <ToolBarTray x:Name="SimuToolBarTray" DockPanel.Dock="Top" Height="25" Visibility="Collapsed">
+            <ToolBar>
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Run}" x:Name="SimuStartButton" Command="{x:Static app:GlobalCommand.SimuStartCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                    <Image Source="/Resources/Image/Start.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton x:Uid="SimuPauseButton" ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Pause}" x:Name="SimuPauseButton" Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Height="24" Width="24" Margin="0,0,0,14">
-                    <Image x:Uid="Image_37" Source="/Resources/Image/Pause.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Pause}" x:Name="SimuPauseButton" Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Height="24" Width="24" Margin="0,0,0,14">
+                    <Image Source="/Resources/Image/Pause.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton x:Uid="SimuStopButton" ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Stop}" x:Name="SimuStopButton" Command="{x:Static app:GlobalCommand.SimuStopCommand}" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_38" Source="/Resources/Image/Stop.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Stop}" x:Name="SimuStopButton" Command="{x:Static app:GlobalCommand.SimuStopCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                    <Image Source="/Resources/Image/Stop.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
             </ToolBar>
             <ToolBar x:Uid="ToolBar_8">
@@ -458,65 +458,106 @@
                 </ComboBox>
             </ToolBar>
         </ToolBarTray>
-        <ad:DockingManager x:Uid="DockManager" x:Name="DockManager" Style="{StaticResource ResourceKey=DockManagerStyle}">
-            <ad:LayoutRoot x:Uid="ad:LayoutRoot_1">
-                <ad:LayoutPanel x:Uid="ad:LayoutPanel_1">
-                    <local:MainTabControl x:Uid="MainTab" x:Name="MainTab"/>
-                </ad:LayoutPanel>
-                <ad:LayoutRoot.LeftSide>
-                    <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_1">
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_1">
-                            <ad:LayoutAnchorable x:Uid="LAProj" x:Name="LAProj" Title="{x:Static properties:Resources.MainWindow_Project_Explorer}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
-                                <Grid x:Uid="TreeViewGrid" x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-                                </Grid>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_2">
-                            <ad:LayoutAnchorable x:Name="LAElemList" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}">
-                                <local:ElementList x:Name="ElemList"></local:ElementList>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_3">
-                            <ad:LayoutAnchorable x:Uid="LAElemInit" x:Name="LAElemInit" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Init}">
-                                <local:ElementInitializeWindow x:Uid="ElemInitWind" x:Name="ElemInitWind"></local:ElementInitializeWindow>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                    </ad:LayoutAnchorSide>
-                </ad:LayoutRoot.LeftSide>
-                <ad:LayoutRoot.BottomSide>
-                    <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_2">
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_4">
-                            <ad:LayoutAnchorable x:Uid="LAErrorList" x:Name="LAErrorList" Title="{x:Static properties:Resources.MainWindow_Error_List}" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_5">
-                            <ad:LayoutAnchorable x:Uid="LABreakpoint" x:Name="LABreakpoint" Title="{x:Static properties:Resources.MainWindow_Breakpoint}">
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                    </ad:LayoutAnchorSide>
-                </ad:LayoutRoot.BottomSide>
-                <ad:LayoutRoot.RightSide>
-                    <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_3">
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_6">
-                            <ad:LayoutAnchorable x:Uid="LAMonitor" x:Name="LAMonitor" Title="{x:Static properties:Resources.MainWindow_Monitor}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
-                                <Grid x:Uid="MonitorViewGrid" x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-                                </Grid>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_7">
-                            <ad:LayoutAnchorable x:Uid="LAFind" x:Name="LAFind" Title="{x:Static properties:Resources.MainWindow_Search}" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                                <Grid x:Uid="GD_Find" x:Name="GD_Find"></Grid>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                        <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_8">
-                            <ad:LayoutAnchorable x:Uid="LAReplace" x:Name="LAReplace" Title="{x:Static properties:Resources.MainWindow_Replace}" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                                <Grid x:Uid="GD_Replace" x:Name="GD_Replace"></Grid>
-                            </ad:LayoutAnchorable>
-                        </ad:LayoutAnchorGroup>
-                    </ad:LayoutAnchorSide>
-                </ad:LayoutRoot.RightSide>
-            </ad:LayoutRoot>
-        </ad:DockingManager>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="20"></RowDefinition>
+            </Grid.RowDefinitions>
+            <ad:DockingManager x:Name="DockManager" Style="{StaticResource ResourceKey=DockManagerStyle}">
+                <ad:LayoutRoot>
+                    <ad:LayoutPanel>
+                        <local:MainTabControl x:Name="MainTab"/>
+                    </ad:LayoutPanel>
+                    <ad:LayoutRoot.LeftSide>
+                        <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_1">
+                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_1">
+                                <ad:LayoutAnchorable x:Uid="LAProj" x:Name="LAProj" Title="{x:Static properties:Resources.MainWindow_Project_Explorer}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                                    <Grid x:Uid="TreeViewGrid" x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                                    </Grid>
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_2">
+                                <ad:LayoutAnchorable x:Name="LAElemList" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}">
+                                    <local:ElementList x:Name="ElemList"></local:ElementList>
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_3">
+                                <ad:LayoutAnchorable x:Uid="LAElemInit" x:Name="LAElemInit" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Init}">
+                                    <local:ElementInitializeWindow x:Uid="ElemInitWind" x:Name="ElemInitWind"></local:ElementInitializeWindow>
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                        </ad:LayoutAnchorSide>
+                    </ad:LayoutRoot.LeftSide>
+                    <ad:LayoutRoot.BottomSide>
+                        <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_2">
+                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_4">
+                                <ad:LayoutAnchorable x:Uid="LAErrorList" x:Name="LAErrorList" Title="{x:Static properties:Resources.MainWindow_Error_List}" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_5">
+                                <ad:LayoutAnchorable x:Uid="LABreakpoint" x:Name="LABreakpoint" Title="{x:Static properties:Resources.MainWindow_Breakpoint}">
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                        </ad:LayoutAnchorSide>
+                    </ad:LayoutRoot.BottomSide>
+                    <ad:LayoutRoot.RightSide>
+                        <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_3">
+                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_6">
+                                <ad:LayoutAnchorable x:Uid="LAMonitor" x:Name="LAMonitor" Title="{x:Static properties:Resources.MainWindow_Monitor}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                                    <Grid x:Uid="MonitorViewGrid" x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                                    </Grid>
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_7">
+                                <ad:LayoutAnchorable x:Uid="LAFind" x:Name="LAFind" Title="{x:Static properties:Resources.MainWindow_Search}" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                                    <Grid x:Uid="GD_Find" x:Name="GD_Find"></Grid>
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LAReplace" Title="{x:Static properties:Resources.MainWindow_Replace}" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                                    <Grid x:Name="GD_Replace"></Grid>
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                        </ad:LayoutAnchorSide>
+                    </ad:LayoutRoot.RightSide>
+                </ad:LayoutRoot>
+            </ad:DockingManager>
+            <StatusBar x:Name="Main_SB" Background="AliceBlue" Grid.Row="1">
+                <DockPanel LastChildFill="False" Margin="-3,-3,0,0" Height="{Binding ElementName=Main_SB,Path=ActualHeight}" Width="{Binding ElementName=Main_SB,Path=ActualWidth}">
+                    <StackPanel x:Name="SB_SP_Program" Visibility="Hidden" Margin="0,0,10,0" DockPanel.Dock="Right" Orientation="Horizontal">
+                        <TextBlock Text="Program: "/>
+                        <TextBlock MinWidth="60" x:Name="SB_Program"/>
+                    </StackPanel>
+                    <Grid DockPanel.Dock="Right" Margin="0,0,10,0">
+                        <StackPanel x:Name="SB_SP_Routine" Visibility="Hidden" Margin="0,0,10,0" DockPanel.Dock="Right" Orientation="Horizontal">
+                            <TextBlock Text="Routine: "/>
+                            <TextBlock x:Name="SB_Routine"/>
+                        </StackPanel>
+                        <StackPanel Visibility="Collapsed" x:Name="SB_SP_Func" Orientation="Horizontal">
+                            <TextBlock Text="Func: "/>
+                            <TextBlock MinWidth="20" x:Name="SB_Func"/>
+                        </StackPanel>
+                        <StackPanel Visibility="Collapsed" x:Name="SB_SP_Modbus" Orientation="Horizontal">
+                            <TextBlock Text="Table: "/>
+                            <TextBlock MinWidth="20" x:Name="SB_Modbus"/>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel x:Name="SB_SP_Network" Visibility="Hidden" DockPanel.Dock="Right" Margin="0,0,10,0" Orientation="Horizontal">
+                        <TextBlock Text="Network: "/>
+                        <TextBlock MinWidth="20" x:Name="SB_Network"/>
+                    </StackPanel>
+                    <StackPanel x:Name="SB_SP_Y" Visibility="Hidden" Margin="0,0,10,0" DockPanel.Dock="Right" Orientation="Horizontal">
+                        <TextBlock Text="Y:"/>
+                        <TextBlock MinWidth="20" x:Name="SB_Y"/>
+                    </StackPanel>
+                    <StackPanel x:Name="SB_SP_X" Visibility="Hidden" Orientation="Horizontal" DockPanel.Dock="Right" Margin="0,0,10,0">
+                        <TextBlock Text="X:"/>
+                        <TextBlock MinWidth="20" x:Name="SB_X"/>
+                    </StackPanel>
+                    <TextBlock DockPanel.Dock="Left" x:Name="SB_Message"/>
+                </DockPanel>
+            </StatusBar>
+        </Grid>
     </DockPanel>
 </Window>
 

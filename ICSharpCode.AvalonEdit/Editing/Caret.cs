@@ -24,7 +24,16 @@ namespace ICSharpCode.AvalonEdit.Editing
         readonly TextView textView;
         readonly CaretLayer caretAdorner;
         bool visible;
-
+        public event RoutedEventHandler VisibleChanged = delegate { };
+        public bool Visible
+        {
+            get => visible;
+            set
+            {
+                visible = value;
+                VisibleChanged(this,null);
+            }
+        }
         internal Caret(TextArea textArea)
         {
             this.textArea = textArea;
@@ -462,7 +471,7 @@ namespace ICSharpCode.AvalonEdit.Editing
         public void Show()
         {
             Log("Caret.Show()");
-            visible = true;
+            Visible = true;
             if (!showScheduled)
             {
                 showScheduled = true;
@@ -513,7 +522,7 @@ namespace ICSharpCode.AvalonEdit.Editing
         public void Hide()
         {
             Log("Caret.Hide()");
-            visible = false;
+            Visible = false;
             if (hasWin32Caret)
             {
                 Win32.DestroyCaret();
@@ -540,6 +549,7 @@ namespace ICSharpCode.AvalonEdit.Editing
             get { return caretAdorner.CaretBrush; }
             set { caretAdorner.CaretBrush = value; }
         }
+        
     }
 }
 

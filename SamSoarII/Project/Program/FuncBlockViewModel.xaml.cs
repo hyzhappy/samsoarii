@@ -27,6 +27,7 @@ using ICSharpCode.AvalonEdit;
 using SamSoarII.LadderInstViewModel;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Controls;
+using System.Threading;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -253,7 +254,6 @@ namespace SamSoarII.AppMain.Project
             }
             HighlightingManager.Instance.RegisterHighlighting("Custom Highlighting", new string[] { ".cool" }, customHighlighting);
             FuncBlockName = name;
-            //CodeTextBox.DataContext = this;
             CodeTextBox.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             CodeTextBox.TextArea.TextEntered += textEditer_TextArea_TextEntered;
             CodeTextBox.TextArea.CodeCompleteKeyDown += textEditer_TextArea_CodeCompleteKeyDown;
@@ -281,7 +281,41 @@ namespace SamSoarII.AppMain.Project
                 Grid.SetColumn(ccstblocks[i], 0);
                 CodeCompletePanel.Children.Add(ccstblocks[i]);
             }
+            CodeTextBox.TextArea.Caret.VisibleChanged += Caret_VisibleChanged;
         }
+
+
+        #region StatusBar
+        private void Caret_VisibleChanged(object sender, RoutedEventArgs e)
+        {
+            if (CodeTextBox.TextArea.Caret.Visible) SetStatusBar(true);
+            else SetStatusBar(false);
+        }
+        private void SetXY(int x, int y)
+        {
+            if (parent == null || parent.IFacade == null) return;
+            if (parent.IFacade.StatusBarItem == StatusBarItem.Func)
+            {
+                parent.IFacade.MainWindow.SB_X.Text = x.ToString();
+                parent.IFacade.MainWindow.SB_Y.Text = y.ToString();
+            }
+        }
+        private void SetStatusBar(bool IsVisible)
+        {
+            if (IsVisible)
+            {
+                SetXY(CodeTextBox.TextArea.Caret.Column, CodeTextBox.TextArea.Caret.Line);
+                parent.IFacade.MainWindow.SB_SP_X.Visibility = Visibility.Visible;
+                parent.IFacade.MainWindow.SB_SP_Y.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                parent.IFacade.MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                parent.IFacade.MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+            }
+        }
+        #endregion
+
 
         #region TextEditer Events
 
@@ -451,6 +485,7 @@ namespace SamSoarII.AppMain.Project
                 CCSProfix = String.Empty;
             }
             TextChanged(this, new RoutedEventArgs());
+            SetXY(CodeTextBox.TextArea.Caret.Column, CodeTextBox.TextArea.Caret.Line);
             //OutputDebug();
         }
         /// <summary>
@@ -548,6 +583,7 @@ namespace SamSoarII.AppMain.Project
             {
                 CCSProfixCursor = CodeTextBox.CaretOffset - CCSOffset;
             }
+            SetXY(CodeTextBox.TextArea.Caret.Column, CodeTextBox.TextArea.Caret.Line);
             //OutputDebug();
         }
         #endregion

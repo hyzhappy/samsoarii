@@ -27,8 +27,28 @@ using SamSoarII.Communication;
 
 namespace SamSoarII.AppMain
 {
+    public enum StatusBarItem
+    {
+        Empty,
+        Program,
+        Routine,
+        Modbus,
+        Func
+    }
     public class InteractionFacade
     {
+        private StatusBarItem _statusBarItem;
+        public StatusBarItem StatusBarItem
+        {
+            get => _statusBarItem;
+            set
+            {
+                _statusBarItem = value;
+                SetStatusBar(value);
+            }
+        }
+
+        public event RoutedEventHandler ProjectChanged = delegate { };
         public bool ProjectLoaded
         {
             get { return _projectModel != null; }
@@ -38,8 +58,12 @@ namespace SamSoarII.AppMain
         public ProjectModel ProjectModel
         {
             get { return _projectModel; }
+            private set
+            {
+                _projectModel = value;
+                ProjectChanged(this,new RoutedEventArgs());
+            }
         }
-        
         private bool _isCommentMode;
         public bool IsCommentMode
         {
@@ -112,6 +136,7 @@ namespace SamSoarII.AppMain
 
         public InteractionFacade(MainWindow mainwindow)
         {
+            _statusBarItem = StatusBarItem.Empty;
             this._mainWindow = mainwindow;
             mainwindow.InstShortCutOpen += Mainwindow_InstShortCutOpen;
             mainwindow.InsertRowCommand.CanExecute += InsertRowCommand_CanExecute;
@@ -124,6 +149,8 @@ namespace SamSoarII.AppMain
             mainwindow.CheckFuncBlockCommand.Executed += CheckFuncBlock_Executed;
             _mainTabControl = _mainWindow.MainTab;
             _mainTabControl.SelectionChanged += OnTabItemChanged;
+            _mainTabControl.CloseTabItem += _mainTabControl_CloseTabItem;
+            _mainTabControl.FloatingWinClosed += _mainTabControl_FloatingWinClosed;
             ElementList.NavigateToNetwork += ElementList_NavigateToNetwork;
             _erwindow = new ErrorReportWindow(this);
             _fwindow = new FindWindow(this);
@@ -137,7 +164,131 @@ namespace SamSoarII.AppMain
             mainwindow.GD_Replace.Children.Add(_trwindow);
             mainwindow.LAErrorList.Content = _erwindow;
             mainwindow.LABreakpoint.Content = _bpwindow;
+            CurrentTabChanged += InteractionFacade_CurrentTabChanged;
+            ProjectChanged += InteractionFacade_ProjectChanged;
         }
+
+        #region StatusBar
+        private void _mainTabControl_FloatingWinClosed(object sender, RoutedEventArgs e)
+        {
+            if (_mainTabControl.TabItemCollection.Count == 0)
+                StatusBarItem = StatusBarItem.Program;
+        }
+
+        private void _mainTabControl_CloseTabItem(object sender, RoutedEventArgs e)
+        {
+            if (_mainTabControl.ChildrenCount == 0 && _mainTabControl.TabItemCollection.Count == 0)
+                StatusBarItem = StatusBarItem.Program;
+            else
+            {
+                if (_mainTabControl.SelectedItem is MainTabDiagramItem)
+                {
+                    StatusBarItem = StatusBarItem.Routine;
+                    ((MainTabDiagramItem)_mainTabControl.SelectedItem).LDVM_ladder.RetStatusBar();
+                }
+                if (_mainTabControl.SelectedItem is FuncBlockViewModel)
+                {
+                    MainWindow.SB_Func.Text = ((FuncBlockViewModel)_mainTabControl.SelectedItem).FuncBlockName;
+                    StatusBarItem = StatusBarItem.Func;
+                }
+                if (_mainTabControl.SelectedItem is ModbusTableViewModel)
+                {
+                    StatusBarItem = StatusBarItem.Modbus;
+                    ProjectModel.MTVModel.RetStatusBar();
+                }
+            }
+        }
+
+        private void InteractionFacade_ProjectChanged(object sender, RoutedEventArgs e)
+        {
+            if (ProjectModel == null)
+            {
+                StatusBarItem = StatusBarItem.Empty;
+                MainWindow.SB_Program.Text = string.Empty;
+            }
+            else
+            {
+                StatusBarItem = StatusBarItem.Program;
+                MainWindow.SB_Program.Text = ProjectModel.ProjectName;
+            }
+        }
+
+        private void InteractionFacade_CurrentTabChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_mainTabControl.ChildrenCount == 0 && _mainTabControl.TabItemCollection.Count == 0)
+            {
+                StatusBarItem = StatusBarItem.Program;
+                return;
+            }
+            if (_mainTabControl.SelectedItem == null)
+                StatusBarItem = StatusBarItem.Program;
+            if (_mainTabControl.SelectedItem is MainTabDiagramItem || _mainTabControl.SelectedItem is LadderDiagramViewModel)
+            {
+                MainWindow.SB_Routine.Text = _mainTabControl.SelectedItem is LadderDiagramViewModel ? ((LadderDiagramViewModel)_mainTabControl.SelectedItem).ProgramName : ((MainTabDiagramItem)_mainTabControl.SelectedItem).LDVM_ladder.ProgramName;
+                StatusBarItem = StatusBarItem.Routine;
+                if (_mainTabControl.SelectedItem is LadderDiagramViewModel)
+                    ((LadderDiagramViewModel)_mainTabControl.SelectedItem).RetStatusBar();
+                else
+                    ((MainTabDiagramItem)_mainTabControl.SelectedItem).LDVM_ladder.RetStatusBar();
+            }
+            if (_mainTabControl.SelectedItem is FuncBlockViewModel)
+            {
+                MainWindow.SB_Func.Text = ((FuncBlockViewModel)_mainTabControl.SelectedItem).FuncBlockName;
+                StatusBarItem = StatusBarItem.Func;
+            }
+            if (_mainTabControl.SelectedItem is ModbusTableViewModel)
+            {
+                StatusBarItem = StatusBarItem.Modbus;
+                ProjectModel.MTVModel.RetStatusBar();
+            }
+        }
+        private void SetStatusBar(StatusBarItem statusBarItem)
+        {
+            switch (statusBarItem)
+            {
+                case StatusBarItem.Empty:
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    break;
+                case StatusBarItem.Program:
+                case StatusBarItem.Modbus:
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    break;
+                case StatusBarItem.Routine:
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    break;
+                case StatusBarItem.Func:
+                    MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Func.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Program.Visibility = Visibility.Visible;
+                    MainWindow.SB_SP_Routine.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                    MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+                    break;
+                default:
+                    break;
+            }
+        }
+        #endregion
+
 
         #region Check
 
@@ -1019,7 +1170,7 @@ namespace SamSoarII.AppMain
                 }
             }
             MainWindow.ResetDock();
-            _projectModel = new ProjectModel(name);
+            ProjectModel = new ProjectModel(name);
             _projectModel.IFacade = this;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
             _projectModel.AutoInstManager = new AutoInstManager(this);
@@ -1075,7 +1226,7 @@ namespace SamSoarII.AppMain
             _mainTabControl.Reset();
             _projectTreeView = null;
             _projectModel.autoSavedManager.Abort();
-            _projectModel = null;
+            ProjectModel = null;
             MainWindow.LACProj.Hide();
         }
         public void SaveProject()
@@ -1118,7 +1269,7 @@ namespace SamSoarII.AppMain
             MainWindow.ResetDock();
             if (_projectModel != null)
                 _projectModel.autoSavedManager.Abort();
-            _projectModel = ProjectHelper.LoadProject(ProjectFullFileName, new ProjectModel(String.Empty));
+            ProjectModel = ProjectHelper.LoadProject(ProjectFullFileName, new ProjectModel(String.Empty));
             _projectModel.IFacade = this;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
             _projectModel.AutoInstManager = new AutoInstManager(this);

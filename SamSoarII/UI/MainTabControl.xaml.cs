@@ -46,7 +46,7 @@ namespace SamSoarII.AppMain.UI
         #region Collections
 
         public ObservableCollection<ITabItem> TabItemCollection { get; set; } = new ObservableCollection<ITabItem>();
-        public ObservableCollection<ITabItem> FloatingCollection { get; set; } = new ObservableCollection<ITabItem>();
+        //public ObservableCollection<ITabItem> FloatingCollection { get; set; } = new ObservableCollection<ITabItem>();
         public ObservableCollection<MainTabDiagramItem> DiagramCollection { get; set; } = new ObservableCollection<MainTabDiagramItem>();
 
         private Dictionary<ITabItem, LayoutDocument> _lDocDict = new Dictionary<ITabItem, LayoutDocument>();
@@ -100,7 +100,7 @@ namespace SamSoarII.AppMain.UI
         
         public void ShowItem(ITabItem item)
         {
-            bool isnew = false;
+            //bool isnew = false;
             LayoutDocument ldoc = null;
             if (item is FuncBlockViewModel)
             {
@@ -142,7 +142,7 @@ namespace SamSoarII.AppMain.UI
                 ldoc.IsActiveChanged += OnActiveChanged;
                 Children.Add(ldoc);
                 _lDocDict.Add(item, ldoc);
-                isnew = true;
+                //isnew = true;
             }
             else
             {
@@ -151,10 +151,7 @@ namespace SamSoarII.AppMain.UI
             int ldocid = Children.IndexOf(ldoc);
             SelectedItem = item;
             SelectedContentIndex = ldocid;
-            if (isnew)
-            {
-                SelectionChanged(this, null);
-            }
+            SelectionChanged(this, null);
         }
 
         public void RenameItem(ITabItem item)
@@ -195,6 +192,7 @@ namespace SamSoarII.AppMain.UI
                         DiagramCollection.Remove(mtditem);
                     }
                 }
+                CloseTabItem(this,new RoutedEventArgs());
             }
         }
         
@@ -204,6 +202,8 @@ namespace SamSoarII.AppMain.UI
         
         public event SelectionChangedEventHandler SelectionChanged = delegate { };
 
+        public event RoutedEventHandler CloseTabItem = delegate { };
+        public event RoutedEventHandler FloatingWinClosed = delegate { };
         public event RoutedEventHandler GotFocus = delegate { };
 
         private void OnActiveChanged(object sender, EventArgs e)
@@ -318,6 +318,7 @@ namespace SamSoarII.AppMain.UI
                 TabItemCollection.Remove(titem);
                 _lDocDict.Remove(titem);
             }
+            FloatingWinClosed(this,null);
         }
 
         #endregion

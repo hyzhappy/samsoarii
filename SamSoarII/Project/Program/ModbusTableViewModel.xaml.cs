@@ -89,10 +89,45 @@ namespace SamSoarII.AppMain.Project
             Current = null;
             DataContext = this;
             ModelChanged += OnModelChanged;
+            SelectionChanged += ModbusTableViewModel_SelectionChanged;
         }
 
+        #region StatusBar
+        private void ModbusTableViewModel_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (Current == null)
+                SetStatusBar(false);
+            else
+            {
+                parent.IFacade.MainWindow.SB_Modbus.Text = CurrentName;
+                SetStatusBar(true);
+            }
+        }
+        private void SetStatusBar(bool IsVisible)
+        {
+            if (IsVisible)
+                parent.IFacade.MainWindow.SB_SP_Modbus.Visibility = Visibility.Visible;
+            else
+                parent.IFacade.MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+        }
+        public void RetStatusBar()
+        {
+            if (parent.IFacade.StatusBarItem == StatusBarItem.Modbus)
+            {
+                if (Current == null)
+                    SetStatusBar(false);
+                else
+                {
+                    parent.IFacade.MainWindow.SB_Modbus.Text = CurrentName;
+                    SetStatusBar(true);
+                }
+            }
+        }
+        #endregion
+
+
         #region Numbers
-        
+
         private ProjectModel parent;
 
         #region Models & Tables
@@ -419,12 +454,14 @@ namespace SamSoarII.AppMain.Project
         #region Event Handler
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
+        
         #region Tools
         public event RoutedEventHandler ModelChanged = delegate { };
 
         public event RoutedEventHandler Close = delegate { };
-        
+
+        public event RoutedEventHandler SelectionChanged = delegate { };
+
         private void B_Insert_Click(object sender, RoutedEventArgs e)
         {
             AddTable();
@@ -549,10 +586,12 @@ namespace SamSoarII.AppMain.Project
                 if (fit.Count() > 0)
                 {
                     Current = fit.First();
+                    SelectionChanged(this, null);
                     return;
                 }
             }
             Current = null;
+            SelectionChanged(this,null);
         }
         
         private void DG_Table_SelectionChanged(object sender, SelectionChangedEventArgs e)

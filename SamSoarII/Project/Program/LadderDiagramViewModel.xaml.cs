@@ -250,6 +250,10 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _selectStatus = value;
+                if (value == SelectStatus.SingleSelected)
+                {
+
+                }
                 switch(_selectStatus)
                 {
                     case SelectStatus.Idle:
@@ -355,6 +359,9 @@ namespace SamSoarII.AppMain.Project
         {
             InitializeComponent();
             _selectRect = new SelectRect();
+            _selectRect.NetworkParentChanged += _selectRect_NetworkParentChanged;
+            _selectRect.XChanged += _selectRect_XChanged;
+            _selectRect.YChanged += _selectRect_YChanged;
             InitializeInstructionNameAndToolTips();
             _projectModel = _parent;
             ProgramName = name;
@@ -371,7 +378,49 @@ namespace SamSoarII.AppMain.Project
             ThumbnailButton.ToolTipOpening += ThumbnailButton_ToolTipOpening;
             ThumbnailButton.ToolTipClosing += ThumbnailButton_ToolTipClosing;
         }
-
+        private void _selectRect_YChanged(object sender, RoutedEventArgs e)
+        {
+            ProjectModel.IFacade.MainWindow.SB_Y.Text = _selectRect.Y.ToString();
+        }
+        private void _selectRect_XChanged(object sender, RoutedEventArgs e)
+        {
+            ProjectModel.IFacade.MainWindow.SB_X.Text = _selectRect.X.ToString();
+        }
+        private void _selectRect_NetworkParentChanged(object sender, RoutedEventArgs e)
+        {
+            if (_selectRect.NetworkParent == null)
+                SetStatusBar(false);
+            else
+            {
+                ProjectModel.IFacade.MainWindow.SB_Network.Text = _selectRect.NetworkParent.NetworkNumber.ToString();
+                SetStatusBar(true);
+            }
+        }
+        private void SetStatusBar(bool IsVisible)
+        {
+            if (IsVisible)
+            {
+                ProjectModel.IFacade.MainWindow.SB_SP_Network.Visibility = Visibility.Visible;
+                ProjectModel.IFacade.MainWindow.SB_SP_X.Visibility = Visibility.Visible;
+                ProjectModel.IFacade.MainWindow.SB_SP_Y.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ProjectModel.IFacade.MainWindow.SB_SP_Network.Visibility = Visibility.Hidden;
+                ProjectModel.IFacade.MainWindow.SB_SP_X.Visibility = Visibility.Hidden;
+                ProjectModel.IFacade.MainWindow.SB_SP_Y.Visibility = Visibility.Hidden;
+            }
+        }
+        public void RetStatusBar()
+        {
+            if (_selectRect.NetworkParent != null && SelectionStatus == SelectStatus.SingleSelected)
+            {
+                ProjectModel.IFacade.MainWindow.SB_Network.Text = _selectRect.NetworkParent.NetworkNumber.ToString();
+                ProjectModel.IFacade.MainWindow.SB_X.Text = _selectRect.X.ToString();
+                ProjectModel.IFacade.MainWindow.SB_Y.Text = _selectRect.Y.ToString();
+                SetStatusBar(true);
+            }
+        }
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             Focus();
