@@ -1722,4 +1722,25 @@
   <data name="Change_Mode" xml:space="preserve">
     <value>The current mode can not be modified for the ladder, please switch to edit mode first!</value>
   </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading...</value>
+  </data>
+  <data name="Download_Fail" xml:space="preserve">
+    <value>Download fail</value>
+  </data>
+  <data name="FuncBlock_Correct" xml:space="preserve">
+    <value>The function block is correct!</value>
+  </data>
+  <data name="FuncBlock_Error" xml:space="preserve">
+    <value>The function block is error!</value>
+  </data>
+  <data name="Ladder_Correct" xml:space="preserve">
+    <value>The ladder is correct!</value>
+  </data>
+  <data name="Ladder_Error" xml:space="preserve">
+    <value>The ladder is error!</value>
+  </data>
+  <data name="Message_LBL_Warning" xml:space="preserve">
+    <value>Warning!</value>
+  </data>
 </root>

@@ -948,7 +948,13 @@ namespace SamSoarII.AppMain.Project
                 {
                     if (!_selectRectOwner.IsFirstNetwork())
                     {
-                        var network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber - 1);
+                        LadderNetworkViewModel network;
+                        int i = 0;
+                        do
+                        {
+                            i++;
+                            network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber - i);
+                        } while (!network.ladderExpander.IsExpand && !network.IsFirstNetwork());
                         if (network.ladderExpander.IsExpand)
                         {
                             _selectRectOwner.ReleaseSelectRect();
@@ -974,7 +980,13 @@ namespace SamSoarII.AppMain.Project
                 {
                     if (!_selectRectOwner.IsLastNetwork())
                     {
-                        var network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber + 1);
+                        LadderNetworkViewModel network;
+                        int i = 0;
+                        do
+                        {
+                            i++;
+                            network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber + i);
+                        } while (!network.ladderExpander.IsExpand && !network.IsLastNetwork());
                         if (network.ladderExpander.IsExpand)
                         {
                             _selectRectOwner.ReleaseSelectRect();
@@ -1089,13 +1101,9 @@ namespace SamSoarII.AppMain.Project
                         SelectRectUp();
                         var vline = _selectRectOwner.SearchVerticalLine(x, y);
                         if (vline != null)
-                        {
                             RemoveSingleVerticalLine(_selectRectOwner, vline);
-                        }
                         else
-                        {
-                            ReplaceSingleVerticalLine(_selectRectOwner, new VerticalLineViewModel() { X = x, Y = y });                     
-                        }
+                            ReplaceSingleVerticalLine(_selectRectOwner, new VerticalLineViewModel() { X = x, Y = y });
                     }
                 }
             }

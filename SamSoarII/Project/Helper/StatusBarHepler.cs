@@ -16,10 +16,7 @@ namespace SamSoarII.AppMain.Project.Helper
 
         public VisualHost(Visual child)
         {
-            if (child == null)
-                throw new ArgumentException("child");
-
-            this.child = child;
+            this.child = child ?? throw new ArgumentException("child");
             AddVisualChild(child);
         }
 
@@ -33,7 +30,7 @@ namespace SamSoarII.AppMain.Project.Helper
             get { return 1; }
         }
     }
-    public class StatusBarHepler
+    public class StatusBarHepler:IDisposable
     {
         private Thread _updateThread;
         private InteractionFacade IFacade;
@@ -50,14 +47,19 @@ namespace SamSoarII.AppMain.Project.Helper
             _updateThread.IsBackground = true;
             _updateThread.Start();
         }
-        public void Abort()
+        private void Abort()
         {
             _updateThread.Abort();
         }
         private void ThreadStartingPoint()
         {
-            IFacade.MainWindow.Main_SB.Dispatcher.Invoke(() => { IFacade.MainWindow.SB_Message.Text = _message; });
+            IFacade.MainWindow.Main_SB.Dispatcher.BeginInvoke(DispatcherPriority.Normal,(ThreadStart) delegate(){ IFacade.MainWindow.SB_Message.Text = _message; });
             Dispatcher.Run();
+        }
+
+        public void Dispose()
+        {
+            Abort();
         }
     }
 }

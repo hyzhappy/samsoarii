@@ -312,16 +312,6 @@ namespace SamSoarII.AppMain
         }
         public void SetMessage(string message)
         {
-            //DispatcherFrame frame = new DispatcherFrame();
-            //MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-            //    new DispatcherOperationCallback(delegate (object f)
-            //    {
-            //        ((DispatcherFrame)f).Continue = false;
-            //        MainWindow.SB_Message.Text = message;
-            //        return null;
-            //    }
-            //        ), frame);
-            //Dispatcher.PushFrame(frame);
             MainWindow.SB_Message.Text = message;
         }
 
@@ -401,18 +391,18 @@ namespace SamSoarII.AppMain
                     {
                         if (App.CultureIsZH_CH())
                             ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                                    ecount, wcount),handle);
+                                    ecount, wcount),handle, true, true);
                         else
                         {
                             ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
-                                    ecount, wcount),handle);
+                                    ecount, wcount),handle, true, true);
                         }
                     }
                 }
                 else
                 {
                     if (showreport)
-                        ShowMessage(Properties.Resources.Program_Correct, handle);
+                        ShowMessage(Properties.Resources.Program_Correct, handle, false, true);
                     else
                         handle.Abort();
                     result = true;
@@ -427,9 +417,9 @@ namespace SamSoarII.AppMain
             else if (errorMessage.Error == ErrorType.Empty)
             {
                 if (App.CultureIsZH_CH())
-                    ShowMessage(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber), handle);
+                    ShowMessage(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber), handle, true, true);
                 else
-                    ShowMessage(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber), handle);
+                    ShowMessage(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber), handle, true, true);
                 result = false;
             }
             else
@@ -443,19 +433,19 @@ namespace SamSoarII.AppMain
                 switch (errorMessage.Error)
                 {
                     case ErrorType.Open:
-                        ShowMessage(Properties.Resources.Open_Error, handle);
+                        ShowMessage(Properties.Resources.Open_Error, handle,true,true);
                         break;
                     case ErrorType.Short:
-                        ShowMessage(Properties.Resources.Short_Error, handle);
+                        ShowMessage(Properties.Resources.Short_Error, handle, true, true);
                         break;
                     case ErrorType.SelfLoop:
-                        ShowMessage(Properties.Resources.Selfloop_Error, handle);
+                        ShowMessage(Properties.Resources.Selfloop_Error, handle, true, true);
                         break;
                     case ErrorType.HybridLink:
-                        ShowMessage(Properties.Resources.HybridLink_Error, handle);
+                        ShowMessage(Properties.Resources.HybridLink_Error, handle, true, true);
                         break;
                     case ErrorType.Special:
-                        ShowMessage(Properties.Resources.Special_Instruction_Error, handle);
+                        ShowMessage(Properties.Resources.Special_Instruction_Error, handle, true, true);
                         break;
                     default:
                         break;
@@ -467,7 +457,8 @@ namespace SamSoarII.AppMain
         {
             bool result = false;
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.LadderDiagram_check);
-            MainWindow.Dispatcher.Invoke(() =>
+            new StatusBarHepler(this, Properties.Resources.LadderDiagram_check).Start();
+            MainWindow.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 handle.Start();
                 _projectModel.AutoInstManager.Pause();
@@ -480,11 +471,32 @@ namespace SamSoarII.AppMain
             {
                 Thread.Sleep(10);
             }
+            if (!showreport)
+            {
+                if (result)
+                    new StatusBarHepler(this, Properties.Resources.Ladder_Correct).Start();
+                else
+                    new StatusBarHepler(this, Properties.Resources.Ladder_Error).Start();
+            }
             return result;
         }
 
-        private void ShowMessage(string message,LoadingWindowHandle handle)
+        private void ShowMessage(string message,LoadingWindowHandle handle,bool isError,bool isLadder)
         {
+            if (isLadder)
+            {
+                if (isError)
+                    new StatusBarHepler(this, Properties.Resources.Ladder_Error).Start();
+                else
+                    new StatusBarHepler(this, Properties.Resources.Ladder_Correct).Start();
+            }
+            else
+            {
+                if (!isError)
+                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Correct).Start();
+                else
+                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Error).Start();
+            }
             handle.Abort();
             MessageBox.Show(message);
         }
@@ -661,15 +673,13 @@ namespace SamSoarII.AppMain
             if (showreport || !result)
             {
                 if (ecount == 0 && wcount == 0)
-                {
-                    ShowMessage(Properties.Resources.Function_Block_Correct, handle);
-                }
+                    ShowMessage(Properties.Resources.Function_Block_Correct, handle, false, false);
                 else
                 {
                     if (App.CultureIsZH_CH())
-                        ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle);
+                        ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle, true, false);
                     else
-                        ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle);
+                        ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle, true, false);
                     _mainWindow.LACErrorList.Show();
                 }
             }
@@ -684,8 +694,9 @@ namespace SamSoarII.AppMain
             {
                 return result;
             }
+            new StatusBarHepler(this, Properties.Resources.Funcblock_Check).Start();
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
-            MainWindow.Dispatcher.Invoke(() =>
+            MainWindow.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 handle.Start();
                 CheckFuncBlockWork(handle, showreport, ref result);
@@ -693,6 +704,13 @@ namespace SamSoarII.AppMain
             while (!handle.Completed)
             {
                 Thread.Sleep(10);
+            }
+            if (!showreport)
+            {
+                if (result)
+                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Correct).Start();
+                else
+                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Error).Start();
             }
             return result;
         }
@@ -1351,9 +1369,8 @@ namespace SamSoarII.AppMain
         {
             ProjectFullFileName = fileName;
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
-            //var helper = new StatusBarHepler(this, Properties.Resources.Project_Preparing);
-            //helper.Start();
-            MainWindow.Dispatcher.Invoke(() =>
+            new StatusBarHepler(this, Properties.Resources.Project_Preparing).Start();
+            MainWindow.Dispatcher.Invoke(DispatcherPriority.Background,(ThreadStart)delegate()
             {
                 handle.Start();
                 LoadProjectWork(handle);
@@ -1413,7 +1430,8 @@ namespace SamSoarII.AppMain
                     {
                         CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
                         LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
-                        MainWindow.Dispatcher.Invoke(() =>
+                        new StatusBarHepler(this, Properties.Resources.Downloading).Start();
+                        MainWindow.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
                             handle.Start();
                             bool ret = DownloadHelper.Download(paras.IsCOMLinked
@@ -1422,9 +1440,15 @@ namespace SamSoarII.AppMain
                             handle.Abort();
                             handle.Completed = true;
                             if (!ret)
+                            {
+                                new StatusBarHepler(this, Properties.Resources.Download_Fail).Start();
                                 MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                            }
                             else
+                            {
+                                new StatusBarHepler(this, Properties.Resources.MessageBox_Download_Successd).Start();
                                 MessageBox.Show(Properties.Resources.MessageBox_Download_Successd);
+                            }
                         });
                         while (!handle.Completed)
                         {

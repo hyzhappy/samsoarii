@@ -538,11 +538,29 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Download fail 的本地化字符串。
+        /// </summary>
+        public static string Download_Fail {
+            get {
+                return ResourceManager.GetString("Download_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Download failed,please check the network or contact our technical support！ 的本地化字符串。
         /// </summary>
         public static string Download_Failed {
             get {
                 return ResourceManager.GetString("Download_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Downloading... 的本地化字符串。
+        /// </summary>
+        public static string Downloading {
+            get {
+                return ResourceManager.GetString("Downloading", resourceCulture);
             }
         }
         
@@ -1249,6 +1267,24 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The function block is correct! 的本地化字符串。
+        /// </summary>
+        public static string FuncBlock_Correct {
+            get {
+                return ResourceManager.GetString("FuncBlock_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The function block is error! 的本地化字符串。
+        /// </summary>
+        public static string FuncBlock_Error {
+            get {
+                return ResourceManager.GetString("FuncBlock_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Funcblocks all correct! 的本地化字符串。
         /// </summary>
         public static string Function_Block_Correct {
@@ -1569,6 +1605,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Ladder_Changed {
             get {
                 return ResourceManager.GetString("Ladder_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The ladder is correct! 的本地化字符串。
+        /// </summary>
+        public static string Ladder_Correct {
+            get {
+                return ResourceManager.GetString("Ladder_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The ladder is error! 的本地化字符串。
+        /// </summary>
+        public static string Ladder_Error {
+            get {
+                return ResourceManager.GetString("Ladder_Error", resourceCulture);
             }
         }
         
@@ -2887,7 +2941,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 This label is never used. 的本地化字符串。
+        ///   查找类似 Warning! 的本地化字符串。
         /// </summary>
         public static string Message_LBL_Warning {
             get {

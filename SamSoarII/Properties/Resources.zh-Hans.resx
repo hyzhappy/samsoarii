@@ -1722,4 +1722,25 @@
   <data name="Change_Mode" xml:space="preserve">
     <value>当前模式不能对梯形图进行修改，请先切换到编辑模式！</value>
   </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>下载中...</value>
+  </data>
+  <data name="Download_Fail" xml:space="preserve">
+    <value>下载失败！</value>
+  </data>
+  <data name="FuncBlock_Correct" xml:space="preserve">
+    <value>函数块正确！</value>
+  </data>
+  <data name="FuncBlock_Error" xml:space="preserve">
+    <value>函数块错误！</value>
+  </data>
+  <data name="Ladder_Correct" xml:space="preserve">
+    <value>梯形图正确！</value>
+  </data>
+  <data name="Ladder_Error" xml:space="preserve">
+    <value>梯形图错误！</value>
+  </data>
+  <data name="Message_LBL_Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
 </root>

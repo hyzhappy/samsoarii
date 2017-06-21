@@ -38,6 +38,7 @@ using SamSoarII.Utility;
 using System.IO.Pipes;
 using System.Windows.Interop;
 using Xceed.Wpf.AvalonDock;
+using SamSoarII.AppMain.Project.Helper;
 
 namespace SamSoarII.AppMain.UI
 {
