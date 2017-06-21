@@ -769,6 +769,17 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnCloseProjectCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            if (_interactionFacade.ProjectModel != null)
+            {
+                if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Simulate)
+                {
+                    OnSimulateCommandExecute(sender, e);
+                }
+                if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Monitor)
+                {
+                    OnMonitorCommandExecute(sender, e);
+                }
+            }
             _interactionFacade.CloseCurrentProject();
             LAProj.Hide();
             LAMonitor.Hide();
