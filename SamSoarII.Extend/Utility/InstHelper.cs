@@ -70,6 +70,13 @@ namespace SamSoarII.Extend.Utility
         /// <param name="networks">PLC代码的NETWORK集</param>
         static public void InstToSimuCode(StreamWriter sw, PLCInstNetwork[] networks)
         {
+            foreach (PLCInstNetwork net in networks)
+            {
+                foreach (PLCInstruction inst in net.Insts)
+                {
+                    inst.WordSize = 32;
+                }
+            }
             sw.Write("#include <stdint.h>\r\n");
             sw.Write("#include \"simulib.h\"\r\n");
             sw.Write("#include \"simuf.h\"\r\n");
@@ -83,6 +90,13 @@ namespace SamSoarII.Extend.Utility
         /// <param name="networks">PLC代码的NETWORK集</param>
         static public void InstToDownCode(StreamWriter sw, PLCInstNetwork[] networks)
         {
+            foreach (PLCInstNetwork net in networks)
+            {
+                foreach (PLCInstruction inst in net.Insts)
+                {
+                    inst.WordSize = 16;
+                }
+            }
             sw.Write("#include <stdint.h>\r\n");
             sw.Write("#include \"downlib.h\"\n");
             sw.Write("#include \"downf.h\"\r\n");

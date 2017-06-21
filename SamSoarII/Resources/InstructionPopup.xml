@@ -604,9 +604,9 @@
          Text_5=""/>
   <INC CatalogID="810"
          Describe="单字加一"
-         Detail="将单字IN加一（IN1 + 1），产生的整数结果保存到李四中。"
+         Detail="将单字IN加一（IN1 + 1），产生的整数结果保存到OUT中。"
          Text_1="[单字]IN(K/H/D/TV/CV/AI/AO/V/Z)"
-         Text_2="[单字]李四(D/TV/CV/AO/V/Z)"
+         Text_2="[单字]OUT(D/TV/CV/AO/V/Z)"
          Text_3=""
          Text_4=""
          Text_5=""/>

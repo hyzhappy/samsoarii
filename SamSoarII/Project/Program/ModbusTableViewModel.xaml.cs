@@ -763,7 +763,6 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-
     }
 
     public class ModbusTableComboBoxItems
