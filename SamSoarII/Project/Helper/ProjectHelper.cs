@@ -184,7 +184,6 @@ namespace SamSoarII.AppMain.Project
 
         public static ProjectModel LoadProject(string filepath, ProjectModel model)
         {
-            //ProjectModel model = new ProjectModel();
             XDocument xdoc = XDocument.Load(filepath);
             XElement xele_r = xdoc.Element("Root");
             XElement xele_p = xele_r.Element("Project");

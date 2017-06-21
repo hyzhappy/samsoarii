@@ -1,4 +1,5 @@
-﻿using SamSoarII.UserInterface;
+﻿using SamSoarII.AppMain.Project;
+using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,15 @@ namespace SamSoarII.AppMain.UI
     }
     public class ProjectPropertyManager
     {
-        public static bool IsModify { get; set; }
+        private static bool isModify;
+        public static bool IsModify
+        {
+            get => isModify;
+            set
+            {
+                isModify = value;
+            }
+        }
         public static Dictionary<string, IXEleCreateOrLoad> ProjectPropertyDic;
         private ProjectPropertyManager(){}
         static ProjectPropertyManager()
@@ -33,7 +42,6 @@ namespace SamSoarII.AppMain.UI
             ProjectPropertyDic.Add("AnalogQuantityParams", new AnalogQuantityParams());
             ProjectPropertyDic.Add("ExpanModuleParams", new ExpansionModuleParams());
             ProjectPropertyDic.Add("CommunicationParams",new CommunicationParams());
-            IsModify = false;
         }
         #region Save and Load ProjectProperty
         public static XElement CreateProjectPropertyXElement()
@@ -72,6 +80,7 @@ namespace SamSoarII.AppMain.UI
             ProjectPropertyDic["AnalogQuantityParams"].LoadPropertyByXElement(rootNode.Element("AnalogQuantityParams"));
             ProjectPropertyDic["ExpanModuleParams"].LoadPropertyByXElement(rootNode.Element("ExpanModuleParams"));
             ProjectPropertyDic["CommunicationParams"].LoadPropertyByXElement(rootNode.Element("CommunicationParams"));
+            IsModify = false;
         }
         #endregion
     }

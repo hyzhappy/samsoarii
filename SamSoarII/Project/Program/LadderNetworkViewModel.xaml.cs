@@ -412,25 +412,16 @@ namespace SamSoarII.AppMain.Project
             }
             set
             {
-                if (value < 0)
-                {
-                    value = 0;
-                }
+                if (value < 0) value = 0;
                 if (value > RowCount - 1)
-                {
                     value = RowCount - 1;
-                }
                 _selectAreaSecondY = value;
                 var top = Math.Min(_selectAreaFirstY, _selectAreaSecondY) * HeightUnit;
                 int height;
                 if (_canHide)
-                {
                     height = 0;
-                }
                 else
-                {
                     height = (Math.Abs(_selectAreaFirstY - _selectAreaSecondY) + 1) * HeightUnit;
-                }
                 SelectArea.Height = height;
                 Canvas.SetTop(SelectArea, top);
             }
@@ -1354,7 +1345,8 @@ namespace SamSoarII.AppMain.Project
                  || ptvitem.RelativeObject is LadderDiagramViewModel
                  || ptvitem.RelativeObject is ModbusTableModel)
                 {
-                    AcquireSelectRect(e);
+                    if(ladderExpander.IsExpand)
+                        AcquireSelectRect(e);
                 }
             }
         }

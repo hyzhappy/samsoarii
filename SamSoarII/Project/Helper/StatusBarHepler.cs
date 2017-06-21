@@ -4,10 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace SamSoarII.AppMain.Project.Helper
 {
+    public class VisualHost : FrameworkElement
+    {
+        Visual child;
+
+        public VisualHost(Visual child)
+        {
+            if (child == null)
+                throw new ArgumentException("child");
+
+            this.child = child;
+            AddVisualChild(child);
+        }
+
+        protected override Visual GetVisualChild(int index)
+        {
+            return (index == 0) ? child : null;
+        }
+
+        protected override int VisualChildrenCount
+        {
+            get { return 1; }
+        }
+    }
     public class StatusBarHepler
     {
         private Thread _updateThread;
@@ -31,7 +56,7 @@ namespace SamSoarII.AppMain.Project.Helper
         }
         private void ThreadStartingPoint()
         {
-            IFacade.MainWindow.SB_Message.Text = _message;
+            IFacade.MainWindow.Main_SB.Dispatcher.Invoke(() => { IFacade.MainWindow.SB_Message.Text = _message; });
             Dispatcher.Run();
         }
     }

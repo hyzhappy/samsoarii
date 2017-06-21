@@ -214,6 +214,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The current mode can not be modified for the ladder, please switch to edit mode first! 的本地化字符串。
+        /// </summary>
+        public static string Change_Mode {
+            get {
+                return ResourceManager.GetString("Change_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Channel 的本地化字符串。
         /// </summary>
         public static string Channel {
@@ -1213,6 +1222,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The function block has changed 的本地化字符串。
+        /// </summary>
+        public static string Func_Changed {
+            get {
+                return ResourceManager.GetString("Func_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 FuncBlock 的本地化字符串。
         /// </summary>
         public static string FuncBlock {
@@ -1542,6 +1560,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Jump_Mark {
             get {
                 return ResourceManager.GetString("Jump_Mark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The ladder has changed 的本地化字符串。
+        /// </summary>
+        public static string Ladder_Changed {
+            get {
+                return ResourceManager.GetString("Ladder_Changed", resourceCulture);
             }
         }
         
@@ -3787,6 +3814,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The project configuration has changed 的本地化字符串。
+        /// </summary>
+        public static string Project_Config_Changed {
+            get {
+                return ResourceManager.GetString("Project_Config_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Project Download 的本地化字符串。
         /// </summary>
         public static string Project_Download {
@@ -3810,6 +3846,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Project_Preparing {
             get {
                 return ResourceManager.GetString("Project_Preparing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The project has been saved 的本地化字符串。
+        /// </summary>
+        public static string Project_Saved {
+            get {
+                return ResourceManager.GetString("Project_Saved", resourceCulture);
             }
         }
         
