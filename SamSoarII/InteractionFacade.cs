@@ -376,19 +376,13 @@ namespace SamSoarII.AppMain
                     result = (ecount == 0);
                     if (showreport || !result)
                     {
-                        if (!App.CultureIsZH_CH())
+                        if (App.CultureIsZH_CH())
                             ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
                                     ecount, wcount),handle);
-                            //MessageBox.Show(
-                            //    String.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                            //        ecount, wcount));
                         else
                         {
                             ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
                                     ecount, wcount),handle);
-                            //MessageBox.Show(
-                            //    string.Format("There are {0} errors and {1} warnings in the program.",
-                            //        ecount, wcount));
                         }
                     }
                 }
@@ -650,7 +644,7 @@ namespace SamSoarII.AppMain
                 }
                 else
                 {
-                    if (!App.CultureIsZH_CH())
+                    if (App.CultureIsZH_CH())
                         ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle);
                     else
                         ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle);
