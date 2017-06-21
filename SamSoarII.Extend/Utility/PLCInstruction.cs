@@ -419,18 +419,11 @@ namespace SamSoarII.Extend.Utility
                         this.flag4 = ToCStyle(args[4], "r", "WORD");
                         break;
                     // (rwW, rW, rwB)
-                    /*
-                     * TON, TONR, TOF这三个计时器比较特殊
-                     * 首先，TV这个计时寄存器必须是可读可写的
-                     * 计时目标是可读的，除此之外，还要有计时开关位T来当第三个参数
-                     * 但是参数省略了T，可以通过TV的编号来得到T的编号
-                     */
-                    case "TON": case "TONR": case "TOF":
-                    /*
-                     * CTU, CTD, CTUD，HCNT计数器和计时器的结构大致相同
-                     * 可放在一块处理
-                     */
-                    case "CTU": case "CTD": case "CTUD": case "HCNT":
+                    case "TON": case "TONR": case "TOF": case "HCNT":
+                        this.flag1 = ToCIndex(args[1], "rw", "DWORD");
+                        this.flag2 = ToCStyle(args[2], "r", "DWORD");
+                        break;
+                    case "CTU": case "CTD": case "CTUD":
                         this.flag1 = ToCStyle(args[1], "rw", "WORD");
                         this.flag2 = ToCStyle(args[2], "r", "WORD");
                         // T/C + 地址
@@ -487,44 +480,44 @@ namespace SamSoarII.Extend.Utility
                     // (rW, wB)
                     case "PLSF":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
-                        this.flag2 = ToCStyle(args[2], "w", "BIT");
+                        this.flag2 = ToCIndex(args[2], "w", "BIT");
                         break;
                     // (rD, wB)
                     case "DPLSF":
                         this.flag1 = ToCStyle(args[1], "r", "DWORD");
-                        this.flag2 = ToCStyle(args[2], "w", "BIT");
+                        this.flag2 = ToCIndex(args[2], "w", "BIT");
                         break;
                     // (rW, rW, wB)
                     case "PWM": case "PLSY": case "PLSR": case "ZRN": case "DRVI":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
                         this.flag2 = ToCStyle(args[2], "r", "WORD");
-                        this.flag3 = ToCStyle(args[3], "w", "BIT");
+                        this.flag3 = ToCIndex(args[3], "w", "BIT");
                         break;
                     // (rD, rD, wB)
                     case "DPWM": case "DPLSY": case "DPLSR": case "DZRN": case "DDRVI":
                         this.flag1 = ToCStyle(args[1], "r", "DWORD");
                         this.flag2 = ToCStyle(args[2], "r", "DWORD");
-                        this.flag3 = ToCStyle(args[3], "w", "BIT");
+                        this.flag3 = ToCIndex(args[3], "w", "BIT");
                         break;
                     // (rW, rW, wB, wB)
                     case "PLSRD":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
                         this.flag2 = ToCStyle(args[2], "r", "WORD");
-                        this.flag3 = ToCStyle(args[3], "w", "BIT");
-                        this.flag4 = ToCStyle(args[4], "w", "BIT");
+                        this.flag3 = ToCIndex(args[3], "w", "BIT");
+                        this.flag4 = ToCIndex(args[4], "w", "BIT");
                         break;
                     // (rD, rD, wB, wB)
                     case "DPLSRD":
                         this.flag1 = ToCStyle(args[1], "r", "DWORD");
                         this.flag2 = ToCStyle(args[2], "r", "DWORD");
-                        this.flag3 = ToCStyle(args[3], "w", "BIT");
-                        this.flag4 = ToCStyle(args[4], "w", "BIT");
+                        this.flag3 = ToCIndex(args[3], "w", "BIT");
+                        this.flag4 = ToCIndex(args[4], "w", "BIT");
                         break;
                     // (rW, wB, wB)
                     case "PTO":
                         this.flag1 = ToCStyle(args[1], "r", "WORD");
-                        this.flag2 = ToCStyle(args[2], "w", "BIT");
-                        this.flag3 = ToCStyle(args[3], "w", "BIT");
+                        this.flag2 = ToCIndex(args[2], "w", "BIT");
+                        this.flag3 = ToCIndex(args[3], "w", "BIT");
                         break;
                     
                 }
@@ -682,6 +675,25 @@ namespace SamSoarII.Extend.Utility
                         throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
                 default:
                     return var;
+            }
+        }
+        
+        private string ToCIndex(string var, string mode = "rw", string type = "WORD")
+        {
+            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
+            Match m2 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)(V|Z)(\d+)$");
+            if (m1.Success)
+            {
+                return m1.Groups[2].Value;
+            }
+            else if (m2.Success)
+            {
+                return String.Format("{0}+{1}Word[{2}]",
+                    m1.Groups[2].Value, m1.Groups[3].Value, m1.Groups[4].Value);
+            }
+            else
+            {
+                return "0";
             }
         }
         /// <summary>

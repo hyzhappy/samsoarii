@@ -85,6 +85,10 @@ namespace SamSoarII.AppMain.Project
                 {
                     ldvmodel.LadderMode = value;
                 }
+                foreach (FuncBlockViewModel fbvmodel in FuncBlocks)
+                {
+                    fbvmodel.IsReadOnly = (_laddermode != LadderMode.Edit);
+                }
                 switch (value)
                 {
                     case LadderMode.Edit:

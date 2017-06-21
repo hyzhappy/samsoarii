@@ -1707,4 +1707,7 @@
   <data name="Project_Preparing" xml:space="preserve">
     <value>工程准备中！</value>
   </data>
+  <data name="Message_LBL_Warning" xml:space="preserve">
+    <value>没有跳转到该标记的JMP指令。</value>
+  </data>
 </root>

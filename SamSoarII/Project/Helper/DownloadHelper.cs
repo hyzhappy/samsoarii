@@ -211,7 +211,7 @@ namespace SamSoarII.AppMain.Project
             FilterParams ftparams =
                 (FilterParams)(ProjectPropertyManager.ProjectPropertyDic["FilterParams"]);
             HoldingSectionParams hsparams =
-                (HoldingSectionParams)(ProjectPropertyManager.ProjectPropertyDic["HoldingSectionParams"]);
+                (HoldingSectionParams)(ProjectPropertyManager.ProjectPropertyDic["HoldingSectParams"]);
             odata.Add(Int32_Low(com232params.BaudRateIndex));
             odata.Add(Int32_Low(com232params.DataBitIndex));
             odata.Add(Int32_Low(com232params.StopBitIndex));
@@ -225,18 +225,19 @@ namespace SamSoarII.AppMain.Project
             odata.Add(Int32_Low(Int32_Low(com232params.Timeout)));
             odata.Add(Int32_Low(Int32_High(com232params.Timeout)));
             odata.Add((byte)(pwparams.UPIsChecked ? 1 : 0));
-            Write(pwparams.UPassword);
+            WriteO(pwparams.UPassword);
             odata.Add((byte)(com232params.CommuType));
             odata.Add((byte)(com485params.CommuType));
             
             odata.Add((byte)(pwparams.DPIsChecked ? 1 : 0));
-            Write(pwparams.DPassword);
+            WriteO(pwparams.DPassword);
             odata.Add((byte)(pwparams.MPIsChecked ? 1 : 0));
-            Write(pwparams.MPassword);
+            WriteO(pwparams.MPassword);
             odata.Add((byte)(ftparams.IsChecked ? 1 : 0));
             int fttime = 1 << (ftparams.FilterTimeIndex + 1);
             odata.Add(Int32_Low(fttime));
             odata.Add(Int32_High(fttime));
+
             odata.Add(Int32_Low(hsparams.MStartAddr));
             odata.Add(Int32_High(hsparams.MStartAddr));
             odata.Add(Int32_Low(hsparams.MLength));
@@ -271,8 +272,7 @@ namespace SamSoarII.AppMain.Project
             foreach (IValueModel ivmodel in regs)
             {
                 // 整数常量（包括单字和双字）
-                if (ivmodel is KWordValue
-                 || ivmodel is KDoubleWordValue)
+                if (ivmodel is KWordValue || ivmodel is KDoubleWordValue)
                 {
                     if (ivmodel is KWordValue)
                         edata.Add((byte)(DownloadRegisterType.K));
@@ -286,8 +286,7 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
                 // 16进制表示的整数常量（包括单字和双字）
-                else if (ivmodel is HWordValue
-                      || ivmodel is HDoubleWordValue)
+                else if (ivmodel is HWordValue || ivmodel is HDoubleWordValue)
                 {
                     if (ivmodel is HWordValue)
                         edata.Add((byte)(DownloadRegisterType.H));
@@ -549,6 +548,7 @@ namespace SamSoarII.AppMain.Project
         /// <param name="option">选项</param>
         static private void Write(ModbusTableViewModel mtvmodel, int option)
         {
+            // 名称和注释信息写入压缩数据
             edata.Add(0xfb);
             int szid = edata.Count();
             edata.Add(0x00);
@@ -624,6 +624,19 @@ namespace SamSoarII.AppMain.Project
             for (int i = 0; i < text.Count(); i++)
             {
                 edata.Add((byte)(text[i]));
+            }
+        }
+        /// <summary>
+        /// 写入一段字符串（写入原数据，长度保证不超过256）
+        /// </summary>
+        /// <param name="text">字符串</param>
+        static private void WriteO(string text)
+        {
+            odata.Add(Int32_Low(text.Count()));
+            //odata.Add(Int32_High(text.Count()));
+            for (int i = 0; i < text.Count(); i++)
+            {
+                odata.Add((byte)(text[i]));
             }
         }
         /// <summary>
