@@ -5,12 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
         xmlns:properties="clr-namespace:SamSoarII.AppMain.Properties"
-        xmlns:adock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:app="clr-namespace:SamSoarII.AppMain"
-        xmlns:proj="clr-namespace:SamSoarII.AppMain.Project"
         xmlns:hdoc="clr-namespace:SamSoarII.HelpDocument.HelpDocComponet;assembly=SamSoarII.HelpDocument"
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
-        xmlns:mon="clr-namespace:SamSoarII.AppMain.UI.Monitor"
         mc:Ignorable="d"
         Title="SamSoarII" Height="400" Width="600" WindowState="Maximized">
     <Window.CommandBindings>

@@ -25,7 +25,12 @@ namespace SamSoarII.AppMain.LadderCommand
         public bool IsModify
         {
             get { return this.ismodify; }
-            set { this.ismodify = value; }
+            set
+            {
+                ismodify = value;
+                if (value == true)
+                    LDVModel.ProjectModel.OnPropertyChanged("Ladder");
+            }
         }
 
         public Stack<IUndoableCommand> UndoStack = new Stack<IUndoableCommand>();
@@ -53,7 +58,7 @@ namespace SamSoarII.AppMain.LadderCommand
              && ldvmodel.LadderMode != LadderMode.Edit
              && !(command is NetworkReplaceBreakpointCommand))
             {
-                MessageBox.Show("当前模式不能对梯形图进行修改，请先切换到编辑模式！");
+                MessageBox.Show(Properties.Resources.Change_Mode);
                 return false;
             }
             return true;

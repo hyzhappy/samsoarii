@@ -205,6 +205,7 @@ namespace SamSoarII.AppMain
             if (ProjectModel == null)
             {
                 StatusBarItem = StatusBarItem.Empty;
+                MainWindow.SB_Message.Text = string.Empty;
                 MainWindow.SB_Program.Text = string.Empty;
                 MainWindow.SB_SP_Program.ToolTip = string.Empty;
             }
@@ -310,16 +311,39 @@ namespace SamSoarII.AppMain
             }
             SetMessage(Properties.Resources.Ready);
         }
-        private void SetMessage(string message)
+        public void SetMessage(string message)
         {
-            MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                (ThreadStart)delegate ()
-                {
-                    MainWindow.SB_Message.Text = message;
-                }
-            );
+            //DispatcherFrame frame = new DispatcherFrame();
+            //MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+            //    new DispatcherOperationCallback(delegate (object f)
+            //    {
+            //        ((DispatcherFrame)f).Continue = false;
+            //        MainWindow.SB_Message.Text = message;
+            //        return null;
+            //    }
+            //        ), frame);
+            //Dispatcher.PushFrame(frame);
+            MainWindow.SB_Message.Text = message;
         }
-        
+
+        private void _projectModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Ladder")
+            {
+                SetMessage(Properties.Resources.Ladder_Changed);
+                return;
+            }
+            if (e.PropertyName == "FuncBlock")
+            {
+                SetMessage(Properties.Resources.Func_Changed);
+                return;
+            }
+            if (e.PropertyName == "ProjectProperty")
+            {
+                SetMessage(Properties.Resources.Project_Config_Changed);
+                return;
+            }
+        }
         #endregion
 
 
@@ -380,16 +404,10 @@ namespace SamSoarII.AppMain
                         if (App.CultureIsZH_CH())
                             ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
                                     ecount, wcount),handle);
-                            //MessageBox.Show(
-                            //    String.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                            //        ecount, wcount));
                         else
                         {
                             ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
                                     ecount, wcount),handle);
-                            //MessageBox.Show(
-                            //    string.Format("There are {0} errors and {1} warnings in the program.",
-                            //        ecount, wcount));
                         }
                     }
                 }
@@ -397,7 +415,6 @@ namespace SamSoarII.AppMain
                 {
                     if (showreport)
                         ShowMessage(Properties.Resources.Program_Correct, handle);
-                        //MessageBox.Show(Properties.Resources.Program_Correct);
                     else
                         handle.Abort();
                     result = true;
@@ -415,10 +432,8 @@ namespace SamSoarII.AppMain
             {
                 if (App.CultureIsZH_CH())
                     ShowMessage(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber), handle);
-                    //MessageBox.Show(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber));
                 else
                     ShowMessage(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber), handle);
-                    //MessageBox.Show(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber));
                 result = false;
             }
             else
@@ -433,23 +448,18 @@ namespace SamSoarII.AppMain
                 {
                     case ErrorType.Open:
                         ShowMessage(Properties.Resources.Open_Error, handle);
-                        //MessageBox.Show(Properties.Resources.Open_Error);
                         break;
                     case ErrorType.Short:
                         ShowMessage(Properties.Resources.Short_Error, handle);
-                        //MessageBox.Show(Properties.Resources.Short_Error);
                         break;
                     case ErrorType.SelfLoop:
                         ShowMessage(Properties.Resources.Selfloop_Error, handle);
-                        //MessageBox.Show(Properties.Resources.Selfloop_Error);
                         break;
                     case ErrorType.HybridLink:
                         ShowMessage(Properties.Resources.HybridLink_Error, handle);
-                        //MessageBox.Show(Properties.Resources.HybridLink_Error);
                         break;
                     case ErrorType.Special:
                         ShowMessage(Properties.Resources.Special_Instruction_Error, handle);
-                        //MessageBox.Show(Properties.Resources.Special_Instruction_Error);
                         break;
                     default:
                         break;
@@ -1234,9 +1244,11 @@ namespace SamSoarII.AppMain
             _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
             ProjectFullFileName = fullFileName;
             _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+            _projectModel.PropertyChanged += _projectModel_PropertyChanged;
             UpdateRefNetworksBrief(_projectModel);
             _projectModel.AutoInstManager.Start();
         }
+        
 
         public void CloseCurrentProject()
         {
@@ -1257,6 +1269,7 @@ namespace SamSoarII.AppMain
             _projectTreeView.PTVRenamed -= OnPTVRenamed;
             _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
             _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
+            _projectModel.PropertyChanged -= _projectModel_PropertyChanged;
             ProjectFullFileName = string.Empty;
             _mainWindow.ClearProjectTreeView();
             _mainWindow.ClearProjectMonitor();
@@ -1334,6 +1347,7 @@ namespace SamSoarII.AppMain
             _mainWindow.SetProjectTreeView(_projectTreeView);
             _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
             _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
+            _projectModel.PropertyChanged += _projectModel_PropertyChanged;
             UpdateRefNetworksBrief(_projectModel);
             ProjectFileManager.Update(_projectModel.ProjectName, ProjectFullFileName);
             _projectModel.AutoInstManager.Start();
@@ -1344,6 +1358,8 @@ namespace SamSoarII.AppMain
         {
             ProjectFullFileName = fileName;
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
+            //var helper = new StatusBarHepler(this, Properties.Resources.Project_Preparing);
+            //helper.Start();
             MainWindow.Dispatcher.Invoke(() =>
             {
                 handle.Start();

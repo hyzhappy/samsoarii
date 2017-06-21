@@ -692,10 +692,11 @@ namespace ICSharpCode.AvalonEdit.Document
 		public DocumentLine GetLineByOffset(int offset)
 		{
 			VerifyAccess();
-			if (offset < 0 || offset > rope.Length) {
-				throw new ArgumentOutOfRangeException("offset", offset, "0 <= offset <= " + rope.Length.ToString());
-			}
-			return lineTree.GetByOffset(offset);
+            if (offset < 0 || offset > rope.Length)
+            {
+                throw new ArgumentOutOfRangeException("offset", offset, "0 <= offset <= " + rope.Length.ToString());
+            }
+            return lineTree.GetByOffset(offset);
 		}
 		#endregion
 		

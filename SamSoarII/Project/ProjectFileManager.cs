@@ -44,24 +44,6 @@ namespace SamSoarII.AppMain.Project
             RecentUsedProjectMessages = new SortedDictionary<ProjectRecentUseTime, Tuple<string, string>>();
             projectShowMessage = new ProjectShowMessage();
         }
-        //public static void Add(string projectName,string projectFullName)
-        //{
-        //    if (RecentUsedProjectMessages.Count == 10)
-        //    {
-        //        Delete(9);
-        //    }
-        //    foreach (var item in new Dictionary<ProjectRecentUseTime, Tuple<string, string>>(RecentUsedProjectMessages))
-        //    {
-        //        if (item.Value.Item1 == projectName)
-        //        {
-        //            RecentUsedProjectMessages.Remove(item.Key);
-        //            break;
-        //        }
-        //    }
-        //    Tuple<string, string> temp = new Tuple<string, string>(projectName, projectFullName);
-        //    RecentUsedProjectMessages.Add(new ProjectRecentUseTime(DateTime.Now), temp);
-        //    projectShowMessage.RaisePropertyChanged();
-        //}
         public static void Update(string projectName,string projectFullName)
         {
             if (RecentUsedProjectMessages.Count == 10)

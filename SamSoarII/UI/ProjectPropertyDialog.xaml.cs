@@ -49,6 +49,7 @@ namespace SamSoarII.AppMain.UI
             {
                 item.Save();
             }
+            _projectModel.OnPropertyChanged("ProjectProperty");
         }
         private void ShowWidget(int index)
         {

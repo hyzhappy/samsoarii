@@ -1,4 +1,4 @@
-﻿<TreeViewItem x:Uid="TreeViewItem_1" x:Class="SamSoarII.AppMain.UI.ProjectTreeViewItem"
+﻿<TreeViewItem x:Class="SamSoarII.AppMain.UI.ProjectTreeViewItem"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

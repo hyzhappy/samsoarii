@@ -1707,4 +1707,19 @@
   <data name="Project_Preparing" xml:space="preserve">
     <value>工程准备中！</value>
   </data>
+  <data name="Project_Saved" xml:space="preserve">
+    <value>工程已保存！</value>
+  </data>
+  <data name="Func_Changed" xml:space="preserve">
+    <value>函数块已更改！</value>
+  </data>
+  <data name="Ladder_Changed" xml:space="preserve">
+    <value>梯形图已更改！</value>
+  </data>
+  <data name="Project_Config_Changed" xml:space="preserve">
+    <value>工程配置已更改！</value>
+  </data>
+  <data name="Change_Mode" xml:space="preserve">
+    <value>当前模式不能对梯形图进行修改，请先切换到编辑模式！</value>
+  </data>
 </root>

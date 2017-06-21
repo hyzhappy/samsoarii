@@ -43,9 +43,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             foreach (var network in ladderDiagram.GetNetworks().Where(x => { return !x.IsMasked; }))
             {
                 if (!network.ladderExpander.IsExpand)
-                {
                     network.ladderExpander.IsExpand = true;
-                }
                 error = CheckNetwork(network);
                 if (error != ErrorType.None)
                 {
@@ -60,10 +58,9 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     LadderGraphRelocationModule.Execute(network);
                 }
             }
+            ladderDiagram.IsModify = false;
             if (!CheckProgramControlInstructions(ladderDiagram))
-            {
                 error = ErrorType.InstPair;
-            }
             InstructionCommentManager.RaiseMappedMessageChangedEvent();
             return new ErrorMessage(error,null);
         }

@@ -1707,4 +1707,19 @@
   <data name="Project_Preparing" xml:space="preserve">
     <value>Project preparing</value>
   </data>
+  <data name="Project_Saved" xml:space="preserve">
+    <value>The project has been saved</value>
+  </data>
+  <data name="Func_Changed" xml:space="preserve">
+    <value>The function block has changed</value>
+  </data>
+  <data name="Ladder_Changed" xml:space="preserve">
+    <value>The ladder has changed</value>
+  </data>
+  <data name="Project_Config_Changed" xml:space="preserve">
+    <value>The project configuration has changed</value>
+  </data>
+  <data name="Change_Mode" xml:space="preserve">
+    <value>The current mode can not be modified for the ladder, please switch to edit mode first!</value>
+  </data>
 </root>

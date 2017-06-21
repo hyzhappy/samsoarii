@@ -85,6 +85,17 @@ namespace SamSoarII.AppMain.Project
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TabHeader"));
             }
         }
+        private bool _isModify = false;
+        public bool IsModify
+        {
+            get => _isModify;
+            set
+            {
+                _isModify = value;
+                if(value == true)
+                    parent.OnPropertyChanged("FuncBlock");
+            }
+        }
         /// <summary>
         /// 函数块的名称
         /// </summary>
@@ -486,6 +497,7 @@ namespace SamSoarII.AppMain.Project
             }
             TextChanged(this, new RoutedEventArgs());
             SetXY(CodeTextBox.TextArea.Caret.Column, CodeTextBox.TextArea.Caret.Line);
+            IsModify = true;
             //OutputDebug();
         }
         /// <summary>
@@ -569,6 +581,7 @@ namespace SamSoarII.AppMain.Project
                         break;
                 }
             }
+            IsModify = true;
             //OutputDebug();
         }
         /// <summary>

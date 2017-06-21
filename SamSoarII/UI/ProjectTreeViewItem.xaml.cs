@@ -575,7 +575,14 @@ namespace SamSoarII.AppMain.UI
             ptview = _ptview;
             RelativeObject = String.Empty;
             Flags = ProjectTreeViewItem.TYPE_CONST;
+            //PreviewMouseDown += ProjectTreeViewItem_PreviewMouseDown;
         }
+
+
+        //private void ProjectTreeViewItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        //{
+            
+        //}
 
         #region Rename
 

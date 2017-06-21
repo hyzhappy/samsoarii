@@ -1016,6 +1016,7 @@ namespace SamSoarII.AppMain.UI
             {
                 _interactionFacade.SaveProject();
             }
+            SB_Message.Text = Properties.Resources.Project_Saved;
         }
         public void SaveProject()
         {

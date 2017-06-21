@@ -43,8 +43,8 @@ namespace SamSoarII.AppMain.Project
         }
     }
     public delegate void RefNetworksBriefChangedEventHandler(RefNetworksBriefChangedEventArgs e);
-
-    public class ProjectModel
+    
+    public class ProjectModel:INotifyPropertyChanged
     {
         public bool IsModify
         {
@@ -56,6 +56,10 @@ namespace SamSoarII.AppMain.Project
                 {
                     ret |= ldvmodel.IsModify;
                 }
+                foreach (var funcblock in FuncBlocks)
+                {
+                    ret |= funcblock.IsModify;
+                }
                 ret |= ProjectPropertyManager.IsModify;
                 return ret;
             }
@@ -65,6 +69,10 @@ namespace SamSoarII.AppMain.Project
                 foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
                 {
                     ldvmodel.IsModify = value;
+                }
+                foreach (var funcblock in FuncBlocks)
+                {
+                    funcblock.IsModify = value;
                 }
                 ProjectPropertyManager.IsModify = value;
             }
@@ -107,6 +115,12 @@ namespace SamSoarII.AppMain.Project
 
         private bool _isCommentMode;
         public event RefNetworksBriefChangedEventHandler RefNetworksBriefChanged = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public void OnPropertyChanged(string messsage)
+        {
+            PropertyChanged(this,new PropertyChangedEventArgs(messsage));
+        }
+
         public AutoSavedManager autoSavedManager { get; set; }
         public AutoInstManager AutoInstManager { get; set; }
         public bool IsCommentMode

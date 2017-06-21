@@ -943,10 +943,14 @@ namespace SamSoarII.AppMain.Project
                 {
                     if (!_selectRectOwner.IsFirstNetwork())
                     {
-                        _selectRectOwner.ReleaseSelectRect();
-                        _selectRectOwner = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber - 1);
-                        _selectRect.Y = _selectRectOwner.RowCount - 1;
-                        _selectRectOwner.AcquireSelectRect();
+                        var network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber - 1);
+                        if (network.ladderExpander.IsExpand)
+                        {
+                            _selectRectOwner.ReleaseSelectRect();
+                            _selectRectOwner = network;
+                            _selectRect.Y = _selectRectOwner.RowCount - 1;
+                            _selectRectOwner.AcquireSelectRect();
+                        }
                     }
                 }
                 VScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
@@ -965,10 +969,14 @@ namespace SamSoarII.AppMain.Project
                 {
                     if (!_selectRectOwner.IsLastNetwork())
                     {
-                        _selectRectOwner.ReleaseSelectRect();
-                        _selectRectOwner = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber + 1);
-                        _selectRect.Y = 0;
-                        _selectRectOwner.AcquireSelectRect();
+                        var network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber + 1);
+                        if (network.ladderExpander.IsExpand)
+                        {
+                            _selectRectOwner.ReleaseSelectRect();
+                            _selectRectOwner = network;
+                            _selectRect.Y = 0;
+                            _selectRectOwner.AcquireSelectRect();
+                        }
                     }
 
                 }
