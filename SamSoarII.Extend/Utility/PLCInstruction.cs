@@ -74,6 +74,29 @@ namespace SamSoarII.Extend.Utility
             set { this.prototypeid = value; }
         }
         /// <summary>
+        /// 一个单字(WORD)所占的空间
+        /// </summary>
+        private int wordsize = 16;
+        /// <summary>
+        /// 一个单字(WORD)所占的空间
+        /// </summary>
+        public int WordSize
+        {
+            get
+            {
+                return this.wordsize;
+            }
+            set
+            {
+                this.wordsize = value;
+                if (hasconvert) Text = Text;
+            }
+        }
+        /// <summary>
+        /// 是否存在转换操作
+        /// </summary>
+        private bool hasconvert = false;
+        /// <summary>
         /// 当这个指令把元素加入栈中时（LD类指令），需要知道这个元素是如何与上一个元素计算合并的
         /// 已知的合并方式有三种，分别为ANDB，ORB和POP
         /// 这里用于线路转换指令（INV, MEP, MEF）的当前信号的计算
@@ -201,6 +224,7 @@ namespace SamSoarII.Extend.Utility
             get { return this.text; }
             set
             {
+                hasconvert = false;
                 // 解析给定的文本，生成类型和四个参数
                 this.text = value;
                 string[] args = text.Split(' ');
@@ -355,7 +379,7 @@ namespace SamSoarII.Extend.Utility
                         this.flag3 = ToCStyle(args[3], "w", "DWORD");
                         break;
                     // (rF, rF, wF)
-                    case "ADDF": case "SUBF": case "MULF": case "DIVF":
+                    case "ADDF": case "SUBF": case "MULF": case "DIVF": case "POW":
                         this.flag1 = ToCStyle(args[1], "r", "FLOAT");
                         this.flag2 = ToCStyle(args[2], "r", "FLOAT");
                         this.flag3 = ToCStyle(args[3], "w", "FLOAT");
@@ -642,25 +666,40 @@ namespace SamSoarII.Extend.Utility
                      */
                      switch (ctype)
                      {
-                        case "WORD": return String.Format("{0:s}Word[{1:s}]", name, addr);
-                        case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:s})))", name, addr);
-                        case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:s})))", name, addr);
+                        case "WORD":
+                            return String.Format("{0:s}Word[{1:s}]", name, addr);
+                        case "DWORD":
+                            hasconvert = true;
+                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "int32_t" : "int64_t");
+                        case "FLOAT":
+                            hasconvert = true;
+                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "float" : "double");
                         default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                      }
                 case "CV":
                     switch (ctype)
                     {
-                        case "WORD": return String.Format("{0:s}Word[{1:s}]", name, addr);
-                        case "DWORD": return String.Format("(*((uint64_t*)({0:s}Word+{1:s})))", name, addr);
-                        case "FLOAT": return String.Format("(*((double*)({0:s}Word+{1:s})))", name, addr);
+                        case "WORD":
+                            return String.Format("{0:s}Word[{1:s}]", name, addr);
+                        case "DWORD":
+                            hasconvert = true;
+                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "int32_t" : "int64_t");
+                        case "FLOAT":
+                            hasconvert = true;
+                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "float" : "double");
                         default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                     }
                 case "CV32":
                     switch (ctype)
                     {
-                        case "WORD": return String.Format("(*((uint32_t*)({0:s}DoubleWord+{1:s})))", name, addr);
-                        case "DWORD": return String.Format("{0:s}DoubleWords[{1:s}]", name, addr);
-                        case "FLOAT": return String.Format("(*((double*)({0:s}DoubleWord+{1:s})))", name, addr);
+                        case "WORD":
+                            hasconvert = true;
+                            return String.Format("(*(({2:s}*)({0:s}DoubleWord+{1:s})))", name, addr, wordsize <= 16 ? "int16_t" : "int32_t");
+                        case "DWORD":
+                            return String.Format("{0:s}DoubleWords[{1:s}]", name, addr);
+                        case "FLOAT":
+                            hasconvert = true;
+                            return String.Format("(*(({2:s}*)({0:s}DoubleWord+{1:s})))", name, addr, wordsize <= 16 ? "float" : "double");
                         default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                     }
                 case "K": case "F":

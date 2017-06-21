@@ -49,13 +49,13 @@ namespace SamSoarII.AppMain
             SettingManager.Save();
             if (SimulateHelper.SModel != null)
                 SimulateHelper.SModel.Dispose();
-            SamSoarII.Simulation.Core.SimulateDllModel.FreeDll();
+            //SamSoarII.Simulation.Core.SimulateDllModel.FreeDll();
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
         public static bool CultureIsZH_CH()
         {
-            return Thread.CurrentThread.CurrentUICulture.Name == string.Format("zh_Hans");
+            return Thread.CurrentThread.CurrentUICulture.Name.Equals("zh_Hans");
         }
     }
 }

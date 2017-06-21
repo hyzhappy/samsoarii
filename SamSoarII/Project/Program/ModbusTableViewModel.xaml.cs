@@ -99,20 +99,27 @@ namespace SamSoarII.AppMain.Project
                 SetStatusBar(false);
             else
             {
-                parent.IFacade.MainWindow.SB_Modbus.Text = CurrentName;
-                SetStatusBar(true);
+                if (parent.IFacade != null)
+                {
+                    parent.IFacade.MainWindow.SB_Modbus.Text = CurrentName;
+                    SetStatusBar(true);
+                }
             }
         }
         private void SetStatusBar(bool IsVisible)
         {
-            if (IsVisible)
-                parent.IFacade.MainWindow.SB_SP_Modbus.Visibility = Visibility.Visible;
-            else
-                parent.IFacade.MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+            if (parent.IFacade != null)
+            {
+                if (IsVisible)
+                    parent.IFacade.MainWindow.SB_SP_Modbus.Visibility = Visibility.Visible;
+                else
+                    parent.IFacade.MainWindow.SB_SP_Modbus.Visibility = Visibility.Hidden;
+            }
         }
         public void RetStatusBar()
         {
-            if (parent.IFacade.StatusBarItem == StatusBarItem.Modbus)
+            if (parent.IFacade != null
+             && parent.IFacade.StatusBarItem == StatusBarItem.Modbus)
             {
                 if (Current == null)
                     SetStatusBar(false);
@@ -124,8 +131,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         #endregion
-
-
+        
         #region Numbers
 
         private ProjectModel parent;
@@ -757,7 +763,6 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
-
     }
 
     public class ModbusTableComboBoxItems

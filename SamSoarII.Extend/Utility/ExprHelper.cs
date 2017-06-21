@@ -75,8 +75,10 @@ namespace SamSoarII.Extend.Utility
         /// 后面的部分都不一样，分别设为B1, B2, ... Bn
         /// 根据分配律，最后合并的表达式为expr = A && (B1 || B2 ... || Bn)
         /// </detail>
-        static public string Merge(List<string> exprs, int left, int right, int padding = 0)
+        static public string Merge(List<string> exprs, int left, int right, ref bool hasor, int padding = 0)
         {
+            hasor = false;
+            bool _hasor = false;
             int i;
             // 只有一个表达式
             if (left == right)
@@ -110,16 +112,17 @@ namespace SamSoarII.Extend.Utility
             if (old_padding >= padding)
             {
                 // 表达式集合用分歧点分为左右两部分，分治处理后合并
-                expr = Merge(exprs, left, difpoint - 1, padding);
+                expr = Merge(exprs, left, difpoint - 1, ref _hasor, padding);
                 expr += "||";
-                expr += Merge(exprs, difpoint, right, padding);
+                expr += Merge(exprs, difpoint, right, ref _hasor, padding);
+                hasor = true;
                 return expr;
             }
             // CASE 2 : 找到新的公共前缀时，按照分配律，剩下的部分用括号括起来
             expr = exprs[left].Substring(old_padding, padding-old_padding+1) + "(";
-            expr += Merge(exprs, left, difpoint - 1, padding + 1);
+            expr += Merge(exprs, left, difpoint - 1, ref _hasor, padding + 1);
             expr += "||";
-            expr += Merge(exprs, difpoint, right, padding + 1);
+            expr += Merge(exprs, difpoint, right, ref _hasor, padding + 1);
             return expr + ")";
         }
         /// <summary>

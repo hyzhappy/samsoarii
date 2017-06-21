@@ -131,7 +131,7 @@ namespace SamSoarII.AppMain.Project
             {
                 Status = STATUS_OPEN;
                 tberr.Text = String.Format(
-                    !App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在断路错误！" : "There have broken circuit in ladder of Network {0:d}.", 
+                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在断路错误！" : "There have broken circuit in ladder of Network {0:d}.", 
                     lnvmodel.NetworkNumber);
                 return;
             }
@@ -140,7 +140,7 @@ namespace SamSoarII.AppMain.Project
             {
                 Status = STATUS_SHORT;
                 tberr.Text = String.Format(
-                    !App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在短路错误！" : "There have short circuit in ladder of Network {0:d}.",
+                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在短路错误！" : "There have short circuit in ladder of Network {0:d}.",
                     lnvmodel.NetworkNumber);
                 return;
             }
@@ -148,7 +148,7 @@ namespace SamSoarII.AppMain.Project
             {
                 Status = STATUS_FUSION;
                 tberr.Text = String.Format(
-                    !App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
+                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
                     lnvmodel.NetworkNumber);
                 return;
             }
@@ -164,7 +164,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         Status = STATUS_FUSION;
                         tberr.Text = String.Format(
-                            !App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
+                            App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
                             lnvmodel.NetworkNumber);
                         return;
                     }
