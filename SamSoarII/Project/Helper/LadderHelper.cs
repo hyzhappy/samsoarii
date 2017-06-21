@@ -30,12 +30,12 @@ namespace SamSoarII.AppMain.Project
             color.G = 0xb2;
             color.B = 0xfa;
             MonitorBrush = new SolidColorBrush(color);
-            //# FFF79B5E
+            //#FFF46622
             color = new Color();
             color.A = 255;
-            color.R = 0xf7;
-            color.G = 0x9b;
-            color.B = 0x5e;
+            color.R = 0xf4;
+            color.G = 0x66;
+            color.B = 0x22;
             SimulateBrush = new SolidColorBrush(color);
         }
         public static ExpGraphNode CreateNodeByElement(BaseViewModel viewmodel)

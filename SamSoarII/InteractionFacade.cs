@@ -199,7 +199,6 @@ namespace SamSoarII.AppMain
                 }
             }
         }
-
         private void InteractionFacade_ProjectChanged(object sender, RoutedEventArgs e)
         {
             if (ProjectModel == null)

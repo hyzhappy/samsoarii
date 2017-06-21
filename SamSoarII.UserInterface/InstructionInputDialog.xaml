@@ -23,17 +23,17 @@
             <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="70" Height="24" Click="OnEnsureButtonClick" Content="{x:Static properties:Resources.Ensure}"/>
             <Button x:Uid="HelpButton" x:Name="HelpButton" Width="70" Height="24" Margin="15,0,0,0" Click="OnHelpButtonClick" Content="{x:Static properties:Resources.Help}"/>
         </StackPanel>
-        <Grid x:Uid="Grid_2">
-            <local:PopupNotTop x:Uid="TextBoxPopup" x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" VerticalOffset="-29" HorizontalOffset="-5" IsOpen="False" Topmost="False">
-                <Border x:Uid="Border_1" BorderBrush="Beige" BorderThickness="3" Width="600" Height="150">
-                    <Grid x:Uid="TBPGrid" x:Name="TBPGrid" Background="Ivory">
+        <Grid>
+            <local:PopupNotTop x:Name="TextBoxPopup" PlacementTarget="{Binding ElementName=window}" Placement="Top" VerticalOffset="-29" HorizontalOffset="-5" IsOpen="False" Topmost="False">
+                <Border BorderBrush="Beige" BorderThickness="3" Width="600" Height="150">
+                    <Grid x:Name="TBPGrid" Background="Ivory">
                         <Grid.Resources>
-                            <Style x:Uid="Style_1" TargetType="TextBlock">
-                                <Setter x:Uid="Setter_1" Property="FontFamily" Value="Courier New,微软雅黑"></Setter>
-                                <Setter x:Uid="Setter_2" Property="FontSize" Value="14"></Setter>
-                                <Setter x:Uid="Setter_3" Property="FontWeight" Value="Light"></Setter>
-                                <Setter x:Uid="Setter_4" Property="Margin" Value="2,2,0,0"></Setter>
-                                <Setter x:Uid="Setter_5" Property="TextAlignment" Value="Left"></Setter>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="Courier New,微软雅黑"></Setter>
+                                <Setter Property="FontSize" Value="14"></Setter>
+                                <Setter Property="FontWeight" Value="Light"></Setter>
+                                <Setter Property="Margin" Value="2,2,0,0"></Setter>
+                                <Setter Property="TextAlignment" Value="Left"></Setter>
                             </Style>
                         </Grid.Resources>
                         <Grid.RowDefinitions>
@@ -57,16 +57,16 @@
                     </Grid>
                 </Border>
             </local:PopupNotTop>
-            <local:PopupNotTop x:Uid="SelectCollectionPopup" x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="44" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
-                <ScrollViewer x:Uid="scrollViewer" VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
-                    <local:CollectionStackPanel x:Uid="CollectionStack" Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
+            <local:PopupNotTop x:Name="SelectCollectionPopup" PlacementTarget="{Binding ElementName=window}" Placement="Bottom" HorizontalOffset="44" VerticalOffset="-21" Width="300" IsOpen="True" Topmost="False">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="scrollViewer" ScrollChanged="OnScrollChanged" CanContentScroll="True">
+                    <local:CollectionStackPanel Background="White" x:Name="CollectionStack" ItemsSource="{Binding CollectionSource}">
                         <local:CollectionStackPanel.Resources>
-                            <Style x:Uid="Style_2" TargetType="Label">
-                                <Setter x:Uid="Setter_6" Property="Height" Value="20"></Setter>
-                                <Setter x:Uid="Setter_7" Property="FontSize" Value="14"></Setter>
-                                <Setter x:Uid="Setter_8" Property="Padding" Value="0"></Setter>
-                                <EventSetter x:Uid="EventSetter_1" Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
-                                <EventSetter x:Uid="EventSetter_2" Event="MouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>
+                            <Style TargetType="Label">
+                                <Setter Property="Height" Value="20"></Setter>
+                                <Setter Property="FontSize" Value="14"></Setter>
+                                <Setter Property="Padding" Value="0"></Setter>
+                                <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
+                                <EventSetter Event="MouseLeftButtonDown" Handler="OnMouseLeftButtonDown"></EventSetter>
                             </Style>
                         </local:CollectionStackPanel.Resources>
                     </local:CollectionStackPanel>

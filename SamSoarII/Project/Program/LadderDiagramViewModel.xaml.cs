@@ -102,7 +102,12 @@ namespace SamSoarII.AppMain.Project
             get { return this._laddermode; }
             set
             {
-                this._laddermode = value;
+                if (value == LadderMode.Demo)
+                {
+                    PreviewMouseWheel -= OnLadderDiagramMouseWheel;
+                    mainStackPanel.LayoutTransform = new ScaleTransform() { ScaleX = 0.45, ScaleY = 0.45 };
+                }
+                _laddermode = value;
                 foreach (LadderNetworkViewModel lnvmodel in GetNetworks())
                 {
                     lnvmodel.LadderMode = value;

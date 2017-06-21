@@ -568,7 +568,7 @@
                             <TextBlock MinWidth="20" x:Name="SB_Row"/>
                         </StackPanel>
                     </Grid>
-                    <TextBlock Margin="10,0,0,0" DockPanel.Dock="Left" x:Name="SB_Message"/>
+                    <TextBlock Margin="10,0,0,0" TextAlignment="Center" DockPanel.Dock="Left" x:Name="SB_Message"/>
                 </DockPanel>
             </StatusBar>
         </Grid>

@@ -577,8 +577,6 @@ namespace SamSoarII.AppMain.UI
             Flags = ProjectTreeViewItem.TYPE_CONST;
             //PreviewMouseDown += ProjectTreeViewItem_PreviewMouseDown;
         }
-
-
         //private void ProjectTreeViewItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         //{
             

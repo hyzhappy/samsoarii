@@ -1354,6 +1354,7 @@ namespace SamSoarII.AppMain.Project
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
+            if (!ladderExpander.IsExpand) return;
             ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
             bool isacquired = AcquireSelectRect(e);
             if (e.Data.GetDataPresent(typeof(LadderNetworkViewModel)))
@@ -1479,7 +1480,7 @@ namespace SamSoarII.AppMain.Project
         public bool AcquireSelectRect(Point pos)
         {
             var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
-            if (intPoint.X < 0 || intPoint.X >= 12
+            if (intPoint.X < 0 || intPoint.X >= GlobalSetting.LadderXCapacity
              || intPoint.Y < 0 || intPoint.Y >= RowCount)
             {
                 return false;

@@ -1537,6 +1537,7 @@ namespace Xceed.Wpf.AvalonDock
                 contentModelAsAnchorable.IsFloat = true;
             }
             var parentPane = contentModel.Parent as ILayoutPane;
+            //if (parentPane == null) return;
             var parentPaneAsPositionableElement = contentModel.Parent as ILayoutPositionableElement;
             var parentPaneAsWithActualSize = contentModel.Parent as ILayoutPositionableElementWithActualSize;
             var contentModelParentChildrenIndex = parentPane.Children.ToList().IndexOf(contentModel);

@@ -89,7 +89,7 @@ namespace SamSoarII.UserInterface
         public void StartAnimation()
         {
             DoubleAnimation animation = new DoubleAnimation();
-            animation.From = -78;
+            animation.From = -80;
             animation.To = 598;
             animation.Duration = TimeSpan.FromSeconds(3.5);
             animation.RepeatBehavior = new RepeatBehavior(20);

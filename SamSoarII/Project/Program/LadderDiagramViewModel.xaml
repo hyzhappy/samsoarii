@@ -28,10 +28,10 @@
         <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
     </UserControl.CommandBindings>
     <UserControl.Resources>
-        <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetTitle"/>
-        <util:DoubleConverter2 x:Uid="util:DoubleConverter2_1" x:Key="converter"></util:DoubleConverter2>
-        <util:MutiConverter x:Uid="util:MutiConverter_1" x:Key="converter1"></util:MutiConverter>
-        <util:BoolToVisibilityConverter2 x:Uid="util:BoolToVisibilityConverter2_1" x:Key="converter2"></util:BoolToVisibilityConverter2>
+        <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetTitle"/>
+        <util:DoubleConverter2 x:Key="converter"></util:DoubleConverter2>
+        <util:MutiConverter x:Key="converter1"></util:MutiConverter>
+        <util:BoolToVisibilityConverter2 x:Key="converter2"></util:BoolToVisibilityConverter2>
     </UserControl.Resources>
     <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <StackPanel x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent" LayoutTransform="{x:Static app:GlobalSetting.LadderScaleTransform}" PreviewMouseDown="OnLadderDiagramMouseDown" MouseMove="OnLadderDiagramMouseMove">

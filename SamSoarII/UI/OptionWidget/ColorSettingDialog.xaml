@@ -8,37 +8,37 @@
         xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
         xmlns:ColorPicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="{x:Static properties:Resources.Edit_Color}" Height="250" Width="400">
+        Title="{x:Static properties:Resources.Edit_Color}" ResizeMode="NoResize" Height="250" Width="400">
     <Window.Resources>
-        <util:ColorToBrushConverter x:Uid="util:ColorToBrushConverter_1" x:Key="ColorToBrushConverter"/>
+        <util:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
     </Window.Resources>
-    <Grid x:Uid="Grid_1">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="*"/>
-            <RowDefinition x:Uid="RowDefinition_2" Height="30"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_3" Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="*"/>
-            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.Resources>
-            <Style x:Uid="Style_1" TargetType="{x:Type Button}">
-                <Setter x:Uid="Setter_1" Property="Margin" Value="12,5,12,5"></Setter>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="12,5,12,5"></Setter>
             </Style>
         </Grid.Resources>
-        <ColorPicker:ColorPicker x:Uid="CP_Color" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+        <ColorPicker:ColorPicker Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                  x:Name="CP_Color" MouseMove="OnMouseMove"
                                  SelectedColor="{Binding Color}">
         </ColorPicker:ColorPicker>
-        <StackPanel x:Uid="StackPanel_1" Margin="20,-30,0,0" Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-            <Label x:Uid="Label_1" BorderBrush="Black" BorderThickness="1,1,0,1" ToolTip="{x:Static properties:Resources.Current_Color}" Background="{Binding ElementName=CP_Color,Path=SelectedColor,Converter={StaticResource ColorToBrushConverter}}" Height="20" Width="90" HorizontalAlignment="Left"></Label>
-            <Label x:Uid="label" BorderBrush="Black" BorderThickness="1" ToolTip="{x:Static properties:Resources.Preview_Color}" x:Name="label" Height="20" Width="30" HorizontalAlignment="Left"></Label>
+        <StackPanel Margin="20,-30,0,0" Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Label BorderBrush="Black" BorderThickness="1,1,0,1" ToolTip="{x:Static properties:Resources.Current_Color}" Background="{Binding ElementName=CP_Color,Path=SelectedColor,Converter={StaticResource ColorToBrushConverter}}" Height="20" Width="90" HorizontalAlignment="Left"></Label>
+            <Label BorderBrush="Black" BorderThickness="1" ToolTip="{x:Static properties:Resources.Preview_Color}" x:Name="label" Height="20" Width="30" HorizontalAlignment="Left"></Label>
         </StackPanel>
-        <Button x:Uid="B_Ensure" Grid.Row="2" Grid.Column="0" Height="20" Width="80"
+        <Button Grid.Row="2" Grid.Column="0" Height="20" Width="80"
                 x:Name="B_Ensure" Click="B_Ensure_Click" Content="{x:Static properties:Resources.Ensure}"/>
 
-        <Button x:Uid="B_Cancel" Grid.Row="2" Grid.Column="1" Height="20" Width="80"
+        <Button Grid.Row="2" Grid.Column="1" Height="20" Width="80"
                 x:Name="B_Cancel" Click="B_Cancel_Click" Content="{x:Static properties:Resources.Cancel}"/>
 
     </Grid>
