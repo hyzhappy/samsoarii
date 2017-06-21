@@ -2887,6 +2887,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 This label is never used. 的本地化字符串。
+        /// </summary>
+        public static string Message_LBL_Warning {
+            get {
+                return ResourceManager.GetString("Message_LBL_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Missing parameters. 的本地化字符串。
         /// </summary>
         public static string Message_Missing_Parameters {

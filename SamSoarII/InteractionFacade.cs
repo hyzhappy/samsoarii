@@ -345,8 +345,7 @@ namespace SamSoarII.AppMain
             }
         }
         #endregion
-
-
+        
         #region Check
 
         private void CheckLadderCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -401,7 +400,7 @@ namespace SamSoarII.AppMain
                     result = (ecount == 0);
                     if (showreport || !result)
                     {
-                        if (App.CultureIsZH_CH())
+                        if (!App.CultureIsZH_CH())
                             ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
                                     ecount, wcount),handle);
                         else
@@ -419,14 +418,12 @@ namespace SamSoarII.AppMain
                         handle.Abort();
                     result = true;
                 }
+                _erwindow.Mode = ErrorReportWindow.MODE_LADDER;
+                _erwindow.Update(weinsts);
                 if (!result)
-                {
-                    _erwindow.Mode = ErrorReportWindow.MODE_LADDER;
-                    _erwindow.Update(weinsts);
                     _mainWindow.LACErrorList.Show();
-                }
-                else
-                    _projectModel.IsModify = false;
+                //else
+                //    _projectModel.IsModify = false;
             }
             else if (errorMessage.Error == ErrorType.Empty)
             {
@@ -660,23 +657,20 @@ namespace SamSoarII.AppMain
                 }
             }
             result = (ecount == 0);
+            _erwindow.Mode = ErrorReportWindow.MODE_FUNC;
+            _erwindow.Update(eweles);
             if (showreport || !result)
             {
                 if (ecount == 0 && wcount == 0)
                 {
-                    ShowMessage(Properties.Resources.Function_Block_Correct,handle);
-                    //MessageBox.Show(Properties.Resources.Function_Block_Correct);
+                    ShowMessage(Properties.Resources.Function_Block_Correct, handle);
                 }
                 else
                 {
-                    if (App.CultureIsZH_CH())
+                    if (!App.CultureIsZH_CH())
                         ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle);
-                        //MessageBox.Show(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount));
                     else
                         ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle);
-                        //MessageBox.Show(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount));
-                    _erwindow.Mode = ErrorReportWindow.MODE_FUNC;
-                    _erwindow.Update(eweles);
                     _mainWindow.LACErrorList.Show();
                 }
             }

@@ -430,31 +430,31 @@ namespace SamSoarII.Extend.Utility
                 // 当栈顶为1时运行的计时器
                 case "TON":
                     if (simumode)
-                        sw.Write("_ton(&{0:s}, &{2:s}, _stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
-                            inst[1], inst[2], inst[3], globalCount, stackTop);
+                        sw.Write("_ton(_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                            stackTop, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("_ton(&{0:s}, &{2:s}, _stack_{3:d}, {1:s});\n",
-                            inst[1], inst[2], inst[3], stackTop);
+                        sw.Write("CI_TON(_stack_{0:d}, {1:s}, {2:s});\n",
+                            stackTop, inst[1], inst[2]);
                     globalCount += 1;
                     break;
                 // 当栈顶为0时运行的计时器
                 case "TOF":
                     if (simumode)
-                        sw.Write("_ton(&{0:s}, &{2:s}, !_stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
-                            inst[1], inst[2], inst[3], globalCount, stackTop);
+                        sw.Write("_ton(!_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                            stackTop, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("_ton(&{0:s}, &{2:s}, !_stack_{3:d}, {1:s});\n",
-                            inst[1], inst[2], inst[3], stackTop);
+                        sw.Write("CI_TON(!_stack_{0:d}, {1:s}, {2:s});\n",
+                            stackTop, inst[1], inst[2]);
                     globalCount += 1;
                     break;
                 // 当栈顶为1时运行，为0时保留当前计时的计时器
                 case "TONR":
                     if (simumode)
-                        sw.Write("_tonr(&{0:s}, &{2:s}, _stack_{4:d}, {1:s}, &_global[{3:d}]);\n",
-                            inst[1], inst[2], inst[3], globalCount, stackTop);
+                        sw.Write("_tonr(_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                            stackTop, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("_tonr(&{0:s}, &{2:s}, _stack_{3:d}, {1:s});\n",
-                            inst[1], inst[2], inst[3], stackTop);
+                        sw.Write("CI_TON(_stack_{0:d}, {1:s}, {2:s});\n",
+                            stackTop, inst[1], inst[2]);
                     globalCount += 1;
                     break;
                 // 向上计数器，每次栈顶上升跳变时加1
@@ -473,7 +473,7 @@ namespace SamSoarII.Extend.Utility
                 // 向上向下计数器，当当前计数小于目标则加1，大于目标则减1
                 case "CTUD":
                     sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3]);
-                    sw.Write("if (({0:s}<{1:s}?{0:s}++:{0:s}--)=={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
+                    sw.Write("if (({0:s}<{1:s}?++{0:s}:--{0:s})=={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // FOR循环指令，和c的for循环保持一致
@@ -510,39 +510,22 @@ namespace SamSoarII.Extend.Utility
                 // 可能会调用到下位接口的指令
                 case "PLSF": case "DPLSF":
                     if (!simumode)
-                        sw.Write("CI_DPLSF(" +
-                            "(uint8_t)(_stack_{0:d}), " +
-                            "(uint32_t)({1:s}), " +
-                            "((&{2:s})-(&YBit[0]))/sizeof(int32_t), " +
-                            "{3:d});\n",
-                            stackTop, inst[1], inst[2], user_id++);
+                        sw.Write("CI_DPLSF((uint8_t)(_stack_{0:d}),(uint32_t)({1:s}),{2:s}, {3:d});\n",
+                            stackTop, inst[1], inst[2], user_id);
                     break;
                 case "PWM": case "DPWM":
                     if (!simumode)
-                        sw.Write("CI_DPWM(" +
-                            "(uint8_t)(_stack_{0:d}), " +
-                            "(uint32_t)({1:s}), " +
-                            "(uint32_t)({2:s}), " +
-                            "((&{3:s})-(&YBit[0]))/sizeof(int32_t), " +
-                            "{4:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], user_id++);
+                        sw.Write("CI_DPWM((uint8_t)(_stack_{0:d}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "PLSY": case "DPLSY":
                     if (!simumode)
-                        sw.Write("CI_DPLSY(" +
-                            "(uint8_t)(_stack_{0:d}), " +
-                            "(uint32_t)({1:s}), " +
-                            "(uint32_t)({2:s}), " +
-                            "((&{3:s})-(&YBit[0]))/sizeof(int32_t), " +
-                            "{4:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], user_id++);
+                        sw.Write("CI_DPLSY((uint8_t)(_stack_{0:d}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "HCNT":
                     if (!simumode)
-                        sw.Write("CI_HCNT(" +
-                             "(uint8_t)(_stack_{0:d}), " +
-                             "((&{1:s})-(&CVDoubleWord[0]))/sizeof(int32_t), " +
-                             "{2:s});\n",
+                        sw.Write("CI_HCNT((uint8_t)(_stack_{0:d}),{1:s},{2:s});\n",
                              stackTop, inst[1], inst[2]);
                     break;
                 // 默认的其他情况，一般之前要先判断栈顶
@@ -624,19 +607,19 @@ namespace SamSoarII.Extend.Utility
                                 sw.Write("_bitshr(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
                             break;
                         // 辅助功能
-                        case "LOG":sw.Write("{1:d} = _log({0:d});\n", inst[1], inst[2]);break;
-                        case "POW":sw.Write("{2:d} = _pow({0:d}, {1:d});\n", inst[1], inst[2], inst[3]);break;
+                        case "LOG":sw.Write("{1:d} = _log({0:d});\n", inst[1], inst[2]); break;
+                        case "POW":sw.Write("{2:d} = _pow({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
                         case "FACT":sw.Write("{1:d} = _fact({0:d);\n", inst[1], inst[2]); break;
-                        case "CMP":  sw.Write("{2:d} = _cmpw({0:d}, {1:d});\n", inst[1], inst[2], inst[3]);break;
+                        case "CMP":  sw.Write("{2:d} = _cmpw({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
                         case "CMPD": sw.Write("{2:d} = _cmpd({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
                         case "CMPF": sw.Write("{2:d} = _cmpf({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
-                        case "ZCP": sw.Write("{3:d} = _zcpw({0:d}, {1:d}, {2:d});\n", inst[1], inst[2], inst[3], inst[4]);break;
+                        case "ZCP": sw.Write("{3:d} = _zcpw({0:d}, {1:d}, {2:d});\n", inst[1], inst[2], inst[3], inst[4]); break;
                         case "ZCPD": sw.Write("{3:d} = _zcpd({0:d}, {1:d}, {2:d});\n", inst[1], inst[2], inst[3], inst[4]); break;
                         case "ZCPF": sw.Write("{3:d} = _zcpf({0:d}, {1:d}, {2:d});\n", inst[1], inst[2], inst[3], inst[4]); break;
                         case "NEG": sw.Write("{1:d} = _negw({0:d});\n", inst[1], inst[2]); break;
                         case "NEGD": sw.Write("{1:d} = _negd({0:d});\n", inst[1], inst[2]); break;
-                        case "XCH": sw.Write("_xch(&{0:d}, &{1:d});\n", inst[1], inst[2]);break;
-                        case "XCHD": sw.Write("_xchd(&{0:d}, &{1:d});\n", inst[1], inst[2]);break;
+                        case "XCH": sw.Write("_xch(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
+                        case "XCHD": sw.Write("_xchd(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
                         case "XCHF": sw.Write("_xchf(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
                         case "CML": sw.Write("{1:d} = _cmlw({0:d});\n", inst[1], inst[2]); break;
                         case "CMLD": sw.Write("{1:d} = _cmld({0:d});\n", inst[1], inst[2]); break;

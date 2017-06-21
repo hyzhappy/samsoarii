@@ -269,6 +269,8 @@ namespace SamSoarII.AppMain.Project
                             }
                             if (!lbdict.ContainsKey(inst[1]))
                             {
+                                inst.Status = PLCOriginInst.STATUS_WARNING;
+                                inst.Message = String.Format(Properties.Resources.Message_LBL_Warning);
                                 lbdict.Add(inst[1], inst);
                             }
                             else
@@ -439,7 +441,7 @@ namespace SamSoarII.AppMain.Project
                     }
                 }
             }
-            
+
             for (int i = invmodels.Count() - 1; i >= 0; i--)
             {
                 InstructionNetworkViewModel _invmodel = invmodels[i];
@@ -463,6 +465,9 @@ namespace SamSoarII.AppMain.Project
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
                                 inst.Message = String.Format("{0}{1:s}", Properties.Resources.Message_Jump_Not_Found, inst[1]);
                             }
+                            PLCOriginInst lblinst = lbdict[inst[1]];
+                            lblinst.Status = PLCOriginInst.STATUS_ACCEPT;
+                            lblinst.Message = String.Empty;
                             break;
                     }
                 }
