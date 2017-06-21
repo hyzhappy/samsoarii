@@ -149,15 +149,11 @@ namespace SamSoarII.Extend.LogicGraph
         /// </summary>
         public void GenExpr()
         {
-            if (!this.Expr.Equals("null"))
-                return;
-            //Console.Write("expr begin {0:d}, {1:s}\n", Id, Expr);
+            if (!this.Expr.Equals("null")) return;
             // 若为起点则表达式为1
             if (this.IsStart)
             {
-                this.Expr = "1";
-                //Console.Write("expr end {0:d}, {1:s}\n", Id, Expr);
-                return;
+                this.Expr = "1"; return;
             }
             // 生成所有子项表达式
             List<String> subexprs = new List<String>();
@@ -190,7 +186,10 @@ namespace SamSoarII.Extend.LogicGraph
                     subexprs.Add(lge.Expr);
                 }
                 // 表达式合并
-                this.Expr = "(" + ExprHelper.Merge(subexprs, 0, subexprs.Count - 1) + ")";
+                bool hasor = false;
+                Expr = ExprHelper.Merge(subexprs, 0, subexprs.Count - 1, ref hasor);
+                if (hasor)
+                    Expr = "(" + Expr + ")";
             }
             // 如果存在前向边
             else if (BackEdges.Count > 0)
@@ -201,76 +200,7 @@ namespace SamSoarII.Extend.LogicGraph
             {
                 this.Expr = "1";
             }
-            //Console.Write("expr end {0:d}, {1:s}\n", Id, Expr);
         }
-        /// <summary>
-        /// 生成从该节点出发到达所有终点的PLC指令
-        /// </summary>
-        public void GenInst(List<PLCInstruction> insts, int flags=0)
-        {
-            // 到达终点可跳出
-            if (this.IsTerminate)
-            {
-                return;
-            }
-            // 结果节点不影响栈内容，不需要开销辅助栈
-            // 找到所有指向的结果节点，忽略掉辅助栈的操作
-            // 剩下的节点数量若不大于一，表示不存在分支，也不需要辅助栈来维护
-            int ncount = 0;
-            for (int i = 0; i < Edges.Count; i++)
-            {
-                LGEdge lge = Edges[i];
-                if (lge.Destination.IsTerminate)
-                    continue;
-                ncount++;
-            }
-            // 当前节点存在分支，则需要辅助栈来维护
-            if (ncount > 1)
-            {
-                // 当前值压入辅助栈
-                InstHelper.AddInst(insts, "MPS");
-                for (int i = 0; i < nedges.Count; i++)
-                {
-                    LGEdge lge = nedges[i];
-                    // 执行当前边对应的PLC指令
-                    lge.PLCInfo.GenInst(insts, flags | 0x04);
-                    // 生成子树的指令
-                    lge.Destination.GenInst(insts, flags);
-                    // 结果节点忽略辅助栈
-                    if (lge.Destination.IsTerminate)
-                        continue;
-                    // 还原现场，需要从辅助栈中取出暂存的值
-                    if (--ncount > 1)
-                        InstHelper.AddInst(insts, "MRD");
-                    // 若暂存值不会再用了，从辅助栈中弹出
-                    if (ncount == 1)
-                        InstHelper.AddInst(insts, "MPP");
-                }
-            }
-            else
-            {
-                // 同上，但不需要辅助栈的支持
-                // 但是需要先处理结果节点
-                for (int i = 0; i < nedges.Count; i++)
-                {
-                    LGEdge lge = nedges[i];
-                    if (!lge.Destination.IsTerminate)
-                        continue;
-                    lge.PLCInfo.GenInst(insts, flags | 0x04);
-                    lge.Destination.GenInst(insts, flags);
-                }
-                // 然后再处理非结果节点
-                for (int i = 0; i < nedges.Count; i++)
-                {
-                    LGEdge lge = nedges[i];
-                    if (lge.Destination.IsTerminate)
-                        continue;
-                    lge.PLCInfo.GenInst(insts, flags | 0x04);
-                    lge.Destination.GenInst(insts, flags);
-                }
-            }
-        }
-
         public void GetInstPrototype(List<PLCInstruction> insts, ref int instend)
         {
             LGEdge lge;
