@@ -2163,11 +2163,6 @@ namespace SamSoarII.AppMain.Project
         }
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
         {
-            currentItem = GetNetworkByMouse();
-            if (currentItem == null && dragItem != null)
-            {
-                dragItem.Opacity = 1;
-            }
             Point _p = e.GetPosition(this);
             if (_selectStatus == SelectStatus.SingleSelected)
             {
@@ -3031,37 +3026,52 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private void OnDragEnter(object sender, DragEventArgs e)
+        private void OnDrop(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
             if (sourcenet != null && sourcenet != desnetwork)
             {
-                sourcenet.Opacity = 0.3;
+                desnetwork.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
                 var command = new LadderDiagramExchangeNetworkCommand(this, sourcenet, desnetwork);
                 _commandManager.Execute(command);
             }
+            sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
+            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
+            desnetwork.Opacity = 1;
+            dragItem = null;
         }
-        private void OnDrop(object sender, DragEventArgs e)
+        private void OnDragOver(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            if (sourcenet == null) return;
-            sourcenet.Opacity = 1;
-            dragItem = null;
+            var desnetwork = (LadderNetworkViewModel)e.Source;
+            sourcenet.CommentAreaBorder.BorderBrush = LadderHelper.MonitorBrush;
+            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
+            if (sourcenet != null && sourcenet != desnetwork)
+            {
+                desnetwork.Opacity = 0.3;
+                desnetwork.ladderExpander.IsExpand = false;
+            }
+        }
+        private void OnDragLeave(object sender, DragEventArgs e)
+        {
+            ((LadderNetworkViewModel)e.Source).Opacity = 1;
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
+            currentItem = GetNetworkByMouse();
+            if (currentItem == null && dragItem != null)
+            {
+                dragItem.Opacity = 1;
+            }
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if (currentItem != null)
+                if (currentItem != null && dragItem != null)
                 {
-                    if (dragItem != null)
+                    if (dragItem != currentItem)
                     {
-                        if (dragItem != currentItem)
-                        {
-                            DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
-                        }
+                        DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
                     }
                 }
             }

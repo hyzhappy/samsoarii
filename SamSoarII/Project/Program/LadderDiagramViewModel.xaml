@@ -75,7 +75,7 @@
                                 MouseDoubleClick="OnMouseDoubleClick" MouseWheel="OnMouseWheel">
                         </Button>
                     </StackPanel>
-                    <StackPanel x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragEnter="OnDragEnter" MouseMove="OnMouseMove"/>
+                    <StackPanel x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left" AllowDrop="True" Drop="OnDrop" DragLeave="OnDragLeave" DragOver="OnDragOver" MouseMove="OnMouseMove"/>
                     <Line x:Name="line2" Stroke="Black" Margin="-25,0,0,0" StrokeThickness="3" X1="0" Y1="0" X2="20" Y2="0"></Line>
                 </StackPanel>
             </Grid>
