@@ -116,7 +116,7 @@
                                                                 RelativeSource={RelativeSource AncestorType={x:Type ad:LayoutAnchorControl},
                                                                                                Mode=FindAncestor}}">
                     </TextBlock>
-                    <Rectangle x:Uid="Rect" Name="Rect" Opacity="0.4" Height="6" Fill="{Binding Path=IsMouseOver,
+                    <Rectangle Name="Rect" Opacity="0.4" Height="6" Fill="{Binding Path=IsMouseOver,
                                                                 RelativeSource={RelativeSource AncestorType={x:Type StackPanel},
                                                                                                Mode=FindAncestor},
                                                                 Converter={StaticResource BoolToSideBrushConverter}}"
@@ -129,6 +129,16 @@
         </ControlTemplate>
         <Style x:Key="DockManagerStyle" TargetType="{x:Type ad:DockingManager}">
             <Setter Property="AnchorTemplate" Value="{StaticResource SamSoarIIAnchorTemplate}"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"></Setter>
+            <Setter Property="Width" Value="24"></Setter>
+            <Setter Property="Height" Value="24"></Setter>
+        </Style>
+        <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"></Setter>
+            <Setter Property="Width" Value="24"></Setter>
+            <Setter Property="Height" Value="24"></Setter>
         </Style>
     </Window.Resources>
     <DockPanel x:Name="MainDockPanel">
@@ -154,14 +164,14 @@
                 <Separator/>
                 <MenuItem x:Name="RecentFileMenu" Style="{x:Null}" Header="{x:Static properties:Resources.MainWindow_Recent_Proj}" ItemsSource="{Binding ProjectUsedTimeMessage}">
                     <MenuItem.Resources>
-                        <Style x:Uid="Style_4" TargetType="MenuItem">
-                            <Setter x:Uid="Setter_7" Property="MaxWidth" Value="350"></Setter>
-                            <EventSetter x:Uid="EventSetter_1" Event="Click" Handler="OnRecentProjectOpen"></EventSetter>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="MaxWidth" Value="350"></Setter>
+                            <EventSetter Event="Click" Handler="OnRecentProjectOpen"></EventSetter>
                         </Style>
                     </MenuItem.Resources>
                 </MenuItem>
-                <Separator x:Uid="Separator_3"/>
-                <MenuItem x:Uid="MenuItem_6" Header="{x:Static properties:Resources.MainWindow_Close_Proj}" Command="{x:Static app:GlobalCommand.CloseProjectCommand}"></MenuItem>
+                <Separator/>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Close_Proj}" Command="{x:Static app:GlobalCommand.CloseProjectCommand}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Exit}" Command="ApplicationCommands.Close"></MenuItem>
             </MenuItem>
@@ -171,7 +181,7 @@
                         <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Uid="MenuItem_10" Header="{x:Static properties:Resources.MainWindow_Redo}" Command="ApplicationCommands.Redo">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Redo}" Command="ApplicationCommands.Redo">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
@@ -204,7 +214,7 @@
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_Out}" Command="{x:Static app:GlobalCommand.ZoomOutCommand}"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Comment_Mode}" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}">
                     <MenuItem.Icon>
-                        <Image x:Uid="Image_9" Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
+                        <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
@@ -258,135 +268,135 @@
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Help}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_View_Help}" Click="OnShowHelpDocWindow"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Online_Upgrade}" Click="OnUpdateClick"></MenuItem>
-                <Separator x:Uid="Separator_11"></Separator>
-                <MenuItem x:Uid="MenuItem_44" Header="{x:Static properties:Resources.MainWindow_About}" Click="OnShowAboutDialog"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_About}" Click="OnShowAboutDialog"></MenuItem>
             </MenuItem>
         </Menu>
         <ToolBarTray x:Name="ToolBar" DockPanel.Dock="Top" Height="25">
-            <ToolBar>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_New_Proj}" Command="ApplicationCommands.New" Height="24" Width="24" Margin="0,0,0,16">
+            <ToolBar Height="25" VerticalAlignment="Top">
+                <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.MainWindow_New_Proj}" Command="ApplicationCommands.New">
                     <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Open_Proj}" Command="ApplicationCommands.Open" Height="24" Width="24" Margin="0,0,0,16">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Open_Proj}" Command="ApplicationCommands.Open" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Open.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Save_Proj}" Command="ApplicationCommands.Save" Height="24" Width="24" Margin="0,0,0,16">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Save_Proj}" Command="ApplicationCommands.Save" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Save.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
-            <ToolBar x:Uid="ToolBar_2">
-                <Button x:Uid="Button_5" ToolTip="{x:Static properties:Resources.MainWindow_Undo}" Command="{x:Static ApplicationCommands.Undo}" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_17" Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+            <ToolBar Height="25" VerticalAlignment="Top">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Undo}" Command="{x:Static ApplicationCommands.Undo}" Style="{StaticResource ButtonStyle}">
+                    <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button x:Uid="Button_6" ToolTip="{x:Static properties:Resources.MainWindow_Redo}" Command="{x:Static ApplicationCommands.Redo}" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_18" Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Redo}" Command="{x:Static ApplicationCommands.Redo}" Style="{StaticResource ButtonStyle}">
+                    <Image Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button x:Uid="Button_7" ToolTip="{x:Static properties:Resources.MainWindow_Cut}" Command="ApplicationCommands.Cut" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_19" Source="/Resources/Image/Cut.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Cut}" Command="ApplicationCommands.Cut" Style="{StaticResource ButtonStyle}">
+                    <Image Source="/Resources/Image/Cut.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button x:Uid="Button_8" ToolTip="{x:Static properties:Resources.MainWindow_Copy}" Command="ApplicationCommands.Copy" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_20" Source="/Resources/Image/Copy.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Copy}" Command="ApplicationCommands.Copy" Style="{StaticResource ButtonStyle}">
+                    <Image Source="/Resources/Image/Copy.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button x:Uid="Button_9" ToolTip="{x:Static properties:Resources.MainWindow_Paste}" Command="ApplicationCommands.Paste" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_21" Source="/Resources/Image/Paste.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Paste}" Command="ApplicationCommands.Paste" Style="{StaticResource ButtonStyle}">
+                    <Image Source="/Resources/Image/Paste.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
-            <ToolBar x:Uid="ToolBar_3">
-                <Button x:Uid="Button_11" ToolTip="{x:Static properties:Resources.MainWindow_Download}" Command="{x:Static app:GlobalCommand.DownloadCommand}" Height="24" Width="24" Margin="0,0,0,16">
-                    <Image x:Uid="Image_23" Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
+            <ToolBar Height="25" VerticalAlignment="Top">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Download}" Command="{x:Static app:GlobalCommand.DownloadCommand}" Style="{StaticResource ButtonStyle}">
+                    <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Upload}" Command="{x:Static app:GlobalCommand.UploadCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Upload}" Command="{x:Static app:GlobalCommand.UploadCommand}" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation}" x:Name="SimulateModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.SimulateCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation}" x:Name="SimulateModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.SimulateCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Monitor}" x:Name="MonitorModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.MonitorCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Monitor}" x:Name="MonitorModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.MonitorCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Monitor.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </ToggleButton>
             </ToolBar>
-            <ToolBar>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Ladder_Mode}" x:Name="LadderModeButton" Command="{x:Static app:GlobalCommand.LadderModeToggleCommand}" Height="24" Width="24" Margin="0,0,0,16">
+            <ToolBar Height="25" VerticalAlignment="Top">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Ladder_Mode}" x:Name="LadderModeButton" Command="{x:Static app:GlobalCommand.LadderModeToggleCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Ladder.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Inst_Mode}" x:Name="InstModeButton" Command="{x:Static app:GlobalCommand.InstModeToggleCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Inst_Mode}" x:Name="InstModeButton" Command="{x:Static app:GlobalCommand.InstModeToggleCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Inst.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Comment_Mode}" x:Name="CommentModeToggleButton" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Comment_Mode}" x:Name="CommentModeToggleButton" Command="{x:Static app:GlobalCommand.CommentModeToggleCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
             </ToolBar>
-            <ToolBar>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Element_List}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowElemListCommand}">
+            <ToolBar Height="25" VerticalAlignment="Top">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Element_List}" Style="{StaticResource ButtonStyle}" Command="{x:Static app:GlobalCommand.ShowElemListCommand}">
                     <Image Source="/Resources/Image/ElementTable.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Soft_Element_Init}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Soft_Element_Init}" Style="{StaticResource ButtonStyle}" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}">
                     <Image Source="/Resources/Image/ElementInitialize.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
-            <ToolBar x:Name="SettingToolBar">
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Communication_Settings}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}">
+            <ToolBar Height="25" VerticalAlignment="Top" x:Name="SettingToolBar">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Communication_Settings}" Style="{StaticResource ButtonStyle}" Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}">
                     <Image Source="/Resources/Image/CommunicationSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_System_Settings}" Height="24" Width="24" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Margin="0,0,0,16">
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_System_Settings}" Style="{StaticResource ButtonStyle}" Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}">
                     <Image Source="/Resources/Image/SystemSetting.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_PLC_Settings}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Template="{StaticResource PLCSettingButton}"></Button>
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_PLC_Settings}" Style="{StaticResource ButtonStyle}" Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Template="{StaticResource PLCSettingButton}"></Button>
             </ToolBar>
         </ToolBarTray>
         <ToolBarTray x:Name="EditToolBarTray" DockPanel.Dock="Top" Height="25">
-            <ToolBar x:Name="ShortCutToolBar">
-                <Button VerticalAlignment="Top" Tag="200" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Open_Contact}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+            <ToolBar Height="25" VerticalAlignment="Top" x:Name="ShortCutToolBar">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Open_Contact}" Tag="200" Click="OnClick" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/LD.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="202" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Open}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="202" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Open}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/LDI.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="201" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Closed}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="201" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Normally_Closed}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/LDIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="203" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Close}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="203" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Close}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/LDIIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="204" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="204" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/LDP.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="205" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="205" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Pulse}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/LDF.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="206" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="206" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Rising_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/MEP.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="207" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="207" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Falling_Edge_Of_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/MEF.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="208" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Reversed_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="208" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Reversed_Result}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/INV.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="209" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="209" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/OUT.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="210" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="210" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Immediately_Output_Coil}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/OUTIM.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="100" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="100" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/HLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="101" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="101" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/VLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="10" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="10" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Horizontal_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/DHLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button VerticalAlignment="Top" Tag="11" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
+                <Button Style="{StaticResource ButtonStyle}" VerticalAlignment="Top" Tag="11" Click="OnClick" ToolTip="{x:Static properties:Resources.MainWindow_Vertical_Line_Delete}" Command="{x:Static app:GlobalCommand.InstShortCutOpenCommand}">
                     <Image Source="/Resources/Image/InstructionToolBar/DVLine.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
             </ToolBar>
-            <ToolBar>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Row_Insert}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.InsertRowCommand}">
+            <ToolBar Height="25">
+                <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.MainWindow_Row_Insert}" Command="{x:Static app:GlobalCommand.InsertRowCommand}">
                     <Image Source="/Resources/Image/InsertRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Row_Delete}" Height="24" Width="24" Margin="0,0,0,16" Command="{x:Static app:GlobalCommand.DeleteRowCommand}">
+                <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.MainWindow_Row_Delete}" Command="{x:Static app:GlobalCommand.DeleteRowCommand}">
                     <Image Source="/Resources/Image/DeleteRow.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
@@ -403,34 +413,34 @@
                     <Image Source="/Resources/Image/Stop.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
             </ToolBar>
-            <ToolBar x:Uid="ToolBar_8">
-                <Button x:Uid="BrpoNowButton" ToolTip="{x:Static properties:Resources.MainWindow_Current_Breakpoint}" x:Name="BrpoNowButton" Height="24" Width="24" Margin="0,0,0,16"
+            <ToolBar>
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Current_Breakpoint}" x:Name="BrpoNowButton" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoNowCommand}">
-                    <Image x:Uid="Image_39" Source="/Resources/Image/Breakpoint/BPNow.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                    <Image Source="/Resources/Image/Breakpoint/BPNow.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button x:Uid="BrpoStepButton" ToolTip="{x:Static properties:Resources.MainWindow_By_Process}" x:Name="BrpoStepButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Process}" x:Name="BrpoStepButton" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoStepCommand}">
                     <Image x:Uid="Image_40" Source="/Resources/Image/Breakpoint/BPStep.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button x:Uid="BrpoCallButton" ToolTip="{x:Static properties:Resources.MainWindow_By_Sentence}" x:Name="BrpoCallButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Sentence}" x:Name="BrpoCallButton" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoCallCommand}">
-                    <Image x:Uid="Image_41" Source="/Resources/Image/Breakpoint/BPCall.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                    <Image Source="/Resources/Image/Breakpoint/BPCall.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button x:Uid="BropOutButton" ToolTip="{x:Static properties:Resources.MainWindow_Jump_Out}" x:Name="BropOutButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Jump_Out}" x:Name="BropOutButton" Height="24" Width="24" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoOutCommand}">
-                    <Image x:Uid="Image_42" Source="/Resources/Image/Breakpoint/BPOut.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
+                    <Image Source="/Resources/Image/Breakpoint/BPOut.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
             </ToolBar>
-            <ToolBar x:Uid="ToolBar_9">
-                <ComboBox x:Uid="ComboBox_1" SelectedIndex="0" Margin="0, -12, 0, 0" Width="80" Height="24" 
+            <ToolBar>
+                <ComboBox SelectedIndex="0" Margin="0, -12, 0, 0" Width="80" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock x:Uid="TextBlock_1">Simulate</TextBlock>
+                    <TextBlock>Simulate</TextBlock>
                 </ComboBox>
-                <ComboBox x:Uid="TBCB_Device" x:Name="TBCB_Device" SelectedIndex="0" Margin="0, -12, 0, 0" Width="120" Height="24"  
+                <ComboBox x:Name="TBCB_Device" SelectedIndex="0" Margin="0, -12, 0, 0" Width="120" Height="24"  
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
                     <TextBlock x:Uid="TextBlock_2">FGs_16MT_A</TextBlock>
                 </ComboBox>
-                <ComboBox x:Uid="TBCB_ProjectName" x:Name="TBCB_ProjectName" SelectedIndex="0" Margin="0, -12, 0, 0" Width="150" Height="24" 
+                <ComboBox x:Name="TBCB_ProjectName" SelectedIndex="0" Margin="0, -12, 0, 0" Width="150" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
                     <TextBlock x:Uid="TextBlock_3">ProjectName</TextBlock>
                 </ComboBox>
@@ -447,48 +457,48 @@
                         <local:MainTabControl x:Name="MainTab"/>
                     </ad:LayoutPanel>
                     <ad:LayoutRoot.LeftSide>
-                        <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_1">
-                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_1">
-                                <ad:LayoutAnchorable x:Uid="LAProj" x:Name="LAProj" Title="{x:Static properties:Resources.MainWindow_Project_Explorer}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
-                                    <Grid x:Uid="TreeViewGrid" x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                        <ad:LayoutAnchorSide>
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LAProj" Title="{x:Static properties:Resources.MainWindow_Project_Explorer}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                                    <Grid x:Name="TreeViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
                                     </Grid>
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_2">
+                            <ad:LayoutAnchorGroup>
                                 <ad:LayoutAnchorable x:Name="LAElemList" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}">
                                     <local:ElementList x:Name="ElemList"></local:ElementList>
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_3">
-                                <ad:LayoutAnchorable x:Uid="LAElemInit" x:Name="LAElemInit" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Init}">
-                                    <local:ElementInitializeWindow x:Uid="ElemInitWind" x:Name="ElemInitWind"></local:ElementInitializeWindow>
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LAElemInit" Title="{x:Static properties:Resources.MainWindow_Soft_Element_Init}">
+                                    <local:ElementInitializeWindow x:Name="ElemInitWind"></local:ElementInitializeWindow>
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
                         </ad:LayoutAnchorSide>
                     </ad:LayoutRoot.LeftSide>
                     <ad:LayoutRoot.BottomSide>
-                        <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_2">
-                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_4">
-                                <ad:LayoutAnchorable x:Uid="LAErrorList" x:Name="LAErrorList" Title="{x:Static properties:Resources.MainWindow_Error_List}" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
+                        <ad:LayoutAnchorSide>
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LAErrorList" Title="{x:Static properties:Resources.MainWindow_Error_List}" FloatingHeight="320" AutoHideWidth="320" AutoHideMinWidth="320">
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_5">
-                                <ad:LayoutAnchorable x:Uid="LABreakpoint" x:Name="LABreakpoint" Title="{x:Static properties:Resources.MainWindow_Breakpoint}">
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LABreakpoint" Title="{x:Static properties:Resources.MainWindow_Breakpoint}">
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
                         </ad:LayoutAnchorSide>
                     </ad:LayoutRoot.BottomSide>
                     <ad:LayoutRoot.RightSide>
-                        <ad:LayoutAnchorSide x:Uid="ad:LayoutAnchorSide_3">
-                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_6">
-                                <ad:LayoutAnchorable x:Uid="LAMonitor" x:Name="LAMonitor" Title="{x:Static properties:Resources.MainWindow_Monitor}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
-                                    <Grid x:Uid="MonitorViewGrid" x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                        <ad:LayoutAnchorSide>
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LAMonitor" Title="{x:Static properties:Resources.MainWindow_Monitor}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                                    <Grid x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
                                     </Grid>
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
-                            <ad:LayoutAnchorGroup x:Uid="ad:LayoutAnchorGroup_7">
-                                <ad:LayoutAnchorable x:Uid="LAFind" x:Name="LAFind" Title="{x:Static properties:Resources.MainWindow_Search}" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
-                                    <Grid x:Uid="GD_Find" x:Name="GD_Find"></Grid>
+                            <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LAFind" Title="{x:Static properties:Resources.MainWindow_Search}" FloatingWidth="300" AutoHideWidth="300" AutoHideMinWidth="300">
+                                    <Grid x:Name="GD_Find"></Grid>
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorGroup>
