@@ -2455,8 +2455,16 @@ namespace SamSoarII.AppMain.Project
                     {
                         removednets.Add(net);
                     }
-                    area.NetworkNumberStart = _selectRectOwner.NetworkNumber;
-                    area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
+                    if (CrossNetState == CrossNetworkState.CrossUp)
+                    {
+                        area.NetworkNumberStart = _selectStartNetwork.NetworkNumber - removednets.Count() + 1;
+                        area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
+                    }
+                    else
+                    {
+                        area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
+                        area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
+                    }
                     int index = removednets.First().NetworkNumber;
                     var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
                         this, replacednets, removednets, index, area);
