@@ -65,7 +65,7 @@ namespace SamSoarII.AppMain.Project
         {
             get { return this._projectModel; }
         }
-        
+
         private string _programName;
         public string ProgramName
         {
@@ -122,7 +122,7 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _isCommentMode = value;
-                foreach(var net in _ladderNetworks)
+                foreach (var net in _ladderNetworks)
                 {
                     net.IsCommentMode = _isCommentMode;
                 }
@@ -130,7 +130,7 @@ namespace SamSoarII.AppMain.Project
                 SelectionStatus = SelectStatus.Idle;
             }
         }
-        
+
         #region Floating
 
         public bool IsFloat { get; set; }
@@ -191,7 +191,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private LinkedList<LadderNetworkViewModel> _ladderNetworks 
+        private LinkedList<LadderNetworkViewModel> _ladderNetworks
             = new LinkedList<LadderNetworkViewModel>();
         public LinkedList<LadderNetworkViewModel> LadderNetworks
         {
@@ -265,7 +265,7 @@ namespace SamSoarII.AppMain.Project
                 {
 
                 }
-                switch(_selectStatus)
+                switch (_selectStatus)
                 {
                     case SelectStatus.Idle:
                         EnterIdleState();
@@ -287,12 +287,12 @@ namespace SamSoarII.AppMain.Project
         //private CrossNetworkState _crossNetState;
         public CrossNetworkState CrossNetState
         {
-            get;set;
+            get; set;
         }
 
         #region About CommandManager
         private LadderCommand.CommandManager _commandManager;
-        
+
         public bool IsModify
         {
             get { return _commandManager.IsModify; }
@@ -452,7 +452,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if (node.Name != "HLine" && node.Name != "VLine")
                 {
-                    List <string> tempList = new List<string>();
+                    List<string> tempList = new List<string>();
                     tempList.Add(node.Attribute("Describe").Value);
                     tempList.Add(node.Attribute("Text_1").Value);
                     tempList.Add(node.Attribute("Text_2").Value);
@@ -465,13 +465,13 @@ namespace SamSoarII.AppMain.Project
             }
             InstrutionNameAndToolTips = tempDic;
         }
-        
+
         #region Network manipulation
         public LadderNetworkViewModel GetNetworkByNumber(int number)
         {
             return _ladderNetworks.ElementAt(number);
         }
-        
+
         /// <summary>
         /// 初始化，删除所有的网络，不要在用户交互中使用，仅仅在初始化的时候调用以初始化
         /// </summary>
@@ -555,11 +555,11 @@ namespace SamSoarII.AppMain.Project
                 network, new BaseViewModel[] { element }, new VerticalLineViewModel[] { });
             if (element.Type == ElementType.Output)
             {
-                for (int i = Math.Max(SelectionRect.X,1); i < GlobalSetting.LadderXCapacity - 1; i++)
+                for (int i = Math.Max(SelectionRect.X, 1); i < GlobalSetting.LadderXCapacity - 1; i++)
                 {
                     if (_selectRectOwner.SearchElement(i, SelectionRect.Y) == null)
                     {
-                        elements.Add(new HorizontalLineViewModel() {X = i,Y = SelectionRect.Y });
+                        elements.Add(new HorizontalLineViewModel() { X = i, Y = SelectionRect.Y });
                     }
                 }
             }
@@ -634,7 +634,7 @@ namespace SamSoarII.AppMain.Project
             network.PropertyChanged += Network_PropertyChanged;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
-        
+
         public void RemoveSingleNetworkCommand(LadderNetworkViewModel network)
         {
             _projectModel.IFacade.RemoveNetwork(network);
@@ -648,7 +648,7 @@ namespace SamSoarII.AppMain.Project
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
-        
+
         /// <summary>
         /// 放置一个新的元素在选择框内
         /// </summary>
@@ -713,7 +713,7 @@ namespace SamSoarII.AppMain.Project
             SelectionStatus = SelectStatus.Idle;
         }
 
-        public void NetworkRemoveRows(LadderNetworkViewModel network,int startRowNumber,int count)
+        public void NetworkRemoveRows(LadderNetworkViewModel network, int startRowNumber, int count)
         {
             NetworkRemoveRowCommand command;
             for (int i = 0; i < count; i++)
@@ -736,7 +736,7 @@ namespace SamSoarII.AppMain.Project
 
         public void AddNetwork(LadderNetworkViewModel net, int index)
         {
-            if(_ladderNetworks.Count > 0)
+            if (_ladderNetworks.Count > 0)
             {
                 if (index == 0)
                 {
@@ -785,7 +785,17 @@ namespace SamSoarII.AppMain.Project
 
         public void AddNetwork(IEnumerable<LadderNetworkViewModel> nets, int index)
         {
-            if(_ladderNetworks.Count > 0)
+            if (nets.Count() == 0) return; 
+            SortedSet<LadderNetworkViewModel> maskedNetworks = new SortedSet<LadderNetworkViewModel>();
+            foreach (var network in new List<LadderNetworkViewModel>(_ladderNetworks))
+            {
+                if (network.IsMasked)
+                {
+                    _ladderNetworks.Remove(network);
+                    maskedNetworks.Add(network);
+                }
+            }
+            if (_ladderNetworks.Count > 0)
             {
                 if (index == 0)
                 {
@@ -796,11 +806,11 @@ namespace SamSoarII.AppMain.Project
                         newnode.Value.PropertyChanged += Network_PropertyChanged;
                     }
                     var node = _ladderNetworks.First;
-                    int n = 0;
+                    int q = 0;
                     while (node != null)
                     {
-                        node.Value.NetworkNumber = n;
-                        n++;
+                        node.Value.NetworkNumber = q;
+                        q++;
                         node = node.Next;
                     }
                 }
@@ -816,38 +826,64 @@ namespace SamSoarII.AppMain.Project
                     {
                         node = node.Next;
                     }
-                    int n = index;
+                    int p = index;
                     foreach (var net in nets)
                     {
-                        net.NetworkNumber = n;
+                        net.NetworkNumber = p;
                         _ladderNetworks.AddAfter(node, net);
                         net.PropertyChanged += Network_PropertyChanged;
-                        n++;
+                        p++;
                         node = node.Next;
                     }
                     node = node.Next;
                     while (node != null)
                     {
-                        node.Value.NetworkNumber = n;
-                        n++;
+                        node.Value.NetworkNumber = p;
+                        p++;
                         node = node.Next;
                     }
                 }
             }
             else
             {
-                int n = 0;
-                foreach(var net in nets)
+                int m = 0;
+                foreach (var net in nets)
                 {
-                    net.NetworkNumber = n;
+                    net.NetworkNumber = m;
                     _ladderNetworks.AddLast(net);
                     net.PropertyChanged += Network_PropertyChanged;
-                    n++;
+                    m++;
                 }
+            }
+            foreach (var maskedNetwork in maskedNetworks)
+            {
+                LinkedListNode<LadderNetworkViewModel> newnode = new LinkedListNode<LadderNetworkViewModel>(maskedNetwork);
+                var cnt = newnode.Value.MaskNumber;
+                var node = _ladderNetworks.First;
+                while ((cnt-- > 0) && node != null) node = node.Next;
+                if (node != null)
+                    _ladderNetworks.AddBefore(node, newnode);
+                else
+                    _ladderNetworks.AddLast(newnode);
+            }
+            int n = 0;
+            foreach (var network in _ladderNetworks)
+            {
+                network.NetworkNumber = n;
+                n++;
             }
             ReloadNetworksToStackPanel();
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
+
+        public void RemoveNetworks(IEnumerable<LadderNetworkViewModel> nets)
+        {
+            if (_ladderNetworks.Count > 1)
+            {
+            }
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+        }
+
         public void RemoveNetwork(LadderNetworkViewModel network)
         {
             if (_ladderNetworks.Count > 1)
@@ -954,7 +990,7 @@ namespace SamSoarII.AppMain.Project
                         {
                             i++;
                             network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber - i);
-                        } while (!network.ladderExpander.IsExpand && !network.IsFirstNetwork());
+                        } while ((network.IsMasked || !network.ladderExpander.IsExpand) && !network.IsFirstNetwork());
                         if (network.ladderExpander.IsExpand)
                         {
                             _selectRectOwner.ReleaseSelectRect();
@@ -986,7 +1022,7 @@ namespace SamSoarII.AppMain.Project
                         {
                             i++;
                             network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber + i);
-                        } while (!network.ladderExpander.IsExpand && !network.IsLastNetwork());
+                        } while ((network.IsMasked || !network.ladderExpander.IsExpand) && !network.IsLastNetwork());
                         if (network.ladderExpander.IsExpand)
                         {
                             _selectRectOwner.ReleaseSelectRect();
@@ -1189,8 +1225,11 @@ namespace SamSoarII.AppMain.Project
                 }
                 else
                 {
-                    _selectAllNetworks.Add(node.Value);
-                    _selectAllNetworkCache.Add(node.Value);
+                    if (!node.Value.IsMasked)
+                    {
+                        _selectAllNetworks.Add(node.Value);
+                        _selectAllNetworkCache.Add(node.Value);
+                    }
                     node = node.Previous;
                 }
             }
@@ -1224,8 +1263,11 @@ namespace SamSoarII.AppMain.Project
                 }
                 else
                 {
-                    _selectAllNetworks.Add(node.Value);
-                    _selectAllNetworkCache.Add(node.Value);
+                    if (!node.Value.IsMasked)
+                    {
+                        _selectAllNetworks.Add(node.Value);
+                        _selectAllNetworkCache.Add(node.Value);
+                    }
                     node = node.Next;
                 }
             }
@@ -2090,7 +2132,7 @@ namespace SamSoarII.AppMain.Project
                             _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
                             _selectStartNetwork.SelectAreaSecondY = _selectRect.Y;
                             SelectionStatus = SelectStatus.MultiSelecting;
-                        } 
+                        }
                     }
                 }
             }
@@ -2302,7 +2344,7 @@ namespace SamSoarII.AppMain.Project
                             _selectAllNetworks.Add(_selectStartNetwork);
                         }
                         int index = _selectAllNetworks.ElementAt(0).NetworkNumber;
-                        if (_selectAllNetworks.Count == _ladderNetworks.Count)
+                        if (_selectAllNetworks.Count == _ladderNetworks.Where(x => { return !x.IsMasked; }).Count())
                         {
                             //全选, 补回一个网络
                             _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
@@ -2368,12 +2410,11 @@ namespace SamSoarII.AppMain.Project
                         if(!copy)
                         {
                             int index = removednets[0].NetworkNumber;
-                            if(removednets.Count == _ladderNetworks.Count)
+                            if(removednets.Count == _ladderNetworks.Where(x => { return !x.IsMasked; }).Count())
                             {
                                 //全选，补回一个空网络
                                 _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
                                     this, new LadderNetworkViewModel(this, 0), removednets, index));
-
                             }
                             else
                             {
@@ -2589,9 +2630,13 @@ namespace SamSoarII.AppMain.Project
         {
             SelectionStatus = SelectStatus.MultiSelected;
             CrossNetState = CrossNetworkState.CrossDown;
-            _selectStartNetwork = _ladderNetworks.First.Value;
+            var node = _ladderNetworks.First;
+            while (node.Value.IsMasked && node.Next != null) node = node.Next;
+            _selectStartNetwork = node.Value;
+            _selectStartNetwork.IsSelectAllMode = true;
             foreach (var net in _ladderNetworks)
             {
+                if (net.IsMasked || net == _selectStartNetwork) continue;
                 _selectAllNetworkCache.Add(net);
                 _selectAllNetworks.Add(net);
                 net.IsSelectAllMode = true;

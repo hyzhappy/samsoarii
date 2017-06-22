@@ -147,12 +147,10 @@ namespace SamSoarII.AppMain.Project
         private int _networkNumber;
         public int NetworkNumber
         {
-            get
-            {
-                return _networkNumber;
-            }
+            get => _networkNumber;
             set
             {
+                if (!IsMasked) MaskNumber = value;
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
@@ -182,7 +180,7 @@ namespace SamSoarII.AppMain.Project
                 NetworkDescriptionTextBlock.Text = value;
             }
         }
-
+        public int MaskNumber { get; set; }
         private bool _isMasked;
         public bool IsMasked
         {
@@ -201,6 +199,7 @@ namespace SamSoarII.AppMain.Project
                     LadderCanvas.Opacity = 0.4;
                     ReleaseSelectRect();
                     IsSelectAreaMode = false;
+                    MaskNumber = NetworkNumber;
                 }
                 else
                 {
@@ -1345,7 +1344,7 @@ namespace SamSoarII.AppMain.Project
                  || ptvitem.RelativeObject is LadderDiagramViewModel
                  || ptvitem.RelativeObject is ModbusTableModel)
                 {
-                    if(ladderExpander.IsExpand)
+                    if(ladderExpander.IsExpand && !IsMasked)
                         AcquireSelectRect(e);
                 }
             }
@@ -1354,7 +1353,7 @@ namespace SamSoarII.AppMain.Project
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
-            if (!ladderExpander.IsExpand) return;
+            if (!ladderExpander.IsExpand || IsMasked) return;
             ProjectTreeViewItem ptvitem = new ProjectTreeViewItem(null);
             bool isacquired = AcquireSelectRect(e);
             if (e.Data.GetDataPresent(typeof(LadderNetworkViewModel)))
