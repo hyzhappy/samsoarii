@@ -209,6 +209,7 @@ namespace SamSoarII.AppMain.Project
                     CommentAreaExpander.Background = Brushes.LightCyan;
                     LadderCanvas.Background = Brushes.Transparent;
                 }
+                MaskChanged(this, new RoutedEventArgs());
             }
         }
         private bool _isCommendMode;

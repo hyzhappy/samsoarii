@@ -55,7 +55,7 @@ namespace SamSoarII.AppMain
         }
         public static bool CultureIsZH_CH()
         {
-            return Thread.CurrentThread.CurrentUICulture.Name.Equals("zh_Hans");
+            return Thread.CurrentThread.CurrentUICulture.Name.Equals("zh-Hans");
         }
     }
 }

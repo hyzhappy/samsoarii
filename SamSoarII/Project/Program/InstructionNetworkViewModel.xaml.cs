@@ -41,10 +41,15 @@ namespace SamSoarII.AppMain.Project
             get { return this.lnvmodel; }
         }
         
+        public bool IsMasked
+        {
+            get { return lnvmodel != null && lnvmodel.IsMasked; }
+        }
+
         private bool ismodified;
         public bool IsModified
         {
-            get { return this.ismodified; }
+            get { return !IsMasked && this.ismodified; }
         }
 
         private LadderChart lchart;
@@ -90,6 +95,7 @@ namespace SamSoarII.AppMain.Project
             this.lnvmodel = _lnvmodel;
             lnvmodel.ElementChanged += OnElementChanged;
             lnvmodel.VerticalLineChanged += OnVerticalLineChanged;
+            lnvmodel.MaskChanged += OnMaskChanged;
             Update();
         }
 
@@ -97,12 +103,12 @@ namespace SamSoarII.AppMain.Project
         {
             lnvmodel.ElementChanged -= OnElementChanged;
             lnvmodel.VerticalLineChanged -= OnVerticalLineChanged;
+            lnvmodel.MaskChanged -= OnMaskChanged;
             this.lnvmodel = null;
         }
 
         public void Update()
         {
-            ismodified = false;
             int rowid = 0;
             RowDefinition rdef;
             NetworkHeader.Text = String.Format("Network {0:d}", lnvmodel?.NetworkNumber);
@@ -126,6 +132,15 @@ namespace SamSoarII.AppMain.Project
                     : "Cannot found network.";
                 return;
             }
+            if (IsMasked)
+            {
+                tberr.Background = Brushes.Gray;
+                tberr.Text = String.Format(
+                    App.CultureIsZH_CH() ? "Network {0:d} 已被屏蔽！" : "Network {0:d} has been masked!",
+                    lnvmodel.NetworkNumber);
+                return;
+            }
+            ismodified = false;
             this.lchart = GenerateHelper.CreateLadderChart(lnvmodel.GetElements().Union(lnvmodel.GetVerticalLines()));
             if (lchart.checkOpenCircuit())
             {
@@ -279,6 +294,11 @@ namespace SamSoarII.AppMain.Project
         private void OnVerticalLineChanged(object sender, LadderElementChangedArgs e)
         {
             ismodified = true;
+        }
+
+        private void OnMaskChanged(object sender, RoutedEventArgs e)
+        {
+            Update();
         }
         
         #region Cursor
