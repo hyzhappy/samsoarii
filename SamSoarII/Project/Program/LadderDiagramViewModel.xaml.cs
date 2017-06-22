@@ -1274,10 +1274,14 @@ namespace SamSoarII.AppMain.Project
             _selectAllNetworks.Clear();
             var node = _ladderNetworks.Find(_selectStartNetwork);
             node = node.Previous;
-            while (node != null && count-- > 0)
+            while (node != null && count > 0)
             {
-                _selectAllNetworks.Add(node.Value);
-                _selectAllNetworkCache.Add(node.Value);
+                if (!node.Value.IsMasked)
+                {
+                    _selectAllNetworks.Add(node.Value);
+                    _selectAllNetworkCache.Add(node.Value);
+                    count--;
+                }
                 node = node.Previous;
             }
         }
@@ -1311,10 +1315,14 @@ namespace SamSoarII.AppMain.Project
             _selectAllNetworks.Clear();
             var node = _ladderNetworks.Find(_selectStartNetwork);
             node = node.Next;
-            while (node != null && count-- > 0)
+            while (node != null && count > 0)
             {
-                _selectAllNetworks.Add(node.Value);
-                _selectAllNetworkCache.Add(node.Value);
+                if (!node.Value.IsMasked)
+                {
+                    _selectAllNetworks.Add(node.Value);
+                    _selectAllNetworkCache.Add(node.Value);
+                    count--;
+                }
                 node = node.Next;
             }
         }
