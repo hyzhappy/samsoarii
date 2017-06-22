@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.UserInterface"
         mc:Ignorable="d"
-        Title="LoadingWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"  Height="160" Width="620" Background="#FFF6F6F6">
+        Title="LoadingWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Height="160" Width="620" Background="#FFF6F6F6">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"></RowDefinition>

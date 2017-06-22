@@ -78,7 +78,7 @@ namespace SamSoarII.AppMain.UI
             DataContext = this;
             InitializeAvalonDock();
             _interactionFacade = new InteractionFacade(this);
-            this.Loaded += MainWindow_Loaded;
+            Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
@@ -180,7 +180,27 @@ namespace SamSoarII.AppMain.UI
         {
             TreeViewGrid.Children.Clear();
         }
-
+        //Called when close or load current project
+        public void ResetToolBar(bool isClose, int viewmode = MainTabControl.VIEWMODE_LADDER)
+        {
+            if (isClose)
+            {
+                LadderModeButton.IsChecked = false;
+                InstModeButton.IsChecked = false;
+                CommentModeToggleButton.IsChecked = false;
+            }
+            else
+            {
+                if((viewmode & MainTabControl.VIEWMODE_LADDER) == 0)
+                    LadderModeButton.IsChecked = false;
+                else
+                    LadderModeButton.IsChecked = true;
+                if ((viewmode & MainTabControl.VIEWMODE_INST) == 0)
+                    InstModeButton.IsChecked = false;
+                else
+                    InstModeButton.IsChecked = true;
+            }
+        }
         #region Event handler
         private void Click_zh_Hans(object sender, RoutedEventArgs e)
         {
@@ -275,8 +295,6 @@ namespace SamSoarII.AppMain.UI
                     {
                         _interactionFacade.LoadProject(projectMessage.Value.Item2);
                         ProjectFileManager.Update(projectMessage.Value.Item1, projectMessage.Value.Item2);
-                        LadderModeButton.IsChecked = true;
-                        InstModeButton.IsChecked = false;
                         LACProj.Show();
                     }
                 }
@@ -287,42 +305,6 @@ namespace SamSoarII.AppMain.UI
         {
             return MainTab.InnerScroll;
         }
-        private void OnTabItemHeaderCancelButtonClick(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            if (button != null)
-            {
-                TabItem tabitem = button.TemplatedParent as TabItem;
-                if (tabitem != null)
-                {
-                    ITabItem tab = tabitem.Content as ITabItem;
-                    if (tab != null)
-                    {
-                        _interactionFacade.CloseTabItem(tab);
-                    }
-                }
-            }
-        }
-        private void OnTabItemHeaderMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.MiddleButton == MouseButtonState.Pressed)
-            {
-                Grid grid = sender as Grid;
-                if (grid != null)
-                {
-                    TabItem tabitem = grid.TemplatedParent as TabItem;
-                    if (tabitem != null)
-                    {
-                        ITabItem tab = tabitem.Content as ITabItem;
-                        if (tab != null)
-                        {
-                            _interactionFacade.CloseTabItem(tab);
-                        }
-                    }
-                }
-            }
-        }
-
         #endregion
 
         #region Project
@@ -337,15 +319,11 @@ namespace SamSoarII.AppMain.UI
         private void CreateProject()
         {
             _interactionFacade.CreateProject(string.Format("{0}",Properties.Resources.Project), string.Empty);
-            LadderModeButton.IsChecked = true;
-            InstModeButton.IsChecked = false;
             LACProj.Show();
         }
         private bool OpenProject(string fullFileName)
         {
             bool ret = _interactionFacade.LoadProject(fullFileName);
-            LadderModeButton.IsChecked = true;
-            InstModeButton.IsChecked = false;
             LACProj.Show();
             return ret;
         }
@@ -568,7 +546,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (_interactionFacade != null)
             {
-                e.CanExecute = _interactionFacade.CurrentLadder != null && _interactionFacade.CurrentLadder.SelectionStatus != SelectStatus.Idle;
+                e.CanExecute = _interactionFacade.ProjectLoaded && _interactionFacade.CurrentLadder != null && _interactionFacade.CurrentLadder.SelectionStatus != SelectStatus.Idle;
             }
             else
             {
@@ -1077,6 +1055,10 @@ namespace SamSoarII.AppMain.UI
                     }
                     else
                         MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                };
+                dialog.Closed += (sender2, e2) => 
+                {
+                    MonitorModeButton.IsChecked = false;
                 };
                 dialog.CommunicationTest += (sender1, e1) => 
                 {

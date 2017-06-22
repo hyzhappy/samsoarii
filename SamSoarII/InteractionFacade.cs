@@ -137,6 +137,7 @@ namespace SamSoarII.AppMain
 
         public InteractionFacade(MainWindow mainwindow)
         {
+            StatusBarHepler.IFacade = this;
             _statusBarItem = StatusBarItem.Empty;
             this._mainWindow = mainwindow;
             mainwindow.InstShortCutOpen += Mainwindow_InstShortCutOpen;
@@ -314,7 +315,6 @@ namespace SamSoarII.AppMain
         {
             MainWindow.SB_Message.Text = message;
         }
-
         private void _projectModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Ladder")
@@ -457,7 +457,7 @@ namespace SamSoarII.AppMain
         {
             bool result = false;
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.LadderDiagram_check);
-            new StatusBarHepler(this, Properties.Resources.LadderDiagram_check).Start();
+            StatusBarHepler.UpdateMessageAsync(Properties.Resources.LadderDiagram_check);
             MainWindow.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 handle.Start();
@@ -474,9 +474,9 @@ namespace SamSoarII.AppMain
             if (!showreport)
             {
                 if (result)
-                    new StatusBarHepler(this, Properties.Resources.Ladder_Correct).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Correct);
                 else
-                    new StatusBarHepler(this, Properties.Resources.Ladder_Error).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Error);
             }
             return result;
         }
@@ -486,16 +486,16 @@ namespace SamSoarII.AppMain
             if (isLadder)
             {
                 if (isError)
-                    new StatusBarHepler(this, Properties.Resources.Ladder_Error).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Error);
                 else
-                    new StatusBarHepler(this, Properties.Resources.Ladder_Correct).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Correct);
             }
             else
             {
                 if (!isError)
-                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Correct).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Correct);
                 else
-                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Error).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Error);
             }
             handle.Abort();
             MessageBox.Show(message);
@@ -694,7 +694,7 @@ namespace SamSoarII.AppMain
             {
                 return result;
             }
-            new StatusBarHepler(this, Properties.Resources.Funcblock_Check).Start();
+            StatusBarHepler.UpdateMessageAsync(Properties.Resources.Funcblock_Check);
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
             MainWindow.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
@@ -708,9 +708,9 @@ namespace SamSoarII.AppMain
             if (!showreport)
             {
                 if (result)
-                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Correct).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Correct);
                 else
-                    new StatusBarHepler(this, Properties.Resources.FuncBlock_Error).Start();
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Error);
             }
             return result;
         }
@@ -1013,7 +1013,7 @@ namespace SamSoarII.AppMain
         }
         private void DeleteRowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (CurrentLadder != null && CurrentLadder.SelectionStatus != SelectStatus.Idle && CurrentLadder.CrossNetState == CrossNetworkState.NoCross)
+            if (ProjectLoaded && CurrentLadder != null && CurrentLadder.SelectionStatus != SelectStatus.Idle && CurrentLadder.CrossNetState == CrossNetworkState.NoCross)
             {
                 e.CanExecute = true;
             }
@@ -1028,7 +1028,7 @@ namespace SamSoarII.AppMain
         }
         private void InsertRowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (CurrentLadder != null && CurrentLadder.SelectionStatus == SelectStatus.SingleSelected)
+            if (ProjectLoaded && CurrentLadder != null && CurrentLadder.SelectionStatus == SelectStatus.SingleSelected)
             {
                 e.CanExecute = true;
             }
@@ -1224,7 +1224,6 @@ namespace SamSoarII.AppMain
                     return;
                 }
             }
-            MainWindow.ResetDock();
             ProjectModel = new ProjectModel(name);
             _projectModel.IFacade = this;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
@@ -1250,6 +1249,8 @@ namespace SamSoarII.AppMain
             _projectTreeView.NavigatedToNetwork += ElementList_NavigateToNetwork;
             _mainTabControl.Reset();
             _mainTabControl.ShowItem(_projectModel.MainRoutine);
+            MainWindow.ResetDock();
+            MainWindow.ResetToolBar(false, _mainTabControl.ViewMode);
             CurrentLadder = _projectModel.MainRoutine;
             _mainWindow.SetProjectTreeView(_projectTreeView);
             _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
@@ -1275,6 +1276,7 @@ namespace SamSoarII.AppMain
                 return;
             }
             MainWindow.ResetDock();
+            MainWindow.ResetToolBar(true);
             _projectTreeView.TabItemOpened -= OnTabOpened;
             _projectTreeView.PTVHandle -= OnGotPTVHandle;
             _projectTreeView.PTVRenamed -= OnPTVRenamed;
@@ -1327,7 +1329,6 @@ namespace SamSoarII.AppMain
                     return;
                 }
             }
-            MainWindow.ResetDock();
             if (_projectModel != null)
                 _projectModel.autoSavedManager.Abort();
             ProjectModel = ProjectHelper.LoadProject(ProjectFullFileName, new ProjectModel(String.Empty));
@@ -1354,6 +1355,8 @@ namespace SamSoarII.AppMain
             _projectModel.EleInitializeData = null;
             _mainTabControl.Reset();
             _mainTabControl.ShowItem(_projectModel.MainRoutine);
+            MainWindow.ResetDock();
+            MainWindow.ResetToolBar(false,_mainTabControl.ViewMode);
             CurrentLadder = _projectModel.MainRoutine;
             _mainWindow.SetProjectTreeView(_projectTreeView);
             _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
@@ -1369,7 +1372,7 @@ namespace SamSoarII.AppMain
         {
             ProjectFullFileName = fileName;
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
-            new StatusBarHepler(this, Properties.Resources.Project_Preparing).Start();
+            StatusBarHepler.UpdateMessageAsync(Properties.Resources.Project_Preparing);
             MainWindow.Dispatcher.Invoke(DispatcherPriority.Background,(ThreadStart)delegate()
             {
                 handle.Start();
@@ -1430,7 +1433,7 @@ namespace SamSoarII.AppMain
                     {
                         CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
                         LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
-                        new StatusBarHepler(this, Properties.Resources.Downloading).Start();
+                        StatusBarHepler.UpdateMessageAsync(Properties.Resources.Downloading);
                         MainWindow.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
                             handle.Start();
@@ -1441,12 +1444,12 @@ namespace SamSoarII.AppMain
                             handle.Completed = true;
                             if (!ret)
                             {
-                                new StatusBarHepler(this, Properties.Resources.Download_Fail).Start();
+                                StatusBarHepler.UpdateMessageAsync(Properties.Resources.Download_Fail);
                                 MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                             }
                             else
                             {
-                                new StatusBarHepler(this, Properties.Resources.MessageBox_Download_Successd).Start();
+                                StatusBarHepler.UpdateMessageAsync(Properties.Resources.MessageBox_Download_Successd);
                                 MessageBox.Show(Properties.Resources.MessageBox_Download_Successd);
                             }
                         });

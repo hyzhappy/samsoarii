@@ -30,36 +30,19 @@ namespace SamSoarII.AppMain.Project.Helper
             get { return 1; }
         }
     }
-    public class StatusBarHepler:IDisposable
+    public class StatusBarHepler
     {
-        private Thread _updateThread;
-        private InteractionFacade IFacade;
-        private string _message;
-        public StatusBarHepler(InteractionFacade _interactionFacade, string message)
+        public static InteractionFacade IFacade;
+        private static string _message;
+        public static void UpdateMessageAsync(string message)
         {
-            IFacade = _interactionFacade;
             _message = message;
+            ThreadPool.QueueUserWorkItem(ThreadStartingPoint);
         }
-        public void Start()
-        {
-            _updateThread = new Thread(ThreadStartingPoint);
-            _updateThread.SetApartmentState(ApartmentState.STA);
-            _updateThread.IsBackground = true;
-            _updateThread.Start();
-        }
-        private void Abort()
-        {
-            _updateThread.Abort();
-        }
-        private void ThreadStartingPoint()
+        private static void ThreadStartingPoint(object obj)
         {
             IFacade.MainWindow.Main_SB.Dispatcher.BeginInvoke(DispatcherPriority.Normal,(ThreadStart) delegate(){ IFacade.MainWindow.SB_Message.Text = _message; });
             Dispatcher.Run();
-        }
-
-        public void Dispose()
-        {
-            Abort();
         }
     }
 }
