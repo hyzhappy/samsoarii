@@ -111,6 +111,7 @@ namespace SamSoarII.AppMain.LadderCommand
         }
         public void Execute()
         {
+            //保证网络号的重排不会影响屏蔽号
             _ladderDiagram.SetNumberAsync(true);
             _ladderDiagram.AddNetwork(_replacedNetworks, _index,false);
             foreach (var net in _removedNetworks)
@@ -134,6 +135,7 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
+            //保证网络号的重排不会影响屏蔽号
             _ladderDiagram.SetNumberAsync(true);
             _ladderDiagram.AddNetwork(_removedNetworks, _index,true);
             foreach (var net in _replacedNetworks)

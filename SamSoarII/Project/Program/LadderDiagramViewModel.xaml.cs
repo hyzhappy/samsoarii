@@ -2382,7 +2382,7 @@ namespace SamSoarII.AppMain.Project
                         {
                             //全选, 补回一个网络
                             _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
-                                this, new LadderNetworkViewModel(this, 0), _selectAllNetworks, index));
+                                this, new LadderNetworkViewModel(this, 0), _selectAllNetworks, 0));
                         }
                         else
                         {
@@ -2448,7 +2448,7 @@ namespace SamSoarII.AppMain.Project
                             {
                                 //全选，补回一个空网络
                                 _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
-                                    this, new LadderNetworkViewModel(this, 0), removednets, index));
+                                    this, new LadderNetworkViewModel(this, 0), removednets, 0));
                             }
                             else
                             {
