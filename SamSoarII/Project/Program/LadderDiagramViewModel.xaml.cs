@@ -785,16 +785,19 @@ namespace SamSoarII.AppMain.Project
             ReloadNetworksToStackPanel();
         }
 
-        public void AddNetwork(IEnumerable<LadderNetworkViewModel> nets, int index)
+        public void AddNetwork(IEnumerable<LadderNetworkViewModel> nets, int index,bool isUndo)
         {
-            if (nets.Count() == 0) return; 
+            if (nets.Count() == 0) return;
             SortedSet<LadderNetworkViewModel> maskedNetworks = new SortedSet<LadderNetworkViewModel>();
-            foreach (var network in new List<LadderNetworkViewModel>(_ladderNetworks))
+            if (isUndo)
             {
-                if (network.IsMasked)
+                foreach (var network in new List<LadderNetworkViewModel>(_ladderNetworks))
                 {
-                    _ladderNetworks.Remove(network);
-                    maskedNetworks.Add(network);
+                    if (network.IsMasked)
+                    {
+                        _ladderNetworks.Remove(network);
+                        maskedNetworks.Add(network);
+                    }
                 }
             }
             if (_ladderNetworks.Count > 0)
@@ -857,22 +860,25 @@ namespace SamSoarII.AppMain.Project
                     m++;
                 }
             }
-            foreach (var maskedNetwork in maskedNetworks)
+            if (isUndo)
             {
-                LinkedListNode<LadderNetworkViewModel> newnode = new LinkedListNode<LadderNetworkViewModel>(maskedNetwork);
-                var cnt = newnode.Value.MaskNumber;
-                var node = _ladderNetworks.First;
-                while ((cnt-- > 0) && node != null) node = node.Next;
-                if (node != null)
-                    _ladderNetworks.AddBefore(node, newnode);
-                else
-                    _ladderNetworks.AddLast(newnode);
-            }
-            int n = 0;
-            foreach (var network in _ladderNetworks)
-            {
-                network.NetworkNumber = n;
-                n++;
+                foreach (var maskedNetwork in maskedNetworks)
+                {
+                    LinkedListNode<LadderNetworkViewModel> newnode = new LinkedListNode<LadderNetworkViewModel>(maskedNetwork);
+                    var cnt = newnode.Value.MaskNumber;
+                    var node = _ladderNetworks.First;
+                    while ((cnt-- > 0) && node != null) node = node.Next;
+                    if (node != null)
+                        _ladderNetworks.AddBefore(node, newnode);
+                    else
+                        _ladderNetworks.AddLast(newnode);
+                }
+                int n = 0;
+                foreach (var network in _ladderNetworks)
+                {
+                    network.NetworkNumber = n;
+                    n++;
+                }
             }
             ReloadNetworksToStackPanel();
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));

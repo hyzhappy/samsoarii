@@ -50,7 +50,7 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
-            _ladderDiagram.AddNetwork(_removedNetworks, _index);
+            _ladderDiagram.AddNetwork(_removedNetworks, _index,true);
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.UpdateModelMessageByNetwork();
             if (_area != null)
