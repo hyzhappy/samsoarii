@@ -48,9 +48,9 @@
     <Compile Include="FuncBlockModel\FuncModel.cs" />
     <Compile Include="LadderChartModel\LadderChart.cs" />
     <Compile Include="LadderChartModel\LCNode.cs" />
-    <Compile Include="LogicGraph\LGEdge.cs" />
-    <Compile Include="LogicGraph\LGraph.cs" />
-    <Compile Include="LogicGraph\LGVertex.cs" />
+    <Compile Include="LadderGraphModel\LGEdge.cs" />
+    <Compile Include="LadderGraphModel\LadderGraph.cs" />
+    <Compile Include="LadderGraphModel\LGVertex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\BreakPointManager.cs" />
     <Compile Include="Utility\ExprHelper.cs" />

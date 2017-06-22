@@ -208,6 +208,7 @@ namespace SamSoarII.AppMain.Project
                     CommentAreaExpander.Background = Brushes.LightCyan;
                     LadderCanvas.Background = Brushes.Transparent;
                 }
+                MaskChanged(this, new RoutedEventArgs());
             }
         }
         private bool _isCommendMode;
@@ -1093,6 +1094,8 @@ namespace SamSoarII.AppMain.Project
             return LadderElements.Values.OrderBy(x => { return x.Y; }).Last().Y;
         }
         #region Event handlers
+
+        public event RoutedEventHandler MaskChanged = delegate { };
 
         #region Relative to Element changed
         public event LadderElementChangedHandler ElementChanged = delegate { };

@@ -12,6 +12,9 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkChangeElementArea
     {
+        static public NetworkChangeElementArea Empty { get; private set; }
+            = new NetworkChangeElementArea();
+
         public SelectStatus SU_Select { get; set; }
         public CrossNetworkState SU_Cross { get; set; }
         public int NetworkNumberStart { get; set; }
@@ -23,6 +26,7 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Select(LadderNetworkViewModel lnvmodel)
         {
+            if (this == Empty) return;
             LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
             ProjectModel pmodel = ldvmodel.ProjectModel;
             InteractionFacade ifacade = pmodel.IFacade;

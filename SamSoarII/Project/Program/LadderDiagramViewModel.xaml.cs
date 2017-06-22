@@ -629,7 +629,8 @@ namespace SamSoarII.AppMain.Project
         public void IFAddNetwork(LadderNetworkViewModel network)
         {
             network.LDVModel = this;
-            var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
+            var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
+                this, network, network.NetworkNumber, NetworkChangeElementArea.Empty);
             _commandManager.Execute(command);
             network.PropertyChanged += Network_PropertyChanged;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
@@ -642,7 +643,8 @@ namespace SamSoarII.AppMain.Project
 
         public void IFRemoveNetwork(LadderNetworkViewModel network)
         {
-            var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
+            var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(
+                this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
             _commandManager.Execute(command);
             network.PropertyChanged -= Network_PropertyChanged;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
@@ -2494,8 +2496,16 @@ namespace SamSoarII.AppMain.Project
                     {
                         removednets.Add(net);
                     }
-                    area.NetworkNumberStart = _selectRectOwner.NetworkNumber;
-                    area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
+                    if (CrossNetState == CrossNetworkState.CrossUp)
+                    {
+                        area.NetworkNumberStart = _selectStartNetwork.NetworkNumber - removednets.Count() + 1;
+                        area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
+                    }
+                    else
+                    {
+                        area.NetworkNumberStart = _selectStartNetwork.NetworkNumber;
+                        area.NetworkNumberEnd = area.NetworkNumberStart + replacednets.Count() - 1;
+                    }
                     int index = removednets.First().NetworkNumber;
                     var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
                         this, replacednets, removednets, index, area);

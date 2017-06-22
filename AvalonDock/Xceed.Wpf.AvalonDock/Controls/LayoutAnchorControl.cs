@@ -107,8 +107,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
         private bool called_Show = false;
         public void Show()
         {
-            if (_model.IsFloat || _model.IsDock)
-                return;
+            if (_model.IsFloat || _model.IsDock) return;
             //if (!_model.IsActive)
            // {
                 called_Show = true;
