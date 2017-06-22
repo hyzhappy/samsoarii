@@ -1095,6 +1095,8 @@ namespace SamSoarII.AppMain.Project
         }
         #region Event handlers
 
+        public event RoutedEventHandler MaskChanged = delegate { };
+
         #region Relative to Element changed
         public event LadderElementChangedHandler ElementChanged = delegate { };
         public event LadderElementChangedHandler VerticalLineChanged = delegate { };

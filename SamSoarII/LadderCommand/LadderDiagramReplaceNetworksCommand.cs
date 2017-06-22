@@ -119,6 +119,11 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_removedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
+            if (_area != null)
+            {
+                LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
+                _area.Select(lnvmodel);
+            }
         }
 
         public void Redo()

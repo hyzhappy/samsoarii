@@ -629,7 +629,8 @@ namespace SamSoarII.AppMain.Project
         public void IFAddNetwork(LadderNetworkViewModel network)
         {
             network.LDVModel = this;
-            var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(this, network, network.NetworkNumber);
+            var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
+                this, network, network.NetworkNumber, NetworkChangeElementArea.Empty);
             _commandManager.Execute(command);
             network.PropertyChanged += Network_PropertyChanged;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
@@ -642,7 +643,8 @@ namespace SamSoarII.AppMain.Project
 
         public void IFRemoveNetwork(LadderNetworkViewModel network)
         {
-            var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
+            var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(
+                this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
             _commandManager.Execute(command);
             network.PropertyChanged -= Network_PropertyChanged;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));

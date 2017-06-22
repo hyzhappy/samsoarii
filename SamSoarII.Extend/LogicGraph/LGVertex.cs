@@ -188,8 +188,7 @@ namespace SamSoarII.Extend.LogicGraph
                 // 表达式合并
                 bool hasor = false;
                 Expr = ExprHelper.Merge(subexprs, 0, subexprs.Count - 1, ref hasor);
-                if (hasor)
-                    Expr = "(" + Expr + ")";
+                if (hasor) Expr = "(" + Expr + ")";
             }
             // 如果存在前向边
             else if (BackEdges.Count > 0)
