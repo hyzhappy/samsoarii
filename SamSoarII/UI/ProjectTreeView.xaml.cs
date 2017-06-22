@@ -1060,9 +1060,7 @@ namespace SamSoarII.AppMain.UI
                         lnvmodel.NetworkNumber = prev.NetworkNumber + 1;
                         if (ldvmodel == lnvmodel.LDVModel
                          && lnvmodel.NetworkNumber > _networknumber)
-                        {
                             lnvmodel.NetworkNumber--;
-                        }
                         break;
                     default:
                         DragItem = null;

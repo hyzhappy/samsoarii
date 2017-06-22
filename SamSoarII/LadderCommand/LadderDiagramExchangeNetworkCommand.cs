@@ -20,6 +20,7 @@ namespace SamSoarII.AppMain.LadderCommand
         }
         public void Execute()
         {
+            _ladderDiagram.SetNumberAsync(false);
             if (_sourceNetwork.NetworkNumber == _desNetwork.NetworkNumber - 1)
             {
                 _ladderDiagram.RemoveNetwork(_sourceNetwork);

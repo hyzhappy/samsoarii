@@ -735,7 +735,13 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Network manipulation，no command, invoked by command form method
-
+        public void SetNumberAsync(bool isAsync)
+        {
+            foreach (var network in _ladderNetworks)
+            {
+                network.IsAsyncNumber = isAsync;
+            }
+        }
         public void AddNetwork(LadderNetworkViewModel net, int index)
         {
             if (_ladderNetworks.Count > 0)

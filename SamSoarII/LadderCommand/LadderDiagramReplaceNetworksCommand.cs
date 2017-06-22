@@ -111,6 +111,7 @@ namespace SamSoarII.AppMain.LadderCommand
         }
         public void Execute()
         {
+            _ladderDiagram.SetNumberAsync(true);
             _ladderDiagram.AddNetwork(_replacedNetworks, _index,false);
             foreach (var net in _removedNetworks)
             {
@@ -133,6 +134,7 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
+            _ladderDiagram.SetNumberAsync(true);
             _ladderDiagram.AddNetwork(_removedNetworks, _index,true);
             foreach (var net in _replacedNetworks)
             {
