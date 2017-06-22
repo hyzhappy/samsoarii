@@ -27,7 +27,7 @@
         <CommandBinding Command="ApplicationCommands.SelectAll"></CommandBinding>
         <!--View Command-->
         <CommandBinding Command="{x:Static app:GlobalCommand.ZoomInCommand}" Executed="OnZoomInCommandExecute" CanExecute="ZoomInCommandCanExecute"></CommandBinding>
-        <CommandBinding x:Uid="CommandBinding_14" Command="{x:Static app:GlobalCommand.ZoomOutCommand}" Executed="OnZoomOutCommandExecute" CanExecute="ZoomOutCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.ZoomOutCommand}" Executed="OnZoomOutCommandExecute" CanExecute="ZoomOutCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" Executed="OnShowProjectTreeViewCommand" CanExecute="ShowProjectTreeViewCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" Executed="OnShowMainMonitorCommand" CanExecute="ShowMainMonitorCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowCommunicationSettingDialogCommand}" Executed="OnShowCommunicationSettingDialogExecute" CanExecute="ShowCommunicationSettingDialogCanExecute"></CommandBinding>

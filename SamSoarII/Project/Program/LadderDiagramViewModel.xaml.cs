@@ -2588,6 +2588,8 @@ namespace SamSoarII.AppMain.Project
         private void OnSelectAllCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             SelectionStatus = SelectStatus.MultiSelected;
+            CrossNetState = CrossNetworkState.CrossDown;
+            _selectStartNetwork = _ladderNetworks.First.Value;
             foreach (var net in _ladderNetworks)
             {
                 _selectAllNetworkCache.Add(net);
