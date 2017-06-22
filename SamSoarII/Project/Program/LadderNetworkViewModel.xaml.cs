@@ -442,11 +442,13 @@ namespace SamSoarII.AppMain.Project
             }
             set
             {
-                if (!_isSelectAreaMode & value)
+                if (!_isSelectAreaMode && value
+                 && !LadderCanvas.Children.Contains(SelectArea))
                 {
                     LadderCanvas.Children.Add(SelectArea);
                 }
-                if (!value & _isSelectAreaMode)
+                if (!value && _isSelectAreaMode
+                 && LadderCanvas.Children.Contains(SelectArea))
                 {
                     LadderCanvas.Children.Remove(SelectArea);
                 }

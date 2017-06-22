@@ -65,7 +65,7 @@ namespace SamSoarII.AppMain.Project
         {
             get { return this._projectModel; }
         }
-
+        
         private string _programName;
         public string ProgramName
         {
@@ -130,7 +130,7 @@ namespace SamSoarII.AppMain.Project
                 SelectionStatus = SelectStatus.Idle;
             }
         }
-
+        
         #region Floating
 
         public bool IsFloat { get; set; }
@@ -1075,7 +1075,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectLeftWithLine()
+        private void SelectRectLeftWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1103,7 +1103,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectRightWithLine()
+        private void SelectRectRightWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1133,7 +1133,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectUpWithLine()
+        private void SelectRectUpWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1159,7 +1159,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectDownWithLine()
+        private void SelectRectDownWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1188,6 +1188,26 @@ namespace SamSoarII.AppMain.Project
                     SelectRectDown();
                 }
             }
+        }
+
+        private void PushUp(int x, int y)
+        {
+
+        }
+
+        private void PushDown(int x, int y)
+        {
+
+        }
+
+        private void PushLeft(int x, int y)
+        {
+
+        }
+
+        private void PushRight(int x, int y)
+        {
+
         }
 
         #endregion
@@ -1587,7 +1607,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectLeftWithLine();
+                    SelectRectLeftWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
@@ -1603,7 +1623,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectRightWithLine();
+                    SelectRectRightWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
@@ -1619,7 +1639,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectDownWithLine();
+                    SelectRectDownWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
@@ -1635,7 +1655,7 @@ namespace SamSoarII.AppMain.Project
             {         
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectUpWithLine();            
+                    SelectRectUpWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
@@ -2394,9 +2414,9 @@ namespace SamSoarII.AppMain.Project
                         _commandManager.Execute(command);
                     }
                     XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(listele, new List<VerticalLineViewModel>(), _selectRect.X, _selectRect.Y, 1, 1);
-                    XElement xele_area = new XElement("Area");
-                    area.Save(xele_area);
-                    xEle.Add(xele_area);
+                    //XElement xele_area = new XElement("Area");
+                    //area.Save(xele_area);
+                    //xEle.Add(xele_area);
                     Clipboard.SetData("LadderContent", xEle.ToString());
                 }
             }
@@ -2436,9 +2456,9 @@ namespace SamSoarII.AppMain.Project
                                     this, removednets, index));
                             }
                         }
-                        XElement xele_area = new XElement("Area");
-                        area.Save(xele_area);
-                        xEle.Add(xele_area);
+                        //XElement xele_area = new XElement("Area");
+                        //area.Save(xele_area);
+                        //xEle.Add(xele_area);
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
                     }
@@ -2819,9 +2839,12 @@ namespace SamSoarII.AppMain.Project
             {
                 case SelectStatus.SingleSelected:
                     LadderNetworkViewModel lnvmodel = GetNetworkByNumber(area.NetworkNumberStart);
-                    lnvmodel.AcquireSelectRect();
-                    SelectionRect.X = area.X1;
-                    SelectionRect.Y = area.Y1;
+                    if (!lnvmodel.IsMasked)
+                    {
+                        lnvmodel.AcquireSelectRect();
+                        SelectionRect.X = area.X1;
+                        SelectionRect.Y = area.Y1;
+                    }
                     break;
                 case SelectStatus.MultiSelected:
                     if (area.SU_Cross != CrossNetworkState.NoCross)
@@ -2829,8 +2852,8 @@ namespace SamSoarII.AppMain.Project
                         for (int nn = area.NetworkNumberStart; nn <= area.NetworkNumberEnd; nn++)
                         {
                             LadderNetworkViewModel _lnvmodel = GetNetworkByNumber(nn);
+                            if (_lnvmodel.IsMasked) continue;
                             _lnvmodel.IsSelectAllMode = true;
-                            //_lnvmodel.IsSelectAreaMode = true;
                             if (nn == area.NetworkNumberStart
                              && area.SU_Cross == CrossNetworkState.CrossDown)
                             {
@@ -2849,12 +2872,17 @@ namespace SamSoarII.AppMain.Project
                     {
                         case CrossNetworkState.CrossUp:
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberEnd);
+                            while (_selectStartNetwork.IsMasked)
+                                _selectStartNetwork = GetNetworkByNumber(_selectStartNetwork.NetworkNumber - 1);
                             break;
                         case CrossNetworkState.CrossDown:
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
+                            while (_selectStartNetwork.IsMasked)
+                                _selectStartNetwork = GetNetworkByNumber(_selectStartNetwork.NetworkNumber + 1);
                             break;
                         case CrossNetworkState.NoCross:
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
+                            _selectStartNetwork.IsSelectAreaMode = true;
                             _selectStartNetwork.SelectAreaFirstX = area.X1;
                             _selectStartNetwork.SelectAreaFirstY = area.Y1;
                             _selectStartNetwork.SelectAreaSecondX = area.X2;
