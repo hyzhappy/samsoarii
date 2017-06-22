@@ -65,7 +65,7 @@ namespace SamSoarII.AppMain.Project
         {
             get { return this._projectModel; }
         }
-
+        
         private string _programName;
         public string ProgramName
         {
@@ -130,7 +130,7 @@ namespace SamSoarII.AppMain.Project
                 SelectionStatus = SelectStatus.Idle;
             }
         }
-
+        
         #region Floating
 
         public bool IsFloat { get; set; }
@@ -2382,9 +2382,9 @@ namespace SamSoarII.AppMain.Project
                         _commandManager.Execute(command);
                     }
                     XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(listele, new List<VerticalLineViewModel>(), _selectRect.X, _selectRect.Y, 1, 1);
-                    XElement xele_area = new XElement("Area");
-                    area.Save(xele_area);
-                    xEle.Add(xele_area);
+                    //XElement xele_area = new XElement("Area");
+                    //area.Save(xele_area);
+                    //xEle.Add(xele_area);
                     Clipboard.SetData("LadderContent", xEle.ToString());
                 }
             }
@@ -2424,9 +2424,9 @@ namespace SamSoarII.AppMain.Project
                                     this, removednets, index));
                             }
                         }
-                        XElement xele_area = new XElement("Area");
-                        area.Save(xele_area);
-                        xEle.Add(xele_area);
+                        //XElement xele_area = new XElement("Area");
+                        //area.Save(xele_area);
+                        //xEle.Add(xele_area);
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
                     }
@@ -2807,9 +2807,12 @@ namespace SamSoarII.AppMain.Project
             {
                 case SelectStatus.SingleSelected:
                     LadderNetworkViewModel lnvmodel = GetNetworkByNumber(area.NetworkNumberStart);
-                    lnvmodel.AcquireSelectRect();
-                    SelectionRect.X = area.X1;
-                    SelectionRect.Y = area.Y1;
+                    if (!lnvmodel.IsMasked)
+                    {
+                        lnvmodel.AcquireSelectRect();
+                        SelectionRect.X = area.X1;
+                        SelectionRect.Y = area.Y1;
+                    }
                     break;
                 case SelectStatus.MultiSelected:
                     if (area.SU_Cross != CrossNetworkState.NoCross)
@@ -2817,8 +2820,8 @@ namespace SamSoarII.AppMain.Project
                         for (int nn = area.NetworkNumberStart; nn <= area.NetworkNumberEnd; nn++)
                         {
                             LadderNetworkViewModel _lnvmodel = GetNetworkByNumber(nn);
+                            if (_lnvmodel.IsMasked) continue;
                             _lnvmodel.IsSelectAllMode = true;
-                            //_lnvmodel.IsSelectAreaMode = true;
                             if (nn == area.NetworkNumberStart
                              && area.SU_Cross == CrossNetworkState.CrossDown)
                             {
@@ -2837,9 +2840,13 @@ namespace SamSoarII.AppMain.Project
                     {
                         case CrossNetworkState.CrossUp:
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberEnd);
+                            while (_selectStartNetwork.IsMasked)
+                                _selectStartNetwork = GetNetworkByNumber(_selectStartNetwork.NetworkNumber - 1);
                             break;
                         case CrossNetworkState.CrossDown:
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
+                            while (_selectStartNetwork.IsMasked)
+                                _selectStartNetwork = GetNetworkByNumber(_selectStartNetwork.NetworkNumber + 1);
                             break;
                         case CrossNetworkState.NoCross:
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
