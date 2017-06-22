@@ -1043,25 +1043,29 @@ namespace SamSoarII.AppMain.UI
             }
             if ((DragItem.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
             {
-                LadderNetworkViewModel lnvmodel = (LadderNetworkViewModel)(DragItem.RelativeObject);
-                lnvmodel.ReleaseSelectRect();
-                lnvmodel.IsSelectAreaMode = false;
-                LadderDiagramViewModel ldvmodel = null;
-                int _networknumber = lnvmodel.NetworkNumber;
+                LadderNetworkViewModel lnvmodel_old = (LadderNetworkViewModel)(DragItem.RelativeObject);
+                LadderNetworkViewModel lnvmodel_new = null;
+                LadderDiagramViewModel ldvmodel_old = lnvmodel_old.LDVModel;
+                LadderDiagramViewModel ldvmodel_new = null;
+                lnvmodel_old.ReleaseSelectRect();
+                lnvmodel_old.IsSelectAreaMode = false;
+                XElement xele = ProjectHelper.CreateXElementByLadderNetwork(lnvmodel_old);
                 switch (CurrentItem.Flags & 0xf)
                 {
                     case ProjectTreeViewItem.TYPE_ROUTINE:
-                        ldvmodel = (LadderDiagramViewModel)(CurrentItem.RelativeObject);
-                        lnvmodel.NetworkNumber = 0;
+                        ldvmodel_new = (LadderDiagramViewModel)(CurrentItem.RelativeObject);
+                        lnvmodel_new = ProjectHelper.CreateLadderNetworkByXElement(xele, ldvmodel_new);
+                        lnvmodel_new.NetworkNumber = 0;
                         break;
                     case ProjectTreeViewItem.TYPE_NETWORK:
                         LadderNetworkViewModel prev = (LadderNetworkViewModel)(CurrentItem.RelativeObject);
-                        ldvmodel = prev.LDVModel;
-                        lnvmodel.NetworkNumber = prev.NetworkNumber + 1;
-                        if (ldvmodel == lnvmodel.LDVModel
-                         && lnvmodel.NetworkNumber > _networknumber)
+                        ldvmodel_new = prev.LDVModel;
+                        lnvmodel_new = ProjectHelper.CreateLadderNetworkByXElement(xele, ldvmodel_new);
+                        lnvmodel_new.NetworkNumber = prev.NetworkNumber + 1;
+                        if (ldvmodel_new == ldvmodel_old
+                         && lnvmodel_new.NetworkNumber > lnvmodel_old.NetworkNumber)
                         {
-                            lnvmodel.NetworkNumber--;
+                            lnvmodel_new.NetworkNumber--;
                         }
                         break;
                     default:
@@ -1071,12 +1075,12 @@ namespace SamSoarII.AppMain.UI
                 ProjectTreeViewEventArgs _e = new ProjectTreeViewEventArgs(
                     ProjectTreeViewEventArgs.TYPE_NETWORK |
                     ProjectTreeViewEventArgs.FLAG_REMOVE,
-                    lnvmodel, lnvmodel.LDVModel);
+                    lnvmodel_old, ldvmodel_old);
                 PTVHandle(this, _e);
                 _e = new ProjectTreeViewEventArgs(
                     ProjectTreeViewEventArgs.TYPE_NETWORK |
                     ProjectTreeViewEventArgs.FLAG_INSERT,
-                    lnvmodel, ldvmodel);
+                    lnvmodel_new, ldvmodel_new);
                 PTVHandle(this, _e);
             }
             else

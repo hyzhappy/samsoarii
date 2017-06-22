@@ -70,7 +70,7 @@ namespace SamSoarII.AppMain.Project
             foreach (LadderNetworkViewModel lnvmodel in ldvmodel.GetNetworks())
             {
                 InstructionNetworkViewModel invmodel = lnvmodel.INVModel;
-                if (invmodel.IsModified)
+                if (invmodel != null && invmodel.IsModified)
                 {
                     invmodel.Dispatcher.Invoke(() =>
                     {

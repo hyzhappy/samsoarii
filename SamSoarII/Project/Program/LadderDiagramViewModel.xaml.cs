@@ -1069,7 +1069,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectLeftWithLine()
+        private void SelectRectLeftWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1097,7 +1097,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectRightWithLine()
+        private void SelectRectRightWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1127,7 +1127,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectUpWithLine()
+        private void SelectRectUpWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1153,7 +1153,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private void SelectRectDownWithLine()
+        private void SelectRectDownWithLine(bool expand = false)
         {
             if (LadderMode != LadderMode.Edit)
             {
@@ -1182,6 +1182,26 @@ namespace SamSoarII.AppMain.Project
                     SelectRectDown();
                 }
             }
+        }
+
+        private void PushUp(int x, int y)
+        {
+
+        }
+
+        private void PushDown(int x, int y)
+        {
+
+        }
+
+        private void PushLeft(int x, int y)
+        {
+
+        }
+
+        private void PushRight(int x, int y)
+        {
+
         }
 
         #endregion
@@ -1581,7 +1601,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectLeftWithLine();
+                    SelectRectLeftWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
@@ -1597,7 +1617,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectRightWithLine();
+                    SelectRectRightWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
@@ -1613,7 +1633,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectDownWithLine();
+                    SelectRectDownWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
@@ -1629,7 +1649,7 @@ namespace SamSoarII.AppMain.Project
             {         
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
-                    SelectRectUpWithLine();            
+                    SelectRectUpWithLine((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift);
                 }
                 else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                 {
