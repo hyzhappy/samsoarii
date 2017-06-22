@@ -150,7 +150,7 @@ namespace SamSoarII.AppMain.Project
             get => _networkNumber;
             set
             {
-                if (!IsMasked || !IsAsyncNumber) MaskNumber = value;
+                if (!IsMasked) MaskNumber = value;
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
@@ -180,10 +180,6 @@ namespace SamSoarII.AppMain.Project
                 NetworkDescriptionTextBlock.Text = value;
             }
         }
-        /// <summary>
-        /// 网络号与屏蔽号是否异步
-        /// </summary>
-        public bool IsAsyncNumber { get; set; } = false;
         /// <summary>
         /// 屏蔽号。用于网络剪切，复制，粘贴操作时保存网络位置信息。
         /// </summary>

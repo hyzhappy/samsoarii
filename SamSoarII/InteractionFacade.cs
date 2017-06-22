@@ -1166,18 +1166,13 @@ namespace SamSoarII.AppMain
         {
             LadderDiagramViewModel tempItem;
             if (ProjectModel.MainRoutine.ProgramName == e.RefLadderName)
-            {
                 tempItem = ProjectModel.MainRoutine;
-            }
             else
-            {
                 tempItem = ProjectModel.SubRoutines.Where(x => { return x.ProgramName == e.RefLadderName; }).First();
-            }
             var network = tempItem.GetNetworkByNumber(e.NetworkNum);
+            if (network.IsMasked) return;
             if (!network.ladderExpander.IsExpand)
-            {
                 network.ladderExpander.IsExpand = true;
-            }
             network.AcquireSelectRect();
             tempItem.SelectionRect.X = e.X;
             tempItem.SelectionRect.Y = e.Y;
@@ -1187,7 +1182,7 @@ namespace SamSoarII.AppMain
         public bool NavigateToNetwork(BaseViewModel bvmodel)
         {
             LadderNetworkViewModel lnvmodel = _projectModel.GetNetwork(bvmodel);
-            if (lnvmodel == null) return false;
+            if (lnvmodel == null|| lnvmodel.IsMasked) return false;
             LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
             NavigateToNetwork(new NavigateToNetworkEventArgs(
                 lnvmodel.NetworkNumber, ldvmodel.ProgramName, bvmodel.X, bvmodel.Y));

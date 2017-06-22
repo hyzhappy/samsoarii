@@ -735,11 +735,11 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Network manipulation，no command, invoked by command form method
-        public void SetNumberAsync(bool isAsync)
+        public void SetMaskNumber()
         {
             foreach (var network in _ladderNetworks)
             {
-                network.IsAsyncNumber = isAsync;
+                network.MaskNumber = network.NetworkNumber;
             }
         }
         public void AddNetwork(LadderNetworkViewModel net, int index)
@@ -756,6 +756,7 @@ namespace SamSoarII.AppMain.Project
                     while (node != null)
                     {
                         node.Value.NetworkNumber++;
+                        if (node.Value.IsMasked) node.Value.MaskNumber++;//屏蔽号随网络的相对位置改变而改变
                         node = node.Next;
                     }
                 }
@@ -778,6 +779,7 @@ namespace SamSoarII.AppMain.Project
                     while (node != null)
                     {
                         node.Value.NetworkNumber = n;
+                        if (node.Value.IsMasked) node.Value.MaskNumber++;//屏蔽号随网络的相对位置改变而改变
                         n++;
                         node = node.Next;
                     }
@@ -894,10 +896,21 @@ namespace SamSoarII.AppMain.Project
         {
             if (_ladderNetworks.Count > 1)
             {
+                foreach (var net in nets)
+                {
+                    if (_ladderNetworks.Contains(net))
+                    {
+                        _ladderNetworks.Remove(net);
+                        net.PropertyChanged -= Network_PropertyChanged;
+                        LadderNetworkStackPanel.Children.Remove(net);
+                    }
+                }
             }
+            int n = 0;
+            foreach (var net in _ladderNetworks)
+                net.NetworkNumber = n++;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
-
         public void RemoveNetwork(LadderNetworkViewModel network)
         {
             if (_ladderNetworks.Count > 1)
@@ -910,6 +923,7 @@ namespace SamSoarII.AppMain.Project
                     while (node != null)
                     {
                         node.Value.NetworkNumber--;
+                        if (node.Value.IsMasked) node.Value.MaskNumber--;//屏蔽号随网络的相对位置改变而改变
                         node = node.Next;
                     }
                     _ladderNetworks.Remove(network);

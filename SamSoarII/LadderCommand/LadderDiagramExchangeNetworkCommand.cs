@@ -20,8 +20,6 @@ namespace SamSoarII.AppMain.LadderCommand
         }
         public void Execute()
         {
-            //保证网络号与屏蔽号同步
-            _ladderDiagram.SetNumberAsync(false);
             if (_sourceNetwork.NetworkNumber == _desNetwork.NetworkNumber - 1)
             {
                 _ladderDiagram.RemoveNetwork(_sourceNetwork);

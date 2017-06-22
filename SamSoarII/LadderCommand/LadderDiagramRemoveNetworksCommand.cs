@@ -35,12 +35,8 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Execute()
         {
-            //保证网络号的重排不会影响屏蔽号
-            _ladderDiagram.SetNumberAsync(true);
-            foreach(var net in _removedNetworks)
-            {
-                _ladderDiagram.RemoveNetwork(net);
-            }
+            _ladderDiagram.SetMaskNumber();
+            _ladderDiagram.RemoveNetworks(_removedNetworks);
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_removedNetworks);
         }
@@ -52,8 +48,6 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
-            //保证网络号的重排不会影响屏蔽号
-            _ladderDiagram.SetNumberAsync(true);
             _ladderDiagram.AddNetwork(_removedNetworks, _index,true);
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.UpdateModelMessageByNetwork();

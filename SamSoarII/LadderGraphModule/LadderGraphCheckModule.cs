@@ -55,6 +55,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 else
                 {
                     network.InitializeLadderLogicModules();
+                    if (network.IsSingleSelected()) network.ReleaseSelectRect();
                     LadderGraphRelocationModule.Execute(network);
                 }
             }
