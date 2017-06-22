@@ -109,27 +109,6 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
-            //_network.INVModel.Setup(_network);
-            /*
-            if (_elements.Count() + _vlines.Count() == 1)
-            {
-                // 将梯形图光标移到新生成的单个元件
-                BaseViewModel bvmodel = _elements.Count() == 1
-                    ? _elements.First() : _vlines.First();
-                _network.AcquireSelectRect();
-                LadderDiagramViewModel ldvmodel = _network.LDVModel;
-                ldvmodel.SelectionRect.X = bvmodel.X;
-                ldvmodel.SelectionRect.Y = bvmodel.Y;
-                if (bvmodel is VerticalLineViewModel)
-                    ldvmodel.SelectionRect.X++;
-                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
-                    new NavigateToNetworkEventArgs(
-                        _network.NetworkNumber,
-                        ldvmodel.ProgramName,
-                        ldvmodel.SelectionRect.X,
-                        ldvmodel.SelectionRect.Y));
-            }
-            else*/ 
             if (_area != null)
             {
                 _area.Select(_network);
@@ -159,26 +138,6 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(oldvline);
             }
-            //_network.INVModel.Setup(_network);
-            /*if (_oldelements.Count() + _oldvlines.Count() == 1)
-            {
-                // 将梯形图光标移到新生成的单个元件
-                BaseViewModel bvmodel = _oldelements.Count() == 1
-                    ? _oldelements.First() : _oldvlines.First();
-                _network.AcquireSelectRect();
-                LadderDiagramViewModel ldvmodel = _network.LDVModel;
-                ldvmodel.SelectionRect.X = bvmodel.X;
-                ldvmodel.SelectionRect.Y = bvmodel.Y;
-                if (bvmodel is VerticalLineViewModel)
-                    ldvmodel.SelectionRect.X++;
-                ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
-                    new NavigateToNetworkEventArgs(
-                        _network.NetworkNumber,
-                        ldvmodel.ProgramName,
-                        ldvmodel.SelectionRect.X,
-                        ldvmodel.SelectionRect.Y));
-            }
-            else */
             if (_oldarea != null)
             {
                 _oldarea.Select(_network);

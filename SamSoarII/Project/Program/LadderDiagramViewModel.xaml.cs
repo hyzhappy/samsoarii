@@ -2856,6 +2856,7 @@ namespace SamSoarII.AppMain.Project
                             break;
                         case CrossNetworkState.NoCross:
                             _selectStartNetwork = GetNetworkByNumber(area.NetworkNumberStart);
+                            _selectStartNetwork.IsSelectAreaMode = true;
                             _selectStartNetwork.SelectAreaFirstX = area.X1;
                             _selectStartNetwork.SelectAreaFirstY = area.Y1;
                             _selectStartNetwork.SelectAreaSecondX = area.X2;
