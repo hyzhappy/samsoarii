@@ -180,6 +180,9 @@ namespace SamSoarII.AppMain.Project
                 NetworkDescriptionTextBlock.Text = value;
             }
         }
+        /// <summary>
+        /// 屏蔽号。用于网络剪切，复制，粘贴操作时保存网络位置信息。
+        /// </summary>
         public int MaskNumber { get; set; }
         private bool _isMasked;
         public bool IsMasked

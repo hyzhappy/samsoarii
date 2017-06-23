@@ -28,7 +28,7 @@
                 </StackPanel.Resources>
                 <Grid x:Name="CommentAreaGrid" Background="Transparent">
                     <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
-                        <Expander x:Uid="CommentAreaExpander" x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
+                        <Expander x:Name="CommentAreaExpander" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan" MouseDoubleClick="OnEditComment">
                             <Expander.Header>
                                 <Grid x:Uid="Grid_2" Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
                                     <Grid.ColumnDefinitions>

@@ -110,7 +110,6 @@
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
     <Compile Include="Event\TabType.cs" />
     <Compile Include="Functionality\LadderVariable.cs" />
-    <Compile Include="Global\GlobalUsageList.cs" />
     <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramExchangeNetworkCommand.cs" />

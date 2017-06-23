@@ -81,11 +81,9 @@ namespace SamSoarII.AppMain.LadderCommand
         }
         public void Execute()
         {
+            _ladderDiagram.SetMaskNumber();
             _ladderDiagram.AddNetwork(_replacedNetworks, _index,false);
-            foreach (var net in _removedNetworks)
-            {
-                _ladderDiagram.RemoveNetwork(net);
-            }
+            _ladderDiagram.RemoveNetworks(_removedNetworks);
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_removedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
@@ -103,10 +101,7 @@ namespace SamSoarII.AppMain.LadderCommand
         public void Undo()
         {
             _ladderDiagram.AddNetwork(_removedNetworks, _index,true);
-            foreach (var net in _replacedNetworks)
-            {
-                _ladderDiagram.RemoveNetwork(net);
-            }
+            _ladderDiagram.RemoveNetworks(_replacedNetworks);
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_replacedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();

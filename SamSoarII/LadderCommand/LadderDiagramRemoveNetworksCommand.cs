@@ -35,10 +35,8 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Execute()
         {
-            foreach(var net in _removedNetworks)
-            {
-                _ladderDiagram.RemoveNetwork(net);
-            }
+            _ladderDiagram.SetMaskNumber();
+            _ladderDiagram.RemoveNetworks(_removedNetworks);
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_removedNetworks);
         }

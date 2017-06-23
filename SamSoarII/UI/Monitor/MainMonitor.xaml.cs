@@ -347,6 +347,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             foreach (var network in ldmodel.LadderNetworks.Where(x => { return x.NetworkNumber >= startindex && x.NetworkNumber <= endindex; }))
             {
+                if (network.IsMasked) continue;
                 AddElementByNetWork(network, table);
             }
             tables.Add(table);
@@ -370,9 +371,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             elementmodel.IntrasegmentAddr = model.Offset.Index;
                         }
                         else
-                        {
                             elementmodel.IsIntrasegment = false;
-                        }
                         elementmodel.SetShowTypes();
                         table.AddElement(elementmodel);
                     }

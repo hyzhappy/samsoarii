@@ -749,7 +749,13 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Network manipulation，no command, invoked by command form method
-
+        public void SetMaskNumber()
+        {
+            foreach (var network in _ladderNetworks)
+            {
+                network.MaskNumber = network.NetworkNumber;
+            }
+        }
         public void AddNetwork(LadderNetworkViewModel net, int index)
         {
             if (_ladderNetworks.Count > 0)
@@ -764,6 +770,7 @@ namespace SamSoarII.AppMain.Project
                     while (node != null)
                     {
                         node.Value.NetworkNumber++;
+                        if (node.Value.IsMasked) node.Value.MaskNumber++;//屏蔽号随网络的相对位置改变而改变
                         node = node.Next;
                     }
                 }
@@ -786,6 +793,7 @@ namespace SamSoarII.AppMain.Project
                     while (node != null)
                     {
                         node.Value.NetworkNumber = n;
+                        if (node.Value.IsMasked) node.Value.MaskNumber++;//屏蔽号随网络的相对位置改变而改变
                         n++;
                         node = node.Next;
                     }
@@ -902,10 +910,21 @@ namespace SamSoarII.AppMain.Project
         {
             if (_ladderNetworks.Count > 1)
             {
+                foreach (var net in nets)
+                {
+                    if (_ladderNetworks.Contains(net))
+                    {
+                        _ladderNetworks.Remove(net);
+                        net.PropertyChanged -= Network_PropertyChanged;
+                        LadderNetworkStackPanel.Children.Remove(net);
+                    }
+                }
             }
+            int n = 0;
+            foreach (var net in _ladderNetworks)
+                net.NetworkNumber = n++;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
-
         public void RemoveNetwork(LadderNetworkViewModel network)
         {
             if (_ladderNetworks.Count > 1)
@@ -918,6 +937,7 @@ namespace SamSoarII.AppMain.Project
                     while (node != null)
                     {
                         node.Value.NetworkNumber--;
+                        if (node.Value.IsMasked) node.Value.MaskNumber--;//屏蔽号随网络的相对位置改变而改变
                         node = node.Next;
                     }
                     _ladderNetworks.Remove(network);
@@ -1520,10 +1540,14 @@ namespace SamSoarII.AppMain.Project
             _selectAllNetworks.Clear();
             var node = _ladderNetworks.Find(_selectStartNetwork);
             node = node.Previous;
-            while (node != null && count-- > 0)
+            while (node != null && count > 0)
             {
-                _selectAllNetworks.Add(node.Value);
-                _selectAllNetworkCache.Add(node.Value);
+                if (!node.Value.IsMasked)
+                {
+                    _selectAllNetworks.Add(node.Value);
+                    _selectAllNetworkCache.Add(node.Value);
+                    count--;
+                }
                 node = node.Previous;
             }
         }
@@ -1557,10 +1581,14 @@ namespace SamSoarII.AppMain.Project
             _selectAllNetworks.Clear();
             var node = _ladderNetworks.Find(_selectStartNetwork);
             node = node.Next;
-            while (node != null && count-- > 0)
+            while (node != null && count > 0)
             {
-                _selectAllNetworks.Add(node.Value);
-                _selectAllNetworkCache.Add(node.Value);
+                if (!node.Value.IsMasked)
+                {
+                    _selectAllNetworks.Add(node.Value);
+                    _selectAllNetworkCache.Add(node.Value);
+                    count--;
+                }
                 node = node.Next;
             }
         }
@@ -2387,11 +2415,6 @@ namespace SamSoarII.AppMain.Project
         }
         private void OnLadderDiagramMouseMove(object sender, MouseEventArgs e)
         {
-            currentItem = GetNetworkByMouse();
-            if (currentItem == null && dragItem != null)
-            {
-                dragItem.Opacity = 1;
-            }
             Point _p = e.GetPosition(this);
             if (_selectStatus == SelectStatus.SingleSelected)
             {
@@ -2628,7 +2651,7 @@ namespace SamSoarII.AppMain.Project
                         {
                             //全选, 补回一个网络
                             _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
-                                this, new LadderNetworkViewModel(this, 0), _selectAllNetworks, index));
+                                this, new LadderNetworkViewModel(this, 0), _selectAllNetworks, 0));
                         }
                         else
                         {
@@ -2694,7 +2717,7 @@ namespace SamSoarII.AppMain.Project
                             {
                                 //全选，补回一个空网络
                                 _commandManager.Execute(new LadderCommand.LadderDiagramReplaceNetworksCommand(
-                                    this, new LadderNetworkViewModel(this, 0), removednets, index));
+                                    this, new LadderNetworkViewModel(this, 0), removednets, 0));
                             }
                             else
                             {
@@ -3255,37 +3278,52 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private void OnDragEnter(object sender, DragEventArgs e)
+        private void OnDrop(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
             if (sourcenet != null && sourcenet != desnetwork)
             {
-                sourcenet.Opacity = 0.3;
+                desnetwork.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
                 var command = new LadderDiagramExchangeNetworkCommand(this, sourcenet, desnetwork);
                 _commandManager.Execute(command);
             }
+            sourcenet.CommentAreaBorder.BorderBrush = Brushes.Brown;
+            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
+            desnetwork.Opacity = 1;
+            dragItem = null;
         }
-        private void OnDrop(object sender, DragEventArgs e)
+        private void OnDragOver(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
-            if (sourcenet == null) return;
-            sourcenet.Opacity = 1;
-            dragItem = null;
+            var desnetwork = (LadderNetworkViewModel)e.Source;
+            sourcenet.CommentAreaBorder.BorderBrush = LadderHelper.MonitorBrush;
+            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
+            if (sourcenet != null && sourcenet != desnetwork)
+            {
+                desnetwork.Opacity = 0.3;
+                desnetwork.ladderExpander.IsExpand = false;
+            }
+        }
+        private void OnDragLeave(object sender, DragEventArgs e)
+        {
+            ((LadderNetworkViewModel)e.Source).Opacity = 1;
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
+            currentItem = GetNetworkByMouse();
+            if (currentItem == null && dragItem != null)
+            {
+                dragItem.Opacity = 1;
+            }
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if (currentItem != null)
+                if (currentItem != null && dragItem != null)
                 {
-                    if (dragItem != null)
+                    if (dragItem != currentItem)
                     {
-                        if (dragItem != currentItem)
-                        {
-                            DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
-                        }
+                        DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
                     }
                 }
             }

@@ -20,15 +20,20 @@ namespace SamSoarII.AppMain.LadderCommand
         }
         public void Execute()
         {
-            if (_sourceNetwork.NetworkNumber == _desNetwork.NetworkNumber - 1)
+            int oldnum = _sourceNetwork.NetworkNumber, newnum = _desNetwork.NetworkNumber;
+            if(oldnum < newnum)
             {
+                _ladderDiagram.RemoveNetwork(_desNetwork);
+                _ladderDiagram.AddNetwork(_desNetwork,oldnum);
                 _ladderDiagram.RemoveNetwork(_sourceNetwork);
-                _ladderDiagram.AddNetwork(_sourceNetwork,_sourceNetwork.NetworkNumber + 1);
+                _ladderDiagram.AddNetwork(_sourceNetwork,newnum);
             }
-            else if(_sourceNetwork.NetworkNumber == _desNetwork.NetworkNumber + 1)
+            else
             {
                 _ladderDiagram.RemoveNetwork(_sourceNetwork);
-                _ladderDiagram.AddNetwork(_sourceNetwork, _sourceNetwork.NetworkNumber - 1);
+                _ladderDiagram.AddNetwork(_sourceNetwork, newnum);
+                _ladderDiagram.RemoveNetwork(_desNetwork);
+                _ladderDiagram.AddNetwork(_desNetwork, oldnum);
             }
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.UpdateModelMessageByNetwork();
