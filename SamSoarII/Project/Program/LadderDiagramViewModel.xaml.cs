@@ -1350,20 +1350,21 @@ namespace SamSoarII.AppMain.Project
             int y1 = y, y2 = y;
             BaseViewModel bvmodel = _selectRectOwner.GetElementByPosition(x, y);
             BaseViewModel bvmodel_r = null;
+            if (bvmodel != null && bvmodel.IsPushed) return true;
             VerticalLineViewModel vlvmodel = null;
             VerticalLineViewModel vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x, y - 1);
             VerticalLineViewModel vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, y);
             while (vlvmodel_u != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
-                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x, y1 - 1);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
+                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x, --y1 - 1);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             while (vlvmodel_d != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
-                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, y2);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
+                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, ++y2);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             for (int _y = y1; _y <= y2; _y++)
             {
@@ -1409,20 +1410,21 @@ namespace SamSoarII.AppMain.Project
             int y1 = y, y2 = y;
             BaseViewModel bvmodel = _selectRectOwner.GetElementByPosition(x, y);
             BaseViewModel bvmodel_l = null;
+            if (bvmodel != null && bvmodel.IsPushed) return true;
             VerticalLineViewModel vlvmodel = null;
             VerticalLineViewModel vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x - 1, y - 1);
             VerticalLineViewModel vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, y);
             while (vlvmodel_u != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
-                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x - 1, y1 - 1);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
+                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x - 1, --y1 - 1);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             while (vlvmodel_d != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
-                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, y2);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
+                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, ++y2);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             for (int _y = y1; _y <= y2; _y++)
             {

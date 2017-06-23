@@ -154,7 +154,7 @@ namespace SamSoarII.AppMain.Project
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
-               PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
             }
         }
 
