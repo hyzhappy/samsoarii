@@ -190,7 +190,7 @@ namespace SamSoarII.AppMain
                 }
                 if (_mainTabControl.SelectedItem is FuncBlockViewModel)
                 {
-                    MainWindow.SB_Func.Text = ((FuncBlockViewModel)_mainTabControl.SelectedItem).FuncBlockName;
+                    MainWindow.SB_Func.Text = ((FuncBlockViewModel)_mainTabControl.SelectedItem).ProgramName;
                     StatusBarItem = StatusBarItem.Func;
                 }
                 if (_mainTabControl.SelectedItem is ModbusTableViewModel)
@@ -280,6 +280,18 @@ namespace SamSoarII.AppMain
         private void OnPTVRenamed(object sender, RoutedEventArgs e)
         {
             UpdateStatusBar();
+            if(sender is string)
+            {
+                string programName = (string)sender;
+                foreach (var subRoutine in ProjectModel.SubRoutines)
+                {
+                    if(subRoutine.ProgramName == programName)
+                    {
+                        subRoutine.UpdateModelMessageByNetwork();
+                        break;
+                    }
+                }
+            }
         }
         private void UpdateStatusBar()
         {
@@ -301,7 +313,7 @@ namespace SamSoarII.AppMain
             }
             if (_mainTabControl.SelectedItem is FuncBlockViewModel)
             {
-                MainWindow.SB_Func.Text = ((FuncBlockViewModel)_mainTabControl.SelectedItem).FuncBlockName;
+                MainWindow.SB_Func.Text = ((FuncBlockViewModel)_mainTabControl.SelectedItem).ProgramName;
                 StatusBarItem = StatusBarItem.Func;
             }
             if (_mainTabControl.SelectedItem is ModbusTableViewModel)
@@ -1254,9 +1266,7 @@ namespace SamSoarII.AppMain
             _mainWindow.SetProjectTreeView(_projectTreeView);
             _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
             ProjectFullFileName = fullFileName;
-            _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
             _projectModel.PropertyChanged += _projectModel_PropertyChanged;
-            UpdateRefNetworksBrief(_projectModel);
             _projectModel.AutoInstManager.Start();
         }
         
@@ -1280,7 +1290,6 @@ namespace SamSoarII.AppMain
             _projectTreeView.PTVHandle -= OnGotPTVHandle;
             _projectTreeView.PTVRenamed -= OnPTVRenamed;
             _projectTreeView.NavigatedToNetwork -= ElementList_NavigateToNetwork;
-            _projectModel.MainRoutine.PropertyChanged -= _projectModel.MainRoutine_PropertyChanged;
             _projectModel.PropertyChanged -= _projectModel_PropertyChanged;
             ProjectFullFileName = string.Empty;
             _mainWindow.ClearProjectTreeView();
@@ -1359,9 +1368,7 @@ namespace SamSoarII.AppMain
             CurrentLadder = _projectModel.MainRoutine;
             _mainWindow.SetProjectTreeView(_projectTreeView);
             _mainWindow.SetProjectMonitor(_projectModel.MMonitorManager.MMWindow);
-            _projectModel.MainRoutine.PropertyChanged += _projectModel.MainRoutine_PropertyChanged;
             _projectModel.PropertyChanged += _projectModel_PropertyChanged;
-            UpdateRefNetworksBrief(_projectModel);
             ProjectFileManager.Update(_projectModel.ProjectName, ProjectFullFileName);
             _projectModel.AutoInstManager.Start();
             handle.Abort();
@@ -1382,14 +1389,6 @@ namespace SamSoarII.AppMain
                 Thread.Sleep(10);
             }
             return true;
-        }
-        private void UpdateRefNetworksBrief(ProjectModel projectModel)
-        {
-            projectModel.UpdateNetworkBriefs(projectModel.MainRoutine,ChangeType.Add);
-            foreach (var item in projectModel.SubRoutines)
-            {
-                projectModel.UpdateNetworkBriefs(item,ChangeType.Add);
-            }
         }
         public int DownloadProject()
         {

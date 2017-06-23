@@ -615,6 +615,7 @@ namespace SamSoarII.AppMain.UI
                         ProjectTreeViewEventArgs.TYPE_ROUTINE | ProjectTreeViewEventArgs.FLAG_REPLACE,
                         ldvmodel, ptvitem.Text);
                     PTVHandle(this, _e);
+                    PTVRenamed(ptvitem.Text, null);
                 }
                 else if (ptvitem.RelativeObject is FuncBlockViewModel)
                 {
@@ -635,6 +636,7 @@ namespace SamSoarII.AppMain.UI
                         ProjectTreeViewEventArgs.TYPE_FUNCBLOCK | ProjectTreeViewEventArgs.FLAG_REPLACE,
                         fbvmodel, ptvitem.Text);
                     PTVHandle(this, _e);
+                    PTVRenamed(this, null);
                 }
                 else if (ptvitem.RelativeObject is ModbusTableModel)
                 {
@@ -653,12 +655,13 @@ namespace SamSoarII.AppMain.UI
                         ProjectTreeViewEventArgs.TYPE_MODBUS | ProjectTreeViewEventArgs.FLAG_REPLACE,
                         mtmodel, ptvitem.Text);
                     PTVHandle(this, _e);
+                    PTVRenamed(this, null);
                 }
                 else
                 {
                     ptvitem.RenameClose();
+                    PTVRenamed(this, null);
                 }
-                PTVRenamed(this,null);
             }
         }
         

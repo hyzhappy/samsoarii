@@ -578,6 +578,7 @@ namespace SamSoarII.AppMain.UI
             }
             item.MappedModels = mappedModels;
         }
+        
         public static void ValueAliasManager_ValueAliasChanged(ValueAliasChangedEventArgs e)
         {
             if (e.Type == ValueChangedType.Clear)

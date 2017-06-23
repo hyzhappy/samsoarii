@@ -97,10 +97,6 @@ namespace SamSoarII.AppMain.Project
             }
         }
         /// <summary>
-        /// 函数块的名称
-        /// </summary>
-        public string FuncBlockName { get; set; }
-        /// <summary>
         /// Avalon库自带的函数补全窗口，已弃用
         /// </summary>
         private CompletionWindow completionWindow;
@@ -264,7 +260,6 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             HighlightingManager.Instance.RegisterHighlighting("Custom Highlighting", new string[] { ".cool" }, customHighlighting);
-            FuncBlockName = name;
             CodeTextBox.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             CodeTextBox.TextArea.TextEntered += textEditer_TextArea_TextEntered;
             CodeTextBox.TextArea.CodeCompleteKeyDown += textEditer_TextArea_CodeCompleteKeyDown;

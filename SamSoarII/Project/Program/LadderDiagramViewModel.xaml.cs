@@ -202,7 +202,6 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _ladderNetworks = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             }
         }
         private SelectRect _selectRect;
@@ -261,10 +260,6 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _selectStatus = value;
-                if (value == SelectStatus.SingleSelected)
-                {
-
-                }
                 switch (_selectStatus)
                 {
                     case SelectStatus.Idle:
@@ -377,7 +372,6 @@ namespace SamSoarII.AppMain.Project
             _projectModel = _parent;
             ProgramName = name;
             LadderCommentTextBlock.DataContext = this;
-            //this.Loaded += OnLoaded;
             _commandManager = new LadderCommand.CommandManager(this);
             IDVModel = new InstructionDiagramViewModel();
             AppendNetwork(new LadderNetworkViewModel(this, 0));
@@ -478,13 +472,8 @@ namespace SamSoarII.AppMain.Project
         public void InitNetworks()
         {
             LadderNetworkStackPanel.Children.Clear();
-            foreach (var network in _ladderNetworks)
-            {
-                network.PropertyChanged -= Network_PropertyChanged;
-            }
             _ladderNetworks.Clear();
             IDVModel.Setup(this);
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         public void AcquireSelectRect(LadderNetworkViewModel network)
@@ -526,17 +515,7 @@ namespace SamSoarII.AppMain.Project
             network.NetworkNumber = _ladderNetworks.Count;
             _ladderNetworks.AddLast(network);
             LadderNetworkStackPanel.Children.Add(network);
-            network.PropertyChanged += Network_PropertyChanged;
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
-        }
-
-        private void Network_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "NetworkBrief")
-            {
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
-            }
         }
 
         #region Network manipulation，undoable command form method
@@ -632,8 +611,6 @@ namespace SamSoarII.AppMain.Project
             var command = new LadderCommand.LadderDiagramReplaceNetworksCommand(
                 this, network, network.NetworkNumber, NetworkChangeElementArea.Empty);
             _commandManager.Execute(command);
-            network.PropertyChanged += Network_PropertyChanged;
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         public void RemoveSingleNetworkCommand(LadderNetworkViewModel network)
@@ -646,8 +623,6 @@ namespace SamSoarII.AppMain.Project
             var command = new LadderCommand.LadderDiagramRemoveNetworksCommand(
                 this, new List<LadderNetworkViewModel>() { network }, network.NetworkNumber);
             _commandManager.Execute(command);
-            network.PropertyChanged -= Network_PropertyChanged;
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
 
@@ -661,7 +636,6 @@ namespace SamSoarII.AppMain.Project
                 new LadderNetworkViewModel[] { ldvmodel_old },
                 ldvmodel_new.NetworkNumber);
             _commandManager.Execute(command);
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
             IDVModel.Setup(this);
         }
 
@@ -724,19 +698,15 @@ namespace SamSoarII.AppMain.Project
 
         public void NetworkRemoveRow(LadderNetworkViewModel network, int rowNumber)
         {
-            var command = new LadderCommand.NetworkRemoveRowCommand(network, rowNumber);
+            var command = new NetworkRemoveRowsCommand(network, rowNumber,1);
             _commandManager.Execute(command);
             SelectionStatus = SelectStatus.Idle;
         }
 
         public void NetworkRemoveRows(LadderNetworkViewModel network, int startRowNumber, int count)
         {
-            NetworkRemoveRowCommand command;
-            for (int i = 0; i < count; i++)
-            {
-                command = new LadderCommand.NetworkRemoveRowCommand(network, startRowNumber + i);
-                _commandManager.Execute(command);
-            }
+            var command = new NetworkRemoveRowsCommand(network, startRowNumber, count);
+            _commandManager.Execute(command);
             SelectionStatus = SelectStatus.Idle;
         }
 
@@ -830,7 +800,6 @@ namespace SamSoarII.AppMain.Project
                     {
                         LinkedListNode<LadderNetworkViewModel> newnode = new LinkedListNode<LadderNetworkViewModel>(net);
                         _ladderNetworks.AddFirst(newnode);
-                        newnode.Value.PropertyChanged += Network_PropertyChanged;
                     }
                     var node = _ladderNetworks.First;
                     int q = 0;
@@ -858,7 +827,6 @@ namespace SamSoarII.AppMain.Project
                     {
                         net.NetworkNumber = p;
                         _ladderNetworks.AddAfter(node, net);
-                        net.PropertyChanged += Network_PropertyChanged;
                         p++;
                         node = node.Next;
                     }
@@ -878,7 +846,6 @@ namespace SamSoarII.AppMain.Project
                 {
                     net.NetworkNumber = m;
                     _ladderNetworks.AddLast(net);
-                    net.PropertyChanged += Network_PropertyChanged;
                     m++;
                 }
             }
@@ -904,7 +871,6 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             ReloadNetworksToStackPanel();
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         public void RemoveNetworks(IEnumerable<LadderNetworkViewModel> nets)
@@ -916,7 +882,6 @@ namespace SamSoarII.AppMain.Project
                     if (_ladderNetworks.Contains(net))
                     {
                         _ladderNetworks.Remove(net);
-                        net.PropertyChanged -= Network_PropertyChanged;
                         LadderNetworkStackPanel.Children.Remove(net);
                     }
                 }
@@ -924,7 +889,6 @@ namespace SamSoarII.AppMain.Project
             int n = 0;
             foreach (var net in _ladderNetworks)
                 net.NetworkNumber = n++;
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
         public void RemoveNetwork(LadderNetworkViewModel network)
         {
@@ -942,11 +906,9 @@ namespace SamSoarII.AppMain.Project
                         node = node.Next;
                     }
                     _ladderNetworks.Remove(network);
-                    network.PropertyChanged -= Network_PropertyChanged;
                     LadderNetworkStackPanel.Children.Remove(network);
                 }
             }
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
         }
 
         #endregion
@@ -2023,7 +1985,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }
-            if (e.Key == Key.Delete)
+            if (e.Key == Key.Delete || e.Key == Key.Back)
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {

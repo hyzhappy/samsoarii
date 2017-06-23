@@ -3,14 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SamSoarII.AppMain.LadderCommand
 {
     public class CommandManager
     {
-        private const int UNDO_LIMIT = 16;
+        private const int UNDO_LIMIT = 128;
 
         private LadderDiagramViewModel ldvmodel;
         public LadderDiagramViewModel LDVModel

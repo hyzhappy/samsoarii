@@ -31,19 +31,6 @@ namespace SamSoarII.AppMain.Project
         Modify,
         Clear
     }
-
-    public class RefNetworksBriefChangedEventArgs : EventArgs
-    {
-        public ChangeType Type { get; set; }
-        public LadderDiagramViewModel Routine { get; set; }
-        public RefNetworksBriefChangedEventArgs(ChangeType type, LadderDiagramViewModel routine)
-        {
-            Type = type;
-            Routine = routine;
-        }
-    }
-    public delegate void RefNetworksBriefChangedEventHandler(RefNetworksBriefChangedEventArgs e);
-    
     public class ProjectModel:INotifyPropertyChanged
     {
         public bool IsModify
@@ -118,7 +105,6 @@ namespace SamSoarII.AppMain.Project
         }
 
         private bool _isCommentMode;
-        public event RefNetworksBriefChangedEventHandler RefNetworksBriefChanged = delegate { };
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public void OnPropertyChanged(string messsage)
         {
@@ -173,37 +159,6 @@ namespace SamSoarII.AppMain.Project
                 return result;
             }
         }
-        public void UpdateNetworkBriefs(LadderDiagramViewModel Routine, ChangeType Type)
-        {
-            switch (Type)
-            {
-                case ChangeType.Add:
-                    ObservableCollection<string> networksBrief = new ObservableCollection<string>();
-                    foreach (var network in Routine.LadderNetworks.OrderBy(x => { return x.NetworkNumber; }))
-                    {
-                        networksBrief.Add(string.Format("{0}-{1}", network.NetworkNumber, network.NetworkBrief));
-                    }
-                    RefNetworksBrief.Add(Routine, networksBrief);
-                    break;
-                case ChangeType.Remove:
-                    RefNetworksBrief.Remove(Routine);
-                    break;
-                case ChangeType.Modify:
-                    networksBrief = new ObservableCollection<string>();
-                    foreach (var network in Routine.LadderNetworks.OrderBy(x => { return x.NetworkNumber; }))
-                    {
-                        networksBrief.Add(string.Format("{0}-{1}", network.NetworkNumber, network.NetworkBrief));
-                    }
-                    RefNetworksBrief[Routine] = networksBrief;
-                    break;
-                case ChangeType.Clear:
-                    RefNetworksBrief.Clear();
-                    break;
-                default:
-                    break;
-            }
-            RefNetworksBriefChanged.Invoke(new RefNetworksBriefChangedEventArgs(Type, Routine));
-        }
         public ProjectModel()
         {
 
@@ -225,13 +180,6 @@ namespace SamSoarII.AppMain.Project
             libfuncblock.IsReadOnly = true;
             LibFuncBlock = libfuncblock;
         }
-        public void MainRoutine_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "LadderNetworks")
-            {
-                UpdateNetworkBriefs(sender as LadderDiagramViewModel, ChangeType.Modify);
-            }
-        }
         public bool ContainProgram(string name)
         {
             return SubRoutines.Any(x => x.ProgramName == name) | FuncBlocks.Any(x => x.ProgramName == name);
@@ -239,25 +187,17 @@ namespace SamSoarII.AppMain.Project
         public void Add(LadderDiagramViewModel ldmodel)
         {
             if (!SubRoutines.Contains(ldmodel))
-            {
-                UpdateNetworkBriefs(ldmodel, ChangeType.Add);
                 SubRoutines.Add(ldmodel);
-            }
         }
         public void Add(FuncBlockViewModel fbmodel)
         {
             if (!FuncBlocks.Contains(fbmodel))
-            {
                 FuncBlocks.Add(fbmodel);
-            }
         }
         public void Remove(LadderDiagramViewModel ldmodel)
         {
             if (SubRoutines.Contains(ldmodel))
-            {
                 SubRoutines.Remove(ldmodel);
-                UpdateNetworkBriefs(ldmodel, ChangeType.Remove);
-            }
         }
         public void Remove(FuncBlockViewModel fbmodel)
         {

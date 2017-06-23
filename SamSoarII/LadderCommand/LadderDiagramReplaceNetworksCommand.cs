@@ -107,6 +107,7 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.UpdateModelMessageByNetwork();
             _oldarea = NetworkChangeElementArea.Create(
                 _ladderDiagram, _removedNetworks);
+            if (_removedNetworks.Count == 0) return;
             LadderNetworkViewModel lnvmodel = _removedNetworks.First();
             _oldarea.Select(lnvmodel);
         }

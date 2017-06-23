@@ -25,22 +25,22 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Execute()
         {
-            // ToList确保在遍历时可以修改 
+            // ToList确保在遍历时可以修改
             _oldRowCount = _network.RowCount;
             _network.RowCount++;
-            var movedElements = _network.GetElements().Where(e => e.Y >= _rowNumber).ToList();
-            var movedVLines = _network.GetVerticalLines().Where(e => e.Y >= _rowNumber).ToList();
+            var movedElements = _network.GetElements().Where(e => e.Y >= _rowNumber).ToList().OrderBy(x => { return x.Y; }).Reverse();
+            var movedVLines = _network.GetVerticalLines().Where(e => e.Y >= _rowNumber).ToList().OrderBy(x => { return x.Y; }).Reverse();
             foreach (var ele in movedElements)
             {
-                _network.RemoveElement(ele);
+                _network.RemoveEle(ele.X,ele.Y);
                 ele.Y++;
-                _network.ReplaceElement(ele);
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                _network.RemoveVerticalLine(vline);
+                _network.RemoveVLine(vline.X,vline.Y);
                 vline.Y++;
-                _network.ReplaceVerticalLine(vline);
+                _network.ReplaceVLine(vline);
             }
             //_network.INVModel.Setup(_network);
             // 将梯形图光标移到新生成的行的头部
@@ -63,22 +63,22 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Undo()
         {
-            _network.RowCount = _oldRowCount;
             // ToList确保在遍历时可以修改 
-            var movedElements = _network.GetElements().Where(e => e.Y > _rowNumber).ToList();
-            var movedVLines = _network.GetVerticalLines().Where(e => e.Y > _rowNumber).ToList();
+            var movedElements = _network.GetElements().Where(e => e.Y > _rowNumber).ToList().OrderBy(x => { return x.Y; });
+            var movedVLines = _network.GetVerticalLines().Where(e => e.Y > _rowNumber).ToList().OrderBy(x => { return x.Y; });
             foreach (var ele in movedElements)
             {
-                _network.RemoveElement(ele);
+                _network.RemoveEle(ele.X, ele.Y);
                 ele.Y--;
-                _network.ReplaceElement(ele);
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                _network.RemoveVerticalLine(vline);
+                _network.RemoveVLine(vline.X, vline.Y);
                 vline.Y--;
-                _network.ReplaceVerticalLine(vline);
+                _network.ReplaceVLine(vline);
             }
+            _network.RowCount = _oldRowCount;
             //_network.INVModel.Setup(_network);
             // 将梯形图光标移到删除的行的位置
             _network.AcquireSelectRect();

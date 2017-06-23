@@ -117,10 +117,10 @@
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
     <Compile Include="LadderCommand\NetworkAddRowCommand.cs" />
     <Compile Include="LadderCommand\NetworkChangeElementArea.cs" />
+    <Compile Include="LadderCommand\NetworkRemoveRowsCommand.cs" />
     <Compile Include="LadderCommand\NetworkReplaceBreakpointCommand.cs" />
     <Compile Include="LadderCommand\NetworkReplaceElementsCommand.cs" />
     <Compile Include="LadderCommand\CommandManager.cs" />
-    <Compile Include="LadderCommand\NetworkRemoveRowCommand.cs" />
     <Compile Include="LadderCommand\NetworkRemoveElementsCommand.cs" />
     <Compile Include="Event\ShowTabItemEventArgs.cs" />
     <Compile Include="Event\EventHandler.cs" />

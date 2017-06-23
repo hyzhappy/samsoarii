@@ -9,19 +9,20 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.AppMain.LadderCommand
 {
-    public class NetworkRemoveRowCommand : IUndoableCommand
+    public class NetworkRemoveRowsCommand : IUndoableCommand
     {
         private LadderNetworkViewModel _network;
-        private int _rowNumber;
+        private int _startRow;
+        private int _count;
+        private int _oldRowCount;
         private HashSet<BaseViewModel> _removedElements;
         private HashSet<VerticalLineViewModel> _removedVerticalLines;
-        private int _oldRowCount;
         private NetworkChangeElementArea _oldarea;
-
-        public NetworkRemoveRowCommand(LadderNetworkViewModel network, int rowNumber)
+        public NetworkRemoveRowsCommand(LadderNetworkViewModel network,int startRow,int count)
         {
             _network = network;
-            _rowNumber = rowNumber;
+            _startRow = startRow;
+            _count = count;
             _oldarea = new NetworkChangeElementArea();
             _oldarea.SU_Select = SelectStatus.MultiSelected;
             _oldarea.SU_Cross = CrossNetworkState.NoCross;
@@ -29,22 +30,13 @@ namespace SamSoarII.AppMain.LadderCommand
             _oldarea.NetworkNumberEnd = _oldarea.NetworkNumberStart;
             _oldarea.X1 = 0;
             _oldarea.X2 = 11;
-            _oldarea.Y1 = rowNumber;
-            _oldarea.Y2 = _oldarea.Y1;
+            _oldarea.Y1 = startRow;
+            _oldarea.Y2 = startRow + count - 1;
         }
-
         public void Execute()
         {
-            _removedElements = new HashSet<BaseViewModel>(_network.GetElements().Where(e => e.Y == _rowNumber));
-            _removedVerticalLines = new HashSet<VerticalLineViewModel>(_network.GetVerticalLines().Where(e => e.Y == _rowNumber));
-            if(_rowNumber == _network.RowCount - 1)
-            {
-                _removedVerticalLines = new HashSet<VerticalLineViewModel>(_network.GetVerticalLines().Where(e => e.Y == _rowNumber - 1));
-            }
-            else
-            {
-                _removedVerticalLines = new HashSet<VerticalLineViewModel>(_network.GetVerticalLines().Where(e => e.Y == _rowNumber));
-            }
+            _removedElements = new HashSet<BaseViewModel>(_network.GetElements().Where(e => { return (e.Y >= _startRow) && (e.Y <= _startRow + _count - 1); }));
+            _removedVerticalLines = new HashSet<VerticalLineViewModel>(_network.GetVerticalLines().Where(e => { return (e.Y >= _startRow) && (e.Y <= _startRow + _count - 1); }));
             Redo();
         }
 
@@ -58,30 +50,26 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.RemoveVerticalLine(vline);
             }
-
-            // ToList确保在遍历时可以修改 
-            var movedElements = _network.GetElements().Where(e => e.Y > _rowNumber).ToList();
-            var movedVLines = _network.GetVerticalLines().Where(e => e.Y > _rowNumber).ToList();
+            var movedElements = _network.GetElements().Where(e => e.Y > _startRow + _count - 1).ToList().OrderBy(x => { return x.Y; });
+            var movedVLines = _network.GetVerticalLines().Where(e => e.Y > _startRow + _count - 1).ToList().OrderBy(x => { return x.Y; });
             foreach (var ele in movedElements)
             {
-                _network.RemoveElement(ele);
-                ele.Y--;
-                _network.ReplaceElement(ele);
+                _network.RemoveEle(ele.X,ele.Y);
+                ele.Y -= _count;
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                _network.RemoveVerticalLine(vline);
-                vline.Y--;
-                _network.ReplaceVerticalLine(vline);
+                _network.RemoveVLine(vline.X,vline.Y);
+                vline.Y -= _count;
+                _network.ReplaceVLine(vline);
             }
             _oldRowCount = _network.RowCount;
-            _network.RowCount--;
-            //_network.INVModel.Setup(_network);
-            // 将梯形图光标移到删除的行的位置
+            _network.RowCount -= _count;
             _network.AcquireSelectRect();
             LadderDiagramViewModel ldvmodel = _network.LDVModel;
             ldvmodel.SelectionRect.X = 0;
-            ldvmodel.SelectionRect.Y = (_rowNumber < _network.RowCount ? _rowNumber : _rowNumber - 1);
+            ldvmodel.SelectionRect.Y = (_startRow < _network.RowCount ? _startRow : _startRow - 1);
             ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
                 new NavigateToNetworkEventArgs(
                     _network.NetworkNumber,
@@ -93,21 +81,20 @@ namespace SamSoarII.AppMain.LadderCommand
         public void Undo()
         {
             _network.RowCount = _oldRowCount;
-            var movedElements = _network.GetElements().Where(e => e.Y >= _rowNumber).ToList();
-            var movedVLines = _network.GetVerticalLines().Where(e => e.Y >= _rowNumber).ToList();
+            var movedElements = _network.GetElements().Where(e => e.Y >= _startRow).ToList().OrderBy(x => { return x.Y; }).Reverse();
+            var movedVLines = _network.GetVerticalLines().Where(e => e.Y >= _startRow).ToList().OrderBy(x => { return x.Y; }).Reverse();
             foreach (var ele in movedElements)
             {
-                _network.RemoveElement(ele);
-                ele.Y++;
-                _network.ReplaceElement(ele);
+                _network.RemoveEle(ele.X, ele.Y);
+                ele.Y += _count;
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                _network.RemoveVerticalLine(vline);
-                vline.Y++;
-                _network.ReplaceVerticalLine(vline);
+                _network.RemoveVLine(vline.X, vline.Y);
+                vline.Y += _count;
+                _network.ReplaceVLine(vline);
             }
-
             foreach (var ele in _removedElements)
             {
                 _network.ReplaceElement(ele);

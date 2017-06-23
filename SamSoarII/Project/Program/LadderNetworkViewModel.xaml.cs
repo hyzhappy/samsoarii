@@ -203,6 +203,7 @@ namespace SamSoarII.AppMain.Project
                     ReleaseSelectRect();
                     IsSelectAreaMode = false;
                     MaskNumber = NetworkNumber;
+                    ClearModelMessage();//当被屏蔽时，移除元素表中的项
                 }
                 else
                 {
@@ -210,7 +211,9 @@ namespace SamSoarII.AppMain.Project
                     LadderCanvas.Opacity = 1.0;
                     CommentAreaExpander.Background = Brushes.LightCyan;
                     LadderCanvas.Background = Brushes.Transparent;
+                    UpdateModelMessage();//当解除屏蔽时，恢复元素表中被移除的的项
                 }
+                InstructionCommentManager.RaiseMappedMessageChangedEvent();//更新元素表
                 MaskChanged(this, new RoutedEventArgs());
             }
         }
@@ -849,7 +852,7 @@ namespace SamSoarII.AppMain.Project
         }
         #endregion
 
-        #region Element Manipulate only for relocation(more efficiency)
+        #region Element Manipulate when changed in same network(more efficiency)
         public void RemoveVLine(int x, int y)
         {
             IntPoint pos = new IntPoint() { X = x, Y = y };
@@ -880,6 +883,7 @@ namespace SamSoarII.AppMain.Project
         }
         public BaseViewModel ReplaceEle(BaseViewModel element)
         {
+            element.NetWorkNum = NetworkNumber;
             BaseViewModel oldele = null;
             IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
             if (_ladderElements.Keys.Contains(p))
@@ -916,10 +920,9 @@ namespace SamSoarII.AppMain.Project
         }
         public void PreCompile()
         {
-            ClearNextElements();
             ClearSearchedFlag();
-            var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
-            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElements);
+            ClearNextElements();
+            Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(_ladderElements.Values.Where(x => { return x.Type == ElementType.Output; }));
             while (tempQueue.Count > 0)
             {
                 var tempElement = tempQueue.Dequeue();
@@ -947,10 +950,18 @@ namespace SamSoarII.AppMain.Project
         private void InitializeSubElements()
         {
             ClearSearchedFlag();
+            ClearSubElements();
             var rootElements = _ladderElements.Values.Where(x => { return x.Type == ElementType.Output; });
             foreach (var rootElement in rootElements)
             {
                 GetSubElements(rootElement);
+            }
+        }
+        private void ClearSubElements()
+        {
+            foreach (var ele in _ladderElements.Values)
+            {
+                ele.SubElements.Clear();
             }
         }
         //得到所有子元素，包括自身和NULL元素。
@@ -1085,12 +1096,12 @@ namespace SamSoarII.AppMain.Project
 
         private bool SearchUpVLine(IntPoint p)
         {
-            return _ladderVerticalLines.Values.Any(l => { return (l.X == p.X) && (l.Y == p.Y - 1); });
+            return _ladderVerticalLines.Values.Any(e => { return (e.X == p.X) && (e.Y == p.Y - 1); });
         }
 
         private bool SearchDownVLine(IntPoint p)
         {
-            return _ladderVerticalLines.Values.Any(l => { return (l.X == p.X) && (l.Y == p.Y); });
+            return _ladderVerticalLines.Values.Any(e => { return (e.X == p.X) && (e.Y == p.Y); });
         }
         #endregion
         //返回最后一行的Y坐标
@@ -1246,7 +1257,6 @@ namespace SamSoarII.AppMain.Project
             if (IsSingleSelected())
             {
                 _ladderDiagram.NetworkAddRow(this, _ladderDiagram.SelectionRect.Y + 1);
-                //AddNewRowAfter(_ladderDiagram.SelectionRect.Y);
             }
         }
         private void OnDeleteRow(object sender, RoutedEventArgs e)
@@ -1254,6 +1264,10 @@ namespace SamSoarII.AppMain.Project
             if (IsSingleSelected())
             {
                 _ladderDiagram.NetworkRemoveRow(this, _ladderDiagram.SelectionRect.Y);
+            }
+            if (IsSelectAreaMode)
+            {
+                _ladderDiagram.NetworkRemoveRows(this, Math.Min(SelectAreaFirstY,SelectAreaSecondY),Math.Abs(SelectAreaFirstY - SelectAreaSecondY) + 1);
             }
         }
         
