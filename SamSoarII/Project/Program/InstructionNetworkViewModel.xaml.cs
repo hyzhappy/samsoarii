@@ -21,6 +21,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.AvalonDock.Controls;
 using Xceed.Wpf.AvalonDock.Layout;
+using System.ComponentModel;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -115,15 +116,15 @@ namespace SamSoarII.AppMain.Project
             this.lnvmodel = _lnvmodel;
             lnvmodel.ElementChanged += OnElementChanged;
             lnvmodel.VerticalLineChanged += OnVerticalLineChanged;
-            lnvmodel.MaskChanged += OnMaskChanged;
+            lnvmodel.PropertyChanged += OnNetworkPropertyChanged;
             Update();
         }
-
+        
         public void Uninstall()
         {
             lnvmodel.ElementChanged -= OnElementChanged;
             lnvmodel.VerticalLineChanged -= OnVerticalLineChanged;
-            lnvmodel.MaskChanged -= OnMaskChanged;
+            lnvmodel.PropertyChanged -= OnNetworkPropertyChanged;
             this.lnvmodel = null;
         }
 
@@ -324,12 +325,22 @@ namespace SamSoarII.AppMain.Project
         {
             ismodified = true;
         }
-
-        private void OnMaskChanged(object sender, RoutedEventArgs e)
-        {
-            Update();
-        }
         
+        private void OnNetworkPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IsMasked":
+                    Update();
+                    break;
+                case "NetworkNumber":
+                    NetworkHeader.Text
+                        = String.Format("Network {0:d}", lnvmodel.NetworkNumber);
+                    Update();
+                    break;
+            }
+        }
+
         #region Cursor
         public bool CatchCursor(BaseViewModel bvmodel)
         {

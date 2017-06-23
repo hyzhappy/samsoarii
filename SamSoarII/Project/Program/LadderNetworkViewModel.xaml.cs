@@ -154,6 +154,7 @@ namespace SamSoarII.AppMain.Project
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
             }
         }
 
@@ -211,7 +212,7 @@ namespace SamSoarII.AppMain.Project
                     CommentAreaExpander.Background = Brushes.LightCyan;
                     LadderCanvas.Background = Brushes.Transparent;
                 }
-                MaskChanged(this, new RoutedEventArgs());
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
             }
         }
         private bool _isCommendMode;
@@ -1099,9 +1100,7 @@ namespace SamSoarII.AppMain.Project
             return LadderElements.Values.OrderBy(x => { return x.Y; }).Last().Y;
         }
         #region Event handlers
-
-        public event RoutedEventHandler MaskChanged = delegate { };
-
+        
         #region Relative to Element changed
         public event LadderElementChangedHandler ElementChanged = delegate { };
         public event LadderElementChangedHandler VerticalLineChanged = delegate { };

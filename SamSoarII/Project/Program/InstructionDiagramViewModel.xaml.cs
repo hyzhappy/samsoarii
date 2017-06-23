@@ -99,8 +99,6 @@ namespace SamSoarII.AppMain.Project
                 if (invmodeldict.ContainsKey(lnvmodel))
                 {
                     invmodel = invmodeldict[lnvmodel];
-                    invmodel.NetworkHeader.Text 
-                        = String.Format("Network {0:d}", lnvmodel.NetworkNumber); 
                 }
                 else
                 {

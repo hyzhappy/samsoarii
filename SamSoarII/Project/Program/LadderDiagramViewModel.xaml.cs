@@ -127,6 +127,8 @@ namespace SamSoarII.AppMain.Project
                     net.IsCommentMode = _isCommentMode;
                 }
                 _selectRect.IsCommentMode = _isCommentMode;
+                if (IDVModel != null)
+                    IDVModel.IsCommentMode = _isCommentMode;
                 SelectionStatus = SelectStatus.Idle;
             }
         }
@@ -894,7 +896,6 @@ namespace SamSoarII.AppMain.Project
                     m++;
                 }
             }
-            //撤销操作需要还原屏蔽网络的原始位置
             if (isUndo)
             {
                 foreach (var maskedNetwork in maskedNetworks)
@@ -2779,7 +2780,7 @@ namespace SamSoarII.AppMain.Project
             {
                 // TODO 命令化
                 var replacednets = new SortedSet<LadderNetworkViewModel>();
-                var removednets = new SortedSet<LadderNetworkViewModel>();
+                var removednets = new SortedSet<LadderNetworkViewModel>();            
                 removednets.Add(_selectRectOwner);
                 foreach (XElement netEle in xEle.Elements("Network"))
                 {
@@ -3282,17 +3283,20 @@ namespace SamSoarII.AppMain.Project
             if (network != null)
             {
                 if (!network.ladderExpander.IsExpand)
+                {
                     dragItem = network;
+                }
                 else
+                {
                     dragItem = null;
+                }
             }
         }
         private void OnDrop(object sender, DragEventArgs e)
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return;
-            if (sourcenet != desnetwork)
+            if (sourcenet != null && sourcenet != desnetwork)
             {
                 desnetwork.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
@@ -3308,10 +3312,9 @@ namespace SamSoarII.AppMain.Project
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet == null) return; 
             sourcenet.CommentAreaBorder.BorderBrush = LadderHelper.MonitorBrush;
             sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
-            if (sourcenet != desnetwork)
+            if (sourcenet != null && sourcenet != desnetwork)
             {
                 desnetwork.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
@@ -3320,18 +3323,22 @@ namespace SamSoarII.AppMain.Project
         private void OnDragLeave(object sender, DragEventArgs e)
         {
             ((LadderNetworkViewModel)e.Source).Opacity = 1;
-            if (dragItem == null) return;
-            dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
-            dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             currentItem = GetNetworkByMouse();
+            if (currentItem == null && dragItem != null)
+            {
+                dragItem.Opacity = 1;
+            }
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 if (currentItem != null && dragItem != null)
                 {
-                    DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
+                    if (dragItem != currentItem)
+                    {
+                        DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
+                    }
                 }
             }
         }

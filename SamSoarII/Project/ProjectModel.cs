@@ -137,10 +137,6 @@ namespace SamSoarII.AppMain.Project
                 foreach (var ldmodel in SubRoutines)
                 {
                     ldmodel.IsCommentMode = _isCommentMode;
-                    if (ldmodel.IDVModel != null)
-                    {
-                        ldmodel.IDVModel.IsCommentMode = _isCommentMode;
-                    }
                 }
             }
         }
