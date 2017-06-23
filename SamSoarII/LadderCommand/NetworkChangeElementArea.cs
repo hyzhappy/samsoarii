@@ -140,6 +140,14 @@ namespace SamSoarII.AppMain.LadderCommand
             Y1 = int.Parse(xele.Attribute("Y1").Value);
             Y2 = int.Parse(xele.Attribute("Y2").Value);
         }
-        
+
+        public NetworkChangeElementArea Clone()
+        {
+            XElement xele = new XElement("Area");
+            this.Save(xele);
+            NetworkChangeElementArea that = new NetworkChangeElementArea();
+            that.Load(xele);
+            return that;
+        }
     }
 }

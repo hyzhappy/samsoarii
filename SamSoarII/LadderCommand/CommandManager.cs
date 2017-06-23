@@ -109,7 +109,8 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             if (command is LadderDiagramReplaceNetworksCommand
              || command is LadderDiagramRemoveNetworksCommand
-             || command is LadderDiagramExchangeNetworkCommand)
+             || command is LadderDiagramExchangeNetworkCommand
+             || command is LadderDiagramMoveNetworkCommand)
             {
                 ldvmodel.InvokeLDNetworksChanged();
             }

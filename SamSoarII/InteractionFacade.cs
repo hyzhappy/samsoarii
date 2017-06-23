@@ -872,6 +872,31 @@ namespace SamSoarII.AppMain
 
         public void ReplaceNetwork
         (
+            LadderNetworkViewModel lnvmodel_old,
+            int number_new,
+            ProjectTreeViewEventArgs e = null
+        )
+        {
+            LadderDiagramViewModel ldvmodel = lnvmodel_old.LDVModel;
+            ldvmodel.IFReplaceNetwork(lnvmodel_old, number_new);
+            if (e == null)
+            {
+                e = new ProjectTreeViewEventArgs
+                (
+                    ProjectTreeViewEventArgs.TYPE_NETWORK
+                  | ProjectTreeViewEventArgs.FLAG_REPLACE,
+                    number_new, lnvmodel_old);
+            }
+            else
+            {
+                e.RelativeObject = number_new;
+                e.TargetedObject = lnvmodel_old;
+            }
+            PTVEvent(this, e);
+        }
+
+        public void ReplaceNetwork
+        (
             LadderDiagramViewModel ldvmodel,
             ProjectTreeViewEventArgs e = null
         )
@@ -1635,6 +1660,16 @@ namespace SamSoarII.AppMain
                     if (e.RelativeObject is LadderDiagramViewModel)
                     {
                         ldvmodel = (LadderDiagramViewModel)(e.RelativeObject);
+                    }
+                    if (e.RelativeObject is int)
+                    {
+                        int number = (int)(e.RelativeObject);
+                        if ((e.Flags & ~0xf) == ProjectTreeViewEventArgs.FLAG_REPLACE)
+                        {
+                            LadderNetworkViewModel lnvmodel_old = (LadderNetworkViewModel)(e.TargetedObject);
+                            ReplaceNetwork(lnvmodel_old, number, e);
+                        }
+                        break;
                     }
                     switch (e.Flags & ~0xf)
                     {

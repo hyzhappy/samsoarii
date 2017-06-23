@@ -665,6 +665,18 @@ namespace SamSoarII.AppMain.Project
             IDVModel.Setup(this);
         }
 
+        public void IFReplaceNetwork(
+            LadderNetworkViewModel ldvmodel_old,
+            int number_new)
+        {
+
+            var command = new LadderCommand.LadderDiagramMoveNetworkCommand(
+                this, ldvmodel_old, number_new);
+            _commandManager.Execute(command);
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("LadderNetworks"));
+            IDVModel.Setup(this);
+        }
+        
         /// <summary>
         /// 放置一个新的元素在选择框内
         /// </summary>

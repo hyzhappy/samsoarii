@@ -764,8 +764,10 @@ namespace SamSoarII.AppMain.UI
                     }
                     break;
                 case ProjectTreeViewEventArgs.TYPE_NETWORK:
+                    
                     if (!(e.RelativeObject is LadderNetworkViewModel)
-                     && !(e.RelativeObject is LadderDiagramViewModel))
+                     && !(e.RelativeObject is LadderDiagramViewModel)
+                     && !(e.RelativeObject is int))
                     {
                         throw new ArgumentException(String.Format("Unsupported RelativeObject {0:s}", e.RelativeObject));
                     }
@@ -778,6 +780,13 @@ namespace SamSoarII.AppMain.UI
                     if (e.RelativeObject is LadderDiagramViewModel)
                     {
                         ldvmodel = (LadderDiagramViewModel)(e.RelativeObject);
+                    }
+                    if (e.RelativeObject is int)
+                    {
+                        if (e.TargetedObject is LadderNetworkViewModel)
+                        {
+                            lnvmodel = (LadderNetworkViewModel)(e.TargetedObject);
+                        }
                     }
                     if (ldvmodel == null)
                     {
@@ -1073,7 +1082,7 @@ namespace SamSoarII.AppMain.UI
                     _e = new ProjectTreeViewEventArgs(
                         ProjectTreeViewEventArgs.TYPE_NETWORK |
                         ProjectTreeViewEventArgs.FLAG_REPLACE,
-                        lnvmodel_new, lnvmodel_old);
+                        lnvmodel_new.NetworkNumber, lnvmodel_old);
                     PTVHandle(this, _e);
                 }
                 else
