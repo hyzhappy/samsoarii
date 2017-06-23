@@ -39,6 +39,7 @@ namespace SamSoarII.LadderInstViewModel
         public List<BaseViewModel> NextElements = new List<BaseViewModel>();
         public List<BaseViewModel> SubElements = new List<BaseViewModel>();
         public bool IsSearched { get; set; }
+        public bool IsPushed { get; set; }
         public virtual ElementType Type { get; }
         public virtual int NetWorkNum { get { return _netWorkNum; } set { _netWorkNum = value; } }
         private int _netWorkNum = -1;

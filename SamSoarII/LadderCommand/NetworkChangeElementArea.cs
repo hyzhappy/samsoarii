@@ -110,7 +110,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 area.NetworkNumberStart = Math.Min(
                     area.NetworkNumberStart, 
                     lnvmodel.NetworkNumber);
-                area.NetworkNumberEnd = Math.Min(
+                area.NetworkNumberEnd = Math.Max(
                     area.NetworkNumberEnd,
                     lnvmodel.NetworkNumber);
             }
