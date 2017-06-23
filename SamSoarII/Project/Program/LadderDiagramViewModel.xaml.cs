@@ -1129,7 +1129,7 @@ namespace SamSoarII.AppMain.Project
                 SelectRectLeft();
                 if (expand)
                 {
-                    PushLeft(_selectRect.X, _selectRect.Y, true);
+                    PushLeft(_selectRect.X, _selectRect.Y);
                     return;
                 }
                 var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
@@ -1164,7 +1164,7 @@ namespace SamSoarII.AppMain.Project
                 if (expand)
                 {
                     SelectRectRight();
-                    PushRight(_selectRect.X, _selectRect.Y, true);
+                    PushRight(_selectRect.X, _selectRect.Y);
                     return;
                 }
                 var model = _selectRectOwner.SearchElement(x, y);
@@ -1232,7 +1232,7 @@ namespace SamSoarII.AppMain.Project
                 if (expand)
                 {
                     SelectRectDown();
-                    PushDown(_selectRect.X, _selectRect.Y, true);
+                    PushDown(_selectRect.X, _selectRect.Y);
                     return;
                 }
                 if (y + 1 == _selectRectOwner.RowCount)
@@ -1262,7 +1262,7 @@ namespace SamSoarII.AppMain.Project
       
         public bool PushUp(int x, int y, bool addline = false)
         {
-            if (x == 0) return false;
+            if (x == 0 || y == 0) return false;
             IEnumerable<BaseViewModel> bvmodels_t = _selectRectOwner.GetElements().Where(
                 (bvmodel) => { return bvmodel.Y == y - 1; });
             if (bvmodels_t.Count() > 0) return false;
@@ -1292,6 +1292,7 @@ namespace SamSoarII.AppMain.Project
         
         public bool PushDown(int x, int y, bool addline = false)
         {
+            if (x == 0) return false;
             IEnumerable<BaseViewModel> bvmodels = _selectRectOwner.GetElements().Where(
                  (bvmodel) => { return bvmodel.Y >= y; });
             IEnumerable<VerticalLineViewModel> vlvmodels = _selectRectOwner.GetVerticalLines().Where(
@@ -1324,7 +1325,10 @@ namespace SamSoarII.AppMain.Project
             vlvmodel_removed.Clear();
             vlvmodel_replaced.Clear();
             bool success = _PushLeft(x, y);
-            bvmodel_removed.ForEach((bvmodel) => { bvmodel.IsPushed = false; });
+            foreach (BaseViewModel bvmodel in _selectRectOwner.GetElements())
+            {
+                bvmodel.IsPushed = false;
+            }
             if (success)
             {
                 XElement bvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
@@ -1351,7 +1355,10 @@ namespace SamSoarII.AppMain.Project
             vlvmodel_removed.Clear();
             vlvmodel_replaced.Clear();
             bool success = _PushRight(x, y);
-            bvmodel_removed.ForEach((bvmodel) => { bvmodel.IsPushed = false; });
+            foreach (BaseViewModel bvmodel in _selectRectOwner.GetElements())
+            {
+                bvmodel.IsPushed = false;
+            }
             if (success)
             {
                 XElement bvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
@@ -1383,13 +1390,13 @@ namespace SamSoarII.AppMain.Project
             VerticalLineViewModel vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, y);
             while (vlvmodel_u != null)
             {
-                bvmodel = _selectRectOwner.GetVerticalLineByPosition(x, --y1);
+                bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
                 vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x, y1 - 1);
                 if (bvmodel is HorizontalLineViewModel) break;
             }
             while (vlvmodel_d != null)
             {
-                bvmodel = _selectRectOwner.GetVerticalLineByPosition(x, ++y2);
+                bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
                 vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, y2);
                 if (bvmodel is HorizontalLineViewModel) break;
             }
@@ -1442,13 +1449,13 @@ namespace SamSoarII.AppMain.Project
             VerticalLineViewModel vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, y);
             while (vlvmodel_u != null)
             {
-                bvmodel = _selectRectOwner.GetVerticalLineByPosition(x, --y1);
+                bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
                 vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x - 1, y1 - 1);
                 if (bvmodel is HorizontalLineViewModel) break;
             }
             while (vlvmodel_d != null)
             {
-                bvmodel = _selectRectOwner.GetVerticalLineByPosition(x, ++y2);
+                bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
                 vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, y2);
                 if (bvmodel is HorizontalLineViewModel) break;
             }
