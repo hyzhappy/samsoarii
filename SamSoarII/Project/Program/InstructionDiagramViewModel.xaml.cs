@@ -47,6 +47,23 @@ namespace SamSoarII.AppMain.Project
         protected static Dictionary<string, PLCOriginInst> outdict
             = new Dictionary<string, PLCOriginInst>();
 
+        protected bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                foreach (InstructionNetworkViewModel invmodel in invmodels)
+                {
+                    invmodel.IsCommentMode = value;
+                }
+            }
+        }
+
         public InstructionDiagramViewModel()
         {
             InitializeComponent();
@@ -82,8 +99,6 @@ namespace SamSoarII.AppMain.Project
                 if (invmodeldict.ContainsKey(lnvmodel))
                 {
                     invmodel = invmodeldict[lnvmodel];
-                    invmodel.NetworkHeader.Text 
-                        = String.Format("Network {0:d}", lnvmodel.NetworkNumber); 
                 }
                 else
                 {

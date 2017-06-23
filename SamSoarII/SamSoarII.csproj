@@ -113,6 +113,7 @@
     <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramExchangeNetworkCommand.cs" />
+    <Compile Include="LadderCommand\LadderDiagramMoveNetworkCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
     <Compile Include="LadderCommand\NetworkAddRowCommand.cs" />

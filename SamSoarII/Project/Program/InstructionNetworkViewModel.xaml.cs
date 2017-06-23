@@ -1,8 +1,10 @@
 ﻿using SamSoarII.Extend.LadderChartModel;
 using SamSoarII.Extend.LogicGraph;
 using SamSoarII.Extend.Utility;
+using SamSoarII.LadderInstModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.Utility;
+using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.AvalonDock.Controls;
 using Xceed.Wpf.AvalonDock.Layout;
+using System.ComponentModel;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -41,6 +44,26 @@ namespace SamSoarII.AppMain.Project
             get { return this.lnvmodel; }
         }
         
+        private List<TextBlock> comments = new List<TextBlock>();
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                foreach (TextBlock tb in comments)
+                {
+                    tb.Visibility = iscommentmode
+                        ? Visibility.Visible
+                        : Visibility.Hidden;
+                }
+            }
+        }
+
         public bool IsMasked
         {
             get { return lnvmodel != null && lnvmodel.IsMasked; }
@@ -53,11 +76,9 @@ namespace SamSoarII.AppMain.Project
         }
 
         private LadderChart lchart;
-
         private LadderGraph lgraph;
 
         private List<PLCOriginInst> insts;
-
         public IEnumerable<PLCOriginInst> Insts
         {
             get { return this.insts; }
@@ -81,7 +102,7 @@ namespace SamSoarII.AppMain.Project
                 return inst.ProtoType;
             }
         }
-
+        
         public InstructionNetworkViewModel()
         {
             InitializeComponent();
@@ -95,15 +116,15 @@ namespace SamSoarII.AppMain.Project
             this.lnvmodel = _lnvmodel;
             lnvmodel.ElementChanged += OnElementChanged;
             lnvmodel.VerticalLineChanged += OnVerticalLineChanged;
-            lnvmodel.MaskChanged += OnMaskChanged;
+            lnvmodel.PropertyChanged += OnNetworkPropertyChanged;
             Update();
         }
-
+        
         public void Uninstall()
         {
             lnvmodel.ElementChanged -= OnElementChanged;
             lnvmodel.VerticalLineChanged -= OnVerticalLineChanged;
-            lnvmodel.MaskChanged -= OnMaskChanged;
+            lnvmodel.PropertyChanged -= OnNetworkPropertyChanged;
             this.lnvmodel = null;
         }
 
@@ -205,7 +226,7 @@ namespace SamSoarII.AppMain.Project
                     tb = new TextBlock();
                     tb.Text = inst[colid-1];
                     tb.Foreground = inst.ProtoType != null ? Brushes.Black : Brushes.Gray;
-                    tb.Background = (rowid&1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
+                    tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
                     Grid.SetRow(tb, rowid);
                     Grid.SetColumn(tb, colid);
                     G_Inst.Children.Add(tb);
@@ -216,6 +237,46 @@ namespace SamSoarII.AppMain.Project
             rdef.Height = new GridLength(1, GridUnitType.Star);
             G_Inst.RowDefinitions.Add(rdef);
             G_Inst.Children.Add(Cursor);
+            UpdateComment();
+        }
+        
+        public void UpdateComment()
+        {
+            foreach (TextBlock comment in comments)
+            {
+                if (G_Inst.Children.Contains(comment))
+                {
+                    G_Inst.Children.Remove(comment);
+                }
+            }
+            comments.Clear();
+            int rowid = 0;
+            foreach (PLCOriginInst inst in insts)
+            {
+                BaseViewModel bvmodel = inst.ProtoType;
+                if (bvmodel != null)
+                {
+                    TextBlock cmt = new TextBlock();
+                    cmt.Visibility = iscommentmode
+                        ? Visibility.Visible
+                        : Visibility.Hidden;
+                    cmt.Foreground = Brushes.Green;
+                    cmt.Text = "//";
+                    BaseModel bmodel = bvmodel.Model;
+                    for (int i = 0; i < bmodel.ParaCount; i++)
+                    {
+                        IValueModel ivmodel = bmodel.GetPara(i);
+                        cmt.Text += String.Format("{0:s}:{1:s}，",
+                            ivmodel.ValueString,
+                            ValueCommentManager.GetComment(ivmodel));
+                    }
+                    Grid.SetRow(cmt, rowid);
+                    Grid.SetColumn(cmt, 7);
+                    G_Inst.Children.Add(cmt);
+                    comments.Add(cmt);
+                }
+                rowid++;
+            }
         }
 
         public void UpdateCheck()
@@ -237,53 +298,22 @@ namespace SamSoarII.AppMain.Project
                     break;
                 }
             }
+            foreach (TextBlock cmt in comments)
+            {
+                cmt.Visibility = Visibility.Hidden;
+            }
             int rowid = 0;
-            RowDefinition rdef;
-            G_Inst.RowDefinitions.Clear();
-            G_Inst.Children.Clear();
             foreach (PLCOriginInst inst in insts)
             {
-                rdef = new RowDefinition();
-                rdef.Height = new GridLength(20);
-                G_Inst.RowDefinitions.Add(rdef);
                 TextBlock tb = new TextBlock();
-                tb.Text = rowid.ToString();
-                tb.Foreground = inst.ProtoType != null ? Brushes.Black : Brushes.Gray;
-                tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
-                Grid.SetRow(tb, rowid);
-                Grid.SetColumn(tb, 0);
-                G_Inst.Children.Add(tb);
-                for (int colid = 1; colid <= 6; colid++)
-                {
-                    tb = new TextBlock();
-                    tb.Text = inst[colid - 1];
-                    tb.Foreground = inst.ProtoType != null ? Brushes.Black : Brushes.Gray;
-                    tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
-                    switch (inst.Status)
-                    {
-                        case PLCOriginInst.STATUS_WARNING:
-                            tb.Background = Brushes.LightYellow;
-                            break;
-                        case PLCOriginInst.STATUS_ERROR:
-                            tb.Background = Brushes.Red;
-                            break;
-                    }
-                    Grid.SetRow(tb, rowid);
-                    Grid.SetColumn(tb, colid);
-                    G_Inst.Children.Add(tb);
-                }
-                tb = new TextBlock();
                 tb.Text = inst.Message;
-                //tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
+                tb.Background = inst.Status == PLCOriginInst.STATUS_ERROR 
+                    ? Brushes.Red : Brushes.Yellow;
                 Grid.SetRow(tb, rowid);
                 Grid.SetColumn(tb, 7);
                 G_Inst.Children.Add(tb);
                 rowid++;
             }
-            rdef = new RowDefinition();
-            rdef.Height = new GridLength(1, GridUnitType.Star);
-            G_Inst.RowDefinitions.Add(rdef);
-            G_Inst.Children.Add(Cursor);
         }
 
         private void OnElementChanged(object sender, LadderElementChangedArgs e)
@@ -295,12 +325,22 @@ namespace SamSoarII.AppMain.Project
         {
             ismodified = true;
         }
-
-        private void OnMaskChanged(object sender, RoutedEventArgs e)
-        {
-            Update();
-        }
         
+        private void OnNetworkPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IsMasked":
+                    Update();
+                    break;
+                case "NetworkNumber":
+                    NetworkHeader.Text
+                        = String.Format("Network {0:d}", lnvmodel.NetworkNumber);
+                    Update();
+                    break;
+            }
+        }
+
         #region Cursor
         public bool CatchCursor(BaseViewModel bvmodel)
         {
