@@ -10,6 +10,8 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class CommandManager
     {
+        private const int UNDO_LIMIT = 16;
+
         private LadderDiagramViewModel ldvmodel;
         public LadderDiagramViewModel LDVModel
         {
@@ -33,8 +35,8 @@ namespace SamSoarII.AppMain.LadderCommand
             }
         }
 
-        public Stack<IUndoableCommand> UndoStack = new Stack<IUndoableCommand>();
-        public Stack<IUndoableCommand> RedoStack = new Stack<IUndoableCommand>();
+        public LinkedList<IUndoableCommand> UndoStack = new LinkedList<IUndoableCommand>();
+        public LinkedList<IUndoableCommand> RedoStack = new LinkedList<IUndoableCommand>();
 
         public bool CanRedo
         {
@@ -69,7 +71,9 @@ namespace SamSoarII.AppMain.LadderCommand
             if (!AssertEdit(command)) return;
             command.Execute();
             InvokeLDNetworksChangedEvent(command);
-            UndoStack.Push(command);
+            UndoStack.AddFirst(command);
+            if (UndoStack.Count() > UNDO_LIMIT)
+                UndoStack.RemoveLast();
             RedoStack.Clear();
             IsModify = true;
         }
@@ -80,8 +84,8 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 var command = UndoStack.First();
                 if (!AssertEdit(command)) return;
-                UndoStack.Pop();
-                RedoStack.Push(command);
+                UndoStack.RemoveFirst();
+                RedoStack.AddFirst(command);
                 command.Undo();
                 InvokeLDNetworksChangedEvent(command);
                 IsModify = true;
@@ -94,8 +98,8 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 var command = RedoStack.First();
                 if (!AssertEdit(command)) return;
-                RedoStack.Pop();
-                UndoStack.Push(command);
+                RedoStack.RemoveFirst();
+                UndoStack.AddFirst(command);
                 command.Redo();
                 InvokeLDNetworksChangedEvent(command);
                 IsModify = true;
