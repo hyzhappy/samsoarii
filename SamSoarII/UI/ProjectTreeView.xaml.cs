@@ -1062,26 +1062,33 @@ namespace SamSoarII.AppMain.UI
                         ldvmodel_new = prev.LDVModel;
                         lnvmodel_new = ProjectHelper.CreateLadderNetworkByXElement(xele, ldvmodel_new);
                         lnvmodel_new.NetworkNumber = prev.NetworkNumber + 1;
-                        if (ldvmodel_new == ldvmodel_old
-                         && lnvmodel_new.NetworkNumber > lnvmodel_old.NetworkNumber)
-                        {
-                            lnvmodel_new.NetworkNumber--;
-                        }
                         break;
                     default:
                         DragItem = null;
                         return;
                 }
-                ProjectTreeViewEventArgs _e = new ProjectTreeViewEventArgs(
-                    ProjectTreeViewEventArgs.TYPE_NETWORK |
-                    ProjectTreeViewEventArgs.FLAG_REMOVE,
-                    lnvmodel_old, ldvmodel_old);
-                PTVHandle(this, _e);
-                _e = new ProjectTreeViewEventArgs(
-                    ProjectTreeViewEventArgs.TYPE_NETWORK |
-                    ProjectTreeViewEventArgs.FLAG_INSERT,
-                    lnvmodel_new, ldvmodel_new);
-                PTVHandle(this, _e);
+                ProjectTreeViewEventArgs _e = null;
+                if (ldvmodel_new == ldvmodel_old)
+                {
+                    _e = new ProjectTreeViewEventArgs(
+                        ProjectTreeViewEventArgs.TYPE_NETWORK |
+                        ProjectTreeViewEventArgs.FLAG_REPLACE,
+                        lnvmodel_new, lnvmodel_old);
+                    PTVHandle(this, _e);
+                }
+                else
+                {
+                    _e = new ProjectTreeViewEventArgs(
+                        ProjectTreeViewEventArgs.TYPE_NETWORK |
+                        ProjectTreeViewEventArgs.FLAG_REMOVE,
+                        lnvmodel_old, ldvmodel_old);
+                    PTVHandle(this, _e);
+                    _e = new ProjectTreeViewEventArgs(
+                        ProjectTreeViewEventArgs.TYPE_NETWORK |
+                        ProjectTreeViewEventArgs.FLAG_INSERT,
+                        lnvmodel_new, ldvmodel_new);
+                    PTVHandle(this, _e);
+                }
             }
             else
             {
