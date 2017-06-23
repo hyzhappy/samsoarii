@@ -1292,30 +1292,34 @@ namespace SamSoarII.AppMain.Project
         
         public bool PushDown(int x, int y, bool addline = false)
         {
-            if (x == 0) return false;
-            IEnumerable<BaseViewModel> bvmodels = _selectRectOwner.GetElements().Where(
-                 (bvmodel) => { return bvmodel.Y >= y; });
-            IEnumerable<VerticalLineViewModel> vlvmodels = _selectRectOwner.GetVerticalLines().Where(
-                (vlvmodel) => { return vlvmodel.Y >= y - 1; });
-            bvmodel_removed = bvmodels.ToList();
-            XElement bvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
-                bvmodels, new VerticalLineViewModel[] { });
-            bvmodel_replaced = ProjectHelper.CreateLadderElementsByXElement(bvmodel_xele).ToList();
-            bvmodel_replaced.ForEach((bvmodel) => { bvmodel.Y++; }); 
-            XElement vlvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
-                new BaseViewModel[] { }, vlvmodels);
-            vlvmodel_replaced = ProjectHelper.CreateLadderVertialLineByXElement(vlvmodel_xele).ToList();
-            vlvmodel_replaced.ForEach((vlvmodel) => { vlvmodel.Y++; });
-            vlvmodels = vlvmodels.Where(
-                (vlvmodel) => { return vlvmodel.Y >= y; });
-            vlvmodel_removed = vlvmodels.ToList();
-            if (addline) vlvmodel_replaced.Add(new VerticalLineViewModel { X = x - 1, Y = y - 1});
-            _selectRectOwner.RowCount++;
-            NetworkReplaceElementsCommand command = new NetworkReplaceElementsCommand(
+            bvmodel_removed.Clear();
+            bvmodel_replaced.Clear();
+            vlvmodel_removed.Clear();
+            vlvmodel_replaced.Clear();
+            bool addrow = false;
+            bool success = _PushDown(x, y, ref addrow);
+            foreach (VerticalLineViewModel vlvmodel in _selectRectOwner.GetVerticalLines())
+            {
+                vlvmodel.IsPushed = false;
+            }
+            if (success)
+            {
+                XElement bvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
+                    bvmodel_replaced, new VerticalLineViewModel[] { });
+                bvmodel_replaced = ProjectHelper.CreateLadderElementsByXElement(bvmodel_xele).ToList();
+                bvmodel_replaced.ForEach((bvmodel) => { bvmodel.Y++; });
+                XElement vlvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
+                    new BaseViewModel[] { }, vlvmodel_replaced);
+                vlvmodel_replaced = ProjectHelper.CreateLadderVertialLineByXElement(vlvmodel_xele).ToList();
+                vlvmodel_replaced.ForEach((vlvmodel) => { vlvmodel.Y++; });
+                if (addline) vlvmodel_replaced.Add(new VerticalLineViewModel { X = x - 1, Y = y });
+                NetworkReplaceElementsCommand command = new NetworkReplaceElementsCommand(
                     _selectRectOwner, bvmodel_replaced, vlvmodel_replaced, bvmodel_removed, vlvmodel_removed,
                     NetworkChangeElementArea.Empty, NetworkChangeElementArea.Empty);
-            _commandManager.Execute(command);
-            return true;
+                if (addrow) _selectRectOwner.RowCount++;
+                _commandManager.Execute(command);
+            }
+            return success;
         }
 
         public bool PushLeft(int x, int y, bool addline = false)
@@ -1335,7 +1339,7 @@ namespace SamSoarII.AppMain.Project
                     bvmodel_replaced, new VerticalLineViewModel[] { });
                 bvmodel_replaced = ProjectHelper.CreateLadderElementsByXElement(bvmodel_xele).ToList();
                 bvmodel_replaced.ForEach((bvmodel) => { bvmodel.X--; });
-                if (addline) bvmodel_replaced.Add(new HorizontalLineViewModel {X = x, Y = y });
+                if (addline) bvmodel_replaced.Add(new HorizontalLineViewModel { X = x, Y = y });
                 XElement vlvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
                     new BaseViewModel[] { }, vlvmodel_replaced);
                 vlvmodel_replaced = ProjectHelper.CreateLadderVertialLineByXElement(vlvmodel_xele).ToList();
@@ -1377,7 +1381,6 @@ namespace SamSoarII.AppMain.Project
             }
             return success;
         }
-        
 
         private bool _PushLeft(int x, int y)
         {
@@ -1497,6 +1500,86 @@ namespace SamSoarII.AppMain.Project
             return true;
         }
 
+        private bool _PushDown(int x, int y, ref bool addrow)
+        {
+            BaseViewModel bvmodel = _selectRectOwner.GetElementByPosition(x, y);
+            BaseViewModel bvmodel_l = _selectRectOwner.GetElementByPosition(x - 1, y);
+            BaseViewModel bvmodel_r = _selectRectOwner.GetElementByPosition(x + 1, y);
+            VerticalLineViewModel vlvmodel_u = null;
+            VerticalLineViewModel vlvmodel_d = null;
+            if ((bvmodel == null || bvmodel.IsPushed) 
+             && (bvmodel_l == null || bvmodel_l.IsPushed)
+             && (bvmodel_r == null || bvmodel_r.IsPushed))
+            {
+                return true;
+            }
+            if (y == _selectRectOwner.RowCount - 1)
+            {
+                addrow = true;
+            }
+            int x1 = x, x2 = x;
+            while (bvmodel_l != null)
+            {
+                bvmodel_l = _selectRectOwner.GetElementByPosition(--x1 - 1, y);
+            }
+            while (bvmodel_r != null)
+            {
+                bvmodel_r = _selectRectOwner.GetElementByPosition(++x2 + 1, y);
+            }
+            vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x1 - 1, y - 1);
+            vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x1 - 1, y);
+            if (vlvmodel_u != null)
+            {
+                vlvmodel_removed.Add(vlvmodel_u);
+                vlvmodel_replaced.Add(vlvmodel_u);
+                if (!vlvmodel_u.IsPushed)
+                {
+                    vlvmodel_replaced.Add(new VerticalLineViewModel { X = x1 - 1, Y = y - 2 });
+                }
+            }
+            if (vlvmodel_d != null)
+            {
+                vlvmodel_removed.Add(vlvmodel_d);
+                vlvmodel_replaced.Add(vlvmodel_d);
+                vlvmodel_d.IsPushed = true;
+            }
+            for (int _x = x1; _x <= x2; _x++)
+            {
+                bvmodel = _selectRectOwner.GetElementByPosition(_x, y);
+                if (bvmodel != null)
+                {
+                    bvmodel_removed.Add(bvmodel);
+                    bvmodel_replaced.Add(bvmodel);
+                    bvmodel.IsPushed = true;
+                }
+                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(_x, y - 1);
+                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(_x, y);
+                if (vlvmodel_u != null)
+                {
+                    vlvmodel_removed.Add(vlvmodel_u);
+                    vlvmodel_replaced.Add(vlvmodel_u);
+                    if (!vlvmodel_u.IsPushed)
+                    {
+                        vlvmodel_replaced.Add(new VerticalLineViewModel { X = _x, Y = y - 2 });
+                    }
+                }
+                if (vlvmodel_d != null)
+                {
+                    vlvmodel_removed.Add(vlvmodel_d);
+                    vlvmodel_replaced.Add(vlvmodel_d);
+                    vlvmodel_d.IsPushed = true;
+                }
+            }
+            for (int _x = x1; _x <= x2; _x++)
+            {
+                if (!_PushDown(_x, y + 1, ref addrow))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
         #endregion
 
         #region Selection Area Relative
