@@ -154,6 +154,7 @@ namespace SamSoarII.AppMain.Project
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
+               PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
             }
         }
 
@@ -214,7 +215,7 @@ namespace SamSoarII.AppMain.Project
                     UpdateModelMessage();//当解除屏蔽时，恢复元素表中被移除的的项
                 }
                 InstructionCommentManager.RaiseMappedMessageChangedEvent();//更新元素表
-                MaskChanged(this, new RoutedEventArgs());
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsMasked"));
             }
         }
         private bool _isCommendMode;
@@ -1585,28 +1586,18 @@ namespace SamSoarII.AppMain.Project
         }
         public List<BaseViewModel> GetSelectedElements()
         {
-            List<BaseViewModel> result = new List<BaseViewModel>();
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            IntPoint p = new IntPoint();
-            for (int i = yBegin; i <= yEnd; i++)
+            return _ladderElements.Where((kvp) =>
             {
-                for(int j = xBegin; j <= xEnd; j++)
-                {
-                    p.X = j;
-                    p.Y = i;
-                    try
-                    {
-                        result.Add(_ladderElements[p]);
-                    }
-                    catch(KeyNotFoundException)
-                    {
-                    } 
-                }
-            }
-            return result;
+                return kvp.Key.X >= xBegin && kvp.Key.X <= xEnd
+                    && kvp.Key.Y >= yBegin && kvp.Key.Y <= yEnd;
+            }).Select((kvp) =>
+            {
+                return kvp.Value;
+            }).ToList();
         }
         public List<BaseViewModel> GetSelectedHLines()
         {
@@ -1639,29 +1630,18 @@ namespace SamSoarII.AppMain.Project
         }
         public List<VerticalLineViewModel> GetSelectedVerticalLines()
         {
-            List<VerticalLineViewModel> result = new List<VerticalLineViewModel>();
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            IntPoint p = new IntPoint();
-            //最后一行的竖线不算进选择区域内
-            for (int i = yBegin; i < yEnd; i++)
-            {
-                for (int j = xBegin; j <= xEnd; j++)
+            return _ladderVerticalLines.Where((kvp) =>
                 {
-                    p.X = j;
-                    p.Y = i;
-                    try
-                    {
-                        result.Add(_ladderVerticalLines[p]);
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                    }
-                }
-            }
-            return result;
+                    return kvp.Key.X >= xBegin && kvp.Key.X <= xEnd
+                        && kvp.Key.Y >= yBegin && kvp.Key.Y <= yEnd;
+                }).Select((kvp) =>
+                {
+                    return kvp.Value;
+                }).ToList();
         }
         #region ladder Folding module
         private void ReloadElementsToCanvas()

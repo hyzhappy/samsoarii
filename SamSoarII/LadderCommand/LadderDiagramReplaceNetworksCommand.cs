@@ -87,10 +87,13 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_removedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
-            _area = NetworkChangeElementArea.Create(
-                _ladderDiagram, _replacedNetworks);
-            LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
-            _area.Select(lnvmodel);
+            if (_replacedNetworks.Count() > 0)
+            {
+                _area = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _replacedNetworks);
+                LadderNetworkViewModel lnvmodel = _replacedNetworks.First();
+                _area.Select(lnvmodel);
+            }
         }
 
         public void Redo()
@@ -105,11 +108,13 @@ namespace SamSoarII.AppMain.LadderCommand
             _ladderDiagram.IDVModel.Setup(_ladderDiagram);
             _ladderDiagram.ClearModelMessageByNetwork(_replacedNetworks);
             _ladderDiagram.UpdateModelMessageByNetwork();
-            _oldarea = NetworkChangeElementArea.Create(
-                _ladderDiagram, _removedNetworks);
-            if (_removedNetworks.Count == 0) return;
-            LadderNetworkViewModel lnvmodel = _removedNetworks.First();
-            _oldarea.Select(lnvmodel);
+            if (_removedNetworks.Count() > 0)
+            {
+                _oldarea = NetworkChangeElementArea.Create(
+                    _ladderDiagram, _removedNetworks);
+                LadderNetworkViewModel lnvmodel = _removedNetworks.First();
+                _oldarea.Select(lnvmodel);
+            }
         }
     }
 }
