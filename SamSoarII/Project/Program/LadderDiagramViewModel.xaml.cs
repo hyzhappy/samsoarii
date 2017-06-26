@@ -2806,12 +2806,14 @@ namespace SamSoarII.AppMain.Project
                         int yBegin = Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
                         int xEnd = Math.Max(_selectStartNetwork.SelectAreaFirstX, _selectStartNetwork.SelectAreaSecondX);
                         int yEnd = Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
-                        XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(_selectStartNetwork.GetSelectedElements(),
-                                                                                                    _selectStartNetwork.GetSelectedVerticalLines(),
+                        List<BaseViewModel> elements = _selectStartNetwork.GetSelectedElements();
+                        List<VerticalLineViewModel> vlines = _selectStartNetwork.GetSelectedVerticalLines();
+                        XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(elements, vlines,
                                                                                                     xBegin, yBegin, xEnd - xBegin + 1, yEnd - yBegin + 1);
                         if(!copy)
                         {
-                            var command = new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines(), area);
+                            var command = new LadderCommand.NetworkRemoveElementsCommand(
+                                _selectStartNetwork, elements, vlines, area);
                             _commandManager.Execute(command);
                         }
                         //XElement xele_area = new XElement("Area");
