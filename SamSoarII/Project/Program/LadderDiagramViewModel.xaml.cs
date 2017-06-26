@@ -338,7 +338,6 @@ namespace SamSoarII.AppMain.Project
             {
                 return this._actualHeight;
             }
-
             set
             {
                 this._actualHeight = value;
@@ -897,6 +896,7 @@ namespace SamSoarII.AppMain.Project
                         _ladderNetworks.Remove(net);
                         LadderNetworkStackPanel.Children.Remove(net);
                     }
+                    net.InvokeRemoveNetwork();
                 }
             }
             int n = 0;
@@ -921,6 +921,7 @@ namespace SamSoarII.AppMain.Project
                     _ladderNetworks.Remove(network);
                     LadderNetworkStackPanel.Children.Remove(network);
                 }
+                network.InvokeRemoveNetwork();
             }
         }
 

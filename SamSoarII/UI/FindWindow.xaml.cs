@@ -105,6 +105,13 @@ namespace SamSoarII.AppMain.UI
             TB_Input.Background = Brushes.Red;
         }
         /// <summary>
+        /// 初始化
+        /// </summary>
+        public void Initialize()
+        {
+            items.Clear();
+        }
+        /// <summary>
         /// 查找指令
         /// </summary>
         private void Find()
@@ -117,7 +124,7 @@ namespace SamSoarII.AppMain.UI
             {
                 // 查找当前程序
                 case MODE_CURRENT:
-                    ITabItem currenttab = parent.MainTabControl.CurrentTab;
+                    ITabItem currenttab = parent.MainTabControl.SelectedItem;
                     if (currenttab is MainTabDiagramItem)
                     {
                         MainTabDiagramItem mtditem = (MainTabDiagramItem)currenttab;
@@ -161,7 +168,7 @@ namespace SamSoarII.AppMain.UI
                     BaseModel bmodel = bvmodel.Model;
                     if (RF_Input.Match(bvmodel.ToInstString()))
                     {
-                        items.Add(new FindElement(bvmodel, ldvmodel, lnvmodel));
+                        items.Add(new FindElement(this, bvmodel, ldvmodel, lnvmodel));
                     }
                 }
             }
@@ -246,13 +253,13 @@ namespace SamSoarII.AppMain.UI
         /// <param name="e"></param>
         private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
-            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            ITabItem currenttab = parent.MainTabControl.SelectedItem;
             // 当前界面是梯形图程序时进行重查
             if (currenttab is MainTabDiagramItem
              || currenttab is LadderDiagramViewModel)
             {
                 Visibility = Visibility.Visible;
-                Find();
+                if (mode == MODE_CURRENT) Find();
             }
             // 否则隐藏窗口
             else
@@ -275,13 +282,32 @@ namespace SamSoarII.AppMain.UI
     /// </summary>
     public class FindElement : ReplaceElement
     {
+        private FindWindow parent;
+
         public FindElement
         (
+            FindWindow _parent,
             BaseViewModel _bvmodel,
             LadderDiagramViewModel _ldvmodel,
             LadderNetworkViewModel _lnvmodel
-        ) : base(_bvmodel, _ldvmodel, _lnvmodel)
+        ) : base(null, _bvmodel, _ldvmodel, _lnvmodel)
         {
+            parent = _parent;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            parent = null;
+        }
+
+        protected override void OnElementChanged(object sender, LadderElementChangedArgs e)
+        {
+            //base.OnElementChanged(sender, e);
+            if (e.BVModel_old == BVModel)
+            {
+                parent.Initialize();
+            }
         }
     }
 }

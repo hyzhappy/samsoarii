@@ -129,6 +129,10 @@ namespace SamSoarII.AppMain.UI
         /// </summary>
         public void Initialize()
         {
+            foreach (TextFindElement ele in items)
+            {
+                ele.Dispose();
+            }
             items.Clear();
         }
         /// <summary>
@@ -136,14 +140,14 @@ namespace SamSoarII.AppMain.UI
         /// </summary>
         private void Find()
         {
-            items.Clear();
+            Initialize();
             if (TB_Input.Text.Length <= 0)
                 return;
             switch (Mode)
             {
                 // 当前文本
                 case MODE_CURRENT:
-                    ITabItem currenttab = parent.MainTabControl.CurrentTab;
+                    ITabItem currenttab = parent.MainTabControl.SelectedItem;
                     if (currenttab is FuncBlockViewModel)
                     {
                         FuncBlockViewModel fbvmodel = (FuncBlockViewModel)currenttab;
@@ -258,7 +262,7 @@ namespace SamSoarII.AppMain.UI
         /// <param name="e"></param>
         private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
-            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            ITabItem currenttab = parent.MainTabControl.SelectedItem;
             if (currenttab is FuncBlockViewModel)
             {
                 Visibility = Visibility.Visible;

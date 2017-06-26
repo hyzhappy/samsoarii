@@ -1299,6 +1299,11 @@ namespace SamSoarII.AppMain
             _mainWindow.ClearProjectMonitor();
             _mainTabControl.Reset();
             MainWindow.LACProj.Hide();
+            _erwindow.Initialize();
+            _fwindow.Initialize();
+            _rwindow.Initialize();
+            _tfwindow.Initialize();
+            _trwindow.Initialize();
             GC.Collect();
         }
         public void SaveProject()

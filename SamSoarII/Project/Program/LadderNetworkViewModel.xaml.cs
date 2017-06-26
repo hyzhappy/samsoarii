@@ -1118,6 +1118,28 @@ namespace SamSoarII.AppMain.Project
         public event LadderElementChangedHandler ElementChanged = delegate { };
         public event LadderElementChangedHandler VerticalLineChanged = delegate { };
         public event BreakpointChangedEventHandler BreakpointChanged = delegate { };
+
+        public void InvokeRemoveNetwork()
+        {
+            LadderElementChangedArgs e = new LadderElementChangedArgs();
+            foreach (BaseViewModel ele in _ladderElements.Values)
+            {
+                e.BVModel_old = ele;
+                e.BVModel_new = null;
+                ElementChanged(this, e);
+            }
+            foreach (VerticalLineViewModel vline in _ladderVerticalLines.Values)
+            {
+                e.BVModel_old = vline;
+                e.BVModel_new = null;
+                VerticalLineChanged(this, e);
+            }
+            foreach (BreakpointRect bprect in _ladderBreakpoints.Values)
+            {
+                BreakpointChanged(this, new BreakpointChangedEventArgs(
+                    this, bprect, null));
+            }
+        }
         #endregion
 
         #region Update NetworkNum and LadderName of BaseViewModel
@@ -1245,7 +1267,6 @@ namespace SamSoarII.AppMain.Project
         {
             _ladderDiagram.DeleteElementExecute();
         }
-
         private void OnAddNewRowBefore(object sender, RoutedEventArgs e)
         {
             if(IsSingleSelected())
@@ -1271,7 +1292,6 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.NetworkRemoveRows(this, Math.Min(SelectAreaFirstY,SelectAreaSecondY),Math.Abs(SelectAreaFirstY - SelectAreaSecondY) + 1);
             }
         }
-        
         private void OnAppendNewRow(object sender, RoutedEventArgs e)
         {
             if (IsSingleSelected())
@@ -1279,7 +1299,6 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.NetworkAddRow(this, RowCount);
             }
         }
-        
         private void OnAppendNewNetwork(object sender, RoutedEventArgs e)
         {
             if(IsSingleSelected())
@@ -1287,7 +1306,6 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.AppendNewNetwork();
             }
         }
-
         private void OnAddNewNetworkBefore(object sender, RoutedEventArgs e)
         {
             if(IsSingleSelected())
@@ -1295,7 +1313,6 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.AddNewNetworkBefore(this);
             }
         }
-
         private void OnAddNewNetworkAfter(object sender, RoutedEventArgs e)
         {
             if (IsSingleSelected())
@@ -1304,7 +1321,6 @@ namespace SamSoarII.AppMain.Project
             }
             
         }
-
         private void OnRemoveNetwork(object sender, RoutedEventArgs e)
         {
             if(IsSingleSelected())
@@ -1312,7 +1328,6 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.RemoveSingleNetworkCommand(this);
             }
         }
-
         private void OnEditComment(object sender, RoutedEventArgs e)
         {
             EditComment();
@@ -1372,7 +1387,6 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
@@ -1492,13 +1506,11 @@ namespace SamSoarII.AppMain.Project
             }
             return false;
         }
-        
         public bool AcquireSelectRect(DragEventArgs e)
         {
             var pos = e.GetPosition(LadderCanvas);
             return AcquireSelectRect(pos);
         }
-
         public bool AcquireSelectRect(Point pos)
         {
             var intPoint = IntPoint.GetIntpointByDouble(pos.X, pos.Y, WidthUnit, HeightUnit);
@@ -1515,8 +1527,7 @@ namespace SamSoarII.AppMain.Project
             }
             return true;
         }
-
-
+        
         #endregion
         
         #region IComparable interface implemention
@@ -1591,13 +1602,13 @@ namespace SamSoarII.AppMain.Project
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
             return _ladderElements.Where((kvp) =>
-            {
-                return kvp.Key.X >= xBegin && kvp.Key.X <= xEnd
-                    && kvp.Key.Y >= yBegin && kvp.Key.Y <= yEnd;
-            }).Select((kvp) =>
-            {
-                return kvp.Value;
-            }).ToList();
+                {
+                    return kvp.Key.X >= xBegin && kvp.Key.X <= xEnd
+                        && kvp.Key.Y >= yBegin && kvp.Key.Y <= yEnd;
+                }).Select((kvp) =>
+                {
+                    return kvp.Value;
+                }).ToList();
         }
         public List<BaseViewModel> GetSelectedHLines()
         {

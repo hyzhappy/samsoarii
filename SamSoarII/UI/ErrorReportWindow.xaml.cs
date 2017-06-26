@@ -33,6 +33,11 @@ namespace SamSoarII.AppMain.UI
             parent = _parent;
         }
 
+        public void Initialize()
+        {
+            items.Clear();
+        }
+
         #region Numbers
 
         private InteractionFacade parent;

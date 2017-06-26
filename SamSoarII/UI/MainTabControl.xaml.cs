@@ -54,12 +54,20 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Current
-        public ITabItem SelectedItem = null;
-        public ITabItem CurrentTab
+        private ITabItem selecteditem = null;
+        public ITabItem SelectedItem
         {
             get
             {
-                return SelectedItem;
+                return selecteditem;
+            }
+            set
+            {
+                if (selecteditem != value)
+                {
+                    selecteditem = value;
+                    SelectionChanged(this, null);
+                }
             }
         }
         #endregion
@@ -151,7 +159,6 @@ namespace SamSoarII.AppMain.UI
             int ldocid = Children.IndexOf(ldoc);
             SelectedItem = item;
             SelectedContentIndex = ldocid;
-            SelectionChanged(this, null);
         }
 
         public void RenameItem(ITabItem item)
@@ -215,11 +222,6 @@ namespace SamSoarII.AppMain.UI
                 {
                     ITabItem _SelectedItem = SelectedItem;
                     SelectedItem = (ITabItem)(ldoc.Content);
-                    if (SelectionChanged != null)
-                    {
-                        SelectionChangedEventArgs _e = null;
-                        SelectionChanged(this, _e);
-                    }
                 }
             }
         }
