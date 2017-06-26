@@ -71,7 +71,7 @@ namespace SamSoarII.Extend.Utility
             while (Height <= y) data.Add(new T[Width]);
             data[y][x] = value;
         }
-        public void Set(int x, int y, GridDictionarySelector<T> selector)
+        public void Set(int x, int y, IGridDictionarySelector<T> selector)
         {
             selector.Reset();
             if (!selector.MoveNext()
@@ -93,7 +93,17 @@ namespace SamSoarII.Extend.Utility
         }
     }
 
-    public class GridDictionarySelector<T> : IEnumerator<T>
+    public interface IGridDictionarySelector<T> : IEnumerable<T>, IEnumerator<T>
+    {
+        int X1 { get; }
+        int X2 { get; }
+        int Y1 { get; }
+        int Y2 { get; }
+        int Width { get; }
+        int Height { get; }
+    }
+
+    public class GridDictionarySelector<T> : IGridDictionarySelector<T>
     {
         public static GridDictionarySelector<T> Empty { get; private set; }
             = new GridDictionarySelector<T> (null, 0, 0, 0, 0);
@@ -112,6 +122,17 @@ namespace SamSoarII.Extend.Utility
         public int Y2 { get { return y2; } }
         public int Width { get { return x2 - x1 + 1; } }
         public int Height { get { return y2 - y1 + 1; } }
+        
+        public IEnumerator<T> GetEnumerator()
+        {
+            Reset();
+            return this;
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            Reset();
+            return this;
+        }
 
         public GridDictionarySelector (
            GridDictionary<T> _dict, int _x1, int _x2, int _y1, int _y2)
@@ -151,5 +172,80 @@ namespace SamSoarII.Extend.Utility
             cx = x1 - 1;
             cy = y1;
         }
+    }
+
+    public class GridDictionarySelectorClone<T> : IEnumerable<T>, IGridDictionarySelector<T>
+    {
+        private T[,] data;
+        private int top;
+        private int left;
+        private int width;
+        private int height;
+        private int x;
+        private int y;
+
+        public int X1 { get { return top; } }
+        public int X2 { get { return top + width - 1; } }
+        public int Y1 { get { return left; } }
+        public int Y2 { get { return left + height - 1; } }
+        public int Width { get { return width; } }
+        public int Height { get { return height; } }
+
+        public GridDictionarySelectorClone (GridDictionarySelector<T> origin)
+        {
+            top = 0;
+            left = 0;
+            width = origin.Width;
+            height = origin.Height;
+            data = new T[width, height];
+
+            origin.Reset();
+            for (x = 0; x < width; x++)
+                for (y = 0; y < height; y++)
+                {
+                    origin.MoveNext();
+                    data[x, y] = origin.Current;
+                }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            Reset();
+            return this;
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            Reset();
+            return this;
+        }
+
+        public T Current { get { return x >= 0 && x < width && y >= 0 && y < height ? data[x, y] : default(T); } }
+
+        object IEnumerator.Current { get { return Current; } }
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            if (y >= height)
+            {
+                return false;
+            }
+            if (++x >= width)
+            {
+                x = 0;
+                return ++y < height;
+            }
+            return true;
+        }
+
+        public void Reset()
+        {
+            x = -1;
+            y = 0;
+        }
+
     }
 }
