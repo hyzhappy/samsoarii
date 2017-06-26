@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.Extend.LogicGraph;
+using SamSoarII.Extend.Utility;
 
 /// <summary>
 /// ClassName : LCNode
@@ -31,6 +32,7 @@ namespace SamSoarII.Extend.LadderChartModel
         /// 内部成员变量
         /// </summary>
         private List<LCNode> nodes;
+        private GridDictionary<LCNode> nodedict;
         private int width;
         private int heigh;
         LCNode leupnode;
@@ -39,6 +41,7 @@ namespace SamSoarII.Extend.LadderChartModel
         public LadderChart()
         {
             nodes = new List<LCNode>();
+            nodedict = new GridDictionary<LCNode>(12);
         }
 
         public List<LCNode> Nodes
@@ -74,57 +77,62 @@ namespace SamSoarII.Extend.LadderChartModel
         /// </summary>
         public bool Insert(LCNode newnode)
         {
+            LCNode node = null;
             // 节点已经存在的话
-            foreach (LCNode node in nodes)
-            {
-                if (node.X == newnode.X && node.Y == newnode.Y)
-                    return false;
-            }
+            node = nodedict.Get(newnode.X, newnode.Y);
+            if (node != null)
+                return false;
             // 链接相邻节点
-            foreach (LCNode node in nodes)
+            node = nodedict.Get(newnode.X - 1, newnode.Y);
+            if (node != default(LCNode))
             {
-                if (node.X == newnode.X-1 && node.Y == newnode.Y)
-                {
-                    node.Right = newnode;
-                    newnode.Left = node;
-                }
-                if (node.X == newnode.X+1 && node.Y == newnode.Y)
-                {
-                    node.Left = newnode;
-                    newnode.Right = node;
-                }
-                if (node.X == newnode.X && node.Y == newnode.Y-1)
-                {
-                    node.Down = newnode;
-                    newnode.Up = node;
-                }
-                if (node.X == newnode.X && node.Y == newnode.Y+1)
-                {
-                    node.Up = newnode;
-                    newnode.Down = node;
-                }
-                if (node.X == newnode.X+1 && node.Y == newnode.Y-1)
-                {
-                    newnode.RiUp = node;
-                    node.LeDo = newnode;
-                }
-                if (node.X == newnode.X+1 && node.Y == newnode.Y+1)
-                {
-                    newnode.RiDo = node;
-                    node.LeUp = newnode;
-                }
-                if (node.X == newnode.X-1 && node.Y == newnode.Y+1)
-                {
-                    node.RiUp = newnode;
-                    newnode.LeDo = node;
-                }
-                if (node.X == newnode.X-1 && node.Y == newnode.Y-1)
-                {
-                    node.RiDo = newnode;
-                    newnode.LeUp = node;
-                }
+                node.Right = newnode;
+                newnode.Left = node;
+            }
+            node = nodedict.Get(newnode.X + 1, newnode.Y);
+            if (node != default(LCNode))
+            {
+                node.Left = newnode;
+                newnode.Right = node;
+            }
+            node = nodedict.Get(newnode.X, newnode.Y - 1);
+            if (node != default(LCNode))
+            {
+                node.Down = newnode;
+                newnode.Up = node;
+            }
+            node = nodedict.Get(newnode.X, newnode.Y + 1);
+            if (node != default(LCNode))
+            {
+                node.Up = newnode;
+                newnode.Down = node;
+            }
+            node = nodedict.Get(newnode.X + 1, newnode.Y - 1);
+            if (node != default(LCNode))
+            {
+                node.LeUp = newnode;
+                newnode.RiDo = node;
+            }
+            node = nodedict.Get(newnode.X + 1, newnode.Y + 1);
+            if (node != default(LCNode))
+            {
+                node.LeDo = newnode;
+                newnode.RiUp = node;
+            }
+            node = nodedict.Get(newnode.X - 1, newnode.Y + 1);
+            if (node != default(LCNode))
+            {
+                node.RiDo = newnode;
+                newnode.LeUp = node;
+            }
+            node = nodedict.Get(newnode.X - 1, newnode.Y - 1);
+            if (node != default(LCNode))
+            {
+                node.RiUp = newnode;
+                newnode.LeDo = node;
             }
             nodes.Add(newnode);
+            nodedict.Set(newnode.X, newnode.Y, newnode);
             return true;
         }
    
@@ -133,57 +141,29 @@ namespace SamSoarII.Extend.LadderChartModel
         /// </summary>
         public bool Delete(LCNode delnode)
         {
-            bool isDelete = false;
+            // 不存在
+            if (nodedict.Get(delnode.X, delnode.Y) != delnode)
+                return false;
             // 链接解除
-            foreach (LCNode node in nodes)
-            {
-                if (node.X == delnode.X - 1 && node.Y == delnode.Y)
-                {
-                    node.Right = null;
-                    delnode.Left = null;
-                }
-                if (node.X == delnode.X + 1 && node.Y == delnode.Y)
-                {
-                    node.Left = null;
-                    delnode.Right = null;
-                }
-                if (node.X == delnode.X && node.Y == delnode.Y - 1)
-                {
-                    node.Down = null;
-                    delnode.Up = null;
-                }
-                if (node.X == delnode.X && node.Y == delnode.Y + 1)
-                {
-                    node.Up = null;
-                    delnode.Down = null;
-                }
-                if (node.X == delnode.X - 1 && node.Y == delnode.Y + 1)
-                {
-                    node.RiUp = null;
-                    delnode.LeDo = null;
-                }
-                if (node.X == delnode.X - 1 && node.Y == delnode.Y - 1)
-                {
-                    node.RiDo = null;
-                    delnode.LeUp = null;
-                }
-                if (node.X == delnode.X + 1 && node.Y == delnode.Y - 1)
-                {
-                    node.LeDo = null;
-                    delnode.RiUp = null;
-                }
-                if (node.X == delnode.X + 1 && node.Y == delnode.Y + 1)
-                {
-                    node.LeUp = null;
-                    delnode.RiDo = null;
-                }
-                if (node.Id == delnode.Id)
-                {
-                    nodes.Remove(node);
-                    isDelete = true;
-                }
-            }
-            return isDelete;
+            if (delnode.Left != null)
+                delnode.Left.Right = null;
+            if (delnode.Right != null)
+                delnode.Right.Left = null;
+            if (delnode.Up != null)
+                delnode.Up.Down = null;
+            if (delnode.Down != null)
+                delnode.Down.Up = null;
+            if (delnode.RiDo != null)
+                delnode.RiDo.LeUp = null;
+            if (delnode.RiUp != null)
+                delnode.RiUp.LeDo = null;
+            if (delnode.LeDo != null)
+                delnode.LeDo.RiUp = null;
+            if (delnode.LeUp != null)
+                delnode.LeUp.RiDo = null;
+            nodes.Remove(delnode);
+            nodedict.Set(delnode.X, delnode.Y, default(LCNode));
+            return true;
         }
         /// <summary>
         /// 获得id对应的梯形图节点

@@ -191,10 +191,12 @@ namespace SamSoarII.AppMain.Project
              && AutoInstManager.IsAlive)
             {
                 AutoInstManager.Abort();
+                /*
                 while (AutoInstManager.IsAlive)
                 {
                     Thread.Sleep(20);
                 }
+                */
             }
         }
         public bool ContainProgram(string name)

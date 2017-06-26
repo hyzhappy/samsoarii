@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\BreakPointManager.cs" />
     <Compile Include="Utility\ExprHelper.cs" />
+    <Compile Include="Utility\GridDictionary.cs" />
     <Compile Include="Utility\InstHelper.cs" />
     <Compile Include="Utility\PLCInstruction.cs" />
     <Compile Include="Utility\PLCOriginInst.cs" />
