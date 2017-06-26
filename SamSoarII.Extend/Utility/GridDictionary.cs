@@ -61,6 +61,10 @@ namespace SamSoarII.Extend.Utility
         }
         public GridDictionarySelector<T> Get(int x1, int x2, int y1, int y2)
         {
+            x1 = Math.Max(x1, 0);
+            y1 = Math.Max(y1, 0);
+            x2 = Math.Min(x2, Width - 1);
+            y2 = Math.Min(y2, Height - 1);
             return _Assert(x1, x2, y1, y2)
                 ? new GridDictionarySelector<T>(this, x1, x2, y1, y2)
                 : GridDictionarySelector<T>.Empty;
@@ -73,8 +77,7 @@ namespace SamSoarII.Extend.Utility
         }
         public void Set(int x, int y, IGridDictionarySelector<T> selector)
         {
-            selector.Reset();
-            if (!selector.MoveNext()
+            if (selector.Width <= 0 || selector.Height <= 0
              || x < 0 || x + selector.Width >= Width
              || y < 0 || y + selector.Height >= Height)
             {
@@ -87,8 +90,7 @@ namespace SamSoarII.Extend.Utility
             for (int _x = x; _x < x + selector.Width; _x++)
                 for (int _y = y; _y < y + selector.Height; _y++)
                 {
-                    data[_y][_x] = selector.Current;
-                    selector.MoveNext();
+                    data[_y][_x] = selector.Get(_x - x + selector.X1, _y - y + selector.Y1);
                 }
         }
     }
@@ -101,6 +103,7 @@ namespace SamSoarII.Extend.Utility
         int Y2 { get; }
         int Width { get; }
         int Height { get; }
+        T Get(int x, int y);
     }
 
     public class GridDictionarySelector<T> : IGridDictionarySelector<T>
@@ -146,7 +149,7 @@ namespace SamSoarII.Extend.Utility
         }
         
         public T Current { get { return dict != null ? dict.Get(cx, cy) : default(T); } }
-
+        
         object IEnumerator.Current { get { return Current; } }
 
         public void Dispose()
@@ -155,22 +158,33 @@ namespace SamSoarII.Extend.Utility
 
         public bool MoveNext()
         {
-            if (dict == null || cy > y2)
+            if (dict == null)
             {
                 return false;
             }
-            if (++cx > x2)
+            while (cy <= y2)
             {
-                cx = x1;
-                return ++cy <= y2;
+                if (++cx > x2)
+                {
+                    cx = x1;
+                    cy++;
+                }
+                if (Current != null)
+                    return true;
             }
-            return true;
+            return false;
         }
 
         public void Reset()
         {
             cx = x1 - 1;
             cy = y1;
+        }
+
+
+        public T Get(int x, int y)
+        {
+            return dict != null ? dict.Get(x, y) : default(T);
         }
     }
 
@@ -229,22 +243,29 @@ namespace SamSoarII.Extend.Utility
 
         public bool MoveNext()
         {
-            if (y >= height)
+            while (y < height)
             {
-                return false;
+                if (++x >= width)
+                {
+                    x = 0;
+                    y++;
+                }
+                if (Current != null)
+                    return true;
             }
-            if (++x >= width)
-            {
-                x = 0;
-                return ++y < height;
-            }
-            return true;
+            return false;
         }
 
         public void Reset()
         {
             x = -1;
             y = 0;
+        }
+
+        public T Get(int x, int y)
+        {
+            return (x >= top && x < top + width && y >= left && y < left + height)
+                ? data[x - top, y - left] : default(T);
         }
 
     }

@@ -354,7 +354,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         }
         private void AddElementByNetWork(LadderNetworkViewModel network, MonitorVariableTable table)
         {
-            foreach (var ele in network.LadderElements.Values.Where(x => { return x.Type != ElementType.HLine; }))
+            foreach (var ele in network.LadderElements.Where(x => { return x.Type != ElementType.HLine; }))
             {
                 foreach (var model in ele.GetValueModels().Where(x => { return !x.IsVariable; }))
                 {

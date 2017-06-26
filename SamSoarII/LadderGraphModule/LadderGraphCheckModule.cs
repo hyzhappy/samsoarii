@@ -68,7 +68,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         private static ErrorType CheckNetwork(LadderNetworkViewModel ladderNetwork)
         {
             ladderNetwork.PreCompile();
-            if (ladderNetwork.LadderElements.Values.Count == 0 && ladderNetwork.LadderVerticalLines.Values.Count == 0)
+            if (ladderNetwork.LadderElements.Count() == 0 && ladderNetwork.LadderVerticalLines.Count() == 0)
             {
                 return ErrorType.Empty;
             }
@@ -105,7 +105,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         private static bool IsLadderGraphShort(LadderNetworkViewModel ladderNetwork)
         {
             ladderNetwork.ClearSearchedFlag();
-            var rootElements = ladderNetwork.LadderElements.Values.Where(x => { return x.Type == ElementType.Output; });
+            var rootElements = ladderNetwork.LadderElements.Where(x => { return x.Type == ElementType.Output; });
             Queue<BaseViewModel> tempQueue = new Queue<BaseViewModel>(rootElements);
             while (tempQueue.Count > 0)
             {
@@ -162,7 +162,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         //自环检测
         private static bool CheckSelfLoop(LadderNetworkViewModel ladderNetwork)
         {
-            var notHLines = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.HLine; });
+            var notHLines = ladderNetwork.LadderElements.Where(x => { return x.Type != ElementType.HLine; });
             //var needCheckElements = notHLines.Where(x => { return !(x.NextElemnets.Any(y => { return y.Type == ElementType.Null; })); });
             IEnumerable<BaseViewModel> hLinesOfNeedCheckElement;
             foreach (var needCheckElement in notHLines)
@@ -202,7 +202,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         //得到与model直连的所有HLine
         private static IEnumerable<BaseViewModel> GetHLines(BaseViewModel model, LadderNetworkViewModel ladderNetwork)
         {
-            var hLines = ladderNetwork.LadderElements.Values.Where(x => { return (x.Type == ElementType.HLine); });
+            var hLines = ladderNetwork.LadderElements.Where(x => { return (x.Type == ElementType.HLine); });
             var tempList = new List<BaseViewModel>();
             foreach (var hLine in hLines)
             {
@@ -243,8 +243,8 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 p3 = relativePoints.ElementAt(0);
                 p1 = relativePoints.ElementAt(1);
             }
-            BaseViewModel element;
-            if (ladderNetwork.LadderElements.TryGetValue(p1, out element))
+            BaseViewModel element = ladderNetwork.LadderElements.Get(p1.X, p1.Y);
+            if (element != null)
             {
                 if (element == model)
                 {
@@ -258,14 +258,16 @@ namespace SamSoarII.AppMain.LadderGraphModule
             VerticalLineViewModel verticalLine;
             if ((direction == Direction.Up) || (direction == Direction.Right))
             {
-                if (ladderNetwork.LadderVerticalLines.TryGetValue(p2, out verticalLine))
+                verticalLine = ladderNetwork.LadderVerticalLines.Get(p2.X, p2.Y);
+                if (verticalLine != null)
                 {
                     up = CheckRelativePoints(ladderNetwork,GetUpRelativePoint(p2.X, p2.Y), model, Direction.Up);
                 }
             }
             if ((direction == Direction.Down) || (direction == Direction.Right))
             {
-                if (ladderNetwork.LadderVerticalLines.TryGetValue(p3, out verticalLine))
+                verticalLine = ladderNetwork.LadderVerticalLines.Get(p3.X, p3.Y);
+                if (verticalLine != null)
                 {
                     down = CheckRelativePoints(ladderNetwork,GetDownRelativePoint(p3.X, p3.Y), model, Direction.Down);
                 }
@@ -277,7 +279,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         private static bool CheckHybridLink(LadderNetworkViewModel ladderNetwork)
         {
             //得到有多条支路的元素集合
-            var needCheckElements = ladderNetwork.LadderElements.Values.Where(x => { return x.NextElements.Count > 1; });
+            var needCheckElements = ladderNetwork.LadderElements.Where(x => { return x.NextElements.Count > 1; });
             foreach (var ele in needCheckElements)
             {
                 for (int i = 0; i < ele.NextElements.Count; i++)
@@ -317,7 +319,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                             }
                         }
                         //得到除直线外，且除去ele子元素的集合。
-                        var tempList = new List<BaseViewModel>(ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.HLine; }));
+                        var tempList = new List<BaseViewModel>(ladderNetwork.LadderElements.Where(x => { return x.Type != ElementType.HLine; }));
                         foreach (var item in ele.SubElements)
                         {
                             tempList.Remove(item);
@@ -341,8 +343,8 @@ namespace SamSoarII.AppMain.LadderGraphModule
         //特殊模块检测
         private static bool CheckSpecialModel(LadderNetworkViewModel ladderNetwork)
         {
-            var allElements = ladderNetwork.LadderElements.Values.Where(x => { return x.Type != ElementType.HLine; });
-            var allSpecialModels = ladderNetwork.LadderElements.Values.Where(x => { return x.Type == ElementType.Special; });
+            var allElements = ladderNetwork.LadderElements.Where(x => { return x.Type != ElementType.HLine; });
+            var allSpecialModels = ladderNetwork.LadderElements.Where(x => { return x.Type == ElementType.Special; });
             foreach (var specialmodel in allSpecialModels)
             {
                 //定义特殊模块的所有子元素及其自身为一个结果集
@@ -451,7 +453,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         //}
         private static bool CheckElements(LadderNetworkViewModel ladderNetwork)
         {
-            var tempElements = ladderNetwork.LadderElements.Values.ToList();
+            var tempElements = ladderNetwork.LadderElements.ToList();
             for (int i = 0; i <= ladderNetwork.GetMaxY(); i++)
             {
                 var tempList = tempElements.Where(x => { return x.Y == i; }).ToList();
@@ -477,7 +479,9 @@ namespace SamSoarII.AppMain.LadderGraphModule
             p1.Y = model.Y;
             p2.X = model.X - 1;
             p2.Y = model.Y - 1;
-            if (ladderNetwork.LadderVerticalLines.ContainsKey(p1) && !ladderNetwork.LadderVerticalLines.ContainsKey(p2) && !ladderNetwork.LadderElements.ContainsKey(p1))
+            if (ladderNetwork.LadderVerticalLines.Get(p1.X, p1.Y) != null && 
+                ladderNetwork.LadderVerticalLines.Get(p2.X, p2.Y) == null && 
+                ladderNetwork.LadderElements.Get(p1.X, p1.Y) == null)
             {
                 ladderNetwork.ErrorModels.Clear();
                 ladderNetwork.ErrorModels.Add(model);//add error element
