@@ -1324,7 +1324,9 @@ namespace SamSoarII.AppMain
         }
         private void LoadProjectWork(LoadingWindowHandle handle)
         {
+            string _pname = ProjectFullFileName;
             CloseCurrentProject();
+            ProjectFullFileName = _pname;
             InstructionCommentManager.UpdateAllComment();
             ProjectModel = ProjectHelper.LoadProject(ProjectFullFileName, new ProjectModel(String.Empty));
             XDocument xdoc = XDocument.Load(ProjectFullFileName);
@@ -1334,7 +1336,7 @@ namespace SamSoarII.AppMain
             _projectModel.autoSavedManager = new AutoSavedManager(this);
             _projectModel.AutoInstManager = new AutoInstManager(this);
             _projectModel.PropertyChanged += _projectModel_PropertyChanged;
-            _projectModel.EleInitializeData = null;
+            //_projectModel.EleInitializeData = null;
             _projectTreeView = new ProjectTreeView(_projectModel, xele_rtv);
             _projectTreeView.TabItemOpened += OnTabOpened;
             _projectTreeView.PTVHandle += OnGotPTVHandle;
