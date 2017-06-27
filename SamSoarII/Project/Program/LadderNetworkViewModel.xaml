@@ -50,7 +50,7 @@
                             Template="{StaticResource ThumbnailButton}" MouseDoubleClick="OnMouseDoubleClick" MouseWheel="OnMouseWheel"/>
                 </Grid>
                 <Grid>
-                    <Canvas x:Name="LadderCanvas" 
+                    <Canvas x:Name="LadderCanvas"
                         HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
                         PreviewMouseDown="OnCanvasMouseDown" PreviewMouseUp="OnCanvasMouseUp"
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">

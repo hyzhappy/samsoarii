@@ -148,7 +148,8 @@ namespace SamSoarII.Extend.Utility
             Reset();
         }
         
-        public T Current { get { return dict != null ? dict.Get(cx, cy) : default(T); } }
+        public T Current { get { return cx >= x1 && cx <= x2 && cy >= y1 && cy <= y2 
+                    && dict != null ? dict.Get(cx, cy) : default(T); } }
         
         object IEnumerator.Current { get { return Current; } }
 

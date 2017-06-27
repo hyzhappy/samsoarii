@@ -56,6 +56,7 @@ namespace SamSoarII.AppMain.LadderCommand
                 _network.RemoveElement(ele);
             foreach (var vline in _vlines)
                 _network.RemoveVerticalLine(vline);
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             //_network.INVModel.Setup(_network);
         }
 
@@ -74,6 +75,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             //_network.INVModel.Setup(_network);
             if (_elements.Count() + _vlines.Count() == 1)
             {

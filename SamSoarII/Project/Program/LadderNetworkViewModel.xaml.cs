@@ -53,7 +53,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged,IDisposable
+    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
     {
         #region Canvas System
         //private ContextMenu CM_Ladder;
@@ -143,6 +143,18 @@ namespace SamSoarII.AppMain.Project
                 {
                     _rowCount = value;
                     LadderCanvas.Height = _rowCount * HeightUnit;
+                    if(value > LadderElements.YCapacity)
+                    {
+                        LadderElements.YCapacity *= 2;
+                        LadderVerticalLines.YCapacity *= 2;
+                        LadderBreakpoints.YCapacity *= 2;
+                    }
+                    else if (value < LadderElements.YCapacity / 4 && LadderElements.YCapacity > 8)
+                    {
+                        LadderElements.YCapacity /= 2;
+                        LadderVerticalLines.YCapacity /= 2;
+                        LadderBreakpoints.YCapacity /= 2;
+                    }
                 }
             }
         }
@@ -240,28 +252,35 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-        private GridDictionary<BaseViewModel> _ladderElements
-            = new GridDictionary<BaseViewModel>(12);
-        private GridDictionary<VerticalLineViewModel> _ladderVerticalLines
-            = new GridDictionary<VerticalLineViewModel>(12);
-        private GridDictionary<BreakpointRect> _ladderBreakpoints
-            = new GridDictionary<BreakpointRect>(12);
+        private CanvasDic<BaseViewModel> _ladderElements
+            = new CanvasDic<BaseViewModel>(GlobalSetting.LadderXCapacity);
+        private CanvasDic<VerticalLineViewModel> _ladderVerticalLines
+            = new CanvasDic<VerticalLineViewModel>(GlobalSetting.LadderXCapacity);
+        private CanvasDic<BreakpointRect> _ladderBreakpoints
+            = new CanvasDic<BreakpointRect>(GlobalSetting.LadderXCapacity);
 
-        public GridDictionary<BaseViewModel> LadderElements
+        //private GridDictionary<BaseViewModel> _ladderElements
+        //    = new GridDictionary<BaseViewModel>(GlobalSetting.LadderXCapacity);
+        //private GridDictionary<VerticalLineViewModel> _ladderVerticalLines
+        //    = new GridDictionary<VerticalLineViewModel>(GlobalSetting.LadderXCapacity);
+        //private GridDictionary<BreakpointRect> _ladderBreakpoints
+        //    = new GridDictionary<BreakpointRect>(GlobalSetting.LadderXCapacity);
+
+        public CanvasDic<BaseViewModel> LadderElements
         {
             get
             {
                 return _ladderElements;
             }
         }
-        public GridDictionary<VerticalLineViewModel> LadderVerticalLines
+        public CanvasDic<VerticalLineViewModel> LadderVerticalLines
         {
             get
             {
                 return _ladderVerticalLines;
             }
         }
-        public GridDictionary<BreakpointRect> LadderBreakpoints
+        public CanvasDic<BreakpointRect> LadderBreakpoints
         {
             get
             {
@@ -298,12 +317,12 @@ namespace SamSoarII.AppMain.Project
 
         public BaseViewModel GetElementByPosition(int X, int Y)
         {
-            return _ladderElements.Get(X, Y);
+            return _ladderElements[X, Y];
         }
 
         public VerticalLineViewModel GetVerticalLineByPosition(int X, int Y)
         {
-            return _ladderVerticalLines.Get(X, Y);
+            return _ladderVerticalLines[X, Y];
         }
         
         #region Selection relative data
@@ -568,7 +587,7 @@ namespace SamSoarII.AppMain.Project
 
         public BreakpointRect SearchBreakpoint(int x, int y)
         {
-            return _ladderBreakpoints.Get(x, y);
+            return _ladderBreakpoints[x,y];
         }
 
         public IEnumerable<BreakpointRect> GetBreakpoint()
@@ -655,18 +674,18 @@ namespace SamSoarII.AppMain.Project
             }
             if (flag)
             {
-                oldele = _ladderElements.Get(element.X, element.Y);
+                oldele = _ladderElements[element.X, element.Y];
                 if (oldele != null)
                 {
                     if (oldele.BPRect != null)
                         RemoveBreakpoint(oldele.BPRect);
                     InstructionCommentManager.Unregister(oldele);
                     oldele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
-                    _ladderElements.Set(oldele.X, oldele.Y, default(BaseViewModel));
+                    _ladderElements[oldele.X, oldele.Y] = default(BaseViewModel);
                     LadderCanvas.Children.Remove(oldele);
                 }
                 element.IsCommentMode = _isCommendMode;
-                _ladderElements.Set(element.X, element.Y, element);
+                _ladderElements[element.X, element.Y] = element;
                 LadderCanvas.Children.Add(element);
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
@@ -681,10 +700,10 @@ namespace SamSoarII.AppMain.Project
         }
         public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
-            if (_ladderVerticalLines.Get(vline.X, vline.Y) == null)
+            if (_ladderVerticalLines[vline.X, vline.Y] == null)
             {
                 vline.IsCommentMode = _isCommendMode;
-                _ladderVerticalLines.Set(vline.X, vline.Y, vline);
+                _ladderVerticalLines[vline.X, vline.Y] = vline;
                 LadderCanvas.Children.Add(vline);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = null;
@@ -703,8 +722,8 @@ namespace SamSoarII.AppMain.Project
                     X = _ladderDiagram.SelectionRect.X,
                     Y = _ladderDiagram.SelectionRect.Y
                 };
-                if (_ladderElements.Get(p.X, p.Y) != null)
-                    rect.BVModel = _ladderElements.Get(p.X, p.Y);
+                if (_ladderElements[p.X, p.Y] != null)
+                    rect.BVModel = _ladderElements[p.X, p.Y];
                 else
                     return;
             }
@@ -713,25 +732,25 @@ namespace SamSoarII.AppMain.Project
                 X = rect.BVModel.X,
                 Y = rect.BVModel.Y
             };
-            BreakpointRect rect_old = _ladderBreakpoints.Get(p.X, p.Y);
+            BreakpointRect rect_old = _ladderBreakpoints[p.X, p.Y];
             if (rect_old != null)
             {
                 LadderCanvas.Children.Remove(rect_old);
             }
-            _ladderBreakpoints.Set(p.X, p.Y, rect);
+            _ladderBreakpoints[p.X, p.Y] = rect;
             LadderCanvas.Children.Add(rect);
             BreakpointChanged(this, new BreakpointChangedEventArgs(
                 this, rect_old, rect));
         }
         public void RemoveElement(IntPoint pos)
         {
-            var ele = _ladderElements.Get(pos.X, pos.Y);
+            var ele = _ladderElements[pos.X, pos.Y];
             if (ele != null)
             {
                 if (ele.BPRect != null)
                     RemoveBreakpoint(ele.BPRect);
                 LadderCanvas.Children.Remove(ele);
-                _ladderElements.Set(pos.X, pos.Y, default(BaseViewModel));
+                _ladderElements[pos.X, pos.Y] = default(BaseViewModel);
                 InstructionCommentManager.Unregister(ele);
                 ele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
@@ -746,16 +765,16 @@ namespace SamSoarII.AppMain.Project
         }
         public void RemoveElement(BaseViewModel element)
         {
-            if (_ladderElements.Get(element.X, element.Y) == element)
+            if (_ladderElements[element.X, element.Y] == element)
                 RemoveElement(element.X, element.Y);
         }
         public bool RemoveVerticalLine(IntPoint pos)
         {
-            var vline = _ladderVerticalLines.Get(pos.X, pos.Y);
+            var vline = _ladderVerticalLines[pos.X, pos.Y];
             if (vline != null)
             {
                 LadderCanvas.Children.Remove(vline);
-                _ladderVerticalLines.Set(pos.X, pos.Y, default(VerticalLineViewModel));
+                _ladderVerticalLines[pos.X, pos.Y] = default(VerticalLineViewModel);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = vline;
                 e.BVModel_new = null;
@@ -773,15 +792,15 @@ namespace SamSoarII.AppMain.Project
         }
         public bool RemoveVerticalLine(VerticalLineViewModel vline)
         {
-            return _ladderVerticalLines.Get(vline.X, vline.Y) == vline
+            return _ladderVerticalLines[vline.X, vline.Y] == vline
                 ? RemoveVerticalLine(vline.X, vline.Y) : false;
         }
         public bool RemoveBreakpoint(IntPoint pos)
         {
-            BreakpointRect rect = _ladderBreakpoints.Get(pos.X, pos.Y);
+            BreakpointRect rect = _ladderBreakpoints[pos.X, pos.Y];
             if (rect != null)
             {
-                _ladderBreakpoints.Set(pos.X, pos.Y, default(BreakpointRect));
+                _ladderBreakpoints[pos.X, pos.Y] = default(BreakpointRect);
                 LadderCanvas.Children.Remove(rect);
                 BreakpointChanged(this, new BreakpointChangedEventArgs(
                     this, rect, null));
@@ -807,39 +826,39 @@ namespace SamSoarII.AppMain.Project
         #region Element Manipulate when changed in same network(more efficiency)
         public void RemoveVLine(int x, int y)
         {
-            var vline = _ladderVerticalLines.Get(x, y);
+            var vline = _ladderVerticalLines[x, y];
             if (vline != null)
             {
                 LadderCanvas.Children.Remove(vline);
-                _ladderVerticalLines.Set(x, y, default(VerticalLineViewModel));
+                _ladderVerticalLines[x,y] = default(VerticalLineViewModel);
             }
         }
         public void ReplaceVLine(VerticalLineViewModel vline)
         {
-            if (_ladderVerticalLines.Get(vline.X, vline.Y) == null)
+            if (_ladderVerticalLines[vline.X, vline.Y] == null)
             {
                 vline.IsCommentMode = _isCommendMode;
-                _ladderVerticalLines.Set(vline.X, vline.Y, vline);
+                _ladderVerticalLines[vline.X, vline.Y] = vline;
                 LadderCanvas.Children.Add(vline);
             }
         }
         public void RemoveEle(int x, int y)
         {
-            var ele = _ladderElements.Get(x, y);
+            var ele = _ladderElements[x, y];
             if (ele != null)
             {
                 LadderCanvas.Children.Remove(ele);
-                _ladderElements.Set(ele.X, ele.Y, default(BaseViewModel));
+                _ladderElements[ele.X, ele.Y] = default(BaseViewModel);
             }
         }
         public BaseViewModel ReplaceEle(BaseViewModel element)
         {
             element.NetWorkNum = NetworkNumber;
-            BaseViewModel oldele = _ladderElements.Get(element.X, element.Y);
+            BaseViewModel oldele = _ladderElements[element.X, element.Y];
             if (oldele != null)
                 LadderCanvas.Children.Remove(oldele);
             element.IsCommentMode = _isCommendMode;
-            _ladderElements.Set(element.X, element.Y, element);
+            _ladderElements[element.X, element.Y] = element;
             LadderCanvas.Children.Add(element);
             return oldele;
         }
@@ -945,22 +964,22 @@ namespace SamSoarII.AppMain.Project
             one.Y = pos.Y;
             two.X = pos.X;
             two.Y = pos.Y - 1;
-            if (_ladderElements.Get(one.X, one.Y) == null 
-             && _ladderVerticalLines.Get(two.X, two.Y) == null)
+            if (_ladderElements[one.X, one.Y] == null 
+             && _ladderVerticalLines[two.X, two.Y] == null)
             {
                 return false;
             }
-            if (_ladderElements.Get(pos.X, pos.Y) == null
-             && _ladderVerticalLines.Get(two.X, two.Y) == null)
+            if (_ladderElements[pos.X, pos.Y] == null
+             && _ladderVerticalLines[two.X, two.Y] == null)
             {
                 return false;
             }
             pos.Y += 1;
             one.Y += 1;
             two.Y += 2;
-            if (_ladderElements.Get(pos.X, pos.Y) == null 
-             && _ladderElements.Get(one.X, pos.Y) == null
-             && _ladderVerticalLines.Get(two.X, two.Y) == null)
+            if (_ladderElements[pos.X, pos.Y] == null 
+             && _ladderElements[one.X, one.Y] == null
+             && _ladderVerticalLines[two.X, two.Y] == null)
             {
                 return false;
             }
@@ -991,7 +1010,7 @@ namespace SamSoarII.AppMain.Project
                 var relativePoints = GetRelativePoint(x - 1, y);
                 foreach (var p in relativePoints)
                 {
-                    BaseViewModel leftmodel = _ladderElements.Get(p.X, p.Y);
+                    BaseViewModel leftmodel = _ladderElements[p.X, p.Y];
                     if (leftmodel != null)
                     {
                         if (leftmodel.Type == ElementType.HLine)
@@ -1550,7 +1569,7 @@ namespace SamSoarII.AppMain.Project
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return _ladderElements.Get(xBegin, xEnd, yBegin, yEnd).ToList();
+            return _ladderElements.SelectRange(xBegin, xEnd, yBegin, yEnd).ToList();
         }
         public List<BaseViewModel> GetSelectedHLines()
         {
@@ -1559,7 +1578,7 @@ namespace SamSoarII.AppMain.Project
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return _ladderElements.Get(xBegin, xEnd, yBegin, yEnd).Where(
+            return _ladderElements.SelectRange(xBegin, xEnd, yBegin, yEnd).Where(
                 (ele) => { return ele is HorizontalLineViewModel; }).ToList();
         }
         public List<VerticalLineViewModel> GetSelectedVerticalLines()
@@ -1568,7 +1587,7 @@ namespace SamSoarII.AppMain.Project
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return _ladderVerticalLines.Get(xBegin, xEnd, yBegin, yEnd).ToList();
+            return _ladderVerticalLines.SelectRange(xBegin, xEnd, yBegin, yEnd).ToList();
         }
         #region ladder Folding module
         private void ReloadElementsToCanvas()

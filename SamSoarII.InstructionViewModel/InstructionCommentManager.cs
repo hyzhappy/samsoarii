@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamSoarII.ValueModel;
+using System.Threading;
+
 namespace SamSoarII.LadderInstViewModel
 {
     public enum MappedMessageChangedType
@@ -58,17 +60,10 @@ namespace SamSoarII.LadderInstViewModel
             {
                 if (!str.Equals(string.Empty) && viewmodel.NetWorkNum != -1)
                 {
-                    Dictionary<string, HashSet<BaseViewModel>> temp = new Dictionary<string, HashSet<BaseViewModel>>(_valueRelatedModel);
                     if (_valueRelatedModel.ContainsKey(str))
-                    {
                         _valueRelatedModel[str].Add(viewmodel);
-                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Add, str, viewmodel));
-                    }
                     else
-                    {
                         _valueRelatedModel.Add(str, new HashSet<BaseViewModel>() { viewmodel });
-                        MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.AddFirst, str, viewmodel));
-                    }
                 }
             }
         }
@@ -84,14 +79,7 @@ namespace SamSoarII.LadderInstViewModel
                         var hset = _valueRelatedModel[str];
                         hset.Remove(viewmodel);
                         if (hset.Count == 0)
-                        {
                             _valueRelatedModel.Remove(str);
-                            MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.RemoveLast, str,viewmodel));
-                        }
-                        else
-                        {
-                            MappedMessageChanged.Invoke(new MappedMessageChangedEventArgs(MappedMessageChangedType.Remove,str ,viewmodel));
-                        }
                     }
                 }
             }

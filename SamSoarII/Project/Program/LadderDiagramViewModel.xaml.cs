@@ -3409,7 +3409,7 @@ namespace SamSoarII.AppMain.Project
         {
             foreach (var network in _ladderNetworks)
             {
-                network.Dispose();
+                //network.Dispose();
             }
             _ladderNetworks.Clear();
             _projectModel = null;

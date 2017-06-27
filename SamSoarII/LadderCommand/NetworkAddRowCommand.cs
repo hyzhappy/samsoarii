@@ -32,15 +32,15 @@ namespace SamSoarII.AppMain.LadderCommand
             var movedVLines = _network.GetVerticalLines().Where(e => e.Y >= _rowNumber).ToList().OrderBy(x => { return x.Y; }).Reverse();
             foreach (var ele in movedElements)
             {
-                //_network.RemoveEle(ele.X,ele.Y);
+                _network.RemoveEle(ele.X,ele.Y);
                 ele.Y++;
-                //_network.ReplaceEle(ele);
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                //_network.RemoveVLine(vline.X,vline.Y);
+                _network.RemoveVLine(vline.X,vline.Y);
                 vline.Y++;
-                //_network.ReplaceVLine(vline);
+                _network.ReplaceVLine(vline);
             }
             //_network.INVModel.Setup(_network);
             // 将梯形图光标移到新生成的行的头部
@@ -68,15 +68,15 @@ namespace SamSoarII.AppMain.LadderCommand
             var movedVLines = _network.GetVerticalLines().Where(e => e.Y > _rowNumber).ToList().OrderBy(x => { return x.Y; });
             foreach (var ele in movedElements)
             {
-                //_network.RemoveEle(ele.X, ele.Y);
+                _network.RemoveEle(ele.X, ele.Y);
                 ele.Y--;
-                //_network.ReplaceEle(ele);
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                //_network.RemoveVLine(vline.X, vline.Y);
+                _network.RemoveVLine(vline.X, vline.Y);
                 vline.Y--;
-                //_network.ReplaceVLine(vline);
+                _network.ReplaceVLine(vline);
             }
             _network.RowCount = _oldRowCount;
             //_network.INVModel.Setup(_network);

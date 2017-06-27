@@ -107,25 +107,25 @@ namespace SamSoarII.Extend.LadderChartModel
                 node.Up = newnode;
                 newnode.Down = node;
             }
-            node = nodedict.Get(newnode.X + 1, newnode.Y - 1);
+            node = nodedict.Get(newnode.X + 1, newnode.Y + 1);
             if (node != default(LCNode))
             {
                 node.LeUp = newnode;
                 newnode.RiDo = node;
             }
-            node = nodedict.Get(newnode.X + 1, newnode.Y + 1);
+            node = nodedict.Get(newnode.X + 1, newnode.Y - 1);
             if (node != default(LCNode))
             {
                 node.LeDo = newnode;
                 newnode.RiUp = node;
             }
-            node = nodedict.Get(newnode.X - 1, newnode.Y + 1);
+            node = nodedict.Get(newnode.X - 1, newnode.Y - 1);
             if (node != default(LCNode))
             {
                 node.RiDo = newnode;
                 newnode.LeUp = node;
             }
-            node = nodedict.Get(newnode.X - 1, newnode.Y - 1);
+            node = nodedict.Get(newnode.X - 1, newnode.Y + 1);
             if (node != default(LCNode))
             {
                 node.RiUp = newnode;

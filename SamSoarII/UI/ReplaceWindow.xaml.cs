@@ -1224,6 +1224,7 @@ namespace SamSoarII.AppMain.UI
         {
             lnvmodel.ReplaceElement(BVM_new);
             Element.BVModel = BVM_new;
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
         }
         /// <summary>
         /// 恢复
@@ -1239,6 +1240,7 @@ namespace SamSoarII.AppMain.UI
         {
             lnvmodel.ReplaceElement(BVM_old);
             Element.BVModel = BVM_old;
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
         }
         
     }

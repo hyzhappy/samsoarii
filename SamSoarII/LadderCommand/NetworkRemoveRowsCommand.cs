@@ -54,16 +54,17 @@ namespace SamSoarII.AppMain.LadderCommand
             var movedVLines = _network.GetVerticalLines().Where(e => e.Y > _startRow + _count - 1).ToList().OrderBy(x => { return x.Y; });
             foreach (var ele in movedElements)
             {
-                //_network.RemoveEle(ele.X,ele.Y);
+                _network.RemoveEle(ele.X,ele.Y);
                 ele.Y -= _count;
-                //_network.ReplaceEle(ele);
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                //_network.RemoveVLine(vline.X,vline.Y);
+                _network.RemoveVLine(vline.X,vline.Y);
                 vline.Y -= _count;
-                //_network.ReplaceVLine(vline);
+                _network.ReplaceVLine(vline);
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             _oldRowCount = _network.RowCount;
             _network.RowCount -= _count;
             _network.AcquireSelectRect();
@@ -85,15 +86,15 @@ namespace SamSoarII.AppMain.LadderCommand
             var movedVLines = _network.GetVerticalLines().Where(e => e.Y >= _startRow).ToList().OrderBy(x => { return x.Y; }).Reverse();
             foreach (var ele in movedElements)
             {
-                //_network.RemoveEle(ele.X, ele.Y);
+                _network.RemoveEle(ele.X, ele.Y);
                 ele.Y += _count;
-                //_network.ReplaceEle(ele);
+                _network.ReplaceEle(ele);
             }
             foreach (var vline in movedVLines)
             {
-                //_network.RemoveVLine(vline.X, vline.Y);
+                _network.RemoveVLine(vline.X, vline.Y);
                 vline.Y += _count;
-                //_network.ReplaceVLine(vline);
+                _network.ReplaceVLine(vline);
             }
             foreach (var ele in _removedElements)
             {
@@ -103,6 +104,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(vline);
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             if (_oldarea != null)
             {
                 _oldarea.Select(_network);

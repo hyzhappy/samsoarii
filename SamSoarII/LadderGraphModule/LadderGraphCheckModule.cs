@@ -243,7 +243,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 p3 = relativePoints.ElementAt(0);
                 p1 = relativePoints.ElementAt(1);
             }
-            BaseViewModel element = ladderNetwork.LadderElements.Get(p1.X, p1.Y);
+            BaseViewModel element = ladderNetwork.LadderElements[p1.X, p1.Y];
             if (element != null)
             {
                 if (element == model)
@@ -258,7 +258,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             VerticalLineViewModel verticalLine;
             if ((direction == Direction.Up) || (direction == Direction.Right))
             {
-                verticalLine = ladderNetwork.LadderVerticalLines.Get(p2.X, p2.Y);
+                verticalLine = ladderNetwork.LadderVerticalLines[p2.X, p2.Y];
                 if (verticalLine != null)
                 {
                     up = CheckRelativePoints(ladderNetwork,GetUpRelativePoint(p2.X, p2.Y), model, Direction.Up);
@@ -266,7 +266,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             }
             if ((direction == Direction.Down) || (direction == Direction.Right))
             {
-                verticalLine = ladderNetwork.LadderVerticalLines.Get(p3.X, p3.Y);
+                verticalLine = ladderNetwork.LadderVerticalLines[p3.X, p3.Y];
                 if (verticalLine != null)
                 {
                     down = CheckRelativePoints(ladderNetwork,GetDownRelativePoint(p3.X, p3.Y), model, Direction.Down);
@@ -279,7 +279,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         private static bool CheckHybridLink(LadderNetworkViewModel ladderNetwork)
         {
             //得到有多条支路的元素集合
-            var needCheckElements = ladderNetwork.LadderElements.Where(x => { return x.NextElements.Count > 1; });
+            var needCheckElements = ladderNetwork.LadderElements.Where(x => { return x.NextElements.Count > 1 && x.Type != ElementType.HLine; }).ToList();
             foreach (var ele in needCheckElements)
             {
                 for (int i = 0; i < ele.NextElements.Count; i++)
@@ -479,9 +479,9 @@ namespace SamSoarII.AppMain.LadderGraphModule
             p1.Y = model.Y;
             p2.X = model.X - 1;
             p2.Y = model.Y - 1;
-            if (ladderNetwork.LadderVerticalLines.Get(p1.X, p1.Y) != null && 
-                ladderNetwork.LadderVerticalLines.Get(p2.X, p2.Y) == null && 
-                ladderNetwork.LadderElements.Get(p1.X, p1.Y) == null)
+            if (ladderNetwork.LadderVerticalLines[p1.X, p1.Y] != null && 
+                ladderNetwork.LadderVerticalLines[p2.X, p2.Y] == null && 
+                ladderNetwork.LadderElements[p1.X, p1.Y] == null)
             {
                 ladderNetwork.ErrorModels.Clear();
                 ladderNetwork.ErrorModels.Add(model);//add error element

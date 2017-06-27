@@ -318,6 +318,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 lnvmodel.ReplaceElement(bvmodel);
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
         }
         static private void Read(FuncBlockViewModel fbvmodel)
         {

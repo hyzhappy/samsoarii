@@ -139,6 +139,7 @@ namespace SamSoarII.AppMain.Project
             {
                 result.ReplaceVerticalLine(vline);
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             return result;
         }
 

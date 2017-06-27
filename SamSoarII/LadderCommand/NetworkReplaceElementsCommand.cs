@@ -113,6 +113,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _area.Select(_network);
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
         }
 
         public virtual void Redo()
@@ -138,6 +139,7 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _network.ReplaceVerticalLine(oldvline);
             }
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             if (_oldarea != null)
             {
                 _oldarea.Select(_network);
