@@ -29,7 +29,7 @@ namespace SamSoarII.LadderInstViewModel
     /// <summary>
     /// 梯形图元件基类，抽象类
     /// </summary>
-    public abstract class BaseViewModel : UserControl
+    public abstract class BaseViewModel : UserControl, IPosition
     {
         public event ShowPropertyDialogHandler ShowPropertyDialogEvent;
         public abstract int X { get; set; }

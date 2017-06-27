@@ -666,7 +666,7 @@ namespace SamSoarII.AppMain.Project
                     LadderCanvas.Children.Remove(oldele);
                 }
                 element.IsCommentMode = _isCommendMode;
-                _ladderElements.Set(element.X, element.Y, element);
+                _ladderElements.Set(element);
                 LadderCanvas.Children.Add(element);
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
@@ -679,7 +679,13 @@ namespace SamSoarII.AppMain.Project
             }
             return oldele;
         }
-        public void ReplaceVerticalLine(VerticalLineViewModel vline)
+        public void ReplaceElement(IEnumerable<BaseViewModel> elements)
+        {
+            foreach (BaseViewModel element in elements)
+            {
+                ReplaceElement(element);
+            }
+        }        public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
             if (_ladderVerticalLines.Get(vline.X, vline.Y) == null)
             {
@@ -692,7 +698,13 @@ namespace SamSoarII.AppMain.Project
                 VerticalLineChanged(this, e);
             }
         }
-
+        public void ReplaceVerticalLine(IEnumerable<VerticalLineViewModel> vlines)
+        {
+            foreach (VerticalLineViewModel vline in vlines)
+            {
+                ReplaceVerticalLine(vline);
+            }
+        }
         public void ReplaceBreakpoint(BreakpointRect rect)
         {
             IntPoint p;
@@ -1544,15 +1556,15 @@ namespace SamSoarII.AppMain.Project
                 SelectAreaOriginSX = _ladderDiagram.SelectionRect.X;
             }
         }
-        public List<BaseViewModel> GetSelectedElements()
+        public IGridDictionarySelector<BaseViewModel> GetSelectedElements()
         {
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return _ladderElements.Get(xBegin, xEnd, yBegin, yEnd).ToList();
+            return _ladderElements.Get(xBegin, xEnd, yBegin, yEnd);
         }
-        public List<BaseViewModel> GetSelectedHLines()
+        public IEnumerable<BaseViewModel> GetSelectedHLines()
         {
             List<BaseViewModel> result = new List<BaseViewModel>();
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
@@ -1560,15 +1572,15 @@ namespace SamSoarII.AppMain.Project
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
             return _ladderElements.Get(xBegin, xEnd, yBegin, yEnd).Where(
-                (ele) => { return ele is HorizontalLineViewModel; }).ToList();
+                (ele) => { return ele is HorizontalLineViewModel; });
         }
-        public List<VerticalLineViewModel> GetSelectedVerticalLines()
+        public IGridDictionarySelector<VerticalLineViewModel> GetSelectedVerticalLines()
         {
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return _ladderVerticalLines.Get(xBegin, xEnd, yBegin, yEnd).ToList();
+            return _ladderVerticalLines.Get(xBegin, xEnd, yBegin, yEnd);
         }
         #region ladder Folding module
         private void ReloadElementsToCanvas()
@@ -1741,6 +1753,11 @@ namespace SamSoarII.AppMain.Project
             {
                 _ladderDiagram.ProjectModel.MMonitorManager.Handle(mvmodel, e);
             }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
 
 

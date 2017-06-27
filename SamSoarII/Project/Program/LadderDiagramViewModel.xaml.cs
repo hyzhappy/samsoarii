@@ -32,6 +32,7 @@ using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Controls;
 using System.Threading;
 using System.Windows.Threading;
+using SamSoarII.Extend.Utility;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -2803,14 +2804,14 @@ namespace SamSoarII.AppMain.Project
                         int yBegin = Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
                         int xEnd = Math.Max(_selectStartNetwork.SelectAreaFirstX, _selectStartNetwork.SelectAreaSecondX);
                         int yEnd = Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
-                        List<BaseViewModel> elements = _selectStartNetwork.GetSelectedElements();
-                        List<VerticalLineViewModel> vlines = _selectStartNetwork.GetSelectedVerticalLines();
+                        IGridDictionarySelector<BaseViewModel> elements = _selectStartNetwork.GetSelectedElements();
+                        IGridDictionarySelector<VerticalLineViewModel> vlines = _selectStartNetwork.GetSelectedVerticalLines();
                         XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(elements, vlines,
                                                                                                     xBegin, yBegin, xEnd - xBegin + 1, yEnd - yBegin + 1);
                         if(!copy)
                         {
                             var command = new LadderCommand.NetworkRemoveElementsCommand(
-                                _selectStartNetwork, elements, vlines, area);
+                                _selectStartNetwork, elements.Clone(), vlines.Clone(), area);
                             _commandManager.Execute(command);
                         }
                         Clipboard.SetData("LadderContent", xEle.ToString());
@@ -2883,22 +2884,24 @@ namespace SamSoarII.AppMain.Project
             //获取复制区域的大小
             int xBegin = int.Parse(xEle.Attribute("XBegin").Value);
             int yBegin = int.Parse(xEle.Attribute("YBegin").Value);
-            int width  = int.Parse(xEle.Attribute("Width").Value);
-            int height = int.Parse(xEle.Attribute("Height").Value);
+            int oWidth  = int.Parse(xEle.Attribute("Width").Value);
+            int oHeight = int.Parse(xEle.Attribute("Height").Value);
             int xStart = 0;
             int yStart = 0;
-            var elements = ProjectHelper.CreateLadderElementsByXElement(xEle);
-            var vlines = ProjectHelper.CreateLadderVertialLineByXElement(xEle);
-            IEnumerable<BaseViewModel> oldelements = new List<BaseViewModel>();
-            IEnumerable<VerticalLineViewModel> oldvlines = new List<VerticalLineViewModel>();
-            bool containOutput = elements.Any(x => x.Type == LadderInstModel.ElementType.Output);
+            var _elements = ProjectHelper.CreateLadderElementsByXElement(xEle);
+            var _vlines = ProjectHelper.CreateLadderVertialLineByXElement(xEle);
+            IGridDictionarySelector<BaseViewModel> oldelements = 
+                GridDictionarySelector<BaseViewModel>.Empty;
+            IGridDictionarySelector<VerticalLineViewModel> oldvlines = 
+                GridDictionarySelector<VerticalLineViewModel>.Empty;
+            bool containOutput = _elements.Any(x => x.Type == LadderInstModel.ElementType.Output);
             var targetNetwork = _selectRectOwner;
             if (_selectRectOwner != null)
             {
                 //单选
                 if(containOutput)
                 {
-                    xStart = GlobalSetting.LadderXCapacity - width;
+                    xStart = GlobalSetting.LadderXCapacity - oWidth;
                 }
                 else
                 {
@@ -2906,14 +2909,16 @@ namespace SamSoarII.AppMain.Project
                 }
                 yStart = _selectRect.Y;
                 //若超出网络高度，重新设定高度
-                if(yStart + height > _selectRectOwner.RowCount)
+                if(yStart + oHeight > _selectRectOwner.RowCount)
                 {
                     // 可撤销的命令
-                    var command1 = new LadderCommand.NetworkRowCountChangeCommand(_selectRectOwner, yStart + height);
+                    var command1 = new LadderCommand.NetworkRowCountChangeCommand(_selectRectOwner, yStart + oHeight);
                     _commandManager.Execute(command1);
                 }
-                oldelements = _selectRectOwner.GetElements().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width -1 && ele.Y <= yStart + height - 1);
-                oldvlines = _selectRectOwner.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X < xStart + width - 1 && ele.Y < yStart + height - 1);
+                //oldelements = _selectRectOwner.GetElements().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width -1 && ele.Y <= yStart + height - 1);
+                oldelements = _selectRectOwner.LadderElements.Get(xStart, xStart + oWidth - 1, yStart, yStart + oHeight - 1).Clone();
+                //oldvlines = _selectRectOwner.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X < xStart + width - 1 && ele.Y < yStart + height - 1);
+                oldvlines = _selectRectOwner.LadderVerticalLines.Get(xStart, xStart + oWidth - 1, yStart, yStart + oHeight - 1).Clone();
             }
             else
             {
@@ -2923,32 +2928,72 @@ namespace SamSoarII.AppMain.Project
                     targetNetwork = _selectStartNetwork;
                     if (containOutput)
                     {
-                        xStart = GlobalSetting.LadderXCapacity - width;
+                        xStart = GlobalSetting.LadderXCapacity - oWidth;
                     }
                     else
                     {
                         xStart = Math.Min(_selectStartNetwork.SelectAreaFirstX, _selectStartNetwork.SelectAreaSecondX);
                     }         
                     yStart = Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
-                    if (yStart + height > _selectStartNetwork.RowCount)
+                    if (yStart + oHeight > _selectStartNetwork.RowCount)
                     {
                         //可撤销的命令
-                        var command1 = new LadderCommand.NetworkRowCountChangeCommand(_selectStartNetwork, yStart + height);
+                        var command1 = new LadderCommand.NetworkRowCountChangeCommand(_selectStartNetwork, yStart + oHeight);
                         _commandManager.Execute(command1);
                     }
-                    oldelements = _selectStartNetwork.GetSelectedElements().Union(_selectStartNetwork.GetElements().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width - 1 && ele.Y <= yStart + height - 1));
-                    oldvlines = _selectStartNetwork.GetSelectedVerticalLines().Union(_selectStartNetwork.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X < xStart + width - 1 && ele.Y < yStart + height - 1));
+                    oldelements = _selectRectOwner.GetSelectedElements();
+                    oldvlines = _selectRectOwner.GetSelectedVerticalLines();
+                    int _xStart = Math.Min(oldelements.X1, oldvlines.X1);
+                    int _yStart = Math.Min(oldelements.Y1, oldvlines.Y2);
+                    if (_xStart < xStart)
+                    {
+                        oWidth += xStart - _xStart;
+                        xStart = _xStart;
+                    }
+                    if (_yStart < yStart)
+                    {
+                        oHeight = yStart - _yStart;
+                        yStart = _yStart;
+                    }
+                    oWidth = Math.Max(oWidth, oldelements.X2 - oldelements.X1 + 1);
+                    oWidth = Math.Max(oWidth, oldvlines.X2 - oldvlines.X1 + 1);
+                    oHeight = Math.Max(oHeight, oldelements.Y2 - oldelements.Y1 + 1);
+                    oHeight = Math.Max(oHeight, oldvlines.Y2 - oldvlines.Y1 + 1);
+                    //oldelements = _selectStartNetwork.GetSelectedElements().Union(_selectStartNetwork.GetElements().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X <= xStart + width - 1 && ele.Y <= yStart + height - 1));
+                    //oldvlines = _selectStartNetwork.GetSelectedVerticalLines().Union(_selectStartNetwork.GetVerticalLines().Where(ele => ele.X >= xStart && ele.Y >= yStart && ele.X < xStart + width - 1 && ele.Y < yStart + height - 1));
+                    oldelements = _selectRectOwner.LadderElements.Get(xStart, xStart + oWidth - 1, yStart, yStart + oHeight - 1).Clone();
+                    oldvlines = _selectRectOwner.LadderVerticalLines.Get(xStart, xStart + oWidth - 1, yStart, yStart + oHeight - 1).Clone();
                 }
             }
-            foreach (var element in elements)
+            int nWidth = 0;
+            int nHeight = 0;
+            foreach (var element in _elements)
             {
                 element.X = xStart + element.X - xBegin;
                 element.Y = yStart + element.Y - yBegin;
+                nWidth = Math.Max(nWidth, element.X - xStart + 1);
+                nHeight = Math.Max(nHeight, element.Y - yStart + 1);
             }
-            foreach (var vline in vlines)
+            foreach (var vline in _vlines)
             {
                 vline.X = xStart + vline.X - xBegin;
                 vline.Y = yStart + vline.Y - yBegin;
+                nWidth = Math.Max(nWidth, vline.X - xStart + 1);
+                nHeight = Math.Max(nHeight, vline.Y - yStart + 1);
+            }
+            IGridDictionarySelector<BaseViewModel> elements =
+                _selectRectOwner.LadderElements.Get(xStart, xStart + nWidth - 1, yStart, yStart + nHeight - 1).Clone();
+            IGridDictionarySelector<VerticalLineViewModel> vlines =
+                _selectRectOwner.LadderVerticalLines.Get(xStart, xStart + nWidth - 1, yStart, yStart + nHeight - 1).Clone();
+            elements.Clear();
+            vlines.Clear();
+            foreach (var element in _elements)
+            {
+                elements.Set(element.X, element.Y, element);
+            }
+            foreach (var vline in _vlines)
+            {
+                vlines.Set(vline.X, vline.Y, vline);
             }
             LadderCommand.NetworkReplaceElementsCommand command 
                 = new LadderCommand.NetworkReplaceElementsCommand(

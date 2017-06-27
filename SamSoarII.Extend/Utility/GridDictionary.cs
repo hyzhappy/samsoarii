@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstViewModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.Extend.Utility
 {
-    public class GridDictionary<T> : IEnumerable<T>
+    public class GridDictionary<T> : IEnumerable<T> where T : IPosition
     {
         private List<T[]> data;
 
@@ -75,6 +76,11 @@ namespace SamSoarII.Extend.Utility
             while (Height <= y) data.Add(new T[Width]);
             data[y][x] = value;
         }
+        public void Set(T value)
+        {
+            if (value == null) return;
+            Set(value.X, value.Y, value);
+        }
         public void Set(int x, int y, IGridDictionarySelector<T> selector)
         {
             if (selector.Width <= 0 || selector.Height <= 0
@@ -95,7 +101,7 @@ namespace SamSoarII.Extend.Utility
         }
     }
 
-    public interface IGridDictionarySelector<T> : IEnumerable<T>, IEnumerator<T>
+    public interface IGridDictionarySelector<T> : IEnumerable<T>, IEnumerator<T> where T : IPosition
     {
         int X1 { get; }
         int X2 { get; }
@@ -103,10 +109,13 @@ namespace SamSoarII.Extend.Utility
         int Y2 { get; }
         int Width { get; }
         int Height { get; }
+        void Clear();
         T Get(int x, int y);
+        void Set(int x, int y, T value);
+        IGridDictionarySelector<T> Clone();
     }
 
-    public class GridDictionarySelector<T> : IGridDictionarySelector<T>
+    public class GridDictionarySelector<T> : IGridDictionarySelector<T> where T : IPosition
     {
         public static GridDictionarySelector<T> Empty { get; private set; }
             = new GridDictionarySelector<T> (null, 0, 0, 0, 0);
@@ -181,14 +190,28 @@ namespace SamSoarII.Extend.Utility
             cy = y1;
         }
 
-
+        public void Clear()
+        {
+            if (dict != null) dict.Clear(x1, x2, y1, y2);
+        }
+        
         public T Get(int x, int y)
         {
             return dict != null ? dict.Get(x, y) : default(T);
         }
+
+        public void Set(int x, int y, T value)
+        {
+            if (dict != null) dict.Set(x, y, value);
+        }
+
+        public IGridDictionarySelector<T> Clone()
+        {
+            return new GridDictionarySelectorClone<T>(this);
+        }
     }
 
-    public class GridDictionarySelectorClone<T> : IEnumerable<T>, IGridDictionarySelector<T>
+    public class GridDictionarySelectorClone<T> : IEnumerable<T>, IGridDictionarySelector<T> where T : IPosition
     {
         private T[,] data;
         private int top;
@@ -205,7 +228,7 @@ namespace SamSoarII.Extend.Utility
         public int Width { get { return width; } }
         public int Height { get { return height; } }
 
-        public GridDictionarySelectorClone (GridDictionarySelector<T> origin)
+        public GridDictionarySelectorClone(IGridDictionarySelector<T> origin)
         {
             top = 0;
             left = 0;
@@ -221,7 +244,7 @@ namespace SamSoarII.Extend.Utility
                     data[x, y] = origin.Current;
                 }
         }
-
+        
         public IEnumerator<T> GetEnumerator()
         {
             Reset();
@@ -262,11 +285,32 @@ namespace SamSoarII.Extend.Utility
             y = 0;
         }
 
+        public void Clear()
+        {
+            for (int _x = 0; _x < width; _x++)
+                for (int _y = 0; _y < height; _y++)
+                {
+                    data[_x, _y] = default(T);
+                }
+        }
+
         public T Get(int x, int y)
         {
             return (x >= top && x < top + width && y >= left && y < left + height)
                 ? data[x - top, y - left] : default(T);
         }
 
+        public void Set(int x, int y, T value)
+        {
+            if (x >= top && x < top + width && y >= left && y < left + height)
+            {
+                data[x - top, y - left] = value;
+            }
+        }
+
+        public IGridDictionarySelector<T> Clone()
+        {
+            return new GridDictionarySelectorClone<T>(this);
+        }
     }
 }
