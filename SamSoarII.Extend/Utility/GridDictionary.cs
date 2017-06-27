@@ -10,18 +10,41 @@ namespace SamSoarII.Extend.Utility
 {
     public class GridDictionary<T> : IEnumerable<T> where T : IPosition
     {
-        private List<T[]> data;
+        private T[][] data;
 
         private int width;
-        private int maxheight;
-        public int Width { get { return width; } }
-        public int Height { get { return data.Count(); } }
-
-        public GridDictionary(int _width, int _maxheight = 64)
+        private int height;
+        public int Width
         {
-            data = new List<T[]>();
+            get
+            {
+                return this.width;
+            }
+        }
+        public int Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                int _height = height;
+                T[][] _data = data;
+                this.height = value;
+                data = new T[height][];
+                for (int i = 0; i < height; i++)
+                {
+                    data[i] = (_data != null && i < _height)
+                        ? _data[i] : new T[width];
+                }
+            }
+        }
+
+        public GridDictionary(int _width, int _height = 8)
+        {
             width = _width;
-            maxheight = _maxheight;
+            Height = _height;
         }
         
         private bool _Assert(int x, int y)
@@ -44,7 +67,7 @@ namespace SamSoarII.Extend.Utility
 
         public void Clear()
         {
-            data.Clear();
+            Clear(0, Width - 1, 0, Height - 1);
         }
         public void Clear(int x1, int x2, int y1, int y2)
         {
@@ -55,12 +78,21 @@ namespace SamSoarII.Extend.Utility
                     data[y][x] = default(T);
                 }
         }
-        public T Get(int x, int y)
+        public T this[int x, int y]
         {
-            if (!_Assert(x, y)) return default(T);
-            return data[y][x];
+            get
+            {
+                if (!_Assert(x, y)) return default(T);
+                return data[y][x];
+            }
+            set
+            {
+                if (x < 0 || x >= Width || y < 0) return;
+                if (Height <= y) Height *= 2;
+                data[y][x] = value;
+            }
         }
-        public GridDictionarySelector<T> Get(int x1, int x2, int y1, int y2)
+        public GridDictionarySelector<T> SelectRange(int x1, int x2, int y1, int y2)
         {
             x1 = Math.Max(x1, 0);
             y1 = Math.Max(y1, 0);
@@ -70,16 +102,10 @@ namespace SamSoarII.Extend.Utility
                 ? new GridDictionarySelector<T>(this, x1, x2, y1, y2)
                 : GridDictionarySelector<T>.Empty;
         }
-        public void Set(int x, int y, T value)
-        {
-            if (x < 0 || x >= Width || y < 0 || y >= maxheight) return;
-            while (Height <= y) data.Add(new T[Width]);
-            data[y][x] = value;
-        }
         public void Set(T value)
         {
             if (value == null) return;
-            Set(value.X, value.Y, value);
+            this[value.X, value.Y] = value;
         }
         public void Set(int x, int y, IGridDictionarySelector<T> selector)
         {
@@ -89,14 +115,14 @@ namespace SamSoarII.Extend.Utility
             {
                 return;
             }
-            while (Height < y + selector.Height)
+            if (Height < y + selector.Height)
             {
-                data.Add(new T[Width]);
+                Height = (int)((y + selector.Height) * 1.5);
             }
             for (int _x = x; _x < x + selector.Width; _x++)
                 for (int _y = y; _y < y + selector.Height; _y++)
                 {
-                    data[_y][_x] = selector.Get(_x - x + selector.X1, _y - y + selector.Y1);
+                    data[_y][_x] = selector[_x - x + selector.X1, _y - y + selector.Y1];
                 }
         }
     }
@@ -110,8 +136,7 @@ namespace SamSoarII.Extend.Utility
         int Width { get; }
         int Height { get; }
         void Clear();
-        T Get(int x, int y);
-        void Set(int x, int y, T value);
+        T this[int x, int y] { get; set; }
         IGridDictionarySelector<T> Clone();
     }
 
@@ -158,7 +183,7 @@ namespace SamSoarII.Extend.Utility
         }
         
         public T Current { get { return cx >= x1 && cx <= x2 && cy >= y1 && cy <= y2 
-                    && dict != null ? dict.Get(cx, cy) : default(T); } }
+                    && dict != null ? dict[cx, cy] : default(T); } }
         
         object IEnumerator.Current { get { return Current; } }
 
@@ -195,17 +220,19 @@ namespace SamSoarII.Extend.Utility
         {
             if (dict != null) dict.Clear(x1, x2, y1, y2);
         }
+
+        public T this[int x, int y]
+        {
+            get
+            {
+                return dict != null ? dict[x, y] : default(T);
+            }
+            set
+            {
+                if (dict != null) dict[x, y] = value;
+            }
+        }
         
-        public T Get(int x, int y)
-        {
-            return dict != null ? dict.Get(x, y) : default(T);
-        }
-
-        public void Set(int x, int y, T value)
-        {
-            if (dict != null) dict.Set(x, y, value);
-        }
-
         public IGridDictionarySelector<T> Clone()
         {
             return new GridDictionarySelectorClone<T>(this);
@@ -295,20 +322,22 @@ namespace SamSoarII.Extend.Utility
                 }
         }
 
-        public T Get(int x, int y)
+        public T this[int x, int y]
         {
-            return (x >= top && x < top + width && y >= left && y < left + height)
-                ? data[x - top, y - left] : default(T);
-        }
-
-        public void Set(int x, int y, T value)
-        {
-            if (x >= top && x < top + width && y >= left && y < left + height)
+            get
             {
-                data[x - top, y - left] = value;
+                return (x >= top && x < top + width && y >= left && y < left + height)
+                    ? data[x - top, y - left] : default(T);
+            }
+            set
+            {
+                if (x >= top && x < top + width && y >= left && y < left + height)
+                {
+                    data[x - top, y - left] = value;
+                }
             }
         }
-
+        
         public IGridDictionarySelector<T> Clone()
         {
             return new GridDictionarySelectorClone<T>(this);

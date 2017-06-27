@@ -143,17 +143,17 @@ namespace SamSoarII.AppMain.Project
                 {
                     _rowCount = value;
                     LadderCanvas.Height = _rowCount * HeightUnit;
-                    if(value > LadderElements.YCapacity)
+                    if(value > LadderElements.Height)
                     {
-                        LadderElements.YCapacity *= 2;
-                        LadderVerticalLines.YCapacity *= 2;
-                        LadderBreakpoints.YCapacity *= 2;
+                        LadderElements.Height *= 2;
+                        LadderVerticalLines.Height *= 2;
+                        LadderBreakpoints.Height *= 2;
                     }
-                    else if (value < LadderElements.YCapacity / 4 && LadderElements.YCapacity > 8)
+                    else if (value < LadderElements.Height / 4 && LadderElements.Height > 8)
                     {
-                        LadderElements.YCapacity /= 2;
-                        LadderVerticalLines.YCapacity /= 2;
-                        LadderBreakpoints.YCapacity /= 2;
+                        LadderElements.Height /= 2;
+                        LadderVerticalLines.Height /= 2;
+                        LadderBreakpoints.Height /= 2;
                     }
                 }
             }
@@ -252,36 +252,29 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        
+        private GridDictionary<BaseViewModel> _ladderElements
+            = new GridDictionary<BaseViewModel>(GlobalSetting.LadderXCapacity);
+        private GridDictionary<VerticalLineViewModel> _ladderVerticalLines
+            = new GridDictionary<VerticalLineViewModel>(GlobalSetting.LadderXCapacity);
+        private GridDictionary<BreakpointRect> _ladderBreakpoints
+            = new GridDictionary<BreakpointRect>(GlobalSetting.LadderXCapacity);
 
-        private CanvasDic<BaseViewModel> _ladderElements
-            = new CanvasDic<BaseViewModel>(GlobalSetting.LadderXCapacity);
-        private CanvasDic<VerticalLineViewModel> _ladderVerticalLines
-            = new CanvasDic<VerticalLineViewModel>(GlobalSetting.LadderXCapacity);
-        private CanvasDic<BreakpointRect> _ladderBreakpoints
-            = new CanvasDic<BreakpointRect>(GlobalSetting.LadderXCapacity);
-
-        //private GridDictionary<BaseViewModel> _ladderElements
-        //    = new GridDictionary<BaseViewModel>(GlobalSetting.LadderXCapacity);
-        //private GridDictionary<VerticalLineViewModel> _ladderVerticalLines
-        //    = new GridDictionary<VerticalLineViewModel>(GlobalSetting.LadderXCapacity);
-        //private GridDictionary<BreakpointRect> _ladderBreakpoints
-        //    = new GridDictionary<BreakpointRect>(GlobalSetting.LadderXCapacity);
-
-        public CanvasDic<BaseViewModel> LadderElements
+        public GridDictionary<BaseViewModel> LadderElements
         {
             get
             {
                 return _ladderElements;
             }
         }
-        public CanvasDic<VerticalLineViewModel> LadderVerticalLines
+        public GridDictionary<VerticalLineViewModel> LadderVerticalLines
         {
             get
             {
                 return _ladderVerticalLines;
             }
         }
-        public CanvasDic<BreakpointRect> LadderBreakpoints
+        public GridDictionary<BreakpointRect> LadderBreakpoints
         {
             get
             {
@@ -1591,13 +1584,13 @@ namespace SamSoarII.AppMain.Project
                 SelectAreaOriginSX = _ladderDiagram.SelectionRect.X;
             }
         }
-        public List<BaseViewModel> GetSelectedElements()
+        public IGridDictionarySelector<BaseViewModel> GetSelectedElements()
         {
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return _ladderElements.SelectRange(xBegin, xEnd, yBegin, yEnd).ToList();
+            return _ladderElements.SelectRange(xBegin, xEnd, yBegin, yEnd);
         }
         public List<BaseViewModel> GetSelectedHLines()
         {
@@ -1609,13 +1602,13 @@ namespace SamSoarII.AppMain.Project
             return _ladderElements.SelectRange(xBegin, xEnd, yBegin, yEnd).Where(
                 (ele) => { return ele is HorizontalLineViewModel; }).ToList();
         }
-        public List<VerticalLineViewModel> GetSelectedVerticalLines()
+        public IGridDictionarySelector<VerticalLineViewModel> GetSelectedVerticalLines()
         {
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return _ladderVerticalLines.SelectRange(xBegin, xEnd, yBegin, yEnd).ToList();
+            return _ladderVerticalLines.SelectRange(xBegin, xEnd, yBegin, yEnd);
         }
         #region ladder Folding module
         private void ReloadElementsToCanvas()

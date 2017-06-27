@@ -79,53 +79,53 @@ namespace SamSoarII.Extend.LadderChartModel
         {
             LCNode node = null;
             // 节点已经存在的话
-            node = nodedict.Get(newnode.X, newnode.Y);
+            node = nodedict[newnode.X, newnode.Y];
             if (node != null)
                 return false;
             // 链接相邻节点
-            node = nodedict.Get(newnode.X - 1, newnode.Y);
+            node = nodedict[newnode.X - 1, newnode.Y];
             if (node != default(LCNode))
             {
                 node.Right = newnode;
                 newnode.Left = node;
             }
-            node = nodedict.Get(newnode.X + 1, newnode.Y);
+            node = nodedict[newnode.X + 1, newnode.Y];
             if (node != default(LCNode))
             {
                 node.Left = newnode;
                 newnode.Right = node;
             }
-            node = nodedict.Get(newnode.X, newnode.Y - 1);
+            node = nodedict[newnode.X, newnode.Y - 1];
             if (node != default(LCNode))
             {
                 node.Down = newnode;
                 newnode.Up = node;
             }
-            node = nodedict.Get(newnode.X, newnode.Y + 1);
+            node = nodedict[newnode.X, newnode.Y + 1];
             if (node != default(LCNode))
             {
                 node.Up = newnode;
                 newnode.Down = node;
             }
-            node = nodedict.Get(newnode.X + 1, newnode.Y + 1);
+            node = nodedict[newnode.X + 1, newnode.Y + 1];
             if (node != default(LCNode))
             {
                 node.LeUp = newnode;
                 newnode.RiDo = node;
             }
-            node = nodedict.Get(newnode.X + 1, newnode.Y - 1);
+            node = nodedict[newnode.X + 1, newnode.Y - 1];
             if (node != default(LCNode))
             {
                 node.LeDo = newnode;
                 newnode.RiUp = node;
             }
-            node = nodedict.Get(newnode.X - 1, newnode.Y - 1);
+            node = nodedict[newnode.X - 1, newnode.Y - 1];
             if (node != default(LCNode))
             {
                 node.RiDo = newnode;
                 newnode.LeUp = node;
             }
-            node = nodedict.Get(newnode.X - 1, newnode.Y + 1);
+            node = nodedict[newnode.X - 1, newnode.Y + 1];
             if (node != default(LCNode))
             {
                 node.RiUp = newnode;
@@ -142,7 +142,7 @@ namespace SamSoarII.Extend.LadderChartModel
         public bool Delete(LCNode delnode)
         {
             // 不存在
-            if (nodedict.Get(delnode.X, delnode.Y) != delnode)
+            if (nodedict[delnode.X, delnode.Y] != delnode)
                 return false;
             // 链接解除
             if (delnode.Left != null)
@@ -162,7 +162,7 @@ namespace SamSoarII.Extend.LadderChartModel
             if (delnode.LeUp != null)
                 delnode.LeUp.RiDo = null;
             nodes.Remove(delnode);
-            nodedict.Set(delnode.X, delnode.Y, default(LCNode));
+            nodedict[delnode.X, delnode.Y] = default(LCNode);
             return true;
         }
         /// <summary>
