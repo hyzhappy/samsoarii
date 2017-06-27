@@ -18,7 +18,7 @@ namespace SamSoarII.LadderInstViewModel
     /// <summary>
     /// BreakpointRect.xaml 的交互逻辑
     /// </summary>
-    public partial class BreakpointRect : UserControl, IPosition
+    public partial class BreakpointRect : UserControl, IPosition,IDisposable
     {
         public BreakpointRect(string _label)
         {
@@ -76,5 +76,9 @@ namespace SamSoarII.LadderInstViewModel
             }
         }
 
+        public void Dispose()
+        {
+            BVModel = null;
+        }
     }
 }

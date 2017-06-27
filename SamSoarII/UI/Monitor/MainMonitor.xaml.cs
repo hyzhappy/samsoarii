@@ -495,7 +495,8 @@ namespace SamSoarII.AppMain.UI.Monitor
                 }
             }
         }
-
+        #endregion
+        #endregion
         public void Dispose()
         {
             _projectmodel = null;
@@ -505,7 +506,5 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             tables.Clear();
         }
-        #endregion
-        #endregion
     }
 }

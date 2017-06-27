@@ -191,13 +191,25 @@ namespace SamSoarII.AppMain.Project
              && AutoInstManager.IsAlive)
             {
                 AutoInstManager.Abort();
-                /*
-                while (AutoInstManager.IsAlive)
-                {
-                    Thread.Sleep(20);
-                }
-                */
             }
+            MainRoutine.Dispose();
+            MainRoutine = null;
+            foreach (var subRoutine in SubRoutines)
+                subRoutine.Dispose();
+            SubRoutines.Clear();
+            MMonitorManager.Dispose();
+            MTVModel.Dispose();
+            MMonitorManager = null;
+            //MTVModel = null;
+            PManager = null;
+            UManager = null;
+            LibFuncBlock.Dispose();
+            LibFuncBlock = null;
+            foreach (var funcBlock in FuncBlocks)
+            {
+                funcBlock.Dispose();
+            }
+            FuncBlocks.Clear();
         }
         public bool ContainProgram(string name)
         {

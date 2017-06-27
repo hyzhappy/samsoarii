@@ -3528,17 +3528,15 @@ namespace SamSoarII.AppMain.Project
             }
             return null;
         }
-
+        #endregion
         public void Dispose()
         {
             foreach (var network in _ladderNetworks)
-            {
-                //network.Dispose();
-            }
+                network.Dispose();
+            LadderNetworkStackPanel.Children.Clear();
             _ladderNetworks.Clear();
             _projectModel = null;
             _commandManager.Dispose();
         }
-        #endregion
     }
 }

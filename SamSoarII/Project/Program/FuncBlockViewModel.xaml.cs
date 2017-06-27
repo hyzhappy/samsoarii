@@ -46,7 +46,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// FuncBlockViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class FuncBlockViewModel : UserControl, IProgram
+    public partial class FuncBlockViewModel : UserControl, IProgram,IDisposable
     {
         #region Numbers
 
@@ -1114,7 +1114,12 @@ namespace SamSoarII.AppMain.Project
             CodeTextBox.SelectAll();
         }
 
-        #endregion
 
+
+        #endregion
+        public void Dispose()
+        {
+            parent = null;
+        }
     }
 }

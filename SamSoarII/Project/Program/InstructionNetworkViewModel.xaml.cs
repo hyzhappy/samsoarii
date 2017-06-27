@@ -333,7 +333,7 @@ namespace SamSoarII.AppMain.Project
                 case "IsMasked":
                     Update();
                     break;
-                case "NetworkNumber":
+                case "NetworkMessage":
                     NetworkHeader.Text
                         = String.Format("Network {0:d}", lnvmodel.NetworkNumber);
                     Update();

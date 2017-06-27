@@ -122,6 +122,7 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             UndoStack.Clear();
             RedoStack.Clear();
+            LDVModel = null;
         }
     }
 

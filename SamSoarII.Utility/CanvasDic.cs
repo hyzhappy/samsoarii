@@ -71,7 +71,21 @@ namespace SamSoarII.Utility
             for (int y = _y1; y <= _y2; y++)
             {
                 for (int x = _x1; x <= _x2; x++)
+                {
+                    if (models[y] == null) break;
                     models[y][x] = default(T);
+                }
+            }
+        }
+        public void Clear()
+        {
+            for (int y = 0; y < YCapacity; y++)
+            {
+                for (int x = 0; x < XCapacity; x++)
+                {
+                    if (models[y] == null) break;
+                    models[y][x] = default(T);
+                }
             }
         }
         public T this[int x,int y]

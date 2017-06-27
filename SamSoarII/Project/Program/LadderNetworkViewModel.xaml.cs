@@ -53,7 +53,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
+    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged,IDisposable
     {
         #region Canvas System
         //private ContextMenu CM_Ladder;
@@ -169,7 +169,7 @@ namespace SamSoarII.AppMain.Project
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
+                //PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
             }
         }
 
@@ -212,12 +212,13 @@ namespace SamSoarII.AppMain.Project
                 _isMasked = value;
                 if (_isMasked)
                 {
+                    ReleaseSelectRect();
+                    IsSelectAreaMode = false;
+                    IsSelectAllMode = false;
                     CommentAreaExpander.Background = Brushes.LightGray;
                     LadderCanvas.Background = Brushes.LightGray;
                     CommentAreaExpander.Opacity = 0.4;
                     LadderCanvas.Opacity = 0.4;
-                    ReleaseSelectRect();
-                    IsSelectAreaMode = false;
                     MaskNumber = NetworkNumber;
                     ClearModelMessage();//当被屏蔽时，移除元素表中的项
                 }
@@ -1789,8 +1790,21 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
-
+        public void Dispose()
+        {
+            foreach (var element in LadderElements)
+                element.Dispose();
+            foreach (var vline in LadderVerticalLines)
+                vline.Dispose();
+            foreach (var Breakpoint in LadderBreakpoints)
+                Breakpoint.Dispose();
+            LadderCanvas.Children.Clear();
+            InstructionCommentManager.ValueRelatedModel.Clear();
+            LadderElements.Clear(0, GlobalSetting.LadderXCapacity - 1, 0, RowCount - 1);
+            LadderVerticalLines.Clear(0, GlobalSetting.LadderXCapacity - 1, 0, RowCount - 1);
+            LadderBreakpoints.Clear(0, GlobalSetting.LadderXCapacity - 1, 0, RowCount - 1);
+        }
         #endregion
-        
+
     }
 }

@@ -33,7 +33,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// ModbusTableViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class ModbusTableViewModel : UserControl, ITabItem, INotifyPropertyChanged
+    public partial class ModbusTableViewModel : UserControl, ITabItem, INotifyPropertyChanged,IDisposable
     {
         #region ITabItem Interfaces
         public string TabHeader
@@ -763,6 +763,10 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
+        public void Dispose()
+        {
+            parent = null;
+        }
     }
 
     public class ModbusTableComboBoxItems
