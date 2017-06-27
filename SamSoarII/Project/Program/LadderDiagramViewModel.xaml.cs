@@ -2998,7 +2998,7 @@ namespace SamSoarII.AppMain.Project
             LadderCommand.NetworkReplaceElementsCommand command 
                 = new LadderCommand.NetworkReplaceElementsCommand(
                     targetNetwork, 
-                    elements, vlines, 
+                    _elements, _vlines, 
                     oldelements, oldvlines);
             _commandManager.Execute(command);
         }

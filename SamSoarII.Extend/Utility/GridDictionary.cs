@@ -230,8 +230,8 @@ namespace SamSoarII.Extend.Utility
 
         public GridDictionarySelectorClone(IGridDictionarySelector<T> origin)
         {
-            top = 0;
-            left = 0;
+            top = origin.Y1;
+            left = origin.X1;
             width = origin.Width;
             height = origin.Height;
             data = new T[width, height];
