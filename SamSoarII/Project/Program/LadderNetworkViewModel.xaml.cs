@@ -679,6 +679,13 @@ namespace SamSoarII.AppMain.Project
             }
             return oldele;
         }
+        public void ReplaceElement(IEnumerable<BaseViewModel> elements)
+        {
+            foreach (BaseViewModel element in elements)
+            {
+                ReplaceElement(element);
+            }
+        }
         public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
             if (_ladderVerticalLines.Get(vline.X, vline.Y) == null)
@@ -690,6 +697,13 @@ namespace SamSoarII.AppMain.Project
                 e.BVModel_old = null;
                 e.BVModel_new = vline;
                 VerticalLineChanged(this, e);
+            }
+        }
+        public void ReplaceVerticalLine(IEnumerable<VerticalLineViewModel> vlines)
+        {
+            foreach (VerticalLineViewModel vline in vlines)
+            {
+                ReplaceVerticalLine(vline);
             }
         }
 
@@ -749,6 +763,13 @@ namespace SamSoarII.AppMain.Project
             if (_ladderElements.Get(element.X, element.Y) == element)
                 RemoveElement(element.X, element.Y);
         }
+        public void RemoveElement(IEnumerable<BaseViewModel> elements)
+        {
+            foreach (BaseViewModel element in elements)
+            {
+                RemoveElement(element);
+            }
+        }
         public bool RemoveVerticalLine(IntPoint pos)
         {
             var vline = _ladderVerticalLines.Get(pos.X, pos.Y);
@@ -775,6 +796,15 @@ namespace SamSoarII.AppMain.Project
         {
             return _ladderVerticalLines.Get(vline.X, vline.Y) == vline
                 ? RemoveVerticalLine(vline.X, vline.Y) : false;
+        }
+        public bool RemoveVerticalLine(IEnumerable<VerticalLineViewModel> vlines)
+        {
+            bool ret = false;
+            foreach (VerticalLineViewModel vline in vlines)
+            {
+                ret |= RemoveVerticalLine(vline);
+            }
+            return ret;
         }
         public bool RemoveBreakpoint(IntPoint pos)
         {
@@ -1743,8 +1773,13 @@ namespace SamSoarII.AppMain.Project
             }
         }
 
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
-        
+
     }
 }

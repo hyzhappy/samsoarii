@@ -12,25 +12,25 @@ namespace SamSoarII.AppMain.LadderCommand
     public class NetworkReplaceElementsCommand : IUndoableCommand
     {
         private LadderNetworkViewModel _network;
-        private HashSet<BaseViewModel> _elements;
-        private HashSet<VerticalLineViewModel> _vlines;
-        private HashSet<BaseViewModel> _oldelements;
-        private HashSet<VerticalLineViewModel> _oldvlines;
+        private IEnumerable<BaseViewModel> _elements;
+        private IEnumerable<VerticalLineViewModel> _vlines;
+        private IEnumerable<BaseViewModel> _oldelements;
+        private IEnumerable<VerticalLineViewModel> _oldvlines;
         private NetworkChangeElementArea _area;
         private NetworkChangeElementArea _oldarea;
 
         public NetworkReplaceElementsCommand(
-            LadderNetworkViewModel network, 
-            IEnumerable<BaseViewModel> elements, IEnumerable<VerticalLineViewModel> vlines, 
+            LadderNetworkViewModel network,
+            IEnumerable<BaseViewModel> elements, IEnumerable<VerticalLineViewModel> vlines,
             IEnumerable<BaseViewModel> oldelements, IEnumerable<VerticalLineViewModel> oldvlines,
             NetworkChangeElementArea area = null,
             NetworkChangeElementArea oldarea = null)
         {
             _network = network;
-            _elements = new HashSet<BaseViewModel>(elements);
-            _vlines = new HashSet<VerticalLineViewModel>(vlines);
-            _oldelements = new HashSet<BaseViewModel>(oldelements);
-            _oldvlines = new HashSet<VerticalLineViewModel>(oldvlines);
+            _elements = elements;
+            _vlines = vlines;
+            _oldelements = oldelements;
+            _oldvlines = oldvlines;
             _area = area;
             _oldarea = oldarea;
             if (_area == null)
@@ -46,17 +46,17 @@ namespace SamSoarII.AppMain.LadderCommand
         }
 
         public NetworkReplaceElementsCommand(
-            LadderNetworkViewModel network, 
-            IEnumerable<BaseViewModel> elements, 
+            LadderNetworkViewModel network,
+            IEnumerable<BaseViewModel> elements,
             IEnumerable<BaseViewModel> oldelements,
             NetworkChangeElementArea area = null,
             NetworkChangeElementArea oldarea = null)
         {
             _network = network;
-            _elements = new HashSet<BaseViewModel>(elements);
-            _oldelements = new HashSet<BaseViewModel>(oldelements);
-            _vlines = new HashSet<VerticalLineViewModel>();
-            _oldvlines = new HashSet<VerticalLineViewModel>();
+            _elements = elements;
+            _oldelements = oldelements;
+            _vlines = new VerticalLineViewModel[] { };
+            _oldvlines = new VerticalLineViewModel[] { };
             _area = area;
             _oldarea = oldarea;
             if (_area == null)
@@ -70,45 +70,19 @@ namespace SamSoarII.AppMain.LadderCommand
                     _network, _oldelements, _oldvlines);
             }
         }
-
-        public BaseViewModel PopOldElement()
-        {
-            BaseViewModel bvmodel = _oldelements.FirstOrDefault();
-            if (bvmodel != null)
-            {
-                _oldelements.Remove(bvmodel);
-            }
-            return bvmodel;
-        }
         
-        public BaseViewModel PopNewElement()
-        {
-            BaseViewModel bvmodel = _elements.FirstOrDefault();
-            if (bvmodel != null)
-            {
-                _elements.Remove(bvmodel);
-            }
-            return bvmodel;
-        }
+        public IEnumerable<BaseViewModel> OldElements
+        { get { return _oldelements; } }
+
+        public IEnumerable<BaseViewModel> NewElements
+        { get { return _elements; } }
 
         public virtual void Execute()
         {
-            foreach(var oldele in _oldelements)
-            {
-                _network.RemoveElement(oldele);
-            }
-            foreach(var oldvline in _oldvlines)
-            {
-                _network.RemoveVerticalLine(oldvline);
-            }
-            foreach(var ele in _elements)
-            {
-                _network.ReplaceElement(ele);
-            }
-            foreach(var vline in _vlines)
-            {
-                _network.ReplaceVerticalLine(vline);
-            }
+            _network.RemoveElement(_oldelements);
+            _network.RemoveVerticalLine(_oldvlines);
+            _network.ReplaceElement(_elements);
+            _network.ReplaceVerticalLine(_vlines);
             if (_area != null)
             {
                 _area.Select(_network);
@@ -122,22 +96,10 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public virtual void Undo()
         {
-            foreach (var ele in _elements)
-            {
-                _network.RemoveElement(ele);
-            }
-            foreach (var vline in _vlines)
-            {
-                _network.RemoveVerticalLine(vline);
-            }
-            foreach (var oldele in _oldelements)
-            {
-                _network.ReplaceElement(oldele);
-            }
-            foreach (var oldvline in _oldvlines)
-            {
-                _network.ReplaceVerticalLine(oldvline);
-            }
+            _network.RemoveElement(_elements);
+            _network.RemoveVerticalLine(_vlines);
+            _network.ReplaceElement(_oldelements);
+            _network.ReplaceVerticalLine(_oldvlines);
             if (_oldarea != null)
             {
                 _oldarea.Select(_network);

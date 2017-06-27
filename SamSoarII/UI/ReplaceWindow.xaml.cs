@@ -1214,8 +1214,8 @@ namespace SamSoarII.AppMain.UI
         {
             lnvmodel = _lnvmodel;
             Element = _element;
-            BVM_old = _command.PopOldElement();
-            BVM_new = _command.PopNewElement();
+            BVM_old = _command.OldElements.First();
+            BVM_new = _command.NewElements.First();
         }
         /// <summary>
         /// 执行

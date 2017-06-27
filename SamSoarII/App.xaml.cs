@@ -15,7 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Lierda.WPFHelper;
+//using Lierda.WPFHelper;
 
 namespace SamSoarII.AppMain
 {
@@ -25,7 +25,7 @@ namespace SamSoarII.AppMain
     public partial class App : Application
     {
         public static SplashScreen splashScreen;
-        public LierdaCracker lierdaCracker;
+        //public LierdaCracker lierdaCracker;
         public App()
         {
             SpecialValueManager.Initialize();

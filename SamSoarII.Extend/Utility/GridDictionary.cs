@@ -205,7 +205,7 @@ namespace SamSoarII.Extend.Utility
         public int Width { get { return width; } }
         public int Height { get { return height; } }
 
-        public GridDictionarySelectorClone (GridDictionarySelector<T> origin)
+        public GridDictionarySelectorClone(GridDictionarySelector<T> origin)
         {
             top = 0;
             left = 0;
@@ -221,7 +221,7 @@ namespace SamSoarII.Extend.Utility
                     data[x, y] = origin.Current;
                 }
         }
-
+        
         public IEnumerator<T> GetEnumerator()
         {
             Reset();
@@ -262,10 +262,27 @@ namespace SamSoarII.Extend.Utility
             y = 0;
         }
 
+        public void Clear()
+        {
+            for (int _x = 0; _x < width; _x++)
+                for (int _y = 0; _y < height; _y++)
+                {
+                    data[x, y] = default(T);
+                }
+        }
+
         public T Get(int x, int y)
         {
             return (x >= top && x < top + width && y >= left && y < left + height)
                 ? data[x - top, y - left] : default(T);
+        }
+
+        public void Set(int x, int y, T value)
+        {
+            if (x >= top && x < top + width && y >= left && y < left + height)
+            {
+                data[x - top, y - left] = value;
+            }
         }
 
     }
