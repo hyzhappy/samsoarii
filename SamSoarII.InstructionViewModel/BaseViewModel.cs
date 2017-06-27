@@ -23,6 +23,7 @@ namespace SamSoarII.LadderInstViewModel
             Dialog = dialog;
         }
     }
+
     public delegate void ShowPropertyDialogHandler(BaseViewModel sender, ShowPropertyDialogEventArgs e);
 
     /// <summary>

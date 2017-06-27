@@ -129,19 +129,34 @@ namespace SamSoarII.AppMain.UI
             TB_Change.Background = Brushes.Red;
         }
         /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="initcmd">是否初始化撤销操作板</param>
+        public void Initialize(bool initcmd = true)
+        {
+            foreach (ReplaceElement ele in items)
+            {
+                ele.Dispose();
+            }
+            items.Clear();
+            if (initcmd)
+            {
+                _cmdmanager.Initialize();
+            }
+        }
+        /// <summary>
         /// 查找指令
         /// </summary>
         private void Find()
         {
-            items.Clear();
+            Initialize(false);
             // 输入信息非法则不执行
-            if (RF_Input.Type == ReplaceFormat.TYPE_INVALID)
-                return;
+            if (RF_Input.Type == ReplaceFormat.TYPE_INVALID) return;
             switch (Mode)
             {
                 // 查找当前程序
                 case MODE_CURRENT:
-                    ITabItem currenttab = parent.MainTabControl.CurrentTab;
+                    ITabItem currenttab = parent.MainTabControl.SelectedItem;
                     if (currenttab is MainTabDiagramItem)
                     {
                         MainTabDiagramItem mtditem = (MainTabDiagramItem)currenttab;
@@ -181,7 +196,7 @@ namespace SamSoarII.AppMain.UI
                     BaseModel bmodel = bvmodel.Model;
                     if (RF_Input.Match(bvmodel.ToInstString()))
                     {
-                        items.Add(new ReplaceElement(bvmodel, ldvmodel, lnvmodel));
+                        items.Add(new ReplaceElement(this, bvmodel, ldvmodel, lnvmodel));
                     }
                 }
             }
@@ -420,13 +435,13 @@ namespace SamSoarII.AppMain.UI
         /// <param name="e"></param>
         private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
-            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            ITabItem currenttab = parent.MainTabControl.SelectedItem;
             // 当前界面是梯形图程序时进行重查
             if (currenttab is MainTabDiagramItem
              || currenttab is LadderDiagramViewModel)
             {
                 Visibility = Visibility.Visible;
-                Find();
+                if (mode == MODE_CURRENT) Find();
             }
             // 否则隐藏窗口
             else
@@ -1027,9 +1042,13 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// 要替换的元素
     /// </summary>
-    public class ReplaceElement : INotifyPropertyChanged
+    public class ReplaceElement : INotifyPropertyChanged, IDisposable
     {
         #region Numbers
+
+        /// <summary> 替换窗口 </summary>
+        private ReplaceWindow parent;
+
         /// <summary> 元件的显示模型 </summary>
         private BaseViewModel bvmodel;
         /// <summary> 元件的显示模型 </summary>
@@ -1106,17 +1125,29 @@ namespace SamSoarII.AppMain.UI
         /// <summary> 构造函数 </summary>
         public ReplaceElement
         (
+            ReplaceWindow _parent,
             BaseViewModel _bvmodel,
             LadderDiagramViewModel _ldvmodel,
             LadderNetworkViewModel _lnvmodel
         )
         {
+            parent = _parent;
             bvmodel = _bvmodel;
             ldvmodel = _ldvmodel;
             lnvmodel = _lnvmodel;
+            lnvmodel.ElementChanged += OnElementChanged;
             PropertyChanged(this, new PropertyChangedEventArgs("Detail"));
             PropertyChanged(this, new PropertyChangedEventArgs("Diagram"));
             PropertyChanged(this, new PropertyChangedEventArgs("Network"));
+        }
+        
+        public virtual void Dispose()
+        {
+            lnvmodel.ElementChanged -= OnElementChanged;
+            parent = null;
+            bvmodel = null;
+            ldvmodel = null;
+            lnvmodel = null;
         }
 
         #region Event Handler
@@ -1124,6 +1155,15 @@ namespace SamSoarII.AppMain.UI
         /// 更改值时触发
         /// </summary>
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
+        
+        protected virtual void OnElementChanged(object sender, LadderElementChangedArgs e)
+        {
+            if (e.BVModel_old == bvmodel)
+            {
+                parent.Initialize();
+            }
+        }
+
         #endregion
     }
     /// <summary>

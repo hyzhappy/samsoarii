@@ -289,8 +289,7 @@ namespace SamSoarII.AppMain.Project
             }
             CodeTextBox.TextArea.Caret.VisibleChanged += Caret_VisibleChanged;
         }
-
-
+        
         #region StatusBar
         private void Caret_VisibleChanged(object sender, RoutedEventArgs e)
         {
@@ -321,8 +320,7 @@ namespace SamSoarII.AppMain.Project
             }
         }
         #endregion
-
-
+        
         #region TextEditer Events
 
         /// <summary>

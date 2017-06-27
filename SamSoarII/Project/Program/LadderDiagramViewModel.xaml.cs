@@ -340,7 +340,6 @@ namespace SamSoarII.AppMain.Project
             {
                 return this._actualHeight;
             }
-
             set
             {
                 this._actualHeight = value;

@@ -33,7 +33,6 @@ namespace SamSoarII.AppMain.Project
         {
             isalive = true;
             Started(this, new RoutedEventArgs());
-
             while (thalive)
             {
                 do
@@ -46,13 +45,13 @@ namespace SamSoarII.AppMain.Project
 
                 isactive = true;
                 Resumed(this, new RoutedEventArgs());
-
                 ProjectModel pmodel = ifacade.ProjectModel;
                 if (pmodel == null) continue;
                 LadderDiagramViewModel main = pmodel.MainRoutine;
                 if (main == null) continue;
                 _Thread_Update(main);
                 if (!thalive) break;
+
                 foreach (LadderDiagramViewModel ldvmodel in pmodel.SubRoutines)
                 {
                     _Thread_Update(ldvmodel);
@@ -60,7 +59,6 @@ namespace SamSoarII.AppMain.Project
                 }
                 if (!thalive) break;
             }
-
             isalive = false;
             thread = null;
             Aborted(this, new RoutedEventArgs());

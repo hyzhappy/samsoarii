@@ -108,23 +108,30 @@ namespace SamSoarII.AppMain.UI
             //TB_Input.Background = Brushes.Red;
         }
 
-        public void Initialize()
+        public void Initialize(bool initcmd = true)
         {
+            foreach (TextReplaceElement ele in items)
+            {
+                ele.Dispose();
+            }
             items.Clear();
-            _cmdmanager.Initialize();
+            if (initcmd)
+            {
+                _cmdmanager.Initialize();
+            }
         }
 
         public void Find(string word = null)
         {
             if (word != null)
                 TB_Input.Text = word;
-            items.Clear();
+            Initialize(false);
             if (TB_Input.Text.Length <= 0)
                 return;
             switch (Mode)
             {
                 case MODE_CURRENT:
-                    ITabItem currenttab = parent.MainTabControl.CurrentTab;
+                    ITabItem currenttab = parent.MainTabControl.SelectedItem;
                     if (currenttab is FuncBlockViewModel)
                     {
                         FuncBlockViewModel fbvmodel = (FuncBlockViewModel)currenttab;
@@ -286,7 +293,7 @@ namespace SamSoarII.AppMain.UI
         
         private void OnCurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
-            ITabItem currenttab = parent.MainTabControl.CurrentTab;
+            ITabItem currenttab = parent.MainTabControl.SelectedItem;
             if (currenttab is FuncBlockViewModel)
             {
                 Visibility = Visibility.Visible;
@@ -330,7 +337,7 @@ namespace SamSoarII.AppMain.UI
         #endregion
     }
 
-    public class TextReplaceElement : INotifyPropertyChanged
+    public class TextReplaceElement : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -447,6 +454,13 @@ namespace SamSoarII.AppMain.UI
             while (end < text.Length && text[end] != '\n' && text[end] != '\r') end++;
             Line = text.Substring(start + 1, end - start - 1);
             lineoffset = textoffset - start - 1;
+        }
+
+        public void Dispose()
+        {
+            tpwindow = null;
+            fbvmodel.TextChanged -= OnTextChanged;
+            fbvmodel = null;
         }
         
         public void Replace(string newword)
