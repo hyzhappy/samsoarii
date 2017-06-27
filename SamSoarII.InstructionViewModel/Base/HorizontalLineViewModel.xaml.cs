@@ -16,6 +16,7 @@ using SamSoarII.UserInterface;
 using System.ComponentModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.ValueModel;
+using SamSoarII.Utility;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -35,7 +36,12 @@ namespace SamSoarII.LadderInstViewModel
         private int _x;
         private int _y;
         private bool _isCommentMode;
-
+        private IntPoint intPos = new IntPoint();
+        public override IntPoint IntPos
+        {
+            get => intPos;
+            set => intPos = value;
+        }
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public override int X
@@ -48,6 +54,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _x = value;
+                intPos.X = value;
                 UpdateLeftProperty();
             }
         }
@@ -62,6 +69,7 @@ namespace SamSoarII.LadderInstViewModel
             set
             {
                 _y = value;
+                intPos.Y = value;
                 UpdateTopProperty();
             }
         }

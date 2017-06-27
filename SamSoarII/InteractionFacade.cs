@@ -25,6 +25,7 @@ using System.Windows.Threading;
 using System.ComponentModel;
 using SamSoarII.Communication;
 using SamSoarII.AppMain.Project.Helper;
+using SamSoarII.AppMain.LadderCommand;
 
 namespace SamSoarII.AppMain
 {
@@ -1094,22 +1095,20 @@ namespace SamSoarII.AppMain
                 case SelectStatus.MultiSelected:
                     if (catalogId == 10 || catalogId == 11)
                     {
+                        LadderDiagramRemoveElementsCommand command = new LadderDiagramRemoveElementsCommand();
                         if (catalogId == 10)
                         {
-                            RemoveNetworkHLines(CurrentLadder.SelectStartNetwork);
+                            command.AddCommand(new NetworkRemoveElementsCommand(CurrentLadder.SelectStartNetwork, CurrentLadder.SelectStartNetwork.GetSelectedHLines(),new List<VerticalLineViewModel>()));
                             foreach (var network in CurrentLadder.SelectAllNetworks)
-                            {
-                                RemoveNetworkHLines(network);
-                            }
+                                command.AddCommand(new NetworkRemoveElementsCommand(network, network.GetSelectedHLines(), new List<VerticalLineViewModel>()));
                         }
                         else
                         {
-                            RemoveNetworkVLines(CurrentLadder.SelectStartNetwork);
+                            command.AddCommand(new NetworkRemoveElementsCommand(CurrentLadder.SelectStartNetwork, new List<BaseViewModel>(), CurrentLadder.SelectStartNetwork.GetSelectedVerticalLines()));
                             foreach (var network in CurrentLadder.SelectAllNetworks)
-                            {
-                                RemoveNetworkVLines(network);
-                            }
+                                command.AddCommand(new NetworkRemoveElementsCommand(network, new List<BaseViewModel>(), network.GetSelectedVerticalLines()));
                         }
+                        CurrentLadder.CommandExecute(command);
                     }
                     else
                     {
@@ -1184,14 +1183,14 @@ namespace SamSoarII.AppMain
         {
             foreach (var hline in network.GetSelectedHLines())
             {
-                network.RemoveElement(hline.X,hline.Y);
+                network.RemoveElement(hline.IntPos);
             }
         }
         public void RemoveNetworkVLines(LadderNetworkViewModel network)
         {
             foreach (var vline in network.GetSelectedVerticalLines())
             {
-                network.RemoveVerticalLine(vline.X,vline.Y);
+                network.RemoveVerticalLine(vline.IntPos);
             }
         }
 
@@ -1320,10 +1319,13 @@ namespace SamSoarII.AppMain
             _mainWindow.ClearProjectTreeView();
             _mainWindow.ClearProjectMonitor();
             _mainTabControl.Reset();
+            CurrentLadder = null;
             _projectTreeView = null;
             _projectModel.autoSavedManager.Abort();
+            ProjectModel.Dispose();
             ProjectModel = null;
             MainWindow.LACProj.Hide();
+            GC.Collect(2,GCCollectionMode.Forced);
         }
         public void SaveProject()
         {
@@ -1442,13 +1444,15 @@ namespace SamSoarII.AppMain
                 };
                 baseSetting.ModifyButtonClick += (sender2, e2) =>
                 {
-                    ProjectPropertyDialog dialog2 = new ProjectPropertyDialog(_projectModel);
-                    dialog2.EnsureButtonClick += (sender1, e1) =>
+                    using (ProjectPropertyDialog dialog2 = new ProjectPropertyDialog(_projectModel))
                     {
-                        dialog2.Save();
-                        dialog2.Close();
-                    };
-                    dialog2.ShowDialog();
+                        dialog2.EnsureButtonClick += (sender1, e1) =>
+                        {
+                            dialog2.Save();
+                            dialog2.Close();
+                        };
+                        dialog2.ShowDialog();
+                    }
                 };
                 dialog.Ensure += (sender3, e3) =>
                 {

@@ -74,6 +74,7 @@ namespace SamSoarII.AppMain.UI
         }
         public MainWindow()
         {
+            App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
             InitializeComponent();
             DataContext = this;
             InitializeAvalonDock();
@@ -82,13 +83,6 @@ namespace SamSoarII.AppMain.UI
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
-            Activated += MainWindow_Activated;
-        }
-
-        private void MainWindow_Activated(object sender, EventArgs e)
-        {
-            App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
-            Activated -= MainWindow_Activated;
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -759,9 +753,12 @@ namespace SamSoarII.AppMain.UI
                     OnMonitorCommandExecute(sender, e);
                 }
             }
-            _interactionFacade.CloseCurrentProject();
-            LAProj.Hide();
-            LAMonitor.Hide();
+            if(CurrentProjectHandle(false, false))
+            {
+                _interactionFacade.CloseCurrentProject();
+                LAProj.Hide();
+                LAMonitor.Hide();
+            }
         }
         private void ClosePageExecuteCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -1223,20 +1220,22 @@ namespace SamSoarII.AppMain.UI
         
         private void OnShowPropertyDialogCommandExecute(object sender, RoutedEventArgs e)
         {
-            ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel);
-            dialog.EnsureButtonClick += (sender1, e1) =>
+            using (ProjectPropertyDialog dialog = new ProjectPropertyDialog(_interactionFacade.ProjectModel))
             {
-                try
+                dialog.EnsureButtonClick += (sender1, e1) =>
                 {
-                    dialog.Save();
-                    dialog.Close();
-                }
-                catch (ProjectPropertyException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            };
-            dialog.ShowDialog();
+                    try
+                    {
+                        dialog.Save();
+                        dialog.Close();
+                    }
+                    catch (ProjectPropertyException ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                };
+                dialog.ShowDialog();
+            }
         }
         private void OnShowHelpDocWindow(object sender, RoutedEventArgs e)
         {

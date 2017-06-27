@@ -825,6 +825,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_539D839CDC350A9DD05B608323169672"
+        "OwnerKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_53F4D5B3B0CA4946988074971D78BF13"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2488,6 +2494,12 @@
         "Entry"
         {
         "MsmKey" = "8:_F3390BF769896C4D70040A116ABE144E"
+        "OwnerKey" = "8:_2417715554D064F9C1598E52DA2CA3C6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3390BF769896C4D70040A116ABE144E"
         "OwnerKey" = "8:_A164549E078DC79BB8F6CB36ECC05FB7"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2711,6 +2723,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_16FB922E6E58874DC6DB886401F2F198"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_539D839CDC350A9DD05B608323169672"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -3317,7 +3335,7 @@
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Resources\\InstructionPopup.xml"
             "TargetName" = "8:InstructionPopup.xml"
             "Tag" = "8:"
-            "Folder" = "8:_D3F1350112AF43CA9D9C1142C02F8001"
+            "Folder" = "8:_B598789BCAF742DF8E9EB5A72D9416DB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5496,6 +5514,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_539D839CDC350A9DD05B608323169672"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Lierda.WPFHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cbb49eab16984ff2, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_539D839CDC350A9DD05B608323169672"
+                    {
+                    "Name" = "8:Lierda.WPFHelper.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Lierda.WPFHelper.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_32F55A9BC58245C489AC9D3F310FEAC9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_53F4D5B3B0CA4946988074971D78BF13"
@@ -9055,7 +9104,7 @@
             "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Resources\\SpecialRegisters.xml"
             "TargetName" = "8:SpecialRegisters.xml"
             "Tag" = "8:"
-            "Folder" = "8:_D3F1350112AF43CA9D9C1142C02F8001"
+            "Folder" = "8:_B598789BCAF742DF8E9EB5A72D9416DB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11421,17 +11470,6 @@
                     "Property" = "8:_4BD223DEC0954EB4BA375283C0BF0511"
                         "Folders"
                         {
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_D3F1350112AF43CA9D9C1142C02F8001"
-                            {
-                            "Name" = "8:Resources"
-                            "AlwaysCreate" = "11:FALSE"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "Property" = "8:_543817F4E6834CDB8BAAA217A05B89E9"
-                                "Folders"
-                                {
-                                }
-                            }
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_55B4EF72A6ED462690DDB3CC3714A504"
@@ -11806,6 +11844,17 @@
                                 {
                                 }
                             }
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B598789BCAF742DF8E9EB5A72D9416DB"
+                    {
+                    "Name" = "8:Resources"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_543817F4E6834CDB8BAAA217A05B89E9"
+                        "Folders"
+                        {
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_E2C18B5EC0244CD2919BB0750E7CEFFE"

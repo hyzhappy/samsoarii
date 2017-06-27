@@ -30,6 +30,8 @@ using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Controls;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -58,7 +60,7 @@ namespace SamSoarII.AppMain.Project
         NoCross
     }
 
-    public partial class LadderDiagramViewModel : UserControl, IProgram
+    public partial class LadderDiagramViewModel : UserControl, IProgram,IDisposable
     {
         private ProjectModel _projectModel;
         public ProjectModel ProjectModel
@@ -2088,7 +2090,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }
-            if (e.Key == Key.Delete || e.Key == Key.Back)
+            if (e.Key == Key.Delete)
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
@@ -2749,9 +2751,6 @@ namespace SamSoarII.AppMain.Project
                         _commandManager.Execute(command);
                     }
                     XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(listele, new List<VerticalLineViewModel>(), _selectRect.X, _selectRect.Y, 1, 1);
-                    //XElement xele_area = new XElement("Area");
-                    //area.Save(xele_area);
-                    //xEle.Add(xele_area);
                     Clipboard.SetData("LadderContent", xEle.ToString());
                 }
             }
@@ -2791,9 +2790,6 @@ namespace SamSoarII.AppMain.Project
                                     this, removednets, index));
                             }
                         }
-                        //XElement xele_area = new XElement("Area");
-                        //area.Save(xele_area);
-                        //xEle.Add(xele_area);
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
                     }
@@ -2804,24 +2800,22 @@ namespace SamSoarII.AppMain.Project
                         int yBegin = Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
                         int xEnd = Math.Max(_selectStartNetwork.SelectAreaFirstX, _selectStartNetwork.SelectAreaSecondX);
                         int yEnd = Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
-                        XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(_selectStartNetwork.GetSelectedElements(),
-                                                                                                    _selectStartNetwork.GetSelectedVerticalLines(),
+                        var _selectedElements = _selectStartNetwork.GetSelectedElements();
+                        var _selectedVerticalLines = _selectStartNetwork.GetSelectedVerticalLines();
+                        XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(_selectedElements,
+                                                                                                    _selectedVerticalLines,
                                                                                                     xBegin, yBegin, xEnd - xBegin + 1, yEnd - yBegin + 1);
                         if(!copy)
                         {
-                            var command = new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectStartNetwork.GetSelectedElements(), _selectStartNetwork.GetSelectedVerticalLines(), area);
+                            var command = new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectedElements, _selectedVerticalLines, area);
                             _commandManager.Execute(command);
                         }
-                        //XElement xele_area = new XElement("Area");
-                        //area.Save(xele_area);
-                        //xEle.Add(xele_area);
                         Clipboard.SetData("LadderContent", xEle.ToString());
                         SelectionStatus = SelectStatus.Idle;
                     }
                 }
             }
         }
-
         private void PasteNetworksExecute(XElement xEle)
         {
             NetworkChangeElementArea area = null;
@@ -3348,7 +3342,8 @@ namespace SamSoarII.AppMain.Project
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
-            if (sourcenet != null && sourcenet != desnetwork)
+            if (sourcenet == null) return;
+            if (sourcenet != desnetwork)
             {
                 desnetwork.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
@@ -3364,10 +3359,11 @@ namespace SamSoarII.AppMain.Project
         {
             var sourcenet = (LadderNetworkViewModel)e.Data.GetData(typeof(LadderNetworkViewModel));
             var desnetwork = (LadderNetworkViewModel)e.Source;
-            sourcenet.CommentAreaBorder.BorderBrush = LadderHelper.MonitorBrush;
-            sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
-            if (sourcenet != null && sourcenet != desnetwork)
+            if (sourcenet == null) return;
+            if (sourcenet != desnetwork)
             {
+                sourcenet.CommentAreaBorder.BorderBrush = LadderHelper.MonitorBrush;
+                sourcenet.CommentAreaBorder.BorderThickness = new Thickness(6);
                 desnetwork.Opacity = 0.3;
                 desnetwork.ladderExpander.IsExpand = false;
             }
@@ -3375,6 +3371,9 @@ namespace SamSoarII.AppMain.Project
         private void OnDragLeave(object sender, DragEventArgs e)
         {
             ((LadderNetworkViewModel)e.Source).Opacity = 1;
+            if (dragItem == null) return;
+            dragItem.CommentAreaBorder.BorderBrush = Brushes.Brown;
+            dragItem.CommentAreaBorder.BorderThickness = new Thickness(4);
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
@@ -3387,10 +3386,7 @@ namespace SamSoarII.AppMain.Project
             {
                 if (currentItem != null && dragItem != null)
                 {
-                    if (dragItem != currentItem)
-                    {
-                        DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
-                    }
+                    DragDrop.DoDragDrop(this, dragItem, DragDropEffects.Move);
                 }
             }
         }
@@ -3404,6 +3400,17 @@ namespace SamSoarII.AppMain.Project
                 }
             }
             return null;
+        }
+
+        public void Dispose()
+        {
+            foreach (var network in _ladderNetworks)
+            {
+                network.Dispose();
+            }
+            _ladderNetworks.Clear();
+            _projectModel = null;
+            _commandManager.Dispose();
         }
         #endregion
     }

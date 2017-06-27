@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,6 +30,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -50,7 +52,7 @@ namespace SamSoarII.AppMain.Project
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged
+    public partial class LadderNetworkViewModel : UserControl, IComparable, INotifyPropertyChanged,IDisposable
     {
         #region Canvas System
         //private ContextMenu CM_Ladder;
@@ -154,6 +156,7 @@ namespace SamSoarII.AppMain.Project
                 _networkNumber = value;
                 NetworkNumberLabel.Content = string.Format("Network {0}", _networkNumber);
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkMessage"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
             }
         }
 
@@ -214,7 +217,7 @@ namespace SamSoarII.AppMain.Project
                     UpdateModelMessage();//当解除屏蔽时，恢复元素表中被移除的的项
                 }
                 InstructionCommentManager.RaiseMappedMessageChangedEvent();//更新元素表
-                MaskChanged(this, new RoutedEventArgs());
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber")); PropertyChanged.Invoke(this, new PropertyChangedEventArgs("NetworkNumber"));
             }
         }
         private bool _isCommendMode;
@@ -466,7 +469,6 @@ namespace SamSoarII.AppMain.Project
                 _isSelectAllMode = value;
                 if(_isSelectAllMode)
                 {
-                    IsSelectAreaMode = true;
                     SelectAreaFirstY = 0;
                     SelectAreaFirstX = 0;
                     SelectAreaSecondX = GlobalSetting.LadderXCapacity - 1;
@@ -480,6 +482,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     CommentAreaGrid.Background = new SolidColorBrush(Colors.DarkBlue);
                     CommentAreaGrid.Background.Opacity = 0.3;
+                    IsSelectAreaMode = true;
                 }
                 else
                 {
@@ -513,7 +516,7 @@ namespace SamSoarII.AppMain.Project
             NetworkNumber = number;
             SelectArea.Fill = new SolidColorBrush(Colors.DarkBlue);
             SelectArea.Opacity = 0.2;
-            Canvas.SetZIndex(SelectArea, -1);
+            Panel.SetZIndex(SelectArea, -1);
             Tag = false;
             Loaded += (sender, e) =>
             {
@@ -689,19 +692,19 @@ namespace SamSoarII.AppMain.Project
             }
             if (flag)
             {
-                IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
-                if (_ladderElements.Keys.Contains(p))
+                //IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
+                if (_ladderElements.Keys.Contains(element.IntPos))
                 {
-                    oldele = _ladderElements[p];
+                    oldele = _ladderElements[element.IntPos];
                     if (oldele.BPRect != null)
                         RemoveBreakpoint(oldele.BPRect);
                     InstructionCommentManager.Unregister(oldele);
                     oldele.ShowPropertyDialogEvent -= this.OnShowPropertyDialog;
-                    _ladderElements.Remove(p);
+                    _ladderElements.Remove(element.IntPos);
                     LadderCanvas.Children.Remove(oldele);
                 }
                 element.IsCommentMode = _isCommendMode;
-                _ladderElements.Add(p, element);
+                _ladderElements.Add(element.IntPos, element);
                 LadderCanvas.Children.Add(element);
                 element.ShowPropertyDialogEvent += OnShowPropertyDialog;
                 InstructionCommentManager.Register(element);
@@ -716,11 +719,11 @@ namespace SamSoarII.AppMain.Project
         }
         public void ReplaceVerticalLine(VerticalLineViewModel vline)
         {
-            IntPoint p = new IntPoint() { X = vline.X, Y = vline.Y };
-            if (!_ladderVerticalLines.ContainsKey(p))
+            //IntPoint p = new IntPoint() { X = vline.X, Y = vline.Y };
+            if (!_ladderVerticalLines.ContainsKey(vline.IntPos))
             {
                 vline.IsCommentMode = _isCommendMode;
-                _ladderVerticalLines.Add(p, vline);
+                _ladderVerticalLines.Add(vline.IntPos, vline);
                 LadderCanvas.Children.Add(vline);
                 LadderElementChangedArgs e = new LadderElementChangedArgs();
                 e.BVModel_old = null;
@@ -789,7 +792,8 @@ namespace SamSoarII.AppMain.Project
         {
             if (_ladderElements.ContainsValue(element))
             {
-                RemoveElement(element.X, element.Y);
+                //RemoveElement(element.X, element.Y);
+                RemoveElement(element.IntPos);
             }
         }
         public bool RemoveVerticalLine(IntPoint pos)
@@ -817,7 +821,8 @@ namespace SamSoarII.AppMain.Project
         {
             if (_ladderVerticalLines.ContainsValue(vline))
             {
-                return RemoveVerticalLine(vline.X, vline.Y);
+                //return RemoveVerticalLine(vline.X, vline.Y);
+                return RemoveVerticalLine(vline.IntPos);
             }
             else
             {
@@ -864,11 +869,11 @@ namespace SamSoarII.AppMain.Project
         }
         public void ReplaceVLine(VerticalLineViewModel vline)
         {
-            IntPoint p = new IntPoint() { X = vline.X, Y = vline.Y };
-            if (!_ladderVerticalLines.ContainsKey(p))
+            //IntPoint p = new IntPoint() { X = vline.X, Y = vline.Y };
+            if (!_ladderVerticalLines.ContainsKey(vline.IntPos))
             {
                 vline.IsCommentMode = _isCommendMode;
-                _ladderVerticalLines.Add(p, vline);
+                _ladderVerticalLines.Add(vline.IntPos, vline);
                 LadderCanvas.Children.Add(vline);
             }
         }
@@ -885,15 +890,15 @@ namespace SamSoarII.AppMain.Project
         {
             element.NetWorkNum = NetworkNumber;
             BaseViewModel oldele = null;
-            IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
-            if (_ladderElements.Keys.Contains(p))
+            //IntPoint p = new IntPoint() { X = element.X, Y = element.Y };
+            if (_ladderElements.Keys.Contains(element.IntPos))
             {
-                oldele = _ladderElements[p];
-                _ladderElements.Remove(p);
+                oldele = _ladderElements[element.IntPos];
+                _ladderElements.Remove(element.IntPos);
                 LadderCanvas.Children.Remove(oldele);
             }
             element.IsCommentMode = _isCommendMode;
-            _ladderElements.Add(p, element);
+            _ladderElements.Add(element.IntPos, element);
             LadderCanvas.Children.Add(element);
             return oldele;
         }
@@ -1110,9 +1115,7 @@ namespace SamSoarII.AppMain.Project
             return LadderElements.Values.OrderBy(x => { return x.Y; }).Last().Y;
         }
         #region Event handlers
-
-        public event RoutedEventHandler MaskChanged = delegate { };
-
+        
         #region Relative to Element changed
         public event LadderElementChangedHandler ElementChanged = delegate { };
         public event LadderElementChangedHandler VerticalLineChanged = delegate { };
@@ -1603,7 +1606,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch(KeyNotFoundException)
                     {
-                    } 
+                    }
                 }
             }
             return result;
@@ -1678,6 +1681,10 @@ namespace SamSoarII.AppMain.Project
                 foreach (var ele in _ladderVerticalLines.Values)
                 {
                     LadderCanvas.Children.Add(ele);
+                }
+                if (IsSelectAreaMode)
+                {
+                    LadderCanvas.Children.Add(SelectArea);
                 }
             }
         }
@@ -1831,9 +1838,24 @@ namespace SamSoarII.AppMain.Project
                 _ladderDiagram.ProjectModel.MMonitorManager.Handle(mvmodel, e);
             }
         }
-
-
         #endregion
-        
+
+        public void Dispose()
+        {
+            foreach (var ele in LadderElements)
+            {
+                ele.Value.Dispose();
+            }
+            foreach (var vline in _ladderVerticalLines)
+            {
+                vline.Value.Dispose();
+            }
+            LadderElements.Clear();
+            _ladderVerticalLines.Clear();
+            LadderCanvas = null;
+
+            _ladderVerticalLines = null;
+            _ladderElements = null;
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace SamSoarII.AppMain.UI.Monitor
     /// <summary>
     /// MainMonitor.xaml 的交互逻辑
     /// </summary>
-    public partial class MainMonitor : UserControl,INotifyPropertyChanged
+    public partial class MainMonitor : UserControl,INotifyPropertyChanged,IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -494,6 +494,16 @@ namespace SamSoarII.AppMain.UI.Monitor
                     ele.CurrentValue = string.Format("????");
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            _projectmodel = null;
+            foreach (var table in tables)
+            {
+                table.Dispose();
+            }
+            tables.Clear();
         }
         #endregion
         #endregion

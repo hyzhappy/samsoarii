@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using SamSoarII.AppMain.Project;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.AppMain.UI;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace SamSoarII.AppMain.LadderCommand
 {
@@ -50,14 +52,10 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Execute()
         {
-            foreach(var ele in _elements)
-            {
+            foreach (var ele in _elements)
                 _network.RemoveElement(ele);
-            }
-            foreach(var vline in _vlines)
-            {
+            foreach (var vline in _vlines)
                 _network.RemoveVerticalLine(vline);
-            }
             //_network.INVModel.Setup(_network);
         }
 

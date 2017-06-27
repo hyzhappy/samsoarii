@@ -7,6 +7,7 @@ using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.PLCDevice;
 using SamSoarII.ValueModel;
+using SamSoarII.Utility;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -95,5 +96,7 @@ namespace SamSoarII.LadderInstViewModel
         }
 
         public override bool IsMonitorMode { get { throw new NotImplementedException(); } set { throw new NotImplementedException(); } }
+
+        public override IntPoint IntPos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

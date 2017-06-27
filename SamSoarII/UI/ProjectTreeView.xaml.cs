@@ -164,6 +164,7 @@ namespace SamSoarII.AppMain.UI
         {
             _projectModel.IFacade.PTVEvent -= OnGotPTVEvent;
             _projectModel.MTVModel.ModelChanged -= OnModbusChanged;
+            _projectModel = null;
         }
 
         private void ReinitializeComponent()

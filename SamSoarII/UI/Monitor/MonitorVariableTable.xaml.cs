@@ -25,7 +25,7 @@ namespace SamSoarII.AppMain.UI.Monitor
     /// <summary>
     /// MonitorVariableTable.xaml 的交互逻辑
     /// </summary>
-    public partial class MonitorVariableTable : UserControl,INotifyPropertyChanged
+    public partial class MonitorVariableTable : UserControl,INotifyPropertyChanged,IDisposable
     {
         private MainMonitor _parent;
         public int HashCode
@@ -366,6 +366,12 @@ namespace SamSoarII.AppMain.UI.Monitor
                     dgcell.DataContext = emodel_new;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            _parent = null;
+            Elements.Clear();
         }
     }
 }

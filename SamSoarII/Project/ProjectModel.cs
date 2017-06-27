@@ -31,7 +31,7 @@ namespace SamSoarII.AppMain.Project
         Modify,
         Clear
     }
-    public class ProjectModel:INotifyPropertyChanged
+    public class ProjectModel:INotifyPropertyChanged,IDisposable
     {
         public bool IsModify
         {
@@ -318,6 +318,19 @@ namespace SamSoarII.AppMain.Project
             return null;
         }
 
+        public void Dispose()
+        {
+            MainRoutine.Dispose();
+            foreach (var routine in SubRoutines)
+            {
+                routine.Dispose();
+            }
+            MainRoutine = null;
+            SubRoutines.Clear();
+            SubRoutines = null;
+            MMonitorManager.Dispose();
+            MMonitorManager = null;
+        }
     }
 }
 

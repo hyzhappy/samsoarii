@@ -56,6 +56,9 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lierda.WPFHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cbb49eab16984ff2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lierda.WPFHelper.1.0.2\lib\net452\Lierda.WPFHelper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -109,11 +112,11 @@
     <Compile Include="Event\RoutineChangedEventArgs.cs" />
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
     <Compile Include="Event\TabType.cs" />
-    <Compile Include="Functionality\LadderVariable.cs" />
     <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramExchangeNetworkCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramMoveNetworkCommand.cs" />
+    <Compile Include="LadderCommand\LadderDiagramRemoveElementsCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
     <Compile Include="LadderCommand\NetworkAddRowCommand.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="Project\AutoSavedManager.cs" />
     <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\Helper\DownloadHelper.cs" />
+    <Compile Include="Project\Helper\ManipulateHelper.cs" />
     <Compile Include="Project\Helper\SFCHelper.cs" />
     <Compile Include="Project\Helper\StatusBarHepler.cs" />
     <Compile Include="Project\Program\FuncBlockViewModel.xaml.cs">
@@ -352,6 +356,7 @@
     </EmbeddedResource>
     <None Include="Communication\Util\usbdll\gen_usbdll.bat" />
     <None Include="Communication\Util\usbdll\usbdll.o" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -644,7 +649,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Converter\" />
     <Folder Include="Project\Program\SFC\View\" />
   </ItemGroup>
   <ItemGroup>

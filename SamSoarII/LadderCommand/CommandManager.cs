@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 namespace SamSoarII.AppMain.LadderCommand
 {
-    public class CommandManager
+    public class CommandManager:IDisposable
     {
         private const int UNDO_LIMIT = 128;
 
@@ -116,6 +116,12 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 ldvmodel.InvokeLDNetworksChanged();
             }
+        }
+
+        public void Dispose()
+        {
+            UndoStack.Clear();
+            RedoStack.Clear();
         }
     }
 

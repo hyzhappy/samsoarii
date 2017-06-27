@@ -22,7 +22,7 @@ namespace SamSoarII.AppMain.UI
     /// <summary>
     /// SettingDialog.xaml 的交互逻辑
     /// </summary>
-    public partial class ProjectPropertyDialog : Window
+    public partial class ProjectPropertyDialog : Window,IDisposable
     {
         public event RoutedEventHandler EnsureButtonClick = delegate { };
 
@@ -90,6 +90,11 @@ namespace SamSoarII.AppMain.UI
             {
                 EnsureButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
+        }
+
+        public void Dispose()
+        {
+            _projectModel = null;
         }
         #endregion
     }

@@ -199,6 +199,8 @@ namespace SamSoarII.AppMain.UI.Monitor
         {
             ThreadPause -= OnThreadPause;
             Abort();
+            MMWindow.Manager = null;
+            MMWindow.Dispose();
         }
         
         #region Initialize

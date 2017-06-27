@@ -10,6 +10,7 @@ using SamSoarII.LadderInstModel;
 using SamSoarII.PLCDevice;
 using SamSoarII.ValueModel;
 using SamSoarII.LadderInstViewModel.Monitor;
+using SamSoarII.Utility;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -27,11 +28,12 @@ namespace SamSoarII.LadderInstViewModel
     /// <summary>
     /// 梯形图元件基类，抽象类
     /// </summary>
-    public abstract class BaseViewModel : UserControl
+    public abstract class BaseViewModel : UserControl,IDisposable
     {
         public event ShowPropertyDialogHandler ShowPropertyDialogEvent;
         public abstract int X { get; set; }
         public abstract int Y { get; set; }
+        public abstract IntPoint IntPos { get; set; }
         public abstract bool IsCommentMode { get; set; }
         public bool CanModify { get; set; } = true;
         public abstract string InstructionName { get; }
@@ -240,6 +242,15 @@ namespace SamSoarII.LadderInstViewModel
         protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        public void Dispose()
+        {
+            ViewCtrl = null;
+            for (int i = 0; i < 4; i++)
+            {
+                SetValueModel(i, null);
+            }
         }
 
         #endregion
