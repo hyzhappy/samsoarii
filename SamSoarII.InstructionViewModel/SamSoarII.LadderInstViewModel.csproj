@@ -220,6 +220,7 @@
     <Compile Include="FontManager.cs" />
     <Compile Include="InstructionCommentManager.cs" />
     <Compile Include="InstructionViewModelPrototype.cs" />
+    <Compile Include="IPosition.cs" />
     <Compile Include="Micro\MicroDiagramViewModel.xaml.cs">
       <DependentUpon>MicroDiagramViewModel.xaml</DependentUpon>
     </Compile>

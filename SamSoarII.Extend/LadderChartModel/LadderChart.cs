@@ -132,7 +132,7 @@ namespace SamSoarII.Extend.LadderChartModel
                 newnode.LeDo = node;
             }
             nodes.Add(newnode);
-            nodedict.Set(newnode.X, newnode.Y, newnode);
+            nodedict.Set(newnode);
             return true;
         }
    

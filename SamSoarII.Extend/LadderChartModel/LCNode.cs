@@ -18,7 +18,7 @@ using SamSoarII.LadderInstViewModel;
 
 namespace SamSoarII.Extend.LadderChartModel
 {
-    public class LCNode
+    public class LCNode : IPosition
     {
         /// <summary>
         /// 内部成员变量
