@@ -28,7 +28,7 @@ namespace SamSoarII.LadderInstViewModel
     /// <summary>
     /// 梯形图元件基类，抽象类
     /// </summary>
-    public abstract class BaseViewModel : UserControl,IDisposable
+    public abstract class BaseViewModel : UserControl
     {
         public event ShowPropertyDialogHandler ShowPropertyDialogEvent;
         public abstract int X { get; set; }
@@ -242,15 +242,6 @@ namespace SamSoarII.LadderInstViewModel
         protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        public void Dispose()
-        {
-            ViewCtrl = null;
-            for (int i = 0; i < 4; i++)
-            {
-                SetValueModel(i, null);
-            }
         }
 
         #endregion

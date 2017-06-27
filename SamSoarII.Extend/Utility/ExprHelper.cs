@@ -107,23 +107,25 @@ namespace SamSoarII.Extend.Utility
             // 向前修正前缀末尾为and计算符
             while (padding > old_padding && exprs[left][padding] != '&') padding--;
             //Console.Write("next padding = {0:d}\n", padding);
-            string expr = "";
+            StringBuilder expr = new StringBuilder(String.Empty);
             // CASE 1 : 若未找到新的公共前缀
             if (old_padding >= padding)
             {
                 // 表达式集合用分歧点分为左右两部分，分治处理后合并
-                expr = Merge(exprs, left, difpoint - 1, ref _hasor, padding);
-                expr += "||";
-                expr += Merge(exprs, difpoint, right, ref _hasor, padding);
+                expr.Append(Merge(exprs, left, difpoint - 1, ref _hasor, padding));
+                expr.Append("||");
+                expr.Append(Merge(exprs, difpoint, right, ref _hasor, padding));
                 hasor = true;
-                return expr;
+                return expr.ToString();
             }
             // CASE 2 : 找到新的公共前缀时，按照分配律，剩下的部分用括号括起来
-            expr = exprs[left].Substring(old_padding, padding-old_padding+1) + "(";
-            expr += Merge(exprs, left, difpoint - 1, ref _hasor, padding + 1);
-            expr += "||";
-            expr += Merge(exprs, difpoint, right, ref _hasor, padding + 1);
-            return expr + ")";
+            expr.Append(exprs[left].Substring(old_padding, padding - old_padding + 1));
+            expr.Append("(");
+            expr.Append(Merge(exprs, left, difpoint - 1, ref _hasor, padding + 1));
+            expr.Append("||");
+            expr.Append(Merge(exprs, difpoint, right, ref _hasor, padding + 1));
+            expr.Append(")");
+            return expr.ToString();
         }
         /// <summary>
         /// 通过逻辑表达式来生成PLC指令

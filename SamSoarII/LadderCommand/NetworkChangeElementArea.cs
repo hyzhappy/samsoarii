@@ -30,8 +30,8 @@ namespace SamSoarII.AppMain.LadderCommand
             LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
             ProjectModel pmodel = ldvmodel.ProjectModel;
             InteractionFacade ifacade = pmodel.IFacade;
-            ifacade.MainTabControl.ShowItem(ldvmodel);
             ldvmodel.AcquireArea(this);
+            ifacade.MainTabControl.ShowItem(ldvmodel);
         }
 
         static public NetworkChangeElementArea Create(

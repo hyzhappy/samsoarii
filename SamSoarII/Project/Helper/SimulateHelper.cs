@@ -140,16 +140,24 @@ namespace SamSoarII.AppMain.Project
 
         static public int Close()
         {
-            smmanager.Abort();
             if (smodel != null)
             {
                 smodel.Dispose();
                 smodel = null;
             }
-            pmodel.LadderMode = LadderMode.Edit;
-            SimuBrpoWindow bpwindow = pmodel.IFacade.BPWindow;
-            bpwindow.Unroute(pmodel);
-            bpwindow.SManager = null;
+            if (smmanager != null)
+            {
+                smmanager.Abort();
+                smmanager = null;
+            }
+            if (pmodel != null)
+            {
+                pmodel.LadderMode = LadderMode.Edit;
+                SimuBrpoWindow bpwindow = pmodel.IFacade.BPWindow;
+                bpwindow.Unroute(pmodel);
+                bpwindow.SManager = null;
+                pmodel = null;
+            }
             return CLOSE_OK;
         }
         

@@ -21,6 +21,7 @@ using SamSoarII.UserInterface;
 using SamSoarII.AppMain.UI.Monitor;
 using SamSoarII.Communication;
 using System.Windows.Media;
+using System.Threading;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -31,7 +32,7 @@ namespace SamSoarII.AppMain.Project
         Modify,
         Clear
     }
-    public class ProjectModel:INotifyPropertyChanged,IDisposable
+    public class ProjectModel : INotifyPropertyChanged, IDisposable
     {
         public bool IsModify
         {
@@ -180,6 +181,24 @@ namespace SamSoarII.AppMain.Project
             libfuncblock.IsReadOnly = true;
             LibFuncBlock = libfuncblock;
         }
+        public void Dispose()
+        {
+            if (autoSavedManager != null)
+            {
+                autoSavedManager.Abort();
+            }
+            if (AutoInstManager != null
+             && AutoInstManager.IsAlive)
+            {
+                AutoInstManager.Abort();
+                /*
+                while (AutoInstManager.IsAlive)
+                {
+                    Thread.Sleep(20);
+                }
+                */
+            }
+        }
         public bool ContainProgram(string name)
         {
             return SubRoutines.Any(x => x.ProgramName == name) | FuncBlocks.Any(x => x.ProgramName == name);
@@ -318,19 +337,6 @@ namespace SamSoarII.AppMain.Project
             return null;
         }
 
-        public void Dispose()
-        {
-            MainRoutine.Dispose();
-            foreach (var routine in SubRoutines)
-            {
-                routine.Dispose();
-            }
-            MainRoutine = null;
-            SubRoutines.Clear();
-            SubRoutines = null;
-            MMonitorManager.Dispose();
-            MMonitorManager = null;
-        }
     }
 }
 

@@ -528,7 +528,7 @@ namespace SamSoarII.AppMain.Project
             var elements = new List<BaseViewModel>();
             elements.Add(element);
             var oldelements = new List<BaseViewModel>();
-            var oldele = _selectRectOwner.SearchElement(element.X, element.Y);
+            var oldele = _selectRectOwner.GetElementByPosition(element.X, element.Y);
             if (oldele != null)
             {
                 oldelements.Add(oldele);
@@ -540,7 +540,7 @@ namespace SamSoarII.AppMain.Project
             {
                 for (int i = Math.Max(SelectionRect.X, 1); i < GlobalSetting.LadderXCapacity - 1; i++)
                 {
-                    if (_selectRectOwner.SearchElement(i, SelectionRect.Y) == null)
+                    if (_selectRectOwner.GetElementByPosition(i, SelectionRect.Y) == null)
                     {
                         elements.Add(new HorizontalLineViewModel() { X = i, Y = SelectionRect.Y });
                     }
@@ -680,7 +680,7 @@ namespace SamSoarII.AppMain.Project
         public void ReplaceSingleVerticalLine(LadderNetworkViewModel network, VerticalLineViewModel vline)
         {
             var vlines = new List<VerticalLineViewModel>();
-            var oldvline = _selectRectOwner.SearchVerticalLine(vline.X, vline.Y);
+            var oldvline = _selectRectOwner.GetVerticalLineByPosition(vline.X, vline.Y);
             if (oldvline == null)
             {
                 vlines.Add(vline);
@@ -899,6 +899,7 @@ namespace SamSoarII.AppMain.Project
                         _ladderNetworks.Remove(net);
                         LadderNetworkStackPanel.Children.Remove(net);
                     }
+                    net.InvokeRemoveNetwork();
                 }
             }
             int n = 0;
@@ -923,6 +924,7 @@ namespace SamSoarII.AppMain.Project
                     _ladderNetworks.Remove(network);
                     LadderNetworkStackPanel.Children.Remove(network);
                 }
+                network.InvokeRemoveNetwork();
             }
         }
 
@@ -1096,7 +1098,7 @@ namespace SamSoarII.AppMain.Project
                     PushLeft(_selectRect.X, _selectRect.Y);
                     return;
                 }
-                var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
+                var model = _selectRectOwner.GetElementByPosition(_selectRect.X, _selectRect.Y);
                 if (model != null)
                 {
                     if (model.Type == LadderInstModel.ElementType.HLine)
@@ -1131,7 +1133,7 @@ namespace SamSoarII.AppMain.Project
                     PushRight(_selectRect.X, _selectRect.Y);
                     return;
                 }
-                var model = _selectRectOwner.SearchElement(x, y);
+                var model = _selectRectOwner.GetElementByPosition(x, y);
                 if (model != null)
                 {
                     if (model.Type == LadderInstModel.ElementType.HLine)
@@ -1172,7 +1174,7 @@ namespace SamSoarII.AppMain.Project
                     if(x >= 0)
                     {
                         SelectRectUp();
-                        var vline = _selectRectOwner.SearchVerticalLine(x, y);
+                        var vline = _selectRectOwner.GetVerticalLineByPosition(x, y);
                         if (vline != null)
                             RemoveSingleVerticalLine(_selectRectOwner, vline);
                         else
@@ -1205,7 +1207,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 if (x >= 0)
                 {
-                    var vline = _selectRectOwner.SearchVerticalLine(x, y);
+                    var vline = _selectRectOwner.GetVerticalLineByPosition(x, y);
                     if (vline != null)
                     {
                         RemoveSingleVerticalLine(_selectRectOwner, vline);
@@ -1352,20 +1354,21 @@ namespace SamSoarII.AppMain.Project
             int y1 = y, y2 = y;
             BaseViewModel bvmodel = _selectRectOwner.GetElementByPosition(x, y);
             BaseViewModel bvmodel_r = null;
+            if (bvmodel != null && bvmodel.IsPushed) return true;
             VerticalLineViewModel vlvmodel = null;
             VerticalLineViewModel vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x, y - 1);
             VerticalLineViewModel vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, y);
             while (vlvmodel_u != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
-                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x, y1 - 1);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
+                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x, --y1 - 1);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             while (vlvmodel_d != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
-                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, y2);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
+                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x, ++y2);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             for (int _y = y1; _y <= y2; _y++)
             {
@@ -1411,20 +1414,21 @@ namespace SamSoarII.AppMain.Project
             int y1 = y, y2 = y;
             BaseViewModel bvmodel = _selectRectOwner.GetElementByPosition(x, y);
             BaseViewModel bvmodel_l = null;
+            if (bvmodel != null && bvmodel.IsPushed) return true;
             VerticalLineViewModel vlvmodel = null;
             VerticalLineViewModel vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x - 1, y - 1);
             VerticalLineViewModel vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, y);
             while (vlvmodel_u != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
-                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x - 1, y1 - 1);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, --y1);
+                vlvmodel_u = _selectRectOwner.GetVerticalLineByPosition(x - 1, --y1 - 1);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             while (vlvmodel_d != null)
             {
-                bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
-                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, y2);
-                if (bvmodel is HorizontalLineViewModel) break;
+                //bvmodel = _selectRectOwner.GetElementByPosition(x, ++y2);
+                vlvmodel_d = _selectRectOwner.GetVerticalLineByPosition(x - 1, ++y2);
+                //if (bvmodel is HorizontalLineViewModel) break;
             }
             for (int _y = y1; _y <= y2; _y++)
             {
@@ -2078,7 +2082,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 if (_selectRectOwner != null)
                 {
-                    var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
+                    var viewmodel = _selectRectOwner.GetElementByPosition(_selectRect.X, _selectRect.Y);
                     if (viewmodel != null && viewmodel.Type != LadderInstModel.ElementType.HLine)
                     {
                         viewmodel.BeginShowPropertyDialog();
@@ -2090,7 +2094,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }
-            if (e.Key == Key.Delete)
+            if (e.Key == Key.Delete || e.Key == Key.Back)
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
@@ -2684,7 +2688,7 @@ namespace SamSoarII.AppMain.Project
             if (LadderMode != LadderMode.Edit) return;
             if (SelectionStatus == SelectStatus.SingleSelected)
             {
-                var model = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
+                var model = _selectRectOwner.GetElementByPosition(_selectRect.X, _selectRect.Y);
                 if (model != null)
                 {
                     var elements = new List<BaseViewModel>();
@@ -2741,7 +2745,7 @@ namespace SamSoarII.AppMain.Project
             {
                 // 单元素复制
                 List<BaseViewModel> listele = new List<BaseViewModel>();
-                var viewmodel = _selectRectOwner.SearchElement(_selectRect.X, _selectRect.Y);
+                var viewmodel = _selectRectOwner.GetElementByPosition(_selectRect.X, _selectRect.Y);
                 if (viewmodel != null)
                 {
                     listele.Add(viewmodel);
@@ -2800,14 +2804,14 @@ namespace SamSoarII.AppMain.Project
                         int yBegin = Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
                         int xEnd = Math.Max(_selectStartNetwork.SelectAreaFirstX, _selectStartNetwork.SelectAreaSecondX);
                         int yEnd = Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
-                        var _selectedElements = _selectStartNetwork.GetSelectedElements();
-                        var _selectedVerticalLines = _selectStartNetwork.GetSelectedVerticalLines();
-                        XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(_selectedElements,
-                                                                                                    _selectedVerticalLines,
+                        List<BaseViewModel> elements = _selectStartNetwork.GetSelectedElements();
+                        List<VerticalLineViewModel> vlines = _selectStartNetwork.GetSelectedVerticalLines();
+                        XElement xEle = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(elements, vlines,
                                                                                                     xBegin, yBegin, xEnd - xBegin + 1, yEnd - yBegin + 1);
                         if(!copy)
                         {
-                            var command = new LadderCommand.NetworkRemoveElementsCommand(_selectStartNetwork, _selectedElements, _selectedVerticalLines, area);
+                            var command = new LadderCommand.NetworkRemoveElementsCommand(
+                                _selectStartNetwork, elements, vlines, area);
                             _commandManager.Execute(command);
                         }
                         Clipboard.SetData("LadderContent", xEle.ToString());
@@ -3033,7 +3037,7 @@ namespace SamSoarII.AppMain.Project
             {
                 int x = _selectRect.X;
                 int y = _selectRect.Y;
-                if(_selectRectOwner.SearchElement(x, y) != null || _selectRectOwner.SearchVerticalLine(x, y) != null)
+                if(_selectRectOwner.GetElementByPosition(x, y) != null || _selectRectOwner.GetVerticalLineByPosition(x, y) != null)
                 {
                     e.CanExecute = true;
                 }
