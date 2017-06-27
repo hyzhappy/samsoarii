@@ -147,9 +147,7 @@ namespace SamSoarII.Utility
                     _cursorY++;
                 }
                 else
-                {
                     _cursorX++;
-                }
                 if (Current != null)
                     return true;
             }

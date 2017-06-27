@@ -711,7 +711,20 @@ namespace SamSoarII.AppMain.Project
                 VerticalLineChanged(this, e);
             }
         }
-
+        public void ReplaceElements(IEnumerable<BaseViewModel> elements)
+        {
+            foreach (var element in elements)
+            {
+                ReplaceElement(element);
+            }
+        }
+        public void ReplaceVerticalLines(IEnumerable<VerticalLineViewModel> vlines)
+        {
+            foreach (var vline in vlines)
+            {
+                ReplaceVerticalLine(vline);
+            }
+        }
         public void ReplaceBreakpoint(BreakpointRect rect)
         {
             IntPoint p;
@@ -757,6 +770,20 @@ namespace SamSoarII.AppMain.Project
                 e.BVModel_old = ele;
                 e.BVModel_new = null;
                 ElementChanged(this, e);
+            }
+        }
+        public void RemoveElements(IEnumerable<BaseViewModel> elements)
+        {
+            foreach (var element in elements)
+            {
+                RemoveElement(element);
+            }
+        }
+        public void RemoveVerticalLines(IEnumerable<VerticalLineViewModel> vlines)
+        {
+            foreach (var vline in vlines)
+            {
+                RemoveVerticalLine(vline);
             }
         }
         public void RemoveElement(int x, int y)

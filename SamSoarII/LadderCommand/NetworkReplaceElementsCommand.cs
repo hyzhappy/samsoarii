@@ -79,10 +79,11 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public virtual void Execute()
         {
-            _network.RemoveElement(_oldelements);
-            _network.RemoveVerticalLine(_oldvlines);
-            _network.ReplaceElement(_elements);
-            _network.ReplaceVerticalLine(_vlines);
+            _network.RemoveElements(_oldelements);
+            _network.RemoveVerticalLines(_oldvlines);
+            _network.ReplaceElements(_elements);
+            _network.ReplaceVerticalLines(_vlines);
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             if (_area != null)
             {
                 _area.Select(_network);
@@ -96,10 +97,11 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public virtual void Undo()
         {
-            _network.RemoveElement(_elements);
-            _network.RemoveVerticalLine(_vlines);
-            _network.ReplaceElement(_oldelements);
-            _network.ReplaceVerticalLine(_oldvlines);
+            _network.RemoveElements(_elements);
+            _network.RemoveVerticalLines(_vlines);
+            _network.ReplaceElements(_oldelements);
+            _network.ReplaceVerticalLines(_oldvlines);
+            InstructionCommentManager.RaiseMappedMessageChangedEvent();
             if (_oldarea != null)
             {
                 _oldarea.Select(_network);

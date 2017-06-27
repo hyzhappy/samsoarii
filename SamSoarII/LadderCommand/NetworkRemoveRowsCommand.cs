@@ -42,14 +42,8 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public void Redo()
         {
-            foreach (var ele in _removedElements)
-            {
-                _network.RemoveElement(ele);
-            }
-            foreach (var vline in _removedVerticalLines)
-            {
-                _network.RemoveVerticalLine(vline);
-            }
+            _network.RemoveElements(_removedElements);
+            _network.RemoveVerticalLines(_removedVerticalLines);
             var movedElements = _network.GetElements().Where(e => e.Y > _startRow + _count - 1).ToList().OrderBy(x => { return x.Y; });
             var movedVLines = _network.GetVerticalLines().Where(e => e.Y > _startRow + _count - 1).ToList().OrderBy(x => { return x.Y; });
             foreach (var ele in movedElements)
@@ -96,14 +90,8 @@ namespace SamSoarII.AppMain.LadderCommand
                 vline.Y += _count;
                 _network.ReplaceVLine(vline);
             }
-            foreach (var ele in _removedElements)
-            {
-                _network.ReplaceElement(ele);
-            }
-            foreach (var vline in _removedVerticalLines)
-            {
-                _network.ReplaceVerticalLine(vline);
-            }
+            _network.ReplaceElements(_removedElements);
+            _network.ReplaceVerticalLines(_removedVerticalLines);
             InstructionCommentManager.RaiseMappedMessageChangedEvent();
             if (_oldarea != null)
             {
