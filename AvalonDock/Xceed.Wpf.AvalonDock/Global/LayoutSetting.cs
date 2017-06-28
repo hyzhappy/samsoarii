@@ -438,12 +438,12 @@ namespace Xceed.Wpf.AvalonDock.Global
                 node_AH.Add(node_KVP);
             }
             xdoc.Add(node_Root);
-            xdoc.Save("LayoutConfig.xml");
+            xdoc.Save(@"Resources\LayoutConfig.xml");
         }
 
         static public void Load()
         {
-            XDocument xdoc = XDocument.Load("LayoutConfig.xml");
+            XDocument xdoc = XDocument.Load(@"Resources\LayoutConfig.xml");
             XElement node_Root = xdoc.Element("LayoutSetting");
             XElement nodes_ID = node_Root.Element("IsDock");
             XElement nodes_DW = node_Root.Element("DockWidth");
