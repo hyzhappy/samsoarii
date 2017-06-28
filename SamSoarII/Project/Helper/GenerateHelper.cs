@@ -973,7 +973,7 @@ namespace SamSoarII.AppMain.Project
             cmd.StartInfo.FileName 
                 = String.Format(@"{0:s}\Compiler\tcc\tcc", currentPath);
             cmd.StartInfo.Arguments
-                = String.Format("{0:s} {1:s} {2:s} -o {3:s} -shared -DBUILD_DLL",
+                = String.Format("\"{0:s}\" \"{1:s}\" \"{2:s}\" -o \"{3:s}\" -shared -DBUILD_DLL",
                     simulibCFile, ladderCFile, funcBlockCFile, outputDllFile);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
@@ -1060,13 +1060,14 @@ namespace SamSoarII.AppMain.Project
                 GenerateCCode(fbvmodel, sw);
             }
             sw.Close();
+            string downloadPath = String.Format(@"{0:s}\downg\.", currentPath);
             Process cmd = null;
             cmd = new Process();
             cmd.StartInfo.FileName
                 = String.Format(@"{0:s}\Compiler\make\make", 
                     currentPath);
             cmd.StartInfo.Arguments 
-                = String.Format(@"-C {0:s}\downg\.", currentPath);
+                = String.Format("-C \"{0:s}\"", downloadPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
@@ -1078,7 +1079,7 @@ namespace SamSoarII.AppMain.Project
                 = String.Format(@"{0:s}\Compiler\make\make",
                     currentPath);
             cmd.StartInfo.Arguments
-                = String.Format(@"-C {0:s}\downg\. clean", currentPath);
+                = String.Format("-C \"{0:s}\" clean", downloadPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
