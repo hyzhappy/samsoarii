@@ -1017,12 +1017,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_676762BDB85E470EB5E369578AE77FD8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_68111180FC8D477CB76A31FF674EC01A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -6153,26 +6147,6 @@
             "TargetName" = "8:rdimon-crt0.o"
             "Tag" = "8:"
             "Folder" = "8:_BFAEDD7AD96A45FCABE3BFD97E35FFE5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_676762BDB85E470EB5E369578AE77FD8"
-            {
-            "SourcePath" = "8:Y:\\Samkoon\\SamSoarII\\Debug\\Project\\CustomHighlighting.xshd"
-            "TargetName" = "8:CustomHighlighting.xshd"
-            "Tag" = "8:"
-            "Folder" = "8:_55B4EF72A6ED462690DDB3CC3714A504"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11468,17 +11442,6 @@
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_4BD223DEC0954EB4BA375283C0BF0511"
-                        "Folders"
-                        {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_55B4EF72A6ED462690DDB3CC3714A504"
-                    {
-                    "Name" = "8:Project"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_11A45CDD14484007B9C21DCFBEC0D47E"
                         "Folders"
                         {
                         }

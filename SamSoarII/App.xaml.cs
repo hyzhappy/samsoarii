@@ -15,7 +15,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Lierda.WPFHelper;
 
 namespace SamSoarII.AppMain
 {
@@ -25,7 +24,6 @@ namespace SamSoarII.AppMain
     public partial class App : Application
     {
         public static SplashScreen splashScreen;
-        public LierdaCracker lierdaCracker;
         public App()
         {
             SpecialValueManager.Initialize();
@@ -44,8 +42,6 @@ namespace SamSoarII.AppMain
         {
             splashScreen = new SplashScreen(@"Resources\Image\SplashScreen.png");
             splashScreen.Show(false, true);
-            //lierdaCracker = new LierdaCracker();
-            //lierdaCracker.Cracker();
         }
 
         private void App_Exit(object sender, ExitEventArgs e)
@@ -53,8 +49,7 @@ namespace SamSoarII.AppMain
             SettingManager.Save();
             if (SimulateHelper.SModel != null)
                 SimulateHelper.SModel.Dispose();
-
-            //SamSoarII.Simulation.Core.SimulateDllModel.FreeDll();
+            
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }

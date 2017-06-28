@@ -56,9 +56,6 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lierda.WPFHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cbb49eab16984ff2, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lierda.WPFHelper.1.0.2\lib\net452\Lierda.WPFHelper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -356,7 +353,6 @@
     </EmbeddedResource>
     <None Include="Communication\Util\usbdll\gen_usbdll.bat" />
     <None Include="Communication\Util\usbdll\usbdll.o" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
