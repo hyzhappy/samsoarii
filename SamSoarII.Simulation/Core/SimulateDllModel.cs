@@ -35,7 +35,7 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 动态库接口：创建仿真代码的编译环境
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "CreateSource")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "CreateSource")]
         public static extern void CreateSource();
 
         /// <summary> LoadDll返回结果：成功</summary>
@@ -84,7 +84,7 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         /// <param name="simudllPath">dll文件路径</param>
         /// <returns></returns>
-        [DllImport("simu.dll", EntryPoint = "LoadDll")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "LoadDll")]
         public static extern int LoadDll
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -94,7 +94,7 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 动态库接口：释放dll
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "FreeDll")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "FreeDll")]
         public static extern void FreeDll
         (
         );
@@ -102,7 +102,7 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 动态库接口：PLC进行单独一次运行
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "RunLadder")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "RunLadder")]
         private static extern int RunLadder();
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
-        [DllImport("simu.dll", EntryPoint = "GetBit")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetBit")]
         private static extern int GetBit
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -127,7 +127,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
-        [DllImport("simu.dll", EntryPoint = "GetWord")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetWord")]
         private static extern int GetWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -143,7 +143,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
-        [DllImport("simu.dll", EntryPoint = "GetDoubleWord")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetDoubleWord")]
         private static extern int GetDoubleWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -159,7 +159,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续获取大小</param>
         /// <param name="output">写入结果的空间</param>
-        [DllImport("simu.dll", EntryPoint = "GetFloat")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetFloat")]
         private static extern int GetFloat
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -174,7 +174,7 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         /// <param name="name">脉冲输出口</param>
         /// <param name="output">写入结果的空间</param>
-        [DllImport("simu.dll", EntryPoint = "GetFeq")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetFeq")]
         private static extern int GetFeq
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -189,7 +189,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
-        [DllImport("simu.dll", EntryPoint = "SetBit")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetBit")]
         private static extern int SetBit
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -205,7 +205,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
-        [DllImport("simu.dll", EntryPoint = "SetWord")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetWord")]
         private static extern int SetWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -221,7 +221,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
-        [DllImport("simu.dll", EntryPoint = "SetDoubleWord")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetDoubleWord")]
         private static extern int SetDoubleWord
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -237,7 +237,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续写入大小</param>
         /// <param name="output">要写入的值的空间</param>
-        [DllImport("simu.dll", EntryPoint = "SetFloat")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetFloat")]
         private static extern int SetFloat
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -253,7 +253,7 @@ namespace SamSoarII.Simulation.Core
         /// <param name="name">变量名</param>
         /// <param name="size">连续写入大小</param>
         /// <param name="value">设置的使能位值</param>
-        [DllImport("simu.dll", EntryPoint = "SetEnable")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetEnable")]
         private static extern void SetEnable
         (
             [MarshalAs(UnmanagedType.LPStr)]
@@ -265,61 +265,61 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 在开始仿真之前，需要做的初始化工作
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "InitRunLadder")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "InitRunLadder")]
         private static extern void InitRunLadder();
 
         /// <summary>
         /// 每运行一次仿真PLC之前，要运行的函数
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "BeforeRunLadder")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "BeforeRunLadder")]
         private static extern void BeforeRunLadder();
 
         /// <summary>
         /// 每运行一次仿真PLC之后，要运行的函数
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "AfterRunLadder")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "AfterRunLadder")]
         private static extern void AfterRunLadder();
 
         /// <summary>
         /// 初始化仿真计时时间
         /// </summary>
         /// <param name="time">要初始化的值</param>
-        [DllImport("simu.dll", EntryPoint = "InitClock")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "InitClock")]
         private static extern void InitClock(int time);
 
         /// <summary>
         /// 获取当前的计时时间
         /// </summary>
         /// <returns>计时时间</returns>
-        [DllImport("simu.dll", EntryPoint = "GetClock")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetClock")]
         private static extern int GetClock();
 
         /// <summary>
         /// 设置时间速率
         /// </summary>
         /// <param name="timerate">时间速率，越小越快，但精度越差</param>
-        [DllImport("simu.dll", EntryPoint = "SetClockRate")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetClockRate")]
         private static extern void SetClockRate(int timerate);
 
         /// <summary>
         /// 设置位数
         /// </summary>
         /// <param name="basebit">位数</param>
-        [DllImport("simu.dll", EntryPoint = "SetBaseBit")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetBaseBit")]
         private static extern void SetBaseBit(int basebit);
 
         /// <summary>
         /// 得到子函数调用的次数
         /// </summary>
         /// <returns></returns>
-        [DllImport("simu.dll", EntryPoint = "GetCallCount")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetCallCount")]
         public static extern int GetCallCount();
 
         /// <summary>
         /// 获得当前的断点地址
         /// </summary>
         /// <returns></returns>
-        [DllImport("simu.dll", EntryPoint = "GetBPAddr")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetBPAddr")]
         public static extern int GetBPAddr();
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         /// <param name="bpaddr">断点地址</param>
         /// <param name="islock">设置(1)或取消(0)</param>
-        [DllImport("simu.dll", EntryPoint = "SetBPAddr")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetBPAddr")]
         public static extern void SetBPAddr(int bpaddr, int islock);
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         /// <param name="bpaddr">断点地址</param>
         /// <param name="maxcount">最大运行次数</param>
-        [DllImport("simu.dll", EntryPoint = "SetBPCount")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetBPCount")]
         public static extern void SetBPCount(int bpaddr, int maxcount);
 
         /// <summary>
@@ -343,35 +343,35 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         /// <param name="cpaddr">断点地址</param>
         /// <param name="cpmsg">条件信息</param>
-        [DllImport("simu.dll", EntryPoint = "SetCPAddr")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetCPAddr")]
         public static extern void SetCPAddr(int cpaddr, int cpmsg);
 
         /// <summary>
         /// 获取当前断点状态
         /// </summary>
         /// <returns></returns>
-        [DllImport("simu.dll", EntryPoint = "GetBPPause")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetBPPause")]
         public static extern int GetBPPause();
 
         /// <summary>
         /// 设置当前断点状态（可以继续运行）
         /// </summary>
         /// <param name="bppause"></param>
-        [DllImport("simu.dll", EntryPoint = "SetBPPause")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetBPPause")]
         public static extern void SetBPPause(int bppause);
         
         /// <summary>
         /// 设置断点使能
         /// </summary>
         /// <param name="bpenable"></param>
-        [DllImport("simu.dll", EntryPoint = "SetBPEnable")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "SetBPEnable")]
         public static extern void SetBPEnable(int bpenable);
         
         /// <summary>
         /// 获得当前栈地址
         /// </summary>
         /// <returns></returns>
-        [DllImport("simu.dll", EntryPoint = "GetRBP")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetRBP")]
         unsafe public static extern void* GetRBP();
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         /// <param name="data">保存的空间</param>
         /// <returns>长度</returns>
-        [DllImport("simu.dll", EntryPoint = "GetBackTrace")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "GetBackTrace")]
         public static extern int GetBackTrace
         (
             [MarshalAs(UnmanagedType.LPArray)]
@@ -389,26 +389,26 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 单步运行（不进入子程序）
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "MoveStep")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "MoveStep")]
         public static extern void MoveStep();
 
         /// <summary>
         /// 单步运行（进入子程序）
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "CallStep")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "CallStep")]
         public static extern void CallStep();
 
         /// <summary>
         /// 跳转到断点
         /// </summary>
         /// <param name="bpaddr">断点地址</param>
-        [DllImport("simu.dll", EntryPoint = "JumpTo")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "JumpTo")]
         public static extern void JumpTo(int bpaddr);
         
         /// <summary>
         /// 从子程序中跳出
         /// </summary>
-        [DllImport("simu.dll", EntryPoint = "JumpOut")]
+        [DllImport(@"simug\simu.dll", EntryPoint = "JumpOut")]
         public static extern void JumpOut();
 
         #endregion
