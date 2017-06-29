@@ -10,6 +10,7 @@ namespace SamSoarII.Utility
 {
     public static class FileHelper
     {
+        public static string ExtensionName = "ssr";
         /// <summary>
         /// Create a file in temporary path with specified postfix
         /// </summary>

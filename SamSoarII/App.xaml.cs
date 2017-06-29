@@ -23,9 +23,11 @@ namespace SamSoarII.AppMain
     /// </summary>
     public partial class App : Application
     {
+        public static string AutoOpenFileFullPath;
         public static SplashScreen splashScreen;
         public App()
         {
+            InitializeComponent();
             SpecialValueManager.Initialize();
             ValueCommentManager.Initialize();
             ValueAliasManager.Initialize();
@@ -37,11 +39,13 @@ namespace SamSoarII.AppMain
             Exit += App_Exit;
             this.Startup += App_Startup;
         }
-
         private void App_Startup(object sender, StartupEventArgs e)
         {
             splashScreen = new SplashScreen(@"Resources\Image\SplashScreen.png");
             splashScreen.Show(false, true);
+            MainWindow mainwindow = new MainWindow();
+            MainWindow = mainwindow;
+            mainwindow.Show();
         }
 
         private void App_Exit(object sender, ExitEventArgs e)

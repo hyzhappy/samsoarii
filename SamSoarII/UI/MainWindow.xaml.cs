@@ -39,6 +39,7 @@ using System.IO.Pipes;
 using System.Windows.Interop;
 using Xceed.Wpf.AvalonDock;
 using SamSoarII.AppMain.Project.Helper;
+using SamSoarII.Utility.FileRegister;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -85,6 +86,21 @@ namespace SamSoarII.AppMain.UI
             SysSettingDialog = new OptionDialog(_interactionFacade);
         }
 
+        private void FileRegister()
+        {
+            if (!FileTypeRegister.FileTypeRegistered(string.Format(".{0}", FileHelper.ExtensionName)))
+            {
+                FileTypeRegInfo fileTypeRegInfo = new FileTypeRegInfo(string.Format(".{0}", FileHelper.ExtensionName));
+                fileTypeRegInfo.Description = "SamSoarII文件类型";
+                fileTypeRegInfo.ExePath = Directory.GetCurrentDirectory();
+                fileTypeRegInfo.ExtendName = string.Format(".{0}", FileHelper.ExtensionName);
+                fileTypeRegInfo.IconPath = Directory.GetCurrentDirectory();
+
+                // 注册  
+                FileTypeRegister fileTypeRegister = new FileTypeRegister();
+                FileTypeRegister.RegisterFileType(fileTypeRegInfo);
+            }
+        }
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             foreach (Window window in Application.Current.Windows)
@@ -248,6 +264,8 @@ namespace SamSoarII.AppMain.UI
             worker.RunWorkerAsync();
             LACProj.Show();
             LAProj.Hide();
+            //FileRegister();
+            if (App.AutoOpenFileFullPath != string.Empty) OpenProject(App.AutoOpenFileFullPath);
             Loaded -= MainWindow_Loaded;
         }
         private void Initialize()
@@ -875,7 +893,7 @@ namespace SamSoarII.AppMain.UI
                     {
                         case MessageBoxResult.Yes:
                             SaveFileDialog saveFileDialog = new SaveFileDialog();
-                            saveFileDialog.Filter = "ssp文件|*.ssp";
+                            saveFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
                             if (saveFileDialog.ShowDialog() == true)
                             {
                                 _interactionFacade.ProjectFullFileName = saveFileDialog.FileName;
@@ -923,7 +941,7 @@ namespace SamSoarII.AppMain.UI
                             MessageBox.Show(Properties.Resources.Message_File_Name);
                             return;
                         }
-                        string fullFileName = string.Format(@"{0}\{1}.ssp", dir, name);
+                        string fullFileName = string.Format(@"{0}\{1}.{2}", dir, name,FileHelper.ExtensionName);
                         if (File.Exists(fullFileName))
                         {
                             MessageBox.Show(Properties.Resources.Message_File_Exist);
@@ -958,7 +976,7 @@ namespace SamSoarII.AppMain.UI
         private void ProjectOpen()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "ssp文件|*.ssp";
+            openFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
             if (openFileDialog.ShowDialog() == true)
             {
                 if (_interactionFacade.ProjectFullFileName == openFileDialog.FileName)
@@ -1019,7 +1037,7 @@ namespace SamSoarII.AppMain.UI
                 return;
             }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "ssp文件|*.ssp";
+            saveFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
             if (saveFileDialog.ShowDialog() == true)
             {
                 _interactionFacade.SaveAsProject(saveFileDialog.FileName);

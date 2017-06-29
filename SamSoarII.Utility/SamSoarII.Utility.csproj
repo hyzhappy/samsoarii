@@ -97,6 +97,8 @@
     <Compile Include="Enums\ShowValueType.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="Converters\DoubleConverter1.cs" />
+    <Compile Include="FileRegister\FileTypeRegInfo.cs" />
+    <Compile Include="FileRegister\FileTypeRegister.cs" />
     <Compile Include="Interfaces\ISaveDialog.cs" />
     <Compile Include="Interfaces\IXEleCreateOrLoad.cs" />
     <Compile Include="IntPoint.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="ValueConverter.cs" />
     <Compile Include="XmlGen.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

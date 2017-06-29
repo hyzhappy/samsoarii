@@ -54,8 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>SamSoarII.AppMain.StartPoint</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -119,10 +118,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -172,6 +171,7 @@
     <Compile Include="LadderGraphModule\LadderGraphCheckModule.cs" />
     <Compile Include="LadderGraphModule\LadderGraphRelocationModule.cs" />
     <Compile Include="LadderGraphModule\LadderLogicModule.cs" />
+    <Compile Include="StartPoint.cs" />
     <Compile Include="Project\AutoInstManager.cs" />
     <Compile Include="Project\AutoSavedManager.cs" />
     <Compile Include="Project\BraceFoldingStrategy.cs" />
