@@ -37,8 +37,8 @@ namespace SamSoarII.LadderInstViewModel
         private IntPoint intPos = new IntPoint();
         public override IntPoint IntPos
         {
-            get => intPos;
-            set => intPos = value;
+            get { return intPos; }
+            set { intPos = value; }
         }
         public override int X
         {

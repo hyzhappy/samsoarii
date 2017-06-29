@@ -37,8 +37,8 @@ namespace SamSoarII.AppMain.LadderCommand
             }
         }
 
-        public LinkedList<IUndoableCommand> UndoStack = new LinkedList<IUndoableCommand>();
-        public LinkedList<IUndoableCommand> RedoStack = new LinkedList<IUndoableCommand>();
+        public Stack<IUndoableCommand> UndoStack = new Stack<IUndoableCommand>(UNDO_LIMIT);
+        public Stack<IUndoableCommand> RedoStack = new Stack<IUndoableCommand>(UNDO_LIMIT);
 
         public bool CanRedo
         {
@@ -73,9 +73,9 @@ namespace SamSoarII.AppMain.LadderCommand
             if (!AssertEdit(command)) return;
             command.Execute();
             InvokeLDNetworksChangedEvent(command);
-            UndoStack.AddFirst(command);
-            if (UndoStack.Count() > UNDO_LIMIT)
-                UndoStack.RemoveLast();
+            UndoStack.Push(command);
+            //if (UndoStack.Count() > UNDO_LIMIT)
+            //    UndoStack.RemoveLast();
             RedoStack.Clear();
             IsModify = true;
         }
@@ -84,10 +84,10 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             if (CanUndo)
             {
-                var command = UndoStack.First();
+                var command = UndoStack.Pop();
                 if (!AssertEdit(command)) return;
-                UndoStack.RemoveFirst();
-                RedoStack.AddFirst(command);
+                //UndoStack.RemoveFirst();
+                RedoStack.Push(command);
                 command.Undo();
                 InvokeLDNetworksChangedEvent(command);
                 IsModify = true;
@@ -98,10 +98,10 @@ namespace SamSoarII.AppMain.LadderCommand
         {
             if (CanRedo)
             {
-                var command = RedoStack.First();
+                var command = RedoStack.Pop();
                 if (!AssertEdit(command)) return;
-                RedoStack.RemoveFirst();
-                UndoStack.AddFirst(command);
+                //RedoStack.RemoveFirst();
+                UndoStack.Push(command);
                 command.Redo();
                 InvokeLDNetworksChangedEvent(command);
                 IsModify = true;

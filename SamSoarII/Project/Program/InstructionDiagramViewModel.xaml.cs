@@ -142,10 +142,10 @@ namespace SamSoarII.AppMain.Project
             {
                 if (invmodel.IsModified)
                 {
-                    invmodel.Dispatcher.Invoke(() =>
+                    invmodel.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
                     {
                         invmodel.Update();
-                    });
+                    }));
                 }
 
                 stkcount = 0;

@@ -97,7 +97,7 @@ namespace SamSoarII.Utility
                 else
                     return default(T);
             }
-            set => Insert(x, y, value);
+            set { Insert(x, y, value); }
         }
         private bool Assert(int x, int y)
         {

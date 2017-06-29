@@ -979,9 +979,9 @@ namespace SamSoarII.AppMain.Project
             double offset = scale * (MainBorder.ActualHeight + 20) / 4;
             foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < networkNumber; }))
             {
-                offset += scale * (item.ActualHeight + 20) / 3.455;
+                offset += scale * (item.ActualHeight + 20) / 2.89;
             }
-            offset += scale * (_selectRect.ActualHeight * row + 20) / 3.41;
+            offset += scale * (_selectRect.ActualHeight * row + 20) / 3;
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
@@ -3465,6 +3465,7 @@ namespace SamSoarII.AppMain.Project
             sourcenet.CommentAreaBorder.BorderThickness = new Thickness(4);
             desnetwork.Opacity = 1;
             dragItem = null;
+            currentItem = null;
         }
         private void OnDragOver(object sender, DragEventArgs e)
         {
@@ -3513,12 +3514,15 @@ namespace SamSoarII.AppMain.Project
             return null;
         }
         #endregion
+
         public void Dispose()
         {
             foreach (var network in _ladderNetworks)
                 network.Dispose();
             LadderNetworkStackPanel.Children.Clear();
             _ladderNetworks.Clear();
+            _selectRectOwner = null;
+            _selectStartNetwork = null;
             _projectModel = null;
             _commandManager.Dispose();
         }

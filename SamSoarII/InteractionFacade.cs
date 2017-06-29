@@ -42,7 +42,7 @@ namespace SamSoarII.AppMain
         private StatusBarItem _statusBarItem;
         public StatusBarItem StatusBarItem
         {
-            get => _statusBarItem;
+            get { return _statusBarItem; }
             set
             {
                 _statusBarItem = value;

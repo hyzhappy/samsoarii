@@ -16,7 +16,14 @@ namespace SamSoarII.AppMain.Project.Helper
 
         public VisualHost(Visual child)
         {
-            this.child = child ?? throw new ArgumentException("child");
+            if (child == null)
+            {
+                throw new ArgumentException("child");
+            }
+            else
+            {
+                this.child = child;
+            }
             AddVisualChild(child);
         }
 

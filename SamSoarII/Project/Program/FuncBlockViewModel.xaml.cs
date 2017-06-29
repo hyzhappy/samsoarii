@@ -88,7 +88,7 @@ namespace SamSoarII.AppMain.Project
         private bool _isModify = false;
         public bool IsModify
         {
-            get => _isModify;
+            get {return _isModify; }
             set
             {
                 _isModify = value;

@@ -23,7 +23,7 @@ namespace SamSoarII.AppMain.UI
         private static bool isModify;
         public static bool IsModify
         {
-            get => isModify;
+            get { return isModify; }
             set
             {
                 isModify = value;

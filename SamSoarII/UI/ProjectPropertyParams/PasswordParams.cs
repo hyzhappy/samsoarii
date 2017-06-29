@@ -34,7 +34,7 @@ namespace SamSoarII.AppMain.UI
         private string _mPassword;
         public bool UPIsChecked
         {
-            get => _upIsChecked;
+            get { return _upIsChecked; }
             set
             {
                 if (_upIsChecked != value)
@@ -47,7 +47,7 @@ namespace SamSoarII.AppMain.UI
         }
         public bool DPIsChecked
         {
-            get => _dpIsChecked;
+            get { return _dpIsChecked; }
             set
             {
                 if (_dpIsChecked != value)
@@ -60,7 +60,7 @@ namespace SamSoarII.AppMain.UI
         }
         public bool MPIsChecked
         {
-            get => _mpIsChecked;
+            get { return _mpIsChecked; }
             set
             {
                 if (_mpIsChecked != value)
@@ -73,7 +73,7 @@ namespace SamSoarII.AppMain.UI
         }
         public string UPassword
         {
-            get => _uPassword;
+            get { return _uPassword; }
             set
             {
                 if (_uPassword != value)
@@ -86,7 +86,7 @@ namespace SamSoarII.AppMain.UI
         }
         public string DPassword
         {
-            get => _dPassword;
+            get { return _dPassword; }
             set
             {
                 if (_dPassword != value)
@@ -99,7 +99,7 @@ namespace SamSoarII.AppMain.UI
         }
         public string MPassword
         {
-            get => _mPassword;
+            get { return _mPassword; }
             set
             {
                 if (_mPassword != value)

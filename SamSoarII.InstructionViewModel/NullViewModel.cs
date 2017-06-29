@@ -97,6 +97,6 @@ namespace SamSoarII.LadderInstViewModel
 
         public override bool IsMonitorMode { get { throw new NotImplementedException(); } set { throw new NotImplementedException(); } }
 
-        public override IntPoint IntPos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override IntPoint IntPos { get {throw new NotImplementedException(); } set { throw new NotImplementedException(); } }
     }
 }

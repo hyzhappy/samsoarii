@@ -27,7 +27,7 @@ namespace ICSharpCode.AvalonEdit.Editing
         public event RoutedEventHandler VisibleChanged = delegate { };
         public bool Visible
         {
-            get => visible;
+            get { return visible; }
             set
             {
                 visible = value;

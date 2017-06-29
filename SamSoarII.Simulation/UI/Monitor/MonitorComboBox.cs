@@ -34,7 +34,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                     Items.Clear();
                     return;
                 }
-                this.Dispatcher.Invoke(() =>
+                this.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
                 {
                     this.svunit = value;
                     Items.Clear();
@@ -91,7 +91,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                             }
                         }
                     }
-                });
+                }));
             }
         }
         

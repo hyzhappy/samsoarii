@@ -370,7 +370,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
 
         public override void Update()
         {
-            Dispatcher.Invoke(_Update);
+            Dispatcher.Invoke(new Utility.Delegates.Execute(_Update));
         }
 
         private void _Update()

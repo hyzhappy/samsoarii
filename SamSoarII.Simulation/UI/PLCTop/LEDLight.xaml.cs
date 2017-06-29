@@ -35,7 +35,7 @@ namespace SamSoarII.Simulation.UI.PLCTop
             set
             {
                 this.status = value;
-                this.Dispatcher.Invoke(() =>
+                this.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
                 {
                     switch (status)
                     {
@@ -57,7 +57,7 @@ namespace SamSoarII.Simulation.UI.PLCTop
                         default:
                             break;
                     }
-                });
+                }));
             }
         }
 

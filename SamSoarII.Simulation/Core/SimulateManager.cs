@@ -991,7 +991,7 @@ namespace SamSoarII.Simulation.Core
 
         private void OnSimulateException(object sender, RoutedEventArgs e)
         {
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 Exception exc = (Exception)sender;
                 SimulateExceptionDialog dialog = new SimulateExceptionDialog();
@@ -1015,7 +1015,7 @@ namespace SamSoarII.Simulation.Core
                     dialog.Close();
                 };
                 dialog.ShowDialog();
-            });
+            }));
         }
 
         #endregion

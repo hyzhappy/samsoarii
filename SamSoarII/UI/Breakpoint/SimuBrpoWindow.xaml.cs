@@ -84,14 +84,14 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             }
             private set
             {
-                Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
                 {
                     if (breakpoint != null)
                         breakpoint.Background = Brushes.Transparent;
                     this.breakpoint = value;
                     if (breakpoint != null)
                         breakpoint.Background = Brushes.Yellow;
-                });
+                }));
             }
         }
 
@@ -262,7 +262,7 @@ namespace SamSoarII.Simulation.UI.Breakpoint
         }
         private void OnBreakpointPause(object sender, BreakpointPauseEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 BaseViewModel bvmodel = BreakPointManager.GetBVModel(e.Address);
                 if (bvmodel != null)
@@ -278,12 +278,12 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                         DG_Main.SelectedIndex = id;
                     }
                 }
-            });
+            }));
         }
 
         private void DG_Main_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 SimuBrpoElement ele = (SimuBrpoElement)(DG_Main.SelectedItem);
                 if (ele != null)
@@ -309,7 +309,7 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                             ele.BVModel.X,
                             ele.BVModel.Y));
                 }
-            });
+            }));
         }
         private void DG_Main_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {

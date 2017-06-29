@@ -15,6 +15,7 @@ using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.PLCDevice;
 using SamSoarII.Utility;
+using static SamSoarII.Utility.Delegates;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -37,8 +38,8 @@ namespace SamSoarII.LadderInstViewModel
         private IntPoint intPos = new IntPoint();
         public override IntPoint IntPos
         {
-            get => intPos;
-            set => intPos = value;
+            get { return intPos; }
+            set { intPos = value; }
         }
         public override int X
         {
@@ -199,80 +200,80 @@ namespace SamSoarII.LadderInstViewModel
 
         private void UpdateMonitor_MiddleTextBlock1()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 MiddleTextBlock1.Text = Model.ParaCount > 0 && _values[0] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(0).ValueString,
                         IsRunning ? _values[0].Value : "???")
                     : String.Empty;
-            });
+            }));
         }
 
         private void UpdateMonitor_MiddleTextBlock2()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 MiddleTextBlock2.Text = Model.ParaCount > 1 && _values[1] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(1).ValueString,
                         IsRunning ? _values[1].Value : "???")
                     : String.Empty;
-            });
+            }));
         }
 
         private void UpdateMonitor_MiddleTextBlock3()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 MiddleTextBlock3.Text = Model.ParaCount > 2 && _values[2] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(2).ValueString,
                         IsRunning ? _values[2].Value : "???")
                     : String.Empty;
-            });
+            }));
         }
 
         private void UpdateMonitor_MiddleTextBlock4()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 MiddleTextBlock4.Text = Model.ParaCount > 3 && _values[3] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(3).ValueString,
                         IsRunning ? _values[3].Value : "???")
                     : String.Empty;
-            });
+            }));
         }
 
         private void UpdateMonitor_MiddleTextBlock5()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 MiddleTextBlock5.Text = Model.ParaCount > 4 && _values[4] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(4).ValueString,
                         IsRunning ? _values[4].Value : "???")
                     : String.Empty;
-            });
+            }));
         }
 
         protected override void OnStart(object sender, RoutedEventArgs e)
         {
             base.OnStart(sender, e);
-            Dispatcher.Invoke(() => { UpdateMonitor(); });
+            Dispatcher.Invoke(new Execute(() => { UpdateMonitor(); }));
         }
 
         protected override void OnAbort(object sender, RoutedEventArgs e)
         {
             base.OnAbort(sender, e);
-            Dispatcher.Invoke(() => { UpdateMonitor(); });
+            Dispatcher.Invoke(new Execute(() => { UpdateMonitor(); }));
         }
 
         protected override void OnValueChanged(object sender, RoutedEventArgs e)
         {
             base.OnValueChanged(sender, e);
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 if (sender == _values[0])
                 {
@@ -294,7 +295,7 @@ namespace SamSoarII.LadderInstViewModel
                 {
                     UpdateMonitor_MiddleTextBlock5();
                 }
-            });
+            }));
         }
 
         #endregion

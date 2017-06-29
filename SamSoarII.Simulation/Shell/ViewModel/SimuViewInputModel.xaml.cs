@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.UserInterface;
+using static SamSoarII.Utility.Delegates;
 
 /// <summary>
 /// ClassName : SimuViewInputModel
@@ -96,7 +97,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
         /// </summary>
         public override void Update()
         {
-            Dispatcher.Invoke(_Update);
+            Dispatcher.Invoke(new Execute(_Update));
         } 
 
         private void _Update()

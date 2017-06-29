@@ -29,7 +29,7 @@ namespace SamSoarII.AppMain.UI
         private bool _isUsed;
         public int InputPassIndex
         {
-            get => _inputPassIndex;
+            get { return _inputPassIndex; }
             set
             {
                 if (_inputPassIndex != value)

@@ -97,7 +97,7 @@ namespace SamSoarII.Simulation.UI.Monitor
             protected set
             {
                 // 根据状态来显示文本
-                this.Dispatcher.Invoke(() =>
+                this.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
                 {
                     this.status = value;
                     switch (this.status)
@@ -119,7 +119,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                             Background = Brushes.Transparent;
                             break;
                     }
-                });
+                }));
             }
         }
 

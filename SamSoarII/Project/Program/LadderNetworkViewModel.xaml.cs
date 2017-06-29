@@ -162,7 +162,7 @@ namespace SamSoarII.AppMain.Project
         private int _networkNumber;
         public int NetworkNumber
         {
-            get => _networkNumber;
+            get { return _networkNumber; }
             set
             {
                 if (!IsMasked) MaskNumber = value;
@@ -1796,6 +1796,12 @@ namespace SamSoarII.AppMain.Project
             LadderElements.Clear(0, GlobalSetting.LadderXCapacity - 1, 0, RowCount - 1);
             LadderVerticalLines.Clear(0, GlobalSetting.LadderXCapacity - 1, 0, RowCount - 1);
             LadderBreakpoints.Clear(0, GlobalSetting.LadderXCapacity - 1, 0, RowCount - 1);
+            ladderExpander.MouseEnter -= OnMouseEnter;
+            ladderExpander.MouseLeave -= OnMouseLeave;
+            ladderExpander.expandButton.IsExpandChanged -= ExpandButton_IsExpandChanged;
+            ThumbnailButton.ToolTipOpening -= ThumbnailButton_ToolTipOpening;
+            ThumbnailButton.ToolTipClosing -= ThumbnailButton_ToolTipClosing;
+            CM_Monitor.ValueModify -= OnMonitorValueModify;
         }
         #endregion
 

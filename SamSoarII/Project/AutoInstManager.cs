@@ -70,10 +70,10 @@ namespace SamSoarII.AppMain.Project
                 InstructionNetworkViewModel invmodel = lnvmodel.INVModel;
                 if (invmodel != null && invmodel.IsModified)
                 {
-                    invmodel.Dispatcher.Invoke(() =>
+                    invmodel.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
                     {
                         invmodel.Update();
-                    });
+                    }));
                 }
                 if (!thalive) return;
             }

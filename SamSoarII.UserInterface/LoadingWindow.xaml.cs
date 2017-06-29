@@ -17,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static SamSoarII.Utility.Delegates;
 
 namespace SamSoarII.UserInterface
 {
@@ -143,21 +144,22 @@ namespace SamSoarII.UserInterface
         public void Abort()
         {
             //Completed = true;窗口关闭不代表耗时操作已完成，比如可能被Messagebox阻塞
-            
+
             while (started && loadWin == null)
             {
                 Thread.Sleep(10);//线程已启动，但还未执行ThreadStartingPoint方法时，需等待
             }
             if (started)
             {
-                loadWin.Dispatcher.Invoke(() =>
+                loadWin.Dispatcher.Invoke(new Execute(() => 
                 {
                     loadWin.Close();
                     loadWin = null;
                     started = false;
-                });
+                }));
             }
         }
+        
         private void ThreadStartingPoint()
         {
             loadWin = new LoadingWindow();

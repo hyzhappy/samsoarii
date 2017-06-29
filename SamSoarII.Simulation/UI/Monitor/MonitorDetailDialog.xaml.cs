@@ -48,10 +48,10 @@ namespace SamSoarII.Simulation.UI.Monitor
             
             private void OnValueChanged(object sender, RoutedEventArgs e)
             {
-                this.Dispatcher.Invoke(() =>
+                this.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
                 {
                     Text = svunit.Value.ToString();
-                });
+                }));
             }
             
         }

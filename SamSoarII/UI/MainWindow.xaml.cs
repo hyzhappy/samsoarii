@@ -65,7 +65,7 @@ namespace SamSoarII.AppMain.UI
         private SolidColorBrush _SB_FontColor = Brushes.Black;
         public SolidColorBrush SB_FontColor
         {
-            get => _SB_FontColor;
+            get { return _SB_FontColor; }
             set
             {
                 _SB_FontColor = value;
@@ -1137,7 +1137,7 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSimulateStart(object sender, RoutedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 SimuStartButton.IsChecked = true;
                 SimuPauseButton.IsChecked = false;
@@ -1145,7 +1145,7 @@ namespace SamSoarII.AppMain.UI
                 SimuStartButton.IsEnabled = false;
                 SimuPauseButton.IsEnabled = true;
                 SimuStopButton.IsEnabled = true;
-            });
+            }));
         }
 
         private void OnSimuStartCommandExecute(object sender, RoutedEventArgs e)
@@ -1155,7 +1155,7 @@ namespace SamSoarII.AppMain.UI
         
         private void OnSimulatePause(object sender, RoutedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 SimuStartButton.IsChecked = false;
                 SimuPauseButton.IsChecked = true;
@@ -1163,7 +1163,7 @@ namespace SamSoarII.AppMain.UI
                 SimuStartButton.IsEnabled = true;
                 SimuPauseButton.IsEnabled = false;
                 SimuStopButton.IsEnabled = true;
-            });
+            }));
         }
 
         private void OnSimuPauseCommandExecute(object sender, RoutedEventArgs e)
@@ -1173,7 +1173,7 @@ namespace SamSoarII.AppMain.UI
 
         private void OnSimulateAbort(object sender, RoutedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 SimuStartButton.IsChecked = false;
                 SimuPauseButton.IsChecked = false;
@@ -1181,7 +1181,7 @@ namespace SamSoarII.AppMain.UI
                 SimuStartButton.IsEnabled = true;
                 SimuPauseButton.IsEnabled = false;
                 SimuStopButton.IsEnabled = false;
-            });
+            }));
         }
 
         private void OnSimuStopCommandExecute(object sender, RoutedEventArgs e)

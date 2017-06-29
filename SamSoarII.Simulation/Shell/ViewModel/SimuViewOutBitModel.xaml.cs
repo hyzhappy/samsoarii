@@ -64,7 +64,7 @@ namespace SamSoarII.Simulation.Shell.ViewModel
         /// </summary>
         public override void Update()
         {
-            Dispatcher.Invoke(_Update);
+            Dispatcher.Invoke(new Utility.Delegates.Execute(_Update));
         }
         /// <summary>
         /// 更新画面（内部的线程版本）

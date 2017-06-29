@@ -15,6 +15,7 @@ using SamSoarII.LadderInstModel;
 using SamSoarII.UserInterface;
 using SamSoarII.PLCDevice;
 using SamSoarII.Utility;
+using static SamSoarII.Utility.Delegates;
 
 namespace SamSoarII.LadderInstViewModel
 {
@@ -37,8 +38,8 @@ namespace SamSoarII.LadderInstViewModel
         private IntPoint intPos = new IntPoint();
         public override IntPoint IntPos
         {
-            get => intPos;
-            set => intPos = value;
+            get { return intPos; }
+            set { intPos = value; }
         }
         public override int X
         {
@@ -176,33 +177,34 @@ namespace SamSoarII.LadderInstViewModel
 
         private void UpdateMonitor_ValueTextBlock()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 ValueTextBlock.Text = Model.ParaCount > 0 && _values[0] != null
                         ? String.Format("{0:s} = {1:s}",
                             Model.GetPara(0).ValueString,
                             IsRunning ? _values[0].Value : "???")
                         : String.Empty;
-            });
+            }));
         }
 
         private void UpdateMonitor_CountTextBlock()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 CountTextBlock.Text = Model.ParaCount > 1 && _values[1] != null
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(1).ValueString,
                         IsRunning ? _values[1].Value : "???")
                     : String.Empty;
-            });
+            }));
+
         }
         
         static string[] BIT_0_SHOWS = { "0", "OFF", "FALSE" };
         static string[] BIT_1_SHOWS = { "1", "ON", "TRUE" };
         private void UpdateMonitor_CenterCanvas()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(new Execute(() =>
             {
                 if (!IsRunning)
                 {
@@ -225,25 +227,25 @@ namespace SamSoarII.LadderInstViewModel
                     return;
                 }
                 CenterCanvas.Background = value ? Brushes.Green : Brushes.Transparent;
-            });
+            }));
         }
 
         protected override void OnStart(object sender, RoutedEventArgs e)
         {
             base.OnStart(sender, e);
-            Dispatcher.Invoke(() => { UpdateMonitor(); });
+            Dispatcher.Invoke(new Execute(() => { UpdateMonitor(); }));
         }
 
         protected override void OnAbort(object sender, RoutedEventArgs e)
         {
             base.OnAbort(sender, e);
-            Dispatcher.Invoke(() => { UpdateMonitor(); });
+            Dispatcher.Invoke(new Execute(() => { UpdateMonitor(); }));
         }
 
         protected override void OnValueChanged(object sender, RoutedEventArgs e)
         {
             base.OnValueChanged(sender, e);
-            Dispatcher.Invoke(() => { UpdateMonitor(); });
+            Dispatcher.Invoke(new Execute(() => { UpdateMonitor(); }));
         }
         #endregion
 

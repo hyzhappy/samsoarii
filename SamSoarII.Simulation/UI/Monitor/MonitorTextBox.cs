@@ -124,7 +124,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                 return;
             }
             // 根据变量和类型设置文本
-            this.Dispatcher.Invoke(() =>
+            this.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 switch (Type & 0x0f)
                 {
@@ -169,7 +169,7 @@ namespace SamSoarII.Simulation.UI.Monitor
                         Text = String.Empty;
                         break;
                 }
-            });
+            }));
             settingup = false;
         }
 

@@ -18,6 +18,7 @@ using SamSoarII.Simulation.Shell.ViewModel;
 using SamSoarII.Extend.LadderChartModel;
 using SamSoarII.Extend.LogicGraph;
 using SamSoarII.Extend.Utility;
+using static SamSoarII.Utility.Delegates;
 
 namespace SamSoarII.Simulation.UI
 {
@@ -180,11 +181,11 @@ namespace SamSoarII.Simulation.UI
         {
             foreach (SimuViewBaseModel svbmodel in _elements.Values)
             {
-                svbmodel.Dispatcher.Invoke(() => { svbmodel.Update(); });
+                svbmodel.Dispatcher.Invoke(new Execute(() => { svbmodel.Update(); }));
             }
             foreach (SimuViewVLineModel svvmodel in _vlines.Values)
             {
-                svvmodel.Dispatcher.Invoke(() => { svvmodel.Update(); });
+                svvmodel.Dispatcher.Invoke(new Execute(() => { svvmodel.Update(); }));
             }
         }
 
@@ -509,12 +510,12 @@ namespace SamSoarII.Simulation.UI
             _lgraph = _lchart.Generate();
             if (_lgraph.checkOpenCircuit())
             {
-                report.Dispatcher.Invoke(() => { report.Text += String.Format("{0:s} 的 {1:s} 出现断路错误！", _parent.Name, Name); });
+                report.Dispatcher.Invoke(new Execute(() => { report.Text += String.Format("{0:s} 的 {1:s} 出现断路错误！", _parent.Name, Name); }));
                 ret += 1;
             }
             if (_lgraph.checkShortCircuit())
             {
-                report.Dispatcher.Invoke(() => { report.Text += String.Format("{0:s} 的 {1:s} 出现短路错误！", _parent.Name, Name); });
+                report.Dispatcher.Invoke(new Execute(() => { report.Text += String.Format("{0:s} 的 {1:s} 出现短路错误！", _parent.Name, Name); }));
                 ret += 1;
             }
             if (ret > 0)
@@ -523,7 +524,7 @@ namespace SamSoarII.Simulation.UI
             }
             if (_lgraph.CheckFusionCircuit())
             {
-                report.Dispatcher.Invoke(() => { report.Text += String.Format("{0:s} 的 {1:s} 出现混联错误！", _parent.Name, Name); });
+                report.Dispatcher.Invoke(new Execute(() => { report.Text += String.Format("{0:s} 的 {1:s} 出现混联错误！", _parent.Name, Name); }));
                 ret += 1;
             }
             return ret;

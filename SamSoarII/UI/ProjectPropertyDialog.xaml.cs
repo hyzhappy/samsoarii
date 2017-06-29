@@ -107,7 +107,7 @@ namespace SamSoarII.AppMain.UI
         }
         public override string Message
         {
-            get => _message;
+            get { return _message; }
         }
     }
 }

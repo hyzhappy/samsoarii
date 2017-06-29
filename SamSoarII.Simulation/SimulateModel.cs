@@ -306,12 +306,12 @@ namespace SamSoarII.Simulation
             {
                 if (pbwin != null)
                 {
-                    pbwin.Dispatcher.Invoke(
-                        () => { pbwin.Close(); });
+                    pbwin.Dispatcher.Invoke(new Utility.Delegates.Execute(
+                        () => { pbwin.Close(); }));
                     pbwin = null;
                 }
-                MainChart.Dispatcher.Invoke(
-                    MainChart.Update);
+                MainChart.Dispatcher.Invoke(new Utility.Delegates.Execute(
+                    MainChart.Update));
             }
         }
 
@@ -320,8 +320,8 @@ namespace SamSoarII.Simulation
             if (sender is double && pbwin != null)
             {
                 double pvalue = (double)sender;
-                pbwin.Dispatcher.Invoke(
-                    () => { pbwin.Value = pvalue; });
+                pbwin.Dispatcher.Invoke(new Utility.Delegates.Execute(
+                    () => { pbwin.Value = pvalue; }));
             }
         }
         
