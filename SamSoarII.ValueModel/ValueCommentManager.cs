@@ -73,12 +73,12 @@ namespace SamSoarII.ValueModel
         }
         public static void UpdateComment(IValueModel value, string comment)
         {
-            UpdateComment(value.ValueString, comment);
+            UpdateComment(value.ValueBaseString, comment);
         }
 
         public static string GetComment(IValueModel value)
         {
-            return GetComment(value.ValueString);
+            return GetComment(value.ValueBaseString);
         }
 
         public static string GetComment(string valueString)

@@ -52,6 +52,15 @@ namespace SamSoarII.ValueModel
             }
         }
 
+
+        public virtual string ValueBaseString
+        {
+            get
+            {
+                return Argument.ValueBaseString;
+            }
+        }
+
         public virtual string ValueString
         {
             get
