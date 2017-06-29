@@ -75,15 +75,18 @@ namespace SamSoarII.AppMain.Project
             }
             set
             {
-                this._laddermode = value;
-                MainRoutine.LadderMode = value;
-                foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
+                if (_laddermode != value)
                 {
-                    ldvmodel.LadderMode = value;
-                }
-                foreach (FuncBlockViewModel fbvmodel in FuncBlocks)
-                {
-                    fbvmodel.IsReadOnly = (_laddermode != LadderMode.Edit);
+                    this._laddermode = value;
+                    MainRoutine.LadderMode = value;
+                    foreach (LadderDiagramViewModel ldvmodel in SubRoutines)
+                    {
+                        ldvmodel.LadderMode = value;
+                    }
+                    foreach (FuncBlockViewModel fbvmodel in FuncBlocks)
+                    {
+                        fbvmodel.IsReadOnly = (_laddermode != LadderMode.Edit);
+                    }
                 }
                 switch (value)
                 {
