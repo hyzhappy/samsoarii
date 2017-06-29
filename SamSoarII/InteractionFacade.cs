@@ -37,6 +37,13 @@ namespace SamSoarII.AppMain
         Modbus,
         Func
     }
+    public enum CheckRet
+    {
+        None,
+        LadderError,
+        FuncblockError,
+        CommunicationError
+    }
     public class InteractionFacade
     {
         private StatusBarItem _statusBarItem;
@@ -1358,6 +1365,7 @@ namespace SamSoarII.AppMain
             if (GlobalSetting.IsSavedByTime)
                 _projectModel.autoSavedManager.Start();
             _projectModel.AutoInstManager.Start();
+            _projectModel.LadderMode = LadderMode.Edit;
             handle.Abort();
             handle.Completed = true;
         }
@@ -1365,6 +1373,7 @@ namespace SamSoarII.AppMain
         {
             ProjectFullFileName = fileName;
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
+            StatusBarHepler.IsLoading = true;
             StatusBarHepler.UpdateMessageAsync(Properties.Resources.Project_Preparing);
             MainWindow.Dispatcher.Invoke(DispatcherPriority.Background,(ThreadStart)delegate()
             {
@@ -1375,6 +1384,7 @@ namespace SamSoarII.AppMain
             {
                 Thread.Sleep(10);
             }
+            StatusBarHepler.IsLoading = false;
             return true;
         }
         public int DownloadProject()
@@ -1416,7 +1426,8 @@ namespace SamSoarII.AppMain
                 };
                 dialog.Ensure += (sender3, e3) =>
                 {
-                    if (CommunicationTest())
+                    var _ret = CommunicationTest();
+                    if (_ret == CheckRet.None)
                     {
                         CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
                         LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
@@ -1473,21 +1484,22 @@ namespace SamSoarII.AppMain
             int ret = SimulateHelper.Simulate(_projectModel);
             return ret;
         }
-        public bool MonitorProject()
-        {
-            if (CommunicationTest())
-            {
-                _projectModel.MMonitorManager.Initialize(_projectModel);
-                _projectModel.LadderMode = LadderMode.Monitor;
-                return true;
-            }
-            return false;
-        }
-        public bool CommunicationTest()
+        //public bool MonitorProject()
+        //{
+        //    var ret = CommunicationTest();
+        //    if (ret == CheckRet.None)
+        //    {
+        //        _projectModel.MMonitorManager.Initialize(_projectModel);
+        //        _projectModel.LadderMode = LadderMode.Monitor;
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        public CheckRet CommunicationTest()
         {
             if (!CheckLadder(false))
             {
-                return false;
+                return CheckRet.LadderError;
             }
             CommunicationParams paras = (CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"];
             if (paras.IsCOMLinked)
@@ -1496,11 +1508,11 @@ namespace SamSoarII.AppMain
                 if (paras.IsAutoCheck
                  && !_projectModel.PManager.AutoCheck())
                 {
-                    return false;
+                    return CheckRet.CommunicationError;
                 }
                 if (_projectModel.PManager.Start() != 0)
                 {
-                    return false;
+                    return CheckRet.CommunicationError;
                 }
             }
             else
@@ -1508,10 +1520,10 @@ namespace SamSoarII.AppMain
                 _projectModel.MMonitorManager.CManager = _projectModel.UManager;
                 if (_projectModel.UManager.Start() != 0)
                 {
-                    return false;
+                    return CheckRet.CommunicationError;
                 }
             }
-            return true;
+            return CheckRet.None;
         }
         private void MonitorAbort()
         {
@@ -1527,19 +1539,9 @@ namespace SamSoarII.AppMain
         }
 
         #endregion
-
-        public void CloseTabItem(ITabItem tabItem)
-        {
-            _mainTabControl.CloseItem(tabItem);
-        }
-
+        
         #region Event handler
-
-        private void OnEditTabOpened(object sender, ShowTabItemEventArgs e)
-        {
-            
-        }
-
+        
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
             switch (e.Type)

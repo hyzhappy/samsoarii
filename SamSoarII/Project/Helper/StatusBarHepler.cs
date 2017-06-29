@@ -41,6 +41,7 @@ namespace SamSoarII.AppMain.Project.Helper
     {
         public static InteractionFacade IFacade;
         private static string _message;
+        public static bool IsLoading { get; set; } = false;
         public static void UpdateMessageAsync(string message)
         {
             _message = message;
@@ -48,7 +49,15 @@ namespace SamSoarII.AppMain.Project.Helper
         }
         private static void ThreadStartingPoint(object obj)
         {
-            IFacade.MainWindow.Main_SB.Dispatcher.BeginInvoke(DispatcherPriority.Normal,(ThreadStart) delegate(){ IFacade.MainWindow.SB_Message.Text = _message; });
+            IFacade.MainWindow.Main_SB.Dispatcher.BeginInvoke(DispatcherPriority.Normal,(ThreadStart) delegate()
+            {
+                IFacade.MainWindow.SB_Message.Text = _message;
+                if (IsLoading)
+                {
+                    IFacade.MainWindow.Main_SB.Background = LadderHelper.LoadingBrush;
+                    IFacade.MainWindow.SB_FontColor = Brushes.White;
+                }
+            });
             Dispatcher.Run();
         }
     }

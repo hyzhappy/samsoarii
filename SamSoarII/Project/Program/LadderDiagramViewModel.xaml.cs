@@ -422,7 +422,7 @@ namespace SamSoarII.AppMain.Project
         }
         public void RetStatusBar()
         {
-            if (_selectRect.NetworkParent != null && SelectionStatus == SelectStatus.SingleSelected)
+            if (ProjectModel != null && _selectRect.NetworkParent != null && SelectionStatus == SelectStatus.SingleSelected)
             {
                 ProjectModel.IFacade.MainWindow.SB_Network.Text = _selectRect.NetworkParent.NetworkNumber.ToString();
                 ProjectModel.IFacade.MainWindow.SB_X.Text = _selectRect.X.ToString();

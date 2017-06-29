@@ -1035,36 +1035,54 @@ namespace SamSoarII.AppMain.UI
             }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
-                CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
-                BaseSetting baseSetting = dialog.GetBaseSetting();
-                baseSetting.SettingButtonClick += (sender1, e1) =>
+                //CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+                //BaseSetting baseSetting = dialog.GetBaseSetting();
+                //baseSetting.SettingButtonClick += (sender1, e1) =>
+                //{
+                //    CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
+                //    dialog1.ShowDialog();
+                //};
+                //dialog.Ensure += (sender1, e1) =>
+                //{
+                //    if (_interactionFacade.MonitorProject())
+                //    {
+                //        MonitorModeButton.IsChecked = true;
+                //        LACMonitor.Show();
+                //        dialog.Close();
+                //    }
+                //    else
+                //        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                //};
+                //dialog.Closed += (sender2, e2) =>
+                //{
+                //    MonitorModeButton.IsChecked = false;
+                //};
+                //dialog.CommunicationTest += (sender1, e1) =>
+                //{
+                //    var ret = _interactionFacade.CommunicationTest();
+                //    if (ret == CheckRet.CommunicationError)
+                //        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                //    else if (ret == CheckRet.None)
+                //        MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
+                //};
+                //dialog.ShowDialog();
+                var _ret = _interactionFacade.CommunicationTest();
+                switch (_ret)
                 {
-                    CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
-                    dialog1.ShowDialog();
-                };
-                dialog.Ensure += (sender1, e1) =>
-                {
-                    if (_interactionFacade.MonitorProject())
-                    {
+                    case CheckRet.None:
+                        _interactionFacade.ProjectModel.MMonitorManager.Initialize(_interactionFacade.ProjectModel);
+                        _interactionFacade.ProjectModel.LadderMode = LadderMode.Monitor;
                         MonitorModeButton.IsChecked = true;
                         LACMonitor.Show();
-                        dialog.Close();
-                    }
-                    else
+                        break;
+                    case CheckRet.CommunicationError:
+                        MonitorModeButton.IsChecked = false;
                         MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
-                };
-                dialog.Closed += (sender2, e2) => 
-                {
-                    MonitorModeButton.IsChecked = false;
-                };
-                dialog.CommunicationTest += (sender1, e1) => 
-                {
-                    if (!_interactionFacade.CommunicationTest())
-                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
-                    else
-                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
-                };
-                dialog.ShowDialog();
+                        break;
+                    default:
+                        MonitorModeButton.IsChecked = false;
+                        break;
+                }
             }
             else if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Monitor)
             {
@@ -1370,11 +1388,12 @@ namespace SamSoarII.AppMain.UI
             };
             dialog.Ensure += (sender1, e1) =>
             {
-                if (!_interactionFacade.CommunicationTest())
+                var ret = _interactionFacade.CommunicationTest();
+                if (ret == CheckRet.CommunicationError)
                 {
                     MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                 }
-                else
+                else if(ret == CheckRet.None)
                 {
                     MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
                 }
@@ -1382,11 +1401,12 @@ namespace SamSoarII.AppMain.UI
             };
             dialog.CommunicationTest += (sender1, e1) =>
             {
-                if (!_interactionFacade.CommunicationTest())
+                var ret = _interactionFacade.CommunicationTest();
+                if (ret == CheckRet.CommunicationError)
                 {
                     MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
                 }
-                else
+                else if(ret == CheckRet.None)
                 {
                     MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
                 }

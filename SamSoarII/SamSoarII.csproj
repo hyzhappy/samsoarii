@@ -175,7 +175,6 @@
     <Compile Include="Project\AutoSavedManager.cs" />
     <Compile Include="Project\BraceFoldingStrategy.cs" />
     <Compile Include="Project\Helper\DownloadHelper.cs" />
-    <Compile Include="Project\Helper\ManipulateHelper.cs" />
     <Compile Include="Project\Helper\SFCHelper.cs" />
     <Compile Include="Project\Helper\StatusBarHepler.cs" />
     <Compile Include="Project\Program\FuncBlockViewModel.xaml.cs">
@@ -785,9 +784,9 @@
     <Resource Include="Resources\Image\InstructionToolbar\VLine.png" />
     <Resource Include="Resources\Image\InstructionToolbar\LD.png" />
     <Resource Include="Resources\Image\InstructionToolbar\LDF.png" />
-    <Resource Include="Resources\Image\InstructionToolbar\LDI.png" />
-    <Resource Include="Resources\Image\InstructionToolbar\LDIIM.png" />
     <Resource Include="Resources\Image\InstructionToolbar\LDIM.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LDIIM.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LDI.png" />
     <Resource Include="Resources\Image\InstructionToolbar\LDP.png" />
     <Resource Include="Resources\Image\Warning.png" />
     <Resource Include="Resources\Image\Breakpoint\BPCall.png" />
