@@ -1250,7 +1250,7 @@ namespace SamSoarII.AppMain.Project
             vlvmodel_replaced.ForEach((vlvmodel) => { vlvmodel.Y--; });
             _selectRectOwner.RowCount--;
             NetworkReplaceElementsCommand command = new NetworkReplaceElementsCommand(
-                    _selectRectOwner, bvmodel_replaced, vlvmodel_replaced, bvmodel_removed, vlvmodel_removed,
+                    _selectRectOwner, bvmodel_replaced.ToArray(), vlvmodel_replaced.ToArray(), bvmodel_removed.ToArray(), vlvmodel_removed.ToArray(),
                     NetworkChangeElementArea.Empty, NetworkChangeElementArea.Empty);
             _commandManager.Execute(command);
             return true;
@@ -1274,13 +1274,13 @@ namespace SamSoarII.AppMain.Project
                     bvmodel_replaced, new VerticalLineViewModel[] { });
                 bvmodel_replaced = ProjectHelper.CreateLadderElementsByXElement(bvmodel_xele).ToList();
                 bvmodel_replaced.ForEach((bvmodel) => { bvmodel.Y++; });
+                if (addline) bvmodel_replaced.Add(new HorizontalLineViewModel { X = x, Y = y });
                 XElement vlvmodel_xele = ProjectHelper.CreateXElementByLadderElementsAndVertialLines(
                     new BaseViewModel[] { }, vlvmodel_replaced);
                 vlvmodel_replaced = ProjectHelper.CreateLadderVertialLineByXElement(vlvmodel_xele).ToList();
                 vlvmodel_replaced.ForEach((vlvmodel) => { vlvmodel.Y++; });
-                if (addline) vlvmodel_replaced.Add(new VerticalLineViewModel { X = x - 1, Y = y });
                 NetworkReplaceElementsCommand command = new NetworkReplaceElementsCommand(
-                    _selectRectOwner, bvmodel_replaced, vlvmodel_replaced, bvmodel_removed, vlvmodel_removed,
+                    _selectRectOwner, bvmodel_replaced.ToArray(), vlvmodel_replaced.ToArray(), bvmodel_removed.ToArray(), vlvmodel_removed.ToArray(),
                     NetworkChangeElementArea.Empty, NetworkChangeElementArea.Empty);
                 if (addrow) _selectRectOwner.RowCount++;
                 _commandManager.Execute(command);
@@ -1311,7 +1311,7 @@ namespace SamSoarII.AppMain.Project
                 vlvmodel_replaced = ProjectHelper.CreateLadderVertialLineByXElement(vlvmodel_xele).ToList();
                 vlvmodel_replaced.ForEach((vlvmodel) => { vlvmodel.X--; });
                 NetworkReplaceElementsCommand command = new NetworkReplaceElementsCommand(
-                    _selectRectOwner, bvmodel_replaced, vlvmodel_replaced, bvmodel_removed, vlvmodel_removed,
+                    _selectRectOwner, bvmodel_replaced.ToArray(), vlvmodel_replaced.ToArray(), bvmodel_removed.ToArray(), vlvmodel_removed.ToArray(),
                     NetworkChangeElementArea.Empty, NetworkChangeElementArea.Empty);
                 _commandManager.Execute(command);
             }
@@ -1341,7 +1341,7 @@ namespace SamSoarII.AppMain.Project
                 vlvmodel_replaced = ProjectHelper.CreateLadderVertialLineByXElement(vlvmodel_xele).ToList();
                 vlvmodel_replaced.ForEach((vlvmodel) => { vlvmodel.X++; });
                 NetworkReplaceElementsCommand command = new NetworkReplaceElementsCommand(
-                    _selectRectOwner, bvmodel_replaced, vlvmodel_replaced, bvmodel_removed, vlvmodel_removed,
+                    _selectRectOwner, bvmodel_replaced.ToArray(), vlvmodel_replaced.ToArray(), bvmodel_removed.ToArray(), vlvmodel_removed.ToArray(),
                     NetworkChangeElementArea.Empty, NetworkChangeElementArea.Empty);
                 _commandManager.Execute(command);
             }
