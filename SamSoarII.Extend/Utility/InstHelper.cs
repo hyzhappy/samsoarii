@@ -414,10 +414,10 @@ namespace SamSoarII.Extend.Utility
                     break;
                 case "RST": case "RSTIM":
                     if (simumode)
-                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, &{3:s}, {2:s});\n", 
+                        sw.Write("if (_stack_{0:d}) {{\n_bitrst(&{1:s}, &{3:s}, {2:s});\n", 
                             stackTop, inst[1], inst[2], inst.EnBit);
                     else
-                        sw.Write("if (_stack_{0:d}) _bitrst(&{1:s}, {2:s});\n", 
+                        sw.Write("if (_stack_{0:d}) {{\n_bitrst(&{1:s}, {2:s});\n", 
                             stackTop, inst[1], inst[2]);
                     /*
                      * 注意如果复位的是计数器位，那么计数器值也要跟着复原

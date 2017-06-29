@@ -755,7 +755,7 @@ namespace SamSoarII.AppMain.Project
             Download81Command d81Cmd = new Download81Command();
             if (!Handle(dFBCmd)) return false;
             int time = 0;
-            while (!Handle(dFCCmd) && time < 20) time++ ;
+            while (time < 20 && !Handle(dFCCmd)) time++;
             if (time >= 20) return false;
             //if (!Handle(dFCCmd)) return false;
             byte[] data = odata.Concat(edata).ToArray();
@@ -767,7 +767,7 @@ namespace SamSoarII.AppMain.Project
                 for (int j = 0; j < 1024; j++)
                     pack[j] = data[i * 1024 + j];
                 d80Cmd = new Download80Command(i, pack);
-                for (time = 0; !Handle(d80Cmd) && time < 3; ) time++;
+                for (time = 0; time < 3 && !Handle(d80Cmd);) time++;
                 if (time >= 3) return false;
                 //if (!Handle(d80Cmd)) return false;
             }
@@ -777,7 +777,7 @@ namespace SamSoarII.AppMain.Project
                 for (int j = 0; j < rem; j++)
                     pack[j] = data[len * 1024 + j];
                 d80Cmd = new Download80Command(len, pack);
-                for (time = 0; !Handle(d80Cmd) && time < 3;) time++;
+                for (time = 0; time < 3 && !Handle(d80Cmd);) time++;
                 if (time >= 3) return false;
                 //if (!Handle(d80Cmd)) return false;
             }
