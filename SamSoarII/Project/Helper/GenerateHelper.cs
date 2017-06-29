@@ -1060,14 +1060,10 @@ namespace SamSoarII.AppMain.Project
                 GenerateCCode(fbvmodel, sw);
             }
             sw.Close();
-            string downloadPath = String.Format(@"{0:s}\downg\.", currentPath);
             Process cmd = null;
             cmd = new Process();
-            cmd.StartInfo.FileName
-                = String.Format(@"{0:s}\Compiler\make\make", 
-                    currentPath);
-            cmd.StartInfo.Arguments 
-                = String.Format("-C \"{0:s}\"", downloadPath);
+            cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);
+            cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\make.cmd", currentPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
@@ -1075,11 +1071,8 @@ namespace SamSoarII.AppMain.Project
             cmd.Start();
             cmd.WaitForExit();
             cmd = new Process();
-            cmd.StartInfo.FileName
-                = String.Format(@"{0:s}\Compiler\make\make",
-                    currentPath);
-            cmd.StartInfo.Arguments
-                = String.Format("-C \"{0:s}\" clean", downloadPath);
+            cmd.StartInfo.WorkingDirectory = String.Format(@"{0:s}\downg\.", currentPath);
+            cmd.StartInfo.FileName = String.Format(@"{0:s}\downg\clean.cmd", currentPath);
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
