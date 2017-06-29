@@ -1273,7 +1273,7 @@ namespace SamSoarII.AppMain.UI
         
         private void OnUploadCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            _interactionFacade.UploadProject();
+            //_interactionFacade.UploadProject();
         }
 
         private void OnDownloadCommandExecute(object sender, ExecutedRoutedEventArgs e)

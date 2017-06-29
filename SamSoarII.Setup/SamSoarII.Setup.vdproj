@@ -51,6 +51,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0497AD401A86447B9025F97A7F15EF11"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_04CC20B09FD04E559A3136AEEF6CB31D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_04F9B363A75947B7BEF5BB9EFFBBA604"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -71,12 +83,6 @@
         {
         "MsmKey" = "8:_0595062DF70C849D417E68AFFFCC125C"
         "OwnerKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_05F44257E9734C1FACF852B47E70BF24"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -142,12 +148,6 @@
         "Entry"
         {
         "MsmKey" = "8:_079BC150D80C400DA0EC53D202F16D0F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_07DE665DC5E54706811B4578EC5C6F8D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -220,6 +220,12 @@
         "Entry"
         {
         "MsmKey" = "8:_0E6AA0D8D29D40DE9E10CA618037D7F7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0EF8F79C0E914C29883D57D34D0C5A9B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -423,6 +429,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_27BD54EB18884AC1B9F50B2DDE484BC1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_27E0C84A91DD48DCA17E0AE1CDC2C262"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -477,7 +489,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2A8D89EBCBF24BFC82C63B625FAAF86A"
+        "MsmKey" = "8:_2AB5A889D5864DBF80EA5A7C12852C84"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -502,18 +514,6 @@
         "Entry"
         {
         "MsmKey" = "8:_2D6DB333652D451EB4D80B709845A482"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2E16B84BC50240A28FDC9FCAECF5462E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2E3580D6EDD444059EB02E9E92D4F412"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -550,12 +550,6 @@
         "Entry"
         {
         "MsmKey" = "8:_36B3E09A1DCF44E9B138416DCD38E1AE"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_36B5AD06C1214FCF9823FB5D9A892432"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -657,7 +651,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3FF01D138B13477D8CB3DA736C320F0A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4069E99721034153A045B3F52B6FE623"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_40EB4C62261945BC9DD057F189598447"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -688,12 +694,6 @@
         "Entry"
         {
         "MsmKey" = "8:_440A28B1E8124A45A2F69D889244B56B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_440AEB4FA47C45B4AF0101DF27040C4C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -825,6 +825,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_53DA86A5DE0840138552B79C65529947"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5488182FB412FDCC8EFB41AEFBF89E2B"
         "OwnerKey" = "8:_8519A6DD3A145D0F33226B5491F284FF"
         "MsmSig" = "8:_UNDEFINED"
@@ -891,12 +897,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_59660AC03F54402F9DE61CE6105464D5"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5967D2EA20F24F0DBAA55A15367207F8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -904,6 +904,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5A131062AC354FA8B101FC7A4AAA22D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5C091EE6145742E1822E37F3281BC5B5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -975,7 +981,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_60B53C6777AB448F83A39DD992E37260"
+        "MsmKey" = "8:_61885F1D95034E49A1378B5DC0B00F39"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1005,19 +1011,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_64769954C38743C589BD6E8791DF4BB6"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_649C96DA99304EC7A6A56CBD501B8D57"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_662BDC927A854983944C9E278AE7BD7F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1035,7 +1029,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_69677752A14B4AA2A85D9CB3547BB5E3"
+        "MsmKey" = "8:_685B8A3D64FA4418B5BF4D34C763A15E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6977A83A930941908DA09CD8518C99FF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1089,6 +1089,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_71197616096B4C679DB1767957642BBE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7153DF7E43574615B22BEE22A49FDF1F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1096,12 +1102,6 @@
         "Entry"
         {
         "MsmKey" = "8:_72A0AF43786A49FEBB6BE885ACABEC9B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_72FB9CD12FDA467FBFFBC12D8C070155"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1132,12 +1132,6 @@
         "Entry"
         {
         "MsmKey" = "8:_75329149BFB74B5A8B9C79BBF528D8F2"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7577D2774A2B4E89B852AA4738C2040E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1191,12 +1185,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7945D7C7B7254059BA0BB6661D0C298D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_797553315CBA4B969DD516CC71D318F3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1233,6 +1221,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7CFA97C5D0794FFEBA1D3658AB31F4BB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7E2E3A69F0277F30D40411AD50A275CE"
         "OwnerKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
         "MsmSig" = "8:_UNDEFINED"
@@ -1258,6 +1252,12 @@
         "Entry"
         {
         "MsmKey" = "8:_81BE0D6C1B3A4DCEB993BBC8AF3034CA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82273B3B04FE4A5A95979F1A810AB0B5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1341,12 +1341,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_86EFAA40C0B7433E9BC5ABE9AA3307E6"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_872B0E822DF570CA1ECF087D1EF0AD7C"
         "OwnerKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
         "MsmSig" = "8:_UNDEFINED"
@@ -1395,31 +1389,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8C7AB1AF2699473FB80B595E80B9A838"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8CBF21A8B25E4EFD88FC7E569F685FE1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8CC07D8E666048198C3E7684FA1C9F59"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8D03AFFB6A1640C3B785735BBD0CD720"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8D1F1DA381A0469A9120D0DF14DFACFE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8D9826C82D9D420EBE9546DF22D1F208"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1437,13 +1419,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8FB913EDF6EB4ADAAEFA5D3B688EF986"
+        "MsmKey" = "8:_8F213339323549B5B6A845740FFD85CD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8FFE5351623B463D90F31891B21A5C3D"
+        "MsmKey" = "8:_8FB913EDF6EB4ADAAEFA5D3B688EF986"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1463,12 +1445,6 @@
         {
         "MsmKey" = "8:_901B2713E38DF54A69FA2BC431F9800E"
         "OwnerKey" = "8:_8C17509DAC559CCCBED0BFADAC33E517"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_90E4FAC9AB7241FABA4C3B903247C429"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1539,19 +1515,13 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_98686CF15F774A528CAD980F389DB089"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_992438CFBA174803B60F4158450EFD39"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_992FA8C6D4B14D179A6A28D2B0A80946"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9AEE4CE789EF49BE9EBC673A143C6FA1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1588,12 +1558,6 @@
         "Entry"
         {
         "MsmKey" = "8:_9CEC0A924B2C45C18DEED7573E1F035B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9D0CE4DC36E6452CA29AC455BEA03E1C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1695,7 +1659,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A409991944034FFA9DBF8B87052AFE20"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A57E6EB280AD417594DC511F0AAB908B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A616FB25982646EAA3D923E07A8DEAAC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1761,12 +1737,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AB52FBE043C247AB9C31F03359F9C4C0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_AB589238204814CBD4BECFD2250ADC35"
         "OwnerKey" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
         "MsmSig" = "8:_UNDEFINED"
@@ -1804,12 +1774,6 @@
         "Entry"
         {
         "MsmKey" = "8:_B11D7F2FED234E6CA016ECBE47F6BEDB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B179B4C244534122BF6E7BC29B2F9B3C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1869,19 +1833,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B73AE9E4CBC84EC894FA460F7E141F7A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B7E8695932AF4F7083DC6CA2C7180FE1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B7FD34C48BDD4B4D819E83C5CF09DE07"
+        "MsmKey" = "8:_B81178D19B4D470D8E577FA18C0D9E43"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1894,6 +1852,12 @@
         "Entry"
         {
         "MsmKey" = "8:_B8EF8B9961FA4662A2D8369265A54C58"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B9810EB1CC7A47269AE21A89AE1DCF77"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1959,12 +1923,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BC085226298B47498D1585B932084FA0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_BC538126D0FA491D8B2EE86142F6194E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1989,6 +1947,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BED2552E409846E882B8FEF1EF835548"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BFA2F4E478E841B3BA89621FA328B625"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2001,19 +1965,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C15093362E8343488A26C26B9C7E35BC"
+        "MsmKey" = "8:_C13F2905106E4D5FBA4C2E7694B3AD6E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_C29CC7DE76114CECA73151E4A5056683"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C2D99DA86D34444CB40D66A069E65F25"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2026,6 +1984,12 @@
         "Entry"
         {
         "MsmKey" = "8:_C34EA656F2EE4321B669FCDC3CEBDDA5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C397EABB0D994906AF03520847E1DB60"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2079,6 +2043,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C726FC99CF214E8E89F6178E5CC92814"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C7AD57F9C7B941BEA15361B883FECF9D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2109,6 +2079,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C8C8C6AA7AD545DCBD01F8E961BE1EAE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C8EA7647248248508B902885580D9ACB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2122,12 +2098,6 @@
         "Entry"
         {
         "MsmKey" = "8:_CA3A5CA67F224278B5F15A73B996B8BC"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CA83AA19EBE747B4B4CD5AEE4E98AF3F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2182,12 +2152,6 @@
         "Entry"
         {
         "MsmKey" = "8:_CE9D1EF5B4D44EEFB2EA5DBDF871937B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CFDDBA6A0B824777A2407C4B1D466FC7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2259,7 +2223,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D6108F68939441D0A2F572E913BE976E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D70AB5E8814B4601BC6AD3BFCCCB2EE5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D72C36C43B3F450BA41FFEF8BB118549"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2271,19 +2247,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D830CAE1E000496D984FA8D04BDB6C8F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D86698D5C7024916AD1879317CD7649F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_D8F782846C10466CA590F3334B5B83C4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D93E15A460B7412DAD6F1CA0E760F056"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2331,25 +2301,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E0A8A126273544998136A72B0C8C81B7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_E0BBBFD1793144B68BCF205ABD5A2305"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E1E9918E84C748988A12D4E7DCDFB7F0"
+        "MsmKey" = "8:_E16316043AA1469C85612C91C629F830"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E27E064B9C8F4A6A9F01EC6B65BAF519"
+        "MsmKey" = "8:_E1E9918E84C748988A12D4E7DCDFB7F0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2422,6 +2386,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E80CAEB66351405C8DEBAC3B6DF0BFBF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E85AEBC6AAB54848A6BDCCFA3CE70F4B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2511,12 +2481,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F11AA11CE9374599B7946A3E8BFA64C9"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F22B2B77F7194344ADD0DAEFD65DFD07"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2524,6 +2488,12 @@
         "Entry"
         {
         "MsmKey" = "8:_F25374127A41482E8E24B39A7C00B3AB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F324A86915AA4EA4BBF3C340820413E7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -3004,6 +2974,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0497AD401A86447B9025F97A7F15EF11"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downlib.c"
+            "TargetName" = "8:downlib.c"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_04CC20B09FD04E559A3136AEEF6CB31D"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\aa.map"
+            "TargetName" = "8:aa.map"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_04F9B363A75947B7BEF5BB9EFFBBA604"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\sys\\queue.h"
@@ -3073,26 +3083,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_05F44257E9734C1FACF852B47E70BF24"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\clean.cmd"
-            "TargetName" = "8:clean.cmd"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_061D02BBEA3D4517838BA53F50A75EE5"
@@ -3192,26 +3182,6 @@
             "TargetName" = "8:iq80310.specs"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_07DE665DC5E54706811B4578EC5C6F8D"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\_downg\\downlib.h"
-            "TargetName" = "8:downlib.h"
-            "Tag" = "8:"
-            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3452,6 +3422,26 @@
             "TargetName" = "8:tcc.exe"
             "Tag" = "8:"
             "Folder" = "8:_83F8B7FBBDAC45A4B4101112CD1DF953"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0EF8F79C0E914C29883D57D34D0C5A9B"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PFI"
+            "TargetName" = "8:F103PLCTest.PFI"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4148,6 +4138,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27BD54EB18884AC1B9F50B2DDE484BC1"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\makefile.mak"
+            "TargetName" = "8:makefile.mak"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27E0C84A91DD48DCA17E0AE1CDC2C262"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\pwd.h"
@@ -4328,12 +4338,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2A8D89EBCBF24BFC82C63B625FAAF86A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2AB5A889D5864DBF80EA5A7C12852C84"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\build\\downf.o"
-            "TargetName" = "8:downf.o"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\make.cmd"
+            "TargetName" = "8:make.cmd"
             "Tag" = "8:"
-            "Folder" = "8:_E1005D15C46D40BB9737A5F839FA4EFB"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4414,46 +4424,6 @@
             "TargetName" = "8:AppUpdate.xml"
             "Tag" = "8:"
             "Folder" = "8:_12364201BB8D477E9F2FCCD5C8B6D2C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E16B84BC50240A28FDC9FCAECF5462E"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downlib.c"
-            "TargetName" = "8:downlib.c"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E3580D6EDD444059EB02E9E92D4F412"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PFI"
-            "TargetName" = "8:F103PLCTest.PFI"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4574,26 +4544,6 @@
             "TargetName" = "8:malloc.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_36B5AD06C1214FCF9823FB5D9A892432"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\libs.ld"
-            "TargetName" = "8:libs.ld"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4928,12 +4878,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3FF01D138B13477D8CB3DA736C320F0A"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downc.bin"
+            "TargetName" = "8:downc.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4069E99721034153A045B3F52B6FE623"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\regex.h"
             "TargetName" = "8:regex.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_40EB4C62261945BC9DD057F189598447"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downf.exe"
+            "TargetName" = "8:downf.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5034,26 +5024,6 @@
             "TargetName" = "8:termios.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_440AEB4FA47C45B4AF0101DF27040C4C"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PS"
-            "TargetName" = "8:F103PLCTest.PS"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5488,6 +5458,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_53DA86A5DE0840138552B79C65529947"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\_downg\\downlib.h"
+            "TargetName" = "8:downlib.h"
+            "Tag" = "8:"
+            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5488182FB412FDCC8EFB41AEFBF89E2B"
             {
             "AssemblyRegister" = "3:1"
@@ -5650,26 +5640,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_59660AC03F54402F9DE61CE6105464D5"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IMD"
-            "TargetName" = "8:F103PLCTest.IMD"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5967D2EA20F24F0DBAA55A15367207F8"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\lib\\msvcrt.def"
@@ -5696,6 +5666,26 @@
             "TargetName" = "8:aprofile-validation.specs"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5C091EE6145742E1822E37F3281BC5B5"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\build\\downlib.o"
+            "TargetName" = "8:downlib.o"
+            "Tag" = "8:"
+            "Folder" = "8:_E1005D15C46D40BB9737A5F839FA4EFB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5930,10 +5920,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60B53C6777AB448F83A39DD992E37260"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_61885F1D95034E49A1378B5DC0B00F39"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\makefile.mak"
-            "TargetName" = "8:makefile.mak"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PR"
+            "TargetName" = "8:F103PLCTest.PR"
             "Tag" = "8:"
             "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
@@ -6030,52 +6020,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_64769954C38743C589BD6E8791DF4BB6"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PO"
-            "TargetName" = "8:F103PLCTest.PO"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_649C96DA99304EC7A6A56CBD501B8D57"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\cpu-init\\rdimon-aem.o"
             "TargetName" = "8:rdimon-aem.o"
             "Tag" = "8:"
             "Folder" = "8:_ED6B699297D346F9B54FF05EDD59C0B8"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_662BDC927A854983944C9E278AE7BD7F"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\makefile"
-            "TargetName" = "8:makefile"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6130,10 +6080,30 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_69677752A14B4AA2A85D9CB3547BB5E3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_685B8A3D64FA4418B5BF4D34C763A15E"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\aa.map"
-            "TargetName" = "8:aa.map"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\clean.cmd"
+            "TargetName" = "8:clean.cmd"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6977A83A930941908DA09CD8518C99FF"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IMD"
+            "TargetName" = "8:F103PLCTest.IMD"
             "Tag" = "8:"
             "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
@@ -6310,6 +6280,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_71197616096B4C679DB1767957642BBE"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.WK3"
+            "TargetName" = "8:F103PLCTest.WK3"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7153DF7E43574615B22BEE22A49FDF1F"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\machine\\param.h"
@@ -6336,26 +6326,6 @@
             "TargetName" = "8:stdlib.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_72FB9CD12FDA467FBFFBC12D8C070155"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\sections.ld"
-            "TargetName" = "8:sections.ld"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6456,26 +6426,6 @@
             "TargetName" = "8:complex.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7577D2774A2B4E89B852AA4738C2040E"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PRI"
-            "TargetName" = "8:F103PLCTest.PRI"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6650,26 +6600,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7945D7C7B7254059BA0BB6661D0C298D"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\make.cmd"
-            "TargetName" = "8:make.cmd"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_797553315CBA4B969DD516CC71D318F3"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\wordexp.h"
@@ -6790,6 +6720,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7CFA97C5D0794FFEBA1D3658AB31F4BB"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\_downg\\modbus.c"
+            "TargetName" = "8:modbus.c"
+            "Tag" = "8:"
+            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7E2E3A69F0277F30D40411AD50A275CE"
             {
             "AssemblyRegister" = "3:1"
@@ -6887,6 +6837,26 @@
             "TargetName" = "8:iconvnls.h"
             "Tag" = "8:"
             "Folder" = "8:_F0750E8F30234C79A130AF03A8811067"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_82273B3B04FE4A5A95979F1A810AB0B5"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downf.h"
+            "TargetName" = "8:downf.h"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7132,26 +7102,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_86EFAA40C0B7433E9BC5ABE9AA3307E6"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downf.c"
-            "TargetName" = "8:downf.c"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_872B0E822DF570CA1ECF087D1EF0AD7C"
             {
             "AssemblyRegister" = "3:1"
@@ -7314,26 +7264,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8C7AB1AF2699473FB80B595E80B9A838"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\_downg\\modbus.c"
-            "TargetName" = "8:modbus.c"
-            "Tag" = "8:"
-            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8CBF21A8B25E4EFD88FC7E569F685FE1"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\stdfix.h"
@@ -7354,52 +7284,32 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8CC07D8E666048198C3E7684FA1C9F59"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\vectors_stm32f10x.o"
-            "TargetName" = "8:vectors_stm32f10x.o"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8D03AFFB6A1640C3B785735BBD0CD720"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downf.exe"
-            "TargetName" = "8:downf.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8D1F1DA381A0469A9120D0DF14DFACFE"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\stdlib.h"
             "TargetName" = "8:stdlib.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8D9826C82D9D420EBE9546DF22D1F208"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downlib.o"
+            "TargetName" = "8:downlib.o"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7454,12 +7364,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8FB913EDF6EB4ADAAEFA5D3B688EF986"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F213339323549B5B6A845740FFD85CD"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\lib\\gdi32.def"
-            "TargetName" = "8:gdi32.def"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IAD"
+            "TargetName" = "8:F103PLCTest.IAD"
             "Tag" = "8:"
-            "Folder" = "8:_0F1639571ECA4DFFB03505C514D37007"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7474,12 +7384,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8FFE5351623B463D90F31891B21A5C3D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8FB913EDF6EB4ADAAEFA5D3B688EF986"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.WK3"
-            "TargetName" = "8:F103PLCTest.WK3"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\lib\\gdi32.def"
+            "TargetName" = "8:gdi32.def"
             "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Folder" = "8:_0F1639571ECA4DFFB03505C514D37007"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7523,26 +7433,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_90E4FAC9AB7241FABA4C3B903247C429"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IAB"
-            "TargetName" = "8:F103PLCTest.IAB"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9195B0123C734A04A12AC8ADFFB8C309"
@@ -7765,52 +7655,32 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_98686CF15F774A528CAD980F389DB089"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PO"
+            "TargetName" = "8:F103PLCTest.PO"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_992438CFBA174803B60F4158450EFD39"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\mem.h"
             "TargetName" = "8:mem.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_992FA8C6D4B14D179A6A28D2B0A80946"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PR"
-            "TargetName" = "8:F103PLCTest.PR"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9AEE4CE789EF49BE9EBC673A143C6FA1"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\libF407PLC.a"
-            "TargetName" = "8:libF407PLC.a"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7862,26 +7732,6 @@
             "TargetName" = "8:crtn.o"
             "Tag" = "8:"
             "Folder" = "8:_A70A187254164B69917A3E25FEBDDB66"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9D0CE4DC36E6452CA29AC455BEA03E1C"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\_downg\\downlib.c"
-            "TargetName" = "8:downlib.c"
-            "Tag" = "8:"
-            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8216,12 +8066,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A409991944034FFA9DBF8B87052AFE20"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\makefile"
+            "TargetName" = "8:makefile"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A57E6EB280AD417594DC511F0AAB908B"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\stdatomic.h"
             "TargetName" = "8:stdatomic.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A616FB25982646EAA3D923E07A8DEAAC"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\libF407PLC.a"
+            "TargetName" = "8:libF407PLC.a"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8436,26 +8326,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AB52FBE043C247AB9C31F03359F9C4C0"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\build\\CMakeCache.txt"
-            "TargetName" = "8:CMakeCache.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_E1005D15C46D40BB9737A5F839FA4EFB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AB589238204814CBD4BECFD2250ADC35"
             {
             "AssemblyRegister" = "3:1"
@@ -8593,26 +8463,6 @@
             "TargetName" = "8:tree.h"
             "Tag" = "8:"
             "Folder" = "8:_F0750E8F30234C79A130AF03A8811067"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B179B4C244534122BF6E7BC29B2F9B3C"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downc.bin"
-            "TargetName" = "8:downc.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8829,26 +8679,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B73AE9E4CBC84EC894FA460F7E141F7A"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\build\\CMakeFiles\\cmake.check_cache"
-            "TargetName" = "8:cmake.check_cache"
-            "Tag" = "8:"
-            "Folder" = "8:_4B3818D7594745E7BDD75C21DD51E55E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7E8695932AF4F7083DC6CA2C7180FE1"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\rdimon.specs"
@@ -8869,12 +8699,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7FD34C48BDD4B4D819E83C5CF09DE07"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B81178D19B4D470D8E577FA18C0D9E43"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\build\\downc.o"
-            "TargetName" = "8:downc.o"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\libs.ld"
+            "TargetName" = "8:libs.ld"
             "Tag" = "8:"
-            "Folder" = "8:_E1005D15C46D40BB9737A5F839FA4EFB"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8915,6 +8745,26 @@
             "TargetName" = "8:reent.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B9810EB1CC7A47269AE21A89AE1DCF77"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\vectors_stm32f10x.o"
+            "TargetName" = "8:vectors_stm32f10x.o"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9080,26 +8930,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BC085226298B47498D1585B932084FA0"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downlib.h"
-            "TargetName" = "8:downlib.h"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BC538126D0FA491D8B2EE86142F6194E"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\sys\\cdefs.h"
@@ -9180,6 +9010,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BED2552E409846E882B8FEF1EF835548"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downlib.h"
+            "TargetName" = "8:downlib.h"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BFA2F4E478E841B3BA89621FA328B625"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\libm.a"
@@ -9220,10 +9070,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C15093362E8343488A26C26B9C7E35BC"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C13F2905106E4D5FBA4C2E7694B3AD6E"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IMB"
-            "TargetName" = "8:F103PLCTest.IMB"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\mem.ld"
+            "TargetName" = "8:mem.ld"
             "Tag" = "8:"
             "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
@@ -9246,26 +9096,6 @@
             "TargetName" = "8:string_s.h"
             "Tag" = "8:"
             "Folder" = "8:_4EB4F104B13E450A8E2416550C196CAD"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2D99DA86D34444CB40D66A069E65F25"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downc.c"
-            "TargetName" = "8:downc.c"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9306,6 +9136,26 @@
             "TargetName" = "8:newlib.h"
             "Tag" = "8:"
             "Folder" = "8:_98BD6ADEB788474EBBE00C778B764406"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C397EABB0D994906AF03520847E1DB60"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\build\\CMakeFiles\\cmake.check_cache"
+            "TargetName" = "8:cmake.check_cache"
+            "Tag" = "8:"
+            "Folder" = "8:_4B3818D7594745E7BDD75C21DD51E55E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9480,6 +9330,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C726FC99CF214E8E89F6178E5CC92814"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PS"
+            "TargetName" = "8:F103PLCTest.PS"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C7AD57F9C7B941BEA15361B883FECF9D"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\arm_cmse.h"
@@ -9580,6 +9450,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C8C8C6AA7AD545DCBD01F8E961BE1EAE"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\sections.ld"
+            "TargetName" = "8:sections.ld"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C8EA7647248248508B902885580D9ACB"
             {
             "AssemblyRegister" = "3:1"
@@ -9637,26 +9527,6 @@
             "TargetName" = "8:rdpmon-crt0.o"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CA83AA19EBE747B4B4CD5AEE4E98AF3F"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\libF103PLC.a"
-            "TargetName" = "8:libF103PLC.a"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9837,26 +9707,6 @@
             "TargetName" = "8:excpt.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CFDDBA6A0B824777A2407C4B1D466FC7"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downf.h"
-            "TargetName" = "8:downf.h"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10102,12 +9952,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D6108F68939441D0A2F572E913BE976E"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IMB"
+            "TargetName" = "8:F103PLCTest.IMB"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D70AB5E8814B4601BC6AD3BFCCCB2EE5"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\aprofile-ve.specs"
             "TargetName" = "8:aprofile-ve.specs"
             "Tag" = "8:"
             "Folder" = "8:_21514AE21E7D49C8AF9729962E496BF3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D72C36C43B3F450BA41FFEF8BB118549"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\_downg\\downlib.c"
+            "TargetName" = "8:downlib.c"
+            "Tag" = "8:"
+            "Folder" = "8:_8C692239B10C4BB2AB5A87CB341F9BE7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10142,52 +10032,32 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D830CAE1E000496D984FA8D04BDB6C8F"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downlib.o"
-            "TargetName" = "8:downlib.o"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D86698D5C7024916AD1879317CD7649F"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IAD"
-            "TargetName" = "8:F103PLCTest.IAD"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D8F782846C10466CA590F3334B5B83C4"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\machine\\setjmp-dj.h"
             "TargetName" = "8:setjmp-dj.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D93E15A460B7412DAD6F1CA0E760F056"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.IAB"
+            "TargetName" = "8:F103PLCTest.IAB"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10342,26 +10212,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E0A8A126273544998136A72B0C8C81B7"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\build\\downlib.o"
-            "TargetName" = "8:downlib.o"
-            "Tag" = "8:"
-            "Folder" = "8:_E1005D15C46D40BB9737A5F839FA4EFB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E0BBBFD1793144B68BCF205ABD5A2305"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\rdimon-crt0.o"
@@ -10382,12 +10232,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E1E9918E84C748988A12D4E7DCDFB7F0"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E16316043AA1469C85612C91C629F830"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\machine\\fastmath.h"
-            "TargetName" = "8:fastmath.h"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PRI"
+            "TargetName" = "8:F103PLCTest.PRI"
             "Tag" = "8:"
-            "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10402,12 +10252,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E27E064B9C8F4A6A9F01EC6B65BAF519"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E1E9918E84C748988A12D4E7DCDFB7F0"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\mem.ld"
-            "TargetName" = "8:mem.ld"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\machine\\fastmath.h"
+            "TargetName" = "8:fastmath.h"
             "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10648,6 +10498,26 @@
             "TargetName" = "8:_types.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E85AEBC6AAB54848A6BDCCFA3CE70F4B"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\libF103PLC.a"
+            "TargetName" = "8:libF103PLC.a"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10942,26 +10812,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F11AA11CE9374599B7946A3E8BFA64C9"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downc.h"
-            "TargetName" = "8:downc.h"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F22B2B77F7194344ADD0DAEFD65DFD07"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\sys\\_intsup.h"
@@ -10988,6 +10838,26 @@
             "TargetName" = "8:timeb.h"
             "Tag" = "8:"
             "Folder" = "8:_5E1EF26C340049E7BBDFC3E86A0A228F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F324A86915AA4EA4BBF3C340820413E7"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downc.h"
+            "TargetName" = "8:downc.h"
+            "Tag" = "8:"
+            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11930,7 +11800,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII.Setup"
         "ProductCode" = "8:{ABDCB673-14F5-4EFE-AD1B-756772B2A55E}"
-        "PackageCode" = "8:{D059BE3F-291F-4A97-90A7-8DAE8FD99BE0}"
+        "PackageCode" = "8:{1684308F-285F-4F53-8DDD-3457E3E9E239}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

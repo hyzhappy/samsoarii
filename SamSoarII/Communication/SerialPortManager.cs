@@ -314,7 +314,7 @@ namespace SamSoarII.Communication
         private bool PortTest()
         {
             port.Open();
-            return false;//暂不可用
+            return true;//暂不可用
             /*
             port.Write(TESTBYTES, 0, TESTBYTES.Length);
             Thread.Sleep(10);

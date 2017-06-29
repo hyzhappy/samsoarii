@@ -93,7 +93,7 @@ namespace SamSoarII.UserInterface
             animation.From = -80;
             animation.To = 598;
             animation.Duration = TimeSpan.FromSeconds(3.5);
-            animation.RepeatBehavior = new RepeatBehavior(20);
+            animation.RepeatBehavior = new RepeatBehavior(2000);
             BeginAnimation(OffsetProperty, animation);
         }
         private const int GWL_STYLE = -16;
