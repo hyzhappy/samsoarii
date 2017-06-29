@@ -25,6 +25,13 @@ namespace SamSoarII.ValueModel
                 return string.Format("{0}{1}{2}", Base, Index, Offset.ValueString);
             }
         }
+        public virtual string ValueBaseString
+        {
+            get
+            {
+                return String.Format("{0}{1}", Base, Index);
+            }
+        }
         public abstract string ValueShowString { get; }
         public string Comment
         {

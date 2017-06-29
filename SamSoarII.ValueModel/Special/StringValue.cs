@@ -31,6 +31,15 @@ namespace SamSoarII.ValueModel
 
         public string value;
 
+
+        public virtual string ValueBaseString
+        {
+            get
+            {
+                return value;
+            }
+        }
+
         public string ValueShowString
         {
             get

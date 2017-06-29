@@ -13,6 +13,7 @@ namespace SamSoarII.ValueModel
         uint Index { get;}
         WordValue Offset { get;}
         string ValueString { get; }
+        string ValueBaseString { get; }
         string ValueShowString { get; }
         string Comment { get; set; }
         bool IsVariable { get; }
