@@ -1443,7 +1443,7 @@ namespace SamSoarII.AppMain
                             if (!ret)
                             {
                                 StatusBarHepler.UpdateMessageAsync(Properties.Resources.Download_Fail);
-                                MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                                MessageBox.Show(Properties.Resources.Download_Fail);
                             }
                             else
                             {
