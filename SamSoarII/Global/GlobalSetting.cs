@@ -12,7 +12,6 @@ namespace SamSoarII.AppMain
 {
     public static class GlobalSetting
     {
-
         private const double ScaleMin = 0.4;
         private const double ScaleMax = 2.5;
         public static int WholeWidth
