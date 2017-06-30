@@ -231,8 +231,8 @@ namespace SamSoarII.UserInterface
                 switch (SelectedIndex)
                 {
                     case 0:
-                        Value2TextBox.Focus();
-                        Keyboard.Focus(Value2TextBox);
+                        ValueTextBox.Focus();
+                        Keyboard.Focus(ValueTextBox);
                         break;
                     case 1:
                         Value2TextBox.Focus();

@@ -70,7 +70,7 @@ namespace SamSoarII.UserInterface
                     Grid.SetColumn(bpmodel, 0);
                     GD_Main.Children.Add(bpmodel);
                 }
-                bpmodel.SelectedIndex = 0;
+                
             }
         }
         
@@ -275,10 +275,25 @@ namespace SamSoarII.UserInterface
         }
 
         #endregion
-        
+
         #region Extra Message
 
-        public IList<string> Details { get; set; }
+        private IList<string> details;
+        public IList<string> Details
+        {
+            get
+            {
+                return this.details;
+            }
+            set
+            {
+                this.details = value;
+                if (bpmodel != null)
+                {
+                    bpmodel.SelectedIndex = 0;
+                }
+            }
+        }
 
         private Label _StringToLabel(string text)
         {
