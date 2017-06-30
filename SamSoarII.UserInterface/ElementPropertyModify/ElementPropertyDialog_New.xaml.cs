@@ -27,7 +27,7 @@ namespace SamSoarII.UserInterface
             DataContext = this;
             KeyDown += ElementPropertyDialog_New_KeyDown;
         }
-
+        
         private void ElementPropertyDialog_New_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -70,6 +70,7 @@ namespace SamSoarII.UserInterface
                     Grid.SetColumn(bpmodel, 0);
                     GD_Main.Children.Add(bpmodel);
                 }
+                bpmodel.SelectedIndex = 0;
             }
         }
         

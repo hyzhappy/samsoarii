@@ -6,9 +6,6 @@
              xmlns:local="clr-namespace:SamSoarII.AppMain.UI"
              mc:Ignorable="d" 
              d:DesignHeight="36" d:DesignWidth="300" Expanded="OnExpanded" Collapsed="OnCollapsed">
-    <TreeViewItem.Resources>
-        
-    </TreeViewItem.Resources>
     <TreeViewItem.Header>
         <StackPanel x:Uid="StackPanel_1" Orientation="Vertical">
             <StackPanel x:Uid="SP_Title" x:Name="SP_Title" Orientation="Horizontal">
