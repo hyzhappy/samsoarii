@@ -92,6 +92,7 @@
     <Compile Include="Converters\DoubleConverter2.cs" />
     <Compile Include="Converters\MutiConverter.cs" />
     <Compile Include="Converters\SelectIndexToVisibility.cs" />
+    <Compile Include="TempDebugger.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="Enums\ElementAddressType.cs" />
     <Compile Include="Enums\ShowValueType.cs" />

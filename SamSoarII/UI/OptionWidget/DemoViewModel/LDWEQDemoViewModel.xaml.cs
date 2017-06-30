@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.LadderInstViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,13 +19,29 @@ namespace SamSoarII.AppMain.UI.OptionWidget.DemoViewModel
     /// <summary>
     /// LDWEQDemoViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LDWEQDemoViewModel : UserControl
+    public partial class LDWEQDemoViewModel : UserControl, IPosition
     {
         public LDWEQDemoViewModel()
         {
             InitializeComponent();
-            Canvas.SetLeft(this, 300);
-            Canvas.SetTop(this, 0);
+            Canvas.SetLeft(this, 300 * X);
+            Canvas.SetTop(this, Y);
+        }
+
+        public int X
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
+        public int Y
+        {
+            get
+            {
+                return 0;
+            }
         }
     }
 }

@@ -41,7 +41,7 @@ namespace SamSoarII.Utility.FileRegister
 
             //HKEY_CLASSES_ROOT/SSR_FileType/Shell/Open/Command
             RegistryKey commandKey = openKey.CreateSubKey("Command");
-            commandKey.SetValue("", regInfo.ExePath + " %1"); // " %1"表示将被双击的文件的路径传给目标应用程序  
+            commandKey.SetValue("", regInfo.ExePath + " %1"); // " %1"表示将被双击的文件的路径传给目标应用程序
             relationKey.Close();
         }
 
@@ -56,7 +56,6 @@ namespace SamSoarII.Utility.FileRegister
             {
                 return false;
             }
-
             string extendName = regInfo.ExtendName;
             string relationName = extendName.Substring(1, extendName.Length - 1).ToUpper() + "_FileType";
             RegistryKey relationKey = Registry.ClassesRoot.OpenSubKey(relationName, true);

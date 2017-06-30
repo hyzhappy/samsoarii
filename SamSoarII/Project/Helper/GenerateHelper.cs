@@ -874,7 +874,7 @@ namespace SamSoarII.AppMain.Project
                 Generate(ldvmodel, nets);
             }
             // 建立仿真的c环境的路径
-            string currentPath = Environment.CurrentDirectory;
+            string currentPath = Utility.FileHelper.AppRootPath;
             string ladderHFile = String.Format(@"{0:s}\simug\simuc.h", currentPath);
             string ladderCFile = String.Format(@"{0:s}\simug\simuc.c", currentPath);
             string funcBlockHFile = String.Format(@"{0:s}\simug\simuf.h", currentPath);
@@ -981,12 +981,14 @@ namespace SamSoarII.AppMain.Project
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
+            
             File.Delete(ladderHFile);
             File.Delete(ladderCFile);
             File.Delete(simulibHFile);
             File.Delete(simulibCFile);
             File.Delete(funcBlockHFile);
             File.Delete(funcBlockCFile);
+            
             return SimulateDllModel.LoadDll(outputDllFile);
         }
 
@@ -1000,7 +1002,7 @@ namespace SamSoarII.AppMain.Project
                 Generate(ldvmodel, nets);
             }
             // 建立仿真的c环境的路径
-            string currentPath = Environment.CurrentDirectory;
+            string currentPath = Utility.FileHelper.AppRootPath;
             string ladderHFile = String.Format(@"{0:s}\downg\downc.h", currentPath);
             string ladderCFile = String.Format(@"{0:s}\downg\downc.c", currentPath);
             string funcBlockHFile = String.Format(@"{0:s}\downg\downf.h", currentPath);

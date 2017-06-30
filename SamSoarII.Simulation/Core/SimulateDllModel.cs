@@ -35,8 +35,22 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 动态库接口：创建仿真代码的编译环境
         /// </summary>
-        [DllImport(@"simug\simu.dll", EntryPoint = "CreateSource")]
-        public static extern void CreateSource();
+        [DllImport(@"simug\simu.dll", EntryPoint = "Encode")]
+        public static extern void Encode(string ifile, string ofile);
+
+        public static void CreateSource()
+        {
+            string currentPath = Utility.FileHelper.AppRootPath;
+            string libcoPath = String.Format(@"{0:s}\simug\simulib.o", currentPath);
+            string libhoPath = String.Format(@"{0:s}\simug\_simulib.o", currentPath);
+            string choPath = String.Format(@"{0:s}\simug\simuc.o", currentPath);
+            string libcPath = String.Format(@"{0:s}\simug\simulib.c", currentPath);
+            string libhPath = String.Format(@"{0:s}\simug\simulib.h", currentPath);
+            string chPath = String.Format(@"{0:s}\simug\simuc.h", currentPath);
+            Encode(libcoPath, libcPath);
+            Encode(libhoPath, libhPath);
+            Encode(choPath, chPath);
+        }
 
         /// <summary> LoadDll返回结果：成功</summary>
         public const int LOADDLL_OK = 0x00;

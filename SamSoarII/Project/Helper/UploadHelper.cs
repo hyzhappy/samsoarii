@@ -1,5 +1,6 @@
 ﻿using SamSoarII.AppMain.UI.Monitor;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.Utility;
 using SamSoarII.ValueModel;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ namespace SamSoarII.AppMain.Project
 
         static public void Read(ref ProjectModel pmodel)
         {
-            string currentpath = Environment.CurrentDirectory;
+            string currentpath = FileHelper.AppRootPath;
             string packfile = String.Format(@"{0:s}\downe.rar", currentpath);
             Process cmd = null;
             cmd = new Process();

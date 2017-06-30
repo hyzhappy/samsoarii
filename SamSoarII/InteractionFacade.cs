@@ -26,6 +26,7 @@ using System.ComponentModel;
 using SamSoarII.Communication;
 using SamSoarII.AppMain.Project.Helper;
 using SamSoarII.AppMain.LadderCommand;
+using SamSoarII.Utility;
 
 namespace SamSoarII.AppMain
 {
@@ -582,7 +583,7 @@ namespace SamSoarII.AppMain
                 cmd = new Process();
                 cmd.StartInfo.FileName =
                     String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc",
-                        Environment.CurrentDirectory);
+                        FileHelper.AppRootPath);
                 cmd.StartInfo.Arguments = string.Format("-c {0} -o {1}", cfile, ofile);
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;
@@ -632,7 +633,7 @@ namespace SamSoarII.AppMain
             cmd.StartInfo.FileName =
                 cmd.StartInfo.FileName =
                     String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc",
-                        Environment.CurrentDirectory);
+                        FileHelper.AppRootPath);
             cmd.StartInfo.Arguments = String.Format("-o {0:s}", bfile);
             foreach (string ofile in ofiles)
             {
@@ -1468,7 +1469,7 @@ namespace SamSoarII.AppMain
         public int UploadProject()
         {
             UploadHelper.Read(ref _projectModel);
-            LoadProject(String.Format(@"{0:s}\upload.xml", Environment.CurrentDirectory));
+            LoadProject(String.Format(@"{0:s}\upload.xml", FileHelper.AppRootPath));
             return 0;
         }
         public int SimulateProject()

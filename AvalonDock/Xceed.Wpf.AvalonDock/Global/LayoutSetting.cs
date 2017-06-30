@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -438,12 +440,12 @@ namespace Xceed.Wpf.AvalonDock.Global
                 node_AH.Add(node_KVP);
             }
             xdoc.Add(node_Root);
-            xdoc.Save(@"Resources\LayoutConfig.xml");
+            xdoc.Save(FileHelper.AppRootPath + @"\Resources\LayoutConfig.xml");
         }
 
         static public void Load()
         {
-            XDocument xdoc = XDocument.Load(@"Resources\LayoutConfig.xml");
+            XDocument xdoc = XDocument.Load(FileHelper.AppRootPath + @"\Resources\LayoutConfig.xml");
             XElement node_Root = xdoc.Element("LayoutSetting");
             XElement nodes_ID = node_Root.Element("IsDock");
             XElement nodes_DW = node_Root.Element("DockWidth");

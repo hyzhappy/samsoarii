@@ -77,10 +77,10 @@ namespace SamSoarII.AppMain.UI
         {
             App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
             InitializeComponent();
-            DataContext = this;
-            InitializeAvalonDock();
-            _interactionFacade = new InteractionFacade(this);
             Loaded += MainWindow_Loaded;
+            DataContext = this;
+            _interactionFacade = new InteractionFacade(this);
+            InitializeAvalonDock();
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
@@ -88,18 +88,19 @@ namespace SamSoarII.AppMain.UI
 
         private void FileRegister()
         {
+            FileTypeRegInfo fileTypeRegInfo = new FileTypeRegInfo(string.Format(".{0}", FileHelper.ExtensionName));
+            fileTypeRegInfo.Description = "SamSoarII文件类型";
+            fileTypeRegInfo.ExePath = System.Windows.Forms.Application.ExecutablePath;
+            fileTypeRegInfo.ExtendName = string.Format(".{0}", FileHelper.ExtensionName);
+            fileTypeRegInfo.IconPath = System.Windows.Forms.Application.ExecutablePath;
             if (!FileTypeRegister.FileTypeRegistered(string.Format(".{0}", FileHelper.ExtensionName)))
             {
-                FileTypeRegInfo fileTypeRegInfo = new FileTypeRegInfo(string.Format(".{0}", FileHelper.ExtensionName));
-                fileTypeRegInfo.Description = "SamSoarII文件类型";
-                fileTypeRegInfo.ExePath = Directory.GetCurrentDirectory();
-                fileTypeRegInfo.ExtendName = string.Format(".{0}", FileHelper.ExtensionName);
-                fileTypeRegInfo.IconPath = Directory.GetCurrentDirectory();
-
-                // 注册  
+                // 注册
                 FileTypeRegister fileTypeRegister = new FileTypeRegister();
                 FileTypeRegister.RegisterFileType(fileTypeRegInfo);
             }
+            else
+                FileTypeRegister.UpdateFileTypeRegInfo(fileTypeRegInfo);
         }
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
@@ -117,7 +118,6 @@ namespace SamSoarII.AppMain.UI
         {
             //DockManager.Theme = new VS2010Theme();
             LayoutSetting.Load();
-            
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
@@ -252,6 +252,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            
             if (!GlobalSetting.LoadLadderScaleSuccess())
             {
                 ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(MainTab);

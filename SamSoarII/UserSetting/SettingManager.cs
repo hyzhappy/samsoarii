@@ -1,6 +1,7 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.AppMain.Properties;
 using SamSoarII.HelpDocument.HelpDocComponet;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,7 +16,7 @@ namespace SamSoarII.AppMain.UI
 {
     public static class SettingManager
     {
-        private static string dir = Directory.GetCurrentDirectory() + @"\UserSetting";
+        private static string dir = FileHelper.AppRootPath + @"\UserSetting";
         static SettingManager()
         {
             string path = dir + @"\UserSetting.xml";

@@ -1,4 +1,5 @@
 ﻿using SamSoarII.LadderInstViewModel;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

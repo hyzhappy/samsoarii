@@ -2,6 +2,7 @@
 using SamSoarII.AppMain.UI.OptionWidget.DemoViewModel;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.LadderInstViewModel.Auxiliar;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
