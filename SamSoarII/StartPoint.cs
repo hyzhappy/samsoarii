@@ -27,10 +27,7 @@ namespace SamSoarII.AppMain
             }
             //FilePath为Main程序的数据成员属性
             App.AutoOpenFileFullPath = filePath;
-            App app = new App();
-            App.splashScreen = new SplashScreen(@"Resources\Image\SplashScreen.png");
-            App.splashScreen.Show(false, true);
-            app.Run(new MainWindow());
+            new App().Run();
         }
     }
 }

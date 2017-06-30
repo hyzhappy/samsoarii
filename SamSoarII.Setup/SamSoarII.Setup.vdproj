@@ -106,7 +106,7 @@
         "Entry"
         {
         "MsmKey" = "8:_07922E84543B82A95264BE3CF38D2E16"
-        "OwnerKey" = "8:_9B4C43AB9A9A7F58906141C49B7A91B8"
+        "OwnerKey" = "8:_27A3A51781F54E591C696E644D7EE154"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -143,6 +143,12 @@
         {
         "MsmKey" = "8:_07922E84543B82A95264BE3CF38D2E16"
         "OwnerKey" = "8:_5488182FB412FDCC8EFB41AEFBF89E2B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_07922E84543B82A95264BE3CF38D2E16"
+        "OwnerKey" = "8:_9B4C43AB9A9A7F58906141C49B7A91B8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -322,6 +328,12 @@
         "Entry"
         {
         "MsmKey" = "8:_1AFD792C184E454C98948875DF5F91B5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1B0B8C59879A4CDC8317E2CD242CCE48"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2632,6 +2644,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D0B6D06ECB85493DAFF651C2DE02658E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_B6518A9497AC4209A9C017723EC7C810"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2645,12 +2663,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_01B821C87F104472B311A46DB134768B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D0B6D06ECB85493DAFF651C2DE02658E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2675,12 +2687,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_901B2713E38DF54A69FA2BC431F9800E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_07922E84543B82A95264BE3CF38D2E16"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2729,6 +2735,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_B55B753D499926D70530BD9708BC135A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_07922E84543B82A95264BE3CF38D2E16"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -3762,6 +3774,26 @@
             "TargetName" = "8:nosys.specs"
             "Tag" = "8:"
             "Folder" = "8:_BFAEDD7AD96A45FCABE3BFD97E35FFE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1B0B8C59879A4CDC8317E2CD242CCE48"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Resources\\Image\\ssr.ico"
+            "TargetName" = "8:ssr.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_3A836C3787C34399A78F2251C65E46F3"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11295,6 +11327,29 @@
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_521CA4A5724847799BEB4A9101E58A6E"
+            {
+            "Name" = "8:SamSoarII"
+            "Description" = "8:SamSoarII文件类型"
+            "Extensions" = "8:ssr"
+            "MIME" = "8:"
+            "Icon" = "8:_1B0B8C59879A4CDC8317E2CD242CCE48"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_BE7E5BAF5F4F4E3CACA5E15FFD48AB83"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -11735,6 +11790,17 @@
                     "Property" = "8:_543817F4E6834CDB8BAAA217A05B89E9"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_3A836C3787C34399A78F2251C65E46F3"
+                            {
+                            "Name" = "8:Image"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_16A478F8E184470A81683629A8A94464"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_E2C18B5EC0244CD2919BB0750E7CEFFE"
@@ -11800,7 +11866,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SamSoarII.Setup"
         "ProductCode" = "8:{ABDCB673-14F5-4EFE-AD1B-756772B2A55E}"
-        "PackageCode" = "8:{1684308F-285F-4F53-8DDD-3457E3E9E239}"
+        "PackageCode" = "8:{230D4A7E-6D5B-4285-845E-819A14A05F59}"
         "UpgradeCode" = "8:{A7ED4973-BC60-4163-929E-885AA3DD333F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
