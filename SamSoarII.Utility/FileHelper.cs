@@ -10,7 +10,20 @@ namespace SamSoarII.Utility
 {
     public static class FileHelper
     {
-        public static string ExtensionName = "ssr";
+        public static string ExtensionName
+        {
+            get
+            {
+                return "ssr";
+            }
+        }
+        public static string AppRootPath
+        {
+            get
+            {
+                return Directory.GetParent(System.Windows.Forms.Application.ExecutablePath).FullName;
+            }
+        }
         /// <summary>
         /// Create a file in temporary path with specified postfix
         /// </summary>

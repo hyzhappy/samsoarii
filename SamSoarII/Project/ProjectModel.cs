@@ -22,6 +22,7 @@ using SamSoarII.AppMain.UI.Monitor;
 using SamSoarII.Communication;
 using System.Windows.Media;
 using System.Threading;
+using SamSoarII.Utility;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -178,7 +179,7 @@ namespace SamSoarII.AppMain.Project
             PManager = new SerialPortManager();
             UManager = new USBManager();
             StreamReader sr = new StreamReader(
-                String.Format(@"{0:s}\simug\simuflib.c", Environment.CurrentDirectory));
+                String.Format(@"{0:s}\simug\simuflib.c", FileHelper.AppRootPath));
             FuncBlockViewModel libfuncblock = new FuncBlockViewModel(Properties.Resources.Library_Function, this);
             libfuncblock.Code = sr.ReadToEnd();
             libfuncblock.IsReadOnly = true;

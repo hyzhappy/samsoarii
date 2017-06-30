@@ -37,17 +37,14 @@ namespace SamSoarII.AppMain
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GlobalSetting.LanagArea);
             }
             Exit += App_Exit;
-            this.Startup += App_Startup;
+            //this.Startup += App_Startup;
         }
-        private void App_Startup(object sender, StartupEventArgs e)
-        {
-            splashScreen = new SplashScreen(@"Resources\Image\SplashScreen.png");
-            splashScreen.Show(false, true);
-            MainWindow mainwindow = new MainWindow();
-            MainWindow = mainwindow;
-            mainwindow.Show();
-        }
-
+        //private void App_Startup(object sender, StartupEventArgs e)
+        //{
+        //    MainWindow mainwindow = new MainWindow();
+        //    MainWindow = mainwindow;
+        //    mainwindow.Show();
+        //}
         private void App_Exit(object sender, ExitEventArgs e)
         {
             SettingManager.Save();

@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using SamSoarII.LadderInstViewModel;
 using System.Configuration;
 using System.ComponentModel;
+using SamSoarII.Utility;
 
 namespace SamSoarII.AppMain.UI
 {

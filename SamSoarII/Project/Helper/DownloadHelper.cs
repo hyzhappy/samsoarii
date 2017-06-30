@@ -134,7 +134,7 @@ namespace SamSoarII.AppMain.Project
             ProjectTreeView ptview = pmodel.IFacade.PTView;
             Write(ptview, option);
             // 设置路径
-            string currentpath = Environment.CurrentDirectory;
+            string currentpath = FileHelper.AppRootPath;
             string execfile = String.Format(@"{0:s}\downc.bin", currentpath);
             string datafile = String.Format(@"{0:s}\downe.bin", currentpath);
             string packfile = String.Format(@"{0:s}\downe.rar", currentpath);
