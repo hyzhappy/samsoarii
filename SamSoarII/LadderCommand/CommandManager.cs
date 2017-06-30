@@ -73,11 +73,12 @@ namespace SamSoarII.AppMain.LadderCommand
             if (!AssertEdit(command)) return;
             command.Execute();
             InvokeLDNetworksChangedEvent(command);
-            UndoStack.Push(command);
-            //if (UndoStack.Count() > UNDO_LIMIT)
-            //    UndoStack.RemoveLast();
-            RedoStack.Clear();
             IsModify = true;
+            if (command is ElementReplaceArgumentCommand
+                && !((ElementReplaceArgumentCommand)command).CanUndo)
+                return;
+            UndoStack.Push(command);
+            RedoStack.Clear();
         }
 
         public void Undo()

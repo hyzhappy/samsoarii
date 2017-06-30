@@ -97,19 +97,6 @@ namespace SamSoarII.UserInterface
                 }
             }
         }
-
-        private void OnWindowKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                Ensure(this, new RoutedEventArgs());
-            }
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
-        }
-        
         public RoutedEventHandler Ensure = delegate { };
         private void OnEnsureButtonClick(object sender, RoutedEventArgs e)
         {

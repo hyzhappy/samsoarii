@@ -36,10 +36,10 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Uid="Button_1" x:Name="EnsureButton" Grid.Row="0" Grid.Column="0" Margin="15,4,15,4"
+            <Button x:Name="EnsureButton" Grid.Row="0" Grid.Column="0" Margin="15,4,15,4"
                 Click="OnEnsureButtonClick" Content="{x:Static properties:Resources.Ensure}"/>
 
-            <Button x:Uid="Button_2" x:Name="CancelButton" Grid.Row="0" Grid.Column="1" Margin="15,4,15,4"
+            <Button x:Name="CancelButton" Grid.Row="0" Grid.Column="1" Margin="15,4,15,4"
                 Click="OnCancelButtonClick" Content="{x:Static properties:Resources.Cancel}"/>
 
         </Grid>

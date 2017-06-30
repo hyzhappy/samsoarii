@@ -1150,10 +1150,8 @@ namespace SamSoarII.AppMain
             if (catalogId != 10 && catalogId != 11 && catalogId != 101)
             {
                 CurrentLadder.ReplaceSingleElement(catalogId);
-                if (catalogId != 209 && catalogId != 210)
-                {
+                if (catalogId == 206 || catalogId == 207 || catalogId == 208 || catalogId == 100)
                     SelectionRectRight();
-                }
             }
             else
             {

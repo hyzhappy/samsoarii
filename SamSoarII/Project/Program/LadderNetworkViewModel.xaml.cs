@@ -1610,6 +1610,7 @@ namespace SamSoarII.AppMain.Project
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
             return _ladderVerticalLines.SelectRange(xBegin, xEnd, yBegin, yEnd);
         }
+
         #region ladder Folding module
         private void ReloadElementsToCanvas()
         {

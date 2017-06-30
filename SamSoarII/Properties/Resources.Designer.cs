@@ -3202,7 +3202,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 MessageBox Download Successd 的本地化字符串。
+        ///   查找类似 Download Successd 的本地化字符串。
         /// </summary>
         public static string MessageBox_Download_Successd {
             get {

@@ -17,6 +17,22 @@ namespace SamSoarII.AppMain.LadderCommand
         private IList<string> pstring_old;
         private IList<string> pstring_new;
 
+        public bool CanUndo
+        {
+            get
+            {
+                try
+                {
+                    Undo();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                Redo();
+                return true;
+            }
+        }
         public ElementReplaceArgumentCommand(
             LadderNetworkViewModel _lnvmodel, BaseViewModel _bvmodel, 
             IList<string> _pstring_old, IList<string> _pstring_new)
@@ -56,7 +72,7 @@ namespace SamSoarII.AppMain.LadderCommand
             // 导航到修改参数的元件
             lnvmodel.AcquireSelectRect();
             LadderDiagramViewModel ldvmodel = lnvmodel.LDVModel;
-            ldvmodel.SelectionRect.X = bvmodel.X;
+            ldvmodel.SelectionRect.X = Math.Min(bvmodel.X + 1,GlobalSetting.LadderXCapacity - 1);
             ldvmodel.SelectionRect.Y = bvmodel.Y;
             ldvmodel.ProjectModel.IFacade.NavigateToNetwork(
                 new NavigateToNetworkEventArgs(
