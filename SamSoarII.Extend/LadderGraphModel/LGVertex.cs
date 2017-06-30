@@ -200,56 +200,5 @@ namespace SamSoarII.Extend.LogicGraph
                 this.Expr = "1";
             }
         }
-        public void GetInstPrototype(List<PLCInstruction> insts, ref int instend)
-        {
-            LGEdge lge;
-            if (instend < 0) return;
-            int _instend = instend;
-            while (insts[_instend].Type.Equals("MPS") ||
-                   insts[_instend].Type.Equals("ORB") ||
-                   insts[_instend].Type.Equals("ANDB"))
-            {
-                _instend--;
-                if (_instend < 0) return;
-            }
-            if (IsTerminate)
-            {
-                lge = BackEdges[0];
-                if (insts[_instend].IsPrototype(lge.PLCInfo.Prototype))
-                {
-                    insts[_instend--].ProtoType = lge.PLCInfo.Prototype;
-                }
-                else
-                {
-                    return;
-                }
-                lge.Source.GetInstPrototype(insts, ref _instend);
-            }
-            else
-            {
-                for (int i = BackEdges.Count() - 1; i >= 0; i--)
-                {
-                    if (_instend < 0) return;
-                    while (insts[_instend].Type.Equals("MPS") ||
-                           insts[_instend].Type.Equals("ORB") ||
-                           insts[_instend].Type.Equals("ANDB"))
-                    {
-                        _instend--;
-                        if (_instend < 0) return;
-                    }
-                    lge = BackEdges[i];
-                    if (insts[_instend].IsPrototype(lge.PLCInfo.Prototype))
-                    {
-                        insts[_instend--].ProtoType = lge.PLCInfo.Prototype;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    lge.Source.GetInstPrototype(insts, ref _instend);
-                }
-            }
-            instend = _instend;
-        }
     }
 }

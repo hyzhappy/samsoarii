@@ -533,8 +533,6 @@ namespace SamSoarII.AppMain.UI
 
         #endregion
         
-        
-
         public int CompareTo(ProjectTreeViewItem that)
         {
             int rank1 = 0;

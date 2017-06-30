@@ -194,6 +194,7 @@ namespace SamSoarII.Extend.LogicGraph
             if (solveCount < vertexs.Count)
                 return true;
             // 还存在一种短路情况，分支后面出现线路指令（INV,MEP,MEF）时
+            /*
             foreach (LGVertex lgv in vertexs)
             {
                 if (lgv.Edges.Count() > 1)
@@ -208,6 +209,7 @@ namespace SamSoarII.Extend.LogicGraph
                     }
                 }
             }
+            */
             return false;
         }
         /// <summary>
