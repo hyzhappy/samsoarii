@@ -252,7 +252,6 @@ namespace SamSoarII.AppMain.UI
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
             if (!GlobalSetting.LoadLadderScaleSuccess())
             {
                 ILayoutPositionableElementWithActualSize _maintab = (ILayoutPositionableElementWithActualSize)(MainTab);
@@ -265,7 +264,6 @@ namespace SamSoarII.AppMain.UI
             worker.RunWorkerAsync();
             LACProj.Show();
             LAProj.Hide();
-            //FileRegister();
             if (App.AutoOpenFileFullPath != string.Empty) OpenProject(App.AutoOpenFileFullPath);
             Loaded -= MainWindow_Loaded;
         }
@@ -1436,7 +1434,7 @@ namespace SamSoarII.AppMain.UI
         {
             //XmlGen.GenUpdateXML(Directory.GetCurrentDirectory());
             Process process = new Process();
-            process.StartInfo.FileName = Directory.GetCurrentDirectory() + @"\Update\SamSoarII.Update.exe";
+            process.StartInfo.FileName = FileHelper.AppRootPath + @"\Update\SamSoarII.Update.exe";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.Start();

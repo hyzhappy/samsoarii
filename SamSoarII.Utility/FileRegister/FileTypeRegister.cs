@@ -29,7 +29,7 @@ namespace SamSoarII.Utility.FileRegister
             RegistryKey relationKey = Registry.ClassesRoot.CreateSubKey(relationName);
             relationKey.SetValue("", regInfo.Description);
 
-            //HKEY_CLASSES_ROOT/SSR_FileType/Shell/DefaultIcon
+            //HKEY_CLASSES_ROOT/SSR_FileType/DefaultIcon
             RegistryKey iconKey = relationKey.CreateSubKey("DefaultIcon");
             iconKey.SetValue("", regInfo.IconPath);
 
@@ -103,10 +103,7 @@ namespace SamSoarII.Utility.FileRegister
         /// <returns></returns>
         public static bool FileTypeRegistered(string extendName)
         {
-            RegistryKey softwareKey = Registry.ClassesRoot.OpenSubKey(extendName);
-            if (softwareKey != null)
-                return true;
-            return false;
+            return Registry.ClassesRoot.OpenSubKey(extendName) != null;
         }
     }
 }
