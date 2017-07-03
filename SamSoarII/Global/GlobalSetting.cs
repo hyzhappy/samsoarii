@@ -111,7 +111,7 @@ namespace SamSoarII.AppMain
         public static int SaveTimeSpan { get; set; }
         public static bool IsInstByTime { get; set; }
         public static int InstTimeSpan { get; set; }
-        public static bool IsCheckOutput { get; set; }
+        public static bool IsCheckCoil { get; set; }
         public static bool IsOpenLSetting { get; set; }
         public static string LanagArea { get; set; }
         public static XElement CreateXELementBySetting()
@@ -132,7 +132,7 @@ namespace SamSoarII.AppMain
             rootNode.Add(new XElement("IsInstByTime", IsInstByTime));
             rootNode.Add(new XElement("InstTimeSpan", InstTimeSpan));
             rootNode.Add(new XElement("IsOpenLSetting", IsOpenLSetting));
-            rootNode.Add(new XElement("IsCheckOutput", IsCheckOutput));
+            rootNode.Add(new XElement("IsCheckCoil", IsCheckCoil));
             rootNode.Add(new XElement("LanagArea", LanagArea));
             XElement xele_font = new XElement("Font");
             rootNode.Add(xele_font);
@@ -274,11 +274,11 @@ namespace SamSoarII.AppMain
             }
             try
             {
-                IsCheckOutput = bool.Parse(rootNode.Element("IsCheckOutput").Value);
+                IsCheckCoil = bool.Parse(rootNode.Element("IsCheckOutput").Value);
             }
             catch (Exception)
             {
-                IsCheckOutput = false;
+                IsCheckCoil = false;
             }
         }
         private static void SaveColor()

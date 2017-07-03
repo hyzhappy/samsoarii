@@ -30,6 +30,7 @@ namespace SamSoarII.AppMain.UI
             TB_Inst.GetTextBox().Text = GlobalSetting.InstTimeSpan.ToString();
             checkbox.IsChecked = GlobalSetting.IsSavedByTime;
             CB_Inst.IsChecked = GlobalSetting.IsInstByTime;
+            CB_Coil.IsChecked = GlobalSetting.IsCheckCoil;
             OptionDialog.EnsureButtonClick += OptionDialog_EnsureButtonClick;
         }
         private void OptionDialog_EnsureButtonClick(object sender, RoutedEventArgs e)
@@ -38,6 +39,7 @@ namespace SamSoarII.AppMain.UI
             GlobalSetting.InstTimeSpan = int.Parse(TB_Inst.GetTextBox().Text);
             GlobalSetting.IsSavedByTime = (bool)checkbox.IsChecked;
             GlobalSetting.IsInstByTime = (bool)CB_Inst.IsChecked;
+            GlobalSetting.IsCheckCoil = (bool)CB_Coil.IsChecked;
             if (_interactionFacade.ProjectLoaded && GlobalSetting.IsSavedByTime)
             {
                 _interactionFacade.ProjectModel.autoSavedManager.Start();

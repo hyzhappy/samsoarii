@@ -295,6 +295,7 @@ namespace SamSoarII.AppMain.Project
                             break;
                         case "OUT":
                         case "OUTIM":
+                            if (!GlobalSetting.IsCheckCoil) break;
                             match = Regex.Match(inst[1], @"^([YMSTC])([0-9]+)$");
                             if (!match.Success)
                             {
