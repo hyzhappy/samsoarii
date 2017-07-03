@@ -1434,6 +1434,7 @@ namespace SamSoarII.AppMain.UI
         {
             //XmlGen.GenUpdateXML(Directory.GetCurrentDirectory());
             Process process = new Process();
+            process.StartInfo.Verb = "runas";
             process.StartInfo.FileName = FileHelper.AppRootPath + @"\Update\SamSoarII.Update.exe";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;

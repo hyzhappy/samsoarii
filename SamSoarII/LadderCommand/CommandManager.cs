@@ -32,7 +32,12 @@ namespace SamSoarII.AppMain.LadderCommand
             set
             {
                 ismodify = value;
-                if (value == true && LDVModel != null)
+                if(!value)
+                {
+                    UndoStack.Clear();
+                    RedoStack.Clear();
+                }
+                else if(value && LDVModel != null)
                     LDVModel.ProjectModel.OnPropertyChanged("Ladder");
             }
         }

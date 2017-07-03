@@ -59,7 +59,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
                     LadderGraphRelocationModule.Execute(network);
                 }
             }
-            ladderDiagram.IsModify = false;
+            //ladderDiagram.IsModify = false;
             if (!CheckProgramControlInstructions(ladderDiagram))
                 error = ErrorType.InstPair;
             InstructionCommentManager.RaiseMappedMessageChangedEvent();

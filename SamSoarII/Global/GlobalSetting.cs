@@ -206,7 +206,7 @@ namespace SamSoarII.AppMain
                 FontManager.GetTitle().FontSize = 32;
                 FontManager.GetTitle().FontFamily = new FontFamily("微软雅黑");
                 FontManager.GetTitle().FontColor = ColorManager.Parse("255 0 0 0");
-                FontManager.GetLadder().FontSize = 24;
+                FontManager.GetLadder().FontSize = 35;
                 FontManager.GetLadder().FontFamily = new FontFamily("Courier New");
                 FontManager.GetLadder().FontColor = ColorManager.Parse("255 0 0 0");
                 FontManager.GetComment().FontSize = 16;

@@ -12,7 +12,7 @@ namespace SamSoarII.Utility
 {
     public class StringHelper
     {
-        public static readonly int MaxCapacity = 28;
+        public static readonly int MaxCapacity = 35;
         public static int Compare(string str,int index)
         {
             int temp = 0;

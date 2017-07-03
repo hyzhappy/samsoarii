@@ -4309,6 +4309,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 *Second 的本地化字符串。
+        /// </summary>
+        public static string Second {
+            get {
+                return ResourceManager.GetString("Second", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Select Element Range 的本地化字符串。
         /// </summary>
         public static string Select_Element_Range {
@@ -4539,6 +4548,24 @@ namespace SamSoarII.AppMain.Properties {
         public static string Timed_Save_Settings {
             get {
                 return ResourceManager.GetString("Timed_Save_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Timed update 的本地化字符串。
+        /// </summary>
+        public static string Timed_Update {
+            get {
+                return ResourceManager.GetString("Timed_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Regularly updated PLC commands setting 的本地化字符串。
+        /// </summary>
+        public static string Timed_Update_PLC {
+            get {
+                return ResourceManager.GetString("Timed_Update_PLC", resourceCulture);
             }
         }
         

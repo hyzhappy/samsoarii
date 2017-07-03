@@ -142,7 +142,7 @@
         </Style>
     </Window.Resources>
     <DockPanel x:Name="MainDockPanel">
-        <Menu DockPanel.Dock="Top" Height="22" FontSize="13" Padding="5,6,0,0" FontFamily="微软雅黑" Background="Gainsboro">
+        <Menu DockPanel.Dock="Top" Height="24" FontSize="13" Padding="5,6,0,0" FontFamily="微软雅黑" Background="Gainsboro">
             <MenuItem Header="{x:Static properties:Resources.MainWindow_File}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_New_Proj}" Command="ApplicationCommands.New">
                     <MenuItem.Icon>

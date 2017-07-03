@@ -11,6 +11,7 @@ namespace SamSoarII.AppMain.LadderCommand
 {
     public class NetworkRemoveRowsCommand : IUndoableCommand
     {
+        private bool _isEndRow;
         private LadderNetworkViewModel _network;
         private int _startRow;
         private int _count;
@@ -32,11 +33,13 @@ namespace SamSoarII.AppMain.LadderCommand
             _oldarea.X2 = 11;
             _oldarea.Y1 = startRow;
             _oldarea.Y2 = startRow + count - 1;
+            _isEndRow = _network.RowCount - 1 == _oldarea.Y2;
         }
         public void Execute()
         {
             _removedElements = new HashSet<BaseViewModel>(_network.GetElements().Where(e => { return (e.Y >= _startRow) && (e.Y <= _startRow + _count - 1); }));
             _removedVerticalLines = new HashSet<VerticalLineViewModel>(_network.GetVerticalLines().Where(e => { return (e.Y >= _startRow) && (e.Y <= _startRow + _count - 1); }));
+            if (_isEndRow) _removedVerticalLines.UnionWith(_network.GetVerticalLines().Where(e => { return e.Y == _startRow - 1; }));
             Redo();
         }
 
@@ -60,7 +63,8 @@ namespace SamSoarII.AppMain.LadderCommand
             }
             InstructionCommentManager.RaiseMappedMessageChangedEvent();
             _oldRowCount = _network.RowCount;
-            _network.RowCount -= _count;
+            if (_count == _network.RowCount) _network.RowCount = 1;
+            else _network.RowCount -= _count;
             _network.AcquireSelectRect();
             LadderDiagramViewModel ldvmodel = _network.LDVModel;
             ldvmodel.SelectionRect.X = 0;

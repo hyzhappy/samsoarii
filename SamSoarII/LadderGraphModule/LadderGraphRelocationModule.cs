@@ -28,7 +28,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         /// <summary>
         /// describe:网络横向扫描
         /// </summary>
-        /// <param name="ladderLogicModule"></param>
+        /// <param name="ladderLogicModule">代表扫描的最小单元</param>
         private static void HorizontalScan(LadderLogicModule ladderLogicModule)
         {
             InitializeCountLevel(ladderLogicModule);
@@ -51,7 +51,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
         /// <summary>
         /// describe:网络纵向扫描
         /// </summary>
-        /// <param name="ladderLogicModule"></param>
+        /// <param name="ladderLogicModule">代表扫描的最小单元</param>
         private static void VerticalScan(LadderLogicModule ladderLogicModule)
         {
             PreScan(ladderLogicModule);

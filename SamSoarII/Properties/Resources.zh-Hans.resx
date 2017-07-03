@@ -1743,4 +1743,13 @@
   <data name="Message_LBL_Warning" xml:space="preserve">
     <value>警告</value>
   </data>
+  <data name="Timed_Update_PLC" xml:space="preserve">
+    <value>定时更新PLC指令设置</value>
+  </data>
+  <data name="Timed_Update" xml:space="preserve">
+    <value>定时更新</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>*秒</value>
+  </data>
 </root>

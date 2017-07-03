@@ -1743,4 +1743,13 @@
   <data name="Message_LBL_Warning" xml:space="preserve">
     <value>Warning!</value>
   </data>
+  <data name="Timed_Update_PLC" xml:space="preserve">
+    <value>Regularly updated PLC commands setting</value>
+  </data>
+  <data name="Timed_Update" xml:space="preserve">
+    <value>Timed update</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>*Second</value>
+  </data>
 </root>

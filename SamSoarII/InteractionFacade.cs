@@ -1185,21 +1185,6 @@ namespace SamSoarII.AppMain
                 }
             }
         }
-        public void RemoveNetworkHLines(LadderNetworkViewModel network)
-        {
-            foreach (var hline in network.GetSelectedHLines())
-            {
-                network.RemoveElement(hline.IntPos);
-            }
-        }
-        public void RemoveNetworkVLines(LadderNetworkViewModel network)
-        {
-            foreach (var vline in network.GetSelectedVerticalLines())
-            {
-                network.RemoveVerticalLine(vline.IntPos);
-            }
-        }
-
         #endregion
 
         #region Navigate

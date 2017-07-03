@@ -13,10 +13,10 @@
             <RowDefinition x:Uid="RowDefinition_2"></RowDefinition>
         </Grid.RowDefinitions>
         <local:BaseSetting x:Uid="baseSetting" x:Name="baseSetting"></local:BaseSetting>
-        <StackPanel x:Uid="StackPanel_1" Grid.Row="2" Orientation="Horizontal">
-            <Button x:Uid="CommunicationTestButton" x:Name="CommunicationTestButton" Width="auto" MinWidth="60" Height="20" Margin="5,0,0,0" Content="{x:Static properties:Resources.Communication_Test}"/>
-            <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="50" Height="20" Margin="200,0,0,0" Content="{x:Static properties:Resources.Ensure}"/>
-            <Button x:Uid="CancelButton" x:Name="CancelButton" Width="50" Height="20" Margin="10,0,0,0" Content="{x:Static properties:Resources.Cancel}"/>
-        </StackPanel>
+        <Canvas Grid.Row="2">
+            <Button x:Name="CommunicationTestButton" Width="auto" Canvas.Left="20" MinWidth="60" Height="20" Margin="0,15,0,0" Content="{x:Static properties:Resources.Communication_Test}"/>
+            <Button x:Name="EnsureButton" Width="50" Height="20" Canvas.Right="80" Margin="0,15,0,0" Content="{x:Static properties:Resources.Ensure}"/>
+            <Button x:Name="CancelButton" Width="50" Height="20" Canvas.Right="20" Margin="0,15,0,0" Content="{x:Static properties:Resources.Cancel}"/>
+        </Canvas>
     </Grid>
 </Window>
