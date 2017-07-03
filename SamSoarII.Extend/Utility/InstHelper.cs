@@ -391,9 +391,9 @@ namespace SamSoarII.Extend.Utility
                 case "LDWL":case "LDDL": case "LDFL":
                     sw.Write("_stack_{0:d} = ({1:s}<{2:s});\n", ++stackTop, inst[1], inst[2]); break;
                 case "AWL":case "ADL":  case "AFL":
-                    sw.Write("_stack_{0:d} &= ({0:s}<{1:s});\n",  stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} &= ({1:s}<{2:s});\n",  stackTop, inst[1], inst[2]); break;
                 case "ORWL": case "ORDL": case "ORFL":
-                    sw.Write("_stack_{0:d} |= ({0:s}<{1:s});\n",  stackTop, inst[1], inst[2]); break;
+                    sw.Write("_stack_{0:d} |= ({1:s}<{2:s});\n",  stackTop, inst[1], inst[2]); break;
                 // 输出线圈
                 /*
                  * 将当前栈顶的值赋值给线圈

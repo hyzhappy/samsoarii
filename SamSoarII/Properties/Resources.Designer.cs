@@ -250,6 +250,24 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Is checking multiple coil output 的本地化字符串。
+        /// </summary>
+        public static string Check_Coil_Output {
+            get {
+                return ResourceManager.GetString("Check_Coil_Output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Checking Setting 的本地化字符串。
+        /// </summary>
+        public static string Check_Setting_Header {
+            get {
+                return ResourceManager.GetString("Check_Setting_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Clear Selected 的本地化字符串。
         /// </summary>
         public static string Clear_Selected {
