@@ -353,6 +353,11 @@ namespace SamSoarII.AppMain
                 SetMessage(Properties.Resources.Project_Config_Changed);
                 return;
             }
+            if (e.PropertyName == "ProjectModel")
+            {
+                SetMessage(Properties.Resources.Project_Changed);
+                return;
+            }
         }
         #endregion
         
@@ -519,7 +524,7 @@ namespace SamSoarII.AppMain
                     StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Error);
             }
             handle.Abort();
-            MessageBox.Show(message);
+            LocalizedMessageBox.Show(message,LocalizedMessageIcon.Information);
         }
         private void CheckLadderCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -760,6 +765,7 @@ namespace SamSoarII.AppMain
             }
             _mainWindow.LACProj.Show();
             PTVEvent(this, e);
+            _projectModel.IsModify = true;
         }
         public void RemoveRoutine
         (
@@ -782,6 +788,7 @@ namespace SamSoarII.AppMain
             }
             _mainTabControl.CloseItem(ldvmodel);
             PTVEvent(this, e);
+            _projectModel.IsModify = true;
         }
         public void ReplaceRoutine
         (
@@ -1427,12 +1434,12 @@ namespace SamSoarII.AppMain
                             if (!ret)
                             {
                                 StatusBarHepler.UpdateMessageAsync(Properties.Resources.Download_Fail);
-                                MessageBox.Show(Properties.Resources.Download_Fail);
+                                LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Information);
                             }
                             else
                             {
                                 StatusBarHepler.UpdateMessageAsync(Properties.Resources.MessageBox_Download_Successd);
-                                MessageBox.Show(Properties.Resources.MessageBox_Download_Successd);
+                                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Download_Successd, LocalizedMessageIcon.Information);
                             }
                         });
                         while (!handle.Completed)
@@ -1442,7 +1449,7 @@ namespace SamSoarII.AppMain
                     }
                     else
                     {
-                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                     }
                 };
                 dialog.ShowDialog();
@@ -1523,9 +1530,9 @@ namespace SamSoarII.AppMain
         }
 
         #endregion
-        
+
         #region Event handler
-        
+
         private void OnTabOpened(object sender, ShowTabItemEventArgs e)
         {
             switch (e.Type)

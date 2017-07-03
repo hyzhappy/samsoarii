@@ -1194,7 +1194,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch (ValueParseException ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        LocalizedMessageBox.Show(ex.Message,LocalizedMessageIcon.Error);
                     }
                 };
             }
@@ -1245,7 +1245,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     catch (ValueParseException ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        LocalizedMessageBox.Show(ex.Message,LocalizedMessageIcon.Error);
                     }
                 };
             }
@@ -1404,7 +1404,7 @@ namespace SamSoarII.AppMain.Project
                     FuncModel fmodel = (FuncModel)(ptvitem.RelativeObject);
                     if (!fmodel.CanCALLM())
                     {
-                        MessageBox.Show(String.Format("{0:s}{1}", fmodel.Name,Properties.Resources.Message_Can_Not_CALL));
+                        LocalizedMessageBox.Show(String.Format("{0:s}{1}", fmodel.Name,Properties.Resources.Message_Can_Not_CALL),LocalizedMessageIcon.Error);
                         return;
                     }
                     CALLMViewModel vmodel = new CALLMViewModel();
@@ -1471,7 +1471,7 @@ namespace SamSoarII.AppMain.Project
                     ModbusTableModel mtmodel = (ModbusTableModel)(ptvitem.RelativeObject);
                     if (!mtmodel.IsVaild)
                     {
-                        MessageBox.Show(Properties.Resources.Message_Modbus_Table_Error);
+                        LocalizedMessageBox.Show(Properties.Resources.Message_Modbus_Table_Error,LocalizedMessageIcon.Error);
                         return;
                     }
                     MBUSViewModel vmodel = new MBUSViewModel();

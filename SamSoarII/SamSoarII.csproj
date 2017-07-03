@@ -789,6 +789,9 @@
     <Content Include="Communication\Util\usbdll\libusb.h" />
     <Content Include="Communication\Util\usbdll\usbdll.c" />
     <Content Include="Communication\Util\usbdll\usbdll.h" />
+    <Resource Include="Resources\Image\Error.png" />
+    <Resource Include="Resources\Image\Information.png" />
+    <Resource Include="Resources\Image\Question.png" />
     <Resource Include="Resources\Image\Collapsed.png" />
     <Resource Include="Resources\Image\Expand.png" />
     <SplashScreen Include="Resources\Image\SplashScreen.png" />

@@ -64,6 +64,10 @@ namespace SamSoarII.AppMain.Project
                     funcblock.IsModify = value;
                 }
                 ProjectPropertyManager.IsModify = value;
+                if (value)
+                {
+                    OnPropertyChanged("ProjectModel");
+                }
             }
         }
 
@@ -311,7 +315,7 @@ namespace SamSoarII.AppMain.Project
             MTVModel = mtmodel;
             return true;
         }
-       
+        
         public LadderNetworkViewModel GetNetwork(BaseViewModel bvmodel)
         {
             if (LadderMode != LadderMode.Simulate)

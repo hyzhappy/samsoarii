@@ -193,7 +193,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 if (textbox.Text.Equals(table.TableName,StringComparison.CurrentCultureIgnoreCase))
                 {
                     textbox.Text = oldTableName;
-                    MessageBox.Show(Properties.Resources.Message_Table_Name_Exist);
+                    LocalizedMessageBox.Show(Properties.Resources.Message_Table_Name_Exist,LocalizedMessageIcon.Warning);
                     return;
                 }
             }
@@ -280,8 +280,8 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 dialog.EnsureButtonClick += (sender1, e1) => 
                 {
-                    MessageBoxResult result = MessageBox.Show(Properties.Resources.Message_Tooltip, string.Empty,MessageBoxButton.YesNo);
-                    if (result == MessageBoxResult.Yes)
+                    LocalizedMessageResult result = LocalizedMessageBox.Show(Properties.Resources.Message_Tooltip, string.Empty, LocalizedMessageButton.YesNo);
+                    if (result == LocalizedMessageResult.Yes)
                     {
                         tables.Clear();
                         if (!(bool)dialog.checkbox.IsChecked)
@@ -302,7 +302,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                                     int endIndex = int.Parse(dialog.textbox2.Text);
                                     if (startIndex > endIndex)
                                     {
-                                        MessageBox.Show(string.Format(Properties.Resources.Message_Network_Range_Error));
+                                        LocalizedMessageBox.Show(string.Format(Properties.Resources.Message_Network_Range_Error),LocalizedMessageIcon.Error);
                                         return;
                                     }
                                     else

@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Controls;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -522,7 +523,7 @@ namespace SamSoarII.AppMain.Project
             string comment = dialog.TB_Comment.Text;
             if (name.Equals(String.Empty))
             {
-                MessageBox.Show(Properties.Resources.Message_Name_Needed);
+                LocalizedMessageBox.Show(Properties.Resources.Message_Name_Needed,LocalizedMessageIcon.Information);
                 return;
             }
             IEnumerable<ModbusTableModel> fit = models.Where(
@@ -532,7 +533,7 @@ namespace SamSoarII.AppMain.Project
                 case DIALOG_CREATE:
                     if (fit.Count() > 0)
                     {
-                        MessageBox.Show(Properties.Resources.Message_Table_Exist);
+                        LocalizedMessageBox.Show(Properties.Resources.Message_Table_Exist, LocalizedMessageIcon.Warning);
                     }
                     else
                     {
@@ -546,7 +547,7 @@ namespace SamSoarII.AppMain.Project
                 case DIALOG_RENAME:
                     if (fit.Count() > 0 && fit.First() != Current)
                     {
-                        MessageBox.Show(Properties.Resources.Message_Table_Exist);
+                        LocalizedMessageBox.Show(Properties.Resources.Message_Table_Exist, LocalizedMessageIcon.Warning);
                     }
                     else
                     {
@@ -626,6 +627,7 @@ namespace SamSoarII.AppMain.Project
         private void OnModelChanged(object sender, RoutedEventArgs e)
         {
             UpdateList();
+            parent.IsModify = true;
         }
 
         #endregion

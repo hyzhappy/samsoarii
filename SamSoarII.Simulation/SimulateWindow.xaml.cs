@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Configuration;
 using SamSoarII.Simulation.Shell.Event;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.Simulation
 {
@@ -39,7 +40,7 @@ namespace SamSoarII.Simulation
             {
                 if (MTable.Save(saveFileDialog.FileName) != 0)
                 {
-                    MessageBox.Show("无法保存监视文件!");
+                    LocalizedMessageBox.Show("无法保存监视文件!",LocalizedMessageIcon.Information);
                 }
             }
         }
@@ -52,7 +53,7 @@ namespace SamSoarII.Simulation
             {
                 if (MTable.Load(openFileDialog.FileName) != 0)
                 {
-                    MessageBox.Show("不正确的监视文件，监视文件已损坏!");
+                    LocalizedMessageBox.Show("不正确的监视文件，监视文件已损坏!", LocalizedMessageIcon.Information);
                 }
             }
         }

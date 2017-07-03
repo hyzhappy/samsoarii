@@ -144,6 +144,9 @@
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LocalizedMessageBox.xaml.cs">
+      <DependentUpon>LocalizedMessageBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NetworkCommentEditDialog.xaml.cs">
       <DependentUpon>NetworkCommentEditDialog.xaml</DependentUpon>
     </Compile>
@@ -258,6 +261,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LocalizedMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

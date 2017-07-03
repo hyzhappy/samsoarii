@@ -1,6 +1,7 @@
 ﻿using SamSoarII.AppMain.Project;
 using SamSoarII.Extend.FuncBlockModel;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.UserInterface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -594,7 +595,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (errormsg == null && HasRenaming)
             {
-                MessageBox.Show(Properties.Resources.Message_Renamed_Error);
+                LocalizedMessageBox.Show(Properties.Resources.Message_Renamed_Error, LocalizedMessageIcon.Error);
                 return;
             }
             _contextmenu = this.ContextMenu;

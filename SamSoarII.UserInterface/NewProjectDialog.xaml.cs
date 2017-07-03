@@ -1,4 +1,5 @@
 ﻿using SamSoarII.PLCDevice;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -106,17 +107,18 @@ namespace SamSoarII.UserInterface
 
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsSettingChecked && File.Exists(PathContent + @"\" + NameContent + ".ssp"))
+            if (IsSettingChecked && File.Exists(PathContent + @"\" + NameContent + "." + FileHelper.ExtensionName))
             {
                 string title = Properties.Resources.Message_Is_Override;
                 string text = String.Format("{2:s} {1},{0}?",Properties.Resources.Message_Is_Override, Properties.Resources.Message_Already_Exist, NameContent);
-                MessageBoxResult mbret = MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                LocalizedMessageResult mbret = LocalizedMessageBox.Show(text, title, LocalizedMessageButton.YesNoCancel, LocalizedMessageIcon.Warning);
                 switch (mbret)
                 {
-                    case MessageBoxResult.Yes:
+                    case LocalizedMessageResult.Yes:
                         break;
-                    case MessageBoxResult.No:
-                    case MessageBoxResult.Cancel:
+                    case LocalizedMessageResult.No:
+                    case LocalizedMessageResult.Cancel:
+                    default:
                         return;
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using SamSoarII.PLCDevice;
+using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -79,17 +80,17 @@ namespace SamSoarII.AppMain.UI.Monitor
             Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (Type == ElementAddressType.H || Type == ElementAddressType.K)
             {
-                MessageBox.Show(Properties.Resources.Constant_Monitor);
+                LocalizedMessageBox.Show(Properties.Resources.Constant_Monitor,LocalizedMessageIcon.Warning);
             }
             else if (ElementAddressHelper.AssertAddrRange(Type, uint.Parse(textBox.Text), device))
             {
                 if ((bool)checkbox1.IsChecked && !ElementAddressHelper.AssertAddrRange(ElementAddressHelper.GetIntrasegmentAddrType(comboBox1.SelectedIndex), uint.Parse(textBox1.Text), device))
                 {
-                    MessageBox.Show(Properties.Resources.Intra_Cross);
+                    LocalizedMessageBox.Show(Properties.Resources.Intra_Cross, LocalizedMessageIcon.Warning);
                 }
                 else if ((bool)checkbox.IsChecked && !ElementAddressHelper.AssertAddrRange(Type, uint.Parse(textBox.Text) + uint.Parse(rangeTextBox.GetTextBox().Text) - 1, device))
                 {
-                    MessageBox.Show(Properties.Resources.Exceed_Adddress);
+                    LocalizedMessageBox.Show(Properties.Resources.Exceed_Adddress, LocalizedMessageIcon.Warning);
                 }
                 else
                 {
@@ -124,7 +125,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             else
             {
-                MessageBox.Show(Properties.Resources.Address_Cross);
+                LocalizedMessageBox.Show(Properties.Resources.Address_Cross, LocalizedMessageIcon.Warning);
             }
         }
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)

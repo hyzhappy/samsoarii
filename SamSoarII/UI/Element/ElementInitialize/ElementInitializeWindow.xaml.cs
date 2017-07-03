@@ -1,4 +1,5 @@
 ﻿using SamSoarII.PLCDevice;
+using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -54,11 +55,11 @@ namespace SamSoarII.AppMain.UI
             Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (EleTypeCombox.SelectedIndex == 0 || EleTypeCombox.SelectedIndex == 1 || EleTypeCombox.SelectedIndex == 13 || EleTypeCombox.SelectedIndex == 14)
             {
-                MessageBox.Show(Properties.Resources.Message_Can_Not_Be_Written);
+                LocalizedMessageBox.Show(Properties.Resources.Message_Can_Not_Be_Written,LocalizedMessageIcon.Error);
             }
             else if(!ElementAddressHelper.AssertAddrRange(Type,uint.Parse(textBox.Text) + uint.Parse(LengthTextbox.Text), device))
             {
-                MessageBox.Show(Properties.Resources.Message_Over_Max_Len);
+                LocalizedMessageBox.Show(Properties.Resources.Message_Over_Max_Len,LocalizedMessageIcon.Error);
             }
             else
             {
@@ -174,7 +175,7 @@ namespace SamSoarII.AppMain.UI
                     if (model.ShowValue.Trim().ToUpper() != "ON" && model.ShowValue.Trim().ToUpper() != "OFF")
                     {
                         e.Cancel = true;
-                        MessageBox.Show(Properties.Resources.Invalid_Input);
+                        LocalizedMessageBox.Show(Properties.Resources.Invalid_Input,LocalizedMessageIcon.Error);
                     }
                     else
                     {
@@ -198,7 +199,7 @@ namespace SamSoarII.AppMain.UI
                     catch (Exception ex)
                     {
                         e.Cancel = true;
-                        MessageBox.Show(Properties.Resources.Invalid_Input);
+                        LocalizedMessageBox.Show(Properties.Resources.Invalid_Input,LocalizedMessageIcon.Error);
                     }
                 }
             }
@@ -216,7 +217,7 @@ namespace SamSoarII.AppMain.UI
                     catch (Exception ex)
                     {
                         e.Cancel = true;
-                        MessageBox.Show(Properties.Resources.Message_Converter_Error);
+                        LocalizedMessageBox.Show(Properties.Resources.Message_Converter_Error,LocalizedMessageIcon.Error);
                     }
                 }
             }

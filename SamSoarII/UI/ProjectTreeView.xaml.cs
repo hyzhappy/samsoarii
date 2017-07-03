@@ -535,9 +535,9 @@ namespace SamSoarII.AppMain.UI
                         ptvitem.Rename();
                         break;
                     case ProjectTreeViewItem.FLAG_REMOVE:
-                        MessageBoxResult result = MessageBox.Show(
-                            Properties.Resources.Message_Delete, Properties.Resources.Important, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                        if (result == MessageBoxResult.Yes)
+                        LocalizedMessageResult result = LocalizedMessageBox.Show(
+                            Properties.Resources.Message_Delete, Properties.Resources.Important, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Warning);
+                        if (result == LocalizedMessageResult.Yes)
                             RemoveAll(ptvitem);
                         break;
                     case ProjectTreeViewItem.FLAG_CREATEFOLDER:
@@ -689,7 +689,7 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewEventArgs.FLAG_CREATEAFTER:
                     if (ProjectTreeViewItem.HasRenaming)
                     {
-                        MessageBox.Show("存在正在被命名的项目，不能进行添加操作！");
+                        LocalizedMessageBox.Show("存在正在被命名的项目，不能进行添加操作！", LocalizedMessageIcon.Warning);
                         return;
                     }
                     break;

@@ -1752,4 +1752,10 @@
   <data name="Second" xml:space="preserve">
     <value>*Second</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Project_Changed" xml:space="preserve">
+    <value>Project changed</value>
+  </data>
 </root>

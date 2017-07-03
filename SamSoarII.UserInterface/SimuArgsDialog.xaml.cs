@@ -195,7 +195,7 @@ namespace SamSoarII.UserInterface
                 case "DWORD": msg2 = string.Format("{0}(-(2^63)~(2^63)-1)。", Properties.Resources.Valid_Range); break;
                 default: break;
             }
-            MessageBox.Show(msg1 + msg2);
+            LocalizedMessageBox.Show(msg1 + msg2,LocalizedMessageIcon.Warning);
         }
 
         public event SimuArgsDialogValuesHandler EnsureClick = delegate { };

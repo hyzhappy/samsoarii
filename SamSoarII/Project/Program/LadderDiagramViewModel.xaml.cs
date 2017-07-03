@@ -1705,11 +1705,11 @@ namespace SamSoarII.AppMain.Project
                 }
                 catch (ValueParseException exce2)
                 {
-                    MessageBox.Show(string.Format(exce2.Message));
+                    LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
                 }
                 catch (InstructionExecption exce3)
                 {
-                    MessageBox.Show(string.Format(exce3.Message));
+                    LocalizedMessageBox.Show(string.Format(exce3.Message), LocalizedMessageIcon.Error);
                 }
             };
             dialog.ShowDialog();

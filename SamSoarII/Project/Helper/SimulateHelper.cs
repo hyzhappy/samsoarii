@@ -33,6 +33,7 @@ using SamSoarII.ValueModel;
 using SamSoarII.Simulation.Core.VariableModel;
 using SamSoarII.AppMain.UI.Monitor;
 using SamSoarII.Simulation.UI.Breakpoint;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.AppMain.Project
 {
@@ -81,58 +82,58 @@ namespace SamSoarII.AppMain.Project
                     bpwindow.SManager = smodel.SManager;
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
-                    MessageBox.Show("Error : 找不到生成的dll文件\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到生成的dll文件\r\n",LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETBIT:
-                    MessageBox.Show("Error : 找不到入口GetBit\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口GetBit\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETWORD:
-                    MessageBox.Show("Error : 找不到入口GetWord\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口GetWord\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETDWORD:
-                    MessageBox.Show("Error : 找不到入口GetDWord\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口GetDWord\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETFLOAT:
-                    MessageBox.Show("Error : 找不到入口GetFloat\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口GetFloat\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_GETFEQ:
-                    MessageBox.Show("Error : 找不到入口GetFeq\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口GetFeq\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETBIT:
-                    MessageBox.Show("Error : 找不到入口SetBit\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口SetBit\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETWORD:
-                    MessageBox.Show("Error : 找不到入口SetWord\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口SetWord\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETDWORD:
-                    MessageBox.Show("Error : 找不到入口SetDWord\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口SetDWord\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETFLOAT:
-                    MessageBox.Show("Error : 找不到入口SetFloat\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口SetFloat\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETFEQ:
-                    MessageBox.Show("Error : 找不到入口SetFeq\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口SetFeq\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_BEFORERUNLADDER:
-                    MessageBox.Show("Error : 找不到入口BeforeRunLadder\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口BeforeRunLadder\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_AFTERRUNLADDER:
-                    MessageBox.Show("Error : 找不到入口AfterRunLadder\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口AfterRunLadder\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_INITRUNLADDER:
-                    MessageBox.Show("Error : 找不到入口InitRunLadder\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口InitRunLadder\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNNT_FOUND_GETCLOCK:
-                    MessageBox.Show("Error : 找不到入口GetClock\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口GetClock\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_INITCLOCK:
-                    MessageBox.Show("Error : 找不到入口InitClock\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口InitClock\r\n", LocalizedMessageIcon.Error);
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_SETCLOCKRATE:
-                    MessageBox.Show("Error : 找不到入口SetClockRate\r\n");
+                    LocalizedMessageBox.Show("Error : 找不到入口SetClockRate\r\n", LocalizedMessageIcon.Error);
                     break;
                 default:
-                    MessageBox.Show("Error : 发生未知错误\r\n");
+                    LocalizedMessageBox.Show("Error : 发生未知错误\r\n", LocalizedMessageIcon.Error);
                     break;
             }
             return ret;

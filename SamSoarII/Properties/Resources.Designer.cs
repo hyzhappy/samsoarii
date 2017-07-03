@@ -61,6 +61,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 About 的本地化字符串。
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Add 的本地化字符串。
         /// </summary>
         public static string Add {
@@ -3864,6 +3873,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Project changed 的本地化字符串。
+        /// </summary>
+        public static string Project_Changed {
+            get {
+                return ResourceManager.GetString("Project_Changed", resourceCulture);
             }
         }
         

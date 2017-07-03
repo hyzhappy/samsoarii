@@ -1752,4 +1752,10 @@
   <data name="Second" xml:space="preserve">
     <value>*秒</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Project_Changed" xml:space="preserve">
+    <value>工程已改动</value>
+  </data>
 </root>

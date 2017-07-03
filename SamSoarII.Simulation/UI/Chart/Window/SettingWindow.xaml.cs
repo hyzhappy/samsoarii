@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using SamSoarII.Simulation.Core.Global;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.Simulation.UI.Chart.Window
 {
@@ -136,12 +137,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("最大数据数的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("最大数据数的格式非法！"),LocalizedMessageIcon.Warning);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("最大数据数的数值超出范围！合法范围为(1024-65536)"));
+                LocalizedMessageBox.Show(String.Format("最大数据数的数值超出范围！合法范围为(1024-65536)"), LocalizedMessageIcon.Warning);
                 return;
             }
             int _TimeRulerDivideNumber = 0;
@@ -153,12 +154,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("时间轴主划分数量的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("时间轴主划分数量的格式非法！"), LocalizedMessageIcon.Warning);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("时间轴主划分数量的数值超出范围！合法范围为(2-40)"));
+                LocalizedMessageBox.Show(String.Format("时间轴主划分数量的数值超出范围！合法范围为(2-40)"), LocalizedMessageIcon.Warning);
                 return;
             }
             int _ScanLockMaximum = 0;
@@ -177,12 +178,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("最大锁定数的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("最大锁定数的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("最大锁定数的数值超出范围！合法范围为(1-32)"));
+                LocalizedMessageBox.Show(String.Format("最大锁定数的数值超出范围！合法范围为(1-32)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _ScanPariodType = 0;
@@ -196,7 +197,7 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             else
             {
-                MessageBox.Show(String.Format(""));
+                LocalizedMessageBox.Show(String.Format(""));
                 return;
             }
             int _ScanPeriodConst = 0;
@@ -210,7 +211,7 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             {
                 if (_ScanPariodType == GlobalSetting.SCANPERIOD_CONST)
                 {
-                    MessageBox.Show(String.Format("扫描周期（常量）的格式非法！"));
+                    LocalizedMessageBox.Show(String.Format("扫描周期（常量）的格式非法！"), LocalizedMessageIcon.Error);
                     return;
                 }
             }
@@ -218,7 +219,7 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             {
                 if (_ScanPariodType == GlobalSetting.SCANPERIOD_CONST)
                 {
-                    MessageBox.Show(String.Format("扫描周期（常量）的数值超出范围！合法范围为(1-100)"));
+                    LocalizedMessageBox.Show(String.Format("扫描周期（常量）的数值超出范围！合法范围为(1-100)"), LocalizedMessageIcon.Error);
                     return;
                 }
             }
@@ -233,7 +234,7 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             {
                 if (_ScanPariodType == GlobalSetting.SCANPERIOD_RATE)
                 {
-                    MessageBox.Show(String.Format("扫描周期（比例）的格式非法！"));
+                    LocalizedMessageBox.Show(String.Format("扫描周期（比例）的格式非法！"), LocalizedMessageIcon.Error);
                     return;
                 }
             }
@@ -241,7 +242,7 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             {
                 if (_ScanPariodType == GlobalSetting.SCANPERIOD_RATE)
                 {
-                    MessageBox.Show(String.Format("扫描周期（比例）的数值超出范围！合法范围为(32-1024)"));
+                    LocalizedMessageBox.Show(String.Format("扫描周期（比例）的数值超出范围！合法范围为(32-1024)"), LocalizedMessageIcon.Error);
                     return;
                 }
             }
@@ -254,12 +255,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("时间轴副划分数量的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("时间轴副划分数量的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("时间轴副划分数量的数值超出范围！合法范围为(2-10)"));
+                LocalizedMessageBox.Show(String.Format("时间轴副划分数量的数值超出范围！合法范围为(2-10)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _TimeRulerStart = 0;
@@ -273,12 +274,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("时间轴起点的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("时间轴起点的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("时间轴起点的数值超出范围！合法范围为(0-600s)"));
+                LocalizedMessageBox.Show(String.Format("时间轴起点的数值超出范围！合法范围为(0-600s)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _TimeRulerEnd = 0;
@@ -292,12 +293,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("时间轴终点的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("时间轴终点的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("时间轴终点的数值超出范围！合法范围为(0-600s)"));
+                LocalizedMessageBox.Show(String.Format("时间轴终点的数值超出范围！合法范围为(0-600s)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _DrawValueDivide = 0;
@@ -309,12 +310,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("数值主划分数量的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("数值主划分数量的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("数值主划分数量超出范围！合法范围为(2-100)"));
+                LocalizedMessageBox.Show(String.Format("数值主划分数量超出范围！合法范围为(2-100)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _DrawValueSubDivide = 0;
@@ -326,12 +327,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("数值副划分数量的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("数值副划分数量的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("数值副划分数量超出范围！合法范围为(2-10)"));
+                LocalizedMessageBox.Show(String.Format("数值副划分数量超出范围！合法范围为(2-10)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _ScanViewMaximum = 0;
@@ -350,12 +351,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("最大监视数的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("最大监视数的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("最大监视数的数值超出范围！合法范围为(1-256)"));
+                LocalizedMessageBox.Show(String.Format("最大监视数的数值超出范围！合法范围为(1-256)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _DrawMaximum = 0;
@@ -367,12 +368,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("最大曲线数的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("最大曲线数的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("最大曲线数的数值超出范围！合法范围为(1-32)"));
+                LocalizedMessageBox.Show(String.Format("最大曲线数的数值超出范围！合法范围为(1-32)"), LocalizedMessageIcon.Error);
                 return;
             }
             int _DrawAccurate = 0;
@@ -384,12 +385,12 @@ namespace SamSoarII.Simulation.UI.Chart.Window
             }
             catch (FormatException fe)
             {
-                MessageBox.Show(String.Format("曲线绘制精度的格式非法！"));
+                LocalizedMessageBox.Show(String.Format("曲线绘制精度的格式非法！"), LocalizedMessageIcon.Error);
                 return;
             }
             catch (ArgumentOutOfRangeException ae)
             {
-                MessageBox.Show(String.Format("曲线绘制精度的数值超出范围！合法范围为(32-2048)"));
+                LocalizedMessageBox.Show(String.Format("曲线绘制精度的数值超出范围！合法范围为(32-2048)"), LocalizedMessageIcon.Error);
                 return;
             }
 

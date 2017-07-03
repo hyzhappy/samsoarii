@@ -18,6 +18,7 @@ using SamSoarII.Simulation.Core.DataModel;
 using SamSoarII.Simulation.UI.Base;
 using System.Xml.Linq;
 using Microsoft.Win32;
+using SamSoarII.UserInterface;
 
 namespace SamSoarII.Simulation.UI.Chart
 {
@@ -299,7 +300,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("保存波形文件失败!");
+                    LocalizedMessageBox.Show("保存波形文件失败!",LocalizedMessageIcon.Error);
                 }
             }
         }
@@ -318,7 +319,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("读取波形文件失败!");
+                    LocalizedMessageBox.Show("读取波形文件失败!", LocalizedMessageIcon.Error);
                 }
             }
         }
@@ -337,7 +338,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("保存波形文件失败!");
+                    LocalizedMessageBox.Show("保存波形文件失败!", LocalizedMessageIcon.Error);
                 }
             }
         }
@@ -356,7 +357,7 @@ namespace SamSoarII.Simulation.UI.Chart
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("读取波形文件失败!");
+                    LocalizedMessageBox.Show("读取波形文件失败!", LocalizedMessageIcon.Error);
                 }
             }
         }

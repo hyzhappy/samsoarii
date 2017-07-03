@@ -248,7 +248,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-
+            LocalizedMessageBox.Show("Version Number:1.0.3",Properties.Resources.About,LocalizedMessageIcon.Information);
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -291,14 +291,14 @@ namespace SamSoarII.AppMain.UI
             var projectMessage = ProjectFileManager.RecentUsedProjectMessages.ElementAt(index);
             if (!File.Exists(projectMessage.Value.Item2))
             {
-                MessageBox.Show(string.Format("{0}",Properties.Resources.Message_File_Moved));
+                LocalizedMessageBox.Show(string.Format("{0}",Properties.Resources.Message_File_Moved),LocalizedMessageIcon.Information);
                 ProjectFileManager.Delete(index);
             }
             else
             {
                 if (_interactionFacade.ProjectLoaded && projectMessage.Value.Item1 == _interactionFacade.ProjectModel.ProjectName)
                 {
-                    MessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded));
+                    LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
                 }
                 else
                 {
@@ -345,11 +345,11 @@ namespace SamSoarII.AppMain.UI
                 window.Close();
             }
         }
-        public MessageBoxResult ShowSaveYesNoCancelDialog()
+        public LocalizedMessageResult ShowSaveYesNoCancelDialog()
         {
             string title = Properties.Resources.Message_Confirm_Save;
             string text = String.Format("{0:s} {1}", _interactionFacade.ProjectModel.ProjectName, Properties.Resources.Message_Changed);
-            return MessageBox.Show(text, title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            return LocalizedMessageBox.Show(text, title, LocalizedMessageButton.YesNoCancel, LocalizedMessageIcon.Warning);
         }
         #endregion
 
@@ -857,10 +857,10 @@ namespace SamSoarII.AppMain.UI
             {
                 if (_interactionFacade.ProjectModel.IsModify && _interactionFacade.ProjectFullFileName != string.Empty)
                 {
-                    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                    LocalizedMessageResult mbret = ShowSaveYesNoCancelDialog();
                     switch (mbret)
                     {
-                        case MessageBoxResult.Yes:
+                        case LocalizedMessageResult.Yes:
                             OnSaveProjectExecute(this, new RoutedEventArgs());
                             _interactionFacade.ProjectModel.IsModify = false;
                             if (CreateNewProject)
@@ -868,14 +868,14 @@ namespace SamSoarII.AppMain.UI
                             if (OpenProject)
                                 ProjectOpen();
                             return true;
-                        case MessageBoxResult.No:
+                        case LocalizedMessageResult.No:
                             _interactionFacade.ProjectModel.IsModify = false;
                             if (CreateNewProject)
                                 NewProjectCreated();
                             if (OpenProject)
                                 ProjectOpen();
                             return true;
-                        case MessageBoxResult.Cancel:
+                        case LocalizedMessageResult.Cancel:
                         default:
                             return false;
                     }
@@ -887,10 +887,10 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
-                    MessageBoxResult mbret = ShowSaveYesNoCancelDialog();
+                    LocalizedMessageResult mbret = ShowSaveYesNoCancelDialog();
                     switch (mbret)
                     {
-                        case MessageBoxResult.Yes:
+                        case LocalizedMessageResult.Yes:
                             SaveFileDialog saveFileDialog = new SaveFileDialog();
                             saveFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
                             if (saveFileDialog.ShowDialog() == true)
@@ -904,13 +904,13 @@ namespace SamSoarII.AppMain.UI
                             if (OpenProject)
                                 ProjectOpen();
                             return true;
-                        case MessageBoxResult.No:
+                        case LocalizedMessageResult.No:
                             if (CreateNewProject)
                                 NewProjectCreated();
                             if (OpenProject)
                                 ProjectOpen();
                             return true;
-                        case MessageBoxResult.Cancel:
+                        case LocalizedMessageResult.Cancel:
                         default:
                             return false;
                     }
@@ -932,18 +932,18 @@ namespace SamSoarII.AppMain.UI
                         string dir = newProjectDialog.PathContent;
                         if (!Directory.Exists(dir))
                         {
-                            MessageBox.Show(Properties.Resources.Message_Path);
+                            LocalizedMessageBox.Show(Properties.Resources.Message_Path,LocalizedMessageIcon.Information);
                             return;
                         }
                         if (name == string.Empty)
                         {
-                            MessageBox.Show(Properties.Resources.Message_File_Name);
+                            LocalizedMessageBox.Show(Properties.Resources.Message_File_Name, LocalizedMessageIcon.Information);
                             return;
                         }
-                        string fullFileName = string.Format(@"{0}\{1}.{2}", dir, name,FileHelper.ExtensionName);
+                        string fullFileName = string.Format(@"{0}\{1}.{2}", dir, name,FileHelper.ExtensionName, LocalizedMessageIcon.Information);
                         if (File.Exists(fullFileName))
                         {
-                            MessageBox.Show(Properties.Resources.Message_File_Exist);
+                            LocalizedMessageBox.Show(Properties.Resources.Message_File_Exist, LocalizedMessageIcon.Information);
                             return;
                         }
                         CreateProject(name, fullFileName);
@@ -980,12 +980,12 @@ namespace SamSoarII.AppMain.UI
             {
                 if (_interactionFacade.ProjectFullFileName == openFileDialog.FileName)
                 {
-                    MessageBox.Show(Properties.Resources.Message_Project_Loaded);
+                    LocalizedMessageBox.Show(Properties.Resources.Message_Project_Loaded, LocalizedMessageIcon.Information);
                     return;
                 }
                 if (!OpenProject(openFileDialog.FileName))
                 {
-                    MessageBox.Show(Properties.Resources.Message_Project_Error);
+                    LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
                 }
             }
         }
@@ -1009,7 +1009,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show(Properties.Resources.Item_Rename);
+                LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 return;
             }
             if (_interactionFacade.ProjectFullFileName == string.Empty)
@@ -1032,7 +1032,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show(Properties.Resources.Item_Rename);
+                LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 return;
             }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -1047,7 +1047,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show(Properties.Resources.Item_Rename);
+                LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 return;
             }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
@@ -1094,7 +1094,7 @@ namespace SamSoarII.AppMain.UI
                         break;
                     case CheckRet.CommunicationError:
                         MonitorModeButton.IsChecked = false;
-                        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                         break;
                     default:
                         MonitorModeButton.IsChecked = false;
@@ -1121,7 +1121,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show(Properties.Resources.Item_Rename);
+                LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 return;
             }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
@@ -1266,7 +1266,7 @@ namespace SamSoarII.AppMain.UI
                     }
                     catch (ProjectPropertyException ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        LocalizedMessageBox.Show(ex.Message, LocalizedMessageIcon.Error);
                     }
                 };
                 dialog.ShowDialog();
@@ -1297,7 +1297,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
             {
-                MessageBox.Show(Properties.Resources.Item_Rename);
+                LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 return;
             }
             _interactionFacade.DownloadProject();
@@ -1408,11 +1408,11 @@ namespace SamSoarII.AppMain.UI
                 var ret = _interactionFacade.CommunicationTest();
                 if (ret == CheckRet.CommunicationError)
                 {
-                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 }
                 else if(ret == CheckRet.None)
                 {
-                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
+                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
                 }
                 dialog.Close();
             };
@@ -1421,11 +1421,11 @@ namespace SamSoarII.AppMain.UI
                 var ret = _interactionFacade.CommunicationTest();
                 if (ret == CheckRet.CommunicationError)
                 {
-                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
+                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                 }
                 else if(ret == CheckRet.None)
                 {
-                    MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
+                    LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
                 }
             };
             dialog.ShowDialog();
@@ -1447,29 +1447,29 @@ namespace SamSoarII.AppMain.UI
                 string message = reader.ReadLine();
                 if (message == string.Format("N"))
                 {
-                    MessageBox.Show(Properties.Resources.New_Version);
+                    LocalizedMessageBox.Show(Properties.Resources.New_Version, LocalizedMessageIcon.Information);
                 }
                 else if (message == string.Format("Y"))
                 {
                     message = reader.ReadLine();
                     if (message == string.Format("WebException"))
                     {
-                        MessageBox.Show(Properties.Resources.Connect_Failed);
+                        LocalizedMessageBox.Show(Properties.Resources.Connect_Failed, LocalizedMessageIcon.Information);
                         return;
                     }
                     else if (message == string.Format("Exception"))
                     {
-                        MessageBox.Show(Properties.Resources.Download_Failed);
+                        LocalizedMessageBox.Show(Properties.Resources.Download_Failed, LocalizedMessageIcon.Information);
                         return;
                     }else if (message == string.Empty)
                     {
-                        MessageBox.Show(Properties.Resources.Connect_Failed);
+                        LocalizedMessageBox.Show(Properties.Resources.Connect_Failed, LocalizedMessageIcon.Information);
                         return;
                     }
                     long filesize = long.Parse(message);
-                    MessageBoxResult ret = MessageBox.Show(string.Format(Properties.Resources.Update_Or_Not + "(" + Properties.Resources.Update_Process + ")\n" + Properties.Resources.Update_Size + "{0:f3}MB", filesize / (1024 * 1024 * 1.0)), Properties.Resources.Update_Whether, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                    LocalizedMessageResult ret = LocalizedMessageBox.Show(string.Format(Properties.Resources.Update_Or_Not + "(" + Properties.Resources.Update_Process + ")\n" + Properties.Resources.Update_Size + "{0:f3}MB", filesize / (1024 * 1024 * 1.0)), Properties.Resources.Update_Whether, LocalizedMessageButton.OKCancel, LocalizedMessageIcon.Information);
                     StreamWriter writer = new StreamWriter(clientPipe);
-                    if (ret == MessageBoxResult.OK)
+                    if (ret == LocalizedMessageResult.Yes)
                         writer.WriteLine("Update");
                     else
                         writer.WriteLine("Cancel");
@@ -1478,16 +1478,16 @@ namespace SamSoarII.AppMain.UI
                 }
                 else if (message == string.Format("WebException"))
                 {
-                    MessageBox.Show(Properties.Resources.Connect_Failed);
+                    LocalizedMessageBox.Show(Properties.Resources.Connect_Failed, LocalizedMessageIcon.Information);
                 }
                 else if (message == string.Format("Exception"))
                 {
-                    MessageBox.Show(Properties.Resources.Download_Failed);
+                    LocalizedMessageBox.Show(Properties.Resources.Download_Failed, LocalizedMessageIcon.Information);
                 }
             }
             else
             {
-                MessageBox.Show(Properties.Resources.Connect_Failed);
+                LocalizedMessageBox.Show(Properties.Resources.Connect_Failed, LocalizedMessageIcon.Information);
             }
         }
     }

@@ -265,7 +265,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             }
             catch (Exception e)
             {
-                MessageBox.Show(Properties.Resources.Message_Number_Error);
+                LocalizedMessageBox.Show(Properties.Resources.Message_Number_Error,LocalizedMessageIcon.Error);
                 return null;
             }
         }
@@ -299,7 +299,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                     }
                     else
                     {
-                        MessageBox.Show(Properties.Resources.Message_Element_Has_Added);
+                        LocalizedMessageBox.Show(Properties.Resources.Message_Element_Has_Added,LocalizedMessageIcon.Information);
                     }
                 };
                 dialog.ShowDialog();

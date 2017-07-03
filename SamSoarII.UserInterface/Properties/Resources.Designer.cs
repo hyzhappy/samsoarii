@@ -493,6 +493,15 @@ namespace SamSoarII.UserInterface.Properties {
         }
         
         /// <summary>
+        ///   查找类似 No 的本地化字符串。
+        /// </summary>
+        public static string NO {
+            get {
+                return ResourceManager.GetString("NO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Number Lock 的本地化字符串。
         /// </summary>
         public static string Number_Lock {
@@ -651,6 +660,15 @@ namespace SamSoarII.UserInterface.Properties {
         public static string Write_ON {
             get {
                 return ResourceManager.GetString("Write_ON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Yes 的本地化字符串。
+        /// </summary>
+        public static string YES {
+            get {
+                return ResourceManager.GetString("YES", resourceCulture);
             }
         }
     }

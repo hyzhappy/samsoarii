@@ -1,4 +1,5 @@
 ﻿using SamSoarII.AppMain.Project;
+using SamSoarII.UserInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace SamSoarII.AppMain.LadderCommand
              && ldvmodel.LadderMode != LadderMode.Edit
              && !(command is NetworkReplaceBreakpointCommand))
             {
-                MessageBox.Show(Properties.Resources.Change_Mode);
+                LocalizedMessageBox.Show(Properties.Resources.Change_Mode,LocalizedMessageIcon.Warning);
                 return false;
             }
             return true;

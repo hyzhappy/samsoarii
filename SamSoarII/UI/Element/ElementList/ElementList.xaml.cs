@@ -741,7 +741,7 @@ namespace SamSoarII.AppMain.UI
                         {
                             if (dialogImport.FileName == string.Empty)
                             {
-                                MessageBox.Show(Properties.Resources.Message_File_Requried);
+                                LocalizedMessageBox.Show(Properties.Resources.Message_File_Requried,LocalizedMessageIcon.Warning);
                                 return;
                             }
                             CSVFileHelper.ImportExcute(dialogImport.FileName, _elementCollection, dialogImport.Separator.Substring(0, 1));
@@ -760,18 +760,18 @@ namespace SamSoarII.AppMain.UI
                             string dir = dialogExport.Path;
                             if (!Directory.Exists(dir))
                             {
-                                MessageBox.Show(Properties.Resources.Message_Path);
+                                LocalizedMessageBox.Show(Properties.Resources.Message_Path, LocalizedMessageIcon.Warning);
                                 return;
                             }
                             if (name == string.Empty)
                             {
-                                MessageBox.Show(Properties.Resources.Message_File_Name);
+                                LocalizedMessageBox.Show(Properties.Resources.Message_File_Name, LocalizedMessageIcon.Warning);
                                 return;
                             }
                             string fullFileName = string.Format(@"{0}\{1}.csv", dir, name);
                             if (File.Exists(fullFileName))
                             {
-                                MessageBox.Show(Properties.Resources.Message_File_Exist);
+                                LocalizedMessageBox.Show(Properties.Resources.Message_File_Exist, LocalizedMessageIcon.Warning);
                                 return;
                             }
                             CSVFileHelper.ExportExcute(fullFileName,ElementCollection,dialogExport.Separator.Substring(0,1));
@@ -802,7 +802,7 @@ namespace SamSoarII.AppMain.UI
                 {
                     if (textBox.Text != string.Empty && !ValueAliasManager.CheckAlias(comment.Name,textBox.Text))
                     {
-                        MessageBox.Show(Properties.Resources.Message_Alias_Exist);
+                        LocalizedMessageBox.Show(Properties.Resources.Message_Alias_Exist, LocalizedMessageIcon.Warning);
                         e.Cancel = true;
                     }
                     else

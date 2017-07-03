@@ -2,6 +2,7 @@
 using SamSoarII.AppMain.LadderCommand;
 using SamSoarII.AppMain.Project;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.UserInterface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -559,7 +560,7 @@ namespace SamSoarII.AppMain.UI
                 = items.Where((cmd) => { return cmd.Element.FBVModel.IsReadOnly; });
             if (fit.Count() > 0)
             {
-                MessageBox.Show(Properties.Resources.Message_Text);
+                LocalizedMessageBox.Show(Properties.Resources.Message_Text, LocalizedMessageIcon.Warning);
             }
             items.Sort((cmd1, cmd2) =>
             {
@@ -588,7 +589,7 @@ namespace SamSoarII.AppMain.UI
                 = items.Where((cmd) => { return cmd.Element.FBVModel.IsReadOnly; });
             if (fit.Count() > 0)
             {
-                MessageBox.Show(Properties.Resources.Message_Text);
+                LocalizedMessageBox.Show(Properties.Resources.Message_Text, LocalizedMessageIcon.Warning);
             }
             int offset = 0;
             string word = null;
