@@ -438,7 +438,7 @@ namespace SamSoarII.Extend.Utility
                 case "ALT": sw.Write("if (_stack_{0:d}) {1:s}^=1;\n", stackTop, inst[1]); break;
                 // 上升沿交替
                 case "ALTP":
-                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1) ", globalCount, stackTop);
+                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1) {2:s}^=1;\n", globalCount, stackTop, inst[1]);
                     sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
                     break;
                 // 当栈顶为1时运行的计时器
