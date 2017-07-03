@@ -1752,4 +1752,10 @@
   <data name="Second" xml:space="preserve">
     <value>*Second</value>
   </data>
+  <data name="Check_Coil_Output" xml:space="preserve">
+    <value>Is checking multiple coil output</value>
+  </data>
+  <data name="Check_Setting_Header" xml:space="preserve">
+    <value>Checking Setting</value>
+  </data>
 </root>

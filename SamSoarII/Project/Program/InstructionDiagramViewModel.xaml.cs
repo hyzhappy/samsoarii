@@ -147,7 +147,6 @@ namespace SamSoarII.AppMain.Project
                         invmodel.Update();
                     }));
                 }
-
                 stkcount = 0;
                 outcount = 0;
                 if (invmodel.Status == InstructionNetworkViewModel.STATUS_OPEN

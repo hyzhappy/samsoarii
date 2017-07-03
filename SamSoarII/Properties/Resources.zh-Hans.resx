@@ -1752,4 +1752,10 @@
   <data name="Second" xml:space="preserve">
     <value>*秒</value>
   </data>
+  <data name="Check_Coil_Output" xml:space="preserve">
+    <value>检查多线圈输出</value>
+  </data>
+  <data name="Check_Setting_Header" xml:space="preserve">
+    <value>检查设置</value>
+  </data>
 </root>
