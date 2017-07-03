@@ -435,11 +435,11 @@ namespace SamSoarII.Extend.Utility
                     sw.Write("}\n");
                     break;
                 // 交替
-                case "ALT": sw.Write("if (_stack_{0:d}) {1:s}^=1;\n", stackTop, inst[1]); break;
+                case "ALT": sw.Write("if (_stack_{0:d}) {1:s}=({1:s} ? 0 : 1);\n", stackTop, inst[1]); break;
                 // 上升沿交替
                 case "ALTP":
-                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1) {2:s}^=1;\n", globalCount, stackTop, inst[1]);
-                    sw.Write("_global[{0:d}] = {1:s};\n", globalCount++, inst[1]);
+                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1) {2:s}=({2:s} ? 0 : 1);\n", globalCount, stackTop, inst[1]);
+                    sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 当栈顶为1时运行的计时器
                 case "TON":
