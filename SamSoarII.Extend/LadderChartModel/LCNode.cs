@@ -409,7 +409,7 @@ namespace SamSoarII.Extend.LadderChartModel
                 case "PTO": text = "PTO " + flag1 + " " + flag2 + " " + flag3; break;
                 case "DRVI": text = "DRVI " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
                 case "DDRVI": text = "DRVI " + flag1 + " " + flag2 + " " + flag3 + " " + flag4; break;
-                case "HCNT": text = "DRVI " + flag1 + " " + flag2; break;
+                case "HCNT": text = "HCNT " + flag1 + " " + flag2; break;
                 case "LOG": text = "LOG " + flag1 + " " + flag2; break;
                 case "POW": text = "POW " + flag1 + " " + flag2 + " " + flag3; break;
                 case "FACT": text = "FACT " + flag1 + " " + flag2; break;
