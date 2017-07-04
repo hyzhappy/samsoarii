@@ -14,8 +14,10 @@ namespace SamSoarII.Utility
         {
             if (!Directory.Exists(FileHelper.AppRootPath + @"\Temp"))
                 Directory.CreateDirectory(FileHelper.AppRootPath + @"\Temp");
-            if (!File.Exists(DebugPath)) File.Create(DebugPath);
-            writer = new StreamWriter(DebugPath);
+            if (!File.Exists(DebugPath))
+                writer = new StreamWriter(File.Create(DebugPath));
+            else
+                writer = new StreamWriter(DebugPath,true);
         }
         public static void WriteLine(string message)
         {

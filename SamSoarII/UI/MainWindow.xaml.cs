@@ -77,13 +77,13 @@ namespace SamSoarII.AppMain.UI
         {
             App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
             InitializeComponent();
-            Loaded += MainWindow_Loaded;
+            InitializeAvalonDock();
             DataContext = this;
             _interactionFacade = new InteractionFacade(this);
-            InitializeAvalonDock();
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
+            Loaded += MainWindow_Loaded;
         }
 
         private void FileRegister()
@@ -116,7 +116,6 @@ namespace SamSoarII.AppMain.UI
 
         private void InitializeAvalonDock()
         {
-            //DockManager.Theme = new VS2010Theme();
             LayoutSetting.Load();
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LAFind);
@@ -126,6 +125,8 @@ namespace SamSoarII.AppMain.UI
             InitializeAvalonDock(LAElemList);
             InitializeAvalonDock(LAElemInit);
             InitializeAvalonDock(LABreakpoint);
+            //DockManager.Theme = new VS2010Theme();
+            
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -244,7 +245,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show("Version Number:1.0.4", Properties.Resources.About,LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show("Version Number:1.0.5", Properties.Resources.About,LocalizedMessageIcon.Information);
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {

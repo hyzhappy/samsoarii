@@ -362,6 +362,7 @@ namespace Xceed.Wpf.AvalonDock.Global
             node_Root.Add(node_AH);
 
             XElement node_KVP = null;
+            
             foreach (KeyValuePair<string, bool> kvp in _defaultIsDockAnchorable)
             {
                 node_KVP = new XElement("KeyValuePair");
@@ -440,12 +441,12 @@ namespace Xceed.Wpf.AvalonDock.Global
                 node_AH.Add(node_KVP);
             }
             xdoc.Add(node_Root);
-            xdoc.Save(FileHelper.AppRootPath + @"\Resources\LayoutConfig.xml");
+            xdoc.Save(FileHelper.AppRootPath + @"\Resources\layoutConfig.xml");
         }
 
         static public void Load()
         {
-            XDocument xdoc = XDocument.Load(FileHelper.AppRootPath + @"\Resources\LayoutConfig.xml");
+            XDocument xdoc = XDocument.Load(FileHelper.AppRootPath + @"\Resources\layoutConfig.xml");
             XElement node_Root = xdoc.Element("LayoutSetting");
             XElement nodes_ID = node_Root.Element("IsDock");
             XElement nodes_DW = node_Root.Element("DockWidth");

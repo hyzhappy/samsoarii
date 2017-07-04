@@ -47,12 +47,13 @@ namespace SamSoarII.AppMain
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             ((MainWindow)Current.MainWindow).SaveProjectByException();
+            AppFinalize();
+            TempDebugger.WriteLine();
             TempDebugger.WriteLine(e.Exception.Message);
             TempDebugger.WriteLine();
             TempDebugger.WriteLine(e.Exception.StackTrace);
             TempDebugger.Dispose();
             LocalizedMessageBox.Show(AppMain.Properties.Resources.Unknowed_Exception, AppMain.Properties.Resources.Error,LocalizedMessageIcon.Error);
-            AppFinalize();
             Current.Shutdown();
             e.Handled = true;
         }
