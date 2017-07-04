@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -54,6 +55,15 @@ namespace SamSoarII.UserInterface
             Caption = caption;
             InitializeButton(button);
             InitializeIcon(icon);
+            KeyDown += LocalizedMessageBox_KeyDown;
+        }
+
+        private void LocalizedMessageBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Button_1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            if (e.Key == Key.Escape)
+                Close();
         }
 
         private void InitializeButton(LocalizedMessageButton button)
@@ -130,10 +140,10 @@ namespace SamSoarII.UserInterface
             if (icon != LocalizedMessageIcon.None)
             {
                 IconToShow.Visibility = Visibility.Visible;
-                TB_MessageToShow.Margin = new Thickness(10, 40, 40, 20);
+                TB_MessageToShow.Margin = new Thickness(10, 35, 40, 20);
             }
             else
-                TB_MessageToShow.Margin = new Thickness(40, 40, 40, 20);
+                TB_MessageToShow.Margin = new Thickness(40, 35, 40, 20);
             switch (icon)
             {
                 case LocalizedMessageIcon.Warning:

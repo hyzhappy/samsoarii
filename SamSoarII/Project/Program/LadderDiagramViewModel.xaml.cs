@@ -2707,8 +2707,8 @@ namespace SamSoarII.AppMain.Project
                         // 图元多选
                         _commandManager.Execute(new LadderCommand.NetworkRemoveElementsCommand(
                             _selectStartNetwork,
-                            _selectStartNetwork.GetSelectedElements(),
-                            _selectStartNetwork.GetSelectedVerticalLines(),
+                            _selectStartNetwork.GetSelectedElements().ToArray(),
+                            _selectStartNetwork.GetSelectedVerticalLines().ToArray(),
                             GetElementArea()));
                     }
                     else

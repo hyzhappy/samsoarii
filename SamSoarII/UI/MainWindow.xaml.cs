@@ -248,7 +248,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show("Version Number:1.0.3",Properties.Resources.About,LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show("Version Number:1.0.3", Properties.Resources.About,LocalizedMessageIcon.Information);
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -349,7 +349,7 @@ namespace SamSoarII.AppMain.UI
         {
             string title = Properties.Resources.Message_Confirm_Save;
             string text = String.Format("{0:s} {1}", _interactionFacade.ProjectModel.ProjectName, Properties.Resources.Message_Changed);
-            return LocalizedMessageBox.Show(text, title, LocalizedMessageButton.YesNoCancel, LocalizedMessageIcon.Warning);
+            return LocalizedMessageBox.Show(text, title, LocalizedMessageButton.YesNoCancel, LocalizedMessageIcon.Question);
         }
         #endregion
 
@@ -1052,37 +1052,6 @@ namespace SamSoarII.AppMain.UI
             }
             if (_interactionFacade.ProjectModel.LadderMode == LadderMode.Edit)
             {
-                //CommunicationSettingDialog dialog = new CommunicationSettingDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
-                //BaseSetting baseSetting = dialog.GetBaseSetting();
-                //baseSetting.SettingButtonClick += (sender1, e1) =>
-                //{
-                //    CommunicationsettingParamsDialog dialog1 = new CommunicationsettingParamsDialog((CommunicationParams)ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]);
-                //    dialog1.ShowDialog();
-                //};
-                //dialog.Ensure += (sender1, e1) =>
-                //{
-                //    if (_interactionFacade.MonitorProject())
-                //    {
-                //        MonitorModeButton.IsChecked = true;
-                //        LACMonitor.Show();
-                //        dialog.Close();
-                //    }
-                //    else
-                //        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
-                //};
-                //dialog.Closed += (sender2, e2) =>
-                //{
-                //    MonitorModeButton.IsChecked = false;
-                //};
-                //dialog.CommunicationTest += (sender1, e1) =>
-                //{
-                //    var ret = _interactionFacade.CommunicationTest();
-                //    if (ret == CheckRet.CommunicationError)
-                //        MessageBox.Show(Properties.Resources.MessageBox_Communication_Failed);
-                //    else if (ret == CheckRet.None)
-                //        MessageBox.Show(Properties.Resources.MessageBox_Communication_Success);
-                //};
-                //dialog.ShowDialog();
                 var _ret = _interactionFacade.CommunicationTest();
                 switch (_ret)
                 {
