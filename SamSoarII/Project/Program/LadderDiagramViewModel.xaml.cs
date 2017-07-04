@@ -3144,7 +3144,7 @@ namespace SamSoarII.AppMain.Project
             {
                 int x = _selectRect.X;
                 int y = _selectRect.Y;
-                if(_selectRectOwner.GetElementByPosition(x, y) != null || _selectRectOwner.GetVerticalLineByPosition(x, y) != null)
+                if(_selectRectOwner?.GetElementByPosition(x, y) != null || _selectRectOwner?.GetVerticalLineByPosition(x, y) != null)
                 {
                     e.CanExecute = true;
                 }

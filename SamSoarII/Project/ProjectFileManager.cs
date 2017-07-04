@@ -37,6 +37,7 @@ namespace SamSoarII.AppMain.Project
     }
     public class ProjectFileManager
     {
+        private static int MaxCapacity = 10;
         public static SortedDictionary<ProjectRecentUseTime, Tuple<string, string>> RecentUsedProjectMessages;
         public static ProjectShowMessage projectShowMessage;
         static ProjectFileManager()
@@ -46,13 +47,13 @@ namespace SamSoarII.AppMain.Project
         }
         public static void Update(string projectName,string projectFullName)
         {
-            if (RecentUsedProjectMessages.Count == 10)
+            if (RecentUsedProjectMessages.Count == MaxCapacity)
             {
-                Delete(9);
+                Delete(MaxCapacity - 1);
             }
             foreach (var item in new Dictionary<ProjectRecentUseTime, Tuple<string, string>>(RecentUsedProjectMessages))
             {
-                if (item.Value.Item1 == projectName)
+                if (item.Value.Item2 == projectFullName)
                 {
                     RecentUsedProjectMessages.Remove(item.Key);
                     break;

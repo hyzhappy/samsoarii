@@ -663,6 +663,7 @@ namespace SamSoarII.AppMain.UI
                     ptvitem.RenameClose();
                     PTVRenamed(this, null);
                 }
+                _projectModel.IsModify = true;
             }
         }
         

@@ -363,6 +363,11 @@ namespace SamSoarII.AppMain
                 SetMessage(Properties.Resources.Project_Changed);
                 return;
             }
+            if (e.PropertyName == "ModBus")
+            {
+                SetMessage(Properties.Resources.ModBus_Changed);
+                return;
+            }
         }
         #endregion
         
@@ -765,12 +770,9 @@ namespace SamSoarII.AppMain
                     ldvmodel, null);
             }
             else
-            {
                 e.RelativeObject = ldvmodel;
-            }
             _mainWindow.LACProj.Show();
             PTVEvent(this, e);
-            _projectModel.IsModify = true;
         }
         public void RemoveRoutine
         (
@@ -793,7 +795,6 @@ namespace SamSoarII.AppMain
             }
             _mainTabControl.CloseItem(ldvmodel);
             PTVEvent(this, e);
-            _projectModel.IsModify = true;
         }
         public void ReplaceRoutine
         (
@@ -1275,6 +1276,7 @@ namespace SamSoarII.AppMain
             if (GlobalSetting.IsSavedByTime)
                 _projectModel.autoSavedManager.Start();
             _projectModel.AutoInstManager.Start();
+            ProjectModel.IsModify = false;
         }
         
         public void CloseCurrentProject()
@@ -1340,6 +1342,8 @@ namespace SamSoarII.AppMain
             XElement xele_r = xdoc.Element("Root");
             XElement xele_rtv = xele_r.Element("ProjectTreeView");
             _projectModel.IFacade = this;
+            _pname = FileHelper.GetFileName(ProjectFullFileName);
+            if (_pname != _projectModel.ProjectName) _projectModel.ProjectName = _pname;
             _projectModel.autoSavedManager = new AutoSavedManager(this);
             _projectModel.AutoInstManager = new AutoInstManager(this);
             _projectModel.PropertyChanged += _projectModel_PropertyChanged;
@@ -1364,6 +1368,7 @@ namespace SamSoarII.AppMain
             _projectModel.LadderMode = LadderMode.Edit;
             handle.Abort();
             handle.Completed = true;
+            ProjectModel.IsModify = false;
         }
         public bool LoadProject(string fileName)
         {

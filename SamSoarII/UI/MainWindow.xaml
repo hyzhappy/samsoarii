@@ -165,7 +165,7 @@
                 <MenuItem x:Name="RecentFileMenu" Style="{x:Null}" Header="{x:Static properties:Resources.MainWindow_Recent_Proj}" ItemsSource="{Binding ProjectUsedTimeMessage}">
                     <MenuItem.Resources>
                         <Style TargetType="MenuItem">
-                            <Setter Property="MaxWidth" Value="350"></Setter>
+                            <Setter Property="MaxWidth" Value="400"></Setter>
                             <EventSetter Event="Click" Handler="OnRecentProjectOpen"></EventSetter>
                         </Style>
                     </MenuItem.Resources>

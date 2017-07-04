@@ -1758,4 +1758,19 @@
   <data name="Project_Changed" xml:space="preserve">
     <value>Project changed</value>
   </data>
+  <data name="ModBus_Changed" xml:space="preserve">
+    <value>Modbus table changed!</value>
+  </data>
+  <data name="Check_Setting_Header" xml:space="preserve">
+    <value>Multi-coil setting</value>
+  </data>
+  <data name="Check_Coil_Output" xml:space="preserve">
+    <value>Check the multi-coil output</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Unknowed_Exception" xml:space="preserve">
+    <value>There is an unknown error in the program. Please contact our technical support and get help!</value>
+  </data>
 </root>

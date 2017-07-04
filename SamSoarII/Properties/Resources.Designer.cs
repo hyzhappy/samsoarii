@@ -250,7 +250,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Is checking multiple coil output 的本地化字符串。
+        ///   查找类似 Check the multi-coil output 的本地化字符串。
         /// </summary>
         public static string Check_Coil_Output {
             get {
@@ -259,7 +259,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Checking Setting 的本地化字符串。
+        ///   查找类似 Multi-coil setting 的本地化字符串。
         /// </summary>
         public static string Check_Setting_Header {
             get {
@@ -1002,6 +1002,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Ensure {
             get {
                 return ResourceManager.GetString("Ensure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Error 的本地化字符串。
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
@@ -3247,6 +3256,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Modbus table changed! 的本地化字符串。
+        /// </summary>
+        public static string ModBus_Changed {
+            get {
+                return ResourceManager.GetString("ModBus_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Create New Table 的本地化字符串。
         /// </summary>
         public static string Modbus_Create_New_Table {
@@ -4665,6 +4683,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string TWR_Inst {
             get {
                 return ResourceManager.GetString("TWR_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 There is an unknown error in the program. Please contact our technical support and get help! 的本地化字符串。
+        /// </summary>
+        public static string Unknowed_Exception {
+            get {
+                return ResourceManager.GetString("Unknowed_Exception", resourceCulture);
             }
         }
         

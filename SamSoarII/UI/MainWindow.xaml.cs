@@ -238,17 +238,13 @@ namespace SamSoarII.AppMain.UI
                 dialog.ShowDialog();
             }
         }
-        private void OnCommentModeToggle(object sender, RoutedEventArgs e)
-        {
-            _interactionFacade.IsCommentMode = !_interactionFacade.IsCommentMode;
-        }
         private void OnClick(object sender, RoutedEventArgs e)
         {
             InstShortCutOpen.Invoke(sender, e);
         }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show("Version Number:1.0.3", Properties.Resources.About,LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show("Version Number:1.0.4", Properties.Resources.About,LocalizedMessageIcon.Information);
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -296,7 +292,7 @@ namespace SamSoarII.AppMain.UI
             }
             else
             {
-                if (_interactionFacade.ProjectLoaded && projectMessage.Value.Item1 == _interactionFacade.ProjectModel.ProjectName)
+                if (_interactionFacade.ProjectLoaded && projectMessage.Value.Item2 == _interactionFacade.ProjectFullFileName)
                 {
                     LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
                 }
@@ -896,6 +892,7 @@ namespace SamSoarII.AppMain.UI
                             if (saveFileDialog.ShowDialog() == true)
                             {
                                 _interactionFacade.ProjectFullFileName = saveFileDialog.FileName;
+                                _interactionFacade.ProjectModel.ProjectName = FileHelper.GetFileName(saveFileDialog.FileName);
                                 _interactionFacade.SaveProject();
                             }
                             else return false;
@@ -1028,6 +1025,29 @@ namespace SamSoarII.AppMain.UI
                 return;
             CurrentProjectHandle(false, false);
         }
+        /// <summary>
+        /// only called by app throw exceptions
+        /// </summary>
+        public void SaveProjectByException()
+        {
+            if (_interactionFacade.ProjectModel == null) return;
+            if (!_interactionFacade.ProjectModel.IsModify && _interactionFacade.ProjectFullFileName != string.Empty) return;
+            if (_interactionFacade.ProjectFullFileName == string.Empty)
+            {
+                if (!Directory.Exists(FileHelper.AppRootPath + System.IO.Path.DirectorySeparatorChar + "Temp"))
+                    Directory.CreateDirectory(FileHelper.AppRootPath + System.IO.Path.DirectorySeparatorChar + "Temp");
+                int id = 1;
+                _interactionFacade.ProjectFullFileName = string.Format("{0}{1}{2}.{3}", FileHelper.AppRootPath + System.IO.Path.DirectorySeparatorChar + "Temp", System.IO.Path.DirectorySeparatorChar, Properties.Resources.Project + id , FileHelper.ExtensionName);
+                while (File.Exists(_interactionFacade.ProjectFullFileName))
+                {
+                    id++;
+                    _interactionFacade.ProjectFullFileName = string.Format("{0}{1}{2}.{3}", FileHelper.AppRootPath + System.IO.Path.DirectorySeparatorChar + "Temp", System.IO.Path.DirectorySeparatorChar, Properties.Resources.Project + id, FileHelper.ExtensionName);
+                }
+                _interactionFacade.ProjectModel.ProjectName = FileHelper.GetFileName(_interactionFacade.ProjectFullFileName);
+            }
+            _interactionFacade.SaveProject();
+        }
+
         private void OnSaveAsProjectExecute(object sender, RoutedEventArgs e)
         {
             if (ProjectTreeViewItem.HasRenaming)

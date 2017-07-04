@@ -66,5 +66,12 @@ namespace SamSoarII.Utility
                 throw new Exception("GetMD5HashFromFile() fail,error:" + ex.Message);
             }
         }
+
+        public static string GetFileName(string fullFileName)
+        {
+            string tempstr = fullFileName.Substring(fullFileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+            tempstr = tempstr.Substring(0, tempstr.LastIndexOf('.'));
+            return tempstr;
+        }
     }
 }

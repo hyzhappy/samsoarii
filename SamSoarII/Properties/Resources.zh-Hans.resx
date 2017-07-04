@@ -1758,4 +1758,19 @@
   <data name="Project_Changed" xml:space="preserve">
     <value>工程已改动</value>
   </data>
+  <data name="ModBus_Changed" xml:space="preserve">
+    <value>Modbus表格已更改！</value>
+  </data>
+  <data name="Check_Setting_Header" xml:space="preserve">
+    <value>多线圈设置</value>
+  </data>
+  <data name="Check_Coil_Output" xml:space="preserve">
+    <value>检查多线圈输出</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Unknowed_Exception" xml:space="preserve">
+    <value>程序出现未知的错误，请与我们的技术支持联系，已获取相关帮助！</value>
+  </data>
 </root>

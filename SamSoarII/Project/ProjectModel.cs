@@ -49,6 +49,7 @@ namespace SamSoarII.AppMain.Project
                 {
                     ret |= funcblock.IsModify;
                 }
+                ret |= MTVModel.IsModify;
                 ret |= ProjectPropertyManager.IsModify;
                 return ret;
             }
@@ -64,6 +65,7 @@ namespace SamSoarII.AppMain.Project
                     funcblock.IsModify = value;
                 }
                 ProjectPropertyManager.IsModify = value;
+                MTVModel.IsModify = value;
                 if (value)
                 {
                     OnPropertyChanged("ProjectModel");
@@ -219,29 +221,37 @@ namespace SamSoarII.AppMain.Project
             }
             FuncBlocks.Clear();
         }
-        public bool ContainProgram(string name)
-        {
-            return SubRoutines.Any(x => x.ProgramName == name) | FuncBlocks.Any(x => x.ProgramName == name);
-        }
         public void Add(LadderDiagramViewModel ldmodel)
         {
             if (!SubRoutines.Contains(ldmodel))
+            {
                 SubRoutines.Add(ldmodel);
+                IsModify = true;
+            }
         }
         public void Add(FuncBlockViewModel fbmodel)
         {
             if (!FuncBlocks.Contains(fbmodel))
+            {
                 FuncBlocks.Add(fbmodel);
+                IsModify = true;
+            }
         }
         public void Remove(LadderDiagramViewModel ldmodel)
         {
             if (SubRoutines.Contains(ldmodel))
+            {
                 SubRoutines.Remove(ldmodel);
+                IsModify = true;
+            }
         }
         public void Remove(FuncBlockViewModel fbmodel)
         {
             if (FuncBlocks.Contains(fbmodel))
+            {
                 FuncBlocks.Remove(fbmodel);
+                IsModify = true;
+            }
         }
         /// <summary>
         /// Save the ProjectModel to a xml format file

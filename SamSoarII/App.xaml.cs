@@ -3,6 +3,7 @@ using SamSoarII.AppMain.UI;
 using SamSoarII.AppMain.UI.HelpDocComponet;
 using SamSoarII.AppMain.UI.HelpDocComponet.HelpDocPages;
 using SamSoarII.LadderInstViewModel;
+using SamSoarII.UserInterface;
 using SamSoarII.Utility;
 using SamSoarII.ValueModel;
 using System;
@@ -40,7 +41,22 @@ namespace SamSoarII.AppMain
             }
             Exit += App_Exit;
             Startup += App_Startup;
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
         }
+
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            ((MainWindow)Current.MainWindow).SaveProjectByException();
+            TempDebugger.WriteLine(e.Exception.Message);
+            TempDebugger.WriteLine();
+            TempDebugger.WriteLine(e.Exception.StackTrace);
+            TempDebugger.Dispose();
+            LocalizedMessageBox.Show(AppMain.Properties.Resources.Unknowed_Exception, AppMain.Properties.Resources.Error,LocalizedMessageIcon.Error);
+            AppFinalize();
+            Current.Shutdown();
+            e.Handled = true;
+        }
+
         private void App_Startup(object sender, StartupEventArgs e)
         {
             MainWindow mainwindow = new MainWindow();
@@ -49,13 +65,19 @@ namespace SamSoarII.AppMain
         }
         private void App_Exit(object sender, ExitEventArgs e)
         {
+            AppFinalize();
+        }
+
+        public void AppFinalize()
+        {
             SettingManager.Save();
             if (SimulateHelper.SModel != null)
                 SimulateHelper.SModel.Dispose();
-            
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
+
         public static bool CultureIsZH_CH()
         {
             return Thread.CurrentThread.CurrentUICulture.Name.Equals("zh-Hans");

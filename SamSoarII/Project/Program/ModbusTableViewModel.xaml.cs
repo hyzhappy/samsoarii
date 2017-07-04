@@ -76,9 +76,25 @@ namespace SamSoarII.AppMain.Project
                 this.actualheight = value;
             }
         }
-        
+
         #endregion
 
+        #region Modify
+        private bool _isModify = false;
+        public bool IsModify
+        {
+            get
+            {
+                return _isModify;
+            }
+            set
+            {
+                _isModify = value;
+                if(value)
+                    parent.OnPropertyChanged("ModBus");
+            }
+        }
+        #endregion
         /// <summary>
         /// 初始化构造函数 
         /// </summary>
@@ -319,6 +335,7 @@ namespace SamSoarII.AppMain.Project
                 models.Insert(index, model);
             }
             ModelChanged(this, new RoutedEventArgs());
+            IsModify = true;
             Current = model;
         }
 
@@ -346,6 +363,7 @@ namespace SamSoarII.AppMain.Project
                 Current = model;
             }
             ModelChanged(this, new RoutedEventArgs());
+            IsModify = true;
         }
 
         public void RenameModel(ModbusTableModel model = null, int index = -1)
@@ -390,6 +408,7 @@ namespace SamSoarII.AppMain.Project
             {
                 Current.Add(table, index);
                 Current = Current;
+                IsModify = true;
             }
         }
 
@@ -398,6 +417,7 @@ namespace SamSoarII.AppMain.Project
             if (Current != null)
             {
                 Current.Remove(table, index);
+                IsModify = true;
                 Current = Current;
             }
         }
@@ -424,6 +444,7 @@ namespace SamSoarII.AppMain.Project
                         break;
                 }
                 Current = Current;
+                IsModify = true;
             }
         }
 
@@ -554,6 +575,7 @@ namespace SamSoarII.AppMain.Project
                         Current.Name = name;
                         Current.Comment = comment;
                         ModelChanged(this, e);
+                        IsModify = true;
                         dialog.Close();
                     }
                     break;
@@ -627,7 +649,6 @@ namespace SamSoarII.AppMain.Project
         private void OnModelChanged(object sender, RoutedEventArgs e)
         {
             UpdateList();
-            parent.IsModify = true;
         }
 
         #endregion
@@ -650,6 +671,7 @@ namespace SamSoarII.AppMain.Project
         {
             DataGridRow dgrow = (DataGridRow)sender;
             Update(dgrow);
+            Loaded -= DataGridRow_Loaded;
         }
         
         private void DataGridCell_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
