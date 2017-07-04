@@ -499,10 +499,27 @@ namespace SamSoarII.Extend.Utility
         {
             Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
             Match m2 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)(V|Z)(\d+)$");
+            Match m3 = Regex.Match(var, @"^([KH])(.+)$");
             string name = null;
             int addrn = 0;
             string addr = null;
-            if (m1.Success)
+            if (m3.Success)
+            {
+                switch (m3.Groups[1].Value)
+                {
+                    case "K":
+                        if (mode.Equals("r"))
+                            return m3.Groups[2].Value;
+                        else
+                            throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
+                    case "H":
+                        if (mode.Equals("r"))
+                            return "0x" + m3.Groups[2].Value;
+                        else
+                            throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
+                }
+            }
+            else if (m1.Success)
             {
                 name = m1.Groups[1].Value;
                 addrn = int.Parse(m1.Groups[2].Value);
@@ -586,22 +603,12 @@ namespace SamSoarII.Extend.Utility
                             hasconvert = true;
                             return String.Format("(*(({2:s}*)({0:s}DoubleWord+{1:s})))", name, addr, wordsize <= 16 ? "int16_t" : "int32_t");
                         case "DWORD":
-                            return String.Format("{0:s}DoubleWords[{1:s}]", name, addr);
+                            return String.Format("{0:s}DoubleWord[{1:s}]", name, addr);
                         case "FLOAT":
                             hasconvert = true;
                             return String.Format("(*(({2:s}*)({0:s}DoubleWord+{1:s})))", name, addr, wordsize <= 16 ? "float" : "double");
                         default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
                     }
-                case "K": case "F":
-                    if (mode.Equals("r"))
-                        return addr.ToString();
-                    else
-                        throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
-                case "H":
-                    if (mode.Equals("r"))
-                        return "0x" + addr.ToString();
-                    else
-                        throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
                 default:
                     return var;
             }

@@ -166,11 +166,13 @@ namespace SamSoarII.Simulation
                     break;
                 case "WORD":
                     unit = new SimulateWordUnit();
-                    unit.Value = Int32.Parse(name.Substring(1));
+                    unit.Value = Int32.Parse(name.Substring(1),
+                        name[0] == 'H' ? System.Globalization.NumberStyles.AllowHexSpecifier : System.Globalization.NumberStyles.Integer);
                     break;
                 case "DWORD":
                     unit = new SimulateDWordUnit();
-                    unit.Value = Int64.Parse(name.Substring(1));
+                    unit.Value = Int64.Parse(name.Substring(1),
+                        name[0] == 'H' ? System.Globalization.NumberStyles.AllowHexSpecifier : System.Globalization.NumberStyles.Integer);
                     break;
                 case "FLOAT":
                     unit = new SimulateFloatUnit();
