@@ -1243,7 +1243,7 @@ namespace SamSoarII.AppMain.Project
                         _e.BVModel_new = sender;
                         ElementChanged(this, _e);
                     }
-                    catch (ValueParseException ex)
+                    catch (Exception ex)
                     {
                         LocalizedMessageBox.Show(ex.Message,LocalizedMessageIcon.Error);
                     }

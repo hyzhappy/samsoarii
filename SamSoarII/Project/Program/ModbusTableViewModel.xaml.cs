@@ -787,6 +787,7 @@ namespace SamSoarII.AppMain.Project
         }
 
         #endregion
+
         public void Dispose()
         {
             parent = null;

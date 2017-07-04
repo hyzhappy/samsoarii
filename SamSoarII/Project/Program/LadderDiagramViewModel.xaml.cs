@@ -526,14 +526,8 @@ namespace SamSoarII.AppMain.Project
         public void ReplaceSingleElement(LadderNetworkViewModel network, BaseViewModel element)
         {
             var elements = new List<BaseViewModel>();
-            elements.Add(element);
             var oldelements = new List<BaseViewModel>();
-            var oldele = _selectRectOwner.GetElementByPosition(element.X, element.Y);
-            if (oldele != null)
-            {
-                oldelements.Add(oldele);
-            }
-
+            elements.Add(element);
             NetworkChangeElementArea oldarea = NetworkChangeElementArea.Create(
                 network, new BaseViewModel[] { element }, new VerticalLineViewModel[] { });
             if (element.Type == ElementType.Output)
@@ -545,7 +539,14 @@ namespace SamSoarII.AppMain.Project
                         elements.Add(new HorizontalLineViewModel() { X = i, Y = SelectionRect.Y });
                     }
                 }
+                element.X = GlobalSetting.LadderXCapacity - 1;
             }
+            var oldele = _selectRectOwner.GetElementByPosition(element.X, element.Y);
+            if (oldele != null)
+            {
+                oldelements.Add(oldele);
+            }
+            
             NetworkChangeElementArea area = NetworkChangeElementArea.Create(
                 network, new BaseViewModel[] { element }, new VerticalLineViewModel[] { });
             area.SU_Select = SelectStatus.SingleSelected;
@@ -1703,13 +1704,9 @@ namespace SamSoarII.AppMain.Project
                     _selectRect.X = rectX;
                     dialog.Close();
                 }
-                catch (ValueParseException exce2)
+                catch (Exception exce2)
                 {
                     LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
-                }
-                catch (InstructionExecption exce3)
-                {
-                    LocalizedMessageBox.Show(string.Format(exce3.Message), LocalizedMessageIcon.Error);
                 }
             };
             dialog.ShowDialog();
@@ -1872,7 +1869,7 @@ namespace SamSoarII.AppMain.Project
                 viewmodel.Y = y;
                 NetworkChangeElementArea oldarea = NetworkChangeElementArea.Create(
                     lnvmodel, new BaseViewModel[] { viewmodel }, new VerticalLineViewModel[] { });
-                eles_old = lnvmodel.GetElements().Where(ele => ele.Y == y && ele.X >= x);
+                eles_old = lnvmodel.GetElements().Where(ele => ele.Y == y && ele.X >= x).ToArray();
                 eles_new = new List<BaseViewModel>();
                 for (int i = x; i < GlobalSetting.LadderXCapacity - 1; i++)
                 {
