@@ -222,10 +222,15 @@ namespace SamSoarII.AppMain
             {
                 StatusBarItem = StatusBarItem.Program;
                 MainWindow.SB_Program.Text = ProjectModel.ProjectName;
-                if(ProjectFullFileName == string.Empty)
+                if (ProjectFullFileName == string.Empty)
                     MainWindow.SB_Program.ToolTip = string.Empty;
                 else
-                    MainWindow.SB_SP_Program.ToolTip = ProjectFullFileName;
+                {
+                    if (App.CultureIsZH_CH())
+                        MainWindow.SB_SP_Program.ToolTip = "路径：" + ProjectFullFileName;
+                    else
+                        MainWindow.SB_SP_Program.ToolTip = "Path:" + ProjectFullFileName;
+                }
             }
         }
 
@@ -1403,6 +1408,27 @@ namespace SamSoarII.AppMain
                         (CommunicationParams)(ProjectPropertyManager.ProjectPropertyDic["CommunicationParams"]));
                     dialog1.ShowDialog();
                 };
+                dialog.CommunicationTest += (sender, e) => 
+                {
+                    var _ret = CommunicationTest();
+                    switch (_ret)
+                    {
+                        case CheckRet.None:
+                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success,LocalizedMessageIcon.Information);
+                            break;
+                        case CheckRet.LadderError:
+                            LocalizedMessageBox.Show(Properties.Resources.Ladder_Error, LocalizedMessageIcon.Error);
+                            break;
+                        case CheckRet.FuncblockError:
+                            LocalizedMessageBox.Show(Properties.Resources.FuncBlock_Error, LocalizedMessageIcon.Error);
+                            break;
+                        case CheckRet.CommunicationError:
+                            LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                            break;
+                        default:
+                            break;
+                    }
+                };
                 baseSetting.ModifyButtonClick += (sender2, e2) =>
                 {
                     using (ProjectPropertyDialog dialog2 = new ProjectPropertyDialog(_projectModel))
@@ -1475,17 +1501,6 @@ namespace SamSoarII.AppMain
             int ret = SimulateHelper.Simulate(_projectModel);
             return ret;
         }
-        //public bool MonitorProject()
-        //{
-        //    var ret = CommunicationTest();
-        //    if (ret == CheckRet.None)
-        //    {
-        //        _projectModel.MMonitorManager.Initialize(_projectModel);
-        //        _projectModel.LadderMode = LadderMode.Monitor;
-        //        return true;
-        //    }
-        //    return false;
-        //}
         public CheckRet CommunicationTest()
         {
             if (!CheckLadder(false))

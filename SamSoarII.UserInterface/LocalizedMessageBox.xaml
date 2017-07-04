@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" MinWidth="200" MinHeight="90">
             <Image x:Name="IconToShow" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,30,0,0" Height="35" Width="35"/>
-            <TextBlock x:Name="TB_MessageToShow" Text="{Binding MessageToShow}" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" MaxWidth="500"></TextBlock>
+            <TextBlock x:Name="TB_MessageToShow" Text="{Binding MessageToShow}" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" MaxWidth="400"></TextBlock>
         </StackPanel>
         <Canvas x:Name="B_Canvas" Grid.Row="1" Background="#FFF6F6F6">
             <Canvas.Resources>

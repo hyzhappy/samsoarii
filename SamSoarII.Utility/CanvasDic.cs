@@ -70,23 +70,14 @@ namespace SamSoarII.Utility
         {
             for (int y = _y1; y <= _y2; y++)
             {
+                if (models[y] == null) continue;
                 for (int x = _x1; x <= _x2; x++)
-                {
-                    if (models[y] == null) break;
                     models[y][x] = default(T);
-                }
             }
         }
         public void Clear()
         {
-            for (int y = 0; y < YCapacity; y++)
-            {
-                for (int x = 0; x < XCapacity; x++)
-                {
-                    if (models[y] == null) break;
-                    models[y][x] = default(T);
-                }
-            }
+            Clear(0,XCapacity - 1,0,YCapacity - 1);
         }
         public T this[int x,int y]
         {
@@ -99,6 +90,25 @@ namespace SamSoarII.Utility
             }
             set { Insert(x, y, value); }
         }
+
+        public T[] this[int index,bool isRow]
+        {
+            get
+            {
+                if (isRow && index < YCapacity) return models[index];
+                else if (!isRow && index < XCapacity)
+                {
+                    T[] temp = new T[YCapacity];
+                    for (int i = 0; i < YCapacity; i++)
+                    {
+                        temp[i] = models[i][index];
+                    }
+                    return temp;
+                }
+                else return null;
+            }
+        }
+
         private bool Assert(int x, int y)
         {
             return (x >= 0 && x < XCapacity && y >= 0 && y < YCapacity && models[y] != null);

@@ -197,33 +197,15 @@ namespace SamSoarII.UserInterface
 
         private void DrawFree(Label label)
         {
-            System.Windows.Media.Color color = new System.Windows.Media.Color();
-            color.A = 255;
-            color.R = 255;
-            color.G = 255;
-            color.B = 255;
-            label.Background = new SolidColorBrush(color);
-            color.A = 255;
-            color.R = 0;
-            color.G = 0;
-            color.B = 0;
-            label.Foreground = new SolidColorBrush(color);
+            label.Background = Brushes.White;
+            label.Foreground = Brushes.Black;
             label.FontWeight = FontWeights.Normal;
         }
 
         private void DrawCursor(Label label)
         {
-            System.Windows.Media.Color color = new System.Windows.Media.Color();
-            color.A = 255;
-            color.R = 0;
-            color.G = 0;
-            color.B = 0;
-            label.Background = new SolidColorBrush(color);
-            color.A = 255;
-            color.R = 255;
-            color.G = 255;
-            color.B = 255;
-            label.Foreground = new SolidColorBrush(color);
+            label.Background = Brushes.Black;
+            label.Foreground = Brushes.White;
             label.FontWeight = FontWeights.Heavy;
         }
 

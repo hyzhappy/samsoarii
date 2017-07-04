@@ -69,9 +69,7 @@ namespace SamSoarII.AppMain.LadderCommand
             _network.ReplaceVerticalLines(_vlines);
             InstructionCommentManager.RaiseMappedMessageChangedEvent();
             if (_area != null)
-            {
                 _area.Select(_network);
-            }
         }
     }
 }
