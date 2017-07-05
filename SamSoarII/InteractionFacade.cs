@@ -1315,6 +1315,7 @@ namespace SamSoarII.AppMain
             if (ProjectFullFileName != string.Empty)
             {
                 SaveAsProject(ProjectFullFileName);
+                ProjectFileManager.Update(FileHelper.GetFileName(ProjectFullFileName), ProjectFullFileName);
             }
         }
         public void SaveAsProject(string fileName)

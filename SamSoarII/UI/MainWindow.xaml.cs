@@ -261,17 +261,21 @@ namespace SamSoarII.AppMain.UI
             worker.RunWorkerAsync();
             LACProj.Show();
             LAProj.Hide();
-            if (App.AutoOpenFileFullPath != string.Empty) OpenProject(App.AutoOpenFileFullPath);
             Loaded -= MainWindow_Loaded;
         }
         private void Initialize()
         {
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 ElementList.InitializeElementCollection();
                 InstructionCommentManager.MappedMessageChanged += ElementList.InstructionCommentManager_MappedMessageChanged;
                 ValueCommentManager.ValueCommentChanged += ElementList.ValueCommentManager_ValueCommentChanged;
                 ValueAliasManager.ValueAliasChanged += ElementList.ValueAliasManager_ValueAliasChanged;
+                if (App.AutoOpenFileFullPath != string.Empty)
+                {
+                    _interactionFacade.LoadProject(App.AutoOpenFileFullPath);
+                    LACProj.Show();
+                }
             });
         }
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -302,7 +306,6 @@ namespace SamSoarII.AppMain.UI
                     if (CurrentProjectHandle(false, false))
                     {
                         _interactionFacade.LoadProject(projectMessage.Value.Item2);
-                        ProjectFileManager.Update(projectMessage.Value.Item1, projectMessage.Value.Item2);
                         LACProj.Show();
                     }
                 }

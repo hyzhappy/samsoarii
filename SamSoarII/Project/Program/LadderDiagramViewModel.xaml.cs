@@ -1202,10 +1202,6 @@ namespace SamSoarII.AppMain.Project
                     PushDown(_selectRect.X, _selectRect.Y);
                     return;
                 }
-                if (y + 1 == _selectRectOwner.RowCount)
-                {
-                    NetworkAddRow(_selectRectOwner, _selectRectOwner.RowCount);
-                }
                 if (x >= 0)
                 {
                     var vline = _selectRectOwner.GetVerticalLineByPosition(x, y);
@@ -1221,7 +1217,7 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        
+
         private List<BaseViewModel> bvmodel_removed = new List<BaseViewModel>();
         private List<BaseViewModel> bvmodel_replaced = new List<BaseViewModel>();
         private List<VerticalLineViewModel> vlvmodel_removed = new List<VerticalLineViewModel>();
