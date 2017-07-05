@@ -189,7 +189,6 @@ namespace SamSoarII.AppMain.UI
             GB_Inst.Content = IDVM_inst;
             ViewMode = _viewmode;
         }
-        
     }
 }
 

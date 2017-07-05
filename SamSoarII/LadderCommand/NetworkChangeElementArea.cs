@@ -80,7 +80,6 @@ namespace SamSoarII.AppMain.LadderCommand
                 area.NetworkNumberEnd = lnvmodel.NetworkNumber;
                 area.X1 = area.X2 = x;
                 area.Y1 = area.Y2 = y;
-                 
             }
             else
             {
