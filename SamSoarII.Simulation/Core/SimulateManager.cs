@@ -177,15 +177,15 @@ namespace SamSoarII.Simulation.Core
                 }
                 // 若检查到暂停状态的改变则进行处理
                 _pause_new = SimulateDllModel.GetBPPause();
-                isbppause = (_pause_new == 1);
-                if (_pause_old == 0 && _pause_new == 1)
+                isbppause = (_pause_new > 0);
+                if (_pause_old == 0 && _pause_new > 0)
                 {
                     if (SimulateDllModel.GetCallCount() > 256)
                         bpstatus = BreakpointStatus.SOF;
                     OnBreakpointPause(new BreakpointPauseEventArgs(
                         SimulateDllModel.GetBPAddr(), bpstatus));
                 }
-                if (_pause_old == 1 && _pause_new == 0)
+                if (_pause_old > 0 && _pause_new == 0)
                 {
                     OnBreakpointResume(new BreakpointPauseEventArgs(
                         SimulateDllModel.GetBPAddr(), bpstatus));
@@ -996,7 +996,8 @@ namespace SamSoarII.Simulation.Core
                 Exception exc = (Exception)sender;
                 SimulateExceptionDialog dialog = new SimulateExceptionDialog();
                 dialog.TB_Message.Text = exc.Message;
-                bool iscritical = (sender is StackOverflowException);
+                //bool iscritical = (sender is StackOverflowException || sender is AccessViolationException);
+                bool iscritical = true;
                 dialog.B_Continue.IsEnabled = !iscritical;
                 dialog.B_Pause.IsEnabled = !iscritical;
                 dialog.B_Continue.Click += (_sender, _e) =>
@@ -1011,7 +1012,7 @@ namespace SamSoarII.Simulation.Core
                 };
                 dialog.B_Abort.Click += (_sender, _e) =>
                 {
-                    dllmodel.Abort();
+                    dllmodel.Abort(true);
                     dialog.Close();
                 };
                 dialog.ShowDialog();

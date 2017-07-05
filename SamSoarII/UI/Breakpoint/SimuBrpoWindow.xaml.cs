@@ -68,6 +68,27 @@ namespace SamSoarII.Simulation.UI.Breakpoint
                 }
             }
         }
+
+        private SimulateModel smodel;
+        public SimulateModel SModel
+        {
+            get
+            {
+                return this.smodel;
+            }
+            set
+            {
+                if (smodel != null)
+                {
+                    smodel.SimulateStart += OnSimulateStart;
+                }
+                this.smodel = value;
+                if (smodel != null)
+                {
+                    smodel.SimulateStart -= OnSimulateStart;
+                }
+            }
+        }
         
         private ObservableCollection<SimuBrpoElement> items
             = new ObservableCollection<SimuBrpoElement> ();
@@ -260,6 +281,15 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             PropertyChanged(this, new PropertyChangedEventArgs("Items"));
             ifacade.MainWindow.LACBreakpoint.Show();
         }
+        
+        private void OnSimulateStart(object sender, RoutedEventArgs e)
+        {
+            foreach (SimuBrpoElement ele in items)
+            {
+                if (ele.IsActive) Active(ele);
+            }
+        }
+
         private void OnBreakpointResume(object sender, BreakpointPauseEventArgs e)
         {
             Breakpoint = null;
