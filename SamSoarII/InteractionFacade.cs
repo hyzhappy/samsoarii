@@ -1193,8 +1193,8 @@ namespace SamSoarII.AppMain
                     {
                         CurrentLadder.RemoveSingleVerticalLine(
                             CurrentLadder.SelectRectOwner, vlvmodel);
+                        SelectionRectDown();
                     }
-                    SelectionRectDown();
                 }
             }
         }
@@ -1342,6 +1342,7 @@ namespace SamSoarII.AppMain
             XElement xele_r = xdoc.Element("Root");
             XElement xele_rtv = xele_r.Element("ProjectTreeView");
             _projectModel.IFacade = this;
+            //在这里更新用户可能自己更改的文件名称
             _pname = FileHelper.GetFileName(ProjectFullFileName);
             if (_pname != _projectModel.ProjectName) _projectModel.ProjectName = _pname;
             _projectModel.autoSavedManager = new AutoSavedManager(this);

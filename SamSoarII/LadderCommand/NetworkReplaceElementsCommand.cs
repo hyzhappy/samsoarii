@@ -18,6 +18,7 @@ namespace SamSoarII.AppMain.LadderCommand
         private IEnumerable<VerticalLineViewModel> _oldvlines;
         private NetworkChangeElementArea _area;
         private NetworkChangeElementArea _oldarea;
+        private int _oldRowCount;
 
         public NetworkReplaceElementsCommand(
             LadderNetworkViewModel network,
@@ -79,6 +80,9 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public virtual void Execute()
         {
+            _oldRowCount = _network.RowCount;
+            int tempRowCount = ComputeRowCount();
+            if (_network.RowCount < tempRowCount) _network.RowCount = tempRowCount;
             _network.RemoveElements(_oldelements);
             _network.RemoveVerticalLines(_oldvlines);
             _network.ReplaceElements(_elements);
@@ -90,6 +94,15 @@ namespace SamSoarII.AppMain.LadderCommand
             }
         }
 
+        private int ComputeRowCount()
+        {
+            if (_elements.Count() == 0 && _vlines.Count() == 0) return 0;
+            if (_elements.Count() == 0) return _vlines.OrderBy(x => { return x.Y; }).Last().Y + 2;
+            if (_vlines.Count() == 0) return _elements.OrderBy(x => { return x.Y; }).Last().Y + 1;
+            return Math.Max(_elements.OrderBy(x => { return x.Y; }).Last().Y + 1,
+                _vlines.OrderBy(x => { return x.Y; }).Last().Y + 2);
+        }
+
         public virtual void Redo()
         {
             Execute();
@@ -97,16 +110,14 @@ namespace SamSoarII.AppMain.LadderCommand
 
         public virtual void Undo()
         {
+            _network.RowCount = _oldRowCount;
             _network.RemoveElements(_elements);
             _network.RemoveVerticalLines(_vlines);
             _network.ReplaceElements(_oldelements);
             _network.ReplaceVerticalLines(_oldvlines);
             InstructionCommentManager.RaiseMappedMessageChangedEvent();
-            if (_oldarea != null)
-            {
-                _oldarea.Select(_network);
-            }
+            _oldarea?.Select(_network);
+            if (_oldarea == null) _area?.Select(_network);
         }
     }
-    
 }
