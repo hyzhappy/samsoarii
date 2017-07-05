@@ -8,7 +8,7 @@
              xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
-                   Background="White">
+             Background="White">
     <Grid x:Uid="G_Main" x:Name="G_Main">
         <Grid.RowDefinitions>
             <RowDefinition x:Uid="RD_Inst" x:Name="RD_Inst" Height="*" MinHeight="64"/>

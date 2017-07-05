@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Input;
 using SamSoarII.AppMain.Project;
 using System.Collections.ObjectModel;
 using Xceed.Wpf.AvalonDock.Layout;
-using SamSoarII.Simulation.UI;
-using SamSoarII.Simulation.UI.Chart;
-using SamSoarII.AppMain.UI.HelpDocComponet;
 using SamSoarII.HelpDocument.HelpDocComponet;
-using System.Windows.Media.Imaging;
 using SamSoarII.AppMain.UI.Style;
 using Xceed.Wpf.AvalonDock.Controls;
 
@@ -54,6 +46,7 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Current
+
         private ITabItem selecteditem = null;
         public ITabItem SelectedItem
         {
@@ -70,6 +63,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
+
         #endregion
 
         #region Inner Scroll
@@ -225,7 +219,7 @@ namespace SamSoarII.AppMain.UI
                 }
             }
         }
-        
+  
         protected override void OnActualWidthChanged()
         {
             base.OnActualWidthChanged();
@@ -296,11 +290,6 @@ namespace SamSoarII.AppMain.UI
             }
         }
         
-        private void OnTabGotFocus(object sender, RoutedEventArgs e)
-        {
-            GotFocus(this, e);
-        }
-
         private void OnTabFloatClosed(object sender, RoutedEventArgs e)
         {
             if (sender is MainTabDiagramItem)

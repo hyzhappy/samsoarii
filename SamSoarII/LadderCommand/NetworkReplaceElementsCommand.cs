@@ -106,6 +106,10 @@ namespace SamSoarII.AppMain.LadderCommand
             {
                 _oldarea.Select(_network);
             }
+            else if (_area != null)
+            {
+                _area.Select(_network);
+            }
         }
     }
     
