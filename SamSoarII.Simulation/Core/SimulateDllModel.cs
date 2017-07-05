@@ -275,7 +275,7 @@ namespace SamSoarII.Simulation.Core
             int size,
             int value
         );
-        
+
         /// <summary>
         /// 在开始仿真之前，需要做的初始化工作
         /// </summary>
@@ -543,7 +543,17 @@ namespace SamSoarII.Simulation.Core
             SetBPEnable(1);
             SetClockRate(1);
             // 初始化
-            InitRunLadder();
+            try
+            {
+                InitRunLadder();
+            }
+            // 触发异常时暂停并发送事件等待处理
+            catch (Exception exce)
+            {
+                Pause();
+                SimulateException(exce, new RoutedEventArgs());
+                SimulateAbort(this, new RoutedEventArgs());
+            }
             // 存活状态下运行循环
             while (simulateActive)
             {
@@ -568,6 +578,7 @@ namespace SamSoarII.Simulation.Core
                 {
                     Pause();
                     SimulateException(exce, new RoutedEventArgs());
+                    SimulateAbort(this, new RoutedEventArgs());
                 }
                 AfterRunLadder();
             }

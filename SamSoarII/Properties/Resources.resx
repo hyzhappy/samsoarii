@@ -1773,4 +1773,7 @@
   <data name="Unknowed_Exception" xml:space="preserve">
     <value>There is an unknown error in the program. Please contact our technical support and get help!</value>
   </data>
+  <data name="Add_Operation_Forbidden" xml:space="preserve">
+    <value>add operation can not be performed!</value>
+  </data>
 </root>

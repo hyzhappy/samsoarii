@@ -323,9 +323,6 @@
     <Compile Include="UI\ReplaceWindow.xaml.cs">
       <DependentUpon>ReplaceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\SelectRect.xaml.cs">
-      <DependentUpon>SelectRect.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\Style\IconManager.cs" />
     <Compile Include="UI\TextFindWindow.xaml.cs">
       <DependentUpon>TextFindWindow.xaml</DependentUpon>
@@ -685,10 +682,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ReplaceWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

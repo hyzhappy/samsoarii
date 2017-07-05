@@ -280,7 +280,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 dialog.EnsureButtonClick += (sender1, e1) => 
                 {
-                    LocalizedMessageResult result = LocalizedMessageBox.Show(Properties.Resources.Message_Tooltip, string.Empty, LocalizedMessageButton.YesNo);
+                    LocalizedMessageResult result = LocalizedMessageBox.Show(Properties.Resources.Message_Tooltip, LocalizedMessageButton.OKCancel);
                     if (result == LocalizedMessageResult.Yes)
                     {
                         tables.Clear();

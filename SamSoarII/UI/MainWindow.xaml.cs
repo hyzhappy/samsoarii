@@ -245,7 +245,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show("Version Number:1.0.5", Properties.Resources.About,LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show("Version Number:1.0.6", Properties.Resources.About,LocalizedMessageIcon.Information);
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -846,6 +846,12 @@ namespace SamSoarII.AppMain.UI
         {
             _interactionFacade.CreateModbus();
         }
+        /// <summary>
+        /// 进行关闭，打开，创建等影响当前工程的操作时调用
+        /// </summary>
+        /// <param name="CreateNewProject">结束操作后是否创建新工程</param>
+        /// <param name="OpenProject">结束操作后是否加载工程</param>
+        /// <returns>是否对当前工程进行了处理</returns>
         private bool CurrentProjectHandle(bool CreateNewProject,bool OpenProject)
         {
             if (_interactionFacade.ProjectModel == null)

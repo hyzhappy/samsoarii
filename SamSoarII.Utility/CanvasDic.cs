@@ -91,7 +91,7 @@ namespace SamSoarII.Utility
             set { Insert(x, y, value); }
         }
 
-        public T[] this[int index,bool isRow]
+        public T[] this[int index,bool isRow = true]
         {
             get
             {

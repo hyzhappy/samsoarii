@@ -24,6 +24,9 @@ namespace SamSoarII.AppMain
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// 用于双击文件启动程序时保存的路径
+        /// </summary>
         public static string AutoOpenFileFullPath;
         public static SplashScreen splashScreen;
         public App()
@@ -43,11 +46,17 @@ namespace SamSoarII.AppMain
             Startup += App_Startup;
             DispatcherUnhandledException += App_DispatcherUnhandledException;
         }
-
+        /// <summary>
+        /// 程序发生未捕捉的异常而崩溃时调用
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
+            //保存用户正在编辑的文件
             ((MainWindow)Current.MainWindow).SaveProjectByException();
             AppFinalize();
+            //写入Debug信息
             TempDebugger.WriteLine();
             TempDebugger.WriteLine(e.Exception.Message);
             TempDebugger.WriteLine();
@@ -78,7 +87,10 @@ namespace SamSoarII.AppMain
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
-
+        /// <summary>
+        /// 检查应用程序的文化设置
+        /// </summary>
+        /// <returns></returns>
         public static bool CultureIsZH_CH()
         {
             return Thread.CurrentThread.CurrentUICulture.Name.Equals("zh-Hans");

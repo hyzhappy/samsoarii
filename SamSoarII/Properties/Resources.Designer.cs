@@ -88,6 +88,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 add operation can not be performed! 的本地化字符串。
+        /// </summary>
+        public static string Add_Operation_Forbidden {
+            get {
+                return ResourceManager.GetString("Add_Operation_Forbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Address range is crossed! 的本地化字符串。
         /// </summary>
         public static string Address_Cross {

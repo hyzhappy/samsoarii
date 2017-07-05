@@ -21,6 +21,7 @@ using System.ComponentModel;
 using SamSoarII.Simulation.Core.Event;
 using SamSoarII.Extend.Utility;
 using SamSoarII.LadderInstViewModel;
+using System.Runtime.ExceptionServices;
 
 namespace SamSoarII.Simulation.UI.Breakpoint
 {
@@ -135,6 +136,7 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             lnvmodel.BreakpointChanged -= OnBreakpointChanged;
         }
 
+        [HandleProcessCorruptedStateExceptions]
         public void Active(SimuBrpoElement ele)
         { 
             int bpaddr = ele.BVModel.BPAddress;
@@ -153,13 +155,15 @@ namespace SamSoarII.Simulation.UI.Breakpoint
             try
             {
                 count = int.Parse(ele.BreakTime);
+                SimulateDllModel.SetBPAddr(bpaddr, bpmsg);
+                SimulateDllModel.SetCPAddr(bpaddr, cpmsg);
+                SimulateDllModel.SetBPCount(bpaddr, count);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                
             }
-            SimulateDllModel.SetBPAddr(bpaddr, bpmsg);
-            SimulateDllModel.SetCPAddr(bpaddr, cpmsg);
-            SimulateDllModel.SetBPCount(bpaddr, count);
+            
         }
         public void Unactive(SimuBrpoElement ele)
         {

@@ -536,7 +536,7 @@ namespace SamSoarII.AppMain.UI
                         break;
                     case ProjectTreeViewItem.FLAG_REMOVE:
                         LocalizedMessageResult result = LocalizedMessageBox.Show(
-                            Properties.Resources.Message_Delete, Properties.Resources.Important, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Warning);
+                            Properties.Resources.Message_Delete, Properties.Resources.Important, LocalizedMessageButton.OKCancel, LocalizedMessageIcon.Warning);
                         if (result == LocalizedMessageResult.Yes)
                             RemoveAll(ptvitem);
                         break;
@@ -690,7 +690,7 @@ namespace SamSoarII.AppMain.UI
                 case ProjectTreeViewEventArgs.FLAG_CREATEAFTER:
                     if (ProjectTreeViewItem.HasRenaming)
                     {
-                        LocalizedMessageBox.Show("存在正在被命名的项目，不能进行添加操作！", LocalizedMessageIcon.Warning);
+                        LocalizedMessageBox.Show(string.Format("{0},{1}",Properties.Resources.Item_Rename,Properties.Resources.Add_Operation_Forbidden), LocalizedMessageIcon.Warning);
                         return;
                     }
                     break;

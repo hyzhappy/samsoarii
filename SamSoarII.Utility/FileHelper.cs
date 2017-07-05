@@ -10,6 +10,9 @@ namespace SamSoarII.Utility
 {
     public static class FileHelper
     {
+        /// <summary>
+        /// SamSoarII的文件类型
+        /// </summary>
         public static string ExtensionName
         {
             get
@@ -17,6 +20,9 @@ namespace SamSoarII.Utility
                 return "ssr";
             }
         }
+        /// <summary>
+        /// 应用程序运行的根目录
+        /// </summary>
         public static string AppRootPath
         {
             get
@@ -66,7 +72,11 @@ namespace SamSoarII.Utility
                 throw new Exception("GetMD5HashFromFile() fail,error:" + ex.Message);
             }
         }
-
+        /// <summary>
+        /// 得到相应的文件名
+        /// </summary>
+        /// <param name="fullFileName">文件的完整路径(包括文件名与后缀)</param>
+        /// <returns>文件名</returns>
         public static string GetFileName(string fullFileName)
         {
             string tempstr = fullFileName.Substring(fullFileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
