@@ -79,6 +79,7 @@ namespace SamSoarII.AppMain.Project
                     smmanager.Initialize();
                     SimuBrpoWindow bpwindow = pmodel.IFacade.BPWindow;
                     bpwindow.Route(pmodel);
+                    bpwindow.SModel = smodel;
                     bpwindow.SManager = smodel.SManager;
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
@@ -156,6 +157,7 @@ namespace SamSoarII.AppMain.Project
                 pmodel.LadderMode = LadderMode.Edit;
                 SimuBrpoWindow bpwindow = pmodel.IFacade.BPWindow;
                 bpwindow.Unroute(pmodel);
+                bpwindow.SModel = null;
                 bpwindow.SManager = null;
                 pmodel = null;
             }

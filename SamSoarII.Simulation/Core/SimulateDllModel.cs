@@ -440,17 +440,11 @@ namespace SamSoarII.Simulation.Core
 
         #region Simulate Process
 
-        /// <summary>
-        /// 仿真线程是否存活
-        /// </summary>
+        /// <summary> 仿真线程是否存活 </summary>
         private bool simulateActive;
-        /// <summary>
-        /// 仿真线程是否正在运行
-        /// </summary>
+        /// <summary> 仿真线程是否正在运行 </summary>
         private bool simulateRunning;
-        /// <summary>
-        /// 仿真线程
-        /// </summary>
+        /// <summary> 仿真线程 </summary>
         private Thread simulateThread;
 
         /// <summary> 仿真状态：停止 </summary>
@@ -465,9 +459,7 @@ namespace SamSoarII.Simulation.Core
         /// <summary> 仿真模式：图表绘制 </summary>
         public const int SIMUMODE_CHART = 0x01;
 
-        /// <summary>
-        /// 仿真状态
-        /// </summary>
+        /// <summary> 仿真状态 </summary>
         public int SimulateStatus
         {
             get
@@ -508,13 +500,9 @@ namespace SamSoarII.Simulation.Core
             }
         }
 
-        /// <summary>
-        /// 仿真模式
-        /// </summary>
+        /// <summary> 仿真模式 </summary>
         private int simumode = SIMUMODE_NORMAL;
-        /// <summary>
-        /// 仿真模式
-        /// </summary>
+        /// <summary> 仿真模式 </summary>
         public int SimuMode
         {
             get
@@ -552,7 +540,7 @@ namespace SamSoarII.Simulation.Core
             {
                 Pause();
                 SimulateException(exce, new RoutedEventArgs());
-                SimulateAbort(this, new RoutedEventArgs());
+                //SimulateAbort(this, new RoutedEventArgs());
             }
             // 存活状态下运行循环
             while (simulateActive)
@@ -578,7 +566,7 @@ namespace SamSoarII.Simulation.Core
                 {
                     Pause();
                     SimulateException(exce, new RoutedEventArgs());
-                    SimulateAbort(this, new RoutedEventArgs());
+                    //SimulateAbort(this, new RoutedEventArgs());
                 }
                 AfterRunLadder();
             }
@@ -654,6 +642,9 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         public void Start()
         {
+            // 已经关闭？
+            if (simulateActive && simulateThread != null)
+                return;
             // 存活和运行
             simulateActive = true;
             simulateRunning = true;
@@ -687,13 +678,21 @@ namespace SamSoarII.Simulation.Core
         /// <summary>
         /// 停止仿真
         /// </summary>
-        public void Abort()
+        public void Abort(bool force = false)
         {
+            // 已经关闭？
+            if (!simulateActive || simulateThread == null)
+                return;
             // 关闭线程并设为null
             simulateActive = false;
             simulateRunning = false;
+            // 强制关闭运行
+            if (force)
+            {
+                simulateThread.Abort();
+                SimulateAbort(this, new RoutedEventArgs());
+            }
             simulateThread = null;
-            //SimulateAbort(this, new RoutedEventArgs());
         }
 
         /// <summary>
