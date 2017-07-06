@@ -969,6 +969,358 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Selection Rectangle Relative
+        private enum BoundaryDirection
+        {
+            Up,
+            Right,
+            Left,
+            Bottom,
+            None
+        }
+        private double _offset = 0;
+        private double GetNextNetworkOffset(int networkNum,bool _up,bool _add)
+        {
+            double offset = 0;
+            if (_up)
+            {
+                if (_add)
+                {
+                    if (networkNum == 0) return 0;
+                    int i = 1;
+                    var network = GetNetworkByNumber(networkNum - i++);
+                    offset += network.ActualHeight;
+                    while (network.IsMasked && i <= networkNum)
+                    {
+                        network = GetNetworkByNumber(networkNum - i++);
+                        offset += network.ActualHeight;
+                    }
+                    if (network.IsMasked) return 0;
+                    else return offset;
+                }
+                else
+                {
+                    if (networkNum == 0) return 0;
+                    int i = 1;
+                    var network = GetNetworkByNumber(networkNum - i++);
+                    if (network.IsMasked)
+                        offset += network.ActualHeight;
+                    while (network.IsMasked && i <= networkNum)
+                    {
+                        network = GetNetworkByNumber(networkNum - i++);
+                        if (network.IsMasked)
+                            offset += network.ActualHeight;
+                        else break;
+                    }
+                    if (network.IsMasked && network.NetworkNumber == LadderNetworks.Count - 1) return 0;
+                    return offset;
+                }
+            }
+            else
+            {
+                if (_add)
+                {
+                    if (LadderNetworks.Count == networkNum + 1) return 0;
+                    int i = 1;
+                    var network = GetNetworkByNumber(networkNum + i++);
+                    offset += network.ActualHeight;
+                    while (network.IsMasked && i + networkNum < LadderNetworks.Count)
+                    {
+                        network = GetNetworkByNumber(networkNum + i++);
+                        offset += network.ActualHeight;
+                    }
+                    if (network.IsMasked) return 0;
+                    else return offset;
+                }
+                else
+                {
+                    if (LadderNetworks.Count == networkNum + 1) return 0;
+                    int i = 1;
+                    var network = GetNetworkByNumber(networkNum + i++);
+                    if (network.IsMasked)
+                        offset += network.ActualHeight;
+                    while (network.IsMasked && i + networkNum < LadderNetworks.Count)
+                    {
+                        network = GetNetworkByNumber(networkNum + i++);
+                        if (network.IsMasked)
+                            offset += network.ActualHeight;
+                        else break;
+                    }
+                    if (network.IsMasked && network.NetworkNumber == 0) return 0;
+                    return offset;
+                }
+            }
+        }
+        private double ComputeOffset(BoundaryDirection direction,bool _isSingleSelected,bool _isCrossed = false)
+        {
+            double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
+            double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+            Point point;
+            switch (direction)
+            {
+                case BoundaryDirection.Up:
+                    if (_isSingleSelected)
+                    {
+                        point = _selectRect.TranslatePoint(new Point(0,0),MainScrollViewer);
+                        if (_selectRect.Y == 0)
+                        {
+                            if(point.Y < 100 * scaleY || _selectRectOwner.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y - 100 * scaleY;
+                            }
+                            if (point.Y + _selectRectOwner.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + _selectRectOwner.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                        }
+                        if(_selectRect.Y != 0)
+                        {
+                            if (point.Y < (100 + _selectRect.ActualHeight) * scaleY)
+                            {
+                                return point.Y - (100 + _selectRect.ActualHeight) * scaleY;
+                            }
+                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                        }
+                    }
+                    else if(!_isCrossed)
+                    {
+                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0,0),MainScrollViewer);
+                        if (Math.Min(_selectStartNetwork.SelectAreaFirstY,_selectStartNetwork.SelectAreaSecondY) == 0)
+                        {
+                            if(point.Y < 100 * scaleY || _selectStartNetwork.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y - 100 * scaleY;
+                            }
+                            if (point.Y + _selectStartNetwork.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + _selectStartNetwork.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                        }
+                        if (Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) != 0)
+                        {
+                            if (point.Y < (100 + _selectRect.ActualHeight) * scaleY || (_selectStartNetwork.SelectArea.ActualHeight + _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y - (100 + _selectRect.ActualHeight) * scaleY;
+                            }
+                            if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        switch (CrossNetState)
+                        {
+                            case CrossNetworkState.CrossUp:
+                                double value;
+                                if (_selectAllNetworks.Count == 0)
+                                {
+                                    point = _selectStartNetwork.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    value = GetNextNetworkOffset(_selectStartNetwork.NetworkNumber, true,true);
+                                }
+                                else
+                                {
+                                    point = _selectAllNetworks.First().TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    value = GetNextNetworkOffset(_selectAllNetworks.First().NetworkNumber, true,true);
+                                }
+                                if (point.Y < value * scaleY)
+                                    return point.Y - value * scaleY;
+                                break;
+                            case CrossNetworkState.CrossDown:
+                                if (_selectAllNetworks.Count == 0)
+                                {
+                                    point = _selectStartNetwork.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    return point.Y + _selectStartNetwork.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                                }
+                                else
+                                {
+                                    point = _selectAllNetworks.Last().TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    value = GetNextNetworkOffset(_selectAllNetworks.Last().NetworkNumber, false,false);
+                                }
+                                return point.Y - value * scaleY - MainScrollViewer.ViewportHeight;
+                        }
+                    }
+                    break;
+                case BoundaryDirection.Right:
+                    if (_isSingleSelected)
+                    {
+                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                        if (point.X < 0) return point.X;
+                        if (point.X + 2 * _selectRect.ActualWidth * scaleX < MainScrollViewer.ViewportWidth)
+                        {
+                            return point.X + 2 * _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
+                        }
+                    }
+                    else if (!_isCrossed)
+                    {
+                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                        if (point.X < 0) return point.X;
+                        if (point.X + (_selectRect.ActualWidth + _selectStartNetwork.SelectArea.ActualWidth) * scaleX > MainScrollViewer.ViewportWidth)
+                        {
+                            return point.X + (_selectRect.ActualWidth + _selectStartNetwork.SelectArea.ActualWidth) * scaleX - MainScrollViewer.ViewportWidth;
+                        }
+                    }
+                    break;
+                case BoundaryDirection.Left:
+                    if (_isSingleSelected)
+                    {
+                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                        if (point.X + _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
+                        {
+                            return point.X + _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
+                        }
+                        if (point.X - _selectRect.ActualWidth * scaleX < 0)
+                        {
+                            return point.X - _selectRect.ActualWidth * scaleX;
+                        }
+                    }
+                    else if(!_isCrossed)
+                    {
+                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0,0),MainScrollViewer);
+                        if (point.X + _selectStartNetwork.SelectArea.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
+                        {
+                            return point.X + _selectStartNetwork.SelectArea.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
+                        }
+                        if (point.X - _selectRect.ActualWidth * scaleX < 0)
+                        {
+                            return point.X - _selectRect.ActualWidth * scaleX;
+                        }
+                    }
+                    break;
+                case BoundaryDirection.Bottom:
+                    if (_isSingleSelected)
+                    {
+                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                        if (_selectRect.Y == _selectRectOwner.RowCount - 1)
+                        {
+                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight || _selectRectOwner.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + _selectRect.ActualHeight * scaleY- MainScrollViewer.ViewportHeight;
+                            }
+                            if (point.Y < (_selectRectOwner.RowCount - 1) * _selectRect.ActualHeight * scaleY + 100 * scaleY)
+                            {
+                                return point.Y - (_selectRectOwner.RowCount - 1) * _selectRect.ActualHeight * scaleY - 100 * scaleY;
+                            }
+                        }
+                        if (_selectRect.Y != _selectRectOwner.RowCount - 1)
+                        {
+                            if (point.Y + 2 * _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + 2 * _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                            if (point.Y < 0)
+                                return point.Y;
+                        }
+                    }
+                    else if (!_isCrossed)
+                    {
+                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                        if (Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) == _selectStartNetwork.RowCount - 1)
+                        {
+                            if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY > MainScrollViewer.ViewportHeight || _selectStartNetwork.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                            if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY < _selectStartNetwork.RowCount * _selectRect.ActualHeight * scaleY + 100 * scaleY)
+                            {
+                                return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - _selectStartNetwork.RowCount * _selectRect.ActualHeight * scaleY - 100 * scaleY;
+                            }
+                        }
+                        if (Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) != _selectStartNetwork.RowCount - 1)
+                        {
+                            if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            {
+                                return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                            if(point.Y < 0) return point.Y;
+                        }
+                    }
+                    else
+                    {
+                        switch (CrossNetState)
+                        {
+                            case CrossNetworkState.CrossUp:
+                                double value;
+                                if (_selectAllNetworks.Count == 0)
+                                {
+                                    point = _selectStartNetwork.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    return point.Y;
+                                }
+                                else
+                                {
+                                    point = _selectAllNetworks.First().TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    value = GetNextNetworkOffset(_selectAllNetworks.First().NetworkNumber, true,false);
+                                }
+                                return point.Y + (value + _selectAllNetworks.First().ActualHeight) * scaleY;
+                            case CrossNetworkState.CrossDown:
+                                LadderNetworkViewModel net;
+                                if (_selectAllNetworks.Count == 0)
+                                {
+                                    point = _selectStartNetwork.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    value = GetNextNetworkOffset(_selectStartNetwork.NetworkNumber, false,true);
+                                    net = _selectStartNetwork;
+                                }
+                                else
+                                {
+                                    net = _selectAllNetworks.Last();
+                                    point = net.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                                    value = GetNextNetworkOffset(net.NetworkNumber,false ,true);
+                                }
+                                return point.Y + (value + net.ActualHeight) * scaleY - MainScrollViewer.ViewportHeight;
+                        }
+                    }
+                    break;
+            }
+            return 0;
+        }
+        private bool AssertSelectionArea(BoundaryDirection direction)
+        {
+            var tempoffset = 0.0;
+            switch (CrossNetState)
+            {
+                case CrossNetworkState.CrossUp:
+                case CrossNetworkState.CrossDown:
+                    tempoffset = ComputeOffset(direction, false, true);
+                    break;
+                case CrossNetworkState.NoCross:
+                    tempoffset = ComputeOffset(direction, _selectRectOwner != null);
+                    break;
+            }
+            if (tempoffset != 0)
+            {
+                _offset = tempoffset;
+                return false;
+            }
+            else
+            {
+                _offset = 0;
+                return true;
+            }
+        }
+        private void ChangeViewport(BoundaryDirection direction)
+        {
+            if (!AssertSelectionArea(direction))
+            {
+                switch (direction)
+                {
+                    case BoundaryDirection.Up:
+                    case BoundaryDirection.Bottom:
+                        MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + _offset);
+                        break;
+                    case BoundaryDirection.Left:
+                    case BoundaryDirection.Right:
+                        MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + _offset);
+                        break;
+                    case BoundaryDirection.None:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         public void NavigateToNetworkByNum(int num)
         {
             VScrollToRect(num, _selectRect.Y);
@@ -976,22 +1328,20 @@ namespace SamSoarII.AppMain.Project
         }
         public void VScrollToRect(int networkNumber, int row)
         {
-            double scale = GlobalSetting.LadderScaleY;
-            double offset = scale * (MainBorder.ActualHeight + 20) / 4;
-            foreach (var item in GetNetworks().Where(x => { return x.NetworkNumber < networkNumber; }))
-            {
-                offset += scale * (item.ActualHeight + 20) / 2.89;
-            }
-            offset += scale * (_selectRect.ActualHeight * row + 20) / 3;
+            double scale = GlobalSetting.LadderScaleTransform.ScaleY;
+            double offset = scale * MainBorder.ActualHeight;
+            foreach (var network in GetNetworks().Where(x => { return x.NetworkNumber < networkNumber; }))
+                offset += scale * network.ActualHeight;
+            offset += scale * _selectRect.ActualHeight * row;
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
         public void HScrollToRect(int XIndex)
         {
-            double scale = GlobalSetting.LadderScaleX;
+            double scale = GlobalSetting.LadderScaleTransform.ScaleX;
             double offset = 0;
-            offset += scale * GlobalSetting.LadderWidthUnit * (XIndex + 1) / 2.89;
-            offset -= scale * MainScrollViewer.ViewportWidth / 2.5;
+            offset += scale * GlobalSetting.LadderWidthUnit * (XIndex + 1);
+            offset -= scale * MainScrollViewer.ViewportWidth;
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToHorizontalOffset(offset);
         }
@@ -2215,9 +2565,10 @@ namespace SamSoarII.AppMain.Project
                     {
                         if (_selectStartNetwork.SelectAreaSecondX > 0)
                         {
+                            ChangeViewport(BoundaryDirection.Left);
                             _selectStartNetwork.SelectAreaSecondX--;
                             _selectStartNetwork.SelectAreaOriginSX = _selectStartNetwork.SelectAreaSecondX;
-                            HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                            //HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                             if (_selectStartNetwork.SelectAreaSecondX == _selectStartNetwork.SelectAreaFirstX && _selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit)
                             {
                                 SelectionRect.X = _selectStartNetwork.SelectAreaFirstX;
@@ -2232,9 +2583,10 @@ namespace SamSoarII.AppMain.Project
                     {
                         if (_selectStartNetwork.SelectAreaSecondX < GlobalSetting.LadderXCapacity - 1)
                         {
+                            ChangeViewport(BoundaryDirection.Right);
                             _selectStartNetwork.SelectAreaSecondX++;
                             _selectStartNetwork.SelectAreaOriginSX = _selectStartNetwork.SelectAreaSecondX;
-                            HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                            //HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                             if (_selectStartNetwork.SelectAreaSecondX == _selectStartNetwork.SelectAreaFirstX && _selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit)
                             {
                                 SelectionRect.X = _selectStartNetwork.SelectAreaFirstX;
@@ -2245,6 +2597,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     break;
                 case Key.Up:
+                    ChangeViewport(BoundaryDirection.Up);
                     if (CrossNetState == CrossNetworkState.CrossUp)
                     {
                         CollectSelectAllNetworkUpByCount(_selectAllNetworks.Count + 1);
@@ -2256,10 +2609,6 @@ namespace SamSoarII.AppMain.Project
                         foreach (var net in _selectAllNetworks)
                         {
                             net.IsSelectAllMode = true;
-                        }
-                        if (_selectAllNetworks.Count > 0)
-                        {
-                            VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
                         }
                     }
                     else if (CrossNetState == CrossNetworkState.CrossDown)
@@ -2275,14 +2624,6 @@ namespace SamSoarII.AppMain.Project
                             foreach (var net in _selectAllNetworks)
                             {
                                 net.IsSelectAllMode = true;
-                            }
-                            if (_selectAllNetworks.Count > 0)
-                            {
-                                VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
-                            }
-                            else
-                            {
-                                VScrollToRect(_selectStartNetwork.NetworkNumber,_selectStartNetwork.RowCount);
                             }
                         }
                         else
@@ -2302,7 +2643,7 @@ namespace SamSoarII.AppMain.Project
                         else
                         {
                             _selectStartNetwork.SelectAreaSecondY--;
-                            VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                            //VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
                             if (_selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit && _selectStartNetwork.SelectArea.Width == GlobalSetting.LadderWidthUnit)
                             {
                                 _selectRect.X = _selectStartNetwork.SelectAreaFirstX;
@@ -2313,6 +2654,7 @@ namespace SamSoarII.AppMain.Project
                     }
                     break;
                 case Key.Down:
+                    ChangeViewport(BoundaryDirection.Bottom);
                     if (CrossNetState == CrossNetworkState.CrossDown)
                     {
                         CollectSelectAllNetworkDownByCount(_selectAllNetworks.Count + 1);
@@ -2324,10 +2666,6 @@ namespace SamSoarII.AppMain.Project
                         foreach (var net in _selectAllNetworks)
                         {
                             net.IsSelectAllMode = true;
-                        }
-                        if (_selectAllNetworks.Count > 0)
-                        {
-                            VScrollToRect(_selectAllNetworks.Last().NetworkNumber, _selectAllNetworks.Last().RowCount - 1);
                         }
                     }
                     else if (CrossNetState == CrossNetworkState.CrossUp)
@@ -2343,14 +2681,6 @@ namespace SamSoarII.AppMain.Project
                             foreach (var net in _selectAllNetworks)
                             {
                                 net.IsSelectAllMode = true;
-                            }
-                            if (_selectAllNetworks.Count > 0)
-                            {
-                                VScrollToRect(_selectAllNetworks.First().NetworkNumber, 0);
-                            }
-                            else
-                            {
-                                VScrollToRect(_selectStartNetwork.NetworkNumber,0);
                             }
                         }
                         else
@@ -2370,7 +2700,7 @@ namespace SamSoarII.AppMain.Project
                         else
                         {
                             _selectStartNetwork.SelectAreaSecondY++;
-                            VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                            //VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
                             if (_selectStartNetwork.SelectArea.Height == GlobalSetting.LadderHeightUnit && _selectStartNetwork.SelectArea.Width == GlobalSetting.LadderWidthUnit)
                             {
                                 _selectRect.X = _selectStartNetwork.SelectAreaFirstX;
@@ -2389,6 +2719,7 @@ namespace SamSoarII.AppMain.Project
             switch (key)
             {
                 case Key.Left:
+                    ChangeViewport(BoundaryDirection.Left);
                     _selectStartNetwork.SelectAreaOriginFX = _selectRect.X;
                     _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
@@ -2396,11 +2727,12 @@ namespace SamSoarII.AppMain.Project
                     _selectStartNetwork.SelectAreaSecondX = _selectRect.X - 1;
                     _selectStartNetwork.SelectAreaSecondY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaOriginSX = _selectRect.X - 1;
-                    HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                    //HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                     CrossNetState = CrossNetworkState.NoCross;
                     SelectionStatus = SelectStatus.MultiSelecting;
                     break;
                 case Key.Right:
+                    ChangeViewport(BoundaryDirection.Right);
                     _selectStartNetwork.SelectAreaOriginFX = _selectRect.X;
                     _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaFirstX = _selectRect.X;
@@ -2408,11 +2740,12 @@ namespace SamSoarII.AppMain.Project
                     _selectStartNetwork.SelectAreaSecondX = _selectRect.X + 1;
                     _selectStartNetwork.SelectAreaSecondY = _selectRect.Y;
                     _selectStartNetwork.SelectAreaOriginSX = _selectRect.X + 1;
-                    HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
+                    //HScrollToRect(_selectStartNetwork.SelectAreaSecondX);
                     CrossNetState = CrossNetworkState.NoCross;
                     SelectionStatus = SelectStatus.MultiSelecting;
                     break;
                 case Key.Up:
+                    ChangeViewport(BoundaryDirection.Up);
                     if (_selectRect.Y == 0)
                     {
                         _selectStartNetwork.IsSelectAllMode = true;
@@ -2428,11 +2761,12 @@ namespace SamSoarII.AppMain.Project
                         _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
                         _selectStartNetwork.SelectAreaSecondY = _selectRect.Y - 1;
                         CrossNetState = CrossNetworkState.NoCross;
-                        VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                        //VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
                     }
                     SelectionStatus = SelectStatus.MultiSelecting;
                     break;
                 case Key.Down:
+                    ChangeViewport(BoundaryDirection.Bottom);
                     if (_selectRect.Y == _selectStartNetwork.RowCount - 1)
                     {
                         _selectStartNetwork.IsSelectAllMode = true;
@@ -2448,7 +2782,7 @@ namespace SamSoarII.AppMain.Project
                         _selectStartNetwork.SelectAreaSecondX = _selectRect.X;
                         _selectStartNetwork.SelectAreaSecondY = _selectRect.Y + 1;
                         CrossNetState = CrossNetworkState.NoCross;
-                        VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
+                        //VScrollToRect(_selectStartNetwork.NetworkNumber, _selectStartNetwork.SelectAreaSecondY);
                     }
                     SelectionStatus = SelectStatus.MultiSelecting;
                     break;
