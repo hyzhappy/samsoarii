@@ -1014,7 +1014,7 @@ namespace SamSoarII.AppMain.Project
                             i++;
                             network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber - i);
                         } while ((network.IsMasked || !network.ladderExpander.IsExpand) && !network.IsFirstNetwork());
-                        if (network.ladderExpander.IsExpand)
+                        if (network.ladderExpander.IsExpand && !network.IsMasked)
                         {
                             _selectRectOwner.ReleaseSelectRect();
                             _selectRectOwner = network;
@@ -1046,7 +1046,7 @@ namespace SamSoarII.AppMain.Project
                             i++;
                             network = _ladderNetworks.ElementAt(_selectRectOwner.NetworkNumber + i);
                         } while ((network.IsMasked || !network.ladderExpander.IsExpand) && !network.IsLastNetwork());
-                        if (network.ladderExpander.IsExpand)
+                        if (network.ladderExpander.IsExpand && !network.IsMasked)
                         {
                             _selectRectOwner.ReleaseSelectRect();
                             _selectRectOwner = network;

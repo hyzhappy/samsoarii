@@ -403,30 +403,30 @@
         </ToolBarTray>
         <ToolBarTray x:Name="SimuToolBarTray" DockPanel.Dock="Top" Height="25" Visibility="Collapsed">
             <ToolBar>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Run}" x:Name="SimuStartButton" Command="{x:Static app:GlobalCommand.SimuStartCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Run}" x:Name="SimuStartButton" Command="{x:Static app:GlobalCommand.SimuStartCommand}" Style="{StaticResource ToggleButtonStyle}" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Start.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Pause}" x:Name="SimuPauseButton" Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Height="24" Width="24" Margin="0,0,0,14">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Pause}" x:Name="SimuPauseButton" Command="{x:Static app:GlobalCommand.SimuPauseCommand}" Style="{StaticResource ToggleButtonStyle}" Margin="0,0,0,14">
                     <Image Source="/Resources/Image/Pause.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Stop}" x:Name="SimuStopButton" Command="{x:Static app:GlobalCommand.SimuStopCommand}" Height="24" Width="24" Margin="0,0,0,16">
+                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation_Stop}" x:Name="SimuStopButton" Command="{x:Static app:GlobalCommand.SimuStopCommand}" Style="{StaticResource ToggleButtonStyle}" Margin="0,0,0,16">
                     <Image Source="/Resources/Image/Stop.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </ToggleButton>
             </ToolBar>
             <ToolBar>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Current_Breakpoint}" x:Name="BrpoNowButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Current_Breakpoint}" x:Name="BrpoNowButton" Style="{StaticResource ButtonStyle}" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoNowCommand}">
                     <Image Source="/Resources/Image/Breakpoint/BPNow.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Process}" x:Name="BrpoStepButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Process}" x:Name="BrpoStepButton" Style="{StaticResource ButtonStyle}" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoStepCommand}">
                     <Image x:Uid="Image_40" Source="/Resources/Image/Breakpoint/BPStep.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Sentence}" x:Name="BrpoCallButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_By_Sentence}" x:Name="BrpoCallButton" Style="{StaticResource ButtonStyle}" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoCallCommand}">
                     <Image Source="/Resources/Image/Breakpoint/BPCall.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Jump_Out}" x:Name="BropOutButton" Height="24" Width="24" Margin="0,0,0,16"
+                <Button ToolTip="{x:Static properties:Resources.MainWindow_Jump_Out}" x:Name="BropOutButton" Style="{StaticResource ButtonStyle}" Margin="0,0,0,16"
                         Command="{x:Static app:GlobalCommand.BrpoOutCommand}">
                     <Image Source="/Resources/Image/Breakpoint/BPOut.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
@@ -434,15 +434,15 @@
             <ToolBar>
                 <ComboBox SelectedIndex="0" Margin="0, -12, 0, 0" Width="80" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock>Simulate</TextBlock>
+                    <TextBlock Text="{x:Static properties:Resources.Simulate}"/>
                 </ComboBox>
                 <ComboBox x:Name="TBCB_Device" SelectedIndex="0" Margin="0, -12, 0, 0" Width="120" Height="24"  
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock x:Uid="TextBlock_2">FGs_16MT_A</TextBlock>
+                    <TextBlock Text="{Binding SelectDevice.Type}"/>
                 </ComboBox>
                 <ComboBox x:Name="TBCB_ProjectName" SelectedIndex="0" Margin="0, -12, 0, 0" Width="150" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock x:Uid="TextBlock_3">ProjectName</TextBlock>
+                    <TextBlock Text="{Binding ProjectModel.ProjectName}"/>
                 </ComboBox>
             </ToolBar>
         </ToolBarTray>

@@ -34,7 +34,7 @@ namespace SamSoarII.AppMain
             splashScreen = new SplashScreen(@"Resources\Image\SplashScreen.png");
             splashScreen.Show(false, true);
             InitializeComponent();
-            SpecialValueManager.Initialize();
+            SpecialValueManager.Initialize(); 
             ValueCommentManager.Initialize();
             ValueAliasManager.Initialize();
             SettingManager.Load();
@@ -57,11 +57,13 @@ namespace SamSoarII.AppMain
             ((MainWindow)Current.MainWindow).SaveProjectByException();
             AppFinalize();
             //写入Debug信息
-            TempDebugger.WriteLine();
+            TempDebugger.WriteLine(DateTime.Now);
             TempDebugger.WriteLine(e.Exception.Message);
             TempDebugger.WriteLine();
             TempDebugger.WriteLine(e.Exception.StackTrace);
+            TempDebugger.WriteLine();
             TempDebugger.Dispose();
+
             LocalizedMessageBox.Show(AppMain.Properties.Resources.Unknowed_Exception, AppMain.Properties.Resources.Error,LocalizedMessageIcon.Error);
             Current.Shutdown();
             e.Handled = true;

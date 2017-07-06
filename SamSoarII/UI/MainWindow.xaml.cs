@@ -40,6 +40,7 @@ using System.Windows.Interop;
 using Xceed.Wpf.AvalonDock;
 using SamSoarII.AppMain.Project.Helper;
 using SamSoarII.Utility.FileRegister;
+using SamSoarII.PLCDevice;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -78,8 +79,10 @@ namespace SamSoarII.AppMain.UI
             App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
             InitializeComponent();
             InitializeAvalonDock();
-            DataContext = this;
             _interactionFacade = new InteractionFacade(this);
+            DataContext = this;
+            TBCB_Device.DataContext = PLCDeviceManager.GetPLCDeviceManager();
+            TBCB_ProjectName.DataContext = _interactionFacade;
             Closing += MainWindow_Closing;
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
@@ -1033,12 +1036,12 @@ namespace SamSoarII.AppMain.UI
         {
             if (ProjectTreeViewItem.HasRenaming)
                 return;
-            CurrentProjectHandle(false, false);
+            CurrentProjectHandle(false,false);
         }
         /// <summary>
         /// only called by app throw exceptions
         /// </summary>
-        public void SaveProjectByException()
+        internal void SaveProjectByException()
         {
             if (_interactionFacade.ProjectModel == null) return;
             if (!_interactionFacade.ProjectModel.IsModify && _interactionFacade.ProjectFullFileName != string.Empty) return;

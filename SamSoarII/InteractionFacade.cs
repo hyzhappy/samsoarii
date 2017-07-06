@@ -45,7 +45,7 @@ namespace SamSoarII.AppMain
         FuncblockError,
         CommunicationError
     }
-    public class InteractionFacade
+    public class InteractionFacade:INotifyPropertyChanged
     {
         private StatusBarItem _statusBarItem;
         public StatusBarItem StatusBarItem
@@ -57,8 +57,7 @@ namespace SamSoarII.AppMain
                 SetStatusBar(value);
             }
         }
-
-        public event RoutedEventHandler ProjectChanged = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public bool ProjectLoaded
         {
             get { return _projectModel != null; }
@@ -71,7 +70,7 @@ namespace SamSoarII.AppMain
             private set
             {
                 _projectModel = value;
-                ProjectChanged(this,new RoutedEventArgs());
+                PropertyChanged(this,new PropertyChangedEventArgs("ProjectModel"));
             }
         }
         private bool _isCommentMode;
@@ -176,8 +175,10 @@ namespace SamSoarII.AppMain
             mainwindow.LAErrorList.Content = _erwindow;
             mainwindow.LABreakpoint.Content = _bpwindow;
             CurrentTabChanged += InteractionFacade_CurrentTabChanged;
-            ProjectChanged += InteractionFacade_ProjectChanged;
+            PropertyChanged += InteractionFacade_PropertyChanged;
         }
+
+        
 
         #region StatusBar
         private void _mainTabControl_FloatingWinClosed(object sender, RoutedEventArgs e)
@@ -209,31 +210,33 @@ namespace SamSoarII.AppMain
                 }
             }
         }
-        private void InteractionFacade_ProjectChanged(object sender, RoutedEventArgs e)
+        private void InteractionFacade_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ProjectModel == null)
+            if (e.PropertyName == "ProjectModel")
             {
-                StatusBarItem = StatusBarItem.Empty;
-                MainWindow.SB_Message.Text = string.Empty;
-                MainWindow.SB_Program.Text = string.Empty;
-                MainWindow.SB_SP_Program.ToolTip = string.Empty;
-            }
-            else
-            {
-                StatusBarItem = StatusBarItem.Program;
-                MainWindow.SB_Program.Text = ProjectModel.ProjectName;
-                if (ProjectFullFileName == string.Empty)
-                    MainWindow.SB_Program.ToolTip = string.Empty;
+                if (ProjectModel == null)
+                {
+                    StatusBarItem = StatusBarItem.Empty;
+                    MainWindow.SB_Message.Text = string.Empty;
+                    MainWindow.SB_Program.Text = string.Empty;
+                    MainWindow.SB_SP_Program.ToolTip = string.Empty;
+                }
                 else
                 {
-                    if (App.CultureIsZH_CH())
-                        MainWindow.SB_SP_Program.ToolTip = "路径：" + ProjectFullFileName;
+                    StatusBarItem = StatusBarItem.Program;
+                    MainWindow.SB_Program.Text = ProjectModel.ProjectName;
+                    if (ProjectFullFileName == string.Empty)
+                        MainWindow.SB_Program.ToolTip = string.Empty;
                     else
-                        MainWindow.SB_SP_Program.ToolTip = "Path:" + ProjectFullFileName;
+                    {
+                        if (App.CultureIsZH_CH())
+                            MainWindow.SB_SP_Program.ToolTip = "路径：" + ProjectFullFileName;
+                        else
+                            MainWindow.SB_SP_Program.ToolTip = "Path:" + ProjectFullFileName;
+                    }
                 }
             }
         }
-
         private void InteractionFacade_CurrentTabChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateStatusBar();
@@ -1285,7 +1288,7 @@ namespace SamSoarII.AppMain
             {
                 _projectModel.PropertyChanged -= _projectModel_PropertyChanged;
                 _projectModel.Dispose();
-                _projectModel = null;
+                ProjectModel = null;
             }
             if (_projectTreeView != null)
             {
@@ -1585,6 +1588,7 @@ namespace SamSoarII.AppMain
         }
 
         public event ProjectTreeViewEventHandler PTVEvent = delegate { };
+
         private void OnGotPTVHandle(object sender, ProjectTreeViewEventArgs e)
         {
             LadderDiagramViewModel ldvmodel = null;

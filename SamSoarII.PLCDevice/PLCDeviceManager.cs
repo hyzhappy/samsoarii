@@ -126,7 +126,8 @@ namespace SamSoarII.PLCDevice
                     _selectDevice = Device.DefaultDevice;
                     break;
             }
-            PropertyChanged.Invoke(_PLCDeviceManager, new PropertyChangedEventArgs("SelectIndex"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SelectIndex"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SelectDevice"));
         }
         public List<BaseDeviceMessageDialog> GetDeviceMessageDialogs()
         {

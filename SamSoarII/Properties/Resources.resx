@@ -1776,4 +1776,7 @@
   <data name="Add_Operation_Forbidden" xml:space="preserve">
     <value>add operation can not be performed!</value>
   </data>
+  <data name="Simulate" xml:space="preserve">
+    <value>Simulate</value>
+  </data>
 </root>
