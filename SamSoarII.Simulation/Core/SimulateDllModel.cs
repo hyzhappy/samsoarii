@@ -642,9 +642,6 @@ namespace SamSoarII.Simulation.Core
         /// </summary>
         public void Start()
         {
-            // 已经关闭？
-            if (simulateActive && simulateThread != null)
-                return;
             // 存活和运行
             simulateActive = true;
             simulateRunning = true;

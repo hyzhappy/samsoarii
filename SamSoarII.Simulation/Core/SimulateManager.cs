@@ -271,7 +271,6 @@ namespace SamSoarII.Simulation.Core
                     BreakpointResume(this, new BreakpointPauseEventArgs(bpaddr, bpstatus));
                     _pause_old = 0;
                 }
-                return;
             }
             // 开始仿真
             //SimuStatus = SIMU_RUNNING;
