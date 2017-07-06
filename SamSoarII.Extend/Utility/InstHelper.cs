@@ -551,7 +551,7 @@ namespace SamSoarII.Extend.Utility
                         // 数据格式的转化指令
                         case "WTOD": sw.Write("{1:s} = _WORD_to_DWORD({0:s});\n", inst[1], inst[2]); break;
                         case "DTOW": sw.Write("{1:s} = _DWORD_to_WORD({0:s});\n", inst[1], inst[2]); break;
-                        case "DTOF": sw.Write("{1:s} = _DOWRD_to_FLOAT({0:s});\n", inst[1], inst[2]); break;
+                        case "DTOF": sw.Write("{1:s} = _DWORD_to_FLOAT({0:s});\n", inst[1], inst[2]); break;
                         case "BIN": sw.Write("{1:s} = _BCD_to_WORD({0:s});\n", inst[1], inst[2]); break;
                         case "BCD": sw.Write("{1:s} = _WORD_to_BCD({0:s});\n", inst[1], inst[2]); break;
                         case "ROUND": sw.Write("{1:s} = _DWORD_to_ROUND({0:s});\n", inst[1], inst[2]); break;
