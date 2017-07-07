@@ -1106,7 +1106,7 @@ namespace SamSoarII.AppMain.Project
                     else if (!_isCrossed)
                     {
                         point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) == 0)
+                        if (_selectStartNetwork.SelectAreaSecondY == 0)
                         {
                             if (point.Y < 100 * scaleY || _selectStartNetwork.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
                             {
@@ -1117,15 +1117,29 @@ namespace SamSoarII.AppMain.Project
                                 return point.Y + _selectStartNetwork.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
                             }
                         }
-                        if (Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) != 0)
+                        else
                         {
-                            if (point.Y < (100 + _selectRect.ActualHeight) * scaleY || (_selectStartNetwork.SelectArea.ActualHeight + _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
+                            if(_selectStartNetwork.SelectAreaFirstY > _selectStartNetwork.SelectAreaSecondY)
                             {
-                                return point.Y - (100 + _selectRect.ActualHeight) * scaleY;
+                                if (point.Y < (_selectRect.ActualHeight + 30) * scaleY || (_selectStartNetwork.SelectArea.ActualHeight + _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
+                                {
+                                    return point.Y - (_selectRect.ActualHeight + 30) * scaleY;
+                                }
+                                if (point.Y + 30 * scaleY> MainScrollViewer.ViewportHeight)
+                                {
+                                    return point.Y + 30 * scaleY - MainScrollViewer.ViewportHeight;
+                                }
                             }
-                            if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            if (_selectStartNetwork.SelectAreaFirstY < _selectStartNetwork.SelectAreaSecondY)
                             {
-                                return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                                if (point.Y + (_selectStartNetwork.SelectArea.ActualHeight - _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
+                                {
+                                    return point.Y + (_selectStartNetwork.SelectArea.ActualHeight - _selectRect.ActualHeight) * scaleY - MainScrollViewer.ViewportHeight;
+                                }
+                                if (point.Y + (_selectStartNetwork.SelectArea.ActualHeight - 2 * _selectRect.ActualHeight) * scaleY < 0)
+                                {
+                                    return point.Y + (_selectStartNetwork.SelectArea.ActualHeight - 2 * _selectRect.ActualHeight) * scaleY;
+                                }
                             }
                         }
                     }
@@ -1168,7 +1182,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
                         if (point.X < 0) return point.X;
-                        if (point.X + 2 * _selectRect.ActualWidth * scaleX < MainScrollViewer.ViewportWidth)
+                        if (point.X + 2 * _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
                         {
                             return point.X + 2 * _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
                         }
@@ -1224,10 +1238,7 @@ namespace SamSoarII.AppMain.Project
                             {
                                 return point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
                             }
-                            if (point.Y < 0)
-                            {
-                                return point.Y;
-                            }
+                            if (point.Y < 0) return point.Y;
                         }
                         if (_selectRect.Y != _selectRectOwner.RowCount - 1)
                         {
@@ -1235,14 +1246,13 @@ namespace SamSoarII.AppMain.Project
                             {
                                 return point.Y + 2 * _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
                             }
-                            if (point.Y < 0)
-                                return point.Y;
+                            if (point.Y < 0) return point.Y;
                         }
                     }
                     else if (!_isCrossed)
                     {
                         point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                        if (Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) == _selectStartNetwork.RowCount - 1)
+                        if (_selectStartNetwork.SelectAreaSecondY == _selectStartNetwork.RowCount - 1)
                         {
                             if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY > MainScrollViewer.ViewportHeight || _selectStartNetwork.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
                             {
@@ -1253,13 +1263,30 @@ namespace SamSoarII.AppMain.Project
                                 return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - _selectStartNetwork.RowCount * _selectRect.ActualHeight * scaleY - 100 * scaleY;
                             }
                         }
-                        if (Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) != _selectStartNetwork.RowCount - 1)
+                        else
                         {
-                            if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            if (_selectStartNetwork.SelectAreaFirstY > _selectStartNetwork.SelectAreaSecondY)
                             {
-                                return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                                if (point.Y + _selectRect.ActualHeight * scaleY < 0)
+                                {
+                                    return point.Y + _selectRect.ActualHeight * scaleY;
+                                }
+                                if (point.Y + 2 * _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                                {
+                                    return point.Y + 2 * _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                                }
                             }
-                            if (point.Y < 0) return point.Y;
+                            if (_selectStartNetwork.SelectAreaFirstY < _selectStartNetwork.SelectAreaSecondY)
+                            {
+                                if (point.Y + (_selectStartNetwork.SelectArea.ActualHeight + _selectRect.ActualHeight) * scaleY > MainScrollViewer.ViewportHeight)
+                                {
+                                    return point.Y + (_selectStartNetwork.SelectArea.ActualHeight + _selectRect.ActualHeight) * scaleY - MainScrollViewer.ViewportHeight;
+                                }
+                                if (point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY < 0)
+                                {
+                                    return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY;
+                                }
+                            }
                         }
                     }
                     else
@@ -1387,8 +1414,8 @@ namespace SamSoarII.AppMain.Project
             double scale = GlobalSetting.LadderScaleTransform.ScaleX;
             double offset = 0;
             offset += scale * GlobalSetting.LadderWidthUnit * (XIndex + 1);
-            offset -= scale * MainScrollViewer.ViewportWidth;
-            offset = Math.Max(0, offset);
+            offset -= MainScrollViewer.ViewportWidth / 1.3;
+            if (MainScrollViewer.ViewportWidth == 0) offset = 0;
             MainScrollViewer.ScrollToHorizontalOffset(offset);
         }
         #endregion

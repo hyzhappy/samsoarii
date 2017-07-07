@@ -151,7 +151,6 @@
     <Compile Include="Communication\Command\IntrasegmentReadCommand.cs" />
     <Compile Include="Communication\Command\IntrasegmentWriteCommand.cs" />
     <Compile Include="Communication\CommunicationDataDefine.cs" />
-    <Compile Include="Communication\CommunicationDataManager.cs" />
     <Compile Include="Communication\ICommunicationManager.cs" />
     <Compile Include="Communication\SerialPortManager.cs" />
     <Compile Include="Communication\USBManager.cs" />
