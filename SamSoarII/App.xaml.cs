@@ -93,9 +93,9 @@ namespace SamSoarII.AppMain
         /// 检查应用程序的文化设置
         /// </summary>
         /// <returns></returns>
-        public static bool CultureIsZH_CH()
+        public static bool CultureIsZH_CN()
         {
-            return Thread.CurrentThread.CurrentUICulture.Name.Equals("zh-Hans");
+            return Thread.CurrentThread.CurrentUICulture.Name.Contains("zh");
         }
     }
 }

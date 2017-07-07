@@ -148,7 +148,7 @@ namespace SamSoarII.AppMain.Project
             if (lnvmodel == null)
             {
                 Status = STATUS_ERROR;
-                tberr.Text = App.CultureIsZH_CH() 
+                tberr.Text = App.CultureIsZH_CN() 
                     ? "找不到 Network。"
                     : "Cannot found network.";
                 return;
@@ -157,7 +157,7 @@ namespace SamSoarII.AppMain.Project
             {
                 tberr.Background = Brushes.Gray;
                 tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 已被屏蔽！" : "Network {0:d} has been masked!",
+                    App.CultureIsZH_CN() ? "Network {0:d} 已被屏蔽！" : "Network {0:d} has been masked!",
                     lnvmodel.NetworkNumber);
                 return;
             }
@@ -167,7 +167,7 @@ namespace SamSoarII.AppMain.Project
             {
                 Status = STATUS_OPEN;
                 tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在断路错误！" : "There have broken circuit in ladder of Network {0:d}.", 
+                    App.CultureIsZH_CN() ? "Network {0:d} 的梯形图存在断路错误！" : "There have broken circuit in ladder of Network {0:d}.", 
                     lnvmodel.NetworkNumber);
                 return;
             }
@@ -176,7 +176,7 @@ namespace SamSoarII.AppMain.Project
             {
                 Status = STATUS_SHORT;
                 tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在短路错误！" : "There have short circuit in ladder of Network {0:d}.",
+                    App.CultureIsZH_CN() ? "Network {0:d} 的梯形图存在短路错误！" : "There have short circuit in ladder of Network {0:d}.",
                     lnvmodel.NetworkNumber);
                 return;
             }
@@ -184,7 +184,7 @@ namespace SamSoarII.AppMain.Project
             {
                 Status = STATUS_FUSION;
                 tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
+                    App.CultureIsZH_CN() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
                     lnvmodel.NetworkNumber);
                 return;
             }
@@ -200,7 +200,7 @@ namespace SamSoarII.AppMain.Project
                     {
                         Status = STATUS_FUSION;
                         tberr.Text = String.Format(
-                            App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
+                            App.CultureIsZH_CN() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
                             lnvmodel.NetworkNumber);
                         return;
                     }

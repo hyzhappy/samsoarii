@@ -229,7 +229,7 @@ namespace SamSoarII.AppMain
                         MainWindow.SB_Program.ToolTip = string.Empty;
                     else
                     {
-                        if (App.CultureIsZH_CH())
+                        if (App.CultureIsZH_CN())
                             MainWindow.SB_SP_Program.ToolTip = "路径：" + ProjectFullFileName;
                         else
                             MainWindow.SB_SP_Program.ToolTip = "Path:" + ProjectFullFileName;
@@ -419,75 +419,91 @@ namespace SamSoarII.AppMain
                         break;
                 }
             }
-            ErrorMessage errorMessage = LadderGraphCheckModule.Execute(CurrentLadder);
-            if (errorMessage.Error == ErrorType.None
-             || errorMessage.Error == ErrorType.InstPair)
+            List<ErrorMessage> errorMessages = new List<ErrorMessage>();
+            errorMessages.Add(LadderGraphCheckModule.Execute(_projectModel.MainRoutine));
+            foreach (var routine in _projectModel.SubRoutines)
             {
-                if (weinsts.Count() > 0)
+                errorMessages.Add(LadderGraphCheckModule.Execute(routine));
+            }
+            for (int i = 0 ; i < errorMessages.Count;i++ )
+            {
+                if (errorMessages[i].Error == ErrorType.None
+             || errorMessages[i].Error == ErrorType.InstPair)
                 {
-                    result = (ecount == 0);
-                    if (showreport || !result)
+                    if (weinsts.Count() > 0)
                     {
-                        if (App.CultureIsZH_CH())
-                            ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
-                                    ecount, wcount),handle, true, true);
-                        else
+                        result = (ecount == 0);
+                        if ((showreport || !result) && i == errorMessages.Count - 1)
                         {
-                            ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
-                                    ecount, wcount),handle, true, true);
+                            if (App.CultureIsZH_CN())
+                                ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                                        ecount, wcount), handle, true, true);
+                            else
+                            {
+                                ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
+                                        ecount, wcount), handle, true, true);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    if (showreport)
-                        ShowMessage(Properties.Resources.Program_Correct, handle, false, true);
                     else
-                        handle.Abort();
-                    result = true;
+                    {
+                        if(i == errorMessages.Count - 1)
+                        {
+                            if (showreport)
+                                ShowMessage(Properties.Resources.Program_Correct, handle, false, true);
+                            else
+                                handle.Abort();
+                            result = true;
+                        }
+                    }
+                    if(i == errorMessages.Count - 1)
+                    {
+                        _erwindow.Mode = ErrorReportWindow.MODE_LADDER;
+                        _erwindow.Update(weinsts);
+                        if (!result)
+                            _mainWindow.LACErrorList.Show();
+                    }
+                    //else
+                    //    _projectModel.IsModify = false;
                 }
-                _erwindow.Mode = ErrorReportWindow.MODE_LADDER;
-                _erwindow.Update(weinsts);
-                if (!result)
-                    _mainWindow.LACErrorList.Show();
-                //else
-                //    _projectModel.IsModify = false;
-            }
-            else if (errorMessage.Error == ErrorType.Empty)
-            {
-                if (App.CultureIsZH_CH())
-                    ShowMessage(string.Format("网络{0}元素为空!", errorMessage.RefNetworks.First().NetworkNumber), handle, true, true);
-                else
-                    ShowMessage(string.Format("Network {0} is empty!", errorMessage.RefNetworks.First().NetworkNumber), handle, true, true);
-                result = false;
-            }
-            else
-            {
-                errorMessage.RefNetworks.First().AcquireSelectRect();
-                CurrentLadder.SelectionRect.X = errorMessage.RefNetworks.Last().ErrorModels.First().X;
-                CurrentLadder.SelectionRect.Y = errorMessage.RefNetworks.Last().ErrorModels.First().Y;
-                CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
-                CurrentLadder.VScrollToRect(errorMessage.RefNetworks.First().NetworkNumber, CurrentLadder.SelectionRect.Y);
-                result = false;
-                switch (errorMessage.Error)
+                else if (errorMessages[i].Error == ErrorType.Empty)
                 {
-                    case ErrorType.Open:
-                        ShowMessage(Properties.Resources.Open_Error, handle,true,true);
-                        break;
-                    case ErrorType.Short:
-                        ShowMessage(Properties.Resources.Short_Error, handle, true, true);
-                        break;
-                    case ErrorType.SelfLoop:
-                        ShowMessage(Properties.Resources.Selfloop_Error, handle, true, true);
-                        break;
-                    case ErrorType.HybridLink:
-                        ShowMessage(Properties.Resources.HybridLink_Error, handle, true, true);
-                        break;
-                    case ErrorType.Special:
-                        ShowMessage(Properties.Resources.Special_Instruction_Error, handle, true, true);
-                        break;
-                    default:
-                        break;
+                    if (App.CultureIsZH_CN())
+                        ShowMessage(string.Format("程序{0}的网络{1}元素为空!", errorMessages[i].RefNetworks.First().LDVModel.ProgramName, errorMessages[i].RefNetworks.First().NetworkNumber), handle, true, true);
+                    else
+                        ShowMessage(string.Format("Network {0} in {1} is empty!", errorMessages[i].RefNetworks.First().NetworkNumber, errorMessages[i].RefNetworks.First().LDVModel.ProgramName), handle, true, true);
+                    result = false;
+                    break;
+                }
+                else
+                {
+                    errorMessages[i].RefNetworks.First().AcquireSelectRect();
+                    CurrentLadder.SelectionRect.X = errorMessages[i].RefNetworks.Last().ErrorModels.First().X;
+                    CurrentLadder.SelectionRect.Y = errorMessages[i].RefNetworks.Last().ErrorModels.First().Y;
+                    CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
+                    CurrentLadder.VScrollToRect(errorMessages[i].RefNetworks.First().NetworkNumber, CurrentLadder.SelectionRect.Y);
+                    result = false;
+                    switch (errorMessages[i].Error)
+                    {
+                        case ErrorType.Open:
+                            ShowMessage(Properties.Resources.Open_Error, handle, true, true);
+                            break;
+                        case ErrorType.Short:
+                            ShowMessage(Properties.Resources.Short_Error, handle, true, true);
+                            break;
+                        case ErrorType.SelfLoop:
+                            ShowMessage(Properties.Resources.Selfloop_Error, handle, true, true);
+                            break;
+                        case ErrorType.HybridLink:
+                            ShowMessage(Properties.Resources.HybridLink_Error, handle, true, true);
+                            break;
+                        case ErrorType.Special:
+                            ShowMessage(Properties.Resources.Special_Instruction_Error, handle, true, true);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
                 }
             }
             handle.Completed = true;
@@ -715,7 +731,7 @@ namespace SamSoarII.AppMain
                     ShowMessage(Properties.Resources.Function_Block_Correct, handle, false, false);
                 else
                 {
-                    if (App.CultureIsZH_CH())
+                    if (App.CultureIsZH_CN())
                         ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle, true, false);
                     else
                         ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle, true, false);
