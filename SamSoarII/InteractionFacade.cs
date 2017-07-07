@@ -468,10 +468,13 @@ namespace SamSoarII.AppMain
                 }
                 else if (errorMessages[i].Error == ErrorType.Empty)
                 {
+                    var num = errorMessages[i].RefNetworks.First().NetworkNumber;
+                    var name = errorMessages[i].RefNetworks.First().LDVModel.ProgramName;
+                    NavigateToNetwork(new NavigateToNetworkEventArgs(num,name,0,0));
                     if (App.CultureIsZH_CN())
-                        ShowMessage(string.Format("程序{0}的网络{1}元素为空!", errorMessages[i].RefNetworks.First().LDVModel.ProgramName, errorMessages[i].RefNetworks.First().NetworkNumber), handle, true, true);
+                        ShowMessage(string.Format("程序{0}的网络{1}元素为空!", name, num), handle, true, true);
                     else
-                        ShowMessage(string.Format("Network {0} in {1} is empty!", errorMessages[i].RefNetworks.First().NetworkNumber, errorMessages[i].RefNetworks.First().LDVModel.ProgramName), handle, true, true);
+                        ShowMessage(string.Format("Network {0} in {1} is empty!", num, name), handle, true, true);
                     result = false;
                     break;
                 }
@@ -1239,8 +1242,8 @@ namespace SamSoarII.AppMain
             network.AcquireSelectRect();
             tempItem.SelectionRect.X = e.X;
             tempItem.SelectionRect.Y = e.Y;
-            tempItem.NavigateToNetworkByNum(e.NetworkNum);
             _mainTabControl.ShowItem(tempItem);
+            tempItem.NavigateToNetworkByNum(e.NetworkNum);
         }
         public bool NavigateToNetwork(BaseViewModel bvmodel)
         {

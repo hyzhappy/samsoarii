@@ -784,7 +784,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                 cmd.UpdataValues();
             }
         }
-   
+
         public void Arrange()
         {
             ReadCommands.Clear();
@@ -834,7 +834,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                                     gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(elements[i]));
                                     gisFirst = false;
                                 }
-                                else ArrangeCmd(gcmd, ref gIndex, elements[i]);
+                                else ArrangeCmd(ref gcmd, ref gIndex, elements[i]);
                             }
                         }
                         else if (!elements[i].IsIntrasegment && GetAddrSpan(elements[i],gstart) < GetMaxRange(gstartele))
@@ -847,7 +847,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             {
                                 gstart = elements[i].StartAddr;
                                 gstartele = elements[i];
-                                ArrangeCmd(gcmd, ref gIndex, elements[i]);
+                                ArrangeCmd(ref gcmd, ref gIndex, elements[i]);
                             }
                         }
                         else if (elements[i].IsIntrasegment && GetAddrSpan(elements[i], istart) < GetMaxRange(istartele) && IsSameIntraBase(istartele, elements[i]))
@@ -879,7 +879,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             {
                                 gstart = elements[i].StartAddr;
                                 gstartele = elements[i];
-                                ArrangeCmd(gcmd,ref gIndex,elements[i]);
+                                ArrangeCmd(ref gcmd,ref gIndex,elements[i]);
                             }
                         }
                     }
@@ -889,7 +889,13 @@ namespace SamSoarII.AppMain.UI.Monitor
             if (!gisFirst) ReadCommands.Add(gcmd);
             if (!iisFirst) ReadCommands.Add(icmd);
         }
-        private void ArrangeCmd(GeneralReadCommand command,ref int index,ElementModel element)
+        /// <summary>
+        /// 对命令进行分组
+        /// </summary>
+        /// <param name="command">当前命令</param>
+        /// <param name="index">当前命令片段的索引</param>
+        /// <param name="element">需添加的元素</param>
+        private void ArrangeCmd(ref GeneralReadCommand command,ref int index,ElementModel element)
         {
             if (index < CommunicationDataDefine.MAX_ADDRESS_TYPE - 1) index++;
             else
