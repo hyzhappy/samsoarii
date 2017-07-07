@@ -205,7 +205,7 @@ namespace SamSoarII.Extend.Utility
                         break;
                     */
                     // (rF, wD)
-                    case "ROUND": case "TURNC":
+                    case "ROUND": case "TRUNC":
                         this.flag1 = ToCStyle(args[1], "r", "FLOAT");
                         this.flag2 = ToCStyle(args[2], "w", "DWORD");
                         break;

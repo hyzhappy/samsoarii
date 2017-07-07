@@ -322,8 +322,8 @@ namespace SamSoarII.Extend.LadderChartModel
                 case "DTOF": text = "DTOF " + flag1 + " " + flag2; break;
                 case "BIN": text = "BIN " + flag1 + " " + flag2; break;
                 case "BCD": text = "BCD " + flag1 + " " + flag2; break;
-                case "ROUND": text = "ROUND " + flag1; break;
-                case "TURNC": text = "TURNC " + flag1; break;
+                case "ROUND": text = "ROUND " + flag1 + " " + flag2; break;
+                case "TRUNC": text = "TRUNC " + flag1 + " " + flag2; break;
                 case "INVW": text = "INVW " + flag1 + " " + flag2; break;
                 case "INVD": text = "INVD " + flag1 + " " + flag2; break;
                 case "ANDW": text = "ANDW " + flag1 + " " + flag2 + " " + flag3; break;
