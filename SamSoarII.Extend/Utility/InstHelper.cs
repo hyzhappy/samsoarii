@@ -554,8 +554,8 @@ namespace SamSoarII.Extend.Utility
                         case "DTOF": sw.Write("{1:s} = _DWORD_to_FLOAT({0:s});\n", inst[1], inst[2]); break;
                         case "BIN": sw.Write("{1:s} = _BCD_to_WORD({0:s});\n", inst[1], inst[2]); break;
                         case "BCD": sw.Write("{1:s} = _WORD_to_BCD({0:s});\n", inst[1], inst[2]); break;
-                        case "ROUND": sw.Write("{1:s} = _DWORD_to_ROUND({0:s});\n", inst[1], inst[2]); break;
-                        case "TRUNC": sw.Write("{1:s} = _DWORD_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
+                        case "ROUND": sw.Write("{1:s} = _FLOAT_to_ROUND({0:s});\n", inst[1], inst[2]); break;
+                        case "TRUNC": sw.Write("{1:s} = _FLOAT_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
                         // 位运算指令
                         case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]); break;
                         case "ANDW": case "ANDD": sw.Write("{2:s} = {0:s}&{1:s}", inst[1], inst[2], inst[3]); break;
