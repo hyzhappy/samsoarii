@@ -1382,11 +1382,42 @@ namespace SamSoarII.AppMain.Project
             }
         }
         /// <summary>
+        /// 保证指令输入框保持在视野内
+        /// </summary>
+        private void NavigateByInstructionInputDialog()
+        {
+            double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
+            double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+            Point point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
+            if (point.X < 0)
+            {
+                MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + point.X);
+            }
+            if (point.X + 2 * _selectRect.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
+            {
+                MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + point.X + 2 * _selectRect.ActualWidth * scaleX - MainScrollViewer.ViewportWidth);
+            }
+            if (point.Y < 0)
+            {
+                MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + point.Y);
+            }
+            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+            {
+                MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight);
+            }
+        }
+        /// <summary>
         /// 精确定位到指定网络号的网络
         /// </summary>
         /// <param name="num">网络号</param>
         public void NavigateToNetworkByNum(int num)
         {
+            if (_isCalledByInstructionInputDialog)
+            {
+                NavigateByInstructionInputDialog();
+                _isCalledByInstructionInputDialog = false;
+                return;
+            }
             VScrollToRect(num, _selectRect.Y);
             HScrollToRect(_selectRect.X);
         }
@@ -2090,6 +2121,7 @@ namespace SamSoarII.AppMain.Project
         #endregion
 
         #region Instruction relative
+        private bool _isCalledByInstructionInputDialog = false;
         public void ShowInstructionInputDialog(string initialString)
         {
             if (_selectRectOwner == null) return;
@@ -2118,16 +2150,18 @@ namespace SamSoarII.AppMain.Project
                     int rectX = _selectRect.X;
                     RegisterInstructionInput(
                         dialog.InstructionInput.Trim(),
-                        _selectRect.X, 
-                        _selectRect.Y, 
+                        _selectRect.X,
+                        _selectRect.Y,
                         _selectRectOwner,
                         ref command, ref rectX);
+                    _isCalledByInstructionInputDialog = true;
                     _commandManager.Execute(command);
                     _selectRect.X = rectX;
                     dialog.Close();
                 }
                 catch (Exception exce2)
                 {
+                    _isCalledByInstructionInputDialog = false;
                     LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
                 }
             };
@@ -3591,7 +3625,6 @@ namespace SamSoarII.AppMain.Project
             CrossNetState = CrossNetworkState.NoCross;
             SelectionStatus = area.SU_Select;
             CrossNetState = area.SU_Cross;
-            NavigateToNetworkByNum(area.NetworkNumberStart);
             _selectAllNetworks.Clear();
             _selectAllNetworkCache.Clear();
             switch (area.SU_Select)
@@ -3651,6 +3684,7 @@ namespace SamSoarII.AppMain.Project
                     EnterMultiSelectedState();
                     break;
             }
+            NavigateToNetworkByNum(area.NetworkNumberStart);
         }
 
         #endregion

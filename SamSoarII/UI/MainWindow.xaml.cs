@@ -248,7 +248,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show("Version Number:1.0.6", Properties.Resources.About,LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show("Version Number:1.0.7", Properties.Resources.About,LocalizedMessageIcon.Information);
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
