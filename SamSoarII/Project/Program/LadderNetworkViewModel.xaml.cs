@@ -1375,7 +1375,28 @@ namespace SamSoarII.AppMain.Project
                         AcquireSelectRect(e);
                 }
             }
+            double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
+            double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+            var point = e.GetPosition(LDVModel.MainScrollViewer);
+            if (LDVModel.MainScrollViewer.ViewportHeight - point.Y < 100 * scaleY)
+            {
+                LDVModel.MainScrollViewer.ScrollToVerticalOffset(LDVModel.MainScrollViewer.VerticalOffset + 80 * scaleX);
+            }
+            else if (point.Y < 100 * scaleY)
+            {
+                LDVModel.MainScrollViewer.ScrollToVerticalOffset(LDVModel.MainScrollViewer.VerticalOffset - 80 * scaleY);
+            }
+            else if (point.X < 100 * scaleX)
+            {
+                LDVModel.MainScrollViewer.ScrollToHorizontalOffset(LDVModel.MainScrollViewer.HorizontalOffset - 80 * scaleY);
+            }
+            else if (LDVModel.MainScrollViewer.ViewportWidth - point.X < 100 * scaleX)
+            {
+                LDVModel.MainScrollViewer.ScrollToHorizontalOffset(LDVModel.MainScrollViewer.HorizontalOffset + 80 * scaleX);
+            }
+            e.Handled = true;
         }
+
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
@@ -1805,6 +1826,5 @@ namespace SamSoarII.AppMain.Project
             CM_Monitor.ValueModify -= OnMonitorValueModify;
         }
         #endregion
-
     }
 }
