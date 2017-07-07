@@ -1133,13 +1133,13 @@ namespace SamSoarII.AppMain.UI
 
         private void TV_Main_DragLeave(object sender, DragEventArgs e)
         {
+            CurrentItem = null;
             if (e.Source == TV_Main)
             {
-                CurrentItem = null;
                 _projectModel.IFacade.MainWindow.LACProj.Hide();
             }
         }
-
+        
         #endregion
 
         #endregion
