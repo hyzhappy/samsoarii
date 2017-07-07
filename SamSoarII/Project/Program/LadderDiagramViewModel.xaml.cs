@@ -968,7 +968,7 @@ namespace SamSoarII.AppMain.Project
         }
         #endregion
 
-        #region Selection Rectangle Relative
+        #region Navigate
         private enum BoundaryDirection
         {
             Up,
@@ -978,7 +978,14 @@ namespace SamSoarII.AppMain.Project
             None
         }
         private double _offset = 0;
-        private double GetNextNetworkOffset(int networkNum,bool _up,bool _add)
+        /// <summary>
+        /// 当光标跨网络时，计算横跨的距离
+        /// </summary>
+        /// <param name="networkNum">起始网络号</param>
+        /// <param name="_up">是否向上收集</param>
+        /// <param name="_add">true 代表直到收集到第一个非屏蔽的网路，false 代表收集连续的屏蔽网络直到碰到非屏蔽的网络终止</param>
+        /// <returns></returns>
+        private double GetNextNetworkOffset(int networkNum, bool _up, bool _add)
         {
             double offset = 0;
             if (_up)
@@ -1050,7 +1057,14 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
-        private double ComputeOffset(BoundaryDirection direction,bool _isSingleSelected,bool _isCrossed = false)
+        /// <summary>
+        /// 计算光标移动时距离可视界面的边距
+        /// </summary>
+        /// <param name="direction">代表光标移动的方向</param>
+        /// <param name="_isSingleSelected">是否是单选</param>
+        /// <param name="_isCrossed">网络的横跨状态</param>
+        /// <returns></returns>
+        private double ComputeOffset(BoundaryDirection direction, bool _isSingleSelected, bool _isCrossed = false)
         {
             double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
             double scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
@@ -1060,23 +1074,28 @@ namespace SamSoarII.AppMain.Project
                 case BoundaryDirection.Up:
                     if (_isSingleSelected)
                     {
-                        point = _selectRect.TranslatePoint(new Point(0,0),MainScrollViewer);
+                        point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
                         if (_selectRect.Y == 0)
                         {
-                            if(point.Y < 100 * scaleY || _selectRectOwner.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            var value = GetNextNetworkOffset(_selectRectOwner.NetworkNumber, true, false);
+                            if (point.Y < (100 + _selectRect.ActualHeight + value) * scaleY)
+                            {
+                                return point.Y - (100 + _selectRect.ActualHeight + value) * scaleY;
+                            }
+                            if (point.Y < 100 * scaleY)
                             {
                                 return point.Y - 100 * scaleY;
                             }
-                            if (point.Y + _selectRectOwner.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
                             {
-                                return point.Y + _selectRectOwner.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                                return point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
                             }
                         }
-                        if(_selectRect.Y != 0)
+                        if (_selectRect.Y != 0)
                         {
-                            if (point.Y < (100 + _selectRect.ActualHeight) * scaleY)
+                            if (point.Y < _selectRect.ActualHeight * scaleY)
                             {
-                                return point.Y - (100 + _selectRect.ActualHeight) * scaleY;
+                                return point.Y - _selectRect.ActualHeight * scaleY;
                             }
                             if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
                             {
@@ -1084,12 +1103,12 @@ namespace SamSoarII.AppMain.Project
                             }
                         }
                     }
-                    else if(!_isCrossed)
+                    else if (!_isCrossed)
                     {
-                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0,0),MainScrollViewer);
-                        if (Math.Min(_selectStartNetwork.SelectAreaFirstY,_selectStartNetwork.SelectAreaSecondY) == 0)
+                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
+                        if (Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY) == 0)
                         {
-                            if(point.Y < 100 * scaleY || _selectStartNetwork.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            if (point.Y < 100 * scaleY || _selectStartNetwork.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
                             {
                                 return point.Y - 100 * scaleY;
                             }
@@ -1119,12 +1138,12 @@ namespace SamSoarII.AppMain.Project
                                 if (_selectAllNetworks.Count == 0)
                                 {
                                     point = _selectStartNetwork.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(_selectStartNetwork.NetworkNumber, true,true);
+                                    value = GetNextNetworkOffset(_selectStartNetwork.NetworkNumber, true, true);
                                 }
                                 else
                                 {
                                     point = _selectAllNetworks.First().TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(_selectAllNetworks.First().NetworkNumber, true,true);
+                                    value = GetNextNetworkOffset(_selectAllNetworks.First().NetworkNumber, true, true);
                                 }
                                 if (point.Y < value * scaleY)
                                     return point.Y - value * scaleY;
@@ -1138,7 +1157,7 @@ namespace SamSoarII.AppMain.Project
                                 else
                                 {
                                     point = _selectAllNetworks.Last().TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(_selectAllNetworks.Last().NetworkNumber, false,false);
+                                    value = GetNextNetworkOffset(_selectAllNetworks.Last().NetworkNumber, false, false);
                                 }
                                 return point.Y - value * scaleY - MainScrollViewer.ViewportHeight;
                         }
@@ -1177,9 +1196,9 @@ namespace SamSoarII.AppMain.Project
                             return point.X - _selectRect.ActualWidth * scaleX;
                         }
                     }
-                    else if(!_isCrossed)
+                    else if (!_isCrossed)
                     {
-                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0,0),MainScrollViewer);
+                        point = _selectStartNetwork.SelectArea.TranslatePoint(new Point(0, 0), MainScrollViewer);
                         if (point.X + _selectStartNetwork.SelectArea.ActualWidth * scaleX > MainScrollViewer.ViewportWidth)
                         {
                             return point.X + _selectStartNetwork.SelectArea.ActualWidth * scaleX - MainScrollViewer.ViewportWidth;
@@ -1196,13 +1215,18 @@ namespace SamSoarII.AppMain.Project
                         point = _selectRect.TranslatePoint(new Point(0, 0), MainScrollViewer);
                         if (_selectRect.Y == _selectRectOwner.RowCount - 1)
                         {
-                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight || _selectRectOwner.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
+                            var value = GetNextNetworkOffset(_selectRectOwner.NetworkNumber, false, false);
+                            if (point.Y + (2 * _selectRect.ActualHeight + 100 + value) * scaleY > MainScrollViewer.ViewportHeight)
                             {
-                                return point.Y + _selectRect.ActualHeight * scaleY- MainScrollViewer.ViewportHeight;
+                                return point.Y + (2 * _selectRect.ActualHeight + 100 + value) * scaleY - MainScrollViewer.ViewportHeight;
                             }
-                            if (point.Y < (_selectRectOwner.RowCount - 1) * _selectRect.ActualHeight * scaleY + 100 * scaleY)
+                            if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
                             {
-                                return point.Y - (_selectRectOwner.RowCount - 1) * _selectRect.ActualHeight * scaleY - 100 * scaleY;
+                                return point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
+                            }
+                            if (point.Y < 0)
+                            {
+                                return point.Y;
                             }
                         }
                         if (_selectRect.Y != _selectRectOwner.RowCount - 1)
@@ -1235,7 +1259,7 @@ namespace SamSoarII.AppMain.Project
                             {
                                 return point.Y + _selectStartNetwork.SelectArea.ActualHeight * scaleY - MainScrollViewer.ViewportHeight;
                             }
-                            if(point.Y < 0) return point.Y;
+                            if (point.Y < 0) return point.Y;
                         }
                     }
                     else
@@ -1252,7 +1276,7 @@ namespace SamSoarII.AppMain.Project
                                 else
                                 {
                                     point = _selectAllNetworks.First().TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(_selectAllNetworks.First().NetworkNumber, true,false);
+                                    value = GetNextNetworkOffset(_selectAllNetworks.First().NetworkNumber, true, false);
                                 }
                                 return point.Y + (value + _selectAllNetworks.First().ActualHeight) * scaleY;
                             case CrossNetworkState.CrossDown:
@@ -1260,14 +1284,14 @@ namespace SamSoarII.AppMain.Project
                                 if (_selectAllNetworks.Count == 0)
                                 {
                                     point = _selectStartNetwork.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(_selectStartNetwork.NetworkNumber, false,true);
+                                    value = GetNextNetworkOffset(_selectStartNetwork.NetworkNumber, false, true);
                                     net = _selectStartNetwork;
                                 }
                                 else
                                 {
                                     net = _selectAllNetworks.Last();
                                     point = net.TranslatePoint(new Point(0, 0), MainScrollViewer);
-                                    value = GetNextNetworkOffset(net.NetworkNumber,false ,true);
+                                    value = GetNextNetworkOffset(net.NetworkNumber, false, true);
                                 }
                                 return point.Y + (value + net.ActualHeight) * scaleY - MainScrollViewer.ViewportHeight;
                         }
@@ -1276,6 +1300,11 @@ namespace SamSoarII.AppMain.Project
             }
             return 0;
         }
+        /// <summary>
+        /// 表示在方向direction上，是否需要移动光标
+        /// </summary>
+        /// <param name="direction">移动的方向</param>
+        /// <returns></returns>
         private bool AssertSelectionArea(BoundaryDirection direction)
         {
             var tempoffset = 0.0;
@@ -1300,6 +1329,10 @@ namespace SamSoarII.AppMain.Project
                 return true;
             }
         }
+        /// <summary>
+        /// 在对应方向上改变可视界面
+        /// </summary>
+        /// <param name="direction">需要改变的方向</param>
         private void ChangeViewport(BoundaryDirection direction)
         {
             if (!AssertSelectionArea(direction))
@@ -1321,11 +1354,20 @@ namespace SamSoarII.AppMain.Project
                 }
             }
         }
+        /// <summary>
+        /// 精确定位到指定网络号的网络
+        /// </summary>
+        /// <param name="num">网络号</param>
         public void NavigateToNetworkByNum(int num)
         {
             VScrollToRect(num, _selectRect.Y);
             HScrollToRect(_selectRect.X);
         }
+        /// <summary>
+        /// 纵向精确定位到指定网络的行
+        /// </summary>
+        /// <param name="networkNumber">网络号</param>
+        /// <param name="row">行号</param>
         public void VScrollToRect(int networkNumber, int row)
         {
             double scale = GlobalSetting.LadderScaleTransform.ScaleY;
@@ -1336,6 +1378,10 @@ namespace SamSoarII.AppMain.Project
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToVerticalOffset(offset);
         }
+        /// <summary>
+        /// 横向精确定位到指定网络的列
+        /// </summary>
+        /// <param name="XIndex"></param>
         public void HScrollToRect(int XIndex)
         {
             double scale = GlobalSetting.LadderScaleTransform.ScaleX;
@@ -1345,10 +1391,15 @@ namespace SamSoarII.AppMain.Project
             offset = Math.Max(0, offset);
             MainScrollViewer.ScrollToHorizontalOffset(offset);
         }
+        #endregion
+
+        #region Selection Rectangle Relative
+
         private void SelectRectUp()
         {
             if (_selectRectOwner != null)
             {
+                ChangeViewport(BoundaryDirection.Up);
                 if (_selectRect.Y > 0)
                 {
                     _selectRect.Y--;
@@ -1373,7 +1424,6 @@ namespace SamSoarII.AppMain.Project
                         }
                     }
                 }
-                VScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
             }
         }
 
@@ -1381,6 +1431,7 @@ namespace SamSoarII.AppMain.Project
         {
             if (_selectRectOwner != null)
             {
+                ChangeViewport(BoundaryDirection.Bottom);
                 if (_selectRect.Y + 1 < _selectRectOwner.RowCount)
                 {
                     _selectRect.Y++;
@@ -1404,9 +1455,7 @@ namespace SamSoarII.AppMain.Project
                             _selectRectOwner.AcquireSelectRect();
                         }
                     }
-
                 }
-                VScrollToRect(_selectRect.NetworkParent.NetworkNumber, _selectRect.Y);
             }
         }
 
@@ -1416,8 +1465,8 @@ namespace SamSoarII.AppMain.Project
             {
                 if (_selectRect.X > 0)
                 {
+                    ChangeViewport(BoundaryDirection.Left);
                     _selectRect.X--;
-                    HScrollToRect(_selectRect.X);
                 }
             }
         }
@@ -1428,8 +1477,8 @@ namespace SamSoarII.AppMain.Project
             {
                 if (_selectRect.X < GlobalSetting.LadderXCapacity - 1)
                 {
+                    ChangeViewport(BoundaryDirection.Right);
                     _selectRect.X++;
-                    HScrollToRect(_selectRect.X);
                 }
             }
         }
