@@ -245,6 +245,7 @@ namespace SamSoarII.LadderInstViewModel
 
         }
         #endregion
+
         public void Dispose()
         {
             for (int i = 0; i < 5; i++)
