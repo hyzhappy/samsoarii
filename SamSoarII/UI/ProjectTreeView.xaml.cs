@@ -1135,6 +1135,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (e.Source == TV_Main)
             {
+                CurrentItem = null;
                 _projectModel.IFacade.MainWindow.LACProj.Hide();
             }
         }
