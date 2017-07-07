@@ -206,6 +206,7 @@ namespace SamSoarII.LadderInstViewModel
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(0).ValueString,
                         IsRunning ? _values[0].Value : "???")
+                    : Model.ParaCount > 0 ? String.Format("{0:s}", Model.GetPara(0).ValueString)
                     : String.Empty;
             }));
         }
@@ -218,6 +219,7 @@ namespace SamSoarII.LadderInstViewModel
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(1).ValueString,
                         IsRunning ? _values[1].Value : "???")
+                    : Model.ParaCount > 1 ? String.Format("{0:s}", Model.GetPara(1).ValueString)
                     : String.Empty;
             }));
         }
@@ -230,6 +232,7 @@ namespace SamSoarII.LadderInstViewModel
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(2).ValueString,
                         IsRunning ? _values[2].Value : "???")
+                    : Model.ParaCount > 2 ? String.Format("{0:s}", Model.GetPara(2).ValueString)
                     : String.Empty;
             }));
         }
@@ -242,6 +245,7 @@ namespace SamSoarII.LadderInstViewModel
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(3).ValueString,
                         IsRunning ? _values[3].Value : "???")
+                    : Model.ParaCount > 3 ? String.Format("{0:s}", Model.GetPara(3).ValueString)
                     : String.Empty;
             }));
         }
@@ -254,6 +258,7 @@ namespace SamSoarII.LadderInstViewModel
                     ? String.Format("{0:s} = {1:s}",
                         Model.GetPara(4).ValueString,
                         IsRunning ? _values[4].Value : "???")
+                    : Model.ParaCount > 4 ? String.Format("{0:s}", Model.GetPara(4).ValueString)
                     : String.Empty;
             }));
         }
