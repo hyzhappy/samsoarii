@@ -417,6 +417,16 @@ namespace SamSoarII.AppMain.Project
                         lcn[1] = ((DECDModel)(bvm.Model)).InputValue.ValueShowString;
                         lcn[2] = ((DECDModel)(bvm.Model)).OutputValue.ValueShowString;
                     }
+                    if (bvm.Model is INVWModel)
+                    {
+                        lcn[1] = ((INVWModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((INVWModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
+                    if (bvm.Model is INVDModel)
+                    {
+                        lcn[1] = ((INVDModel)(bvm.Model)).InputValue.ValueShowString;
+                        lcn[2] = ((INVDModel)(bvm.Model)).OutputValue.ValueShowString;
+                    }
                     if (bvm.Model is ANDWModel)
                     {
                         lcn[1] = ((ANDWModel)(bvm.Model)).InputValue1.ValueShowString;

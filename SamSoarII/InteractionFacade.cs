@@ -177,9 +177,7 @@ namespace SamSoarII.AppMain
             CurrentTabChanged += InteractionFacade_CurrentTabChanged;
             PropertyChanged += InteractionFacade_PropertyChanged;
         }
-
         
-
         #region StatusBar
         private void _mainTabControl_FloatingWinClosed(object sender, RoutedEventArgs e)
         {

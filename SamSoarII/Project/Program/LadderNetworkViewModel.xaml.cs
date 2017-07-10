@@ -149,7 +149,7 @@ namespace SamSoarII.AppMain.Project
                         LadderVerticalLines.Height *= 2;
                         LadderBreakpoints.Height *= 2;
                     }
-                    else if (value < LadderElements.Height / 4 && LadderElements.Height > 8)
+                    else if (!_canHide && value < LadderElements.Height / 4 && LadderElements.Height > 8)
                     {
                         LadderElements.Height /= 2;
                         LadderVerticalLines.Height /= 2;
@@ -1396,7 +1396,6 @@ namespace SamSoarII.AppMain.Project
             }
             e.Handled = true;
         }
-
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);

@@ -805,12 +805,19 @@ namespace SamSoarII.AppMain.Project
             if (cmd.RecvDataLen == 0) return true;
             while (true)
             {
-                if (commanager.Read(cmd) == 0)
+                try
                 {
-                    hasrecv = true;
-                    break;
+                    if (commanager.Read(cmd) == 0)
+                    {
+                        hasrecv = true;
+                        break;
+                    }
+                    recvtime++;
                 }
-                recvtime++;
+                catch (Exception)
+                {
+                    return false;
+                }
             }
             return hasrecv && cmd.IsComplete && cmd.IsSuccess;
         }
