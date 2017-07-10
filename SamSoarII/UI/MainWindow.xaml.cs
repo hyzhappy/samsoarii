@@ -98,7 +98,7 @@ namespace SamSoarII.AppMain.UI
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
             Loaded += MainWindow_Loaded;
-            KeyDown += MainWindow_KeyDown;
+            PreviewKeyDown += MainWindow_KeyDown;
         }
         
         private void InitializeHotKey()
@@ -302,7 +302,7 @@ namespace SamSoarII.AppMain.UI
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
                     _threeHotKeys = ThreeHotKeyManager.GetHotKeys(ModifierKeys.Control, e.Key);
-                    if (_threeHotKeys != null)
+                    if (_threeHotKeys.Count > 0)
                     {
                         _interactionFacade.SetMessage(string.Format("(Ctrl+{0}){1}", e.Key, Properties.Resources.Key_Pressed));
                         ThreeHotKeyManager.IsWaitForSecondModifier = true;
@@ -312,8 +312,9 @@ namespace SamSoarII.AppMain.UI
             }
             else
             {
-                if (e.Key == Key.System) return;
-                if (KeyInputHelper.IsModifier(e.Key))
+                Key key = e.Key;
+                if(key == Key.System) key = e.SystemKey;
+                if (KeyInputHelper.IsModifier(key))
                 {
                     ThreeHotKeyManager.IsWaitForSecondModifier = false;
                     if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && !inputMessage.Contains("Ctrl"))
@@ -327,16 +328,15 @@ namespace SamSoarII.AppMain.UI
                 }
                 else
                 {
-                    inputMessage += inputMessage == string.Empty ? inputMessage += string.Format("{0})", e.Key) : string.Format("+{0})", e.Key);
+                    inputMessage += inputMessage == string.Empty ? inputMessage += string.Format("{0})", key) : string.Format("+{0})", key);
                     if (ThreeHotKeyManager.IsWaitForSecondModifier)
                     {
-                        foreach (var key in _threeHotKeys)
+                        foreach (var hotKey in _threeHotKeys)
                         {
-                            if (key.Assert(e.Key) && key.CanExecute)
+                            if (hotKey.Assert(key) && hotKey.CanExecute)
                             {
-                                key.Execute();
+                                hotKey.Execute();
                                 _interactionFacade.SetMessage(Properties.Resources.Ready);
-                                e.Handled = true;
                                 _threeHotKeys.Clear();
                                 break;
                             }
@@ -356,6 +356,7 @@ namespace SamSoarII.AppMain.UI
                     ThreeHotKeyManager.IsWaitForSecondKey = false;
                     inputMessage = string.Empty;
                 }
+                e.Handled = true;
             }
         }
 
