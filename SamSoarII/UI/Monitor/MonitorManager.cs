@@ -138,12 +138,19 @@ namespace SamSoarII.AppMain.UI.Monitor
                         }
                         //_Thread_WaitForActive(itvtime);
                         Thread.Sleep(itvtime);
-                        while (hassend)
+                        while (hassend && recvtime < 50)
                         {
-                            if (Recv(CurrentCommand))
+                            try
                             {
-                                hasrecv = true;
-                                break;
+                                if (Recv(CurrentCommand))
+                                {
+                                    hasrecv = true;
+                                    break;
+                                }
+                            }
+                            catch (Exception)
+                            {
+
                             }
                             recvtime++;
                         }

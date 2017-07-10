@@ -247,19 +247,12 @@ namespace SamSoarII.Communication
         static int readbuffercount = 0;
         public int Read(ICommunicationCommand cmd)
         {
-            try
-            {
-                int count = port.Read(readbuffer, readbuffercount, 4096 - readbuffercount);
-                readbuffercount += count;
-                byte[] data = new byte[readbuffercount];
-                for (int i = 0; i < readbuffercount; i++)
-                    data[i] = readbuffer[i];
-                cmd.RetData = data;
-            }
-            catch (Exception)
-            {
-                return 1;
-            }
+            int count = port.Read(readbuffer, readbuffercount, 4096 - readbuffercount);
+            readbuffercount += count;
+            byte[] data = new byte[readbuffercount];
+            for (int i = 0; i < readbuffercount; i++)
+                data[i] = readbuffer[i];
+            cmd.RetData = data;
             if (!cmd.IsComplete)
                 return 1;
             readbuffercount = 0;
