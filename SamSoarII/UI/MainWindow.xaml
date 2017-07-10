@@ -221,9 +221,9 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Project_Explorer}" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" InputGestureText="Ctrl+F3,O"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}" Command="{x:Static app:GlobalCommand.ShowElemListCommand}" InputGestureText="Ctrl+F1,O"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Init}" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}" InputGestureText="Ctrl+F2,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Project_Explorer}" Command="{x:Static app:GlobalCommand.ShowProjectTreeViewCommand}" InputGestureText="Ctrl+F1,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}" Command="{x:Static app:GlobalCommand.ShowElemListCommand}" InputGestureText="Ctrl+F2,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Init}" Command="{x:Static app:GlobalCommand.ShowElemInitCommand}" InputGestureText="Ctrl+F3,O"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Error_List}" Command="{x:Static app:GlobalCommand.ShowErrorListCommand}" InputGestureText="Ctrl+F5,O"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Monitor_List}" Command="{x:Static app:GlobalCommand.ShowMainMonitorCommand}" InputGestureText="Ctrl+F4,O"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Breakpoint_List}" Command="{x:Static app:GlobalCommand.ShowBreakpointCommand}" InputGestureText="Ctrl+F8,O"></MenuItem>

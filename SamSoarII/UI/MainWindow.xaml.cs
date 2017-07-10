@@ -226,21 +226,21 @@ namespace SamSoarII.AppMain.UI
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
                     continue;
                 }
-                if (command == GlobalCommand.ShowElemListCommand)
+                if (command == GlobalCommand.ShowProjectTreeViewCommand)
                 {
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F1, Key.O);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
                     continue;
                 }
-                if (command == GlobalCommand.ShowElemInitCommand)
+                if (command == GlobalCommand.ShowElemListCommand)
                 {
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F2, Key.O);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
                     continue;
                 }
-                if (command == GlobalCommand.ShowProjectTreeViewCommand)
+                if (command == GlobalCommand.ShowElemInitCommand)
                 {
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F3, Key.O);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
@@ -335,9 +335,9 @@ namespace SamSoarII.AppMain.UI
                         {
                             if (hotKey.Assert(key) && hotKey.CanExecute)
                             {
-                                hotKey.Execute();
                                 _interactionFacade.SetMessage(Properties.Resources.Ready);
                                 _threeHotKeys.Clear();
+                                hotKey.Execute();
                                 break;
                             }
                         }
