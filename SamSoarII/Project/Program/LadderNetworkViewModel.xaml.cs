@@ -1396,7 +1396,6 @@ namespace SamSoarII.AppMain.Project
             }
             e.Handled = true;
         }
-
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
