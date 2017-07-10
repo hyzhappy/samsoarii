@@ -18,14 +18,14 @@
              PreviewKeyUp="OnLadderDiagramKeyUp"
              MouseUp="OnLadderDiagramMouseUp">
     <UserControl.CommandBindings>
-        <CommandBinding Command="{x:Static ApplicationCommands.Cut}"   CanExecute="CutCopyCommandCanExecute" Executed="OnCutCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Copy}"  CanExecute="CutCopyCommandCanExecute" Executed="OnCopyCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Cut}" CanExecute="CutCopyCommandCanExecute" Executed="OnCutCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Copy}" CanExecute="CutCopyCommandCanExecute" Executed="OnCopyCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Paste}" CanExecute="PasteCommandCanExecute" Executed="OnPasteCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Undo}" CanExecute="UndoCommandCanExecute" Executed="OnUndoCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="RedoCommandCanExecute" Executed="OnRedoCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Find}" CanExecute="FindCommandCanExecute" Executed="OnFindCommandExecute"></CommandBinding>
         <CommandBinding Command="{x:Static ApplicationCommands.Replace}" CanExecute="ReplaceCommandCanExecute" Executed="OnReplaceCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" CanExecute="OnSelectAllCommandCanExecute" Executed="OnSelectAllCommandExecute"></CommandBinding>
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type inst:FontManager}" MethodName="GetTitle"/>

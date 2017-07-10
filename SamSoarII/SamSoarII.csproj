@@ -161,6 +161,7 @@
     <Compile Include="Event\RoutineChangedEventArgs.cs" />
     <Compile Include="Event\RoutineRenamedEventArgs.cs" />
     <Compile Include="Event\TabType.cs" />
+    <Compile Include="Global\GlobalThreeHotKey.cs" />
     <Compile Include="LadderCommand\ElementReplaceArgumentCommand.cs" />
     <Compile Include="LadderCommand\IUndoableCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramExchangeNetworkCommand.cs" />

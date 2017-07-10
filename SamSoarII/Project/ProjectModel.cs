@@ -297,7 +297,7 @@ namespace SamSoarII.AppMain.Project
             ProjectPropertyManager.LoadProjectPropertyByXElement(rootNode.Element("ProjectPropertyParams"));
             MMonitorManager.MMWindow.LoadTablesByXElement(rootNode.Element("Tables"));
             EleInitializeData = rootNode.Element("EleInitialize");
-            var ldnodes = rootNode.Elements("Ladder");
+            var ldnodes = rootNode.Elements("Ladder") ;
             foreach (XElement ldnode in ldnodes)
             {
                 var ldmodel = ProjectHelper.CreateLadderDiagramByXElement(ldnode, this);

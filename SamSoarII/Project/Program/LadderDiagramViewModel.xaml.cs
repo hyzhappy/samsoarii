@@ -2398,6 +2398,10 @@ namespace SamSoarII.AppMain.Project
         }
         private void OnLadderDiagramKeyDown(object sender, KeyEventArgs e)
         {
+            if (((MainWindow)Application.Current.MainWindow).IsWaitForKey)
+            {
+                return;
+            }
             if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
             {
                 IsPressingCtrl = true;
@@ -2507,7 +2511,7 @@ namespace SamSoarII.AppMain.Project
                             break;
                     }
                 }
-                else
+                else if((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.None)
                 {
                     switch (e.Key)
                     {
@@ -2547,7 +2551,7 @@ namespace SamSoarII.AppMain.Project
                 }
                 e.Handled = true;
             }
-            if (e.Key == Key.Delete || e.Key == Key.Back)
+            if (e.Key == Key.Delete)
             {
                 if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                 {
@@ -3499,7 +3503,7 @@ namespace SamSoarII.AppMain.Project
                 int y = _selectRect.Y;
                 if(_selectRectOwner?.GetElementByPosition(x, y) != null || _selectRectOwner?.GetVerticalLineByPosition(x, y) != null)
                 {
-                    e.CanExecute = true;
+                    e.CanExecute = true && !ProjectModel.IFacade.MainWindow.IsWaitForKey;
                 }
                 else
                 {
@@ -3508,7 +3512,7 @@ namespace SamSoarII.AppMain.Project
             }
             else
             {
-                e.CanExecute = SelectionStatus == SelectStatus.MultiSelected;
+                e.CanExecute = (SelectionStatus == SelectStatus.MultiSelected) && !ProjectModel.IFacade.MainWindow.IsWaitForKey;
             }
         }
 
@@ -3516,7 +3520,7 @@ namespace SamSoarII.AppMain.Project
         {
             if(Clipboard.ContainsData("LadderContent") && (SelectionStatus == SelectStatus.MultiSelected || SelectionStatus == SelectStatus.SingleSelected))
             {
-                e.CanExecute = true;
+                e.CanExecute = true && !ProjectModel.IFacade.MainWindow.IsWaitForKey;
             }
             else
             {
@@ -3526,22 +3530,26 @@ namespace SamSoarII.AppMain.Project
 
         private void UndoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = _commandManager.CanUndo;
+            e.CanExecute = _commandManager.CanUndo && !ProjectModel.IFacade.MainWindow.IsWaitForKey;
         }
 
         private void RedoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = _commandManager.CanRedo;
+            e.CanExecute = _commandManager.CanRedo && !ProjectModel.IFacade.MainWindow.IsWaitForKey;
         }
 
         private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = true && !ProjectModel.IFacade.MainWindow.IsWaitForKey;
         }
 
         private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = LadderMode == LadderMode.Edit;
+            e.CanExecute = (LadderMode == LadderMode.Edit) && !ProjectModel.IFacade.MainWindow.IsWaitForKey;
+        }
+        private void OnSelectAllCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !ProjectModel.IFacade.MainWindow.IsWaitForKey;
         }
         #endregion
 

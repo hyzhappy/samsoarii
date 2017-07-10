@@ -148,12 +148,9 @@ namespace SamSoarII.AppMain.Project
             List<BaseViewModel> result = new List<BaseViewModel>();
             foreach (XElement instNode in xEle.Elements("InstEle"))
             {
-                int catalogId = int.Parse(instNode.Attribute("CatalogID").Value);
-                var viewmodel = LadderInstViewModelPrototype.Clone(catalogId);
-                int x = int.Parse(instNode.Attribute("X").Value);
-                int y = int.Parse(instNode.Attribute("Y").Value);
-                viewmodel.X = x;
-                viewmodel.Y = y;
+                var viewmodel = LadderInstViewModelPrototype.Clone(int.Parse(instNode.Attribute("CatalogID").Value));
+                viewmodel.X = int.Parse(instNode.Attribute("X").Value);
+                viewmodel.Y = int.Parse(instNode.Attribute("Y").Value);
                 List<string> valueStrings = new List<string>();
                 foreach (XElement valuenode in instNode.Elements("Value"))
                 {

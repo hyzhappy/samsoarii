@@ -139,46 +139,46 @@
     <value>帮助(_H)</value>
   </data>
   <data name="MainWindow_New_Proj" xml:space="preserve">
-    <value>新建工程</value>
+    <value>新建工程(_N)</value>
   </data>
   <data name="MainWindow_Open_Proj" xml:space="preserve">
-    <value>打开工程</value>
+    <value>打开工程(_O)</value>
   </data>
   <data name="MainWindow_Save_Proj" xml:space="preserve">
-    <value>保存工程</value>
+    <value>保存工程(_S)</value>
   </data>
   <data name="MainWindow_Save_As_Proj" xml:space="preserve">
-    <value>工程另存为</value>
+    <value>工程另存为(_A)</value>
   </data>
   <data name="MainWindow_Recent_Proj" xml:space="preserve">
     <value>最近工程</value>
   </data>
   <data name="MainWindow_Close_Proj" xml:space="preserve">
-    <value>关闭当前工程</value>
+    <value>关闭当前工程(_T)</value>
   </data>
   <data name="MainWindow_Exit" xml:space="preserve">
-    <value>退出</value>
+    <value>退出(_X)</value>
   </data>
   <data name="MainWindow_Undo" xml:space="preserve">
-    <value>撤销</value>
+    <value>撤销(_U)</value>
   </data>
   <data name="MainWindow_Redo" xml:space="preserve">
-    <value>恢复</value>
+    <value>恢复(_R)</value>
   </data>
   <data name="MainWindow_Cut" xml:space="preserve">
-    <value>剪切</value>
+    <value>剪切(_T)</value>
   </data>
   <data name="MainWindow_Paste" xml:space="preserve">
-    <value>粘贴</value>
+    <value>粘贴(_P)</value>
   </data>
   <data name="MainWindow_Copy" xml:space="preserve">
-    <value>复制</value>
+    <value>复制(_C)</value>
   </data>
   <data name="MainWindow_Del" xml:space="preserve">
-    <value>删除</value>
+    <value>删除(_D)</value>
   </data>
   <data name="MainWindow_Select_All" xml:space="preserve">
-    <value>全选</value>
+    <value>全选(_A)</value>
   </data>
   <data name="MainWindow_Search" xml:space="preserve">
     <value>查找</value>
@@ -187,10 +187,10 @@
     <value>替换</value>
   </data>
   <data name="MainWindow_Zoom_In" xml:space="preserve">
-    <value>放大</value>
+    <value>放大(_I)</value>
   </data>
   <data name="MainWindow_Zoom_Out" xml:space="preserve">
-    <value>缩小</value>
+    <value>缩小(_O)</value>
   </data>
   <data name="MainWindow_Comment_Mode" xml:space="preserve">
     <value>注释模式</value>
@@ -226,16 +226,16 @@
     <value>属性</value>
   </data>
   <data name="MainWindow_Upload" xml:space="preserve">
-    <value>上载</value>
+    <value>上载(_U)</value>
   </data>
   <data name="MainWindow_Download" xml:space="preserve">
-    <value>下载</value>
+    <value>下载(_D)</value>
   </data>
   <data name="MainWindow_Monitor" xml:space="preserve">
-    <value>监视</value>
+    <value>监视(_M)</value>
   </data>
   <data name="MainWindow_Simulation" xml:space="preserve">
-    <value>仿真</value>
+    <value>仿真(_S)</value>
   </data>
   <data name="MainWindow_Ret_Edit_Mode" xml:space="preserve">
     <value>返回编辑</value>
@@ -250,22 +250,22 @@
     <value>函数功能块检测</value>
   </data>
   <data name="MainWindow_Option" xml:space="preserve">
-    <value>选项</value>
+    <value>选项(_O)</value>
   </data>
   <data name="MainWindow_Chinese" xml:space="preserve">
-    <value>中文</value>
+    <value>中文(_C)</value>
   </data>
   <data name="MainWindow_English" xml:space="preserve">
-    <value>英语</value>
+    <value>英语(_E)</value>
   </data>
   <data name="MainWindow_View_Help" xml:space="preserve">
-    <value>查看帮助</value>
+    <value>查看帮助(_H)</value>
   </data>
   <data name="MainWindow_Online_Upgrade" xml:space="preserve">
-    <value>在线升级</value>
+    <value>在线升级(_U)</value>
   </data>
   <data name="MainWindow_About" xml:space="preserve">
-    <value>关于</value>
+    <value>关于(_A)</value>
   </data>
   <data name="MainWindow_Compile" xml:space="preserve">
     <value>编译</value>
@@ -1778,5 +1778,14 @@
   </data>
   <data name="Simulate" xml:space="preserve">
     <value>仿真</value>
+  </data>
+  <data name="Key_Pressed" xml:space="preserve">
+    <value>已按下，正在等待按下第二个键...</value>
+  </data>
+  <data name="Key_Combination" xml:space="preserve">
+    <value>组合键</value>
+  </data>
+  <data name="Not_Command" xml:space="preserve">
+    <value>不是命令！</value>
   </data>
 </root>

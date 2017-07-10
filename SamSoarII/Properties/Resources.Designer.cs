@@ -1645,6 +1645,24 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Key combination 的本地化字符串。
+        /// </summary>
+        public static string Key_Combination {
+            get {
+                return ResourceManager.GetString("Key_Combination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 has been pressed, waiting to press the second key ... 的本地化字符串。
+        /// </summary>
+        public static string Key_Pressed {
+            get {
+                return ResourceManager.GetString("Key_Pressed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 The ladder has changed 的本地化字符串。
         /// </summary>
         public static string Ladder_Changed {
@@ -1897,7 +1915,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 About 的本地化字符串。
+        ///   查找类似 About(_A) 的本地化字符串。
         /// </summary>
         public static string MainWindow_About {
             get {
@@ -1969,7 +1987,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Chinese 的本地化字符串。
+        ///   查找类似 Chinese(_C) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Chinese {
             get {
@@ -1978,7 +1996,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Close Project 的本地化字符串。
+        ///   查找类似 Close Project(_T) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Close_Proj {
             get {
@@ -2014,7 +2032,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Copy 的本地化字符串。
+        ///   查找类似 Copy(_C) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Copy {
             get {
@@ -2032,7 +2050,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Cut 的本地化字符串。
+        ///   查找类似 Cut(_T) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Cut {
             get {
@@ -2041,7 +2059,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Delete 的本地化字符串。
+        ///   查找类似 Delete(_D) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Del {
             get {
@@ -2050,7 +2068,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Download 的本地化字符串。
+        ///   查找类似 Download(_D) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Download {
             get {
@@ -2077,7 +2095,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 English 的本地化字符串。
+        ///   查找类似 English(_E) 的本地化字符串。
         /// </summary>
         public static string MainWindow_English {
             get {
@@ -2095,7 +2113,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Exit 的本地化字符串。
+        ///   查找类似 Exit(_X) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Exit {
             get {
@@ -2239,7 +2257,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Monitor 的本地化字符串。
+        ///   查找类似 Monitor(_M) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Monitor {
             get {
@@ -2257,7 +2275,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 New Project 的本地化字符串。
+        ///   查找类似 New Project(_N) 的本地化字符串。
         /// </summary>
         public static string MainWindow_New_Proj {
             get {
@@ -2284,7 +2302,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Online Upgrade 的本地化字符串。
+        ///   查找类似 Online Upgrade(_U) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Online_Upgrade {
             get {
@@ -2293,7 +2311,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Open Project 的本地化字符串。
+        ///   查找类似 Open Project(_O) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Open_Proj {
             get {
@@ -2302,7 +2320,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Option 的本地化字符串。
+        ///   查找类似 Option(_O) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Option {
             get {
@@ -2320,7 +2338,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Paste 的本地化字符串。
+        ///   查找类似 Paste(_P) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Paste {
             get {
@@ -2383,7 +2401,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Redo 的本地化字符串。
+        ///   查找类似 Redo(_R) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Redo {
             get {
@@ -2455,7 +2473,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Save As 的本地化字符串。
+        ///   查找类似 Save As(_A) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Save_As_Proj {
             get {
@@ -2464,7 +2482,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Save Project 的本地化字符串。
+        ///   查找类似 Save Project(_S) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Save_Proj {
             get {
@@ -2482,7 +2500,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Select All 的本地化字符串。
+        ///   查找类似 Select All(_A) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Select_All {
             get {
@@ -2491,7 +2509,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Simulation 的本地化字符串。
+        ///   查找类似 Simulation(_S) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Simulation {
             get {
@@ -2563,7 +2581,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Undo 的本地化字符串。
+        ///   查找类似 Undo(_U) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Undo {
             get {
@@ -2572,7 +2590,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Upload 的本地化字符串。
+        ///   查找类似 Upload(_U) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Upload {
             get {
@@ -2608,7 +2626,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 View Help 的本地化字符串。
+        ///   查找类似 View Help(_H) 的本地化字符串。
         /// </summary>
         public static string MainWindow_View_Help {
             get {
@@ -2617,7 +2635,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Zoom In 的本地化字符串。
+        ///   查找类似 Zoom In(_I) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Zoom_In {
             get {
@@ -2626,7 +2644,7 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Zoom Out 的本地化字符串。
+        ///   查找类似 Zoom Out(_O) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Zoom_Out {
             get {
@@ -3657,6 +3675,15 @@ namespace SamSoarII.AppMain.Properties {
         public static string Not_Clear_While_Download {
             get {
                 return ResourceManager.GetString("Not_Clear_While_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 is not a command! 的本地化字符串。
+        /// </summary>
+        public static string Not_Command {
+            get {
+                return ResourceManager.GetString("Not_Command", resourceCulture);
             }
         }
         

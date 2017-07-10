@@ -9,6 +9,7 @@ using SamSoarII.LadderInstViewModel.Interrupt;
 using SamSoarII.LadderInstViewModel;
 using SamSoarII.LadderInstViewModel.Pulse;
 using SamSoarII.LadderInstViewModel.Auxiliar;
+using System.Windows.Threading;
 
 namespace SamSoarII.LadderInstViewModel
 {

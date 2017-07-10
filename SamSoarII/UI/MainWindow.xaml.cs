@@ -41,6 +41,7 @@ using Xceed.Wpf.AvalonDock;
 using SamSoarII.AppMain.Project.Helper;
 using SamSoarII.Utility.FileRegister;
 using SamSoarII.PLCDevice;
+using SamSoarII.AppMain.Global;
 
 namespace SamSoarII.AppMain.UI
 {
@@ -52,6 +53,8 @@ namespace SamSoarII.AppMain.UI
         private OptionDialog SysSettingDialog;
         private InteractionFacade _interactionFacade;
         private CanAnimationScroll MainScroll;
+        private List<GlobalThreeHotKey> _threeHotKeys = new List<GlobalThreeHotKey>();
+        private string inputMessage = string.Empty;
         public LayoutAnchorControl LACProj { get { return LAProj?.AnchorControl; } }
         public LayoutAnchorControl LACFind { get { return LAFind?.AnchorControl; } }
         public LayoutAnchorControl LACReplace { get { return LAReplace?.AnchorControl; } }
@@ -74,11 +77,19 @@ namespace SamSoarII.AppMain.UI
                 PropertyChanged(this,new PropertyChangedEventArgs("SB_FontColor"));
             }
         }
+        public bool IsWaitForKey
+        {
+            get
+            {
+                return ThreeHotKeyManager.IsWaitForSecondKey || ThreeHotKeyManager.IsWaitForSecondModifier;
+            }
+        }
         public MainWindow()
         {
             App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
             InitializeComponent();
             InitializeAvalonDock();
+            InitializeHotKey();
             _interactionFacade = new InteractionFacade(this);
             DataContext = this;
             TBCB_Device.DataContext = PLCDeviceManager.GetPLCDeviceManager();
@@ -87,6 +98,265 @@ namespace SamSoarII.AppMain.UI
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             SysSettingDialog = new OptionDialog(_interactionFacade);
             Loaded += MainWindow_Loaded;
+            KeyDown += MainWindow_KeyDown;
+        }
+        
+        private void InitializeHotKey()
+        {
+            KeyPartTwo keyPart;
+            GlobalThreeHotKey hotKey;
+            foreach (var command in GlobalCommand.commands)
+            {
+                if (command == GlobalCommand.AddNewFuncBlockCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.F);
+                    hotKey = new GlobalThreeHotKey(this,command,keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.AddNewModbusCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.M);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.AddNewSubRoutineCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.R);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.CheckFuncBlockCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.F);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.CheckNetworkErrorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.N);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.CompileCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.C);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.DownloadCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.D);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.MonitorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.M);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.UploadCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.U);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.EditCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.E);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ZoomInCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.I);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ZoomOutCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.SimulateCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.S);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.MonitorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.M);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.InstModeToggleCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.I);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.LadderModeToggleCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.L);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.CommentModeToggleCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.C);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowElemListCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F1, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowElemInitCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F2, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowProjectTreeViewCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F3, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowMainMonitorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F4, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowErrorListCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F5, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowOptionDialogCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F6, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowPropertyDialogCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F7, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowBreakpointCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F8, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+                if (command == GlobalCommand.CloseProjectCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.Q, Key.E);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    continue;
+                }
+            }
+        }
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_threeHotKeys.Count == 0)
+            {
+                if (KeyInputHelper.IsModifier(e.Key))
+                {
+                    return;
+                }
+                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    _threeHotKeys = ThreeHotKeyManager.GetHotKeys(ModifierKeys.Control, e.Key);
+                    if (_threeHotKeys != null)
+                    {
+                        _interactionFacade.SetMessage(string.Format("(Ctrl+{0}){1}", e.Key, Properties.Resources.Key_Pressed));
+                        ThreeHotKeyManager.IsWaitForSecondModifier = true;
+                        ThreeHotKeyManager.IsWaitForSecondKey = true;
+                    }
+                }
+            }
+            else
+            {
+                if (e.Key == Key.System) return;
+                if (KeyInputHelper.IsModifier(e.Key))
+                {
+                    ThreeHotKeyManager.IsWaitForSecondModifier = false;
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && !inputMessage.Contains("Ctrl"))
+                        inputMessage += inputMessage == string.Empty ? "Ctrl" : "+Ctrl";
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt && !inputMessage.Contains("Alt"))
+                        inputMessage += inputMessage == string.Empty ? "Alt" : "+Alt";
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift && !inputMessage.Contains("Shift"))
+                        inputMessage += inputMessage == string.Empty ? "Shift" : "+Shift";
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Windows) == ModifierKeys.Windows && !inputMessage.Contains("Windows"))
+                        inputMessage += inputMessage == string.Empty ? "Windows" : "+Windows";
+                }
+                else
+                {
+                    inputMessage += inputMessage == string.Empty ? inputMessage += string.Format("{0})", e.Key) : string.Format("+{0})", e.Key);
+                    if (ThreeHotKeyManager.IsWaitForSecondModifier)
+                    {
+                        foreach (var key in _threeHotKeys)
+                        {
+                            if (key.Assert(e.Key) && key.CanExecute)
+                            {
+                                key.Execute();
+                                _interactionFacade.SetMessage(Properties.Resources.Ready);
+                                e.Handled = true;
+                                _threeHotKeys.Clear();
+                                break;
+                            }
+                        }
+                        if (_threeHotKeys.Count != 0)
+                        {
+                            _interactionFacade.SetMessage(string.Format("{0}{1}{2}{3}", Properties.Resources.Key_Combination, _threeHotKeys.First(), inputMessage, Properties.Resources.Not_Command));
+                            _threeHotKeys.Clear();
+                        }
+                    }
+                    else
+                    {
+                        _interactionFacade.SetMessage(string.Format("{0}{1}{2}{3}", Properties.Resources.Key_Combination, _threeHotKeys.First(), inputMessage, Properties.Resources.Not_Command));
+                        _threeHotKeys.Clear();
+                    }
+                    ThreeHotKeyManager.IsWaitForSecondModifier = false;
+                    ThreeHotKeyManager.IsWaitForSecondKey = false;
+                    inputMessage = string.Empty;
+                }
+            }
         }
 
         private void FileRegister()
@@ -357,27 +627,19 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Command can Execute
-        private void OnEleListOpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void OnNewProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (_interactionFacade != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
+            e.CanExecute = !IsWaitForKey;
         }
-        private void OnEleInitializeCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        private void OnOpenProjectCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (_interactionFacade != null)
-            {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
-            }
-            else
-            {
-                e.CanExecute = false;
-            }
+            e.CanExecute = !IsWaitForKey;
+        }
+
+        private void OnProcessExitCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !IsWaitForKey;
         }
         private void ClosePageCanExecuteCommand(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -409,7 +671,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (_interactionFacade != null)
             {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = _interactionFacade.ProjectLoaded && IsWaitForKey;
             }
             else
             {
@@ -752,14 +1014,6 @@ namespace SamSoarII.AppMain.UI
         #endregion
 
         #region Command Execute
-        private void OnEleInitializeCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            LACElemInit.Show();
-        }
-        private void OnEleListOpenCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            LACElemList.Show();
-        }
         private void OnCloseProjectCommand(object sender, ExecutedRoutedEventArgs e)
         {
             if (_interactionFacade.ProjectModel != null)
@@ -1030,7 +1284,8 @@ namespace SamSoarII.AppMain.UI
             {
                 _interactionFacade.SaveProject();
             }
-            SB_Message.Text = Properties.Resources.Project_Saved;
+            _interactionFacade.SetMessage(Properties.Resources.Project_Saved);
+            //SB_Message.Text = Properties.Resources.Project_Saved;
         }
         public void SaveProject()
         {

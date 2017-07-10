@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.AppMain.Global;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace SamSoarII.AppMain
 {
     public static class GlobalCommand
     {
+        public static HashSet<RoutedUICommand> commands;
         public static RoutedUICommand AddNewFuncBlockCommand { get; set; }
         public static RoutedUICommand AddNewSubRoutineCommand { get; set; }
         public static RoutedUICommand AddNewModbusCommand { get; set; }
@@ -45,49 +47,82 @@ namespace SamSoarII.AppMain
         public static RoutedUICommand BrpoCallCommand { get; set; }
         public static RoutedUICommand BrpoNowCommand { get; set; }
         public static RoutedUICommand BrpoOutCommand { get; set; }
-        public static RoutedUICommand EleListOpenCommand { get; set; }
-        public static RoutedUICommand EleInitializeCommand { get; set; }
 
         static GlobalCommand()
         {
+            commands = new HashSet<RoutedUICommand>();
             AddNewFuncBlockCommand = new RoutedUICommand();
+            commands.Add(AddNewFuncBlockCommand);
             AddNewSubRoutineCommand = new RoutedUICommand();
+            commands.Add(AddNewSubRoutineCommand);
             AddNewModbusCommand = new RoutedUICommand();
+            commands.Add(AddNewModbusCommand);
             InsertRowCommand = new RoutedUICommand();
+            commands.Add(InsertRowCommand);
             DeleteRowCommand = new RoutedUICommand();
+            commands.Add(DeleteRowCommand);
             ZoomInCommand = new RoutedUICommand();
+            commands.Add(ZoomInCommand);
             ZoomOutCommand = new RoutedUICommand();
+            commands.Add(ZoomOutCommand);
             ShowProjectTreeViewCommand = new RoutedUICommand();
+            commands.Add(ShowProjectTreeViewCommand);
             ShowCommunicationSettingDialogCommand = new RoutedUICommand();
+            commands.Add(ShowCommunicationSettingDialogCommand);
             ShowMainMonitorCommand = new RoutedUICommand();
+            commands.Add(ShowMainMonitorCommand);
             ShowErrorListCommand = new RoutedUICommand();
+            commands.Add(ShowErrorListCommand);
             ShowElemListCommand = new RoutedUICommand();
+            commands.Add(ShowElemListCommand);
             ShowElemInitCommand = new RoutedUICommand();
+            commands.Add(ShowElemInitCommand);
             ShowBreakpointCommand = new RoutedUICommand();
+            commands.Add(ShowBreakpointCommand);
             CompileCommand = new RoutedUICommand();
+            commands.Add(CompileCommand);
             MonitorCommand = new RoutedUICommand();
+            commands.Add(MonitorCommand);
             EditCommand = new RoutedUICommand();
+            commands.Add(EditCommand);
             DownloadCommand = new RoutedUICommand();
+            commands.Add(DownloadCommand);
             UploadCommand = new RoutedUICommand();
+            commands.Add(UploadCommand);
             ShowPropertyDialogCommand = new RoutedUICommand();
+            commands.Add(ShowPropertyDialogCommand);
             InstShortCutOpenCommand = new RoutedUICommand();
+            commands.Add(InstShortCutOpenCommand);
             ShowOptionDialogCommand = new RoutedUICommand();
+            commands.Add(ShowOptionDialogCommand);
             LadderModeToggleCommand = new RoutedUICommand();
+            commands.Add(LadderModeToggleCommand);
             InstModeToggleCommand = new RoutedUICommand();
+            commands.Add(InstModeToggleCommand);
             CommentModeToggleCommand = new RoutedUICommand();
+            commands.Add(CommentModeToggleCommand);
             CheckNetworkErrorCommand = new RoutedUICommand();
+            commands.Add(CheckNetworkErrorCommand);
             CheckFuncBlockCommand = new RoutedUICommand();
+            commands.Add(CheckFuncBlockCommand);
             CloseProjectCommand = new RoutedUICommand();
+            commands.Add(CloseProjectCommand);
             SimulateCommand = new RoutedUICommand();
+            commands.Add(SimulateCommand);
             SimuStartCommand = new RoutedUICommand();
+            commands.Add(SimuStartCommand);
             SimuStopCommand = new RoutedUICommand();
+            commands.Add(SimuStopCommand);
             SimuPauseCommand = new RoutedUICommand();
+            commands.Add(SimuPauseCommand);
             BrpoStepCommand = new RoutedUICommand();
+            commands.Add(BrpoStepCommand);
             BrpoCallCommand = new RoutedUICommand();
+            commands.Add(BrpoCallCommand);
             BrpoNowCommand = new RoutedUICommand();
+            commands.Add(BrpoNowCommand);
             BrpoOutCommand = new RoutedUICommand();
-            EleListOpenCommand = new RoutedUICommand();
-            EleInitializeCommand = new RoutedUICommand();
+            commands.Add(BrpoOutCommand);
         }
     }
 }

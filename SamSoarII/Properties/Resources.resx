@@ -139,46 +139,46 @@
     <value>Help(_H)</value>
   </data>
   <data name="MainWindow_New_Proj" xml:space="preserve">
-    <value>New Project</value>
+    <value>New Project(_N)</value>
   </data>
   <data name="MainWindow_Open_Proj" xml:space="preserve">
-    <value>Open Project</value>
+    <value>Open Project(_O)</value>
   </data>
   <data name="MainWindow_Save_Proj" xml:space="preserve">
-    <value>Save Project</value>
+    <value>Save Project(_S)</value>
   </data>
   <data name="MainWindow_Save_As_Proj" xml:space="preserve">
-    <value>Save As</value>
+    <value>Save As(_A)</value>
   </data>
   <data name="MainWindow_Recent_Proj" xml:space="preserve">
     <value>Recent Project</value>
   </data>
   <data name="MainWindow_Close_Proj" xml:space="preserve">
-    <value>Close Project</value>
+    <value>Close Project(_T)</value>
   </data>
   <data name="MainWindow_Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Exit(_X)</value>
   </data>
   <data name="MainWindow_Undo" xml:space="preserve">
-    <value>Undo</value>
+    <value>Undo(_U)</value>
   </data>
   <data name="MainWindow_Redo" xml:space="preserve">
-    <value>Redo</value>
+    <value>Redo(_R)</value>
   </data>
   <data name="MainWindow_Cut" xml:space="preserve">
-    <value>Cut</value>
+    <value>Cut(_T)</value>
   </data>
   <data name="MainWindow_Paste" xml:space="preserve">
-    <value>Paste</value>
+    <value>Paste(_P)</value>
   </data>
   <data name="MainWindow_Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Copy(_C)</value>
   </data>
   <data name="MainWindow_Del" xml:space="preserve">
-    <value>Delete</value>
+    <value>Delete(_D)</value>
   </data>
   <data name="MainWindow_Select_All" xml:space="preserve">
-    <value>Select All</value>
+    <value>Select All(_A)</value>
   </data>
   <data name="MainWindow_Search" xml:space="preserve">
     <value>Search</value>
@@ -187,10 +187,10 @@
     <value>Replace</value>
   </data>
   <data name="MainWindow_Zoom_In" xml:space="preserve">
-    <value>Zoom In</value>
+    <value>Zoom In(_I)</value>
   </data>
   <data name="MainWindow_Zoom_Out" xml:space="preserve">
-    <value>Zoom Out</value>
+    <value>Zoom Out(_O)</value>
   </data>
   <data name="MainWindow_Comment_Mode" xml:space="preserve">
     <value>Comment Mode</value>
@@ -226,16 +226,16 @@
     <value>Property</value>
   </data>
   <data name="MainWindow_Upload" xml:space="preserve">
-    <value>Upload</value>
+    <value>Upload(_U)</value>
   </data>
   <data name="MainWindow_Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Download(_D)</value>
   </data>
   <data name="MainWindow_Monitor" xml:space="preserve">
-    <value>Monitor</value>
+    <value>Monitor(_M)</value>
   </data>
   <data name="MainWindow_Simulation" xml:space="preserve">
-    <value>Simulation</value>
+    <value>Simulation(_S)</value>
   </data>
   <data name="MainWindow_Ret_Edit_Mode" xml:space="preserve">
     <value>Return To Edit Mode</value>
@@ -250,22 +250,22 @@
     <value>FuncBlock Check</value>
   </data>
   <data name="MainWindow_Option" xml:space="preserve">
-    <value>Option</value>
+    <value>Option(_O)</value>
   </data>
   <data name="MainWindow_Chinese" xml:space="preserve">
-    <value>Chinese</value>
+    <value>Chinese(_C)</value>
   </data>
   <data name="MainWindow_English" xml:space="preserve">
-    <value>English</value>
+    <value>English(_E)</value>
   </data>
   <data name="MainWindow_View_Help" xml:space="preserve">
-    <value>View Help</value>
+    <value>View Help(_H)</value>
   </data>
   <data name="MainWindow_Online_Upgrade" xml:space="preserve">
-    <value>Online Upgrade</value>
+    <value>Online Upgrade(_U)</value>
   </data>
   <data name="MainWindow_About" xml:space="preserve">
-    <value>About</value>
+    <value>About(_A)</value>
   </data>
   <data name="MainWindow_Compile" xml:space="preserve">
     <value>Compile</value>
@@ -1778,5 +1778,14 @@
   </data>
   <data name="Simulate" xml:space="preserve">
     <value>Simulate</value>
+  </data>
+  <data name="Key_Pressed" xml:space="preserve">
+    <value>has been pressed, waiting to press the second key ...</value>
+  </data>
+  <data name="Key_Combination" xml:space="preserve">
+    <value>Key combination</value>
+  </data>
+  <data name="Not_Command" xml:space="preserve">
+    <value>is not a command!</value>
   </data>
 </root>
