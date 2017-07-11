@@ -12,6 +12,7 @@ namespace SamSoarII.AppMain.Global
         private UIElement _source;
         private RoutedUICommand _command;
         private KeyPartTwo _keyPart;
+        public string ShowMessage { get; set; }
         public GlobalThreeHotKey(UIElement source, RoutedUICommand command, KeyPartTwo keyPart)
         {
             _source = source;

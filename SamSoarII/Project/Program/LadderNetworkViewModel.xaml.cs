@@ -1394,7 +1394,7 @@ namespace SamSoarII.AppMain.Project
             {
                 LDVModel.MainScrollViewer.ScrollToHorizontalOffset(LDVModel.MainScrollViewer.HorizontalOffset + 80 * scaleX);
             }
-            e.Handled = true;
+            //e.Handled = true;
         }
         protected override void OnDrop(DragEventArgs e)
         {

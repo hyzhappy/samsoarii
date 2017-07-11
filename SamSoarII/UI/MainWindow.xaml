@@ -72,6 +72,12 @@
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Gesture="Alt+F4" Command="ApplicationCommands.Close"></KeyBinding>
+        <KeyBinding Gesture="F9" Command="{x:Static app:GlobalCommand.BrpoStepCommand}"></KeyBinding>
+        <KeyBinding Gesture="F10" Command="{x:Static app:GlobalCommand.BrpoCallCommand}"></KeyBinding>
+        <KeyBinding Gesture="F11" Command="{x:Static app:GlobalCommand.BrpoOutCommand}"></KeyBinding>
+        <KeyBinding Gesture="F5" Command="{x:Static app:GlobalCommand.SimuStartCommand}"></KeyBinding>
+        <KeyBinding Gesture="F6" Command="{x:Static app:GlobalCommand.SimuPauseCommand}"></KeyBinding>
+        <KeyBinding Gesture="F7" Command="{x:Static app:GlobalCommand.SimuStopCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.Resources>
         <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -277,44 +283,44 @@
         </Menu>
         <ToolBarTray x:Name="ToolBar" DockPanel.Dock="Top" Height="25">
             <ToolBar Height="25" VerticalAlignment="Top">
-                <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.MainWindow_New_Proj}" Command="ApplicationCommands.New">
+                <Button Style="{StaticResource ButtonStyle}" ToolTip="{x:Static properties:Resources.New_Proj}" Command="ApplicationCommands.New">
                     <Image Source="/Resources/Image/New.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Open_Proj}" Command="ApplicationCommands.Open" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Open_Proj}" Command="ApplicationCommands.Open" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Open.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Save_Proj}" Command="ApplicationCommands.Save" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Save_Proj}" Command="ApplicationCommands.Save" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Save.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
             <ToolBar Height="25" VerticalAlignment="Top">
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Undo}" Command="{x:Static ApplicationCommands.Undo}" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Undo}" Command="{x:Static ApplicationCommands.Undo}" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Undo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Redo}" Command="{x:Static ApplicationCommands.Redo}" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Redo}" Command="{x:Static ApplicationCommands.Redo}" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Redo.png" Style="{StaticResource ResourceKey=ImageEnable}"></Image>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Cut}" Command="ApplicationCommands.Cut" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Cut}" Command="ApplicationCommands.Cut" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Cut.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Copy}" Command="ApplicationCommands.Copy" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Copy}" Command="ApplicationCommands.Copy" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Copy.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Paste}" Command="ApplicationCommands.Paste" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Paste}" Command="ApplicationCommands.Paste" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Paste.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
             </ToolBar>
             <ToolBar Height="25" VerticalAlignment="Top">
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Download}" Command="{x:Static app:GlobalCommand.DownloadCommand}" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Download}" Command="{x:Static app:GlobalCommand.DownloadCommand}" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <Button ToolTip="{x:Static properties:Resources.MainWindow_Upload}" Command="{x:Static app:GlobalCommand.UploadCommand}" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="{x:Static properties:Resources.Upload}" Command="{x:Static app:GlobalCommand.UploadCommand}" Style="{StaticResource ButtonStyle}">
                     <Image Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </Button>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Simulation}" x:Name="SimulateModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.SimulateCommand}" Style="{StaticResource ToggleButtonStyle}">
+                <ToggleButton ToolTip="{x:Static properties:Resources.Simulation}" x:Name="SimulateModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.SimulateCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </ToggleButton>
-                <ToggleButton ToolTip="{x:Static properties:Resources.MainWindow_Monitor}" x:Name="MonitorModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.MonitorCommand}" Style="{StaticResource ToggleButtonStyle}">
+                <ToggleButton ToolTip="{x:Static properties:Resources.Monitor}" x:Name="MonitorModeButton" IsThreeState="False" Command="{x:Static app:GlobalCommand.MonitorCommand}" Style="{StaticResource ToggleButtonStyle}">
                     <Image Source="/Resources/Image/Monitor.png" Style="{StaticResource ResourceKey=ImageEnable}"/>
                 </ToggleButton>
             </ToolBar>
@@ -494,7 +500,7 @@
                     <ad:LayoutRoot.RightSide>
                         <ad:LayoutAnchorSide>
                             <ad:LayoutAnchorGroup>
-                                <ad:LayoutAnchorable x:Name="LAMonitor" Title="{x:Static properties:Resources.MainWindow_Monitor}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
+                                <ad:LayoutAnchorable x:Name="LAMonitor" Title="{x:Static properties:Resources.Monitor}" FloatingWidth="240" AutoHideWidth="240" AutoHideMinWidth="240">
                                     <Grid x:Name="MonitorViewGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
                                     </Grid>
                                 </ad:LayoutAnchorable>
