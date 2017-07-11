@@ -247,6 +247,24 @@ namespace SamSoarII.AppMain.UI.Monitor
                     return -1;
             }
         }
+        private int GetSpan(int dataType)
+        {
+            switch (dataType)
+            {
+                case 1:
+                case 2:
+                case 5:
+                    return 1;
+                case 3:
+                case 4:
+                    return 2;
+                case 6:
+                    return 2;
+                default:
+                    return 1;
+            }
+        }
+
         private void AddElement()
         {
             using (AddElementDialog dialog = new AddElementDialog())
@@ -254,10 +272,12 @@ namespace SamSoarII.AppMain.UI.Monitor
                 dialog.EnsureButtonClick += (sender1, e1) => 
                 {
                     List<ElementModel> emb = new List<ElementModel>();
-                    for (int i = 0; i < dialog.AddNums; i++)
+                    int span = GetSpan(dialog.DataType);
+                    for (int j = 0,i = 0; j < dialog.AddNums; i += span,j++)
                     {
                         ElementModel ele = new ElementModel(dialog.IntrasegmentType != string.Empty,dialog.DataType);
                         ele.AddrType = dialog.AddrType;
+                        ele.DataType = dialog.DataType;
                         ele.StartAddr = (uint)(dialog.StartAddr + i);
                         ele.IntrasegmentType = dialog.IntrasegmentType;
                         ele.IntrasegmentAddr = dialog.IntrasegmentAddr;
@@ -280,7 +300,7 @@ namespace SamSoarII.AppMain.UI.Monitor
             {
                 dialog.EnsureButtonClick += (sender1, e1) => 
                 {
-                    LocalizedMessageResult result = LocalizedMessageBox.Show(Properties.Resources.Message_Tooltip, LocalizedMessageButton.OKCancel);
+                    LocalizedMessageResult result = LocalizedMessageBox.Show(Properties.Resources.Message_Tooltip, LocalizedMessageButton.OKCancel,LocalizedMessageIcon.Warning);
                     if (result == LocalizedMessageResult.Yes)
                     {
                         tables.Clear();
@@ -360,23 +380,31 @@ namespace SamSoarII.AppMain.UI.Monitor
                 {
                     if (AssertValueModel(model))
                     {
-                        ElementModel elementmodel = new ElementModel();
-                        elementmodel.AddrType = model.Base;
-                        elementmodel.StartAddr = model.Index;
-                        elementmodel.DataType = GetDataType(model.Type);
+                        table.AddElement(GetElement(model));
                         if (model.Offset != WordValue.Null)
                         {
-                            elementmodel.IsIntrasegment = true;
-                            elementmodel.IntrasegmentType = model.Offset.Base;
-                            elementmodel.IntrasegmentAddr = model.Offset.Index;
+                            table.AddElement(GetElement(model.Offset));
                         }
-                        else
-                            elementmodel.IsIntrasegment = false;
-                        elementmodel.SetShowTypes();
-                        table.AddElement(elementmodel);
                     }
                 }
             }
+        }
+        private ElementModel GetElement(IValueModel model)
+        {
+            ElementModel elementmodel = new ElementModel();
+            elementmodel.AddrType = model.Base;
+            elementmodel.StartAddr = model.Index;
+            elementmodel.DataType = GetDataType(model.Type);
+            if (model.Offset != WordValue.Null)
+            {
+                elementmodel.IsIntrasegment = true;
+                elementmodel.IntrasegmentType = model.Offset.Base;
+                elementmodel.IntrasegmentAddr = model.Offset.Index;
+            }
+            else
+                elementmodel.IsIntrasegment = false;
+            elementmodel.SetShowTypes();
+            return elementmodel;
         }
         private void DeleteElement()
         {

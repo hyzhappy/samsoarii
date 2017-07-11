@@ -125,9 +125,9 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <ControlTemplate x:Uid="ControlTemplate_6" TargetType="RepeatButton" x:Key="UpButton">
-        <Border x:Uid="Border_3" x:Name="Border">
-            <Image x:Uid="Image_4" x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/up.png" Width="14" Height="14" Opacity="0.8"></Image>
+    <ControlTemplate TargetType="RepeatButton" x:Key="UpButton">
+        <Border x:Name="Border">
+            <Image x:Name="Image" Source="pack://application:,,,/SamSoarII.HelpDocument;component/HelpDocComponet/Resources/Images/up.png" Width="14" Height="14" Opacity="0.8"></Image>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger x:Uid="Trigger_14" Property="IsMouseOver" Value="True">

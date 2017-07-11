@@ -91,7 +91,7 @@ namespace SamSoarII.UserInterface
 
         private void RangeTextBox_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DefaultValue != -1)
+            if (DefaultValue != -1 && textbox.Text == string.Empty)
             {
                 textbox.Text = DefaultValue.ToString();
             }

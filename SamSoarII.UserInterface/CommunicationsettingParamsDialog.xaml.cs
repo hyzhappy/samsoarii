@@ -30,10 +30,7 @@ namespace SamSoarII.UserInterface
             EnsureButton.Click += EnsureButton_Click;
             CancelButton.Click += CancelButton_Click;
             KeyDown += CommunicationsettingParamsDialog_KeyDown;
-            Binding binding = new Binding();
-            binding.Source = this.communicationParams;
-            binding.Path = new PropertyPath("Timeout");
-            rangeTextbox.textbox.SetBinding(TextBox.TextProperty, binding);
+            rangeTextbox.GetTextBox().Text = communicationParams.Timeout.ToString();
         }
         private void CommunicationsettingParamsDialog_KeyDown(object sender, KeyEventArgs e)
         {

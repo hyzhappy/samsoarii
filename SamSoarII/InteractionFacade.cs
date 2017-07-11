@@ -1504,6 +1504,7 @@ namespace SamSoarII.AppMain
                     {
                         LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
                     }
+                    dialog.Close();
                 };
                 dialog.ShowDialog();
             }

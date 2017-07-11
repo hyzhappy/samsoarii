@@ -24,12 +24,12 @@ namespace SamSoarII.AppMain.Project
             color.G = 58;
             color.B = 58;
             FoldingBrush = new SolidColorBrush(color);
-            //#FF4CB2FA
+            //#FF0281CE
             color = new Color();
             color.A = 255;
-            color.R = 0x4c;
-            color.G = 0xb2;
-            color.B = 0xfa;
+            color.R = 0x02;
+            color.G = 0x81;
+            color.B = 0xCE;
             MonitorBrush = new SolidColorBrush(color);
             //#FFF46622
             color = new Color();

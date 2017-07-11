@@ -64,7 +64,7 @@
             </StackPanel>
             <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
                 <TextBlock x:Uid="TextBlock_7" Margin="0,10,0,0" Text="{x:Static properties:Resources.Timeout}"/>
-                <local:RangeTextBox x:Uid="rangeTextbox" LowRange="1" TopRange="6000" DefaultValue="20" x:Name="rangeTextbox"></local:RangeTextBox>
+                <local:RangeTextBox LowRange="1" TopRange="6000" DefaultValue="20" x:Name="rangeTextbox"></local:RangeTextBox>
                 <TextBlock x:Uid="TextBlock_8" Margin="5,10,0,0">*ms</TextBlock>
             </StackPanel>
         </StackPanel>
