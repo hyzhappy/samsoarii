@@ -349,6 +349,15 @@ namespace SamSoarII.AppMain.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The current command is not executable! 的本地化字符串。
+        /// </summary>
+        public static string Command_Not_Execute {
+            get {
+                return ResourceManager.GetString("Command_Not_Execute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Comment 的本地化字符串。
         /// </summary>
         public static string Comment {

@@ -1836,4 +1836,7 @@
   <data name="Close_Proj" xml:space="preserve">
     <value>关闭当前工程</value>
   </data>
+  <data name="Command_Not_Execute" xml:space="preserve">
+    <value>当前命令不可执行！</value>
+  </data>
 </root>

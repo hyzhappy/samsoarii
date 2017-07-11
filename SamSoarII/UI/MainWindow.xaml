@@ -37,7 +37,7 @@
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowBreakpointCommand}" Executed="OnShowBreakpointExecute" CanExecute="ShowBreakpointCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowOptionDialogCommand}" Executed="OnShowOptionDialogCommandExecute" CanExecute="ShowOptionDialogCommandCanExecute"/>
         <!--Project Command-->
-        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRouteinCommandCanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static app:GlobalCommand.AddNewSubRoutineCommand}" Executed="OnAddNewSubRoutineCommandExecute" CanExecute="AddNewSubRoutineCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewFuncBlockCommand}" Executed="OnAddNewFuncBlockCommandExecute" CanExecute="AddNewFuncBlockCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.AddNewModbusCommand}" Executed="OnAddNewModbusCommandExecute" CanExecute="AddNewModbusCommandCanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static app:GlobalCommand.ShowPropertyDialogCommand}" Executed="OnShowPropertyDialogCommandExecute" CanExecute="ShowPropertyDialogCommandCanExecute"></CommandBinding>

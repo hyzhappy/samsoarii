@@ -328,6 +328,7 @@ namespace SamSoarII.AppMain.UI
             ToolTip toolTip = new ToolTip();
             TextBlock textblock = new TextBlock();
             textblock.TextAlignment = TextAlignment.Left;
+            textblock.Foreground = Brushes.Black;
             for (int i = 0; i < _threeHotKeys.Count; i++)
             {
                 textblock.Text += _threeHotKeys[i].ShowMessage;
@@ -379,11 +380,18 @@ namespace SamSoarII.AppMain.UI
                     {
                         foreach (var hotKey in _threeHotKeys)
                         {
-                            if (hotKey.Assert(key) && hotKey.CanExecute)
+                            if (hotKey.Assert(key))
                             {
-                                _interactionFacade.SetMessage(Properties.Resources.Ready);
                                 _threeHotKeys.Clear();
-                                hotKey.Execute();
+                                if (hotKey.CanExecute)
+                                {
+                                    _interactionFacade.SetMessage(Properties.Resources.Ready);
+                                    hotKey.Execute();
+                                }
+                                else
+                                {
+                                    _interactionFacade.SetMessage(Properties.Resources.Command_Not_Execute);
+                                }
                                 break;
                             }
                         }
@@ -567,7 +575,7 @@ namespace SamSoarII.AppMain.UI
         }
         private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show("Version Number:1.0.7", Properties.Resources.About,LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show("Version Number:1.0.8", Properties.Resources.About,LocalizedMessageIcon.Information);
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -720,18 +728,18 @@ namespace SamSoarII.AppMain.UI
         {
             if (_interactionFacade != null)
             {
-                e.CanExecute = _interactionFacade.ProjectLoaded && IsWaitForKey;
+                e.CanExecute = _interactionFacade.ProjectLoaded && !IsWaitForKey;
             }
             else
             {
                 e.CanExecute = false;
             }
         }
-        private void AddNewSubRouteinCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void AddNewSubRoutineCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (_interactionFacade != null)
             {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = _interactionFacade.ProjectLoaded && _interactionFacade.ProjectModel.LadderMode == LadderMode.Edit;
             }
             else
             {
@@ -742,7 +750,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (_interactionFacade != null)
             {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = _interactionFacade.ProjectLoaded && _interactionFacade.ProjectModel.LadderMode == LadderMode.Edit;
             }
             else
             {
@@ -753,7 +761,7 @@ namespace SamSoarII.AppMain.UI
         {
             if (_interactionFacade != null)
             {
-                e.CanExecute = _interactionFacade.ProjectLoaded;
+                e.CanExecute = _interactionFacade.ProjectLoaded && _interactionFacade.ProjectModel.LadderMode == LadderMode.Edit;
             }
             else
             {
