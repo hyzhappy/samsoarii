@@ -130,7 +130,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                             }
                             sendtime++;
                         }
-                        int itvtime = 10;
+                        int itvtime = 20;
                         if (CurrentCommand is GeneralWriteCommand
                          || CurrentCommand is IntrasegmentWriteCommand)
                         {
@@ -138,7 +138,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                         }
                         //_Thread_WaitForActive(itvtime);
                         Thread.Sleep(itvtime);
-                        while (hassend && recvtime < 50)
+                        while (hassend)
                         {
                             try
                             {
@@ -148,7 +148,7 @@ namespace SamSoarII.AppMain.UI.Monitor
                                     break;
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception e)
                             {
 
                             }
@@ -198,7 +198,7 @@ namespace SamSoarII.AppMain.UI.Monitor
         public MonitorManager(ProjectModel projectModel)
         {
             MMWindow = new MainMonitor(projectModel);
-            ComThread = new Thread(_Thread_Run);
+            //ComThread = new Thread(_Thread_Run);
             ThreadPause += OnThreadPause;
         }
 

@@ -106,6 +106,7 @@ namespace SamSoarII.Simulation
         /// 仿真的工程资源树界面
         /// </summary>
         public ProjectTreeView PTView;
+        
         /// <summary>
         /// 监视变量的表格的界面
         /// </summary>
@@ -223,6 +224,23 @@ namespace SamSoarII.Simulation
             {
                 OnSimulateAbort(this, new RoutedEventArgs());
             }
+        }
+        
+        public void Initialize()
+        {
+            dllmodel.Unlock("X0", 128);
+            dllmodel.Unlock("Y0", 128);
+            dllmodel.Unlock("M0", 8192);
+            dllmodel.Unlock("C0", 256);
+            dllmodel.Unlock("T0", 256);
+            dllmodel.Unlock("S0", 1024);
+            dllmodel.Unlock("D0", 8192);
+            dllmodel.Unlock("CV0", 256);
+            dllmodel.Unlock("TV0", 256);
+            //dllmodel.Unlock("AI0", 32);
+            //dllmodel.Unlock("AO0", 32);
+            dllmodel.Unlock("V0", 8);
+            dllmodel.Unlock("Z0", 8);
         }
 
         #region Event handler
