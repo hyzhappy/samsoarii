@@ -81,6 +81,7 @@ namespace SamSoarII.AppMain.Project
                     bpwindow.Route(pmodel);
                     bpwindow.SModel = smodel;
                     bpwindow.SManager = smodel.SManager;
+                    smodel.Initialize();
                     break;
                 case SimulateDllModel.LOADDLL_CANNOT_FOUND_DLLFILE:
                     LocalizedMessageBox.Show("Error : 找不到生成的dll文件\r\n",LocalizedMessageIcon.Error);

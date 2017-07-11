@@ -119,6 +119,7 @@ namespace SamSoarII.Extend.Utility
                 this.text = value;
                 string[] args = text.Split(' ');
                 this.type = args[0];
+                this.enbit = "";
                 if (args.Length > 1) this.oflag1 = args[1];
                 if (args.Length > 2) this.oflag2 = args[2];
                 if (args.Length > 3) this.oflag3 = args[3];

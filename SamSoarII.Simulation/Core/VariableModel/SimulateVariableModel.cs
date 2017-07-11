@@ -249,7 +249,7 @@ namespace SamSoarII.Simulation.Core.VariableModel
             smodel.SManager.UnlockAll();
         }
 
-        public void Write(string value, string type = null)
+        public void Write(string value, string type = "")
         {
             if (svunit is SimulateBitUnit)
             {

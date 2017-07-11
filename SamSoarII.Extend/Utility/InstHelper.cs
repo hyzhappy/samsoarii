@@ -621,22 +621,23 @@ namespace SamSoarII.Extend.Utility
                                 sw.Write("_bitshr(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
                             break;
                         // 辅助功能
-                        case "LOG":sw.Write("{1:d} = _log({0:d});\n", inst[1], inst[2]); break;
-                        case "POW":sw.Write("{2:d} = _pow({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
-                        case "FACT":sw.Write("{1:d} = _fact({0:d);\n", inst[1], inst[2]); break;
-                        case "CMP":  sw.Write("{2:d} = _cmpw({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
-                        case "CMPD": sw.Write("{2:d} = _cmpd({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
-                        case "CMPF": sw.Write("{2:d} = _cmpf({0:d}, {1:d});\n", inst[1], inst[2], inst[3]); break;
-                        case "ZCP": sw.Write("{3:d} = _zcpw({0:d}, {1:d}, {2:d});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "ZCPD": sw.Write("{3:d} = _zcpd({0:d}, {1:d}, {2:d});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "ZCPF": sw.Write("{3:d} = _zcpf({0:d}, {1:d}, {2:d});\n", inst[1], inst[2], inst[3], inst[4]); break;
-                        case "NEG": sw.Write("{1:d} = _negw({0:d});\n", inst[1], inst[2]); break;
-                        case "NEGD": sw.Write("{1:d} = _negd({0:d});\n", inst[1], inst[2]); break;
-                        case "XCH": sw.Write("_xch(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
-                        case "XCHD": sw.Write("_xchd(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
-                        case "XCHF": sw.Write("_xchf(&{0:d}, &{1:d});\n", inst[1], inst[2]); break;
-                        case "CML": sw.Write("{1:d} = _cmlw({0:d});\n", inst[1], inst[2]); break;
-                        case "CMLD": sw.Write("{1:d} = _cmld({0:d});\n", inst[1], inst[2]); break;
+                        case "LOG":sw.Write("{1:s} = _log({0:s});\n", inst[1], inst[2]); break;
+                        case "POW":sw.Write("{2:s} = _pow({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "FACT":sw.Write("{1:s} = _fact({0:s});\n", inst[1], inst[2]); break;
+                        case "SQRT":sw.Write("{1:s} = _sqrt({0:s});\n", inst[1], inst[2]); break;
+                        case "CMP":  sw.Write("{2:s} = _cmpw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "CMPD": sw.Write("{2:s} = _cmpd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "CMPF": sw.Write("{2:s} = _cmpf({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "ZCP": sw.Write("{3:s} = _zcpw({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "ZCPD": sw.Write("{3:s} = _zcpd({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "ZCPF": sw.Write("{3:s} = _zcpf({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "NEG": sw.Write("{1:s} = _negw({0:s});\n", inst[1], inst[2]); break;
+                        case "NEGD": sw.Write("{1:s} = _negd({0:s});\n", inst[1], inst[2]); break;
+                        case "XCH": sw.Write("_xch(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
+                        case "XCHD": sw.Write("_xchd(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
+                        case "XCHF": sw.Write("_xchf(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
+                        case "CML": sw.Write("{1:s} = _cmlw({0:s});\n", inst[1], inst[2]); break;
+                        case "CMLD": sw.Write("{1:s} = _cmld({0:s});\n", inst[1], inst[2]); break;
                         case "FMOV":
                             if (simumode)
                                 sw.Write("_fmovw({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);

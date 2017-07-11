@@ -148,7 +148,7 @@ namespace SamSoarII.AppMain.UI
                 }
                 else if (values[i] is WordValue)
                     vartypes[i] = "WORD";
-                else if (values[i] is DWordValue)
+                else if (values[i] is DoubleWordValue)
                     vartypes[i] = "DWORD";
                 else if (values[i] is FloatValue)
                     vartypes[i] = "FLOAT";
