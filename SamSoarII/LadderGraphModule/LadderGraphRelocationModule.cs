@@ -26,7 +26,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             RemoveEmptyLines(ladderNetwork);
         }
         /// <summary>
-        /// describe:网络横向扫描
+        /// 网络横向扫描
         /// </summary>
         /// <param name="ladderLogicModule">代表扫描的最小单元</param>
         private static void HorizontalScan(LadderLogicModule ladderLogicModule)
@@ -49,7 +49,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             MoveResidueEle(ladderLogicModule);
         }
         /// <summary>
-        /// describe:网络纵向扫描
+        /// 网络纵向扫描
         /// </summary>
         /// <param name="ladderLogicModule">代表扫描的最小单元</param>
         private static void VerticalScan(LadderLogicModule ladderLogicModule)
@@ -231,7 +231,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             }
         }
         /// <summary>
-        /// describe:使网络中的逻辑单元之间不保留任何空行
+        /// 使网络中的逻辑单元之间不保留任何空行
         /// </summary>
         /// <param name="ladderLogicModule"></param>
         private static void PreScan(LadderLogicModule ladderLogicModule)
@@ -516,7 +516,7 @@ namespace SamSoarII.AppMain.LadderGraphModule
             }
         }
         /// <summary>
-        /// describe:进行梯形图扫描前的核心操作,对逻辑单元中的VLine进行分层。
+        /// 进行梯形图扫描前的核心操作,对逻辑单元中的VLine进行分层。
         /// </summary>
         /// <param name="ladderLogicModule"></param>
         private static void InitializeCountLevel(LadderLogicModule ladderLogicModule)
@@ -692,6 +692,12 @@ namespace SamSoarII.AppMain.LadderGraphModule
                 }
             }
         }
+        /// <summary>
+        /// 得到两个层级间的元素数量
+        /// </summary>
+        /// <param name="ladderLogicModule"></param>
+        /// <param name="VLine"></param>
+        /// <returns></returns>
         private static int GetCount(LadderLogicModule ladderLogicModule, VerticalLineViewModel VLine)
         {
             int cnt;
@@ -738,6 +744,10 @@ namespace SamSoarII.AppMain.LadderGraphModule
             }
             return cnt;
         }
+        /// <summary>
+        /// 删除移动后多余的空行
+        /// </summary>
+        /// <param name="ladderNetwork"></param>
         private static void RemoveEmptyLines(LadderNetworkViewModel ladderNetwork)
         {
             ladderNetwork.RowCount = ladderNetwork.GetMaxY() + 1;

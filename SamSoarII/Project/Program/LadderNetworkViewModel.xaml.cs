@@ -201,6 +201,7 @@ namespace SamSoarII.AppMain.Project
         /// </summary>
         public int MaskNumber { get; set; }
         private bool _isMasked;
+        public bool IsInvokeByCommand = false;
         public bool IsMasked
         {
             get
@@ -210,6 +211,8 @@ namespace SamSoarII.AppMain.Project
             set
             {
                 _isMasked = value;
+                if(!IsInvokeByCommand)
+                    LDVModel.CommandExecute(new LadderNetworkMaskCommand(this));
                 if (_isMasked)
                 {
                     ReleaseSelectRect();
@@ -928,7 +931,7 @@ namespace SamSoarII.AppMain.Project
         {
             PreCompile();
             var graph = ConvertToGraph();
-            graph.Convert();
+            //graph.Convert();
             var tree = graph.ConvertToTree();
             tree.TreeName = string.Format("network_{0}", NetworkNumber);
             return tree.GenerateCode();

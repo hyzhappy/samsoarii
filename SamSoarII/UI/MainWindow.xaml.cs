@@ -458,7 +458,7 @@ namespace SamSoarII.AppMain.UI
             //DockManager.Theme = new VS2010Theme();
             
         }
-
+        
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
         {
             AnchorSide side;

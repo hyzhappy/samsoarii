@@ -2529,7 +2529,7 @@ namespace SamSoarII.AppMain.Project
             if (e.Key == Key.Enter)
             {
                 if (LadderMode != LadderMode.Edit) return;
-                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                if ((e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None)
                 {
                     if (SelectionRect.NetworkParent != null)
                     {
@@ -2553,7 +2553,7 @@ namespace SamSoarII.AppMain.Project
             }
             if (e.Key == Key.Delete)
             {
-                if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                if ((e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None)
                 {
                     DeleteRowExecute();
                 }

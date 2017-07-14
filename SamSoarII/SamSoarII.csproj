@@ -169,6 +169,7 @@
     <Compile Include="LadderCommand\LadderDiagramRemoveElementsCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramRemoveNetworksCommand.cs" />
     <Compile Include="LadderCommand\LadderDiagramReplaceNetworksCommand.cs" />
+    <Compile Include="LadderCommand\LadderNetworkMaskCommand.cs" />
     <Compile Include="LadderCommand\NetworkAddRowCommand.cs" />
     <Compile Include="LadderCommand\NetworkChangeElementArea.cs" />
     <Compile Include="LadderCommand\NetworkRemoveRowsCommand.cs" />
