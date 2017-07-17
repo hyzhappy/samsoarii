@@ -1,0 +1,16 @@
+﻿<Window x:Uid="Window_1" x:Class="SamSoarII.HelpDocument.HelpDocComponet.PrintWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.HelpDocument.HelpDocComponet"
+        mc:Ignorable="d"
+        Title="PrintWindow" Height="300" Width="500" ResizeMode="NoResize">
+    <Canvas x:Uid="Canvas_1">
+        <TextBlock x:Uid="TextBlock_1" Canvas.Left="30" Canvas.Top="30" FontSize="15" Text="你可以打印选中的页面或其包含的所有子页面,你希望如何处理?"/>
+        <RadioButton x:Uid="PrintSelect" x:Name="PrintSelect" Canvas.Left="50" Canvas.Top="80" IsChecked="True" IsThreeState="False">打印选中的页面</RadioButton>
+        <RadioButton x:Uid="PrintRecursion" x:Name="PrintRecursion" Canvas.Left="50" Canvas.Top="120" IsThreeState="False">打印所选页面以及其所有子页面</RadioButton>
+        <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="确定" Height="25" Width="80" Canvas.Left="250" Canvas.Top="200"></Button>
+        <Button x:Uid="CancelButton" x:Name="CancelButton" Content="取消" Height="25" Width="80" Canvas.Left="360" Canvas.Top="200"></Button>
+    </Canvas>
+</Window>

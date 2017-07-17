@@ -1,0 +1,165 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using SamSoarII.Core.Models;
+
+namespace SamSoarII.Shell.Dialogs
+{
+    public enum ModuleType
+    {
+        input_IO,
+        output_IO,
+        input_AD,
+        output_DA
+    }
+    /// <summary>
+    /// ExpansionModuleSettingWidget.xaml 的交互逻辑
+    /// </summary>
+    public partial class ExpansionModuleSettingWidget : UserControl, IDisposable
+    {
+        public ExpansionModuleSettingWidget(ExpansionModuleParams _core)
+        {
+            InitializeComponent();
+            core = _core;
+            DataContext = core;
+            oldindex = 0;
+        }
+
+        public void Dispose()
+        {
+            core = null;
+            DataContext = null;
+        }
+
+        #region Number
+
+        private ExpansionModuleParams core;
+        public ExpansionModuleParams Core { get { return this.core; } }
+
+        private int oldindex;
+
+        #endregion
+        
+        private void SetZIndex(int index, bool isUp)
+        {
+            switch (index)
+            {
+                case 0:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox0, 11);
+                        Panel.SetZIndex(combox1, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox0, 10);
+                        Panel.SetZIndex(combox1, 10);
+                    }
+                    break;
+                case 1:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox1, 11);
+                        Panel.SetZIndex(combox2, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox1, 10);
+                        Panel.SetZIndex(combox2, 10);
+                    }
+                    break;
+                case 2:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox2, 11);
+                        Panel.SetZIndex(combox3, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox2, 10);
+                        Panel.SetZIndex(combox3, 10);
+                    }
+                    break;
+                case 3:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox3, 11);
+                        Panel.SetZIndex(combox4, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox3, 10);
+                        Panel.SetZIndex(combox4, 10);
+                    }
+                    break;
+                case 4:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox4, 11);
+                        Panel.SetZIndex(combox5, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox4, 10);
+                        Panel.SetZIndex(combox5, 10);
+                    }
+                    break;
+                case 5:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox5, 11);
+                        Panel.SetZIndex(combox6, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox5, 10);
+                        Panel.SetZIndex(combox6, 10);
+                    }
+                    break;
+                case 6:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox6, 11);
+                        Panel.SetZIndex(combox7, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox6, 10);
+                        Panel.SetZIndex(combox7, 10);
+                    }
+                    break;
+                case 7:
+                    if (isUp)
+                    {
+                        Panel.SetZIndex(checkbox7, 11);
+                        Panel.SetZIndex(combox8, 11);
+                    }
+                    else
+                    {
+                        Panel.SetZIndex(checkbox7, 10);
+                        Panel.SetZIndex(combox8, 10);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetZIndex(oldindex, false);
+            oldindex = combox.SelectedIndex;
+            SetZIndex(oldindex, true);
+        }
+    }
+}

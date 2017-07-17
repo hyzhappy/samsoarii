@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace SamSoarII.Shell.Dialogs
+{
+    /// <summary>
+    /// ValueModifyDialog.xaml 的交互逻辑
+    /// </summary>
+    public partial class ValueModifyDialog : Window, IDisposable
+    {
+        public ValueModifyDialog(object _core)
+        {
+            InitializeComponent();
+            mainpanel = new ValueModifyPanel(_core);
+            Content = mainpanel;
+        }
+
+        public void Dispose()
+        {
+            Content = null;
+            mainpanel.Dispose();
+            mainpanel = null;
+        }
+
+        private ValueModifyPanel mainpanel;
+        
+    }
+}

@@ -1,0 +1,391 @@
+﻿<UserControl x:Uid="UserControl_1" x:Class="SamSoarII.HelpDocument.HelpDocComponet.HelpDocTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.HelpDocument.HelpDocComponet"
+             mc:Ignorable="d" 
+             d:DesignHeight="1000" d:DesignWidth="300">
+    <UserControl.CommandBindings>
+        <CommandBinding x:Uid="CollectCommand" x:Name="CollectCommand" Command="{x:Static local:HelpDocCommand.CollectPage}"></CommandBinding>
+        <CommandBinding x:Uid="PrintPageCommand" x:Name="PrintPageCommand" Command="{x:Static local:HelpDocCommand.PrintPage}"></CommandBinding>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <ContextMenu x:Uid="ContextMenu_1" x:Key="TreeItemContext">
+            <MenuItem x:Uid="MenuItem_1" Header="操作">
+                <MenuItem x:Uid="MenuItem_2" Header="打开" Click="OnOpen"></MenuItem>
+                <MenuItem x:Uid="MenuItem_3" Header="关闭" Click="OnClose"></MenuItem>
+                <MenuItem x:Uid="MenuItem_4" Header="全部打开" Click="OnOpenAll"></MenuItem>
+                <MenuItem x:Uid="MenuItem_5" Header="全部关闭" Click="OnCloseAll"></MenuItem>
+            </MenuItem>
+            <MenuItem x:Uid="MenuItem_6" Header="打印" Command="{x:Static local:HelpDocCommand.PrintPage}"></MenuItem>
+            <MenuItem x:Uid="MenuItem_7" Header="搜藏" Command="{x:Static local:HelpDocCommand.CollectPage}"></MenuItem>
+        </ContextMenu>
+        <DataTemplate x:Uid="DataTemplate_1" x:Key="PageTemplateProto">
+            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
+                <Image x:Uid="Image_1" Source="Resources/Images/Doc.png" Width="14"></Image>
+                <TextBlock x:Uid="TextBlock_1" Margin="6,0,0,0" Text="{Binding Path=Tag,RelativeSource={RelativeSource Mode=FindAncestor ,AncestorType={x:Type local:HelpDocTreeItem}}}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Uid="DataTemplate_2" x:Key="PageTemplateClose">
+            <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
+                <Image x:Uid="Image_2" Source="Resources/Images/DocClose.png" Width="14"></Image>
+                <TextBlock x:Uid="TextBlock_2" Margin="6,0,0,0" Text="{Binding Path=Tag,RelativeSource={RelativeSource Mode=FindAncestor ,AncestorType={x:Type local:HelpDocTreeItem}}}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Uid="DataTemplate_3" x:Key="PageTemplateOpen">
+            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                <Image x:Uid="Image_3" Source="Resources/Images/DocOpen.png" Width="14"></Image>
+                <TextBlock x:Uid="TextBlock_3" Margin="6,0,0,0" Text="{Binding Path=Tag,RelativeSource={RelativeSource Mode=FindAncestor ,AncestorType={x:Type local:HelpDocTreeItem}}}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <Style x:Uid="Style_1" TargetType="local:HelpDocTreeItem" x:Key="ContextStyle">
+            <Style.Triggers>
+                <Trigger x:Uid="Trigger_1" Property="IsMouseOver" Value="True">
+                    <Setter x:Uid="Setter_1" Property="Background" Value="LightBlue"></Setter>
+                </Trigger>
+            </Style.Triggers>
+            <Setter x:Uid="Setter_2" Property="ContextMenu" Value="{StaticResource TreeItemContext}"></Setter>
+            <EventSetter x:Uid="EventSetter_1" Event="MouseDoubleClick" Handler="OnMouseDoubleClick"></EventSetter>
+        </Style>
+        <Style x:Uid="Style_2" x:Key="ChangeStyle" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+            <Style.Triggers>
+                <Trigger x:Uid="Trigger_2" Property="IsExpanded" Value="False">
+                    <Setter x:Uid="Setter_3" Property="HeaderTemplate" Value="{StaticResource PageTemplateClose}"></Setter>
+                </Trigger>
+                <Trigger x:Uid="Trigger_3" Property="IsExpanded" Value="True">
+                    <Setter x:Uid="Setter_4" Property="HeaderTemplate" Value="{StaticResource PageTemplateOpen}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid x:Uid="Grid_1">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Uid="RowDefinition_1" Height="30"></RowDefinition>
+            <RowDefinition x:Uid="RowDefinition_2" Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border x:Uid="Border_1" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="3,3,0,0">
+            <TextBlock x:Uid="TextBlock_4" TextAlignment="Left" FontSize="20">目录</TextBlock>
+        </Border>
+        <TreeView x:Uid="HelpDocTree" x:Name="HelpDocTree" FontSize="14" KeyDown="OnKeyDown" Grid.Row="1">
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_1" PageIndex="1000" Tag="MainPage" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_2" PageIndex="2000" Tag="QuickStart" Style="{StaticResource ChangeStyle}">
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_3" PageIndex="2100" Tag="ToKnowSamSoar Developer" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_4" PageIndex="2200" Tag="System Requirements" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_5" PageIndex="2300" Tag="Setup Of SamSoar Developer" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_6" PageIndex="2400" Tag="Run Of SamSoar Developer" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_7" PageIndex="2500" Tag="Basic Operation" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_8" PageIndex="2501" Tag="MouseUsage and ShortcutKey" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+                </local:HelpDocTreeItem>
+            </local:HelpDocTreeItem>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_9" PageIndex="3000" Tag="Edit Interface" Style="{StaticResource ChangeStyle}">
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_10" PageIndex="3100" Tag="Menu" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_11" PageIndex="3200" Tag="ToolBar" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_3" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_5" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_12" PageIndex="3201" Tag="Elementlist"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_13" PageIndex="3202" Tag="Program Check"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_14" PageIndex="3203" Tag="System Settings"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_15" PageIndex="3204" Tag="Element Comment"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_16" PageIndex="3205" Tag="Annotation Editing Mode"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_17" PageIndex="3206" Tag="PLC Parameter Setting"/>
+                </local:HelpDocTreeItem>
+            </local:HelpDocTreeItem>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_18" PageIndex="4000" Tag="Create New Project Steps" Style="{StaticResource ChangeStyle}">
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_19" PageIndex="4100" Tag="Software Install and Usage" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+            </local:HelpDocTreeItem>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_20" PageIndex="5000" Tag="PLC Instruction" Style="{StaticResource ChangeStyle}">
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_21" PageIndex="5100" Tag="BitLogic" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_4" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_6" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_22" PageIndex="5101" Tag="-|   |-(常开)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_23" PageIndex="5102" Tag="-| / |-(常闭)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_24" PageIndex="5103" Tag="-| | |-(立即常开)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_25" PageIndex="5104" Tag="-| /| |-(立即常闭)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_26" PageIndex="5105" Tag="-| ↑ |-(上升沿)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_27" PageIndex="5106" Tag="-| ↓ |-(下降沿)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_28" PageIndex="5107" Tag="-↑-(结果上升沿)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_29" PageIndex="5108" Tag="-↓-(结果下降沿)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_30" PageIndex="5109" Tag="-/-(取反)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_31" PageIndex="5110" Tag="-( )(普通输出线圈)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_32" PageIndex="5111" Tag="-( | )(立即输出线圈)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_33" PageIndex="5112" Tag="-( S )(置位输出线圈)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_34" PageIndex="5113" Tag="-( SI )(立即置位输出线圈)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_35" PageIndex="5114" Tag="-( R )(复位输出线圈)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_36" PageIndex="5115" Tag="-( RI )(立即复位输出线圈)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_37" PageIndex="5116" Tag="ALT(连续交替输出)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_38" PageIndex="5117" Tag="ALTP(脉冲交替输出)"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_39" PageIndex="5200" Tag="Compare" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_5" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_7" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_40" PageIndex="5201" Tag="==(比较等于)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_41" PageIndex="5202" Tag="&lt;&gt;(比较不等于)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_42" PageIndex="5203" Tag="&gt;=(比较大于等于)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_43" PageIndex="5204" Tag="&lt;=(比较小于等于)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_44" PageIndex="5205" Tag="&gt;(比较大于)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_45" PageIndex="5206" Tag="&lt;(比较小于)"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_46" PageIndex="5300" Tag="Convert" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_6" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_8" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_47" PageIndex="5301" Tag="WTOD(整数转换为双整数)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_48" PageIndex="5302" Tag="DTOW(双整数转换为整数)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_49" PageIndex="5303" Tag="DTOF(双整数转换为浮点数)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_50" PageIndex="5304" Tag="BIN(BCD转换为整数)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_51" PageIndex="5305" Tag="BCD(整数转换为BCD)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_52" PageIndex="5306" Tag="ROUND(取整)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_53" PageIndex="5307" Tag="TRUNC(截位)"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_54" PageIndex="5400" Tag="LogicOperation" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_7" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_9" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_55" PageIndex="5401" Tag="INVW(反转字)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_56" PageIndex="5402" Tag="INVD(反转双字)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_57" PageIndex="5403" Tag="ANDW(字相与)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_58" PageIndex="5404" Tag="ANDD(双字相与)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_59" PageIndex="5405" Tag="ORW(字相或)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_60" PageIndex="5406" Tag="ORD(双字相或)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_61" PageIndex="5407" Tag="XORW(字异或)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_62" PageIndex="5408" Tag="XORD(双字异或)"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_63" PageIndex="5500" Tag="Move" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_8" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_10" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_64" PageIndex="5501" Tag="MOV(传送字)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_65" PageIndex="5502" Tag="MOVD(传送双字)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_66" PageIndex="5503" Tag="MOVF(传送浮点数)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_67" PageIndex="5504" Tag="MVBLK(成块移动字)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_68" PageIndex="5505" Tag="MVDBLK(成块移动双字)"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_69" PageIndex="5600" Tag="FloatCalculation" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_9" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_11" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_70" PageIndex="5601" Tag="ADDF(浮点数加)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_71" PageIndex="5602" Tag="SUBF(浮点数减)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_72" PageIndex="5603" Tag="MULF(浮点数乘)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_73" PageIndex="5604" Tag="DIVF(浮点数除)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_74" PageIndex="5605" Tag="SQRT(平方根)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_75" PageIndex="5606" Tag="SIN(正弦)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_76" PageIndex="5607" Tag="COS(余弦)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_77" PageIndex="5608" Tag="TAN(正切)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_78" PageIndex="5609" Tag="LN(自然对数)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_79" PageIndex="5610" Tag="EXP(自然指数)"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_80" PageIndex="5700" Tag="IntegerCalculation" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_10" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_12" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_81" PageIndex="5701" Tag="ADD(字相加)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_82" PageIndex="5702" Tag="ADDD(双字相加)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_83" PageIndex="5703" Tag="SUB(字相减)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_84" PageIndex="5704" Tag="SUBD(双字相减)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_85" PageIndex="5705" Tag="MUL(乘)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_86" PageIndex="5706" Tag="MULW(字乘)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_87" PageIndex="5707" Tag="MULD(双字乘)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_88" PageIndex="5708" Tag="DIV(除)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_89" PageIndex="5709" Tag="DIVW(字除)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_90" PageIndex="5710" Tag="DIVD(双字除)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_91" PageIndex="5711" Tag="INC(字加一)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_92" PageIndex="5712" Tag="INCD(双字加一)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_93" PageIndex="5713" Tag="DEC(字减一)"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_94" PageIndex="5714" Tag="DECD(双字减一)"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_95" PageIndex="5800" Tag="Timer" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_11" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_13" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_96" PageIndex="5801" Tag="TON()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_97" PageIndex="5802" Tag="TONR()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_98" PageIndex="5803" Tag="TOF()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_99" PageIndex="5900" Tag="Counter" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_12" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_14" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_100" PageIndex="5901" Tag="CTU()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_101" PageIndex="5902" Tag="CTUD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_102" PageIndex="5903" Tag="CTD()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_103" PageIndex="6000" Tag="ProgramControl" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_13" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_15" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_104" PageIndex="6001" Tag="FOR()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_105" PageIndex="6002" Tag="NEXT()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_106" PageIndex="6003" Tag="JMP()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_107" PageIndex="6004" Tag="LBL()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_108" PageIndex="6005" Tag="CALL()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_109" PageIndex="6006" Tag="CALLM()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_110" PageIndex="6100" Tag="Shift" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_14" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_16" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_111" PageIndex="6101" Tag="SHL()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_112" PageIndex="6102" Tag="SHLD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_113" PageIndex="6103" Tag="SHR()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_114" PageIndex="6104" Tag="SHRD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_115" PageIndex="6105" Tag="SHLB()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_116" PageIndex="6106" Tag="SHRB()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_117" PageIndex="6107" Tag="ROL()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_118" PageIndex="6108" Tag="ROLD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_119" PageIndex="6109" Tag="ROR()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_120" PageIndex="6110" Tag="RORD()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_121" PageIndex="6200" Tag="Interrupt" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_15" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_17" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_122" PageIndex="6201" Tag="ATCH()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_123" PageIndex="6202" Tag="DTCH()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_124" PageIndex="6203" Tag="EI()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_125" PageIndex="6204" Tag="DI()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_126" PageIndex="6300" Tag="RealTime" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_16" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_18" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_127" PageIndex="6301" Tag="TRD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_128" PageIndex="6302" Tag="TWR()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_129" PageIndex="6400" Tag="Communication" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_17" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_19" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_130" PageIndex="6401" Tag="MBUS()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_131" PageIndex="6402" Tag="SEND()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_132" PageIndex="6403" Tag="REV()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_133" PageIndex="6500" Tag="Pulse" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_18" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_20" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_134" PageIndex="6501" Tag="PLSF()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_135" PageIndex="6502" Tag="PWM()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_136" PageIndex="6503" Tag="PLSY()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_137" PageIndex="6504" Tag="DPLSF()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_138" PageIndex="6505" Tag="DPWM()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_139" PageIndex="6506" Tag="DPLSY()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_140" PageIndex="6507" Tag="PLSR()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_141" PageIndex="6508" Tag="DPLSR()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_142" PageIndex="6509" Tag="PLSRD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_143" PageIndex="6510" Tag="DPLSRD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_144" PageIndex="6511" Tag="PLSNEXT()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_145" PageIndex="6512" Tag="PLSSTOP()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_146" PageIndex="6513" Tag="ZRN()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_147" PageIndex="6514" Tag="DZRN()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_148" PageIndex="6515" Tag="PTO()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_149" PageIndex="6516" Tag="DRVI()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_150" PageIndex="6517" Tag="DDRVI()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_151" PageIndex="6600" Tag="HCNT" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_152" PageIndex="6601" Tag="HCNT()" HeaderTemplate="{StaticResource PageTemplateProto}" Style="{StaticResource ContextStyle}"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_153" PageIndex="6700" Tag="Auxiliary Function" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_19" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_21" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_154" PageIndex="6701" Tag="LOG()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_155" PageIndex="6702" Tag="POW()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_156" PageIndex="6703" Tag="FACT()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_157" PageIndex="6704" Tag="CMP()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_158" PageIndex="6705" Tag="CMPD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_159" PageIndex="6706" Tag="CMPF()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_160" PageIndex="6707" Tag="ZCP()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_161" PageIndex="6708" Tag="ZCPD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_162" PageIndex="6709" Tag="ZCPF()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_163" PageIndex="6710" Tag="NEG()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_164" PageIndex="6711" Tag="NEGD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_165" PageIndex="6712" Tag="XCH()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_166" PageIndex="6713" Tag="XCHD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_167" PageIndex="6714" Tag="XCHF()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_168" PageIndex="6715" Tag="CML()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_169" PageIndex="6716" Tag="CMLD()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_170" PageIndex="6717" Tag="SMOV()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_171" PageIndex="6718" Tag="FMOV()"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_172" PageIndex="6719" Tag="FMOVD()"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_173" PageIndex="6800" Tag="PID" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            </local:HelpDocTreeItem>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_174" PageIndex="7000" Tag="Function Features Block" Style="{StaticResource ChangeStyle}">
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_175" PageIndex="7100" Tag="Getting Start To C" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_20" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_22" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_176" PageIndex="7101" Tag="C语言数据类型"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_177" PageIndex="7102" Tag="变量初值和类型转换"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_178" PageIndex="7103" Tag="基本运算符和表达式"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_179" PageIndex="7104" Tag="一维数组"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_180" PageIndex="7105" Tag="小结"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_181" PageIndex="7200" Tag="C Programming Preliminary" Style="{StaticResource ChangeStyle}">
+                    <local:HelpDocTreeItem.Resources>
+                        <Style x:Uid="Style_21" TargetType="local:HelpDocTreeItem" BasedOn="{StaticResource ContextStyle}">
+                            <Setter x:Uid="Setter_23" Property="HeaderTemplate" Value="{StaticResource PageTemplateProto}"></Setter>
+                        </Style>
+                    </local:HelpDocTreeItem.Resources>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_182" PageIndex="7201" Tag="C语言语句"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_183" PageIndex="7202" Tag="分支结构程序"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_184" PageIndex="7203" Tag="Switch语句"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_185" PageIndex="7204" Tag="循环结构程序"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_186" PageIndex="7205" Tag="For语句"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_187" PageIndex="7206" Tag="Break语句"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_188" PageIndex="7207" Tag="Continue语句"/>
+                    <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_189" PageIndex="7208" Tag="小结"/>
+                </local:HelpDocTreeItem>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_190" PageIndex="7300" Tag="The Brief Of Function Features Block" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+                <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_191" PageIndex="7400" Tag="Library Function Appendix" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            </local:HelpDocTreeItem>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_192" PageIndex="8000" Tag="PLC Parameter Setting" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_193" PageIndex="8100" Tag="Register" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_194" PageIndex="8200" Tag="Communication Protocol " HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_195" PageIndex="8300" Tag="Hardware Manual" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_196" PageIndex="8400" Tag="System Settings" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+            <local:HelpDocTreeItem x:Uid="local:HelpDocTreeItem_197" PageIndex="8500" Tag="Contact Information" HeaderTemplate="{StaticResource PageTemplateClose}" Style="{StaticResource ContextStyle}"/>
+        </TreeView>
+    </Grid>
+</UserControl>

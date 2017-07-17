@@ -1,0 +1,95 @@
+﻿<local:LadderUnitViewModel x:Class="SamSoarII.Shell.Models.OutputRectViewModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Models"
+             xmlns:mng="clr-namespace:SamSoarII.Shell.Managers"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Width="300" Height="300" Background="Transparent">
+    <local:LadderUnitViewModel.Resources>
+        <ObjectDataProvider x:Key="LadderFont" ObjectType="{x:Type mng:FontManager}" MethodName="GetLadder">
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="CommentFont" ObjectType="{x:Type mng:FontManager}" MethodName="GetComment">
+        </ObjectDataProvider>
+        <Style x:Key="LadderFontStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" 
+                    Value="{Binding Source={StaticResource LadderFont}, Path=FontSize}">
+            </Setter>
+            <Setter Property="FontFamily" 
+                    Value="{Binding Source={StaticResource LadderFont}, Path=FontFamily}">
+            </Setter>
+            <Setter Property="Foreground" 
+                    Value="{Binding Source={StaticResource LadderFont}, Path=FontColor}">
+            </Setter>
+        </Style>
+        <Style x:Key="CommentFontStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" 
+                    Value="{Binding Source={StaticResource CommentFont}, Path=FontSize}">
+            </Setter>
+            <Setter Property="FontFamily" 
+                    Value="{Binding Source={StaticResource CommentFont}, Path=FontFamily}">
+            </Setter>
+            <Setter Property="Foreground" 
+                    Value="{Binding Source={StaticResource CommentFont}, Path=FontColor}">
+            </Setter>
+        </Style>
+    </local:LadderUnitViewModel.Resources>
+    <StackPanel>
+        <Canvas x:Name="mainCanvas" Width="300" Height="300">
+            <Canvas.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" 
+                            Value="{Binding Source={StaticResource LadderFont}, Path=FontSize}">
+                    </Setter>
+                    <Setter Property="FontFamily" 
+                            Value="{Binding Source={StaticResource LadderFont}, Path=FontFamily}">
+                    </Setter>
+                    <Setter Property="Width" 
+                            Value="250">
+                    </Setter>
+                    <Setter Property="Height" 
+                            Value="50">
+                    </Setter>
+                    <Setter Property="Foreground" 
+                            Value="{Binding Source={StaticResource LadderFont},Path=FontColor}">
+                    </Setter>
+                </Style>
+            </Canvas.Resources>
+            <Border Canvas.Left="20" Canvas.Top="20" Width="280" Height="280" 
+                    BorderThickness="4" BorderBrush="Black">
+            </Border>
+            <Line X1="0" Y1="100" X2="20" Y2="100" 
+                  Stroke="Black" StrokeThickness="4">
+            </Line>
+            <Label Canvas.Left="30" Canvas.Top="80" FontSize="25">
+                EN
+            </Label>
+            <TextBlock x:Name="TopTextBlock" 
+                       Canvas.Left="25" Canvas.Top="20" TextAlignment="Center"
+                       Style="{StaticResource LadderFontStyle}">
+            </TextBlock>
+        </Canvas>
+        <StackPanel x:Name="CommentArea" Width="300" Height="200">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="FontSize" 
+                            Value="{Binding Source={StaticResource CommentFont},Path=FontSize}">
+                    </Setter>
+                    <Setter Property="FontFamily" 
+                            Value="{Binding Source={StaticResource CommentFont},Path=FontFamily}">
+                    </Setter>
+                    <Setter Property="Foreground" 
+                            Value="{Binding Source={StaticResource CommentFont},Path=FontColor}">
+                    </Setter>
+                    <Setter Property="TextWrapping" 
+                            Value="Wrap">
+                    </Setter>
+                    <Setter Property="Margin" 
+                            Value="10, 4, 0, 0">
+                    </Setter>
+                </Style>
+            </StackPanel.Resources>
+        </StackPanel>
+    </StackPanel>
+</local:LadderUnitViewModel>

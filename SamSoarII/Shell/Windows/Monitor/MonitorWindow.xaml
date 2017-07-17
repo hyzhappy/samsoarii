@@ -1,0 +1,152 @@
+﻿<UserControl x:Class="SamSoarII.Shell.Windows.MonitorWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Windows"
+             xmlns:gb="clr-namespace:SamSoarII.Global"
+             xmlns:properties="clr-namespace:SamSoarII.Properties"
+             xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="400" MinHeight="400" MinWidth="400" x:Name="UserControl" Background="#FFFBFCF6">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static gb:MonitorCommand.AddElementCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static gb:MonitorCommand.DeleteAllElementCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static gb:MonitorCommand.DeleteElementsCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static gb:MonitorCommand.QuickAddElementsCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static gb:MonitorCommand.StartCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static gb:MonitorCommand.StopCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <ContextMenu x:Key="ListBoxContextMenu">
+            <MenuItem Header="{x:Static properties:Resources.Modbus_Create_New_Table}" Click="AddTableClick"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.Modbus_Delete_Table}" Click="DeleteTableClick"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.Delete_All}" Click="DeleteAllTables"></MenuItem>
+        </ContextMenu>
+        <ContextMenu x:Key="DataGridContextMenu">
+            <MenuItem Header="{x:Static properties:Resources.Add}" Command="{x:Static gb:MonitorCommand.AddElementCommand}"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.Quick_Add}" Command="{x:Static gb:MonitorCommand.QuickAddElementsCommand}"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.MainWindow_Del}" Command="{x:Static gb:MonitorCommand.DeleteElementsCommand}"></MenuItem>
+            <MenuItem Header="{x:Static properties:Resources.Delete_All}" Command="{x:Static gb:MonitorCommand.DeleteAllElementCommand}"></MenuItem>
+        </ContextMenu>
+        <ControlTemplate x:Key="ListBoxItemTempalte" TargetType="{x:Type ListBoxItem}">
+            <Grid>
+                <Border x:Name="Border">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="pack://application:,,,/SamSoarII;component/Resources/Image/table.png" Width="14"></Image>
+                        <ContentPresenter HorizontalAlignment="Left" Name="ContentSite" Content="{Binding TableName}" VerticalAlignment="Center" Grid.Column="1"></ContentPresenter>
+                    </Grid>
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="LightBlue"></Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="#FF72CBE8"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <util:DoubleConverter1 x:Key="DoubleConverter1"></util:DoubleConverter1>
+        <util:BoolConverter x:Key="ReverseBool"></util:BoolConverter>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="20"></Setter>
+            <Setter Property="MinWidth" Value="70"></Setter>
+            <Setter Property="FontSize" Value="12"></Setter>
+            <Setter Property="Margin" Value="10,0,10,0"></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border BorderBrush="Black" BorderThickness="1.5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition x:Name="Row2" Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button x:Name="AddButton" Command="{x:Static gb:MonitorCommand.AddElementCommand}" Content="{x:Static properties:Resources.Add_Element}"></Button>
+                <Button Grid.Column="1" x:Name="DeleteButton" Command="{x:Static gb:MonitorCommand.DeleteElementsCommand}" Content="{x:Static properties:Resources.Element_Delete}"/>
+                <Button Grid.Column="2" x:Name="StartMonitor" Command="{x:Static gb:MonitorCommand.StartCommand}" Content="{x:Static properties:Resources.Monitor_Start}"/>
+                <Button Grid.Row="1" x:Name="QuickButton" Command="{x:Static gb:MonitorCommand.QuickAddElementsCommand}" Content="{x:Static properties:Resources.Quick_Add}"/>
+                <Button Grid.Row="1" Grid.Column="1" x:Name="DeleteAllButton" Command="{x:Static gb:MonitorCommand.DeleteAllElementCommand}" Content="{x:Static properties:Resources.Delete_All}"/>
+                <Button Grid.Row="1" Grid.Column="2" x:Name="StopMonitor" Command="{x:Static gb:MonitorCommand.StopCommand}" Content="{x:Static properties:Resources.Monitor_Stop}"/>
+            </Grid>
+            <ScrollViewer x:Uid="ScrollViewer_1" Margin="5,5,0,0" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel x:Uid="StackPanel_4" Orientation="Vertical" MinWidth="75">
+                    <TextBox x:Uid="textbox" x:Name="textbox" Height="20" Margin="5,0,0,0" IsEnabled="{Binding HasSelectedTable}" GotFocus="textbox_GotFocus" LostFocus="textbox_LostFocus"></TextBox>
+                    <ListBox x:Uid="Tables" x:Name="Tables" Grid.Row="1" ItemsSource="{Binding Children}" SelectedItem="{Binding SelectedTable, Mode=TwoWay}"
+                             Margin="5,0,0,0" SelectedIndex="0" Height="{Binding ElementName=UserControl,Path=ActualHeight,Converter={StaticResource DoubleConverter1}}" ContextMenu="{StaticResource ListBoxContextMenu}">
+                        <ListBox.Resources>
+                            <Style x:Uid="Style_2" TargetType="{x:Type ListBoxItem}">
+                                <Setter x:Uid="Setter_7" Property="Template" Value="{StaticResource ListBoxItemTempalte}"></Setter>
+                                <EventSetter x:Uid="EventSetter_1" Event="Selected" Handler="ListBoxItem_Selected"></EventSetter>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+                </StackPanel>
+            </ScrollViewer>
+            <Border x:Uid="Border_2" Grid.Row="1" Grid.Column="1" Margin="5" BorderBrush="Black" BorderThickness="0.7">
+                <DataGrid x:Name="ElementDataGrid" HorizontalScrollBarVisibility="Auto" RowHeaderWidth="0"
+                  Background="White" VerticalScrollBarVisibility="Auto" SelectionMode="Extended"
+                  AutoGenerateColumns="False" ColumnHeaderHeight="24" RowBackground="#FFFDFDD0"
+                  CanUserResizeColumns="True" ItemsSource="{Binding TableElements}" ContextMenu="{StaticResource DataGridContextMenu}"
+                  CanUserAddRows="False" CanUserDeleteRows="False" MouseDoubleClick="ElementDataGrid_MouseDoubleClick">
+                    <DataGrid.Resources>
+                        <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
+                            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="0,3,0,0">
+                                <ContentPresenter TextBlock.FontSize="12" TextBlock.TextAlignment="Center"></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                        <Style TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
+                            <Setter Property="TextWrapping" Value="Wrap"></Setter>
+                            <Setter Property="FontSize" Value="12"></Setter>
+                            <Setter Property="FontFamily" Value="Arial"></Setter>
+                        </Style>
+                        <Style x:Uid="Style_2" TargetType="DataGridColumnHeader">
+                            <Setter x:Uid="Setter_4" Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="ElementName" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="True" Header="{x:Static properties:Resources.Element}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding ShowName}">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn x:Name="ElementValue" CanUserSort="False" Width="1.4*" MinWidth="92" IsReadOnly="True" Header="{x:Static properties:Resources.ON_OFF_CurrentValue}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding CurrentValue}">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn x:Name="SetValue" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="True" Header="{x:Static properties:Resources.Set_Value}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding SetValue}">
+                        </DataGridTextColumn>
+                        <DataGridComboBoxColumn x:Uid="DataType" x:Name="DataType" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="False" Header="{x:Static properties:Resources.Data_Type}">
+                            <DataGridComboBoxColumn.EditingElementStyle>
+                                <Style x:Uid="Style_3" TargetType="ComboBox">
+                                    <Setter x:Uid="Setter_5" Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                                    <Setter x:Uid="Setter_6" Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                                    <EventSetter x:Uid="EventSetter_1" Event="SelectionChanged" Handler="ComboBox_SelectionChanged"></EventSetter>
+                                </Style>
+                            </DataGridComboBoxColumn.EditingElementStyle>
+                            <DataGridComboBoxColumn.ElementStyle>
+                                <Style x:Uid="Style_4" TargetType="ComboBox">
+                                    <Setter x:Uid="Setter_7" Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                                    <Setter x:Uid="Setter_8" Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                                </Style>
+                            </DataGridComboBoxColumn.ElementStyle>
+                        </DataGridComboBoxColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

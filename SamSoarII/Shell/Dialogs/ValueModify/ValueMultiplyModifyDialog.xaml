@@ -1,0 +1,12 @@
+﻿<Window x:Class="SamSoarII.Shell.Dialogs.ValueMultiplyModifyDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+        xmlns:properties="clr-namespace:SamSoarII.Properties"
+        mc:Ignorable="d" 
+        Title="{x:Static properties:Resources.Element_Value_Modify}" Height="250" Width="400">
+    <TabControl x:Uid="TC_Main" x:Name="TC_Main">
+    </TabControl>
+</Window>

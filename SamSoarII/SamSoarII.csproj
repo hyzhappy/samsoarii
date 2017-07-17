@@ -1,0 +1,992 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AB0293B9-C85C-4F49-A4B6-7074C8ACC6B9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SamSoarII</RootNamespace>
+    <AssemblyName>SamSoarII</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <BootstrapperComponentsLocation>Relative</BootstrapperComponentsLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\Samkoon\SamSoarII\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SamSoarII.AppMain.StartPoint</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AllResourceManager.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Communication\Command\Download80Command.cs" />
+    <Compile Include="Core\Communication\Command\Download81Command.cs" />
+    <Compile Include="Core\Communication\Command\DownloadFBCommand.cs" />
+    <Compile Include="Core\Communication\Command\DownloadFCCommand.cs" />
+    <Compile Include="Core\Communication\Command\ForceCancelCommand.cs" />
+    <Compile Include="Core\Communication\Command\GeneralReadCommand.cs" />
+    <Compile Include="Core\Communication\Command\GeneralWriteCommand.cs" />
+    <Compile Include="Core\Communication\Command\ICommunicationCommand.cs" />
+    <Compile Include="Core\Communication\Command\IntrasegmentReadCommand.cs" />
+    <Compile Include="Core\Communication\Command\IntrasegmentWriteCommand.cs" />
+    <Compile Include="Core\Communication\CommunicationManager.cs" />
+    <Compile Include="Core\Communication\IPortManager.cs" />
+    <Compile Include="Core\Communication\SerialPortManager.cs" />
+    <Compile Include="Core\Communication\USBManager.cs" />
+    <Compile Include="Core\Communication\Util\CommunicationDataDefine.cs" />
+    <Compile Include="Core\Communication\Util\CommandHelper.cs" />
+    <Compile Include="Core\Communication\Util\CRC16.cs" />
+    <Compile Include="Core\Devices\BroadDevice.cs" />
+    <Compile Include="Core\Devices\Device.cs" />
+    <Compile Include="Core\Devices\FGs16MRDevice.cs" />
+    <Compile Include="Core\Devices\FGs16MTDevice.cs" />
+    <Compile Include="Core\Devices\FGs20MR-BYKDevice.cs" />
+    <Compile Include="Core\Devices\FGs32MR-YTJDevice.cs" />
+    <Compile Include="Core\Devices\FGs32MRDevice.cs" />
+    <Compile Include="Core\Devices\FGs32MT-YTJDevice.cs" />
+    <Compile Include="Core\Devices\FGs32MTDevice.cs" />
+    <Compile Include="Core\Devices\FGs64MRDevice.cs" />
+    <Compile Include="Core\Devices\FGs64MTDevice.cs" />
+    <Compile Include="Core\Devices\MaxRangeDevice.cs" />
+    <Compile Include="Core\Devices\PLCDeviceManager.cs" />
+    <Compile Include="Core\Devices\PLCDeviceType.cs" />
+    <Compile Include="Core\Devices\SpecialRegister.cs" />
+    <Compile Include="Core\Generate\BreakpointManager.cs" />
+    <Compile Include="Core\Generate\ExprHelper.cs" />
+    <Compile Include="Core\Generate\InstHelper.cs" />
+    <Compile Include="Core\Generate\LadderCharts\LadderChart.cs" />
+    <Compile Include="Core\Generate\LadderCharts\LadderChartNode.cs" />
+    <Compile Include="Core\Generate\LadderGraphModule\LadderGraphCheckModule.cs" />
+    <Compile Include="Core\Generate\LadderGraphModule\LadderGraphRelocationModule.cs" />
+    <Compile Include="Core\Generate\LadderGraphModule\LadderLogicModule.cs" />
+    <Compile Include="Core\Generate\LadderGraphs\LadderGraph.cs" />
+    <Compile Include="Core\Generate\LadderGraphs\LadderGraphEdge.cs" />
+    <Compile Include="Core\Generate\LadderGraphs\LadderGraphVertex.cs" />
+    <Compile Include="Core\Generate\PLCInstruction.cs" />
+    <Compile Include="Core\Generate\PLCOriginInst.cs" />
+    <Compile Include="Core\Helpers\CSVFileHelper.cs" />
+    <Compile Include="Core\Helpers\DownloadHelper.cs" />
+    <Compile Include="Core\Helpers\ElementAddressHelper.cs" />
+    <Compile Include="Core\Helpers\GenerateHelper.cs" />
+    <Compile Include="Core\Helpers\Interfaces\IHelper.cs" />
+    <Compile Include="Core\Helpers\ProjectHelper.cs" />
+    <Compile Include="Core\Helpers\SimulateHelper.cs" />
+    <Compile Include="Core\Helpers\UIHelper.cs" />
+    <Compile Include="Core\Helpers\UploadHelper.cs" />
+    <Compile Include="Core\Models\FuncBlocks\FuncBlock.cs" />
+    <Compile Include="Core\Models\FuncBlocks\FuncBlockModel.cs" />
+    <Compile Include="Core\Models\FuncBlocks\FuncModel.cs" />
+    <Compile Include="Core\Models\Interfaces\IElementInitializeModel.cs" />
+    <Compile Include="Core\Models\Instructions\InstructionDiagramModel.cs" />
+    <Compile Include="Core\Models\Instructions\InstructionNetworkModel.cs" />
+    <Compile Include="Core\Models\Interfaces\IModel.cs" />
+    <Compile Include="Core\Models\Interfaces\IParams.cs" />
+    <Compile Include="Core\Models\Ladders\LadderDiagramModel.cs" />
+    <Compile Include="Core\Models\Ladders\LadderNetworkModel.cs" />
+    <Compile Include="Core\Models\Ladders\LadderUnitModel.cs" />
+    <Compile Include="Core\Models\Modbus\ModbusItem.cs" />
+    <Compile Include="Core\Models\Modbus\ModbusModel.cs" />
+    <Compile Include="Core\Models\Modbus\ModbusTableModel.cs" />
+    <Compile Include="Core\Models\Monitor\MonitorModel.cs" />
+    <Compile Include="Core\Models\ProjectModel.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\CommunicationParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\ProjectPropertyParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\AnalogQuantityParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\CommunicationInterfaceParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\ExpansionModuleParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\FilterParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\HoldingSectionParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\PasswordParams.cs" />
+    <Compile Include="Core\Models\Values\BitElementModel.cs" />
+    <Compile Include="Core\Models\Values\SpecialValueManager.cs" />
+    <Compile Include="Core\Models\Values\ValueInfo.cs" />
+    <Compile Include="Core\Models\Values\ValueManager.cs" />
+    <Compile Include="Core\Models\Values\ValueModel.cs" />
+    <Compile Include="Core\Models\Values\ValuePrototype.cs" />
+    <Compile Include="Core\Models\Values\ValueStore.cs" />
+    <Compile Include="Core\Models\Values\WordElementModel.cs" />
+    <Compile Include="Core\Simulate\SimulateBreakpointEvent.cs" />
+    <Compile Include="Core\Simulate\SimulateDllModel.cs" />
+    <Compile Include="Core\Simulate\SimulateManager.cs" />
+    <Compile Include="Core\Simulate\SimulateViewer.cs" />
+    <Compile Include="Global\GlobalCommand.cs" />
+    <Compile Include="Global\GlobalSetting.cs" />
+    <Compile Include="Global\MonitorCommand.cs" />
+    <Compile Include="Global\ProjectFileManager.cs" />
+    <Compile Include="Global\SettingManager.cs" />
+    <Compile Include="InteractionFacade.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\AddElementDialog.xaml.cs">
+      <DependentUpon>AddElementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ComBaseSetting.xaml.cs">
+      <DependentUpon>ComBaseSetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\CommunicationParamsDialog.xaml.cs">
+      <DependentUpon>CommunicationParamsDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\CommunicationSettingDialog.xaml.cs">
+      <DependentUpon>CommunicationSettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\QuickAddElementDialog.xaml.cs">
+      <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SimulateExceptionDialog.xaml.cs">
+      <DependentUpon>SimulateExceptionDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SystemOption\DemoFuncViewModel.xaml.cs">
+      <DependentUpon>DemoFuncViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SystemOption\DemoLadderViewModel.xaml.cs">
+      <DependentUpon>DemoLadderViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SystemOption\ColorSettingDialog.xaml.cs">
+      <DependentUpon>ColorSettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SystemOption\DemoCanvas.xaml.cs">
+      <DependentUpon>DemoCanvas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\DeviceDialog\BaseDeviceMessageDialog.xaml.cs">
+      <DependentUpon>BaseDeviceMessageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs16MRDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs16MTDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs20MRBYKDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs32MRDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs32MRYTJDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs32MTDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs32MTYTJDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs64MRDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\DeviceDialog\FGs64MTDeviceMessageDialog.cs" />
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\DeviceSelectionWidget.xaml.cs">
+      <DependentUpon>DeviceSelectionWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SystemOption\FontSettingWidget.xaml.cs">
+      <DependentUpon>FontSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SystemOption\OptionDialog.xaml.cs">
+      <DependentUpon>OptionDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\SystemOption\OtherSettingWidget.xaml.cs">
+      <DependentUpon>OtherSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\ProjectPropertyDialog.xaml.cs">
+      <DependentUpon>ProjectPropertyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\CommunicationSettingWidget.xaml.cs">
+      <DependentUpon>CommunicationSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\BaseCommunicationInterface.xaml.cs">
+      <DependentUpon>BaseCommunicationInterface.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\DefaultValueDialog.xaml.cs">
+      <DependentUpon>DefaultValueDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\PasswordSettingWidget.xaml.cs">
+      <DependentUpon>PasswordSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\FilterSettingWidget.xaml.cs">
+      <DependentUpon>FilterSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\HoldingSectionSettingWidget.xaml.cs">
+      <DependentUpon>HoldingSectionSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\ExpansionModuleSettingWidget.xaml.cs">
+      <DependentUpon>ExpansionModuleSettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\AnalogQuantitySettingWidget.xaml.cs">
+      <DependentUpon>AnalogQuantitySettingWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\CollectionStackPanel.cs" />
+    <Compile Include="Shell\Dialogs\CSVExportDialog.xaml.cs">
+      <DependentUpon>CSVExportDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\CSVImportDialog.xaml.cs">
+      <DependentUpon>CSVImportDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\BasePropModel.cs" />
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\ElementPropertyDialog.xaml.cs">
+      <DependentUpon>ElementPropertyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\InputPropModel.xaml.cs">
+      <DependentUpon>InputPropModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\OutputPropModel.xaml.cs">
+      <DependentUpon>OutputPropModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\OutRecPropModel.xaml.cs">
+      <DependentUpon>OutRecPropModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\InstructionInputDialog.xaml.cs">
+      <DependentUpon>InstructionInputDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\Interfaces\IDialog.cs" />
+    <Compile Include="Shell\Dialogs\LadderDiagramCommentEditDialog.xaml.cs">
+      <DependentUpon>LadderDiagramCommentEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\LadderNetworkCommentEditDialog.xaml.cs">
+      <DependentUpon>LadderNetworkCommentEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\LocalizedMessageBox.xaml.cs">
+      <DependentUpon>LocalizedMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ModbusDialog.xaml.cs">
+      <DependentUpon>ModbusDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\NewProjectDialog.xaml.cs">
+      <DependentUpon>NewProjectDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\Controls\PopupNotTop.cs" />
+    <Compile Include="Shell\Dialogs\RangeTextBox.xaml.cs">
+      <DependentUpon>RangeTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ReplaceReportWindow.xaml.cs">
+      <DependentUpon>ReplaceReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ValueModify\ValueModifyDialog.xaml.cs">
+      <DependentUpon>ValueModifyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ValueModify\ValueModifyPanel.xaml.cs">
+      <DependentUpon>ValueModifyPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ValueModify\ValueMultiplyModifyDialog.xaml.cs">
+      <DependentUpon>ValueMultiplyModifyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Managers\FontManager.cs" />
+    <Compile Include="Shell\Managers\IconManager.cs" />
+    <Compile Include="Shell\Managers\ValueViewManager.cs" />
+    <Compile Include="Shell\Models\BraceFoldingStrategy.cs" />
+    <Compile Include="Shell\Models\CanExpandButton.cs" />
+    <Compile Include="Shell\Models\FuncBlockViewModel.xaml.cs">
+      <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Instructions\InstructionDiagramViewModel.xaml.cs">
+      <DependentUpon>InstructionDiagramViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Instructions\InstructionNetworkViewModel.xaml.cs">
+      <DependentUpon>InstructionNetworkViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Interfaces\ILoadModel.cs" />
+    <Compile Include="Shell\Models\Interfaces\IProgram.cs" />
+    <Compile Include="Shell\Models\Interfaces\ITabItem.cs" />
+    <Compile Include="Shell\Models\Interfaces\IViewModel.cs" />
+    <Compile Include="Shell\Models\Ladders\LadderDiagramViewModel.xaml.cs">
+      <DependentUpon>LadderDiagramViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\LadderExpander.xaml.cs">
+      <DependentUpon>LadderExpander.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\LadderModes.cs" />
+    <Compile Include="Shell\Models\Ladders\LadderNetworkViewModel.xaml.cs">
+      <DependentUpon>LadderNetworkViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\Units\HLineViewModel.xaml.cs">
+      <DependentUpon>HLineViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\Units\InputViewModel.xaml.cs">
+      <DependentUpon>InputViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\Units\LadderUnitViewModel.cs" />
+    <Compile Include="Shell\Models\Ladders\Units\OutputRectViewModel.xaml.cs">
+      <DependentUpon>OutputRectViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\Units\OutputViewModel.xaml.cs">
+      <DependentUpon>OutputViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\Units\SpecialViewModel.xaml.cs">
+      <DependentUpon>SpecialViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\Ladders\Units\VLineViewModel.xaml.cs">
+      <DependentUpon>VLineViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\ModbusTableViewModel.xaml.cs">
+      <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\ProjectViewModel.cs" />
+    <Compile Include="Shell\Models\SelectRect.xaml.cs">
+      <DependentUpon>SelectRect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\Element\ElementInitWindow.xaml.cs">
+      <DependentUpon>ElementInitWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\Element\ElementListWindow.xaml.cs">
+      <DependentUpon>ElementListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\Element\ElementStackPanel.cs" />
+    <Compile Include="Shell\Windows\ErrorReport\ErrorReportElement_FB.cs" />
+    <Compile Include="Shell\Windows\ErrorReport\ErrorReportElement.cs" />
+    <Compile Include="Shell\Windows\ErrorReport\ErrorReportWindow.xaml.cs">
+      <DependentUpon>ErrorReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\FindReplace\FindWindow.xaml.cs">
+      <DependentUpon>FindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\FindReplace\ReplaceWindow.xaml.cs">
+      <DependentUpon>ReplaceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\FindReplace\TextFindWindow.xaml.cs">
+      <DependentUpon>TextFindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\FindReplace\TextReplaceWindow.xaml.cs">
+      <DependentUpon>TextReplaceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\Interfaces\ITabItem.cs" />
+    <Compile Include="Shell\Windows\Interfaces\IWindow.cs" />
+    <Compile Include="Shell\Windows\Interfaces\IWindowEventArgs.cs" />
+    <Compile Include="Core\Models\Monitor\MonitorElement.cs" />
+    <Compile Include="Core\Models\Monitor\MonitorTable.cs" />
+    <Compile Include="Shell\Windows\Monitor\MonitorWindow.xaml.cs">
+      <DependentUpon>MonitorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\OnlyNumsTextBox.cs" />
+    <Compile Include="Shell\Windows\ProjectTrees\ProjectTreeView.xaml.cs">
+      <DependentUpon>ProjectTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\ProjectTrees\ProjectTreeViewItem.xaml.cs">
+      <DependentUpon>ProjectTreeViewItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\ProjectTrees\ProjectTreeViewEventArgs.cs" />
+    <Compile Include="Shell\Windows\Tab\BaseTabItem.cs" />
+    <Compile Include="Shell\Windows\Tab\MainTabControl.xaml.cs">
+      <DependentUpon>MainTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\Tab\MainTabDiagramItem.xaml.cs">
+      <DependentUpon>MainTabDiagramItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\UnderBar.xaml.cs">
+      <DependentUpon>UnderBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StartPoint.cs" />
+    <Compile Include="Threads\BaseThreadManager.cs" />
+    <Compile Include="Threads\Core\AutoInstManager.cs" />
+    <Compile Include="Threads\Core\AutoSaveManager.cs" />
+    <Compile Include="Threads\Core\CoreThreadManager.cs" />
+    <Compile Include="Threads\Interfaces\IThreadManager.cs" />
+    <Compile Include="Threads\TimerThreadManager.cs" />
+    <Compile Include="Threads\Shell\ViewThreadManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InstructionPopup.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Resources\Image\Breakpoint\BPIcons.psd" />
+    <None Include="Resources\Image\Icons.psd" />
+    <None Include="Resources\Image\Lock\Thumbs.db" />
+    <None Include="Resources\Image\TreeViewIcon\Icons.psd" />
+    <EmbeddedResource Include="Shell\Models\CustomHighlighting.xshd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AvalonDock\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
+      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
+      <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ColorPicker\ColorPicker.csproj">
+      <Project>{827f8c33-8118-48c7-ab3c-4864298396ad}</Project>
+      <Name>ColorPicker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
+      <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
+      <Name>ICSharpCode.AvalonEdit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibUsbDotNet\LibUsbDotNet.csproj">
+      <Project>{186E0CC6-F452-4D5E-A9DB-0D7CE3AAEAE6}</Project>
+      <Name>LibUsbDotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.HelpDocument\SamSoarII.HelpDocument.csproj">
+      <Project>{932daf07-5116-44df-9091-bd4cdc7cd01e}</Project>
+      <Name>SamSoarII.HelpDocument</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamSoarII.Utility\SamSoarII.Utility.csproj">
+      <Project>{aafb923a-b366-4d7d-ab40-81f7d71a1f30}</Project>
+      <Name>SamSoarII.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LayoutConfig.xml" />
+    <Resource Include="Resources\UserSetting.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.zh-Hans.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Breakpoint\BPCall.png" />
+    <Resource Include="Resources\Image\Breakpoint\BPNow.png" />
+    <Resource Include="Resources\Image\Breakpoint\BPOut.png" />
+    <Resource Include="Resources\Image\Breakpoint\BPStep.png" />
+    <Resource Include="Resources\Image\Collapsed.png" />
+    <Resource Include="Resources\Image\Comment.png" />
+    <Resource Include="Resources\Image\CommunicationSetting.png" />
+    <Resource Include="Resources\Image\Compile.png" />
+    <Resource Include="Resources\Image\Config.png" />
+    <Resource Include="Resources\Image\Copy.png" />
+    <Resource Include="Resources\Image\Cut.png" />
+    <Resource Include="Resources\Image\DeleteRow.png" />
+    <Resource Include="Resources\Image\Download.png" />
+    <Resource Include="Resources\Image\ElementInitialize.png" />
+    <Resource Include="Resources\Image\ElementTable.png" />
+    <Resource Include="Resources\Image\Expand.png" />
+    <Resource Include="Resources\Image\Expand\ExpandOff.png" />
+    <Resource Include="Resources\Image\Expand\ExpandOn.png" />
+    <Resource Include="Resources\Image\folderClose.png" />
+    <Resource Include="Resources\Image\folderOpen.png" />
+    <Resource Include="Resources\Image\FUNC.png" />
+    <Resource Include="Resources\Image\FuncBlock.png" />
+    <Resource Include="Resources\Image\InsertRow.png" />
+    <Resource Include="Resources\Image\Inst.png" />
+    <Resource Include="Resources\Image\Instruction.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\DHLine.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\DVLine.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\HLine.ico" />
+    <Resource Include="Resources\Image\InstructionToolbar\HLine.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\INV.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LD.ico" />
+    <Resource Include="Resources\Image\InstructionToolbar\LD.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LDF.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LDI.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LDIIM.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LDIM.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\LDP.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\MEF.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\MEP.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\OUT.ico" />
+    <Resource Include="Resources\Image\InstructionToolbar\OUT.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\OUTIM.png" />
+    <Resource Include="Resources\Image\InstructionToolbar\VLine.ico" />
+    <Resource Include="Resources\Image\InstructionToolbar\VLine.png" />
+    <Resource Include="Resources\Image\Ladder.png" />
+    <Resource Include="Resources\Image\Lock\LockOff.png" />
+    <Resource Include="Resources\Image\Lock\LockOn.png" />
+    <Resource Include="Resources\Image\MainStyle\folderClose.png" />
+    <Resource Include="Resources\Image\MainStyle\folderOpen.png" />
+    <Resource Include="Resources\Image\MainStyle\FUNC.png" />
+    <Resource Include="Resources\Image\MainStyle\FuncBlock.png" />
+    <Resource Include="Resources\Image\MainStyle\Instruction.png" />
+    <Resource Include="Resources\Image\MainStyle\ModBusTable.png" />
+    <Resource Include="Resources\Image\MainStyle\Network.png" />
+    <Resource Include="Resources\Image\MainStyle\Program.png" />
+    <Resource Include="Resources\Image\MainStyle\Project.png" />
+    <Resource Include="Resources\Image\MainStyle\Routines.png" />
+    <Resource Include="Resources\Image\MainStyle\TVFolder.png" />
+    <Resource Include="Resources\Image\ModBusTable.png" />
+    <Resource Include="Resources\Image\Monitor.png" />
+    <Resource Include="Resources\Image\Network.png" />
+    <Resource Include="Resources\Image\New.png" />
+    <Resource Include="Resources\Image\Open.png" />
+    <Resource Include="Resources\Image\Paste.png" />
+    <Resource Include="Resources\Image\Pause.png" />
+    <Resource Include="Resources\Image\PLCSetting.png" />
+    <Resource Include="Resources\Image\Project.png" />
+    <Resource Include="Resources\Image\Redo.png" />
+    <Resource Include="Resources\Image\Routine.png" />
+    <Resource Include="Resources\Image\Routines.png" />
+    <Resource Include="Resources\Image\Save.png" />
+    <Resource Include="Resources\Image\Search.png" />
+    <Resource Include="Resources\Image\Simu.png" />
+    <Resource Include="Resources\Image\Start.png" />
+    <Resource Include="Resources\Image\Stop.png" />
+    <Resource Include="Resources\Image\SystemSetting.png" />
+    <Resource Include="Resources\Image\table.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\ElementList.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Func.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.ico" />
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlock.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\FuncBlockFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Input1.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Input2.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output1.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Instruction_Output2.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Ladders.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\MainProgram.ico" />
+    <Resource Include="Resources\Image\TreeViewIcon\Modbus.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\ModbusFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Network.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\NetworkFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Program.ico" />
+    <Resource Include="Resources\Image\TreeViewIcon\Program.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Root.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\Routine.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\RoutineFolder.png" />
+    <Resource Include="Resources\Image\TreeViewIcon\SubProgram.ico" />
+    <Resource Include="Resources\Image\TVFolder.png" />
+    <Resource Include="Resources\Image\Undo.png" />
+    <Resource Include="Resources\Image\Upload.png" />
+    <Resource Include="Resources\Image\Warning.png" />
+    <EmbeddedResource Include="Resources\SpecialRegisters.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Resources\Image\SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ResourceDictionary\LadderInstructionDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Resources\ResourceDictionary\TabControlDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\AddElementDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ComBaseSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\CommunicationParamsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\CommunicationSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\QuickAddElementDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SimulateExceptionDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SystemOption\DemoFuncViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SystemOption\DemoLadderViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SystemOption\ColorSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SystemOption\DemoCanvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\DeviceDialog\BaseDeviceMessageDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\DeviceSelectionWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SystemOption\FontSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SystemOption\OptionDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\SystemOption\OtherSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\ProjectPropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\CommunicationSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\BaseCommunicationInterface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\DefaultValueDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\PasswordSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\FilterSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\HoldingSectionSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\ExpansionModuleSettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\AnalogQuantitySettingWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\CSVExportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\CSVImportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\ElementPropertyDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\InputPropModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\OutputPropModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\OutRecPropModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\InstructionInputDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\LadderDiagramCommentEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\LadderNetworkCommentEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\LoadingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\LocalizedMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\ModbusDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\NewProjectDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Dialogs\RangeTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ReplaceReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ValueModify\ValueModifyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ValueModify\ValueModifyPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ValueModify\ValueMultiplyModifyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Models\FuncBlockViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Instructions\InstructionDiagramViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Instructions\InstructionNetworkViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\LadderDiagramViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\LadderExpander.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\LadderNetworkViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\Units\HLineViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\Units\InputViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\Units\OutputRectViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\Units\OutputViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\Units\SpecialViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Ladders\Units\VLineViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\ModbusTableViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\SelectRect.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\Element\ElementInitWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Windows\Element\ElementListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Windows\ErrorReport\ErrorReportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\FindReplace\FindWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\FindReplace\ReplaceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\FindReplace\TextFindWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\FindReplace\TextReplaceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\Monitor\MonitorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Windows\ProjectTrees\ProjectTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\ProjectTrees\ProjectTreeViewItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\Tab\MainTabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\Tab\MainTabDiagramItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\UnderBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\Models\Ladders\Commands\" />
+    <Folder Include="Shell\Helper\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Error.png" />
+    <Resource Include="Resources\Image\Information.png" />
+    <Resource Include="Resources\Image\Question.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

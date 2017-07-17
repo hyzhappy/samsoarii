@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="SamSoarII.Shell.Dialogs.DemoFuncViewModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+             xmlns:gb="clr-namespace:SamSoarII.Global"
+             xmlns:mg="clr-namespace:SamSoarII.Shell.Managers"
+             xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
+             xmlns:Text="http://icsharpcode.net/sharpdevelop/avalonedit"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type mg:DemoFontManager}" MethodName="GetFunc"/>
+    </UserControl.Resources>
+    <UserControl.Content>
+        <Border BorderBrush="Orange" BorderThickness="1">
+            <Border.Child>
+                <Grid>
+                    <Text:TextEditor SyntaxHighlighting="C++" x:Name="CodeTextBox" DataContext="{StaticResource FontData}"
+                                     HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                     FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}"
+                                     ShowLineNumbers="True" IsReadOnly="true">
+                    </Text:TextEditor>
+                </Grid>
+            </Border.Child>
+        </Border>
+    </UserControl.Content>
+</UserControl>

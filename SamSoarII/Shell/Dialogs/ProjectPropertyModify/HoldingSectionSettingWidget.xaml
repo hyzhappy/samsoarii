@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="SamSoarII.Shell.Dialogs.HoldingSectionSettingWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+             xmlns:properties="clr-namespace:SamSoarII.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600">
+    <Grid x:Uid="Grid_1">
+        <Grid.Resources>
+            <Style x:Uid="Style_1" TargetType="StackPanel">
+                <Setter x:Uid="Setter_1" Property="Margin" Value="20,5,0,5"></Setter>
+                <Setter x:Uid="Setter_2" Property="Orientation" Value="Horizontal"></Setter>
+            </Style>
+            <Style x:Uid="Style_2" TargetType="Label">
+                <Setter x:Uid="Setter_3" Property="FontSize" Value="16"></Setter>
+            </Style>
+        </Grid.Resources>
+        <StackPanel x:Uid="StackPanel_1" Style="{x:Null}">
+            <StackPanel x:Uid="StackPanel_2">
+                <Label x:Uid="Label_1" FontSize="16" Content="{x:Static properties:Resources.Power_off_Retention_Area_Setting}"/>
+            </StackPanel>
+            <StackPanel x:Uid="StackPanel_3">
+                <Label x:Uid="Label_2" Content="{x:Static properties:Resources.Start_Address}"/>
+                <Label x:Uid="Label_3" Margin="60,0,0,0" Content="{x:Static properties:Resources.Length}"/>
+            </StackPanel>
+            <StackPanel x:Uid="StackPanel_4">
+                <Label x:Uid="Label_4">M</Label>
+                <TextBox x:Uid="MTextbox1" x:Name="MTextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="10,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding MStartAddr}"></TextBox>
+                <StackPanel x:Uid="MStackPanel1" x:Name="MStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="MButton1" x:Name="MButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding M1CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="MButton2" x:Name="MButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding M2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Uid="MTextbox2" x:Name="MTextbox2" TextChanged="OnTextChanged" PreviewKeyDown="OnPreviewKeyDown" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding MLength}"></TextBox>
+                <StackPanel x:Uid="MStackPanel2" x:Name="MStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="MButton3" x:Name="MButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding M3CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="MButton4" x:Name="MButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding M4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel x:Uid="StackPanel_5">
+                <Label x:Uid="Label_5">D</Label>
+                <TextBox x:Uid="DTextbox1" x:Name="DTextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="13,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding DStartAddr}"></TextBox>
+                <StackPanel x:Uid="DStackPanel1" x:Name="DStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="DButton1" x:Name="DButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding D1CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="DButton2" x:Name="DButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding D2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Uid="DTextbox2" x:Name="DTextbox2" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding DLength}"></TextBox>
+                <StackPanel x:Uid="DStackPanel2" x:Name="DStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="DButton3" x:Name="DButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding D3CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="DButton4" x:Name="DButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding D4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel x:Uid="StackPanel_6">
+                <Label x:Uid="Label_6">S</Label>
+                <TextBox x:Uid="STextbox1" x:Name="STextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="16,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding SStartAddr}"></TextBox>
+                <StackPanel x:Uid="SStackPanel1" x:Name="SStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="SButton1" x:Name="SButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding S1CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="SButton2" x:Name="SButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding S2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Uid="STextbox2" x:Name="STextbox2" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding SLength}"></TextBox>
+                <StackPanel x:Uid="SStackPanel2" x:Name="SStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="SButton3" x:Name="SButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding S3CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="SButton4" x:Name="SButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding S4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel x:Uid="StackPanel_7">
+                <Label x:Uid="Label_7">CV</Label>
+                <TextBox x:Uid="CVTextbox1" x:Name="CVTextbox1" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="4,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding CVStartAddr}"></TextBox>
+                <StackPanel x:Uid="CVStackPanel1" x:Name="CVStackPanel1" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="CVButton1" x:Name="CVButton1" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding CV1CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="CVButton2" x:Name="CVButton2" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding CV2CanDown}"></RepeatButton>
+                </StackPanel>
+                <TextBox x:Uid="CVTextbox2" x:Name="CVTextbox2" PreviewKeyDown="OnPreviewKeyDown" TextChanged="OnTextChanged" GotFocus="OnGotFocus" LostFocus="OnLostFocus" Margin="33,0,0,0" FontSize="16" Height="20" Width="60" Text="{Binding CVLength}"></TextBox>
+                <StackPanel x:Uid="CVStackPanel2" x:Name="CVStackPanel2" Margin="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <RepeatButton x:Uid="CVButton3" x:Name="CVButton3" Click="OnUpClick" Template="{StaticResource UpButton}" Height="11" IsEnabled="{Binding CV3CanUp}"></RepeatButton>
+                    <RepeatButton x:Uid="CVButton4" x:Name="CVButton4" Click="OnDownClick" Template="{StaticResource DownButton}" Height="11" IsEnabled="{Binding CV4CanDown}"></RepeatButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel x:Uid="StackPanel_8">
+                <CheckBox x:Uid="CheckBox1" x:Name="CheckBox1" Margin="8,0,0,0" VerticalAlignment="Center" IsChecked="{Binding NotClear}"></CheckBox>
+                <Label x:Uid="Label_8" Content="{x:Static properties:Resources.Not_Clear_While_Download}"/>
+            </StackPanel>
+            <StackPanel x:Uid="StackPanel_9">
+                <Button x:Uid="Button_1" Width="70" Height="24" Margin="135,0,0,0" FontSize="16" Click="DefaultButtonClick" Content="{x:Static properties:Resources.Default}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

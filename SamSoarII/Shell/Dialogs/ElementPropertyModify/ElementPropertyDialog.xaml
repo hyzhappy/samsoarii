@@ -1,0 +1,65 @@
+﻿<Window x:Uid="Window_1" x:Class="SamSoarII.Shell.Dialogs.ElementPropertyDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+        xmlns:properties="clr-namespace:SamSoarII.Properties"
+        mc:Ignorable="d"
+        Title="{x:Static properties:Resources.Element_Parameter_Setting}" 
+        Height="466" Width="360"
+        MinHeight="466" MinWidth="360"
+        Loaded="Window_Loaded">
+    <Grid x:Uid="GD_Main" x:Name="GD_Main">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+        <TextBlock TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" Margin="20,4,200,4" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"
+                   FontSize="14" Text="{x:Static properties:Resources.Parameter_Description}"/>
+        <TextBlock Grid.Row="2" TextWrapping="Wrap" Grid.Column="0" Margin="20,4,200,4"
+                   HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"
+                   FontSize="14" Text="{x:Static properties:Resources.Element_Comment}"/>
+
+        <TextBlock Grid.Row="1" Height="25" Grid.Column="0" Margin="120,8,8,4"
+                   x:Name="TB_Detail"
+                   VerticalAlignment="Center">
+        </TextBlock>
+        <TextBox x:Uid="TB_Comment" Grid.Row="2" Grid.Column="0" Margin="120,4,8,4"
+                 x:Name="TB_Comment" Height="25"
+                 TextChanged="TB_Comment_TextChanged">
+        </TextBox>
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="EnsureButton" Grid.Row="0" Grid.Column="0" Margin="15,4,15,4"
+                Click="OnEnsureButtonClick" Content="{x:Static properties:Resources.Ensure}"/>
+
+            <Button x:Name="CancelButton" Grid.Row="0" Grid.Column="1" Margin="15,4,15,4"
+                Click="OnCancelButtonClick" Content="{x:Static properties:Resources.Cancel}"/>
+
+        </Grid>
+
+        <local:PopupNotTop x:Uid="PU_Collection" x:Name="PU_Collection" Placement="Bottom" HorizontalOffset="0" VerticalOffset="0" Width="300" IsOpen="True" Topmost="False">
+            <ScrollViewer x:Uid="SV_Collection" VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="SV_Collection" CanContentScroll="True">
+                <local:CollectionStackPanel x:Uid="SP_Collection" Background="White" x:Name="SP_Collection" ItemsSource="{Binding CollectionSource}">
+                    <local:CollectionStackPanel.Resources>
+                        <Style x:Uid="Style_1" TargetType="Label">
+                            <Setter x:Uid="Setter_1" Property="Height" Value="20"></Setter>
+                            <Setter x:Uid="Setter_2" Property="FontSize" Value="14"></Setter>
+                            <Setter x:Uid="Setter_3" Property="Padding" Value="0"></Setter>
+                            <EventSetter x:Uid="EventSetter_1" Event="MouseLeftButtonDown" Handler="OnLeftDown"></EventSetter>
+                            <EventSetter x:Uid="EventSetter_2" Event="MouseEnter" Handler="OnMouseEnter"></EventSetter>
+                            <EventSetter x:Uid="EventSetter_3" Event="MouseLeave" Handler="OnMouseLeave"></EventSetter>
+                        </Style>
+                    </local:CollectionStackPanel.Resources>
+                </local:CollectionStackPanel>
+            </ScrollViewer>
+        </local:PopupNotTop>
+    </Grid>
+</Window>

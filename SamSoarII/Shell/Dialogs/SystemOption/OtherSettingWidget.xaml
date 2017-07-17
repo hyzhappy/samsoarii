@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="SamSoarII.Shell.Dialogs.OtherSettingWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+             xmlns:properties="clr-namespace:SamSoarII.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="480">
+    <Grid>
+        <StackPanel Margin="20,20,20,20">
+            <GroupBox Header="{x:Static properties:Resources.Timed_Save_Settings}">
+                <StackPanel Margin="10,0,0,10">
+                    <StackPanel Margin="0,10,0,5" Orientation="Horizontal">
+                        <CheckBox x:Name="checkbox" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
+                        <TextBlock FontSize="16" Text="{x:Static properties:Resources.Timed_Save}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <local:RangeTextBox x:Name="timespantextbox" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" LowRange="1" TopRange="20" DefaultValue="-1"></local:RangeTextBox>
+                        <TextBlock x:Uid="TextBlock_3" Margin="5,0,0,0" FontSize="16" Text="{x:Static properties:Resources.Minute}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="{x:Static properties:Resources.Timed_Update_PLC}">
+                <StackPanel Margin="10,0,0,10">
+                    <StackPanel Margin="0,10,0,5" Orientation="Horizontal">
+                        <CheckBox x:Name="CB_Inst" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
+                        <TextBlock  FontSize="16" Text="{x:Static properties:Resources.Timed_Update}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <local:RangeTextBox x:Name="TB_Inst" IsEnabled="{Binding ElementName=CB_Inst,Path=IsChecked}" LowRange="1" TopRange="20" DefaultValue="-1"></local:RangeTextBox>
+                        <TextBlock Margin="5,0,0,0" FontSize="16" Text="{x:Static properties:Resources.Second}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="{x:Static properties:Resources.Check_Setting_Header}">
+                <StackPanel Margin="10,0,0,10">
+                    <StackPanel Margin="0,10,0,5" Orientation="Horizontal">
+                        <CheckBox x:Name="CB_Coil" Margin="0,3,10,0" IsThreeState="False" IsChecked="False"></CheckBox>
+                        <TextBlock FontSize="16" Text="{x:Static properties:Resources.Check_Coil_Output}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

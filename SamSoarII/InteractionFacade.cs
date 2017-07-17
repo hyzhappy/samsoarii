@@ -1,0 +1,1495 @@
+﻿using Microsoft.Win32;
+using SamSoarII.Core.Models;
+using SamSoarII.Global;
+using SamSoarII.Shell.Dialogs;
+using SamSoarII.Shell.Managers;
+using SamSoarII.Shell.Models;
+using SamSoarII.Shell.Windows;
+using SamSoarII.Threads;
+using SamSoarII.Utility;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Windows.Input;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Threading;
+using System.Text.RegularExpressions;
+using SamSoarII.Core.Generate;
+using SamSoarII.Core.Simulate;
+using System.Diagnostics;
+using SamSoarII.Core.Helpers;
+using SamSoarII.Core.Communication;
+
+namespace SamSoarII
+{
+    public class InteractionFacade : IDisposable
+    {
+        public InteractionFacade(MainWindow _wndMain)
+        {
+            wndMain = _wndMain;
+            mngValue = new ValueManager(this);
+            vmngValue = new ValueViewManager(mngValue);
+            barStatus = new UnderBar(this);
+            tvProj = new ProjectTreeView(this);
+            tcMain = new MainTabControl(this);
+            wndError = new ErrorReportWindow(this);
+            wndFind = new FindWindow(this);
+            wndReplace = new ReplaceWindow(this);
+            wndTFind = new TextFindWindow(this);
+            wndTReplace = new TextReplaceWindow(this);
+            wndEList = new ElementListWindow(this);
+            wndEInit = new ElementInitWindow(this);
+            wndMoni = new MonitorWindow(this);
+            barStatus.Post += OnReceiveIWindowEvent;
+            tvProj.Post += OnReceiveIWindowEvent;
+            tcMain.Post += OnReceiveIWindowEvent;
+            wndError.Post += OnReceiveIWindowEvent;
+            wndFind.Post += OnReceiveIWindowEvent;
+            wndReplace.Post += OnReceiveIWindowEvent;
+            wndTFind.Post += OnReceiveIWindowEvent;
+            wndTReplace.Post += OnReceiveIWindowEvent;
+            wndEList.Post += OnReceiveIWindowEvent;
+            wndEInit.Post += OnReceiveIWindowEvent;
+            wndMoni.Post += OnReceiveIWindowEvent;
+            thmngCore = new CoreThreadManager(this);
+            thmngView = new ViewThreadManager(this);
+            mngSimu = new SimulateManager(this);
+            mngSimu.Started += OnSimulateStarted;
+            mngSimu.Paused += OnSimulatePaused;
+            mngSimu.Aborted += OnSimulateAborted;
+            mngSimu.BreakpointPaused += OnBreakpointPaused;
+            mngSimu.BreakpointResumed += OnBreakpointResumed;
+            mngComu = new CommunicationManager(this);
+        }
+        
+        public void Dispose()
+        {
+            //if (mdProj != null) CloseProject();
+            WaitForThreadAbort();
+            PostIWindowEvent = delegate { };
+            tvProj.Post -= OnReceiveIWindowEvent;
+            tcMain.Post -= OnReceiveIWindowEvent;
+            wndError.Post -= OnReceiveIWindowEvent;
+            wndFind.Post -= OnReceiveIWindowEvent;
+            wndReplace.Post -= OnReceiveIWindowEvent;
+            wndTFind.Post -= OnReceiveIWindowEvent;
+            wndTReplace.Post -= OnReceiveIWindowEvent;
+            wndEList.Post -= OnReceiveIWindowEvent;
+            wndEInit.Post -= OnReceiveIWindowEvent;
+            tvProj = null;
+            tcMain = null;
+            wndError = null;
+            wndFind = null;
+            wndReplace = null;
+            wndTFind = null;
+            wndTReplace = null;
+            wndMain = null;
+            wndEList = null;
+            wndEInit = null;
+        }
+
+        #region Numbers
+
+        #region UI
+
+        private MainWindow wndMain;
+        public MainWindow WNDMain { get { return this.wndMain; } }
+
+        private UnderBar barStatus;
+        public UnderBar BARStatus { get { return this.barStatus; } }
+ 
+        private ProjectTreeView tvProj;
+        public ProjectTreeView TVProj { get { return this.tvProj; } }
+
+        private MainTabControl tcMain;
+        public MainTabControl TCMain { get { return this.tcMain; } }
+        public LadderDiagramViewModel CurrentLadder { get { return tcMain.SelectedItem is MainTabDiagramItem
+            ? ((MainTabDiagramItem)(tcMain.SelectedItem)).LDVModel : null; } }
+
+        private ErrorReportWindow wndError;
+        public ErrorReportWindow WNDError { get { return this.wndError; } }
+
+        private FindWindow wndFind;
+        public FindWindow WNDFind { get { return this.wndFind; } }
+
+        private ReplaceWindow wndReplace;
+        public ReplaceWindow WNDReplace { get { return this.wndReplace; } }
+
+        private TextFindWindow wndTFind;
+        public TextFindWindow WNDTFind { get { return this.wndTFind; } }
+
+        private TextReplaceWindow wndTReplace;
+        public TextReplaceWindow WNDTReplace { get { return this.wndTReplace; } }
+
+        private ElementListWindow wndEList;
+        public ElementListWindow WNDEList { get { return this.wndEList; } }
+
+        private ElementInitWindow wndEInit;
+        public ElementInitWindow WNDEInit { get { return this.wndEInit; } }
+
+        private MonitorWindow wndMoni;
+        public MonitorWindow WNDMoni { get { return this.wndMoni; } }
+        
+        #endregion
+
+        #region Project
+
+        private ProjectModel mdProj;
+        public ProjectModel MDProj { get { return this.mdProj; } }
+
+        private ProjectViewModel vmdProj;
+        public ProjectViewModel VMDProj { get { return this.vmdProj; } }
+
+        private SimulateManager mngSimu;
+        public SimulateManager MNGSimu { get { return this.mngSimu; } }
+
+        private CommunicationManager mngComu;
+        public CommunicationManager MNGComu { get { return this.mngComu; } }
+        
+        #endregion
+
+        #region Values
+
+        private ValueManager mngValue;
+        public ValueManager MNGValue { get { return this.mngValue; } }
+
+        private ValueViewManager vmngValue;
+        public ValueViewManager VMNGValue { get { return this.vmngValue; } }
+
+        #endregion
+
+        #region Threads
+
+        private CoreThreadManager thmngCore;
+        public CoreThreadManager ThMNGCore { get { return this.thmngCore; } }
+
+        private ViewThreadManager thmngView;
+        public ViewThreadManager ThMNGView { get { return this.thmngView; } }
+        
+        private void WaitForThreadPause()
+        {
+            thmngCore.Pause();
+            thmngView.Pause();
+            while (thmngCore.IsActive || thmngView.IsActive) Thread.Sleep(10) ;
+        }
+
+        private void WaitForThreadAbort()
+        {
+            thmngCore.Abort();
+            thmngView.Abort();
+            while (thmngCore.IsAlive || thmngView.IsAlive) Thread.Sleep(10);
+        }
+
+        private void AllThreadStart()
+        {
+            thmngCore.Start();
+            thmngView.Start();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Project
+
+        private void InitializeProject()
+        {
+            vmdProj = new ProjectViewModel(mdProj);
+            vmdProj.PropertyChanged += OnViewPropertyChanged;
+            ThMNGView.Add(vmdProj);
+            AllThreadStart();
+            tcMain.ViewMode = MainTabControl.VIEWMODE_LADDER;
+            tcMain.ShowItem(mdProj.MainDiagram.Tab);
+            tvProj.ReinitializeComponent();
+            barStatus.Update(mdProj);
+            wndEInit.UpdateElements();
+            wndMoni.Core = mdProj.Monitor;
+            wndMain.LACProj.Show();
+        }
+        
+        public void CreateProject(string name, string filename = null)
+        {
+            if (mdProj != null)
+            {
+                Thread createthread = new Thread(() =>
+                {
+                    _CloseProject();
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { _CreateProject(name, filename); });
+                });
+                createthread.Start();
+            }
+            else
+            {
+                _CreateProject(name, filename);
+            }
+        }
+
+        private void _CreateProject(string name, string filename)
+        {
+            mdProj = new ProjectModel(this, name);
+            InitializeProject();
+            if (filename != null) SaveAsProject(filename);
+        }
+        
+        public void LoadProject(string filename)
+        {
+            if (mdProj != null)
+            {
+                PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Project_Preparing));
+                LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
+                handle.Start();
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    _CloseProject();
+                    _LoadProject(filename);
+                    handle.Completed = true;
+                    handle.Abort();
+                });
+                while (!handle.Completed) Thread.Sleep(10);
+                PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ready));
+            }
+            else
+            {
+                _LoadProject(filename);
+            }
+        }
+
+        private void _LoadProject(string filename)
+        {
+            try
+            {
+                mdProj = new ProjectModel(this, "# load", filename);
+                InitializeProject();
+            }
+            catch (Exception e)
+            {
+                mdProj = null;
+                LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
+            }
+        }
+        
+        public void SaveProject()
+        {
+            if (mdProj.FileName == null)
+                ShowSaveProjectDialog();
+            else
+                mdProj.Save();
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Project_Saved));
+        }
+
+        public void SaveAsProject(string filename, bool isexception = false)
+        {
+            mdProj.Save(filename);
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Project_Saved));
+        }
+        
+        public void CloseProject()
+        {
+            Thread closethread = new Thread(() =>
+            {
+                _CloseProject();
+            });
+            closethread.Start();
+        }
+
+        private void _CloseProject()
+        {
+            WaitForThreadAbort();
+            tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
+            tvProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tvProj.Reset(); });
+            vmdProj.PropertyChanged -= OnViewPropertyChanged;
+            vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); mdProj.Dispose(); });
+            vmdProj = null;
+            wndMoni.Core = null;
+            mdProj = null;
+            mngValue.Initialize();
+            GC.Collect();
+        }
+
+        public bool DownloadProject()
+        {
+            if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
+            if (vmdProj.LadderMode == LadderModes.Monitor) _CloseMonitor();
+            if (!CheckLadder(false)) return false;
+            if (!CheckFuncBlock(false)) return false;
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Generating_Final);
+            handle.Start();
+            Thread genthread = new Thread(() =>
+            {
+                GenerateHelper.GenerateFinal(mdProj, "libF103PLC.a");
+                mngComu.LoadExecute();
+                handle.Completed = true;
+                handle.Abort();
+            });
+            genthread.Start();
+            while (!handle.Completed) Thread.Sleep(10);
+
+            CommunicationParams paraCom = mdProj.PARAProj.PARACom;
+            using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
+                CommunicationSettingDialogMode.DOWNLOAD))
+            {
+                ComBaseSetting basesetting = dialog.GetBaseSetting();
+                basesetting.DataLen = mngComu.ExecLen;
+                basesetting.SettingButtonClick += (sender1, e1) =>
+                {
+                    using (CommunicationParamsDialog dialog1 = new CommunicationParamsDialog(paraCom))
+                    {
+                        dialog1.ShowDialog();
+                    }
+                };
+                dialog.CommunicationTest += (sender2, e2) =>
+                {
+                    if (mngComu.CheckLink())
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
+                    else
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                };
+                basesetting.ModifyButtonClick += (sender2, e2) =>
+                {
+                    using (ProjectPropertyDialog dialog2 = new ProjectPropertyDialog(mdProj))
+                    {
+                        dialog2.EnsureButtonClick += (sender1, e1) =>
+                        {
+                            dialog2.Save();
+                            dialog2.Close();
+                        };
+                        dialog2.ShowDialog();
+                    }
+                };
+                dialog.Ensure += (sender3, e3) =>
+                {
+                    if (mngComu.CheckLink())
+                    {
+                        handle = new LoadingWindowHandle(Properties.Resources.Project_Download);
+                        //StatusBarHepler.UpdateMessageAsync(Properties.Resources.Downloading);
+                        vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+                        {
+                            handle.Start();
+                            bool ret = mngComu.DownloadExecute();
+                            handle.Abort();
+                            handle.Completed = true;
+                            if (!ret)
+                            {
+                                //StatusBarHepler.UpdateMessageAsync(Properties.Resources.Download_Fail);
+                                LocalizedMessageBox.Show(Properties.Resources.Download_Fail, LocalizedMessageIcon.Information);
+                            }
+                            else
+                            {
+                                //StatusBarHepler.UpdateMessageAsync(Properties.Resources.MessageBox_Download_Successd);
+                                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Download_Successd, LocalizedMessageIcon.Information);
+                            }
+                        });
+                        while (!handle.Completed)
+                        {
+                            Thread.Sleep(10);
+                        }
+                    }
+                    else
+                    {
+                        LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                    }
+                };
+                dialog.ShowDialog();
+            }
+            return true;
+        }
+        
+        public void UploadProject()
+        {
+
+        }
+
+        public bool SimulateProject()
+        {
+            if (vmdProj.LadderMode == LadderModes.Monitor)
+                _CloseMonitor();
+            if (vmdProj.LadderMode == LadderModes.Simulate)
+            {
+                _CloseSimulate();
+                return false;
+            }
+            if (!CheckLadder(false)) return false;
+            if (!CheckFuncBlock(false)) return false;
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus, 
+                UnderBarStatus.Loading, Properties.Resources.Simulate_Initing));
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Simulate_Initing);
+            handle.Start();
+            int ret = 0;
+            Thread genthread = new Thread(() => 
+            {
+                ret = GenerateHelper.GenerateSimu(mdProj);
+                handle.Completed = true;
+                handle.Abort();
+            });
+            genthread.Start();
+            while (!handle.Completed) Thread.Sleep(10);
+            switch (ret)
+            {
+                case SimulateDllModel.LOADDLL_OK:
+                    vmdProj.LadderMode = LadderModes.Simulate;
+                    mngSimu.IsEnable = true;
+                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                        MainWindowEventArgs.TYPE_HIDE 
+                      | MainWindowEventArgs.FLAG_EDIT));
+                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                        MainWindowEventArgs.TYPE_SHOW
+                      | MainWindowEventArgs.FLAG_SIMULATE));
+                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                        MainWindowEventArgs.TYPE_TOGGLE_DOWN
+                      | MainWindowEventArgs.FLAG_SIMULATE));
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, 
+                        UnderBarStatus.Simulate, Properties.Resources.MainWindow_Simulation));
+                    return true;
+                default:
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                        UnderBarStatus.Error, Properties.Resources.Simulate_Error));
+                    LocalizedMessageBox.Show(Properties.Resources.Simulate_Error, LocalizedMessageIcon.Error);
+                    return false;
+            }
+        }
+
+        public bool MonitorProject()
+        {
+            if (vmdProj.LadderMode == LadderModes.Monitor)
+                _CloseMonitor();
+            if (vmdProj.LadderMode == LadderModes.Simulate)
+            {
+                _CloseMonitor();
+                return false;
+            }
+            if (!CheckLadder(false)) return false;
+            //if (!CheckFuncBlock(false)) return false;
+            if (!mngComu.CheckLink())
+            {
+                PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                    UnderBarStatus.Error, Properties.Resources.MessageBox_Communication_Failed));
+                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                return false;
+            }
+            vmdProj.LadderMode = LadderModes.Monitor;
+            mngComu.IsEnable = true;
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_HIDE
+              | MainWindowEventArgs.FLAG_EDIT));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_DOWN
+              | MainWindowEventArgs.FLAG_MONITOR));
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Monitor, Properties.Resources.MainWindow_Monitor));
+            wndMain.LACMonitor.Show();
+            return true;
+        }
+
+        public void EditProject()
+        {
+            if (vmdProj == null) return;
+            switch (vmdProj.LadderMode)
+            {
+                case LadderModes.Simulate:
+                    _CloseSimulate();
+                    break;
+                case LadderModes.Monitor:
+                    _CloseMonitor();
+                    break;
+            }
+        }
+       
+        private void _CloseSimulate()
+        {
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Loading, Properties.Resources.Simulate_Closing));
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Simulate_Closing);
+            handle.Start();
+            vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+            {
+                mngSimu.Abort();
+                mngSimu.IsEnable = false;
+                while (mngSimu.IsAlive) Thread.Sleep(10);
+                SimulateDllModel.FreeDll();
+                vmdProj.LadderMode = LadderModes.Edit;
+                handle.Completed = true;
+                handle.Abort();
+            });
+            while (!handle.Completed) Thread.Sleep(10);
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_SHOW
+              | MainWindowEventArgs.FLAG_EDIT));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_HIDE
+              | MainWindowEventArgs.FLAG_SIMULATE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_UP
+              | MainWindowEventArgs.FLAG_SIMULATE));
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Ready));
+        }
+
+        private void _CloseMonitor()
+        {
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Loading, Properties.Resources.Monitor_Closing));
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Monitor_Closing);
+            handle.Start();
+            vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+            {
+                mngComu.AbortAll();
+                mngComu.IsEnable = false;
+                while (mngComu.IsAlive) Thread.Sleep(10);
+                vmdProj.LadderMode = LadderModes.Edit;
+                handle.Completed = true;
+                handle.Abort();
+            });
+            while (!handle.Completed) Thread.Sleep(10);
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_SHOW
+              | MainWindowEventArgs.FLAG_EDIT));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_UP
+              | MainWindowEventArgs.FLAG_MONITOR));
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                UnderBarStatus.Normal, Properties.Resources.Ready));
+        }
+        
+        #endregion
+
+        #region Check
+
+        public bool CheckLadder(bool showreport = false)
+        {
+            bool result = false;
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.LadderDiagram_check));
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.LadderDiagram_check);
+            wndMain.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+            {
+                handle.Start();
+                thmngCore.MNGInst.Pause();
+                while (thmngCore.MNGInst.IsActive)
+                    Thread.Sleep(10);
+                result = _CheckLadder(handle, showreport);
+                thmngCore.MNGInst.Start();
+            });
+            while (!handle.Completed) Thread.Sleep(10);
+            if (!showreport)
+            {
+                if (result)
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ladder_Correct));
+                else
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Error, Properties.Resources.Ladder_Error));
+            }
+            return result;
+        }
+        
+        private bool _CheckLadder(LoadingWindowHandle handle, bool showreport)
+        {
+            bool result = false;
+            List<ErrorMessage> errorMessages = new List<ErrorMessage>();
+            foreach (LadderDiagramModel diagram in mdProj.Diagrams)
+            {
+                errorMessages.Add(LadderGraphCheckModule.Execute(diagram));
+            }
+            for (int i = 0; i < errorMessages.Count; i++)
+            {
+                if (errorMessages[i].Error == ErrorType.None
+                 || errorMessages[i].Error == ErrorType.InstPair)
+                {
+                    IList<ErrorReportElement> weinsts = null;
+                    int ecount = 0;
+                    int wcount = 0;
+                    weinsts = _CheckInsts(ref ecount, ref wcount);
+                    if (weinsts.Count() > 0)
+                    {
+                        result = (ecount == 0);
+                        if ((showreport || !result) && i == errorMessages.Count - 1)
+                        {
+                            if (App.CultureIsZH_CH())
+                                ShowMessage(string.Format("程序存在{0:d}处错误，{1:d}处警告。",
+                                        ecount, wcount), handle, true, true);
+                            else
+                            {
+                                ShowMessage(string.Format("There are {0} errors and {1} warnings in the program.",
+                                        ecount, wcount), handle, true, true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (i == errorMessages.Count - 1)
+                        {
+                            if (showreport)
+                                ShowMessage(Properties.Resources.Program_Correct, handle, false, true);
+                            else
+                                handle.Abort();
+                            result = true;
+                        }
+                    }
+                    if (i == errorMessages.Count - 1)
+                    {
+                        wndError.Mode = ErrorReportWindow.MODE_LADDER;
+                        wndError.Update(weinsts);
+                        if (!result) wndMain.LACErrorList.Show();
+                    }
+                    //else
+                    //    _projectModel.IsModify = false;
+                }
+                else if (errorMessages[i].Error == ErrorType.Empty)
+                {
+                    LadderNetworkModel network = errorMessages[i].RefNetworks.First();
+                    int num = network.ID;
+                    string name = network.Parent.Name;
+                    Navigate(network);
+                    if (App.CultureIsZH_CH())
+                        ShowMessage(string.Format("程序{0}的网络{1}元素为空!", name, num), handle, true, true);
+                    else
+                        ShowMessage(string.Format("Network {0} in {1} is empty!", num, name), handle, true, true);
+                    result = false;
+                    break;
+                }
+                else
+                {
+                    errorMessages[i].RefNetworks.First().View.AcquireSelectRect();
+                    CurrentLadder.SelectionRect.X = errorMessages[i].RefNetworks.Last().ErrorModels.First().X;
+                    CurrentLadder.SelectionRect.Y = errorMessages[i].RefNetworks.Last().ErrorModels.First().Y;
+                    CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
+                    CurrentLadder.VScrollToRect(errorMessages[i].RefNetworks.First().ID, CurrentLadder.SelectionRect.Y);
+                    result = false;
+                    switch (errorMessages[i].Error)
+                    {
+                        case ErrorType.Open:
+                            ShowMessage(Properties.Resources.Open_Error, handle, true, true);
+                            break;
+                        case ErrorType.Short:
+                            ShowMessage(Properties.Resources.Short_Error, handle, true, true);
+                            break;
+                        case ErrorType.SelfLoop:
+                            ShowMessage(Properties.Resources.Selfloop_Error, handle, true, true);
+                            break;
+                        case ErrorType.HybridLink:
+                            ShowMessage(Properties.Resources.HybridLink_Error, handle, true, true);
+                            break;
+                        case ErrorType.Special:
+                            ShowMessage(Properties.Resources.Special_Instruction_Error, handle, true, true);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+            }
+            handle.Completed = true;
+            return result;
+        }
+
+        private IList<ErrorReportElement> _CheckInsts(ref int ecount, ref int wcount)
+        {
+            foreach (LadderDiagramModel ldmodel in mdProj.Diagrams)
+            {
+                ldmodel.IsInterruptLadder = false;
+                foreach (InstructionNetworkModel inmodel in ldmodel.Inst.Children) 
+                    foreach (PLCOriginInst inst in inmodel.Insts)
+                    {
+                        inst.Status = PLCOriginInst.STATUS_ACCEPT;
+                        inst.Message = String.Empty;
+                    } 
+            }
+            mngValue.Check();
+            foreach (LadderDiagramModel ldmodel in mdProj.Diagrams) 
+                ldmodel.Inst.Check(); 
+            foreach (LadderDiagramModel ldmodel in mdProj.Diagrams) 
+                ldmodel.Inst.CheckForInterrrupt(); 
+            ecount = 0;
+            wcount = 0;
+            List<ErrorReportElement> weinsts = new List<ErrorReportElement>();
+            foreach (LadderDiagramModel ldmodel in mdProj.Diagrams)
+                foreach (InstructionNetworkModel inmodel in ldmodel.Inst.Children)
+                    foreach (PLCOriginInst inst in inmodel.Insts) 
+                        if (inst.Status == PLCOriginInst.STATUS_ERROR)
+                        {
+                            ecount++;
+                            weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
+                        } 
+            foreach (LadderDiagramModel ldmodel in mdProj.Diagrams)
+                foreach (InstructionNetworkModel inmodel in ldmodel.Inst.Children)
+                    foreach (PLCOriginInst inst in inmodel.Insts) 
+                        if (inst.Status == PLCOriginInst.STATUS_WARNING)
+                        {
+                            wcount++;
+                            weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
+                        } 
+            return weinsts;
+        }
+
+        public bool CheckFuncBlock(bool showreport = false)
+        {
+            bool result = false;
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Funcblock_Check));
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
+            wndMain.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+            {
+                handle.Start();
+                result = _CheckFuncBlock(handle, showreport);
+            });
+            while (!handle.Completed) Thread.Sleep(10);
+            if (!showreport)
+            {
+                if (result)
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.FuncBlock_Correct));
+                else
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Error, Properties.Resources.FuncBlock_Error));
+            }
+            return result;
+        }
+
+        public bool _CheckFuncBlock(LoadingWindowHandle handle, bool showreport)
+        {
+            List<string> cfiles = new List<string>();
+            List<string> ofiles = new List<string>();
+            Process cmd = null;
+            string stdout = null;
+            string stderr = null;
+            Match m1 = null;
+            Match m2 = null;
+            string message = null;
+            int sline = 0;
+            int line = 0;
+            int column = 0;
+            ErrorReportElement_FB ewele = null;
+            List<ErrorReportElement_FB> eweles = new List<ErrorReportElement_FB>();
+            foreach (FuncBlockModel fbmodel in mdProj.FuncBlocks)
+            {
+                //string hfile = SamSoarII.Utility.FileHelper.GetTempFile(".h");
+                string cfile = SamSoarII.Utility.FileHelper.GetTempFile(".c");
+                string ofile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
+                cfiles.Add(cfile);
+                ofiles.Add(ofile);
+                StreamWriter cw = new StreamWriter(cfile);
+                cw.Write("#include <math.h>\n");
+                cw.Write("typedef int BIT;\n");
+                cw.Write("typedef int WORD;\n");
+                cw.Write("typedef long DWORD;\n");
+                cw.Write("typedef double FLOAT;\n");
+                if (fbmodel.IsLibrary)
+                {
+                    cw.Write("double asin(double a) {}");
+                    cw.Write("double acos(double a) {}");
+                    cw.Write("double atan(double a) {}");
+                    cw.Write("double log(double a) {}");
+                    cw.Write("double log10(double a) {}");
+                    cw.Write("double sqrt(double a) {}");
+                }
+                foreach (FuncModel fmodel in fbmodel.Funcs)
+                {
+                    cw.Write(String.Format("{0:s} {1:s}(",
+                        fmodel.ReturnType, fmodel.Name));
+                    if (fmodel.ArgCount > 0)
+                    {
+                        cw.Write(fmodel.GetArgType(0));
+                        for (int i = 1; i < fmodel.ArgCount; i++)
+                        {
+                            cw.Write("," + fmodel.GetArgType(i));
+                        }
+                    }
+                    cw.Write(");\n");
+                }
+                cw.Write(fbmodel.Code);
+                cw.Close();
+                sline = 4 + fbmodel.Funcs.Count();
+                cmd = new Process();
+                cmd.StartInfo.FileName =
+                    String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc",
+                        FileHelper.AppRootPath);
+                cmd.StartInfo.Arguments = string.Format("-c {0} -o {1}", cfile, ofile);
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.StartInfo.RedirectStandardOutput = true;
+                cmd.StartInfo.RedirectStandardError = true;
+                cmd.Start();
+                cmd.WaitForExit();
+                stdout = cmd.StandardOutput.ReadToEnd();
+                stderr = cmd.StandardError.ReadToEnd();
+                m1 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): error: (.+)\r\n");
+                m2 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): warning: (.+)\r\n");
+                while (m1 != null && m1.Success)
+                {
+                    message = m1.Groups[4].Value;
+                    line = int.Parse(m1.Groups[2].Value) - sline;
+                    column = int.Parse(m1.Groups[3].Value);
+                    ewele = new ErrorReportElement_FB
+                    (
+                        ErrorReportElement_FB.STATUS_ERROR,
+                        message,
+                        fbmodel,
+                        line,
+                        column
+                    );
+                    eweles.Add(ewele);
+                    m1 = m1.NextMatch();
+                }
+                while (m2 != null && m2.Success)
+                {
+                    message = m2.Groups[4].Value;
+                    line = int.Parse(m2.Groups[2].Value) - sline;
+                    column = int.Parse(m2.Groups[3].Value);
+                    ewele = new ErrorReportElement_FB
+                    (
+                        ErrorReportElement_FB.STATUS_WARNING,
+                        message,
+                        fbmodel,
+                        line,
+                        column
+                    );
+                    eweles.Add(ewele);
+                    m2 = m2.NextMatch();
+                }
+            }
+            string bfile = SamSoarII.Utility.FileHelper.GetTempFile(".o");
+            cmd = new Process();
+            cmd.StartInfo.FileName =
+                cmd.StartInfo.FileName =
+                    String.Format(@"{0:s}\Compiler\arm\bin\arm-none-eabi-gcc",
+                        FileHelper.AppRootPath);
+            cmd.StartInfo.Arguments = String.Format("-o {0:s}", bfile);
+            foreach (string ofile in ofiles)
+            {
+                cmd.StartInfo.Arguments += " " + ofile;
+            }
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.Start();
+            cmd.WaitForExit();
+            stdout = cmd.StandardOutput.ReadToEnd();
+            stderr = cmd.StandardError.ReadToEnd();
+            m1 = Regex.Match(stderr, @"\s(.+):\((.+)\): (.+)\r\n");
+            while (m1 != null && m1.Success)
+            {
+                message = m1.Groups[3].Value;
+                line = column = 0;
+                string _cfile = m1.Groups[1].Value;
+                IEnumerable<string> _cfiles_fit = cfiles.Where(
+                    (file) => { return file.EndsWith(_cfile); }
+                );
+                if (_cfiles_fit.Count() > 0)
+                {
+                    _cfile = _cfiles_fit.First();
+                    int _cfile_id = cfiles.IndexOf(_cfile);
+                    if (_cfile_id >= 0)
+                    {
+                        FuncBlockModel _fbmodel = mdProj.FuncBlocks[_cfile_id];
+                        ewele = new ErrorReportElement_FB
+                        (
+                            ErrorReportElement_FB.STATUS_ERROR,
+                            message,
+                            _fbmodel,
+                            line,
+                            column
+                        );
+                        eweles.Add(ewele);
+                    }
+                }
+                m1 = m1.NextMatch();
+            }
+            int ecount = 0;
+            int wcount = 0;
+            foreach (ErrorReportElement_FB _ewele in eweles)
+            {
+                switch (_ewele.Status)
+                {
+                    case ErrorReportElement_FB.STATUS_ERROR:
+                        ecount++; break;
+                    case ErrorReportElement_FB.STATUS_WARNING:
+                        wcount++; break;
+                }
+            }
+            bool result = (ecount == 0);
+            wndError.Mode = ErrorReportWindow.MODE_FUNC;
+            wndError.Update(eweles);
+            if (showreport || !result)
+            {
+                if (ecount == 0 && wcount == 0)
+                    ShowMessage(Properties.Resources.Function_Block_Correct, handle, false, false);
+                else
+                {
+                    if (App.CultureIsZH_CH())
+                        ShowMessage(String.Format("函数块发生{0:d}处错误，{1:d}处警告。", ecount, wcount), handle, true, false);
+                    else
+                        ShowMessage(String.Format("There are {0} errors and {1} warnings in the funcblock.", ecount, wcount), handle, true, false);
+                    wndMain.LACErrorList.Show();
+                }
+            }
+            else
+                handle.Abort();
+            handle.Completed = true;
+            return result;
+        }
+        
+        #endregion
+
+        #region View Mode
+
+        public void SetLadderMode(bool istrue)
+        {
+            if (istrue)
+                tcMain.ViewMode |= MainTabControl.VIEWMODE_LADDER;
+            else
+                tcMain.ViewMode &= ~MainTabControl.VIEWMODE_LADDER;
+        }
+
+        public void SetInstMode(bool istrue)
+        {
+            if (istrue)
+                tcMain.ViewMode |= MainTabControl.VIEWMODE_INST;
+            else
+                tcMain.ViewMode &= ~MainTabControl.VIEWMODE_INST;
+        }
+
+        public void SetCommentMode(bool istrue)
+        {
+            vmdProj.IsCommentMode = istrue;
+        }
+
+        #endregion
+
+        #region Navigate & Select
+        
+        public void Navigate(string text)
+        {
+            Match m = Regex.Match(text, @"\(Diagram=([^)]*)\)\(Network=([^)]*)\)\(X=([^,]*),Y=([^)]*)\)");
+            if (m.Success)
+            {
+                string diagramname = m.Groups[1].Value;
+                int networkid = int.Parse(m.Groups[2].Value);
+                int x = int.Parse(m.Groups[3].Value);
+                int y = int.Parse(m.Groups[4].Value);
+                LadderDiagramModel diagram = mdProj.Diagrams.Where(d => d.Name.Equals(diagramname)).FirstOrDefault();
+                LadderNetworkModel network = diagram?.Children[networkid];
+                Navigate(network, x, y);    
+            }
+        }
+
+        public void Navigate(LadderUnitModel unit)
+        {
+            Navigate(unit.Parent, unit.X, unit.Y);
+        }
+
+        public void Navigate(LadderNetworkModel network)
+        {
+            Navigate(network, 0, 0);
+        }
+
+        public void Navigate(LadderNetworkModel network, int x, int y)
+        {
+            if (instinputrect != null)
+            {
+                if (instinputrect.X < GlobalSetting.LadderXCapacity - 1)
+                    instinputrect.X++;
+                network.Parent.View.NavigateByInstructionInputDialog();
+                instinputrect = null;
+                return;
+            }
+            if (network.View == null || !network.View.IsFullLoaded || network.IsMasked) return;
+            LadderDiagramModel diagram = network.Parent;
+            if (diagram.Tab == null)
+                diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
+            tcMain.ShowItem(diagram.Tab);
+            network.View.AcquireSelectRect();
+            SelectRectCore rect = diagram.View.SelectionRect.Core;
+            rect.X = x;
+            rect.Y = y;
+            diagram.View.NavigateToNetworkByNum(network.ID);
+        }
+        
+        public void Select(LadderNetworkModel network, int x1, int x2, int y1, int y2)
+        {
+            if (instinputrect != null)
+            {
+                instinputrect.X = x2;
+                network.Parent.View.NavigateByInstructionInputDialog();
+                instinputrect = null;
+                return;
+            }
+            if (x1 == x2 && y1 == y2)
+            {
+                Navigate(network, x1, y1);
+                return;
+            }
+            if (network.View == null || !network.View.IsFullLoaded || network.IsMasked) return;
+            LadderDiagramModel diagram = network.Parent;
+            if (diagram.Tab == null)
+                diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
+            tcMain.ShowItem(diagram.Tab);
+            diagram.View.Select(network, x1, x2, y1, y2);
+        }
+
+        public void Select(LadderDiagramModel diagram, int start, int end)
+        {
+            if (instinputrect != null)
+            {
+                if (instinputrect.X < GlobalSetting.LadderXCapacity - 1)
+                    instinputrect.X++;
+                diagram.View.NavigateByInstructionInputDialog();
+                instinputrect = null;
+                return;
+            }
+            foreach (LadderNetworkModel network in diagram.Children)
+            {
+                if (network.ID < start || network.ID > end) continue;
+                if (network.View == null || !network.View.IsFullLoaded) return;
+            }
+            if (diagram.Tab == null)
+                diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
+            tcMain.ShowItem(diagram.Tab);
+            diagram.View.Select(start, end);
+        }
+
+        #endregion
+
+        #region Dialogs
+
+        private void ShowMessage(string message, LoadingWindowHandle handle, bool isError, bool isLadder)
+        {
+            if (isLadder)
+            {
+                /*
+                if (isError)
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Error);
+                else
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Correct);
+                */
+            }
+            else
+            {
+                /*
+                if (!isError)
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Correct);
+                else
+                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Error);
+                */    
+            }
+            handle.Abort();
+            LocalizedMessageBox.Show(message, LocalizedMessageIcon.Information);
+        }
+
+        public LocalizedMessageResult ShowSaveYesNoCancelDialog()
+        {
+            string title = Properties.Resources.Message_Confirm_Save;
+            string text = String.Format("{0:s} {1}", mdProj.ProjName, Properties.Resources.Message_Changed);
+            return LocalizedMessageBox.Show(text, title, LocalizedMessageButton.YesNoCancel, LocalizedMessageIcon.Question);
+        }
+
+        public void ShowCreateProjectDialog()
+        {
+            NewProjectDialog newProjectDialog;
+            using (newProjectDialog = new NewProjectDialog())
+            {
+                newProjectDialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    PLCDevice.PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(newProjectDialog.Type);
+                    if (newProjectDialog.IsSettingChecked)
+                    {
+                        string name = newProjectDialog.NameContent;
+                        string dir = newProjectDialog.PathContent;
+                        if (!Directory.Exists(dir))
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.Message_Path, LocalizedMessageIcon.Information);
+                            return;
+                        }
+                        if (name == string.Empty)
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.Message_File_Name, LocalizedMessageIcon.Information);
+                            return;
+                        }
+                        string fullFileName = string.Format(@"{0}\{1}.{2}", dir, name, FileHelper.ExtensionName, LocalizedMessageIcon.Information);
+                        if (File.Exists(fullFileName))
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.Message_File_Exist, LocalizedMessageIcon.Information);
+                            return;
+                        }
+                        CreateProject(name, fullFileName);
+                    }
+                    else
+                    {
+                        CreateProject(Properties.Resources.New_Project_Name);
+                    }
+                    newProjectDialog.Close();
+                };
+                newProjectDialog.ShowDialog();
+            }
+        }
+        
+        public void ShowOpenProjectDialog()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
+            if (openFileDialog.ShowDialog() == true)
+            {
+                if (mdProj != null && mdProj.ProjName.Equals(openFileDialog.FileName))
+                {
+                    LocalizedMessageBox.Show(Properties.Resources.Message_Project_Loaded, LocalizedMessageIcon.Information);
+                    return;
+                }
+                LoadProject(openFileDialog.FileName);
+            }
+        }
+
+        public void ShowSaveProjectDialog()
+        {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
+                return;
+            }
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                SaveAsProject(saveFileDialog.FileName);
+            }
+        }
+
+        private SelectRectCore instinputrect = null;
+        public void ShowInstructionInputDialog(string initialString, SelectRectCore core)
+        {
+            if (core.Parent == null) return;
+            using (InstructionInputDialog dialog = new InstructionInputDialog(mdProj, initialString))
+            {
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.EnsureButtonClick += (sender, e) =>
+                {
+                    try
+                    {
+                        instinputrect = core;
+                        core.Parent.Parent.AddSingleUnit(dialog.InstructionInput, core, core.Parent);
+                        dialog.Close();
+                    }
+                    catch (Exception exce2)
+                    {
+                        instinputrect = null;
+                        LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.ShowDialog();
+            }
+        }
+
+        public void ShowElementPropertyDialog(LadderUnitModel current)
+        {
+            using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
+            {
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.Ensure += (sender, e) =>
+                {
+                    try
+                    {
+                        current.Parent.Parent.UpdateUC(current, dialog.PropertyStrings);
+                        dialog.Close();
+                    }
+                    catch (Exception exce2)
+                    {
+                        LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.ShowDialog();
+            }
+        }
+
+        public void ShowProjectPropertyDialog()
+        {
+            using (ProjectPropertyDialog dialog = new ProjectPropertyDialog(mdProj))
+            {
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.EnsureButtonClick += (sender, e) =>
+                {
+                    try
+                    {
+                        dialog.Save();
+                    }
+                    catch (Exception exce2)
+                    {
+                        LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.ShowDialog();
+            }
+        }
+        
+        public void ShowValueModifyDialog(IEnumerable<object> args)
+        {
+            if (args.Count() == 1)
+            {
+                using (ValueModifyDialog dialog = new ValueModifyDialog(args.First()))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.ShowDialog();
+                }
+            }
+            else if (args.Count() > 1)
+            {
+                using (ValueMultiplyModifyDialog dialog = new ValueMultiplyModifyDialog(args))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.ShowDialog();
+                }
+            }
+        }
+
+        public void ShowEditDiagramCommentDialog(LadderDiagramModel core)
+        {
+            using (LadderDiagramCommentEditDialog dialog = new LadderDiagramCommentEditDialog(core))
+            {
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    core.Name = dialog.LadderName;
+                    core.Brief = dialog.LadderComment;
+                    dialog.Close();
+                };
+                dialog.CancelButtonClick += (sender2, e2) =>
+                {
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            }
+        }
+        
+        public void ShowEditNetworkCommentDialog(LadderNetworkModel core)
+        {
+            using (LadderNetworkCommentEditDialog dialog = new LadderNetworkCommentEditDialog(core))
+            {
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    core.Brief = dialog.NetworkBrief;
+                    core.Description = dialog.NetworkDescription;
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            }
+        }
+
+        private OptionDialog dlgOption;
+        public void ShowSystemOptionDialog()
+        {
+            if (dlgOption == null) dlgOption = new OptionDialog();
+            dlgOption.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dlgOption.ShowDialog();
+        }
+
+        #endregion
+
+        #region Event Handler
+
+        public event IWindowEventHandler PostIWindowEvent = delegate { };
+
+        private void OnReceiveIWindowEvent(IWindow sender, IWindowEventArgs e)
+        {
+            if (sender is MainTabControl && e is MainTabControlEventArgs)
+            {
+                MainTabControlEventArgs e1 = (MainTabControlEventArgs)e;
+                switch (e1.Action)
+                {
+                    case TabAction.SELECT:
+                    case TabAction.ACTIVE:
+                        PostIWindowEvent(sender, e);
+                        break;
+                    case TabAction.VIEWMODE:
+                        PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                            ((tcMain.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0
+                                ? MainWindowEventArgs.TYPE_TOGGLE_DOWN
+                                : MainWindowEventArgs.TYPE_TOGGLE_UP)
+                            | MainWindowEventArgs.FLAG_LADDER));
+                        PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                            ((tcMain.ViewMode & MainTabControl.VIEWMODE_INST) != 0
+                                ? MainWindowEventArgs.TYPE_TOGGLE_DOWN
+                                : MainWindowEventArgs.TYPE_TOGGLE_UP)
+                            | MainWindowEventArgs.FLAG_INST));
+                        break;
+                }
+            }
+            if (sender is ProjectTreeView && e is ProjectTreeViewEventArgs)
+            {
+                ProjectTreeViewEventArgs e2 = (ProjectTreeViewEventArgs)e;
+                switch (e2.Flags & ~0xf)
+                {
+                    case ProjectTreeViewEventArgs.FLAG_DOUBLECLICK:
+                        if (e2.RelativeObject is LadderDiagramModel)
+                        {
+                            LadderDiagramModel ldmodel = (LadderDiagramModel)(e2.RelativeObject);
+                            if (ldmodel.Tab == null)
+                            {
+                                ldmodel.Tab = new MainTabDiagramItem(tcMain, ldmodel, ldmodel.Inst);
+                                thmngView.Add(ldmodel.Tab.IDVModel);
+                                thmngView.Add(ldmodel.Tab.LDVModel);
+                            }
+                            tcMain.ShowItem(ldmodel.Tab);
+                        }
+                        if (e2.RelativeObject is FuncBlockModel)
+                        {
+                            FuncBlockModel fbmodel = (FuncBlockModel)(e2.RelativeObject);
+                            if (fbmodel.View == null)
+                            {
+                                fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
+                                fbmodel.View.FullLoad();
+                            }
+                            tcMain.ShowItem(fbmodel.View);
+                        }
+                        if (e2.RelativeObject is ModbusTableModel)
+                        {
+                            ModbusTableModel mtmodel = (ModbusTableModel)(e2.RelativeObject);
+                            if (mtmodel.View == null)
+                                mtmodel.View = new ModbusTableViewModel(mtmodel, tcMain);
+                            tcMain.ShowItem(mtmodel.View);
+                        }
+                        break;
+                }
+            }
+        }
+
+        public bool CanStart
+        {
+            get
+            {
+                if (vmdProj == null) return false;
+                switch (vmdProj.LadderMode)
+                {
+                    case LadderModes.Simulate:
+                        return !mngSimu.IsActive || mngSimu.IsBPPause;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool CanPause
+        {
+            get
+            {
+                if (vmdProj == null) return false;
+                switch (vmdProj.LadderMode)
+                {
+                    case LadderModes.Simulate:
+                        return mngSimu.IsActive && !mngSimu.IsBPPause;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool CanStop
+        {
+            get
+            {
+                if (vmdProj == null) return false;
+                switch (vmdProj.LadderMode)
+                {
+                    case LadderModes.Simulate:
+                        return mngSimu.IsAlive;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool CanExecute(CanExecuteRoutedEventArgs e)
+        {
+            if (e.Command != ApplicationCommands.New
+             && e.Command != ApplicationCommands.Open
+             && e.Command != GlobalCommand.UploadCommand
+             && e.Command != GlobalCommand.ShowOptionDialogCommand)
+            {
+                bool ret = mdProj != null && vmdProj != null;
+                if (!ret) return ret;
+                if (e.Command == MonitorCommand.StartCommand
+                 || e.Command == GlobalCommand.SimuStartCommand)
+                {
+                    ret &= CanStart;
+                }
+                if (e.Command == MonitorCommand.StopCommand
+                 || e.Command == GlobalCommand.SimuStopCommand)
+                {
+                    ret &= CanStop;
+                }
+                if (e.Command == GlobalCommand.SimuPauseCommand)
+                {
+                    ret &= CanPause;
+                }
+                return ret;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        
+        private void OnViewPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "LadderMode": break;
+                case "IsCommentMode":
+                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                        (vmdProj.IsCommentMode
+                            ? MainWindowEventArgs.TYPE_TOGGLE_DOWN
+                            : MainWindowEventArgs.TYPE_TOGGLE_UP)
+                        | MainWindowEventArgs.FLAG_COMMENT));
+                    break;
+            }
+        }
+
+        #region Simulate
+        
+        private void OnSimulateStarted(object sender, RoutedEventArgs e)
+        {
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_DOWN
+              | MainWindowEventArgs.FLAG_START));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_UP
+              | MainWindowEventArgs.FLAG_STOP
+              | MainWindowEventArgs.FLAG_PAUSE));
+        }
+
+        private void OnSimulatePaused(object sender, RoutedEventArgs e)
+        {
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_DOWN
+              | MainWindowEventArgs.FLAG_PAUSE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_UP
+              | MainWindowEventArgs.FLAG_STOP
+              | MainWindowEventArgs.FLAG_START));
+        }
+
+        private void OnSimulateAborted(object sender, RoutedEventArgs e)
+        {
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_DOWN
+              | MainWindowEventArgs.FLAG_STOP));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_TOGGLE_UP
+              | MainWindowEventArgs.FLAG_START
+              | MainWindowEventArgs.FLAG_PAUSE));
+        }
+
+        private void OnBreakpointPaused(object sender, BreakpointPauseEventArgs e)
+        {
+
+        }
+
+        private void OnBreakpointResumed(object sender, BreakpointPauseEventArgs e)
+        {
+
+        }
+        
+        #endregion
+
+        #endregion
+
+    }
+}

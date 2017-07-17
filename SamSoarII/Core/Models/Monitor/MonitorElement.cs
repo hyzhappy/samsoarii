@@ -1,0 +1,260 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+using System.Xml.Linq;
+
+namespace SamSoarII.Core.Models
+{
+    public class MonitorElement : IDisposable, INotifyPropertyChanged
+    {
+        public MonitorElement(MonitorTable _parent, ValueStore _store)
+        {
+            parent = _parent;
+            store = _store;
+            store.RefNum++;
+        }
+
+        public MonitorElement(MonitorTable _parent, int _datatype, string _addrtype, int _startaddr, string _intratype, int _intraaddr)
+        {
+            parent = _parent;
+            datatype = _datatype;
+            string name = String.Format("{0:s}{1:d}", _addrtype, _startaddr);
+            ValueInfo vinfo = ValueManager[name];
+            store = _FindStore(vinfo, _intratype, _intraaddr);
+            store.RefNum++;
+        }
+
+        public MonitorElement(MonitorTable _parent, XElement xele)
+        {
+            parent = _parent;
+            Load(xele);
+        }
+        
+        public void Dispose()
+        {
+            if (--store.RefNum == 0)
+                store.Parent.Stores.Remove(store);
+            parent = null;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        #region Number
+
+        private MonitorTable parent;
+        public MonitorTable Parent { get { return this.parent; } }
+        public ValueManager ValueManager { get { return parent.ValueManager; } }
+
+        private ValueStore store;
+        public ValueStore Store { get { return this.store; } }
+        private ValueStore _FindStore(ValueInfo vinfo, string _intratype, int _intraaddr)
+        {
+            ValueModel.Types type = ValueModel.Types.NULL;
+            ValueModel.Bases ibase = ValueModel.Bases.NULL;
+            switch (_intratype)
+            {
+                case "V": ibase = ValueModel.Bases.V; break;
+                case "Z": ibase = ValueModel.Bases.Z; break;
+            }
+            switch (ShowType)
+            {
+                case "BOOL": type = ValueModel.Types.BOOL; break;
+                case "WORD": case "UWORD": case "BCD": type = ValueModel.Types.WORD; break;
+                case "DWORD": case "UDWORD": type = ValueModel.Types.DWORD; break;
+                case "FLOAT": type = ValueModel.Types.FLOAT; break;
+            }
+            store = vinfo.Stores.Where(vs => vs.Type == type && vs.Intra == ibase && vs.IntraOffset == _intraaddr).FirstOrDefault();
+            if (store == null)
+            {
+                store = new ValueStore(vinfo, type, ibase, _intraaddr);
+                vinfo.Stores.Add(store);
+            }
+            return store;
+        }
+
+        public string AddrType { get { return store.Parent.Prototype.Base.ToString(); } }
+        public int StartAddr { get { return store.Parent.Prototype.Offset; } }
+        public bool IsIntrasegment { get { return store.Intra != ValueModel.Bases.NULL; } }
+        public string IntrasegmentType { get { return store.Intra == ValueModel.Bases.NULL ? String.Empty : store.Intra.ToString(); } }
+        public int IntrasegmentAddr { get { return store.IntraOffset; } }
+        public string ShowName { get { return store.Name; } }
+        public string FlagName
+        {
+            get
+            {
+                if (!IsIntrasegment)
+                {
+                    return String.Format("{0}_{1}_{2}", AddrType, StartAddr, DataType);
+                }
+                else
+                {
+                    return String.Format("{0}_{1}{2}_{3}_{4}", AddrType, IntrasegmentType, IntrasegmentAddr, StartAddr, DataType);
+                }
+            }
+        }
+        public object CurrentValue
+        {
+            get
+            {
+                return store.Value;
+            }
+            set
+            {
+                store.Value = value;
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
+            }
+        }
+
+        private string setvalue;
+        public string SetValue
+        {
+            get
+            {
+                return setvalue;
+            }
+            set
+            {
+                setvalue = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SetValue"));
+            }
+        }
+
+        static private string[] bool_Showtypes = { "BOOL" };
+        static private string[] word_ShowTypes = { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT" };
+        public string[] ShowTypes
+        {
+            get
+            {
+                if (store.Type == ValueModel.Types.BOOL) return bool_Showtypes;
+                return word_ShowTypes;
+            }
+        }
+
+        public string ShowType
+        {
+            get
+            {
+                switch (DataType)
+                {
+                    case 0: return "BOOL";
+                    case 1: return "WORD";
+                    case 2: return "UWORD";
+                    case 3: return "DWORD";
+                    case 4: return "UDWORD";
+                    case 5: return "BCD";
+                    case 6: return "FLOAT";
+                    default: return "null";
+                }
+            }
+            set
+            {
+                switch (value)
+                {
+                    case "BOOL": DataType = 0; break;
+                    case "WORD": DataType = 1; break;
+                    case "UWORD": DataType = 2; break;
+                    case "DWORD": DataType = 3; break;
+                    case "UDWORD": DataType = 4; break;
+                    case "BCD": DataType = 5; break;
+                    case "FLOAT": DataType = 6; break;
+                }
+            }
+        }
+
+        private int datatype;
+        public int DataType
+        {
+            get
+            {
+                return this.datatype;
+            }
+            set
+            {
+                this.datatype = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("DataType"));
+                PropertyChanged(this, new PropertyChangedEventArgs("ShowType"));
+                PropertyChanged(this, new PropertyChangedEventArgs("SelectedIndex"));
+                ValueStore _store = store;
+                store = _FindStore(store.Parent, IntrasegmentType, IntrasegmentAddr);
+                _store.RefNum--;
+                store.RefNum++;
+                if (_store.RefNum == 0) _store.Parent.Stores.Remove(_store);
+            }
+        }
+        
+        public int ByteCount
+        {
+            get
+            {
+                switch (DataType)
+                {
+                    case 1:
+                    case 2:
+                    case 5:
+                        return 2;
+                    case 3:
+                    case 4:
+                        return 4;
+                    case 6:
+                        return 4;
+                    default:
+                        return 1;
+                }
+            }
+        }
+        
+        public int SelectIndex
+        {
+            get
+            {
+                if (DataType == 0)
+                {
+                    return DataType;
+                }
+                else
+                {
+                    return DataType - 1;
+                }
+            }
+            set
+            {
+                if (DataType != 0)
+                {
+                    if (DataType != value + 1)
+                    {
+                        DataType = value + 1;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Load & Save
+
+        public void Load(XElement xele)
+        {
+            datatype = int.Parse(xele.Attribute("DataType").Value);
+            string name = xele.Attribute("Name").Value;
+            ValueInfo vinfo = ValueManager[name];
+            string intratype = xele.Attribute("IntraType").Value;
+            int intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
+            store = _FindStore(vinfo, intratype, intraaddr);
+        }
+
+        public void Save(XElement xele)
+        {
+            xele.SetAttributeValue("Name", ShowName);
+            xele.SetAttributeValue("DataType", DataType);
+            xele.SetAttributeValue("IntraType", IntrasegmentType);
+            xele.SetAttributeValue("IntraAddr", IntrasegmentAddr);
+        }
+
+        #endregion
+    }
+}
