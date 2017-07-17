@@ -165,7 +165,7 @@ namespace SamSoarII.Shell.Models
                                     Core.Children[1].Text,
                                     !MNGSimu.IsAlive ? "???" : Core.Children[1].Value);
                         }
-                        else if (LadderMode == LadderModes.Simulate)
+                        else if (LadderMode == LadderModes.Monitor)
                         {
                             if (Core.Children.Count >= 1) ValueTextBlock.Text =
                                 String.Format("{0:s} = {1}",
@@ -187,7 +187,8 @@ namespace SamSoarII.Shell.Models
         private void UpdateCenterCanvas()
         {
             if (LadderMode == LadderModes.Edit ||
-               (LadderMode == LadderModes.Simulate && !MNGSimu.IsAlive))
+               (LadderMode == LadderModes.Simulate && !MNGSimu.IsAlive) ||
+               (LadderMode == LadderModes.Monitor && !MNGComu.IsAlive))
             {
                 CenterCanvas.Background = Brushes.Transparent;
                 return;

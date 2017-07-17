@@ -311,7 +311,8 @@ namespace SamSoarII.Shell.Models
         private void UpdateCenterCanvas()
         {
             if (LadderMode == LadderModes.Edit ||
-               (LadderMode == LadderModes.Simulate && !MNGSimu.IsAlive))
+               (LadderMode == LadderModes.Simulate && !MNGSimu.IsAlive) ||
+               (LadderMode == LadderModes.Monitor && !MNGComu.IsAlive))
             {
                 CenterCanvas.Background = Brushes.Transparent;
                 return;

@@ -28,12 +28,7 @@ namespace SamSoarII.Core.Models
             children = null;
             parent = null;
         }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Number

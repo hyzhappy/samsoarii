@@ -291,11 +291,19 @@ namespace SamSoarII
         
         public void CloseProject()
         {
-            Thread closethread = new Thread(() =>
+            if (vmdProj != null)
             {
-                _CloseProject();
-            });
-            closethread.Start();
+                EditProject();
+                LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.MainWindow_Close_Proj);
+                handle.Start();
+                vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    _CloseProject();
+                    handle.Completed = true;
+                    handle.Abort();
+                });
+                while (!handle.Completed) Thread.Sleep(10);
+            }
         }
 
         private void _CloseProject()
@@ -303,6 +311,7 @@ namespace SamSoarII
             WaitForThreadAbort();
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
             tvProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tvProj.Reset(); });
+            barStatus.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { barStatus.Reset(); });
             vmdProj.PropertyChanged -= OnViewPropertyChanged;
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); mdProj.Dispose(); });
             vmdProj = null;
@@ -330,6 +339,7 @@ namespace SamSoarII
             genthread.Start();
             while (!handle.Completed) Thread.Sleep(10);
 
+            mngComu.IsEnable = true;
             CommunicationParams paraCom = mdProj.PARAProj.PARACom;
             using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom,
                 CommunicationSettingDialogMode.DOWNLOAD))
@@ -397,6 +407,7 @@ namespace SamSoarII
                 };
                 dialog.ShowDialog();
             }
+            mngComu.IsEnable = false;
             return true;
         }
         
@@ -445,6 +456,7 @@ namespace SamSoarII
                       | MainWindowEventArgs.FLAG_SIMULATE));
                     PostIWindowEvent(null, new UnderBarEventArgs(barStatus, 
                         UnderBarStatus.Simulate, Properties.Resources.MainWindow_Simulation));
+                    wndMain.LACMonitor.Show();
                     return true;
                 default:
                     PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
@@ -456,24 +468,25 @@ namespace SamSoarII
 
         public bool MonitorProject()
         {
-            if (vmdProj.LadderMode == LadderModes.Monitor)
-                _CloseMonitor();
             if (vmdProj.LadderMode == LadderModes.Simulate)
+                _CloseSimulate();
+            if (vmdProj.LadderMode == LadderModes.Monitor)
             {
                 _CloseMonitor();
                 return false;
             }
             if (!CheckLadder(false)) return false;
             //if (!CheckFuncBlock(false)) return false;
+            mngComu.IsEnable = true;
             if (!mngComu.CheckLink())
             {
                 PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                     UnderBarStatus.Error, Properties.Resources.MessageBox_Communication_Failed));
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                mngComu.IsEnable = false;
                 return false;
             }
             vmdProj.LadderMode = LadderModes.Monitor;
-            mngComu.IsEnable = true;
             PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
                 MainWindowEventArgs.TYPE_HIDE
               | MainWindowEventArgs.FLAG_EDIT));
@@ -1360,6 +1373,8 @@ namespace SamSoarII
                 {
                     case LadderModes.Simulate:
                         return !mngSimu.IsActive || mngSimu.IsBPPause;
+                    case LadderModes.Monitor:
+                        return !mngComu.IsAlive;
                     default:
                         return false;
                 }
@@ -1390,6 +1405,8 @@ namespace SamSoarII
                 {
                     case LadderModes.Simulate:
                         return mngSimu.IsAlive;
+                    case LadderModes.Monitor:
+                        return mngComu.IsAlive;
                     default:
                         return false;
                 }

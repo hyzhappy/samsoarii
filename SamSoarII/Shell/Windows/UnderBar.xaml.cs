@@ -197,6 +197,17 @@ namespace SamSoarII.Shell.Windows
 
         #region Update
 
+        public void Reset()
+        {
+            Current = null;
+            Status = UnderBarStatus.Normal;
+            TB_Header.Text = "";
+            TB_Item1.Text = "";
+            TB_Item2.Text = "";
+            TB_Item3.Text = "";
+            TB_Item4.Text = "";
+        }
+
         public void ResetMessage()
         {
             switch (status)

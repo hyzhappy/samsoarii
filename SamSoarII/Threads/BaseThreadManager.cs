@@ -79,9 +79,8 @@ namespace SamSoarII.Threads
         {
             isalive = false;
             isactive = false;
-            thread.Abort();
-            thread = null;
             Aborted(this, new RoutedEventArgs());
+            thread.Abort();
         }
 
         public virtual void Abort()

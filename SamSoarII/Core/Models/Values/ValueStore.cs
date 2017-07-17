@@ -103,11 +103,12 @@ namespace SamSoarII.Core.Models
         }
 
         public event ValueStoreWriteEventHandler Post = delegate { };
-        public void Write(object value, bool tolock = false)
+        public void Write(object value, bool tolock = false, bool unsigned = false)
         {
             Post(this, new ValueStoreWriteEventArgs(this, value,
                 ValueStoreWriteEventArgs.FLAGS_ISWRITE |
-                (tolock ? ValueStoreWriteEventArgs.FLAGS_TOLOCK : 0)));
+                (tolock ? ValueStoreWriteEventArgs.FLAGS_TOLOCK : 0) |
+                (unsigned ? ValueStoreWriteEventArgs.FLAGS_UNSIGNED : 0)));
         }
         public void Unlock(bool all = false)
         {
@@ -126,12 +127,14 @@ namespace SamSoarII.Core.Models
         public const int FLAGS_TOLOCK = 0x02;
         public const int FLAGS_UNLOCK = 0x04;
         public const int FLAGS_UNLOCKALL = 0x08;
+        public const int FLAGS_UNSIGNED = 0x10;
         private int flags;
         public int Flags { get { return this.flags; } }
         public bool IsWrite { get { return (flags & FLAGS_ISWRITE) != 0; } }
         public bool ToLock { get { return (flags & FLAGS_TOLOCK) != 0; } }
         public bool Unlock { get { return (flags & FLAGS_UNLOCK) != 0; } }
         public bool UnlockAll { get { return (flags & FLAGS_UNLOCKALL) != 0; } }
+        public bool Unsigned { get { return (flags & FLAGS_UNSIGNED) != 0; } }
 
         private object tovalue;
         public object ToValue { get { return this.tovalue; } }

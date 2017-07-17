@@ -109,6 +109,7 @@ namespace SamSoarII
             LA_ErrorList.Content = ifParent.WNDError;
             LA_ElemList.Content = ifParent.WNDEList;
             LA_ElemInit.Content = ifParent.WNDEInit;
+            LA_Monitor.Content = ifParent.WNDMoni;
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -141,6 +142,7 @@ namespace SamSoarII
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            IFParent.CloseProject();
             Dispose();
             Application.Current.Shutdown();
         }
@@ -241,7 +243,6 @@ namespace SamSoarII
                 CommandBinding_Executed_SaveHint(sender, e);
                 return;
             }
-
             if (e.Command == ApplicationCommands.Save)
                 ifParent.SaveProject();
             if (e.Command == ApplicationCommands.SaveAs)
@@ -260,6 +261,10 @@ namespace SamSoarII
                 LACProj.Show();
             if (e.Command == GlobalCommand.ShowErrorListCommand)
                 LACErrorList.Show();
+            if (e.Command == GlobalCommand.ShowMainMonitorCommand)
+                LACMonitor.Show();
+            //if (e.Command == GlobalCommand.ShowBreakpointCommand)
+            //    LACBreakpoint.Show();
             if (e.Command == GlobalCommand.ShowPropertyDialogCommand)
                 ifParent.ShowProjectPropertyDialog();
             if (e.Command == GlobalCommand.ShowOptionDialogCommand)
@@ -303,13 +308,11 @@ namespace SamSoarII
                 return;
             }
             if (e.Command == GlobalCommand.SimulateCommand)
-            {
                 ifParent.SimulateProject();
-            }
             if (e.Command == GlobalCommand.DownloadCommand)
-            {
                 ifParent.DownloadProject();
-            }
+            if (e.Command == GlobalCommand.MonitorCommand)
+                ifParent.MonitorProject();
         }
 
         private void CommandBinding_Executed_ReturnEditMode(object sender, ExecutedRoutedEventArgs e)

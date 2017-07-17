@@ -25,7 +25,6 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Uid="TextBlock_1" Grid.Row="0" Grid.Column="0"
                        VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,8,8,8" FontSize="16" Text="{x:Static properties:Resources.Data_Type}"/>
-
             <ComboBox x:Uid="CB_Type" Grid.Row="0" Grid.Column="1"
                      x:Name="CB_Type" 
                      Height="25" VerticalAlignment="Center" Margin="12,0,12,0"

@@ -226,17 +226,10 @@ namespace SamSoarII.Core.Communication
                 Thread.Sleep(itvtime);
                 while (hassend)
                 {
-                    try
+                    if (Recv(current) || current.IsComplete)
                     {
-                        if (Recv(current))
-                        {
-                            hasrecv = true;
-                            break;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-
+                        hasrecv = true;
+                        break;
                     }
                     recvtime++;
                 }
@@ -566,33 +559,33 @@ namespace SamSoarII.Core.Communication
                 switch (vstore.Type)
                 {
                     case ValueModel.Types.BOOL:
-                        data = new byte[] { (byte)(int)e.ToValue };
+                        data = new byte[] { (byte)(e.ToValue.ToString().Equals("ON") ? 1 : 0) };
                         break;
                     case ValueModel.Types.WORD:
                         data = ValueConverter.GetBytes(
-                            (UInt16)(Int16)e.ToValue);
+                            (UInt16)(Int16.Parse(e.ToValue.ToString())));
                         break;
                     case ValueModel.Types.UWORD:
                         data = ValueConverter.GetBytes(
-                            (UInt16)e.ToValue);
+                            UInt16.Parse(e.ToValue.ToString()));
                         break;
                     case ValueModel.Types.BCD:
                         data = ValueConverter.GetBytes(
-                            ValueConverter.ToUINT16(
-                                (UInt16)(Int16)(e.ToValue)));
+                            ValueConverter.ToBCD(
+                                UInt16.Parse(e.ToValue.ToString())));
                         break;
                     case ValueModel.Types.DWORD:
                         data = ValueConverter.GetBytes(
-                            (UInt32)(Int32)(e.ToValue));
+                            (UInt32)(Int32.Parse(e.ToValue.ToString())));
                         break;
                     case ValueModel.Types.UDWORD:
                         data = ValueConverter.GetBytes(
-                            (UInt32)(e.ToValue));
+                            UInt32.Parse(e.ToValue.ToString()));
                         break;
                     case ValueModel.Types.FLOAT:
                         data = ValueConverter.GetBytes(
                             ValueConverter.FloatToUInt(
-                                (float)(e.ToValue)));
+                                float.Parse(e.ToValue.ToString())));
                         break;
                     default:
                         data = new byte[0];

@@ -9,6 +9,7 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Windows;
 using System.ComponentModel;
+using SamSoarII.Utility;
 
 namespace SamSoarII.Core.Simulate
 {
@@ -88,7 +89,7 @@ namespace SamSoarII.Core.Simulate
                 foreach (ValueStore vstore in e.NewItems)
                     stores.Add(vstore);
             if (e.OldItems != null)
-                foreach (ValueStore vstore in e.NewItems)
+                foreach (ValueStore vstore in e.OldItems)
                     stores.Remove(vstore);
         }
 
@@ -199,18 +200,17 @@ namespace SamSoarII.Core.Simulate
                 switch (store.Type)
                 {
                     case ValueModel.Types.BOOL:
-                        DllModel.SetValue_Bit(store.Name, (int)e.ToValue); break;
+                        DllModel.SetValue_Bit(store.Name, e.ToValue.ToString().Equals("ON") ? 1 : 0); break;
                     case ValueModel.Types.WORD:
-                    case ValueModel.Types.BCD:
-                        DllModel.SetValue_Word(store.Name, (Int32)(Int16)e.ToValue); break;
                     case ValueModel.Types.UWORD:
-                        DllModel.SetValue_Word(store.Name, (Int32)(UInt16)e.ToValue); break;
+                        DllModel.SetValue_Word(store.Name, Int32.Parse(e.ToValue.ToString())); break;
+                    case ValueModel.Types.BCD:
+                        DllModel.SetValue_Word(store.Name, (Int32)(ValueConverter.ToBCD(UInt16.Parse(e.ToValue.ToString())))); break;
                     case ValueModel.Types.DWORD:
-                        DllModel.SetValue_DWord(store.Name, (Int64)(Int32)e.ToValue); break;
                     case ValueModel.Types.UDWORD:
-                        DllModel.SetValue_DWord(store.Name, (Int64)(UInt32)e.ToValue); break;
+                        DllModel.SetValue_DWord(store.Name, Int64.Parse(e.ToValue.ToString())); break;
                     case ValueModel.Types.FLOAT:
-                        DllModel.SetValue_Float(store.Name, (double)(float)e.ToValue); break;
+                        DllModel.SetValue_Float(store.Name, double.Parse(e.ToValue.ToString())); break;
                 }
             }
         }

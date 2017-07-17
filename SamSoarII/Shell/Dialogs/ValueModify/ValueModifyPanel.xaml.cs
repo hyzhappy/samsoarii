@@ -76,6 +76,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             TB_Value.IsReadOnly = true;
             CB_Type.Items.Add("BOOL");
+            CB_Type.SelectedIndex = 0;
             BT_FON.Visibility = BT_FOFF.Visibility = BT_CF.Visibility = BT_CFA.Visibility
                 = Visibility.Visible;
         }
@@ -83,6 +84,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             TB_Value.IsReadOnly = true;
             CB_Type.Items.Add("BOOL");
+            CB_Type.SelectedIndex = 0;
             BT_WON.Visibility = BT_WOFF.Visibility
                 = Visibility.Visible;
         }
@@ -105,6 +107,7 @@ namespace SamSoarII.Shell.Dialogs
                         CB_Type.Items.Add("FLOAT");
                         break;
                 }
+                CB_Type.SelectedIndex = 0;
             }
             if (MECore != null)
             {
@@ -114,6 +117,7 @@ namespace SamSoarII.Shell.Dialogs
                 CB_Type.Items.Add("UDWORD");
                 CB_Type.Items.Add("BCD");
                 CB_Type.Items.Add("FLOAT");
+                CB_Type.SelectedIndex = MECore.SelectIndex;
             }
             BT_Write.Visibility = Visibility.Visible;
         }
@@ -156,12 +160,30 @@ namespace SamSoarII.Shell.Dialogs
             }
             if (sender == BT_Write)
             {
-                Store.Write(TB_Value.Text);
+                if (VMCore != null)
+                {
+                    switch (CB_Type.Text)
+                    {
+                        case "UWORD":
+                        case "UDWORD":
+                        case "BCD":
+                            Store.Write(TB_Value.Text, false, true);
+                            break;
+                        default:
+                            Store.Write(TB_Value.Text, false);
+                            break;
+                    }
+                }
+                if (MECore != null)
+                {
+                    Store.Write(TB_Value.Text, false);
+                }
             }
         }
 
         private void CB_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (MECore != null) MECore.SelectIndex = CB_Type.SelectedIndex;
             CheckValue();
         }
 
@@ -192,9 +214,9 @@ namespace SamSoarII.Shell.Dialogs
         {
             try
             {
-                switch (CB_Type.Text)
+                switch (CB_Type.Items[CB_Type.SelectedIndex].ToString())
                 {
-                    case "BIT":
+                    case "BOOL":
                         switch (TB_Value.Text)
                         {
                             case "ON":
@@ -223,7 +245,8 @@ namespace SamSoarII.Shell.Dialogs
                             TB_Value.Background = Brushes.Red;
                             return;
                         }
-                        Int16.Parse(TB_Value.Text);
+                        UInt16 value = UInt16.Parse(TB_Value.Text);
+                        if (value > 9999) throw new FormatException();
                         break;
                     case "FLOAT":
                         float.Parse(TB_Value.Text);

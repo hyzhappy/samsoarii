@@ -29,6 +29,7 @@ namespace SamSoarII.Shell.Windows
         public MonitorWindow(InteractionFacade _ifParent)
         {
             InitializeComponent();
+            DataContext = this;
             ifParent = _ifParent;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
         }
@@ -69,12 +70,15 @@ namespace SamSoarII.Shell.Windows
                     core.ChildrenChanged += OnCoreChildrenChanged;
                     if (core.View != this) core.View = this;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("Children"));
+                PropertyChanged(this, new PropertyChangedEventArgs("TableElements"));
             }
         }
-        public IList<MonitorTable> Children { get { return core.Children; } }
+        public IList<MonitorTable> Children { get { return core != null ? core.Children : new MonitorTable[] { }; } }
         private void OnCoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             PropertyChanged(this, new PropertyChangedEventArgs("Children"));
+            PropertyChanged(this, new PropertyChangedEventArgs("TableElements"));
         }
         IModel IViewModel.Core { get { return this.Core; } set { this.Core = (MonitorModel)value; } }
         public bool IsBeingMonitored
@@ -86,12 +90,12 @@ namespace SamSoarII.Shell.Windows
                 {
                     case LadderModes.Edit: return false;
                     case LadderModes.Simulate: return ifParent.CanStop;
+                    case LadderModes.Monitor: return ifParent.MNGComu.IsAlive;
                     default: return false;
                 }
             }
         }
-
-
+        
         private MonitorTable selectedtable;
         public MonitorTable SelectedTable
         {
@@ -113,8 +117,8 @@ namespace SamSoarII.Shell.Windows
                 if (selectedtable != null)
                 {
                     textbox.Text = selectedtable.Name;
-                    _selectedtable.ChildrenChanged += OnTableChildrenChanged;
-                    if (_selectedtable.View != this) _selectedtable.View = this;
+                    selectedtable.ChildrenChanged += OnTableChildrenChanged;
+                    if (selectedtable.View != this) selectedtable.View = this;
                 }
                 PropertyChanged(this, new PropertyChangedEventArgs("HasSelectedTable"));
                 PropertyChanged(this, new PropertyChangedEventArgs("TableElements"));
@@ -176,6 +180,7 @@ namespace SamSoarII.Shell.Windows
                             MonitorTable table = new MonitorTable(core, diagram.Name);
                             Children.Add(table);
                             dict.Add(table.Name, table);
+                            if (diagram.IsMainLadder) SelectedTable = table;
                         }
                         foreach (ValueInfo vinfo in ValueManager)
                         {
@@ -298,6 +303,12 @@ namespace SamSoarII.Shell.Windows
                         ifParent.MNGSimu.Start();
                     if (e.Command == MonitorCommand.StopCommand)
                         ifParent.MNGSimu.Abort();
+                    break;
+                case LadderModes.Monitor:
+                    if (e.Command == MonitorCommand.StartCommand)
+                        ifParent.MNGComu.Start();
+                    if (e.Command == MonitorCommand.StopCommand)
+                        ifParent.MNGComu.Abort();
                     break;
             }
             if (e.Command == MonitorCommand.AddElementCommand)

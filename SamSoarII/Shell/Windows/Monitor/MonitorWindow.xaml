@@ -38,7 +38,7 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Source="pack://application:,,,/SamSoarII;component/Resources/Image/table.png" Width="14"></Image>
-                        <ContentPresenter HorizontalAlignment="Left" Name="ContentSite" Content="{Binding TableName}" VerticalAlignment="Center" Grid.Column="1"></ContentPresenter>
+                        <ContentPresenter HorizontalAlignment="Left" Name="ContentSite" Content="{Binding Name}" VerticalAlignment="Center" Grid.Column="1"></ContentPresenter>
                     </Grid>
                 </Border>
             </Grid>

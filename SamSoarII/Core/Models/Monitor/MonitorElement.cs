@@ -15,8 +15,7 @@ namespace SamSoarII.Core.Models
         public MonitorElement(MonitorTable _parent, ValueStore _store)
         {
             parent = _parent;
-            store = _store;
-            store.RefNum++;
+            Store = _store;
         }
 
         public MonitorElement(MonitorTable _parent, int _datatype, string _addrtype, int _startaddr, string _intratype, int _intraaddr)
@@ -25,10 +24,9 @@ namespace SamSoarII.Core.Models
             datatype = _datatype;
             string name = String.Format("{0:s}{1:d}", _addrtype, _startaddr);
             ValueInfo vinfo = ValueManager[name];
-            store = _FindStore(vinfo, _intratype, _intraaddr);
-            store.RefNum++;
+            Store = _FindStore(vinfo, _intratype, _intraaddr);
         }
-
+        
         public MonitorElement(MonitorTable _parent, XElement xele)
         {
             parent = _parent;
@@ -37,8 +35,7 @@ namespace SamSoarII.Core.Models
         
         public void Dispose()
         {
-            if (--store.RefNum == 0)
-                store.Parent.Stores.Remove(store);
+            Store = null;
             parent = null;
         }
 
@@ -49,9 +46,40 @@ namespace SamSoarII.Core.Models
         private MonitorTable parent;
         public MonitorTable Parent { get { return this.parent; } }
         public ValueManager ValueManager { get { return parent.ValueManager; } }
-
+        public InteractionFacade IFParent { get { return parent?.Parent?.Parent?.Parent; } }
+        
         private ValueStore store;
-        public ValueStore Store { get { return this.store; } }
+        public ValueStore Store
+        {
+            get
+            {
+                return this.store;
+            }
+            set
+            {
+                ValueStore _store = store;
+                this.store = value;
+                if (_store != null)
+                {
+                    _store.RefNum--;
+                    _store.PropertyChanged -= OnStorePropertyChanged;
+                    IFParent.MNGSimu.Aborted -= OnSimulateAborted;
+                    IFParent.MNGComu.Aborted -= OnMonitorAborted;
+                }
+                if (store != null)
+                {
+                    store.RefNum++;
+                    store.PropertyChanged += OnStorePropertyChanged;
+                    IFParent.MNGSimu.Aborted += OnSimulateAborted;
+                    IFParent.MNGComu.Aborted += OnMonitorAborted;
+                    datatype = (int)(store.Type);
+                    CurrentValue = "???";
+
+                }
+                if (_store != null && _store.RefNum == 0) _store.Parent.Stores.Remove(_store);
+            }
+        }
+        
         private ValueStore _FindStore(ValueInfo vinfo, string _intratype, int _intraaddr)
         {
             ValueModel.Types type = ValueModel.Types.NULL;
@@ -68,13 +96,13 @@ namespace SamSoarII.Core.Models
                 case "DWORD": case "UDWORD": type = ValueModel.Types.DWORD; break;
                 case "FLOAT": type = ValueModel.Types.FLOAT; break;
             }
-            store = vinfo.Stores.Where(vs => vs.Type == type && vs.Intra == ibase && vs.IntraOffset == _intraaddr).FirstOrDefault();
-            if (store == null)
+            ValueStore _store = vinfo.Stores.Where(vs => vs.Type == type && vs.Intra == ibase && vs.IntraOffset == _intraaddr).FirstOrDefault();
+            if (_store == null)
             {
-                store = new ValueStore(vinfo, type, ibase, _intraaddr);
-                vinfo.Stores.Add(store);
+                _store = new ValueStore(vinfo, type, ibase, _intraaddr);
+                vinfo.Stores.Add(_store);
             }
-            return store;
+            return _store;
         }
 
         public string AddrType { get { return store.Parent.Prototype.Base.ToString(); } }
@@ -97,19 +125,31 @@ namespace SamSoarII.Core.Models
                 }
             }
         }
+
+        private bool unknown = false;
         public object CurrentValue
         {
             get
             {
-                return store.Value;
+                return unknown ? "???" : store.ShowValue;
             }
             set
             {
-                store.Value = value;
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
+                if (value.ToString().Equals("???"))
+                {
+                    unknown = true;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
+                }
+                else
+                {
+                    unknown = false;
+                    store.Value = value;
+                }
+                //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });             
+                //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
             }
         }
-
+        
         private string setvalue;
         public string SetValue
         {
@@ -134,7 +174,6 @@ namespace SamSoarII.Core.Models
                 return word_ShowTypes;
             }
         }
-
         public string ShowType
         {
             get
@@ -176,14 +215,10 @@ namespace SamSoarII.Core.Models
             set
             {
                 this.datatype = value;
+                Store = _FindStore(store.Parent, IntrasegmentType, IntrasegmentAddr);
                 PropertyChanged(this, new PropertyChangedEventArgs("DataType"));
                 PropertyChanged(this, new PropertyChangedEventArgs("ShowType"));
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedIndex"));
-                ValueStore _store = store;
-                store = _FindStore(store.Parent, IntrasegmentType, IntrasegmentAddr);
-                _store.RefNum--;
-                store.RefNum++;
-                if (_store.RefNum == 0) _store.Parent.Stores.Remove(_store);
+                PropertyChanged(this, new PropertyChangedEventArgs("SelectIndex"));
             }
         }
         
@@ -244,7 +279,7 @@ namespace SamSoarII.Core.Models
             ValueInfo vinfo = ValueManager[name];
             string intratype = xele.Attribute("IntraType").Value;
             int intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
-            store = _FindStore(vinfo, intratype, intraaddr);
+            Store = _FindStore(vinfo, intratype, intraaddr);
         }
 
         public void Save(XElement xele)
@@ -253,6 +288,32 @@ namespace SamSoarII.Core.Models
             xele.SetAttributeValue("DataType", DataType);
             xele.SetAttributeValue("IntraType", IntrasegmentType);
             xele.SetAttributeValue("IntraAddr", IntrasegmentAddr);
+        }
+
+        #endregion
+
+        #region Event Handler
+
+        private void OnStorePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Value":
+                    unknown = false;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
+                    //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
+                    break;
+            }
+        }
+        
+        private void OnSimulateAborted(object sender, RoutedEventArgs e)
+        {
+            CurrentValue = "???";
+        }
+
+        private void OnMonitorAborted(object sender, RoutedEventArgs e)
+        {
+            CurrentValue = "???";
         }
 
         #endregion

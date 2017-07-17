@@ -12,6 +12,14 @@ namespace SamSoarII.Core.Models
         public CommunicationParams(ProjectPropertyParams _parent)
         {
             parent = _parent;
+            serialportindex = 0;
+            baudrateindex = 1;
+            databitindex = 0;
+            stopbitindex = 0;
+            checkcodeindex = 0;
+            timeout = 20;
+            iscomlinked = false;
+            isautocheck = true;
         }
 
         public void Dispose()

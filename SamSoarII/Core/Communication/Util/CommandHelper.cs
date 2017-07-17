@@ -151,11 +151,11 @@ namespace SamSoarII.Core.Communication
                     int offset = (int)span % 8;
                     if (((data[index] >> offset) & 0x01) == 0x00)
                     {
-                        segment.Model.CurrentValue = string.Format("OFF");
+                        segment.Model.CurrentValue = 0;
                     }
                     else
                     {
-                        segment.Model.CurrentValue = string.Format("ON");
+                        segment.Model.CurrentValue = 1;
                     }
                 }
                 else
@@ -170,29 +170,29 @@ namespace SamSoarII.Core.Communication
                     switch (type)
                     {
                         case WordType.INT16:
-                            segment.Model.CurrentValue = string.Format("{0}", (short)showValue);
+                            segment.Model.CurrentValue = (short)showValue;
                             break;
                         case WordType.POS_INT16:
-                            segment.Model.CurrentValue = string.Format("{0}", (ushort)showValue);
+                            segment.Model.CurrentValue = (ushort)showValue;
                             break;
                         case WordType.INT32:
-                            segment.Model.CurrentValue = string.Format("{0}", (int)showValue);
+                            segment.Model.CurrentValue = (int)showValue;
                             break;
                         case WordType.POS_INT32:
-                            segment.Model.CurrentValue = string.Format("{0}", showValue);
+                            segment.Model.CurrentValue = (uint)showValue;
                             break;
                         case WordType.BCD:
                             if (showValue > 9999)
                             {
-                                segment.Model.CurrentValue = string.Format("????");
+                                segment.Model.CurrentValue = string.Format("???");
                             }
                             else
                             {
-                                segment.Model.CurrentValue = string.Format("{0}", ValueConverter.ToBCD((ushort)showValue));
+                                segment.Model.CurrentValue = ValueConverter.ToBCD((ushort)showValue);
                             }
                             break;
                         case WordType.FLOAT:
-                            segment.Model.CurrentValue = string.Format("{0}", ValueConverter.UIntToFloat(showValue));
+                            segment.Model.CurrentValue = ValueConverter.UIntToFloat(showValue);
                             break;
                         default:
                             break;
