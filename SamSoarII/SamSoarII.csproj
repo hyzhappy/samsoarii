@@ -228,6 +228,7 @@
     <Compile Include="Core\Simulate\SimulateViewer.cs" />
     <Compile Include="Global\GlobalCommand.cs" />
     <Compile Include="Global\GlobalSetting.cs" />
+    <Compile Include="Global\GlobalThreeHotKey.cs" />
     <Compile Include="Global\MonitorCommand.cs" />
     <Compile Include="Global\ProjectFileManager.cs" />
     <Compile Include="Global\SettingManager.cs" />

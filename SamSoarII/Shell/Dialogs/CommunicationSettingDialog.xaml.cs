@@ -47,6 +47,8 @@ namespace SamSoarII.Shell.Dialogs
         }
         public void Dispose()
         {
+            Ensure = null;
+            CommunicationTest = null;
             if (IsEnabled) Close();
         }
         public ComBaseSetting GetBaseSetting()

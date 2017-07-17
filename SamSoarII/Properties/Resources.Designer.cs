@@ -403,6 +403,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 The current command is not executable! 的本地化字符串。
+        /// </summary>
+        public static string Command_Not_Execute {
+            get {
+                return ResourceManager.GetString("Command_Not_Execute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Comment 的本地化字符串。
         /// </summary>
         public static string Comment {
@@ -1884,6 +1893,24 @@ namespace SamSoarII.Properties {
         public static string Jump_Mark {
             get {
                 return ResourceManager.GetString("Jump_Mark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Key combination 的本地化字符串。
+        /// </summary>
+        public static string Key_Combination {
+            get {
+                return ResourceManager.GetString("Key_Combination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 has been pressed, waiting to press the second key ... 的本地化字符串。
+        /// </summary>
+        public static string Key_Pressed {
+            get {
+                return ResourceManager.GetString("Key_Pressed", resourceCulture);
             }
         }
         
@@ -4071,6 +4098,15 @@ namespace SamSoarII.Properties {
         public static string Not_Clear_While_Download {
             get {
                 return ResourceManager.GetString("Not_Clear_While_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 is not a command! 的本地化字符串。
+        /// </summary>
+        public static string Not_Command {
+            get {
+                return ResourceManager.GetString("Not_Command", resourceCulture);
             }
         }
         

@@ -2064,6 +2064,10 @@ namespace SamSoarII.Shell.Models
         }
         private void OnLadderDiagramKeyDown(object sender, KeyEventArgs e)
         {
+            if (IFParent.IsWaitForKey)
+            {
+                return;
+            }
             if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
             {
                 ispressingctrl = true;
@@ -2173,7 +2177,7 @@ namespace SamSoarII.Shell.Models
                             break;
                     }
                 }
-                else
+                else if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.None)
                 {
                     switch (e.Key)
                     {
@@ -2209,7 +2213,7 @@ namespace SamSoarII.Shell.Models
                 }
                 e.Handled = true;
             }
-            if (e.Key == Key.Delete || e.Key == Key.Back)
+            if (e.Key == Key.Delete)
             {
                 if (SelectRectOwner != null && _selectRect.Current != null)
                 {
@@ -2600,12 +2604,23 @@ namespace SamSoarII.Shell.Models
         
         private void CutCopyCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
+            if (IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
             e.CanExecute = SelectionStatus == SelectStatus.SingleSelected;
             e.CanExecute &= _selectRect.Current != null;
             e.CanExecute |= SelectionStatus == SelectStatus.MultiSelected;
+            
         }
         private void PasteCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
+            if (IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
             e.CanExecute = SelectionStatus == SelectStatus.MultiSelected;
             e.CanExecute |= SelectionStatus == SelectStatus.SingleSelected;
             e.CanExecute &= Clipboard.ContainsData("LadderContent");
@@ -2613,18 +2628,25 @@ namespace SamSoarII.Shell.Models
         private void UndoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Core.CanUndo;
+            e.CanExecute &= !IFParent.IsWaitForKey;
         }
         private void RedoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Core.CanRedo;
+            e.CanExecute &= !IFParent.IsWaitForKey;
         }
         private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = !IFParent.IsWaitForKey;
         }
         private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = LadderMode == LadderModes.Edit;
+            e.CanExecute &= !IFParent.IsWaitForKey;
+        }
+        private void SelectAllCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !IFParent.IsWaitForKey;
         }
 
         #endregion

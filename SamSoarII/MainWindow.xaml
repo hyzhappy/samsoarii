@@ -8,14 +8,16 @@
         xmlns:wnd="clr-namespace:SamSoarII.Shell.Windows"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="600" WindowState="Maximized">
+        Title="MainWindow" Height="400" Width="600" WindowState="Maximized" 
+        KeyDown="MainWindow_KeyDown"
+        Closing="Window_Closing">
     <Window.CommandBindings>
         <!--File Commands-->
-        <CommandBinding Command="ApplicationCommands.New" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="ApplicationCommands.Save" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Open" Executed="CommandBinding_Executed"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="ApplicationCommands.Close" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="ApplicationCommands.New" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>
         <!--Edit Commands-->
         <CommandBinding Command="ApplicationCommands.Undo"></CommandBinding>
         <CommandBinding Command="ApplicationCommands.Redo"></CommandBinding>
@@ -63,9 +65,10 @@
         <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoStepCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoCallCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoOutCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.EleInitializeCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.EleListOpenCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
     </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Gesture="Alt+F4" Command="ApplicationCommands.Close"/>
+    </Window.InputBindings>
     <Window.Resources>
         <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <ad:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
@@ -161,9 +164,9 @@
                 <MenuItem x:Name="RecentFileMenu" Style="{x:Null}" Header="{x:Static properties:Resources.MainWindow_Recent_Proj}" ItemsSource="{Binding ProjectUsedTimeMessage}">
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Close_Proj}" Command="{x:Static gb:GlobalCommand.CloseProjectCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Close_Proj}" Command="{x:Static gb:GlobalCommand.CloseProjectCommand}" InputGestureText="Ctrl+Q,E"></MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Exit}" Command="ApplicationCommands.Close"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Exit}" Command="ApplicationCommands.Close" InputGestureText="Alt+F4"></MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Edit}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Undo}" Command="ApplicationCommands.Undo">
@@ -200,52 +203,52 @@
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Replace}" Command="ApplicationCommands.Replace"></MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_View}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_In}" Command="{x:Static gb:GlobalCommand.ZoomInCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_Out}" Command="{x:Static gb:GlobalCommand.ZoomOutCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Comment_Mode}" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static gb:GlobalCommand.CommentModeToggleCommand}">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_In}" Command="{x:Static gb:GlobalCommand.ZoomInCommand}" InputGestureText="Ctrl+T,I"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_Out}" Command="{x:Static gb:GlobalCommand.ZoomOutCommand}" InputGestureText="Ctrl+T,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Comment_Mode}" IsCheckable="True" IsChecked="{Binding ElementName=CommentModeToggleButton, Path=IsChecked, Mode=TwoWay}" Command="{x:Static gb:GlobalCommand.CommentModeToggleCommand}" InputGestureText="Ctrl+E,C">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Comment.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Project_Explorer}" Command="{x:Static gb:GlobalCommand.ShowProjectTreeViewCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}" Command="{x:Static gb:GlobalCommand.ShowElemListCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Init}" Command="{x:Static gb:GlobalCommand.ShowElemInitCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Error_List}" Command="{x:Static gb:GlobalCommand.ShowErrorListCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Monitor_List}" Command="{x:Static gb:GlobalCommand.ShowMainMonitorCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Breakpoint_List}" Command="{x:Static gb:GlobalCommand.ShowBreakpointCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Project_Explorer}" Command="{x:Static gb:GlobalCommand.ShowProjectTreeViewCommand}" InputGestureText="Ctrl+F1,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Manager}" Command="{x:Static gb:GlobalCommand.ShowElemListCommand}" InputGestureText="Ctrl+F2,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Soft_Element_Init}" Command="{x:Static gb:GlobalCommand.ShowElemInitCommand}" InputGestureText="Ctrl+F3,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Error_List}" Command="{x:Static gb:GlobalCommand.ShowErrorListCommand}" InputGestureText="Ctrl+F5,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Monitor_List}" Command="{x:Static gb:GlobalCommand.ShowMainMonitorCommand}" InputGestureText="Ctrl+F4,O"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Breakpoint_List}" Command="{x:Static gb:GlobalCommand.ShowBreakpointCommand}" InputGestureText="Ctrl+F8,O"></MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Proj}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_SubRoutine}" Command="{x:Static gb:GlobalCommand.AddNewSubRoutineCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_FuncBlock}" Command="{x:Static gb:GlobalCommand.AddNewFuncBlockCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_Modbus_Table}" Command="{x:Static gb:GlobalCommand.AddNewModbusCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_SubRoutine}" Command="{x:Static gb:GlobalCommand.AddNewSubRoutineCommand}" InputGestureText="Ctrl+W,R"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_FuncBlock}" Command="{x:Static gb:GlobalCommand.AddNewFuncBlockCommand}" InputGestureText="Ctrl+W,F"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Add_Modbus_Table}" Command="{x:Static gb:GlobalCommand.AddNewModbusCommand}" InputGestureText="Ctrl+W,M"></MenuItem>
                 <Separator/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Property_Proj}" Command="{x:Static gb:GlobalCommand.ShowPropertyDialogCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Property_Proj}" Command="{x:Static gb:GlobalCommand.ShowPropertyDialogCommand}" InputGestureText="Ctrl+F7,O"></MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Tool}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Upload}" Command="{x:Static gb:GlobalCommand.UploadCommand}">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Upload}" Command="{x:Static gb:GlobalCommand.UploadCommand}" InputGestureText="Ctrl+T,U">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Upload.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Download}" Command="{x:Static gb:GlobalCommand.DownloadCommand}">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Download}" Command="{x:Static gb:GlobalCommand.DownloadCommand}" InputGestureText="Ctrl+T,D">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Download.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Simulation}" Command="{x:Static gb:GlobalCommand.SimulateCommand}">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Simulation}" Command="{x:Static gb:GlobalCommand.SimulateCommand}" InputGestureText="Ctrl+E,S">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Simu.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Monitor}" Command="{x:Static gb:GlobalCommand.MonitorCommand}"></MenuItem>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Ret_Edit_Mode}" Command="{x:Static gb:GlobalCommand.EditCommand}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Monitor}" Command="{x:Static gb:GlobalCommand.MonitorCommand}" InputGestureText="Ctrl+E,M"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Ret_Edit_Mode}" Command="{x:Static gb:GlobalCommand.EditCommand}" InputGestureText="Ctrl+T,E"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Proj_Check}">
-                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static gb:GlobalCommand.CheckNetworkErrorCommand}"></MenuItem>
-                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static gb:GlobalCommand.CheckFuncBlockCommand}"></MenuItem>
+                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static gb:GlobalCommand.CheckNetworkErrorCommand}" InputGestureText="Ctrl+T,N"></MenuItem>
+                    <MenuItem Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static gb:GlobalCommand.CheckFuncBlockCommand}" InputGestureText="Ctrl+T,F"></MenuItem>
                 </MenuItem>
                 <Separator ></Separator>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Option}" Command="{x:Static gb:GlobalCommand.ShowOptionDialogCommand}">
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Option}" Command="{x:Static gb:GlobalCommand.ShowOptionDialogCommand}" InputGestureText="Ctrl+F6,O">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Config.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>
                     </MenuItem.Icon>

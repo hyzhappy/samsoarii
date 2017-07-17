@@ -8,3 +8,8 @@ C:\vsworkspace\samsoarii_simplify2\SamSoarII.Utility\obj\x86\Debug\SamSoarII.Uti
 C:\vsworkspace\samsoarii_simplify2\SamSoarII.Utility\bin\x86\Debug\SamSoarII.Utility.dll
 C:\vsworkspace\samsoarii_simplify2\SamSoarII.Utility\bin\x86\Debug\SamSoarII.Utility.pdb
 C:\vsworkspace\samsoarii_simplify2\SamSoarII.Utility\obj\x86\Debug\SamSoarII.Utility.csprojResolveAssemblyReference.cache
+C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.Utility\bin\x86\Debug\SamSoarII.Utility.dll
+C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.Utility\bin\x86\Debug\SamSoarII.Utility.pdb
+C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.Utility\obj\x86\Debug\SamSoarII.Utility.csprojResolveAssemblyReference.cache
+C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.Utility\obj\x86\Debug\SamSoarII.Utility.dll
+C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.Utility\obj\x86\Debug\SamSoarII.Utility.pdb

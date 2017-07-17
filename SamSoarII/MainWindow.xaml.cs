@@ -2,6 +2,7 @@
 using SamSoarII.Global;
 using SamSoarII.Shell.Dialogs;
 using SamSoarII.Shell.Windows;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,6 +37,7 @@ namespace SamSoarII
             ifParent = new InteractionFacade(this);
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             InitializeAvalonDock();
+            InitializeHotKey();
         }
 
         public void Dispose()
@@ -135,9 +137,334 @@ namespace SamSoarII
 
         #endregion
 
+        #region HotKey
+
+        private List<GlobalThreeHotKey> _threeHotKeys;
+        private string inputMessage = string.Empty;
+        
+        private void InitializeHotKey()
+        {
+            _threeHotKeys = new List<GlobalThreeHotKey>();
+            KeyPartTwo keyPart;
+            GlobalThreeHotKey hotKey;
+            foreach (var command in GlobalCommand.commands)
+            {
+                if (command == GlobalCommand.AddNewFuncBlockCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.F);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+W,F)\t{0}", Properties.Resources.MainWindow_Add_FuncBlock);
+                    continue;
+                }
+                if (command == GlobalCommand.AddNewModbusCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.M);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+W,M)\t{0}", Properties.Resources.MainWindow_Add_Modbus_Table);
+                    continue;
+                }
+                if (command == GlobalCommand.AddNewSubRoutineCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.R);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+W,R)\t{0}", Properties.Resources.MainWindow_Add_SubRoutine);
+                    continue;
+                }
+                if (command == GlobalCommand.CheckFuncBlockCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.F);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,F)\t{0}", Properties.Resources.MainWindow_Funcblock_Check);
+                    continue;
+                }
+                if (command == GlobalCommand.CheckNetworkErrorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.N);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,N)\t{0}", Properties.Resources.MainWindow_Ladder_Check);
+                    continue;
+                }
+                if (command == GlobalCommand.CompileCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.C);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,C)\t{0}", Properties.Resources.MainWindow_Compile);
+                    continue;
+                }
+                if (command == GlobalCommand.DownloadCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.D);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,D)\t{0}", Properties.Resources.MainWindow_Download);
+                    continue;
+                }
+                if (command == GlobalCommand.MonitorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.M);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,M)\t{0}", Properties.Resources.MainWindow_Download);
+                    continue;
+                }
+                if (command == GlobalCommand.UploadCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.U);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,U)\t{0}", Properties.Resources.MainWindow_Upload);
+                    continue;
+                }
+                if (command == GlobalCommand.EditCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.E);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,E)\t{0}", Properties.Resources.MainWindow_Ret_Edit_Mode);
+                    continue;
+                }
+                if (command == GlobalCommand.ZoomInCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.I);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,I)\t{0}", Properties.Resources.MainWindow_Zoom_In);
+                    continue;
+                }
+                if (command == GlobalCommand.ZoomOutCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,O)\t{0}", Properties.Resources.MainWindow_Zoom_Out);
+                    continue;
+                }
+                if (command == GlobalCommand.SimulateCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.S);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+E,S)\t{0}", Properties.Resources.MainWindow_Simulation);
+                    continue;
+                }
+                if (command == GlobalCommand.MonitorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.M);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+E,M)\t{0}", Properties.Resources.MainWindow_Monitor);
+                    continue;
+                }
+                if (command == GlobalCommand.InstModeToggleCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.I);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+E,I)\t{0}", Properties.Resources.MainWindow_Inst_Mode);
+                    continue;
+                }
+                if (command == GlobalCommand.LadderModeToggleCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.L);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+E,L)\t{0}", Properties.Resources.MainWindow_Ladder_Mode);
+                    continue;
+                }
+                if (command == GlobalCommand.CommentModeToggleCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.C);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+E,C)\t{0}", Properties.Resources.MainWindow_Comment_Mode);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowProjectTreeViewCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F1, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F1,O)\t{0}", Properties.Resources.MainWindow_Project_Explorer);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowElemListCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F2, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F2,O)\t{0}", Properties.Resources.MainWindow_Element_List);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowElemInitCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F3, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F3,O)\t{0}", Properties.Resources.MainWindow_Soft_Element_Init);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowMainMonitorCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F4, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F4,O)\t{0}", Properties.Resources.MainWindow_Monitor_List);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowErrorListCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F5, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F5,O)\t{0}", Properties.Resources.MainWindow_Error_List);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowOptionDialogCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F6, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F6,O)\t{0}", Properties.Resources.MainWindow_Option);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowPropertyDialogCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F7, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F7,O)\t{0}", Properties.Resources.MainWindow_Property_Proj);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowBreakpointCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F8, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F8,O)\t{0}", Properties.Resources.MainWindow_Breakpoint_List);
+                    continue;
+                }
+                if (command == GlobalCommand.CloseProjectCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.Q, Key.E);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+Q,E)\t{0}", Properties.Resources.MainWindow_Close_Proj);
+                    continue;
+                }
+            }
+        }
+        private ToolTip GenToolTipByHotKeys()
+        {
+            ToolTip toolTip = new ToolTip();
+            TextBlock textblock = new TextBlock();
+            textblock.TextAlignment = TextAlignment.Left;
+            textblock.Foreground = Brushes.Black;
+            for (int i = 0; i < _threeHotKeys.Count; i++)
+            {
+                textblock.Text += _threeHotKeys[i].ShowMessage;
+                if (i < _threeHotKeys.Count - 1) textblock.Text += "\n";
+            }
+            toolTip.Content = textblock;
+            return toolTip;
+        }
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (_threeHotKeys.Count == 0)
+            {
+                if (KeyInputHelper.IsModifier(e.Key))
+                {
+                    return;
+                }
+                if (((e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None))
+                {
+                    _threeHotKeys = ThreeHotKeyManager.GetHotKeys(ModifierKeys.Control, e.Key);
+                    if (_threeHotKeys.Count > 0)
+                    {
+                        ifParent.SetUnderBarMessage(string.Format("(Ctrl+{0}){1}", e.Key, Properties.Resources.Key_Pressed));
+                        ThreeHotKeyManager.IsWaitForSecondModifier = true;
+                        ThreeHotKeyManager.IsWaitForSecondKey = true;
+                        ifParent.BARStatus.ToolTip = GenToolTipByHotKeys();
+                    }
+                }
+            }
+            else
+            {
+                Key key = e.Key;
+                if (key == Key.System) key = e.SystemKey;
+                if (KeyInputHelper.IsModifier(key))
+                {
+                    ThreeHotKeyManager.IsWaitForSecondModifier = false;
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && !inputMessage.Contains("Ctrl"))
+                        inputMessage += inputMessage == string.Empty ? "Ctrl" : "+Ctrl";
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt && !inputMessage.Contains("Alt"))
+                        inputMessage += inputMessage == string.Empty ? "Alt" : "+Alt";
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift && !inputMessage.Contains("Shift"))
+                        inputMessage += inputMessage == string.Empty ? "Shift" : "+Shift";
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Windows) == ModifierKeys.Windows && !inputMessage.Contains("Windows"))
+                        inputMessage += inputMessage == string.Empty ? "Windows" : "+Windows";
+                }
+                else
+                {
+                    inputMessage += inputMessage == string.Empty ? inputMessage += string.Format("{0})", key) : string.Format("+{0})", key);
+                    if (ThreeHotKeyManager.IsWaitForSecondModifier)
+                    {
+                        foreach (var hotKey in _threeHotKeys)
+                        {
+                            if (hotKey.Assert(key))
+                            {
+                                _threeHotKeys.Clear();
+                                if (hotKey.CanExecute)
+                                {
+                                    ifParent.SetUnderBarMessage(Properties.Resources.Ready);
+                                    hotKey.Execute();
+                                }
+                                else
+                                {
+                                    ifParent.SetUnderBarMessage(Properties.Resources.Command_Not_Execute);
+                                }
+                                break;
+                            }
+                        }
+                        if (_threeHotKeys.Count != 0)
+                        {
+                            ifParent.SetUnderBarMessage(string.Format("{0}{1}{2}{3}", Properties.Resources.Key_Combination, _threeHotKeys.First(), inputMessage, Properties.Resources.Not_Command));
+                            _threeHotKeys.Clear();
+                        }
+                    }
+                    else
+                    {
+                        ifParent.SetUnderBarMessage(string.Format("{0}{1}{2}{3}", Properties.Resources.Key_Combination, _threeHotKeys.First(), inputMessage, Properties.Resources.Not_Command));
+                        _threeHotKeys.Clear();
+                    }
+                    ThreeHotKeyManager.IsWaitForSecondModifier = false;
+                    ThreeHotKeyManager.IsWaitForSecondKey = false;
+                    inputMessage = string.Empty;
+                    ifParent.BARStatus.ToolTip = null;
+                }
+                e.Handled = true;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Event Handler
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if (ProjectTreeViewItem.HasRenaming)
+            {
+                LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
+                e.Cancel = true;
+            }
+        }
 
         protected override void OnClosed(EventArgs e)
         {
@@ -269,6 +596,8 @@ namespace SamSoarII
                 ifParent.ShowProjectPropertyDialog();
             if (e.Command == GlobalCommand.ShowOptionDialogCommand)
                 ifParent.ShowSystemOptionDialog();
+            if (e.Command == GlobalCommand.ShowCommunicationSettingDialogCommand)
+                ifParent.ShowCommunicationSettingDialog();
             if (e.Command == GlobalCommand.CheckNetworkErrorCommand)
                 ifParent.CheckLadder(true);
             if (e.Command == GlobalCommand.CheckFuncBlockCommand)
@@ -333,7 +662,7 @@ namespace SamSoarII
         }
 
         #endregion
-
+        
     }
 
     public class MainWindowEventArgs : IWindowEventArgs

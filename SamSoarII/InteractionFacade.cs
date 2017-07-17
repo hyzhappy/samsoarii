@@ -485,7 +485,7 @@ namespace SamSoarII
             wndMain.LACMonitor.Show();
             return true;
         }
-
+        
         public void EditProject()
         {
             if (vmdProj == null) return;
@@ -1056,21 +1056,17 @@ namespace SamSoarII
         {
             if (isLadder)
             {
-                /*
                 if (isError)
-                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Error);
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Error, Properties.Resources.Ladder_Error));
                 else
-                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.Ladder_Correct);
-                */
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ladder_Correct));
             }
             else
             {
-                /*
-                if (!isError)
-                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Correct);
+                if (isError)
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Error, Properties.Resources.FuncBlock_Error));
                 else
-                    StatusBarHepler.UpdateMessageAsync(Properties.Resources.FuncBlock_Error);
-                */    
+                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.FuncBlock_Correct));
             }
             handle.Abort();
             LocalizedMessageBox.Show(message, LocalizedMessageIcon.Information);
@@ -1281,6 +1277,55 @@ namespace SamSoarII
             dlgOption.ShowDialog();
         }
 
+        public void ShowCommunicationSettingDialog()
+        {
+            CommunicationParams paraCom = mdProj.PARAProj.PARACom;
+            using (CommunicationSettingDialog dialog = new CommunicationSettingDialog(paraCom))
+            {
+                ComBaseSetting baseSetting = dialog.GetBaseSetting();
+                baseSetting.SettingButtonClick += (sender1, e1) =>
+                {
+                    using (CommunicationParamsDialog dialog1 = new CommunicationParamsDialog(paraCom))
+                    {
+                        dialog1.ShowDialog();
+                    }
+                };
+                dialog.Ensure += OnCommunicationTest;
+                dialog.CommunicationTest += OnCommunicationTest;
+                dialog.ShowDialog();
+            }
+        }
+
+        private void OnCommunicationTest(object sender, RoutedEventArgs e)
+        {
+            mngComu.IsEnable = true;
+            if (mngComu.CheckLink())
+                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Success, LocalizedMessageIcon.Information);
+            else
+                LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+            mngComu.IsEnable = false;
+        }
+
+        #endregion
+
+        #region HotKey System
+
+        /// <summary>
+        /// 表示是否在等待命令的输入
+        /// </summary>
+        public bool IsWaitForKey
+        {
+            get
+            {
+                return ThreeHotKeyManager.IsWaitForSecondKey || ThreeHotKeyManager.IsWaitForSecondModifier;
+            }
+        }
+        
+        public void SetUnderBarMessage(string message)
+        {
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus, barStatus.Status, message));
+        }
+
         #endregion
 
         #region Event Handler
@@ -1402,12 +1447,14 @@ namespace SamSoarII
 
         public bool CanExecute(CanExecuteRoutedEventArgs e)
         {
+            bool ret = true;
+            ret &= !IsWaitForKey;
             if (e.Command != ApplicationCommands.New
              && e.Command != ApplicationCommands.Open
              && e.Command != GlobalCommand.UploadCommand
              && e.Command != GlobalCommand.ShowOptionDialogCommand)
             {
-                bool ret = mdProj != null && vmdProj != null;
+                ret &= mdProj != null && vmdProj != null;
                 if (!ret) return ret;
                 if (e.Command == MonitorCommand.StartCommand
                  || e.Command == GlobalCommand.SimuStartCommand)
@@ -1423,12 +1470,20 @@ namespace SamSoarII
                 {
                     ret &= CanPause;
                 }
-                return ret;
             }
-            else
+            if (e.Command == ApplicationCommands.New
+            || e.Command == ApplicationCommands.Open
+            || e.Command == ApplicationCommands.Close
+            || e.Command == ApplicationCommands.Save
+            || e.Command == ApplicationCommands.SaveAs
+            || e.Command == GlobalCommand.CloseProjectCommand
+            || e.Command == GlobalCommand.SimulateCommand
+            || e.Command == GlobalCommand.DownloadCommand
+            || e.Command == GlobalCommand.MonitorCommand)
             {
-                return true;
+                ret &= !ProjectTreeViewItem.HasRenaming;
             }
+            return ret;
         }
         
         private void OnViewPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -1968,4 +1968,16 @@
   <data name="Simulate_Error" xml:space="preserve">
     <value>仿真初始化失败！</value>
   </data>
+  <data name="Command_Not_Execute" xml:space="preserve">
+    <value>当前命令不可执行！</value>
+  </data>
+  <data name="Key_Combination" xml:space="preserve">
+    <value>组合键</value>
+  </data>
+  <data name="Key_Pressed" xml:space="preserve">
+    <value>已按下，正在等待按下第二个键...</value>
+  </data>
+  <data name="Not_Command" xml:space="preserve">
+    <value>不是命令！</value>
+  </data>
 </root>
