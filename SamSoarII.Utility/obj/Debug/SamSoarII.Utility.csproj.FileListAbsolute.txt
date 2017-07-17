@@ -1,0 +1,5 @@
+C:\Samkoon\SamSoarII\Debug\SamSoarII.Utility.dll
+C:\Samkoon\SamSoarII\Debug\SamSoarII.Utility.pdb
+C:\vsworkspace\samsoarii\SamSoarII.Utility\obj\Debug\SamSoarII.Utility.csprojResolveAssemblyReference.cache
+C:\vsworkspace\samsoarii\SamSoarII.Utility\obj\Debug\SamSoarII.Utility.dll
+C:\vsworkspace\samsoarii\SamSoarII.Utility\obj\Debug\SamSoarII.Utility.pdb

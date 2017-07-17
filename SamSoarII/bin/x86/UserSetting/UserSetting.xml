@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserSetting>
+  <FavoritePages />
+  <RecentUsedProjectMessages>
+    <RecentUsedProjectMessage>
+      <Year>2017</Year>
+      <Month>7</Month>
+      <Day>5</Day>
+      <Hour>16</Hour>
+      <Minute>34</Minute>
+      <Second>53</Second>
+      <ProjectName>20170705</ProjectName>
+      <ProjectFullFileName>C:\Samkoon\20170705.ssr</ProjectFullFileName>
+    </RecentUsedProjectMessage>
+    <RecentUsedProjectMessage>
+      <Year>2017</Year>
+      <Month>7</Month>
+      <Day>5</Day>
+      <Hour>14</Hour>
+      <Minute>5</Minute>
+      <Second>46</Second>
+      <ProjectName>20170703</ProjectName>
+      <ProjectFullFileName>C:\Samkoon\20170703.ssr</ProjectFullFileName>
+    </RecentUsedProjectMessage>
+    <RecentUsedProjectMessage>
+      <Year>2017</Year>
+      <Month>7</Month>
+      <Day>4</Day>
+      <Hour>16</Hour>
+      <Minute>19</Minute>
+      <Second>37</Second>
+      <ProjectName>Project</ProjectName>
+      <ProjectFullFileName>C:\Samkoon\比较指令崩溃\单字比较指令变址崩溃.ssr</ProjectFullFileName>
+    </RecentUsedProjectMessage>
+  </RecentUsedProjectMessages>
+  <SystemSetting>
+    <LadderOriginScaleX>0.29090909090909084</LadderOriginScaleX>
+    <LadderOriginScaleY>0.29090909090909084</LadderOriginScaleY>
+    <LadderScaleX>1.1800000000000002</LadderScaleX>
+    <LadderScaleY>1.1800000000000002</LadderScaleY>
+    <FuncBlockFontSize>16</FuncBlockFontSize>
+    <_A>255</_A>
+    <_R>0</_R>
+    <_G>0</_G>
+    <_B>0</_B>
+    <IsSavedByTime>false</IsSavedByTime>
+    <SaveTimeSpan>1</SaveTimeSpan>
+    <IsInstByTime>true</IsInstByTime>
+    <InstTimeSpan>10</InstTimeSpan>
+    <IsCheckCoil>true</IsCheckCoil>
+    <IsOpenLSetting>true</IsOpenLSetting>
+    <LanagArea>zh-Hans</LanagArea>
+    <Font>
+      <Comment FontSize="16" FontFamily="微软雅黑" FontColor="255 0 0 0" />
+      <Func FontSize="22" FontFamily="Courier New" FontColor="255 0 0 0" />
+      <Ladder FontSize="42" FontFamily="Courier New" FontColor="255 0 0 0" />
+      <Title FontSize="32" FontFamily="微软雅黑" FontColor="255 0 0 0" />
+    </Font>
+  </SystemSetting>
+</UserSetting>
