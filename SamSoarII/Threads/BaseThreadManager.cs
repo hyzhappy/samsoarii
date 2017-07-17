@@ -9,9 +9,10 @@ namespace SamSoarII.Threads
 {
     public abstract class BaseThreadManager : IThreadManager
     {
-        public BaseThreadManager(bool _isMTA)
+        public BaseThreadManager(bool _isMTA, bool _forceabort = false)
         {
             isMTA = _isMTA;
+            forceabort = _forceabort;
         }
 
         #region IThreadManager
@@ -22,6 +23,7 @@ namespace SamSoarII.Threads
         private bool thalive;
         private bool thactive;
         private bool isMTA;
+        private bool forceabort;
         private int timespan = 10;
         public bool IsAlive { get { return this.isalive && thread != null && thread.IsAlive; } }
         public bool IsActive { get { return this.isactive && thread != null; } }
@@ -87,7 +89,7 @@ namespace SamSoarII.Threads
         {
             if (!IsAlive) return;
             thalive = false;
-            if (isactive) return;
+            if (isactive && !forceabort) return;
             _Invoke_Abort();
         }
 

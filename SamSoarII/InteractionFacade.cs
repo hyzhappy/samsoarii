@@ -213,19 +213,8 @@ namespace SamSoarII
         
         public void CreateProject(string name, string filename = null)
         {
-            if (mdProj != null)
-            {
-                Thread createthread = new Thread(() =>
-                {
-                    _CloseProject();
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { _CreateProject(name, filename); });
-                });
-                createthread.Start();
-            }
-            else
-            {
-                _CreateProject(name, filename);
-            }
+            CloseProject();
+            _CreateProject(name, filename);
         }
 
         private void _CreateProject(string name, string filename)
@@ -237,25 +226,18 @@ namespace SamSoarII
         
         public void LoadProject(string filename)
         {
-            if (mdProj != null)
-            {
-                PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Project_Preparing));
-                LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
-                handle.Start();
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-                {
-                    _CloseProject();
-                    _LoadProject(filename);
-                    handle.Completed = true;
-                    handle.Abort();
-                });
-                while (!handle.Completed) Thread.Sleep(10);
-                PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ready));
-            }
-            else
+            CloseProject();
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Project_Preparing));
+            LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
+            handle.Start();
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
                 _LoadProject(filename);
-            }
+                handle.Completed = true;
+                handle.Abort();
+            });
+            while (!handle.Completed) Thread.Sleep(10);
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ready));
         }
 
         private void _LoadProject(string filename)
@@ -296,18 +278,23 @@ namespace SamSoarII
                 EditProject();
                 LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.MainWindow_Close_Proj);
                 handle.Start();
-                vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-                {
+                Thread closethread = new Thread(() => { 
                     _CloseProject();
                     handle.Completed = true;
                     handle.Abort();
                 });
-                while (!handle.Completed) Thread.Sleep(10);
+                closethread.Start();
+                while (!handle.Completed)
+                {
+                    Dispatcher.Run();
+                    Thread.Sleep(10);
+                }
             }
         }
 
         private void _CloseProject()
         {
+            if (mdProj == null) return;
             WaitForThreadAbort();
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
             tvProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tvProj.Reset(); });
