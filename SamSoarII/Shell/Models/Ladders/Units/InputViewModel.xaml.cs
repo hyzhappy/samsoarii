@@ -1,5 +1,6 @@
 ﻿using SamSoarII.Core.Models;
 using SamSoarII.Core.Simulate;
+using SamSoarII.Shell.Managers;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -259,9 +260,29 @@ namespace SamSoarII.Shell.Models
         
         public override void Update(int flags = UPDATE_ALL)
         {
+            FontData fdata = null;
             base.Update(flags);
             switch (flags)
             {
+                case UPDATE_STYLE:
+                    fdata = FontManager.GetLadder();
+                    ValueTextBlock.Foreground = fdata.FontColor;
+                    ValueTextBlock.FontFamily = fdata.FontFamily;
+                    ValueTextBlock.FontSize = fdata.FontSize;
+                    Value2TextBlock.Foreground = fdata.FontColor;
+                    Value2TextBlock.FontFamily = fdata.FontFamily;
+                    Value2TextBlock.FontSize = fdata.FontSize;
+                    fdata = FontManager.GetComment();
+                    foreach (TextBlock comment in comments)
+                    {
+                        if (comment != null)
+                        {
+                            comment.Foreground = fdata.FontColor;
+                            comment.FontFamily = fdata.FontFamily;
+                            comment.FontSize = fdata.FontSize;
+                        }
+                    }
+                    break;
                 case UPDATE_PROPERTY:
                     Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {

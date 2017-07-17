@@ -9,7 +9,7 @@
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="600" WindowState="Maximized" 
-        KeyDown="MainWindow_KeyDown"
+        PreviewKeyDown="MainWindow_KeyDown"
         Closing="Window_Closing">
     <Window.CommandBindings>
         <!--File Commands-->

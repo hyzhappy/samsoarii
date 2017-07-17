@@ -1472,16 +1472,31 @@ namespace SamSoarII
                 }
             }
             if (e.Command == ApplicationCommands.New
-            || e.Command == ApplicationCommands.Open
-            || e.Command == ApplicationCommands.Close
-            || e.Command == ApplicationCommands.Save
-            || e.Command == ApplicationCommands.SaveAs
-            || e.Command == GlobalCommand.CloseProjectCommand
-            || e.Command == GlobalCommand.SimulateCommand
-            || e.Command == GlobalCommand.DownloadCommand
-            || e.Command == GlobalCommand.MonitorCommand)
+             || e.Command == ApplicationCommands.Open
+             || e.Command == ApplicationCommands.Close
+             || e.Command == ApplicationCommands.Save
+             || e.Command == ApplicationCommands.SaveAs
+             || e.Command == GlobalCommand.CloseProjectCommand
+             || e.Command == GlobalCommand.SimulateCommand
+             || e.Command == GlobalCommand.DownloadCommand
+             || e.Command == GlobalCommand.MonitorCommand
+             || e.Command == GlobalCommand.AddNewFuncBlockCommand
+             || e.Command == GlobalCommand.AddNewModbusCommand
+             || e.Command == GlobalCommand.AddNewSubRoutineCommand)
             {
                 ret &= !ProjectTreeViewItem.HasRenaming;
+            }
+            if (e.Command == ApplicationCommands.Cut
+             || e.Command == ApplicationCommands.Copy
+             || e.Command == ApplicationCommands.Paste
+             || e.Command == ApplicationCommands.Delete
+             || e.Command == ApplicationCommands.Undo
+             || e.Command == ApplicationCommands.Redo
+             || e.Command == GlobalCommand.AddNewFuncBlockCommand
+             || e.Command == GlobalCommand.AddNewModbusCommand
+             || e.Command == GlobalCommand.AddNewSubRoutineCommand)
+            {
+                ret &= vmdProj != null && vmdProj.LadderMode == LadderModes.Edit;
             }
             return ret;
         }

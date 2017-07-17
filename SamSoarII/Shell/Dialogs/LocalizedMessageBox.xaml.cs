@@ -175,6 +175,12 @@ namespace SamSoarII.Shell.Dialogs
             messagebox.ShowDialog();
             return messagebox._result;
         }
+        public static LocalizedMessageResult Show(string messageToShow, LocalizedMessageButton button, LocalizedMessageIcon icon)
+        {
+            LocalizedMessageBox messagebox = new LocalizedMessageBox(messageToShow, string.Empty, button, icon);
+            messagebox.ShowDialog();
+            return messagebox._result;
+        }
         public static LocalizedMessageResult Show(string messageToShow, LocalizedMessageButton button)
         {
             LocalizedMessageBox messagebox = new LocalizedMessageBox(messageToShow, string.Empty, button, LocalizedMessageIcon.None);

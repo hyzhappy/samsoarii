@@ -145,17 +145,31 @@ namespace SamSoarII.Shell.Windows
 
         #region Elements
 
+        private int GetSpan(MonitorElement element)
+        {
+            switch (element.Store.Type)
+            {
+                case ValueModel.Types.DWORD:
+                case ValueModel.Types.UDWORD:
+                case ValueModel.Types.FLOAT:
+                    return element.AddrType.Equals("CV") && element.StartAddr >= 200 ? 1 : 2;
+                default:
+                    return 1;
+            }
+        }
+        
         private void AddElement(MonitorTable table)
         {
             using (AddElementDialog dialog = new AddElementDialog())
             {
                 dialog.EnsureButtonClick += (sender1, e1) =>
                 {
-                    for (int i = 0; i < dialog.AddNums; i++)
+                    for (int i = 0; i < dialog.AddNums; )
                     {
                         MonitorElement element = new MonitorElement(table, 
                             dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr + i), dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr));
                         table.Children.Add(element);
+                        i += GetSpan(element);
                     }
                     dialog.Close();
                 };
@@ -169,7 +183,7 @@ namespace SamSoarII.Shell.Windows
             {
                 dialog.EnsureButtonClick += (sender1, e1) =>
                 {
-                    LocalizedMessageResult result = LocalizedMessageBox.Show(Properties.Resources.Message_Tooltip, LocalizedMessageButton.OKCancel);
+                    LocalizedMessageResult result = LocalizedMessageBox.Show(Properties.Resources.Message_Tooltip, LocalizedMessageButton.OKCancel, LocalizedMessageIcon.Warning);
                     if (result == LocalizedMessageResult.Yes)
                     {
                         Children.Clear();
@@ -198,6 +212,7 @@ namespace SamSoarII.Shell.Windows
                             }
                         }
                     }
+                    dialog.Close();
                 };
                 dialog.ShowDialog();
             }

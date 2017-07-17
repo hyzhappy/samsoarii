@@ -26,8 +26,8 @@ namespace SamSoarII
         public App()
         {
             InitializeComponent();
-            AllResourceManager.Initialize();
             SettingManager.Load();
+            AllResourceManager.Initialize();
             Startup += App_Startup;
             Exit += App_Exit;
             DispatcherUnhandledException += App_DispatcherUnhandledException;

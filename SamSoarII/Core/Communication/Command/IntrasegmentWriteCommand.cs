@@ -56,7 +56,10 @@ namespace SamSoarII.Core.Communication
             addrType2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType),RefElement.IntrasegmentType),(uint)(RefElement.IntrasegmentAddr));
             startLowAddr2 = (byte)RefElement.IntrasegmentAddr;
             addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), RefElement.AddrType), (uint)(RefElement.StartAddr));
-            length = 0x01;
+            if (RefElement.ByteCount == 4 && !(RefElement.AddrType == "CV" && RefElement.StartAddr >= 200))
+                length = 0x02;
+            else
+                length = 0x01;
             byte[] startaddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr);
             startLowAddr1 = startaddr[1];
             startHighAddr = startaddr[0];

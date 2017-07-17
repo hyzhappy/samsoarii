@@ -2604,7 +2604,7 @@ namespace SamSoarII.Shell.Models
         
         private void CutCopyCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent.IsWaitForKey)
+            if (laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2616,7 +2616,7 @@ namespace SamSoarII.Shell.Models
         }
         private void PasteCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent.IsWaitForKey)
+            if (laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2628,16 +2628,19 @@ namespace SamSoarII.Shell.Models
         private void UndoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Core.CanUndo;
+            e.CanExecute &= laddermode == LadderModes.Edit;
             e.CanExecute &= !IFParent.IsWaitForKey;
         }
         private void RedoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Core.CanRedo;
+            e.CanExecute &= laddermode == LadderModes.Edit;
             e.CanExecute &= !IFParent.IsWaitForKey;
         }
         private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = !IFParent.IsWaitForKey;
+            e.CanExecute &= laddermode == LadderModes.Edit;
         }
         private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {

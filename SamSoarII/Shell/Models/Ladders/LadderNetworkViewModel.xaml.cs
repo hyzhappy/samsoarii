@@ -435,7 +435,10 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #region Load
-        
+
+        private int loadcount;
+        private int loadfinish;
+
         public bool IsFullLoaded
         {
             get
@@ -452,13 +455,17 @@ namespace SamSoarII.Shell.Models
         
         public void FullLoad()
         {
+            loadfinish = 0;
+            loadcount = core.Children.Count() + core.VLines.Count();
             for (int y = 0; y < core.RowCount; y++)
             { 
                 Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                 {
                     foreach (LadderUnitModel unit in core.Children.SelectRange(0, GlobalSetting.LadderXCapacity, y, y))
                     {
-                        if (unit.View == null) unit.View = LadderUnitViewModel.Create(unit);
+                        if (unit.View == null)
+                            unit.View = LadderUnitViewModel.Create(unit);
+                        loadfinish++;
                         if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
                     }
                 });
@@ -467,19 +474,26 @@ namespace SamSoarII.Shell.Models
                 {
                     foreach (LadderUnitModel unit in core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity, y, y))
                     {
-                        if (unit.View == null) unit.View = LadderUnitViewModel.Create(unit);
+                        if (unit.View == null)
+                            unit.View = LadderUnitViewModel.Create(unit);
+                        loadfinish++;
                         if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
                     }
                 });
                 if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
             }
+            if (IsSelectAreaMode)
+                Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
+                {
+                    LadderCanvas.Children.Add(SelectArea);
+                });
         }
 
         public void UpdateFullLoadProgress()
         {
             NetworkNumberLabel.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
-                NetworkNumberLabel.Content = String.Format("{0:s}({1:d}%)", NetworkNumber, Core.Children.Where(u => u.View != null).Count() * 100 / Core.Children.Count());
+                NetworkNumberLabel.Content = String.Format("{0:s}({1:d}%)", NetworkNumber, loadcount == 0 ? 100 : loadfinish * 100 / loadcount);
             });
         }
 
@@ -499,30 +513,30 @@ namespace SamSoarII.Shell.Models
                 Core.IsExpand = value;
             }
         }
-        
+
+        private Canvas tipcanvas = null;
         private ToolTip GenerateToolTipByLadder()
         {
             ToolTip tooltip = new ToolTip();
             ScrollViewer scroll = new ScrollViewer();
             scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            Canvas canvas = new Canvas();
+            tipcanvas = new Canvas();
             scroll.MaxHeight = 385;
-            canvas.Background = Brushes.White;
-            canvas.HorizontalAlignment = HorizontalAlignment.Left;
+            tipcanvas.Background = Brushes.White;
+            tipcanvas.HorizontalAlignment = HorizontalAlignment.Left;
             ScaleTransform transform = new ScaleTransform(GlobalSetting.LadderOriginScaleX / 1.7, GlobalSetting.LadderOriginScaleY / 1.7);
-            canvas.Height = Core.RowCount * HeightUnit;
-            canvas.Width = LadderCanvas.Width;
-            foreach (var ele in Core.Children)
+            tipcanvas.Height = Core.RowCount * HeightUnit;
+            tipcanvas.Width = LadderCanvas.Width;
+            if (IsFullLoaded)
             {
-                canvas.Children.Add(ele.View);
+                foreach (var ele in Core.Children)
+                    tipcanvas.Children.Add(ele.View);
+                foreach (var ele in Core.VLines)
+                    tipcanvas.Children.Add(ele.View);
             }
-            foreach (var ele in Core.VLines)
-            {
-                canvas.Children.Add(ele.View);
-            }
-            canvas.LayoutTransform = transform;
-            scroll.Content = canvas;
+            tipcanvas.LayoutTransform = transform;
+            scroll.Content = tipcanvas;
             tooltip.Content = scroll;
             return tooltip;
         }
@@ -531,9 +545,10 @@ namespace SamSoarII.Shell.Models
         {
             if (tooltip != null)
             {
-                Canvas canvas = (Canvas)((ScrollViewer)tooltip.Content).Content;
-                canvas.LayoutTransform = null;
-                canvas.Children.Clear();
+                //Canvas canvas = (Canvas)((ScrollViewer)tooltip.Content).Content;
+                tipcanvas.LayoutTransform = null;
+                tipcanvas.Children.Clear();
+                tipcanvas = null;
             }
         }
 
@@ -543,7 +558,7 @@ namespace SamSoarII.Shell.Models
         
         public bool AcquireSelectRect(MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && !IsMasked)
+            if (e.LeftButton == MouseButtonState.Pressed && !IsMasked && IsFullLoaded)
             {
                 var pos = e.GetPosition(LadderCanvas);
                 return AcquireSelectRect(pos);
@@ -566,9 +581,7 @@ namespace SamSoarII.Shell.Models
             ViewParent.SelectionRect.X = intPoint.X;
             ViewParent.SelectionRect.Y = intPoint.Y;
             if (!IsSingleSelected())
-            {
                 AcquireSelectRect();
-            }
             return true;
         }
 
@@ -626,7 +639,7 @@ namespace SamSoarII.Shell.Models
                     LadderCanvas.Children.Add(SelectArea);
             }
         }
-        
+
         private LadderModes laddermode;
         public LadderModes LadderMode
         {
@@ -661,14 +674,8 @@ namespace SamSoarII.Shell.Models
         //private bool ismasked;
         public bool IsMasked
         {
-            get
-            {
-                return Core.IsMasked;
-            }
-            set
-            {
-                Core.IsMasked = value;
-            }
+            get { return Core.IsMasked; }
+            set { Core.IsMasked = value; }
         }
         
         #endregion
@@ -825,7 +832,7 @@ namespace SamSoarII.Shell.Models
                 ViewParent.MainScrollViewer.ScrollToHorizontalOffset(ViewParent.MainScrollViewer.HorizontalOffset - 80 * scaleY);
             else if (ViewParent.MainScrollViewer.ViewportWidth - point.X < 100 * scaleX)
                 ViewParent.MainScrollViewer.ScrollToHorizontalOffset(ViewParent.MainScrollViewer.HorizontalOffset + 80 * scaleX);
-            e.Handled = true;
+            //e.Handled = true;
         }
         protected override void OnDrop(DragEventArgs e)
         {

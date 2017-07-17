@@ -384,7 +384,7 @@ namespace SamSoarII
                 if (((e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None))
                 {
                     _threeHotKeys = ThreeHotKeyManager.GetHotKeys(ModifierKeys.Control, e.Key);
-                    if (_threeHotKeys.Count > 0)
+                    if (_threeHotKeys != null)
                     {
                         ifParent.SetUnderBarMessage(string.Format("(Ctrl+{0}){1}", e.Key, Properties.Resources.Key_Pressed));
                         ThreeHotKeyManager.IsWaitForSecondModifier = true;

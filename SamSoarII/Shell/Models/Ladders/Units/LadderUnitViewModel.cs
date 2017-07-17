@@ -217,6 +217,7 @@ namespace SamSoarII.Shell.Models
         public const int UPDATE_WIDTH = 0x04;
         public const int UPDATE_HEIGHT = 0x08;
         public const int UPDATE_PROPERTY = 0x10;
+        public const int UPDATE_STYLE = 0x20;
         public virtual void Update(int flags = UPDATE_ALL)
         {
             switch (flags)
@@ -237,12 +238,15 @@ namespace SamSoarII.Shell.Models
                     break;
                 case UPDATE_PROPERTY:
                     break;
+                case UPDATE_STYLE:
+                    break;
                 default:
                     Update(flags & UPDATE_TOP);
                     Update(flags & UPDATE_LEFT);
                     Update(flags & UPDATE_WIDTH);
                     Update(flags & UPDATE_HEIGHT);
                     Update(flags & UPDATE_PROPERTY);
+                    Update(flags & UPDATE_STYLE);
                     break;
             }
         }
