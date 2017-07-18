@@ -501,6 +501,24 @@ namespace SamSoarII
                 LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 e.Cancel = true;
             }
+            if (Project.IsModified)
+            {
+                var ret = IFParent.ShowSaveYesNoCancelDialog();
+                switch (ret)
+                {
+                    case LocalizedMessageResult.None:
+                    case LocalizedMessageResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                    case LocalizedMessageResult.Yes:
+                        IFParent.SaveProject();
+                        break;
+                    case LocalizedMessageResult.No:
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         protected override void OnClosed(EventArgs e)

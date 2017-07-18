@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Xceed.Wpf.AvalonDock.Global;
 
 namespace SamSoarII
 {
@@ -71,6 +72,7 @@ namespace SamSoarII
         public void AppFinalize()
         {
             SettingManager.Save();
+            LayoutSetting.Save();
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
