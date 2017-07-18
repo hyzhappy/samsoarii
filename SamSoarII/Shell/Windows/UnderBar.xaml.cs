@@ -156,12 +156,13 @@ namespace SamSoarII.Shell.Windows
                 if (_project != null)
                 {
                     _project.PropertyChanged -= OnProjectPropertyChanged;
+                    _project.Modified -= OnProjectModified;
                 }
                 if (project != null)
                 {
                     project.PropertyChanged += OnProjectPropertyChanged;
+                    project.Modified += OnProjectModified;
                     TB_Item4.Text = String.Format("{0:s}:{1:s}", Properties.Resources.Project, project.ProjName);
-                    ResetMessage();
                 }
             }
         }
@@ -214,6 +215,8 @@ namespace SamSoarII.Shell.Windows
 
                     }
                 }
+                if (project != null && !ifparent.IsWaitForKey)
+                    TB_Header.Text = Properties.Resources.Ready;
             }
         }
         
@@ -231,28 +234,6 @@ namespace SamSoarII.Shell.Windows
             TB_Item2.Text = "";
             TB_Item3.Text = "";
             TB_Item4.Text = "";
-        }
-
-        public void ResetMessage()
-        {
-            if (project == null) return;
-            if (ifparent.IsWaitForKey) return;
-            switch (status)
-            {
-                case UnderBarStatus.Normal:
-                    TB_Header.Text = project.IsModified ? Properties.Resources.Ready : Properties.Resources.Project_Saved;
-                    break;
-                case UnderBarStatus.Error:
-                    Status = UnderBarStatus.Normal;
-                    TB_Header.Text = project.IsModified ? Properties.Resources.Ready : Properties.Resources.Project_Saved;
-                    break;
-                case UnderBarStatus.Simulate:
-                    TB_Header.Text = Properties.Resources.MainWindow_Simulation;
-                    break;
-                case UnderBarStatus.Monitor:
-                    TB_Header.Text = Properties.Resources.MainWindow_Monitor;
-                    break;
-            }
         }
         
         public void Update(LadderDiagramViewModel view)
@@ -310,7 +291,7 @@ namespace SamSoarII.Shell.Windows
                     }
                     break;
             }
-            ResetMessage();
+            //ResetMessage();
         }
 
         public void Update(FuncBlockViewModel view)
@@ -319,7 +300,7 @@ namespace SamSoarII.Shell.Windows
             TB_Item3.Text = String.Format("{0:s}:{1:s}", Properties.Resources.FuncBlock, view.Core.Name);
             TB_Item2.Text = String.Format("({0:d},{1:d})", view.Line, view.Column);
             TB_Item1.Text = "";
-            ResetMessage();
+            //ResetMessage();
         }
 
         public void Update(ModbusTableViewModel view)
@@ -330,7 +311,7 @@ namespace SamSoarII.Shell.Windows
                 : String.Empty;
             TB_Item2.Text = "";
             TB_Item1.Text = "";
-            ResetMessage();
+            //ResetMessage();
         }
 
         #endregion
@@ -361,10 +342,25 @@ namespace SamSoarII.Shell.Windows
                 TB_Header.Text = e2.Message;
             }
         }
-        
+
         private void OnProjectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            ResetMessage();
+            if (e.PropertyName.Equals("IsModified") && project.IsModified == false)
+                TB_Header.Text = Properties.Resources.Project_Saved;
+        }
+
+        private void OnProjectModified(object sender, RoutedEventArgs e)
+        {
+            if (sender is LadderDiagramModel)
+                TB_Header.Text = Properties.Resources.Ladder_Changed;
+            else if (sender is FuncBlockModel)
+                TB_Header.Text = Properties.Resources.Func_Changed;
+            else if (sender is ModbusModel)
+                TB_Header.Text = Properties.Resources.ModBus_Changed;
+            else if (sender is ProjectPropertyParams)
+                TB_Header.Text = Properties.Resources.Project_Config_Changed;
+            else
+                TB_Header.Text = Properties.Resources.Project_Changed;
         }
 
         private void OnLadderSelectionChanged(object sender, RoutedEventArgs e)

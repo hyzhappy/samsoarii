@@ -170,12 +170,13 @@ namespace SamSoarII.Shell.Models
             {
                 case SelectStatus.Idle: break;
                 case SelectStatus.SingleSelected:
+                    isnavigatable = false;
                     if (type == LadderUnitModel.Types.VLINE)
                     {
                         LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X, _selectRect.Y];
                         if (vline == null && _selectRect.X > 0)
                         {
-                            Core.QuickInsertElement(type, _selectRect.Core);
+                            Core.QuickInsertElement(type, SelectRectOwner, _selectRect.X - 1, _selectRect.Y);
                             SelectRectDown();
                         }
                     }
@@ -184,6 +185,7 @@ namespace SamSoarII.Shell.Models
                         Core.QuickInsertElement(type, _selectRect.Core);
                         SelectRectRight();
                     }
+                    isnavigatable = true;
                     break;
                 case SelectStatus.MultiSelecting: break;
                 case SelectStatus.MultiSelected:
@@ -201,6 +203,7 @@ namespace SamSoarII.Shell.Models
             {
                 case SelectStatus.Idle: break;
                 case SelectStatus.SingleSelected:
+                    isnavigatable = false;
                     switch (type)
                     {
                         case LadderUnitModel.Types.HLINE:
@@ -210,7 +213,7 @@ namespace SamSoarII.Shell.Models
                             SelectRectRight();
                             break;
                         case LadderUnitModel.Types.VLINE:
-                            LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X, _selectRect.Y];
+                            LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X - 1, _selectRect.Y];
                             if (vline != null)
                             {
                                 Core.RemoveU(SelectRectOwner, new LadderUnitModel[] { vline });
@@ -218,6 +221,7 @@ namespace SamSoarII.Shell.Models
                             }
                             break;
                     }
+                    isnavigatable = true;
                     break;
                 case SelectStatus.MultiSelecting: break;
                 case SelectStatus.MultiSelected:
@@ -904,7 +908,13 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #region SelectRect Move & Modify
-        
+
+        private bool isnavigatable = true;
+        public bool IsNavigatable
+        {
+            get { return this.isnavigatable; }
+        }
+
         private void SelectRectUp()
         {
             if (SelectRectOwner != null)
@@ -1002,10 +1012,12 @@ namespace SamSoarII.Shell.Models
             }
             if (SelectRectOwner != null)
             {
+                isnavigatable = false;
                 SelectRectLeft();
                 if (expand)
                 {
                     PushLeft(_selectRect.X, _selectRect.Y);
+                    isnavigatable = true;
                     return;
                 }
                 if (_selectRect.Current != null)
@@ -1017,6 +1029,7 @@ namespace SamSoarII.Shell.Models
                 {
                     Core.QuickInsertElement(LadderUnitModel.Types.HLINE, _selectRect.Core);
                 }
+                isnavigatable = true;
             }
         }
         private void SelectRectRightWithLine(bool expand = false)
@@ -1030,10 +1043,12 @@ namespace SamSoarII.Shell.Models
             int y = _selectRect.Y;
             if (SelectRectOwner != null)
             {
+                isnavigatable = false;
                 if (expand)
                 {
                     SelectRectRight();
                     PushRight(_selectRect.X, _selectRect.Y);
+                    isnavigatable = true;
                     return;
                 }
                 if (_selectRect.Current != null)
@@ -1046,6 +1061,7 @@ namespace SamSoarII.Shell.Models
                     Core.QuickInsertElement(LadderUnitModel.Types.HLINE, _selectRect.Core);
                 }
                 SelectRectRight();
+                isnavigatable = true;
             }
         }
         private void SelectRectUpWithLine(bool expand = false)
@@ -1059,10 +1075,12 @@ namespace SamSoarII.Shell.Models
             int y = _selectRect.Y - 1;
             if (SelectRectOwner != null)
             {
+                isnavigatable = false;
                 if (expand)
                 {
                     PushUp(_selectRect.X, _selectRect.Y);
                     SelectRectUp();
+                    isnavigatable = true;
                     return;
                 }
                 if (y >= 0)
@@ -1077,6 +1095,7 @@ namespace SamSoarII.Shell.Models
                             Core.QuickInsertElement(LadderUnitModel.Types.VLINE, SelectRectOwner, x, y);
                     }
                 }
+                isnavigatable = true;
             }
         }
         private void SelectRectDownWithLine(bool expand = false)
@@ -1090,10 +1109,12 @@ namespace SamSoarII.Shell.Models
             int y = _selectRect.Y;
             if (SelectRectOwner != null)
             {
+                isnavigatable = false;
                 if (expand)
                 {
                     SelectRectDown();
                     PushDown(_selectRect.X, _selectRect.Y);
+                    isnavigatable = true;
                     return;
                 }
                 if (x >= 0)
@@ -1103,8 +1124,9 @@ namespace SamSoarII.Shell.Models
                         Core.RemoveSingleUnit(vline);
                     else
                         Core.QuickInsertElement(LadderUnitModel.Types.VLINE, SelectRectOwner, x, y);
-                    //SelectRectDown();
+                    SelectRectDown();
                 }
+                isnavigatable = true;
             }
         }
         

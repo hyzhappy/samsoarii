@@ -10,7 +10,7 @@
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="{x:Static gb:GlobalSetting.WholeWidth}" x:Name="LadderNetworkUserControl"
-             >
+             AllowDrop="True">
     <UserControl.Resources>
         <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="FontData" ObjectType="{x:Type mg:FontManager}" MethodName="GetTitle"/>
         <util:BoolToVisibilityConverter2 x:Uid="util:BoolToVisibilityConverter2_1" x:Key="converter"></util:BoolToVisibilityConverter2>

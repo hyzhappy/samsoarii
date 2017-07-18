@@ -110,7 +110,7 @@ namespace SamSoarII.Shell.Models
             get { return core; }
             set { Core = (LadderNetworkModel)value; }
         }
-        public InteractionFacade IFParent { get { return core.Parent.Parent.Parent; } }
+        public InteractionFacade IFParent { get { return core?.Parent?.Parent?.Parent; } }
 
         private void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -118,7 +118,12 @@ namespace SamSoarII.Shell.Models
             {
                 case "RowCount":
                     if (IsSingleSelected())
-                        ViewParent.SelectionRect.Y = Math.Min(ViewParent.SelectionRect.Y, RowCount - 1);
+                        if (ViewParent.SelectionRect.Y >= RowCount) ViewParent.SelectionRect.Y = RowCount - 1;
+                    if (IsSelectAreaMode || IsSelectAllMode)
+                    {
+                        if (SelectAreaFirstY >= RowCount) SelectAreaFirstY = RowCount - 1;
+                        if (SelectAreaSecondY >= RowCount) SelectAreaSecondY = RowCount - 1;
+                    }
                     LadderCanvas.Height = RowCount * HeightUnit;
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
                     break;

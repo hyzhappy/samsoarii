@@ -15,7 +15,7 @@ namespace SamSoarII.Core.Models
     {
         #region Resources
 
-        public enum Types { BOOL, WORD, UWORD, DWORD, UDWORD, FLOAT, BCD, STRING, NULL};
+        public enum Types { BOOL, WORD, UWORD, DWORD, UDWORD, BCD, FLOAT, STRING, NULL};
         public enum Bases { X, Y, S, M, C, T, D, CV, TV, AI, AO, V, Z, K, H, NULL};
 
         public readonly static string[] NameOfTypes = { "BOOL", "WORD", "UWORD", "DWORD", "UDWORD", "FLOAT", "BCD", "STRING", "NULL" };

@@ -216,6 +216,7 @@ namespace SamSoarII
         {
             CloseProject();
             _CreateProject(name, filename);
+            PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ready));
         }
 
         private void _CreateProject(string name, string filename)
@@ -262,16 +263,16 @@ namespace SamSoarII
                 ShowSaveProjectDialog();
             else
                 mdProj.Save();
-            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
-                UnderBarStatus.Normal, Properties.Resources.Project_Saved));
+            //PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+            //    UnderBarStatus.Normal, Properties.Resources.Project_Saved));
         }
 
         public void SaveAsProject(string filename, bool isexception = false)
         {
             mdProj.Save(filename);
             ProjectFileManager.Update(filename, filename);
-            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
-                UnderBarStatus.Normal, Properties.Resources.Project_Saved));
+            //PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+            //    UnderBarStatus.Normal, Properties.Resources.Project_Saved));
         }
         
         public void CloseProject()

@@ -11,6 +11,7 @@ using System.Collections.Specialized;
 using System.IO;
 using SamSoarII.Utility;
 using SamSoarII.Shell.Windows;
+using System.Windows;
 
 namespace SamSoarII.Core.Models
 {
@@ -47,7 +48,7 @@ namespace SamSoarII.Core.Models
             }
             ismodified = false;
         }
-        
+
         public void Dispose()
         {
             foreach (LadderDiagramModel diagram in diagrams)
@@ -94,13 +95,20 @@ namespace SamSoarII.Core.Models
         public bool IsModified
         {
             get { return this.ismodified; }
-            set
+            private set
             {
                 if (ismodified == value) return;
                 this.ismodified = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("IsModified"));
             }
         }
+        public event RoutedEventHandler Modified = delegate { };
+        public void InvokeModify(IModel source)
+        {
+            IsModified = true;
+            Modified(source, new RoutedEventArgs());
+        }
+
 
         #region Models
 

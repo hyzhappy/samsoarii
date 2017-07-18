@@ -15,6 +15,7 @@ namespace SamSoarII.Core.Models
         public MonitorElement(MonitorTable _parent, ValueStore _store)
         {
             parent = _parent;
+            datatype = (int)(_store.Type);
             Store = _store;
         }
 
@@ -72,9 +73,8 @@ namespace SamSoarII.Core.Models
                     store.PropertyChanged += OnStorePropertyChanged;
                     IFParent.MNGSimu.Aborted += OnSimulateAborted;
                     IFParent.MNGComu.Aborted += OnMonitorAborted;
-                    datatype = (int)(store.Type);
+                    //datatype = (int)(store.Type);
                     CurrentValue = "???";
-
                 }
                 if (_store != null && _store.RefNum == 0) _store.Parent.Stores.Remove(_store);
             }
@@ -89,13 +89,7 @@ namespace SamSoarII.Core.Models
                 case "V": ibase = ValueModel.Bases.V; break;
                 case "Z": ibase = ValueModel.Bases.Z; break;
             }
-            switch (ShowType)
-            {
-                case "BOOL": type = ValueModel.Types.BOOL; break;
-                case "WORD": case "UWORD": case "BCD": type = ValueModel.Types.WORD; break;
-                case "DWORD": case "UDWORD": type = ValueModel.Types.DWORD; break;
-                case "FLOAT": type = ValueModel.Types.FLOAT; break;
-            }
+            type = (ValueModel.Types)(datatype);
             ValueStore _store = vinfo.Stores.Where(vs => vs.Type == type && vs.Intra == ibase && vs.IntraOffset == _intraaddr).FirstOrDefault();
             if (_store == null)
             {

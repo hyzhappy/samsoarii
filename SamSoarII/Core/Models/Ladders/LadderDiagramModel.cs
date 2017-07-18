@@ -224,7 +224,7 @@ namespace SamSoarII.Core.Models
         #endregion
 
         #region Commands
-
+        
         public const int CMDTYPE_ReplaceNetwork = 0x01;
         public const int CMDTYPE_ReplaceRow = 0x02;
         public const int CMDTYPE_ReplaceUnit = 0x04;
@@ -307,7 +307,6 @@ namespace SamSoarII.Core.Models
             {
                 foreach (LadderUnitModel unit in units) Update(unit);
             }
-
             public void Update(LadderNetworkModel network)
             {
                 switch (status)
@@ -329,7 +328,6 @@ namespace SamSoarII.Core.Models
             {
                 foreach (LadderNetworkModel network in networks) Update(network);
             }
-
             public void Update(LadderNetworkModel _network, int _x1, int _x2, int _y1, int _y2)
             {
                 switch (status)
@@ -361,7 +359,6 @@ namespace SamSoarII.Core.Models
                         break;
                 }
             }
-
             public void Select(InteractionFacade ifparent)
             {
                 switch (status)
@@ -501,32 +498,23 @@ namespace SamSoarII.Core.Models
                 cmd.Unit.InstArgs = cmd.OldProperties.ToArray();
                 area.Update(cmd.Unit);
             }
-            if ((cmd.Type & CMDTYPE_MoveUnit) == 0)
-            {
-                if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0 
-                 && cmd.OldUnits.Count() == 0 && cmd.NewUnits.Count() == 1 
-                 && cmd.NewUnits[0].Shape == LadderUnitModel.Shapes.VLine)
-                {
-                    IFParent.Navigate(cmd.Network, cmd.NewUnits[0].X + 1, cmd.NewUnits[0].Y);
-                }
-                else if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0
-                 && cmd.OldUnits.Count() == 1 && cmd.NewUnits.Count() == 0
-                 && cmd.OldUnits[0].Shape == LadderUnitModel.Shapes.VLine)
-                {
-                    IFParent.Navigate(cmd.Network, cmd.OldUnits[0].X + 1, cmd.OldUnits[0].Y + 1);
-                }
-                else
-                {
-                    area.Select(IFParent);
-                }
-            }
+            if (View != null && View.IsNavigatable)
+                area.Select(IFParent);
             redos.Push(cmd);
-            Parent.IsModified = true;
+            Parent.InvokeModify(this);
         }
         public void Redo()
         {
             if (!CanRedo) return;
             Command cmd = redos.Pop();
+            if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
+            {
+                if (cmd.Network.RowCount - cmd.OldRows.Count() + cmd.NewRows.Count() <= 0) return;
+            }
+            if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
+            {
+                if (Children.Where(n => !n.IsMasked).Count() - cmd.OldNetworks.Count() + cmd.NewNetworks.Count() <= 0) return;
+            }
             LadderNetworkModel net = null;
             RelativeArea area = new RelativeArea();
             int i1 = 0, i2 = 0;
@@ -640,27 +628,10 @@ namespace SamSoarII.Core.Models
                 }
                 area.Update(cmd.NewNetworks);
             }
-            if ((cmd.Type & CMDTYPE_MoveUnit) == 0)
-            {
-                if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0
-                 && cmd.OldUnits.Count() == 0 && cmd.NewUnits.Count() == 1
-                 && cmd.NewUnits[0].Shape == LadderUnitModel.Shapes.VLine)
-                {
-                    IFParent.Navigate(cmd.Network, cmd.NewUnits[0].X + 1, cmd.NewUnits[0].Y + 1);
-                }
-                else if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0
-                 && cmd.OldUnits.Count() == 1 && cmd.NewUnits.Count() == 0
-                 && cmd.OldUnits[0].Shape == LadderUnitModel.Shapes.VLine)
-                {
-                    IFParent.Navigate(cmd.Network, cmd.OldUnits[0].X + 1, cmd.OldUnits[0].Y);
-                }
-                else
-                {
-                    area.Select(IFParent);
-                }
-            }
+            if (View != null && View.IsNavigatable)
+                area.Select(IFParent);
             undos.Push(cmd);
-            Parent.IsModified = true;
+            Parent.InvokeModify(this);
         }
         private void Execute(int _type, object _target, IList<object> _olds, IList<object> _news)
         {
@@ -889,6 +860,7 @@ namespace SamSoarII.Core.Models
 
         public void AddSingleUnit(LadderUnitModel unit, LadderNetworkModel net, bool cover = false)
         {
+            if (unit.X < 0 || unit.Y >= GlobalSetting.LadderXCapacity || unit.Y < 0) return;
             LadderUnitModel old = null;
             switch (unit.Shape)
             {
@@ -915,6 +887,7 @@ namespace SamSoarII.Core.Models
                     ReplaceU(net, old != null ? new LadderUnitModel[] { old } : new LadderUnitModel[] { }, new LadderUnitModel[] { unit });
                     break;
                 default:
+                    if (unit.X == GlobalSetting.LadderXCapacity - 1) return;
                     old = net.Children[unit.X, unit.Y];
                     if (old != null && !cover) return;
                     ReplaceU(net, old != null ? new LadderUnitModel[] { old } : new LadderUnitModel[] { }, new LadderUnitModel[] { unit });
