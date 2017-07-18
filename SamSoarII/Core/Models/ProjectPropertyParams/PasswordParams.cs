@@ -67,7 +67,7 @@ namespace SamSoarII.Core.Models
         public string PWDownload
         {
             get { return this.pwDownload; }
-            set { this.PWDownload = value; PropertyChanged(this, new PropertyChangedEventArgs("PWDownload")); }
+            set { pwDownload = value; PropertyChanged(this, new PropertyChangedEventArgs("PWDownload")); }
         }
 
         private string pwMonitor;

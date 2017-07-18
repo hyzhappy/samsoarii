@@ -38,10 +38,10 @@
         </Grid.ColumnDefinitions>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static properties:Resources.Select_Element_Range}">
             <ListBox x:Name="LB_Range" SelectionMode="Extended" ItemsSource="{Binding RangeListCollection}" 
-                     MouseLeftButtonDown="LB_Range_MouseLeftButtonDown"
-                     SelectionChanged="LB_Range_SelectionChanged">
+                     MouseLeftButtonDown="LB_Range_MouseLeftButtonDown">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="LBI_MouseLeftButtonDown"></EventSetter>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="Blue"/>
@@ -62,7 +62,7 @@
         </GroupBox>
         <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
             <TextBlock Margin="6,8">搜索:</TextBlock>
-            <TextBox x:Name="TB_Search" Margin="5,6,0,6" Width="120"></TextBox>
+            <TextBox x:Name="TB_Search" Margin="5,6,0,6" Width="120" TextChanged="OnTextChanged"></TextBox>
         </StackPanel>
         <ToggleButton x:Name="BT_Detail" Grid.Row="0" Grid.Column="3" Content="{x:Static properties:Resources.Displays_Details}"></ToggleButton>
         <Button x:Name="BT_Clear" Grid.Row="0" Grid.Column="4" Content="{x:Static properties:Resources.Clear_Selected}"></Button>
@@ -78,28 +78,28 @@
                   CanUserResizeColumns="False"
                   RowBackground="White" AlternatingRowBackground="AliceBlue">
             <DataGrid.Resources>
-                <Style x:Uid="Style_2" TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
-                    <Setter x:Uid="Setter_8" Property="TextWrapping" Value="Wrap"></Setter>
-                    <Setter x:Uid="Setter_9" Property="FontSize" Value="16"></Setter>
-                    <Setter x:Uid="Setter_10" Property="FontFamily" Value="Arial"></Setter>
+                <Style TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
+                    <Setter Property="TextWrapping" Value="Wrap"></Setter>
+                    <Setter Property="FontSize" Value="16"></Setter>
+                    <Setter Property="FontFamily" Value="Arial"></Setter>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.RowDetailsTemplate>
-                <DataTemplate x:Uid="DataTemplate_1">
-                    <Border x:Uid="Border_4" MaxHeight="90">
-                        <ScrollViewer x:Uid="ScrollViewer_2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <local:ElementStackPanel x:Uid="elementStackPanel" x:Name="elementStackPanel" Grid.Row="1" ItemsSource="{Binding Units}">
+                <DataTemplate>
+                    <Border MaxHeight="90">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <local:ElementStackPanel x:Name="elementStackPanel" Grid.Row="1" ItemsSource="{Binding Units}">
                                 <local:ElementStackPanel.Resources>
-                                    <Style x:Uid="Style_4" TargetType="TextBlock">
+                                    <Style TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <Trigger x:Uid="Trigger_3" Property="IsMouseOver" Value="True">
-                                                <Setter x:Uid="Setter_12" Property="FontWeight" Value="Heavy"></Setter>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="FontWeight" Value="Heavy"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
-                                        <Setter x:Uid="Setter_13" Property="FontSize" Value="14"></Setter>
-                                        <Setter x:Uid="Setter_14" Property="Margin" Value="4,5,-2,0"></Setter>
-                                        <Setter x:Uid="Setter_15" Property="FontFamily" Value="Arial"></Setter>
-                                        <EventSetter x:Uid="EventSetter_1" Event="MouseLeftButtonDown" Handler="NavigateMouseLeftButtonDown"></EventSetter>
+                                        <Setter Property="FontSize" Value="14"></Setter>
+                                        <Setter Property="Margin" Value="4,5,-2,0"></Setter>
+                                        <Setter Property="FontFamily" Value="Arial"></Setter>
+                                        <EventSetter Event="MouseLeftButtonDown" Handler="NavigateMouseLeftButtonDown"></EventSetter>
                                     </Style>
                                 </local:ElementStackPanel.Resources>
                             </local:ElementStackPanel>
@@ -108,11 +108,11 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Uid="elementName" x:Name="elementName" CanUserSort="False" IsReadOnly="True" Width="1.1*" MinWidth="80" Header="{x:Static properties:Resources.Element_Name}" Binding="{Binding Name}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Name="elementName" CanUserSort="False" IsReadOnly="True" Width="1.1*" MinWidth="80" Header="{x:Static properties:Resources.Element_Name}" Binding="{Binding Name}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Uid="elementComment" x:Name="elementComment" CanUserSort="False" IsReadOnly="False" Width="1.5*" MinWidth="200" Header="{x:Static properties:Resources.Element_Comment}" Binding="{Binding Comment}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Name="elementComment" CanUserSort="False" IsReadOnly="False" Width="1.5*" MinWidth="200" Header="{x:Static properties:Resources.Element_Comment}" Binding="{Binding Comment}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Uid="elementAlias" x:Name="elementAlias" CanUserSort="False" IsReadOnly="False" Width="1.3*" MinWidth="120" Header="{x:Static properties:Resources.Element_Alias}" Binding="{Binding Alias}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
+                <DataGridTextColumn x:Name="elementAlias" CanUserSort="False" IsReadOnly="False" Width="1.3*" MinWidth="120" Header="{x:Static properties:Resources.Element_Alias}" Binding="{Binding Alias}" ElementStyle="{StaticResource DataGridTextColumnStyle}">
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>

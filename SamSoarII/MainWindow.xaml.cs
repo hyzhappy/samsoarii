@@ -384,7 +384,7 @@ namespace SamSoarII
                 if (((e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None))
                 {
                     _threeHotKeys = ThreeHotKeyManager.GetHotKeys(ModifierKeys.Control, e.Key);
-                    if (_threeHotKeys != null)
+                    if (_threeHotKeys.Count > 0)
                     {
                         ifParent.SetUnderBarMessage(string.Format("(Ctrl+{0}){1}", e.Key, Properties.Resources.Key_Pressed));
                         ThreeHotKeyManager.IsWaitForSecondModifier = true;
@@ -456,6 +456,16 @@ namespace SamSoarII
         #endregion
 
         #region Event Handler
+
+        private void RegionalSetting(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void About(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {

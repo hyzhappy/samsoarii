@@ -22,10 +22,10 @@ namespace SamSoarII.Shell.Dialogs
     {
         public PasswordSettingWidget(PasswordParams _core)
         {
-            Initialized += PasswordSettingWidget_Initialized;
             InitializeComponent();
             core = _core;
             DataContext = core;
+            Initialized += PasswordSettingWidget_Initialized;
         }
 
         public void Dispose()

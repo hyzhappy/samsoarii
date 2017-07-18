@@ -381,8 +381,8 @@ namespace SamSoarII.Core.Models
 
         private Stack<Command> undos = new Stack<Command>();
         private Stack<Command> redos = new Stack<Command>();
-        public bool CanUndo { get { return View != null && View.LadderMode == LadderModes.Edit && undos.Count() > 0; } }
-        public bool CanRedo { get { return View != null && View.LadderMode == LadderModes.Edit && redos.Count() > 0; } }
+        public bool CanUndo { get { return View != null && View.LadderMode == LadderModes.Edit && undos != null && undos.Count() > 0; } }
+        public bool CanRedo { get { return View != null && View.LadderMode == LadderModes.Edit && redos != null && redos.Count() > 0; } }
         public void Undo()
         {
             if (!CanUndo) return;

@@ -77,6 +77,7 @@ namespace SamSoarII.Shell.Windows
                 }
                 if (HasUsed) colle = colle.Where(vi => vi.Values.Count() > 0);
                 if (HasCommnet) colle = colle.Where(vi => vi.Comment.Length > 0);
+                colle = colle.Where(x => { return x.Name.StartsWith(TB_Search.Text.ToUpper()); }).ToList();
                 return colle.ToArray();
             }
         }
@@ -95,11 +96,19 @@ namespace SamSoarII.Shell.Windows
 
         public event IWindowEventHandler Post = delegate { };
         
-        private void LB_Range_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LBI_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var lbi = (ListBoxItem)sender;
+            lbi.IsSelected = !lbi.IsSelected;
+            if (!lbi.IsSelected) LB_Range.SelectedItem = null;
+            else LB_Range.SelectedItem = lbi.Content;
+            PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
+            e.Handled = true;
+        }
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
         }
-        
         private void LB_Range_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             LB_Range.SelectedItem = null;

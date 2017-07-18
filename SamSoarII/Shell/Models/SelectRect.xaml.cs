@@ -201,7 +201,7 @@ namespace SamSoarII.Shell.Models
 
         #region Shell
 
-        public LadderNetworkViewModel ViewParent { get { return core.Parent.View; } }
+        public LadderNetworkViewModel ViewParent { get { return core?.Parent?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
         private bool isCommentMode;

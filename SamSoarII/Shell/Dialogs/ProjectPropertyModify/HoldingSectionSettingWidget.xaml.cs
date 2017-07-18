@@ -45,7 +45,7 @@ namespace SamSoarII.Shell.Dialogs
 
         public void Dispose()
         {
-            PropertyChanged = null;
+            PropertyChanged = delegate { };
             core = null;
             DataContext = null;
             MStackPanel1.DataContext = null;

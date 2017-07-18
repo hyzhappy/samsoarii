@@ -255,14 +255,14 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Language}" Margin="0,-5,0,0">
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_Chinese}"/>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_English}"/>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_Chinese}" Click="RegionalSetting"/>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_English}" Click="RegionalSetting"/>
             </MenuItem>
             <MenuItem Header="{x:Static properties:Resources.MainWindow_Help}" Margin="0,-5,0,0">
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_View_Help}"></MenuItem>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Online_Upgrade}"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="{x:Static properties:Resources.MainWindow_About}"></MenuItem>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_About}" Click="About"></MenuItem>
             </MenuItem>
         </Menu>
         <ToolBarTray x:Name="TB_Main" DockPanel.Dock="Top" Height="25">

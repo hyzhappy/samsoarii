@@ -72,7 +72,7 @@ namespace SamSoarII.Core.Models
         public FilterParams PARAFilter { get { return this.paraFilter; } }
 
         private HoldingSectionParams paraHolding;
-        public HoldingSectionParams PARAHolding { get { return this.PARAHolding; } }
+        public HoldingSectionParams PARAHolding { get { return this.paraHolding; } }
 
         private AnalogQuantityParams paraAnalog;
         public AnalogQuantityParams PARAAnalog { get { return this.paraAnalog; } }
