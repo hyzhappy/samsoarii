@@ -40,6 +40,7 @@ namespace SamSoarII
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             InitializeAvalonDock();
             InitializeHotKey();
+            App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
         }
 
         public void Dispose()
@@ -74,6 +75,7 @@ namespace SamSoarII
 
         #region AvalonDock 
 
+        private List<LayoutAnchorable> anchors;
         public LayoutAnchorable LAProj { get { return LA_Proj; } }
         public LayoutAnchorable LAFind { get { return LA_Find; } }
         public LayoutAnchorable LAReplace { get { return LA_Replace; } }
@@ -94,6 +96,7 @@ namespace SamSoarII
         private void InitializeAvalonDock()
         {
             //DockManager.Theme = new VS2010Theme();
+            anchors = new List<LayoutAnchorable>();
             LayoutSetting.Load();
             InitializeAvalonDock(LAProj);
             InitializeAvalonDock(LAFind);
@@ -134,7 +137,14 @@ namespace SamSoarII
             LAnch.FloatingWidth = floatsize[2];
             LAnch.FloatingHeight = floatsize[3];
 
+            anchors.Add(LAnch);
             LAnch.Hide();
+        }
+
+        public void HideAllDock()
+        {
+            foreach (LayoutAnchorable anchor in anchors)
+                anchor.Hide();
         }
 
         #endregion
@@ -377,6 +387,7 @@ namespace SamSoarII
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
+            //if (e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Insert || e.Key == Key.Delete || e.Key == Key.Return) return;
             if (_threeHotKeys.Count == 0)
             {
                 if (KeyInputHelper.IsModifier(e.Key))
@@ -386,7 +397,7 @@ namespace SamSoarII
                 if (((e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None))
                 {
                     _threeHotKeys = ThreeHotKeyManager.GetHotKeys(ModifierKeys.Control, e.Key);
-                    if (_threeHotKeys.Count > 0)
+                    if (_threeHotKeys != null && _threeHotKeys.Count() > 0)
                     {
                         ifParent.SetUnderBarMessage(string.Format("(Ctrl+{0}){1}", e.Key, Properties.Resources.Key_Pressed));
                         ThreeHotKeyManager.IsWaitForSecondModifier = true;
@@ -500,6 +511,22 @@ namespace SamSoarII
             {
                 LocalizedMessageBox.Show(Properties.Resources.Item_Rename, LocalizedMessageIcon.Warning);
                 e.Cancel = true;
+            }
+            if (Project?.IsModified == true)
+            {
+                LocalizedMessageResult mbret = ifParent.ShowSaveYesNoCancelDialog();
+                switch (mbret)
+                {
+                    case LocalizedMessageResult.Yes:
+                        ifParent.SaveProject();
+                        break;
+                    case LocalizedMessageResult.No:
+                        break;
+                    case LocalizedMessageResult.Cancel:
+                    default:
+                        e.Cancel = true;
+                        return;
+                }
             }
         }
 
@@ -645,7 +672,16 @@ namespace SamSoarII
                 ifParent.MNGSimu.Pause();
             if (e.Command == GlobalCommand.SimuStopCommand)
                 ifParent.MNGSimu.Abort();
-
+            if (e.Command == GlobalCommand.ChangeToChineseCommand)
+                ifParent.ShowLanaEnsureDialog(true);
+            if (e.Command == GlobalCommand.ChangeToEnglishCommand)
+                ifParent.ShowLanaEnsureDialog(false);
+            if (e.Command == GlobalCommand.ShowHelpDocumentCommand)
+                ifParent.ShowHelpDocument();
+            if (e.Command == GlobalCommand.InsertRowCommand)
+                ifParent.InsertRow();
+            if (e.Command == GlobalCommand.DeleteRowCommand)
+                ifParent.RemoveRow();
         }
 
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)
@@ -698,8 +734,34 @@ namespace SamSoarII
             e.CanExecute = ifParent != null ? ifParent.CanExecute(e) : false;
         }
 
+        private void OnInstShortCutClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button)
+            {
+                Button button = (Button)(sender);
+                switch (button.Tag.ToString())
+                {
+                    case "200": ifParent.QuickInsertElement(LadderUnitModel.Types.LD); break;
+                    case "201": ifParent.QuickInsertElement(LadderUnitModel.Types.LDIM); break;
+                    case "202": ifParent.QuickInsertElement(LadderUnitModel.Types.LDI); break;
+                    case "203": ifParent.QuickInsertElement(LadderUnitModel.Types.LDIIM); break;
+                    case "204": ifParent.QuickInsertElement(LadderUnitModel.Types.LDP); break;
+                    case "205": ifParent.QuickInsertElement(LadderUnitModel.Types.LDF); break;
+                    case "206": ifParent.QuickInsertElement(LadderUnitModel.Types.MEP); break;
+                    case "207": ifParent.QuickInsertElement(LadderUnitModel.Types.MEF); break;
+                    case "208": ifParent.QuickInsertElement(LadderUnitModel.Types.INV); break;
+                    case "209": ifParent.QuickInsertElement(LadderUnitModel.Types.OUT); break;
+                    case "210": ifParent.QuickInsertElement(LadderUnitModel.Types.OUTIM); break;
+                    case "100": ifParent.QuickInsertElement(LadderUnitModel.Types.HLINE); break;
+                    case "101": ifParent.QuickInsertElement(LadderUnitModel.Types.VLINE); break;
+                    case "10":  ifParent.QuickRemoveElement(LadderUnitModel.Types.HLINE); break;
+                    case "11":  ifParent.QuickRemoveElement(LadderUnitModel.Types.VLINE); break;
+                }
+            }
+        }
+
         #endregion
-        
+
     }
 
     public class MainWindowEventArgs : IWindowEventArgs

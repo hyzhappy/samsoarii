@@ -47,7 +47,7 @@ namespace SamSoarII.Shell.Dialogs
         private void showMessageDialog(int index)
         {
             ContentGrid.Children.Clear();
-            if (index >= 0 && _widget[index].Parent == null)
+            if (_widget[index].Parent == null)
             {
                 ContentGrid.Children.Add(_widget[index]);
             }

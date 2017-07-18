@@ -943,6 +943,7 @@ namespace SamSoarII.Core.Models
             }
             if (View != null) View.Dispose();
             Parent = null;
+            oldparent = null;
             children = null;
         }
 
@@ -977,6 +978,11 @@ namespace SamSoarII.Core.Models
 
         #region Number
 
+        private LadderNetworkModel oldparent;
+        public LadderNetworkModel OldParent
+        {
+            get { return this.oldparent; }
+        }
         private LadderNetworkModel parent;
         public LadderNetworkModel Parent
         {
@@ -986,7 +992,9 @@ namespace SamSoarII.Core.Models
             }
             set
             {
-                if (ValueManager != null) ValueManager.Remove(this); 
+                if (parent == value) return; 
+                if (ValueManager != null) ValueManager.Remove(this);
+                this.oldparent = parent;
                 this.parent = value;
                 if (ValueManager != null) ValueManager.Add(this);
             }

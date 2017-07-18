@@ -253,6 +253,9 @@
     <Compile Include="Shell\Dialogs\CommunicationSettingDialog.xaml.cs">
       <DependentUpon>CommunicationSettingDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Dialogs\LanaEnsureDialog.xaml.cs">
+      <DependentUpon>LanaEnsureDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Dialogs\QuickAddElementDialog.xaml.cs">
       <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
     </Compile>
@@ -709,6 +712,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\CommunicationSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\LanaEnsureDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

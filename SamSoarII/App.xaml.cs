@@ -22,9 +22,12 @@ namespace SamSoarII
         /// 用于双击文件启动程序时保存的路径
         /// </summary>
         public static string AutoOpenFileFullPath;
+        public static SplashScreen splashScreen;
 
         public App()
         {
+            splashScreen = new SplashScreen(@"Resources\Image\SplashScreen.png");
+            splashScreen.Show(false, true);
             InitializeComponent();
             SettingManager.Load();
             AllResourceManager.Initialize();

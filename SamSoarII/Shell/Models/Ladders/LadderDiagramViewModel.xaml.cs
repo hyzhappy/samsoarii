@@ -163,11 +163,118 @@ namespace SamSoarII.Shell.Models
                     break;
             }
         }
+        
+        public void QuickInsertElement(LadderUnitModel.Types type)
+        {
+            switch (SelectionStatus)
+            {
+                case SelectStatus.Idle: break;
+                case SelectStatus.SingleSelected:
+                    if (type == LadderUnitModel.Types.VLINE)
+                    {
+                        LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X, _selectRect.Y];
+                        if (vline == null && _selectRect.X > 0)
+                        {
+                            Core.QuickInsertElement(type, _selectRect.Core);
+                            SelectRectDown();
+                        }
+                    }
+                    else
+                    {
+                        Core.QuickInsertElement(type, _selectRect.Core);
+                        SelectRectRight();
+                    }
+                    break;
+                case SelectStatus.MultiSelecting: break;
+                case SelectStatus.MultiSelected:
+                    LadderNetworkModel net = SelectStartNetwork.Core;    
+                    int x = SelectStartNetwork.SelectAreaFirstX;
+                    int y = SelectStartNetwork.SelectAreaFirstY;
+                    Core.QuickInsertElement(type, net, x, y);
+                    break;
+            }
+        }
+
+        public void QuickRemoveElement(LadderUnitModel.Types type)
+        {
+            switch (SelectionStatus)
+            {
+                case SelectStatus.Idle: break;
+                case SelectStatus.SingleSelected:
+                    switch (type)
+                    {
+                        case LadderUnitModel.Types.HLINE:
+                            LadderUnitModel hline = SelectRectOwner.Children[_selectRect.X, _selectRect.Y];
+                            if (hline != null)
+                                Core.RemoveU(SelectRectOwner, new LadderUnitModel[] { hline });
+                            SelectRectRight();
+                            break;
+                        case LadderUnitModel.Types.VLINE:
+                            LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X, _selectRect.Y];
+                            if (vline != null)
+                            {
+                                Core.RemoveU(SelectRectOwner, new LadderUnitModel[] { vline });
+                                SelectRectDown();
+                            }
+                            break;
+                    }
+                    break;
+                case SelectStatus.MultiSelecting: break;
+                case SelectStatus.MultiSelected:
+                    switch (type)
+                    {
+                        case LadderUnitModel.Types.HLINE:
+                            IEnumerable<LadderUnitModel> hlines = SelectStartNetwork.GetSelectedHLines();
+                            foreach (LadderNetworkViewModel netview in Core.Children.Select(c => c.View))
+                                hlines = hlines.Concat(netview.GetSelectedHLines());
+                            Core.RemoveU(SelectStartNetwork.Core, hlines);
+                            break;
+                        case LadderUnitModel.Types.VLINE:
+                            IEnumerable<LadderUnitModel> vlines = SelectStartNetwork.GetSelectedVLines();
+                            foreach (LadderNetworkViewModel netview in Core.Children.Select(c => c.View))
+                                vlines = vlines.Concat(netview.GetSelectedVLines());
+                            Core.RemoveU(SelectStartNetwork.Core, vlines);
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        public void InsertRow()
+        {
+            switch (SelectionStatus)
+            {
+                case SelectStatus.SingleSelected:
+                    Core.AddR(SelectRectOwner, _selectRect.Y);
+                    break;
+                case SelectStatus.MultiSelected: 
+                    if (SelectStartNetwork != null && SelectStartNetwork.IsSelectAreaMode)
+                        Core.AddR(SelectStartNetwork.Core, 
+                            Math.Max(SelectStartNetwork.SelectAreaFirstY, SelectStartNetwork.SelectAreaSecondY) + 1);
+                    break;
+            }
+        }
+
+        public void RemoveRow()
+        {
+            switch (SelectionStatus)
+            {
+                case SelectStatus.SingleSelected:
+                    Core.RemoveR(SelectRectOwner, _selectRect.Y);
+                    break;
+                case SelectStatus.MultiSelected:
+                    if (SelectStartNetwork != null && SelectStartNetwork.IsSelectAreaMode)
+                        Core.RemoveR(SelectStartNetwork.Core, 
+                            Math.Min(SelectStartNetwork.SelectAreaFirstY, SelectStartNetwork.SelectAreaSecondY), 
+                            Math.Max(SelectStartNetwork.SelectAreaFirstY, SelectStartNetwork.SelectAreaSecondY));
+                    break;
+            }
+        }
 
         #endregion
 
         #region Shell
-        
+
         public ProjectViewModel ViewParent { get { return core?.Parent.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
@@ -2645,7 +2752,7 @@ namespace SamSoarII.Shell.Models
         
         private void CutCopyCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2657,7 +2764,7 @@ namespace SamSoarII.Shell.Models
         }
         private void PasteCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2668,29 +2775,48 @@ namespace SamSoarII.Shell.Models
         }
         private void UndoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
+            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
             e.CanExecute = Core.CanUndo;
-            e.CanExecute &= laddermode == LadderModes.Edit;
-            e.CanExecute &= !IFParent.IsWaitForKey;
         }
         private void RedoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
+            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
             e.CanExecute = Core.CanRedo;
-            e.CanExecute &= laddermode == LadderModes.Edit;
-            e.CanExecute &= !IFParent.IsWaitForKey;
         }
         private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !IFParent.IsWaitForKey;
-            e.CanExecute &= laddermode == LadderModes.Edit;
+            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = true;
         }
         private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = LadderMode == LadderModes.Edit;
-            e.CanExecute &= !IFParent.IsWaitForKey;
+            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = true;
         }
         private void SelectAllCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !IFParent.IsWaitForKey;
+            if (IFParent == null || IFParent.IsWaitForKey)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = true;
         }
 
         #endregion

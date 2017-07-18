@@ -479,6 +479,8 @@ namespace SamSoarII.Core.Models
         /// <param name="end"></param>
         public virtual void Build(string text, int start, int end, int offset = 0)
         {
+            // 设置修改标记
+            Model.Parent.IsModified = true;
             // 括号栈
             Stack<char> bracketstack = new Stack<char>();
             // 匹配到的左括号

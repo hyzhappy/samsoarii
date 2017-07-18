@@ -431,8 +431,19 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
             {
-                cmd.Network.Remove(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                cmd.Network.RemoveV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                if (cmd.NewUnits.Where(u => u.Parent != cmd.Network).Count() > 0)
+                {
+                    foreach (LadderNetworkModel network in children)
+                    {
+                        network.Remove(cmd.NewUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                        network.RemoveV(cmd.NewUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                    }
+                }
+                else
+                {
+                    cmd.Network.Remove(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                    cmd.Network.RemoveV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                }
             }
             if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
             {
@@ -456,8 +467,19 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
             { 
-                cmd.Network.Add(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                cmd.Network.AddV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                if (cmd.OldUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
+                {
+                    foreach (LadderNetworkModel network in children)
+                    {
+                        network.Add(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                        network.AddV(cmd.OldUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                    }
+                }
+                else
+                {
+                    cmd.Network.Add(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                    cmd.Network.AddV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                }
                 area.Update(cmd.OldUnits);
             }
             if ((cmd.Type & CMDTYPE_ChangeComments) != 0)
@@ -526,8 +548,19 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
             {
-                cmd.Network.Remove(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                cmd.Network.RemoveV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                if (cmd.OldUnits.Where(u => u.Parent != cmd.Network).Count() > 0)
+                {
+                    foreach (LadderNetworkModel network in children)
+                    {
+                        network.Remove(cmd.OldUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                        network.RemoveV(cmd.OldUnits.Where((_unit) => { return _unit.Parent == network && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                    }
+                }
+                else
+                {
+                    cmd.Network.Remove(cmd.OldUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                    cmd.Network.RemoveV(cmd.OldUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                }
             }
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
@@ -565,8 +598,19 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
             {
-                cmd.Network.Add(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                cmd.Network.AddV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                if (cmd.NewUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
+                {
+                    foreach (LadderNetworkModel network in children)
+                    {
+                        network.Add(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                        network.AddV(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                    }
+                }
+                else
+                {
+                    cmd.Network.Add(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
+                    cmd.Network.AddV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                }
                 area.Update(cmd.NewUnits);
             }
             if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
@@ -925,7 +969,7 @@ namespace SamSoarII.Core.Models
         {
             RemoveU(unit.Parent, new LadderUnitModel[] { unit });
         }
-
+        
         public void QuickInsertElement(LadderUnitModel.Types type, SelectRectCore rect)
         {
             QuickInsertElement(type, rect.Parent, rect.X, rect.Y);
