@@ -152,7 +152,7 @@ namespace SamSoarII.Shell.Windows
                 case ValueModel.Types.DWORD:
                 case ValueModel.Types.UDWORD:
                 case ValueModel.Types.FLOAT:
-                    return element.AddrType.Equals("CV") && element.StartAddr >= 200 ? 1 : 2;
+                    return element.AddrType.Equals("CV") && element.StartAddr < 200 ? 1 : 2;
                 default:
                     return 1;
             }
@@ -164,11 +164,12 @@ namespace SamSoarII.Shell.Windows
             {
                 dialog.EnsureButtonClick += (sender1, e1) =>
                 {
-                    for (int i = 0; i < dialog.AddNums; )
+                    for (int i = 0,j = 0; j < dialog.AddNums; j++)
                     {
                         MonitorElement element = new MonitorElement(table, 
                             dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr + i), dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr));
-                        table.Children.Add(element);
+                        if(!table.Contains(element))
+                            table.Children.Add(element);
                         i += GetSpan(element);
                     }
                     dialog.Close();
@@ -207,6 +208,11 @@ namespace SamSoarII.Shell.Windows
                                 if (!table.IsVisited)
                                 {
                                     table.Children.Add(new MonitorElement(table, value.Store));
+                                    if (value.Intra != ValueModel.Bases.NULL)
+                                    {
+                                        MonitorElement ele = new MonitorElement(table,1,value.Intra.ToString(),value.IntraOffset,string.Empty,0);
+                                        if (!table.Contains(ele)) table.Children.Add(ele);
+                                    }
                                     table.IsVisited = true;
                                 }
                             }

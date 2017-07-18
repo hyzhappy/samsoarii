@@ -55,7 +55,16 @@ namespace SamSoarII.Core.Models
                     element.Dispose();
             ChildrenChanged(this, e);
         }
-
+        public bool Contains(MonitorElement element)
+        {
+            foreach (var child in Children)
+            {
+                if (child.AddrType == element.AddrType && child.StartAddr == element.StartAddr
+                    && child.IsIntrasegment == element.IsIntrasegment && child.IntrasegmentAddr == element.IntrasegmentAddr
+                    && child.IntrasegmentType == element.IntrasegmentType) return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Shell
