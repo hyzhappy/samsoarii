@@ -92,10 +92,9 @@ namespace SamSoarII
         public LayoutAnchorControl LACElemList { get { return LA_ElemList?.AnchorControl; } }
         public LayoutAnchorControl LACElemInit { get { return LA_ElemInit?.AnchorControl; } }
         public LayoutAnchorControl LACBreakpoint { get { return LA_Breakpoint?.AnchorControl; } }
-        
+
         private void InitializeAvalonDock()
         {
-            //DockManager.Theme = new VS2010Theme();
             anchors = new List<LayoutAnchorable>();
             LayoutSetting.Load();
             InitializeAvalonDock(LAProj);
