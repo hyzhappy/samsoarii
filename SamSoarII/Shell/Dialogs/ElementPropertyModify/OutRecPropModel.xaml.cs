@@ -139,7 +139,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             get
             {
-                return Core.Type == LadderUnitModel.Types.CALLM ? count : base.Count;
+                return Core.Type == LadderUnitModel.Types.CALLM ? this.count : base.Count;
             }
             set
             {

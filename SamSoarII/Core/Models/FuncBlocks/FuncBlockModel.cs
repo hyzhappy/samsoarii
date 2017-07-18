@@ -262,7 +262,7 @@ namespace SamSoarII.Core.Models
             assign = new FuncBlock_Assignment(this, Root, "uint_32* CVDoubleWord;");
             assign = new FuncBlock_Assignment(this, Root, "uint_16* TVWord;");
             InvokePropertyChanged("Funcs");
-            Parent.IsModified = true;
+            Parent.InvokeModify(this);
         }
 
         #endregion
