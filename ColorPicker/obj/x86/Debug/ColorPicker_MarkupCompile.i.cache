@@ -4,7 +4,7 @@
 library
 C#
 .cs
-C:\vsworkspace\samsoarii_simple\samsoarii\ColorPicker\obj\x86\Debug\
+Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\
 ColorPicker
 none
 false
@@ -16,5 +16,5 @@ DEBUG;TRACE
 132056062586
 Themes\Generic.xaml;
 
-False
+True
 

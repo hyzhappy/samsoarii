@@ -83,7 +83,7 @@ namespace SamSoarII.Core.Models
 
         #region Shell
 
-        public IViewModel View { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IViewModel View { get { throw new NotImplementedException(); } set { throw new NotImplementedException(); } }
         
         private ProjectTreeViewItem ptvitem;
         public ProjectTreeViewItem PTVItem
