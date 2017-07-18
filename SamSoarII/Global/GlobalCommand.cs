@@ -48,6 +48,11 @@ namespace SamSoarII.Global
         public static RoutedUICommand BrpoOutCommand { get; set; }
         public static RoutedUICommand EleListOpenCommand { get; set; }
         public static RoutedUICommand EleInitializeCommand { get; set; }
+        public static RoutedUICommand ChangeToChineseCommand { get; set; }
+        public static RoutedUICommand ChangeToEnglishCommand { get; set; }
+        public static RoutedUICommand ShowHelpDocumentCommand { get; set; }
+        public static RoutedUICommand OnlineHelpCommand { get; set; }
+        public static RoutedUICommand ShowAboutCommand { get; set; }
 
         static GlobalCommand()
         {
@@ -124,6 +129,16 @@ namespace SamSoarII.Global
             commands.Add(BrpoNowCommand);
             BrpoOutCommand = new RoutedUICommand();
             commands.Add(BrpoOutCommand);
+            ChangeToChineseCommand = new RoutedUICommand();
+            commands.Add(ChangeToChineseCommand);
+            ChangeToEnglishCommand = new RoutedUICommand();
+            commands.Add(ChangeToEnglishCommand);
+            ShowHelpDocumentCommand = new RoutedUICommand();
+            commands.Add(ShowHelpDocumentCommand);
+            OnlineHelpCommand = new RoutedUICommand();
+            commands.Add(OnlineHelpCommand);
+            ShowAboutCommand = new RoutedUICommand();
+            commands.Add(ShowAboutCommand);
         }
     }
 }

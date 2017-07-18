@@ -129,7 +129,6 @@ namespace SamSoarII.Shell.Windows
                 }
             }
         }
-
         public Brush FontColor
         {
             get
@@ -142,6 +141,31 @@ namespace SamSoarII.Shell.Windows
             }
         }
 
+        private ProjectModel project;
+        public ProjectModel Project
+        {
+            get
+            {
+                return this.project;
+            }
+            set
+            {
+                if (project == value) return;
+                ProjectModel _project = project;
+                project = value;
+                if (_project != null)
+                {
+                    _project.PropertyChanged -= OnProjectPropertyChanged;
+                }
+                if (project != null)
+                {
+                    project.PropertyChanged += OnProjectPropertyChanged;
+                    TB_Item4.Text = String.Format("{0:s}:{1:s}", Properties.Resources.Project, project.ProjName);
+                    ResetMessage();
+                }
+            }
+        }
+        
         private object current;
         public object Current
         {
@@ -199,6 +223,7 @@ namespace SamSoarII.Shell.Windows
 
         public void Reset()
         {
+            Project = null;
             Current = null;
             Status = UnderBarStatus.Normal;
             TB_Header.Text = "";
@@ -210,14 +235,16 @@ namespace SamSoarII.Shell.Windows
 
         public void ResetMessage()
         {
+            if (project == null) return;
+            if (ifparent.IsWaitForKey) return;
             switch (status)
             {
                 case UnderBarStatus.Normal:
-                    TB_Header.Text = Properties.Resources.Ready;
+                    TB_Header.Text = project.IsModified ? Properties.Resources.Ready : Properties.Resources.Project_Saved;
                     break;
                 case UnderBarStatus.Error:
-                    TB_Header.Text = Properties.Resources.Ready;
                     Status = UnderBarStatus.Normal;
+                    TB_Header.Text = project.IsModified ? Properties.Resources.Ready : Properties.Resources.Project_Saved;
                     break;
                 case UnderBarStatus.Simulate:
                     TB_Header.Text = Properties.Resources.MainWindow_Simulation;
@@ -227,13 +254,7 @@ namespace SamSoarII.Shell.Windows
                     break;
             }
         }
-
-        public void Update(ProjectModel project)
-        {
-            TB_Item4.Text = String.Format("{0:s}:{1:s}", Properties.Resources.Project, project.ProjName);
-            ResetMessage();
-        }
-
+        
         public void Update(LadderDiagramViewModel view)
         {
             Current = view;
@@ -251,10 +272,16 @@ namespace SamSoarII.Shell.Windows
                     break;
                 case SelectStatus.MultiSelecting:
                 case SelectStatus.MultiSelected:
+                    LadderNetworkViewModel network = view.SelectStartNetwork;
+                    if (network == null)
+                    {
+                        TB_Item2.Text = Properties.Resources.MainWindow_Select_All;
+                        TB_Item1.Text = "";
+                        break;
+                    }
                     switch (view.CrossNetState)
                     {
                         case CrossNetworkState.NoCross:
-                            LadderNetworkViewModel network = view.SelectStartNetwork;
                             TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, network.Core.ID);
                             TB_Item1.Text = String.Format("(X1={0:d},X2={1:d},Y1={2:d},Y2={3:d})",
                                 Math.Min(network.SelectAreaFirstX, network.SelectAreaSecondX),
@@ -333,6 +360,11 @@ namespace SamSoarII.Shell.Windows
                 Status = e2.Status;
                 TB_Header.Text = e2.Message;
             }
+        }
+        
+        private void OnProjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            ResetMessage();
         }
 
         private void OnLadderSelectionChanged(object sender, RoutedEventArgs e)

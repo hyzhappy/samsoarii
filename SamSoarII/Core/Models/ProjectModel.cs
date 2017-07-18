@@ -93,7 +93,12 @@ namespace SamSoarII.Core.Models
         public bool IsModified
         {
             get { return this.ismodified; }
-            set { this.ismodified = value; }
+            set
+            {
+                if (ismodified == value) return;
+                this.ismodified = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("IsModified"));
+            }
         }
 
         #region Models

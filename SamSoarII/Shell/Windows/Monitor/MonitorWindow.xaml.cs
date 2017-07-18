@@ -152,7 +152,7 @@ namespace SamSoarII.Shell.Windows
                 case ValueModel.Types.DWORD:
                 case ValueModel.Types.UDWORD:
                 case ValueModel.Types.FLOAT:
-                    return element.AddrType.Equals("CV") && element.StartAddr < 200 ? 1 : 2;
+                    return element.AddrType.Equals("CV") && element.StartAddr >= 200 ? 1 : 2;
                 default:
                     return 1;
             }
@@ -211,7 +211,7 @@ namespace SamSoarII.Shell.Windows
                                     if (value.Intra != ValueModel.Bases.NULL)
                                     {
                                         MonitorElement ele = new MonitorElement(table,1,value.Intra.ToString(),value.IntraOffset,string.Empty,0);
-                                        if (!table.Contains(ele)) table.Children.Add(ele);
+                                        if (!table.Contains(ele)) table.Children.Add(ele); else ele.Dispose();
                                     }
                                     table.IsVisited = true;
                                 }
@@ -243,6 +243,7 @@ namespace SamSoarII.Shell.Windows
                                dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr), dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr));
                         int id = TableElements.IndexOf(element);
                         TableElements[id] = newelement;
+                        dialog.Close();
                     }
                     else
                     {

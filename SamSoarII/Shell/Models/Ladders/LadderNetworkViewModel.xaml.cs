@@ -431,6 +431,24 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
+        
+        public IEnumerable<LadderUnitModel> GetSelectedHLines()
+        {
+            int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
+            int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
+            int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
+            int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
+            return Core.Children.SelectRange(xBegin, xEnd, yBegin, yEnd).Where(
+                (ele) => { return ele.Shape == LadderUnitModel.Shapes.HLine; });
+        }
+        public IEnumerable<LadderUnitModel> GetSelectedVLines()
+        {
+            int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
+            int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
+            int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
+            int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
+            return Core.VLines.SelectRange(xBegin, xEnd, yBegin, yEnd);
+        }
 
         #endregion
 

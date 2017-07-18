@@ -23,6 +23,7 @@ using SamSoarII.Core.Simulate;
 using System.Diagnostics;
 using SamSoarII.Core.Helpers;
 using SamSoarII.Core.Communication;
+using SamSoarII.HelpDocument;
 
 namespace SamSoarII
 {
@@ -205,7 +206,7 @@ namespace SamSoarII
             tcMain.ViewMode = MainTabControl.VIEWMODE_LADDER;
             tcMain.ShowItem(mdProj.MainDiagram.Tab);
             tvProj.ReinitializeComponent();
-            barStatus.Update(mdProj);
+            barStatus.Project = mdProj;
             wndEInit.UpdateElements();
             wndMoni.Core = mdProj.Monitor;
             wndMain.LACProj.Show();
@@ -298,6 +299,7 @@ namespace SamSoarII
         {
             if (mdProj == null) return;
             WaitForThreadAbort();
+            wndMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndMain.HideAllDock(); });
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
             tvProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tvProj.Reset(); });
             barStatus.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { barStatus.Reset(); });
@@ -1308,8 +1310,33 @@ namespace SamSoarII
             mngComu.IsEnable = false;
         }
 
-        #endregion
+        public void ShowLanaEnsureDialog(bool ischinese)
+        {
+            using (LanaEnsureDialog dialog = new LanaEnsureDialog())
+            {
+                dialog.EnsureButtonClick += (sender1, e1) =>
+                {
+                    GlobalSetting.IsOpenLSetting = true;
+                    GlobalSetting.LanagArea = ischinese ? "zh-Hans" : "en";
+                    dialog.Close();
+                };
+                dialog.ShowDialog();
+            }
+        }
 
+        HelpDocWindow helpDocWindow = null;
+        public void ShowHelpDocument()
+        {
+            if (helpDocWindow == null)
+            {
+                helpDocWindow = new HelpDocWindow();
+                helpDocWindow.Closed += (sender, e) => { helpDocWindow = null; };
+                helpDocWindow.Show();
+            }
+        }
+
+        #endregion
+        
         #region HotKey System
 
         /// <summary>
@@ -1326,6 +1353,34 @@ namespace SamSoarII
         public void SetUnderBarMessage(string message)
         {
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, barStatus.Status, message));
+        }
+
+        #endregion
+
+        #region Ladder Modify
+
+        public void QuickInsertElement(LadderUnitModel.Types type)
+        {
+            if (CurrentLadder == null) return;
+            CurrentLadder.QuickInsertElement(type);
+        }
+
+        public void QuickRemoveElement(LadderUnitModel.Types type)
+        {
+            if (CurrentLadder == null) return;
+            CurrentLadder.QuickRemoveElement(type);
+        }
+
+        public void InsertRow()
+        {
+            if (CurrentLadder == null) return;
+            CurrentLadder.InsertRow();
+        }
+
+        public void RemoveRow()
+        {
+            if (CurrentLadder == null) return;
+            CurrentLadder.RemoveRow();
         }
 
         #endregion
@@ -1454,7 +1509,12 @@ namespace SamSoarII
             if (e.Command != ApplicationCommands.New
              && e.Command != ApplicationCommands.Open
              && e.Command != GlobalCommand.UploadCommand
-             && e.Command != GlobalCommand.ShowOptionDialogCommand)
+             && e.Command != GlobalCommand.ShowOptionDialogCommand
+             && e.Command != GlobalCommand.ChangeToChineseCommand
+             && e.Command != GlobalCommand.ChangeToEnglishCommand
+             && e.Command != GlobalCommand.ShowHelpDocumentCommand
+             && e.Command != GlobalCommand.OnlineHelpCommand
+             && e.Command != GlobalCommand.ShowAboutCommand)
             {
                 ret &= mdProj != null && vmdProj != null;
                 if (!ret) return ret;

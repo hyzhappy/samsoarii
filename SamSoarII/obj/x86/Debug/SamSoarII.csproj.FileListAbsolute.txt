@@ -664,3 +664,5 @@ Y:\Projects\SamSoarII-NEW\SamSoarII\obj\x86\Debug\SamSoarII.Properties.Resources
 Y:\Projects\SamSoarII-NEW\SamSoarII\obj\x86\Debug\SamSoarII.Properties.Resources.zh-Hans.resources
 Y:\Projects\SamSoarII-NEW\SamSoarII\obj\x86\Debug\SamSoarII.csproj.GenerateResource.Cache
 Y:\Projects\SamSoarII-NEW\SamSoarII\obj\x86\Debug\zh-Hans\SamSoarII.resources.dll
+C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII\obj\x86\Debug\Shell\Dialogs\LanaEnsureDialog.g.cs
+C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII\obj\x86\Debug\Shell\Dialogs\LanaEnsureDialog.baml
