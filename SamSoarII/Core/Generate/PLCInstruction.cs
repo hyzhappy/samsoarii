@@ -128,7 +128,7 @@ namespace SamSoarII.Core.Generate
             {
                 hasconvert = false;
                 // 解析给定的文本，生成类型和四个参数
-                this.text = value;
+                this.text = value.ToUpper();
                 args = text.Split(' ');
                 this.type = args[0];
                 this.enbit = "";

@@ -27,7 +27,7 @@ using SamSoarII.HelpDocument;
 
 namespace SamSoarII
 {
-    public class InteractionFacade : IDisposable
+    public class InteractionFacade : IDisposable,INotifyPropertyChanged
     {
         public InteractionFacade(MainWindow _wndMain)
         {
@@ -140,7 +140,7 @@ namespace SamSoarII
         #region Project
 
         private ProjectModel mdProj;
-        public ProjectModel MDProj { get { return this.mdProj; } }
+        public ProjectModel MDProj { get { return this.mdProj; } set { mdProj = value; PropertyChanged(this, new PropertyChangedEventArgs("MDProj")); } }
 
         private ProjectViewModel vmdProj;
         public ProjectViewModel VMDProj { get { return this.vmdProj; } }
@@ -221,7 +221,7 @@ namespace SamSoarII
 
         private void _CreateProject(string name, string filename)
         {
-            mdProj = new ProjectModel(this, name);
+            MDProj = new ProjectModel(this, name);
             InitializeProject();
             if (filename != null) SaveAsProject(filename);
         }
@@ -246,13 +246,13 @@ namespace SamSoarII
         {
             try
             {
-                mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
+                MDProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
                 ProjectFileManager.Update(filename, filename);
                 InitializeProject();
             }
             catch (Exception e)
             {
-                mdProj = null;
+                MDProj = null;
                 LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
             }
         }
@@ -308,7 +308,7 @@ namespace SamSoarII
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); mdProj.Dispose(); });
             vmdProj = null;
             wndMoni.Core = null;
-            mdProj = null;
+            MDProj = null;
             mngValue.Initialize();
             GC.Collect();
         }
@@ -1390,6 +1390,7 @@ namespace SamSoarII
         #region Event Handler
 
         public event IWindowEventHandler PostIWindowEvent = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnReceiveIWindowEvent(IWindow sender, IWindowEventArgs e)
         {

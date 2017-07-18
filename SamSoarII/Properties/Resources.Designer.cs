@@ -5047,6 +5047,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Simulate 的本地化字符串。
+        /// </summary>
+        public static string Simulate {
+            get {
+                return ResourceManager.GetString("Simulate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Closing simulation... 的本地化字符串。
         /// </summary>
         public static string Simulate_Closing {

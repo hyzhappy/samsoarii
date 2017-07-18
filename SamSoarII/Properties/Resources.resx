@@ -1980,4 +1980,7 @@
   <data name="Not_Command" xml:space="preserve">
     <value>is not a command!</value>
   </data>
+  <data name="Simulate" xml:space="preserve">
+    <value>Simulate</value>
+  </data>
 </root>

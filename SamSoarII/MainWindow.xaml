@@ -452,15 +452,15 @@
             <ToolBar>
                 <ComboBox SelectedIndex="0" Margin="0, -12, 0, 0" Width="80" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock>Simulate</TextBlock>
+                    <TextBlock Text="{x:Static properties:Resources.Simulate}"/>
                 </ComboBox>
                 <ComboBox x:Name="TBCB_Device" SelectedIndex="0" Margin="0, -12, 0, 0" Width="120" Height="24"  
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock x:Uid="TextBlock_2">FGs_16MT_A</TextBlock>
+                    <TextBlock Text="{Binding SelectDevice.Type}"/>
                 </ComboBox>
                 <ComboBox x:Name="TBCB_ProjectName" SelectedIndex="0" Margin="0, -12, 0, 0" Width="150" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock x:Uid="TextBlock_3">ProjectName</TextBlock>
+                    <TextBlock Text="{Binding MDProj.ProjName}"/>
                 </ComboBox>
             </ToolBar>
         </ToolBarTray>

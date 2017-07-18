@@ -1,5 +1,6 @@
 ﻿using SamSoarII.Core.Models;
 using SamSoarII.Global;
+using SamSoarII.PLCDevice;
 using SamSoarII.Shell.Dialogs;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Utility;
@@ -37,6 +38,8 @@ namespace SamSoarII
             InitializeComponent();
             ifParent = new InteractionFacade(this);
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
+            TBCB_Device.DataContext = PLCDeviceManager.GetPLCDeviceManager();
+            TBCB_ProjectName.DataContext = ifParent;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             InitializeAvalonDock();
             InitializeHotKey();
