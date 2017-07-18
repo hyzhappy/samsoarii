@@ -1,5 +1,6 @@
 ﻿using SamSoarII.Core.Models;
 using SamSoarII.Shell.Dialogs;
+using SamSoarII.Shell.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -151,6 +152,11 @@ namespace SamSoarII.Shell.Windows
                     PTVI_Ladders,
                     ProjectTreeViewItem.TYPE_LADDERS,
                     PTVIH_Insts[i]);
+            }
+            for (int i = 0; i < (int)(LadderUnitModel.Types.VLINE); i++)
+            {
+                int id = (int)(LadderUnitModel.OutlineOfTypes[i]);
+                CreatePTVItem(PTVI_Insts[id], ProjectTreeViewItem.TYPE_INSTRUCTION, (LadderUnitModel.Types)i, false);
             }
 
             foreach (LadderDiagramModel ldmodel in Project.Diagrams)
@@ -673,6 +679,237 @@ namespace SamSoarII.Shell.Windows
             {
                 Rebuild(ptvitem, (FuncBlockModel)(ptvitem.RelativeObject));
             }
+        }
+
+        #endregion
+
+        #region Drag & Drop
+
+        private ProjectTreeViewItem dragitem = null;
+        public ProjectTreeViewItem DragItem
+        {
+            get { return this.dragitem; }
+            private set
+            {
+                if (value == null)
+                {
+                    this.dragitem = null;
+                    return;
+                }
+                if (ifParent.VMDProj.LadderMode != LadderModes.Edit) return;
+                if (value.IsCritical) return;
+                if (value.IsRenaming) return;
+                if ((value.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
+                {
+                    LadderNetworkModel lnmodel = (LadderNetworkModel)(value.RelativeObject);
+                    LadderDiagramModel ldmodel = lnmodel.Parent;
+                    if (ldmodel.Children.Count() <= 1) return;
+                }
+                this.dragitem = value;
+                DragDrop.DoDragDrop(TV_Main, dragitem, DragDropEffects.Move);
+            }
+        }
+
+        private ProjectTreeViewItem currentitem = null;
+        public ProjectTreeViewItem CurrentItem
+        {
+            get { return this.currentitem; }
+            private set
+            {
+                //if (currentitem == value) return;
+                if (currentitem != null)
+                {
+                    currentitem.Underline.Visibility = Visibility.Hidden;
+                    currentitem.Background = Brushes.Transparent;
+                }
+                this.currentitem = value;
+                if (currentitem != null && dragitem != null
+                 && currentitem != dragitem)
+                {
+                    if ((dragitem.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
+                    {
+                        switch (currentitem.Flags & 0xf)
+                        {
+                            case ProjectTreeViewItem.TYPE_NETWORK:
+                                currentitem.Underline.Visibility = Visibility.Visible;
+                                break;
+                            case ProjectTreeViewItem.TYPE_ROUTINE:
+                                currentitem.Underline.Visibility = Visibility.Visible;
+                                break;
+                        }
+                        return;
+                    }
+                    if (dragitem.IsAncestorOf(currentitem))
+                        return;
+                    foreach (ProjectTreeViewItem ptvitem in currentitem.Items)
+                    {
+                        if (ptvitem.Text.Equals(dragitem.Text))
+                        {
+                            return;
+                        }
+                    }
+                    switch (dragitem.Flags & 0xf)
+                    {
+                        case ProjectTreeViewItem.TYPE_ROUTINE:
+                        case ProjectTreeViewItem.TYPE_ROUTINEFLODER:
+                            if ((currentitem.Flags & 0xf) != ProjectTreeViewItem.TYPE_ROUTINEFLODER)
+                                return;
+                            break;
+                        case ProjectTreeViewItem.TYPE_FUNCBLOCK:
+                        case ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER:
+                            if ((currentitem.Flags & 0xf) != ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER)
+                                return;
+                            break;
+                        default:
+                            return;
+                    }
+                    currentitem.Background = Brushes.BlueViolet;
+                }
+            }
+        }
+
+        private ProjectTreeViewItem GetPTVIParent(object obj)
+        {
+            if (obj is FrameworkElement)
+            {
+                FrameworkElement fele = (FrameworkElement)obj;
+                while (!(fele is ProjectTreeViewItem)
+                    && (fele.Parent is FrameworkElement))
+                {
+                    fele = (FrameworkElement)(fele.Parent);
+                }
+                if (fele is ProjectTreeViewItem)
+                {
+                    return (ProjectTreeViewItem)fele;
+                }
+            }
+            return null;
+        }
+
+        private ProjectTreeView GetThisParent(object obj)
+        {
+            if (obj is FrameworkElement)
+            {
+                FrameworkElement fele = (FrameworkElement)obj;
+                while (fele != this
+                    && (fele.Parent is FrameworkElement))
+                {
+                    fele = (FrameworkElement)(fele.Parent);
+                }
+                if (fele == this)
+                {
+                    return this;
+                }
+            }
+            return null;
+        }
+
+        private void OnPTVIMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                DragItem = null;
+                return;
+            }
+            CurrentItem = GetPTVIParent(e.OriginalSource);
+            if (CurrentItem == null) return;
+            if (DragItem == null && TV_Main.SelectedItem != null
+             && TV_Main.SelectedItem == CurrentItem)
+            {
+                DragItem = CurrentItem;
+            }
+        }
+
+        private void OnPTVIDragOver(object sender, DragEventArgs e)
+        {
+            CurrentItem = GetPTVIParent(e.OriginalSource);
+        }
+
+        private void TV_Main_Drop(object sender, DragEventArgs e)
+        {
+            if (CurrentItem == null
+             || CurrentItem.Background != Brushes.BlueViolet
+             && CurrentItem.Underline.Visibility != Visibility.Visible)
+            {
+                DragItem = null;
+                return;
+            }
+            if ((DragItem.Flags & 0xf) == ProjectTreeViewItem.TYPE_NETWORK)
+            {
+                LadderNetworkModel lnmodel_old = (LadderNetworkModel)(DragItem.RelativeObject);
+                LadderNetworkModel lnmodel_new = null;
+                LadderDiagramModel ldmodel_old = lnmodel_old.Parent;
+                LadderDiagramModel ldmodel_new = null;
+                if (lnmodel_old.View != null)
+                {
+                    lnmodel_old.View.ReleaseSelectRect();
+                    lnmodel_old.View.IsSelectAreaMode = false;
+                }
+                XElement xele = new XElement("Network");
+                lnmodel_old.Save(xele);
+                switch (CurrentItem.Flags & 0xf)
+                {
+                    case ProjectTreeViewItem.TYPE_ROUTINE:
+                        ldmodel_new = (LadderDiagramModel)(CurrentItem.RelativeObject);
+                        lnmodel_new = new LadderNetworkModel(null, 0);
+                        lnmodel_new.Load(xele);
+                        lnmodel_new.ID = 0;
+                        break;
+                    case ProjectTreeViewItem.TYPE_NETWORK:
+                        LadderNetworkModel prev = (LadderNetworkModel)(CurrentItem.RelativeObject);
+                        ldmodel_new = prev.Parent;
+                        lnmodel_new = new LadderNetworkModel(null, 0);
+                        lnmodel_new.Load(xele);
+                        lnmodel_new.ID = prev.ID + 1;
+                        break;
+                    default:
+                        DragItem = null;
+                        return;
+                }
+                ProjectTreeViewEventArgs _e = null;
+                if (ldmodel_new == ldmodel_old)
+                {
+                    ldmodel_old.ReplaceN(
+                        new LadderNetworkModel[] { lnmodel_old },
+                        new LadderNetworkModel[] { lnmodel_old },
+                        new int[] { lnmodel_new.ID - (lnmodel_new.ID > lnmodel_old.ID ? 1 : 0)});
+                }
+                else
+                {
+                    ldmodel_old.RemoveN(lnmodel_old.ID, lnmodel_old);
+                    ldmodel_new.AddN(lnmodel_new.ID, lnmodel_new);
+                }
+            }
+            else
+            {
+                ((ProjectTreeViewItem)(DragItem.Parent)).Items.Remove(DragItem);
+                if (CurrentItem.IsOrder)
+                {
+                    for (int i = 0; i < CurrentItem.Items.Count; i++)
+                    {
+                        if (DragItem.CompareTo((ProjectTreeViewItem)(CurrentItem.Items[i])) <= 0)
+                        {
+                            CurrentItem.Items.Insert(i, DragItem);
+                            break;
+                        }
+                    }
+                }
+                if (!CurrentItem.Items.Contains(DragItem))
+                {
+                    CurrentItem.Items.Add(DragItem);
+                }
+                CurrentItem.IsExpanded = true;
+                DragItem.IsSelected = true;
+            }
+            DragItem = null;
+            CurrentItem = CurrentItem;
+        }
+
+        private void TV_Main_DragLeave(object sender, DragEventArgs e)
+        {
+            CurrentItem = null;
+            if (e.Source == TV_Main)
+                ifParent.WNDMain.LACProj.Hide();
         }
 
         #endregion

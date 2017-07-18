@@ -91,11 +91,15 @@ namespace SamSoarII.Shell.Models
                         net.Inst.View = new InstructionNetworkViewModel(net.Inst);
                         ViewThread.Add(net.Inst.View);
                     }
+                    if (net.Inst.View.Parent is StackPanel)
+                    {
+                        ((StackPanel)(net.Inst.View.Parent)).Children.Remove(net.Inst.View);
+                    }
                     MainStack.Children.Insert(e.NewStartingIndex, net.Inst.View);
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     net = (LadderNetworkModel)(e.OldItems[0]);
-                    MainStack.Children.RemoveAt(e.OldStartingIndex);
+                    MainStack.Children.Remove(net.Inst.View);
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     net = (LadderNetworkModel)(e.NewItems[0]);

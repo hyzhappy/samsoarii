@@ -351,7 +351,8 @@ namespace SamSoarII.Shell.Windows
                                     IconSource = "/Resources/Image/TreeViewIcon/Instruction_Output2.png";
                                     break;
                             }
-                            switch (LadderUnitModel.NameOfTypes[(int)type])
+                            Text = LadderUnitModel.NameOfTypes[(int)type];
+                            switch (Text)
                             {
                                 case "LD": Text = "-|　|-"; SubText = Properties.Resources.MainWindow_Normally_Open_Contact; break;
                                 case "LDIM": Text = "-|｜|-"; SubText = Properties.Resources.MainWindow_Immediately_Open; break;
@@ -383,6 +384,9 @@ namespace SamSoarII.Shell.Windows
                                 case "SETIM": Text = "-(SI) "; SubText = Properties.Resources.Set_Immediately; break;
                                 case "RST": Text = "-(Ｒ) "; SubText = Properties.Resources.Reset_Coil; break;
                                 case "RSTIM": Text = "-(RI) "; SubText = Properties.Resources.Reset_Immediately; break;
+                                case "MEP": Text = "- ↑ -"; SubText = Properties.Resources.MainWindow_Rising_Edge_Of_Result; break;
+                                case "MEF": Text = "- ↓ -"; SubText = Properties.Resources.MainWindow_Falling_Edge_Of_Result; break;
+                                case "INV": Text = "- ／ -"; SubText = Properties.Resources.MainWindow_Reversed_Result; break;
                                 case "ALT": SubText = Properties.Resources.Alternating_Output; break;
                                 case "ALTP": SubText = Properties.Resources.Pulse_Alternation; break;
                                 case "WTOD": SubText = Properties.Resources.Word_To_DWord; break;
