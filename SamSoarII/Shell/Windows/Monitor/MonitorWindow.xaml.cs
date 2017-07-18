@@ -205,15 +205,19 @@ namespace SamSoarII.Shell.Windows
                             {
                                 LadderDiagramModel diagram = value.Parent.Parent.Parent;
                                 MonitorTable table = dict[diagram.Name];
-                                if (!table.IsVisited)
+                                MonitorElement ele1 = new MonitorElement(table, value.Store);
+                                if (!table.Contains(ele1))
                                 {
-                                    table.Children.Add(new MonitorElement(table, value.Store));
+                                    table.Children.Add(ele1);
                                     if (value.Intra != ValueModel.Bases.NULL)
                                     {
                                         MonitorElement ele = new MonitorElement(table,1,value.Intra.ToString(),value.IntraOffset,string.Empty,0);
                                         if (!table.Contains(ele)) table.Children.Add(ele); else ele.Dispose();
                                     }
-                                    table.IsVisited = true;
+                                }
+                                else
+                                {
+                                    ele1.Dispose();
                                 }
                             }
                         }

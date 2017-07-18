@@ -500,11 +500,6 @@ namespace SamSoarII.Shell.Models
                 });
                 if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
             }
-            if (IsSelectAreaMode)
-                Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
-                {
-                    LadderCanvas.Children.Add(SelectArea);
-                });
         }
 
         public void UpdateFullLoadProgress()

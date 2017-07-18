@@ -106,7 +106,7 @@ namespace SamSoarII.Shell.Models
                 Update();
             }
         }
-        public InteractionFacade IFParent { get { return core?.Parent.Parent; } }
+        public InteractionFacade IFParent { get { return core?.Parent?.Parent; } }
         
         IModel IViewModel.Core
         {

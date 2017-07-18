@@ -45,6 +45,7 @@ namespace SamSoarII.Core.Models
                 monitor = new MonitorModel(this);
                 paraProj = new ProjectPropertyParams(this);
             }
+            ismodified = false;
         }
         
         public void Dispose()

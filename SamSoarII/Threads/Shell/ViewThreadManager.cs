@@ -13,7 +13,7 @@ namespace SamSoarII.Threads
 
     public class ViewThreadManager : BaseThreadManager
     {
-        public ViewThreadManager(InteractionFacade _parent) : base(true)
+        public ViewThreadManager(InteractionFacade _parent) : base(true, true)
         {
             parent = _parent;
             loads = new Stack<ILoadModel>();
@@ -28,12 +28,13 @@ namespace SamSoarII.Threads
         private Stack<ILoadModel> loads;
         #endregion
 
+        private Thread progthread = null;
         protected override void Handle()
         {
             Thread.Sleep(10);
             if (loads.Count() == 0) return;
             ILoadModel load = loads.Pop();
-            Thread thread = new Thread(() =>
+            progthread = new Thread(() =>
             {
                 while (!load.IsFullLoaded)
                 {
@@ -41,10 +42,11 @@ namespace SamSoarII.Threads
                     Thread.Sleep(50);
                 }
             });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            progthread.SetApartmentState(ApartmentState.STA);
+            progthread.Start();
             load.FullLoad();
-            thread.Abort();
+            progthread.Abort();
+            progthread = null;
             if (!load.IsFullLoaded)
             {
                 loads.Push(load);
@@ -67,6 +69,8 @@ namespace SamSoarII.Threads
         
         private void OnAborted(object sender, RoutedEventArgs e)
         {
+            if (progthread != null && progthread.IsAlive)
+                progthread.Abort();
             loads.Clear();
         }
     }

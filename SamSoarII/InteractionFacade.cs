@@ -281,12 +281,12 @@ namespace SamSoarII
                 EditProject();
                 LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.MainWindow_Close_Proj);
                 handle.Start();
-                Thread closethread = new Thread(() => { 
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
                     _CloseProject();
                     handle.Completed = true;
                     handle.Abort();
                 });
-                closethread.Start();
                 while (!handle.Completed)
                 {
                     Dispatcher.Run();

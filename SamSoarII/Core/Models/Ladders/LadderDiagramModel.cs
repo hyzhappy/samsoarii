@@ -886,7 +886,7 @@ namespace SamSoarII.Core.Models
 
         #region Manipulation
 
-        public void AddSingleUnit(LadderUnitModel unit, LadderNetworkModel net, bool cover = true)
+        public void AddSingleUnit(LadderUnitModel unit, LadderNetworkModel net, bool cover = false)
         {
             LadderUnitModel old = null;
             switch (unit.Shape)
