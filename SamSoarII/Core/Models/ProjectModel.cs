@@ -201,6 +201,7 @@ namespace SamSoarII.Core.Models
         {
             if (_filename == null) return;
             filename = _filename;
+            projname = FileHelper.GetFileName(_filename);
             XDocument xdoc = new XDocument();
             XElement xele_r = new XElement("Root");
             XElement xele_p = new XElement("Project");

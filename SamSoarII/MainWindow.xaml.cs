@@ -6,6 +6,7 @@ using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -35,6 +36,7 @@ namespace SamSoarII
         {
             InitializeComponent();
             ifParent = new InteractionFacade(this);
+            RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             InitializeAvalonDock();
             InitializeHotKey();
@@ -456,6 +458,31 @@ namespace SamSoarII
         #endregion
 
         #region Event Handler
+        private int GetMenuItemIndex(string item)
+        {
+            return RecentFileMenu.Items.IndexOf(item);
+        }
+        private void OnRecentProjectOpen(object sender, RoutedEventArgs e)
+        {
+            int index = GetMenuItemIndex((sender as MenuItem).Header as string);
+            var projectMessage = ProjectFileManager.RecentUsedProjectMessages.ElementAt(index);
+            if (!File.Exists(projectMessage.Value.Item2))
+            {
+                LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_File_Moved), LocalizedMessageIcon.Information);
+                ProjectFileManager.Delete(index);
+            }
+            else
+            {
+                if (ifParent.MDProj != null && projectMessage.Value.Item2 == ifParent.MDProj.FileName)
+                    LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
+                else
+                {
+                    ifParent.LoadProject(projectMessage.Value.Item2);
+                    LACProj.Show();
+                }
+            }
+            e.Handled = true;
+        }
 
         private void RegionalSetting(object sender, RoutedEventArgs e)
         {

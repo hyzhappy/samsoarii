@@ -244,7 +244,8 @@ namespace SamSoarII
         {
             try
             {
-                mdProj = new ProjectModel(this, "# load", filename);
+                mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
+                ProjectFileManager.Update(filename, filename);
                 InitializeProject();
             }
             catch (Exception e)
@@ -267,6 +268,7 @@ namespace SamSoarII
         public void SaveAsProject(string filename, bool isexception = false)
         {
             mdProj.Save(filename);
+            ProjectFileManager.Update(filename, filename);
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Normal, Properties.Resources.Project_Saved));
         }
