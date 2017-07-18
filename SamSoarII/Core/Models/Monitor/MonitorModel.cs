@@ -23,6 +23,9 @@ namespace SamSoarII.Core.Models
         
         public void Dispose()
         {
+            children.Clear();
+            children.CollectionChanged -= OnChildrenChanged;
+            children = null;
             parent = null;
         }
 

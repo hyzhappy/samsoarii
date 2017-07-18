@@ -1448,6 +1448,12 @@ namespace SamSoarII
                                 mtmodel.View = new ModbusTableViewModel(mtmodel, tcMain);
                             tcMain.ShowItem(mtmodel.View);
                         }
+                        if (e2.RelativeObject is LadderUnitModel.Types)
+                        {
+                            LadderUnitModel.Types type = (LadderUnitModel.Types)(e2.RelativeObject);
+                            if (CurrentLadder != null)
+                                CurrentLadder.QuickInsertElement(type);
+                        }
                         break;
                 }
             }

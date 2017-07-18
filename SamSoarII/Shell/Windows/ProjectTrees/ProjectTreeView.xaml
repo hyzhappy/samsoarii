@@ -7,7 +7,11 @@
              d:DesignHeight="1000" d:DesignWidth="300" Focusable="True">
     <Grid x:Uid="Grid_1">
         <TreeView x:Uid="TV_Main" x:Name="TV_Main" FontSize="12"
-                  AllowDrop="True">
+                  AllowDrop="True"
+                  MouseMove="OnPTVIMouseMove"  
+                  DragOver="OnPTVIDragOver"
+                  DragLeave="TV_Main_DragLeave"
+                  Drop="TV_Main_Drop">
         </TreeView>
     </Grid>
 </UserControl>

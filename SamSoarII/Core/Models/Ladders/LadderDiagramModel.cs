@@ -395,6 +395,7 @@ namespace SamSoarII.Core.Models
                 for (i2 = cmd.NewNetworks.Count - 1; i2 >= 0; i2--)
                 {
                     net = (LadderNetworkModel)(cmd.NewNetworks[i2]);
+                    net.ID = cmd.NewNetIDs[i2];
                     children.RemoveAt(net.ID);
                     net.Parent = null;
                 }
@@ -618,7 +619,7 @@ namespace SamSoarII.Core.Models
                 for (i2 = cmd.OldNetworks.Count - 1; i2 >= 0; i2--)
                 {
                     net = (LadderNetworkModel)(cmd.OldNetworks[i2]);
-                    //net.ID = cmd.OldNetIDs[i2];
+                    net.ID = cmd.OldNetIDs[i2];
                     children.RemoveAt(net.ID);
                     net.Parent = null;
                 }
