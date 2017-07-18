@@ -11,8 +11,10 @@ namespace SamSoarII.Core.Models
 {
     public class CommunicationInterfaceParams : IParams
     {
-        public CommunicationInterfaceParams(ProjectPropertyParams _parent)
+        public string Name;
+        public CommunicationInterfaceParams(ProjectPropertyParams _parent,string name)
         {
+            Name = name;
             parent = _parent;
             baudrateindex = 1;
             databitindex = 0;
@@ -128,7 +130,7 @@ namespace SamSoarII.Core.Models
 
         public CommunicationInterfaceParams Clone(ProjectPropertyParams parent)
         {
-            CommunicationInterfaceParams that = new CommunicationInterfaceParams(parent);
+            CommunicationInterfaceParams that = new CommunicationInterfaceParams(parent,this.Name);
             that.Load(this);
             return that;
         }
@@ -143,11 +145,11 @@ namespace SamSoarII.Core.Models
                 this.StopBitIndex = that.StopBitIndex;
                 this.CheckCodeIndex = that.CheckCodeIndex;
                 this.BufferBitIndex = that.BufferBitIndex;
-                this.Timeout = this.Timeout;
+                this.StationNumber = that.StationNumber;
+                this.Timeout = that.Timeout;
             }
         }
         #endregion
-
-
+        
     }
 }

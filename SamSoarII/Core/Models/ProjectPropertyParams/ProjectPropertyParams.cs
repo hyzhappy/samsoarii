@@ -12,8 +12,8 @@ namespace SamSoarII.Core.Models
         public ProjectPropertyParams(ProjectModel _parent)
         {
             parent = _parent;
-            paraCom232 = new CommunicationInterfaceParams(this);
-            paraCom485 = new CommunicationInterfaceParams(this);
+            paraCom232 = new CommunicationInterfaceParams(this, "232");
+            paraCom485 = new CommunicationInterfaceParams(this, "485");
             paraPassword = new PasswordParams(this);
             paraFilter = new FilterParams(this);
             paraHolding = new HoldingSectionParams(this);

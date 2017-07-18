@@ -28,11 +28,25 @@ namespace SamSoarII.Shell.Dialogs
         public BaseCommunicationInterface(CommunicationInterfaceParams _core)
         {
             InitializeComponent();
+            SetGroup(_core.Name);
             core = _core;
             DataContext = core;
             SetCommunicationType(core.ComType);
+            Binding binding = new Binding();
+            binding.Source = _core;
+            binding.Path = new PropertyPath("StationNumber");
+            rangeTextbox1.GetTextBox().SetBinding(TextBox.TextProperty, binding);
+            binding = new Binding();
+            binding.Source = _core;
+            binding.Path = new PropertyPath("Timeout");
+            rangeTextbox2.GetTextBox().SetBinding(TextBox.TextProperty, binding);
         }
-
+        private void SetGroup(string groupname)
+        {
+            Master.GroupName = groupname;
+            Slave.GroupName = groupname;
+            FreeButton.GroupName = groupname;
+        }
         public virtual void Dispose()
         {
             core = null;

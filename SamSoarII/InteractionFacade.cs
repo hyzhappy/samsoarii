@@ -1209,6 +1209,7 @@ namespace SamSoarII
                     try
                     {
                         dialog.Save();
+                        dialog.Close();
                     }
                     catch (Exception exce2)
                     {

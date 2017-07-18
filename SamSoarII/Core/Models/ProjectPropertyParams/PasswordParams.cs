@@ -38,8 +38,8 @@ namespace SamSoarII.Core.Models
         private bool pwenUpload;
         public bool PWENUpload
         {
-            get { return this.pwenDownload; }
-            set { this.pwenDownload = value; PropertyChanged(this, new PropertyChangedEventArgs("PWENUpload")); }
+            get { return this.pwenUpload; }
+            set { this.pwenUpload = value; PropertyChanged(this, new PropertyChangedEventArgs("PWENUpload")); }
         }
 
         private bool pwenDownload;

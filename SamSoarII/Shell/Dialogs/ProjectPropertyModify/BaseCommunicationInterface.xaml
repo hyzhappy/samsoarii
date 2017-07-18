@@ -62,30 +62,30 @@
                 </ComboBox>
             </StackPanel>
         </Canvas>
-        <Canvas x:Uid="Canvas_2" Grid.Row="1">
-            <StackPanel x:Uid="StackPanel_6" Canvas.Top="10">
-                <RadioButton x:Uid="Master" x:Name="Master" Margin="0,2,5,0"></RadioButton>
+        <Canvas Grid.Row="1">
+            <StackPanel  Canvas.Top="10">
+                <RadioButton x:Name="Master" Margin="0,2,5,0"></RadioButton>
                 <TextBlock Width="130" Text="{x:Static properties:Resources.Modbus_Master_Station}"></TextBlock>
             </StackPanel>
-            <StackPanel x:Uid="StackPanel_7" Canvas.Top="55">
-                <RadioButton x:Uid="FreeButton" x:Name="FreeButton" Margin="0,2,5,0"></RadioButton>
+            <StackPanel Canvas.Top="55">
+                <RadioButton x:Name="FreeButton" Margin="0,2,5,0"></RadioButton>
                 <TextBlock Width="130" Text="{x:Static properties:Resources.Free_Port_Communication}"></TextBlock>
             </StackPanel>
-            <StackPanel x:Uid="StackPanel_8" Canvas.Top="10" Canvas.Left="190">
-                <RadioButton x:Uid="Slave" x:Name="Slave" Margin="0,2,5,0"></RadioButton>
+            <StackPanel Canvas.Top="10" Canvas.Left="190">
+                <RadioButton x:Name="Slave" Margin="0,2,5,0"></RadioButton>
                 <TextBlock Width="130" Text="{x:Static properties:Resources.Modbus_Slaver_Station}"></TextBlock>
             </StackPanel>
         </Canvas>
-        <Canvas x:Uid="Canvas_3" Grid.Row="2">
-            <StackPanel x:Uid="StackPanel_9" Canvas.Top="10">
+        <Canvas Grid.Row="2">
+            <StackPanel Canvas.Top="10">
                 <TextBlock FontSize="16" Text="{x:Static properties:Resources.Station_Number_Setting}"></TextBlock>
                 <local:RangeTextBox x:Uid="rangeTextbox1" x:Name="rangeTextbox1" Margin="5,-2,0,0" LowRange="1" TopRange="128" DefaultValue="-1"></local:RangeTextBox>
-                <TextBlock x:Uid="TextBlock_10" FontSize="16" Text="(1-128)"></TextBlock>
+                <TextBlock FontSize="16" Text="(1-128)"></TextBlock>
             </StackPanel>
-            <StackPanel x:Uid="StackPanel_10" Canvas.Top="50">
-                <TextBlock x:Uid="TextBlock_11" FontSize="16" Text="{x:Static properties:Resources.Timeout}"></TextBlock>
-                <local:RangeTextBox x:Uid="rangeTextbox2" x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="1" TopRange="255" DefaultValue="-1"></local:RangeTextBox>
-                <TextBlock x:Uid="TextBlock_12" FontSize="16" Text="*10ms    (1-255)"></TextBlock>
+            <StackPanel Canvas.Top="50">
+                <TextBlock FontSize="16" Text="{x:Static properties:Resources.Timeout}"></TextBlock>
+                <local:RangeTextBox x:Name="rangeTextbox2" Margin="5,-2,0,0" LowRange="1" TopRange="255" DefaultValue="-1"></local:RangeTextBox>
+                <TextBlock FontSize="16" Text="*10ms    (1-255)"></TextBlock>
             </StackPanel>
         </Canvas>
         <Button x:Uid="Button_1" Grid.Row="3" Width="80" Height="24" HorizontalAlignment="Left" FontSize="16" Margin="20,0,0,0" Click="DefaultButtonClick" Content="{x:Static properties:Resources.Default}"/>

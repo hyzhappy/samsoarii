@@ -91,6 +91,7 @@ namespace SamSoarII.Shell.Dialogs
             wgDevice.Save();
             wgCommunication.Save();
             wgPassword.Save();
+            wgHolding.Save();
             oldParams.Load(newParams);
         }
 

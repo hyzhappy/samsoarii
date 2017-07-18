@@ -43,6 +43,19 @@ namespace SamSoarII.Shell.Dialogs
             CVStackPanel2.DataContext = this;
         }
 
+        public void Save()
+        {
+            core.MStartAddr = int.Parse(MTextbox1.Text);
+            core.MLength = int.Parse(MTextbox2.Text);
+            core.DStartAddr = int.Parse(DTextbox1.Text);
+            core.DLength = int.Parse(DTextbox2.Text);
+            core.SStartAddr = int.Parse(STextbox1.Text);
+            core.SLength = int.Parse(STextbox2.Text);
+            core.CVStartAddr = int.Parse(CVTextbox1.Text);
+            core.CVLength = int.Parse(CVTextbox2.Text);
+            core.NotClear = (bool)CheckBox1.IsChecked;
+        }
+
         public void Dispose()
         {
             PropertyChanged = delegate { };
