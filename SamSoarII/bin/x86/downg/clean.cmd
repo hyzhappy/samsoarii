@@ -1,1 +1,0 @@
-erase -f ..\\downc.elf ..\\downc.hex ..\\downc.map downc.c downf.c build\\downc.o build\\downf.o
