@@ -36,7 +36,7 @@ namespace SamSoarII.Shell.Models
         public override void Recreate(params object[] args)
         {
             base.Recreate(args);
-            comments = new TextBlock[2];
+            recreating = true;
             ReinitializeComponent();
             DataContext = this;
             if (Core?.Parent?.View != null)
@@ -44,6 +44,7 @@ namespace SamSoarII.Shell.Models
                 LadderMode = Core.Parent.View.LadderMode;
                 IsCommentMode = Core.Parent.View.IsCommentMode;
             }
+            recreating = false;
         }
 
         #endregion
@@ -51,7 +52,8 @@ namespace SamSoarII.Shell.Models
         public InputViewModel(LadderUnitModel _core)
         {
             InitializeComponent();
-            Recreate(_core);
+            comments = new TextBlock[2];
+            if (_core != null) Recreate(_core);
         }
         
         private void ReinitializeComponent()

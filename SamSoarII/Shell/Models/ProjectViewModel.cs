@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace SamSoarII.Shell.Models
 {
-    public class ProjectViewModel : ILoadModel, INotifyPropertyChanged
+    public class ProjectViewModel : IViewModel, INotifyPropertyChanged
     {
         public ProjectViewModel(ProjectModel _core)
         {
@@ -73,82 +73,7 @@ namespace SamSoarII.Shell.Models
 
         public IViewModel ViewParent { get { return null; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
-
-        #region Load
-
-        public bool IsFullLoaded
-        {
-            get
-            {
-                foreach (LadderDiagramModel ldmodel in Core.Diagrams)
-                {
-                    if (ldmodel.View == null) return false;
-                    if (ldmodel.Inst.View == null) return false;
-                }
-                return true;
-            }
-        }
-
-        public ViewThreadManager ViewThread
-        {
-            get { return Core.Parent.ThMNGView; }
-        }
-
-        public IEnumerable<ILoadModel> LoadChildren
-        {
-            get
-            {
-                foreach (LadderDiagramModel ldmodel in Core.Diagrams)
-                {
-                    if (ldmodel.View != null && !ldmodel.View.IsFullLoaded) yield return ldmodel.View;
-                    if (ldmodel.Inst.View != null && !ldmodel.Inst.View.IsFullLoaded) yield return ldmodel.Inst.View;
-                }
-                /*
-                foreach (FuncBlockModel fbmodel in Core.FuncBlocks)
-                {
-                    if (fbmodel.View != null && !fbmodel.View.IsFullLoaded) yield return fbmodel.View;
-                }
-                */
-            }
-        }
-
-        public void UpdateFullLoadProgress() { }
-
-        #endregion
-
-        public void FullLoad()
-        {
-            foreach (LadderDiagramModel ldmodel in Core.Diagrams)
-            {
-                if (ldmodel.View == null)
-                {
-                    Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                    {
-                        ldmodel.View = new LadderDiagramViewModel(ldmodel);
-                    });
-                }
-                if (ldmodel.Inst.View == null)
-                {
-                    Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                    {
-                        ldmodel.Inst.View = new InstructionDiagramViewModel(ldmodel.Inst);
-                    });
-                }
-            }
-            /*
-            foreach (FuncBlockModel fbmodel in Core.FuncBlocks)
-            {
-                if (fbmodel.View == null)
-                {
-                    Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                    {
-                        fbmodel.View = new FuncBlockViewModel(fbmodel, IFParent.TCMain);
-                    });
-                }
-            }
-            */
-        }
-
+        
         public void Update() { }
 
         private LadderModes laddermode;
@@ -206,10 +131,7 @@ namespace SamSoarII.Shell.Models
                 case NotifyCollectionChangedAction.Add:
                     diagram = (LadderDiagramModel)(e.NewItems[0]);
                     if (diagram.View == null)
-                    {
                         diagram.View = new LadderDiagramViewModel(diagram);
-                        ViewThread.Add(diagram.View);
-                    }
                     break;
             }
         }
@@ -222,10 +144,7 @@ namespace SamSoarII.Shell.Models
                 case NotifyCollectionChangedAction.Add:
                     funcblock = (FuncBlockModel)(e.NewItems[0]);
                     if (funcblock.View == null)
-                    {
                         funcblock.View = new FuncBlockViewModel(funcblock, IFParent.TCMain);
-                        ViewThread.Add(funcblock.View);
-                    }
                     break;
             }
         }

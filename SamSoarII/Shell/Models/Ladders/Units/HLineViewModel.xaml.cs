@@ -31,6 +31,7 @@ namespace SamSoarII.Shell.Models
         public override void Recreate(params object[] args)
         {
             base.Recreate(args);
+            recreating = true;
             DataContext = this;
             if (Core?.Parent?.View != null)
             {
@@ -38,6 +39,7 @@ namespace SamSoarII.Shell.Models
                 IsCommentMode = Core.Parent.View.IsCommentMode;
             }
             Update();
+            recreating = false;
         }
         
         #endregion
@@ -45,7 +47,7 @@ namespace SamSoarII.Shell.Models
         public HLineViewModel(LadderUnitModel _core)
         {
             InitializeComponent();
-            Recreate(_core);
+            if (_core != null) Recreate(_core);
         }
 
         public override void Dispose()

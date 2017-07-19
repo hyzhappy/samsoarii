@@ -47,15 +47,14 @@ namespace SamSoarII.Shell.Models
     /// <summary>
     /// FuncBlockViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class FuncBlockViewModel : BaseTabItem, ILoadModel
+    public partial class FuncBlockViewModel : BaseTabItem, IViewModel
     {
         public FuncBlockViewModel(FuncBlockModel _core, MainTabControl _tabcontrol) : base(_tabcontrol)
         {
             InitializeComponent();
             DataContext = this;
             Core = _core;
-            //CodeTextBox.Text = core.Code;
-            isfullloaded = false;
+            CodeTextBox.Text = core.Code;
             if (ViewParent != null) LadderMode = ViewParent.LadderMode;
             InvokePropertyChanged("TabHeader");
 
@@ -1026,35 +1025,6 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #endregion
-
-
-        #region Load
-
-        private bool isfullloaded;
-        public bool IsFullLoaded { get { return this.isfullloaded; } }
-
-        public ViewThreadManager ViewThread { get { return Core.Parent.Parent.ThMNGView; } }
-
-        public IEnumerable<ILoadModel> LoadChildren { get { return new ILoadModel[] { }; } }
-
-        public void FullLoad()
-        {
-            Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-            {
-                CodeTextBox.Text = core.Code;
-                isfullloaded = true;
-            });
-        }
-
-        public void UpdateFullLoadProgress()
-        {
-        }
-
-        public void Update()
-        {
-        }
-
-        #endregion
-
+        
     }
 }

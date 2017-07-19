@@ -1,4 +1,5 @@
-﻿using SamSoarII.Core.Models;
+﻿using SamSoarII.Core.Generate;
+using SamSoarII.Core.Models;
 using SamSoarII.Shell.Models;
 using SamSoarII.Utility;
 using System;
@@ -16,17 +17,28 @@ namespace SamSoarII
         static private ResourceManager<SpecialViewModel> rmgSpecial;
         static private ResourceManager<HLineViewModel> rmgHLine;
         static private ResourceManager<VLineViewModel> rmgVLine;
+        static private ResourceManager<InstructionRowViewModel> rmgIRow;
 
         static public void Initialize()
         {
-            rmgInput = new ResourceManager<InputViewModel>(new InputViewModel(new LadderUnitModel(null, LadderUnitModel.Types.LD)));
-            rmgOutput = new ResourceManager<OutputViewModel>(new OutputViewModel(new LadderUnitModel(null, LadderUnitModel.Types.OUT)));
-            rmgOutRec = new ResourceManager<OutputRectViewModel>(new OutputRectViewModel(new LadderUnitModel(null, LadderUnitModel.Types.ADD)));
-            rmgSpecial = new ResourceManager<SpecialViewModel>(new SpecialViewModel(new LadderUnitModel(null, LadderUnitModel.Types.INV)));
-            rmgHLine = new ResourceManager<HLineViewModel>(new HLineViewModel(new LadderUnitModel(null, LadderUnitModel.Types.HLINE)));
-            rmgVLine = new ResourceManager<VLineViewModel>(new VLineViewModel(new LadderUnitModel(null, LadderUnitModel.Types.VLINE)));
+            rmgInput = new ResourceManager<InputViewModel>(new InputViewModel(null), 300, new object[] { null });
+            rmgOutput = new ResourceManager<OutputViewModel>(new OutputViewModel(null), 100, new object[] { null });
+            rmgOutRec = new ResourceManager<OutputRectViewModel>(new OutputRectViewModel(null), 100, new object[] { null });
+            rmgSpecial = new ResourceManager<SpecialViewModel>(new SpecialViewModel(null), 100, new object[] { null });
+            rmgHLine = new ResourceManager<HLineViewModel>(new HLineViewModel(null), 500, new object[] { null });
+            rmgVLine = new ResourceManager<VLineViewModel>(new VLineViewModel(null), 300, new object[] { null });
+            rmgIRow = new ResourceManager<InstructionRowViewModel>(new InstructionRowViewModel(null, 0), 100, new object[] { null, 0 });
         }
 
+        static public InstructionRowViewModel CreateInstRow(PLCOriginInst inst, int id)
+        {
+            return rmgIRow.Create(inst, id);
+        }
+        static public void Dispose(InstructionRowViewModel irow)
+        {
+            rmgIRow.Dispose(irow);
+        }
+        
         static public InputViewModel CreateInput(LadderUnitModel _core)
         {
             return rmgInput.Create(_core);
@@ -80,7 +92,5 @@ namespace SamSoarII
         {
             rmgVLine.Dispose(_view);
         }
-
-
     }
 }
