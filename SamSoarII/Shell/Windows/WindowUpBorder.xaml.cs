@@ -87,6 +87,7 @@ namespace SamSoarII.Shell.Windows
                     break;
             }
         }
+
         private void OnResizeWindow(object sender, RoutedEventArgs e)
         {
             ChangeWindowState();

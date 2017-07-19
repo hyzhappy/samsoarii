@@ -4,7 +4,7 @@
 library
 C#
 .cs
-C:\vsworkspace\samsoarii_simple\samsoarii\ICSharpCode.AvalonEdit\obj\x86\Debug\
+Y:\Projects\SamSoarII-NEW\ICSharpCode.AvalonEdit\obj\x86\Debug\
 ICSharpCode.AvalonEdit
 none
 false
@@ -12,7 +12,7 @@ DEBUG;TRACE;DOTNET4
 
 6-1436255252
 
-2241790165443
+2241398723137
 1591836353
 CodeCompletion\CompletionList.xaml;CodeCompletion\InsightWindow.xaml;Search\SearchPanel.xaml;Search\DropDownButton.xaml;TextEditor.xaml;themes\generic.xaml;
 

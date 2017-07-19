@@ -24,7 +24,6 @@ C:\vsworkspace\samsoarii_simplify2\ColorPicker\obj\x86\Debug\ColorPicker.pdb
 C:\vsworkspace\samsoarii_simplify2\ColorPicker\obj\x86\Debug\ColorPicker.csprojResolveAssemblyReference.cache
 Y:\Projects\SamSoarII-NEW\ColorPicker\bin\x86\Debug\ColorPicker.dll
 Y:\Projects\SamSoarII-NEW\ColorPicker\bin\x86\Debug\ColorPicker.pdb
-Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker.csprojResolveAssemblyReference.cache
 Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\GeneratedInternalTypeHelper.g.cs
 Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker_MarkupCompile.cache
 Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker_MarkupCompile.lref
@@ -34,3 +33,4 @@ Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker.Properties.Resou
 Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker.csproj.GenerateResource.Cache
 Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker.dll
 Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker.pdb
+Y:\Projects\SamSoarII-NEW\ColorPicker\obj\x86\Debug\ColorPicker.csprojResolveAssemblyReference.cache

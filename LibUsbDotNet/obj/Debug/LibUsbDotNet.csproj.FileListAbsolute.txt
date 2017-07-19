@@ -3,8 +3,3 @@ C:\vsworkspace\samsoarii\LibUsbDotNet\bin\Debug\LibUsbDotNet.pdb
 C:\vsworkspace\samsoarii\LibUsbDotNet\obj\Debug\LibUsbDotNet.csprojResolveAssemblyReference.cache
 C:\vsworkspace\samsoarii\LibUsbDotNet\obj\Debug\LibUsbDotNet.dll
 C:\vsworkspace\samsoarii\LibUsbDotNet\obj\Debug\LibUsbDotNet.pdb
-Y:\Projects\SamSoarII-NEW\LibUsbDotNet\bin\Debug\LibUsbDotNet.dll
-Y:\Projects\SamSoarII-NEW\LibUsbDotNet\bin\Debug\LibUsbDotNet.pdb
-Y:\Projects\SamSoarII-NEW\LibUsbDotNet\obj\Debug\LibUsbDotNet.csprojResolveAssemblyReference.cache
-Y:\Projects\SamSoarII-NEW\LibUsbDotNet\obj\Debug\LibUsbDotNet.dll
-Y:\Projects\SamSoarII-NEW\LibUsbDotNet\obj\Debug\LibUsbDotNet.pdb
