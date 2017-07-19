@@ -5,6 +5,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources\ResourceDictionary\MainResource.xaml"/>
                 <ResourceDictionary Source="Resources\ResourceDictionary\TabControlDictionary.xaml"/>
                 <ResourceDictionary Source="Resources\ResourceDictionary\LadderInstructionDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>

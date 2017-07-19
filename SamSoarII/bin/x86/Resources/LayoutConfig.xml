@@ -23,7 +23,7 @@
     <KeyValuePair Key="查找" Value="458.666666666667" />
     <KeyValuePair Key="替换" Value="300" />
     <KeyValuePair Key="错误列表" Value="8000" />
-    <KeyValuePair Key="监视" Value="406.4" />
+    <KeyValuePair Key="监视" Value="392" />
     <KeyValuePair Key="软元件管理器" Value="856.093333333333" />
     <KeyValuePair Key="软元件初始化" Value="856.093333333333" />
     <KeyValuePair Key="断点" Value="*" />
@@ -82,29 +82,29 @@
     <KeyValuePair Key="软元件管理器" Value="27.3333333333333" />
     <KeyValuePair Key="软元件初始化" Value="100" />
     <KeyValuePair Key="查找" Value="172.666666666667" />
-    <KeyValuePair Key="工程资源管理器" Value="430.4" />
-    <KeyValuePair Key="监视" Value="433.6" />
+    <KeyValuePair Key="工程资源管理器" Value="456.8" />
+    <KeyValuePair Key="监视" Value="432.8" />
     <KeyValuePair Key="断点" Value="349.333333333333" />
     <KeyValuePair Key="Project Explorer" Value="365.333333333333" />
   </FloatTop>
   <FloatLeft>
     <KeyValuePair Key="替换" Value="862.666666666667" />
     <KeyValuePair Key="软元件管理器" Value="162.666666666667" />
-    <KeyValuePair Key="软元件初始化" Value="425.333333333333" />
+    <KeyValuePair Key="软元件初始化" Value="425.6" />
     <KeyValuePair Key="查找" Value="489.333333333333" />
-    <KeyValuePair Key="工程资源管理器" Value="-57.6" />
-    <KeyValuePair Key="监视" Value="1436.8" />
+    <KeyValuePair Key="工程资源管理器" Value="-70.4" />
+    <KeyValuePair Key="监视" Value="1483.2" />
     <KeyValuePair Key="Project Explorer" Value="-170.666666666667" />
     <KeyValuePair Key="断点" Value="409.333333333333" />
   </FloatLeft>
   <FloatWidth>
-    <KeyValuePair Key="工程资源管理器" Value="236" />
+    <KeyValuePair Key="工程资源管理器" Value="396.8" />
     <KeyValuePair Key="查找" Value="400" />
     <KeyValuePair Key="替换" Value="400" />
-    <KeyValuePair Key="监视" Value="468" />
+    <KeyValuePair Key="监视" Value="197.6" />
     <KeyValuePair Key="错误列表" Value="800" />
     <KeyValuePair Key="软元件管理器" Value="908" />
-    <KeyValuePair Key="软元件初始化" Value="600" />
+    <KeyValuePair Key="软元件初始化" Value="498.4" />
     <KeyValuePair Key="断点" Value="835.333333333333" />
     <KeyValuePair Key="Project Explorer" Value="240" />
     <KeyValuePair Key="Search" Value="400" />
@@ -116,10 +116,10 @@
     <KeyValuePair Key="Breakpoint" Value="840" />
   </FloatWidth>
   <FloatHeight>
-    <KeyValuePair Key="工程资源管理器" Value="708.8" />
+    <KeyValuePair Key="工程资源管理器" Value="698.4" />
     <KeyValuePair Key="查找" Value="400" />
     <KeyValuePair Key="替换" Value="400" />
-    <KeyValuePair Key="监视" Value="539.2" />
+    <KeyValuePair Key="监视" Value="516.8" />
     <KeyValuePair Key="错误列表" Value="360" />
     <KeyValuePair Key="软元件管理器" Value="621.333333333333" />
     <KeyValuePair Key="软元件初始化" Value="600" />
@@ -138,7 +138,7 @@
     <KeyValuePair Key="查找" Value="240" />
     <KeyValuePair Key="替换" Value="240" />
     <KeyValuePair Key="错误列表" Value="8000" />
-    <KeyValuePair Key="监视" Value="300.666666666667" />
+    <KeyValuePair Key="监视" Value="180" />
     <KeyValuePair Key="软元件管理器" Value="937.333333333333" />
     <KeyValuePair Key="软元件初始化" Value="488.666666666667" />
     <KeyValuePair Key="断点" Value="800" />

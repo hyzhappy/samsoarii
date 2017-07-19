@@ -8,3 +8,8 @@ C:\vsworkspace\samsoarii_simplify2\LibUsbDotNet\bin\x86\Debug\LibUsbDotNet.pdb
 C:\vsworkspace\samsoarii_simplify2\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.dll
 C:\vsworkspace\samsoarii_simplify2\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.pdb
 C:\vsworkspace\samsoarii_simplify2\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.csprojResolveAssemblyReference.cache
+Y:\Projects\SamSoarII-NEW\LibUsbDotNet\bin\x86\Debug\LibUsbDotNet.dll
+Y:\Projects\SamSoarII-NEW\LibUsbDotNet\bin\x86\Debug\LibUsbDotNet.pdb
+Y:\Projects\SamSoarII-NEW\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.dll
+Y:\Projects\SamSoarII-NEW\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.pdb
+Y:\Projects\SamSoarII-NEW\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.csprojResolveAssemblyReference.cache

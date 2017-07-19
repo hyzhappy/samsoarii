@@ -23,4 +23,19 @@ namespace SamSoarII.Utility
             return newvalue;
         }
     }
+    [ValueConversion(typeof(double), typeof(double))]
+    public class DoubleConverter3 : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double newvalue = (double)value / 2;
+            return newvalue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double newvalue = (double)value * 2;
+            return newvalue;
+        }
+    }
 }

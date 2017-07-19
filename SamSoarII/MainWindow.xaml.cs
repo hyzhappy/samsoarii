@@ -496,12 +496,7 @@ namespace SamSoarII
             }
             e.Handled = true;
         }
-
-        private void RegionalSetting(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        
         private void About(object sender, RoutedEventArgs e)
         {
 
@@ -726,9 +721,12 @@ namespace SamSoarII
                 ifParent.ShowCreateProjectDialog();
             if (e.Command == ApplicationCommands.Open)
                 ifParent.ShowOpenProjectDialog();
-            if (e.Command == ApplicationCommands.Close
-             || e.Command == GlobalCommand.CloseProjectCommand)
+            if (e.Command == GlobalCommand.CloseProjectCommand)
                 ifParent.CloseProject();
+            if (e.Command == ApplicationCommands.Close)
+            {
+                Application.Current.Shutdown();
+            }
         }
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)

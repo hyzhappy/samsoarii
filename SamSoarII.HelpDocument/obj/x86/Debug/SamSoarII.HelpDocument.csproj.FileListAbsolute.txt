@@ -1261,427 +1261,6 @@ C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.HelpDocument\obj\x86\Debug\S
 C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.csproj.GenerateResource.Cache
 C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.dll
 C:\vsworkspace\samsoarii_simple\samsoarii\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.pdb
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.HelpDocument.dll
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.HelpDocument.pdb
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.Utility.dll
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.Utility.pdb
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.csprojResolveAssemblyReference.cache
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\SubtitleParagraph.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\TitleParagraph.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocFavorite.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Communication Protocol\Page8200.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Contact Information\Page8500.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4000.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4100.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3000.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3100.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3200.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3201.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3202.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3203.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3204.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3205.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3206.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7200.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7201.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7202.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7203.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7204.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7205.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7206.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7207.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7208.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7100.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7101.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7102.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7103.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7104.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7105.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7000.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7300.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7400.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Hardware Manual\Page8300.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\MainPage.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6700.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6701.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6702.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6703.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6704.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6705.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6706.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6707.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6708.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6709.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6710.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6711.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6712.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6713.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6714.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6715.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6716.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6717.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6718.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6719.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5100.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5101.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5102.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5103.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5104.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5105.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5106.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5107.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5108.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5109.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5110.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5111.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5112.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5113.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5114.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5115.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5116.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5117.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6400.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6401.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6402.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6403.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5200.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5201.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5202.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5203.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5204.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5205.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5206.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5300.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5301.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5302.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5303.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5304.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5305.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5306.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5307.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5900.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5901.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5902.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5903.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5600.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5601.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5602.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5603.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5604.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5605.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5606.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5607.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5608.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5609.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5610.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6600.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6601.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5700.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5701.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5702.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5703.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5704.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5705.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5706.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5707.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5708.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5709.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5710.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5711.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5712.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5713.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5714.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6200.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6201.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6202.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6203.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6204.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5400.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5401.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5402.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5403.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5404.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5405.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5406.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5407.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5408.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5500.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5501.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5502.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5503.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5504.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5505.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Page5000.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\PID\Page6800.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6000.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6001.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6002.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6003.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6004.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6005.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6006.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6500.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6501.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6502.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6503.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6504.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6505.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6506.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6507.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6508.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6509.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6510.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6511.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6512.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6513.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6514.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6515.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6516.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6517.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6300.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6301.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6302.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6100.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6101.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6102.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6103.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6104.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6105.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6106.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6107.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6108.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6109.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6110.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5800.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5801.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5802.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5803.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Parameter Setting\Page8000.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2500.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2501.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2000.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2100.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2200.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2300.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2400.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Register\Page8100.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\System Settings\Page8400.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocSearch.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocTreeView.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\PrintWindow.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocWindow.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\GeneratedInternalTypeHelper.g.cs
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument_MarkupCompile.cache
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument_MarkupCompile.lref
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\SubtitleParagraph.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\TitleParagraph.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocFavorite.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Communication Protocol\Page8200.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Contact Information\Page8500.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4000.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4100.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3000.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3100.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3200.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3201.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3202.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3203.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3204.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3205.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3206.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7200.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7201.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7202.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7203.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7204.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7205.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7206.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7207.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7208.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7100.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7101.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7102.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7103.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7104.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7105.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7000.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7300.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7400.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Hardware Manual\Page8300.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\MainPage.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6700.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6701.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6702.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6703.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6704.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6705.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6706.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6707.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6708.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6709.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6710.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6711.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6712.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6713.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6714.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6715.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6716.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6717.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6718.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6719.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5100.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5101.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5102.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5103.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5104.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5105.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5106.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5107.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5108.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5109.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5110.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5111.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5112.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5113.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5114.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5115.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5116.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5117.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6400.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6401.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6402.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6403.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5200.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5201.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5202.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5203.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5204.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5205.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5206.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5300.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5301.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5302.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5303.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5304.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5305.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5306.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5307.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5900.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5901.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5902.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5903.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5600.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5601.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5602.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5603.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5604.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5605.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5606.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5607.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5608.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5609.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5610.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6600.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6601.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5700.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5701.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5702.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5703.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5704.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5705.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5706.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5707.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5708.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5709.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5710.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5711.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5712.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5713.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5714.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6200.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6201.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6202.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6203.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6204.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5400.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5401.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5402.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5403.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5404.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5405.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5406.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5407.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5408.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5500.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5501.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5502.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5503.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5504.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5505.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Page5000.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\PID\Page6800.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6000.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6001.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6002.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6003.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6004.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6005.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6006.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6500.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6501.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6502.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6503.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6504.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6505.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6506.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6507.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6508.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6509.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6510.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6511.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6512.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6513.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6514.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6515.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6516.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6517.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6300.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6301.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6302.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6100.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6101.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6102.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6103.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6104.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6105.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6106.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6107.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6108.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6109.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6110.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5800.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5801.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5802.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5803.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Parameter Setting\Page8000.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2500.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2501.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2000.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2100.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2200.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2300.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2400.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Register\Page8100.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\System Settings\Page8400.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocSearch.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocTreeView.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\PrintWindow.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocWindow.baml
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.g.resources
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.Properties.Resources.resources
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.csproj.GenerateResource.Cache
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.dll
-Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.pdb
 C:\vsworkspace\samsoarii_simple\samsoarii2\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.HelpDocument.dll
 C:\vsworkspace\samsoarii_simple\samsoarii2\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.HelpDocument.pdb
 C:\vsworkspace\samsoarii_simple\samsoarii2\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.Utility.dll
@@ -2103,3 +1682,424 @@ C:\vsworkspace\samsoarii_simple\samsoarii2\SamSoarII.HelpDocument\obj\x86\Debug\
 C:\vsworkspace\samsoarii_simple\samsoarii2\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.csproj.GenerateResource.Cache
 C:\vsworkspace\samsoarii_simple\samsoarii2\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.dll
 C:\vsworkspace\samsoarii_simple\samsoarii2\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.pdb
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.HelpDocument.dll
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.HelpDocument.pdb
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.Utility.dll
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\bin\x86\Debug\SamSoarII.Utility.pdb
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.csprojResolveAssemblyReference.cache
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\SubtitleParagraph.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\TitleParagraph.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocFavorite.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Communication Protocol\Page8200.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Contact Information\Page8500.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4000.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4100.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3000.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3100.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3200.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3201.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3202.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3203.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3204.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3205.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3206.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7200.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7201.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7202.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7203.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7204.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7205.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7206.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7207.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7208.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7100.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7101.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7102.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7103.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7104.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7105.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7000.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7300.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7400.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Hardware Manual\Page8300.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\MainPage.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6700.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6701.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6702.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6703.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6704.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6705.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6706.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6707.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6708.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6709.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6710.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6711.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6712.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6713.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6714.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6715.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6716.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6717.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6718.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6719.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5100.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5101.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5102.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5103.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5104.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5105.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5106.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5107.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5108.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5109.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5110.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5111.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5112.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5113.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5114.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5115.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5116.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5117.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6400.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6401.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6402.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6403.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5200.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5201.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5202.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5203.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5204.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5205.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5206.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5300.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5301.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5302.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5303.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5304.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5305.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5306.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5307.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5900.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5901.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5902.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5903.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5600.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5601.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5602.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5603.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5604.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5605.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5606.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5607.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5608.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5609.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5610.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6600.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6601.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5700.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5701.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5702.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5703.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5704.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5705.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5706.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5707.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5708.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5709.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5710.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5711.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5712.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5713.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5714.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6200.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6201.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6202.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6203.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6204.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5400.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5401.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5402.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5403.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5404.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5405.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5406.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5407.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5408.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5500.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5501.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5502.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5503.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5504.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5505.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Page5000.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\PID\Page6800.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6000.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6001.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6002.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6003.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6004.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6005.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6006.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6500.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6501.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6502.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6503.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6504.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6505.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6506.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6507.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6508.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6509.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6510.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6511.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6512.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6513.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6514.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6515.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6516.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6517.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6300.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6301.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6302.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6100.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6101.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6102.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6103.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6104.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6105.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6106.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6107.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6108.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6109.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6110.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5800.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5801.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5802.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5803.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Parameter Setting\Page8000.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2500.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2501.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2000.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2100.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2200.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2300.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2400.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Register\Page8100.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\System Settings\Page8400.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocSearch.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocTreeView.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\PrintWindow.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocWindow.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\GeneratedInternalTypeHelper.g.cs
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument_MarkupCompile.cache
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument_MarkupCompile.lref
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\SubtitleParagraph.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\Controls\TitleParagraph.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocFavorite.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Communication Protocol\Page8200.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Contact Information\Page8500.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4000.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Create New Project Steps\Page4100.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3000.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\Page3100.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3200.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3201.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3202.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3203.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3204.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3205.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Edit Interface\ToolBar\Page3206.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7200.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7201.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7202.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7203.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7204.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7205.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7206.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7207.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\C Programming Preliminary\Page7208.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7100.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7101.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7102.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7103.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7104.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Getting Start To C\Page7105.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7000.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7300.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Function Features Block\Page7400.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Hardware Manual\Page8300.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\MainPage.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6700.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6701.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6702.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6703.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6704.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6705.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6706.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6707.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6708.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6709.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6710.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6711.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6712.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6713.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6714.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6715.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6716.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6717.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6718.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Auxiliary Function\Page6719.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5100.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5101.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5102.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5103.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5104.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5105.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5106.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5107.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5108.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5109.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5110.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5111.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5112.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5113.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5114.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5115.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5116.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\BitLogic\Page5117.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6400.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6401.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6402.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Communication\Page6403.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5200.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5201.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5202.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5203.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5204.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5205.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Compare\Page5206.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5300.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5301.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5302.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5303.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5304.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5305.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5306.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Convert\Page5307.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5900.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5901.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5902.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Counter\Page5903.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5600.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5601.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5602.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5603.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5604.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5605.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5606.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5607.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5608.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5609.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\FloatCalculation\Page5610.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6600.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\HCNT\Page6601.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5700.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5701.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5702.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5703.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5704.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5705.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5706.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5707.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5708.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5709.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5710.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5711.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5712.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5713.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\IntegerCalculation\Page5714.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6200.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6201.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6202.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6203.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Interrupt\Page6204.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5400.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5401.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5402.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5403.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5404.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5405.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5406.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5407.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\LogicOperation\Page5408.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5500.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5501.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5502.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5503.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5504.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Move\Page5505.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Page5000.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\PID\Page6800.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6000.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6001.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6002.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6003.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6004.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6005.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\ProgramControl\Page6006.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6500.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6501.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6502.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6503.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6504.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6505.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6506.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6507.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6508.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6509.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6510.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6511.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6512.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6513.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6514.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6515.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6516.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Pulse\Page6517.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6300.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6301.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\RealTime\Page6302.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6100.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6101.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6102.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6103.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6104.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6105.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6106.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6107.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6108.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6109.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Shift\Page6110.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5800.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5801.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5802.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Instruction\Timer\Page5803.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\PLC Parameter Setting\Page8000.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2500.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Basic Operation\Page2501.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2000.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2100.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2200.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2300.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\QuickStart\Page2400.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\Register\Page8100.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocPages\System Settings\Page8400.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocSearch.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\HelpDocTreeView.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocComponet\PrintWindow.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\HelpDocWindow.baml
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.g.resources
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.Properties.Resources.resources
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.csproj.GenerateResource.Cache
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.dll
+Y:\Projects\SamSoarII-NEW\SamSoarII.HelpDocument\obj\x86\Debug\SamSoarII.HelpDocument.pdb

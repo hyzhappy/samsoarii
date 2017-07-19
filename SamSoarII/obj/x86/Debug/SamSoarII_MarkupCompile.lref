@@ -3,6 +3,7 @@
 FY:\Projects\SamSoarII-NEW\SamSoarII\App.xaml;;
 FY:\Projects\SamSoarII-NEW\SamSoarII\MainWindow.xaml;;
 FY:\Projects\SamSoarII-NEW\SamSoarII\Resources\ResourceDictionary\LadderInstructionDictionary.xaml;;
+FY:\Projects\SamSoarII-NEW\SamSoarII\Resources\ResourceDictionary\MainResource.xaml;;
 FY:\Projects\SamSoarII-NEW\SamSoarII\Resources\ResourceDictionary\TabControlDictionary.xaml;;
 FY:\Projects\SamSoarII-NEW\SamSoarII\Shell\Dialogs\AddElementDialog.xaml;;
 FY:\Projects\SamSoarII-NEW\SamSoarII\Shell\Dialogs\ComBaseSetting.xaml;;
@@ -73,4 +74,5 @@ FY:\Projects\SamSoarII-NEW\SamSoarII\Shell\Windows\ProjectTrees\ProjectTreeViewI
 FY:\Projects\SamSoarII-NEW\SamSoarII\Shell\Windows\Tab\MainTabControl.xaml;;
 FY:\Projects\SamSoarII-NEW\SamSoarII\Shell\Windows\Tab\MainTabDiagramItem.xaml;;
 FY:\Projects\SamSoarII-NEW\SamSoarII\Shell\Windows\UnderBar.xaml;;
+FY:\Projects\SamSoarII-NEW\SamSoarII\Shell\Windows\WindowUpBorder.xaml;;
 

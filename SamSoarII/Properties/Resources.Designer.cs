@@ -2941,6 +2941,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Maximize 的本地化字符串。
+        /// </summary>
+        public static string Maximize {
+            get {
+                return ResourceManager.GetString("Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Modbus communication 的本地化字符串。
         /// </summary>
         public static string MBUS_Inst {
@@ -3603,6 +3612,15 @@ namespace SamSoarII.Properties {
         public static string MessageBox_Download_Successd {
             get {
                 return ResourceManager.GetString("MessageBox_Download_Successd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Minimize 的本地化字符串。
+        /// </summary>
+        public static string Minimize {
+            get {
+                return ResourceManager.GetString("Minimize", resourceCulture);
             }
         }
         
@@ -4737,6 +4755,15 @@ namespace SamSoarII.Properties {
         public static string Reset_Immediately {
             get {
                 return ResourceManager.GetString("Reset_Immediately", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Restore 的本地化字符串。
+        /// </summary>
+        public static string Restore {
+            get {
+                return ResourceManager.GetString("Restore", resourceCulture);
             }
         }
         

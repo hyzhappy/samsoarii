@@ -1515,6 +1515,7 @@ namespace SamSoarII
         {
             bool ret = true;
             ret &= !IsWaitForKey;
+            if (e.Command == ApplicationCommands.Close) return ret;
             if (e.Command != ApplicationCommands.New
              && e.Command != ApplicationCommands.Open
              && e.Command != GlobalCommand.UploadCommand
@@ -1544,7 +1545,6 @@ namespace SamSoarII
             }
             if (e.Command == ApplicationCommands.New
              || e.Command == ApplicationCommands.Open
-             || e.Command == ApplicationCommands.Close
              || e.Command == ApplicationCommands.Save
              || e.Command == ApplicationCommands.SaveAs
              || e.Command == GlobalCommand.CloseProjectCommand
