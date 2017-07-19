@@ -45,7 +45,7 @@ namespace SamSoarII.Shell.Models
     /// <summary>
     /// LadderDiagramViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderDiagramViewModel : UserControl, ILoadModel, IProgram
+    public partial class LadderDiagramViewModel : UserControl, IViewModel, IProgram
     {
         public LadderDiagramViewModel(LadderDiagramModel _core)
         {
@@ -142,10 +142,7 @@ namespace SamSoarII.Shell.Models
                 case NotifyCollectionChangedAction.Add:
                     net = (LadderNetworkModel)(e.NewItems[0]);
                     if (net.View == null)
-                    {
                         net.View = new LadderNetworkViewModel(net);
-                        ViewThread.Add(net.View);
-                    }
                     LadderNetworkStackPanel.Children.Insert(e.NewStartingIndex, net.View);
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -281,6 +278,8 @@ namespace SamSoarII.Shell.Models
 
         public ProjectViewModel ViewParent { get { return core?.Parent.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
+        
+        public ScrollViewer Scroll { get { return this.MainScrollViewer; } }
 
         #region Binding
 
@@ -931,8 +930,7 @@ namespace SamSoarII.Shell.Models
                     while (id >= 0)
                     {
                         lnmodel = Core.Children[id];
-                        if (lnmodel.View != null && lnmodel.View.IsFullLoaded
-                         && !lnmodel.IsMasked && lnmodel.View.IsExpand)
+                        if (lnmodel.View != null && !lnmodel.IsMasked && lnmodel.View.IsExpand)
                         {
                             break;
                         }
@@ -963,8 +961,7 @@ namespace SamSoarII.Shell.Models
                     while (id < Core.NetworkCount)
                     {
                         lnmodel = Core.Children[id];
-                        if (lnmodel.View != null && lnmodel.View.IsFullLoaded
-                         && !lnmodel.IsMasked && lnmodel.View.IsExpand)
+                        if (lnmodel.View != null && !lnmodel.IsMasked && lnmodel.View.IsExpand)
                         {
                             break;
                         }
@@ -1868,56 +1865,7 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
-        #region Load
         
-        public bool IsFullLoaded
-        {
-            get
-            {
-                foreach (LadderNetworkModel net in core.Children)
-                    if (net.View == null) return false;
-                return true;
-            }
-        }
-        
-        public void FullLoad()
-        {
-            foreach (LadderNetworkModel net in core.Children)
-            {
-                if (net.View == null)
-                {
-                    Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                    {
-                        net.View = new LadderNetworkViewModel(net);
-                    });
-                }
-            }
-        }
-
-        public void UpdateFullLoadProgress()
-        {
-            
-        }
-
-        public ViewThreadManager ViewThread
-        {
-            get { return Core.Parent.Parent.ThMNGView; }
-        }
-
-        public IEnumerable<ILoadModel> LoadChildren
-        {
-            get
-            {
-                foreach (LadderNetworkModel net in core.Children)
-                {
-                    if (net.View != null && !net.View.IsFullLoaded) yield return net.View;
-                }
-            }
-        }
-
-        #endregion
-
         #region Expand
 
         //private bool isexpand;
@@ -2068,24 +2016,10 @@ namespace SamSoarII.Shell.Models
             PropertyChanged(this, new PropertyChangedEventArgs("TabHeader"));
             PropertyChanged(this, new PropertyChangedEventArgs("ProgramName"));
             PropertyChanged(this, new PropertyChangedEventArgs("LadderComment"));
-            if (!IsFullLoaded)
-            {
-                ladderExpander.Visibility = Visibility.Collapsed;
-                ladderExpander.IsEnabled = false;
-                ThumbnailButton.Visibility = Visibility.Hidden;
-                ThumbnailButton.IsEnabled = false;
-            }
-            else
-            {
-                ladderExpander.Visibility = Visibility.Visible;
-                ladderExpander.IsEnabled = true;
-                ThumbnailButton.Visibility = Visibility.Visible;
-                ThumbnailButton.IsEnabled = true;
-            }
-            if (!IsFullLoaded || !IsExpand)
+            if (!IsExpand)
             {
                 LadderNetworkStackPanel.Children.Clear();
-                if (IsFullLoaded && !IsExpand && ThumbnailButton.ToolTip == null)
+                if (ThumbnailButton.ToolTip == null)
                 {
                     ThumbnailButton.ToolTip = GenerateToolTipByLadder();
                     TitleStackPanel.Children.Add(ThumbnailButton);
@@ -2101,7 +2035,10 @@ namespace SamSoarII.Shell.Models
                 }
                 LadderNetworkStackPanel.Children.Clear();
                 foreach (LadderNetworkModel net in core.Children)
-                        LadderNetworkStackPanel.Children.Add(net.View);
+                {
+                    if (net.View == null) net.View = new LadderNetworkViewModel(net);
+                    LadderNetworkStackPanel.Children.Add(net.View);
+                }
             }
         }
         

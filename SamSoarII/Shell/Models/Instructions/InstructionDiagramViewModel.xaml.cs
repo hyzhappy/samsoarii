@@ -23,13 +23,14 @@ namespace SamSoarII.Shell.Models
     /// <summary>
     /// InstructionDiagramViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class InstructionDiagramViewModel : UserControl, ILoadModel
+    public partial class InstructionDiagramViewModel : UserControl, IViewModel
     {
         public InstructionDiagramViewModel(InstructionDiagramModel _core)
         {
             InitializeComponent();
             DataContext = this;
             Core = _core;
+            Update();
         }
 
         public void Dispose()
@@ -87,14 +88,7 @@ namespace SamSoarII.Shell.Models
                 case NotifyCollectionChangedAction.Add:
                     net = (LadderNetworkModel)(e.NewItems[0]);
                     if (net.Inst.View == null)
-                    {
                         net.Inst.View = new InstructionNetworkViewModel(net.Inst);
-                        ViewThread.Add(net.Inst.View);
-                    }
-                    if (net.Inst.View.Parent is StackPanel)
-                    {
-                        ((StackPanel)(net.Inst.View.Parent)).Children.Remove(net.Inst.View);
-                    }
                     MainStack.Children.Insert(e.NewStartingIndex, net.Inst.View);
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -120,58 +114,16 @@ namespace SamSoarII.Shell.Models
 
         public ProjectViewModel ViewParent { get { return core?.Parent.Parent.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
-
-        #region Load
         
-        public bool IsFullLoaded
-        {
-            get
-            {
-                foreach (LadderNetworkModel net in core.Parent.Children)
-                    if (net.Inst.View == null) return false;
-                return true;
-            }
-        }
-        public ViewThreadManager ViewThread
-        {
-            get
-            {
-                return Core.Parent.Parent.Parent.ThMNGView;
-            }
-        }
-        public IEnumerable<ILoadModel> LoadChildren
-        {
-            get
-            {
-                foreach (LadderNetworkModel net in core.Parent.Children)
-                    if (net.Inst.View != null && !net.Inst.View.IsFullLoaded)
-                        yield return net.Inst.View;
-            }
-        }
-
-        public void FullLoad()
-        {
-            foreach (LadderNetworkModel net in core.Parent.Children)
-            {
-                if (net.Inst.View == null)
-                {
-                    Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                    {
-                        net.Inst.View = new InstructionNetworkViewModel(net.Inst);
-                    });
-                }
-            }
-        }   
-
-        public void UpdateFullLoadProgress() { }
-        
-        #endregion
-
         public void Update()
         {
             MainStack.Children.Clear();
             foreach (LadderNetworkModel net in core.Parent.Children)
+            {
+                if (net.Inst.View == null)
+                    net.Inst.View = new InstructionNetworkViewModel(net.Inst);
                 MainStack.Children.Add(net.Inst.View);
+            }
         }
 
         private LadderModes laddermode;

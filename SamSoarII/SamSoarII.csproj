@@ -395,7 +395,7 @@
     <Compile Include="Shell\Models\Instructions\InstructionNetworkViewModel.xaml.cs">
       <DependentUpon>InstructionNetworkViewModel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Models\Interfaces\ILoadModel.cs" />
+    <Compile Include="Shell\Models\Instructions\InstructionRowViewModel.cs" />
     <Compile Include="Shell\Models\Interfaces\IProgram.cs" />
     <Compile Include="Shell\Models\Interfaces\ITabItem.cs" />
     <Compile Include="Shell\Models\Interfaces\IViewModel.cs" />

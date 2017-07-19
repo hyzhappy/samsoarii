@@ -3,6 +3,7 @@ using SamSoarII.Core.Models;
 using SamSoarII.Threads;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -15,24 +16,46 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.Specialized;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace SamSoarII.Shell.Models
 {
     /// <summary>
     /// InstructionNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class InstructionNetworkViewModel : UserControl, ILoadModel
+    public partial class InstructionNetworkViewModel : UserControl, IViewModel
     {
         public InstructionNetworkViewModel(InstructionNetworkModel _core)
         {
             InitializeComponent();
             DataContext = this;
             Core = _core;
-        }
 
+            children = new ObservableCollection<InstructionRowViewModel>();
+            children.CollectionChanged += OnChildrenCollectionChanged;
+            loadedrowstart = 0;
+            loadedrowend = -1;
+            oldscrolloffset = 0;
+
+            tberr = new TextBlock();
+            tberr.Background = Brushes.Red;
+            SetPosition(tberr, 0);
+            CV_Inst.Children.Add(tberr);
+        }
+        
         public void Dispose()
         {
             Core = null;
+
+            children.Clear();
+            children.CollectionChanged -= OnChildrenCollectionChanged;
+            children = null;
+
+            CV_Inst.Children.Remove(tberr);
+            tberr = null;
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -76,15 +99,10 @@ namespace SamSoarII.Shell.Models
             switch (e.PropertyName)
             {
                 case "ID": PropertyChanged(this, new PropertyChangedEventArgs("Header")); break;
-                case "IsMasked": Update(); break;
+                case "IsMasked": BaseUpdate(); break;
             }
         }
-
-        public void FullLoad()
-        {
-            isfullloaded = true;
-        }
-
+        
         #endregion
 
         #region Shell
@@ -92,25 +110,16 @@ namespace SamSoarII.Shell.Models
         public InstructionDiagramViewModel ViewParent { get { return core?.Parent.Parent?.Inst.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
+        private TextBlock tberr;
+
         #region Binding
 
         public string Header { get { return String.Format("Network {0:d}", core != null ? core.Parent.ID : 0); } }
 
-        #endregion
+        public int RowCount { get { return (int)(CV_Inst.Height / 20); } }
 
-        #region Load
-
-        private bool isfullloaded;
-        public bool IsFullLoaded { get { return this.isfullloaded; } }
-        public ViewThreadManager ViewThread { get { return Core.Parent.Parent.Parent.Parent.ThMNGView; } }
-        public IEnumerable<ILoadModel> LoadChildren { get { return new ILoadModel[] { }; } }
-
-        public void UpdateFullLoadProgress() { }
-        
         #endregion
         
-        private List<TextBlock[]> insts = new List<TextBlock[]>();
-
         private void SetPosition(FrameworkElement ctrl, int row, int column = -1)
         {
             Canvas.SetTop(ctrl, row * 20 + 1);
@@ -129,102 +138,160 @@ namespace SamSoarII.Shell.Models
             }
         }
 
-        public void Update()
+        #region Dynamic
+
+        private int loadedrowstart;
+        public int LoadedRowStart { get { return this.loadedrowstart; } }
+
+        private int loadedrowend;
+        public int LoadedRowEnd { get { return this.loadedrowend; } }
+
+        private int oldscrolloffset;
+
+        private ObservableCollection<InstructionRowViewModel> children;
+        public IList<InstructionRowViewModel> Children { get { return this.children; } }
+        private void OnChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            RowDefinition rdef;
-            CV_Inst.Children.Clear();
-            CV_Inst.Height = 20;
-            rdef = new RowDefinition();
-            rdef.Height = new GridLength(20);
-            TextBlock tberr = new TextBlock();
-            tberr.Background = Brushes.Red;
-            SetPosition(tberr, 0);
-            CV_Inst.Children.Add(tberr);
-            if (!isfullloaded)
-            {
-                tberr.Background = Brushes.Gray;
-                tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "正在加载 Network {0:d}..." : "Loading Network {0:d}...",
-                    Core.ID);
-                return;
-            }
-            if (Core.IsMasked)
-            {
-                tberr.Background = Brushes.Gray;
-                tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 已被屏蔽！" : "Network {0:d} has been masked!",
-                    Core.ID);
-                return;
-            }
-            if (Core.IsOpenCircuit)
-            {
-                tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在断路错误！" : "There have broken circuit in ladder of Network {0:d}.",
-                    Core.ID);
-                return;
-            }
-            if (Core.IsShortCircuit)
-            {
-                tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在短路错误！" : "There have short circuit in ladder of Network {0:d}.",
-                    Core.ID);
-                return;
-            }
-            if (Core.IsFusionCircuit)
-            {
-                tberr.Text = String.Format(
-                    App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
-                    Core.ID);
-                return;
-            }
-            CV_Inst.Children.Clear();
-            CV_Inst.Height = Core.Insts.Count * 20;
-            for (int rowid = 0; rowid < Core.Insts.Count; rowid++)
-            {
-                PLCOriginInst inst = Core.Insts[rowid];
-                LadderUnitModel unit = inst.Inst.ProtoType;
-                TextBlock[] tbs = (rowid < insts.Count())
-                    ? insts[rowid] : new TextBlock[8];
-                TextBlock tb = tbs[0] != null ? tbs[0] : (tbs[0] = new TextBlock());
-                tb.Text = rowid.ToString();
-                tb.Foreground = unit != null ? Brushes.Black : Brushes.Gray;
-                tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
-                SetPosition(tb, rowid, 0);
-                CV_Inst.Children.Add(tb);
-                for (int colid = 1; colid <= 6; colid++)
+            if (e.NewItems != null)
+                foreach (InstructionRowViewModel row in e.NewItems)
                 {
-                    tb = tbs[colid] != null ? tbs[colid] : (tbs[colid] = new TextBlock());
-                    tb.Text = inst[colid - 1];
-                    tb.Foreground = unit != null ? Brushes.Black : Brushes.Gray;
-                    tb.Background = (rowid & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
-                    SetPosition(tb, rowid, colid);
-                    CV_Inst.Children.Add(tb);
-                }
-                tb = tbs[7] != null ? tbs[7] : (tbs[7] = new TextBlock());
-                tb.Visibility = iscommentmode
-                    ? Visibility.Visible
-                    : Visibility.Hidden;
-                tb.Foreground = Brushes.Green;
-                StringBuilder tbtext = new StringBuilder("");
-                if (unit != null)
-                {
-                    tbtext.Append("// ");
-                    foreach (ValueModel value in unit.Children)
+                    for (int i = 0; i < row.TextBlocks.Count; i++)
                     {
-                        ValueInfo info = ValueManager[value];
-                        tbtext.Append(String.Format("{0:s}:{1:s}, ",
-                            value.Text, info.Comment));
+                        SetPosition(row.TextBlocks[i], row.ID, i);
+                        CV_Inst.Children.Add(row.TextBlocks[i]);
                     }
+                    row.TextBlocks[7].Visibility = iscommentmode
+                        ? Visibility.Visible : Visibility.Hidden;
                 }
-                tb.Text = tbtext.ToString();
-                SetPosition(tb, rowid, 7);
-                CV_Inst.Children.Add(tb);
-                if (rowid >= insts.Count()) insts.Add(tbs);
-            }
-            Canvas.SetZIndex(Cursor, -1); 
-            //CV_Inst.Children.Add(Cursor);
+            if (e.OldItems != null)
+                foreach (InstructionRowViewModel row in e.OldItems)
+                {
+                    for (int i = 0; i < row.TextBlocks.Count; i++)
+                        CV_Inst.Children.Remove(row.TextBlocks[i]);
+                    row.Dispose();
+                }
         }
-        
+
+        public void BaseUpdate()
+        {
+            bool invalid = false;
+            invalid |= Core.IsMasked;
+            invalid |= Core.IsOpenCircuit;
+            invalid |= Core.IsShortCircuit;
+            invalid |= Core.IsFusionCircuit;
+            tberr.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                tberr.Visibility = invalid ? Visibility.Visible : Visibility.Hidden;
+                tberr.Background = Core.IsMasked ? Brushes.Gray : Brushes.Red;
+                if (Core.IsMasked)
+                {
+                    tberr.Text = String.Format(
+                        App.CultureIsZH_CH() ? "Network {0:d} 已被屏蔽！" : "Network {0:d} has been masked!",
+                        Core.ID);
+                }
+                else if (Core.IsOpenCircuit)
+                {
+                    tberr.Text = String.Format(
+                        App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在断路错误！" : "There have broken circuit in ladder of Network {0:d}.",
+                        Core.ID);
+                }
+                else if (Core.IsShortCircuit)
+                {
+                    tberr.Text = String.Format(
+                        App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在短路错误！" : "There have short circuit in ladder of Network {0:d}.",
+                        Core.ID);
+                }
+                else if (Core.IsFusionCircuit)
+                {
+                    tberr.Text = String.Format(
+                        App.CultureIsZH_CH() ? "Network {0:d} 的梯形图存在混连错误！" : "There have fusion circuit in ladder of Network {0:d}.",
+                        Core.ID);
+                }
+                else
+                {
+                    tberr.Text = "";
+                }
+            });
+        }
+
+        public void DynamicUpdate()
+        {
+            bool invalid = false;
+            invalid |= Core.IsMasked;
+            invalid |= Core.IsOpenCircuit;
+            invalid |= Core.IsShortCircuit;
+            invalid |= Core.IsFusionCircuit;
+            if (!invalid)
+            {
+                ScrollViewer scroll = null;
+                Point p = new Point();
+                double newscrolloffset = 0;
+                CV_Inst.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    CV_Inst.Height = invalid ? 20 : Core.Insts.Count * 20;
+                    scroll = ViewParent.Scroll;
+                    p = CV_Inst.TranslatePoint(new Point(0, 0), scroll);
+                    newscrolloffset = scroll.VerticalOffset;
+                });
+                int _loadedrowstart = 0;
+                int _loadedrowend = Core.Insts.Count - 1;
+                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / 20) - 3);
+                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / 20) + 3);
+                if (_loadedrowstart > _loadedrowend)
+                {
+                    if (loadedrowstart <= loadedrowend)
+                        DisposeRange(loadedrowstart, loadedrowend);
+                }
+                else if (loadedrowstart > _loadedrowend)
+                {
+                    CreateRange(_loadedrowstart, _loadedrowend);
+                }
+                else
+                {
+                    if (_loadedrowstart < loadedrowstart)
+                        CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
+                    if (_loadedrowstart > loadedrowstart)
+                        DisposeRange(loadedrowstart, _loadedrowstart - 1);
+                    if (loadedrowend < _loadedrowend)
+                        CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
+                    if (loadedrowend > _loadedrowend)
+                        DisposeRange(_loadedrowend + 1, loadedrowend);
+                }
+                loadedrowstart = _loadedrowstart;
+                loadedrowend = _loadedrowend;
+            }
+        }
+
+        public void DynamicDispose()
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                children.Clear();
+                loadedrowstart = 0;
+                loadedrowend = -1;
+            });
+        }
+
+        private void CreateRange(int rowstart, int rowend)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                for (int i = rowstart; i <= rowend; i++)
+                    children.Add(AllResourceManager.CreateInstRow(Core.Insts[i], i));
+            });
+        }
+
+        private void DisposeRange(int rowstart, int rowend)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                foreach (InstructionRowViewModel row in children.Where(r => r.ID >= rowstart && r.ID <= rowend).ToArray())
+                    children.Remove(row);
+            });
+        }
+
+        #endregion
+
         private LadderModes laddermode;
         public LadderModes LadderMode
         {
@@ -248,12 +315,10 @@ namespace SamSoarII.Shell.Models
             set
             {
                 this.iscommentmode = value;
-                foreach (TextBlock[] tbs in insts)
-                {
-                    tbs[7].Visibility = iscommentmode
-                        ? Visibility.Visible
-                        : Visibility.Hidden;
-                }
+
+                foreach (InstructionRowViewModel row in children)
+                    row.TextBlocks[7].Visibility = iscommentmode
+                        ? Visibility.Visible : Visibility.Hidden;
             }
         }
 

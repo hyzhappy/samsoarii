@@ -24,6 +24,7 @@ using System.Diagnostics;
 using SamSoarII.Core.Helpers;
 using SamSoarII.Core.Communication;
 using SamSoarII.HelpDocument;
+using System.Collections.Specialized;
 
 namespace SamSoarII
 {
@@ -201,7 +202,7 @@ namespace SamSoarII
         {
             vmdProj = new ProjectViewModel(mdProj);
             vmdProj.PropertyChanged += OnViewPropertyChanged;
-            ThMNGView.Add(vmdProj);
+            //ThMNGView.Add(vmdProj);
             AllThreadStart();
             tcMain.ViewMode = MainTabControl.VIEWMODE_LADDER;
             tcMain.ShowItem(mdProj.MainDiagram.Tab);
@@ -232,9 +233,9 @@ namespace SamSoarII
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Project_Preparing));
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Project_Load);
             handle.Start();
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
-                _LoadProject(filename);
+                _LoadProject(filename, handle);
                 handle.Completed = true;
                 handle.Abort();
             });
@@ -242,7 +243,7 @@ namespace SamSoarII
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Normal, Properties.Resources.Ready));
         }
 
-        private void _LoadProject(string filename)
+        private void _LoadProject(string filename, LoadingWindowHandle handle)
         {
             try
             {
@@ -252,7 +253,9 @@ namespace SamSoarII
             }
             catch (Exception e)
             {
-                MDProj = null;
+                handle.Completed = true;
+                handle.Abort();
+                mdProj = null;
                 LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
             }
         }
@@ -998,7 +1001,7 @@ namespace SamSoarII
                 instinputrect = null;
                 return;
             }
-            if (network.View == null || !network.View.IsFullLoaded || network.IsMasked) return;
+            if (network.View == null || network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
@@ -1024,7 +1027,7 @@ namespace SamSoarII
                 Navigate(network, x1, y1);
                 return;
             }
-            if (network.View == null || !network.View.IsFullLoaded || network.IsMasked) return;
+            if (network.View == null || network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
@@ -1045,7 +1048,7 @@ namespace SamSoarII
             foreach (LadderNetworkModel network in diagram.Children)
             {
                 if (network.ID < start || network.ID > end) continue;
-                if (network.View == null || !network.View.IsFullLoaded) return;
+                if (network.View == null) return;
             }
             if (diagram.Tab == null)
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
@@ -1426,22 +1429,14 @@ namespace SamSoarII
                         if (e2.RelativeObject is LadderDiagramModel)
                         {
                             LadderDiagramModel ldmodel = (LadderDiagramModel)(e2.RelativeObject);
-                            if (ldmodel.Tab == null)
-                            {
-                                ldmodel.Tab = new MainTabDiagramItem(tcMain, ldmodel, ldmodel.Inst);
-                                thmngView.Add(ldmodel.Tab.IDVModel);
-                                thmngView.Add(ldmodel.Tab.LDVModel);
-                            }
+                            if (ldmodel.Tab == null) ldmodel.Tab = new MainTabDiagramItem(tcMain, ldmodel, ldmodel.Inst);
                             tcMain.ShowItem(ldmodel.Tab);
                         }
                         if (e2.RelativeObject is FuncBlockModel)
                         {
                             FuncBlockModel fbmodel = (FuncBlockModel)(e2.RelativeObject);
                             if (fbmodel.View == null)
-                            {
                                 fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
-                                fbmodel.View.FullLoad();
-                            }
                             tcMain.ShowItem(fbmodel.View);
                         }
                         if (e2.RelativeObject is ModbusTableModel)
@@ -1456,6 +1451,19 @@ namespace SamSoarII
                             LadderUnitModel.Types type = (LadderUnitModel.Types)(e2.RelativeObject);
                             if (CurrentLadder != null)
                                 CurrentLadder.QuickInsertElement(type);
+                        }
+                        if (e2.TargetedObject is ProjectTreeViewItem)
+                        {
+                            ProjectTreeViewItem ptvitem = (ProjectTreeViewItem)(e2.TargetedObject);
+                            switch (ptvitem.Flags & 0xf)
+                            {
+                                case ProjectTreeViewItem.TYPE_ELEMENTLIST:
+                                    wndMain.LACElemList.Show();
+                                    break;
+                                case ProjectTreeViewItem.TYPE_ELEMENTINITIALIZE:
+                                    wndMain.LACElemInit.Show();
+                                    break;
+                            }
                         }
                         break;
                 }
@@ -1586,9 +1594,9 @@ namespace SamSoarII
                     break;
             }
         }
-
-        #region Simulate
         
+        #region Simulate
+
         private void OnSimulateStarted(object sender, RoutedEventArgs e)
         {
             PostIWindowEvent(null, new MainWindowEventArgs(wndMain,

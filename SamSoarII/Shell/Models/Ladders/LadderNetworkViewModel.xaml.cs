@@ -41,7 +41,7 @@ namespace SamSoarII.Shell.Models
     /// <summary>
     /// LadderNetworkViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class LadderNetworkViewModel : UserControl, ILoadModel, INotifyPropertyChanged, IComparable<LadderNetworkViewModel>
+    public partial class LadderNetworkViewModel : UserControl, IViewModel, INotifyPropertyChanged, IComparable<LadderNetworkViewModel>
     {
         public LadderNetworkViewModel(LadderNetworkModel _core)
         {
@@ -61,6 +61,8 @@ namespace SamSoarII.Shell.Models
                 LadderMode = ViewParent.LadderMode;
                 IsCommentMode = ViewParent.IsCommentMode;
             }
+            loadedrowstart = 0;
+            loadedrowend = -1;
             Update();
         }
 
@@ -125,6 +127,7 @@ namespace SamSoarII.Shell.Models
                         if (SelectAreaSecondY >= RowCount) SelectAreaSecondY = RowCount - 1;
                     }
                     LadderCanvas.Height = RowCount * HeightUnit;
+                    DynamicUpdate();
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
                     break;
                 case "IsExpand":
@@ -175,14 +178,19 @@ namespace SamSoarII.Shell.Models
             switch (e.Action)
             {
                 case LadderUnitAction.ADD:
+                    if (sender.Y < loadedrowstart || sender.Y > loadedrowend)
+                        break;
                     if (sender.View == null)
                         sender.View = LadderUnitViewModel.Create(sender);
-                    if (sender.View.Parent is Canvas)
-                        ((Canvas)(sender.View.Parent)).Children.Remove(sender.View);
+                    //if (sender.View.Parent is Canvas)
+                    //    ((Canvas)(sender.View.Parent)).Children.Remove(sender.View);
                     LadderCanvas.Children.Add(sender.View);
                     break;
                 case LadderUnitAction.REMOVE:
+                    if (sender.View == null) break;
                     LadderCanvas.Children.Remove(sender.View);
+                    //AllResourceManager.Dispose(sender.View);
+                    //sender.View = null;
                     sender.View.Dispose();
                     break;
                 case LadderUnitAction.MOVE:
@@ -196,7 +204,7 @@ namespace SamSoarII.Shell.Models
 
         #region Shell
 
-        public LadderDiagramViewModel ViewParent { get { return core?.Parent.View; } }
+        public LadderDiagramViewModel ViewParent { get { return core?.Parent?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
         #region Binding
@@ -394,11 +402,13 @@ namespace SamSoarII.Shell.Models
         
         public void ReleaseSelectRect()
         {
+            if (ViewParent.SelectionRect == null) return;
             if (ViewParent.SelectionRect.Core.Parent == Core)
                 ViewParent.SelectionRect.Core.Parent = null;
         }
         public void AcquireSelectRect()
         {
+            if (ViewParent.SelectionRect == null) return;
             if (ViewParent.SelectionRect.Core.Parent != Core)
                 ViewParent.SelectionRect.Core.Parent = Core;
         }
@@ -456,67 +466,7 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
-        #region Load
-
-        private int loadcount;
-        private int loadfinish;
-
-        public bool IsFullLoaded
-        {
-            get
-            {
-                foreach (LadderUnitModel unit in core.Children)
-                    if (unit.View == null) return false;
-                return true;
-            }
-        }
-
-        public ViewThreadManager ViewThread { get { return Core.Parent.Parent.Parent.ThMNGView; } }
-
-        public IEnumerable<ILoadModel> LoadChildren { get { return new ILoadModel[] { }; } }
         
-        public void FullLoad()
-        {
-            loadfinish = 0;
-            loadcount = core.Children.Count() + core.VLines.Count();
-            for (int y = 0; y < core.RowCount; y++)
-            { 
-                Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                {
-                    foreach (LadderUnitModel unit in core.Children.SelectRange(0, GlobalSetting.LadderXCapacity, y, y))
-                    {
-                        if (unit.View == null)
-                            unit.View = LadderUnitViewModel.Create(unit);
-                        loadfinish++;
-                        if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
-                    }
-                });
-                if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
-                Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-                {
-                    foreach (LadderUnitModel unit in core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity, y, y))
-                    {
-                        if (unit.View == null)
-                            unit.View = LadderUnitViewModel.Create(unit);
-                        loadfinish++;
-                        if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
-                    }
-                });
-                if (!ViewThread.ThAlive || !ViewThread.ThActive) break;
-            }
-        }
-
-        public void UpdateFullLoadProgress()
-        {
-            NetworkNumberLabel.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-            {
-                NetworkNumberLabel.Content = String.Format("{0:s}({1:d}%)", NetworkNumber, loadcount == 0 ? 100 : loadfinish * 100 / loadcount);
-            });
-        }
-
-        #endregion
-
         #region Expand
         
         //private bool isexpand;
@@ -546,13 +496,6 @@ namespace SamSoarII.Shell.Models
             ScaleTransform transform = new ScaleTransform(GlobalSetting.LadderOriginScaleX / 1.7, GlobalSetting.LadderOriginScaleY / 1.7);
             tipcanvas.Height = Core.RowCount * HeightUnit;
             tipcanvas.Width = LadderCanvas.Width;
-            if (IsFullLoaded)
-            {
-                foreach (var ele in Core.Children)
-                    tipcanvas.Children.Add(ele.View);
-                foreach (var ele in Core.VLines)
-                    tipcanvas.Children.Add(ele.View);
-            }
             tipcanvas.LayoutTransform = transform;
             scroll.Content = tipcanvas;
             tooltip.Content = scroll;
@@ -576,7 +519,7 @@ namespace SamSoarII.Shell.Models
         
         public bool AcquireSelectRect(MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && !IsMasked && IsFullLoaded)
+            if (e.LeftButton == MouseButtonState.Pressed && !IsMasked)
             {
                 var pos = e.GetPosition(LadderCanvas);
                 return AcquireSelectRect(pos);
@@ -605,35 +548,159 @@ namespace SamSoarII.Shell.Models
 
         #endregion
 
+        #region Dynamic
+
+        private int loadedrowstart;
+        public int LoadedRowStart { get { return this.loadedrowstart; } }
+
+        private int loadedrowend;
+        public int LoadedRowEnd { get { return this.loadedrowend; } }
+
+        private double oldscrolloffset;
+        public void DynamicUpdate()
+        {
+            //double scaleX = GlobalSetting.LadderScaleTransform.ScaleX;
+            double scaleY = 0;
+            ScrollViewer scroll = null;
+            Point p = new Point();
+            double newscrolloffset = 0;
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
+                scroll = ViewParent?.Scroll;
+                p = LadderCanvas.TranslatePoint(new Point(0, 0), scroll);
+                newscrolloffset = scroll.VerticalOffset;
+            });
+            if (!IsExpand)
+            {
+                if (loadedrowstart <= loadedrowend)
+                {
+                    DisposeRange(loadedrowstart, loadedrowend);
+                    loadedrowstart = 0;
+                    loadedrowend = -1;
+                }
+            }
+            else
+            {
+                int _loadedrowstart = 0; 
+                int _loadedrowend = RowCount - 1;
+                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (HeightUnit * scaleY)) - 3);
+                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (HeightUnit * scaleY)) + 3);
+                if (_loadedrowstart > _loadedrowend)
+                {
+                    if (loadedrowstart <= loadedrowend)
+                    {
+                        if (newscrolloffset > oldscrolloffset)
+                            DisposeRange(loadedrowstart, loadedrowend);
+                        else
+                            DisposeRange(loadedrowend, loadedrowstart);
+                    }
+                }
+                else if (loadedrowstart > _loadedrowend)
+                {
+                    if (newscrolloffset > oldscrolloffset)
+                        CreateRange(_loadedrowstart, _loadedrowend);
+                    else
+                        CreateRange(_loadedrowend, _loadedrowstart);
+                }
+                else
+                {
+                    if (newscrolloffset > oldscrolloffset)
+                    {
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(_loadedrowstart, Math.Min(_loadedrowend, loadedrowstart - 1));
+                        if (_loadedrowstart > loadedrowstart)
+                            DisposeRange(loadedrowstart, _loadedrowstart - 1);
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(Math.Max(_loadedrowstart, loadedrowend + 1), _loadedrowend);
+                        if (loadedrowend > _loadedrowend)
+                            DisposeRange(_loadedrowend + 1, loadedrowend);
+                    }
+                    else
+                    {
+                        if (_loadedrowstart < loadedrowstart)
+                            CreateRange(Math.Min(_loadedrowend, loadedrowstart - 1), _loadedrowstart);
+                        if (_loadedrowstart > loadedrowstart)
+                            DisposeRange(_loadedrowstart - 1, loadedrowstart);
+                        if (loadedrowend < _loadedrowend)
+                            CreateRange(_loadedrowend, Math.Max(_loadedrowstart, loadedrowend + 1));
+                        if (loadedrowend > _loadedrowend)
+                            DisposeRange(loadedrowend, _loadedrowend + 1);
+                    }
+                }
+                loadedrowstart = _loadedrowstart;
+                loadedrowend = _loadedrowend;
+            }
+            oldscrolloffset = newscrolloffset;
+        }
+
+        public void DynamicDispose()
+        {
+            if (loadedrowstart <= loadedrowend)
+            {
+                DisposeRange(loadedrowstart, loadedrowend);
+                loadedrowstart = 0;
+                loadedrowend = -1;
+            }
+        }
+
+        private void CreateRange(int rowstart, int rowend)
+        {
+            int dir = (rowstart < rowend ? 1 : -1);
+            for (int y = rowstart; y != rowend + dir; y += dir)
+            {
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
+                    units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
+                    foreach (LadderUnitModel unit in units)
+                    {
+                        if (unit.View == null)
+                        {
+                            unit.View = LadderUnitViewModel.Create(unit);
+                            LadderCanvas.Children.Add(unit.View);
+                        }
+                    }
+                });
+            }
+        }
+
+        private void DisposeRange(int rowstart, int rowend)
+        {
+            int dir = (rowstart < rowend ? 1 : -1);
+            for (int y = rowstart; y != rowend + dir; y += dir)
+            {
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
+                    units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
+                    foreach (LadderUnitModel unit in units)
+                    {
+                        if (unit.View != null)
+                        {
+                            LadderCanvas.Children.Remove(unit.View);
+                            //AllResourceManager.Dispose(unit.View);
+                            //unit.View = null;
+                            unit.View.Dispose();
+                        }
+                    }
+                });
+            }
+        }
+
+        #endregion
+
         public void Update()
         {
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("ID"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("Brief"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("Description"));
-            if (!IsFullLoaded)
-            {
-                CommentAreaExpander.Background = Brushes.Gray;
-                CommentAreaExpander.Opacity = 0.4;
-                ladderExpander.Visibility = Visibility.Collapsed;
-                ladderExpander.IsEnabled = false;
-                ThumbnailButton.Visibility = Visibility.Hidden;
-                ThumbnailButton.IsEnabled = false;
-            }
-            else
-            {
-                OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
-                OnCorePropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
-                ladderExpander.Visibility = Visibility.Visible;
-                ladderExpander.IsEnabled = true;
-                ThumbnailButton.Visibility = Visibility.Visible;
-                ThumbnailButton.IsEnabled = true;
-            }
-            if (!IsFullLoaded || !IsExpand)
+            if (!IsExpand)
             {
                 ReleaseSelectRect();
                 LadderCanvas.Height = 0;
                 LadderCanvas.Children.Clear();
-                if (IsFullLoaded && !IsExpand && ThumbnailButton.ToolTip == null)
+                if (ThumbnailButton.ToolTip == null)
                 {
                     ThumbnailButton.ToolTip = GenerateToolTipByLadder();
                     if (ThumbnailButton.Parent is Grid)
@@ -650,10 +717,7 @@ namespace SamSoarII.Shell.Models
                     CommentAreaGrid.Children.Remove(ThumbnailButton);
                 }
                 LadderCanvas.Height = RowCount * HeightUnit;
-                LadderCanvas.Children.Clear();
-                foreach (LadderUnitModel unit in Core.Children.Concat(Core.VLines))
-                    LadderCanvas.Children.Add(unit.View);
-                if (IsSelectAreaMode)
+                if (IsSelectAreaMode && !LadderCanvas.Children.Contains(SelectArea))
                     LadderCanvas.Children.Add(SelectArea);
             }
         }
@@ -870,7 +934,7 @@ namespace SamSoarII.Shell.Models
                 if (ptvitem.RelativeObject is LadderUnitModel.Types)
                 {
                     LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
-                    Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core);
+                    Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
                 }
                 else if (ptvitem.RelativeObject is FuncModel)
                 {

@@ -143,13 +143,7 @@ namespace SamSoarII.Core.Models
         {
             ismodify = false;
             Compile();
-            if (View != null)
-            {
-                View.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
-                {
-                    View.Update();
-                }));
-            }
+            if (View != null) View.BaseUpdate();
         }
 
         private void Compile()

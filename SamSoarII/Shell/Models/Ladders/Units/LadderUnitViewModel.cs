@@ -19,20 +19,21 @@ namespace SamSoarII.Shell.Models
     {
         #region IResource
 
+        private int resourceid;
+        public int ResourceID
+        {
+            get { return this.resourceid; }
+            set { this.resourceid = value; }
+        }
+
         public abstract IResource Create(params object[] args);
 
+        protected bool recreating = false;
         public virtual void Recreate(params object[] args)
         {
             Core = (LadderUnitModel)args[0];
         }
         
-        private bool isdisposed;
-        public virtual bool IsDisposed
-        {
-            get { return this.isdisposed; }
-            set { this.isdisposed = value; }
-        }
-
         #endregion
 
         public LadderUnitViewModel()
@@ -83,6 +84,7 @@ namespace SamSoarII.Shell.Models
             }
             set
             {
+                if (recreating) return;
                 if (core == value) return;
                 LadderUnitModel _core = core;
                 this.core = value;

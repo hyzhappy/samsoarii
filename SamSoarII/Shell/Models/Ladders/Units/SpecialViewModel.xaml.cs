@@ -31,6 +31,7 @@ namespace SamSoarII.Shell.Models
         public override void Recreate(params object[] args)
         {
             base.Recreate(args);
+            recreating = true;
             DataContext = this;
             if (Core?.Parent?.View != null)
             {
@@ -38,6 +39,7 @@ namespace SamSoarII.Shell.Models
                 IsCommentMode = Core.Parent.View.IsCommentMode;
             }
             ReinitializeComponent();
+            recreating = false;
         }
 
         #endregion
@@ -45,11 +47,12 @@ namespace SamSoarII.Shell.Models
         public SpecialViewModel(LadderUnitModel _core)
         {
             InitializeComponent();
-            Recreate(_core);
+            if (_core != null) Recreate(_core);
         }
 
         private void ReinitializeComponent()
         {
+            CenterCanvas.Children.Clear();
             Line line1 = null;
             Line line2 = null;
             Line line3 = null;

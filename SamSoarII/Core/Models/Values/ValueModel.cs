@@ -108,7 +108,7 @@ namespace SamSoarII.Core.Models
         public string Text
         {
             get { return this.text; }
-            set { Parse(value); this.text = value; }
+            set { value = value.ToUpper(); Parse(value); this.text = value; }
         }
 
         public string Comment { get { return ValueManager != null ? ValueManager[this].Comment : ""; } }

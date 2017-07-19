@@ -9,7 +9,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using SamSoarII.Global;
+using SamSoarII.Properties;
+using SamSoarII.Shell.Managers;
 using SamSoarII.Shell.Models;
+using SamSoarII.Utility;
 using System;
 using System.Diagnostics;
 using System.Windows;

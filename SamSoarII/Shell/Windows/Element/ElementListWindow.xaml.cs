@@ -113,7 +113,11 @@ namespace SamSoarII.Shell.Windows
         {
             LB_Range.SelectedItem = null;
         }
-        
+        private void LB_Range_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (sender == BT_Clear && DG_Element.SelectedItems != null)

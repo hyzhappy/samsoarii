@@ -112,6 +112,7 @@ namespace SamSoarII.Shell.Windows
                 tab.Dispose();
             }
             tabitems.Clear();
+            selecteditem = null;
         }
 
         public void Add(ITabItem tab)

@@ -13,7 +13,8 @@ namespace SamSoarII.Core.Models
         public ValueStore(ValueInfo _parent, ValueModel.Types _type, ValueModel.Bases _ibs = ValueModel.Bases.NULL, int _ifs = 0)
         {
             parent = _parent;
-            parent.PropertyChanged += OnParentPropertyChanged;
+            if (parent != null)
+                parent.PropertyChanged += OnParentPropertyChanged;
             type = _type;
             ibs = _ibs;
             ifs = _ifs;
@@ -21,7 +22,8 @@ namespace SamSoarII.Core.Models
         
         public void Dispose()
         {
-            parent.PropertyChanged -= OnParentPropertyChanged;
+            if (parent != null)
+                parent.PropertyChanged -= OnParentPropertyChanged;
             parent = null;
         }
 

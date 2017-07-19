@@ -9,6 +9,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using SamSoarII.Global;
+using SamSoarII.Properties;
+using SamSoarII.Shell.Windows;
+using SamSoarII.Utility;
 using System;
 using System.Diagnostics;
 using System.Windows;

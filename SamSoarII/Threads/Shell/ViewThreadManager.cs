@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Shell.Models;
+using SamSoarII.Shell.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,14 @@ using System.Windows.Threading;
 
 namespace SamSoarII.Threads
 {
-    public enum ViewThreadAction { DIAGRAM, FUNCBLOCK, INSTRUCTION }
-
     public class ViewThreadManager : BaseThreadManager
     {
         public ViewThreadManager(InteractionFacade _parent) : base(true, true)
         {
             parent = _parent;
-            loads = new Stack<ILoadModel>();
             Aborted += OnAborted;
+            oldscrolloffset = 0;
+            current = null;
         }
         
         #region Number
@@ -25,53 +25,48 @@ namespace SamSoarII.Threads
         private InteractionFacade parent;
         public InteractionFacade Parent { get { return this.parent; } }
 
-        private Stack<ILoadModel> loads;
         #endregion
 
-        private Thread progthread = null;
+        private double oldscrolloffset;
+        private LadderDiagramViewModel current;
         protected override void Handle()
         {
-            Thread.Sleep(10);
-            if (loads.Count() == 0) return;
-            ILoadModel load = loads.Pop();
-            progthread = new Thread(() =>
+            if (current?.Core?.Children != null && current != parent.CurrentLadder)
             {
-                while (!load.IsFullLoaded)
+                for (int i = 0; i < current.Core.Children.Count; i++)
                 {
-                    load.UpdateFullLoadProgress();
-                    Thread.Sleep(50);
+                    current.Core.Children[i].View.DynamicDispose();
+                    current.Core.Children[i].Inst.View.DynamicDispose();
                 }
-            });
-            progthread.SetApartmentState(ApartmentState.STA);
-            progthread.Start();
-            load.FullLoad();
-            progthread.Abort();
-            progthread = null;
-            if (!load.IsFullLoaded)
+            }
+            current = parent.CurrentLadder;
+            if (current == null)
             {
-                loads.Push(load);
+                oldscrolloffset = 0;
                 return;
             }
-            load.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            double newscrolloffset = current.Scroll.VerticalOffset;
+            if (newscrolloffset > oldscrolloffset)
             {
-                load.Update();
-            });
-            List<ILoadModel> children = load.LoadChildren.ToList();
-            children.Reverse();
-            foreach (ILoadModel sub in children)
-                loads.Push(sub);
-        }
-
-        public void Add(ILoadModel load)
-        {
-            loads.Push(load);
+                for (int i = 0; i < current.Core.Children.Count; i++)
+                {
+                    current.Core.Children[i].View.DynamicUpdate();
+                    current.Core.Children[i].Inst.View.DynamicUpdate();
+                }
+            }
+            else
+            {
+                for (int i = current.Core.Children.Count - 1; i >= 0; i--)
+                {
+                    current.Core.Children[i].View.DynamicUpdate();
+                    current.Core.Children[i].Inst.View.DynamicUpdate();
+                }
+            }
+            oldscrolloffset = newscrolloffset;
         }
         
         private void OnAborted(object sender, RoutedEventArgs e)
         {
-            if (progthread != null && progthread.IsAlive)
-                progthread.Abort();
-            loads.Clear();
         }
     }
 }

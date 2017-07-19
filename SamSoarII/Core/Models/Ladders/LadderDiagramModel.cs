@@ -196,7 +196,7 @@ namespace SamSoarII.Core.Models
             xatt = xele.Attribute("IsMain");
             ismain = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("Path");
-            path = xatt == null ? null : xele.Value;
+            path = xatt == null ? null : xatt.Value;
             children.Clear();
             foreach (XElement xele_ch in xele.Elements("Network"))
             {
@@ -858,9 +858,9 @@ namespace SamSoarII.Core.Models
 
         #region Manipulation
 
-        public void AddSingleUnit(LadderUnitModel unit, LadderNetworkModel net, bool cover = false)
+        public void AddSingleUnit(LadderUnitModel unit, LadderNetworkModel net, bool cover = true)
         {
-            if (unit.X < 0 || unit.Y >= GlobalSetting.LadderXCapacity || unit.Y < 0) return;
+            if (unit.X < 0 || unit.X >= GlobalSetting.LadderXCapacity || unit.Y < 0) return;
             LadderUnitModel old = null;
             switch (unit.Shape)
             {
@@ -889,7 +889,7 @@ namespace SamSoarII.Core.Models
                 default:
                     if (unit.X == GlobalSetting.LadderXCapacity - 1) return;
                     old = net.Children[unit.X, unit.Y];
-                    if (old != null && !cover) return;
+                    //if (old != null && !cover) return;
                     ReplaceU(net, old != null ? new LadderUnitModel[] { old } : new LadderUnitModel[] { }, new LadderUnitModel[] { unit });
                     break;
             }
@@ -930,7 +930,7 @@ namespace SamSoarII.Core.Models
                 newunit.InstArgs = instargs;
                 newunit.X = rect.X;
                 newunit.Y = rect.Y;
-                AddSingleUnit(newunit, net);
+                AddSingleUnit(newunit, net, cover);
             }
             catch (ValueParseException e)
             {
@@ -944,15 +944,15 @@ namespace SamSoarII.Core.Models
             RemoveU(unit.Parent, new LadderUnitModel[] { unit });
         }
         
-        public void QuickInsertElement(LadderUnitModel.Types type, SelectRectCore rect)
+        public void QuickInsertElement(LadderUnitModel.Types type, SelectRectCore rect, bool cover = true)
         {
-            QuickInsertElement(type, rect.Parent, rect.X, rect.Y);
+            QuickInsertElement(type, rect.Parent, rect.X, rect.Y, cover);
         }
 
-        public void QuickInsertElement(LadderUnitModel.Types type, LadderNetworkModel net, int x, int y)
+        public void QuickInsertElement(LadderUnitModel.Types type, LadderNetworkModel net, int x, int y, bool cover = true)
         {
             LadderUnitModel unit = new LadderUnitModel(null, type) { X = x, Y = y };
-            AddSingleUnit(unit, net);
+            AddSingleUnit(unit, net, cover);
         }
         
         #endregion

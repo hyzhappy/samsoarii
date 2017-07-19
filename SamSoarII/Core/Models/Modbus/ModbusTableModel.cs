@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using SamSoarII.Shell.Models;
 using System.Collections.ObjectModel;
 using SamSoarII.Shell.Windows;
+using System.Collections.Specialized;
 
 namespace SamSoarII.Core.Models
 {
@@ -16,13 +17,13 @@ namespace SamSoarII.Core.Models
         {
             parent = _parent;
             children = new ObservableCollection<ModbusModel>();
+            children.CollectionChanged += OnChildrenCollectionChanged;
         }
-        
+
         public void Dispose()
         {
-            foreach (ModbusModel modbus in children)
-                modbus.Dispose();
             children.Clear();
+            children.CollectionChanged -= OnChildrenCollectionChanged;
             children = null;
             parent = null;
         }
@@ -37,6 +38,14 @@ namespace SamSoarII.Core.Models
 
         private ObservableCollection<ModbusModel> children;
         public IList<ModbusModel> Children { get { return children; } }
+        public event NotifyCollectionChangedEventHandler ChildrenChanged = delegate { };
+        private void OnChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems != null)
+                foreach (ModbusModel modbus in e.OldItems)
+                    modbus.Dispose();
+            ChildrenChanged(this, e);
+        }
 
         #endregion
 
