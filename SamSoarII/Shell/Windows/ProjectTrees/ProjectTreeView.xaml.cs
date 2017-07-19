@@ -163,14 +163,17 @@ namespace SamSoarII.Shell.Windows
             {
                 if (ldmodel.IsMainLadder) continue;
                 string path = ldmodel.Path;
+                string next = null;
                 ProjectTreeViewItem ptvitem = PTVI_SubRoutines;
                 if (path != null)
                 {
                     string name = PathMove(ref path);
                     name = PathMove(ref path);
-                    while (path != null)
+                    name = PathMove(ref path);
+                    name = PathMove(ref path);
+                    next = PathMove(ref path);
+                    while (next != null)
                     {
-                        name = PathMove(ref path);
                         IEnumerable<ProjectTreeViewItem> fit = ptvitem.Items.Cast<ProjectTreeViewItem>();
                         fit = fit.Where((ptvi) => { return ptvi.Text.Equals(name); });
                         ptvitem = fit.Count() > 0 ? fit.First()
@@ -180,6 +183,8 @@ namespace SamSoarII.Shell.Windows
                               | ProjectTreeViewItem.FLAG_CREATEROUTINE
                               | ProjectTreeViewItem.FLAG_REMOVE,
                                 name, false, true);
+                        name = next;
+                        next = PathMove(ref path);
                     }
                 }
                 ldmodel.PTVItem = CreatePTVItem(ptvitem,

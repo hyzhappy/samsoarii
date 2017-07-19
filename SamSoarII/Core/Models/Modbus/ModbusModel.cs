@@ -35,6 +35,11 @@ namespace SamSoarII.Core.Models
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         #region Numbers
 
         private ModbusTableModel parent;

@@ -69,6 +69,10 @@ namespace SamSoarII.Shell.Windows
                     {
                         ((LadderDiagramModel)relativeobject).ChildrenChanged -= OnNetworkChanged;
                     }
+                    if (relativeobject is ModbusTableModel)
+                    {
+                        ((ModbusTableModel)relativeobject).ChildrenChanged -= OnModbusTableChanged;
+                    }
                     if (relativeobject is ModbusModel)
                     {
                         ((ModbusModel)relativeobject).ChildrenChanged -= OnModbusChanged;
@@ -91,6 +95,10 @@ namespace SamSoarII.Shell.Windows
                     {
                         ((LadderDiagramModel)relativeobject).ChildrenChanged += OnNetworkChanged;
                     }
+                    if (relativeobject is ModbusTableModel)
+                    {
+                        ((ModbusTableModel)relativeobject).ChildrenChanged += OnModbusTableChanged;
+                    }
                     if (relativeobject is ModbusModel)
                     {
                         ((ModbusModel)relativeobject).ChildrenChanged += OnModbusChanged;
@@ -99,6 +107,7 @@ namespace SamSoarII.Shell.Windows
             }
         }
         
+
         public string IconSource
         {
             get
@@ -620,9 +629,14 @@ namespace SamSoarII.Shell.Windows
             ptview.Handle(this, e, TYPE_NETWORK);
         }
 
-        private void OnModbusChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnModbusTableChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             ptview.Handle(this, e, TYPE_MODBUS);
+        }
+
+        private void OnModbusChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            //ptview.Handle(this, e, TYPE_MODBUS);
         }
 
         #endregion

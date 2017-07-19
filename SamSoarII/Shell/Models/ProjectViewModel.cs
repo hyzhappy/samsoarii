@@ -125,28 +125,36 @@ namespace SamSoarII.Shell.Models
 
         private void OnCoreDiagramChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            LadderDiagramModel diagram = null;
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    diagram = (LadderDiagramModel)(e.NewItems[0]);
+            if (e.NewItems != null)
+                foreach (LadderDiagramModel diagram in e.NewItems)
+                {
                     if (diagram.View == null)
                         diagram.View = new LadderDiagramViewModel(diagram);
-                    break;
-            }
+                    if (diagram.Inst?.View == null)
+                        diagram.Inst.View = new InstructionDiagramViewModel(diagram.Inst);
+                }
+            if (e.OldItems != null)
+                foreach (LadderDiagramModel diagram in e.OldItems)
+                    if (diagram.Tab != null)
+                    {
+                        diagram.Tab.Dispose();
+                        diagram.Tab = null;
+                    }
         }
 
         private void OnCoreFuncBlockChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            FuncBlockModel funcblock = null;
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    funcblock = (FuncBlockModel)(e.NewItems[0]);
+            if (e.NewItems != null)
+                foreach (FuncBlockModel funcblock in e.NewItems)
                     if (funcblock.View == null)
                         funcblock.View = new FuncBlockViewModel(funcblock, IFParent.TCMain);
-                    break;
-            }
+            if (e.OldItems != null)
+                foreach (FuncBlockModel funcblock in e.OldItems)
+                    if (funcblock.View != null)
+                    {
+                        funcblock.View.Dispose();
+                        funcblock.View = null;
+                    }
         }
 
         #endregion

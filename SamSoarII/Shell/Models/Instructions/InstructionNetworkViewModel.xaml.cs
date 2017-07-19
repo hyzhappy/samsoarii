@@ -262,6 +262,16 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        public void DynamicDispose()
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+                children.Clear();
+                loadedrowstart = 0;
+                loadedrowend = -1;
+            });
+        }
+
         private void CreateRange(int rowstart, int rowend)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()

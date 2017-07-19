@@ -1160,20 +1160,18 @@ namespace SamSoarII.Core.Models
 
         public void Parse(string[] _args, bool updatevmg = true)
         {
-            int start = 0;
-            if (type == Types.CALLM) start++;
-            if (_args.Length != children.Length - start)
+            if (_args.Length != children.Length)
             {
                 throw new ValueParseException("输入的参数数量不相符！", null);
             }
             string[] oldtexts = new string[children.Length];
             if (updatevmg && ValueManager != null) ValueManager.Remove(this);
-            for (int i = start; i < children.Length; i++)
+            for (int i = 0; i < children.Length; i++)
             {
                 try
                 {
                     oldtexts[i] = children[i].Text;
-                    children[i].Text = _args[i - start];
+                    children[i].Text = _args[i];
                 }
                 catch (Exception e)
                 {

@@ -634,6 +634,16 @@ namespace SamSoarII.Shell.Models
             oldscrolloffset = newscrolloffset;
         }
 
+        public void DynamicDispose()
+        {
+            if (loadedrowstart <= loadedrowend)
+            {
+                DisposeRange(loadedrowstart, loadedrowend);
+                loadedrowstart = 0;
+                loadedrowend = -1;
+            }
+        }
+
         private void CreateRange(int rowstart, int rowend)
         {
             int dir = (rowstart < rowend ? 1 : -1);

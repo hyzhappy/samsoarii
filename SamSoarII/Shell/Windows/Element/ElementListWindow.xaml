@@ -38,7 +38,8 @@
         </Grid.ColumnDefinitions>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static properties:Resources.Select_Element_Range}">
             <ListBox x:Name="LB_Range" SelectionMode="Extended" ItemsSource="{Binding RangeListCollection}" 
-                     MouseLeftButtonDown="LB_Range_MouseLeftButtonDown">
+                     MouseLeftButtonDown="LB_Range_MouseLeftButtonDown"
+                     SelectionChanged="LB_Range_SelectionChanged">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="LBI_MouseLeftButtonDown"></EventSetter>

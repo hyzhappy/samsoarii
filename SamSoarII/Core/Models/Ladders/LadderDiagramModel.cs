@@ -196,7 +196,7 @@ namespace SamSoarII.Core.Models
             xatt = xele.Attribute("IsMain");
             ismain = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("Path");
-            path = xatt == null ? null : xele.Value;
+            path = xatt == null ? null : xatt.Value;
             children.Clear();
             foreach (XElement xele_ch in xele.Elements("Network"))
             {

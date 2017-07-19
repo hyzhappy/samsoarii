@@ -16,6 +16,8 @@ namespace SamSoarII.Threads
         {
             parent = _parent;
             Aborted += OnAborted;
+            oldscrolloffset = 0;
+            current = null;
         }
         
         #region Number
@@ -26,14 +28,23 @@ namespace SamSoarII.Threads
         #endregion
 
         private double oldscrolloffset;
+        private LadderDiagramViewModel current;
         protected override void Handle()
         {
-            if (parent.CurrentLadder == null)
+            if (current?.Core?.Children != null && current != parent.CurrentLadder)
+            {
+                for (int i = 0; i < current.Core.Children.Count; i++)
+                {
+                    current.Core.Children[i].View.DynamicDispose();
+                    current.Core.Children[i].Inst.View.DynamicDispose();
+                }
+            }
+            current = parent.CurrentLadder;
+            if (current == null)
             {
                 oldscrolloffset = 0;
                 return;
             }
-            LadderDiagramViewModel current = parent.CurrentLadder;
             double newscrolloffset = current.Scroll.VerticalOffset;
             if (newscrolloffset > oldscrolloffset)
             {

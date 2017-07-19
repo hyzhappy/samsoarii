@@ -24,6 +24,7 @@ using System.Diagnostics;
 using SamSoarII.Core.Helpers;
 using SamSoarII.Core.Communication;
 using SamSoarII.HelpDocument;
+using System.Collections.Specialized;
 
 namespace SamSoarII
 {
@@ -1451,6 +1452,19 @@ namespace SamSoarII
                             if (CurrentLadder != null)
                                 CurrentLadder.QuickInsertElement(type);
                         }
+                        if (e2.TargetedObject is ProjectTreeViewItem)
+                        {
+                            ProjectTreeViewItem ptvitem = (ProjectTreeViewItem)(e2.TargetedObject);
+                            switch (ptvitem.Flags & 0xf)
+                            {
+                                case ProjectTreeViewItem.TYPE_ELEMENTLIST:
+                                    wndMain.LACElemList.Show();
+                                    break;
+                                case ProjectTreeViewItem.TYPE_ELEMENTINITIALIZE:
+                                    wndMain.LACElemInit.Show();
+                                    break;
+                            }
+                        }
                         break;
                 }
             }
@@ -1580,9 +1594,9 @@ namespace SamSoarII
                     break;
             }
         }
-
-        #region Simulate
         
+        #region Simulate
+
         private void OnSimulateStarted(object sender, RoutedEventArgs e)
         {
             PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
