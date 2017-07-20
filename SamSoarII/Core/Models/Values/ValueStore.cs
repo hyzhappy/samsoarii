@@ -94,7 +94,7 @@ namespace SamSoarII.Core.Models
         public int RefNum
         {
             get { return this.refnum; }
-            set { this.refnum = value; PropertyChanged(this, new PropertyChangedEventArgs("RefNum")); }
+            set { this.refnum = value; }
         }
 
         private MonitorElement visual;
