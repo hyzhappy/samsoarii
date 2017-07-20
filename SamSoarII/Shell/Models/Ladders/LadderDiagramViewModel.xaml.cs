@@ -2511,9 +2511,9 @@ namespace SamSoarII.Shell.Models
                         int yBegin = Math.Min(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
                         int xEnd = Math.Max(_selectStartNetwork.SelectAreaFirstX, _selectStartNetwork.SelectAreaSecondX);
                         int yEnd = Math.Max(_selectStartNetwork.SelectAreaFirstY, _selectStartNetwork.SelectAreaSecondY);
-                        IEnumerable<LadderUnitModel> units = SelectRectOwner.Children.SelectRange(xBegin, xEnd, yBegin, yEnd);
-                        units = units.Concat(SelectRectOwner.VLines.SelectRange(xBegin, xEnd, yBegin, yEnd));
-                        Core.RemoveU(SelectRectOwner, units);
+                        IEnumerable<LadderUnitModel> units = _selectStartNetwork.Core.Children.SelectRange(xBegin, xEnd, yBegin, yEnd);
+                        units = units.Concat(_selectStartNetwork.Core.VLines.SelectRange(xBegin, xEnd, yBegin, yEnd));
+                        Core.RemoveU(_selectStartNetwork.Core, units);
                         SelectionStatus = SelectStatus.Idle;
                     }
                 }

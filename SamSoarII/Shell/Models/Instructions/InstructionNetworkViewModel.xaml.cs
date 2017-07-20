@@ -148,7 +148,7 @@ namespace SamSoarII.Shell.Models
         private int loadedrowend;
         public int LoadedRowEnd { get { return this.loadedrowend; } }
 
-        private int oldscrolloffset;
+        private double oldscrolloffset;
 
         private ObservableCollection<InstructionRowViewModel> children;
         public IList<InstructionRowViewModel> Children { get { return this.children; } }
@@ -254,6 +254,7 @@ namespace SamSoarII.Shell.Models
                 }
                 loadedrowstart = _loadedrowstart;
                 loadedrowend = _loadedrowend;
+                oldscrolloffset = newscrolloffset;
             }
             else if (loadedrowstart <= loadedrowend)
             {

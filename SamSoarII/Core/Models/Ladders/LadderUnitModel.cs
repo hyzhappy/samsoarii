@@ -1074,9 +1074,10 @@ namespace SamSoarII.Core.Models
             {
                 if (inst == value) return;
                 PLCInstruction _inst = inst;
-                this.inst = value;
+                this.inst = null;
                 if (_inst != null && _inst.ProtoType != null)
                     _inst.ProtoType = null;
+                this.inst = value;
                 if (inst != null && inst.ProtoType != this)
                     inst.ProtoType = this;
             }

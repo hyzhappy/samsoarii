@@ -148,6 +148,7 @@ namespace SamSoarII.Core.Models
 
         private void Compile()
         {
+            insts.Clear();
             if (lchart != null)
             {
                 lchart.Dispose();
@@ -180,7 +181,6 @@ namespace SamSoarII.Core.Models
             }
             List<PLCInstruction> _insts = lgraph.GenInst();
             SortedSet<int> prototypeids = new SortedSet<int>();
-            insts.Clear();
             foreach (PLCInstruction inst in _insts)
             {
                 insts.Add(inst.ToOrigin());

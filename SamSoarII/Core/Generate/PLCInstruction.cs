@@ -47,9 +47,10 @@ namespace SamSoarII.Core.Generate
             {
                 if (prototype == value) return;
                 LadderUnitModel _prototype = prototype;
-                this.prototype = value;
+                this.prototype = null;
                 if (_prototype != null && _prototype.Inst != null)
                     _prototype.Inst = null;
+                this.prototype = value;
                 if (prototype != null && prototype.Inst != this)
                     prototype.Inst = this;
             }
@@ -77,9 +78,10 @@ namespace SamSoarII.Core.Generate
             {
                 if (origin == value) return;
                 PLCOriginInst _origin = origin;
-                this.origin = value;
+                this.origin = null;
                 if (_origin != null && _origin.Inst != null)
                     _origin.Inst = null;
+                this.origin = value;
                 if (origin != null && origin.Inst != this)
                     origin.Inst = this;
             }

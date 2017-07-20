@@ -146,7 +146,7 @@ namespace SamSoarII.Shell.Dialogs
             {
                 switch (e.PropertyName)
                 {
-                    case "SelectedIndex": ReadDetail(); break;
+                    case "SelectedIndex": ReadDetail(); ReadComment(); break;
                     case "SelectedComment": ReadComment(); break;
                 }
             }

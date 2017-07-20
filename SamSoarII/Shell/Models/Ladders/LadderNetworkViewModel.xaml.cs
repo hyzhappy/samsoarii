@@ -584,8 +584,8 @@ namespace SamSoarII.Shell.Models
             {
                 int _loadedrowstart = 0; 
                 int _loadedrowend = RowCount - 1;
-                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (HeightUnit * scaleY)) - 3);
-                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (HeightUnit * scaleY)) + 3);
+                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (GlobalSetting.LadderHeightUnit * scaleY)) - 3);
+                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (GlobalSetting.LadderHeightUnit * scaleY)) + 3);
                 if (_loadedrowstart > _loadedrowend)
                 {
                     if (loadedrowstart <= loadedrowend)
@@ -698,6 +698,7 @@ namespace SamSoarII.Shell.Models
             if (!IsExpand)
             {
                 ReleaseSelectRect();
+                if (IsSelectAreaMode && !IsSelectAllMode) IsSelectAreaMode = false;
                 LadderCanvas.Height = 0;
                 LadderCanvas.Children.Clear();
                 if (ThumbnailButton.ToolTip == null)
@@ -750,6 +751,13 @@ namespace SamSoarII.Shell.Models
                 foreach (LadderUnitModel unit in Core.Children)
                     if (unit.View != null) unit.View.IsCommentMode = iscommentmode;
                 LadderCanvas.Height = HeightUnit * RowCount;
+                if (IsSelectAreaMode || IsSelectAllMode)
+                {
+                    SelectAreaFirstX = SelectAreaFirstX;
+                    SelectAreaFirstY = SelectAreaFirstY;
+                    SelectAreaSecondX = SelectAreaSecondX;
+                    SelectAreaSecondY = SelectAreaSecondY;
+                }
             }
         }
 

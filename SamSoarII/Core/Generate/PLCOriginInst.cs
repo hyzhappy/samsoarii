@@ -25,9 +25,10 @@ namespace SamSoarII.Core.Generate
             {
                 if (inst == value) return;
                 PLCInstruction _inst = inst;
-                this.inst = value;
+                this.inst = null;
                 if (_inst != null && _inst.Origin != null)
                     _inst.Origin = null;
+                this.inst = value;
                 if (inst != null && inst.Origin != this)
                     inst.Origin = this;
             }
