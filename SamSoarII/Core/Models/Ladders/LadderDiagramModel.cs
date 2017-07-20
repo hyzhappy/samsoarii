@@ -159,8 +159,9 @@ namespace SamSoarII.Core.Models
             {
                 if (view == value) return;
                 LadderDiagramViewModel _view = view;
-                this.view = value;
+                this.view = null;
                 if (_view != null && _view.Core != null) _view.Core = null;
+                this.view = value;
                 if (view != null && view.Core != this) view.Core = this;
             }
         }
@@ -501,7 +502,7 @@ namespace SamSoarII.Core.Models
             if (View != null && View.IsNavigatable)
                 area.Select(IFParent);
             redos.Push(cmd);
-            Parent.InvokeModify(this);
+            Parent.InvokeModify(this, true);
         }
         public void Redo()
         {

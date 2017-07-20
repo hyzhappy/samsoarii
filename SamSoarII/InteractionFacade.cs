@@ -287,16 +287,32 @@ namespace SamSoarII
                 ShowSaveProjectDialog();
             else
                 mdProj.Save();
-            //PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
-            //    UnderBarStatus.Normal, Properties.Resources.Project_Saved));
         }
 
         public void SaveAsProject(string filename, bool isexception = false)
         {
+            if (isexception)
+            {
+                try
+                {
+                    WaitForThreadAbort();
+                    vmdProj.Reset();
+                    if (mdProj.UndoDiagram != null && mdProj.UndoDiagram.CanRedo) mdProj.UndoDiagram.Redo();
+                    if (mdProj.RedoDiagram != null && mdProj.RedoDiagram.CanUndo) mdProj.RedoDiagram.Undo();
+                }
+                catch (Exception)
+                {
+
+                }
+                finally
+                {
+                    mdProj.Save(filename);
+                    //ProjectFileManager.Update(filename, filename);
+                }
+                return;
+            }
             mdProj.Save(filename);
             ProjectFileManager.Update(filename, filename);
-            //PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
-            //    UnderBarStatus.Normal, Properties.Resources.Project_Saved));
         }
         
         public void CloseProject()

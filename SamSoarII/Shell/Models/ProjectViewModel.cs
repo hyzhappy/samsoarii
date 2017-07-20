@@ -117,6 +117,22 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        public void Reset()
+        {
+            foreach (LadderDiagramModel diagram in core.Diagrams)
+            {
+                diagram.View = null;
+                foreach (LadderNetworkModel network in diagram.Children)
+                {
+                    network.View = null;
+                    foreach (LadderUnitModel unit in network.Children)
+                    {
+                        unit.View = null;
+                    }
+                }
+            }
+        }
+
         public void UpdateUnit(int flags)
         {
             foreach (LadderDiagramModel diagram in core.Diagrams)

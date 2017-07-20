@@ -103,8 +103,14 @@ namespace SamSoarII.Core.Models
             }
         }
         public event RoutedEventHandler Modified = delegate { };
-        public void InvokeModify(IModel source)
+        public void InvokeModify(IModel source, bool undo = false)
         {
+            if (source is LadderDiagramModel)
+            {
+                LadderDiagramModel diagram = (LadderDiagramModel)source;
+                undodiagram = undo ? diagram : null;
+                redodiagram = undo ? null : diagram;
+            }
             IsModified = true;
             Modified(source, new RoutedEventArgs());
         }
@@ -114,6 +120,12 @@ namespace SamSoarII.Core.Models
 
         private LadderDiagramModel maindiagram;
         public LadderDiagramModel MainDiagram { get { return this.maindiagram; } }
+
+        private LadderDiagramModel undodiagram;
+        public LadderDiagramModel UndoDiagram { get { return this.undodiagram; } }
+
+        private LadderDiagramModel redodiagram;
+        public LadderDiagramModel RedoDiagram { get { return this.redodiagram; } }
 
         private ObservableCollection<LadderDiagramModel> diagrams;
         public IList<LadderDiagramModel> Diagrams { get { return this.diagrams; } }

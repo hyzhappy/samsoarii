@@ -87,13 +87,14 @@ namespace SamSoarII.Shell.Models
                 if (recreating) return;
                 if (core == value) return;
                 LadderUnitModel _core = core;
-                this.core = value;
+                this.core = null;
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
                     _core.Changed -= OnCoreChanged;
                     if (_core.View != null) _core.View = null;
                 }
+                this.core = value;
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;

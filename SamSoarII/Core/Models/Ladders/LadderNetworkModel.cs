@@ -163,8 +163,9 @@ namespace SamSoarII.Core.Models
             {
                 if (view == value) return;
                 LadderNetworkViewModel _view = view;
-                this.view = value;
+                this.view = null;
                 if (_view != null && _view.Core != null) _view.Core = null;
+                this.view = value;
                 if (view != null && view.Core != this) view.Core = this;
             }
         }
