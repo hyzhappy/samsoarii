@@ -65,6 +65,7 @@ namespace SamSoarII.Shell.Models
             bool[] middleused = { false, false, false, false, false };
             bool[] bottomused = { false, false };
             int maxcount = Core.Children.Count;
+            TopTextBlock.Text = Core.InstName;
             if (Core.Type == LadderUnitModel.Types.CALLM)
             {
                 maxcount = 5;
@@ -205,7 +206,6 @@ namespace SamSoarII.Shell.Models
                         if (Core == null) return;
                         if (LadderMode == LadderModes.Edit)
                         {
-                            TopTextBlock.Text = Core.InstName;
                             if (Core.Type == LadderUnitModel.Types.CALLM)
                             {
                                 for (int i = 0; i < 5; i++)
