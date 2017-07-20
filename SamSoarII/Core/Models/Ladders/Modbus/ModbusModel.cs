@@ -69,10 +69,25 @@ namespace SamSoarII.Core.Models
             get { return this.children; }
         }
         public event NotifyCollectionChangedEventHandler ChildrenChanged = delegate { };
+        private bool childrenChangedInvokable = true;
         private void OnChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (!childrenChangedInvokable) return;
+            if (e.OldItems != null)
+                foreach (ModbusItem item in e.OldItems)
+                    item.Dispose();
             ChildrenChanged(this, e);
         }
+
+        public void ChildrenSwap(int id1, int id2)
+        {
+            childrenChangedInvokable = false;
+            ModbusItem temp = children[id1];
+            children[id1] = children[id2];
+            children[id2] = temp;
+            childrenChangedInvokable = true;
+        }
+
         public bool IsValid
         {
             get

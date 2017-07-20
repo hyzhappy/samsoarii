@@ -92,14 +92,14 @@ namespace SamSoarII.Core.Models
         private string brief;
         public string Brief
         {
-            get { return this.brief; }
+            get { return brief != null ? this.brief : ""; }
             set { this.brief = value; PropertyChanged(this, new PropertyChangedEventArgs("Brief")); }
         }
 
         private string description;
         public string Description
         {
-            get { return this.description; }
+            get { return description != null ? this.description : ""; }
             set { this.description = value; PropertyChanged(this, new PropertyChangedEventArgs("Description")); }
         }
 

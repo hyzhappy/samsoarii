@@ -13,6 +13,7 @@ namespace SamSoarII.Core.Generate
         public LadderChartNode(LadderUnitModel _prototype)
         {
             prototype = _prototype;
+            prototype.Inst = null;
             if (prototype.Type == LadderUnitModel.Types.VLINE)
             {
                 VAccess = true;

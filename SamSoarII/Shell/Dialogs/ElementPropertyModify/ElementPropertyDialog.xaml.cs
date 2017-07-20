@@ -95,6 +95,11 @@ namespace SamSoarII.Shell.Dialogs
                 {
                     bpmodel.PropertyChanged -= OnPropertyChanged;
                     GD_Main.Children.Remove(bpmodel);
+                    if (bpmodel is OutRecPropModel)
+                    {
+                        OutRecPropModel orpmodel = (OutRecPropModel)bpmodel;
+                        orpmodel.CollectionPopup -= OnShowCollectionPopup;
+                    }
                 }
                 this.bpmodel = value;
                 if (bpmodel != null)
@@ -141,7 +146,7 @@ namespace SamSoarII.Shell.Dialogs
             {
                 switch (e.PropertyName)
                 {
-                    case "SelectedIndex": ReadDetail(); break;
+                    case "SelectedIndex": ReadDetail(); ReadComment(); break;
                     case "SelectedComment": ReadComment(); break;
                 }
             }
@@ -226,7 +231,6 @@ namespace SamSoarII.Shell.Dialogs
         
         private void OnShowCollectionPopup(object sender, CollectionPopupEventArgs e)
         {
-            if (PopupType != CollectionPopupType.FREE) return;
             if (e.Type == CollectionPopupType.FUNCBLOCKS)
             {
                 IEnumerable<string[]> fit = Functions.Where(
@@ -234,14 +238,22 @@ namespace SamSoarII.Shell.Dialogs
                 if (fit.Count() > 0)
                 {
                     string[] msg = fit.First();
-                    bpmodel.Count = msg.Length / 2;
+                    OutRecPropModel orpmodel = (OutRecPropModel)bpmodel;
+                    orpmodel.Count = (msg.Length - 1) / 2;
+                    for (int i = 1; i < orpmodel.Count; i++)
+                    {
+                        orpmodel.SetPropertyLabel(i, msg[i * 2 + 2]);
+                        orpmodel.SetPropertyText(i, "");
+                    }
                 }
             }
-            e.TB_Value.TextChanged += OnPopupTextBoxTextChanged;
-            e.TB_Value.LostFocus += OnPopupTextBoxLostFocus;
-            PU_Collection.PlacementTarget = e.TB_Value;
-            PopupType = e.Type;
-
+            if (PopupType == CollectionPopupType.FREE)
+            {
+                e.TB_Value.TextChanged += OnPopupTextBoxTextChanged;
+                e.TB_Value.LostFocus += OnPopupTextBoxLostFocus;
+                PU_Collection.PlacementTarget = e.TB_Value;
+                PopupType = e.Type;
+            }
         }
 
         private void OnPopupTextBoxLostFocus(object sender, RoutedEventArgs e)

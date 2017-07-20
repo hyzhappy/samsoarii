@@ -74,8 +74,6 @@ namespace SamSoarII.Shell.Models
         public IViewModel ViewParent { get { return null; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
         
-        public void Update() { }
-
         private LadderModes laddermode;
         public LadderModes LadderMode
         {
@@ -117,6 +115,14 @@ namespace SamSoarII.Shell.Models
                 }
                 PropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             }
+        }
+
+        public void UpdateUnit(int flags)
+        {
+            foreach (LadderDiagramModel diagram in core.Diagrams)
+                foreach (LadderNetworkModel network in diagram.Children)
+                    foreach (LadderUnitModel unit in network.Children)
+                        if (unit.View != null) unit.View.Update(flags);
         }
         
         #endregion

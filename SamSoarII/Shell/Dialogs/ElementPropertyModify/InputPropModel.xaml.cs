@@ -200,8 +200,8 @@ namespace SamSoarII.Shell.Dialogs
             Value2TextBox.Visibility = Count >= 2
                 ? Visibility.Visible
                 : Visibility.Hidden;
-            if (Count >= 1) ValueTextBox.Text = Core.Children[0].Text;
-            if (Count >= 2) Value2TextBox.Text = Core.Children[1].Text;
+            if (Count >= 1) ValueTextBox.Text = GetValueString(0);
+            if (Count >= 2) Value2TextBox.Text = GetValueString(1);
         }
         
         public override int SelectedIndex

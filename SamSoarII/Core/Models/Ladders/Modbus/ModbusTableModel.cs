@@ -15,13 +15,16 @@ namespace SamSoarII.Core.Models
     {
         public ModbusTableModel(ProjectModel _parent)
         {
+            isdisposed = false;
             parent = _parent;
             children = new ObservableCollection<ModbusModel>();
             children.CollectionChanged += OnChildrenCollectionChanged;
         }
 
+        protected bool isdisposed;
         public void Dispose()
         {
+            isdisposed = true;
             children.Clear();
             children.CollectionChanged -= OnChildrenCollectionChanged;
             children = null;
@@ -39,12 +42,23 @@ namespace SamSoarII.Core.Models
         private ObservableCollection<ModbusModel> children;
         public IList<ModbusModel> Children { get { return children; } }
         public event NotifyCollectionChangedEventHandler ChildrenChanged = delegate { };
+        private bool childrenChangedInvokeable = true;
         private void OnChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (!childrenChangedInvokeable) return;
             if (e.OldItems != null)
                 foreach (ModbusModel modbus in e.OldItems)
                     modbus.Dispose();
             ChildrenChanged(this, e);
+        }
+
+        public void ChildrenSwap(int id1, int id2)
+        {
+            childrenChangedInvokeable = false;
+            ModbusModel temp = children[id1];
+            children[id1] = children[id2];
+            children[id2] = temp;
+            childrenChangedInvokeable = true;
         }
 
         #endregion

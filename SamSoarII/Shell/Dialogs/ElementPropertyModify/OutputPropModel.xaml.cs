@@ -44,8 +44,8 @@ namespace SamSoarII.Shell.Dialogs
             CountTextBox.Visibility = Count >= 2
                 ? Visibility.Visible
                 : Visibility.Hidden;
-            if (Count >= 1) ValueTextBox.Text = Core.Children[0].Text;
-            if (Count >= 2) CountTextBox.Text = Core.Children[1].Text;
+            if (Count >= 1) ValueTextBox.Text = GetValueString(0);
+            if (Count >= 2) CountTextBox.Text = GetValueString(1);
 
         }
 

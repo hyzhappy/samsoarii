@@ -69,6 +69,10 @@ namespace SamSoarII.Shell.Windows
                     {
                         ((LadderDiagramModel)relativeobject).ChildrenChanged -= OnNetworkChanged;
                     }
+                    if (relativeobject is LadderNetworkModel)
+                    {
+                        ((LadderNetworkModel)relativeobject).PropertyChanged -= OnNetworkPropertyChanged;
+                    }
                     if (relativeobject is ModbusTableModel)
                     {
                         ((ModbusTableModel)relativeobject).ChildrenChanged -= OnModbusTableChanged;
@@ -95,6 +99,10 @@ namespace SamSoarII.Shell.Windows
                     {
                         ((LadderDiagramModel)relativeobject).ChildrenChanged += OnNetworkChanged;
                     }
+                    if (relativeobject is LadderNetworkModel)
+                    {
+                        ((LadderNetworkModel)relativeobject).PropertyChanged += OnNetworkPropertyChanged;
+                    }
                     if (relativeobject is ModbusTableModel)
                     {
                         ((ModbusTableModel)relativeobject).ChildrenChanged += OnModbusTableChanged;
@@ -107,7 +115,6 @@ namespace SamSoarII.Shell.Windows
             }
         }
         
-
         public string IconSource
         {
             get
@@ -250,8 +257,7 @@ namespace SamSoarII.Shell.Windows
                         if (RelativeObject is LadderNetworkModel)
                         {
                             LadderNetworkModel lnvmodel = (LadderNetworkModel)RelativeObject;
-                            if (lnvmodel.Brief == null
-                             || lnvmodel.Brief.Length == 0)
+                            if (lnvmodel.Brief == null || lnvmodel.Brief.Length == 0)
                             {
                                 Text = String.Format("{0} {1:d}", Properties.Resources.Network, lnvmodel.ID);
                             }
@@ -629,6 +635,11 @@ namespace SamSoarII.Shell.Windows
             ptview.Handle(this, e, TYPE_NETWORK);
         }
 
+        private void OnNetworkPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Flags = Flags;
+        }
+        
         private void OnModbusTableChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             ptview.Handle(this, e, TYPE_MODBUS);

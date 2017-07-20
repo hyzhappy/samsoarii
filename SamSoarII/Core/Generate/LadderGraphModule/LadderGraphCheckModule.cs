@@ -43,8 +43,8 @@ namespace SamSoarII.Core.Generate
             ErrorType error = ErrorType.None;
             foreach (var network in ladderDiagram.Children.Where(x => { return !x.IsMasked; }))
             {
-                if (!network.View.ladderExpander.IsExpand)
-                    network.View.ladderExpander.IsExpand = true;
+                //if (network.View != null && !network.View.ladderExpander.IsExpand)
+                //    network.View.ladderExpander.IsExpand = true;
                 error = CheckNetwork(network);
                 if (error != ErrorType.None)
                 {
@@ -56,7 +56,7 @@ namespace SamSoarII.Core.Generate
                 else
                 {
                     network.InitializeLadderLogicModules();
-                    if (network.View.IsSingleSelected()) network.View.ReleaseSelectRect();
+                    if (network.View != null && network.View.IsSingleSelected()) network.View.ReleaseSelectRect();
                     LadderGraphRelocationModule.Execute(network);
                 }
             }

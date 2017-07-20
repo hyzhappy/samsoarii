@@ -23,23 +23,18 @@
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock1" x:Name="MiddleTextBlock1"
                    Canvas.Top="122" Canvas.Left="36" FontSize="18">
-            A1:
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock2" x:Name="MiddleTextBlock2"
                    Canvas.Top="152" Canvas.Left="36" FontSize="18">
-            A2:
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock3" x:Name="MiddleTextBlock3"
                    Canvas.Top="182" Canvas.Left="36" FontSize="18">
-            A3:
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock4" x:Name="MiddleTextBlock4"
                    Canvas.Top="212" Canvas.Left="36" FontSize="18">
-            A4:
         </TextBlock>
         <TextBlock x:Uid="MiddleTextBlock5" x:Name="MiddleTextBlock5"
                    Canvas.Top="242" Canvas.Left="36" FontSize="18">
-            A5:
         </TextBlock>
         <TextBox x:Uid="MiddleTextBox1" x:Name="MiddleTextBox1" 
                  Canvas.Left="150" Canvas.Top="120" Width="140" Height="30"
@@ -47,7 +42,6 @@
                  FontSize="18"
                  GotFocus="MiddleTextBox1_GotFocus"
                  TextChanged="MiddleTextBox1_TextChanged">
-            D0
         </TextBox>
         <TextBox x:Uid="MiddleTextBox2" x:Name="MiddleTextBox2" 
                  Canvas.Left="150" Canvas.Top="150" Width="140" Height="30"
@@ -55,7 +49,6 @@
                  FontSize="18"
                  GotFocus="MiddleTextBox2_GotFocus"
                  TextChanged="MiddleTextBox2_TextChanged">
-            D1
         </TextBox>
         <TextBox x:Uid="MiddleTextBox3" x:Name="MiddleTextBox3" 
                  Canvas.Left="150" Canvas.Top="180" Width="140" Height="30"
@@ -63,7 +56,6 @@
                  FontSize="18"
                  GotFocus="MiddleTextBox3_GotFocus"
                  TextChanged="MiddleTextBox3_TextChanged">
-            D2
         </TextBox>
         <TextBox x:Uid="MiddleTextBox4" x:Name="MiddleTextBox4" 
                  Canvas.Left="150" Canvas.Top="210" Width="140" Height="30"
@@ -71,7 +63,6 @@
                  FontSize="18"
                  GotFocus="MiddleTextBox4_GotFocus"
                  TextChanged="MiddleTextBox4_TextChanged">
-            D3
         </TextBox>
         <TextBox x:Uid="MiddleTextBox5" x:Name="MiddleTextBox5" 
                  Canvas.Left="150" Canvas.Top="240" Width="140" Height="30"
@@ -79,7 +70,6 @@
                  FontSize="18"
                  GotFocus="MiddleTextBox5_GotFocus"
                  TextChanged="MiddleTextBox5_TextChanged">
-            D4
         </TextBox>
     </Canvas>
 </local:BasePropModel>

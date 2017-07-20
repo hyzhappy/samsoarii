@@ -20,17 +20,23 @@ namespace SamSoarII.Core.Models
         static readonly public ValueFormat WordFormat = new ValueFormat(
             "Word", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex1 });
 
-        static readonly private string[] selectedhandlecodes = {
+        static private string[] selectedhandlecodes = {
             string.Format("0x01({0})",Properties.Resources.Read_Bit), string.Format("0x02({0})",Properties.Resources.Read_Bit),
             string.Format("0x03({0})",Properties.Resources.Read_Word), string.Format("0x04({0})",Properties.Resources.Read_Word),
             string.Format("0x05({0})",Properties.Resources.Write_Bit), string.Format("0x06({0})",Properties.Resources.Write_Word),
             string.Format("0x0f({0})",Properties.Resources.Write_Bits),string.Format("0x10({0})",Properties.Resources.Write_Words) };
+
         public IEnumerable<string> SelectedHandleCodes()
         {
             return selectedhandlecodes;
         }
 
         #endregion
+
+        public ModbusItem()
+        {
+            parent = null;
+        }
 
         public ModbusItem(ModbusModel _parent)
         {
@@ -197,8 +203,10 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    bool check1 = WordFormat.Match(MasteRegister).Success;
-                    bool check2 = BitFormat.Match(MasteRegister).Success;
+                    Match match1 = WordFormat.Match(MasteRegister);
+                    Match match2 = BitFormat.Match(MasteRegister);
+                    bool check1 = match1 != null && match1.Success;
+                    bool check2 = match2 != null && match2.Success;
                     if (HandleCode.Equals(selectedhandlecodes[0])
                      || HandleCode.Equals(selectedhandlecodes[1])
                      || HandleCode.Equals(selectedhandlecodes[4])

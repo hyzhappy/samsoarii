@@ -79,7 +79,7 @@ namespace SamSoarII.Shell.Models
                         Canvas.SetLeft(middlevalues[i], 25);
                         Canvas.SetTop(middlevalues[i], 120 + i * 30);
                         middlevalues[i].TextAlignment = TextAlignment.Left;
-                        middlevalues[i].Style = (Style)Resources["LadderFontStyle"];
+                        //middlevalues[i].Style = (Style)Resources["LadderFontStyle"];
                     }
                     if (!mainCanvas.Children.Contains(middlevalues[i]))
                         mainCanvas.Children.Add(middlevalues[i]);
@@ -105,7 +105,7 @@ namespace SamSoarII.Shell.Models
                         Canvas.SetLeft(middlevalues[id], 25);
                         Canvas.SetTop(middlevalues[id], 120 + id * 30);
                         middlevalues[id].TextAlignment = TextAlignment.Left;
-                        middlevalues[id].Style = (Style)Resources["LadderFontStyle"];
+                        //middlevalues[id].Style = (Style)Resources["LadderFontStyle"];
                     }
                     if (!mainCanvas.Children.Contains(middlevalues[id]))
                         mainCanvas.Children.Add(middlevalues[id]);
@@ -120,7 +120,7 @@ namespace SamSoarII.Shell.Models
                         Canvas.SetLeft(bottomvalues[id], 25);
                         Canvas.SetTop(bottomvalues[id], 250 - id * 30);
                         bottomvalues[id].TextAlignment = TextAlignment.Right;
-                        bottomvalues[id].Style = (Style)Resources["LadderFontStyle"];
+                        //bottomvalues[id].Style = (Style)Resources["LadderFontStyle"];
                     }
                     if (!mainCanvas.Children.Contains(bottomvalues[id]))
                         mainCanvas.Children.Add(bottomvalues[id]);
@@ -222,10 +222,14 @@ namespace SamSoarII.Shell.Models
                                 ValueFormat vformat = vmodel.Format;
                                 string text = String.Format("{0:s}:{1:s}",
                                     vformat.Name, vmodel.Text);
+                                TextBlock textblock = null;
                                 if (vformat.Position >= 0)
-                                    middlevalues[vformat.Position].Text = text;
+                                    textblock = middlevalues[vformat.Position];
                                 else
-                                    bottomvalues[-vformat.Position - 1].Text = text;
+                                    textblock = bottomvalues[-vformat.Position - 1];
+                                textblock.Text = text;
+                                if (!mainCanvas.Children.Contains(textblock))
+                                    mainCanvas.Children.Add(textblock);
                                 comments[i].Text = String.Format("{0:s}:{1:s}",
                                     vmodel.Text, vmodel.Comment);
                             }

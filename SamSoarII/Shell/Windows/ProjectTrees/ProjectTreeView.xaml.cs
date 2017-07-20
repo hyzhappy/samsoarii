@@ -55,7 +55,7 @@ namespace SamSoarII.Shell.Windows
         public ProjectModel Project { get { return ifParent.MDProj; } }
         /// <summary> 要添加的树元素的父亲 </summary>
         private ProjectTreeViewItem newparent;
-        
+
         #region Components
 
         private ProjectTreeViewItem PTVI_Root;
@@ -302,21 +302,17 @@ namespace SamSoarII.Shell.Windows
         private void Clear(ProjectTreeViewItem ptvitem)
         {
             foreach (ProjectTreeViewItem subitem in ptvitem.Items)
-            {
                 Dispose(subitem);
-            }
             ptvitem.Items.Clear();
         }
         
         private void Rebuild(ProjectTreeViewItem ptvitem, LadderDiagramModel ldmodel)
         {
             ptvitem.RelativeObject = ldmodel;
-            IEnumerable<object> relatives = ptvitem.Items.Cast<ProjectTreeViewItem>().Select((item) => { return item.RelativeObject; });
+            Clear(ptvitem);
             foreach (LadderNetworkModel lnvmodel in ldmodel.Children)
             {
-                if (!relatives.Contains(lnvmodel))
-                {
-                    CreatePTVItem(
+                CreatePTVItem(
                         ptvitem,
                         ProjectTreeViewItem.TYPE_NETWORK
                       | ProjectTreeViewItem.FLAG_REMOVE
@@ -324,15 +320,6 @@ namespace SamSoarII.Shell.Windows
                       | ProjectTreeViewItem.FLAG_CREATENETWORKAFTER
                       | ProjectTreeViewItem.FLAG_CONFIG,
                         lnvmodel, false);
-                }
-            }
-            foreach (ProjectTreeViewItem item in ptvitem.Items.Cast<ProjectTreeViewItem>().ToArray())
-            {
-                if (!ldmodel.Children.Contains(item.RelativeObject))
-                {
-                    Dispose(item);
-                    ptvitem.Items.Remove(item);
-                }
             }
         }
 
@@ -360,27 +347,41 @@ namespace SamSoarII.Shell.Windows
         private void Rebuild(ProjectTreeViewItem ptvitem, ModbusTableModel mtvmodel)
         {
             ptvitem.RelativeObject = mtvmodel;
-            IEnumerable<object> relatives = ptvitem.Items.Cast<ProjectTreeViewItem>().Select((item) => { return item.RelativeObject; });
+            Clear(ptvitem);
             foreach (ModbusModel mmodel in mtvmodel.Children)
             {
-                if (!relatives.Contains(mtvmodel))
-                {
-                    CreatePTVItem(
+                CreatePTVItem(
                     ptvitem,
                     ProjectTreeViewItem.TYPE_MODBUS
                   | ProjectTreeViewItem.FLAG_RENAME
                   | ProjectTreeViewItem.FLAG_REMOVE,
                     mmodel, false);
-                }
             }
-            foreach (ProjectTreeViewItem item in ptvitem.Items.Cast<ProjectTreeViewItem>().ToArray())
-            {
-                if (!mtvmodel.Children.Contains(item.RelativeObject))
-                {
-                    Dispose(item);
-                    ptvitem.Items.Remove(item);
-                }
-            }
+        }
+
+        private void AddNewSubRoutines()
+        {
+            newparent = (TV_Main.SelectedItem is ProjectTreeViewItem ? (ProjectTreeViewItem)(TV_Main.SelectedItem) : PTVI_SubRoutines);
+            if ((newparent.Flags & 0xf) != ProjectTreeViewItem.TYPE_ROUTINEFLODER)
+                newparent = PTVI_SubRoutines;
+            LadderDiagramModel ldmodel = new LadderDiagramModel(Project, "# New");
+            Project.Diagrams.Add(ldmodel);
+        }
+
+        private void AddNewFuncBlock()
+        {
+            newparent = (TV_Main.SelectedItem is ProjectTreeViewItem ? (ProjectTreeViewItem)(TV_Main.SelectedItem) : PTVI_FuncBlocks);
+            if ((newparent.Flags & 0xf) != ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER)
+                newparent = PTVI_FuncBlocks;
+            FuncBlockModel fbmodel = new FuncBlockModel(Project, "# New", "");
+            Project.FuncBlocks.Add(fbmodel);
+        }
+
+        private void AddNewModbus()
+        {
+            OnPTVIDoubleClick(PTVI_Modbus, null);
+            ModbusTableModel mtmodel = Project.Modbus;
+            mtmodel.View.InitializeDialog(ModbusTableViewModel.DIALOG_CREATE);
         }
 
         #endregion
@@ -509,6 +510,7 @@ namespace SamSoarII.Shell.Windows
             LadderDiagramModel ldmodel = null;
             LadderNetworkModel lnmodel = null;
             FuncBlockModel fbmodel = null;
+            ModbusTableModel mtmodel = null;
             ModbusModel mmodel = null;
             ProjectTreeViewEventArgs _e = null;
             ptvitem.IsExpanded = true;
@@ -547,6 +549,11 @@ namespace SamSoarII.Shell.Windows
                     lnmodel = (LadderNetworkModel)(ptvitem.RelativeObject);
                     ldmodel = lnmodel.Parent;
                     ldmodel.AddN(lnmodel.ID + 1);
+                    break;
+                case ProjectTreeViewItem.FLAG_CREATEMODBUS:
+                    OnPTVIDoubleClick(ptvitem, null);
+                    mtmodel = (ModbusTableModel)(ptvitem.RelativeObject);
+                    mtmodel.View.InitializeDialog(ModbusTableViewModel.DIALOG_CREATE);
                     break;
                 case ProjectTreeViewItem.FLAG_RENAME:
                     ptvitem.Rename();

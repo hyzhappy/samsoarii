@@ -25,7 +25,6 @@
                  FontSize="18"
                  GotFocus="ValueTextBox_GotFocus"
                  TextChanged="ValueTextBox_TextChanged">
-            D0
         </TextBox>
         <Canvas x:Uid="CenterCanvas" x:Name="CenterCanvas" Canvas.Top="50" Canvas.Left="100" Width="100" Height="100">
             <Rectangle x:Uid="Rectangle_1" Width="60" Height="60" Canvas.Top="20" Canvas.Left="20" Fill="Blue" Visibility="Hidden" Opacity="0.5"></Rectangle>
@@ -40,7 +39,6 @@
                  FontSize="18"
                  GotFocus="Value2TextBox_GotFocus"
                  TextChanged="Value2TextBox_TextChanged">
-            D1
         </TextBox>
     </Canvas>
 </local:BasePropModel>

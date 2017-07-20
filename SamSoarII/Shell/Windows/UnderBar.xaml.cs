@@ -237,6 +237,15 @@ namespace SamSoarII.Shell.Windows
             TB_Item3.Text = "";
             TB_Item4.Text = "";
         }
+
+        public void ResetMessage()
+        {
+            if (Status == UnderBarStatus.Error)
+            {
+                Status = UnderBarStatus.Normal;
+                TB_Header.Text = Properties.Resources.Ready;
+            }
+        }
         
         public void Update(LadderDiagramViewModel view)
         {
@@ -250,7 +259,9 @@ namespace SamSoarII.Shell.Windows
                     break;
                 case SelectStatus.SingleSelected:
                     SelectRectCore rect = view.SelectionRect.Core;
-                    TB_Item2.Text = String.Format("{0:s} {1:d}", Properties.Resources.Network, rect.Parent.ID);
+                    TB_Item2.Text = (rect.Parent.Brief.Length > 0)
+                        ? String.Format("{0:s} {1:d} - {2:s}", Properties.Resources.Network, rect.Parent.ID, rect.Parent.Brief)
+                        : String.Format("{0:s} {1:d}", Properties.Resources.Network, rect.Parent.ID);
                     TB_Item1.Text = String.Format("(X={0:d},Y={1:d})", rect.X, rect.Y);
                     break;
                 case SelectStatus.MultiSelecting:
@@ -293,7 +304,7 @@ namespace SamSoarII.Shell.Windows
                     }
                     break;
             }
-            //ResetMessage();
+            ResetMessage();
         }
 
         public void Update(FuncBlockViewModel view)
@@ -302,7 +313,7 @@ namespace SamSoarII.Shell.Windows
             TB_Item3.Text = String.Format("{0:s}:{1:s}", Properties.Resources.FuncBlock, view.Core.Name);
             TB_Item2.Text = String.Format("({0:d},{1:d})", view.Line, view.Column);
             TB_Item1.Text = "";
-            //ResetMessage();
+            ResetMessage();
         }
 
         public void Update(ModbusTableViewModel view)
@@ -313,7 +324,7 @@ namespace SamSoarII.Shell.Windows
                 : String.Empty;
             TB_Item2.Text = "";
             TB_Item1.Text = "";
-            //ResetMessage();
+            ResetMessage();
         }
 
         #endregion

@@ -10,7 +10,7 @@
              xmlns:properties="clr-namespace:SamSoarII.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="{x:Static gb:GlobalSetting.WholeWidth}"
-             Background="Transparent" Focusable="True"
+             Background="White" Focusable="True"
              PreviewMouseWheel="OnLadderDiagramMouseWheel"
              PreviewKeyDown="OnLadderDiagramKeyDown"
              PreviewKeyUp="OnLadderDiagramKeyUp"
