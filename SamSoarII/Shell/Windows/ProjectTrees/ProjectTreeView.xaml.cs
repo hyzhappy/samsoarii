@@ -407,6 +407,43 @@ namespace SamSoarII.Shell.Windows
             ptvitem.Expanded -= OnPTVIExpanded;
         }
 
+        private void Remove(ProjectTreeViewItem ptvitem)
+        {
+            LadderDiagramModel ldmodel = null;
+            LadderNetworkModel lnmodel = null;
+            FuncBlockModel fbmodel = null;
+            ModbusModel mmodel = null;
+            if (ptvitem.RelativeObject is LadderDiagramModel)
+            {
+                ldmodel = (LadderDiagramModel)(ptvitem.RelativeObject);
+                Project.Diagrams.Remove(ldmodel);
+            }
+            else if (ptvitem.RelativeObject is FuncBlockModel)
+            {
+                fbmodel = (FuncBlockModel)(ptvitem.RelativeObject);
+                Project.FuncBlocks.Remove(fbmodel);
+            }
+            else if (ptvitem.RelativeObject is ModbusModel)
+            {
+                mmodel = (ModbusModel)(ptvitem.RelativeObject);
+                mmodel.Parent.Children.Remove(mmodel);
+            }
+            else if (ptvitem.RelativeObject is LadderNetworkModel)
+            {
+                lnmodel = (LadderNetworkModel)(ptvitem.RelativeObject);
+                ldmodel = lnmodel.Parent;
+                ldmodel.RemoveN(lnmodel.ID, lnmodel);
+            }
+            else
+            {
+                foreach (ProjectTreeViewItem subitem in ptvitem.Items.Cast<ProjectTreeViewItem>().ToArray())
+                    Remove(subitem);
+                Dispose(ptvitem);
+                ProjectTreeViewItem ptvparent = (ProjectTreeViewItem)(ptvitem.Parent);
+                ptvparent.Items.Remove(ptvitem);
+            }
+        }
+
         #endregion
         
         #region Event Handler
@@ -507,12 +544,11 @@ namespace SamSoarII.Shell.Windows
             ProjectMenuItem pmitem = (ProjectMenuItem)sender;
             ProjectTreeViewItem ptvitem = pmitem.PTVItem;
             ProjectTreeViewItem newitem = null;
+            ProjectTreeViewEventArgs _e = null;
             LadderDiagramModel ldmodel = null;
             LadderNetworkModel lnmodel = null;
             FuncBlockModel fbmodel = null;
             ModbusTableModel mtmodel = null;
-            ModbusModel mmodel = null;
-            ProjectTreeViewEventArgs _e = null;
             ptvitem.IsExpanded = true;
             switch (pmitem.Flags)
             {
@@ -567,30 +603,14 @@ namespace SamSoarII.Shell.Windows
                 case ProjectTreeViewItem.FLAG_REMOVE:
                     if (ptvitem.RelativeObject is LadderNetworkModel)
                     {
-                        lnmodel = (LadderNetworkModel)(ptvitem.RelativeObject);
-                        ldmodel = lnmodel.Parent;
-                        ldmodel.Children.Remove(lnmodel);
+                        Remove(ptvitem);
                         break;
                     }
                     LocalizedMessageResult result = LocalizedMessageBox.Show(
                             Properties.Resources.Message_Delete, Properties.Resources.Important, LocalizedMessageButton.YesNo, LocalizedMessageIcon.Warning);
                     if (result == LocalizedMessageResult.Yes)
                     {
-                        if (ptvitem.RelativeObject is LadderDiagramModel)
-                        {
-                            ldmodel = (LadderDiagramModel)(ptvitem.RelativeObject);
-                            Project.Diagrams.Remove(ldmodel);
-                        }
-                        if (ptvitem.RelativeObject is FuncBlockModel)
-                        {
-                            fbmodel = (FuncBlockModel)(ptvitem.RelativeObject);
-                            Project.FuncBlocks.Remove(fbmodel);
-                        }
-                        if (ptvitem.RelativeObject is ModbusModel)
-                        {
-                            mmodel = (ModbusModel)(ptvitem.RelativeObject);
-                            mmodel.Parent.Children.Remove(mmodel);
-                        }
+                        Remove(ptvitem);
                     }
                     break;
             }

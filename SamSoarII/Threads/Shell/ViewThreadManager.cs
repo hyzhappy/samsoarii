@@ -33,18 +33,7 @@ namespace SamSoarII.Threads
         {
             if (current?.Core?.Children != null && current != parent.CurrentLadder)
             {
-                try
-                {
-                    for (int i = 0; i < current.Core.Children.Count; i++)
-                    {
-                        current.Core.Children[i].View.DynamicDispose();
-                        current.Core.Children[i].Inst.View.DynamicDispose();
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
+                DestoryCurrent();
             }
             current = parent.CurrentLadder;
             if (current == null)
@@ -76,6 +65,22 @@ namespace SamSoarII.Threads
             catch (Exception)
             {
 
+            }
+        }
+
+        private void DestoryCurrent()
+        {
+            try
+            {
+                for (int i = 0; i < current.Core.Children.Count; i++)
+                {
+                    current.Core.Children[i].View.DynamicDispose();
+                    current.Core.Children[i].Inst.View.DynamicDispose();
+                }
+            }
+            catch (Exception)
+            {
+                DestoryCurrent();
             }
         }
         
