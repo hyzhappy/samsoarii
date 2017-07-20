@@ -10,7 +10,7 @@
         mc:Ignorable="d" MinHeight="48" MinWidth="240" Icon="/Resources/Image/SamSoarII.ico"
         Title="MainWindow" Height="400" Width="600" WindowState="Maximized"
         PreviewKeyDown="MainWindow_KeyDown" Style="{StaticResource MainWindowBorderStyle}"
-        Closing="Window_Closing" ResizeMode="CanResizeWithGrip" WindowStyle="None">
+        Closing="Window_Closing" ResizeMode="CanResizeWithGrip">
     <Window.CommandBindings>
         <!--File Commands-->
         <CommandBinding Command="ApplicationCommands.New" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"/>

@@ -222,7 +222,18 @@ namespace SamSoarII.Core.Models
             xdoc.Add(xele_r);
             xele_r.Add(xele_p);
             Save(xele_p);
-            xdoc.Save(filename);
+            if (!Directory.Exists(Directory.GetParent(_filename).FullName))
+            {
+                Directory.CreateDirectory(Directory.GetParent(_filename).FullName);
+            }
+            if (!File.Exists(_filename))
+            {
+                xdoc.Save(File.Create(_filename));
+            }
+            else
+            {
+                xdoc.Save(filename);
+            }
         }
 
         public void Save()

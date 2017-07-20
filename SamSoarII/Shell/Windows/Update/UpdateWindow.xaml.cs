@@ -62,8 +62,10 @@ namespace SamSoarII.Shell.Windows.Update
         {
             ifParent.PostIWindowEvent -= _ifParent_PostIWindowEvent;
             Core.InformationsCountChanged -= Core_InformationsCountChanged;
+            Core.Dispose();
             ifParent = null;
             Core = null;
+            informations = null;
         }
 
         private List<InformationUnit> informations = new List<InformationUnit>();

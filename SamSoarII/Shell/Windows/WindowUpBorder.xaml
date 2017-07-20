@@ -31,6 +31,6 @@
         <Button x:Name="CloseButton" ToolTip="{x:Static properties:Resources.Close}" Template="{StaticResource CloseBtn}" Click="OnCloseWindow" shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
         <Button x:Name="ResizeButton" ToolTip="{x:Static properties:Resources.Restore}" Template="{StaticResource CustomButton}" Click="OnResizeWindow" shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
         <Button x:Name="MinimizedButton" ToolTip="{x:Static properties:Resources.Minimize}" Template="{StaticResource MinimizedButton}" Click="OnMinimizedWindow" shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
-        <Button x:Name="InformButton" Template="{StaticResource InformButton}" Click="OnInformWindow" shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
+        <Button x:Name="InformButton" ToolTip="{x:Static properties:Resources.Information}" Template="{StaticResource InformButton}" Click="OnInformWindow" shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
     </DockPanel>
 </UserControl>
