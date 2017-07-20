@@ -195,7 +195,11 @@ namespace SamSoarII
         {
             thmngCore.Abort();
             thmngView.Abort();
-            while (thmngCore.IsAlive || thmngView.IsAlive) Thread.Sleep(10);
+            while (thmngCore.IsAlive || thmngView.IsAlive)
+            {
+                //Dispatcher.Run();
+                Thread.Sleep(10);
+            }
         }
 
         private void AllThreadStart()
@@ -295,7 +299,6 @@ namespace SamSoarII
             {
                 try
                 {
-                    //WaitForThreadAbort();
                     vmdProj.Reset();
                     if (mdProj.UndoDiagram != null && mdProj.UndoDiagram.CanRedo) mdProj.UndoDiagram.Redo();
                     if (mdProj.RedoDiagram != null && mdProj.RedoDiagram.CanUndo) mdProj.RedoDiagram.Undo();
@@ -306,8 +309,8 @@ namespace SamSoarII
                 }
                 finally
                 {
+                    if (mdProj.FileName != string.Empty) mdProj.Save();
                     mdProj.Save(filename);
-                    //ProjectFileManager.Update(filename, filename);
                 }
                 return;
             }

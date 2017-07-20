@@ -45,7 +45,13 @@ namespace SamSoarII
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             //保存用户正在编辑的文件
-            ((MainWindow)Current.MainWindow).IFParent.SaveAsProject(FileHelper.AppRootPath + @"\Temp\__last.ssr", true);
+            ((MainWindow)Current.MainWindow).IFParent.SaveAsProject(FileHelper.AppRootPath + string.Format(@"\Temp\__backupfile({0}{1}{2}_{3}.{4}.{5}).ssr",
+                DateTime.Now.Year, DateTime.Now.Month < 10 ? string.Format("0{0}", DateTime.Now.Month) : DateTime.Now.Month.ToString(),
+                DateTime.Now.Day < 10 ? string.Format("0{0}", DateTime.Now.Day) : DateTime.Now.Day.ToString(),
+                DateTime.Now.Hour < 10 ? string.Format("0{0}", DateTime.Now.Hour) : DateTime.Now.Hour.ToString(),
+                DateTime.Now.Minute < 10 ? string.Format("0{0}", DateTime.Now.Minute) : DateTime.Now.Minute.ToString(),
+                DateTime.Now.Second < 10 ? string.Format("0{0}", DateTime.Now.Second) : DateTime.Now.Second.ToString()), 
+                true);
             AppFinalize();
             //写入Debug信息
             TempDebugger.WriteLine(DateTime.Now);
@@ -62,7 +68,7 @@ namespace SamSoarII
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            MainWindow mwnd = new SamSoarII.MainWindow();
+            MainWindow mwnd = new MainWindow();
             MainWindow = mwnd;
             mwnd.Show();
         }
