@@ -203,7 +203,7 @@ namespace SamSoarII.Shell.Models
                     {
                         case LadderUnitModel.Types.HLINE:
                             LadderUnitModel hline = SelectRectOwner.Children[_selectRect.X, _selectRect.Y];
-                            if (hline != null)
+                            if (hline != null && hline.Type == LadderUnitModel.Types.HLINE)
                                 Core.RemoveU(SelectRectOwner, new LadderUnitModel[] { hline });
                             SelectRectRight();
                             break;
