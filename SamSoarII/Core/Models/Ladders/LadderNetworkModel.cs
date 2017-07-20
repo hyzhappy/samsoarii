@@ -125,12 +125,27 @@ namespace SamSoarII.Core.Models
             get { return this.isexpand; }
             set { this.isexpand = value; PropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
         }
-         
+        
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (LadderUnitModel unit in Children.Concat(VLines))
+                    unit.LadderMode = laddermode;
+                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
 
         #endregion
 
         #region Inst
-        
+
         private InstructionNetworkModel inst;
         public InstructionNetworkModel Inst
         {

@@ -123,6 +123,23 @@ namespace SamSoarII.Core.Models
             set { this.isitpr = value; PropertyChanged(this, new PropertyChangedEventArgs("IsInterruptLadder")); }
         }
 
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (LadderNetworkModel network in Children)
+                    network.LadderMode = laddermode;
+                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+        
+
         #endregion
 
         #region Inst
@@ -379,8 +396,8 @@ namespace SamSoarII.Core.Models
 
         private Stack<Command> undos = new Stack<Command>();
         private Stack<Command> redos = new Stack<Command>();
-        public bool CanUndo { get { return View != null && View.LadderMode == LadderModes.Edit && undos != null && undos.Count() > 0; } }
-        public bool CanRedo { get { return View != null && View.LadderMode == LadderModes.Edit && redos != null && redos.Count() > 0; } }
+        public bool CanUndo { get { return LadderMode == LadderModes.Edit && undos != null && undos.Count() > 0; } }
+        public bool CanRedo { get { return LadderMode == LadderModes.Edit && redos != null && redos.Count() > 0; } }
         public void Undo()
         {
             if (!CanUndo) return;

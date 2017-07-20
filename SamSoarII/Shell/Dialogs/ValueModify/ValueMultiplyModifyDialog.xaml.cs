@@ -30,7 +30,7 @@ namespace SamSoarII.Shell.Dialogs
                 tabs[i] = new TabItem();
                 tabs[i].Header = panels[i].Store.Name;
                 tabs[i].Content = panels[i];
-                TC_Main.Items.Add(tabs[i]);
+                TC_Main.Items.Add(tabs[i++]);
             }
         }
 

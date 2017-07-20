@@ -224,10 +224,12 @@ namespace SamSoarII.Shell.Models
                 double newscrolloffset = 0;
                 CV_Inst.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
-                    scroll = ViewParent.Scroll;
+                    scroll = ViewParent?.Scroll;
+                    if (scroll == null) return;
                     p = CV_Inst.TranslatePoint(new Point(0, 0), scroll);
                     newscrolloffset = scroll.VerticalOffset;
                 });
+                if (scroll == null) return;
                 int _loadedrowstart = 0;
                 int _loadedrowend = Core.Insts.Count - 1;
                 _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / 20) - 3);

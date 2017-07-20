@@ -94,7 +94,7 @@ namespace SamSoarII.Core.Models
         public int RefNum
         {
             get { return this.refnum; }
-            set { this.refnum = value; PropertyChanged(this, new PropertyChangedEventArgs("RefNum")); }
+            set { this.refnum = value; }
         }
 
         private MonitorElement visual;
@@ -117,7 +117,6 @@ namespace SamSoarII.Core.Models
             Post(this, new ValueStoreWriteEventArgs(this, null,
                 all ? ValueStoreWriteEventArgs.FLAGS_UNLOCKALL : ValueStoreWriteEventArgs.FLAGS_UNLOCK));
         }
-        
     }
 
     public class ValueStoreWriteEventArgs : EventArgs

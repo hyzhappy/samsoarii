@@ -40,10 +40,7 @@ namespace SamSoarII.Shell.Models
             ReinitializeComponent();
             DataContext = this;
             if (Core?.Parent?.View != null)
-            {
-                LadderMode = Core.Parent.View.LadderMode;
                 IsCommentMode = Core.Parent.View.IsCommentMode;
-            }
             recreating = false;
         }
 
@@ -288,6 +285,7 @@ namespace SamSoarII.Shell.Models
                 case UPDATE_PROPERTY:
                     Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
+                        if (Core == null) return;
                         if (LadderMode == LadderModes.Edit)
                         {
                             if (Core.Children.Count >= 1) ValueTextBlock.Text = Core.Children[0].Text;

@@ -55,10 +55,7 @@ namespace SamSoarII.Shell.Models
             DataContext = this;
             Core = _core;
             if (Core.Parent.View != null)
-            {
-                LadderMode = Core.Parent.View.LadderMode;
                 IsCommentMode = Core.Parent.View.IsCommentMode;
-            }
             _selectRect = new SelectRect();
             ladderExpander.MouseEnter += OnExpanderMouseEnter;
             ladderExpander.MouseLeave += OnExpanderMouseLeave;
@@ -2047,25 +2044,9 @@ namespace SamSoarII.Shell.Models
         {
             get { return core != null && core.Inst != null ? core.Inst.View : null; }
         }
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                if (Inst != null) Inst.LadderMode = value;
-                foreach (LadderNetworkModel net in Core.Children)
-                {
-                    if (net.View != null) net.View.LadderMode = laddermode;
-                }
-            }
-        }
-
+        
+        public LadderModes LadderMode { get { return core.LadderMode; } }
+        
         private bool iscommentmode;
         public bool IsCommentMode
         {
@@ -2717,7 +2698,7 @@ namespace SamSoarII.Shell.Models
         
         private void CutCopyCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2729,7 +2710,7 @@ namespace SamSoarII.Shell.Models
         }
         private void PasteCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2740,7 +2721,7 @@ namespace SamSoarII.Shell.Models
         }
         private void UndoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2749,7 +2730,7 @@ namespace SamSoarII.Shell.Models
         }
         private void RedoCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2758,7 +2739,7 @@ namespace SamSoarII.Shell.Models
         }
         private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;
@@ -2767,7 +2748,7 @@ namespace SamSoarII.Shell.Models
         }
         private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (IFParent == null || laddermode != LadderModes.Edit || IFParent.IsWaitForKey)
+            if (IFParent == null || LadderMode != LadderModes.Edit || IFParent.IsWaitForKey)
             {
                 e.CanExecute = false;
                 return;

@@ -1090,6 +1090,13 @@ namespace SamSoarII.Core.Models
             set { this.bpaddress = value; }
         }
 
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get { return this.laddermode; }
+            set { this.laddermode = value; PropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
+        }
+        
         #endregion
 
         #region Shell

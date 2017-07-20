@@ -115,7 +115,24 @@ namespace SamSoarII.Core.Models
             Modified(source, new RoutedEventArgs());
         }
 
-
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (LadderDiagramModel diagram in Diagrams)
+                    diagram.LadderMode = laddermode;
+                foreach (FuncBlockModel funcblock in FuncBlocks)
+                    funcblock.LadderMode = laddermode;
+                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+        
         #region Models
 
         private LadderDiagramModel maindiagram;
