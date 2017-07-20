@@ -30,12 +30,16 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             DataContext = this;
             Core = _core;
+            cursor = new InstSelectRect(new InstSelectRectCore(null));
+            if (core.Parent?.View?.SelectionRect != null)
+                cursor.Core.Ladder = core.Parent?.View?.SelectionRect.Core;
             Update();
         }
 
         public void Dispose()
         {
             Core = null;
+            cursor.Dispose();
         }
         
         #region Core
@@ -158,7 +162,55 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        #region Select
+
+        private InstSelectRect cursor;
+        public new InstSelectRect Cursor { get { return this.cursor; } }
+
         #endregion
 
+        #endregion
+
+        #region Event Handler
+        
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (cursor.Core.Parent == null) return;
+            switch (e.Key)
+            {
+                case Key.Down:
+                    if (cursor.Core.Row <= 0)
+                    {
+                        int id = cursor.Core.Parent.Parent.ID;
+                        if (id > 0)
+                        {
+                            cursor.Core.Parent = Core.Parent.Children[id - 1].Inst;
+                            cursor.Core.Row = cursor.Core.Parent.Insts.Count - 1;
+                        }
+                    }
+                    else
+                    {
+                        cursor.Core.Row--;
+                    }
+                    break;
+                case Key.Up:
+                    if (cursor.Core.Row >= cursor.Core.Parent.Insts.Count - 1)
+                    {
+                        int id = cursor.Core.Parent.Parent.ID;
+                        if (id < Core.Parent.Children.Count - 1)
+                        {
+                            cursor.Core.Parent = Core.Parent.Children[id + 1].Inst;
+                            cursor.Core.Row = cursor.Core.Parent.Insts.Count - 1;
+                        }
+                    }
+                    else
+                    {
+                        cursor.Core.Row++;
+                    }
+                    break;
+            }
+        }
+
+        #endregion
     }
 }

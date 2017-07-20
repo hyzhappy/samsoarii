@@ -24,7 +24,7 @@ namespace SamSoarII.Shell.Dialogs
         private OtherSettingWidget wdOther;
         private List<UserControl> _widget = new List<UserControl>();
 
-        public static event RoutedEventHandler EnsureButtonClick = delegate { };
+        public event RoutedEventHandler EnsureButtonClick = delegate { };
 
         public OptionDialog()
         {

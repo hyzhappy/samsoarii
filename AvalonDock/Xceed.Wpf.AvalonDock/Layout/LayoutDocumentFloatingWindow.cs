@@ -72,7 +72,7 @@ namespace Xceed.Wpf.AvalonDock.Layout
 
         public override void RemoveChild(ILayoutElement element)
         {
-            Debug.Assert(element == RootDocument && element != null);
+            //Debug.Assert(element == RootDocument && element != null);
             RootDocument = null;
         }
 

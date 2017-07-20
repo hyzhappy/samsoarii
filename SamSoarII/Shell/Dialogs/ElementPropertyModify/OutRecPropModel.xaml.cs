@@ -28,7 +28,7 @@ namespace SamSoarII.Shell.Dialogs
             for (int i = 0; i < Core.Children.Count; i++)
             {
                 SetPropertyLabel(i, Core.Children[i].Format.Name);
-                SetPropertyText(i, Core.Children[i].Text);
+                SetPropertyText(i, GetValueString(i));
             }
         }
         

@@ -64,6 +64,7 @@ namespace SamSoarII.Shell.Models
                 }
                 if (parent?.View != null)
                 {
+                    if (!parent.IsExpand) parent.IsExpand = true;
                     parent.View.LadderCanvas.Children.Add(View);
                     parent.View.SelectAreaOriginFX = X;
                     parent.View.SelectAreaOriginFY = Y;
@@ -72,6 +73,7 @@ namespace SamSoarII.Shell.Models
                         parent.Parent.View.SelectionStatus = SelectStatus.SingleSelected;
                 }
                 PropertyChanged(this, new PropertyChangedEventArgs("Parent"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Current"));
             }
         }
         IModel IModel.Parent { get { return Parent; } }
@@ -108,7 +110,60 @@ namespace SamSoarII.Shell.Models
 
         public LadderUnitModel Current
         {
-            get { return parent == null ? null : parent.Children[x, y]; }
+            get
+            {
+                return parent == null ? null : parent.Children[x, y];
+            }
+        }
+
+        private InstSelectRectCore inst;
+        public InstSelectRectCore Inst
+        {
+            get
+            {
+                return this.inst;
+            }
+            set
+            {
+                if (inst == value) return;
+                InstSelectRectCore _inst = inst;
+                inst = null;
+                if (_inst != null)
+                {
+                    _inst.PropertyChanged -= OnInstPropertyChanged;
+                    if (_inst.Ladder != null) _inst.Ladder = null;
+                }
+                this.inst = value;
+                if (inst != null)
+                {
+                    inst.PropertyChanged += OnInstPropertyChanged;
+                    if (inst.Ladder != this) inst.Ladder = this;
+                }
+            }
+        }
+
+        private bool isnavigatable = true;
+        public bool SelfIsNavigatable { get { return isnavigatable; } }
+        public bool IsNavigatable { get { return isnavigatable && (inst == null || inst.SelfIsNavigatable); } }
+
+        private void OnInstPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Current":
+                    if (!IsNavigatable) break;
+                    LadderUnitModel _current = Inst.Current?.Inst?.ProtoType;
+                    if (_current?.Parent != null && _current != Current)
+                    {
+                        isnavigatable = false;
+                        Parent = _current.Parent;
+                        X = _current.X;
+                        Y = _current.Y;
+                        Parent.Parent.View.NavigateByInstructionInputDialog();
+                        isnavigatable = true;
+                    }
+                    break;
+            }
         }
 
         #endregion

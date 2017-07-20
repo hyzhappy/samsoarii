@@ -683,6 +683,12 @@ namespace SamSoarII
                 ifParent.InsertRow();
             if (e.Command == GlobalCommand.DeleteRowCommand)
                 ifParent.RemoveRow();
+            if (e.Command == GlobalCommand.AddNewSubRoutineCommand)
+                ifParent.AddNewSubRoutine();
+            if (e.Command == GlobalCommand.AddNewFuncBlockCommand)
+                ifParent.AddNewFuncBlock();
+            if (e.Command == GlobalCommand.AddNewModbusCommand)
+                ifParent.AddNewModbus();
         }
 
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)

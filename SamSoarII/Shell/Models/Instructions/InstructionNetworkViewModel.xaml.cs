@@ -107,7 +107,7 @@ namespace SamSoarII.Shell.Models
 
         #region Shell
 
-        public InstructionDiagramViewModel ViewParent { get { return core?.Parent.Parent?.Inst.View; } }
+        public InstructionDiagramViewModel ViewParent { get { return core?.Parent?.Parent?.Inst?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
         private TextBlock tberr;
@@ -117,6 +117,8 @@ namespace SamSoarII.Shell.Models
         public string Header { get { return String.Format("Network {0:d}", core != null ? core.Parent.ID : 0); } }
 
         public int RowCount { get { return (int)(CV_Inst.Height / 20); } }
+
+        public bool Invalid { get { return core == null || Core.IsMasked || Core.IsOpenCircuit || Core.IsShortCircuit || Core.IsFusionCircuit; } }
 
         #endregion
         
@@ -174,15 +176,13 @@ namespace SamSoarII.Shell.Models
 
         public void BaseUpdate()
         {
-            bool invalid = false;
-            invalid |= Core.IsMasked;
-            invalid |= Core.IsOpenCircuit;
-            invalid |= Core.IsShortCircuit;
-            invalid |= Core.IsFusionCircuit;
             tberr.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
-                tberr.Visibility = invalid ? Visibility.Visible : Visibility.Hidden;
+                CV_Inst.Height = Invalid ? 20 : Core.Insts.Count * 20;
+                tberr.Visibility = Invalid ? Visibility.Visible : Visibility.Hidden;
                 tberr.Background = Core.IsMasked ? Brushes.Gray : Brushes.Red;
+                if (ViewParent.Cursor.Core.Parent == Core)
+                    ViewParent.Cursor.Core.Parent = null;
                 if (Core.IsMasked)
                 {
                     tberr.Text = String.Format(
@@ -212,23 +212,18 @@ namespace SamSoarII.Shell.Models
                     tberr.Text = "";
                 }
             });
+            DynamicUpdate();
         }
 
         public void DynamicUpdate()
         {
-            bool invalid = false;
-            invalid |= Core.IsMasked;
-            invalid |= Core.IsOpenCircuit;
-            invalid |= Core.IsShortCircuit;
-            invalid |= Core.IsFusionCircuit;
-            if (!invalid)
+            if (!Invalid)
             {
                 ScrollViewer scroll = null;
                 Point p = new Point();
                 double newscrolloffset = 0;
                 CV_Inst.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
-                    CV_Inst.Height = invalid ? 20 : Core.Insts.Count * 20;
                     scroll = ViewParent.Scroll;
                     p = CV_Inst.TranslatePoint(new Point(0, 0), scroll);
                     newscrolloffset = scroll.VerticalOffset;
@@ -259,6 +254,12 @@ namespace SamSoarII.Shell.Models
                 }
                 loadedrowstart = _loadedrowstart;
                 loadedrowend = _loadedrowend;
+            }
+            else if (loadedrowstart <= loadedrowend)
+            {
+                DisposeRange(loadedrowstart, loadedrowend);
+                loadedrowstart = 0;
+                loadedrowend = -1;
             }
         }
 
@@ -324,5 +325,18 @@ namespace SamSoarII.Shell.Models
 
         #endregion
 
+        #region Event Handler
+
+        private void CV_Inst_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Point p = e.GetPosition(CV_Inst);
+            if (p.Y >= 0 && p.Y < 20 * core.Insts.Count)
+            {
+                ViewParent.Cursor.Core.Parent = Core;
+                ViewParent.Cursor.Core.Row = (int)(p.Y / 20);
+            }
+        }
+
+        #endregion
     }
 }

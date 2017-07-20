@@ -8,7 +8,7 @@
              xmlns:properties="clr-namespace:SamSoarII.Properties"
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="400" x:Name="UserControl" Background="#FFFBFCF6">
+             d:DesignHeight="800" d:DesignWidth="400" MinHeight="400" MinWidth="400" x:Name="UserControl" Background="#FFFBFCF6">
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static gb:MonitorCommand.AddElementCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
         <CommandBinding Command="{x:Static gb:MonitorCommand.DeleteAllElementCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>

@@ -867,7 +867,7 @@ namespace SamSoarII.Core.Models
                 case LadderUnitModel.Shapes.Output:
                 case LadderUnitModel.Shapes.OutputRect:
                     List<LadderUnitModel> news = new List<LadderUnitModel>();
-                    for (int x = unit.X; x < GlobalSetting.LadderXCapacity - 1; x++)
+                    for (int x = cover ? unit.X : 0; x < GlobalSetting.LadderXCapacity - 1; x++)
                     {
                         LadderUnitModel hline = new LadderUnitModel(net, LadderUnitModel.Types.HLINE);
                         hline.X = x;

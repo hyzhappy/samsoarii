@@ -16,12 +16,12 @@ namespace SamSoarII.Shell.Dialogs
         public BasePropModel(LadderUnitModel _core)
         {
             core = _core;
-            valuestrings = new string[5];
-            commentstrings = new string[5];
+            valuestrings = new string[5] { "", "", "", "", "" };
+            commentstrings = new string[5] { "", "", "", "", "" };
             for (int i = 0; i < core.Children.Count; i++)
             {
                 ValueModel value = core.Children[i];
-                valuestrings[i] = value.Text;
+                valuestrings[i] = value.Text.Equals("???") ? "" : value.Text;
                 commentstrings[i] = value.ValueManager[value].Comment;
             }
         }
@@ -60,11 +60,10 @@ namespace SamSoarII.Shell.Dialogs
             {
                 valuestrings[id] = str;
                 //PropertyChanged(this, new PropertyChangedEventArgs(String.Format("ValueString{0:d}", id + 1)));
-                ValueModel value = Core.Children[id];
                 string comment = null;
                 try
                 {
-                    comment = value.ValueManager[str].Comment;
+                    comment = core.ValueManager[str].Comment;
                 }
                 catch (ValueParseException)
                 {

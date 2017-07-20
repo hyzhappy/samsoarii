@@ -12,13 +12,13 @@
             <RowDefinition x:Uid="RowDefinition_2" Height="1*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" x:Name="NetworkHeader" FontSize="16" VerticalAlignment="Center" Margin="5,2,0,2" Text="{Binding Header}"></TextBlock>
-        <Canvas x:Uid="CV_Inst" x:Name="CV_Inst" Grid.Row="1">
+        <Canvas x:Uid="CV_Inst" x:Name="CV_Inst" Grid.Row="1"
+                MouseDown="CV_Inst_MouseDown">
             <Canvas.Resources>
                 <Style x:Uid="Style_1" TargetType="{x:Type TextBlock}">
                     <Setter x:Uid="Setter_1" Property="Margin" Value="2,2,0,0"></Setter>
                 </Style>
             </Canvas.Resources>
-            <Rectangle x:Uid="Cursor" x:Name="Cursor" Stroke="Black" Visibility="Hidden"></Rectangle>
         </Canvas>
     </Grid>
 </UserControl>

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using SamSoarII.Shell.Dialogs;
 using SamSoarII.Shell.Windows;
+using System.Collections.Specialized;
 
 namespace SamSoarII.Shell.Models
 {
@@ -28,6 +29,7 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             DataContext = this;
             Core = _core;
+            UpdateButtonEnable();
         }
 
         public override void Dispose()
@@ -49,19 +51,23 @@ namespace SamSoarII.Shell.Models
             {
                 if (core == value) return;
                 ModbusTableModel _core = core;
-                this.core = value;
+                this.core = null;
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
+                    _core.ChildrenChanged -= OnCoreChildrenChanged;
                     if (_core.View != null) _core.View = null;
                 }
+                this.core = value;
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    core.ChildrenChanged += OnCoreChildrenChanged;
                     if (core.View != this) core.View = this;
                 }
             }
         }
+        
         IModel IViewModel.Core
         {
             get { return core; }
@@ -72,11 +78,17 @@ namespace SamSoarII.Shell.Models
         {
 
         }
+        
+        private void OnCoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            InvokePropertyChanged("ListItems");
+            UpdateButtonEnable();
+        }
 
         #endregion
 
         #region Shell
-        
+
         public ProjectViewModel ViewParent { get { return core?.Parent.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
@@ -92,6 +104,7 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        private ModbusModel oldcurrent = null;
         public ModbusModel Current
         {
             get
@@ -129,8 +142,8 @@ namespace SamSoarII.Shell.Models
         #region Dialog
 
         private ModbusDialog dialog;
-        private const int DIALOG_CREATE = 0x00;
-        private const int DIALOG_RENAME = 0x01;
+        public const int DIALOG_CREATE = 0x00;
+        public const int DIALOG_RENAME = 0x01;
         private int dialogtype;
         private int DialogType
         {
@@ -150,7 +163,7 @@ namespace SamSoarII.Shell.Models
             }
         }
 
-        private void InitializeDialog(int dialogType)
+        public void InitializeDialog(int dialogType)
         {
             if (dialog != null) return;
             if (DialogType == DIALOG_RENAME && Current == null) return;
@@ -202,25 +215,34 @@ namespace SamSoarII.Shell.Models
         private void B_ModelUp_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null) return;
-            LB_Tables.Items.MoveCurrentToPrevious();
+            int id = LB_Tables.SelectedIndex;
+            Core.ChildrenSwap(id, id - 1);
+            LB_Tables.SelectedIndex = id - 1;
         }
 
         private void B_ModelDown_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null) return;
-            LB_Tables.Items.MoveCurrentToNext();
+            int id = LB_Tables.SelectedIndex;
+            Core.ChildrenSwap(id, id + 1);
+            LB_Tables.SelectedIndex = id + 1;
         }
 
         private void B_ModelTop_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null) return;
             LB_Tables.Items.MoveCurrentToFirst();
+            int id = LB_Tables.SelectedIndex;
+            Core.ChildrenSwap(id, 0);
+            LB_Tables.SelectedIndex = 0;
         }
 
         private void B_ModelBottom_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null) return;
-            LB_Tables.Items.MoveCurrentToLast();
+            int id = LB_Tables.SelectedIndex;
+            Core.ChildrenSwap(id, ListItems.Count() - 1);
+            LB_Tables.SelectedIndex = ListItems.Count() - 1;
         }
 
         private void B_Insert_Click(object sender, RoutedEventArgs e)
@@ -246,25 +268,33 @@ namespace SamSoarII.Shell.Models
         private void B_Up_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null || CurrentItem == null) return;
-            DG_Table.Items.MoveCurrentToPrevious();
+            int id = DG_Table.SelectedIndex;
+            Current.ChildrenSwap(id, id - 1);
+            LB_Tables.SelectedIndex = id - 1;
         }
 
         private void B_Down_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null || CurrentItem == null) return;
-            DG_Table.Items.MoveCurrentToNext();
+            int id = DG_Table.SelectedIndex;
+            Current.ChildrenSwap(id, id + 1);
+            LB_Tables.SelectedIndex = id + 1;
         }
 
         private void B_Top_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null || CurrentItem == null) return;
-            DG_Table.Items.MoveCurrentToFirst();
+            int id = DG_Table.SelectedIndex;
+            Current.ChildrenSwap(id, 0);
+            LB_Tables.SelectedIndex = 0;
         }
 
         private void B_Bottom_Click(object sender, RoutedEventArgs e)
         {
             if (Current == null || CurrentItem == null) return;
-            DG_Table.Items.MoveCurrentToLast();
+            int id = DG_Table.SelectedIndex;
+            Current.ChildrenSwap(id, GridItems.Count() - 1);
+            LB_Tables.SelectedIndex = GridItems.Count() - 1;
         }
         
         #endregion
@@ -335,11 +365,43 @@ namespace SamSoarII.Shell.Models
         private void LB_Tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Invoke(TabAction.ACTIVE);
+            UpdateButtonEnable();
+            if (oldcurrent != null)
+                oldcurrent.ChildrenChanged -= OnModelChildrenChanged;
+            ModbusModel newcurrent = e.AddedItems != null && e.AddedItems.Count > 0 ? (ModbusModel)e.AddedItems[0] : null;
+            if (newcurrent != null)
+                newcurrent.ChildrenChanged += OnModelChildrenChanged;
+            oldcurrent = newcurrent;
+            InvokePropertyChanged("GridItems");
+        }
+
+        private void OnModelChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            InvokePropertyChanged("GridItems");
+            UpdateButtonEnable();
         }
 
         private void DG_Table_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Invoke(TabAction.ACTIVE);
+            UpdateButtonEnable();
+        }
+
+        private void UpdateButtonEnable()
+        {
+            B_Insert.IsEnabled = (Current != null);
+            B_Remove.IsEnabled = (Current != null && CurrentItem != null);
+            B_Up.IsEnabled = (Current != null && CurrentItem != null && DG_Table.SelectedIndex > 0);
+            B_Down.IsEnabled = (Current != null && CurrentItem != null && DG_Table.SelectedIndex < GridItems.Count() - 1);
+            B_Top.IsEnabled = (Current != null && CurrentItem != null && DG_Table.SelectedIndex > 0);
+            B_Bottom.IsEnabled = (Current != null && CurrentItem != null && DG_Table.SelectedIndex < GridItems.Count() - 1);
+            B_AddModel.IsEnabled = true;
+            B_RemoveModel.IsEnabled = (Current != null);
+            B_RenameModel.IsEnabled = (Current != null);
+            B_ModelUp.IsEnabled = (Current != null && LB_Tables.SelectedIndex > 0);
+            B_ModelDown.IsEnabled = (Current != null && LB_Tables.SelectedIndex < ListItems.Count() - 1);
+            B_ModelTop.IsEnabled = (Current != null && LB_Tables.SelectedIndex > 0);
+            B_ModelDown.IsEnabled = (Current != null && LB_Tables.SelectedIndex < ListItems.Count() - 1);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -465,5 +527,6 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #endregion
+        
     }
 }

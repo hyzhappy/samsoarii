@@ -398,6 +398,9 @@
       <DependentUpon>InstructionNetworkViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Models\Instructions\InstructionRowViewModel.cs" />
+    <Compile Include="Shell\Models\Instructions\InstSelectRect.xaml.cs">
+      <DependentUpon>InstSelectRect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Models\Interfaces\IProgram.cs" />
     <Compile Include="Shell\Models\Interfaces\ITabItem.cs" />
     <Compile Include="Shell\Models\Interfaces\IViewModel.cs" />
@@ -898,6 +901,10 @@
     <Page Include="Shell\Models\Instructions\InstructionNetworkViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\Instructions\InstSelectRect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Models\Ladders\LadderDiagramViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>

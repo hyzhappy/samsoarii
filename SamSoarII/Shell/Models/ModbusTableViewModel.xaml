@@ -98,6 +98,7 @@
                 <RowDefinition Height="24"/>
                 <RowDefinition Height="24"/>
                 <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Button x:Name="B_Insert"
@@ -124,17 +125,20 @@
             <Button x:Name="B_RemoveModel"
                     Grid.Row="7" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_RemoveModel_Click" Content="{x:Static properties:Resources.Modbus_Delete_Table}"/>
-            <Button x:Name="B_ModelUp"
+            <Button x:Name="B_RenameModel"
                     Grid.Row="8" Grid.Column="0" Margin="5,2,5,2"
+                    Click="B_RenameModel_Click" Content="表格重命名"/>
+            <Button x:Name="B_ModelUp"
+                    Grid.Row="9" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_ModelUp_Click" Content="{x:Static properties:Resources.Modbus_Current_Table_Up}"/>
             <Button x:Name="B_ModelDown"
-                    Grid.Row="9" Grid.Column="0" Margin="5,2,5,2"
+                    Grid.Row="10" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_ModelDown_Click" Content="{x:Static properties:Resources.Modbus_Current_Table_Down}"/>
             <Button x:Name="B_ModelTop"
-                    Grid.Row="10" Grid.Column="0" Margin="5,2,5,2"
+                    Grid.Row="11" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_ModelTop_Click" Content="当前表格置顶"/>
             <Button x:Name="B_ModelBottom"
-                    Grid.Row="11" Grid.Column="0" Margin="5,2,5,2"
+                    Grid.Row="12" Grid.Column="0" Margin="5,2,5,2"
                     Click="B_ModelBottom_Click" Content="当前表格置底"/>
         </Grid>
     </Grid>

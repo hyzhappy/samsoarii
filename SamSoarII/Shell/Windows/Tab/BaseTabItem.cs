@@ -25,7 +25,7 @@ namespace SamSoarII.Shell.Windows
         
         public virtual void Dispose()
         {
-            PropertyChanged = null;
+            PropertyChanged = delegate { };
             tabcontrol.Remove(this);
             tabcontrol = null;
             TabContainer.Content = null;
@@ -64,7 +64,7 @@ namespace SamSoarII.Shell.Windows
         
         public void Invoke(TabAction action)
         {
-            tabcontrol.Invoke(this, action);
+            if (tabcontrol != null) tabcontrol.Invoke(this, action);
         }
 
         #endregion

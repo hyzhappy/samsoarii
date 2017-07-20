@@ -1302,7 +1302,14 @@ namespace SamSoarII
         private OptionDialog dlgOption;
         public void ShowSystemOptionDialog()
         {
-            if (dlgOption == null) dlgOption = new OptionDialog();
+            if (dlgOption == null)
+            {
+                dlgOption = new OptionDialog();
+                dlgOption.EnsureButtonClick += (sender, e) =>
+                {
+                    if (VMDProj != null) VMDProj.UpdateUnit(LadderUnitViewModel.UPDATE_STYLE);
+                };
+            }
             dlgOption.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dlgOption.ShowDialog();
         }
@@ -1383,7 +1390,22 @@ namespace SamSoarII
 
         #endregion
 
-        #region Ladder Modify
+        #region Modify
+
+        public void AddNewSubRoutine()
+        {
+            
+        }
+
+        public void AddNewFuncBlock()
+        {
+
+        }
+        
+        public void AddNewModbus()
+        {
+
+        }
 
         public void QuickInsertElement(LadderUnitModel.Types type)
         {
@@ -1463,9 +1485,14 @@ namespace SamSoarII
                         if (e2.RelativeObject is ModbusTableModel)
                         {
                             ModbusTableModel mtmodel = (ModbusTableModel)(e2.RelativeObject);
-                            if (mtmodel.View == null)
-                                mtmodel.View = new ModbusTableViewModel(mtmodel, tcMain);
                             tcMain.ShowItem(mtmodel.View);
+                        }
+                        if (e2.RelativeObject is ModbusModel)
+                        {
+                            ModbusModel mmodel = (ModbusModel)(e2.RelativeObject);
+                            ModbusTableModel mtmodel = mmodel.Parent;
+                            tcMain.ShowItem(mtmodel.View);
+                            mtmodel.View.Current = mmodel;
                         }
                         if (e2.RelativeObject is LadderUnitModel.Types)
                         {
@@ -1485,6 +1512,16 @@ namespace SamSoarII
                                     wndMain.LACElemInit.Show();
                                     break;
                             }
+                        }
+                        break;
+                    case ProjectTreeViewEventArgs.FLAG_CONFIG:
+                        if (e2.RelativeObject is LadderDiagramModel)
+                        {
+                            ShowEditDiagramCommentDialog((LadderDiagramModel)(e2.RelativeObject));
+                        }
+                        if (e2.RelativeObject is LadderNetworkModel)
+                        {
+                            ShowEditNetworkCommentDialog((LadderNetworkModel)(e2.RelativeObject));
                         }
                         break;
                 }
@@ -1557,6 +1594,12 @@ namespace SamSoarII
             {
                 ret &= mdProj != null && vmdProj != null;
                 if (!ret) return ret;
+                if (e.Command == GlobalCommand.InstShortCutOpenCommand
+                 || e.Command == GlobalCommand.InsertRowCommand
+                 || e.Command == GlobalCommand.DeleteRowCommand)
+                {
+                    ret &= CurrentLadder != null;
+                }
                 if (e.Command == MonitorCommand.StartCommand
                  || e.Command == GlobalCommand.SimuStartCommand)
                 {

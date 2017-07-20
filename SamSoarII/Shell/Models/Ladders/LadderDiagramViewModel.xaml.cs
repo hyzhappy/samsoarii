@@ -246,7 +246,7 @@ namespace SamSoarII.Shell.Models
             switch (SelectionStatus)
             {
                 case SelectStatus.SingleSelected:
-                    Core.AddR(SelectRectOwner, _selectRect.Y);
+                    Core.AddR(SelectRectOwner, _selectRect.Y + 1);
                     break;
                 case SelectStatus.MultiSelected: 
                     if (SelectStartNetwork != null && SelectStartNetwork.IsSelectAreaMode)
@@ -2306,7 +2306,12 @@ namespace SamSoarII.Shell.Models
                 {
                     if (_selectRect.ViewParent != null)
                     {
+                        isnavigatable = false;
                         Core.AddR(SelectRectOwner, SelectRectOwner.RowCount);
+                        _selectRect.X = 0;
+                        _selectRect.Y = SelectRectOwner.RowCount - 1;
+                        NavigateByInstructionInputDialog();
+                        isnavigatable = true;
                         return;
                     }
                 }
