@@ -117,7 +117,6 @@ namespace SamSoarII.Core.Models
             Post(this, new ValueStoreWriteEventArgs(this, null,
                 all ? ValueStoreWriteEventArgs.FLAGS_UNLOCKALL : ValueStoreWriteEventArgs.FLAGS_UNLOCK));
         }
-        
     }
 
     public class ValueStoreWriteEventArgs : EventArgs

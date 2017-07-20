@@ -32,6 +32,22 @@ namespace SamSoarII.Shell.Models
         public virtual void Recreate(params object[] args)
         {
             Core = (LadderUnitModel)args[0];
+            oldladdermode = Core.LadderMode;
+            if (LadderMode != LadderModes.Edit)
+            {
+                if (LadderMode == LadderModes.Simulate)
+                {
+                    MNGSimu.Started += OnSimulateStarted;
+                    MNGSimu.Aborted += OnSimulateAborted;
+                }
+                if (LadderMode == LadderModes.Monitor)
+                {
+                    MNGComu.Started += OnMonitorStarted;
+                    MNGComu.Aborted += OnMonitorAborted;
+                }
+                foreach (ValueModel vmodel in Core.Children)
+                    vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
+            }
         }
         
         #endregion
@@ -43,6 +59,21 @@ namespace SamSoarII.Shell.Models
 
         public virtual void Dispose()
         {
+            if (LadderMode != LadderModes.Edit)
+            {
+                if (LadderMode == LadderModes.Simulate)
+                {
+                    MNGSimu.Started -= OnSimulateStarted;
+                    MNGSimu.Aborted -= OnSimulateAborted;
+                }
+                if (LadderMode == LadderModes.Monitor)
+                {
+                    MNGComu.Started -= OnMonitorStarted;
+                    MNGComu.Aborted -= OnMonitorAborted;
+                }
+                foreach (ValueModel vmodel in Core.Children)
+                    vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
+            }
             Core = null;
         }
 
@@ -118,6 +149,40 @@ namespace SamSoarII.Shell.Models
             {
                 case "X": Update(UPDATE_LEFT); break;
                 case "Y": Update(UPDATE_TOP); break;
+                case "LadderMode":
+                    if (oldladdermode != LadderModes.Edit)
+                    {
+                        if (oldladdermode == LadderModes.Simulate)
+                        {
+                            MNGSimu.Started -= OnSimulateStarted;
+                            MNGSimu.Aborted -= OnSimulateAborted;
+                        }
+                        if (oldladdermode == LadderModes.Monitor)
+                        {
+                            MNGComu.Started -= OnMonitorStarted;
+                            MNGComu.Aborted -= OnMonitorAborted;
+                        }
+                        foreach (ValueModel vmodel in Core.Children)
+                            vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
+                    }
+                    if (LadderMode != LadderModes.Edit)
+                    {
+                        if (LadderMode == LadderModes.Simulate)
+                        {
+                            MNGSimu.Started += OnSimulateStarted;
+                            MNGSimu.Aborted += OnSimulateAborted;
+                        }
+                        if (LadderMode == LadderModes.Monitor)
+                        {
+                            MNGComu.Started += OnMonitorStarted;
+                            MNGComu.Aborted += OnMonitorAborted;
+                        }
+                        foreach (ValueModel vmodel in Core.Children)
+                            vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
+                    }
+                    Update(UPDATE_PROPERTY);
+                    oldladdermode = LadderMode;
+                    break;
             }
         }
         
@@ -155,50 +220,8 @@ namespace SamSoarII.Shell.Models
         public LadderNetworkViewModel ViewParent { get { return core?.Parent?.View; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
-        private LadderModes laddermode;
-        public virtual LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                LadderModes _laddermode = laddermode;
-                this.laddermode = value;
-                if (_laddermode != LadderModes.Edit)
-                {
-                    if (_laddermode == LadderModes.Simulate)
-                    {
-                        MNGSimu.Started -= OnSimulateStarted;
-                        MNGSimu.Aborted -= OnSimulateAborted;
-                    }
-                    if (laddermode == LadderModes.Monitor)
-                    {
-                        MNGComu.Started -= OnMonitorStarted;
-                        MNGComu.Aborted -= OnMonitorAborted;
-                    }
-                    foreach (ValueModel vmodel in Core.Children)
-                        vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
-                }
-                if (laddermode != LadderModes.Edit)
-                {
-                    if (laddermode == LadderModes.Simulate)
-                    {
-                        MNGSimu.Started += OnSimulateStarted;
-                        MNGSimu.Aborted += OnSimulateAborted;
-                    }
-                    if (laddermode == LadderModes.Monitor)
-                    {
-                        MNGComu.Started += OnMonitorStarted;
-                        MNGComu.Aborted += OnMonitorAborted;
-                    }
-                    foreach (ValueModel vmodel in Core.Children)
-                        vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
-                }
-                Update(UPDATE_PROPERTY);
-            }
-        }
+        private LadderModes oldladdermode;
+        public LadderModes LadderMode { get { return core.LadderMode; } }
         
         private bool iscommentmode;
         public virtual bool IsCommentMode

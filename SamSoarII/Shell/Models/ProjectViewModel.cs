@@ -77,25 +77,8 @@ namespace SamSoarII.Shell.Models
         private LadderModes laddermode;
         public LadderModes LadderMode
         {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                foreach (LadderDiagramModel ldmodel in Core.Diagrams)
-                {
-                    if (ldmodel.View != null)
-                        ldmodel.View.LadderMode = laddermode;
-                }
-                foreach (FuncBlockModel fbmodel in Core.FuncBlocks)
-                {
-                    if (fbmodel.View != null)
-                        fbmodel.View.LadderMode = laddermode;
-                }
-                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
-            }
+            get { return core.LadderMode; }
+            set { core.LadderMode = value; }
         }
 
         private bool iscommentmode;

@@ -50,16 +50,20 @@ namespace SamSoarII.Threads
             {
                 for (int i = 0; i < current.Core.Children.Count; i++)
                 {
-                    current.Core.Children[i].View.DynamicUpdate();
-                    current.Core.Children[i].Inst.View.DynamicUpdate();
+                    if (i < current.Core.Children.Count)
+                        current.Core.Children[i].View.DynamicUpdate();
+                    if (i < current.Core.Children.Count)
+                        current.Core.Children[i].Inst.View.DynamicUpdate();
                 }
             }
             else
             {
                 for (int i = current.Core.Children.Count - 1; i >= 0; i--)
                 {
-                    current.Core.Children[i].View.DynamicUpdate();
-                    current.Core.Children[i].Inst.View.DynamicUpdate();
+                    if (i < current.Core.Children.Count)
+                        current.Core.Children[i].View.DynamicUpdate();
+                    if (i < current.Core.Children.Count)
+                        current.Core.Children[i].Inst.View.DynamicUpdate();
                 }
             }
             oldscrolloffset = newscrolloffset;

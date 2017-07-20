@@ -60,6 +60,13 @@ namespace SamSoarII.Core.Models
         private bool islibrary;
         public bool IsLibrary { get { return this.islibrary; } }
 
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get { return this.laddermode; }
+            set { this.laddermode = value; PropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
+        }
+
         public IEnumerable<FuncModel> Funcs
         {
             get

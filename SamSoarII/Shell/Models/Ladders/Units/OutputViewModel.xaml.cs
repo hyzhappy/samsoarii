@@ -39,10 +39,7 @@ namespace SamSoarII.Shell.Models
             ReinitializeComponent();
             DataContext = this;
             if (Core?.Parent?.View != null)
-            {
-                LadderMode = Core.Parent.View.LadderMode;
                 IsCommentMode = Core.Parent.View.IsCommentMode;
-            }
             recreating = false;
         }
 

@@ -57,10 +57,7 @@ namespace SamSoarII.Shell.Models
             ladderExpander.IsExpand = IsExpand;
             CommentAreaGrid.Children.Remove(ThumbnailButton);
             if (ViewParent != null)
-            {
-                LadderMode = ViewParent.LadderMode;
                 IsCommentMode = ViewParent.IsCommentMode;
-            }
             loadedrowstart = 0;
             loadedrowend = -1;
             Update();
@@ -569,9 +566,11 @@ namespace SamSoarII.Shell.Models
             {
                 scaleY = GlobalSetting.LadderScaleTransform.ScaleY;
                 scroll = ViewParent?.Scroll;
+                if (scroll == null) return;
                 p = LadderCanvas.TranslatePoint(new Point(0, 0), scroll);
                 newscrolloffset = scroll.VerticalOffset;
             });
+            if (scroll == null) return;
             if (!IsExpand)
             {
                 if (loadedrowstart <= loadedrowend)
@@ -723,21 +722,8 @@ namespace SamSoarII.Shell.Models
                     LadderCanvas.Children.Add(SelectArea);
             }
         }
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                foreach (LadderUnitModel unit in Core.Children)
-                    if (unit.View != null) unit.View.LadderMode = laddermode;
-            }
-        }
+        
+        public LadderModes LadderMode { get { return core.LadderMode; } }
         
         private bool iscommentmode;
         public bool IsCommentMode

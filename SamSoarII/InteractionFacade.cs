@@ -299,8 +299,7 @@ namespace SamSoarII
             {
                 try
                 {
-                    //WaitForThreadAbort();
-                    //vmdProj.Reset();
+                    vmdProj.Reset();
                     if (mdProj.UndoDiagram != null && mdProj.UndoDiagram.CanRedo) mdProj.UndoDiagram.Redo();
                     if (mdProj.RedoDiagram != null && mdProj.RedoDiagram.CanUndo) mdProj.RedoDiagram.Undo();
                 }
