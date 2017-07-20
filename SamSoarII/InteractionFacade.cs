@@ -25,6 +25,8 @@ using SamSoarII.Core.Helpers;
 using SamSoarII.Core.Communication;
 using SamSoarII.HelpDocument;
 using System.Collections.Specialized;
+using SamSoarII.Shell.Windows.Update;
+using SamSoarII.Core.Update;
 
 namespace SamSoarII
 {
@@ -46,6 +48,8 @@ namespace SamSoarII
             wndEList = new ElementListWindow(this);
             wndEInit = new ElementInitWindow(this);
             wndMoni = new MonitorWindow(this);
+            udManager = new UpdateManager(this);
+            wndInform = new UpdateWindow(this);
             barStatus.Post += OnReceiveIWindowEvent;
             tvProj.Post += OnReceiveIWindowEvent;
             tcMain.Post += OnReceiveIWindowEvent;
@@ -57,6 +61,7 @@ namespace SamSoarII
             wndEList.Post += OnReceiveIWindowEvent;
             wndEInit.Post += OnReceiveIWindowEvent;
             wndMoni.Post += OnReceiveIWindowEvent;
+            wndInform.Post += OnReceiveIWindowEvent;
             thmngCore = new CoreThreadManager(this);
             thmngView = new ViewThreadManager(this);
             mngSimu = new SimulateManager(this);
@@ -82,6 +87,8 @@ namespace SamSoarII
             wndTReplace.Post -= OnReceiveIWindowEvent;
             wndEList.Post -= OnReceiveIWindowEvent;
             wndEInit.Post -= OnReceiveIWindowEvent;
+            wndMoni.Post -= OnReceiveIWindowEvent;
+            wndInform.Post -= OnReceiveIWindowEvent;
             tvProj = null;
             tcMain = null;
             wndError = null;
@@ -92,6 +99,9 @@ namespace SamSoarII
             wndMain = null;
             wndEList = null;
             wndEInit = null;
+            wndMoni = null;
+            wndInform = null;
+            udManager = null;
         }
 
         #region Numbers
@@ -135,14 +145,16 @@ namespace SamSoarII
 
         private MonitorWindow wndMoni;
         public MonitorWindow WNDMoni { get { return this.wndMoni; } }
-        
+
+        private UpdateWindow wndInform;
+        public UpdateWindow WNDInform { get { return wndInform; } }
         #endregion
 
         #region Project
 
         private ProjectModel mdProj;
         public ProjectModel MDProj { get { return this.mdProj; } set { mdProj = value; PropertyChanged(this, new PropertyChangedEventArgs("MDProj")); } }
-
+        
         private ProjectViewModel vmdProj;
         public ProjectViewModel VMDProj { get { return this.vmdProj; } }
 
@@ -191,6 +203,15 @@ namespace SamSoarII
             thmngCore.Start();
             thmngView.Start();
         }
+
+        #region Tools
+        private UpdateManager udManager;
+        public UpdateManager UDManager
+        {
+            get { return udManager; }
+        }
+
+        #endregion
 
         #endregion
 

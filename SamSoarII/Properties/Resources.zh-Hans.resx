@@ -1992,4 +1992,13 @@
   <data name="Restore" xml:space="preserve">
     <value>还原</value>
   </data>
+  <data name="Information" xml:space="preserve">
+    <value>通知</value>
+  </data>
+  <data name="All_Information" xml:space="preserve">
+    <value>所有通知：</value>
+  </data>
+  <data name="No_Information" xml:space="preserve">
+    <value>没有可用的通知</value>
+  </data>
 </root>

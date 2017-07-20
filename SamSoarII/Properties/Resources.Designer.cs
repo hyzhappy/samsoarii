@@ -115,6 +115,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 All informations: 的本地化字符串。
+        /// </summary>
+        public static string All_Information {
+            get {
+                return ResourceManager.GetString("All_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 All Networks 的本地化字符串。
         /// </summary>
         public static string All_Networks {
@@ -1614,6 +1623,15 @@ namespace SamSoarII.Properties {
         public static string Important {
             get {
                 return ResourceManager.GetString("Important", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Information 的本地化字符串。
+        /// </summary>
+        public static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
             }
         }
         
@@ -4107,6 +4125,15 @@ namespace SamSoarII.Properties {
         public static string NO {
             get {
                 return ResourceManager.GetString("NO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 No informations 的本地化字符串。
+        /// </summary>
+        public static string No_Information {
+            get {
+                return ResourceManager.GetString("No_Information", resourceCulture);
             }
         }
         

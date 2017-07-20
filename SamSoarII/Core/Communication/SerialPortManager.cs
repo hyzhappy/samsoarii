@@ -143,7 +143,8 @@ namespace SamSoarII.Core.Communication
         {
             if (port.IsOpen) port.Close();
             CommunicationParams paras = parent.IFParent.MDProj.PARAProj.PARACom;
-            PortName = PORTNAMES[paras.SerialPortIndex];
+            if(PORTNAMES.Count() > 0)
+                PortName = PORTNAMES[paras.SerialPortIndex];
             BaudRate = BAUDRATES[paras.BaudRateIndex];
             DataBits = DATABITS[paras.DataBitIndex];
             StopBits = STOPBITS[paras.StopBitIndex];

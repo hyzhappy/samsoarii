@@ -508,6 +508,10 @@
                                 </ad:LayoutAnchorable>
                             </ad:LayoutAnchorGroup>
                             <ad:LayoutAnchorGroup>
+                                <ad:LayoutAnchorable x:Name="LA_Inform" Title="{x:Static properties:Resources.Information}">
+                                </ad:LayoutAnchorable>
+                            </ad:LayoutAnchorGroup>
+                            <ad:LayoutAnchorGroup>
                                 <ad:LayoutAnchorable x:Name="LA_Find" Title="{x:Static properties:Resources.MainWindow_Search}">
                                     <Grid x:Name="GD_Find"/>
                                 </ad:LayoutAnchorable>

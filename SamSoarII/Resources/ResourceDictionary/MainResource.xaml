@@ -78,4 +78,9 @@
             <Image x:Name="Image" Margin="8,4,0,0" Height="15" Source="/Resources/Image/Custom.png"/>
         </Canvas>
     </ControlTemplate>
+    <ControlTemplate x:Key="InformButton" TargetType="Button">
+        <Canvas Background="{Binding Path=Background,RelativeSource={RelativeSource TemplatedParent}}">
+            <Image x:Name="Image" Margin="8,4,0,0" Height="15" Source="/Resources/Image/Inform.png"/>
+        </Canvas>
+    </ControlTemplate>
 </ResourceDictionary>

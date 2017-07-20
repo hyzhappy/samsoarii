@@ -199,9 +199,9 @@
     <Compile Include="Core\Models\Ladders\LadderDiagramModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderNetworkModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderUnitModel.cs" />
-    <Compile Include="Core\Models\Modbus\ModbusItem.cs" />
-    <Compile Include="Core\Models\Modbus\ModbusModel.cs" />
-    <Compile Include="Core\Models\Modbus\ModbusTableModel.cs" />
+    <Compile Include="Core\Models\Ladders\Modbus\ModbusItem.cs" />
+    <Compile Include="Core\Models\Ladders\Modbus\ModbusModel.cs" />
+    <Compile Include="Core\Models\Ladders\Modbus\ModbusTableModel.cs" />
     <Compile Include="Core\Models\Monitor\MonitorModel.cs" />
     <Compile Include="Core\Models\ProjectModel.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\CommunicationParams.cs" />
@@ -224,6 +224,8 @@
     <Compile Include="Core\Simulate\SimulateDllModel.cs" />
     <Compile Include="Core\Simulate\SimulateManager.cs" />
     <Compile Include="Core\Simulate\SimulateViewer.cs" />
+    <Compile Include="Core\Update\Information.cs" />
+    <Compile Include="Core\Update\UpdateManager.cs" />
     <Compile Include="Global\GlobalCommand.cs" />
     <Compile Include="Global\GlobalSetting.cs" />
     <Compile Include="Global\GlobalThreeHotKey.cs" />
@@ -485,6 +487,12 @@
     <Compile Include="Shell\Windows\UnderBar.xaml.cs">
       <DependentUpon>UnderBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Windows\Update\InformationUnit.xaml.cs">
+      <DependentUpon>InformationUnit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Windows\Update\UpdateWindow.xaml.cs">
+      <DependentUpon>UpdateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Windows\WindowUpBorder.xaml.cs">
       <DependentUpon>WindowUpBorder.xaml</DependentUpon>
     </Compile>
@@ -574,7 +582,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\LayoutConfig.xml" />
-    <Resource Include="Resources\UserSetting.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.zh-Hans.resx" />
@@ -988,6 +995,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Shell\Windows\Update\InformationUnit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Windows\Update\UpdateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell\Windows\WindowUpBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1012,6 +1027,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\Inform.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

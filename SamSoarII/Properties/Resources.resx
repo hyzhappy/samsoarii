@@ -1992,4 +1992,13 @@
   <data name="Restore" xml:space="preserve">
     <value>Restore</value>
   </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="All_Information" xml:space="preserve">
+    <value>All informations:</value>
+  </data>
+  <data name="No_Information" xml:space="preserve">
+    <value>No informations</value>
+  </data>
 </root>

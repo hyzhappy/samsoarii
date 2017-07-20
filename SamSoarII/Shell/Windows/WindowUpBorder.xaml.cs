@@ -26,6 +26,13 @@ namespace SamSoarII.Shell.Windows
             window = (MainWindow)Application.Current.MainWindow;
             DataContext = window;
             window.StateChanged += Window_StateChanged;
+            window.IFParent.UDManager.InformationsCountChanged += UDManager_InformationsCountChanged;
+        }
+
+        private void UDManager_InformationsCountChanged(object sender, EventArgs e)
+        {
+            if (window.IFParent.UDManager.View.Informations.Count == 0) InformButton.Background = Brushes.Transparent;
+            else InformButton.Background = Brushes.OrangeRed;
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
@@ -91,6 +98,11 @@ namespace SamSoarII.Shell.Windows
         private void OnResizeWindow(object sender, RoutedEventArgs e)
         {
             ChangeWindowState();
+        }
+
+        private void OnInformWindow(object sender, RoutedEventArgs e)
+        {
+            window.LACInform.Show();
         }
     }
 }

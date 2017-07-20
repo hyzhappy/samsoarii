@@ -83,6 +83,7 @@ namespace SamSoarII
         public LayoutAnchorable LAFind { get { return LA_Find; } }
         public LayoutAnchorable LAReplace { get { return LA_Replace; } }
         public LayoutAnchorable LAMonitor { get { return LA_Monitor; } }
+        public LayoutAnchorable LAInform { get { return LA_Inform; } }
         public LayoutAnchorable LAErrorList { get { return LA_ErrorList; } }
         public LayoutAnchorable LAElemList { get { return LA_ElemList; } }
         public LayoutAnchorable LAElemInit { get { return LA_ElemInit; } }
@@ -91,6 +92,7 @@ namespace SamSoarII
         public LayoutAnchorControl LACFind { get { return LA_Find?.AnchorControl; } }
         public LayoutAnchorControl LACReplace { get { return LA_Replace?.AnchorControl; } }
         public LayoutAnchorControl LACMonitor { get { return LA_Monitor?.AnchorControl; } }
+        public LayoutAnchorControl LACInform { get { return LA_Inform?.AnchorControl; } }
         public LayoutAnchorControl LACErrorList { get { return LA_ErrorList?.AnchorControl; } }
         public LayoutAnchorControl LACElemList { get { return LA_ElemList?.AnchorControl; } }
         public LayoutAnchorControl LACElemInit { get { return LA_ElemInit?.AnchorControl; } }
@@ -104,6 +106,7 @@ namespace SamSoarII
             InitializeAvalonDock(LAFind);
             InitializeAvalonDock(LAReplace);
             InitializeAvalonDock(LAMonitor);
+            InitializeAvalonDock(LAInform);
             InitializeAvalonDock(LAErrorList);
             InitializeAvalonDock(LAElemList);
             InitializeAvalonDock(LAElemInit);
@@ -119,6 +122,7 @@ namespace SamSoarII
             LA_ElemList.Content = ifParent.WNDEList;
             LA_ElemInit.Content = ifParent.WNDEInit;
             LA_Monitor.Content = ifParent.WNDMoni;
+            LA_Inform.Content = ifParent.WNDInform;
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
