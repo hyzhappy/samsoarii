@@ -2042,7 +2042,7 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
-        
+
         public InstructionDiagramViewModel Inst
         {
             get { return core != null && core.Inst != null ? core.Inst.View : null; }

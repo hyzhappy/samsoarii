@@ -19,7 +19,7 @@
         <Grid Grid.Row="1">
             <ListBox x:Name="LB_Inform" Grid.Row="1" Visibility="Collapsed" ItemsSource="{Binding Informations}"/>
 
-            <TextBlock x:Name="TB_Inform" FontSize="15" VerticalAlignment="Top" Margin="0,120,0,0" HorizontalAlignment="Center" Width="120" Height="24" Text="{x:Static properties:Resources.No_Information}"/>
+            <TextBlock x:Name="TB_Inform" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Width="120" Height="24" Text="{x:Static properties:Resources.No_Information}"/>
         </Grid>
     </Grid>
 </UserControl>

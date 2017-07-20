@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SamSoarII.Core.Update
 {
-    public class UpdateManager
+    public class UpdateManager:IDisposable
     {
         private InteractionFacade ifParent;
         public InteractionFacade IFParent { get { return ifParent; } }
@@ -21,11 +21,25 @@ namespace SamSoarII.Core.Update
         {
             ifParent = _ifParent;
         }
-
+        public void ChildrensChanged()
+        {
+            InformationsCountChanged(this, new EventArgs());
+        }
         public void AddInformation(Information information)
         {
             informations.Add(information);
-            InformationsCountChanged(this,new EventArgs());
+            ChildrensChanged();
+        }
+
+        public void Dispose()
+        {
+            ifParent = null;
+            InformationsCountChanged = delegate { };
+            foreach (var information in informations)
+            {
+                information.Dispose();
+            }
+            informations = null;
         }
     }
 }
