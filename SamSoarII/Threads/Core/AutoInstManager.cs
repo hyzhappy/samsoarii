@@ -20,20 +20,27 @@ namespace SamSoarII.Threads
         
         protected override void Handle()
         {
-            if (!GlobalSetting.IsInstByTime) return;
-            ProjectModel proj = parent.MDProj;
-            if (proj != null)
+            try
             {
-                foreach (LadderDiagramModel ldmodel in proj.Diagrams)
+                if (!GlobalSetting.IsInstByTime) return;
+                ProjectModel proj = parent.MDProj;
+                if (proj != null)
                 {
-                    foreach (LadderNetworkModel lnmodel in ldmodel.Children)
+                    foreach (LadderDiagramModel ldmodel in proj.Diagrams)
                     {
-                        if (lnmodel.Inst.IsModify)
-                            lnmodel.Inst.Update();
+                        foreach (LadderNetworkModel lnmodel in ldmodel.Children)
+                        {
+                            if (lnmodel.Inst.IsModify)
+                                lnmodel.Inst.Update();
+                            if (!ThAlive || !ThActive) return;
+                        }
                         if (!ThAlive || !ThActive) return;
                     }
-                    if (!ThAlive || !ThActive) return;
                 }
+            }
+            catch (Exception)
+            {
+
             }
         }
     }

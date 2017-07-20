@@ -33,10 +33,17 @@ namespace SamSoarII.Threads
         {
             if (current?.Core?.Children != null && current != parent.CurrentLadder)
             {
-                for (int i = 0; i < current.Core.Children.Count; i++)
+                try
                 {
-                    current.Core.Children[i].View.DynamicDispose();
-                    current.Core.Children[i].Inst.View.DynamicDispose();
+                    for (int i = 0; i < current.Core.Children.Count; i++)
+                    {
+                        current.Core.Children[i].View.DynamicDispose();
+                        current.Core.Children[i].Inst.View.DynamicDispose();
+                    }
+                }
+                catch (Exception)
+                {
+
                 }
             }
             current = parent.CurrentLadder;
@@ -45,28 +52,31 @@ namespace SamSoarII.Threads
                 oldscrolloffset = 0;
                 return;
             }
-            double newscrolloffset = current.Scroll.VerticalOffset;
-            if (newscrolloffset > oldscrolloffset)
+            try
             {
-                for (int i = 0; i < current.Core.Children.Count; i++)
+                double newscrolloffset = current.Scroll.VerticalOffset;
+                if (newscrolloffset > oldscrolloffset)
                 {
-                    if (i < current.Core.Children.Count)
+                    for (int i = 0; i < current.Core.Children.Count; i++)
+                    {
                         current.Core.Children[i].View.DynamicUpdate();
-                    if (i < current.Core.Children.Count)
                         current.Core.Children[i].Inst.View.DynamicUpdate();
+                    }
                 }
+                else
+                {
+                    for (int i = current.Core.Children.Count - 1; i >= 0; i--)
+                    {
+                        current.Core.Children[i].View.DynamicUpdate();
+                        current.Core.Children[i].Inst.View.DynamicUpdate();
+                    }
+                }
+                oldscrolloffset = newscrolloffset;
             }
-            else
+            catch (Exception)
             {
-                for (int i = current.Core.Children.Count - 1; i >= 0; i--)
-                {
-                    if (i < current.Core.Children.Count)
-                        current.Core.Children[i].View.DynamicUpdate();
-                    if (i < current.Core.Children.Count)
-                        current.Core.Children[i].Inst.View.DynamicUpdate();
-                }
+
             }
-            oldscrolloffset = newscrolloffset;
         }
         
         private void OnAborted(object sender, RoutedEventArgs e)

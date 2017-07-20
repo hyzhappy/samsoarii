@@ -19,8 +19,15 @@ namespace SamSoarII.Threads
 
         protected override void Handle()
         {
-            if (GlobalSetting.IsSavedByTime && parent.MDProj != null && parent.MDProj.FileName != null)
-                parent.SaveProject();
+            try
+            {
+                if (GlobalSetting.IsSavedByTime && parent.MDProj != null && parent.MDProj.FileName != null)
+                    parent.SaveProject();
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }

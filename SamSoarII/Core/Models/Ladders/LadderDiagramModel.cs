@@ -527,11 +527,17 @@ namespace SamSoarII.Core.Models
             Command cmd = redos.Pop();
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
-                if (cmd.Network.RowCount - cmd.OldRows.Count() + cmd.NewRows.Count() <= 0) return;
+                if (cmd.Network.RowCount - cmd.OldRows.Count() + cmd.NewRows.Count() <= 0)
+                {
+                    cmd.NewRows = cmd.NewRows.Concat(new int[] { 0 }).ToArray();
+                }
             }
             if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
             {
-                if (Children.Where(n => !n.IsMasked).Count() - cmd.OldNetworks.Count() + cmd.NewNetworks.Count() <= 0) return;
+                if (Children.Where(n => !n.IsMasked).Count() - cmd.OldNetworks.Count() + cmd.NewNetworks.Count() <= 0)
+                {
+                    cmd.NewNetworks = cmd.NewNetworks.Concat(new LadderNetworkModel[] { new LadderNetworkModel(null, 0) }).ToArray();
+                }
             }
             LadderNetworkModel net = null;
             RelativeArea area = new RelativeArea();
