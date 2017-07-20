@@ -103,8 +103,8 @@ namespace SamSoarII.Shell.Models
                     core.PropertyChanged += OnCorePropertyChanged;
                     core.ChildrenChanged += OnCoreChildrenChanged;
                     if (core.View != this) core.View = this;
+                    Update();
                 }
-                Update();
             }
         }
         public InteractionFacade IFParent { get { return core?.Parent?.Parent; } }
