@@ -46,24 +46,44 @@ namespace SamSoarII.Shell.Dialogs
                     switch (value)
                     {
                         case 0:
-                            MiddleTextBox1.Focus();
-                            Keyboard.Focus(MiddleTextBox1);
+                            if (!MiddleTextBox1.IsFocused)
+                            {
+                                MiddleTextBox1.Focus();
+                                Keyboard.Focus(MiddleTextBox1);
+                            }
+                            MiddleTextBox1.SelectAll();
                             break;
                         case 1:
-                            MiddleTextBox2.Focus();
-                            Keyboard.Focus(MiddleTextBox2);
+                            if (!MiddleTextBox2.IsFocused)
+                            {
+                                MiddleTextBox2.Focus();
+                                Keyboard.Focus(MiddleTextBox2);
+                            }
+                            MiddleTextBox2.SelectAll();
                             break;
                         case 2:
-                            MiddleTextBox3.Focus();
-                            Keyboard.Focus(MiddleTextBox3);
+                            if (!MiddleTextBox3.IsFocused)
+                            {
+                                MiddleTextBox3.Focus();
+                                Keyboard.Focus(MiddleTextBox3);
+                            }
+                            MiddleTextBox3.SelectAll();
                             break;
                         case 3:
-                            MiddleTextBox4.Focus();
-                            Keyboard.Focus(MiddleTextBox4);
+                            if (!MiddleTextBox4.IsFocused)
+                            {
+                                MiddleTextBox4.Focus();
+                                Keyboard.Focus(MiddleTextBox4);
+                            }
+                            MiddleTextBox4.SelectAll();
                             break;
                         case 4:
-                            MiddleTextBox5.Focus();
-                            Keyboard.Focus(MiddleTextBox5);
+                            if (!MiddleTextBox5.IsFocused)
+                            {
+                                MiddleTextBox5.Focus();
+                                Keyboard.Focus(MiddleTextBox5);
+                            }
+                            MiddleTextBox5.SelectAll();
                             break;
                     }
                 }
@@ -113,23 +133,23 @@ namespace SamSoarII.Shell.Dialogs
 
         private void MiddleTextBox1_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.SelectedIndex = 0;
+            SelectedIndex = 0;
         }
         private void MiddleTextBox2_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.SelectedIndex = 1;
+            SelectedIndex = 1;
         }
         private void MiddleTextBox3_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.SelectedIndex = 2;
+            SelectedIndex = 2;
         }
         private void MiddleTextBox4_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.SelectedIndex = 3;
+            SelectedIndex = 3;
         }
         private void MiddleTextBox5_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.SelectedIndex = 4;
+            SelectedIndex = 4;
         }
 
         #region CALLM

@@ -94,6 +94,7 @@ namespace SamSoarII.Shell.Dialogs
                 if (bpmodel != null)
                 {
                     bpmodel.PropertyChanged -= OnPropertyChanged;
+                    bpmodel.Loaded -= OnPropModelLoaded;
                     GD_Main.Children.Remove(bpmodel);
                     if (bpmodel is OutRecPropModel)
                     {
@@ -105,20 +106,28 @@ namespace SamSoarII.Shell.Dialogs
                 if (bpmodel != null)
                 {
                     bpmodel.PropertyChanged += OnPropertyChanged;
+                    bpmodel.Loaded += OnPropModelLoaded;
                     GD_Main.Children.Add(bpmodel);
                     if (bpmodel is OutRecPropModel)
                     {
                         OutRecPropModel orpmodel = (OutRecPropModel)bpmodel;
                         orpmodel.CollectionPopup += OnShowCollectionPopup;
                     }
+                    if (bpmodel.IsLoaded) OnPropModelLoaded(bpmodel, new RoutedEventArgs());
                 }
             }
         }
 
+        private void OnPropModelLoaded(object sender, RoutedEventArgs e)
+        {
+            bpmodel.SelectedIndex = 0;
+        }
+
+
         #endregion
 
         #region Event handler
-        
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             bpmodel.SelectedIndex = 0;

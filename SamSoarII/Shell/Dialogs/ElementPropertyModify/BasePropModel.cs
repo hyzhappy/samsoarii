@@ -16,6 +16,7 @@ namespace SamSoarII.Shell.Dialogs
         public BasePropModel(LadderUnitModel _core)
         {
             core = _core;
+            selectedindex = -1;
             valuestrings = new string[5] { "", "", "", "", "" };
             commentstrings = new string[5] { "", "", "", "", "" };
             for (int i = 0; i < core.Children.Count; i++)

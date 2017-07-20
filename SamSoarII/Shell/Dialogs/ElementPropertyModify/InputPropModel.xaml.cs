@@ -218,12 +218,20 @@ namespace SamSoarII.Shell.Dialogs
                     switch (SelectedIndex)
                     {
                         case 0:
-                            ValueTextBox.Focus();
-                            Keyboard.Focus(ValueTextBox);
+                            if (!ValueTextBox.IsFocused)
+                            {
+                                ValueTextBox.Focus();
+                                Keyboard.Focus(ValueTextBox);
+                            }
+                            ValueTextBox.SelectAll();
                             break;
                         case 1:
-                            Value2TextBox.Focus();
-                            Keyboard.Focus(Value2TextBox);
+                            if (!Value2TextBox.IsFocused)
+                            {
+                                Value2TextBox.Focus();
+                                Keyboard.Focus(Value2TextBox);
+                            }
+                            Value2TextBox.SelectAll();
                             break;
                     }
                 }
@@ -240,11 +248,11 @@ namespace SamSoarII.Shell.Dialogs
         }
         private void ValueTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.SelectedIndex = 0;
+            SelectedIndex = 0;
         }
         private void Value2TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.SelectedIndex = 1;
+            SelectedIndex = 1;
         }
     }
 }
