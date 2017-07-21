@@ -55,13 +55,14 @@ namespace SamSoarII.Shell.Models
             {
                 if (parent == value) return;
                 LadderNetworkModel _parent = parent;
-                this.parent = value;
+                this.parent = null;
                 if (_parent?.View != null)
                 {
                     _parent.View.LadderCanvas.Children.Remove(View);
                     if (_parent.Parent.View.SelectionStatus == SelectStatus.SingleSelected)
                         _parent.Parent.View.SelectionStatus = SelectStatus.Idle;
                 }
+                this.parent = value;
                 if (parent?.View != null)
                 {
                     if (!parent.IsExpand) parent.IsExpand = true;
