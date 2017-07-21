@@ -183,7 +183,7 @@ namespace SamSoarII.Shell.Models
                     else
                     {
                         Core.QuickInsertElement(type, _selectRect.Core);
-                        SelectRectRight();
+                        //SelectRectRight();
                     }
                     isnavigatable = true;
                     break;

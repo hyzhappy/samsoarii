@@ -918,6 +918,7 @@ namespace SamSoarII.Core.Models
                     ReplaceU(net, old != null ? new LadderUnitModel[] { old } : new LadderUnitModel[] { }, new LadderUnitModel[] { unit });
                     break;
             }
+            view.IFParent.Navigate(unit);
         }
 
         public void AddSingleUnit(string text, SelectRectCore rect, LadderNetworkModel net, bool cover = true)
