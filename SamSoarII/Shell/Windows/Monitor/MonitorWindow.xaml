@@ -8,7 +8,7 @@
              xmlns:properties="clr-namespace:SamSoarII.Properties"
              xmlns:util="clr-namespace:SamSoarII.Utility;assembly=SamSoarII.Utility"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="400" MinHeight="400" MinWidth="400" x:Name="UserControl" Background="#FFFBFCF6">
+             d:DesignHeight="800" d:DesignWidth="400" x:Name="UserControl" Background="#FFFBFCF6">
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static gb:MonitorCommand.AddElementCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
         <CommandBinding Command="{x:Static gb:MonitorCommand.DeleteAllElementCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
@@ -52,6 +52,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <util:DoubleConverter1 x:Key="DoubleConverter1"></util:DoubleConverter1>
+        <util:DoubleConverter3 x:Key="DoubleConverter3"></util:DoubleConverter3>
         <util:BoolConverter x:Key="ReverseBool"></util:BoolConverter>
         <Style TargetType="Button">
             <Setter Property="Height" Value="20"></Setter>
@@ -101,51 +102,53 @@
                     </ListBox>
                 </StackPanel>
             </ScrollViewer>
-            <Border x:Name="Border" Grid.Row="1" Grid.Column="1" Margin="5" BorderBrush="Black" BorderThickness="0.7">
-                <DataGrid x:Name="ElementDataGrid" HorizontalScrollBarVisibility="Auto" RowHeaderWidth="0"
-                  Background="White" VerticalScrollBarVisibility="Auto" SelectionMode="Extended"
-                  AutoGenerateColumns="False" ColumnHeaderHeight="24" RowBackground="#FFFDFDD0"
-                  CanUserResizeColumns="True" ItemsSource="{Binding TableElements}" ContextMenu="{StaticResource DataGridContextMenu}"
-                  CanUserAddRows="False" CanUserDeleteRows="False" MouseDoubleClick="ElementDataGrid_MouseDoubleClick">
-                    <DataGrid.Resources>
-                        <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
-                            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="0,3,0,0">
-                                <ContentPresenter TextBlock.FontSize="12" TextBlock.TextAlignment="Center"></ContentPresenter>
-                            </Border>
-                        </ControlTemplate>
-                        <Style TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
-                            <Setter Property="TextWrapping" Value="Wrap"></Setter>
-                            <Setter Property="FontSize" Value="12"></Setter>
-                            <Setter Property="FontFamily" Value="Arial"></Setter>
-                        </Style>
-                        <Style x:Uid="Style_2" TargetType="DataGridColumnHeader">
-                            <Setter x:Uid="Setter_4" Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="ElementName" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="True" Header="{x:Static properties:Resources.Element}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding ShowName}">
-                        </DataGridTextColumn>
-                        <DataGridTextColumn x:Name="ElementValue" CanUserSort="False" Width="1.4*" MinWidth="92" IsReadOnly="True" Header="{x:Static properties:Resources.ON_OFF_CurrentValue}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding CurrentValue}">
-                        </DataGridTextColumn>
-                        <DataGridTextColumn x:Name="SetValue" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="True" Header="{x:Static properties:Resources.Set_Value}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding SetValue}">
-                        </DataGridTextColumn>
-                        <DataGridComboBoxColumn x:Uid="DataType" x:Name="DataType" CanUserSort="False" Width="*" MinWidth="55" IsReadOnly="False" Header="{x:Static properties:Resources.Data_Type}">
-                            <DataGridComboBoxColumn.EditingElementStyle>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
-                                    <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
-                                    <EventSetter Event="SelectionChanged" Handler="ComboBox_SelectionChanged"></EventSetter>
-                                </Style>
-                            </DataGridComboBoxColumn.EditingElementStyle>
-                            <DataGridComboBoxColumn.ElementStyle>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
-                                    <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
-                                </Style>
-                            </DataGridComboBoxColumn.ElementStyle>
-                        </DataGridComboBoxColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+            <Border Background="White" Grid.Row="1" Grid.Column="1">
+                <Viewbox VerticalAlignment="Top" >
+                    <DataGrid x:Name="ElementDataGrid" HorizontalScrollBarVisibility="Auto" RowHeaderWidth="0"
+                    Background="White" VerticalScrollBarVisibility="Auto" SelectionMode="Extended"
+                    AutoGenerateColumns="False" ColumnHeaderHeight="24" RowBackground="#FFFDFDD0" MinWidth="260"
+                    CanUserResizeColumns="True" ItemsSource="{Binding TableElements}" ContextMenu="{StaticResource DataGridContextMenu}"
+                    CanUserAddRows="False" CanUserDeleteRows="False" MouseDoubleClick="ElementDataGrid_MouseDoubleClick">
+                        <DataGrid.Resources>
+                            <ControlTemplate x:Key="HeaderTemplate" TargetType="DataGridColumnHeader">
+                                <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="0,3,0,0">
+                                    <ContentPresenter TextBlock.FontSize="12" TextBlock.TextAlignment="Center"></ContentPresenter>
+                                </Border>
+                            </ControlTemplate>
+                            <Style TargetType="TextBlock" x:Key="DataGridTextColumnStyle">
+                                <Setter Property="TextWrapping" Value="Wrap"></Setter>
+                                <Setter Property="FontSize" Value="12"></Setter>
+                                <Setter Property="FontFamily" Value="Arial"></Setter>
+                            </Style>
+                            <Style x:Uid="Style_2" TargetType="DataGridColumnHeader">
+                                <Setter x:Uid="Setter_4" Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="ElementName" CanUserSort="False" MinWidth="55" IsReadOnly="True" Header="{x:Static properties:Resources.Element}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding ShowName}">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="ElementValue" CanUserSort="False" MinWidth="95" IsReadOnly="True" Header="{x:Static properties:Resources.ON_OFF_CurrentValue}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding CurrentValue}">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="SetValue" CanUserSort="False" MinWidth="55" IsReadOnly="True" Header="{x:Static properties:Resources.Set_Value}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding SetValue}">
+                            </DataGridTextColumn>
+                            <DataGridComboBoxColumn x:Uid="DataType" x:Name="DataType" MinWidth="55" CanUserSort="False" IsReadOnly="False" Header="{x:Static properties:Resources.Data_Type}">
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                                        <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                                        <EventSetter Event="SelectionChanged" Handler="ComboBox_SelectionChanged"></EventSetter>
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="ItemsSource" Value="{Binding ShowTypes}"></Setter>
+                                        <Setter Property="SelectedIndex" Value="{Binding SelectIndex,Mode=TwoWay}"></Setter>
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
+                            </DataGridComboBoxColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Viewbox>
             </Border>
         </Grid>
     </Border>

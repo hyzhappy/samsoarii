@@ -159,7 +159,7 @@ namespace SamSoarII.Shell.Models
                         Parent = _current.Parent;
                         X = _current.X;
                         Y = _current.Y;
-                        Parent.Parent.View.NavigateByInstructionInputDialog();
+                        Parent.Parent.View.IFParent.Navigate(_current);
                         isnavigatable = true;
                     }
                     break;
