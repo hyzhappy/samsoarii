@@ -923,6 +923,7 @@ namespace SamSoarII.Shell.Models
                     break;
                 default:
                     CMMoni = ViewParent.CMMoni;
+                    CMMoni.Core = ViewParent.SelectionRect.Current;
                     break;
             }
             LadderCanvas.CaptureMouse();
