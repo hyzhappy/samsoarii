@@ -584,8 +584,8 @@ namespace SamSoarII.Shell.Models
             {
                 int _loadedrowstart = 0; 
                 int _loadedrowend = RowCount - 1;
-                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (GlobalSetting.LadderHeightUnit * scaleY)) - 3);
-                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (GlobalSetting.LadderHeightUnit * scaleY)) + 3);
+                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (HeightUnit * scaleY)) - 3);
+                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (HeightUnit * scaleY)) + 3);
                 if (_loadedrowstart > _loadedrowend)
                 {
                     if (loadedrowstart <= loadedrowend)
@@ -724,6 +724,54 @@ namespace SamSoarII.Shell.Models
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
+
+        public LadderEditMenu CMEdit
+        {
+            get
+            {
+                return LadderCanvas.ContextMenu is LadderEditMenu
+                    ? (LadderEditMenu)(LadderCanvas.ContextMenu) : null;
+            }
+            set
+            {
+                if (CMEdit == value) return;
+                CMMoni = null;
+                LadderEditMenu _CMEdit = CMEdit;
+                LadderCanvas.ContextMenu = null;
+                if (_CMEdit != null)
+                {
+                    _CMEdit.Post -= OnLadderNetworkEdit;
+                    if (_CMEdit.Parent != null) _CMEdit.Parent = null;
+                }
+                LadderCanvas.ContextMenu = value;
+                _CMEdit = CMEdit;
+                if (_CMEdit != null)
+                {
+                    _CMEdit.Post += OnLadderNetworkEdit;
+                    if (_CMEdit.Parent != this) _CMEdit.Parent = this;
+                }
+            }
+        }
+
+        public LadderMonitorMenu CMMoni
+        {
+            get
+            {
+                return LadderCanvas.ContextMenu is LadderMonitorMenu
+                    ? (LadderMonitorMenu)(LadderCanvas.ContextMenu) : null;
+            }
+            set
+            {
+                if (CMMoni == value) return;
+                CMEdit = null;
+                LadderMonitorMenu _CMMoni = CMMoni;
+                LadderCanvas.ContextMenu = null;
+                if (_CMMoni != null && _CMMoni.Parent != null) _CMMoni.Parent = null;
+                LadderCanvas.ContextMenu = value;
+                _CMMoni = CMMoni;
+                if (_CMMoni != null && _CMMoni.Parent != this) _CMMoni.Parent = this;
+            }
+        }
         
         private bool iscommentmode;
         public bool IsCommentMode
@@ -808,51 +856,59 @@ namespace SamSoarII.Shell.Models
 
         #endregion
         
-        private void OnDeleteElement(object sender, RoutedEventArgs e)
+
+        private void OnLadderNetworkEdit(object sender, LadderEditEventArgs e)
         {
-            ViewParent.Delete();
+            switch (e.Type)
+            {
+                case LadderEditEventArgs.Types.Delete:
+                    ViewParent.Delete();
+                    break;
+                case LadderEditEventArgs.Types.RowInsertBefore:
+                    if (IsSingleSelected())
+                        Core.Parent.AddR(Core, ViewParent.SelectionRect.Y);
+                    if (IsSelectAreaMode)
+                        Core.Parent.AddR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY));
+                    break;
+                case LadderEditEventArgs.Types.RowInsertAfter:
+                    if (IsSingleSelected())
+                        Core.Parent.AddR(Core, ViewParent.SelectionRect.Y + 1);
+                    if (IsSelectAreaMode)
+                        Core.Parent.AddR(Core, Math.Max(SelectAreaFirstY, SelectAreaSecondY) + 1);
+                    break;
+                case LadderEditEventArgs.Types.RowInsertEnd:
+                    Core.Parent.AddR(Core, RowCount);
+                    break;
+                case LadderEditEventArgs.Types.RowDelete:
+                    if (IsSingleSelected())
+                        Core.Parent.RemoveR(Core, ViewParent.SelectionRect.Y);
+                    if (IsSelectAreaMode)
+                        Core.Parent.RemoveR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY), Math.Max(SelectAreaFirstY, SelectAreaSecondY));
+                    break;
+                case LadderEditEventArgs.Types.NetInsertBefore:
+                    Core.Parent.AddN(Core.ID);
+                    break;
+                case LadderEditEventArgs.Types.NetInsertAfter:
+                    Core.Parent.AddN(Core.ID + 1);
+                    break;
+                case LadderEditEventArgs.Types.NetInsertEnd:
+                    Core.Parent.AddN(Core.Parent.NetworkCount);
+                    break;
+                case LadderEditEventArgs.Types.NetDelete:
+                    Core.Parent.RemoveN(Core.ID, Core);
+                    break;
+                case LadderEditEventArgs.Types.NetCopy:
+                    break;
+                case LadderEditEventArgs.Types.NetCut:
+                    break;
+                case LadderEditEventArgs.Types.NetPaste:
+                    break;
+                case LadderEditEventArgs.Types.NetShield:
+                    Core.IsMasked = !Core.IsMasked;
+                    break;
+            }
         }
-        private void OnAddNewRowBefore(object sender, RoutedEventArgs e)
-        {
-            if (IsSingleSelected())
-                Core.Parent.AddR(Core, ViewParent.SelectionRect.Y);
-            if (IsSelectAreaMode)
-                Core.Parent.AddR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY));
-        }
-        private void OnAddNewRowAfter(object sender, RoutedEventArgs e)
-        {
-            if (IsSingleSelected())
-                Core.Parent.AddR(Core, ViewParent.SelectionRect.Y + 1);
-            if (IsSelectAreaMode)
-                Core.Parent.AddR(Core, Math.Max(SelectAreaFirstY, SelectAreaSecondY) + 1);
-        }
-        private void OnDeleteRow(object sender, RoutedEventArgs e)
-        {
-            if (IsSingleSelected())
-                Core.Parent.RemoveR(Core, ViewParent.SelectionRect.Y);
-            if (IsSelectAreaMode)
-                Core.Parent.RemoveR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY), Math.Max(SelectAreaFirstY, SelectAreaSecondY));
-        }
-        private void OnAppendNewRow(object sender, RoutedEventArgs e)
-        {
-            Core.Parent.AddR(Core, RowCount);
-        }
-        private void OnAppendNewNetwork(object sender, RoutedEventArgs e)
-        {
-            Core.Parent.AddN(Core.Parent.NetworkCount);
-        }
-        private void OnAddNewNetworkBefore(object sender, RoutedEventArgs e)
-        {
-            Core.Parent.AddN(Core.ID);
-        }
-        private void OnAddNewNetworkAfter(object sender, RoutedEventArgs e)
-        {
-            Core.Parent.AddN(Core.ID + 1);
-        }
-        private void OnRemoveNetwork(object sender, RoutedEventArgs e)
-        {
-            Core.Parent.RemoveN(Core.ID, Core);
-        }
+
         private void OnEditComment(object sender, RoutedEventArgs e)
         {
             IFParent.ShowEditNetworkCommentDialog(Core);
@@ -860,6 +916,15 @@ namespace SamSoarII.Shell.Models
         
         private void OnCanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
+            switch (LadderMode)
+            {
+                case LadderModes.Edit:
+                    CMEdit = ViewParent.CMEdit;
+                    break;
+                default:
+                    CMMoni = ViewParent.CMMoni;
+                    break;
+            }
             LadderCanvas.CaptureMouse();
             AcquireSelectRect(e);
             if (e.ClickCount == 2)
@@ -966,6 +1031,6 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
+        
     }
 }

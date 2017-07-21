@@ -43,7 +43,15 @@ namespace SamSoarII
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             InitializeAvalonDock();
             InitializeHotKey();
+            Loaded += OnMainWindowLoaded;
             App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
+        }
+
+        private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= OnMainWindowLoaded;
+            LACProj.Show();
+            LAProj.Hide();
         }
 
         public void Dispose()

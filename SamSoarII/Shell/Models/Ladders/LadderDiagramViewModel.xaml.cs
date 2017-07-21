@@ -57,6 +57,8 @@ namespace SamSoarII.Shell.Models
             if (Core.Parent.View != null)
                 IsCommentMode = Core.Parent.View.IsCommentMode;
             _selectRect = new SelectRect();
+            cmEdit = new LadderEditMenu();
+            cmMoni = new LadderMonitorMenu();
             ladderExpander.MouseEnter += OnExpanderMouseEnter;
             ladderExpander.MouseLeave += OnExpanderMouseLeave;
             ladderExpander.line.Visibility = Visibility.Hidden;
@@ -968,7 +970,7 @@ namespace SamSoarII.Shell.Models
                     if (id < Core.NetworkCount)
                     {
                         SelectRectOwner = lnmodel;
-                        _selectRect.Y = lnmodel.RowCount - 1;
+                        _selectRect.Y = 0;
                     }
                 }
                 //VScrollToRect(SelectRectOwner.ID, _selectRect.Y);
@@ -2006,6 +2008,16 @@ namespace SamSoarII.Shell.Models
             }
             return null;
         }
+
+        #endregion
+
+        #region ContextMenu
+
+        private LadderEditMenu cmEdit;
+        public LadderEditMenu CMEdit { get { return this.cmEdit; } }
+
+        private LadderMonitorMenu cmMoni;
+        public LadderMonitorMenu CMMoni { get { return this.cmMoni; } }
 
         #endregion
 

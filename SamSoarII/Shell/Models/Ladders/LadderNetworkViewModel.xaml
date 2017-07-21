@@ -56,35 +56,20 @@
                         HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent" 
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                         PreviewMouseDown="OnCanvasMouseDown" PreviewMouseUp="OnCanvasMouseUp">
-                        <Canvas.ContextMenu>
-                            <ContextMenu x:Uid="CM_Edit" x:Name="CM_Edit" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Cut}" Command="ApplicationCommands.Cut"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Copy}" Command="ApplicationCommands.Copy"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Paste}" Command="ApplicationCommands.Paste"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Element_Delete}" Click="OnDeleteElement"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Row_Insert}">
-                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_before}" Click="OnAddNewRowBefore"></MenuItem>
-                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_After}" Click="OnAddNewRowAfter"></MenuItem>
-                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_End}" Click="OnAppendNewRow"></MenuItem>
-                                </MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Row_Delete}" Click="OnDeleteRow"></MenuItem>
-                                <Separator ></Separator>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Insert}">
-                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_before}" Click="OnAddNewNetworkBefore"></MenuItem>
-                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_After}" Click="OnAddNewNetworkAfter"></MenuItem>
-                                    <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Insert_End}" Click="OnAppendNewNetwork"></MenuItem>
-                                </MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Delete}" Click="OnRemoveNetwork"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Cut}"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Copy}"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Network_Paste}"></MenuItem>
+                        <Canvas.Resources>
+                            <ContextMenu x:Key="CM_Monitor" x:Name="CM_Monitor">
+                                <MenuItem x:Name="CMI_Value1"/>
+                                <MenuItem x:Name="CMI_Value2"/>
+                                <MenuItem x:Name="CMI_Value3"/>
+                                <MenuItem x:Name="CMI_Value4"/>
+                                <MenuItem x:Name="CMI_Value5"/>
                                 <Separator/>
-                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_Shield_Network}" IsCheckable="True" IsChecked="{Binding IsMasked}"></MenuItem>
-                                <Separator ></Separator>
-                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_In}" Command="{x:Static gb:GlobalCommand.ZoomInCommand}"></MenuItem>
-                                <MenuItem Header="{x:Static properties:Resources.MainWindow_Zoom_Out}" Command="{x:Static gb:GlobalCommand.ZoomOutCommand}"></MenuItem>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_AddBreakpoint}" Command="{x:Static gb:BreakpointCommand.Add}"/>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_SettingBreakpoint}" Command="{x:Static gb:BreakpointCommand.Setting}"/>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_RemoveBreakpoint}" Command="{x:Static gb:BreakpointCommand.Remove}"/>
+                                <MenuItem Header="{x:Static properties:Resources.LadderNetwork_JumpToThis}" Command="{x:Static gb:BreakpointCommand.JumpTo}"/>
                             </ContextMenu>
-                        </Canvas.ContextMenu>
+                        </Canvas.Resources>
                     </Canvas>
                 </Grid>
             </StackPanel>

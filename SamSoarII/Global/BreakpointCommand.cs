@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace SamSoarII.Global
 {
-    class BreakpointCommand
+    public class BreakpointCommand
     {
         public static RoutedUICommand Add;
         public static RoutedUICommand Setting;

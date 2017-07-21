@@ -2010,4 +2010,7 @@
   <data name="LadderNetwork_SettingBreakpoint" xml:space="preserve">
     <value>断点设置</value>
   </data>
+  <data name="LadderNetwork_JumpToThis" xml:space="preserve">
+    <value>跳转到该点</value>
+  </data>
 </root>
