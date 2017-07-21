@@ -1651,13 +1651,7 @@ namespace SamSoarII
             {
                 ret &= !ProjectTreeViewItem.HasRenaming;
             }
-            if (e.Command == ApplicationCommands.Cut
-             || e.Command == ApplicationCommands.Copy
-             || e.Command == ApplicationCommands.Paste
-             || e.Command == ApplicationCommands.Delete
-             || e.Command == ApplicationCommands.Undo
-             || e.Command == ApplicationCommands.Redo
-             || e.Command == GlobalCommand.AddNewFuncBlockCommand
+            if (e.Command == GlobalCommand.AddNewFuncBlockCommand
              || e.Command == GlobalCommand.AddNewModbusCommand
              || e.Command == GlobalCommand.AddNewSubRoutineCommand)
             {

@@ -861,7 +861,7 @@ namespace SamSoarII.Shell.Models
                 _selectStartNetwork.IsSelectAllMode = false;
                 _selectStartNetwork = null;
             }
-            //SelectRectOwner = null;
+            SelectRectOwner = null;
             _selectAllNetworks.Clear();
             foreach (var net in _selectAllNetworkCache)
             {
@@ -1847,6 +1847,7 @@ namespace SamSoarII.Shell.Models
             for (int nn = start; nn <= end; nn++)
             {
                 LadderNetworkModel network = Core.Children[nn];
+                network.View.IsSelectAllMode = true;
                 if (network.IsMasked) continue;
                 if (_selectStartNetwork == null)
                     _selectStartNetwork = network.View;
@@ -1924,12 +1925,12 @@ namespace SamSoarII.Shell.Models
             this.Focus();
             Keyboard.Focus(this);
 
-            /*
+            
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 SelectionStatus = SelectStatus.Idle;
             }
-            */
+            
             if (LadderMode != LadderModes.Edit)
             {
                 return;

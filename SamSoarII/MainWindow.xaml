@@ -72,6 +72,12 @@
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Gesture="Alt+F4" Command="ApplicationCommands.Close"/>
+        <KeyBinding Gesture="F9" Command="{x:Static gb:GlobalCommand.BrpoStepCommand}"></KeyBinding>
+        <KeyBinding Gesture="F10" Command="{x:Static gb:GlobalCommand.BrpoCallCommand}"></KeyBinding>
+        <KeyBinding Gesture="F11" Command="{x:Static gb:GlobalCommand.BrpoOutCommand}"></KeyBinding>
+        <KeyBinding Gesture="F5" Command="{x:Static gb:GlobalCommand.SimuStartCommand}"></KeyBinding>
+        <KeyBinding Gesture="F6" Command="{x:Static gb:GlobalCommand.SimuPauseCommand}"></KeyBinding>
+        <KeyBinding Gesture="F7" Command="{x:Static gb:GlobalCommand.SimuStopCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.Resources>
         <ad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
