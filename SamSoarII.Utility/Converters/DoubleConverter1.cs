@@ -28,13 +28,13 @@ namespace SamSoarII.Utility
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double newvalue = (double)value / 2;
+            double newvalue = (double)value / 4;
             return newvalue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double newvalue = (double)value * 2;
+            double newvalue = (double)value * 4;
             return newvalue;
         }
     }
