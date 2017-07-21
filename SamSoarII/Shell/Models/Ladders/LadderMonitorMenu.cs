@@ -81,6 +81,7 @@ namespace SamSoarII.Shell.Models
                 miBPAdd.IsEnabled = false;
                 miBPSetting.IsEnabled = false;
                 miBPRemove.IsEnabled = false;
+                mdValues.Clear();
                 for (int i = 0; i < 5; i++)
                     miValues[i].Visibility = Visibility.Collapsed;
                 if (core == null) return;
@@ -93,10 +94,14 @@ namespace SamSoarII.Shell.Models
                         miValues[i].Header = String.Format(App.CultureIsZH_CH() ? "修改{0:s}" : "Modify{0:s}", core.Children[i].Text);
                         idValues[i] = mdValues.Count();
                         mdValues.Add(core.Children[i]);
+                        switch (core.LadderMode)
+                        {
+                            case LadderModes.Monitor: miValues[i].IsEnabled = IFParent.MNGComu.IsAlive; break;
+                            case LadderModes.Simulate: miValues[i].IsEnabled = IFParent.MNGSimu.IsAlive; break;
+                            default: miValues[i].IsEnabled = false; break;
+                        }
                     }
                 }
-                for (int i = core.Children.Count(); i < 5; i++)
-                    miValues[i].Visibility = Visibility.Collapsed;
             }
         }
         public InteractionFacade IFParent { get { return core?.Parent?.Parent?.Parent?.Parent; } }

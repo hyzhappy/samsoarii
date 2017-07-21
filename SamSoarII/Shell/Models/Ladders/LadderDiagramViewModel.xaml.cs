@@ -71,6 +71,9 @@ namespace SamSoarII.Shell.Models
         
         public void Dispose()
         {
+            _selectRect.Dispose();
+            cmEdit.Dispose();
+            cmMoni.Dispose();
             Core = null;
         }
 

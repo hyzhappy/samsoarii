@@ -299,7 +299,7 @@ namespace SamSoarII
             {
                 try
                 {
-                    vmdProj.Reset();
+                    vmdProj.Dispose();
                     if (mdProj.UndoDiagram != null && mdProj.UndoDiagram.CanRedo) mdProj.UndoDiagram.Redo();
                     if (mdProj.RedoDiagram != null && mdProj.RedoDiagram.CanUndo) mdProj.RedoDiagram.Undo();
                 }
@@ -1601,6 +1601,14 @@ namespace SamSoarII
 
         public bool CanExecute(CanExecuteRoutedEventArgs e)
         {
+            if (e.Command == GlobalCommand.BrpoCallCommand
+             || e.Command == GlobalCommand.BrpoNowCommand
+             || e.Command == GlobalCommand.BrpoOutCommand
+             || e.Command == GlobalCommand.BrpoStepCommand
+             || e.Command == GlobalCommand.ShowBreakpointCommand)
+            {
+                return false;
+            }
             bool ret = true;
             ret &= !IsWaitForKey;
             if (e.Command == ApplicationCommands.Close) return ret;

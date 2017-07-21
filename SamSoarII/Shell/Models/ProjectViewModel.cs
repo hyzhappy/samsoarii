@@ -24,6 +24,19 @@ namespace SamSoarII.Shell.Models
         
         public void Dispose()
         {
+            foreach (LadderDiagramModel diagram in core.Diagrams)
+            {
+                diagram?.View?.Dispose();
+                foreach (LadderNetworkModel network in diagram.Children)
+                {
+                    network?.View?.Dispose();
+                    foreach (LadderUnitModel unit in network.Children)
+                        unit?.View?.Dispose();
+                }
+            }
+            foreach (FuncBlockModel funcblock in core.FuncBlocks)
+                funcblock?.View?.Dispose();
+            core.Modbus?.View?.Dispose();
             Core = null;
         }
         
@@ -74,7 +87,6 @@ namespace SamSoarII.Shell.Models
         public IViewModel ViewParent { get { return null; } }
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
         
-        private LadderModes laddermode;
         public LadderModes LadderMode
         {
             get { return core.LadderMode; }
@@ -99,23 +111,7 @@ namespace SamSoarII.Shell.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             }
         }
-
-        public void Reset()
-        {
-            foreach (LadderDiagramModel diagram in core.Diagrams)
-            {
-                diagram.View = null;
-                foreach (LadderNetworkModel network in diagram.Children)
-                {
-                    network.View = null;
-                    foreach (LadderUnitModel unit in network.Children)
-                    {
-                        unit.View = null;
-                    }
-                }
-            }
-        }
-
+        
         public void UpdateUnit(int flags)
         {
             foreach (LadderDiagramModel diagram in core.Diagrams)
