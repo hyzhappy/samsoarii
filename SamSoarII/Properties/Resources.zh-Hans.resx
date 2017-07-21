@@ -2001,4 +2001,13 @@
   <data name="No_Information" xml:space="preserve">
     <value>没有可用的通知</value>
   </data>
+  <data name="LadderNetwork_AddBreakpoint" xml:space="preserve">
+    <value>添加断点</value>
+  </data>
+  <data name="LadderNetwork_RemoveBreakpoint" xml:space="preserve">
+    <value>删除断点</value>
+  </data>
+  <data name="LadderNetwork_SettingBreakpoint" xml:space="preserve">
+    <value>断点设置</value>
+  </data>
 </root>
