@@ -873,13 +873,13 @@ namespace SamSoarII.Shell.Models
                 case LadderEditEventArgs.Types.RowInsertBefore:
                     if (IsSingleSelected())
                         Core.Parent.AddR(Core, ViewParent.SelectionRect.Y);
-                    if (IsSelectAreaMode)
+                    else if (IsSelectAreaMode)
                         Core.Parent.AddR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY));
                     break;
                 case LadderEditEventArgs.Types.RowInsertAfter:
                     if (IsSingleSelected())
                         Core.Parent.AddR(Core, ViewParent.SelectionRect.Y + 1);
-                    if (IsSelectAreaMode)
+                    else if (IsSelectAreaMode)
                         Core.Parent.AddR(Core, Math.Max(SelectAreaFirstY, SelectAreaSecondY) + 1);
                     break;
                 case LadderEditEventArgs.Types.RowInsertEnd:
@@ -888,7 +888,7 @@ namespace SamSoarII.Shell.Models
                 case LadderEditEventArgs.Types.RowDelete:
                     if (IsSingleSelected())
                         Core.Parent.RemoveR(Core, ViewParent.SelectionRect.Y);
-                    if (IsSelectAreaMode)
+                    else if (IsSelectAreaMode)
                         Core.Parent.RemoveR(Core, Math.Min(SelectAreaFirstY, SelectAreaSecondY), Math.Max(SelectAreaFirstY, SelectAreaSecondY));
                     break;
                 case LadderEditEventArgs.Types.NetInsertBefore:
