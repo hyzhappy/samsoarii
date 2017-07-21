@@ -268,6 +268,22 @@ namespace SamSoarII.Core.Models
 
         public void Add(LadderUnitModel lumodel)
         {
+            if (lumodel.X < 0 || lumodel.Y < 0)
+                throw new LadderUnitChangedEventException(LadderUnitAction.ADD, Properties.Resources.LadderUnit_LocationError);
+            switch (lumodel.Shape)
+            {
+                case LadderUnitModel.Shapes.Input:
+                case LadderUnitModel.Shapes.Special:
+                case LadderUnitModel.Shapes.HLine:
+                    if (lumodel.X >= GlobalSetting.LadderXCapacity - 1)
+                        throw new LadderUnitChangedEventException(LadderUnitAction.ADD, Properties.Resources.LadderUnit_LocationError);
+                    break;
+                case LadderUnitModel.Shapes.Output:
+                case LadderUnitModel.Shapes.OutputRect:
+                    if (lumodel.X != GlobalSetting.LadderXCapacity - 1)
+                        throw new LadderUnitChangedEventException(LadderUnitAction.ADD, Properties.Resources.LadderUnit_LocationError);
+                    break;
+            }
             LadderUnitModel _lumodel = children[lumodel.X, lumodel.Y];
             if (_lumodel != null) Remove(_lumodel);
             children[lumodel.X, lumodel.Y] = lumodel;

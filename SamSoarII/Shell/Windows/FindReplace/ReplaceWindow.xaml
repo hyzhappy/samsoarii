@@ -39,6 +39,7 @@
                       SelectedIndex="{Binding Mode, Mode=TwoWay}">
                 <TextBlock x:Uid="TextBlock_1" Text="{x:Static properties:Resources.Current_Routine}"/>
                 <TextBlock x:Uid="TextBlock_2" Text="{x:Static properties:Resources.All_Routine}"/>
+                <TextBlock x:Uid="TextBlock_3" Text="{x:Static properties:Resources.Routine_SelectedRange}"/>
             </ComboBox>
             <Button x:Uid="Button_1" ToolTip="{x:Static properties:Resources.MainWindow_Undo}" Command="{x:Static ApplicationCommands.Undo}" 
                     Grid.Row="0" Grid.Column="1"

@@ -429,7 +429,7 @@ namespace SamSoarII.Core.Simulate
         /// <summary>
         /// 初始化构造函数
         /// </summary>
-        public SimulateDllModel(SimulateManager _parent) : base(false)
+        public SimulateDllModel(SimulateManager _parent) : base(false, true)
         {
             parent = _parent;
         }

@@ -444,16 +444,22 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
-        
-        public IEnumerable<LadderUnitModel> GetSelectedHLines()
+
+        public IEnumerable<LadderUnitModel> GetSelectedElements()
         {
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
             int xEnd = Math.Max(_selectAreaFirstX, _selectAreaSecondX);
             int yBegin = Math.Min(_selectAreaFirstY, _selectAreaSecondY);
             int yEnd = Math.Max(_selectAreaFirstY, _selectAreaSecondY);
-            return Core.Children.SelectRange(xBegin, xEnd, yBegin, yEnd).Where(
+            return Core.Children.SelectRange(xBegin, xEnd, yBegin, yEnd);
+        }
+        
+        public IEnumerable<LadderUnitModel> GetSelectedHLines()
+        {
+            return GetSelectedElements().Where(
                 (ele) => { return ele.Shape == LadderUnitModel.Shapes.HLine; });
         }
+
         public IEnumerable<LadderUnitModel> GetSelectedVLines()
         {
             int xBegin = Math.Min(_selectAreaFirstX, _selectAreaSecondX);
@@ -995,7 +1001,6 @@ namespace SamSoarII.Shell.Models
                 if (ptvitem.RelativeObject is LadderUnitModel.Types)
                 {
                     LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
-                    Core.Parent.IsCalledByDrag = true;
                     Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
                 }
                 else if (ptvitem.RelativeObject is FuncModel)

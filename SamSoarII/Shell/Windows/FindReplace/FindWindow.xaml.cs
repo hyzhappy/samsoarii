@@ -26,6 +26,7 @@ namespace SamSoarII.Shell.Windows
         public FindWindow(InteractionFacade _ifParent)
         {
             InitializeComponent();
+            DataContext = this;
             ifParent = _ifParent;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             items = new ObservableCollection<FindElement>();
@@ -169,8 +170,12 @@ namespace SamSoarII.Shell.Windows
             switch (RF_Input.Type)
             {
                 case ReplaceFormat.TYPE_INVALID:
-                    // 非法时，将输入框涂红，并禁止操作
-                    TB_Input.Background = Brushes.Red;
+                    // 输入为空时涂白色
+                    if (RF_Input.Text.Length == 0)
+                        TB_Input.Background = Brushes.White;
+                    // 非法时，将输入框涂红
+                    else
+                        TB_Input.Background = Brushes.Red;
                     break;
                 default:
                     // 合法时，将输入框涂绿，表示待操作

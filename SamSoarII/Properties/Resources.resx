@@ -2013,4 +2013,10 @@
   <data name="LadderNetwork_JumpToThis" xml:space="preserve">
     <value>Jump to this</value>
   </data>
+  <data name="LadderUnit_LocationError" xml:space="preserve">
+    <value>Try to insert ladder unit at an invalid location!</value>
+  </data>
+  <data name="Routine_SelectedRange" xml:space="preserve">
+    <value>Selected Range</value>
+  </data>
 </root>
