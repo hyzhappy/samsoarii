@@ -536,7 +536,7 @@ namespace SamSoarII.Shell.Windows
                 (ptvitem.Flags & 0xf) | ProjectTreeViewEventArgs.FLAG_DOUBLECLICK,
                 ptvitem.RelativeObject, ptvitem);
             Post(this, _e);
-            ptvitem.IsExpanded = true;
+            if (e.OriginalSource != ptvitem.TBL_Text || e.OriginalSource != ptvitem.TBS_Text) return;
         }
 
         private void ONPTVIMenuClick(object sender, RoutedEventArgs e)
