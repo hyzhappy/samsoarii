@@ -108,7 +108,6 @@ namespace SamSoarII.Shell.Models
                     Update();
                     break;
             }
-            LadderMode = laddermode;
             IsCommentMode = iscommentmode;
         }
 
@@ -129,21 +128,8 @@ namespace SamSoarII.Shell.Models
                 MainStack.Children.Add(net.Inst.View);
             }
         }
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                foreach (InstructionNetworkViewModel invmodel in MainStack.Children)
-                    invmodel.LadderMode = value;
-            }
-        }
+        
+        public LadderModes LadderMode { get { return core.LadderMode; } }
 
         private bool iscommentmode;
         public bool IsCommentMode

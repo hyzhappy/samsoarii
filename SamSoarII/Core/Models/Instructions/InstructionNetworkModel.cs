@@ -63,6 +63,13 @@ namespace SamSoarII.Core.Models
         private bool ismodify;
         public bool IsModify { get { return this.ismodify; } }
 
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get { return this.laddermode; }
+            set { this.laddermode = value; PropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
+        }
+
         #endregion
         
         #region Shell

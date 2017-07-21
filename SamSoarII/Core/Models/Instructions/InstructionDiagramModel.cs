@@ -59,6 +59,22 @@ namespace SamSoarII.Core.Models
 
         public IEnumerable<InstructionNetworkModel> Children { get { return parent?.Children.Select(n => n.Inst); } }
 
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (InstructionNetworkModel netinst in Children)
+                    netinst.LadderMode = laddermode;
+                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+
         #endregion
 
         #region Shell

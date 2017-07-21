@@ -295,19 +295,8 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-            }
-        }
+        
+        public LadderModes LadderMode { get { return core.LadderMode; } }
 
         private bool iscommentmode;
         public bool IsCommentMode

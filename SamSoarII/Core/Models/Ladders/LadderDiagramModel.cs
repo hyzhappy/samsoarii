@@ -133,6 +133,7 @@ namespace SamSoarII.Core.Models
             set
             {
                 this.laddermode = value;
+                if (Inst != null) Inst.LadderMode = laddermode;
                 foreach (LadderNetworkModel network in Children)
                     network.LadderMode = laddermode;
                 PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
