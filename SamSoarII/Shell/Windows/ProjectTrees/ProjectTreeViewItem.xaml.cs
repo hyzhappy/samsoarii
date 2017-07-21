@@ -624,7 +624,7 @@ namespace SamSoarII.Shell.Windows
         {
             ptview.Handle(this, e, TYPE_LADDERS);
         }
-
+        
         private void OnFuncBlockChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             ptview.Handle(this, e, TYPE_FUNCBLOCK);
@@ -744,7 +744,7 @@ namespace SamSoarII.Shell.Windows
                 return;
             }
             var item = sender as ProjectTreeViewItem;
-            if (item.Items.Count > 0)
+            if(Items.Count > 0)
             {
                 switch (item.Flags & 0xf)
                 {
@@ -760,16 +760,13 @@ namespace SamSoarII.Shell.Windows
                         break;
                 }
             }
-            else
-            {
-                e.Handled = true;
-            }
+            else e.Handled = true;
         }
 
         private void OnCollapsed(object sender, RoutedEventArgs e)
         {
             var item = sender as ProjectTreeViewItem;
-            if (item.Items.Count > 0)
+            if (Items.Count > 0)
             {
                 switch (item.Flags & 0xf)
                 {
@@ -785,12 +782,41 @@ namespace SamSoarII.Shell.Windows
                         break;
                 }
             }
-            else
+            else e.Handled = true;
+        }
+        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+        {
+            if (RelativeObject?.ToString() == Properties.Resources.FuncBlock) return;
+            base.OnItemsChanged(e);
+            if (Items.Count == 0)
             {
-                e.Handled = true;
+                switch (Flags & 0xf)
+                {
+                    case TYPE_FUNCBLOCKFLODER:
+                    case TYPE_MODBUSFLODER:
+                    case TYPE_NETWORKFLODER:
+                    case TYPE_ROUTINEFLODER:
+                        IconSource = "/Resources/Image/MainStyle/folderClose.png";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (Items.Count == 1)
+            {
+                switch (Flags & 0xf)
+                {
+                    case TYPE_FUNCBLOCKFLODER:
+                    case TYPE_MODBUSFLODER:
+                    case TYPE_NETWORKFLODER:
+                    case TYPE_ROUTINEFLODER:
+                        IconSource = "/Resources/Image/MainStyle/folderOpen.png";
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-
         private void TBO_Text_Loaded(object sender, RoutedEventArgs e)
         {
             TBO_Text.Focus();
