@@ -2001,4 +2001,13 @@
   <data name="No_Information" xml:space="preserve">
     <value>No informations</value>
   </data>
+  <data name="LadderNetwork_AddBreakpoint" xml:space="preserve">
+    <value>Add Breakpoint</value>
+  </data>
+  <data name="LadderNetwork_RemoveBreakpoint" xml:space="preserve">
+    <value>Remove Breakpoint</value>
+  </data>
+  <data name="LadderNetwork_SettingBreakpoint" xml:space="preserve">
+    <value>Breakpoint Setting</value>
+  </data>
 </root>

@@ -53,7 +53,7 @@ namespace SamSoarII.Global
         public static RoutedUICommand ShowHelpDocumentCommand { get; set; }
         public static RoutedUICommand OnlineHelpCommand { get; set; }
         public static RoutedUICommand ShowAboutCommand { get; set; }
-
+        
         static GlobalCommand()
         {
             commands = new HashSet<RoutedUICommand>();

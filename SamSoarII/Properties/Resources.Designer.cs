@@ -2005,6 +2005,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Add Breakpoint 的本地化字符串。
+        /// </summary>
+        public static string LadderNetwork_AddBreakpoint {
+            get {
+                return ResourceManager.GetString("LadderNetwork_AddBreakpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Edit Network Comment 的本地化字符串。
         /// </summary>
         public static string LadderNetwork_Edit_Network_Comment {
@@ -2118,6 +2127,24 @@ namespace SamSoarII.Properties {
         public static string LadderNetwork_Network_Paste {
             get {
                 return ResourceManager.GetString("LadderNetwork_Network_Paste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Remove Breakpoint 的本地化字符串。
+        /// </summary>
+        public static string LadderNetwork_RemoveBreakpoint {
+            get {
+                return ResourceManager.GetString("LadderNetwork_RemoveBreakpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Breakpoint Setting 的本地化字符串。
+        /// </summary>
+        public static string LadderNetwork_SettingBreakpoint {
+            get {
+                return ResourceManager.GetString("LadderNetwork_SettingBreakpoint", resourceCulture);
             }
         }
         
