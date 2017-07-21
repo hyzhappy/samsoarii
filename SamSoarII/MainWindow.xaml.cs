@@ -701,28 +701,32 @@ namespace SamSoarII
 
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)
         {
-            if (Project?.IsModified == true)
-            {
-                LocalizedMessageResult mbret = ifParent.ShowSaveYesNoCancelDialog();
-                switch (mbret)
-                {
-                    case LocalizedMessageResult.Yes:
-                        ifParent.SaveProject();
-                        break;
-                    case LocalizedMessageResult.No:
-                        break;
-                    case LocalizedMessageResult.Cancel:
-                    default:
-                        return;
-                }
-            }
             if (e.Command == ApplicationCommands.New
-             || e.Command == ApplicationCommands.Open
-             || e.Command == ApplicationCommands.Close
-             || e.Command == GlobalCommand.CloseProjectCommand)
+                || e.Command == ApplicationCommands.Open
+                || e.Command == ApplicationCommands.Close
+                || e.Command == GlobalCommand.CloseProjectCommand)
             {
+                if (Project?.IsModified == true)
+                {
+                    LocalizedMessageResult mbret = ifParent.ShowSaveYesNoCancelDialog();
+                    switch (mbret)
+                    {
+                        case LocalizedMessageResult.Yes:
+                            ifParent.SaveProject();
+                            break;
+                        case LocalizedMessageResult.No:
+                            break;
+                        case LocalizedMessageResult.Cancel:
+                        default:
+                            return;
+                    }
+                }
                 CommandBinding_Executed_ReturnEditMode(sender, e);
                 return;
+            }
+            if (Project?.IsModified == true)
+            {
+                ifParent.SaveProject();
             }
             if (e.Command == GlobalCommand.SimulateCommand)
                 ifParent.SimulateProject();

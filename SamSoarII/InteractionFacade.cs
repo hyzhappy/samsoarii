@@ -1232,6 +1232,7 @@ namespace SamSoarII
                     try
                     {
                         current.Parent.Parent.UpdateUC(current, dialog.PropertyStrings);
+                        current.Parent.Parent.View.NavigateByInstructionInputDialog();
                         dialog.Close();
                     }
                     catch (Exception exce2)
@@ -1628,7 +1629,7 @@ namespace SamSoarII
                  || e.Command == GlobalCommand.InsertRowCommand
                  || e.Command == GlobalCommand.DeleteRowCommand)
                 {
-                    ret &= CurrentLadder != null;
+                    ret &= CurrentLadder != null && CurrentLadder.SelectionStatus != SelectStatus.Idle;
                 }
                 if (e.Command == MonitorCommand.StartCommand
                  || e.Command == GlobalCommand.SimuStartCommand)

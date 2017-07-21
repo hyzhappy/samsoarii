@@ -995,6 +995,7 @@ namespace SamSoarII.Shell.Models
                 if (ptvitem.RelativeObject is LadderUnitModel.Types)
                 {
                     LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
+                    Core.Parent.IsCalledByDrag = true;
                     Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
                 }
                 else if (ptvitem.RelativeObject is FuncModel)

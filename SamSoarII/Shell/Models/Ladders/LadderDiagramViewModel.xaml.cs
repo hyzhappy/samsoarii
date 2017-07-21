@@ -991,7 +991,7 @@ namespace SamSoarII.Shell.Models
                 }
             }
         }
-        private void SelectRectRight()
+        public void SelectRectRight()
         {
             if (SelectRectOwner != null)
             {
@@ -1781,6 +1781,14 @@ namespace SamSoarII.Shell.Models
             if (point.Y + _selectRect.ActualHeight * scaleY > MainScrollViewer.ViewportHeight)
             {
                 MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset + point.Y + _selectRect.ActualHeight * scaleY - MainScrollViewer.ViewportHeight);
+            }
+            if (_selectRect.X == GlobalSetting.LadderXCapacity - 1)
+            {
+                MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset + MainScrollViewer.ScrollableWidth);
+            }
+            if (_selectRect.X == 0)
+            {
+                MainScrollViewer.ScrollToHorizontalOffset(0);
             }
         }
         /// <summary>
