@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml.Linq;
 
 namespace SamSoarII.Core.Models
@@ -246,6 +247,17 @@ namespace SamSoarII.Core.Models
                 unit.Save(xele_unit);
                 xele_lc.Add(xele_unit);
             }
+        }
+
+        public void CopyToClipboard()
+        {
+            XElement xele = new XElement("Root");
+            XElement xele_ns = new XElement("Networks");
+            XElement xele_n = new XElement("Network");
+            Save(xele_n);
+            xele_ns.Add(xele_n);
+            xele.Add(xele_ns);
+            Clipboard.SetData("LadderContent", xele.ToString());
         }
 
         #endregion

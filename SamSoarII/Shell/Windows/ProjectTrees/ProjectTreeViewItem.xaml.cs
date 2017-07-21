@@ -73,6 +73,10 @@ namespace SamSoarII.Shell.Windows
                     {
                         ((LadderNetworkModel)relativeobject).PropertyChanged -= OnNetworkPropertyChanged;
                     }
+                    if (relativeobject is FuncBlockModel)
+                    {
+                        ((FuncBlockModel)relativeobject).PropertyChanged -= OnFuncBlockPropertyChanged;
+                    }
                     if (relativeobject is ModbusTableModel)
                     {
                         ((ModbusTableModel)relativeobject).ChildrenChanged -= OnModbusTableChanged;
@@ -102,6 +106,10 @@ namespace SamSoarII.Shell.Windows
                     if (relativeobject is LadderNetworkModel)
                     {
                         ((LadderNetworkModel)relativeobject).PropertyChanged += OnNetworkPropertyChanged;
+                    }
+                    if (relativeobject is FuncBlockModel)
+                    {
+                        ((FuncBlockModel)relativeobject).PropertyChanged += OnFuncBlockPropertyChanged;
                     }
                     if (relativeobject is ModbusTableModel)
                     {
@@ -639,6 +647,14 @@ namespace SamSoarII.Shell.Windows
         {
             Flags = Flags;
         }
+
+        private void OnFuncBlockPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Funcs": IsExpanded = false; break;
+            }
+        }
         
         private void OnModbusTableChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -756,7 +772,7 @@ namespace SamSoarII.Shell.Windows
                         e.Handled = true;
                         break;
                     default:
-                        e.Handled = true;
+                        e.Handled = false;
                         break;
                 }
             }

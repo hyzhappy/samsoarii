@@ -30,7 +30,6 @@ namespace SamSoarII.Shell.Models
             miNetRemove = new MenuItem();
             miNetCut = new MenuItem();
             miNetCopy = new MenuItem();
-            miNetPaste = new MenuItem();
             miNetShield = new MenuItem();
             miZoomIn = new MenuItem();
             miZoomOut = new MenuItem();
@@ -56,7 +55,6 @@ namespace SamSoarII.Shell.Models
             miNetRemove.Header = Properties.Resources.LadderNetwork_Network_Delete;
             miNetCut.Header = Properties.Resources.LadderNetwork_Network_Cut;
             miNetCopy.Header = Properties.Resources.LadderNetwork_Network_Copy;
-            miNetPaste.Header = Properties.Resources.LadderNetwork_Network_Paste;
             miNetShield.Header = Properties.Resources.LadderNetwork_Shield_Network;
             miZoomIn.Header = Properties.Resources.MainWindow_Zoom_In;
             miZoomOut.Header = Properties.Resources.MainWindow_Zoom_Out;
@@ -74,7 +72,6 @@ namespace SamSoarII.Shell.Models
             miNetRemove.Click += OnMenuItemClicked;
             miNetCut.Click += OnMenuItemClicked;
             miNetCopy.Click += OnMenuItemClicked;
-            miNetPaste.Click += OnMenuItemClicked;
             miNetShield.Click += OnMenuItemClicked;
             miZoomIn.Command = GlobalCommand.ZoomInCommand;
             miZoomOut.Command = GlobalCommand.ZoomOutCommand;
@@ -90,7 +87,6 @@ namespace SamSoarII.Shell.Models
             Items.Add(miNetRemove);
             Items.Add(miNetCut);
             Items.Add(miNetCopy);
-            Items.Add(miNetPaste);
             Items.Add(new Separator());
             Items.Add(miNetShield);
             Items.Add(new Separator());
@@ -114,7 +110,6 @@ namespace SamSoarII.Shell.Models
             miNetIEnd.Click -= OnMenuItemClicked;
             miNetCut.Click -= OnMenuItemClicked;
             miNetCopy.Click -= OnMenuItemClicked;
-            miNetPaste.Click -= OnMenuItemClicked;
             miNetShield.Click -= OnMenuItemClicked;
             miZoomIn.Command = null;
             miZoomOut.Command = null;
@@ -164,7 +159,6 @@ namespace SamSoarII.Shell.Models
         private MenuItem miNetRemove;
         private MenuItem miNetCut;
         private MenuItem miNetCopy;
-        private MenuItem miNetPaste;
         private MenuItem miNetShield;
         private MenuItem miZoomIn;
         private MenuItem miZoomOut;
@@ -188,7 +182,6 @@ namespace SamSoarII.Shell.Models
             if (sender == miNetRemove) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetDelete));
             if (sender == miNetCut) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCut));
             if (sender == miNetCopy) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCopy));
-            if (sender == miNetPaste) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetPaste));
             if (sender == miNetShield) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetShield));
         }
         
@@ -205,7 +198,7 @@ namespace SamSoarII.Shell.Models
 
     public class LadderEditEventArgs
     {
-        public enum Types { Delete, RowInsertBefore, RowInsertAfter, RowInsertEnd, RowDelete, NetInsertBefore, NetInsertAfter, NetInsertEnd, NetDelete, NetCut, NetCopy, NetPaste, NetShield}
+        public enum Types { Delete, RowInsertBefore, RowInsertAfter, RowInsertEnd, RowDelete, NetInsertBefore, NetInsertAfter, NetInsertEnd, NetDelete, NetCut, NetCopy, NetShield}
         private Types type;
         public Types Type { get { return this.type; } }
 

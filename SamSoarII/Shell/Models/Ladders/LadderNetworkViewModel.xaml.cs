@@ -862,7 +862,6 @@ namespace SamSoarII.Shell.Models
 
         #endregion
         
-
         private void OnLadderNetworkEdit(object sender, LadderEditEventArgs e)
         {
             switch (e.Type)
@@ -904,10 +903,11 @@ namespace SamSoarII.Shell.Models
                     Core.Parent.RemoveN(Core.ID, Core);
                     break;
                 case LadderEditEventArgs.Types.NetCopy:
+                    Core.CopyToClipboard();
                     break;
                 case LadderEditEventArgs.Types.NetCut:
-                    break;
-                case LadderEditEventArgs.Types.NetPaste:
+                    Core.CopyToClipboard();
+                    Core.Parent.RemoveN(Core.ID, Core);
                     break;
                 case LadderEditEventArgs.Types.NetShield:
                     Core.IsMasked = !Core.IsMasked;

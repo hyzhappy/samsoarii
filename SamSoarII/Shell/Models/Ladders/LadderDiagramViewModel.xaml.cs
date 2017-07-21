@@ -2616,8 +2616,8 @@ namespace SamSoarII.Shell.Models
                 {
                     XElement xele = XElement.Parse(xmltext);
                     //xele = xele.Element("Root");
-                    SelectStatus selectstatus = (SelectStatus)int.Parse(xele.Attribute("SelectionStatus").Value);
-                    CrossNetworkState crossstate = (CrossNetworkState)int.Parse(xele.Attribute("CrossNetworkState").Value);
+                    //SelectStatus selectstatus = (SelectStatus)int.Parse(xele.Attribute("SelectionStatus").Value);
+                    //CrossNetworkState crossstate = (CrossNetworkState)int.Parse(xele.Attribute("CrossNetworkState").Value);
                     XElement xele_c = xele.Element("Current");
                     XElement xele_us = xele.Element("Units");
                     XElement xele_ns = xele.Element("Networks");

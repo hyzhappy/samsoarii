@@ -54,7 +54,7 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             DataContext = this;
             Core = _core;
-            CodeTextBox.Text = core.Code;
+            //CodeTextBox.Text = core.Code;
             if (ViewParent != null) LadderMode = ViewParent.LadderMode;
             InvokePropertyChanged("TabHeader");
 
@@ -128,6 +128,7 @@ namespace SamSoarII.Shell.Models
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    CodeTextBox.Text = core.Code;
                     if (core.View != this) core.View = this;
                 }
                 //Update();

@@ -85,7 +85,7 @@ namespace SamSoarII.Shell.Dialogs
                 FontFamilyItem ffitem = new FontFamilyItem(fontFamily);
                 CB_Family.Items.Add(ffitem);
             }
-            for (int i = 22; i <= 60; i++)
+            for (int i = 8; i <= 64; i++)
             {
                 ComboBoxItem item = new ComboBoxItem();
                 item.Content = i;

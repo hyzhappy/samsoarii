@@ -281,7 +281,7 @@ namespace SamSoarII.Core.Helpers
             FuncBlockModel fbvmodel,
             StreamWriter sw)
         {
-            sw.Write(GenerateCType(fbvmodel.Code));
+            sw.Write(GenerateCType(fbvmodel.View != null ? fbvmodel.View.Code : fbvmodel.Code));
         }
     }
 }

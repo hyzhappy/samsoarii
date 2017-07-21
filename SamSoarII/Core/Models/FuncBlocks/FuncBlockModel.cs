@@ -41,7 +41,7 @@ namespace SamSoarII.Core.Models
         public string Name
         {
             get { return this.name; }
-            set { this.name = value; }
+            set { this.name = value; InvokePropertyChanged("Name"); }
         }
 
         private string path;
@@ -54,7 +54,7 @@ namespace SamSoarII.Core.Models
         public string Code
         {
             get { return this.code; }
-            set { this.code = value; }
+            set { this.code = value; InvokePropertyChanged("Code"); }
         }
 
         private bool islibrary;
@@ -402,7 +402,7 @@ namespace SamSoarII.Core.Models
         public void Save(XElement xele)
         {
             xele.SetAttributeValue("Name", name);
-            xele.Value = Code;
+            xele.Value = view != null ? view.Code : Code;
             path = ptvitem == null ? null : ptvitem.Path;
             if (path != null) xele.SetAttributeValue("Path", path);
         }
