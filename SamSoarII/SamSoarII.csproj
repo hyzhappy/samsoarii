@@ -226,6 +226,7 @@
     <Compile Include="Core\Simulate\SimulateViewer.cs" />
     <Compile Include="Core\Update\Information.cs" />
     <Compile Include="Core\Update\UpdateManager.cs" />
+    <Compile Include="Global\BreakpointCommand.cs" />
     <Compile Include="Global\GlobalCommand.cs" />
     <Compile Include="Global\GlobalSetting.cs" />
     <Compile Include="Global\GlobalThreeHotKey.cs" />
@@ -383,6 +384,7 @@
     <Compile Include="Shell\Dialogs\ValueModify\ValueMultiplyModifyDialog.xaml.cs">
       <DependentUpon>ValueMultiplyModifyDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Models\Ladders\LadderMonitorMenu.cs" />
     <Compile Include="Shell\Managers\FontManager.cs" />
     <Compile Include="Shell\Managers\IconManager.cs" />
     <Compile Include="Shell\Managers\ValueViewManager.cs" />
@@ -404,6 +406,7 @@
     <Compile Include="Shell\Models\Interfaces\IProgram.cs" />
     <Compile Include="Shell\Models\Interfaces\ITabItem.cs" />
     <Compile Include="Shell\Models\Interfaces\IViewModel.cs" />
+    <Compile Include="Shell\Models\Ladders\LadderEditMenu.cs" />
     <Compile Include="Shell\Models\Ladders\LadderDiagramViewModel.xaml.cs">
       <DependentUpon>LadderDiagramViewModel.xaml</DependentUpon>
     </Compile>

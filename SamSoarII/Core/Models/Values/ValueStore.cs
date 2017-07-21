@@ -68,7 +68,12 @@ namespace SamSoarII.Core.Models
         public object Value
         {
             get { return this.value; }
-            set { this.value = value; PropertyChanged(this, new PropertyChangedEventArgs("Value")); }
+            set
+            {
+                if (this.value != null && value != null && this.value.Equals(value)) return;
+                this.value = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Value"));
+            }
         }
         public string ShowValue
         {

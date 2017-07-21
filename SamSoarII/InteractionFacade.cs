@@ -1264,8 +1264,10 @@ namespace SamSoarII
             }
         }
         
-        public void ShowValueModifyDialog(IEnumerable<object> args)
+        public void ShowValueModifyDialog(IEnumerable<object> args, int id = 0)
         {
+            if (vmdProj.LadderMode == LadderModes.Simulate && !mngSimu.IsAlive) return;
+            if (vmdProj.LadderMode == LadderModes.Monitor && !mngComu.IsAlive) return;
             if (args.Count() == 1)
             {
                 using (ValueModifyDialog dialog = new ValueModifyDialog(args.First()))
@@ -1279,6 +1281,7 @@ namespace SamSoarII
                 using (ValueMultiplyModifyDialog dialog = new ValueMultiplyModifyDialog(args))
                 {
                     dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.SelectedIndex = id;
                     dialog.ShowDialog();
                 }
             }

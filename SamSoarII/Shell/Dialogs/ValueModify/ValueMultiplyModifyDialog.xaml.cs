@@ -47,6 +47,12 @@ namespace SamSoarII.Shell.Dialogs
             panels = null;
         }
 
+        public int SelectedIndex
+        {
+            get { return TC_Main.SelectedIndex; }
+            set { TC_Main.SelectedIndex = value; }
+        }
+
         private ValueModifyPanel[] panels;
         private TabItem[] tabs;
     }

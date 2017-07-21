@@ -2086,6 +2086,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Jump to this 的本地化字符串。
+        /// </summary>
+        public static string LadderNetwork_JumpToThis {
+            get {
+                return ResourceManager.GetString("LadderNetwork_JumpToThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Network Copy 的本地化字符串。
         /// </summary>
         public static string LadderNetwork_Network_Copy {
