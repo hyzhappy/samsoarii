@@ -353,7 +353,7 @@ namespace SamSoarII
             wndMoni.Core = null;
             MDProj = null;
             mngValue.Initialize();
-            GC.Collect();
+            //GC.Collect();
         }
 
         public bool DownloadProject()
