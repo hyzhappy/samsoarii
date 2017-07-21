@@ -2013,4 +2013,10 @@
   <data name="LadderNetwork_JumpToThis" xml:space="preserve">
     <value>跳转到该点</value>
   </data>
+  <data name="LadderUnit_LocationError" xml:space="preserve">
+    <value>添加的梯形图元件坐标非法！</value>
+  </data>
+  <data name="Routine_SelectedRange" xml:space="preserve">
+    <value>选择范围</value>
+  </data>
 </root>

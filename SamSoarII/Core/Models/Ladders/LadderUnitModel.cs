@@ -15,6 +15,12 @@ namespace SamSoarII.Core.Models
 {
     public enum LadderUnitAction { ADD, REMOVE, MOVE, UPDATE};
 
+    public class LadderUnitChangedEventException : Exception
+    {
+        public LadderUnitAction Action { get; private set; }
+        public LadderUnitChangedEventException(LadderUnitAction _action, string _msg) : base(_msg) { Action = _action; }
+    }
+    
     public class LadderUnitChangedEventArgs : EventArgs
     {
         public LadderUnitAction Action { get; private set; }

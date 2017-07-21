@@ -2167,6 +2167,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Try to insert ladder unit at an invalid location! 的本地化字符串。
+        /// </summary>
+        public static string LadderUnit_LocationError {
+            get {
+                return ResourceManager.GetString("LadderUnit_LocationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 LadderDiagram 的本地化字符串。
         /// </summary>
         public static string LaddreDiagram {
@@ -4899,6 +4908,15 @@ namespace SamSoarII.Properties {
         public static string Routine_Range {
             get {
                 return ResourceManager.GetString("Routine_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Selected Range 的本地化字符串。
+        /// </summary>
+        public static string Routine_SelectedRange {
+            get {
+                return ResourceManager.GetString("Routine_SelectedRange", resourceCulture);
             }
         }
         

@@ -22,6 +22,7 @@ namespace SamSoarII.Shell.Windows
         public TextFindWindow(InteractionFacade _ifParent)
         {
             InitializeComponent();
+            DataContext = this;
             ifParent = _ifParent;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
         }

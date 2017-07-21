@@ -183,7 +183,11 @@ namespace SamSoarII.Shell.Models
                     else
                     {
                         Core.QuickInsertElement(type, _selectRect.Core);
-                        //SelectRectRight();
+                        LadderUnitModel newunit = _selectRect.Current;
+                        if (newunit != null && newunit.Children.Count > 0)
+                            IFParent.ShowElementPropertyDialog(newunit);
+                        else
+                            SelectRectRight();
                     }
                     isnavigatable = true;
                     break;

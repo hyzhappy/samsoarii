@@ -905,6 +905,7 @@ namespace SamSoarII.Core.Models
                     IEnumerable<LadderUnitModel> olds = (cover ? net.Children.SelectRange(unit.X, GlobalSetting.LadderXCapacity, unit.Y, unit.Y).ToArray()
                         : old != null ? new LadderUnitModel[] { old } : new LadderUnitModel[] { });
                     ReplaceU(net, olds, news);
+                    view.IFParent.Navigate(unit);
                     break;
                 case LadderUnitModel.Shapes.VLine:
                     old = net.VLines[unit.X, unit.Y];
@@ -973,26 +974,10 @@ namespace SamSoarII.Core.Models
         {
             QuickInsertElement(type, rect.Parent, rect.X, rect.Y, cover);
         }
-        /// <summary>
-        /// 拖动放置元素时，参数并未设置，此时不移动选择框
-        /// </summary>
-        public bool IsCalledByDrag = false;
         public void QuickInsertElement(LadderUnitModel.Types type, LadderNetworkModel net, int x, int y, bool cover = true)
         {
             LadderUnitModel unit = new LadderUnitModel(null, type) { X = x, Y = y };
             AddSingleUnit(unit, net, cover);
-            if (unit.Shape == LadderUnitModel.Shapes.Output || unit.Shape == LadderUnitModel.Shapes.OutputRect)
-            {
-                view.IFParent.Navigate(unit);
-            }
-            else
-            {
-                if (!IsCalledByDrag)
-                {
-                    view.SelectRectRight();
-                }
-                else IsCalledByDrag = false;
-            }
         }
         
         #endregion

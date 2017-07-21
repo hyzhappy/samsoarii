@@ -1,5 +1,6 @@
 ﻿using SamSoarII.Core.Models;
 using SamSoarII.Shell.Dialogs;
+using SamSoarII.Shell.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +30,7 @@ namespace SamSoarII.Shell.Windows
         public ReplaceWindow(InteractionFacade _ifParent)
         {
             InitializeComponent();
+            DataContext = this;
             ifParent = _ifParent;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             undos = new Stack<ReplaceCommandGroup>();
@@ -50,6 +52,22 @@ namespace SamSoarII.Shell.Windows
         public ProjectModel Project { get { return ifParent.MDProj; } }
         /// <summary> 当前程序 </summary>
         private LadderDiagramModel current;
+        /// <summary> 当前程序 </summary>
+        public LadderDiagramModel Current
+        {
+            get
+            {
+                return this.current;
+            }
+            private set
+            {
+                if (current == value) return;
+                if (current?.View != null) current.View.SelectionChanged -= OnCurrentSelectionChanged;
+                this.current = value;
+                if (current?.View != null) current.View.SelectionChanged += OnCurrentSelectionChanged;
+            }
+        }
+        
         /// <summary> 当前查找到的元素 </summary>
         private ObservableCollection<ReplaceElement> items
             = new ObservableCollection<ReplaceElement>();
@@ -74,6 +92,8 @@ namespace SamSoarII.Shell.Windows
         public const int MODE_CURRENT = 0x00;
         /// <summary> 模式：查找所有程序 </summary>
         public const int MODE_ALL = 0x01;
+        /// <summary> 模式：查找选择范围 </summary>
+        public const int MODE_SELECT = 0x02;
         /// <summary> 模式 </summary>
         private int mode;
         /// <summary> 模式 </summary>
@@ -100,9 +120,11 @@ namespace SamSoarII.Shell.Windows
         #region Commands
 
         private Stack<ReplaceCommandGroup> undos;
+
         private Stack<ReplaceCommandGroup> redos;
         
         public bool CanUndo { get { return undos != null && undos.Count() > 0; } }
+
         public bool CanRedo { get { return redos != null && redos.Count() > 0; } }
 
         public void Undo()
@@ -111,6 +133,7 @@ namespace SamSoarII.Shell.Windows
             ReplaceCommandGroup cmd = undos.Pop();
             cmd.Undo();
             redos.Push(cmd);
+            Find();
         }
 
         public void Redo()
@@ -119,6 +142,7 @@ namespace SamSoarII.Shell.Windows
             ReplaceCommandGroup cmd = redos.Pop();
             cmd.Redo();
             undos.Push(cmd);
+            Find();
         }
 
         public void ClearCommands()
@@ -150,8 +174,9 @@ namespace SamSoarII.Shell.Windows
             if (RF_Input.Type == ReplaceFormat.TYPE_INVALID) return;
             switch (Mode)
             {
-                // 查找当前程序
+                // 查找当前程序或者选择范围
                 case MODE_CURRENT:
+                case MODE_SELECT:
                     Find(current);
                     break;
                 // 查找所有程序
@@ -169,27 +194,48 @@ namespace SamSoarII.Shell.Windows
         /// <param name="ldvmodel"></param>
         private void Find(LadderDiagramModel diagram)
         {
-            // 遍历所有网络
-            foreach (LadderNetworkModel network in diagram.Children)
+            // 选择范围内查找
+            if (Mode == MODE_SELECT)
             {
-                // 遍历所有元件
-                foreach (LadderUnitModel unit in network.Children)
+                if (current?.View == null || current.View.SelectionStatus != Models.SelectStatus.MultiSelected) return;
+                if (current.View.CrossNetState == Models.CrossNetworkState.NoCross)
+                    Find(current.View.SelectStartNetwork.GetSelectedElements());
+                else
                 {
-                    switch (unit.Shape)
-                    {
-                        // 忽略连线
-                        case LadderUnitModel.Shapes.HLine:
-                        case LadderUnitModel.Shapes.VLine:
-                            break;
-                        // 检查元件
-                        default:
-                            if (RF_Input.Match(unit.ToInstString()))
-                                items.Add(new ReplaceElement(this, unit));
-                            break;
-                    }
+                    if (current.View.SelectStartNetwork != null)
+                        Find(current.View.SelectStartNetwork.Core.Children);
+                    foreach (LadderNetworkViewModel netview in current.View.SelectAllNetworks)
+                        Find(netview.Core.Children);
+                }
+            }
+            // 遍历所有网络
+            else
+            {
+                foreach (LadderNetworkModel network in diagram.Children)
+                    Find(network.Children);
+            }
+        }
+
+        private void Find(IEnumerable<LadderUnitModel> units)
+        {
+            // 遍历所有元件
+            foreach (LadderUnitModel unit in units)
+            {
+                switch (unit.Shape)
+                {
+                    // 忽略连线
+                    case LadderUnitModel.Shapes.HLine:
+                    case LadderUnitModel.Shapes.VLine:
+                        break;
+                    // 检查元件
+                    default:
+                        if (RF_Input.Match(unit.ToInstString()))
+                            items.Add(new ReplaceElement(this, unit));
+                        break;
                 }
             }
         }
+        
         /// <summary>
         /// 将选定的指令替换
         /// </summary>
@@ -236,6 +282,7 @@ namespace SamSoarII.Shell.Windows
             {
                 redos.Clear();
                 undos.Push(group);
+                Find();
             }
             // 当需要显示结果，或者出现错误替换时显示
             if (showdialog || error > 0)
@@ -269,19 +316,30 @@ namespace SamSoarII.Shell.Windows
                     if (e1.Tab is MainTabDiagramItem)
                     {
                         Visibility = Visibility.Visible;
-                        current = ((MainTabDiagramItem)(e1.Tab)).LDVModel.Core;
+                        Current = ((MainTabDiagramItem)(e1.Tab)).LDVModel.Core;
                         if (Mode == MODE_CURRENT) Find();
                     }
                     // 否则隐藏窗口
                     else
                     {
                         Visibility = Visibility.Hidden;
-                        current = null;
+                        Current = null;
                     }
                 }
             }
         }
-        
+
+        /// <summary>
+        /// 当前梯形图的选择状态更改时触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnCurrentSelectionChanged(object sender, RoutedEventArgs e)
+        {
+            Mode = current?.View?.SelectionStatus == Models.SelectStatus.MultiSelected
+                ? MODE_SELECT : MODE_CURRENT;
+        }
+
         /// <summary>
         /// 当输入文本更改时触发
         /// </summary>
@@ -294,8 +352,12 @@ namespace SamSoarII.Shell.Windows
             switch (RF_Input.Type)
             {
                 case ReplaceFormat.TYPE_INVALID:
-                    // 非法时，将输入框涂红，并禁止操作
-                    TB_Input.Background = Brushes.Red;
+                    // 输入为空时涂白色
+                    if (RF_Input.Text.Length == 0)
+                        TB_Input.Background = Brushes.White;
+                    // 非法时，将输入框涂红
+                    else
+                        TB_Input.Background = Brushes.Red;
                     break;
                 default:
                     // 合法时，将输入框涂绿，表示待操作
@@ -332,9 +394,13 @@ namespace SamSoarII.Shell.Windows
             switch (RF_Change.Type)
             {
                 case ReplaceFormat.TYPE_REGISTER:
-                    // 输入和替换的格式均为【寄存器】格式才合法
+                    // 输入和替换的格式均为相同格式才合法
                     if (RF_Input.Type == RF_Change.Type)
                         TB_Change.Background = Brushes.LightGreen;
+                    // 输入为空时涂白色
+                    if (RF_Change.Text.Length == 0)
+                        TB_Change.Background = Brushes.White;
+                    // 非法时，将输入框涂红
                     else
                         TB_Change.Background = Brushes.Red;
                     break;
@@ -392,7 +458,7 @@ namespace SamSoarII.Shell.Windows
             if (TB_Change.Background == Brushes.Red) return;
             if (e.Key != Key.Enter) return;
             TB_Change.IsEnabled = false;
-            Replace(false);
+            Replace();
             TB_Change.Background = Brushes.White;
             TB_Change.IsEnabled = true;
         }
@@ -885,11 +951,7 @@ namespace SamSoarII.Shell.Windows
         /// <param name="prototype">查找格式</param>
         /// <param name="unit">要替换的元件</param>
         /// <returns>替换命令</returns>
-        public ReplaceCommand Replace
-        (
-            ReplaceFormat prototype,
-            LadderUnitModel unit
-        )
+        public ReplaceCommand Replace(ReplaceFormat prototype, LadderUnitModel unit)
         {
             string input = unit.ToInstString();
             // 将指令文本转为正则格式
@@ -1015,50 +1077,66 @@ namespace SamSoarII.Shell.Windows
                 }
             }
             // 建立命令并返回
-            return new ReplaceCommand(unit, input, output);
+            return new ReplaceCommand(unit, output);
         }
     }
     /// <summary> 替换命令 </summary>
     public class ReplaceCommand : IDisposable
     {
-        public ReplaceCommand(LadderUnitModel _unit, string _input, string _output)
+        public ReplaceCommand(LadderUnitModel _unit, string _output)
         {
-            unit = _unit;
-            string[] _oldtexts = _input.Split(' ');
-            oldtype = LadderUnitModel.TypeOfNames[_oldtexts[0]];
-            oldargs = new string[_oldtexts.Length - 1];
-            Array.Copy(_oldtexts, 1, oldargs, 0, oldargs.Length);
-            string[] _newtexts = _output.Split(' ');
-            newtype = LadderUnitModel.TypeOfNames[_newtexts[0]];
-            newargs = new string[_newtexts.Length - 1];
+            oldunit = _unit;
+            network = oldunit.Parent;
+            string[] _newtexts = _output.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            LadderUnitModel.Types newtype = LadderUnitModel.TypeOfNames[_newtexts[0]];
+            string[] newargs = new string[_newtexts.Length - 1];
             Array.Copy(_newtexts, 1, newargs, 0, newargs.Length);
+            newunit = new LadderUnitModel(null, newtype) { X = oldunit.X, Y = oldunit.Y };
+            newunit.Parse(newargs);
         }
 
         public void Dispose()
         {
-            unit = null;
+            oldunit = null;
+            newunit = null;
         }
 
         #region Number
 
-        private LadderUnitModel unit;
-        private LadderUnitModel.Types oldtype;
-        private LadderUnitModel.Types newtype;
-        private string[] oldargs;
-        private string[] newargs;
+        private LadderNetworkModel network;
+        private LadderUnitModel oldunit;
+        private LadderUnitModel newunit;
 
         #endregion
 
         #region Undo & Redo
         
-        public void Undo()
-        {
-            unit.Parse(oldtype, oldargs);
-        }
-
         public void Redo()
         {
-            unit.Parse(newtype, newargs);
+            network.Remove(oldunit);
+            try
+            {
+                network.Add(newunit);
+            }
+            catch (LadderUnitChangedEventException exce)
+            {
+                network.Add(oldunit);
+                throw exce;
+            }
+        }
+
+        public void Undo()
+        {
+            network.Remove(newunit);
+            try
+            {
+                network.Add(oldunit);
+            }
+            catch (LadderUnitChangedEventException exce)
+            {
+                network.Add(newunit);
+                throw exce;
+            }
         }
 
         #endregion
@@ -1091,7 +1169,7 @@ namespace SamSoarII.Shell.Windows
         
         public void Redo()
         {
-            foreach (ReplaceCommand cmd in commands) cmd.Undo();
+            foreach (ReplaceCommand cmd in commands) cmd.Redo();
         }
 
     }

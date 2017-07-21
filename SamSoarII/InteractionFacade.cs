@@ -1,11 +1,18 @@
 ﻿using Microsoft.Win32;
-using SamSoarII.Core.Models;
 using SamSoarII.Global;
+using SamSoarII.Core.Models;
+using SamSoarII.Core.Generate;
+using SamSoarII.Core.Simulate;
+using SamSoarII.Core.Helpers;
+using SamSoarII.Core.Communication;
+using SamSoarII.Core.Update;
 using SamSoarII.Shell.Dialogs;
 using SamSoarII.Shell.Managers;
 using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
+using SamSoarII.Shell.Windows.Update;
 using SamSoarII.Threads;
+using SamSoarII.HelpDocument;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -18,15 +25,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
 using System.Text.RegularExpressions;
-using SamSoarII.Core.Generate;
-using SamSoarII.Core.Simulate;
 using System.Diagnostics;
-using SamSoarII.Core.Helpers;
-using SamSoarII.Core.Communication;
-using SamSoarII.HelpDocument;
 using System.Collections.Specialized;
-using SamSoarII.Shell.Windows.Update;
-using SamSoarII.Core.Update;
 
 namespace SamSoarII
 {
