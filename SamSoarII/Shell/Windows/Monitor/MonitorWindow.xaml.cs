@@ -423,10 +423,36 @@ namespace SamSoarII.Shell.Windows
                 }
             }
         }
-        
+
         #endregion
 
         #endregion
+        private double ColumnsWidth
+        {
+            get
+            {
+                double width = 0;
+                foreach (var column in ElementDataGrid.Columns)
+                {
+                    width += column.ActualWidth;
+                }
+                return width;
+            }
+        }
         
+        private void ArrangeWidth()
+        {
+            for (int i = 0; i < ElementDataGrid.Columns.Count; i++)
+            {
+                if (i == 1)
+                {
+                    ElementDataGrid.Columns[i].Width = Math.Max(95, ElementDataGrid.ActualWidth * 1.4 / 4.4);
+                }
+                else
+                {
+                    ElementDataGrid.Columns[i].Width = Math.Max(60, ElementDataGrid.ActualWidth / 4.4);
+                }
+            }
+        }
     }
 }
