@@ -21,7 +21,7 @@
         <ObjectDataProvider x:Key="CommentFontData" ObjectType="{x:Type mg:DemoFontManager}" MethodName="GetComment"/>
     </UserControl.Resources>
     <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <StackPanel x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent" LayoutTransform="{x:Static gb:GlobalSetting.LadderScaleTransform}">
+        <StackPanel x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent">
             <StackPanel.Resources>
                 <ContextMenu x:Key="CommentAreaContextMenu">
                     <MenuItem Header="{x:Static properties:Resources.LadderDiagram_Edit_Program_Comment}"></MenuItem>
@@ -50,29 +50,25 @@
                 <StackPanel x:Name="LadderDiagramStackPanel">
                     <StackPanel Orientation="Horizontal">
                         <Border x:Name="MainBorder" BorderThickness="2" BorderBrush="Red" Width="1500" Margin="20,0,0,20" HorizontalAlignment="Left" Background="AntiqueWhite">
-                            <Expander x:Name="CommentAreaExpander" ContextMenu="{StaticResource CommentAreaContextMenu}" Focusable="False">
+                            <Expander x:Name="CommentAreaExpander" ContextMenu="{StaticResource CommentAreaContextMenu}" Focusable="False" IsExpanded="True">
                                 <Expander.Header>
                                     <TextBlock x:Name="LadderTitleTextBlock" MinHeight="48" DataContext="{StaticResource FontData}" FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}" Foreground="{Binding FontColor}" Text="{x:Static properties:Resources.LadderDiagram_Program_Comment}"></TextBlock>
                                 </Expander.Header>
-                                <TextBlock x:Name="LadderCommentTextBlock" FontSize="28">这是梯形图程序</TextBlock>
+                                <TextBlock x:Name="LadderCommentTextBlock" FontSize="28" Text="{x:Static properties:Resources.Ladder_Program}"/>
                             </Expander>
                         </Border>
-                        <Button x:Name="ThumbnailButton"
-                                VerticalAlignment="Top" Margin="20,0,0,0" Width="65" Height="55" 
-                                Template="{StaticResource ThumbnailButton}">
-                        </Button>
                     </StackPanel>
                     <StackPanel x:Name="LadderNetworkStackPanel" HorizontalAlignment="Left">
-                        <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
-                            <model:LadderExpander x:Uid="ladderExpander2" x:Name="ladderExpander2" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}" IsExpand="True" Margin="-50,0,0,0"/>
-                            <Grid x:Uid="Grid_1">
+                        <StackPanel Orientation="Horizontal">
+                            <model:LadderExpander x:Name="ladderExpander2" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}" IsExpand="True" Margin="-50,0,0,0"/>
+                            <Grid>
                                 <Rectangle x:Name="Rect2" VerticalAlignment="Top" Height="{Binding ElementName=mainstack,Path=ActualHeight}"/>
                                 <StackPanel x:Name="mainstack" Margin="0,0,0,20">
                                     <Grid x:Name="CommentAreaGrid" Background="Transparent">
                                         <Border x:Name="CommentAreaBorder" BorderThickness="4" BorderBrush="Brown" Width="1500" Margin="20,0,0,0" HorizontalAlignment="Left">
-                                            <Expander x:Name="CommentAreaExpander2" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan">
+                                            <Expander x:Name="CommentAreaExpander2" Width="{Binding ElementName=CommentAreaBorder, Path=Width}" Background="LightCyan"  IsExpanded="True">
                                                 <Expander.Header>
-                                                    <Grid x:Uid="Grid_2" Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
+                                                    <Grid Width="{Binding ElementName=CommentAreaBorder,Path=Width}" ContextMenu="{StaticResource CommentAreaContextMenu}">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition x:Uid="ColumnDefinition_1" Width="1*"></ColumnDefinition>
                                                             <ColumnDefinition x:Uid="ColumnDefinition_2" Width="1*"></ColumnDefinition>
@@ -84,16 +80,14 @@
                                                         <Label x:Uid="NetworkBriefLabel" x:Name="NetworkBriefLabel" FontSize="32" Grid.Column="2" Grid.Row="0" Content="{Binding NetworkBrief}"></Label>
                                                     </Grid>
                                                 </Expander.Header>
-                                                <TextBlock x:Uid="NetworkDescriptionTextBlock" x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">这是一个梯形图网络</TextBlock>
+                                                <TextBlock x:Uid="NetworkDescriptionTextBlock" x:Name="NetworkDescriptionTextBlock" FontSize="32" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"  Text="{x:Static properties:Resources.Ladder_Network}"/>
                                             </Expander>
                                         </Border>
-                                        <Button x:Name="ThumbnailButton2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1540,0,0,0" Width="65" Height="55" 
-                                            Template="{StaticResource ThumbnailButton}"/>
                                     </Grid>
                                     <Grid x:Name="GD_Canvas">
                                         <Canvas x:Name="LadderCanvas"
-                                                HorizontalAlignment="Left" Height="300" Width="3600" Margin="0,20,0,0" Background="Transparent">
-                                            <StackPanel Canvas.Left="0" Canvas.Top="0" Width="300">
+                                                HorizontalAlignment="Left" Height="500" Width="3600" Margin="0,20,0,0" Background="Transparent">
+                                            <StackPanel Canvas.Left="0" Canvas.Top="0" Height="500" Width="300">
                                                 <Canvas Height="300" Width="300">
                                                     <Line X1="0" Y1="100" X2="100" Y2="100" Stroke="Black" StrokeThickness="4"/>
                                                     <Line X1="200" Y1="100" X2="300" Y2="100" Stroke="Black" StrokeThickness="4"/>

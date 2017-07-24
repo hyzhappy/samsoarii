@@ -1960,6 +1960,24 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 This is a ladder network 的本地化字符串。
+        /// </summary>
+        public static string Ladder_Network {
+            get {
+                return ResourceManager.GetString("Ladder_Network", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 This is a ladder program 的本地化字符串。
+        /// </summary>
+        public static string Ladder_Program {
+            get {
+                return ResourceManager.GetString("Ladder_Program", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Ladder title 的本地化字符串。
         /// </summary>
         public static string Ladder_Title {
