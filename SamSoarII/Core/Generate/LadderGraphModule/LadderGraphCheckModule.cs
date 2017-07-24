@@ -41,6 +41,7 @@ namespace SamSoarII.Core.Generate
         public static ErrorMessage Execute(LadderDiagramModel ladderDiagram)
         {
             ErrorType error = ErrorType.None;
+            ladderDiagram.ClearUndoRedoAction();
             foreach (var network in ladderDiagram.Children.Where(x => { return !x.IsMasked; }))
             {
                 //if (network.View != null && !network.View.ladderExpander.IsExpand)
