@@ -132,11 +132,11 @@ namespace SamSoarII.Shell.Models
                 case 0: Canvas.SetLeft(ctrl, 1); ctrl.Width = 38; break;
                 case 1: Canvas.SetLeft(ctrl, 41); ctrl.Width = 78; break;
                 case 2: Canvas.SetLeft(ctrl, 121); ctrl.Width = 78; break;
-                case 3: Canvas.SetLeft(ctrl, 181); ctrl.Width = 78; break;
-                case 4: Canvas.SetLeft(ctrl, 241); ctrl.Width = 78; break;
-                case 5: Canvas.SetLeft(ctrl, 321); ctrl.Width = 78; break;
-                case 6: Canvas.SetLeft(ctrl, 401); ctrl.Width = 78; break;
-                case 7: Canvas.SetLeft(ctrl, 481); ctrl.Width = 238; break;
+                case 3: Canvas.SetLeft(ctrl, 201); ctrl.Width = 78; break;
+                case 4: Canvas.SetLeft(ctrl, 281); ctrl.Width = 78; break;
+                case 5: Canvas.SetLeft(ctrl, 361); ctrl.Width = 78; break;
+                case 6: Canvas.SetLeft(ctrl, 441); ctrl.Width = 78; break;
+                case 7: Canvas.SetLeft(ctrl, 521); ctrl.Width = 238; break;
             }
         }
 

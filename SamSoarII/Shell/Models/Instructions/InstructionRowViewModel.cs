@@ -34,7 +34,7 @@ namespace SamSoarII.Shell.Models
             LadderUnitModel unit = core.Inst.ProtoType;
             for (int i = 0; i < 7; i++)
             {
-                tbs[i].Background = (i & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
+                tbs[i].Background = ((id + i) & 1) == 0 ? Brushes.AliceBlue : Brushes.LightCyan;
                 tbs[i].Foreground = unit != null ? Brushes.Black : Brushes.Gray;
                 tbs[i].Text = i == 0 ? id.ToString() : core[i - 1];
             }

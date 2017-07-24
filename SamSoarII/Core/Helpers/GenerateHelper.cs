@@ -18,9 +18,7 @@ namespace SamSoarII.Core.Helpers
                 new List<InstHelper.PLCInstNetwork>();
             Generate(project.MainDiagram, nets);
             foreach (LadderDiagramModel diagram in project.Diagrams)
-            {
                 if (!diagram.IsMainLadder) Generate(diagram, nets);
-            }
             // 建立仿真的c环境的路径
             string currentPath = Utility.FileHelper.AppRootPath;
             string ladderHFile = String.Format(@"{0:s}\simug\simuc.h", currentPath);
@@ -114,18 +112,14 @@ namespace SamSoarII.Core.Helpers
             sw.Write("typedef int64_t D_WORD;\r\n");
             sw.Write("typedef double _FLOAT;\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
-            {
                 GenerateCHeader(fbmodel, sw);
-            }
             sw.Close();
             // 生成用户函数的c语言
             sw = new StreamWriter(funcBlockCFile);
             sw.Write("#include <math.h>\r\n");
             sw.Write("#include \"simuf.h\"\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
-            {
                 GenerateCCode(fbmodel, sw);
-            }
             sw.Close();
             SimulateDllModel.CreateSource();
             Process cmd = null;

@@ -60,6 +60,7 @@ namespace SamSoarII.Threads
                         current.Core.Children[i].Inst.View.DynamicUpdate();
                     }
                 }
+                current.Outline.DynamicUpdate();
                 oldscrolloffset = newscrolloffset;
             }
             catch (Exception)

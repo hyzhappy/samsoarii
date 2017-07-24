@@ -57,6 +57,7 @@ namespace SamSoarII.Shell.Models
             if (Core.Parent.View != null)
                 IsCommentMode = Core.Parent.View.IsCommentMode;
             _selectRect = new SelectRect();
+            outline = new NetworkOutlineViewModel();
             cmEdit = new LadderEditMenu();
             cmMoni = new LadderMonitorMenu();
             ladderExpander.MouseEnter += OnExpanderMouseEnter;
@@ -72,6 +73,7 @@ namespace SamSoarII.Shell.Models
         public void Dispose()
         {
             _selectRect.Dispose();
+            outline.Dispose();
             cmEdit.Dispose();
             cmMoni.Dispose();
             Core = null;
@@ -173,7 +175,7 @@ namespace SamSoarII.Shell.Models
                     isnavigatable = false;
                     if (type == LadderUnitModel.Types.VLINE)
                     {
-                        LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X, _selectRect.Y];
+                        LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X - 1, _selectRect.Y];
                         if (vline == null && _selectRect.X > 0)
                         {
                             Core.QuickInsertElement(type, SelectRectOwner, _selectRect.X - 1, _selectRect.Y);
@@ -287,6 +289,9 @@ namespace SamSoarII.Shell.Models
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
         
         public ScrollViewer Scroll { get { return this.MainScrollViewer; } }
+
+        private NetworkOutlineViewModel outline;
+        public NetworkOutlineViewModel Outline { get { return this.outline; } }
 
         #region Binding
 
@@ -1152,6 +1157,9 @@ namespace SamSoarII.Shell.Models
         }
         public bool PushDown(int x, int y, bool addline = false)
         {
+            push_removes.Clear();
+            push_moves.Clear();
+            push_adds.Clear();
             bool addrow = false;
             bool success = _PushDown(x, y, ref addrow);
             if (success) Core.ReplaceMoveU(SelectRectOwner, push_removes, push_adds, push_moves, 0, 1, addrow ? 1 : 0);

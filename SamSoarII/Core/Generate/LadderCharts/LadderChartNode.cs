@@ -42,7 +42,7 @@ namespace SamSoarII.Core.Generate
         /// <summary> 类型 </summary>
         public string Type { get { return prototype.InstName; } }
         /// <summary> X坐标 </summary>
-        public int X { get { return prototype.X; } }
+        public int X { get { return prototype.X + (prototype.Shape == LadderUnitModel.Shapes.VLine ? 1 : 0) ; } }
         /// <summary> Y坐标 </summary>
         public int Y { get { return prototype.Y; } }
         /// <summary> 是否为起点 </summary>

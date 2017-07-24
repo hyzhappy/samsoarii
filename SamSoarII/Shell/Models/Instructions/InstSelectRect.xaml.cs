@@ -93,8 +93,8 @@ namespace SamSoarII.Shell.Models
                     if (_current?.Inst?.Origin != null)
                     {
                         isnavigatable = false;
-                        Parent = _current.Parent.Inst;
-                        Row = Parent.Insts.IndexOf(_current.Inst.Origin);
+                        Parent = _current?.Parent?.Inst;
+                        Row = Parent != null ? Parent.Insts.IndexOf(_current.Inst.Origin) : -1;
                         isnavigatable = true;
                     }
                     break;

@@ -7,12 +7,12 @@ namespace SamSoarII.Core.Simulate
 {
     public class BreakpointPauseEventArgs : EventArgs
     {
-        private int address;
-        public int Address { get { return this.address; } }
+        private BreakpointCursor cursor;
+        public BreakpointCursor Cursor { get { return this.cursor; } }
 
-        public BreakpointPauseEventArgs(int _address)
+        public BreakpointPauseEventArgs(BreakpointCursor _cursor)
         {
-            address = _address;
+            cursor = _cursor;
         }
     }
 
