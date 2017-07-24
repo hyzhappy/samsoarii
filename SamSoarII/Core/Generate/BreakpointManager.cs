@@ -18,6 +18,7 @@ namespace SamSoarII.Core.Generate
         {
             count = 0;
             bvmodels.Clear();
+            fblocks.Clear();
         }
 
         static public void Register(LadderUnitModel lumodel)

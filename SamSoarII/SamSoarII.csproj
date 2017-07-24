@@ -220,6 +220,7 @@
     <Compile Include="Core\Models\Values\ValuePrototype.cs" />
     <Compile Include="Core\Models\Values\ValueStore.cs" />
     <Compile Include="Core\Models\Values\WordElementModel.cs" />
+    <Compile Include="Core\Simulate\BreakpointCursor.cs" />
     <Compile Include="Core\Simulate\SimulateBreakpointEvent.cs" />
     <Compile Include="Core\Simulate\SimulateDllModel.cs" />
     <Compile Include="Core\Simulate\SimulateManager.cs" />
@@ -438,6 +439,9 @@
     </Compile>
     <Compile Include="Shell\Models\ModbusTableViewModel.xaml.cs">
       <DependentUpon>ModbusTableViewModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Models\NetworkOutlineViewModel.xaml.cs">
+      <DependentUpon>NetworkOutlineViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Models\ProjectViewModel.cs" />
     <Compile Include="Shell\Models\SelectRect.xaml.cs">
@@ -948,6 +952,10 @@
     <Page Include="Shell\Models\ModbusTableViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Models\NetworkOutlineViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Models\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>

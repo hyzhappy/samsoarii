@@ -596,23 +596,15 @@ namespace SamSoarII
                             break;
                         case MainWindowEventArgs.TYPE_SHOW:
                             if ((e1.Flags & MainWindowEventArgs.FLAG_SIMULATE) != 0)
-                            {
                                 TB_Simu.Visibility = Visibility.Visible;
-                            }
-                            if ((e1.Flags & MainWindowEventArgs.FLAG_EDIT) != 0)
-                            {
-                                TB_Edit.Visibility = Visibility.Visible;
-                            }
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_EDIT) != 0)                            
+                                TB_Edit.Visibility = Visibility.Visible;                            
                             break;
                         case MainWindowEventArgs.TYPE_HIDE:
-                            if ((e1.Flags & MainWindowEventArgs.FLAG_SIMULATE) != 0)
-                            {
-                                TB_Simu.Visibility = Visibility.Collapsed;
-                            }
-                            if ((e1.Flags & MainWindowEventArgs.FLAG_EDIT) != 0)
-                            {
-                                TB_Edit.Visibility = Visibility.Collapsed;
-                            }
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_SIMULATE) != 0)                            
+                                TB_Simu.Visibility = Visibility.Collapsed;                            
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_EDIT) != 0)                            
+                                TB_Edit.Visibility = Visibility.Collapsed;                            
                             break;
                     }
                 });
@@ -725,9 +717,7 @@ namespace SamSoarII
                 return;
             }
             if (Project?.IsModified == true)
-            {
-                ifParent.SaveProject();
-            }
+                ifParent.SaveProject();        
             if (e.Command == GlobalCommand.SimulateCommand)
                 ifParent.SimulateProject();
             if (e.Command == GlobalCommand.DownloadCommand)
@@ -746,9 +736,7 @@ namespace SamSoarII
             if (e.Command == GlobalCommand.CloseProjectCommand)
                 ifParent.CloseProject();
             if (e.Command == ApplicationCommands.Close)
-            {
                 Application.Current.Shutdown();
-            }
         }
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)

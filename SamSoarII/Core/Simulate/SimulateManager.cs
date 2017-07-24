@@ -62,7 +62,7 @@ namespace SamSoarII.Core.Simulate
 
         public void Abort()
         {
-            if (viewer.ISBPPause) viewer.Resume();
+            if (viewer.IsBPPause) viewer.Resume();
             dllmodel.Abort();
             viewer.Abort();
         }
@@ -75,7 +75,7 @@ namespace SamSoarII.Core.Simulate
 
         public void Start()
         {
-            if (viewer.ISBPPause) viewer.Resume();
+            if (viewer.IsBPPause) viewer.Resume();
             dllmodel.Start();
             viewer.Start();
         }
@@ -100,7 +100,7 @@ namespace SamSoarII.Core.Simulate
 
         #region Breakpoint
 
-        public bool IsBPPause { get { return viewer.ISBPPause; } }
+        public bool IsBPPause { get { return viewer.IsBPPause; } }
 
         public event BreakpointPauseEventHandler BreakpointPaused = delegate { };
         private void OnBreakpointPaused(object sender, BreakpointPauseEventArgs e)

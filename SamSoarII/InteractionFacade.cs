@@ -347,12 +347,14 @@ namespace SamSoarII
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
             tvProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tvProj.Reset(); });
             barStatus.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { barStatus.Reset(); });
+            wndMoni.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndMoni.Core = null; });
             vmdProj.PropertyChanged -= OnViewPropertyChanged;
-            vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); mdProj.Dispose(); });
+            vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); });
+            mdProj.Dispose();
             vmdProj = null;
-            wndMoni.Core = null;
-            MDProj = null;
+            mdProj = null;
             mngValue.Initialize();
+            BreakpointManager.Initialize();
             //GC.Collect();
         }
 

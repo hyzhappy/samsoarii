@@ -26,7 +26,6 @@ namespace SamSoarII.Threads
             }
             catch (Exception)
             {
-                Handle();
             }
         }
     }

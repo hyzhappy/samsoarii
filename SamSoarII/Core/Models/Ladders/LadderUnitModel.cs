@@ -1088,21 +1088,32 @@ namespace SamSoarII.Core.Models
                     inst.ProtoType = this;
             }
         }
-
-        private int bpaddress;
-        public int BPAddress
-        {
-            get { return this.bpaddress; }
-            set { this.bpaddress = value; }
-        }
-
+        
         private LadderModes laddermode;
         public LadderModes LadderMode
         {
             get { return this.laddermode; }
             set { this.laddermode = value; PropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
         }
-        
+
+        #region Breakpoint
+
+        private int bpAddress;
+        public int BPAddress
+        {
+            get { return this.bpAddress; }
+            set { this.bpAddress = value; }
+        }
+
+        private BreakpointCursor bpCursor;
+        public BreakpointCursor BPCursor
+        {
+            get { return this.bpCursor; }
+            set { this.bpCursor = value; PropertyChanged(this, new PropertyChangedEventArgs("BPCursor")); }
+        }
+   
+        #endregion
+
         #endregion
 
         #region Shell

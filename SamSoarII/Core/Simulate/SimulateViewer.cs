@@ -21,6 +21,7 @@ namespace SamSoarII.Core.Simulate
             TimeSpan = 100;
             stores = new ObservableCollection<ValueStore>();
             stores.CollectionChanged += OnStoresChanged;
+            cursor = new BreakpointCursor(this);
         }
         
         #region Number
@@ -52,7 +53,6 @@ namespace SamSoarII.Core.Simulate
 
         }
         
-
         private bool isenable;
         public bool IsEnable
         {
@@ -116,12 +116,10 @@ namespace SamSoarII.Core.Simulate
                 }
             }
             // 若检查到暂停状态的改变则进行处理
-            _pause_new = SimulateDllModel.GetBPPause();
-            isbppause = (_pause_new > 0);
-            if (_pause_old == 0 && _pause_new > 0)
+            if (SimulateDllModel.GetBPPause() > 0 && cursor.Address < 0)
             {
-                bpaddr = SimulateDllModel.GetBPAddr();
-                BreakpointPaused(this, new BreakpointPauseEventArgs(bpaddr));
+                cursor.Address = SimulateDllModel.GetBPAddr();
+                BreakpointPaused(this, new BreakpointPauseEventArgs(cursor));
                 if (SimulateDllModel.GetCallCount() > 256)
                     OnSimulateException(new StackOverflowException("子程序 & 用户函数嵌套调用超过了上限（256）。"), new RoutedEventArgs());
             }
@@ -132,45 +130,43 @@ namespace SamSoarII.Core.Simulate
 
         #region Breakpoint Control
 
-        private bool isbppause;
-        public bool ISBPPause { get { return this.isbppause; } }
-
-        private int bpaddr;
-        public int BPAddr { get { return this.bpaddr; } }
-
+        private BreakpointCursor cursor;
+        public BreakpointCursor Cursor { get { return this.cursor; } }
+        public bool IsBPPause { get { return cursor.Address >= 0; } }
+        
         public void Resume()
         {
             SimulateDllModel.SetBPPause(0);
-            BreakpointResumed(this, new BreakpointPauseEventArgs(bpaddr));
-            _pause_old = 0;
+            BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
+            cursor.Address = -1;
         }
         
         public void MoveStep()
         {
             SimulateDllModel.MoveStep();
-            BreakpointResumed(this, new BreakpointPauseEventArgs(bpaddr));
-            _pause_old = 0;
+            BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
+            cursor.Address = -1;
         }
 
         public void CallStep()
         {
             SimulateDllModel.CallStep();
-            BreakpointResumed(this, new BreakpointPauseEventArgs(bpaddr));
-            _pause_old = 0;
+            BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
+            cursor.Address = -1;
         }
 
         public void JumpTo(int bpaddr)
         {
             SimulateDllModel.JumpTo(bpaddr);
-            BreakpointResumed(this, new BreakpointPauseEventArgs(bpaddr));
-            _pause_old = 0;
+            BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
+            cursor.Address = -1;
         }
 
         public void JumpOut()
         {
             SimulateDllModel.JumpOut();
-            BreakpointResumed(this, new BreakpointPauseEventArgs(bpaddr));
-            _pause_old = 0;
+            BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
+            cursor.Address = -1;
         }
 
         #endregion

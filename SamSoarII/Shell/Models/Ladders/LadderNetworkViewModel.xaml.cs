@@ -156,22 +156,18 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "ID":
                     NetworkNumberLabel.Content = NetworkNumber;
-                    //PropertyChanged(this, new PropertyChangedEventArgs("NetworkNumber"));
                     break;
                 case "Brief":
                     NetworkBriefLabel.Content = NetworkBrief;
-                    //PropertyChanged(this, new PropertyChangedEventArgs("NetworkBrief"));
                     break;
                 case "Description":
                     NetworkDescriptionTextBlock.Text = NetworkDescription;
-                    //PropertyChanged(this, new PropertyChangedEventArgs("NetworkDescription"));
                     break;
             }
         }
         
         private void OnCoreChildrenChanged(LadderUnitModel sender, LadderUnitChangedEventArgs e)
         {
-            //if (!IsFullLoaded) return;
             if (!IsExpand) IsExpand = true;
             switch (e.Action)
             {
@@ -180,18 +176,29 @@ namespace SamSoarII.Shell.Models
                         break;
                     if (sender.View == null)
                         sender.View = LadderUnitViewModel.Create(sender);
-                    //if (sender.View.Parent is Canvas)
-                    //    ((Canvas)(sender.View.Parent)).Children.Remove(sender.View);
                     LadderCanvas.Children.Add(sender.View);
                     break;
                 case LadderUnitAction.REMOVE:
                     if (sender.View == null) break;
                     LadderCanvas.Children.Remove(sender.View);
-                    //AllResourceManager.Dispose(sender.View);
-                    //sender.View = null;
                     sender.View.Dispose();
                     break;
                 case LadderUnitAction.MOVE:
+                    if (sender.Y >= loadedrowstart && sender.Y <= loadedrowend)
+                    {
+                        if (sender.View == null)
+                            sender.View = LadderUnitViewModel.Create(sender);
+                        if (!LadderCanvas.Children.Contains(sender.View))
+                            LadderCanvas.Children.Add(sender.View);
+                    }
+                    else
+                    {
+                        if (sender.View != null)
+                        {
+                            LadderCanvas.Children.Remove(sender.View);
+                            sender.View.Dispose();
+                        }
+                    }
                     break;
                 case LadderUnitAction.UPDATE:
                     break;
@@ -237,8 +244,8 @@ namespace SamSoarII.Shell.Models
 
         #region Select
 
-        private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
-        private int HeightUnit { get { return IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
+        public int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
+        public int HeightUnit { get { return IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
 
         public int SelectAreaOriginFX
         {
@@ -709,7 +716,7 @@ namespace SamSoarII.Shell.Models
                 LadderCanvas.Children.Clear();
                 if (ThumbnailButton.ToolTip == null)
                 {
-                    ThumbnailButton.ToolTip = GenerateToolTipByLadder();
+                    ThumbnailButton.ToolTip = new ToolTip();
                     if (ThumbnailButton.Parent is Grid)
                         ((Grid)(ThumbnailButton.Parent)).Children.Remove(ThumbnailButton);
                     CommentAreaGrid.Children.Add(ThumbnailButton);
@@ -719,7 +726,6 @@ namespace SamSoarII.Shell.Models
             {
                 if (ThumbnailButton.ToolTip != null)
                 {
-                    RemoveToolTipByLadder((ToolTip)ThumbnailButton.ToolTip);
                     ThumbnailButton.ToolTip = null;
                     CommentAreaGrid.Children.Remove(ThumbnailButton);
                 }
@@ -789,7 +795,7 @@ namespace SamSoarII.Shell.Models
             set
             {
                 this.iscommentmode = value;
-                foreach (LadderUnitModel unit in Core.Children)
+                foreach (LadderUnitModel unit in Core.Children.Concat(Core.VLines))
                     if (unit.View != null) unit.View.IsCommentMode = iscommentmode;
                 LadderCanvas.Height = HeightUnit * RowCount;
                 if (IsSelectAreaMode || IsSelectAllMode)
@@ -839,10 +845,15 @@ namespace SamSoarII.Shell.Models
         private void ThumbnailButton_ToolTipClosing(object sender, ToolTipEventArgs e)
         {
             _canScrollToolTip = false;
+            ViewParent.Outline.Core = null;
+            ((ToolTip)(ThumbnailButton.ToolTip)).Content = null;
+
         }
         private void ThumbnailButton_ToolTipOpening(object sender, ToolTipEventArgs e)
         {
             _canScrollToolTip = true;
+            ViewParent.Outline.Core = Core;
+            ((ToolTip)(ThumbnailButton.ToolTip)).Content = ViewParent.Outline;
         }
         
         private void OnThumbnailButtonMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -855,13 +866,19 @@ namespace SamSoarII.Shell.Models
         {
             if (_canScrollToolTip)
             {
-                ScrollViewer scroll = (ScrollViewer)((ToolTip)ThumbnailButton.ToolTip).Content;
+                ScrollViewer scroll = ((NetworkOutlineViewModel)(((ToolTip)ThumbnailButton.ToolTip).Content)).Scroll;
                 scroll.ScrollToVerticalOffset(scroll.VerticalOffset - e.Delta / 10);
             }
         }
 
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            if (_canScrollToolTip) e.Handled = true;
+            base.OnMouseWheel(e);
+        }
+
         #endregion
-        
+
         private void OnLadderNetworkEdit(object sender, LadderEditEventArgs e)
         {
             switch (e.Type)

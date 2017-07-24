@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Core.Simulate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -263,6 +264,27 @@ namespace SamSoarII.Core.Models
         /// 断点地址
         /// </summary>
         public int BPAddress { get; set; }
+
+        /// <summary>
+        /// 断点光标
+        /// </summary>
+        private BreakpointCursor bpCursor;
+
+        /// <summary>
+        /// 断点光标
+        /// </summary>
+        public BreakpointCursor BPCursor
+        {
+            get
+            {
+                return this.bpCursor;
+            }
+            set
+            {
+                this.bpCursor = value;
+            }
+        }
+        
         /// <summary>
         /// 获得所有局部变量
         /// </summary>
