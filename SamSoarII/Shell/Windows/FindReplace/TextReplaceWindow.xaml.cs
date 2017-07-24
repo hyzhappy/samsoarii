@@ -102,6 +102,8 @@ namespace SamSoarII.Shell.Windows
             DataContext = this;
             ifParent = _ifParent;
             Mode = MODE_CURRENT;
+            undos = new Stack<TextReplaceCommandGroup>();
+            redos = new Stack<TextReplaceCommandGroup>();
         }
 
         public void Initialize(bool initcmd = true)
