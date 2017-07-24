@@ -387,7 +387,7 @@ namespace SamSoarII.Shell.Windows
 
         private void textbox_GotFocus(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void textbox_LostFocus(object sender, RoutedEventArgs e)

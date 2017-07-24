@@ -740,7 +740,7 @@ namespace SamSoarII
                 return;
             }
             if (Project?.IsModified == true)
-                ifParent.SaveProject();        
+                ifParent.SaveProject();
             if (e.Command == GlobalCommand.SimulateCommand)
                 ifParent.SimulateProject();
             if (e.Command == GlobalCommand.DownloadCommand)
