@@ -901,18 +901,21 @@ namespace SamSoarII.Core.Models
                 case LadderUnitModel.Shapes.Output:
                 case LadderUnitModel.Shapes.OutputRect:
                     List<LadderUnitModel> news = new List<LadderUnitModel>();
-                    for (int x = cover ? unit.X : Math.Max(1, view.SelectionRect.X) ; x < GlobalSetting.LadderXCapacity - 1; x++)
+                    List<LadderUnitModel> olds = new List<LadderUnitModel>();
+                    for (int x = cover ? unit.X : Math.Max(1, view.SelectionRect.X); x < GlobalSetting.LadderXCapacity - 1; x++)
                     {
                         LadderUnitModel hline = new LadderUnitModel(net, LadderUnitModel.Types.HLINE);
                         hline.X = x;
                         hline.Y = unit.Y;
                         if (cover || net.Children[hline.X, hline.Y] == null) news.Add(hline);
+                        if (cover && net.Children[hline.X, hline.Y] != null) olds.Add(net.Children[hline.X, hline.Y]);
                     }
                     unit.X = GlobalSetting.LadderXCapacity - 1;
                     news.Add(unit);
                     old = net.Children[unit.X, unit.Y];
-                    IEnumerable<LadderUnitModel> olds = (cover ? net.Children.SelectRange(unit.X, GlobalSetting.LadderXCapacity, unit.Y, unit.Y).ToArray()
-                        : old != null ? new LadderUnitModel[] { old } : new LadderUnitModel[] { });
+                    if (old != null) olds.Add(old);
+                    //IEnumerable<LadderUnitModel> olds = (cover ? net.Children.SelectRange(unit.X, GlobalSetting.LadderXCapacity, unit.Y, unit.Y).ToArray()
+                    //    : old != null ? new LadderUnitModel[] { old } : new LadderUnitModel[] { });
                     ReplaceU(net, olds, news);
                     view.IFParent.Navigate(unit);
                     break;
