@@ -399,6 +399,11 @@ namespace SamSoarII.Core.Models
         private Stack<Command> redos = new Stack<Command>();
         public bool CanUndo { get { return LadderMode == LadderModes.Edit && undos != null && undos.Count() > 0; } }
         public bool CanRedo { get { return LadderMode == LadderModes.Edit && redos != null && redos.Count() > 0; } }
+        public void ClearUndoRedoAction()
+        {
+            undos.Clear();
+            redos.Clear();
+        }
         public void Undo()
         {
             if (!CanUndo) return;
@@ -896,7 +901,7 @@ namespace SamSoarII.Core.Models
                 case LadderUnitModel.Shapes.Output:
                 case LadderUnitModel.Shapes.OutputRect:
                     List<LadderUnitModel> news = new List<LadderUnitModel>();
-                    for (int x = cover ? unit.X : 0; x < GlobalSetting.LadderXCapacity - 1; x++)
+                    for (int x = cover ? unit.X : Math.Max(1, view.SelectionRect.X) ; x < GlobalSetting.LadderXCapacity - 1; x++)
                     {
                         LadderUnitModel hline = new LadderUnitModel(net, LadderUnitModel.Types.HLINE);
                         hline.X = x;

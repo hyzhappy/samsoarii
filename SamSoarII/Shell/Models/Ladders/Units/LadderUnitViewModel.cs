@@ -251,16 +251,16 @@ namespace SamSoarII.Shell.Models
                 case 0:
                     break;
                 case UPDATE_TOP:
-                    Canvas.SetTop(this, Y * (iscommentmode ? 500 : 300));
+                    Canvas.SetTop(this, Y * (iscommentmode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit));
                     break;
                 case UPDATE_LEFT:
-                    Canvas.SetLeft(this, X * 300);
+                    Canvas.SetLeft(this, X * Global.GlobalSetting.LadderWidthUnit);
                     break;
                 case UPDATE_WIDTH:
-                    Width = 300;
+                    Width = Global.GlobalSetting.LadderWidthUnit;
                     break;
                 case UPDATE_HEIGHT:
-                    Height = (iscommentmode ? 500 : 300);
+                    Height = (iscommentmode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit);
                     break;
                 case UPDATE_PROPERTY:
                     break;

@@ -26,7 +26,7 @@ namespace SamSoarII.Shell.Windows
     /// <summary>
     /// ElementInitWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class ElementInitWindow : UserControl, IWindow
+    public partial class ElementInitWindow : UserControl, IWindow, INotifyPropertyChanged
     {
         private InteractionFacade ifparent;
         public InteractionFacade IFParent { get { return this.ifparent; } }
@@ -61,9 +61,9 @@ namespace SamSoarII.Shell.Windows
         public ElementInitWindow(InteractionFacade _ifparent)
         {
             InitializeComponent();
+            DataContext = this;
             ifparent = _ifparent;
             ifparent.PostIWindowEvent += OnReceiveIWindowEvent;
-            DataContext = this;
             CloseButton.Click += CloseButton_Click;
             KeyDown += ElementInitializeWindow_KeyDown;
             AddButton.Click += AddButton_Click;

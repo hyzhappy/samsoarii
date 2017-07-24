@@ -176,9 +176,10 @@ namespace SamSoarII.Shell.Models
                     if (type == LadderUnitModel.Types.VLINE)
                     {
                         LadderUnitModel vline = SelectRectOwner.VLines[_selectRect.X - 1, _selectRect.Y];
-                        if (vline == null && _selectRect.X > 0)
+                        if (_selectRect.X > 0)
                         {
-                            Core.QuickInsertElement(type, SelectRectOwner, _selectRect.X - 1, _selectRect.Y);
+                            if (vline == null)
+                                Core.QuickInsertElement(type, SelectRectOwner, _selectRect.X - 1, _selectRect.Y);
                             SelectRectDown();
                         }
                     }
