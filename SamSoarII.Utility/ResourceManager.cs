@@ -14,11 +14,12 @@ namespace SamSoarII.Utility
 
     public class ResourceManager<T> where T : IResource
     {
-        public ResourceManager(T _template, int count, params object[] args)
+        public ResourceManager(T _template, int _count, params object[] args)
         {
             template = _template;
+            count = _count;
             usedcount = 0;
-            data = new T[count];
+            data = new T[count*4];
             for (int i = 0; i < count; i++)
             {
                 data[i] = (T)(template.Create(args));
@@ -30,17 +31,27 @@ namespace SamSoarII.Utility
 
         private T template;
         private T[] data;
+        private int count;
         private int usedcount;
         
         #endregion
         
         public T Create(params object[] args)
         {
-            if (usedcount >= data.Length)
+            if (usedcount >= count)
             {
-                T result = (T)(template.Create(args));
-                result.ResourceID = -1;
-                return result;
+                if (count < data.Length)
+                {
+                    data[count] = (T)(template.Create(args));
+                    data[count].ResourceID = count;
+                    count++;
+                }
+                else
+                {
+                    template = (T)(template.Create(args));
+                    template.ResourceID = -1;
+                    return template;
+                }
             }
             data[usedcount].Recreate(args);
             return data[usedcount++];

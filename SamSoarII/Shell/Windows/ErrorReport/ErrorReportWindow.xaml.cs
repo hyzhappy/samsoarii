@@ -215,7 +215,14 @@ namespace SamSoarII.Shell.Windows
         }
 
         #region Event Handlers
-        
+
+        public event IWindowEventHandler Post = delegate { };
+
+        private void OnReceiveIWindowEvent(IWindow sender, IWindowEventArgs e)
+        {
+
+        }
+
         private void DG_List_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
             if (!ifParent.WNDMain.LAErrorList.IsFloat
@@ -236,7 +243,7 @@ namespace SamSoarII.Shell.Windows
         private void DG_FList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
             if (!ifParent.WNDMain.LAErrorList.IsFloat
-             && ifParent.WNDMain.LAErrorList.IsDock)
+             && !ifParent.WNDMain.LAErrorList.IsDock)
             {
                 LayoutSetting.AddDefaultDockWidthAnchorable(
                     Properties.Resources.MainWindow_Error_List, ifParent.WNDMain.LAErrorList.AutoHideWidth.ToString());
@@ -255,16 +262,6 @@ namespace SamSoarII.Shell.Windows
         }
 
         #endregion
-
-        #region Event Handler
-
-        public event IWindowEventHandler Post = delegate { };
         
-        private void OnReceiveIWindowEvent(IWindow sender, IWindowEventArgs e)
-        {
-
-        }
-
-        #endregion
     }
 }

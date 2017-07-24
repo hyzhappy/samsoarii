@@ -121,6 +121,8 @@ namespace SamSoarII
         public MainTabControl TCMain { get { return this.tcMain; } }
         public LadderDiagramViewModel CurrentLadder { get { return tcMain.SelectedItem is MainTabDiagramItem
             ? ((MainTabDiagramItem)(tcMain.SelectedItem)).LDVModel : null; } }
+        public FuncBlockViewModel CurrentFuncBlock { get { return tcMain.SelectedItem is FuncBlockViewModel
+            ? (FuncBlockViewModel)(tcMain.SelectedItem) : null; } }
 
         private ErrorReportWindow wndError;
         public ErrorReportWindow WNDError { get { return this.wndError; } }
@@ -846,7 +848,7 @@ namespace SamSoarII
                     }
                     cw.Write(");\n");
                 }
-                cw.Write(fbmodel.Code);
+                cw.Write(fbmodel.View != null ? fbmodel.View.Code : fbmodel.Code);
                 cw.Close();
                 sline = 4 + fbmodel.Funcs.Count();
                 cmd = new Process();
@@ -1488,6 +1490,11 @@ namespace SamSoarII
                             LadderDiagramModel ldmodel = (LadderDiagramModel)(e2.RelativeObject);
                             if (ldmodel.Tab == null) ldmodel.Tab = new MainTabDiagramItem(tcMain, ldmodel, ldmodel.Inst);
                             tcMain.ShowItem(ldmodel.Tab);
+                        }
+                        if (e2.RelativeObject is LadderNetworkModel)
+                        {
+                            LadderNetworkModel lnmodel = (LadderNetworkModel)(e2.RelativeObject);
+                            Navigate(lnmodel);
                         }
                         if (e2.RelativeObject is FuncBlockModel)
                         {

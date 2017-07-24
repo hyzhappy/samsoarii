@@ -21,13 +21,13 @@ namespace SamSoarII
 
         static public void Initialize()
         {
-            rmgInput = new ResourceManager<InputViewModel>(new InputViewModel(null), 300, new object[] { null });
-            rmgOutput = new ResourceManager<OutputViewModel>(new OutputViewModel(null), 100, new object[] { null });
-            rmgOutRec = new ResourceManager<OutputRectViewModel>(new OutputRectViewModel(null), 100, new object[] { null });
-            rmgSpecial = new ResourceManager<SpecialViewModel>(new SpecialViewModel(null), 100, new object[] { null });
-            rmgHLine = new ResourceManager<HLineViewModel>(new HLineViewModel(null), 500, new object[] { null });
-            rmgVLine = new ResourceManager<VLineViewModel>(new VLineViewModel(null), 300, new object[] { null });
-            rmgIRow = new ResourceManager<InstructionRowViewModel>(new InstructionRowViewModel(null, 0), 100, new object[] { null, 0 });
+            rmgInput = new ResourceManager<InputViewModel>(new InputViewModel(null), 100, new object[] { null });
+            rmgOutput = new ResourceManager<OutputViewModel>(new OutputViewModel(null), 25, new object[] { null });
+            rmgOutRec = new ResourceManager<OutputRectViewModel>(new OutputRectViewModel(null), 25, new object[] { null });
+            rmgSpecial = new ResourceManager<SpecialViewModel>(new SpecialViewModel(null), 25, new object[] { null });
+            rmgHLine = new ResourceManager<HLineViewModel>(new HLineViewModel(null), 125, new object[] { null });
+            rmgVLine = new ResourceManager<VLineViewModel>(new VLineViewModel(null), 75, new object[] { null });
+            rmgIRow = new ResourceManager<InstructionRowViewModel>(new InstructionRowViewModel(null, 0), 25, new object[] { null, 0 });
         }
 
         static public InstructionRowViewModel CreateInstRow(PLCOriginInst inst, int id)

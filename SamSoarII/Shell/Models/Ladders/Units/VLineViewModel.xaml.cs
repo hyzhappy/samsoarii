@@ -61,7 +61,7 @@ namespace SamSoarII.Shell.Models
                     Canvas.SetTop(this, Y * (IsCommentMode ? 500 : 300) + 100);
                     break;
                 case UPDATE_LEFT:
-                    Canvas.SetLeft(this, X * 300 + 148);
+                    Canvas.SetLeft(this, X * 300 + 150);
                     break;
                 case UPDATE_HEIGHT:
                     Height = IsCommentMode ? 500 : 300;
