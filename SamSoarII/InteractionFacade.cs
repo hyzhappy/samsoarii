@@ -1035,14 +1035,6 @@ namespace SamSoarII
 
         public void Navigate(LadderNetworkModel network, int x, int y)
         {
-            if (instinputrect != null)
-            {
-                if (instinputrect.X < GlobalSetting.LadderXCapacity - 1)
-                    instinputrect.X++;
-                network.Parent.View.NavigateByInstructionInputDialog();
-                instinputrect = null;
-                return;
-            }
             if (network.View == null || network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
@@ -1057,13 +1049,6 @@ namespace SamSoarII
         
         public void Select(LadderNetworkModel network, int x1, int x2, int y1, int y2)
         {
-            if (instinputrect != null)
-            {
-                instinputrect.X = x2;
-                network.Parent.View.NavigateByInstructionInputDialog();
-                instinputrect = null;
-                return;
-            }
             if (x1 == x2 && y1 == y2)
             {
                 Navigate(network, x1, y1);
@@ -1079,14 +1064,6 @@ namespace SamSoarII
 
         public void Select(LadderDiagramModel diagram, int start, int end)
         {
-            if (instinputrect != null)
-            {
-                if (instinputrect.X < GlobalSetting.LadderXCapacity - 1)
-                    instinputrect.X++;
-                diagram.View.NavigateByInstructionInputDialog();
-                instinputrect = null;
-                return;
-            }
             foreach (LadderNetworkModel network in diagram.Children)
             {
                 if (network.ID < start || network.ID > end) continue;
@@ -1199,7 +1176,7 @@ namespace SamSoarII
             }
         }
 
-        private SelectRectCore instinputrect = null;
+        //private SelectRectCore instinputrect = null;
         public void ShowInstructionInputDialog(string initialString, SelectRectCore core)
         {
             if (core.Parent == null) return;
@@ -1210,13 +1187,13 @@ namespace SamSoarII
                 {
                     try
                     {
-                        instinputrect = core;
                         core.Parent.Parent.AddSingleUnit(dialog.InstructionInput, core, core.Parent);
+                        if (core.X < GlobalSetting.LadderXCapacity - 1) core.X++;
+                        core.Parent.Parent.View.NavigateByInstructionInputDialog();
                         dialog.Close();
                     }
                     catch (Exception exce2)
                     {
-                        instinputrect = null;
                         LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
                     }
                 };
