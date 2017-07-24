@@ -201,7 +201,7 @@ namespace SamSoarII.Shell.Models
         {
             InitializeComponent();
             Core = new SelectRectCore(null);
-            Width = 300;
+            Width = Global.GlobalSetting.LadderWidthUnit;
             IsCommentMode = false;
         }
 
@@ -247,8 +247,8 @@ namespace SamSoarII.Shell.Models
         {
             switch (e.PropertyName)
             {
-                case "X": Canvas.SetLeft(this, 300 * Core.X); break;
-                case "Y": Canvas.SetTop(this, (isCommentMode ? 500 : 300) * Core.Y); break;
+                case "X": Canvas.SetLeft(this, Global.GlobalSetting.LadderWidthUnit * Core.X); break;
+                case "Y": Canvas.SetTop(this, (isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y); break;
             }
             PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
@@ -270,8 +270,8 @@ namespace SamSoarII.Shell.Models
             set
             {
                 isCommentMode = value;
-                Canvas.SetTop(this, (isCommentMode ? 500 : 300) * Core.Y);
-                Height = isCommentMode ? 500 : 300;
+                Canvas.SetTop(this, (isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit) * Core.Y);
+                Height = isCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit;
             }
         }
 
