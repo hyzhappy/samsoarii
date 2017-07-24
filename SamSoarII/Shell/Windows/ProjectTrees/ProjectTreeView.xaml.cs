@@ -365,7 +365,7 @@ namespace SamSoarII.Shell.Windows
             }
         }
 
-        private void AddNewSubRoutines()
+        public void AddNewSubRoutines()
         {
             newparent = (TV_Main.SelectedItem is ProjectTreeViewItem ? (ProjectTreeViewItem)(TV_Main.SelectedItem) : PTVI_SubRoutines);
             if ((newparent.Flags & 0xf) != ProjectTreeViewItem.TYPE_ROUTINEFLODER)
@@ -374,7 +374,7 @@ namespace SamSoarII.Shell.Windows
             Project.Diagrams.Add(ldmodel);
         }
 
-        private void AddNewFuncBlock()
+        public void AddNewFuncBlock()
         {
             newparent = (TV_Main.SelectedItem is ProjectTreeViewItem ? (ProjectTreeViewItem)(TV_Main.SelectedItem) : PTVI_FuncBlocks);
             if ((newparent.Flags & 0xf) != ProjectTreeViewItem.TYPE_FUNCBLOCKFLODER)
@@ -383,7 +383,7 @@ namespace SamSoarII.Shell.Windows
             Project.FuncBlocks.Add(fbmodel);
         }
 
-        private void AddNewModbus()
+        public void AddNewModbus()
         {
             OnPTVIDoubleClick(PTVI_Modbus, null);
             ModbusTableModel mtmodel = Project.Modbus;
@@ -495,6 +495,7 @@ namespace SamSoarII.Shell.Windows
                               | ProjectTreeViewItem.FLAG_RENAME
                               | ProjectTreeViewItem.FLAG_REMOVE,
                                 ldmodel, false);
+                            ptvparent.IsExpanded = true;
                         }
                     break;
                 case ProjectTreeViewItem.TYPE_FUNCBLOCK:
@@ -523,6 +524,7 @@ namespace SamSoarII.Shell.Windows
                               | ProjectTreeViewItem.FLAG_RENAME
                               | ProjectTreeViewItem.FLAG_REMOVE,
                                 fbmodel, false);
+                            ptvparent.IsExpanded = true;
                         }
                     break;
                 case ProjectTreeViewItem.TYPE_NETWORK:

@@ -183,14 +183,15 @@ namespace SamSoarII.Shell.Models
                             SelectRectDown();
                         }
                     }
-                    else
+                    else if (LadderUnitModel.Formats[(int)type].Length == 0)
                     {
                         Core.QuickInsertElement(type, _selectRect.Core);
-                        LadderUnitModel newunit = _selectRect.Current;
-                        if (newunit != null && newunit.Children.Count > 0)
-                            IFParent.ShowElementPropertyDialog(newunit);
-                        else
-                            SelectRectRight();
+                        SelectRectRight();
+                    }
+                    else
+                    {
+                        IFParent.ShowElementPropertyDialog(type, _selectRect.Core);
+                        SelectRectRight();
                     }
                     isnavigatable = true;
                     break;
@@ -2335,13 +2336,9 @@ namespace SamSoarII.Shell.Models
                     }
                 }
                 if (_selectRect.Current != null && _selectRect.Current.Type != LadderUnitModel.Types.HLINE)
-                {
                     IFParent.ShowElementPropertyDialog(_selectRect.Current);
-                }
                 else
-                {
                     IFParent.ShowInstructionInputDialog(string.Empty, _selectRect.Core);
-                }
                 e.Handled = true;
             }
             if (e.Key == Key.Delete)

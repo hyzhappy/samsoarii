@@ -123,9 +123,7 @@ namespace SamSoarII.Shell.Windows
         public void Initialize()
         {
             foreach (TextFindElement ele in items)
-            {
                 ele.Dispose();
-            }
             items.Clear();
         }
         /// <summary>

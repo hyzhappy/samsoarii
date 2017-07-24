@@ -111,6 +111,11 @@ namespace SamSoarII.Shell.Windows
             foreach (TextReplaceElement ele in items)
                 ele.Dispose();
             items.Clear();
+            if (initcmd)
+            {
+                UndoClear();
+                RedoClear();
+            }
         }
 
         public void Find(string word = null)
@@ -183,7 +188,7 @@ namespace SamSoarII.Shell.Windows
                 cmd.Add(new TextReplaceCommand(fbmodel.View, start, oldtext, newtext.ToString()));
             }
             cmd.Redo();
-            redos.Clear();
+            RedoClear();
             undos.Push(cmd);
             Find();
         }
@@ -334,6 +339,12 @@ namespace SamSoarII.Shell.Windows
 
         private Stack<TextReplaceCommandGroup> undos;
         private Stack<TextReplaceCommandGroup> redos;
+
+        private void UndoClear()
+        {
+            foreach (TextReplaceCommandGroup cmd in undos) cmd.Dispose();
+            undos.Clear();
+        }
         
         private void UndoCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -346,6 +357,12 @@ namespace SamSoarII.Shell.Windows
             cmd.Undo();
             redos.Push(cmd);
             Find();
+        }
+
+        private void RedoClear()
+        {
+            foreach (TextReplaceCommandGroup cmd in redos) cmd.Dispose();
+            redos.Clear();
         }
 
         private void RedoCanExecute(object sender, CanExecuteRoutedEventArgs e)

@@ -1225,6 +1225,38 @@ namespace SamSoarII
             }
         }
 
+        public void ShowElementPropertyDialog(LadderUnitModel.Types type, SelectRectCore core, bool cover = true)
+        {
+            LadderUnitModel current = new LadderUnitModel(core.Parent, type) { X = core.X, Y = core.Y };
+            using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
+            {
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                dialog.Ensure += (sender, e) =>
+                {
+                    try
+                    {
+                        IList<string> properties = dialog.PropertyStrings;
+                        List<string> instargs = new List<string>();
+                        for (int i = 0; i < properties.Count / 2; i++)
+                        {
+                            string value = properties[i * 2];
+                            instargs.Add(value);
+                            mngValue[value].Comment = properties[i * 2 + 1];
+                        }
+                        current.InstArgs = instargs.ToArray();
+                        core.Parent.Parent.AddSingleUnit(current, core.Parent, cover);
+                        dialog.Close();
+                    }
+                    catch (Exception exce2)
+                    {
+                        LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
+                    }
+                };
+                dialog.Cancel += (sender, e) => { current.Dispose(); };
+                dialog.ShowDialog();
+            }
+        }
+
         public void ShowProjectPropertyDialog()
         {
             using (ProjectPropertyDialog dialog = new ProjectPropertyDialog(mdProj))
@@ -1410,17 +1442,19 @@ namespace SamSoarII
         }
         public void AddNewSubRoutine()
         {
-            
+            wndMain.LACProj.Show();
+            tvProj.AddNewSubRoutines();
         }
 
         public void AddNewFuncBlock()
         {
-
+            wndMain.LACProj.Show();
+            tvProj.AddNewFuncBlock();
         }
         
         public void AddNewModbus()
         {
-
+            tvProj.AddNewModbus();
         }
 
         public void QuickInsertElement(LadderUnitModel.Types type)
