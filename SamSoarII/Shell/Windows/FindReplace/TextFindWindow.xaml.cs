@@ -39,6 +39,7 @@ namespace SamSoarII.Shell.Windows
             InitializeComponent();
             DataContext = this;
             ifParent = _ifParent;
+            ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             Mode = MODE_CURRENT;
         }
 

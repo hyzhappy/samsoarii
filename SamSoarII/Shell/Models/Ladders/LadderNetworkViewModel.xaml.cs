@@ -1018,6 +1018,7 @@ namespace SamSoarII.Shell.Models
                 if (ptvitem.RelativeObject is LadderUnitModel.Types)
                 {
                     LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
+                    IFParent.ShowElementPropertyDialog(type, ViewParent.SelectionRect.Core, false);
                     Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
                 }
                 else if (ptvitem.RelativeObject is FuncModel)
@@ -1028,10 +1029,7 @@ namespace SamSoarII.Shell.Models
                         LocalizedMessageBox.Show(String.Format("{0:s}{1}", fmodel.Name, Properties.Resources.Message_Can_Not_CALL), LocalizedMessageIcon.Error);
                         return;
                     }
-                    LadderUnitModel unit = new LadderUnitModel(null, fmodel);
-                    unit.X = ViewParent.SelectionRect.X;
-                    unit.Y = ViewParent.SelectionRect.Y;
-                    Core.Parent.AddSingleUnit(unit, Core, false);
+                    IFParent.ShowElementPropertyDialog(fmodel, ViewParent.SelectionRect.Core);
                 }
                 else if (ptvitem.RelativeObject is LadderDiagramModel)
                 {
@@ -1045,11 +1043,7 @@ namespace SamSoarII.Shell.Models
                 else if (ptvitem.RelativeObject is ModbusModel)
                 {
                     ModbusModel mmodel = (ModbusModel)(ptvitem.RelativeObject);
-                    LadderUnitModel unit = new LadderUnitModel(null, LadderUnitModel.Types.MBUS);
-                    unit.InstArgs = new string[] { "K285", mmodel.Name, "D0" };
-                    unit.X = ViewParent.SelectionRect.X;
-                    unit.Y = ViewParent.SelectionRect.Y;
-                    Core.Parent.AddSingleUnit(unit, Core, false);
+                    IFParent.ShowElementPropertyDialog(mmodel, ViewParent.SelectionRect.Core);
                 }
             }
         }

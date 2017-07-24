@@ -64,14 +64,18 @@ namespace SamSoarII.Core.Models
                 {
                     _store.RefNum--;
                     _store.PropertyChanged -= OnStorePropertyChanged;
+                    IFParent.MNGSimu.Started -= OnSimulateStarted;
                     IFParent.MNGSimu.Aborted -= OnSimulateAborted;
+                    IFParent.MNGComu.Started -= OnMonitorStarted;
                     IFParent.MNGComu.Aborted -= OnMonitorAborted;
                 }
                 if (store != null)
                 {
                     store.RefNum++;
                     store.PropertyChanged += OnStorePropertyChanged;
+                    IFParent.MNGSimu.Started += OnSimulateStarted;
                     IFParent.MNGSimu.Aborted += OnSimulateAborted;
+                    IFParent.MNGComu.Started += OnMonitorStarted;
                     IFParent.MNGComu.Aborted += OnMonitorAborted;
                     //datatype = (int)(store.Type);
                     CurrentValue = "???";
@@ -132,15 +136,14 @@ namespace SamSoarII.Core.Models
                 if (value.ToString().Equals("???"))
                 {
                     unknown = true;
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
                 }
                 else
                 {
                     unknown = false;
                     store.Value = value;
                 }
-                //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });             
-                //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
+                //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue")); });     
             }
         }
         
@@ -299,10 +302,22 @@ namespace SamSoarII.Core.Models
                     break;
             }
         }
+
+        private void OnSimulateStarted(object sender, RoutedEventArgs e)
+        {
+            unknown = false;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
+        }
         
         private void OnSimulateAborted(object sender, RoutedEventArgs e)
         {
             CurrentValue = "???";
+        }
+
+        private void OnMonitorStarted(object sender, RoutedEventArgs e)
+        {
+            unknown = false;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("CurrentValue"));
         }
 
         private void OnMonitorAborted(object sender, RoutedEventArgs e)

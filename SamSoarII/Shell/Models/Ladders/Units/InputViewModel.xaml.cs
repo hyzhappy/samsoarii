@@ -310,7 +310,6 @@ namespace SamSoarII.Shell.Models
                         }
                         else if (LadderMode == LadderModes.Monitor)
                         {
-
                             if (Core.Children.Count >= 1) ValueTextBlock.Text =
                                 String.Format("{0:s} = {1}",
                                     Core.Children[0].Text,

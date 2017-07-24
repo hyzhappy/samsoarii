@@ -935,6 +935,17 @@ namespace SamSoarII.Core.Models
             Parent = _parent;
         }
 
+        public LadderUnitModel(LadderNetworkModel _parent, ModbusModel modbus)
+        {
+            type = Types.MBUS;
+            ValueFormat[] formats = Formats[(int)type];
+            children = new ValueModel[formats.Length];
+            for (int i = 0; i < children.Length; i++)
+                children[i] = new ValueModel(this, formats[i]);
+            children[1].Text = modbus.Name;
+            Parent = _parent;
+        }
+
         public LadderUnitModel(LadderNetworkModel _parent, XElement xele)
         {
             Load(xele);

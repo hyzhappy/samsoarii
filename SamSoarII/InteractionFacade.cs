@@ -1228,6 +1228,23 @@ namespace SamSoarII
         public void ShowElementPropertyDialog(LadderUnitModel.Types type, SelectRectCore core, bool cover = true)
         {
             LadderUnitModel current = new LadderUnitModel(core.Parent, type) { X = core.X, Y = core.Y };
+            ShowImmediateElementPropertyDialog(current, cover);
+        }
+        
+        public void ShowElementPropertyDialog(FuncModel func, SelectRectCore core)
+        {
+            LadderUnitModel current = new LadderUnitModel(core.Parent, func) { X = core.X, Y = core.Y };
+            ShowImmediateElementPropertyDialog(current, false);
+        }
+
+        public void ShowElementPropertyDialog(ModbusModel modbus, SelectRectCore core)
+        {
+            LadderUnitModel current = new LadderUnitModel(core.Parent, modbus) { X = core.X, Y = core.Y };
+            ShowImmediateElementPropertyDialog(current, false);
+        }
+
+        private void ShowImmediateElementPropertyDialog(LadderUnitModel current, bool cover = true)
+        {
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -1241,10 +1258,17 @@ namespace SamSoarII
                         {
                             string value = properties[i * 2];
                             instargs.Add(value);
-                            mngValue[value].Comment = properties[i * 2 + 1];
+                            try
+                            {
+                                mngValue[value].Comment = properties[i * 2 + 1];
+                            } 
+                            catch (ValueParseException)
+                            {
+
+                            }
                         }
                         current.InstArgs = instargs.ToArray();
-                        core.Parent.Parent.AddSingleUnit(current, core.Parent, cover);
+                        current.Parent.Parent.AddSingleUnit(current, current.Parent, cover);
                         dialog.Close();
                     }
                     catch (Exception exce2)
