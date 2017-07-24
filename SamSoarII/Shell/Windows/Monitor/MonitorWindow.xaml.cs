@@ -423,10 +423,9 @@ namespace SamSoarII.Shell.Windows
                 }
             }
         }
-        
+
         #endregion
 
         #endregion
-        
     }
 }

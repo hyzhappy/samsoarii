@@ -1416,7 +1416,19 @@ namespace SamSoarII
         #endregion
 
         #region Modify
-
+        public void ZoomChanged(bool isZoomIn)
+        {
+            if (isZoomIn)
+            {
+                GlobalSetting.LadderScaleX *= 1.1;
+                GlobalSetting.LadderScaleY *= 1.1;
+            }
+            else
+            {
+                GlobalSetting.LadderScaleX /= 1.1;
+                GlobalSetting.LadderScaleY /= 1.1;
+            }
+        }
         public void AddNewSubRoutine()
         {
             
@@ -1613,7 +1625,13 @@ namespace SamSoarII
                 return false;
             }
             bool ret = true;
-            ret &= !IsWaitForKey;
+            if (e.Command == ApplicationCommands.New
+             || e.Command == ApplicationCommands.Open
+             || e.Command == ApplicationCommands.Save
+             || e.Command == ApplicationCommands.Close)
+            {
+                ret &= !IsWaitForKey;
+            }
             if (e.Command == ApplicationCommands.Close) return ret;
             if (e.Command != ApplicationCommands.New
              && e.Command != ApplicationCommands.Open

@@ -43,17 +43,36 @@ namespace SamSoarII
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             InitializeAvalonDock();
             InitializeHotKey();
-            Loaded += OnMainWindowLoaded;
             App.splashScreen.Close(TimeSpan.FromMilliseconds(0));
+            Loaded += OnMainWindowLoaded;
         }
 
         private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
         {
+            if (!GlobalSetting.LoadLadderScaleSuccess())
+            {
+                ILayoutPositionableElementWithActualSize _maintab = ifParent.TCMain;
+                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 4340;
+                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 4340;
+            }
             Loaded -= OnMainWindowLoaded;
             LACProj.Show();
             LAProj.Hide();
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += backgroundWorker_DoWork;
+            worker.RunWorkerAsync();
         }
 
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
+            {
+                if (App.AutoOpenFileFullPath != string.Empty)
+                {
+                    ifParent.LoadProject(App.AutoOpenFileFullPath);
+                }
+            });
+        }
         public void Dispose()
         {
             ifParent.PostIWindowEvent -= OnReceiveIWindowEvent;
@@ -508,10 +527,10 @@ namespace SamSoarII
             }
             e.Handled = true;
         }
-        
+
         private void About(object sender, RoutedEventArgs e)
         {
-
+            LocalizedMessageBox.Show(string.Format("Version : 2.0.0"), LocalizedMessageIcon.Information);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -689,8 +708,12 @@ namespace SamSoarII
                 ifParent.AddNewFuncBlock();
             if (e.Command == GlobalCommand.AddNewModbusCommand)
                 ifParent.AddNewModbus();
+            if (e.Command == GlobalCommand.ZoomInCommand)
+                ifParent.ZoomChanged(true);
+            if (e.Command == GlobalCommand.ZoomOutCommand)
+                ifParent.ZoomChanged(false);
         }
-
+        
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)
         {
             if (e.Command == ApplicationCommands.New

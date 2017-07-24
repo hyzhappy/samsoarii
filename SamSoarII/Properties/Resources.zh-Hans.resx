@@ -2019,4 +2019,10 @@
   <data name="Routine_SelectedRange" xml:space="preserve">
     <value>选择范围</value>
   </data>
+  <data name="Ladder_Network" xml:space="preserve">
+    <value>这是一个梯形图网络</value>
+  </data>
+  <data name="Ladder_Program" xml:space="preserve">
+    <value>这是梯形图程序</value>
+  </data>
 </root>

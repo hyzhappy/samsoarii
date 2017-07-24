@@ -22,6 +22,13 @@ namespace SamSoarII.Shell.Dialogs
         public DemoLadderViewModel()
         {
             InitializeComponent();
+            mainStackPanel.LayoutTransform = new ScaleTransform(0.45,0.45);
+            CommentAreaExpander.IsEnabled = false;
+            CommentAreaExpander2.IsEnabled = false;
+            ladderExpander.IsEnabled = false;
+            ladderExpander2.IsEnabled = false;
+            ladderExpander.line.Visibility = Visibility.Hidden;
+            ladderExpander.line1.Visibility = Visibility.Hidden;
         }
     }
 }
