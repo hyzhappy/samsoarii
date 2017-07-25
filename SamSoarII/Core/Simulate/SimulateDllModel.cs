@@ -93,6 +93,13 @@ namespace SamSoarII.Core.Simulate
         public const int LOADDLL_CANNOT_FOUND_SETCLOCKRATE = 0x13;
 
         /// <summary>
+        /// 动态库接口：dll是否存在？
+        /// </summary>
+        /// <returns></returns>
+        [DllImport(@"simug\simu.dll", EntryPoint = "IsDllAlive")]
+        public static extern int IsDllAlive();
+
+        /// <summary>
         /// 动态库接口：读取工程dll
         /// </summary>
         /// <param name="simudllPath">dll文件路径</param>
@@ -108,9 +115,7 @@ namespace SamSoarII.Core.Simulate
         /// 动态库接口：释放dll
         /// </summary>
         [DllImport(@"simug\simu.dll", EntryPoint = "FreeDll")]
-        public static extern void FreeDll
-        (
-        );
+        public static extern void FreeDll();
 
         /// <summary>
         /// 动态库接口：PLC进行单独一次运行

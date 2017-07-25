@@ -500,10 +500,13 @@ void bpcycle(int32_t _bpaddr)
 {
 	if (!bpenable) return;
 	bpaddr = _bpaddr;
-	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 7);
-	if (cpmsg != 0) return;
-	if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
-	bpcount[bpaddr] = 0;
+	if (bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31))))
+	{
+		int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 7);
+		if (cpmsg != 0) return;
+		if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
+		bpcount[bpaddr] = 0;
+	}
 	if (bpstep
 	|| bpcstep
 	|| bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31)))
@@ -523,8 +526,6 @@ void cpcycle(int32_t _bpaddr, int32_t value)
 	bpaddr = _bpaddr;
 	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 15);
 	if (cpmsg == 0) return;
-	if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
-	bpcount[bpaddr] = 0;
 	int32_t prevalue = cpstack[cpsttop];
 	int32_t cond = 0;
 	if (cpmsg & 0x01)
@@ -539,6 +540,8 @@ void cpcycle(int32_t _bpaddr, int32_t value)
 		cond &= (bpjump == bpaddr);
 	if (cond)
 	{
+		if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
+		bpcount[bpaddr] = 0;
 		bpjump = -1;
 		bppause = 2;
 		while (bpenable && bppause);	

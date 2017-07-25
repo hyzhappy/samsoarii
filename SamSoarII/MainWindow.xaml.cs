@@ -712,8 +712,16 @@ namespace SamSoarII
                 ifParent.ZoomChanged(true);
             if (e.Command == GlobalCommand.ZoomOutCommand)
                 ifParent.ZoomChanged(false);
+            if (e.Command == GlobalCommand.BrpoStepCommand)
+                ifParent.MNGSimu.MoveStep();
+            if (e.Command == GlobalCommand.BrpoCallCommand)
+                ifParent.MNGSimu.CallStep();
+            if (e.Command == GlobalCommand.BrpoOutCommand)
+                ifParent.MNGSimu.JumpOut();
+            if (e.Command == GlobalCommand.BrpoNowCommand)
+                ifParent.NavigateToBreakpointCursor();
         }
-        
+
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)
         {
             if (e.Command == ApplicationCommands.New

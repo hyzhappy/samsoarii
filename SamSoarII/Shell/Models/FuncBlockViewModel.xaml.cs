@@ -408,7 +408,7 @@ namespace SamSoarII.Shell.Models
                 CCSProfix = String.Empty;
             }
             TextChanged(this, new RoutedEventArgs());
-            //InvokePropertyChanged("Caret");
+            InvokePropertyChanged("Caret");
         }
         /// <summary>
         /// 当用户键入字符后发生

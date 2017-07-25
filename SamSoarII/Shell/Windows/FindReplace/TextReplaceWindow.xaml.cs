@@ -170,19 +170,20 @@ namespace SamSoarII.Shell.Windows
             TextReplaceCommandGroup cmd = new TextReplaceCommandGroup();
             foreach (FuncBlockModel fbmodel in ifParent.MDProj.FuncBlocks)
             {
+                if (fbmodel.IsLibrary) continue;
                 IEnumerable<TextReplaceElement> eles = DG_List.SelectedItems.Cast<TextReplaceElement>().Where(
                     ele => ele.FBVModel == fbmodel.View);
                 if (eles.Count() == 0) continue;
                 List<TextReplaceElement> elelist = eles.ToList();
-                elelist.Sort((e1, e2) => { return e1.Offset.CompareTo(e2); });
+                elelist.Sort((e1, e2) => { return e1.Offset.CompareTo(e2.Offset); });
                 int start = elelist.First().Offset;
                 int end = elelist.Last().Offset + elelist.Last().Word.Length;
                 string oldtext = fbmodel.View.Code.Substring(start, end - start);
                 StringBuilder newtext = new StringBuilder();
                 for (int i = 0; i < elelist.Count(); i++)
                 {
-                    int pstart = (i == 0 ? start : elelist[i - 1].Offset + elelist[i - 1].Word.Length);
-                    int pend = elelist[i].Offset;
+                    int pstart = (i == 0 ? 0 : elelist[i - 1].Offset + elelist[i - 1].Word.Length - start);
+                    int pend = elelist[i].Offset - start;
                     if (pend > pstart) newtext.Append(oldtext.Substring(pstart, pend - pstart));
                     newtext.Append(TB_Change.Text);
                 }

@@ -162,6 +162,7 @@ namespace SamSoarII.Core.Models
         
         private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            Parent.InvokeModify(this);
             PropertyChanged(sender, e);
         }
 

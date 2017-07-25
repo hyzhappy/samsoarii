@@ -18,6 +18,7 @@ namespace SamSoarII
         static private ResourceManager<HLineViewModel> rmgHLine;
         static private ResourceManager<VLineViewModel> rmgVLine;
         static private ResourceManager<InstructionRowViewModel> rmgIRow;
+        static private ResourceManager<LadderBrpoViewModel> rmgBrpo;
 
         static public void Initialize()
         {
@@ -28,6 +29,16 @@ namespace SamSoarII
             rmgHLine = new ResourceManager<HLineViewModel>(new HLineViewModel(null), 125, new object[] { null });
             rmgVLine = new ResourceManager<VLineViewModel>(new VLineViewModel(null), 75, new object[] { null });
             rmgIRow = new ResourceManager<InstructionRowViewModel>(new InstructionRowViewModel(null, 0), 25, new object[] { null, 0 });
+            rmgBrpo = new ResourceManager<LadderBrpoViewModel>(new LadderBrpoViewModel(null), 20, new object[] { null });
+        }
+
+        static public LadderBrpoViewModel CreateBrpo(LadderBrpoModel core)
+        {
+            return rmgBrpo.Create(core);
+        }
+        static public void Dispose(LadderBrpoViewModel brpo)
+        {
+            rmgBrpo.Dispose(brpo);
         }
 
         static public InstructionRowViewModel CreateInstRow(PLCOriginInst inst, int id)

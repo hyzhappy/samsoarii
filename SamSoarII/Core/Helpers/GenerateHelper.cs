@@ -30,7 +30,6 @@ namespace SamSoarII.Core.Helpers
             string outputDllFile = String.Format(@"{0:s}\simuc.dll", currentPath);
             // 生成梯形图的c语言
             StreamWriter sw = new StreamWriter(ladderCFile);
-            BreakpointManager.Initialize();
             InstHelper.InstToSimuCode(sw, nets.ToArray());
             sw.Write("void InitUserRegisters()\r\n{\r\n");
             ValueManager ValueManager = project.Parent.MNGValue;

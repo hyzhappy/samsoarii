@@ -166,7 +166,6 @@
     <Compile Include="Core\Devices\PLCDeviceManager.cs" />
     <Compile Include="Core\Devices\PLCDeviceType.cs" />
     <Compile Include="Core\Devices\SpecialRegister.cs" />
-    <Compile Include="Core\Generate\BreakpointManager.cs" />
     <Compile Include="Core\Generate\ExprHelper.cs" />
     <Compile Include="Core\Generate\InstHelper.cs" />
     <Compile Include="Core\Generate\LadderCharts\LadderChart.cs" />
@@ -196,6 +195,7 @@
     <Compile Include="Core\Models\Instructions\InstructionNetworkModel.cs" />
     <Compile Include="Core\Models\Interfaces\IModel.cs" />
     <Compile Include="Core\Models\Interfaces\IParams.cs" />
+    <Compile Include="Core\Models\Ladders\LadderBrpoModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderDiagramModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderNetworkModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderUnitModel.cs" />
@@ -221,6 +221,8 @@
     <Compile Include="Core\Models\Values\ValueStore.cs" />
     <Compile Include="Core\Models\Values\WordElementModel.cs" />
     <Compile Include="Core\Simulate\BreakpointCursor.cs" />
+    <Compile Include="Core\Simulate\BreakpointManager.cs" />
+    <Compile Include="Core\Simulate\IBreakpoint.cs" />
     <Compile Include="Core\Simulate\SimulateBreakpointEvent.cs" />
     <Compile Include="Core\Simulate\SimulateDllModel.cs" />
     <Compile Include="Core\Simulate\SimulateManager.cs" />
@@ -385,6 +387,9 @@
     <Compile Include="Shell\Dialogs\ValueModify\ValueMultiplyModifyDialog.xaml.cs">
       <DependentUpon>ValueMultiplyModifyDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Models\LadderBrpoViewModel.xaml.cs">
+      <DependentUpon>LadderBrpoViewModel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Models\Ladders\LadderMonitorMenu.cs" />
     <Compile Include="Shell\Managers\FontManager.cs" />
     <Compile Include="Shell\Managers\IconManager.cs" />
@@ -447,6 +452,9 @@
     <Compile Include="Shell\Models\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Windows\BreakpointWindow.xaml.cs">
+      <DependentUpon>BreakpointWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Windows\Element\ElementInitWindow.xaml.cs">
       <DependentUpon>ElementInitWindow.xaml</DependentUpon>
     </Compile>
@@ -476,6 +484,7 @@
     <Compile Include="Shell\Windows\Interfaces\IWindowEventArgs.cs" />
     <Compile Include="Core\Models\Monitor\MonitorElement.cs" />
     <Compile Include="Core\Models\Monitor\MonitorTable.cs" />
+    <Compile Include="Shell\Windows\LadderBrpoTableElement.cs" />
     <Compile Include="Shell\Windows\Monitor\MonitorWindow.xaml.cs">
       <DependentUpon>MonitorWindow.xaml</DependentUpon>
     </Compile>
@@ -913,6 +922,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Shell\Models\LadderBrpoViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell\Models\Ladders\LadderDiagramViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -960,6 +973,10 @@
     <Page Include="Shell\Models\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell\Windows\BreakpointWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Windows\Element\ElementInitWindow.xaml">
       <SubType>Designer</SubType>
