@@ -150,6 +150,7 @@ namespace SamSoarII
             LA_ElemInit.Content = ifParent.WNDEInit;
             LA_Monitor.Content = ifParent.WNDMoni;
             LA_Inform.Content = ifParent.WNDInform;
+            LA_Breakpoint.Content = ifParent.WNDBrpo;
         }
 
         private void InitializeAvalonDock(LayoutAnchorable LAnch)
@@ -690,8 +691,8 @@ namespace SamSoarII
                 LACErrorList.Show();
             if (e.Command == GlobalCommand.ShowMainMonitorCommand)
                 LACMonitor.Show();
-            //if (e.Command == GlobalCommand.ShowBreakpointCommand)
-            //    LACBreakpoint.Show();
+            if (e.Command == GlobalCommand.ShowBreakpointCommand)
+                LACBreakpoint.Show();
             if (e.Command == GlobalCommand.ShowPropertyDialogCommand)
                 ifParent.ShowProjectPropertyDialog();
             if (e.Command == GlobalCommand.ShowOptionDialogCommand)

@@ -15,6 +15,7 @@ namespace SamSoarII.Core.Simulate
         public BreakpointManager(SimulateManager _parent)
         {
             parent = _parent;
+            parent.PropertyChanged += OnParentPropertyChanged;
             items = new ObservableCollection<IBreakpoint>();
             enableitems = new ObservableCollection<IBreakpoint>();
             activeitems = new ObservableCollection<IBreakpoint>();
@@ -199,7 +200,20 @@ namespace SamSoarII.Core.Simulate
                     break;
             }
         }
-        
+
+
+        private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IsEnable":
+                    if (parent.IsEnable)
+                        foreach (IBreakpoint ibrpo in activeitems)
+                            Active(ibrpo);
+                    break;
+            }
+        }
+
         #endregion
     }
 }

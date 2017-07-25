@@ -13,7 +13,7 @@ namespace SamSoarII.Shell.Windows
         #region Resources
 
         static private string[] selectedconditions
-            = { "无", "0", "1", "上升沿", "下降沿" };
+            = { "无", "ON", "OFF", "上升沿", "下降沿", "边沿"};
 
         public IEnumerable<string> SelectedConditions()
         {
