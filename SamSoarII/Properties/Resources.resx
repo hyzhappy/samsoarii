@@ -2088,4 +2088,43 @@
   <data name="Del" xml:space="preserve">
     <value>Delete(_D)</value>
   </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>Chinese</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="View_Help" xml:space="preserve">
+    <value>View Help</value>
+  </data>
+  <data name="Ret_Edit_Mode" xml:space="preserve">
+    <value>Return To Edit Mode</value>
+  </data>
+  <data name="Ladder_Check" xml:space="preserve">
+    <value>Ladder Check</value>
+  </data>
+  <data name="Funcblock_Checked" xml:space="preserve">
+    <value>FuncBlock Check</value>
+  </data>
+  <data name="Add_SubRoutine" xml:space="preserve">
+    <value>Add SubRoutine</value>
+  </data>
+  <data name="Add_FuncBlock" xml:space="preserve">
+    <value>Add FuncBlock</value>
+  </data>
+  <data name="Add_Modbus_Table" xml:space="preserve">
+    <value>Add Modbus Table</value>
+  </data>
+  <data name="Property_Proj" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="Monitor_List" xml:space="preserve">
+    <value>Monitor List</value>
+  </data>
+  <data name="Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="Close_Proj" xml:space="preserve">
+    <value>Close Project</value>
+  </data>
 </root>

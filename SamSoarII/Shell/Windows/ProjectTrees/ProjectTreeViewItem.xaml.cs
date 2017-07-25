@@ -802,7 +802,6 @@ namespace SamSoarII.Shell.Windows
         }
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (RelativeObject?.ToString() == Properties.Resources.FuncBlock) return;
             base.OnItemsChanged(e);
             if (Items.Count == 0)
             {
@@ -818,7 +817,7 @@ namespace SamSoarII.Shell.Windows
                         break;
                 }
             }
-            else if (Items.Count == 1)
+            else if (Items.Count == 1 && IsExpanded)
             {
                 switch (Flags & 0xf)
                 {
