@@ -680,8 +680,11 @@ namespace SamSoarII.Core.Models
                     cmd.NewRows = _news.Cast<int>().ToArray();
                     foreach (int row in cmd.OldRows)
                     {
-                        oldunits.AddRange(cmd.Network.Children.SelectRange(0, 11, row, row));
-                        oldunits.AddRange(cmd.Network.VLines.SelectRange(0, 11, row, row));
+                        oldunits.AddRange(cmd.Network.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, row, row));
+                        if(cmd.Network.RowCount == 2)
+                            oldunits.AddRange(cmd.Network.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, 0, 1));
+                        else
+                            oldunits.AddRange(cmd.Network.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, row, row));
                     }
                     cmd.Type |= CMDTYPE_ReplaceUnit;
                     cmd.OldUnits = oldunits;
@@ -755,7 +758,8 @@ namespace SamSoarII.Core.Models
             List<int> oldids = olds.Select(n => n.ID).ToList();
             List<int> newids = _newids.ToList();
             IEnumerable<LadderNetworkModel> nomasks = Children.Where(n => !n.IsMasked);
-            if (olds.Count() == nomasks.Count())
+            //保证操作后，界面至少存在一个可编辑的网络
+            if (_news.Count() == 0 && olds.Count() == nomasks.Count())
             {
                 LadderNetworkModel newone = new LadderNetworkModel(null, nomasks.First().ID);
                 news.Add(newone);

@@ -2345,17 +2345,11 @@ namespace SamSoarII.Shell.Models
             }
             if (e.Key == Key.Delete)
             {
-                if (SelectRectOwner != null && _selectRect.Current != null)
+                if(SelectionStatus == SelectStatus.SingleSelected && (e.KeyboardDevice.Modifiers ^ ModifierKeys.Control) == ModifierKeys.None)
                 {
-                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                    {
-                        Core.RemoveR(SelectRectOwner, _selectRect.Y);
-                    }
-                    else
-                    {
-                        Core.RemoveSingleUnit(_selectRect.Current);
-                    }
+                    Core.RemoveR(SelectRectOwner, _selectRect.Y);
                 }
+                else Delete();
             }
         }
         private void OnLadderDiagramMouseWheel(object sender, MouseWheelEventArgs e)
@@ -2511,7 +2505,6 @@ namespace SamSoarII.Shell.Models
             }
             else
             {
-
                 if (SelectionStatus == SelectStatus.MultiSelected)
                 {
                     // 多网络复制
