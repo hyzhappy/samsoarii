@@ -411,6 +411,7 @@ namespace SamSoarII.Core.Models
             RelativeArea area = new RelativeArea();
             LadderNetworkModel net = null;
             int i1 = 0, i2 = 0;
+            IList<int> newrows = null;
             if ((cmd.Type & CMDTYPE_ReplaceNetwork) != 0)
             {
                 for (i2 = cmd.NewNetworks.Count - 1; i2 >= 0; i2--)
@@ -455,6 +456,7 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
+                newrows = cmd.NewRows.ToArray();
                 for (i2 = 0; i2 < cmd.OldRows.Count; i2++)
                 {
                     int y1 = (int)(cmd.OldRows[i2]);
@@ -465,6 +467,8 @@ namespace SamSoarII.Core.Models
                         if (y == y2 + 1) { y2++; i2++; } else break;
                     }
                     cmd.Network.InsertR(y1, y2);
+                    for (i1 = 0; i1 < newrows.Count; i1++)
+                        if (newrows[i1] >= y1) newrows[i1] += y2 - y1 + 1;
                     area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity, y1, y2);
                 }
             }
@@ -492,13 +496,13 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
-                for (i2 = cmd.NewRows.Count - 1; i2 >= 0; i2--)
+                for (i2 = newrows.Count - 1; i2 >= 0; i2--)
                 {
-                    int y2 = (int)(cmd.NewRows[i2]);
+                    int y2 = (int)(newrows[i2]);
                     int y1 = y2;
                     while (i2 > 0)
                     {
-                        int y = (int)(cmd.NewRows[i2 - 1]);
+                        int y = (int)(newrows[i2 - 1]);
                         if (y == y1 - 1) { y1--; i2--; } else break;
                     }
                     cmd.Network.RemoveR(y1, y2);
@@ -550,6 +554,7 @@ namespace SamSoarII.Core.Models
             LadderNetworkModel net = null;
             RelativeArea area = new RelativeArea();
             int i1 = 0, i2 = 0;
+            IList<int> oldrows = null;
             if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
             {
                 cmd.Unit.InstArgs = cmd.NewProperties.ToArray();
@@ -585,6 +590,7 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
+                oldrows = cmd.OldRows.ToArray();
                 for (i2 = 0; i2 < cmd.NewRows.Count; i2++)
                 {
                     int y1 = (int)(cmd.NewRows[i2]);
@@ -596,6 +602,8 @@ namespace SamSoarII.Core.Models
                     }
                     cmd.Network.InsertR(y1, y2);
                     area.Update(cmd.Network, 0, GlobalSetting.LadderXCapacity, y1, y2);
+                    for (i1 = 0; i1 < oldrows.Count; i1++)
+                        if (oldrows[i1] >= y1) oldrows[i1] += y2 - y1 + 1;
                 }
             }
             if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
@@ -622,13 +630,13 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ReplaceRow) != 0)
             {
-                for (i2 = cmd.OldRows.Count - 1; i2 >= 0; i2--)
+                for (i2 = oldrows.Count - 1; i2 >= 0; i2--)
                 {
-                    int y2 = (int)(cmd.OldRows[i2]);
+                    int y2 = (int)(oldrows[i2]);
                     int y1 = y2;
                     while (i2 > 0)
                     {
-                        int y = (int)(cmd.OldRows[i2 - 1]);
+                        int y = (int)(oldrows[i2 - 1]);
                         if (y == y1 - 1) { y1--; i2--; } else break;
                     }
                     cmd.Network.RemoveR(y1, y2);

@@ -200,9 +200,10 @@ namespace SamSoarII.Core.Generate
                     sw.Write("void _SBR_{0:s}();\n", inst[1]);
             }
             // 建立扫描的主函数
+            bool ismain = true;
             sw.Write("void RunLadder()\n{\n");
-            if (simumode)
-                sw.Write("callinto();\n");
+            //if (simumode)
+            //    sw.Write("callinto();\n");
             sw.Write("_itr_invoke();\n");
             // 建立局部的栈和辅助栈
             for (int i = 1; i <= stackTotal; i++)
@@ -223,9 +224,10 @@ namespace SamSoarII.Core.Generate
                 {
                     // 函数头部
                     case "FUNC":
-                        if (simumode)
+                        if (simumode && !ismain)
                             sw.Write("callleave();\n");
                         sw.Write("}\n\n");
+                        ismain = false;
                         sw.Write("void _SBR_{0:s}()", inst[1]);
                         sw.Write("{\n");
                         if (simumode)
@@ -248,7 +250,7 @@ namespace SamSoarII.Core.Generate
                         break;
                 }
             }
-            if (simumode)
+            if (simumode && !ismain)
                 sw.Write("callleave();\n");
             sw.Write("}\n");
         }
