@@ -23,6 +23,7 @@ namespace SamSoarII.Core.Simulate
 
         private SimulateViewer parent;
         public SimulateViewer Parent { get { return this.parent; } }
+        public BreakpointManager BreakpointManager { get { return parent.Parent.MNGBrpo; } }
 
         private int address;
         public int Address
@@ -37,12 +38,8 @@ namespace SamSoarII.Core.Simulate
                 this.address = value;
                 if (address >= 0)
                 {
-                    LadderUnitModel unit = BreakpointManager.GetLadderUnit(address);
-                    FuncBlock func = BreakpointManager.GetFuncUnit(address);
-                    if (unit != null)
-                        Current = unit;
-                    else if (func != null)
-                        Current = func;
+                    if (address < BreakpointManager.Items.Count)
+                        Current = BreakpointManager.Items[address];
                     else
                         address = -1;
                 }
@@ -50,30 +47,29 @@ namespace SamSoarII.Core.Simulate
             }
         }
 
-        private object current;
-        private object Current
+        private IBreakpoint current;
+        public IBreakpoint Current
         {
+            get
+            {
+                return this.current;
+            }
             set
             {
-                if (CurrentUnit != null) CurrentUnit.BPCursor = null;
-                if (CurrentFunc != null) CurrentFunc.BPCursor = null;
+                if (current == value) return;
+                IBreakpoint _current = current;
+                this.current = null;
+                if (_current != null)
+                {
+                    address = -1;
+                    if (_current.Cursor != null) _current.Cursor = null;
+                }
                 this.current = value;
-                if (CurrentUnit != null) CurrentUnit.BPCursor = this;
-                if (CurrentFunc != null) CurrentFunc.BPCursor = this;
-            }
-        }
-        public LadderUnitModel CurrentUnit
-        {
-            get
-            {
-                return current is LadderUnitModel ? (LadderUnitModel)current : null;
-            }
-        }
-        public FuncBlock CurrentFunc
-        {
-            get
-            {
-                return current is FuncBlock ? (FuncBlock)current : null;
+                if (current != null)
+                {
+                    address = current.Address;
+                    if (current.Cursor != this) current.Cursor = this;
+                }
             }
         }
         

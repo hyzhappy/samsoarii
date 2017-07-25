@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Width="300" Height="300" Background="Transparent">
     <StackPanel>
-        <Canvas Width="300" Height="300">
+        <Canvas x:Name="mainCanvas" Width="300" Height="300">
             <Line X1="0" Y1="100" X2="300" Y2="100" Stroke="Black" StrokeThickness="4">
             </Line>
             <Canvas x:Name="CenterCanvas" Width="100" Height="100" Canvas.Left="100" Canvas.Top="50">

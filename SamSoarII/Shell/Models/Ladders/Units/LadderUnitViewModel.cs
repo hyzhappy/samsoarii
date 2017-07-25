@@ -180,8 +180,11 @@ namespace SamSoarII.Shell.Models
                         foreach (ValueModel vmodel in Core.Children)
                             vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
                     }
-                    Update(UPDATE_PROPERTY);
+                    Update(UPDATE_PROPERTY | UPDATE_BRPO);
                     oldladdermode = LadderMode;
+                    break;
+                case "BPEnable": case "BPCursor":
+                    Update(UPDATE_BRPO);
                     break;
             }
         }
@@ -244,6 +247,7 @@ namespace SamSoarII.Shell.Models
         public const int UPDATE_HEIGHT = 0x08;
         public const int UPDATE_PROPERTY = 0x10;
         public const int UPDATE_STYLE = 0x20;
+        public const int UPDATE_BRPO = 0x40;
         public virtual void Update(int flags = UPDATE_ALL)
         {
             switch (flags)
@@ -266,6 +270,8 @@ namespace SamSoarII.Shell.Models
                     break;
                 case UPDATE_STYLE:
                     break;
+                case UPDATE_BRPO:
+                    break;
                 default:
                     Update(flags & UPDATE_TOP);
                     Update(flags & UPDATE_LEFT);
@@ -273,6 +279,7 @@ namespace SamSoarII.Shell.Models
                     Update(flags & UPDATE_HEIGHT);
                     Update(flags & UPDATE_PROPERTY);
                     Update(flags & UPDATE_STYLE);
+                    Update(flags & UPDATE_BRPO);
                     break;
             }
         }

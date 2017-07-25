@@ -43,10 +43,8 @@ namespace SamSoarII.Core.Models
         #region Numbers
 
         private ModbusTableModel parent;
-        public ModbusTableModel Parent
-        {
-            get { return this.parent; }
-        }
+        public ModbusTableModel Parent { get { return this.parent; } }
+        public ProjectModel Project { get { return parent.Parent; } }
         IModel IModel.Parent { get { return Parent; } }
 
         private string name;
@@ -73,10 +71,21 @@ namespace SamSoarII.Core.Models
         private void OnChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (!childrenChangedInvokable) return;
+            if (e.NewItems != null)
+                foreach (ModbusItem item in e.NewItems)
+                    item.PropertyChanged += OnChildrenPropertyChanged;
             if (e.OldItems != null)
                 foreach (ModbusItem item in e.OldItems)
+                {
+                    item.PropertyChanged -= OnChildrenPropertyChanged;
                     item.Dispose();
+                }
+            Project.InvokeModify(this);
             ChildrenChanged(this, e);
+        }
+        private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Project.InvokeModify((ModbusItem)sender);
         }
 
         public void ChildrenSwap(int id1, int id2)
@@ -86,6 +95,7 @@ namespace SamSoarII.Core.Models
             children[id1] = children[id2];
             children[id2] = temp;
             childrenChangedInvokable = true;
+            Project.InvokeModify(this);
         }
 
         public bool IsValid

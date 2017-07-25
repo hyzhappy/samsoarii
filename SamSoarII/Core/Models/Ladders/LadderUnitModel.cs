@@ -923,7 +923,7 @@ namespace SamSoarII.Core.Models
             children = new ValueModel[formats.Length];
             for (int i = 0; i < children.Length; i++)
                 children[i] = new ValueModel(this, formats[i]);
-            Parent = _parent;
+            InitializeStructure(_parent);
         }
 
         public LadderUnitModel(LadderNetworkModel _parent, FuncModel func)
@@ -932,7 +932,7 @@ namespace SamSoarII.Core.Models
             children = new ValueModel[] { new ValueModel(this, Formats[(int)Types.CALLM][0])};
             children[0].Text = func.Name;
             children = children.Concat(func.GetValueModels(this)).ToArray();
-            Parent = _parent;
+            InitializeStructure(_parent);
         }
 
         public LadderUnitModel(LadderNetworkModel _parent, ModbusModel modbus)
@@ -943,13 +943,21 @@ namespace SamSoarII.Core.Models
             for (int i = 0; i < children.Length; i++)
                 children[i] = new ValueModel(this, formats[i]);
             children[1].Text = modbus.Name;
-            Parent = _parent;
+            InitializeStructure(_parent);
         }
 
         public LadderUnitModel(LadderNetworkModel _parent, XElement xele)
         {
             Load(xele);
+            InitializeStructure(_parent);
+        }
+
+        private void InitializeStructure(LadderNetworkModel _parent)
+        {
             Parent = _parent;
+            if (Shape == Shapes.Input      || Shape == Shapes.Output 
+             || Shape == Shapes.OutputRect || Shape == Shapes.Special)
+                Breakpoint = new LadderBrpoModel(this);
         }
 
         public void Dispose()
@@ -959,7 +967,9 @@ namespace SamSoarII.Core.Models
                 vmodel.Dispose();
             }
             if (View != null) View.Dispose();
+            if (Breakpoint != null) Breakpoint.Dispose();
             Parent = null;
+            Breakpoint = null;
             oldparent = null;
             children = null;
         }
@@ -1109,20 +1119,51 @@ namespace SamSoarII.Core.Models
 
         #region Breakpoint
 
-        private int bpAddress;
-        public int BPAddress
+        private LadderBrpoModel breakpoint;
+        public LadderBrpoModel Breakpoint
         {
-            get { return this.bpAddress; }
-            set { this.bpAddress = value; }
+            get
+            {
+                return this.breakpoint;
+            }
+            set
+            {
+                if (breakpoint == value) return;
+                LadderBrpoModel _breakpoint = breakpoint;
+                this.breakpoint = null;
+                if (_breakpoint != null)
+                {
+                    _breakpoint.PropertyChanged -= OnBreakpointPropertyChanged;
+                    if (_breakpoint.Parent != null) _breakpoint.Parent = null;
+                }
+                this.breakpoint = value;
+                if (breakpoint != null)
+                {
+                    breakpoint.PropertyChanged += OnBreakpointPropertyChanged;
+                    if (breakpoint.Parent != this) breakpoint.Parent = this;
+                }
+            }
+        }
+        private void OnBreakpointPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IsEnable": PropertyChanged(this, new PropertyChangedEventArgs("BPEnable")); break;
+                case "Cursor": PropertyChanged(this, new PropertyChangedEventArgs("BPCursor")); break;
+            }
         }
 
-        private BreakpointCursor bpCursor;
+        public bool BPEnable
+        {
+            get { return breakpoint.IsEnable; }
+            set { breakpoint.IsEnable = value; }
+        }
+
         public BreakpointCursor BPCursor
         {
-            get { return this.bpCursor; }
-            set { this.bpCursor = value; PropertyChanged(this, new PropertyChangedEventArgs("BPCursor")); }
+            get { return breakpoint.Cursor; }
         }
-   
+        
         #endregion
 
         #endregion
@@ -1177,6 +1218,10 @@ namespace SamSoarII.Core.Models
                 children[i] = new ValueModel(this, formats[i]);
                 children[i++].Text = xele_v.Value;
             }
+            XElement xele_bp = xele.Element("Breakpoint");
+            breakpoint = new LadderBrpoModel(this);
+            if (xele_bp != null)
+                breakpoint.Load(xele_bp);
         }
 
         public void Save(XElement xele)
@@ -1189,6 +1234,12 @@ namespace SamSoarII.Core.Models
                 XElement xele_v = new XElement("Value");
                 xele_v.Value = vmodel.Text;
                 xele.Add(xele_v);
+            }
+            if (breakpoint != null && breakpoint.IsEnable)
+            {
+                XElement xele_bp = new XElement("Breakpoint");
+                breakpoint.Save(xele_bp);
+                xele.Add(xele_bp);
             }
         }
 

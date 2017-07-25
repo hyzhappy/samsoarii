@@ -1,13 +1,14 @@
 ﻿using SamSoarII.Threads;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
 
 namespace SamSoarII.Core.Simulate
 {
-    public class SimulateManager : IThreadManager
+    public class SimulateManager : IThreadManager, INotifyPropertyChanged
     {
         public SimulateManager(InteractionFacade _ifParent)
         {
@@ -22,7 +23,10 @@ namespace SamSoarII.Core.Simulate
             viewer.Aborted += OnAborted;
             viewer.BreakpointPaused += OnBreakpointPaused;
             viewer.BreakpointResumed += OnBreakpointResumed;
+            mngBrpo = new BreakpointManager(this);
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
         
         #region Number
 
@@ -35,6 +39,9 @@ namespace SamSoarII.Core.Simulate
         private SimulateViewer viewer;
         public SimulateViewer Viewer { get { return this.viewer; } }
 
+        private BreakpointManager mngBrpo;
+        public BreakpointManager MNGBrpo { get { return this.mngBrpo; } }
+
         private bool isenable;
         public bool IsEnable
         {
@@ -46,6 +53,7 @@ namespace SamSoarII.Core.Simulate
             {
                 this.isenable = value;
                 viewer.IsEnable = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("IsEnable"));
             }
         }
         
@@ -112,6 +120,30 @@ namespace SamSoarII.Core.Simulate
         private void OnBreakpointResumed(object sender, BreakpointPauseEventArgs e)
         {
             BreakpointResumed(this, e);
+        }
+
+        public void MoveStep()
+        {
+            viewer.MoveStep();
+            if (!IsActive) Start();
+        }
+
+        public void CallStep()
+        {
+            viewer.CallStep();
+            if (!IsActive) Start();
+        }
+
+        public void JumpOut()
+        {
+            viewer.JumpOut();
+            if (!IsActive) Start();
+        }
+        
+        public void JumpTo(int bpaddr)
+        {
+            viewer.JumpTo(bpaddr);
+            if (!IsActive) Start();
         }
 
         #endregion

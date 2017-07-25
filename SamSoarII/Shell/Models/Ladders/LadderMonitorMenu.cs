@@ -15,15 +15,18 @@ namespace SamSoarII.Shell.Models
             miBPAdd = new MenuItem();
             miBPSetting = new MenuItem();
             miBPRemove = new MenuItem();
+            miJumpTo = new MenuItem();
             miValues = new MenuItem[] { new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem() };
             mdValues = new List<ValueModel>();
             idValues = new int[] { 0, 0, 0, 0, 0 };
             miBPAdd.Header = Properties.Resources.LadderNetwork_AddBreakpoint;
             miBPSetting.Header = Properties.Resources.LadderNetwork_SettingBreakpoint;
             miBPRemove.Header = Properties.Resources.LadderNetwork_RemoveBreakpoint;
+            miJumpTo.Header = Properties.Resources.LadderNetwork_JumpToThis;
             miBPAdd.Click += OnMenuItemClick;
             miBPSetting.Click += OnMenuItemClick;
             miBPRemove.Click += OnMenuItemClick;
+            miJumpTo.Click += OnMenuItemClick;
             for (int i = 0; i < 5; i++)
             {
                 miValues[i].Click += OnMenuItemClick;
@@ -33,6 +36,7 @@ namespace SamSoarII.Shell.Models
             Items.Add(miBPAdd);
             Items.Add(miBPSetting);
             Items.Add(miBPRemove);
+            Items.Add(miJumpTo);
         }
         
         public void Dispose()
@@ -81,10 +85,15 @@ namespace SamSoarII.Shell.Models
                 miBPAdd.IsEnabled = false;
                 miBPSetting.IsEnabled = false;
                 miBPRemove.IsEnabled = false;
+                miJumpTo.IsEnabled = false;
                 mdValues.Clear();
                 for (int i = 0; i < 5; i++)
                     miValues[i].Visibility = Visibility.Collapsed;
                 if (core == null) return;
+                miBPAdd.IsEnabled = core.Breakpoint != null && !core.Breakpoint.IsEnable;
+                miBPSetting.IsEnabled = core.Breakpoint != null && core.Breakpoint.IsEnable;
+                miBPRemove.IsEnabled = core.Breakpoint != null && core.Breakpoint.IsEnable;
+                miJumpTo.IsEnabled = core.Breakpoint != null;
                 for (int i = 0, j; i < core.Children.Count(); i++)
                 {
                     for (j = 0; j < i; j++) if (core.Children[j].Text.Equals(core.Children[i].Text)) break;
@@ -109,6 +118,7 @@ namespace SamSoarII.Shell.Models
         private MenuItem miBPAdd;
         private MenuItem miBPSetting;
         private MenuItem miBPRemove;
+        private MenuItem miJumpTo;
         private MenuItem[] miValues;
         private List<ValueModel> mdValues;
         private int[] idValues;
@@ -124,6 +134,12 @@ namespace SamSoarII.Shell.Models
                 {
                     IFParent.ShowValueModifyDialog(mdValues, idValues[i]);
                 }
+            if (sender == miBPAdd)
+                core.Breakpoint.IsEnable = true;
+            if (sender == miBPRemove)
+                core.Breakpoint.IsEnable = false;
+            if (sender == miJumpTo)
+                IFParent.MNGSimu.JumpTo(core.Breakpoint.Address);
         }
 
         #endregion

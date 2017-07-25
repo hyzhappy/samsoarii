@@ -30,13 +30,15 @@ using System.Collections.Specialized;
 
 namespace SamSoarII
 {
-    public class InteractionFacade : IDisposable,INotifyPropertyChanged
+    public class InteractionFacade : IDisposable, INotifyPropertyChanged
     {
         public InteractionFacade(MainWindow _wndMain)
         {
             wndMain = _wndMain;
             mngValue = new ValueManager(this);
             vmngValue = new ValueViewManager(mngValue);
+            mngSimu = new SimulateManager(this);
+            mngComu = new CommunicationManager(this);
             barStatus = new UnderBar(this);
             tvProj = new ProjectTreeView(this);
             tcMain = new MainTabControl(this);
@@ -48,8 +50,16 @@ namespace SamSoarII
             wndEList = new ElementListWindow(this);
             wndEInit = new ElementInitWindow(this);
             wndMoni = new MonitorWindow(this);
+            wndBrpo = new BreakpointWindow(this);
             udManager = new UpdateManager(this);
             wndInform = new UpdateWindow(this);
+            thmngCore = new CoreThreadManager(this);
+            thmngView = new ViewThreadManager(this);
+            mngSimu.Started += OnSimulateStarted;
+            mngSimu.Paused += OnSimulatePaused;
+            mngSimu.Aborted += OnSimulateAborted;
+            mngSimu.BreakpointPaused += OnBreakpointPaused;
+            mngSimu.BreakpointResumed += OnBreakpointResumed;
             barStatus.Post += OnReceiveIWindowEvent;
             tvProj.Post += OnReceiveIWindowEvent;
             tcMain.Post += OnReceiveIWindowEvent;
@@ -61,16 +71,8 @@ namespace SamSoarII
             wndEList.Post += OnReceiveIWindowEvent;
             wndEInit.Post += OnReceiveIWindowEvent;
             wndMoni.Post += OnReceiveIWindowEvent;
+            wndBrpo.Post += OnReceiveIWindowEvent;
             wndInform.Post += OnReceiveIWindowEvent;
-            thmngCore = new CoreThreadManager(this);
-            thmngView = new ViewThreadManager(this);
-            mngSimu = new SimulateManager(this);
-            mngSimu.Started += OnSimulateStarted;
-            mngSimu.Paused += OnSimulatePaused;
-            mngSimu.Aborted += OnSimulateAborted;
-            mngSimu.BreakpointPaused += OnBreakpointPaused;
-            mngSimu.BreakpointResumed += OnBreakpointResumed;
-            mngComu = new CommunicationManager(this);
         }
         
         public void Dispose()
@@ -148,8 +150,12 @@ namespace SamSoarII
         private MonitorWindow wndMoni;
         public MonitorWindow WNDMoni { get { return this.wndMoni; } }
 
+        private BreakpointWindow wndBrpo;
+        public BreakpointWindow WNDBrpo { get { return this.wndBrpo; } }
+
         private UpdateWindow wndInform;
         public UpdateWindow WNDInform { get { return wndInform; } }
+
         #endregion
 
         #region Project
@@ -356,7 +362,7 @@ namespace SamSoarII
             vmdProj = null;
             mdProj = null;
             mngValue.Initialize();
-            BreakpointManager.Initialize();
+            //BreakpointManager.Initialize();
             //GC.Collect();
         }
 
@@ -473,6 +479,7 @@ namespace SamSoarII
             int ret = 0;
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
+                mngSimu.MNGBrpo.Initialize();
                 ret = GenerateHelper.GenerateSimu(mdProj);
                 handle.Completed = true;
                 handle.Abort();
@@ -494,6 +501,7 @@ namespace SamSoarII
                       | MainWindowEventArgs.FLAG_SIMULATE));
                     PostIWindowEvent(null, new UnderBarEventArgs(barStatus, 
                         UnderBarStatus.Simulate, Properties.Resources.MainWindow_Simulation));
+                    wndMain.LAReplace.Hide();
                     wndMain.LACMonitor.Show();
                     return true;
                 default:
@@ -533,6 +541,7 @@ namespace SamSoarII
               | MainWindowEventArgs.FLAG_MONITOR));
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Monitor, Properties.Resources.MainWindow_Monitor));
+            wndMain.LAReplace.Hide();
             wndMain.LACMonitor.Show();
             return true;
         }
@@ -1074,6 +1083,14 @@ namespace SamSoarII
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
             tcMain.ShowItem(diagram.Tab);
             diagram.View.Select(start, end);
+        }
+
+        public void NavigateToBreakpointCursor()
+        {
+            if (!mngSimu.IsBPPause) return;
+            IBreakpoint ibrpo = mngSimu.Viewer.Cursor.Current;
+            if (ibrpo is LadderBrpoModel)
+                Navigate(((LadderBrpoModel)ibrpo).Parent);
         }
 
         #endregion
@@ -1657,14 +1674,6 @@ namespace SamSoarII
 
         public bool CanExecute(CanExecuteRoutedEventArgs e)
         {
-            if (e.Command == GlobalCommand.BrpoCallCommand
-             || e.Command == GlobalCommand.BrpoNowCommand
-             || e.Command == GlobalCommand.BrpoOutCommand
-             || e.Command == GlobalCommand.BrpoStepCommand
-             || e.Command == GlobalCommand.ShowBreakpointCommand)
-            {
-                return false;
-            }
             bool ret = true;
             if (e.Command == ApplicationCommands.New
              || e.Command == ApplicationCommands.Open
@@ -1706,6 +1715,23 @@ namespace SamSoarII
                 {
                     ret &= CanPause;
                 }
+                if (e.Command == GlobalCommand.BrpoNowCommand
+                 || e.Command == GlobalCommand.BrpoOutCommand)
+                {
+                    ret &= mngSimu.IsBPPause;
+                }
+                if (e.Command == GlobalCommand.BrpoCallCommand
+                 || e.Command == GlobalCommand.BrpoStepCommand)
+                {
+                    ret &= mngSimu.IsBPPause || !mngSimu.IsActive;
+                }
+                if (e.Command == GlobalCommand.AddNewFuncBlockCommand
+                 || e.Command == GlobalCommand.AddNewModbusCommand
+                 || e.Command == GlobalCommand.AddNewSubRoutineCommand
+                 || e.Command == ApplicationCommands.Replace)
+                {
+                    ret &= vmdProj.LadderMode == LadderModes.Edit;
+                }
             }
             if (e.Command == ApplicationCommands.New
              || e.Command == ApplicationCommands.Open
@@ -1720,12 +1746,6 @@ namespace SamSoarII
              || e.Command == GlobalCommand.AddNewSubRoutineCommand)
             {
                 ret &= !ProjectTreeViewItem.HasRenaming;
-            }
-            if (e.Command == GlobalCommand.AddNewFuncBlockCommand
-             || e.Command == GlobalCommand.AddNewModbusCommand
-             || e.Command == GlobalCommand.AddNewSubRoutineCommand)
-            {
-                ret &= vmdProj != null && vmdProj.LadderMode == LadderModes.Edit;
             }
             return ret;
         }
@@ -1782,7 +1802,7 @@ namespace SamSoarII
 
         private void OnBreakpointPaused(object sender, BreakpointPauseEventArgs e)
         {
-
+            NavigateToBreakpointCursor();
         }
 
         private void OnBreakpointResumed(object sender, BreakpointPauseEventArgs e)

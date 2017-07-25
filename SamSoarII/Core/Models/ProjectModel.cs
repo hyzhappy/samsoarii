@@ -114,6 +114,11 @@ namespace SamSoarII.Core.Models
             IsModified = true;
             Modified(source, new RoutedEventArgs());
         }
+        public void InvokeModify(IParams source)
+        {
+            IsModified = true;
+            Modified(source, new RoutedEventArgs());
+        }
 
         private LadderModes laddermode;
         public LadderModes LadderMode
@@ -174,7 +179,7 @@ namespace SamSoarII.Core.Models
         #endregion
 
         #endregion
-
+        
         #region View
 
         private ProjectViewModel view;
@@ -310,6 +315,7 @@ namespace SamSoarII.Core.Models
             if (e.NewItems != null)
                 foreach (LadderDiagramModel ldmodel in e.NewItems)
                     ldmodel.Parent = this;
+            InvokeModify(this);
             DiagramChanged(this, e);
         }
 
@@ -317,6 +323,7 @@ namespace SamSoarII.Core.Models
 
         private void OnFuncBlockCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            InvokeModify(this);
             FuncBlockChanged(this, e);
         }
 

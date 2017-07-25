@@ -34,7 +34,9 @@ typedef int(*iDllfun)(void);
 typedef void*(*pDllfun)(void);
 typedef int(*ipDllfun)(int*);
 
+static char edata[65536];
 static char cmd[1024];
+static char dllPath[256];
 static HINSTANCE hdll;
 static vDllfun dfBeforeRunLadder;
 static vDllfun dfRunLadder;
@@ -70,7 +72,6 @@ static vDllfun dfCallStep;
 static viDllfun dfJumpTo;
 static vDllfun dfJumpOut;
 
-static char edata[65536];
 EXPORT void Encode(char* ifile, char* ofile)
 {
 	int i = 0;
@@ -90,7 +91,19 @@ EXPORT void Encode(char* ifile, char* ofile)
 	fclose(fo);
 }
 
-static char dllPath[256];
+EXPORT int IsDllAlive()
+{
+	return hdll != NULL ? 1 : 0;
+}
+
+EXPORT void FreeDll()
+{
+	FreeLibrary(hdll);
+	hdll = NULL;
+	sprintf(cmd, "erase %s", dllPath);
+	system(cmd);
+}
+
 EXPORT int LoadDll(char* simudllPath)
 {
 	strcpy(dllPath, simudllPath);
@@ -103,209 +116,202 @@ EXPORT int LoadDll(char* simudllPath)
 	dfRunLadder = (vDllfun)GetProcAddress(hdll, "_RunLadder@0");
 	if (dfRunLadder == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 2;
 	}
 	dfGetBit = (isii32Dllfun)GetProcAddress(hdll, "_GetBit@12");
 	if (dfGetBit == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 3;
 	}
 	dfGetWord = (isii32Dllfun)GetProcAddress(hdll, "_GetWord@12");
 	if (dfGetWord == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 4;
 	}
 	dfGetDWord = (isii64Dllfun)GetProcAddress(hdll, "_GetDoubleWord@12");
 	if (dfGetDWord == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 5;
 	}
 	dfGetFloat = (isif64Dllfun)GetProcAddress(hdll, "_GetFloat@12");
 	if (dfGetFloat == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 6;
 	}
 	dfGetFeq = (isi64Dllfun)GetProcAddress(hdll, "_GetFeq@8");
 	if (dfGetFeq == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 7;
 	}
 	dfSetBit = (isii32Dllfun)GetProcAddress(hdll, "_SetBit@12");
 	if (dfSetBit == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 8;
 	}
 	dfSetWord = (isii32Dllfun)GetProcAddress(hdll, "_SetWord@12");
 	if (dfSetWord == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 9;
 	}
 	dfSetDWord = (isii64Dllfun)GetProcAddress(hdll, "_SetDoubleWord@12");
 	if (dfSetDWord == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 10;
 	}
 	dfSetFloat = (isif64Dllfun)GetProcAddress(hdll, "_SetFloat@12");
 	if (dfGetFloat == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 11;
 	}
 	dfSetFeq = (isiv64Dllfun)GetProcAddress(hdll, "_SetFeq@12");
 	if (dfSetFeq == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 12;
 	}
 	dfSetEnable = (vsiiDllfun)GetProcAddress(hdll, "_SetEnable@12");
 	if (dfSetEnable == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 13;
 	}
 	dfBeforeRunLadder = (vDllfun)GetProcAddress(hdll, "_BeforeRunLadder@0");
 	if (dfBeforeRunLadder == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 14;
 	}
 	dfAfterRunLadder = (vDllfun)GetProcAddress(hdll, "_AfterRunLadder@0");
 	if (dfAfterRunLadder == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 15;
 	}
 	dfInitRunLadder = (vDllfun)GetProcAddress(hdll, "_InitRunLadder@0");
 	if (dfInitRunLadder == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 16;
 	}
 	dfInitClock = (viDllfun)GetProcAddress(hdll, "_InitClock@4");
 	if (dfInitClock == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 17;
 	}
 	dfGetClock = (iDllfun)GetProcAddress(hdll, "_GetClock@0");
 	if (dfGetClock == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 18;
 	}
 	dfSetClockRate = (viDllfun)GetProcAddress(hdll, "_SetClockRate@4");
 	if (dfSetClockRate == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 19;
 	}
 	dfSetBaseBit = (viDllfun)GetProcAddress(hdll, "_SetBaseBit@4");
 	if (dfSetBaseBit == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 20;
 	}
 	dfGetCallCount = (iDllfun)GetProcAddress(hdll, "_GetCallCount@0");
 	if (dfGetCallCount == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 21;
 	}
 	dfGetBPAddr = (iDllfun)GetProcAddress(hdll, "_GetBPAddr@0");
 	if (dfGetBPAddr == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 22;
 	}
 	dfSetBPAddr = (viiDllfun)GetProcAddress(hdll, "_SetBPAddr@8");
 	if (dfSetBPAddr == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 23;
 	}
 	dfSetCPAddr = (viiDllfun)GetProcAddress(hdll, "_SetCPAddr@8");
 	if (dfSetCPAddr == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 24;
 	}
 	dfGetBPPause = (iDllfun)GetProcAddress(hdll, "_GetBPPause@0");
 	if (dfGetBPPause == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 25;
 	}
 	dfSetBPPause = (viDllfun)GetProcAddress(hdll, "_SetBPPause@4");
 	if (dfSetBPPause == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 26;
 	}
 	dfMoveStep = (vDllfun)GetProcAddress(hdll, "_MoveStep@0");
 	if (dfMoveStep == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 27;
 	}
 	dfCallStep = (vDllfun)GetProcAddress(hdll, "_CallStep@0");
 	if (dfCallStep == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 28;
 	}
 	dfJumpTo = (viDllfun)GetProcAddress(hdll, "_JumpTo@4");
 	if (dfJumpTo == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 29;
 	}
 	dfJumpOut = (vDllfun)GetProcAddress(hdll, "_JumpOut@0");
 	if (dfJumpOut == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 30;
 	}
 	dfSetBPEnable = (viDllfun)GetProcAddress(hdll, "_SetBPEnable@4");
 	if (dfSetBPEnable == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 31;
 	}
 	dfSetBPCount = (viiDllfun)GetProcAddress(hdll, "_SetBPCount@8");
 	if (dfSetBPCount == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 32;
 	}
 	dfGetRBP = (pDllfun)GetProcAddress(hdll, "_GetRBP@0");
 	if (dfGetRBP == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 33;
 	}
 	dfGetBackTrace = (ipDllfun)GetProcAddress(hdll, "_GetBackTrace@4");
 	if (dfGetBackTrace == NULL)
 	{
-		FreeLibrary(hdll);
+		FreeDll();
 		return 34;
 	}
 	return 0;
-}
-
-EXPORT void FreeDll()
-{
-	FreeLibrary(hdll);
-	sprintf(cmd, "erase %s", dllPath);
-	system(cmd);
 }
 
 EXPORT void RunLadder()

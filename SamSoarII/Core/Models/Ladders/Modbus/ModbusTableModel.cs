@@ -48,8 +48,21 @@ namespace SamSoarII.Core.Models
             if (!childrenChangedInvokeable) return;
             if (e.OldItems != null)
                 foreach (ModbusModel modbus in e.OldItems)
+                {
+                    modbus.PropertyChanged -= OnChildrenPropertyChanged;
                     modbus.Dispose();
+                }
+            if (e.NewItems != null)
+                foreach (ModbusModel modbus in e.NewItems)
+                {
+                    modbus.PropertyChanged += OnChildrenPropertyChanged;
+                }
+            parent.InvokeModify(this);
             ChildrenChanged(this, e);
+        }
+        private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            parent.InvokeModify((ModbusModel)sender);
         }
 
         public void ChildrenSwap(int id1, int id2)

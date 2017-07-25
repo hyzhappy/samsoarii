@@ -268,8 +268,7 @@ namespace SamSoarII.Core.Generate
                 // 断点循环
                 if (inst.ProtoType != null)
                 {
-                    BreakpointManager.Register(inst.ProtoType);
-                    bp = inst.ProtoType.BPAddress;
+                    bp = inst.ProtoType.Breakpoint.Address;
                     sw.Write("bpcycle({0});\n", bp);
                 }
                 // 需要由写入使能作为条件
@@ -896,20 +895,14 @@ namespace SamSoarII.Core.Generate
             if (fblock is FuncBlock_Root
              || fblock is FuncBlock_Local)
             {
-                if (fblock is FuncBlock_Local)
-                    sw.Write("{\n");
+                if (fblock is FuncBlock_Local) sw.Write("{\n");
                 foreach (FuncBlock child in fblock.Childrens)
                 {
                     if (prev < child.IndexStart)
-                    {
                         sw.Write(code.Substring(prev, child.IndexStart - prev));
-                    }
                     if (child is FuncBlock_Local)
-                    {
                         FuncToCCode(sw, child, code);
-                    }
                 }
-                BreakpointManager.Register(fblock);
                 bp = fblock.BPAddress;
                 sw.Write("bpcycle({0});\n", bp);
                 if (fblock is FuncBlock_Local)
@@ -921,7 +914,6 @@ namespace SamSoarII.Core.Generate
                 sw.Write("for (");
                 if (fblockfh.Start != null)
                 {
-                    BreakpointManager.Register(fblockfh.Start);
                     bp = fblockfh.Start.BPAddress;
                     sw.Write("bpcycle({0}),{1}",
                         bp, ReplaceType(code, fblockfh.Start.IndexStart, fblockfh.Start.Length));
@@ -929,7 +921,6 @@ namespace SamSoarII.Core.Generate
                 //sw.Write(";");
                 if (fblockfh.Cond != null)
                 {
-                    BreakpointManager.Register(fblockfh.Cond);
                     bp = fblockfh.Cond.BPAddress;
                     sw.Write("bpcycle({0}),{1}",
                         bp, ReplaceType(code, fblockfh.Cond.IndexStart, fblockfh.Cond.Length));
@@ -937,7 +928,6 @@ namespace SamSoarII.Core.Generate
                 //sw.Write(";");
                 if (fblockfh.Next != null)
                 {
-                    BreakpointManager.Register(fblockfh.Next);
                     bp = fblockfh.Next.BPAddress;
                     sw.Write("bpcycle({0}),{1}",
                         bp, ReplaceType(code, fblockfh.Next.IndexStart, fblockfh.Next.Length));
@@ -950,7 +940,6 @@ namespace SamSoarII.Core.Generate
                 sw.Write("while (");
                 if (fblockwh.Cond != null)
                 {
-                    BreakpointManager.Register(fblockwh.Cond);
                     bp = fblockwh.Cond.BPAddress;
                     sw.Write("bpcycle({0}),{1}",
                         bp, ReplaceType(code, fblockwh.Cond.IndexStart, fblockwh.Cond.Length));
@@ -961,7 +950,6 @@ namespace SamSoarII.Core.Generate
             {
                 if (!(fblock is FuncBlock_Root))
                 {
-                    BreakpointManager.Register(fblock);
                     bp = fblock.BPAddress;
                     sw.Write("bpcycle({0});\n", bp);
                 }

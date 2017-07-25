@@ -368,7 +368,7 @@ namespace SamSoarII.Shell.Windows
                 TB_Header.Text = Properties.Resources.Ladder_Changed;
             else if (sender is FuncBlockModel)
                 TB_Header.Text = Properties.Resources.Func_Changed;
-            else if (sender is ModbusModel)
+            else if (sender is ModbusTableModel || sender is ModbusModel || sender is ModbusItem)
                 TB_Header.Text = Properties.Resources.ModBus_Changed;
             else if (sender is ProjectPropertyParams)
                 TB_Header.Text = Properties.Resources.Project_Config_Changed;

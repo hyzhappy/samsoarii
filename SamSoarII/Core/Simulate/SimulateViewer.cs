@@ -18,6 +18,8 @@ namespace SamSoarII.Core.Simulate
         public SimulateViewer(SimulateManager _parent) : base(false)
         {
             parent = _parent;
+            DllModel.SimulateException += OnSimulateException;
+            parent.Aborted += OnSimulateAborted;
             TimeSpan = 100;
             stores = new ObservableCollection<ValueStore>();
             stores.CollectionChanged += OnStoresChanged;
@@ -96,10 +98,7 @@ namespace SamSoarII.Core.Simulate
         #endregion
 
         #region Thread
-
-        private int _pause_old;
-        private int _pause_new;
-
+        
         protected override void Handle()
         {
             foreach (ValueStore vstore in stores)
@@ -119,11 +118,13 @@ namespace SamSoarII.Core.Simulate
             if (SimulateDllModel.GetBPPause() > 0 && cursor.Address < 0)
             {
                 cursor.Address = SimulateDllModel.GetBPAddr();
-                BreakpointPaused(this, new BreakpointPauseEventArgs(cursor));
+                if (cursor.Current != null)
+                    BreakpointPaused(this, new BreakpointPauseEventArgs(cursor));
+                else if (SimulateDllModel.GetCallCount() <= 256)
+                    SimulateDllModel.SetBPPause(0);
                 if (SimulateDllModel.GetCallCount() > 256)
                     OnSimulateException(new StackOverflowException("子程序 & 用户函数嵌套调用超过了上限（256）。"), new RoutedEventArgs());
             }
-            _pause_old = _pause_new;
         }
 
         #endregion
@@ -225,6 +226,11 @@ namespace SamSoarII.Core.Simulate
 
         public event BreakpointPauseEventHandler BreakpointPaused = delegate { };
         public event BreakpointPauseEventHandler BreakpointResumed = delegate { };
+
+        private void OnSimulateAborted(object sender, RoutedEventArgs e)
+        {
+            Cursor.Address = -1;
+        }
 
         private void OnSimulateException(object sender, RoutedEventArgs e)
         {
