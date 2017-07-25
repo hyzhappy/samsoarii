@@ -1090,7 +1090,12 @@ namespace SamSoarII
             if (!mngSimu.IsBPPause) return;
             IBreakpoint ibrpo = mngSimu.Viewer.Cursor.Current;
             if (ibrpo is LadderBrpoModel)
-                Navigate(((LadderBrpoModel)ibrpo).Parent);
+            {
+                vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    Navigate(((LadderBrpoModel)ibrpo).Parent);
+                });
+            }
         }
 
         #endregion

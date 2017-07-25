@@ -184,7 +184,7 @@ namespace SamSoarII.Shell.Models
                     oldladdermode = LadderMode;
                     break;
                 case "BPEnable": case "BPCursor":
-                    Update(UPDATE_BRPO);
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { Update(UPDATE_BRPO); });
                     break;
             }
         }

@@ -90,10 +90,14 @@ namespace SamSoarII.Shell.Models
                 for (int i = 0; i < 5; i++)
                     miValues[i].Visibility = Visibility.Collapsed;
                 if (core == null) return;
-                miBPAdd.IsEnabled = core.Breakpoint != null && !core.Breakpoint.IsEnable;
-                miBPSetting.IsEnabled = core.Breakpoint != null && core.Breakpoint.IsEnable;
-                miBPRemove.IsEnabled = core.Breakpoint != null && core.Breakpoint.IsEnable;
-                miJumpTo.IsEnabled = core.Breakpoint != null;
+                miBPAdd.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miBPSetting.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miBPRemove.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miJumpTo.Visibility = parent.LadderMode == LadderModes.Simulate ? Visibility.Visible : Visibility.Collapsed;
+                miBPAdd.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && !core.Breakpoint.IsEnable;
+                miBPSetting.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
+                miBPRemove.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null && core.Breakpoint.IsEnable;
+                miJumpTo.IsEnabled = parent.LadderMode == LadderModes.Simulate && core.Breakpoint != null;
                 for (int i = 0, j; i < core.Children.Count(); i++)
                 {
                     for (j = 0; j < i; j++) if (core.Children[j].Text.Equals(core.Children[i].Text)) break;
@@ -135,9 +139,15 @@ namespace SamSoarII.Shell.Models
                     IFParent.ShowValueModifyDialog(mdValues, idValues[i]);
                 }
             if (sender == miBPAdd)
+            {
                 core.Breakpoint.IsEnable = true;
+                core.Breakpoint.IsActive = true;
+            }
             if (sender == miBPRemove)
+            {
+                core.Breakpoint.IsActive = false;
                 core.Breakpoint.IsEnable = false;
+            }
             if (sender == miJumpTo)
                 IFParent.MNGSimu.JumpTo(core.Breakpoint.Address);
         }

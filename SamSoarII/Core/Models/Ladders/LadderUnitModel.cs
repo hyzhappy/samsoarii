@@ -1218,10 +1218,7 @@ namespace SamSoarII.Core.Models
                 children[i] = new ValueModel(this, formats[i]);
                 children[i++].Text = xele_v.Value;
             }
-            XElement xele_bp = xele.Element("Breakpoint");
-            breakpoint = new LadderBrpoModel(this);
-            if (xele_bp != null)
-                breakpoint.Load(xele_bp);
+            
         }
 
         public void Save(XElement xele)
@@ -1234,12 +1231,6 @@ namespace SamSoarII.Core.Models
                 XElement xele_v = new XElement("Value");
                 xele_v.Value = vmodel.Text;
                 xele.Add(xele_v);
-            }
-            if (breakpoint != null && breakpoint.IsEnable)
-            {
-                XElement xele_bp = new XElement("Breakpoint");
-                breakpoint.Save(xele_bp);
-                xele.Add(xele_bp);
             }
         }
 

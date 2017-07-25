@@ -108,10 +108,16 @@ namespace SamSoarII.Shell.Windows
             if (sender == BT_Jump)
                 SimulateManager.JumpTo(brpo.Address);
             if (sender == BT_Remove)
+            {
+                brpo.IsActive = false;
                 brpo.IsEnable = false;
+            }
             if (sender == BT_RemoveAll)
                 foreach (LadderBrpoTableElement element in items.ToArray())
+                {
+                    element.Parent.IsActive = false;
                     element.Parent.IsEnable = false;
+                }
         }
 
         #endregion
