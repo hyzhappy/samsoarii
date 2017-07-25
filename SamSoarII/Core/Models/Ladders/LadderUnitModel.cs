@@ -1302,15 +1302,7 @@ namespace SamSoarII.Core.Models
             if (updatevmg && ValueManager != null) ValueManager.Add(this);
             Invoke(LadderUnitAction.UPDATE);
         }
-
-        public void Parse(LadderUnitModel.Types _type, string[] _args)
-        {
-            if (ShapeOfTypes[(int)_type] != ShapeOfTypes[(int)type])
-                throw new ValueParseException("元件的新类型和原来不匹配！", null);
-            type = _type;
-            Parse(_args);
-        }
-
+        
         public void Parse(FuncModel func, string[] _args)
         {
             if (ValueManager != null) ValueManager.Remove(this);

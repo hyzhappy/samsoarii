@@ -71,8 +71,17 @@ namespace SamSoarII.Shell.Dialogs
                 List<string> result = new List<string>();
                 for (int i = 0; i < bpmodel.Count; i++)
                 {
-                    result.Add(bpmodel.GetValueString(i));
-                    result.Add(bpmodel.GetCommentString(i));
+                    string value = bpmodel.GetValueString(i);
+                    if (value.Length == 0)
+                    {
+                        result.Add("???");
+                        result.Add("");
+                    }
+                    else
+                    {
+                        result.Add(bpmodel.GetValueString(i));
+                        result.Add(bpmodel.GetCommentString(i));
+                    }
                 }
                 return result;
             }

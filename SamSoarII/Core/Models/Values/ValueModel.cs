@@ -165,6 +165,12 @@ namespace SamSoarII.Core.Models
 
         private void Parse(string text)
         {
+            if (text.Equals("???"))
+            {
+                bas = Bases.NULL; ofs = 0;
+                ibs = Bases.NULL; ifs = 0;
+                return;
+            }
             Match match = format.Match(text);
             if (match == null)
                 throw new ValueParseException("Unexpected input.", format);
