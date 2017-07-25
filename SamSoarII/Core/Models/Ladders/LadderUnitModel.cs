@@ -1235,7 +1235,7 @@ namespace SamSoarII.Core.Models
                 xele_v.Value = vmodel.Text;
                 xele.Add(xele_v);
             }
-            if (breakpoint.IsEnable)
+            if (breakpoint != null && breakpoint.IsEnable)
             {
                 XElement xele_bp = new XElement("Breakpoint");
                 breakpoint.Save(xele_bp);

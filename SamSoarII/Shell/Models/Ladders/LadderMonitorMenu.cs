@@ -15,6 +15,7 @@ namespace SamSoarII.Shell.Models
             miBPAdd = new MenuItem();
             miBPSetting = new MenuItem();
             miBPRemove = new MenuItem();
+            miJumpTo = new MenuItem();
             miValues = new MenuItem[] { new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem(), new MenuItem() };
             mdValues = new List<ValueModel>();
             idValues = new int[] { 0, 0, 0, 0, 0 };

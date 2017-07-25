@@ -34,7 +34,9 @@ typedef int(*iDllfun)(void);
 typedef void*(*pDllfun)(void);
 typedef int(*ipDllfun)(int*);
 
+static char edata[65536];
 static char cmd[1024];
+static char dllPath[256];
 static HINSTANCE hdll;
 static vDllfun dfBeforeRunLadder;
 static vDllfun dfRunLadder;
@@ -70,7 +72,6 @@ static vDllfun dfCallStep;
 static viDllfun dfJumpTo;
 static vDllfun dfJumpOut;
 
-static char edata[65536];
 EXPORT void Encode(char* ifile, char* ofile)
 {
 	int i = 0;
@@ -95,7 +96,14 @@ EXPORT int IsDllAlive()
 	return hdll != NULL ? 1 : 0;
 }
 
-static char dllPath[256];
+EXPORT void FreeDll()
+{
+	FreeLibrary(hdll);
+	hdll = NULL;
+	sprintf(cmd, "erase %s", dllPath);
+	system(cmd);
+}
+
 EXPORT int LoadDll(char* simudllPath)
 {
 	strcpy(dllPath, simudllPath);
@@ -304,14 +312,6 @@ EXPORT int LoadDll(char* simudllPath)
 		return 34;
 	}
 	return 0;
-}
-
-EXPORT void FreeDll()
-{
-	FreeLibrary(hdll);
-	hdll = NULL;
-	sprintf(cmd, "erase %s", dllPath);
-	system(cmd);
 }
 
 EXPORT void RunLadder()
