@@ -507,8 +507,7 @@ void bpcycle(int32_t _bpaddr)
 		if (++bpcount[bpaddr] < bpmaxcount[bpaddr]) return;
 		bpcount[bpaddr] = 0;
 	}
-	if (bpstep
-	|| bpcstep
+	if (bpstep || bpcstep
 	|| bpjump < 0 && (bpdatas[bpaddr>>5] & (1<<(bpaddr&31)))
 	|| bpjump == bpaddr)
 	{

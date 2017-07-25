@@ -15,7 +15,7 @@ namespace SamSoarII.Core.Simulate
 {
     public class SimulateViewer : TimerThreadManager
     {
-        public SimulateViewer(SimulateManager _parent) : base(false)
+        public SimulateViewer(SimulateManager _parent) : base(false, true)
         {
             parent = _parent;
             DllModel.SimulateException += OnSimulateException;
@@ -137,37 +137,37 @@ namespace SamSoarII.Core.Simulate
         
         public void Resume()
         {
-            SimulateDllModel.SetBPPause(0);
             BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
             cursor.Address = -1;
+            SimulateDllModel.SetBPPause(0);
         }
         
         public void MoveStep()
         {
-            SimulateDllModel.MoveStep();
             BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
             cursor.Address = -1;
+            SimulateDllModel.MoveStep();
         }
 
         public void CallStep()
         {
-            SimulateDllModel.CallStep();
             BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
             cursor.Address = -1;
+            SimulateDllModel.CallStep();
         }
 
         public void JumpTo(int bpaddr)
         {
-            SimulateDllModel.JumpTo(bpaddr);
             BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
             cursor.Address = -1;
+            SimulateDllModel.JumpTo(bpaddr);
         }
 
         public void JumpOut()
         {
-            SimulateDllModel.JumpOut();
             BreakpointResumed(this, new BreakpointPauseEventArgs(cursor));
             cursor.Address = -1;
+            SimulateDllModel.JumpOut();
         }
 
         #endregion
@@ -234,7 +234,7 @@ namespace SamSoarII.Core.Simulate
 
         private void OnSimulateException(object sender, RoutedEventArgs e)
         {
-            if (!IsEnable || !DllModel.IsActive)
+            if (!IsEnable || !DllModel.IsAlive)
             {
                 DllModel.Abort();
                 return;

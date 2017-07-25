@@ -32,7 +32,7 @@ namespace SamSoarII.Shell.Windows
             SimulateManager.PropertyChanged += OnSimulatePropertyChanged;
             BreakpointManager.EnableItemsChanged += OnEnableItemsChanged;
             items = new ObservableCollection<LadderBrpoTableElement>();
-            items.CollectionChanged += OnItemsChanged;
+            DataContext = this;
             OnSimulatePropertyChanged(this, new PropertyChangedEventArgs("IsEnable"));
         }
         
@@ -47,11 +47,7 @@ namespace SamSoarII.Shell.Windows
 
         private ObservableCollection<LadderBrpoTableElement> items;
         public IEnumerable<LadderBrpoTableElement> Items { get { return this.items; } }
-        private void OnItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs("Items"));
-            UpdateButtonEnable();
-        }
+
         #endregion
 
         private void UpdateButtonEnable()
@@ -84,18 +80,20 @@ namespace SamSoarII.Shell.Windows
 
         private void OnEnableItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null)
-                foreach (IBreakpoint ibrpo in e.OldItems)
-                {
-                    if (ibrpo is LadderBrpoModel)
-                        items.Add(new LadderBrpoTableElement((LadderBrpoModel)ibrpo));
-                }
             if (e.NewItems != null)
                 foreach (IBreakpoint ibrpo in e.NewItems)
                 {
                     if (ibrpo is LadderBrpoModel)
+                        items.Add(new LadderBrpoTableElement((LadderBrpoModel)ibrpo));
+                }
+            if (e.OldItems != null)
+                foreach (IBreakpoint ibrpo in e.OldItems)
+                {
+                    if (ibrpo is LadderBrpoModel)
                         items.Remove(((LadderBrpoModel)ibrpo).Element);
                 }
+            PropertyChanged(this, new PropertyChangedEventArgs("Items"));
+            UpdateButtonEnable();
         }
         
         private void OnButtonClick(object sender, RoutedEventArgs e)

@@ -18,9 +18,9 @@ namespace SamSoarII.Core.Simulate
             dllmodel.Paused += OnPaused;
             dllmodel.Aborted += OnAborted;
             viewer = new SimulateViewer(this);
-            viewer.Started += OnStarted;
-            viewer.Paused += OnPaused;
-            viewer.Aborted += OnAborted;
+            //viewer.Started += OnStarted;
+            //viewer.Paused += OnPaused;
+            //viewer.Aborted += OnAborted;
             viewer.BreakpointPaused += OnBreakpointPaused;
             viewer.BreakpointResumed += OnBreakpointResumed;
             mngBrpo = new BreakpointManager(this);
@@ -125,25 +125,25 @@ namespace SamSoarII.Core.Simulate
         public void MoveStep()
         {
             viewer.MoveStep();
-            if (!IsActive) Start();
+            if (!IsAlive) Start();
         }
 
         public void CallStep()
         {
             viewer.CallStep();
-            if (!IsActive) Start();
+            if (!IsAlive) Start();
         }
 
         public void JumpOut()
         {
             viewer.JumpOut();
-            if (!IsActive) Start();
+            if (!IsAlive) Start();
         }
         
         public void JumpTo(int bpaddr)
         {
             viewer.JumpTo(bpaddr);
-            if (!IsActive) Start();
+            if (!IsAlive) Start();
         }
 
         #endregion

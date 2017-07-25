@@ -958,13 +958,17 @@ namespace SamSoarII.Core.Models
             {
                 newunit = new LadderUnitModel(null, type);
             }
+            /*
             if (newunit.Children.Count != items.Length - 1)
             {
                 newunit.Dispose();
                 throw new ValueParseException(Properties.Resources.Message_Func_Params_Num_Error, null);
             }
+            */
             string[] instargs = new string[items.Length - 1];
-            Array.Copy(items, 1, instargs, 0, instargs.Length);
+            Array.Copy(items, 1, instargs, 0, items.Length);
+            for (int i = items.Length; i < instargs.Length; i++)
+                instargs[i] = "???";
             try
             {
                 newunit.InstArgs = instargs;
