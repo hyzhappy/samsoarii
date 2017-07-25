@@ -2088,4 +2088,43 @@
   <data name="Del" xml:space="preserve">
     <value>删除(_D)</value>
   </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>英语</value>
+  </data>
+  <data name="View_Help" xml:space="preserve">
+    <value>查看帮助</value>
+  </data>
+  <data name="Ret_Edit_Mode" xml:space="preserve">
+    <value>返回编辑</value>
+  </data>
+  <data name="Ladder_Check" xml:space="preserve">
+    <value>梯形图检测</value>
+  </data>
+  <data name="Funcblock_Checked" xml:space="preserve">
+    <value>函数功能块检测</value>
+  </data>
+  <data name="Add_SubRoutine" xml:space="preserve">
+    <value>添加子程序</value>
+  </data>
+  <data name="Add_FuncBlock" xml:space="preserve">
+    <value>添加函数功能块</value>
+  </data>
+  <data name="Add_Modbus_Table" xml:space="preserve">
+    <value>添加Modbus表格</value>
+  </data>
+  <data name="Property_Proj" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="Monitor_List" xml:space="preserve">
+    <value>监视列表</value>
+  </data>
+  <data name="Option" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="Close_Proj" xml:space="preserve">
+    <value>关闭当前工程</value>
+  </data>
 </root>

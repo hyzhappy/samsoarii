@@ -88,11 +88,38 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Add FuncBlock 的本地化字符串。
+        /// </summary>
+        public static string Add_FuncBlock {
+            get {
+                return ResourceManager.GetString("Add_FuncBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Add Modbus Table 的本地化字符串。
+        /// </summary>
+        public static string Add_Modbus_Table {
+            get {
+                return ResourceManager.GetString("Add_Modbus_Table", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 add operation can not be performed! 的本地化字符串。
         /// </summary>
         public static string Add_Operation_Forbidden {
             get {
                 return ResourceManager.GetString("Add_Operation_Forbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Add SubRoutine 的本地化字符串。
+        /// </summary>
+        public static string Add_SubRoutine {
+            get {
+                return ResourceManager.GetString("Add_SubRoutine", resourceCulture);
             }
         }
         
@@ -358,6 +385,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Chinese 的本地化字符串。
+        /// </summary>
+        public static string Chinese {
+            get {
+                return ResourceManager.GetString("Chinese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Clear Selected 的本地化字符串。
         /// </summary>
         public static string Clear_Selected {
@@ -372,6 +408,15 @@ namespace SamSoarII.Properties {
         public static string Close {
             get {
                 return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Close Project 的本地化字符串。
+        /// </summary>
+        public static string Close_Proj {
+            get {
+                return ResourceManager.GetString("Close_Proj", resourceCulture);
             }
         }
         
@@ -1240,6 +1285,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 English 的本地化字符串。
+        /// </summary>
+        public static string English {
+            get {
+                return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Ensure 的本地化字符串。
         /// </summary>
         public static string Ensure {
@@ -1596,6 +1650,15 @@ namespace SamSoarII.Properties {
         public static string Funcblock_Check {
             get {
                 return ResourceManager.GetString("Funcblock_Check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 FuncBlock Check 的本地化字符串。
+        /// </summary>
+        public static string Funcblock_Checked {
+            get {
+                return ResourceManager.GetString("Funcblock_Checked", resourceCulture);
             }
         }
         
@@ -2001,6 +2064,15 @@ namespace SamSoarII.Properties {
         public static string Ladder_Changed {
             get {
                 return ResourceManager.GetString("Ladder_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Ladder Check 的本地化字符串。
+        /// </summary>
+        public static string Ladder_Check {
+            get {
+                return ResourceManager.GetString("Ladder_Check", resourceCulture);
             }
         }
         
@@ -4066,6 +4138,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Monitor List 的本地化字符串。
+        /// </summary>
+        public static string Monitor_List {
+            get {
+                return ResourceManager.GetString("Monitor_List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Monitor Start 的本地化字符串。
         /// </summary>
         public static string Monitor_Start {
@@ -4359,6 +4440,15 @@ namespace SamSoarII.Properties {
         public static string Open_Proj {
             get {
                 return ResourceManager.GetString("Open_Proj", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Option 的本地化字符串。
+        /// </summary>
+        public static string Option {
+            get {
+                return ResourceManager.GetString("Option", resourceCulture);
             }
         }
         
@@ -4714,6 +4804,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Property 的本地化字符串。
+        /// </summary>
+        public static string Property_Proj {
+            get {
+                return ResourceManager.GetString("Property_Proj", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Relative position multi - stage pulse control(DWord) 的本地化字符串。
         /// </summary>
         public static string PTO_Inst {
@@ -4980,6 +5079,15 @@ namespace SamSoarII.Properties {
         public static string Restore {
             get {
                 return ResourceManager.GetString("Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Return To Edit Mode 的本地化字符串。
+        /// </summary>
+        public static string Ret_Edit_Mode {
+            get {
+                return ResourceManager.GetString("Ret_Edit_Mode", resourceCulture);
             }
         }
         
@@ -5664,6 +5772,15 @@ namespace SamSoarII.Properties {
         public static string Variable_Modification {
             get {
                 return ResourceManager.GetString("Variable_Modification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 View Help 的本地化字符串。
+        /// </summary>
+        public static string View_Help {
+            get {
+                return ResourceManager.GetString("View_Help", resourceCulture);
             }
         }
         

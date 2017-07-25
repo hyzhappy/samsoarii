@@ -199,7 +199,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.F);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+W,F)\t{0}", Properties.Resources.MainWindow_Add_FuncBlock);
+                    hotKey.ShowMessage = string.Format("(Ctrl+W,F)\t{0}", Properties.Resources.Add_FuncBlock);
                     continue;
                 }
                 if (command == GlobalCommand.AddNewModbusCommand)
@@ -207,7 +207,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.M);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+W,M)\t{0}", Properties.Resources.MainWindow_Add_Modbus_Table);
+                    hotKey.ShowMessage = string.Format("(Ctrl+W,M)\t{0}", Properties.Resources.Add_Modbus_Table);
                     continue;
                 }
                 if (command == GlobalCommand.AddNewSubRoutineCommand)
@@ -215,7 +215,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.W, Key.R);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+W,R)\t{0}", Properties.Resources.MainWindow_Add_SubRoutine);
+                    hotKey.ShowMessage = string.Format("(Ctrl+W,R)\t{0}", Properties.Resources.Add_SubRoutine);
                     continue;
                 }
                 if (command == GlobalCommand.CheckFuncBlockCommand)
@@ -223,7 +223,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.F);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+T,F)\t{0}", Properties.Resources.MainWindow_Funcblock_Check);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,F)\t{0}", Properties.Resources.Funcblock_Checked);
                     continue;
                 }
                 if (command == GlobalCommand.CheckNetworkErrorCommand)
@@ -231,7 +231,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.N);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+T,N)\t{0}", Properties.Resources.MainWindow_Ladder_Check);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,N)\t{0}", Properties.Resources.Ladder_Check);
                     continue;
                 }
                 if (command == GlobalCommand.CompileCommand)
@@ -250,14 +250,6 @@ namespace SamSoarII
                     hotKey.ShowMessage = string.Format("(Ctrl+T,D)\t{0}", Properties.Resources.MainWindow_Download);
                     continue;
                 }
-                if (command == GlobalCommand.MonitorCommand)
-                {
-                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.M);
-                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
-                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+T,M)\t{0}", Properties.Resources.MainWindow_Download);
-                    continue;
-                }
                 if (command == GlobalCommand.UploadCommand)
                 {
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.U);
@@ -271,7 +263,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.E);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+T,E)\t{0}", Properties.Resources.MainWindow_Ret_Edit_Mode);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,E)\t{0}", Properties.Resources.Ret_Edit_Mode);
                     continue;
                 }
                 if (command == GlobalCommand.ZoomInCommand)
@@ -295,7 +287,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.U, Key.C);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+U,C)\t{0}", Properties.Resources.MainWindow_Chinese);
+                    hotKey.ShowMessage = string.Format("(Ctrl+U,C)\t{0}", Properties.Resources.Chinese);
                     continue;
                 }
                 if (command == GlobalCommand.ChangeToEnglishCommand)
@@ -303,7 +295,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.U, Key.E);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+U,E)\t{0}", Properties.Resources.MainWindow_English);
+                    hotKey.ShowMessage = string.Format("(Ctrl+U,E)\t{0}", Properties.Resources.English);
                     continue;
                 }
                 if (command == GlobalCommand.SimulateCommand)
@@ -375,7 +367,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F4, Key.O);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+F4,O)\t{0}", Properties.Resources.MainWindow_Monitor_List);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F4,O)\t{0}", Properties.Resources.Monitor_List);
                     continue;
                 }
                 if (command == GlobalCommand.ShowErrorListCommand)
@@ -391,7 +383,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F6, Key.O);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+F6,O)\t{0}", Properties.Resources.MainWindow_Option);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F6,O)\t{0}", Properties.Resources.Option);
                     continue;
                 }
                 if (command == GlobalCommand.ShowPropertyDialogCommand)
@@ -399,7 +391,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F7, Key.O);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+F7,O)\t{0}", Properties.Resources.MainWindow_Property_Proj);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F7,O)\t{0}", Properties.Resources.Property_Proj);
                     continue;
                 }
                 if (command == GlobalCommand.ShowBreakpointCommand)
@@ -415,7 +407,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F9, Key.O);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+F9,O)\t{0}", Properties.Resources.MainWindow_View_Help);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F9,O)\t{0}", Properties.Resources.View_Help);
                     continue;
                 }
                 if (command == GlobalCommand.CloseProjectCommand)
@@ -423,7 +415,7 @@ namespace SamSoarII
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.Q, Key.E);
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
-                    hotKey.ShowMessage = string.Format("(Ctrl+Q,E)\t{0}", Properties.Resources.MainWindow_Close_Proj);
+                    hotKey.ShowMessage = string.Format("(Ctrl+Q,E)\t{0}", Properties.Resources.Close_Proj);
                     continue;
                 }
             }
@@ -459,7 +451,7 @@ namespace SamSoarII
                         ifParent.SetUnderBarMessage(string.Format("(Ctrl+{0}){1}", e.Key, Properties.Resources.Key_Pressed));
                         ThreeHotKeyManager.IsWaitForSecondModifier = true;
                         ThreeHotKeyManager.IsWaitForSecondKey = true;
-                        ifParent.BARStatus.ToolTip = GenToolTipByHotKeys();
+                        ifParent.BARStatus.TB_Header.ToolTip = GenToolTipByHotKeys();
                     }
                 }
             }
@@ -771,14 +763,21 @@ namespace SamSoarII
                 CommandBinding_Executed_ReturnEditMode(sender, e);
                 return;
             }
+            bool ret;
             if (Project?.IsModified == true)
                 ifParent.SaveProject();
             if (e.Command == GlobalCommand.SimulateCommand)
-                ifParent.SimulateProject();
+            {
+                ret = ifParent.SimulateProject();
+                TB_Simulate.IsChecked = ret;
+            }
             if (e.Command == GlobalCommand.DownloadCommand)
                 ifParent.DownloadProject();
             if (e.Command == GlobalCommand.MonitorCommand)
-                ifParent.MonitorProject();
+            {
+                ret = ifParent.MonitorProject();
+                TB_Monitor.IsChecked = ret;
+            }
         }
 
         private void CommandBinding_Executed_ReturnEditMode(object sender, ExecutedRoutedEventArgs e)

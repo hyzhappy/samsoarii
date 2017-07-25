@@ -190,8 +190,8 @@ namespace SamSoarII.Shell.Models
                     }
                     else
                     {
-                        IFParent.ShowElementPropertyDialog(type, _selectRect.Core);
-                        SelectRectRight();
+                        if(IFParent.ShowElementPropertyDialog(type, _selectRect.Core))
+                            SelectRectRight();
                     }
                     isnavigatable = true;
                     break;

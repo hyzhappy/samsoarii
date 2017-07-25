@@ -112,8 +112,7 @@ namespace SamSoarII.Shell.Dialogs
         }
         private void OnHelpButtonClick(object sender, RoutedEventArgs e)
         {
-            HelpDocWindow helpDocWindow = new HelpDocWindow();
-            helpDocWindow.Show();
+            core.Parent.ShowHelpDocument();
         }
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {

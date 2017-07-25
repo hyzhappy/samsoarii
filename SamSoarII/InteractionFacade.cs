@@ -1241,10 +1241,12 @@ namespace SamSoarII
             }
         }
 
-        public void ShowElementPropertyDialog(LadderUnitModel.Types type, SelectRectCore core, bool cover = true)
+        public bool ShowElementPropertyDialog(LadderUnitModel.Types type, SelectRectCore core, bool cover = true)
         {
+            bool ret;
             LadderUnitModel current = new LadderUnitModel(core.Parent, type) { X = core.X, Y = core.Y };
-            ShowImmediateElementPropertyDialog(current, cover);
+            ret = ShowImmediateElementPropertyDialog(current, cover);
+            return ret;
         }
         
         public void ShowElementPropertyDialog(FuncModel func, SelectRectCore core)
@@ -1259,8 +1261,9 @@ namespace SamSoarII
             ShowImmediateElementPropertyDialog(current, false);
         }
 
-        private void ShowImmediateElementPropertyDialog(LadderUnitModel current, bool cover = true)
+        private bool ShowImmediateElementPropertyDialog(LadderUnitModel current, bool cover = true)
         {
+            bool ret = false;
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -1277,7 +1280,7 @@ namespace SamSoarII
                             try
                             {
                                 mngValue[value].Comment = properties[i * 2 + 1];
-                            } 
+                            }
                             catch (ValueParseException)
                             {
 
@@ -1285,6 +1288,7 @@ namespace SamSoarII
                         }
                         current.InstArgs = instargs.ToArray();
                         current.Parent.Parent.AddSingleUnit(current, current.Parent, cover);
+                        ret = true;
                         dialog.Close();
                     }
                     catch (Exception exce2)
@@ -1295,6 +1299,7 @@ namespace SamSoarII
                 dialog.Cancel += (sender, e) => { current.Dispose(); };
                 dialog.ShowDialog();
             }
+            return ret;
         }
 
         public void ShowProjectPropertyDialog()
