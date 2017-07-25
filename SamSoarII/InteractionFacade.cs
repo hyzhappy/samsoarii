@@ -477,14 +477,13 @@ namespace SamSoarII
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Simulate_Initing);
             handle.Start();
             int ret = 0;
-            Thread genthread = new Thread(() => 
+            vmdProj.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
             {
                 mngSimu.MNGBrpo.Initialize();
                 ret = GenerateHelper.GenerateSimu(mdProj);
                 handle.Completed = true;
                 handle.Abort();
             });
-            genthread.Start();
             while (!handle.Completed) Thread.Sleep(10);
             switch (ret)
             {
