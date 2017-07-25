@@ -709,6 +709,7 @@ namespace SamSoarII.Shell.Models
                     if (_selectRect.Y == 0)
                     {
                         _selectStartNetwork.IsSelectAllMode = true;
+                        _selectStartNetwork.SelectAreaOriginFY = 0;
                         CrossNetState = CrossNetworkState.CrossUp;
                     }
                     else
@@ -730,6 +731,7 @@ namespace SamSoarII.Shell.Models
                     if (_selectRect.Y == _selectStartNetwork.RowCount - 1)
                     {
                         _selectStartNetwork.IsSelectAllMode = true;
+                        _selectStartNetwork.SelectAreaOriginFY = _selectRect.Y;
                         CrossNetState = CrossNetworkState.CrossDown;
                     }
                     else

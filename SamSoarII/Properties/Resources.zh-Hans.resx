@@ -151,13 +151,13 @@
     <value>工程另存为</value>
   </data>
   <data name="MainWindow_Recent_Proj" xml:space="preserve">
-    <value>最近工程</value>
+    <value>最近工程(_F)</value>
   </data>
   <data name="MainWindow_Close_Proj" xml:space="preserve">
-    <value>关闭当前工程</value>
+    <value>关闭当前工程(_C)</value>
   </data>
   <data name="MainWindow_Exit" xml:space="preserve">
-    <value>退出</value>
+    <value>退出(_X)</value>
   </data>
   <data name="MainWindow_Undo" xml:space="preserve">
     <value>撤销</value>
@@ -178,7 +178,7 @@
     <value>删除</value>
   </data>
   <data name="MainWindow_Select_All" xml:space="preserve">
-    <value>全选</value>
+    <value>全选(_A)</value>
   </data>
   <data name="MainWindow_Search" xml:space="preserve">
     <value>查找</value>
@@ -208,22 +208,22 @@
     <value>错误列表</value>
   </data>
   <data name="MainWindow_Monitor_List" xml:space="preserve">
-    <value>监视列表</value>
+    <value>监视列表(_M)</value>
   </data>
   <data name="MainWindow_Breakpoint_List" xml:space="preserve">
     <value>断点列表</value>
   </data>
   <data name="MainWindow_Add_SubRoutine" xml:space="preserve">
-    <value>添加子程序</value>
+    <value>添加子程序(_R)</value>
   </data>
   <data name="MainWindow_Add_FuncBlock" xml:space="preserve">
-    <value>添加函数功能块</value>
+    <value>添加函数功能块(_F)</value>
   </data>
   <data name="MainWindow_Add_Modbus_Table" xml:space="preserve">
-    <value>添加Modbus表格</value>
+    <value>添加Modbus表格(_M)</value>
   </data>
   <data name="MainWindow_Property_Proj" xml:space="preserve">
-    <value>属性</value>
+    <value>属性(_P)</value>
   </data>
   <data name="MainWindow_Upload" xml:space="preserve">
     <value>上载</value>
@@ -238,34 +238,34 @@
     <value>仿真</value>
   </data>
   <data name="MainWindow_Ret_Edit_Mode" xml:space="preserve">
-    <value>返回编辑</value>
+    <value>返回编辑(_E)</value>
   </data>
   <data name="MainWindow_Proj_Check" xml:space="preserve">
-    <value>程序检测</value>
+    <value>程序检测(_C)</value>
   </data>
   <data name="MainWindow_Ladder_Check" xml:space="preserve">
-    <value>梯形图检测</value>
+    <value>梯形图检测(_L)</value>
   </data>
   <data name="MainWindow_Funcblock_Check" xml:space="preserve">
-    <value>函数功能块检测</value>
+    <value>函数功能块检测(_F)</value>
   </data>
   <data name="MainWindow_Option" xml:space="preserve">
-    <value>选项</value>
+    <value>选项(_O)</value>
   </data>
   <data name="MainWindow_Chinese" xml:space="preserve">
-    <value>中文</value>
+    <value>中文(_C)</value>
   </data>
   <data name="MainWindow_English" xml:space="preserve">
-    <value>英语</value>
+    <value>英语(_E)</value>
   </data>
   <data name="MainWindow_View_Help" xml:space="preserve">
-    <value>查看帮助</value>
+    <value>查看帮助(_V)</value>
   </data>
   <data name="MainWindow_Online_Upgrade" xml:space="preserve">
-    <value>在线升级</value>
+    <value>在线升级(_U)</value>
   </data>
   <data name="MainWindow_About" xml:space="preserve">
-    <value>关于</value>
+    <value>关于(_A)</value>
   </data>
   <data name="MainWindow_Compile" xml:space="preserve">
     <value>编译</value>
@@ -1891,7 +1891,7 @@
     <value>修改</value>
   </data>
   <data name="Monitor" xml:space="preserve">
-    <value>监视</value>
+    <value>监视(_M)</value>
   </data>
   <data name="Network_Number" xml:space="preserve">
     <value>网络号</value>
@@ -1981,7 +1981,7 @@
     <value>不是命令！</value>
   </data>
   <data name="Simulate" xml:space="preserve">
-    <value>仿真</value>
+    <value>仿真(_S)</value>
   </data>
   <data name="Maximize" xml:space="preserve">
     <value>最大化</value>
@@ -2024,5 +2024,68 @@
   </data>
   <data name="Ladder_Program" xml:space="preserve">
     <value>这是梯形图程序</value>
+  </data>
+  <data name="Zoom_Out" xml:space="preserve">
+    <value>缩小(_O)</value>
+  </data>
+  <data name="Zoom_In" xml:space="preserve">
+    <value>放大(_I)</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>上载(_U)</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>下载(_D)</value>
+  </data>
+  <data name="Comment_Mode" xml:space="preserve">
+    <value>注释模式(_C)</value>
+  </data>
+  <data name="Project_Explorer" xml:space="preserve">
+    <value>工程资源管理器(_P)</value>
+  </data>
+  <data name="Soft_Element_Manager" xml:space="preserve">
+    <value>软元件管理器(_E)</value>
+  </data>
+  <data name="Soft_Element_Init" xml:space="preserve">
+    <value>软元件初始化(_I)</value>
+  </data>
+  <data name="Error_List" xml:space="preserve">
+    <value>错误列表(_E)</value>
+  </data>
+  <data name="Breakpoint_List" xml:space="preserve">
+    <value>断点列表(_B)</value>
+  </data>
+  <data name="Redo" xml:space="preserve">
+    <value>恢复(_R)</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>撤销(_U)</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>剪切(_T)</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>粘贴(_P)</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制(_C)</value>
+  </data>
+  <data name="Menu_Search" xml:space="preserve">
+    <value>查找(_F)</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>替换(_R)</value>
+  </data>
+  <data name="New_Proj" xml:space="preserve">
+    <value>新建工程(_N)</value>
+  </data>
+  <data name="Open_Proj" xml:space="preserve">
+    <value>打开工程(_O)</value>
+  </data>
+  <data name="Save_Proj" xml:space="preserve">
+    <value>保存工程(_S)</value>
+  </data>
+  <data name="Del" xml:space="preserve">
+    <value>删除(_D)</value>
   </data>
 </root>

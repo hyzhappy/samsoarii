@@ -290,6 +290,22 @@ namespace SamSoarII
                     hotKey.ShowMessage = string.Format("(Ctrl+T,O)\t{0}", Properties.Resources.MainWindow_Zoom_Out);
                     continue;
                 }
+                if (command == GlobalCommand.ChangeToChineseCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.U, Key.C);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+U,C)\t{0}", Properties.Resources.MainWindow_Chinese);
+                    continue;
+                }
+                if (command == GlobalCommand.ChangeToEnglishCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.U, Key.E);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+U,E)\t{0}", Properties.Resources.MainWindow_English);
+                    continue;
+                }
                 if (command == GlobalCommand.SimulateCommand)
                 {
                     keyPart = new KeyPartTwo(ModifierKeys.Control, Key.E, Key.S);
@@ -392,6 +408,14 @@ namespace SamSoarII
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
                     hotKey.ShowMessage = string.Format("(Ctrl+F8,O)\t{0}", Properties.Resources.MainWindow_Breakpoint_List);
+                    continue;
+                }
+                if (command == GlobalCommand.ShowHelpDocumentCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.F9, Key.O);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+F9,O)\t{0}", Properties.Resources.MainWindow_View_Help);
                     continue;
                 }
                 if (command == GlobalCommand.CloseProjectCommand)
