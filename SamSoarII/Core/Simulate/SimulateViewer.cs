@@ -234,7 +234,7 @@ namespace SamSoarII.Core.Simulate
 
         private void OnSimulateException(object sender, RoutedEventArgs e)
         {
-            if (!IsEnable)
+            if (!IsEnable || !DllModel.IsActive)
             {
                 DllModel.Abort();
                 return;

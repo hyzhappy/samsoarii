@@ -72,63 +72,42 @@ namespace SamSoarII.Core.Models
             emptyinfo = new ValueInfo(new ValuePrototype(ValueModel.Bases.NULL, 0));
             tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.VarRegex }));
             for (int i = 0; i < MaxRange.XRange.Count; i++)
-            {
                 infos[i + XOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, i));
-            }
             for (int i = 0; i < MaxRange.YRange.Count; i++)
-            {
                 infos[i + YOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Y, i));
-            }
             for (int i = 0; i < MaxRange.MRange.Count; i++)
-            {
                 infos[i + MOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.M, i));
-            }
             for (int i = 0; i < MaxRange.SRange.Count; i++)
-            {
                 infos[i + SOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.S, i));
-            }
             for (int i = 0; i < MaxRange.CRange.Count; i++)
-            {
                 infos[i + COffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.C, i));
-            }
             for (int i = 0; i < MaxRange.TRange.Count; i++)
-            {
                 infos[i + TOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.T, i));
-            }
             for (int i = 0; i < MaxRange.DRange.Count; i++)
-            {
                 infos[i + DOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.D, i));
-            }
             for (int i = 0; i < MaxRange.CVRange.Count; i++)
-            {
                 infos[i + CVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.CV, i));
-            }
             for (int i = 0; i < MaxRange.TVRange.Count; i++)
-            {
                 infos[i + TVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.TV, i));
-            }
             for (int i = 0; i < MaxRange.AIRange.Count; i++)
-            {
                 infos[i + AIOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AI, i));
-            }
             for (int i = 0; i < MaxRange.AORange.Count; i++)
-            {
                 infos[i + AOOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AO, i));
-            }
             for (int i = 0; i < MaxRange.VRange.Count; i++)
-            {
                 infos[i + VOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.V, i));
-            }
             for (int i = 0; i < MaxRange.ZRange.Count; i++)
-            {
                 infos[i + ZOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Z, i));
-            }
+            for (int i = 0; i < infos.Length; i++)
+                infos[i].PropertyChanged += OnInfoPropertyChanged;
         }
-
+        
         public void Dispose()
         {
             for (int i = 0; i < InfoCount; i++)
+            {
+                infos[i].PropertyChanged -= OnInfoPropertyChanged;
                 infos[i].Dispose();
+            }
             emptyinfo.Dispose();
             infos = null;
         }
@@ -510,6 +489,16 @@ namespace SamSoarII.Core.Models
         }
 
         #endregion
+
+        #region Event Handler
+
+        private void OnInfoPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (parent.MDProj != null)
+                parent.MDProj.InvokeModify(this);
+        }
+
+        #endregion
     }
-    
+
 }

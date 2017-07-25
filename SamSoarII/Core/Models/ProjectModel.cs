@@ -102,6 +102,7 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IsModified"));
             }
         }
+
         public event RoutedEventHandler Modified = delegate { };
         public void InvokeModify(IModel source, bool undo = false)
         {
@@ -311,20 +312,40 @@ namespace SamSoarII.Core.Models
         {
             if (e.OldItems != null)
                 foreach (LadderDiagramModel ldmodel in e.OldItems)
+                {
+                    ldmodel.PropertyChanged -= OnDiagramPropertyChanged;
                     ldmodel.Parent = null;
+                }
             if (e.NewItems != null)
                 foreach (LadderDiagramModel ldmodel in e.NewItems)
+                {
+                    ldmodel.PropertyChanged += OnDiagramPropertyChanged;
                     ldmodel.Parent = this;
+                }
             InvokeModify(this);
             DiagramChanged(this, e);
+        }
+        private void OnDiagramPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            InvokeModify(this);
         }
 
         public event NotifyCollectionChangedEventHandler FuncBlockChanged = delegate { };
 
         private void OnFuncBlockCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (e.OldItems != null)
+                foreach (FuncBlockModel fbmodel in e.OldItems)
+                    fbmodel.PropertyChanged -= OnFuncBlockPropertyChanged;
+            if (e.NewItems != null)
+                foreach (FuncBlockModel fbmodel in e.NewItems)
+                    fbmodel.PropertyChanged += OnFuncBlockPropertyChanged;
             InvokeModify(this);
             FuncBlockChanged(this, e);
+        }
+        private void OnFuncBlockPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            InvokeModify(this);
         }
 
         #endregion
