@@ -151,13 +151,13 @@
     <value>Save As</value>
   </data>
   <data name="MainWindow_Recent_Proj" xml:space="preserve">
-    <value>Recent Project</value>
+    <value>Recent Project(_F)</value>
   </data>
   <data name="MainWindow_Close_Proj" xml:space="preserve">
-    <value>Close Project</value>
+    <value>Close Project(_C)</value>
   </data>
   <data name="MainWindow_Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Exit(_X)</value>
   </data>
   <data name="MainWindow_Undo" xml:space="preserve">
     <value>Undo</value>
@@ -178,7 +178,7 @@
     <value>Delete</value>
   </data>
   <data name="MainWindow_Select_All" xml:space="preserve">
-    <value>Select All</value>
+    <value>Select All(_A)</value>
   </data>
   <data name="MainWindow_Search" xml:space="preserve">
     <value>Search</value>
@@ -208,22 +208,22 @@
     <value>Error List</value>
   </data>
   <data name="MainWindow_Monitor_List" xml:space="preserve">
-    <value>Monitor List</value>
+    <value>Monitor List(_M)</value>
   </data>
   <data name="MainWindow_Breakpoint_List" xml:space="preserve">
     <value>Breakpoint List</value>
   </data>
   <data name="MainWindow_Add_SubRoutine" xml:space="preserve">
-    <value>Add SubRoutine</value>
+    <value>Add SubRoutine(_R)</value>
   </data>
   <data name="MainWindow_Add_FuncBlock" xml:space="preserve">
-    <value>Add FuncBlock</value>
+    <value>Add FuncBlock(_F)</value>
   </data>
   <data name="MainWindow_Add_Modbus_Table" xml:space="preserve">
-    <value>Add Modbus Table</value>
+    <value>Add Modbus Table(_M)</value>
   </data>
   <data name="MainWindow_Property_Proj" xml:space="preserve">
-    <value>Property</value>
+    <value>Property(_P)</value>
   </data>
   <data name="MainWindow_Upload" xml:space="preserve">
     <value>Upload</value>
@@ -238,34 +238,34 @@
     <value>Simulation</value>
   </data>
   <data name="MainWindow_Ret_Edit_Mode" xml:space="preserve">
-    <value>Return To Edit Mode</value>
+    <value>Return To Edit Mode(_E)</value>
   </data>
   <data name="MainWindow_Proj_Check" xml:space="preserve">
-    <value>Program Check</value>
+    <value>Program Check(_C)</value>
   </data>
   <data name="MainWindow_Ladder_Check" xml:space="preserve">
-    <value>Ladder Check</value>
+    <value>Ladder Check(_L)</value>
   </data>
   <data name="MainWindow_Funcblock_Check" xml:space="preserve">
-    <value>FuncBlock Check</value>
+    <value>FuncBlock Check(_F)</value>
   </data>
   <data name="MainWindow_Option" xml:space="preserve">
-    <value>Option</value>
+    <value>Option(_O)</value>
   </data>
   <data name="MainWindow_Chinese" xml:space="preserve">
-    <value>Chinese</value>
+    <value>Chinese(_C)</value>
   </data>
   <data name="MainWindow_English" xml:space="preserve">
-    <value>English</value>
+    <value>English(_E)</value>
   </data>
   <data name="MainWindow_View_Help" xml:space="preserve">
-    <value>View Help</value>
+    <value>View Help(_V)</value>
   </data>
   <data name="MainWindow_Online_Upgrade" xml:space="preserve">
-    <value>Online Upgrade</value>
+    <value>Online Upgrade(_U)</value>
   </data>
   <data name="MainWindow_About" xml:space="preserve">
-    <value>About</value>
+    <value>About(_A)</value>
   </data>
   <data name="MainWindow_Compile" xml:space="preserve">
     <value>Compile</value>
@@ -1891,7 +1891,7 @@
     <value>Modify</value>
   </data>
   <data name="Monitor" xml:space="preserve">
-    <value>Monitor</value>
+    <value>Monitor(_M)</value>
   </data>
   <data name="Network_Number" xml:space="preserve">
     <value>Network Number</value>
@@ -1981,7 +1981,7 @@
     <value>is not a command!</value>
   </data>
   <data name="Simulate" xml:space="preserve">
-    <value>Simulate</value>
+    <value>Simulate(_S)</value>
   </data>
   <data name="Maximize" xml:space="preserve">
     <value>Maximize</value>
@@ -2024,5 +2024,68 @@
   </data>
   <data name="Ladder_Program" xml:space="preserve">
     <value>This is a ladder program</value>
+  </data>
+  <data name="Zoom_Out" xml:space="preserve">
+    <value>Zoom Out(_O)</value>
+  </data>
+  <data name="Zoom_In" xml:space="preserve">
+    <value>Zoom In(_I)</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload(_U)</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download(_D)</value>
+  </data>
+  <data name="Comment_Mode" xml:space="preserve">
+    <value>Comment Mode(_C)</value>
+  </data>
+  <data name="Project_Explorer" xml:space="preserve">
+    <value>Project Explorer(_P)</value>
+  </data>
+  <data name="Soft_Element_Manager" xml:space="preserve">
+    <value>Soft Element Manager(_E)</value>
+  </data>
+  <data name="Soft_Element_Init" xml:space="preserve">
+    <value>Soft Element Initialize(_I)</value>
+  </data>
+  <data name="Error_List" xml:space="preserve">
+    <value>Error List(_E)</value>
+  </data>
+  <data name="Breakpoint_List" xml:space="preserve">
+    <value>Breakpoint List(_B)</value>
+  </data>
+  <data name="Redo" xml:space="preserve">
+    <value>Redo(_R)</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Undo(_U)</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>Cut(_T)</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Paste(_P)</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy(_C)</value>
+  </data>
+  <data name="Menu_Search" xml:space="preserve">
+    <value>Search(_F)</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Replace(_R)</value>
+  </data>
+  <data name="New_Proj" xml:space="preserve">
+    <value>New Project(_N)</value>
+  </data>
+  <data name="Open_Proj" xml:space="preserve">
+    <value>Open Project(_O)</value>
+  </data>
+  <data name="Save_Proj" xml:space="preserve">
+    <value>Save Project(_S)</value>
+  </data>
+  <data name="Del" xml:space="preserve">
+    <value>Delete(_D)</value>
   </data>
 </root>
