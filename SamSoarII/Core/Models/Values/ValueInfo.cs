@@ -171,9 +171,10 @@ namespace SamSoarII.Core.Models
             set
             {
                 IElementInitializeModel _initmodel = initmodel;
-                this.initmodel = value;
+                this.initmodel = null;
                 if (_initmodel != null && _initmodel.Parent != null)
                     _initmodel.Parent = null;
+                this.initmodel = value;
                 if (initmodel != null && initmodel.Parent != this)
                     initmodel.Parent = this;
                 PropertyChanged(this, new PropertyChangedEventArgs("InitModel"));

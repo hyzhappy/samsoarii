@@ -234,6 +234,11 @@ namespace SamSoarII.Core.Simulate
 
         private void OnSimulateException(object sender, RoutedEventArgs e)
         {
+            if (!IsEnable || !DllModel.IsActive)
+            {
+                DllModel.Abort();
+                return;
+            }
             System.Windows.Application.Current.Dispatcher.Invoke(new Utility.Delegates.Execute(() =>
             {
                 Exception exc = (Exception)sender;
