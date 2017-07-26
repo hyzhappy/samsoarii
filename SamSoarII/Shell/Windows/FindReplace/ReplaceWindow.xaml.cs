@@ -163,6 +163,7 @@ namespace SamSoarII.Shell.Windows
         {
             foreach (ReplaceElement item in items) item.Dispose();
             items.Clear();
+            if (initcmd) ClearCommands();
         }
         /// <summary> 
         /// 查找指令 
@@ -325,6 +326,17 @@ namespace SamSoarII.Shell.Windows
                         Visibility = Visibility.Hidden;
                         Current = null;
                     }
+                }
+            }
+            // 主交互发过来的事件
+            if (sender == ifParent && e is InteractionFacadeEventArgs)
+            {
+                InteractionFacadeEventArgs e2 = (InteractionFacadeEventArgs)e;
+                switch (e2.Flags)
+                {
+                    case InteractionFacadeEventArgs.Types.DiagramModified:
+                        Initialize();
+                        break;
                 }
             }
         }

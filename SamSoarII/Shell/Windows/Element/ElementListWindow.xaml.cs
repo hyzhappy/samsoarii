@@ -31,6 +31,7 @@ namespace SamSoarII.Shell.Windows
             InitializeComponent();
             DataContext = this;
             ifParent = _ifParent;
+            ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             rangeitems = new RangeItem[13];
             rangeitems[0] = new RangeItem(this, ValueModel.Bases.X);
             rangeitems[1] = new RangeItem(this, ValueModel.Bases.Y);
@@ -46,7 +47,7 @@ namespace SamSoarII.Shell.Windows
             rangeitems[11] = new RangeItem(this, ValueModel.Bases.V);
             rangeitems[12] = new RangeItem(this, ValueModel.Bases.Z);
         }
-
+        
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Number
@@ -95,7 +96,21 @@ namespace SamSoarII.Shell.Windows
         #region Event Handler
 
         public event IWindowEventHandler Post = delegate { };
-        
+
+        private void OnReceiveIWindowEvent(IWindow sender, IWindowEventArgs e)
+        {
+            if (sender == ifParent && e is InteractionFacadeEventArgs)
+            {
+                InteractionFacadeEventArgs e1 = (InteractionFacadeEventArgs)e;
+                switch (e1.Flags)
+                {
+                    case InteractionFacadeEventArgs.Types.DiagramModified:
+                        PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
+                        break;
+                }
+            }
+        }
+
         private void LBI_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var lbi = (ListBoxItem)sender;
