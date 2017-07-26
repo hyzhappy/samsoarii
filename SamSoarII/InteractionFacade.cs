@@ -41,6 +41,7 @@ namespace SamSoarII
             add { PostIWindowEvent += value; }
             remove { PostIWindowEvent -= value; }
         }
+
         #endregion
 
         public InteractionFacade(MainWindow _wndMain)
@@ -375,7 +376,6 @@ namespace SamSoarII
             vmdProj = null;
             mdProj = null;
             mngValue.Initialize();
-            //BreakpointManager.Initialize();
             //GC.Collect();
         }
         

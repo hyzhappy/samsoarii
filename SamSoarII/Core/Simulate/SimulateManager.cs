@@ -90,18 +90,17 @@ namespace SamSoarII.Core.Simulate
         
         private void OnStarted(object sender, RoutedEventArgs e)
         {
-            if (dllmodel.IsActive && viewer.IsActive)
-                Started(this, new RoutedEventArgs());
+            Started(this, new RoutedEventArgs());
         }
 
         private void OnPaused(object sender, RoutedEventArgs e)
         {
-            if (!IsActive) Paused(this, new RoutedEventArgs());
+            Paused(this, new RoutedEventArgs());
         }
 
         private void OnAborted(object sender, RoutedEventArgs e)
         {
-            if (!IsAlive) Aborted(this, new RoutedEventArgs());
+            Aborted(this, new RoutedEventArgs());
         }
 
         #endregion

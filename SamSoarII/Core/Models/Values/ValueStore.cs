@@ -18,6 +18,7 @@ namespace SamSoarII.Core.Models
             type = _type;
             ibs = _ibs;
             ifs = _ifs;
+            value = 0;
         }
         
         public void Dispose()
@@ -70,7 +71,7 @@ namespace SamSoarII.Core.Models
             get { return this.value; }
             set
             {
-                if (this.value != null && value != null && this.value.Equals(value)) return;
+                if (this.value.Equals(value)) return;
                 this.value = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("Value"));
             }
