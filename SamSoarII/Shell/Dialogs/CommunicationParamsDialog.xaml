@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         xmlns:port="clr-namespace:System.IO.Ports;assembly=System"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
         Title="{x:Static properties:Resources.Communication_Parameter_Setting}" Height="200" Width="300">
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>

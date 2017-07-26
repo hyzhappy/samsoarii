@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
         Title="{x:Static properties:Resources.Instruction_Input}" Height="90" Width="600"
          KeyDown="OnWindowKeyDown" ResizeMode="NoResize" x:Name="window" LocationChanged="OnLocationChanged">
     <Grid x:Uid="Grid_1">

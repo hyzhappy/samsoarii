@@ -16,8 +16,8 @@ namespace SamSoarII.Core.Models
             {
                 LadderNetworkModel net1 = unit1.Parent;
                 LadderNetworkModel net2 = unit2.Parent;
-                LadderDiagramModel dia1 = net1.Parent;
-                LadderDiagramModel dia2 = net2.Parent;
+                LadderDiagramModel dia1 = net1?.Parent;
+                LadderDiagramModel dia2 = net2?.Parent;
                 if (dia1 == null) return 1;
                 if (dia2 == null) return -1;
                 if (net1 == null) return 1;

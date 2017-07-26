@@ -58,6 +58,7 @@ namespace SamSoarII.Shell.Models
             CommentAreaGrid.Children.Remove(ThumbnailButton);
             if (ViewParent != null)
                 IsCommentMode = ViewParent.IsCommentMode;
+            else core.Parent.View = new LadderDiagramViewModel(core.Parent);
             loadedrowstart = 0;
             loadedrowend = -1;
             Update();
@@ -1018,8 +1019,9 @@ namespace SamSoarII.Shell.Models
                 if (ptvitem.RelativeObject is LadderUnitModel.Types)
                 {
                     LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
-                    IFParent.ShowElementPropertyDialog(type, ViewParent.SelectionRect.Core, false);
                     Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
+                    if (IFParent.ShowElementPropertyDialog(type, ViewParent.SelectionRect.Core, false))
+                        core.Parent.View.SelectRectRight();
                 }
                 else if (ptvitem.RelativeObject is FuncModel)
                 {

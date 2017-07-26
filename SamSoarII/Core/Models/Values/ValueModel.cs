@@ -139,7 +139,7 @@ namespace SamSoarII.Core.Models
                 if (store != null) store.PropertyChanged += OnStorePropertyChanged;
             }
         }
-        public object Value { get { return store?.Value; } }
+        public object Value { get { return store?.Value != null ? store.Value : 0; } }
         public event PropertyChangedEventHandler StorePropertyChanged = delegate { };
         private void OnStorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {

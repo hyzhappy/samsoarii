@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:SamSoarII.Properties"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:dev="clr-namespace:SamSoarII.PLCDevice"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
         Title="{x:Static properties:Resources.New_Project}" Height="360" Width="560" ResizeMode="NoResize">
     <Window.Resources>
         <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="PLCTypeList" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
