@@ -30,8 +30,19 @@ using System.Collections.Specialized;
 
 namespace SamSoarII
 {
-    public class InteractionFacade : IDisposable, INotifyPropertyChanged
+    public class InteractionFacade : IDisposable, INotifyPropertyChanged, IWindow
     {
+        #region IWindow
+
+        InteractionFacade IWindow.IFParent { get { return this; } }
+
+        event IWindowEventHandler IWindow.Post
+        {
+            add { PostIWindowEvent += value; }
+            remove { PostIWindowEvent -= value; }
+        }
+        #endregion
+
         public InteractionFacade(MainWindow _wndMain)
         {
             wndMain = _wndMain;
@@ -233,6 +244,7 @@ namespace SamSoarII
 
         private void InitializeProject()
         {
+            mdProj.Modified += OnProjectModified;
             vmdProj = new ProjectViewModel(mdProj);
             vmdProj.PropertyChanged += OnViewPropertyChanged;
             //ThMNGView.Add(vmdProj);
@@ -351,6 +363,7 @@ namespace SamSoarII
         {
             if (mdProj == null) return;
             WaitForThreadAbort();
+            mdProj.Modified -= OnProjectModified;
             wndMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndMain.HideAllDock(); });
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
             tvProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tvProj.Reset(); });
@@ -365,7 +378,7 @@ namespace SamSoarII
             //BreakpointManager.Initialize();
             //GC.Collect();
         }
-
+        
         public bool DownloadProject()
         {
             if (vmdProj.LadderMode == LadderModes.Simulate) _CloseSimulate();
@@ -490,22 +503,22 @@ namespace SamSoarII
                 case SimulateDllModel.LOADDLL_OK:
                     vmdProj.LadderMode = LadderModes.Simulate;
                     mngSimu.IsEnable = true;
-                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                         MainWindowEventArgs.TYPE_HIDE 
                       | MainWindowEventArgs.FLAG_EDIT));
-                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                         MainWindowEventArgs.TYPE_SHOW
                       | MainWindowEventArgs.FLAG_SIMULATE));
-                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                         MainWindowEventArgs.TYPE_TOGGLE_DOWN
                       | MainWindowEventArgs.FLAG_SIMULATE));
-                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus, 
+                    PostIWindowEvent(this, new UnderBarEventArgs(barStatus, 
                         UnderBarStatus.Simulate, Properties.Resources.MainWindow_Simulation));
                     wndMain.LAReplace.Hide();
                     wndMain.LACMonitor.Show();
                     return true;
                 default:
-                    PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                    PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                         UnderBarStatus.Error, Properties.Resources.Simulate_Error));
                     LocalizedMessageBox.Show(Properties.Resources.Simulate_Error, LocalizedMessageIcon.Error);
                     return false;
@@ -533,13 +546,13 @@ namespace SamSoarII
                 return false;
             }
             vmdProj.LadderMode = LadderModes.Monitor;
-            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                 MainWindowEventArgs.TYPE_HIDE
               | MainWindowEventArgs.FLAG_EDIT));
-            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                 MainWindowEventArgs.TYPE_TOGGLE_DOWN
               | MainWindowEventArgs.FLAG_MONITOR));
-            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+            PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                 UnderBarStatus.Monitor, Properties.Resources.MainWindow_Monitor));
             wndMain.LAReplace.Hide();
             wndMain.LACMonitor.Show();
@@ -712,14 +725,11 @@ namespace SamSoarII
                 }
                 else
                 {
-                    var net = errorMessages[i].RefNetworks.First();
-                    if (net.View == null) net.View = new LadderNetworkViewModel(net);
-                    net.View.AcquireSelectRect();
-                    net.Parent.View.SelectionRect.X = errorMessages[i].RefNetworks.Last().ErrorModels.First().X;
-                    net.Parent.View.SelectionRect.Y = errorMessages[i].RefNetworks.Last().ErrorModels.First().Y;
-                    net.Parent.View.HScrollToRect(net.Parent.View.SelectionRect.X);
-                    net.Parent.View.VScrollToRect(errorMessages[i].RefNetworks.First().ID, net.Parent.View.SelectionRect.Y);
-                    Navigate(net, net.Parent.View.SelectionRect.X, net.Parent.View.SelectionRect.Y);
+                    errorMessages[i].RefNetworks.First().View.AcquireSelectRect();
+                    CurrentLadder.SelectionRect.X = errorMessages[i].RefNetworks.Last().ErrorModels.First().X;
+                    CurrentLadder.SelectionRect.Y = errorMessages[i].RefNetworks.Last().ErrorModels.First().Y;
+                    CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
+                    CurrentLadder.VScrollToRect(errorMessages[i].RefNetworks.First().ID, CurrentLadder.SelectionRect.Y);
                     result = false;
                     switch (errorMessages[i].Error)
                     {
@@ -744,7 +754,6 @@ namespace SamSoarII
                     break;
                 }
             }
-            mdProj.ChangeModify(false);
             handle.Completed = true;
             return result;
         }
@@ -784,7 +793,7 @@ namespace SamSoarII
                         {
                             wcount++;
                             weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
-                        }
+                        } 
             return weinsts;
         }
 
@@ -1050,8 +1059,6 @@ namespace SamSoarII
         public void Navigate(LadderNetworkModel network, int x, int y)
         {
             if (network.IsMasked) return;
-            if(network.View == null)
-                network.View = new LadderNetworkViewModel(network);
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
@@ -1556,12 +1563,12 @@ namespace SamSoarII
                         PostIWindowEvent(sender, e);
                         break;
                     case TabAction.VIEWMODE:
-                        PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                        PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                             ((tcMain.ViewMode & MainTabControl.VIEWMODE_LADDER) != 0
                                 ? MainWindowEventArgs.TYPE_TOGGLE_DOWN
                                 : MainWindowEventArgs.TYPE_TOGGLE_UP)
                             | MainWindowEventArgs.FLAG_LADDER));
-                        PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                        PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                             ((tcMain.ViewMode & MainTabControl.VIEWMODE_INST) != 0
                                 ? MainWindowEventArgs.TYPE_TOGGLE_DOWN
                                 : MainWindowEventArgs.TYPE_TOGGLE_UP)
@@ -1780,7 +1787,15 @@ namespace SamSoarII
                     break;
             }
         }
-        
+
+        private void OnProjectModified(object sender, RoutedEventArgs e)
+        {
+            if (sender is LadderDiagramModel)
+                PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.DiagramModified, sender, sender));
+            if (sender is FuncBlockModel)
+                PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.FuncBlockModified, sender, sender));
+        }
+
         #region Simulate
 
         private void OnSimulateStarted(object sender, RoutedEventArgs e)
@@ -1830,5 +1845,26 @@ namespace SamSoarII
 
         #endregion
 
+    }
+
+    public class InteractionFacadeEventArgs : IWindowEventArgs
+    {
+        public enum Types { DiagramModified, FuncBlockModified }
+        private Types flags;
+        public Types Flags { get { return this.flags; } }
+        int IWindowEventArgs.Flags { get { return (int)Flags; } }
+
+        private object targetedobject;
+        object IWindowEventArgs.TargetedObject { get { return this.targetedobject; } }
+
+        private object relativeobject;
+        object IWindowEventArgs.RelativeObject { get { return this.relativeobject; } }
+
+        public InteractionFacadeEventArgs(Types _flags, object _targetedobject, object _relativeobject)
+        {
+            flags = _flags;
+            targetedobject = _targetedobject;
+            relativeobject = _relativeobject;
+        }
     }
 }

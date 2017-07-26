@@ -3679,6 +3679,24 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 X register is out of allowed range of device 的本地化字符串。
+        /// </summary>
+        public static string Message_OutOfXRange {
+            get {
+                return ResourceManager.GetString("Message_OutOfXRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Y register is out of allowed range of device 的本地化字符串。
+        /// </summary>
+        public static string Message_OutOfYRange {
+            get {
+                return ResourceManager.GetString("Message_OutOfYRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Over the maximum length range, please re-enter! 的本地化字符串。
         /// </summary>
         public static string Message_Over_Max_Len {

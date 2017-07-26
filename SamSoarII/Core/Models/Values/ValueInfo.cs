@@ -68,6 +68,8 @@ namespace SamSoarII.Core.Models
             if (comment != null) Comment = null;
             if (alias != null) Alias = null;
             values.Clear();
+            if (units != null) units.Clear();
+            stores.Clear();
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -120,7 +122,10 @@ namespace SamSoarII.Core.Models
         {
             if (units == null) units = new SortedList<LadderUnitModel, int>(new UnitComparer());
             if (!units.ContainsKey(unit))
+            {
                 units.Add(unit, 1);
+                PropertyChanged(this, new PropertyChangedEventArgs("Units"));
+            }
             else
                 units[unit]++;
         }
@@ -128,7 +133,11 @@ namespace SamSoarII.Core.Models
         {
             if (units == null) return;
             if (!units.ContainsKey(unit)) return;
-            if (--units[unit] == 0) units.Remove(unit);
+            if (--units[unit] == 0)
+            {
+                units.Remove(unit);
+                PropertyChanged(this, new PropertyChangedEventArgs("Units"));
+            }
         }
 
         private string comment;

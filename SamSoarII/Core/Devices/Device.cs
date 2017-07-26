@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SamSoarII.Utility;
 using System.Xml.Linq;
 using System.IO;
+using SamSoarII.Core.Models;
 
 namespace SamSoarII.PLCDevice
 {
@@ -54,6 +55,40 @@ namespace SamSoarII.PLCDevice
                 register.CanWrite = bool.Parse(ele.Attribute("CanWrite").Value);
                 register.Describe = ele.Attribute("Describe").Value;
                 SpecialRegisters.Add(register);
+            }
+        }
+        public IntRange GetRange(ValueModel.Bases bas)
+        {
+            switch (bas)
+            {
+                case ValueModel.Bases.X:
+                    return XRange;
+                case ValueModel.Bases.Y:
+                    return YRange;
+                case ValueModel.Bases.M:
+                    return MRange;
+                case ValueModel.Bases.S:
+                    return SRange;
+                case ValueModel.Bases.C:
+                    return CRange;
+                case ValueModel.Bases.T:
+                    return TRange;
+                case ValueModel.Bases.D:
+                    return DRange;
+                case ValueModel.Bases.CV:
+                    return CVRange;
+                case ValueModel.Bases.TV:
+                    return TVRange;
+                case ValueModel.Bases.AI:
+                    return AIRange;
+                case ValueModel.Bases.AO:
+                    return AORange;
+                case ValueModel.Bases.V:
+                    return VRange;
+                case ValueModel.Bases.Z:
+                    return ZRange;
+                default:
+                    return new IntRange(0, 0);
             }
         }
     }

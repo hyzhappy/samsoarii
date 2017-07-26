@@ -87,8 +87,18 @@ namespace SamSoarII.Core.Models
         private Device device;
         public Device Device
         {
-            get { return this.device; }
-            set { this.device = value; PropertyChanged(this, new PropertyChangedEventArgs("Device")); }
+            get
+            {
+                return this.device;
+            }
+            set
+            {
+                this.device = value;
+                ValueManager.RemoveInvalidValues();
+                foreach (LadderDiagramModel diagram in Diagrams)
+                    diagram.ClearUndoRedoAction();
+                PropertyChanged(this, new PropertyChangedEventArgs("Device"));
+            }
         }
 
         private bool ismodified;
