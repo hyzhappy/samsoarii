@@ -1292,7 +1292,7 @@ namespace SamSoarII.Core.Models
                 }
                 catch (Exception e)
                 {
-                    for (int j = 0; j < i; j++)
+                    for (int j = 0; j < children.Length; j++)
                         children[j].Text = oldtexts[j];
                     if (updatevmg && ValueManager != null) ValueManager.Add(this);
                     throw new ValueParseException(e.Message,

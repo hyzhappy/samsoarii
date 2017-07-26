@@ -132,6 +132,7 @@ namespace SamSoarII.Core.Models
 
         private ValueInfo[] infos;
         private ValueInfo emptyinfo;
+        public ValueInfo EmptyInfo { get { return this.emptyinfo; } }
         private ValueModel tempmodel;
 
         #endregion
@@ -210,7 +211,7 @@ namespace SamSoarII.Core.Models
         
         public int IndexOf(ValueModel value)
         {
-            return GetOffset(value.Base) + value.Offset;
+            return value.Offset < Device.GetRange(value.Base).Count ? GetOffset(value.Base) + value.Offset : -1;
         }
 
         public int IndexOf(ValueInfo item)
@@ -375,6 +376,37 @@ namespace SamSoarII.Core.Models
             foreach (LadderNetworkModel net in dia.Children) Remove(net);
         }
 
+        public void RemoveInvalidValues()
+        {
+            int bas = 0;
+            int len = 0;
+            int maxlen = 0;
+            bas = XOffset;
+            len = Device.XRange.Count;
+            maxlen = MaxRange.XRange.Count;
+            for (int i = bas + len; i < bas + maxlen; i++)
+            {
+                ValueInfo vinfo = infos[i];
+                foreach (ValueModel value in vinfo.Values)
+                    value.Text = "???";
+                foreach (LadderUnitModel unit in vinfo.Units)
+                    unit.Invoke(LadderUnitAction.UPDATE);
+                vinfo.Initialize();
+            }
+            bas = YOffset;
+            len = Device.YRange.Count;
+            maxlen = MaxRange.YRange.Count;
+            for (int i = bas + len; i < bas + maxlen; i++)
+            {
+                ValueInfo vinfo = infos[i];
+                foreach (ValueModel value in vinfo.Values)
+                    value.Text = "???";
+                foreach (LadderUnitModel unit in vinfo.Units)
+                    unit.Invoke(LadderUnitAction.UPDATE);
+                vinfo.Initialize();
+            }
+        }
+
         #endregion
 
         #region Check
@@ -389,6 +421,7 @@ namespace SamSoarII.Core.Models
             }
             int bas = 0;
             int len = 0;
+            //int maxlen = 0;
             bas = GetOffset(ValueModel.Bases.TV);
             len = Device.TVRange.Count;
             for (int i = bas; i < bas + len; i++)
@@ -425,6 +458,38 @@ namespace SamSoarII.Core.Models
                     }
                 }
             }
+            /*
+            bas = XOffset;
+            len = Device.XRange.Count;
+            maxlen = MaxRange.XRange.Count;
+            for (int i = bas + len; i < bas + maxlen; i++)
+            {
+                ValueInfo vinfo = infos[i];
+                if (vinfo.Units.Count() > 0)
+                {
+                    foreach (PLCOriginInst inst in vinfo.Units.Select(u => u.Inst.Origin))
+                    {
+                        inst.Status = PLCOriginInst.STATUS_ERROR;
+                        inst.Message = Properties.Resources.Message_OutOfXRange;
+                    }
+                }
+            }
+            bas = YOffset;
+            len = Device.YRange.Count;
+            maxlen = MaxRange.YRange.Count;
+            for (int i = bas + len; i < bas + maxlen; i++)
+            {
+                ValueInfo vinfo = infos[i];
+                if (vinfo.Units.Count() > 0)
+                {
+                    foreach (PLCOriginInst inst in vinfo.Units.Select(u => u.Inst.Origin))
+                    {
+                        inst.Status = PLCOriginInst.STATUS_ERROR;
+                        inst.Message = Properties.Resources.Message_OutOfYRange;
+                    }
+                }
+            }
+            */
         }
 
         private void CheckCoil(int bas, int len)

@@ -1045,7 +1045,7 @@ namespace SamSoarII
 
         public void Navigate(LadderNetworkModel network, int x, int y)
         {
-            if (network.View == null || network.IsMasked) return;
+            if (network.IsMasked) return;
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);

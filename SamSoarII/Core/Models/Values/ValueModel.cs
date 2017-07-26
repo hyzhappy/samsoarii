@@ -199,6 +199,9 @@ namespace SamSoarII.Core.Models
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
+                    Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+                    if (ofs < 0 || ofs >= device.GetRange(bas).Count)
+                        throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                     break;
             }
             //if (ValueManager != null) ValueManager.Add(this);

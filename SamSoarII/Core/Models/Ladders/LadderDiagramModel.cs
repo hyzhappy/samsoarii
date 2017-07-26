@@ -966,15 +966,13 @@ namespace SamSoarII.Core.Models
             {
                 newunit = new LadderUnitModel(null, type);
             }
-            /*
-            if (newunit.Children.Count != items.Length - 1)
+            if (newunit.Children.Count < items.Length - 1)
             {
                 newunit.Dispose();
                 throw new ValueParseException(Properties.Resources.Message_Func_Params_Num_Error, null);
             }
-            */
-            string[] instargs = new string[items.Length - 1];
-            Array.Copy(items, 1, instargs, 0, items.Length);
+            string[] instargs = new string[newunit.Children.Count];
+            Array.Copy(items, 1, instargs, 0, items.Length - 1);
             for (int i = items.Length; i < instargs.Length; i++)
                 instargs[i] = "???";
             try
@@ -1000,6 +998,7 @@ namespace SamSoarII.Core.Models
         {
             QuickInsertElement(type, rect.Parent, rect.X, rect.Y, cover);
         }
+
         public void QuickInsertElement(LadderUnitModel.Types type, LadderNetworkModel net, int x, int y, bool cover = true)
         {
             LadderUnitModel unit = new LadderUnitModel(null, type) { X = x, Y = y };
