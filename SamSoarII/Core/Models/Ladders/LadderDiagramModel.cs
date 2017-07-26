@@ -70,16 +70,18 @@ namespace SamSoarII.Core.Models
         public event NotifyCollectionChangedEventHandler ChildrenChanged = delegate { };
         private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            /*
             if (e.OldItems != null)
                 foreach (LadderNetworkModel lnmodel in e.OldItems)
-                    lnmodel.Parent = null;
+                    lnmodel.PropertyChanged -= OnChildrenPropertyChanged;
             if (e.NewItems != null)
                 foreach (LadderNetworkModel lnmodel in e.NewItems)
-                    lnmodel.Parent = this;
-            */
+                    lnmodel.PropertyChanged += OnChildrenPropertyChanged;
             PropertyChanged(this, new PropertyChangedEventArgs("NetworkCount"));
             ChildrenChanged(this, e);
+        }
+        private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            parent.InvokeModify((LadderNetworkModel)sender);
         }
 
         private string name;

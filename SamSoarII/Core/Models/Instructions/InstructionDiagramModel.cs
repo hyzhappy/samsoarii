@@ -120,7 +120,7 @@ namespace SamSoarII.Core.Models
             Dictionary<string, PLCOriginInst> lbdict = new Dictionary<string, PLCOriginInst>();
             Match match = null;
 
-            foreach (InstructionNetworkModel invmodel in Children)
+            foreach (InstructionNetworkModel invmodel in Children.Where(inv => !inv.Parent.IsMasked))
             {
                 if (invmodel.IsModify) invmodel.Update();
                 if (invmodel.IsOpenCircuit || invmodel.IsShortCircuit || invmodel.IsFusionCircuit) continue;
@@ -328,6 +328,7 @@ namespace SamSoarII.Core.Models
             for (int i = Parent.Children.Count() - 1; i >= 0; i--)
             { 
                 InstructionNetworkModel inmodel = Parent.Children[i].Inst;
+                if (inmodel.Parent.IsMasked) continue;
                 foreach (PLCOriginInst inst in inmodel.Insts)
                 {
                     if (inst.Status == PLCOriginInst.STATUS_ERROR) continue;
@@ -360,7 +361,7 @@ namespace SamSoarII.Core.Models
         public void CheckForInterrrupt()
         {
             if (!Parent.IsInterruptLadder) return;
-            foreach (InstructionNetworkModel inmodel in Children)
+            foreach (InstructionNetworkModel inmodel in Children.Where(inv => !inv.Parent.IsMasked))
             {
                 foreach (PLCOriginInst inst in inmodel.Insts)
                 {

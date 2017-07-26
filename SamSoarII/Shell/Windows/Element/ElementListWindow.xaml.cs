@@ -76,7 +76,7 @@ namespace SamSoarII.Shell.Windows
                     IEnumerable<ValueModel.Bases> types = LB_Range.SelectedItems.Cast<RangeItem>().Select(ri => ri.Type);
                     colle = ValueManager.Where(vi => types.Contains(vi.Prototype.Base));
                 }
-                if (HasUsed) colle = colle.Where(vi => vi.Values.Count() > 0);
+                if (HasUsed) colle = colle.Where(vi => vi.UsedUnits.Count() > 0);
                 if (HasCommnet) colle = colle.Where(vi => vi.Comment.Length > 0);
                 colle = colle.Where(x => { return x.Name.StartsWith(TB_Search.Text.ToUpper()); }).ToList();
                 return colle.ToArray();

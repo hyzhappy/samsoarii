@@ -427,7 +427,7 @@ namespace SamSoarII.Core.Models
             for (int i = bas; i < bas + len; i++)
             {
                 ValueInfo vinfo = this[i];
-                IEnumerable<LadderUnitModel> fits = vinfo.Units.Where(
+                IEnumerable<LadderUnitModel> fits = vinfo.UsedUnits.Where(
                     u => u.Type == LadderUnitModel.Types.TON
                       || u.Type == LadderUnitModel.Types.TONR
                       || u.Type == LadderUnitModel.Types.TOF);
@@ -445,7 +445,7 @@ namespace SamSoarII.Core.Models
             for (int i = bas; i < bas + len; i++)
             {
                 ValueInfo vinfo = this[i];
-                IEnumerable<LadderUnitModel> fits = vinfo.Units.Where(
+                IEnumerable<LadderUnitModel> fits = vinfo.UsedUnits.Where(
                     u => u.Type == LadderUnitModel.Types.CTD
                       || u.Type == LadderUnitModel.Types.CTD
                       || u.Type == LadderUnitModel.Types.CTUD);
@@ -467,7 +467,7 @@ namespace SamSoarII.Core.Models
                 ValueInfo vinfo = infos[i];
                 if (vinfo.Units.Count() > 0)
                 {
-                    foreach (PLCOriginInst inst in vinfo.Units.Select(u => u.Inst.Origin))
+                    foreach (PLCOriginInst inst in vinfo.UsedUnits.Select(u => u.Inst.Origin))
                     {
                         inst.Status = PLCOriginInst.STATUS_ERROR;
                         inst.Message = Properties.Resources.Message_OutOfXRange;
@@ -482,7 +482,7 @@ namespace SamSoarII.Core.Models
                 ValueInfo vinfo = infos[i];
                 if (vinfo.Units.Count() > 0)
                 {
-                    foreach (PLCOriginInst inst in vinfo.Units.Select(u => u.Inst.Origin))
+                    foreach (PLCOriginInst inst in vinfo.UsedUnits.Select(u => u.Inst.Origin))
                     {
                         inst.Status = PLCOriginInst.STATUS_ERROR;
                         inst.Message = Properties.Resources.Message_OutOfYRange;

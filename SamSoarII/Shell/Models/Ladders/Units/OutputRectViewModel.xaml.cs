@@ -255,32 +255,47 @@ namespace SamSoarII.Shell.Models
                                     vmodel.Text, vmodel.Comment);
                             }
                         }
-                        else if (LadderMode == LadderModes.Simulate)
+                        else if (!Core.IsUsed)
                         {
                             for (int i = 0; i < Core.Children.Count; i++)
                             {
                                 ValueModel vmodel = Core.Children[i];
                                 ValueFormat vformat = vmodel.Format;
-                                string text = String.Format("{0:s} = {1}",
-                                    vmodel.Text, !MNGSimu.IsAlive ? "???" : vmodel.Value);
                                 if (vformat.Position >= 0)
-                                    middlevalues[vformat.Position].Text = text;
+                                    middlevalues[vformat.Position].Text = "";
                                 else
-                                    bottomvalues[-vformat.Position - 1].Text = text;
+                                    bottomvalues[-vformat.Position - 1].Text = "";
                             }
                         }
-                        else if (LadderMode == LadderModes.Monitor)
+                        else
                         {
-                            for (int i = 0; i < Core.Children.Count; i++)
+                            if (LadderMode == LadderModes.Simulate)
                             {
-                                ValueModel vmodel = Core.Children[i];
-                                ValueFormat vformat = vmodel.Format;
-                                string text = String.Format("{0:s} = {1}",
-                                    vmodel.Text, !MNGComu.IsAlive ? "???" : vmodel.Value);
-                                if (vformat.Position >= 0)
-                                    middlevalues[vformat.Position].Text = text;
-                                else
-                                    bottomvalues[-vformat.Position - 1].Text = text;
+                                for (int i = 0; i < Core.Children.Count; i++)
+                                {
+                                    ValueModel vmodel = Core.Children[i];
+                                    ValueFormat vformat = vmodel.Format;
+                                    string text = String.Format("{0:s} = {1}",
+                                        vmodel.Text, !MNGSimu.IsAlive ? "???" : vmodel.Value);
+                                    if (vformat.Position >= 0)
+                                        middlevalues[vformat.Position].Text = text;
+                                    else
+                                        bottomvalues[-vformat.Position - 1].Text = text;
+                                }
+                            }
+                            else if (LadderMode == LadderModes.Monitor)
+                            {
+                                for (int i = 0; i < Core.Children.Count; i++)
+                                {
+                                    ValueModel vmodel = Core.Children[i];
+                                    ValueFormat vformat = vmodel.Format;
+                                    string text = String.Format("{0:s} = {1}",
+                                        vmodel.Text, !MNGComu.IsAlive ? "???" : vmodel.Value);
+                                    if (vformat.Position >= 0)
+                                        middlevalues[vformat.Position].Text = text;
+                                    else
+                                        bottomvalues[-vformat.Position - 1].Text = text;
+                                }
                             }
                         }
                     });

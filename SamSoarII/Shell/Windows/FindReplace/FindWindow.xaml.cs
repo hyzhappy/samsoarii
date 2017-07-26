@@ -108,11 +108,12 @@ namespace SamSoarII.Shell.Windows
         private void Find(LadderDiagramModel diagram)
         {
             // 遍历所有网络
-            foreach (LadderNetworkModel network in diagram.Children)
+            foreach (LadderNetworkModel network in diagram.Children.Where(n => !n.IsMasked))
             {
                 // 遍历所有元件
                 foreach (LadderUnitModel unit in network.Children)
                 {
+                    if (!unit.IsUsed) continue;
                     switch (unit.Shape)
                     {
                         // 忽略连线

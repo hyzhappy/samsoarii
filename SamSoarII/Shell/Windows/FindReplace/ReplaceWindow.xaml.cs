@@ -216,6 +216,7 @@ namespace SamSoarII.Shell.Windows
             // 遍历所有元件
             foreach (LadderUnitModel unit in units)
             {
+                if (!unit.IsUsed) continue;
                 switch (unit.Shape)
                 {
                     // 忽略连线
