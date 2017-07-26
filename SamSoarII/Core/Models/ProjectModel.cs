@@ -120,7 +120,10 @@ namespace SamSoarII.Core.Models
             IsModified = true;
             Modified(source, new RoutedEventArgs());
         }
-
+        public void ChangeModify(bool isModify)
+        {
+            ismodified = isModify;
+        }
         private LadderModes laddermode;
         public LadderModes LadderMode
         {

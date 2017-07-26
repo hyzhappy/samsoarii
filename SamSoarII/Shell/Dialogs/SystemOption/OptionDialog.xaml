@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
         Title="OptionDialog" Height="600" ResizeMode="NoResize" Width="600" PreviewKeyDown="Window_PreviewKeyDown" Closing="OnClosing">
     <Grid x:Uid="Grid_1">
         <Grid.ColumnDefinitions>

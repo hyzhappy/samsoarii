@@ -712,11 +712,14 @@ namespace SamSoarII
                 }
                 else
                 {
-                    errorMessages[i].RefNetworks.First().View.AcquireSelectRect();
-                    CurrentLadder.SelectionRect.X = errorMessages[i].RefNetworks.Last().ErrorModels.First().X;
-                    CurrentLadder.SelectionRect.Y = errorMessages[i].RefNetworks.Last().ErrorModels.First().Y;
-                    CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
-                    CurrentLadder.VScrollToRect(errorMessages[i].RefNetworks.First().ID, CurrentLadder.SelectionRect.Y);
+                    var net = errorMessages[i].RefNetworks.First();
+                    if (net.View == null) net.View = new LadderNetworkViewModel(net);
+                    net.View.AcquireSelectRect();
+                    net.Parent.View.SelectionRect.X = errorMessages[i].RefNetworks.Last().ErrorModels.First().X;
+                    net.Parent.View.SelectionRect.Y = errorMessages[i].RefNetworks.Last().ErrorModels.First().Y;
+                    net.Parent.View.HScrollToRect(net.Parent.View.SelectionRect.X);
+                    net.Parent.View.VScrollToRect(errorMessages[i].RefNetworks.First().ID, net.Parent.View.SelectionRect.Y);
+                    Navigate(net, net.Parent.View.SelectionRect.X, net.Parent.View.SelectionRect.Y);
                     result = false;
                     switch (errorMessages[i].Error)
                     {
@@ -741,6 +744,7 @@ namespace SamSoarII
                     break;
                 }
             }
+            mdProj.ChangeModify(false);
             handle.Completed = true;
             return result;
         }
@@ -780,7 +784,7 @@ namespace SamSoarII
                         {
                             wcount++;
                             weinsts.Add(new ErrorReportElement(inst, inmodel.Parent));
-                        } 
+                        }
             return weinsts;
         }
 
@@ -1045,7 +1049,9 @@ namespace SamSoarII
 
         public void Navigate(LadderNetworkModel network, int x, int y)
         {
-            if (network.View == null || network.IsMasked) return;
+            if (network.IsMasked) return;
+            if(network.View == null)
+                network.View = new LadderNetworkViewModel(network);
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
