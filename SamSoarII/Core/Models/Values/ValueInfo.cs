@@ -152,7 +152,7 @@ namespace SamSoarII.Core.Models
                 this.comment = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("Comment"));
                 foreach (ValueModel vmodel in values)
-                    vmodel.Parent.Invoke(LadderUnitAction.UPDATE);
+                    vmodel.Parent?.Invoke(LadderUnitAction.UPDATE);
             }
         }
 
