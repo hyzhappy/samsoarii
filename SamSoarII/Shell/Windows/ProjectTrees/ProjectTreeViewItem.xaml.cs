@@ -904,7 +904,7 @@ namespace SamSoarII.Shell.Windows
                 case ProjectTreeViewItem.FLAG_CREATENETWORKAFTER:
                     Header = Properties.Resources.LadderNetwork_Insert_After; break;
                 case ProjectTreeViewItem.FLAG_CONFIG:
-                    Header = profix + Properties.Resources.MainWindow_Property_Proj; break;
+                    Header = profix + Properties.Resources.Property_Proj; break;
             }
         }
     }

@@ -5,24 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
         xmlns:properties="clr-namespace:SamSoarII.Properties"
-        mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico"
-        Title="{x:Static properties:Resources.Annotation_Edit}" Height="600" Width="600">
-    <Grid x:Uid="Grid_1">
+        mc:Ignorable="d" Icon="/Resources/Image/SamSoarII.ico" ResizeMode="NoResize"
+        Title="{x:Static properties:Resources.Annotation_Edit}" Height="350" Width="500">
+    <Grid Background="AliceBlue">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Uid="ColumnDefinition_1" Width="1*"></ColumnDefinition>
-            <ColumnDefinition x:Uid="ColumnDefinition_2" Width="1*"></ColumnDefinition>
-            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="1*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_2" Height="4*"></RowDefinition>
-            <RowDefinition x:Uid="RowDefinition_3" Height="1*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock x:Uid="TextBlock_1" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Text="{x:Static properties:Resources.LaddreDiagram}"/>
-        <TextBlock x:Uid="TextBlock_2" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Text="{x:Static properties:Resources.Detailed_Description}"/>
-        <TextBlock x:Uid="LadderNameTextBlock" x:Name="LadderNameTextBlock" FontSize="14"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding LadderName}"></TextBlock>
-        <TextBox x:Uid="LadderCommentTextBox" x:Name="LadderCommentTextBox"  Width="300" Height="250" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" AcceptsReturn="True" Text="{Binding LadderComment}"></TextBox>
-        <Button x:Uid="EnsureButton" x:Name="EnsureButton" Width="100" Height="24" Grid.Column="1" Grid.Row="3" Click="OnEnsureButtonClick" Content="{x:Static properties:Resources.Ensure}"/>
-        <Button x:Uid="CancelButton" x:Name="CancelButton" Width="100" Height="24" Grid.Column="2" Grid.Row="3" Click="OnCancelButtonClick" Content="{x:Static properties:Resources.Cancel}"/>
+        <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Text="{x:Static properties:Resources.LaddreDiagram}"/>
+        <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Text="{x:Static properties:Resources.Detailed_Description}"/>
+        <TextBlock x:Name="LadderNameTextBlock" FontSize="14"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding LadderName}"></TextBlock>
+        <TextBox x:Name="LadderCommentTextBox"  Width="300" Height="200" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" AcceptsReturn="True" Text="{Binding LadderComment}"></TextBox>
+        <Button x:Name="EnsureButton" Width="80" Height="24" Grid.Column="1" Grid.Row="3" Click="OnEnsureButtonClick" Content="{x:Static properties:Resources.Ensure}"/>
+        <Button x:Name="CancelButton" Width="80" Height="24" Grid.Column="2" Grid.Row="3" Click="OnCancelButtonClick" Content="{x:Static properties:Resources.Cancel}"/>
     </Grid>
 </Window>
