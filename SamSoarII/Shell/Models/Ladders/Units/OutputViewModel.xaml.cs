@@ -198,29 +198,37 @@ namespace SamSoarII.Shell.Models
                                     vmodel.Text, vmodel.Comment);
                             }
                         }
-                        else if (LadderMode == LadderModes.Simulate)
+                        else if (!Core.IsUsed)
                         {
-                            if (Core.Children.Count >= 1) ValueTextBlock.Text =
-                                String.Format("{0:s} = {1}",
-                                    Core.Children[0].Text,
-                                    !MNGSimu.IsAlive ? "???" : Core.Children[0].Value);
-                            if (Core.Children.Count >= 2) CountTextBlock.Text =
-                                String.Format("{0:s} = {1}",
-                                    Core.Children[1].Text,
-                                    !MNGSimu.IsAlive ? "???" : Core.Children[1].Value);
+                            ValueTextBlock.Text = "";
+                            CountTextBlock.Text = "";
                         }
-                        else if (LadderMode == LadderModes.Monitor)
+                        else
                         {
-                            if (Core.Children.Count >= 1) ValueTextBlock.Text =
-                                String.Format("{0:s} = {1}",
-                                    Core.Children[0].Text,
-                                    !MNGComu.IsAlive ? "???" : Core.Children[0].Value);
-                            if (Core.Children.Count >= 2) CountTextBlock.Text =
-                                String.Format("{0:s} = {1}",
-                                    Core.Children[1].Text,
-                                    !MNGComu.IsAlive ? "???" : Core.Children[1].Value);
+                            if (LadderMode == LadderModes.Simulate)
+                            {
+                                if (Core.Children.Count >= 1) ValueTextBlock.Text =
+                                    String.Format("{0:s} = {1}",
+                                        Core.Children[0].Text,
+                                        !MNGSimu.IsAlive ? "???" : Core.Children[0].Value);
+                                if (Core.Children.Count >= 2) CountTextBlock.Text =
+                                    String.Format("{0:s} = {1}",
+                                        Core.Children[1].Text,
+                                        !MNGSimu.IsAlive ? "???" : Core.Children[1].Value);
+                            }
+                            else if (LadderMode == LadderModes.Monitor)
+                            {
+                                if (Core.Children.Count >= 1) ValueTextBlock.Text =
+                                    String.Format("{0:s} = {1}",
+                                        Core.Children[0].Text,
+                                        !MNGComu.IsAlive ? "???" : Core.Children[0].Value);
+                                if (Core.Children.Count >= 2) CountTextBlock.Text =
+                                    String.Format("{0:s} = {1}",
+                                        Core.Children[1].Text,
+                                        !MNGComu.IsAlive ? "???" : Core.Children[1].Value);
+                            }
+                            UpdateCenterCanvas();
                         }
-                        UpdateCenterCanvas();
                     });
                     break;
             }    

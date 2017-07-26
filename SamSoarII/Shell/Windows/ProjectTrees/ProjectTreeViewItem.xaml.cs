@@ -264,15 +264,14 @@ namespace SamSoarII.Shell.Windows
                         Image.Height = 14;
                         if (RelativeObject is LadderNetworkModel)
                         {
-                            LadderNetworkModel lnvmodel = (LadderNetworkModel)RelativeObject;
-                            if (lnvmodel.Brief == null || lnvmodel.Brief.Length == 0)
-                            {
-                                Text = String.Format("{0} {1:d}", Properties.Resources.Network, lnvmodel.ID);
-                            }
+                            LadderNetworkModel lnmodel = (LadderNetworkModel)RelativeObject;
+                            if (lnmodel.Brief == null || lnmodel.Brief.Length == 0)
+                                Text = String.Format("{0} {1:d}", Properties.Resources.Network, lnmodel.ID);
                             else
-                            {
-                                Text = String.Format("{0:d}-{1:s}", lnvmodel.ID, lnvmodel.Brief);
-                            }
+                                Text = String.Format("{0:d}-{1:s}", lnmodel.ID, lnmodel.Brief);
+                            TBL_Text.Foreground = lnmodel.IsMasked ? Brushes.Gray : Brushes.Black;
+                            TBS_Text.Foreground = lnmodel.IsMasked ? Brushes.Gray : Brushes.Black;
+                            //TBO_Text.Foreground = lnmodel.IsMasked ? Brushes.Gray : Brushes.Black;
                         }
                         break;
                     case TYPE_NETWORKFLODER:

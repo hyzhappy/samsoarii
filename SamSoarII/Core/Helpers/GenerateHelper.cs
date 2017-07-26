@@ -218,7 +218,7 @@ namespace SamSoarII.Core.Helpers
             LadderDiagramModel diagram,
             List<InstHelper.PLCInstNetwork> nets)
         {
-            foreach (LadderNetworkModel network in diagram.Children)
+            foreach (LadderNetworkModel network in diagram.Children.Where(n => !n.IsMasked))
             {
                 Generate(network, nets);
             }

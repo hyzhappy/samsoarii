@@ -58,7 +58,8 @@ namespace SamSoarII.Shell.Models
             CommentAreaGrid.Children.Remove(ThumbnailButton);
             if (ViewParent != null)
                 IsCommentMode = ViewParent.IsCommentMode;
-            else core.Parent.View = new LadderDiagramViewModel(core.Parent);
+            else
+                core.Parent.View = new LadderDiagramViewModel(core.Parent);
             loadedrowstart = 0;
             loadedrowend = -1;
             Update();
@@ -131,14 +132,39 @@ namespace SamSoarII.Shell.Models
                     break;
                 case "IsExpand":
                     ladderExpander.IsExpand = IsExpand;
-                    Update();
+                    if (!IsExpand)
+                    {
+                        ReleaseSelectRect();
+                        if (IsSelectAreaMode && !IsSelectAllMode) IsSelectAreaMode = false;
+                        LadderCanvas.Height = 0;
+                        LadderCanvas.Children.Clear();
+                        if (ThumbnailButton.ToolTip == null)
+                        {
+                            ThumbnailButton.ToolTip = new ToolTip();
+                            if (ThumbnailButton.Parent is Grid)
+                                ((Grid)(ThumbnailButton.Parent)).Children.Remove(ThumbnailButton);
+                            CommentAreaGrid.Children.Add(ThumbnailButton);
+                        }
+                    }
+                    else
+                    {
+                        if (ThumbnailButton.ToolTip != null)
+                        {
+                            ThumbnailButton.ToolTip = null;
+                            CommentAreaGrid.Children.Remove(ThumbnailButton);
+                        }
+                        LadderCanvas.Height = RowCount * HeightUnit;
+                        if (IsSelectAreaMode && !LadderCanvas.Children.Contains(SelectArea))
+                            LadderCanvas.Children.Add(SelectArea);
+                    }
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
                     break;
                 case "IsMasked":
                     if (IsMasked)
                     {
-                        ViewParent.SelectionRect.Core.Parent = null;
+                        if (ViewParent?.SelectionRect?.Core != null)
+                            ViewParent.SelectionRect.Core.Parent = null;
                         IsSelectAreaMode = false;
                         IsSelectAllMode = false;
                         CommentAreaExpander.Background = Brushes.LightGray;
@@ -709,31 +735,9 @@ namespace SamSoarII.Shell.Models
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("ID"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("Brief"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("Description"));
-            if (!IsExpand)
-            {
-                ReleaseSelectRect();
-                if (IsSelectAreaMode && !IsSelectAllMode) IsSelectAreaMode = false;
-                LadderCanvas.Height = 0;
-                LadderCanvas.Children.Clear();
-                if (ThumbnailButton.ToolTip == null)
-                {
-                    ThumbnailButton.ToolTip = new ToolTip();
-                    if (ThumbnailButton.Parent is Grid)
-                        ((Grid)(ThumbnailButton.Parent)).Children.Remove(ThumbnailButton);
-                    CommentAreaGrid.Children.Add(ThumbnailButton);
-                }
-            }
-            else
-            {
-                if (ThumbnailButton.ToolTip != null)
-                {
-                    ThumbnailButton.ToolTip = null;
-                    CommentAreaGrid.Children.Remove(ThumbnailButton);
-                }
-                LadderCanvas.Height = RowCount * HeightUnit;
-                if (IsSelectAreaMode && !LadderCanvas.Children.Contains(SelectArea))
-                    LadderCanvas.Children.Add(SelectArea);
-            }
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }

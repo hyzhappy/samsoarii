@@ -1034,6 +1034,8 @@ namespace SamSoarII.Core.Models
             get { return parent?.Parent?.Parent?.Parent.MNGValue; }
         }
 
+        public bool IsUsed { get { return parent != null && !parent.IsMasked; } }
+
         private ValueModel[] children;
         public IList<ValueModel> Children
         {

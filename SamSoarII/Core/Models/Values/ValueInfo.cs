@@ -118,6 +118,7 @@ namespace SamSoarII.Core.Models
 
         private SortedList<LadderUnitModel, int> units;
         public IList<LadderUnitModel> Units { get { return units != null ? units.Keys : new LadderUnitModel[] { }; } }
+        public IEnumerable<LadderUnitModel> UsedUnits { get { return Units.Where(u => u.IsUsed); } }
         public void Add(LadderUnitModel unit)
         {
             if (units == null) units = new SortedList<LadderUnitModel, int>(new UnitComparer());

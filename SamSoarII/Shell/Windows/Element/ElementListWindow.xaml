@@ -89,7 +89,7 @@
                 <DataTemplate>
                     <Border MaxHeight="90">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <local:ElementStackPanel x:Name="elementStackPanel" Grid.Row="1" ItemsSource="{Binding Units}">
+                            <local:ElementStackPanel x:Name="elementStackPanel" Grid.Row="1" ItemsSource="{Binding UsedUnits}">
                                 <local:ElementStackPanel.Resources>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>

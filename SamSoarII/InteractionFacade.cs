@@ -518,6 +518,9 @@ namespace SamSoarII
                     wndMain.LACMonitor.Show();
                     return true;
                 default:
+                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                        MainWindowEventArgs.TYPE_TOGGLE_UP
+                      | MainWindowEventArgs.FLAG_SIMULATE));
                     PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                         UnderBarStatus.Error, Properties.Resources.Simulate_Error));
                     LocalizedMessageBox.Show(Properties.Resources.Simulate_Error, LocalizedMessageIcon.Error);
@@ -539,9 +542,12 @@ namespace SamSoarII
             mngComu.IsEnable = true;
             if (!mngComu.CheckLink())
             {
-                PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                     UnderBarStatus.Error, Properties.Resources.MessageBox_Communication_Failed));
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
+                PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                    MainWindowEventArgs.TYPE_TOGGLE_UP
+                  | MainWindowEventArgs.FLAG_MONITOR));
                 mngComu.IsEnable = false;
                 return false;
             }
@@ -1789,7 +1795,7 @@ namespace SamSoarII
 
         private void OnProjectModified(object sender, RoutedEventArgs e)
         {
-            if (sender is LadderDiagramModel)
+            if (sender is LadderDiagramModel || sender is LadderNetworkModel || sender is LadderUnitModel)
                 PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.DiagramModified, sender, sender));
             if (sender is FuncBlockModel)
                 PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.FuncBlockModified, sender, sender));
