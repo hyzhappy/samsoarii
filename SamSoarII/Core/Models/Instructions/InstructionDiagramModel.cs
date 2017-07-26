@@ -124,15 +124,10 @@ namespace SamSoarII.Core.Models
             {
                 if (invmodel.IsModify) invmodel.Update();
                 if (invmodel.IsOpenCircuit || invmodel.IsShortCircuit || invmodel.IsFusionCircuit) continue;
-                foreach (PLCOriginInst inst in invmodel.Insts)
-                {
-                    if (inst.Inst.ProtoType == null) continue;
-                    if (inst.Inst.ProtoType.Shape == LadderUnitModel.Shapes.Output
-                     || inst.Inst.ProtoType.Shape == LadderUnitModel.Shapes.OutputRect)
-                    {
-                        outcount++;
-                    }
-                }
+                stkcount = invmodel.Insts.Where(i => i[0].StartsWith("LD")).Count();
+                outcount = invmodel.Insts.Where(i => i.Inst.ProtoType != null
+                    && (i.Inst.ProtoType.Shape == LadderUnitModel.Shapes.Output
+                        || i.Inst.ProtoType.Shape == LadderUnitModel.Shapes.OutputRect)).Count();
                 foreach (PLCOriginInst inst in invmodel.Insts)
                 {
                     for (int i = 1; i <= 5; i++)
@@ -145,7 +140,6 @@ namespace SamSoarII.Core.Models
                         }
                     }
                     if (inst.Status == PLCOriginInst.STATUS_ERROR) continue;
-                    if (inst[0].StartsWith("LD")) stkcount++;
                     switch (inst[0])
                     {
                         case "ANDB":

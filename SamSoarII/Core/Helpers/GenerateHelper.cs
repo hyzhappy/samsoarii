@@ -134,14 +134,12 @@ namespace SamSoarII.Core.Helpers
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
-            /*
             File.Delete(ladderHFile);
             File.Delete(ladderCFile);
             File.Delete(simulibHFile);
             File.Delete(simulibCFile);
             File.Delete(funcBlockHFile);
             File.Delete(funcBlockCFile);
-            */
             return SimulateDllModel.LoadDll(outputDllFile);
         }
 

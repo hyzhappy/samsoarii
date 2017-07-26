@@ -113,8 +113,8 @@ namespace SamSoarII.Core.Models
             }
             set
             {
-                if (!ismasked && value) ValueManager.Add(this);
-                if (ismasked && !value) ValueManager.Remove(this);
+                //if (!ismasked && value) ValueManager.Add(this);
+                //if (ismasked && !value) ValueManager.Remove(this);
                 this.ismasked = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
             }

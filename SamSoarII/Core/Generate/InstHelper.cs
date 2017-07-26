@@ -842,7 +842,7 @@ namespace SamSoarII.Core.Generate
                 sw.Write("}\n");
             }
             // 进入条件断点的循环
-            if (simumode && inst.ProtoType != null)
+            if (simumode && inst.ProtoType != null && !inst[0].Equals("LBL") && !inst[0].Equals("NEXT"))
             {
                 _CalcSignal(sw, true);
                 sw.Write("cpcycle({0}, _signal);\n", bp);
