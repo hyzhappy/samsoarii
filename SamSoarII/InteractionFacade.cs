@@ -731,11 +731,7 @@ namespace SamSoarII
                 }
                 else
                 {
-                    errorMessages[i].RefNetworks.First().View.AcquireSelectRect();
-                    CurrentLadder.SelectionRect.X = errorMessages[i].RefNetworks.Last().ErrorModels.First().X;
-                    CurrentLadder.SelectionRect.Y = errorMessages[i].RefNetworks.Last().ErrorModels.First().Y;
-                    CurrentLadder.HScrollToRect(CurrentLadder.SelectionRect.X);
-                    CurrentLadder.VScrollToRect(errorMessages[i].RefNetworks.First().ID, CurrentLadder.SelectionRect.Y);
+                    Navigate(errorMessages[i].RefNetworks.First(), errorMessages[i].RefNetworks.Last().ErrorModels.First().X, errorMessages[i].RefNetworks.Last().ErrorModels.First().Y);
                     result = false;
                     switch (errorMessages[i].Error)
                     {
@@ -760,6 +756,7 @@ namespace SamSoarII
                     break;
                 }
             }
+            mdProj.ChangeModify(false);
             handle.Completed = true;
             return result;
         }
@@ -1065,6 +1062,8 @@ namespace SamSoarII
         public void Navigate(LadderNetworkModel network, int x, int y)
         {
             if (network.IsMasked) return;
+            if (network.View == null)
+                network.View = new LadderNetworkViewModel(network);
             LadderDiagramModel diagram = network.Parent;
             if (diagram.Tab == null)
                 diagram.Tab = new MainTabDiagramItem(tcMain, diagram, diagram.Inst);
