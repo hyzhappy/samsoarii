@@ -37,9 +37,7 @@ namespace SamSoarII.Shell.Windows
             redos = new Stack<ReplaceCommandGroup>();
         }
 
-        /// <summary>
-        /// 属性更改时触发
-        /// </summary>
+        /// <summary> 属性更改时触发 </summary>
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Numbers
@@ -155,9 +153,7 @@ namespace SamSoarII.Shell.Windows
         
         #endregion
 
-        /// <summary>
-        /// 初始化
-        /// </summary>
+        /// <summary> 初始化 </summary>
         /// <param name="initcmd">是否初始化撤销操作板</param>
         public void Initialize(bool initcmd = true)
         {
@@ -165,9 +161,7 @@ namespace SamSoarII.Shell.Windows
             items.Clear();
             if (initcmd) ClearCommands();
         }
-        /// <summary> 
-        /// 查找指令 
-        /// </summary>
+        /// <summary> 查找指令 </summary>
         private void Find()
         {
             items.Clear();
