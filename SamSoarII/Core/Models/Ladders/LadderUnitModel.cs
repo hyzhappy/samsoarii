@@ -1340,12 +1340,13 @@ namespace SamSoarII.Core.Models
             {
                 case Shapes.HLine:
                 case Shapes.Input:
-                    return NextElements.All(x => { return (x.Type == Types.NULL) | (x.Shape == Shapes.Special) | (x.Shape == Shapes.Input); }) & NextElements.Count > 0;
+                    return NextElements.All(x => { return x.Type == Types.NULL || x.Shape == Shapes.Special || x.Shape == Shapes.Input; }) && NextElements.Count > 0;
                 case Shapes.Output:
                 case Shapes.OutputRect:
-                    return NextElements.All(x => { return (x.Shape == Shapes.Input) | (x.Shape == Shapes.Special); }) & NextElements.Count > 0;
+                    if (Type == Types.NEXT || Type == Types.LBL) return true;
+                    return NextElements.All(x => { return x.Shape == Shapes.Input || x.Shape == Shapes.Special; }) && NextElements.Count > 0;
                 case Shapes.Special:
-                    return NextElements.All(x => { return x.Shape == Shapes.Special || x.Shape == Shapes.Input; }) & NextElements.Count > 0;
+                    return NextElements.All(x => { return x.Shape == Shapes.Special || x.Shape == Shapes.Input; }) && NextElements.Count > 0;
                 default:
                     return false;
             }
