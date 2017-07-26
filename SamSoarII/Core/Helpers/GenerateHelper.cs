@@ -110,6 +110,9 @@ namespace SamSoarII.Core.Helpers
             sw.Write("typedef int32_t _WORD;\r\n");
             sw.Write("typedef int64_t D_WORD;\r\n");
             sw.Write("typedef double _FLOAT;\r\n");
+            sw.Write("extern void callinfo();\r\n");
+            sw.Write("extern void callleave();\r\n");
+            sw.Write("extern void bpcycle(int addr);\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
                 GenerateCHeader(fbmodel, sw);
             sw.Close();
@@ -118,7 +121,7 @@ namespace SamSoarII.Core.Helpers
             sw.Write("#include <math.h>\r\n");
             sw.Write("#include \"simuf.h\"\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
-                GenerateCCode(fbmodel, sw);
+                GenerateCCode(fbmodel, sw, true);
             sw.Close();
             SimulateDllModel.CreateSource();
             Process cmd = null;
@@ -134,12 +137,14 @@ namespace SamSoarII.Core.Helpers
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
             cmd.WaitForExit();
+            /*
             File.Delete(ladderHFile);
             File.Delete(ladderCFile);
             File.Delete(simulibHFile);
             File.Delete(simulibCFile);
             File.Delete(funcBlockHFile);
             File.Delete(funcBlockCFile);
+            */
             return SimulateDllModel.LoadDll(outputDllFile);
         }
 
@@ -270,11 +275,65 @@ namespace SamSoarII.Core.Helpers
             }
         }
 
-        private static void GenerateCCode(
-            FuncBlockModel fbvmodel,
-            StreamWriter sw)
+        private static List<FuncBlock_Local> funcs = new List<FuncBlock_Local>();
+        private static List<FuncBlock> bps = new List<FuncBlock>();
+        private static void GenerateCCode(FuncBlockModel fbmodel, StreamWriter sw, bool simu = false)
         {
-            sw.Write(GenerateCType(fbvmodel.View != null ? fbvmodel.View.Code : fbvmodel.Code));
+            if (!simu)
+            {
+                sw.Write(GenerateCType(fbmodel.Code));
+                return;
+            }
+            funcs.Clear();
+            bps.Clear();
+            FindInFuncBlock(fbmodel.Root);
+            StringBuilder code = new StringBuilder();
+            int start = 0, len = 0;
+
+            for (int i1 = 0, i2 = 0; i1 < funcs.Count(); i1++)
+            {
+                start = i1 == 0 ? 0 : funcs[i1 - 1].IndexEnd + 1;
+                len = funcs[i1].IndexStart - start - 1;
+                if (len > 0) code.Append(fbmodel.Code.Substring(start, len));
+                code.Append("{callinto();");
+
+                bool firstbp = true;
+                for (; i2 < bps.Count() && bps[i2].IndexStart < funcs[i1].IndexEnd; i2++)
+                {
+                    start = firstbp ? funcs[i1].IndexStart + 1 : bps[i2 - 1].IndexEnd + 1;
+                    len = bps[i2].IndexStart - start;
+                    if (len > 0) code.Append(fbmodel.Code.Substring(start, len));
+                    
+                    if (bps[i2] is FuncBlock_Statement) code.Append("{");
+                    start = bps[i2].IndexStart;
+                    len = bps[i2].IndexEnd - start + 1;
+                    if (len > 0) code.Append(fbmodel.Code.Substring(start, len));
+                    code.Append(String.Format("bpcycle({0:d});", bps[i2].BPAddress));
+                    if (bps[i2] is FuncBlock_Statement) code.Append("}");
+                    firstbp = false;
+                }
+
+                start = firstbp ? funcs[i1].IndexStart + 1 : bps[i2 - 1].IndexEnd + 1;
+                len = funcs[i1].IndexEnd - start;
+                if (len > 0) code.Append(fbmodel.Code.Substring(start, len));
+                code.Append("callleave();}");
+            }
+            
+            code.Append(fbmodel.Code.Substring(funcs.Last().IndexEnd + 1));
+            sw.Write(GenerateCType(code.ToString()));
+        }
+
+        private static void FindInFuncBlock(FuncBlock fblock)
+        {
+            if (fblock is FuncBlock_Local)
+            {
+                FuncBlock_Local local = (FuncBlock_Local)fblock;
+                if (local.Header != null) funcs.Add(local);
+            }
+            if (fblock.Breakpoint != null)
+                bps.Add(fblock);
+            foreach (FuncBlock sub in fblock.Childrens)
+                FindInFuncBlock(sub);
         }
     }
 }

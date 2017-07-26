@@ -170,6 +170,27 @@ namespace SamSoarII.Core.Simulate
                                 activeitems.Add(unit.Breakpoint);
                         }
                     }
+            foreach (FuncBlockModel funcblock in IFParent.MDProj.FuncBlocks)
+            {
+                if (funcblock.View != null)
+                    funcblock.Code = funcblock.View.Code;
+                funcblock.BuildAll(funcblock.Code);
+                Initialize(funcblock.Root);    
+            }
+        }
+
+        private void Initialize(FuncBlock fblock)
+        {
+            if (fblock is FuncBlock_Statement 
+             || ((fblock is FuncBlock_Assignment || fblock is FuncBlock_AssignmentSeries) 
+                && !(fblock.Parent is FuncBlock_Root)))
+            {
+                fblock.Breakpoint = new FuncBrpoModel(fblock);
+                items.Add(fblock.Breakpoint);
+                fblock.Breakpoint.Address = items.Count() - 1;
+            }
+            foreach (FuncBlock sub in fblock.Childrens)
+                Initialize(sub);
         }
 
         #endregion

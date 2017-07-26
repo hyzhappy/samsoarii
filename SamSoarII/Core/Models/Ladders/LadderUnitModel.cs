@@ -1151,19 +1151,26 @@ namespace SamSoarII.Core.Models
             switch (e.PropertyName)
             {
                 case "IsEnable": PropertyChanged(this, new PropertyChangedEventArgs("BPEnable")); break;
+                case "IsActive": PropertyChanged(this, new PropertyChangedEventArgs("BPActive")); break;
                 case "Cursor": PropertyChanged(this, new PropertyChangedEventArgs("BPCursor")); break;
             }
         }
 
         public bool BPEnable
         {
-            get { return breakpoint.IsEnable; }
-            set { breakpoint.IsEnable = value; }
+            get { return breakpoint != null && breakpoint.IsEnable; }
+            set { if (breakpoint != null) breakpoint.IsEnable = value; }
+        }
+
+        public bool BPActive
+        {
+            get { return breakpoint != null && breakpoint.IsActive; }
+            set { if (breakpoint != null) breakpoint.IsActive = value; }
         }
 
         public BreakpointCursor BPCursor
         {
-            get { return breakpoint.Cursor; }
+            get { return breakpoint?.Cursor; }
         }
         
         #endregion

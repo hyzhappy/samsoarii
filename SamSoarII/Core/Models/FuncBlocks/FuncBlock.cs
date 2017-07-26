@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using System.ComponentModel;
 
 namespace SamSoarII.Core.Models
 {
     /// <summary>
     /// 所有元素模型的超级抽象类
     /// </summary>
-    abstract public class FuncBlock
+    abstract public class FuncBlock : INotifyPropertyChanged
     {
         /// <summary>
         /// 初始化构造函数
@@ -25,6 +25,8 @@ namespace SamSoarII.Core.Models
             Current = null;
             Namespace = String.Empty;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Numbers
 
@@ -255,39 +257,65 @@ namespace SamSoarII.Core.Models
         #endregion
 
         #region Breakpoint System
-        /// <summary>
-        /// 是否是断点
-        /// </summary>
-        public bool IsBreakpoint { get; set; }
 
-        /// <summary>
-        /// 断点地址
-        /// </summary>
-        public int BPAddress { get; set; }
+        private FuncBrpoModel breakpoint;
 
-        /// <summary>
-        /// 断点光标
-        /// </summary>
-        private BreakpointCursor bpCursor;
-
-        /// <summary>
-        /// 断点光标
-        /// </summary>
-        public BreakpointCursor BPCursor
+        public FuncBrpoModel Breakpoint
         {
             get
             {
-                return this.bpCursor;
+                return this.breakpoint;
             }
             set
             {
-                this.bpCursor = value;
+                if (breakpoint == value) return;
+                FuncBrpoModel _breakpoint = breakpoint;
+                this.breakpoint = null;
+                if (_breakpoint != null)
+                {
+                    _breakpoint.PropertyChanged -= OnBreakpointPropertyChanged;
+                    if (_breakpoint.Parent != null) _breakpoint.Parent = null;
+                }
+                this.breakpoint = value;
+                if (breakpoint != null)
+                {
+                    breakpoint.PropertyChanged += OnBreakpointPropertyChanged;
+                    if (breakpoint.Parent != this) breakpoint.Parent = this;
+                }
+            }
+        }
+
+        private void OnBreakpointPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IsEnable": PropertyChanged(this, new PropertyChangedEventArgs("BPEnable")); break;
+                case "IsActive": PropertyChanged(this, new PropertyChangedEventArgs("BPActive")); break;
+                case "Cursor": PropertyChanged(this, new PropertyChangedEventArgs("BPCursor")); break;
             }
         }
         
-        /// <summary>
-        /// 获得所有局部变量
-        /// </summary>
+        /// <summary> 断点地址 </summary>
+        public int BPAddress { get { return breakpoint != null ? breakpoint.Address : -1; } }
+
+        /// <summary> 断点是否可用 </summary>
+        public bool BPEnable
+        {
+            get { return breakpoint != null && breakpoint.IsEnable; }
+            set { if (breakpoint != null) breakpoint.IsEnable = value; }
+        }
+
+        /// <summary> 断点是否激活 </summary>
+        public bool BPActive
+        {
+            get { return breakpoint != null && breakpoint.IsActive; }
+            set { if (breakpoint != null) breakpoint.IsActive = value; }
+        }
+
+        /// <summary> 断点光标 </summary>
+        public BreakpointCursor BPCursor { get { return breakpoint?.Cursor; } }
+
+        /// <summary> 获得所有局部变量 </summary>
         public IList<FuncBlock_Assignment> LocalVars
         {
             get
@@ -323,9 +351,7 @@ namespace SamSoarII.Core.Models
             }
         }
 
-        /// <summary>
-        /// 获得所有函数参数
-        /// </summary>
+        /// <summary> 获得所有函数参数 </summary>
         public IList<FuncBlock_Assignment> Parameters
         {
             get
@@ -344,6 +370,7 @@ namespace SamSoarII.Core.Models
                 return new FuncBlock_Assignment[0];
             }
         }
+
         #endregion
 
         #endregion
@@ -731,7 +758,7 @@ namespace SamSoarII.Core.Models
                                 }
                             }
                         }
-                        // 检查是否为for & while循环头部
+                        // 检查是否为for&while循环 / if条件头部
                         if (this is FuncBlock_Local && bracketstack.Count() == 0 && leftbracket == '(')
                         {
                             int hstart = dividelabel + 1;
@@ -773,6 +800,7 @@ namespace SamSoarII.Core.Models
                                     newblock.Next.IndexStart = hstart + m1.Groups[3].Index;
                                     newblock.Next.IndexEnd = newblock.Next.IndexStart + m1.Groups[3].Length - 1;
                                 }
+                                dividelabel = hend;
                             }
                             // while循环头部
                             if (m2.Success)
@@ -789,6 +817,7 @@ namespace SamSoarII.Core.Models
                                     newblock.Cond.IndexStart = hstart + m1.Groups[1].Index;
                                     newblock.Cond.IndexEnd = newblock.Cond.IndexStart + m1.Groups[1].Length - 1;
                                 }
+                                dividelabel = hend;
                             }
                             // if循环头部
                             if (m3.Success)
@@ -805,6 +834,7 @@ namespace SamSoarII.Core.Models
                                     newblock.Cond.IndexStart = hstart + m1.Groups[1].Index;
                                     newblock.Cond.IndexEnd = newblock.Cond.IndexStart + m1.Groups[1].Length - 1;
                                 }
+                                dividelabel = hend;
                             }
                         }
                         //bracketcount--;
@@ -928,6 +958,11 @@ namespace SamSoarII.Core.Models
                             AddChildren(comment);
                             comment = null;
                         }
+                        break;
+                    // 关键字 "else"
+                    case 'e':
+                        if (bracketstack.Count() == 0 && i >= 3 && text.Substring(i - 3, 4).Equals("else"))
+                            dividelabel = i;
                         break;
                 }
             }
@@ -1156,15 +1191,15 @@ namespace SamSoarII.Core.Models
             Match m1 = null;
             if (texts.Length == 1)
             {
-                m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
+                m1 = Regex.Match(text, @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
             }
             if (texts.Length == 2)
             {
-                m1 = Regex.Match(texts[0], @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
+                m1 = Regex.Match(texts[0], @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
             }
             if (m1 != null && m1.Success)
             {
-                Name = m1.Groups[3].Value;
+                Name = m1.Groups[5].Value;
             }
             else
             {
@@ -1292,12 +1327,12 @@ namespace SamSoarII.Core.Models
             string[] texts = text.Split('=');
             if (texts.Length == 1)
             {
-                Match m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
+                Match m1 = Regex.Match(text, @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*;\s*$");
                 return m1.Success;
             }
             if (texts.Length == 2)
             {
-                Match m1 = Regex.Match(texts[0], @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
+                Match m1 = Regex.Match(texts[0], @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+([a-zA-Z_]\w*)\s*$");
                 Match m2 = Regex.Match(texts[1], @"^\s*[^;]*;\s*$");
                 //Match m3 = Regex.Match(texts[1], @"^\s*\d*\.\d+\s*;\s*$");
                 //Match m4 = Regex.Match(texts[1], @"^\s*0x[\da-fA-F]{1,8}\s*;\s*$");
@@ -1346,30 +1381,30 @@ namespace SamSoarII.Core.Models
         public override void Build(string text, int start, int end, int offset = 0)
         {
             ClearDefines();
-            Match m1 = Regex.Match(text.Substring(start, end - start + 1), @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
+            Match m1 = Regex.Match(text.Substring(start, end - start + 1), @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
             if (!m1.Success) return;
-            string _text = m1.Groups[3].Value;
+            string _text = m1.Groups[5].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {
-                Match m2 = Regex.Match(sub, @"^((\s*\*)*)\s*([a-zA-Z_]\w*)\s*");
+                Match m2 = Regex.Match(sub, @"^(\s*\*)*\s*([a-zA-Z_]\w*)\s*");
                 if (!m2.Success) return;
                 FuncBlock_Assignment fba = new FuncBlock_Assignment(model);
                 fba.Namespace = Parent.Namespace;
-                fba.Name = m2.Groups[3].Value;
+                fba.Name = m2.Groups[2].Value;
                 defines.Add(fba);
             }
         }
 
         static public bool TextSuit(string text)
         {
-            Match m1 = Regex.Match(text, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
+            Match m1 = Regex.Match(text, @"^\s*(((struct|unsigned)\s+)?[a-zA-Z_]\w*(\s*\*)*)\s+(.*);$");
             if (!m1.Success) return false;
-            string _text = m1.Groups[3].Value;
+            string _text = m1.Groups[5].Value;
             string[] texts = _text.Split(',');
             foreach (string sub in texts)
             {
-                Match m2 = Regex.Match(sub, @"^\s*([a-zA-Z_]\w*(\s*\*)*)\s*(=\s*[\w\.]*\s*)?$");
+                Match m2 = Regex.Match(sub, @"^(\s*\*)*\s*([a-zA-Z_]\w*)\s*(=|$)");
                 if (!m2.Success) return false;
             }
             return true;

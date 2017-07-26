@@ -643,7 +643,7 @@ namespace SamSoarII.Shell.Models
                 if (value.Equals(String.Empty))
                 {
                     CodeCompletePanel.Visibility = Visibility.Collapsed;
-                    CCSIsSelected = false;
+                    CCSIsSelected = true;
                     CodeTextBox.TextArea.IsCodeCompleteMode = false;
                 }
                 else
@@ -657,7 +657,7 @@ namespace SamSoarII.Shell.Models
                     CodeCompletePanel.Visibility = Visibility.Visible;
                     CCSViewPoint = 0;
                     CCSCursor = 0;
-                    CCSIsSelected = false;
+                    CCSIsSelected = true;
                     CodeTextBox.TextArea.IsCodeCompleteMode = true;
                     CCSUpdate();
                 }

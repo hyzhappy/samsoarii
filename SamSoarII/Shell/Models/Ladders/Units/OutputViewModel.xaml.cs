@@ -54,6 +54,11 @@ namespace SamSoarII.Shell.Models
 
         public override void Dispose()
         {
+            if (Core.Breakpoint.View != null)
+            {
+                MainCanvas.Children.Remove(Core.Breakpoint.View);
+                Core.Breakpoint.View.Dispose();
+            }
             base.Dispose();
             DataContext = null;
             AllResourceManager.Dispose(this);

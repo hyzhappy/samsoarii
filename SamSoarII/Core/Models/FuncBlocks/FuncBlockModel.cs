@@ -26,6 +26,7 @@ namespace SamSoarII.Core.Models
         }
         
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         public void InvokePropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
@@ -270,96 +271,6 @@ namespace SamSoarII.Core.Models
             assign = new FuncBlock_Assignment(this, Root, "uint_16* TVWord;");
             InvokePropertyChanged("Funcs");
             Parent.InvokeModify(this);
-        }
-
-        #endregion
-
-        #region Breakpoint System
-
-        private int bpaddrmin;
-        private int bpaddrmax;
-
-        public void InitBP()
-        {
-            InitBP(Root);
-        }
-
-        private void InitBP(FuncBlock fblock)
-        {
-            fblock.IsBreakpoint = false;
-            if (fblock is FuncBlock_ForHeader)
-            {
-                FuncBlock_ForHeader fblockfh = (FuncBlock_ForHeader)fblock;
-                InitBP(fblockfh.Start);
-                InitBP(fblockfh.Cond);
-                InitBP(fblockfh.Next);
-            }
-            if (fblock is FuncBlock_WhileHeader)
-            {
-                FuncBlock_WhileHeader fblockwh = (FuncBlock_WhileHeader)fblock;
-                InitBP(fblockwh.Cond);
-            }
-            if (fblock is FuncBlock_IfHeader)
-            {
-                FuncBlock_IfHeader fblockih = (FuncBlock_IfHeader)fblock;
-                InitBP(fblockih.Cond);
-            }
-            if (fblock is FuncBlock_WhileEnd)
-            {
-                FuncBlock_WhileEnd fblockwe = (FuncBlock_WhileEnd)fblock;
-                InitBP(fblockwe.Cond);
-            }
-            foreach (FuncBlock child in fblock.Childrens)
-            {
-                InitBP(child);
-            }
-        }
-
-        public void GetBPAddrRange()
-        {
-            bpaddrmin = 0x3fffffff;
-            bpaddrmax = -0x3fffffff;
-            GetBPAddrRange(Root);
-        }
-
-        private void GetBPAddrRange(FuncBlock fblock)
-        {
-            if (fblock.IsBreakpoint)
-            {
-                bpaddrmin = Math.Max(bpaddrmin, fblock.BPAddress);
-                bpaddrmax = Math.Max(bpaddrmax, fblock.BPAddress);
-            }
-            if (fblock is FuncBlock_ForHeader)
-            {
-                FuncBlock_ForHeader fblockfh = (FuncBlock_ForHeader)fblock;
-                GetBPAddrRange(fblockfh.Start);
-                GetBPAddrRange(fblockfh.Cond);
-                GetBPAddrRange(fblockfh.Next);
-            }
-            if (fblock is FuncBlock_WhileHeader)
-            {
-                FuncBlock_WhileHeader fblockwh = (FuncBlock_WhileHeader)fblock;
-                GetBPAddrRange(fblockwh.Cond);
-            }
-            if (fblock is FuncBlock_IfHeader)
-            {
-                FuncBlock_IfHeader fblockih = (FuncBlock_IfHeader)fblock;
-                GetBPAddrRange(fblockih.Cond);
-            }
-            if (fblock is FuncBlock_WhileEnd)
-            {
-                FuncBlock_WhileEnd fblockwe = (FuncBlock_WhileEnd)fblock;
-                GetBPAddrRange(fblockwe.Cond);
-            }
-            foreach (FuncBlock child in fblock.Childrens)
-            {
-                GetBPAddrRange(child);
-            }
-        }
-
-        public bool ContainBP(int bpaddr)
-        {
-            return bpaddr >= bpaddrmin && bpaddr <= bpaddrmax;
         }
 
         #endregion

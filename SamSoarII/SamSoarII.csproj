@@ -194,6 +194,7 @@
     <Compile Include="Core\Models\FuncBlocks\FuncBlock.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncBlockModel.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncModel.cs" />
+    <Compile Include="Core\Models\FuncBlocks\FuncBrpoModel.cs" />
     <Compile Include="Core\Models\Interfaces\IElementInitializeModel.cs" />
     <Compile Include="Core\Models\Instructions\InstructionDiagramModel.cs" />
     <Compile Include="Core\Models\Instructions\InstructionNetworkModel.cs" />
