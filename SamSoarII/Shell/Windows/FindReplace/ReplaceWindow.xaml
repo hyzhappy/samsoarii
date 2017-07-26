@@ -123,7 +123,7 @@
                                     Header="{x:Static properties:Resources.Routine}" Width="80">
                     </DataGridTextColumn>
                     <DataGridTextColumn x:Uid="DGTC_Network" x:Name="DGTC_Network" IsReadOnly="True" Binding="{Binding Network}"
-                                    Header="{x:Static properties:Resources.Network}" Width="40">
+                                    Header="{x:Static properties:Resources.Network}" Width="60">
                     </DataGridTextColumn>
                 </DataGrid.Columns>
 

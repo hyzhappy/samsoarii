@@ -88,7 +88,7 @@
                                         Header="{x:Static properties:Resources.FuncBlock}" Width="80">
                     </DataGridTextColumn>
                     <DataGridTextColumn x:Uid="DGTC_Network" x:Name="DGTC_Network" IsReadOnly="True" Binding="{Binding Position}"
-                                        Header="{x:Static properties:Resources.Position}" Width="40">
+                                        Header="{x:Static properties:Resources.Position}" Width="60">
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>

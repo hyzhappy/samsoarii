@@ -458,7 +458,7 @@
             <ToolBar>
                 <ComboBox SelectedIndex="0" Margin="0, -12, 0, 0" Width="80" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock Text="{x:Static properties:Resources.Simulate}"/>
+                    <TextBlock Text="{x:Static properties:Resources.MainWindow_Simulation}"/>
                 </ComboBox>
                 <ComboBox x:Name="TBCB_Device" SelectedIndex="0" Margin="0, -12, 0, 0" Width="120" Height="24"  
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
