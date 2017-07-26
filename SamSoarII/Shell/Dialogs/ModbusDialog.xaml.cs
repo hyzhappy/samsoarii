@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -21,6 +22,22 @@ namespace SamSoarII.Shell.Dialogs
         public ModbusDialog()
         {
             InitializeComponent();
+            KeyDown += ModbusDialog_KeyDown;
+        }
+
+        private void ModbusDialog_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                B_Ensure.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+            else
+            {
+                if (e.Key == Key.Escape)
+                {
+                    B_Cancel.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                }
+            }
         }
     }
 }
