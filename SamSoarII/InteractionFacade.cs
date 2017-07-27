@@ -449,6 +449,7 @@ namespace SamSoarII
                             }
                             else
                             {
+                                dialog.Close();
                                 //StatusBarHepler.UpdateMessageAsync(Properties.Resources.MessageBox_Download_Successd);
                                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Download_Successd, LocalizedMessageIcon.Information);
                             }

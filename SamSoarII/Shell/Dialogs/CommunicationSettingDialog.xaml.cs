@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace SamSoarII.Shell.Dialogs
 {
@@ -36,6 +37,7 @@ namespace SamSoarII.Shell.Dialogs
             this.communicationParams = communicationParams;
             Mode = mode;
             baseSetting.DataContext = this.communicationParams;
+            //baseSetting.radiobutton.IsChecked = communicationParams.IsComLinked;
             EnsureButton.Click += EnsureButton_Click;
             CancelButton.Click += CancelButton_Click;
             CommunicationTestButton.Click += CommunicationTestButton_Click;
@@ -77,6 +79,11 @@ namespace SamSoarII.Shell.Dialogs
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            Save();
         }
         public event RoutedEventHandler Ensure = delegate { };
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
