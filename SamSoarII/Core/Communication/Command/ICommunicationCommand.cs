@@ -11,10 +11,10 @@ namespace SamSoarII.Core.Communication
     public class AddrSegment
     {
         #region Numbers
-        public byte Type { get; private set; }
-        public byte Length { get; private set; }
-        public byte AddrLow { get; private set; }
-        public byte AddrHigh { get; private set; }
+        public byte Type { get; set; }
+        public byte Length { get; set; }
+        public byte AddrLow { get; set; }
+        public byte AddrHigh { get; set; }
         public uint Addr
         {
             get
@@ -24,6 +24,7 @@ namespace SamSoarII.Core.Communication
         }
         #endregion
         public MonitorElement Model { get; set; }
+        public AddrSegment() { }
         public AddrSegment(MonitorElement model,bool isIntra = false)
         {
             Model = model;

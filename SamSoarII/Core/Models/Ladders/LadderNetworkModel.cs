@@ -266,10 +266,9 @@ namespace SamSoarII.Core.Models
 
         public event LadderUnitChangedEventHandler ChildrenChanged = delegate { };
         
-        private void Invoke(LadderUnitModel lumodel, LadderUnitAction action)
+        public void InvokeByChildren(LadderUnitModel unit, LadderUnitAction action)
         {
-            lumodel.Invoke(action);
-            ChildrenChanged(lumodel, new LadderUnitChangedEventArgs(action));
+            ChildrenChanged(unit, new LadderUnitChangedEventArgs(action));
         }
 
         #endregion
@@ -298,8 +297,9 @@ namespace SamSoarII.Core.Models
             if (_lumodel != null) Remove(_lumodel);
             children[lumodel.X, lumodel.Y] = lumodel;
             lumodel.Parent = this;
-            Invoke(lumodel, LadderUnitAction.ADD);
+            lumodel.Invoke(LadderUnitAction.ADD);
         }
+        
         public void Add(IEnumerable<LadderUnitModel> lumodels)
         {
             foreach (LadderUnitModel lumodel in lumodels) Add(lumodel);
@@ -307,7 +307,7 @@ namespace SamSoarII.Core.Models
 
         public void Remove(LadderUnitModel lumodel)
         {
-            Invoke(lumodel, LadderUnitAction.REMOVE);
+            lumodel.Invoke(LadderUnitAction.REMOVE);
             children[lumodel.X, lumodel.Y] = null;
             lumodel.Parent = null;
         }
@@ -322,7 +322,7 @@ namespace SamSoarII.Core.Models
             lumodel.X += dx;
             lumodel.Y += dy;
             children[lumodel.X, lumodel.Y] = lumodel;
-            Invoke(lumodel, LadderUnitAction.MOVE);
+            lumodel.Invoke(LadderUnitAction.MOVE);
         }
         public void Move(IEnumerable<LadderUnitModel> lumodels, int dx, int dy)
         {
@@ -335,7 +335,7 @@ namespace SamSoarII.Core.Models
             foreach (LadderUnitModel lumodel in lumodels)
             {
                 children[lumodel.X, lumodel.Y] = lumodel;
-                Invoke(lumodel, LadderUnitAction.MOVE);
+                lumodel.Invoke(LadderUnitAction.MOVE);
             }
         }
 
@@ -349,7 +349,7 @@ namespace SamSoarII.Core.Models
             if (_lumodel != null) Remove(_lumodel);
             vlines[lumodel.X, lumodel.Y] = lumodel;
             lumodel.Parent = this;
-            Invoke(lumodel, LadderUnitAction.ADD);
+            lumodel.Invoke(LadderUnitAction.ADD);
         }
         public void AddV(IEnumerable<LadderUnitModel> lumodels)
         {
@@ -358,7 +358,7 @@ namespace SamSoarII.Core.Models
 
         public void RemoveV(LadderUnitModel lumodel)
         {
-            Invoke(lumodel, LadderUnitAction.REMOVE);
+            lumodel.Invoke(LadderUnitAction.REMOVE);
             vlines[lumodel.X, lumodel.Y] = null;
             lumodel.Parent = null;
         }
@@ -373,7 +373,7 @@ namespace SamSoarII.Core.Models
             lumodel.X += dx;
             lumodel.Y += dy;
             vlines[lumodel.X, lumodel.Y] = lumodel;
-            Invoke(lumodel, LadderUnitAction.MOVE);
+            lumodel.Invoke(LadderUnitAction.MOVE);
         }
         public void MoveV(IEnumerable<LadderUnitModel> lumodels, int dx, int dy)
         {
@@ -386,7 +386,7 @@ namespace SamSoarII.Core.Models
             foreach (LadderUnitModel lumodel in lumodels)
             {
                 vlines[lumodel.X, lumodel.Y] = lumodel;
-                Invoke(lumodel, LadderUnitAction.MOVE);
+                lumodel.Invoke(LadderUnitAction.MOVE);
             }
         }
 

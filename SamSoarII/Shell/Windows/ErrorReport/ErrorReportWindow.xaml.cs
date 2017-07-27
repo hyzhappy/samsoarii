@@ -170,7 +170,7 @@ namespace SamSoarII.Shell.Windows
 
         public void Update(IEnumerable<ErrorReportElement> insts)
         {
-            items.Clear();
+            Initialize();
             int _errorcount = 0;
             int _warningcount = 0;
             foreach (ErrorReportElement inst in insts)
@@ -195,7 +195,7 @@ namespace SamSoarII.Shell.Windows
 
         public void Update(IEnumerable<ErrorReportElement_FB> eles)
         {
-            fitems.Clear();
+            Initialize();
             int _errorcount = 0;
             int _warningcount = 0;
             foreach (ErrorReportElement_FB ele in eles)

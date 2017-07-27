@@ -12,6 +12,7 @@ using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
 using SamSoarII.Core.Generate;
+using SamSoarII.Core.Communication;
 
 namespace SamSoarII.Core.Models
 {
@@ -69,34 +70,62 @@ namespace SamSoarII.Core.Models
         {
             parent = _parent;
             infos = new ValueInfo[InfoCount];
-            emptyinfo = new ValueInfo(new ValuePrototype(ValueModel.Bases.NULL, 0));
+            emptyinfo = new ValueInfo(new ValuePrototype(ValueModel.Bases.NULL, 0), -1);
             tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.VarRegex }));
             for (int i = 0; i < MaxRange.XRange.Count; i++)
-                infos[i + XOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, i));
+                infos[i + XOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, i), i + XOffset);
             for (int i = 0; i < MaxRange.YRange.Count; i++)
-                infos[i + YOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Y, i));
+                infos[i + YOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Y, i), i + YOffset);
             for (int i = 0; i < MaxRange.MRange.Count; i++)
-                infos[i + MOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.M, i));
+                infos[i + MOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.M, i), i + MOffset);
             for (int i = 0; i < MaxRange.SRange.Count; i++)
-                infos[i + SOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.S, i));
+                infos[i + SOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.S, i), i + SOffset);
             for (int i = 0; i < MaxRange.CRange.Count; i++)
-                infos[i + COffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.C, i));
+                infos[i + COffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.C, i), i + COffset);
             for (int i = 0; i < MaxRange.TRange.Count; i++)
-                infos[i + TOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.T, i));
+                infos[i + TOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.T, i), i + TOffset);
+            int dataaddr = DOffset;
             for (int i = 0; i < MaxRange.DRange.Count; i++)
-                infos[i + DOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.D, i));
+            {
+                infos[i + DOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.D, i), dataaddr);
+                dataaddr += 2;
+            }
             for (int i = 0; i < MaxRange.CVRange.Count; i++)
-                infos[i + CVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.CV, i));
+            {
+                infos[i + CVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.CV, i), dataaddr);
+                dataaddr += (i <= MaxRange.CV16Range.End ? 2 : 4);
+            }
             for (int i = 0; i < MaxRange.TVRange.Count; i++)
-                infos[i + TVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.TV, i));
+            {
+                infos[i + TVOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.TV, i), dataaddr);
+                dataaddr += 2;
+            }
             for (int i = 0; i < MaxRange.AIRange.Count; i++)
-                infos[i + AIOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AI, i));
+            {
+                infos[i + AIOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AI, i), dataaddr);
+                dataaddr += 2;
+            }
             for (int i = 0; i < MaxRange.AORange.Count; i++)
-                infos[i + AOOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AO, i));
+            {
+                infos[i + AOOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.AO, i), dataaddr);
+                dataaddr += 2;
+            }
+            storev = new ValueStore[MaxRange.VRange.Count];
             for (int i = 0; i < MaxRange.VRange.Count; i++)
-                infos[i + VOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.V, i));
+            {
+                infos[i + VOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.V, i), dataaddr);
+                storev[i] = new ValueStore(infos[i + VOffset], ValueModel.Types.WORD);
+                dataaddr += 2;
+            }
+            storez = new ValueStore[MaxRange.ZRange.Count];
             for (int i = 0; i < MaxRange.ZRange.Count; i++)
-                infos[i + ZOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Z, i));
+            {
+                infos[i + ZOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.Z, i), dataaddr);
+                storez[i] = new ValueStore(infos[i + ZOffset], ValueModel.Types.WORD);
+                dataaddr += 2;
+            }
+            datas = new byte[dataaddr];
+            dataused = new bool[dataaddr];
             for (int i = 0; i < infos.Length; i++)
                 infos[i].PropertyChanged += OnInfoPropertyChanged;
         }
@@ -348,7 +377,6 @@ namespace SamSoarII.Core.Models
             {
                 vinfo.Remove(value);
                 vinfo.Remove(value.Parent);
-
             }
         }
         public void Add(LadderUnitModel unit)
@@ -512,7 +540,52 @@ namespace SamSoarII.Core.Models
         }
 
         #endregion
+
+        #region Monitor Data
+
+        private byte[] datas;
+        private bool[] dataused;
+
+        private ValueStore[] storev;
+        private ValueStore[] storez;
         
+        public IList<ICommunicationCommand> GetReadCommands()
+        {
+            for (int i = 0; i < infos.Count(); i++)
+                dataused[i] = false;
+            for (int i = 0; i < infos.Count(); i++)
+            {
+                switch (infos[i].Prototype.Base)
+                {
+                    case ValueModel.Bases.V:
+                    case ValueModel.Bases.Z:
+                        dataused[infos[i].DataAddr] = true;
+                        dataused[infos[i].DataAddr + 1] = true;
+                        break;
+                    default:
+                        if (infos[i].Stores.Count() == 0) continue;
+                        int maxbyte = infos[i].Stores.Max(vs => vs.ByteCount);
+                        for (int j = infos[i].DataAddr; j < infos[i].DataAddr + maxbyte; j++)
+                            dataused[j] = true;
+                        IEnumerable<ValueStore> intras = infos[i].Stores.Where(vs => vs.Intra != ValueModel.Bases.NULL);
+                        break;
+                }
+            }
+            
+            List<AddrSegment> segs = new List<AddrSegment>();
+            
+            List<ICommunicationCommand> result = new List<ICommunicationCommand>();
+            
+            return result;
+        }
+
+        public void AnalyzeReadCommands(IEnumerable<ICommunicationCommand> cmds)
+        {
+
+        }
+
+        #endregion
+
         #region Save & Load
 
         public void Save(XElement xele)

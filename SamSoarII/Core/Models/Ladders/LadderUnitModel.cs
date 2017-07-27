@@ -1365,6 +1365,7 @@ namespace SamSoarII.Core.Models
         public void Invoke(LadderUnitAction action)
         {
             Changed(this, new LadderUnitChangedEventArgs(action));
+            parent?.InvokeByChildren(this, action);
         }
 
         #endregion
