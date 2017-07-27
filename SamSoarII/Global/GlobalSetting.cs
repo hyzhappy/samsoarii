@@ -321,7 +321,6 @@ namespace SamSoarII.Global
         {
             InstrutionNameAndToolTips = new Dictionary<string, List<string>>();
             Assembly assembly = Assembly.GetExecutingAssembly();
-            //Console.WriteLine(assembly.GetManifestResourceNames());
             Stream stream = assembly.GetManifestResourceStream("SamSoarII.Resources.InstructionPopup.xml");
             Dictionary<string, List<string>> tempDic = new Dictionary<string, List<string>>();
             XDocument xDoc = XDocument.Load(stream);
