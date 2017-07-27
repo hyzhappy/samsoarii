@@ -486,6 +486,7 @@
     <Compile Include="Shell\Windows\FindReplace\TextReplaceWindow.xaml.cs">
       <DependentUpon>TextReplaceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Windows\FuncBrpoTableElement.cs" />
     <Compile Include="Shell\Windows\Interfaces\ITabItem.cs" />
     <Compile Include="Shell\Windows\Interfaces\IWindow.cs" />
     <Compile Include="Shell\Windows\Interfaces\IWindowEventArgs.cs" />

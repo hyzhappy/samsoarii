@@ -2133,4 +2133,7 @@
   <data name="Message_OutOfYRange" xml:space="preserve">
     <value>Y register is out of allowed range of device</value>
   </data>
+  <data name="Statement" xml:space="preserve">
+    <value>Statement</value>
+  </data>
 </root>

@@ -5533,6 +5533,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Statement 的本地化字符串。
+        /// </summary>
+        public static string Statement {
+            get {
+                return ResourceManager.GetString("Statement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Station Number Setting 的本地化字符串。
         /// </summary>
         public static string Station_Number_Setting {

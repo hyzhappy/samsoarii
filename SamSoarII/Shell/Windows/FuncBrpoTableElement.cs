@@ -1,33 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using SamSoarII.Core.Models;
 using System.Windows.Media;
+using System.ComponentModel;
+using SamSoarII.Core.Models;
+using ICSharpCode.AvalonEdit;
 
 namespace SamSoarII.Shell.Windows
 {
-    public class LadderBrpoTableElement : IDisposable, INotifyPropertyChanged
+    public class FuncBrpoTableElement : IDisposable, INotifyPropertyChanged
     {
-        #region Resources
-
-        static private string[] selectedconditions
-            = { "无", "ON", "OFF", "上升沿", "下降沿", "边沿"};
-
-        public IEnumerable<string> SelectedConditions()
-        {
-            return selectedconditions;
-        }
-
-        #endregion
-        
-        public LadderBrpoTableElement()
-        {
-
-        }
-
-        public LadderBrpoTableElement(LadderBrpoModel _parent)
+        public FuncBrpoTableElement(FuncBrpoModel _parent)
         {
             Parent = _parent;
         }
@@ -41,8 +25,8 @@ namespace SamSoarII.Shell.Windows
 
         #region Number
 
-        private LadderBrpoModel parent;
-        public LadderBrpoModel Parent
+        private FuncBrpoModel parent;
+        public FuncBrpoModel Parent
         {
             get
             {
@@ -51,7 +35,7 @@ namespace SamSoarII.Shell.Windows
             set
             {
                 if (parent == value) return;
-                LadderBrpoModel _parent = parent;
+                FuncBrpoModel _parent = parent;
                 this.parent = null;
                 if (_parent != null)
                 {
@@ -68,17 +52,15 @@ namespace SamSoarII.Shell.Windows
         }
         public string ActiveInfo { get { return parent.IsActive ? "启用" : "禁用"; } }
         public Brush ActiveBrush { get { return parent.IsActive ? Brushes.Red : Brushes.Gray; } }
-        public string ProgramName { get { return parent.Parent.Parent.Parent.Name; } }
-        public string Instruction { get { return parent.Parent.ToInstString(); } }
-        public int SelectedIndex
+        public string ProgramName { get { return parent.Parent.Model.Name; } }
+        public string Statement { get { return parent.Parent.Model.Code.Substring(parent.Parent.IndexStart, parent.Parent.IndexEnd - parent.Parent.IndexStart + 1); } }
+        public string Position
         {
-            get { return parent.ConditionIndex; }
-            set { parent.ConditionIndex = value; }
-        }
-        public string SkipCount
-        {
-            get { return parent.SkipCount.ToString(); }
-            set { try { parent.SkipCount = Math.Max(1, int.Parse(value)); } catch (Exception) { parent.SkipCount = 1; } }
+            get
+            {
+                TextViewPosition? pos = parent.Parent.Model.View.GetPosition(parent.Parent.IndexStart);
+                return pos.HasValue ? String.Format("({0},{1})", pos.Value.Line, pos.Value.Column) : String.Empty;
+            }
         }
 
         private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -89,15 +71,9 @@ namespace SamSoarII.Shell.Windows
                     PropertyChanged(this, new PropertyChangedEventArgs("ActiveInfo"));
                     PropertyChanged(this, new PropertyChangedEventArgs("ActiveBrush"));
                     break;
-                case "ConditionIndex":
-                    PropertyChanged(this, new PropertyChangedEventArgs("SelectedIndex"));
-                    break;
-                case "SkipCount":
-                    PropertyChanged(this, new PropertyChangedEventArgs("SkipCount"));
-                    break;
             }
         }
-
+        
         #endregion
     }
 }

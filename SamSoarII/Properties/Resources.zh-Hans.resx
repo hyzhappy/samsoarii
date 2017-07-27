@@ -2133,4 +2133,7 @@
   <data name="Message_OutOFYRange" xml:space="preserve">
     <value>Y寄存器的索引超出了设备型号的范围！</value>
   </data>
+  <data name="Statement" xml:space="preserve">
+    <value>语句</value>
+  </data>
 </root>

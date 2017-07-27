@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using SamSoarII.Core.Simulate;
+using SamSoarII.Shell.Windows;
 
 namespace SamSoarII.Core.Models
 {
@@ -73,6 +74,34 @@ namespace SamSoarII.Core.Models
         {
             get { return this.cursor; }
             set { this.cursor = value; PropertyChanged(this, new PropertyChangedEventArgs("Cursor")); }
+        }
+
+        #endregion
+
+        #region View
+
+        private FuncBrpoTableElement element;
+        public FuncBrpoTableElement Element
+        {
+            get
+            {
+                return this.element;
+            }
+            set
+            {
+                if (element == value) return;
+                FuncBrpoTableElement _element = element;
+                this.element = null;
+                if (_element != null)
+                {
+                    if (_element.Parent != null) _element.Parent = null;
+                }
+                this.element = value;
+                if (element != null)
+                {
+                    if (element.Parent != this) element.Parent = this;
+                }
+            }
         }
 
         #endregion
