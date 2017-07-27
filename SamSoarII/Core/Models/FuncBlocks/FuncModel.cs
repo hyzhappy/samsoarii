@@ -20,6 +20,8 @@ namespace SamSoarII.Core.Models
         #endregion
 
         #region Number
+        /// <summary> 父类 </summary>
+        public FuncBlockModel Parent { get; set; }
         /// <summary> 文本坐标 </summary>
         public int Offset { get; set; }
         /// <summary> 函数名称 </summary>

@@ -710,6 +710,7 @@ namespace SamSoarII.Core.Models
                                 hstart += m1.Index;
                                 //hstart = hend - m1.Value.Length + 1;
                                 FuncModel func = new FuncModel();
+                                func.Parent = Model;
                                 func.Offset = hstart;
                                 func.ReturnType = Regex.Replace(m1.Groups[1].Value, @"\s*", String.Empty);
                                 func.Name = m1.Groups[3].Value;

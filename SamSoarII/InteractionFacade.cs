@@ -1631,6 +1631,11 @@ namespace SamSoarII
                                 fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
                             tcMain.ShowItem(fbmodel.View);
                         }
+                        if (e2.RelativeObject is FuncModel)
+                        {
+                            FuncModel fmodel = (FuncModel)(e2.RelativeObject);
+                            Navigate(fmodel.Parent, fmodel.Offset);
+                        }
                         if (e2.RelativeObject is ModbusTableModel)
                         {
                             ModbusTableModel mtmodel = (ModbusTableModel)(e2.RelativeObject);

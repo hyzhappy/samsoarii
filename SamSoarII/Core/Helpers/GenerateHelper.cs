@@ -289,6 +289,11 @@ namespace SamSoarII.Core.Helpers
             FindInFuncBlock(fbmodel.Root);
             StringBuilder code = new StringBuilder();
             int start = 0, len = 0;
+            if (funcs.Count() == 0)
+            {
+                sw.Write(GenerateCType(fbmodel.Code));
+                return;
+            }
 
             for (int i1 = 0, i2 = 0; i1 < funcs.Count(); i1++)
             {

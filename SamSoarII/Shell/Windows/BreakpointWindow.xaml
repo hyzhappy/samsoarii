@@ -42,7 +42,8 @@
                       HorizontalScrollBarVisibility="Auto">
             <Grid>
                 <DataGrid x:Uid="DG_Main" x:Name="DG_Main" ItemsSource="{Binding Items}"
-                      AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False">
+                      AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False"
+                      SelectionChanged="DG_Main_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Uid="DataGridTextColumn_1" Header="{x:Static properties:Resources.Enable_Disable}" 
                                         Binding="{Binding ActiveInfo}" IsReadOnly="True">
@@ -78,7 +79,8 @@
                 </DataGrid>
                 <DataGrid x:Uid="DG_FMain" x:Name="DG_FMain" ItemsSource="{Binding FItems}"
                           AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False" 
-                          IsEnabled="False" Visibility="Hidden">
+                          IsEnabled="False" Visibility="Hidden"
+                          SelectionChanged="DG_FMain_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Uid="DataGridTextColumn_1" Header="{x:Static properties:Resources.Enable_Disable}" 
                                         Binding="{Binding ActiveInfo}" IsReadOnly="True">

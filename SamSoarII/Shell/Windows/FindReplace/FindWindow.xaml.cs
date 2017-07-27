@@ -96,7 +96,7 @@ namespace SamSoarII.Shell.Windows
                 case MODE_ALL:
                     Find(Project.MainDiagram);
                     foreach (LadderDiagramModel diagram in Project.Diagrams)
-                        Find(diagram);
+                        if (!diagram.IsMainLadder) Find(diagram);
                     break;
             }
             PropertyChanged(this, new PropertyChangedEventArgs("Items"));

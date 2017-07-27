@@ -162,6 +162,16 @@ namespace SamSoarII.Shell.Windows
                 }
             }
         }
+        
+        private void DG_Main_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateButtonEnable();
+        }
+
+        private void DG_FMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateButtonEnable();
+        }
 
         #endregion
 
