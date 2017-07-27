@@ -567,12 +567,36 @@ namespace SamSoarII.Core.Models
                         int maxbyte = infos[i].Stores.Max(vs => vs.ByteCount);
                         for (int j = infos[i].DataAddr; j < infos[i].DataAddr + maxbyte; j++)
                             dataused[j] = true;
-                        IEnumerable<ValueStore> intras = infos[i].Stores.Where(vs => vs.Intra != ValueModel.Bases.NULL);
                         break;
                 }
+                IEnumerable<ValueStore> intras = infos[i].Stores.Where(vs => vs.Intra != ValueModel.Bases.NULL);
+                foreach (ValueStore vstore in intras)
+                {
+                    int dataaddr = infos[i].DataAddr;
+                    switch (vstore.Intra)
+                    {
+                        case ValueModel.Bases.V: dataaddr += (int)(storev[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+                        case ValueModel.Bases.Z: dataaddr += (int)(storez[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+                    }
+                    for (int j = Math.Max(0, dataaddr); j < Math.Min(dataused.Length, dataaddr + vstore.ByteCount); j++)
+                        dataused[j] = true;
+                }
             }
-            
             List<AddrSegment> segs = new List<AddrSegment>();
+            int start = -1;
+            for (int i = 0; i < infos.Count(); i++)
+            {
+                bool issplit = false;
+                if (dataused[infos[i].DataAddr])
+                {
+                    if (start == -1) start = i;
+                    if (start != -1)
+                    {
+                        issplit |= infos[i].Prototype.Base != infos[start].Prototype.Base;
+                        
+                    }
+                }
+            }
             
             List<ICommunicationCommand> result = new List<ICommunicationCommand>();
             
