@@ -1402,7 +1402,7 @@
     <value>浮点相乘</value>
   </data>
   <data name="Word_Divide" xml:space="preserve">
-    <value>单子相除</value>
+    <value>单字相除</value>
   </data>
   <data name="DWord_Divide" xml:space="preserve">
     <value>双字相除</value>
