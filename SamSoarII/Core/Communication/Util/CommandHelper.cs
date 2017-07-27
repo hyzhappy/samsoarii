@@ -165,7 +165,9 @@ namespace SamSoarII.Core.Communication
         public static void UpdateElements(List<AddrSegment> Segments,byte[] data)
         {
             byte addrType = Segments.First().Type;
-            int startAddr = Segments.OrderBy(x => { return x.Model.StartAddr; }).First().Model.StartAddr;
+            AddrSegment firstseg = Segments.Where(s => s.Model?.Store != null).OrderBy(x => x.Model.StartAddr).FirstOrDefault();
+            if (firstseg == null) return;
+            int startAddr = firstseg.Model.StartAddr;
             int typeLen = GetLengthByAddrType(addrType);
             foreach (var segment in Segments)
             {

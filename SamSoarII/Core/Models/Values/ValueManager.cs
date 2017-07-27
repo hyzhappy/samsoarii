@@ -570,6 +570,7 @@ namespace SamSoarII.Core.Models
                         break;
                 }
                 IEnumerable<ValueStore> intras = infos[i].Stores.Where(vs => vs.Intra != ValueModel.Bases.NULL);
+                if (intras.Count() > 0) intras = intras.ToArray();
                 foreach (ValueStore vstore in intras)
                 {
                     int dataaddr = infos[i].DataAddr;
@@ -593,11 +594,32 @@ namespace SamSoarII.Core.Models
                     if (start != -1)
                     {
                         issplit |= infos[i].Prototype.Base != infos[start].Prototype.Base;
-                        
+                        int maxrange = 32;
+                        if (infos[i].Prototype.Base == ValueModel.Bases.CV && infos[i].Prototype.Offset >= 200)
+                            maxrange = 16;
+                        issplit |= i - start + 1 > maxrange;
                     }
                 }
+                else if (start != -1)
+                {
+                    issplit = true;
+                }
+                if (issplit)
+                {
+                    segs.Add(CommandHelper.GetAddrSegment(
+                        infos[start].Prototype.Base,
+                        infos[start].Prototype.Offset,
+                        i - start));
+                    start = dataused[infos[i].DataAddr] ? i : -1;
+                }
             }
-            
+            if (start != -1)
+            {
+                segs.Add(CommandHelper.GetAddrSegment(
+                        infos[start].Prototype.Base,
+                        infos[start].Prototype.Offset,
+                        infos.Count() - start));
+            }
             List<ICommunicationCommand> result = new List<ICommunicationCommand>();
             
             return result;
