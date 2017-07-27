@@ -43,6 +43,8 @@ namespace SamSoarII.Shell.Models
             tberr.Background = Brushes.Red;
             SetPosition(tberr, 0);
             CV_Inst.Children.Add(tberr);
+
+            BaseUpdate();
         }
         
         public void Dispose()
@@ -258,11 +260,9 @@ namespace SamSoarII.Shell.Models
                 loadedrowend = _loadedrowend;
                 oldscrolloffset = newscrolloffset;
             }
-            else if (loadedrowstart <= loadedrowend)
+            else
             {
-                DisposeRange(loadedrowstart, loadedrowend);
-                loadedrowstart = 0;
-                loadedrowend = -1;
+                DynamicDispose();
             }
         }
 
@@ -270,7 +270,9 @@ namespace SamSoarII.Shell.Models
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
-                children.Clear();
+                foreach (InstructionRowViewModel row in children.ToArray())
+                    children.Remove(row);
+                //children.Clear();
                 loadedrowstart = 0;
                 loadedrowend = -1;
             });

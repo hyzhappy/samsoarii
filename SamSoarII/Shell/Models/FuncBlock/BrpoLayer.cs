@@ -45,7 +45,9 @@ namespace SamSoarII.Shell.Models
             core.BreakpointPropertyChanged -= OnCoreBrpoPropertyChanged;
             this.core = null;
             this.textview = null;
-            items.Clear();
+            foreach (FuncBlock item in items.ToArray())
+                items.Remove(item);
+            //items.Clear();
             items = null;
         }
 
