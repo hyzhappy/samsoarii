@@ -589,6 +589,13 @@ namespace SamSoarII.Core.Generate
             get { return this.type; }
         }
         /// <summary>
+        /// 指令参数数量
+        /// </summary>
+        public int Count
+        {
+            get { return args.Count(); }
+        }
+        /// <summary>
         /// 指令参数（0为类型，1-5分别对应五个参数）
         /// </summary>
         /// <param name="id"></param>

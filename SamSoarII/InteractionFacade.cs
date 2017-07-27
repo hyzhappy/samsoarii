@@ -1074,7 +1074,26 @@ namespace SamSoarII
             rect.Y = y;
             diagram.View.NavigateToNetworkByNum(network.ID);
         }
+
+        public void Navigate(FuncBlock fblock)
+        {
+            Navigate(fblock.Model, fblock.IndexStart);
+        }
+
+        public void Navigate(FuncBlockModel fbmodel, int offset)
+        {
+            if (fbmodel.View == null) fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
+            tcMain.ShowItem(fbmodel.View);
+            fbmodel.View.SetOffset(offset);
+        }
         
+        public void Navigate(FuncBlockModel fbmodel, int row, int column)
+        {
+            if (fbmodel.View == null) fbmodel.View = new FuncBlockViewModel(fbmodel, tcMain);
+            tcMain.ShowItem(fbmodel.View);
+            fbmodel.View.SetPosition(row, column);
+        }
+
         public void Select(LadderNetworkModel network, int x1, int x2, int y1, int y2)
         {
             if (x1 == x2 && y1 == y2)
@@ -1112,6 +1131,13 @@ namespace SamSoarII
                 vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
                     Navigate(((LadderBrpoModel)ibrpo).Parent);
+                });
+            }
+            if (ibrpo is FuncBrpoModel)
+            {
+                vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                {
+                    Navigate(((FuncBrpoModel)ibrpo).Parent);
                 });
             }
         }

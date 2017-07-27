@@ -46,7 +46,8 @@ namespace SamSoarII.Shell.Models
                     MNGComu.Aborted += OnMonitorAborted;
                 }
                 foreach (ValueModel vmodel in Core.Children)
-                    vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
+                    if (vmodel.Store != null)
+                        vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
             }
         }
         
@@ -72,7 +73,8 @@ namespace SamSoarII.Shell.Models
                     MNGComu.Aborted -= OnMonitorAborted;
                 }
                 foreach (ValueModel vmodel in Core.Children)
-                    vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
+                    if (vmodel.Store != null)
+                        vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
             }
             Core = null;
         }
@@ -163,7 +165,8 @@ namespace SamSoarII.Shell.Models
                             MNGComu.Aborted -= OnMonitorAborted;
                         }
                         foreach (ValueModel vmodel in Core.Children)
-                            vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
+                            if (vmodel.Store != null)
+                                vmodel.Store.PropertyChanged -= OnValueStorePropertyChanged;
                     }
                     if (LadderMode != LadderModes.Edit)
                     {
@@ -178,7 +181,8 @@ namespace SamSoarII.Shell.Models
                             MNGComu.Aborted += OnMonitorAborted;
                         }
                         foreach (ValueModel vmodel in Core.Children)
-                            vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
+                            if (vmodel.Store != null)
+                                vmodel.Store.PropertyChanged += OnValueStorePropertyChanged;
                     }
                     Update(UPDATE_PROPERTY | UPDATE_BRPO);
                     oldladdermode = LadderMode;

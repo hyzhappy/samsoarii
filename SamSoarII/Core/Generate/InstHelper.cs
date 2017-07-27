@@ -699,7 +699,7 @@ namespace SamSoarII.Core.Generate
                         // CALLM指令，调用用户实现的c语言宏指令，根据参数数量的不同表现为不同的格式
                         case "CALLM":
                             // 无参数的函数
-                            if (inst[2].Equals(String.Empty))
+                            if (inst.Count == 2)
                             {
                                 sw.Write("{0:s}();", inst[1]);
                             }
@@ -707,7 +707,7 @@ namespace SamSoarII.Core.Generate
                             else
                             {
                                 sw.Write("{0:s}({1:s}", inst[1], inst[2]);
-                                for (int i = 3; i < 6; i++)
+                                for (int i = 3; i < inst.Count; i++)
                                 {
                                     if (inst[i].Equals(String.Empty)) break;
                                     sw.Write(",{0:s}", inst[i]);

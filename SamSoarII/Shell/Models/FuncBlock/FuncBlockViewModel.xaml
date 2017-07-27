@@ -10,9 +10,15 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <wnd:BaseTabItem.CommandBindings>
-        <CommandBinding Command="{x:Static ApplicationCommands.Find}" CanExecute="FindCommandCanExecute" Executed="OnFindCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.Replace}" CanExecute="ReplaceCommandCanExecute" Executed="OnReplaceCommandExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" Executed="OnSelectAllCommandExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static ApplicationCommands.Undo}" CanExecute="OnCommandCanExecute"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.Redo}" CanExecute="OnCommandCanExecute"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.Cut}" CanExecute="OnCommandCanExecute"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.Copy}" CanExecute="OnCommandCanExecute"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.Paste}" CanExecute="OnCommandCanExecute"/>
+        <CommandBinding Command="{x:Static ApplicationCommands.SelectAll}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
+        <CommandBinding Command="{x:Static local:FuncBlockViewModel.AddBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
+        <CommandBinding Command="{x:Static local:FuncBlockViewModel.RemoveBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
+        <CommandBinding Command="{x:Static local:FuncBlockViewModel.ActiveBreakpoint}" CanExecute="OnCommandCanExecute" Executed="OnCommandExecute"/>
     </wnd:BaseTabItem.CommandBindings>
     <wnd:BaseTabItem.Resources>
         <ObjectDataProvider x:Key="FontData" ObjectType="{x:Type mg:FontManager}" MethodName="GetFunc"/>
@@ -91,6 +97,11 @@
             <MenuItem x:Uid="MenuItem_4" Header="复制" Command="{x:Static ApplicationCommands.Copy}"></MenuItem>
             <MenuItem x:Uid="MenuItem_5" Header="粘贴" Command="{x:Static ApplicationCommands.Paste}"></MenuItem>
             <MenuItem x:Uid="MenuItem_6" Header="全选" Command="{x:Static ApplicationCommands.SelectAll}"></MenuItem>
+            <Separator/>
+            <MenuItem Header="设置断点" Command="{x:Static local:FuncBlockViewModel.AddBreakpoint}"/>
+            <MenuItem Header="删除断点" Command="{x:Static local:FuncBlockViewModel.RemoveBreakpoint}"/>
+            <MenuItem x:Name="MI_BPActive" Header="启用断点" Command="{x:Static local:FuncBlockViewModel.ActiveBreakpoint}"/>
+            <MenuItem Header="跳转至该点" Command="{x:Static local:FuncBlockViewModel.JumpToThis}"/>
         </ContextMenu>
     </UserControl.ContextMenu>
 </wnd:BaseTabItem>

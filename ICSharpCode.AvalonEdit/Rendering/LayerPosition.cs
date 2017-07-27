@@ -18,6 +18,14 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// </summary>
 		/// <remarks>This layer is below the Selection layer.</remarks>
 		Background,
+        /// <summary>
+        /// The layer of breakpoint label
+        /// </summary>
+        BreakpointLabel,
+        /// <summary>
+        /// The layer of breakpoint cursor 
+        /// </summary>
+        BreakpointCursor,
 		/// <summary>
 		/// This layer contains the selection rectangle.
 		/// </summary>

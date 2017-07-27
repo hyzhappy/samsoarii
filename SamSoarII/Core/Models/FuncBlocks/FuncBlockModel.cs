@@ -1,4 +1,5 @@
-﻿using SamSoarII.Shell.Models;
+﻿using ICSharpCode.AvalonEdit.Document;
+using SamSoarII.Shell.Models;
 using SamSoarII.Shell.Windows;
 using System;
 using System.Collections.Generic;
@@ -274,7 +275,18 @@ namespace SamSoarII.Core.Models
         }
 
         #endregion
+
+        #region Breakpoint System
+
+        public event PropertyChangedEventHandler BreakpointPropertyChanged = delegate { };
+
+        public void InvokeBreakpointPropertyChanged(FuncBlock fblock, string pname)
+        {
+            BreakpointPropertyChanged(fblock, new PropertyChangedEventArgs(pname));
+        }
         
+        #endregion
+
         #region Shell
 
         private FuncBlockViewModel view;

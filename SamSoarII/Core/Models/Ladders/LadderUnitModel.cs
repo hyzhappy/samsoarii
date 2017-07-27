@@ -948,8 +948,9 @@ namespace SamSoarII.Core.Models
 
         public LadderUnitModel(LadderNetworkModel _parent, XElement xele)
         {
-            Load(xele);
+            children = new ValueModel[] { };
             InitializeStructure(_parent);
+            try { Load(xele); } catch (ValueParseException) { }
         }
 
         private void InitializeStructure(LadderNetworkModel _parent)
@@ -1047,6 +1048,7 @@ namespace SamSoarII.Core.Models
             {
                 for (int i = 0; i < children.Count(); i++)
                 {
+                    if (children[i].Store?.Parent == null) continue;
                     ValueModel fit = children.First(v => ValueManager[v] == ValueManager[children[i]]);
                     if (fit == children[i]) yield return children[i];   
                 }
@@ -1219,15 +1221,11 @@ namespace SamSoarII.Core.Models
             x = int.Parse(xele.Attribute("X").Value);
             y = int.Parse(xele.Attribute("Y").Value);
             ValueFormat[] formats = Formats[(int)type];
-            IEnumerable<XElement> xele_vs = xele.Elements("Value");
-            children = new ValueModel[xele_vs.Count()];
-            int i = 0;
-            foreach (XElement xele_v in xele_vs)
-            {
+            children = new ValueModel[formats.Length];
+            for (int i = 0; i < children.Length; i++)
                 children[i] = new ValueModel(this, formats[i]);
-                children[i++].Text = xele_v.Value;
-            }
-            
+            IEnumerable<XElement> xele_vs = xele.Elements("Value");
+            Parse(xele_vs.Select(x => x.Value).ToArray());
         }
 
         public void Save(XElement xele)

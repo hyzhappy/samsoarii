@@ -2,12 +2,13 @@
 using SamSoarII.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
 namespace SamSoarII.Core.Simulate
 {
-    public class BreakpointCursor : IDisposable
+    public class BreakpointCursor : IDisposable, INotifyPropertyChanged
     {
         public BreakpointCursor(SimulateViewer _parent)
         {
@@ -18,6 +19,8 @@ namespace SamSoarII.Core.Simulate
         {
             parent = null;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Number
 
@@ -70,6 +73,7 @@ namespace SamSoarII.Core.Simulate
                     address = current.Address;
                     if (current.Cursor != this) current.Cursor = this;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("Current"));
             }
         }
         

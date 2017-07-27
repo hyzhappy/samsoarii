@@ -29,6 +29,7 @@ using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Controls;
 using System.Threading;
 using SamSoarII.Threads;
+using ICSharpCode.AvalonEdit.Rendering;
 
 /// <summary>
 /// Namespace : SamSoarII.Simulation
@@ -49,13 +50,30 @@ namespace SamSoarII.Shell.Models
     /// </summary>
     public partial class FuncBlockViewModel : BaseTabItem, IViewModel
     {
+        #region Resources
+
+        static public RoutedUICommand AddBreakpoint { get; private set; }
+        static public RoutedUICommand ActiveBreakpoint { get; private set; }
+        static public RoutedUICommand RemoveBreakpoint { get; private set; }
+        static public RoutedUICommand JumpToThis { get; private set; }
+        
+        static FuncBlockViewModel()
+        {
+            AddBreakpoint = new RoutedUICommand();
+            ActiveBreakpoint = new RoutedUICommand();
+            RemoveBreakpoint = new RoutedUICommand();
+            JumpToThis = new RoutedUICommand();
+        }
+
+        #endregion
+
         public FuncBlockViewModel(FuncBlockModel _core, MainTabControl _tabcontrol) : base(_tabcontrol)
         {
             InitializeComponent();
             DataContext = this;
             Core = _core;
             //CodeTextBox.Text = core.Code;
-            if (ViewParent != null) LadderMode = ViewParent.LadderMode;
+            //if (ViewParent != null) LadderMode = ViewParent.LadderMode;
             InvokePropertyChanged("TabHeader");
 
             IHighlightingDefinition customHighlighting;
@@ -87,6 +105,8 @@ namespace SamSoarII.Shell.Models
             CodeTextBox.TextArea.IndentationStrategy = new ICSharpCode.AvalonEdit.Indentation.CSharp.CSharpIndentationStrategy(CodeTextBox.Options);
             //completionWindow = new CompletionWindow(CodeTextBox.TextArea);
             completionWindow = null;
+            lyBrpo = new BrpoLayer(core, textview);
+            lyCursor = new BrpoCursorLayer(core, textview);
             CCSProfix = String.Empty;
             ccstblocks = new TextBlock[9];
             for (int i = 0; i < 9; i++)
@@ -103,6 +123,8 @@ namespace SamSoarII.Shell.Models
         public override void Dispose()
         {
             base.Dispose();
+            lyBrpo.Dispose();
+            lyCursor.Dispose();
             Core = null;
         }
         
@@ -130,10 +152,13 @@ namespace SamSoarII.Shell.Models
                     core.PropertyChanged += OnCorePropertyChanged;
                     CodeTextBox.Text = core.Code;
                     if (core.View != this) core.View = this;
+                    OnCorePropertyChanged(this, new PropertyChangedEventArgs("Name"));
+                    OnCorePropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
                 }
                 //Update();
             }
         }
+        public InteractionFacade IFParent { get { return core?.Parent?.Parent; } }
 
         IModel IViewModel.Core
         {
@@ -148,6 +173,9 @@ namespace SamSoarII.Shell.Models
                 case "Name":
                     InvokePropertyChanged("TabHeader");
                     break;
+                case "LadderMode":
+                    IsReadOnly = core.IsLibrary || laddermode != LadderModes.Edit;
+                    break;
             }
         }
 
@@ -161,34 +189,21 @@ namespace SamSoarII.Shell.Models
         public override string TabHeader { get { return core != null ? core.Name : ""; } }
 
         private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                IsReadOnly = laddermode != LadderModes.Edit;
-            }
-        }
+        public LadderModes LadderMode { get { return core.LadderMode; } }
       
-        /// <summary>
-        /// Avalon库自带的函数补全窗口，已弃用
-        /// </summary>
+        /// <summary> Avalon库自带的函数补全窗口，已弃用 </summary>
         private CompletionWindow completionWindow;
-        /// <summary>
-        /// 代码高亮的管理器
-        /// </summary>
+        /// <summary> 代码高亮的管理器 </summary>
         private FoldingManager foldingManager;
-        /// <summary>
-        /// 代码高亮的策略
-        /// </summary>
+        /// <summary> 代码高亮的策略 </summary>
         private AbstractFoldingStrategy foldingStrategy;
-        /// <summary>
-        /// 函数代码
-        /// </summary>
+        /// <summary> 文本显示 </summary>
+        public TextView textview { get { return CodeTextBox.TextArea.TextView; } }
+        /// <summary> 断点显示的层次管理器 </summary>
+        private BrpoLayer lyBrpo;
+        /// <summary> 断点坐标显示的层次管理器 </summary>
+        private BrpoCursorLayer lyCursor;
+        /// <summary> 函数代码 </summary>
         public string Code
         {
             get
@@ -993,39 +1008,80 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #endregion
-
+        
         #region Event Handler
 
         public event RoutedEventHandler TextChanged = delegate { };
 
-        private void FindCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void OnCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (e.Command == ApplicationCommands.Cut ||
+                e.Command == ApplicationCommands.Copy ||
+                e.Command == ApplicationCommands.Paste ||
+                e.Command == ApplicationCommands.Undo ||
+                e.Command == ApplicationCommands.Redo)
+            {
+                e.CanExecute = core != null && LadderMode == LadderModes.Edit && !IsReadOnly;
+            }
+            else if (e.Command == AddBreakpoint)
+            {
+                e.CanExecute = core?.Current?.Breakpoint != null && LadderMode == LadderModes.Simulate && !core.Current.Breakpoint.IsEnable;
+            }
+            else if (e.Command == RemoveBreakpoint ||
+                     e.Command == ActiveBreakpoint)
+            {
+                e.CanExecute = core?.Current?.Breakpoint != null && LadderMode == LadderModes.Simulate && core.Current.Breakpoint.IsEnable;
+            }
+            else if (e.Command == JumpToThis)
+            {
+                e.CanExecute = core?.Current?.Breakpoint != null && LadderMode == LadderModes.Simulate;
+            }
+            else
+            {
+                e.CanExecute = true;
+            }
         }
-
-        private void ReplaceCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void OnFindCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            core.Parent.Parent.WNDMain.LACFind.Show();
-        }
-
-        private void OnReplaceCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            core.Parent.Parent.WNDMain.LACReplace.Show();
-        }
-
-        private void OnSelectAllCommandExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            CodeTextBox.SelectAll();
-        }
-
-        #endregion
-
-        #endregion
         
+        private void OnCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.SelectAll)
+                CodeTextBox.SelectAll();
+            if (e.Command == AddBreakpoint)
+            {
+                core.Current.Breakpoint.IsEnable = true;
+                core.Current.Breakpoint.IsActive = true;
+            }
+            if (e.Command == RemoveBreakpoint)
+            {
+                core.Current.Breakpoint.IsActive = false;
+                core.Current.Breakpoint.IsEnable = false;
+            }
+            if (e.Command == ActiveBreakpoint)
+                core.Current.Breakpoint.IsActive ^= true;
+            if (e.Command == JumpToThis)
+                IFParent.MNGSimu.JumpTo(core.Current.Breakpoint.Address);
+                
+        }
+
+        protected override void OnContextMenuOpening(ContextMenuEventArgs e)
+        {
+            base.OnContextMenuOpening(e);
+            MI_BPActive.IsChecked = core?.Current?.Breakpoint != null && LadderMode == LadderModes.Simulate && core.Current.Breakpoint.IsActive;
+        }
+
+        #endregion
+
+        #endregion
+
+    }
+
+    public class FuncBlockSegment : ISegment
+    {
+        private FuncBlock core;
+        public int Offset { get { return core.IndexStart; } }
+        public int EndOffset { get { return core.IndexEnd + 1; } }
+        public int Length { get { return EndOffset - Offset; } }
+
+        public FuncBlockSegment(FuncBlock _core) { core = _core; }
     }
 }

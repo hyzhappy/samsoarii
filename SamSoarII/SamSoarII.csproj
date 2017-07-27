@@ -392,7 +392,9 @@
     <Compile Include="Shell\Dialogs\ValueModify\ValueMultiplyModifyDialog.xaml.cs">
       <DependentUpon>ValueMultiplyModifyDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Models\LadderBrpoViewModel.xaml.cs">
+    <Compile Include="Shell\Models\FuncBlock\BrpoCursorLayer.cs" />
+    <Compile Include="Shell\Models\FuncBlock\BrpoLayer.cs" />
+    <Compile Include="Shell\Models\Ladders\LadderBrpoViewModel.xaml.cs">
       <DependentUpon>LadderBrpoViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Models\Ladders\LadderMonitorMenu.cs" />
@@ -401,7 +403,7 @@
     <Compile Include="Shell\Managers\ValueViewManager.cs" />
     <Compile Include="Shell\Models\BraceFoldingStrategy.cs" />
     <Compile Include="Shell\Models\CanExpandButton.cs" />
-    <Compile Include="Shell\Models\FuncBlockViewModel.xaml.cs">
+    <Compile Include="Shell\Models\FuncBlock\FuncBlockViewModel.xaml.cs">
       <DependentUpon>FuncBlockViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Models\Instructions\InstructionDiagramViewModel.xaml.cs">
@@ -454,7 +456,7 @@
       <DependentUpon>NetworkOutlineViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Models\ProjectViewModel.cs" />
-    <Compile Include="Shell\Models\SelectRect.xaml.cs">
+    <Compile Include="Shell\Models\Ladders\SelectRect.xaml.cs">
       <DependentUpon>SelectRect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Windows\BreakpointWindow.xaml.cs">
@@ -911,7 +913,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell\Models\FuncBlockViewModel.xaml">
+    <Page Include="Shell\Models\FuncBlock\FuncBlockViewModel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -927,7 +929,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell\Models\LadderBrpoViewModel.xaml">
+    <Page Include="Shell\Models\Ladders\LadderBrpoViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -975,7 +977,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell\Models\SelectRect.xaml">
+    <Page Include="Shell\Models\Ladders\SelectRect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

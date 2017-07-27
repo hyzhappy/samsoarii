@@ -12,7 +12,7 @@ namespace SamSoarII.Core.Models
     /// <summary>
     /// 所有元素模型的超级抽象类
     /// </summary>
-    abstract public class FuncBlock : INotifyPropertyChanged
+    abstract public class FuncBlock
     {
         /// <summary>
         /// 初始化构造函数
@@ -25,9 +25,7 @@ namespace SamSoarII.Core.Models
             Current = null;
             Namespace = String.Empty;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
+        
         #region Numbers
 
         #region Parent Model
@@ -289,9 +287,9 @@ namespace SamSoarII.Core.Models
         {
             switch (e.PropertyName)
             {
-                case "IsEnable": PropertyChanged(this, new PropertyChangedEventArgs("BPEnable")); break;
-                case "IsActive": PropertyChanged(this, new PropertyChangedEventArgs("BPActive")); break;
-                case "Cursor": PropertyChanged(this, new PropertyChangedEventArgs("BPCursor")); break;
+                case "IsEnable": Model.InvokeBreakpointPropertyChanged(this, "BPEnable"); break;
+                case "IsActive": Model.InvokeBreakpointPropertyChanged(this, "BPActive"); break;
+                case "Cursor": Model.InvokeBreakpointPropertyChanged(this, "BPCursor"); break;
             }
         }
         
