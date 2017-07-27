@@ -60,9 +60,9 @@
                     <CheckBox x:Name="CB_Monitor" Margin="2,6"
                               IsChecked="{Binding IsDownloadMonitor}"  
                               Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
-                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Monitor}"></TextBlock>
-                    <CheckBox x:Name="CB_Setting" Margin="2,6" 
-                              IsChecked="{Binding IsDownloadSetting}" 
+                    <TextBlock Margin="2,6" Text="{x:Static properties:Resources.MainWindow_Monitor}"></TextBlock>
+                    <CheckBox x:Name="CB_Setting" Margin="2,6"
+                              IsChecked="{Binding IsDownloadSetting}"
                               Checked="OnChecked" Unchecked="OnUnchecked"></CheckBox>
                     <TextBlock Margin="2,6" Text="{x:Static properties:Resources.Setting}"></TextBlock>
                 </StackPanel>
