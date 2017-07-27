@@ -45,11 +45,9 @@ namespace SamSoarII.Shell.Windows
             }
             set
             {
-                items.Clear();
+                Initialize(false);
                 foreach (TextReplaceElement item in value)
-                {
                     items.Add(item);
-                }
                 PropertyChanged(this, new PropertyChangedEventArgs("Items"));
             }
         }

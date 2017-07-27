@@ -20,7 +20,7 @@ using Xceed.Wpf.AvalonDock.Global;
 
 namespace SamSoarII.Shell.Windows
 {
-    public class ErrorReportElement_FB : INotifyPropertyChanged
+    public class ErrorReportElement_FB : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -80,6 +80,12 @@ namespace SamSoarII.Shell.Windows
             PropertyChanged(this, new PropertyChangedEventArgs("Message"));
             PropertyChanged(this, new PropertyChangedEventArgs("Program"));
             PropertyChanged(this, new PropertyChangedEventArgs("Point"));
+        }
+
+        public void Dispose()
+        {
+            funcblock = null;
+            PropertyChanged = null;
         }
     }
 }

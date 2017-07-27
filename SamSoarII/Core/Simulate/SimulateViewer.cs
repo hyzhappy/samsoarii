@@ -66,6 +66,11 @@ namespace SamSoarII.Core.Simulate
             {
                 if (isenable == value) return;
                 this.isenable = value;
+                foreach (ValueStore vstore in stores)
+                {
+                    vstore.PropertyChanged -= OnStorePropertyChanged;
+                    vstore.Post -= OnReceiveValueStoreEvent;
+                }
                 stores.Clear();
                 if (isenable)
                 {

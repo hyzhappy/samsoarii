@@ -61,11 +61,11 @@ namespace SamSoarII.Shell.Windows
             }
             set
             {
+                foreach (TextFindElement item in value)
+                    item.Dispose();
                 items.Clear();
                 foreach (TextFindElement item in value)
-                {
                     items.Add(item);
-                }
                 PropertyChanged(this, new PropertyChangedEventArgs("Items"));
             }
         }

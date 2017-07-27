@@ -25,6 +25,11 @@ namespace SamSoarII.Core.Models
         public void Dispose()
         {
             isdisposed = true;
+            foreach (ModbusModel modbus in children)
+            {
+                modbus.PropertyChanged -= OnChildrenPropertyChanged;
+                modbus.Dispose();
+            }
             children.Clear();
             children.CollectionChanged -= OnChildrenCollectionChanged;
             children = null;
@@ -113,6 +118,11 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
+            foreach (ModbusModel modbus in children)
+            {
+                modbus.PropertyChanged -= OnChildrenPropertyChanged;
+                modbus.Dispose();
+            }
             children.Clear();
             foreach (XElement xele_m in xele.Elements("Table"))
             {

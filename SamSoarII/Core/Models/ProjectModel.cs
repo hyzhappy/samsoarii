@@ -52,13 +52,19 @@ namespace SamSoarII.Core.Models
         public void Dispose()
         {
             foreach (LadderDiagramModel diagram in diagrams)
+            {
+                diagram.PropertyChanged -= OnDiagramPropertyChanged;
                 diagram.Dispose();
+            }
             diagrams.CollectionChanged -= OnDiagramCollectionChanged;
             diagrams.Clear();
             diagrams = null;
             maindiagram = null;
             foreach (FuncBlockModel funcblock in funcblocks)
+            {
+                funcblock.PropertyChanged -= OnFuncBlockPropertyChanged;
                 funcblock.Dispose();
+            }
             funcblocks.CollectionChanged -= OnFuncBlockCollectionChanged;
             funcblocks.Clear();
             funcblocks = null;

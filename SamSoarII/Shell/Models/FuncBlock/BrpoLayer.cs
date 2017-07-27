@@ -47,7 +47,6 @@ namespace SamSoarII.Shell.Models
             this.textview = null;
             foreach (FuncBlock item in items.ToArray())
                 items.Remove(item);
-            //items.Clear();
             items = null;
         }
 
