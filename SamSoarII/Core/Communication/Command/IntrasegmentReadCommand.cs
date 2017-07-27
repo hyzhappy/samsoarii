@@ -57,7 +57,7 @@ namespace SamSoarII.Core.Communication
             var group = Segments.OrderBy(x => { return x.Base.Model.StartAddr; });
             var model = group.Last().Base.Model;
             command[4] = (byte)(model.StartAddr - group.First().Base.Model.StartAddr + 1);
-            if (model.ByteCount == 4 && !(model.AddrType == "CV" && model.StartAddr >= 200))
+            if (!(model.AddrType == "CV" && model.StartAddr >= 200))
             {
                 command[4]++;
             }

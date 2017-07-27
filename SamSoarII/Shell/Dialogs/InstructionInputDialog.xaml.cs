@@ -154,7 +154,6 @@ namespace SamSoarII.Shell.Dialogs
         {
             InstructionInputTextBox.Focus();
             InstructionInputTextBox.Select(InstructionInputTextBox.Text.Length, 0);
-            instructionNames.AddRange(GlobalSetting.InstrutionNameAndToolTips.Keys.ToArray());
             foreach (var name in instructionNames)
             {
                 Label temp = new Label();
