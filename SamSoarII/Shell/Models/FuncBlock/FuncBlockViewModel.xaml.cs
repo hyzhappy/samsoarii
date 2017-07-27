@@ -174,7 +174,7 @@ namespace SamSoarII.Shell.Models
                     InvokePropertyChanged("TabHeader");
                     break;
                 case "LadderMode":
-                    IsReadOnly = core.IsLibrary || laddermode != LadderModes.Edit;
+                    IsReadOnly = core.IsLibrary || LadderMode != LadderModes.Edit;
                     break;
             }
         }
@@ -187,8 +187,7 @@ namespace SamSoarII.Shell.Models
         IViewModel IViewModel.ViewParent { get { return ViewParent; } }
 
         public override string TabHeader { get { return core != null ? core.Name : ""; } }
-
-        private LadderModes laddermode;
+        
         public LadderModes LadderMode { get { return core.LadderMode; } }
       
         /// <summary> Avalon库自带的函数补全窗口，已弃用 </summary>
