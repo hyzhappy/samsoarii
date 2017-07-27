@@ -26,9 +26,11 @@ namespace SamSoarII.Core.Models
             PropertyChanged = null;
             foreach (ModbusItem item in children)
             {
+                item.PropertyChanged -= OnChildrenPropertyChanged;
                 item.Dispose();
             }
             children.Clear();
+            children.CollectionChanged -= OnChildrenChanged;
             children = null;
             parent = null;
         }
@@ -142,6 +144,11 @@ namespace SamSoarII.Core.Models
         {
             name = xele.Attribute("Name").Value;
             comment = xele.Attribute("Comment").Value;
+            foreach (ModbusItem item in children)
+            {
+                item.PropertyChanged -= OnChildrenPropertyChanged;
+                item.Dispose();
+            }
             children.Clear();
             foreach (XElement xele_i in xele.Elements("Item"))
             {

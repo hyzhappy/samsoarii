@@ -36,7 +36,11 @@ namespace SamSoarII.Shell.Windows
 
         public void Initialize()
         {
+            foreach (ErrorReportElement element in items)
+                element.Dispose();
             items.Clear();
+            foreach (ErrorReportElement_FB element in fitems)
+                element.Dispose();
             fitems.Clear();
         }
 

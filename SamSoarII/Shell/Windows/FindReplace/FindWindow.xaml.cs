@@ -83,7 +83,7 @@ namespace SamSoarII.Shell.Windows
         /// <summary> 查找指令 </summary>
         private void Find()
         {
-            items.Clear();
+            Initialize();
             // 输入信息非法则不执行
             if (RF_Input.Type == ReplaceFormat.TYPE_INVALID) return;
             switch (Mode)

@@ -78,11 +78,9 @@ namespace SamSoarII.Shell.Windows
             }
             set
             {
-                items.Clear();
+                Initialize(false);
                 foreach (ReplaceElement item in value)
-                {
                     items.Add(item);
-                }
                 PropertyChanged(this, new PropertyChangedEventArgs("Items"));
             }
         }
@@ -166,7 +164,7 @@ namespace SamSoarII.Shell.Windows
         /// <summary> 查找指令 </summary>
         private void Find()
         {
-            items.Clear();
+            Initialize(false);
             // 输入信息非法则不执行
             if (RF_Input.Type == ReplaceFormat.TYPE_INVALID) return;
             switch (Mode)

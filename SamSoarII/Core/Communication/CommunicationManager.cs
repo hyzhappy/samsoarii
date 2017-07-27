@@ -79,6 +79,8 @@ namespace SamSoarII.Core.Communication
             {
                 if (isenable == value) return;
                 this.isenable = value;
+                foreach (MonitorElement element in elements)
+                    element.Store.Post -= OnReceiveValueStoreEvent;
                 elements.Clear();
                 if (isenable)
                 {
@@ -133,14 +135,10 @@ namespace SamSoarII.Core.Communication
         {
             if (e.NewItems != null)
                 foreach (MonitorElement element in e.NewItems)
-                {
                     element.Store.Post += OnReceiveValueStoreEvent;
-                }
             if (e.OldItems != null)
                 foreach (MonitorElement element in e.NewItems)
-                {
                     element.Store.Post -= OnReceiveValueStoreEvent;
-                }
         }
 
         #endregion
@@ -380,12 +378,8 @@ namespace SamSoarII.Core.Communication
             readcmds.Clear();
             Queue<string> tempQueue_Base = new Queue<string>();
             foreach (var ele in elements)
-            {
                 if (!tempQueue_Base.Contains(ele.AddrType))
-                {
                     tempQueue_Base.Enqueue(ele.AddrType);
-                }
-            }
             string addrType;
             int gIndex = 0;
             bool gisFirst = true, iisFirst = true;

@@ -9,7 +9,7 @@ using System.Text;
 
 namespace SamSoarII.Shell.Windows
 {
-    public class ErrorReportElement : INotifyPropertyChanged
+    public class ErrorReportElement : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -24,6 +24,13 @@ namespace SamSoarII.Shell.Windows
         {
             this.inst = _inst;
             this.network = _network;
+        }
+
+        public void Dispose()
+        {
+            inst = null;
+            network = null;
+            PropertyChanged = null;
         }
 
         public LadderUnitModel Prototype

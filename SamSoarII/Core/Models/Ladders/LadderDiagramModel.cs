@@ -30,7 +30,10 @@ namespace SamSoarII.Core.Models
         {
             Parent = null;
             foreach (LadderNetworkModel network in children)
+            {
+                network.PropertyChanged -= OnChildrenPropertyChanged;
                 network.Dispose();
+            }
             children.CollectionChanged -= Children_CollectionChanged;
             children.Clear();
             children = null;
@@ -218,6 +221,11 @@ namespace SamSoarII.Core.Models
             ismain = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("Path");
             path = xatt == null ? null : xatt.Value;
+            foreach (LadderNetworkModel network in children)
+            {
+                network.PropertyChanged -= OnChildrenPropertyChanged;
+                network.Dispose();
+            }
             children.Clear();
             foreach (XElement xele_ch in xele.Elements("Network"))
             {

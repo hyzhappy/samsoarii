@@ -45,7 +45,7 @@ namespace SamSoarII.Core.Simulate
         }
 
         private ObservableCollection<IBreakpoint> enableitems;
-        private IBreakpoint[] enableitemcache;
+        //private IBreakpoint[] enableitemcache;
         private bool enableitemlock;
         public IList<IBreakpoint> EnableItems { get { return this.items; } }
         public event NotifyCollectionChangedEventHandler EnableItemsChanged = delegate { };
@@ -63,7 +63,7 @@ namespace SamSoarII.Core.Simulate
         }
 
         private ObservableCollection<IBreakpoint> activeitems;
-        private IBreakpoint[] activeitemcache;
+        //private IBreakpoint[] activeitemcache;
         private bool activeitemlock;
         public IList<IBreakpoint> ActiveItems { get { return this.items; } }
         public event NotifyCollectionChangedEventHandler ActiveItemsChanged = delegate { };
@@ -141,6 +141,8 @@ namespace SamSoarII.Core.Simulate
         
         public void Initialize()
         {
+            foreach (IBreakpoint ibrpo in items)
+                ibrpo.PropertyChanged -= OnBrpoPropertyChanged;
             items.Clear();
             if (IFParent.MDProj == null)
             {
@@ -148,14 +150,14 @@ namespace SamSoarII.Core.Simulate
                 activeitems.Clear();
                 return;
             }
-            enableitemcache = enableitems.ToArray();
-            activeitemcache = activeitems.ToArray();
+            //enableitemcache = enableitems.ToArray();
+            //activeitemcache = activeitems.ToArray();
             enableitems.Clear();
             activeitems.Clear();
-            foreach (IBreakpoint ibrpo in enableitemcache)
-                ibrpo.IsEnable = true;
-            foreach (IBreakpoint ibrpo in activeitemcache)
-                ibrpo.IsActive = true;
+            //foreach (IBreakpoint ibrpo in enableitemcache)
+            //    ibrpo.IsEnable = true;
+            //foreach (IBreakpoint ibrpo in activeitemcache)
+            //    ibrpo.IsActive = true;
             foreach (LadderDiagramModel diagram in IFParent.MDProj.Diagrams)
                 foreach (LadderNetworkModel network in diagram.Children)
                     foreach (LadderUnitModel unit in network.Children)

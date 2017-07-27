@@ -23,6 +23,8 @@ namespace SamSoarII.Core.Models
        
         public void Dispose()
         {
+            foreach (MonitorElement element in children)
+                element.Dispose();
             children.Clear();
             children.CollectionChanged -= OnChildrenChanged;
             children = null;
@@ -109,6 +111,8 @@ namespace SamSoarII.Core.Models
         public void Load(XElement xele)
         {
             name = xele.Attribute("Name").Value;
+            foreach (MonitorElement element in children)
+                element.Dispose();
             children.Clear();
             foreach (XElement xele_e in xele.Elements("Element"))
             {

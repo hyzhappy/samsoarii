@@ -51,7 +51,8 @@ namespace SamSoarII.Shell.Models
         {
             Core = null;
 
-            children.Clear();
+            foreach (InstructionRowViewModel row in children.ToArray())
+                children.Remove(row);
             children.CollectionChanged -= OnChildrenCollectionChanged;
             children = null;
 
