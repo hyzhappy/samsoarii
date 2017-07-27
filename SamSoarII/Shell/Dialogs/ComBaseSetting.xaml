@@ -20,9 +20,9 @@
         <GroupBox Grid.Row="0" Grid.Column="0"
                   Header="{x:Static properties:Resources.Connection_Mode}">
             <StackPanel Orientation="Horizontal">
-                <RadioButton x:Name="radiobutton" Margin="30,10,0,0" IsChecked="{Binding IsCOMLinked}" Checked="OnChecked" Unchecked="OnUnchecked"></RadioButton>
+                <RadioButton x:Name="radiobutton" Margin="30,10,0,0" IsChecked="{Binding IsComLinked}" Checked="OnChecked" Unchecked="OnUnchecked"></RadioButton>
                 <TextBlock Margin="2,10,0,0">COM</TextBlock>
-                <RadioButton Margin="80,10,0,0" IsChecked="{Binding ElementName=radiobutton,Path=IsChecked,Converter={StaticResource BoolConverter}}"></RadioButton>
+                <RadioButton Margin="80,10,0,0" IsChecked="{Binding ElementName=radiobutton,Path=IsChecked,Converter={StaticResource BoolConverter}}"/>
                 <TextBlock Margin="2,10,0,0">USB</TextBlock>
             </StackPanel>
         </GroupBox>
