@@ -131,6 +131,7 @@ namespace SamSoarII.Shell.Windows
             ReplaceCommandGroup cmd = undos.Pop();
             cmd.Undo();
             redos.Push(cmd);
+            IFParent.MDProj.InvokeModify(this);
             Find();
         }
 
@@ -140,6 +141,7 @@ namespace SamSoarII.Shell.Windows
             ReplaceCommandGroup cmd = redos.Pop();
             cmd.Redo();
             undos.Push(cmd);
+            IFParent.MDProj.InvokeModify(this);
             Find();
         }
 
@@ -278,6 +280,7 @@ namespace SamSoarII.Shell.Windows
             {
                 redos.Clear();
                 undos.Push(group);
+                IFParent.MDProj.InvokeModify(this);
                 Find();
             }
             // 当需要显示结果，或者出现错误替换时显示
@@ -405,7 +408,7 @@ namespace SamSoarII.Shell.Windows
                     if (RF_Input.Type == RF_Change.Type)
                         TB_Change.Background = Brushes.LightGreen;
                     // 输入为空时涂白色
-                    if (RF_Change.Text.Length == 0)
+                    else if (RF_Change.Text.Length == 0)
                         TB_Change.Background = Brushes.White;
                     // 非法时，将输入框涂红
                     else

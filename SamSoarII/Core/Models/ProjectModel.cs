@@ -130,6 +130,11 @@ namespace SamSoarII.Core.Models
             IsModified = true;
             Modified(source, new RoutedEventArgs());
         }
+        public void InvokeModify(IWindow window)
+        {
+            IsModified = true;
+            Modified(window, new RoutedEventArgs());
+        }
         public void ChangeModify(bool isModify)
         {
             ismodified = isModify;

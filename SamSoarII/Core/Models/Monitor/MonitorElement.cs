@@ -78,7 +78,8 @@ namespace SamSoarII.Core.Models
                     IFParent.MNGComu.Started += OnMonitorStarted;
                     IFParent.MNGComu.Aborted += OnMonitorAborted;
                     //datatype = (int)(store.Type);
-                    CurrentValue = "???";
+                    if (!IFParent.MNGSimu.IsAlive && !IFParent.MNGComu.IsAlive)
+                        CurrentValue = "???";
                 }
                 if (_store != null && _store.RefNum == 0) _store.Parent.Stores.Remove(_store);
             }
