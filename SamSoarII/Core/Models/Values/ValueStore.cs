@@ -64,6 +64,27 @@ namespace SamSoarII.Core.Models
         {
             get { return this.type; }
         }
+        public int ByteCount
+        {
+            get
+            {
+                switch (type)
+                {
+                    case ValueModel.Types.BOOL:
+                        return 1;
+                    case ValueModel.Types.WORD:
+                    case ValueModel.Types.UWORD:
+                    case ValueModel.Types.BCD:
+                        return 2;
+                    case ValueModel.Types.DWORD:
+                    case ValueModel.Types.UDWORD:
+                    case ValueModel.Types.FLOAT:
+                        return 4;
+                    default:
+                        return 0;
+                }
+            }
+        }
 
         private object value;
         public object Value

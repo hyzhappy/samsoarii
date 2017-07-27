@@ -36,9 +36,10 @@ namespace SamSoarII.Core.Models
             }
         }
 
-        public ValueInfo(ValuePrototype _prototype)
+        public ValueInfo(ValuePrototype _prototype, int _dataaddr)
         {
             prototype = _prototype;
+            dataaddr = _dataaddr;
             values = new ObservableCollection<ValueModel>();
             stores = new ObservableCollection<ValueStore>();
             values.CollectionChanged += OnValueCollectionChanged;
@@ -79,6 +80,9 @@ namespace SamSoarII.Core.Models
         private ValuePrototype prototype;
         public ValuePrototype Prototype { get { return this.prototype; } }
         public string Name { get { return prototype.Text; } }
+
+        private int dataaddr;
+        public int DataAddr { get { return dataaddr; } }
 
         private ObservableCollection<ValueModel> values;
         public IList<ValueModel> Values { get { return this.values; } }

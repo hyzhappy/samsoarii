@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using System.Threading;
+using SamSoarII.Core.Models;
 
 namespace SamSoarII.Core.Communication
 {
@@ -136,6 +137,30 @@ namespace SamSoarII.Core.Communication
                 default:
                     return null;
             }
+        }
+        public static AddrSegment GetAddrSegment(ValueModel.Bases bas, int ofs, int len)
+        {
+            AddrSegment ret = new AddrSegment();
+            ret.AddrLow = (byte)(ofs & 0xff);
+            ret.AddrHigh = (byte)(ofs >> 8);
+            ret.Length = (byte)len;
+            switch (bas)
+            {
+                case ValueModel.Bases.X: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_X; break;
+                case ValueModel.Bases.Y: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_Y; break;
+                case ValueModel.Bases.S: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_S; break;
+                case ValueModel.Bases.M: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_M; break;
+                case ValueModel.Bases.T: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_T; break;
+                case ValueModel.Bases.C: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_C; break;
+                case ValueModel.Bases.D: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_D; break;
+                case ValueModel.Bases.TV: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_TV; break;
+                case ValueModel.Bases.CV: ret.Type = ofs < 200 ? CommunicationDataDefine.ADDRESS_TYPE_CV : CommunicationDataDefine.ADDRESS_TYPE_CV32; break;
+                case ValueModel.Bases.AI: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_AI; break;
+                case ValueModel.Bases.AO: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_AO; break;
+                case ValueModel.Bases.V: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_V; break;
+                case ValueModel.Bases.Z: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_Z; break;
+            }
+            return ret;
         }
         public static void UpdateElements(List<AddrSegment> Segments,byte[] data)
         {

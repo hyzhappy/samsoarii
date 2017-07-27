@@ -80,7 +80,10 @@ namespace SamSoarII.Core.Communication
                 if (isenable == value) return;
                 this.isenable = value;
                 foreach (MonitorElement element in elements)
+                {
                     element.Store.Post -= OnReceiveValueStoreEvent;
+                    element.Dispose();
+                }
                 elements.Clear();
                 if (isenable)
                 {
