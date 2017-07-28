@@ -2142,4 +2142,19 @@
   <data name="In_Edit_Mode" xml:space="preserve">
     <value>Is already in edit mode!</value>
   </data>
+  <data name="Expand_Collapsed" xml:space="preserve">
+    <value>Expand/Collapsed</value>
+  </data>
+  <data name="Expand" xml:space="preserve">
+    <value>Expand</value>
+  </data>
+  <data name="Collapsed" xml:space="preserve">
+    <value>Collapsed</value>
+  </data>
+  <data name="Collapsed_All" xml:space="preserve">
+    <value>Collapsed all</value>
+  </data>
+  <data name="Expand_All" xml:space="preserve">
+    <value>Expand all</value>
+  </data>
 </root>

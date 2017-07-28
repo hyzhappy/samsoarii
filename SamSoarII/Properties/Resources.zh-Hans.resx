@@ -2142,4 +2142,19 @@
   <data name="In_Edit_Mode" xml:space="preserve">
     <value>已处于编辑模式！</value>
   </data>
+  <data name="Expand_Collapsed" xml:space="preserve">
+    <value>展开/折叠</value>
+  </data>
+  <data name="Expand" xml:space="preserve">
+    <value>展开</value>
+  </data>
+  <data name="Collapsed" xml:space="preserve">
+    <value>折叠</value>
+  </data>
+  <data name="Collapsed_All" xml:space="preserve">
+    <value>全部折叠</value>
+  </data>
+  <data name="Expand_All" xml:space="preserve">
+    <value>全部展开</value>
+  </data>
 </root>
