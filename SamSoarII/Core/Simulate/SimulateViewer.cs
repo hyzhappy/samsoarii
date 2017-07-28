@@ -43,14 +43,12 @@ namespace SamSoarII.Core.Simulate
                     if (vstore.IsLocked) DllModel.Lock(vstore.Name);
                     if (!vstore.IsLocked) DllModel.Unlock(vstore.Name);
                     vstore.PropertyChanged += OnStorePropertyChanged;
-                    vstore.Post += OnReceiveValueStoreEvent;
                 }
             if (e.OldItems != null)
                 foreach (ValueStore vstore in e.OldItems)
                 {
                     DllModel.Unlock(vstore.Name);
                     vstore.PropertyChanged -= OnStorePropertyChanged;
-                    vstore.Post -= OnReceiveValueStoreEvent;
                 }
 
         }
@@ -69,11 +67,11 @@ namespace SamSoarII.Core.Simulate
                 foreach (ValueStore vstore in stores)
                 {
                     vstore.PropertyChanged -= OnStorePropertyChanged;
-                    vstore.Post -= OnReceiveValueStoreEvent;
                 }
                 stores.Clear();
                 if (isenable)
                 {
+                    ValueManager.PostValueStoreEvent += OnReceiveValueStoreEvent;
                     foreach (ValueInfo vinfo in ValueManager)
                     {
                         vinfo.StoresChanged += OnValueInfoStoresChanged;
@@ -83,6 +81,7 @@ namespace SamSoarII.Core.Simulate
                 }
                 else
                 {
+                    ValueManager.PostValueStoreEvent -= OnReceiveValueStoreEvent;
                     foreach (ValueInfo vinfo in ValueManager)
                     {
                         vinfo.StoresChanged -= OnValueInfoStoresChanged;

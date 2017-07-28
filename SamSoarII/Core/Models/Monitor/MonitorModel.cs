@@ -19,10 +19,12 @@ namespace SamSoarII.Core.Models
             children = new ObservableCollection<MonitorTable>();
             children.CollectionChanged += OnChildrenChanged;
             children.Add(new MonitorTable(this, "Default"));
+            ValueManager.PostValueStoreEvent += OnReceiveValueStoreEvent;
         }
         
         public void Dispose()
         {
+            ValueManager.PostValueStoreEvent -= OnReceiveValueStoreEvent;
             foreach (MonitorTable table in children)
                 table.Dispose();
             children.Clear();
@@ -103,6 +105,25 @@ namespace SamSoarII.Core.Models
                 table.Load(xele_t);
                 children.Add(table);
             }
+        }
+
+        #endregion
+
+        #region Event Handler
+        
+        private void OnReceiveValueStoreEvent(object sender, ValueStoreWriteEventArgs e)
+        {
+            ValueStore vstore = (ValueStore)sender;
+            foreach (MonitorTable table in children)
+                foreach (MonitorElement element in table.Children)
+                {
+                    if (e.IsWrite && element.Store == vstore)
+                        element.SetValue = e.ToValue.ToString();
+                    if (e.Unlock && element.Store == vstore)
+                        element.SetValue = "";
+                    if (e.UnlockAll)
+                        element.SetValue = "";
+                }
         }
 
         #endregion

@@ -12,7 +12,7 @@ namespace SamSoarII.Core.Communication
         private const byte slaveNum = CommunicationDataDefine.SLAVE_ADDRESS;
         private const byte commandType = CommunicationDataDefine.FGS_READ;
         private byte addrTypeNum = 0x00;
-        public List<AddrSegment>[] SegmentsGroup = new List<AddrSegment>[CommunicationDataDefine.MAX_ADDRESS_TYPE];
+        public List<AddrSegment> Segments = new List<AddrSegment>();
         private bool Initialized = false;
         private byte[] command;
         //返回的数据
@@ -40,11 +40,7 @@ namespace SamSoarII.Core.Communication
         public GeneralReadCommand(){}
         public void InitializeCommandByElement()
         {
-            foreach (var group in SegmentsGroup)
-            {
-                if (group != null && group.Count > 0) addrTypeNum++;
-                else break;
-            }
+            addrTypeNum = (byte)(Segments.Count());
             command = new byte[4 * addrTypeNum + 5];
             GenerateCommand();
         }
@@ -53,7 +49,7 @@ namespace SamSoarII.Core.Communication
             List<byte[]> retData = GetRetData();
             for (int i = 0; i < retData.Count; i++)
             {
-                CommandHelper.UpdateElements(SegmentsGroup[i],retData[i]);
+                CommandHelper.UpdateElements(new List<AddrSegment>() { Segments[i] },retData[i]);
             }
         }
         private void GenerateCommand()
@@ -64,14 +60,8 @@ namespace SamSoarII.Core.Communication
             RecvDataLen = 5;
             for (int i = 0; i < addrTypeNum; i++)
             {
-                command[3 + 4 * i] = SegmentsGroup[i].First().Type;
-                var group = SegmentsGroup[i].OrderBy(x => { return x.Model.StartAddr; });
-                var model = group.Last().Model;
-                command[4 + 4 * i] = (byte)(model.StartAddr - group.First().Model.StartAddr + 1);
-                if (!(model.AddrType == "CV" && model.StartAddr >= 200))
-                {
-                    command[4 + 4 * i]++;
-                }
+                command[3 + 4 * i] = Segments[i].Type;
+                command[4 + 4 * i] = Segments[i].Length;
                 var typeLen = CommandHelper.GetLengthByAddrType(command[3 + 4 * i]);
                 var dataLen = command[4 + 4 * i] * typeLen;
                 if (typeLen == 1)
@@ -79,8 +69,8 @@ namespace SamSoarII.Core.Communication
                     dataLen = dataLen / 8 + ((dataLen % 8 == 0) ? 0 : 1);
                 }
                 RecvDataLen += 2 + dataLen;
-                command[5 + 4 * i] = group.First().AddrLow;
-                command[6 + 4 * i] = group.First().AddrHigh;
+                command[5 + 4 * i] = Segments[i].AddrLow;
+                command[6 + 4 * i] = Segments[i].AddrHigh;
             }
             byte[] commandCache = new byte[command.Length - 2];
             byte[] CRCCode;
@@ -134,7 +124,7 @@ namespace SamSoarII.Core.Communication
             IsSuccess = CRC16.CheckCRC(commandCache, CRCCode);
         }
         //Can be call after assign value for Property of RetData
-        private List<byte[]> GetRetData()
+        public List<byte[]> GetRetData()
         {
             List<byte[]> templist = new List<byte[]>(RetData[2]);
             int pos = 3;

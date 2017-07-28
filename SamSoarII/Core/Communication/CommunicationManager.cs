@@ -24,9 +24,8 @@ namespace SamSoarII.Core.Communication
             mngPort = new SerialPortManager(this);
             mngUSB = new USBManager(this);
             mngCurrent = null;
-            elements = new ObservableCollection<MonitorElement>();
-            elements.CollectionChanged += OnElementCollectionChanged;
-            readcmds = new ObservableCollection<ICommunicationCommand>();
+            //elements = new ObservableCollection<MonitorElement>();
+            //elements.CollectionChanged += OnElementCollectionChanged;
             writecmds = new Queue<ICommunicationCommand>();
             Paused += OnThreadPaused;
             //PARACom.PropertyChanged += OnCommunicationParamsChanged;
@@ -37,8 +36,8 @@ namespace SamSoarII.Core.Communication
         private InteractionFacade ifParent;
         public InteractionFacade IFParent { get { return this.ifParent; } }
         public ValueManager ValueManager { get { return ifParent.MNGValue; } }
-        public CommunicationParams PARACom { get { return ifParent.MDProj.PARAProj.PARACom; } }
-        public MonitorModel MDMoni { get { return ifParent.MDProj.Monitor; } }
+        public CommunicationParams PARACom { get { return ifParent.MDProj?.PARAProj?.PARACom; } }
+        public MonitorModel MDMoni { get { return ifParent.MDProj?.Monitor; } }
 
         #region Port & USB
 
@@ -79,58 +78,26 @@ namespace SamSoarII.Core.Communication
             {
                 if (isenable == value) return;
                 this.isenable = value;
-                foreach (MonitorElement element in elements)
-                {
-                    element.Store.Post -= OnReceiveValueStoreEvent;
-                    element.Dispose();
-                }
-                elements.Clear();
                 if (isenable)
                 {
+                    ValueManager.PostValueStoreEvent += OnReceiveValueStoreEvent;
                     PARACom.PropertyChanged += OnCommunicationParamsChanged;
                     OnCommunicationParamsChanged(this, null);
                     visualtable = new MonitorTable(MDMoni, "Visual");
-                    foreach (ValueInfo vinfo in ValueManager)
-                    {
-                        vinfo.StoresChanged += OnValueInfoStoreChanged;
-                        foreach (ValueStore vstore in vinfo.Stores)
-                        {
-                            MonitorElement element = new MonitorElement(visualtable, vstore);
-                            vstore.Visual = element;
-                            elements.Add(element);
-                        }
-                    }
-                    Arrange();
+                    readcmds = ValueManager.GetReadCommands().ToArray();
                 }
                 else
                 {
+                    ValueManager.PostValueStoreEvent -= OnReceiveValueStoreEvent;
                     PARACom.PropertyChanged -= OnCommunicationParamsChanged;
-                    foreach (ValueInfo vinfo in ValueManager)
-                        vinfo.StoresChanged -= OnValueInfoStoreChanged;
                     visualtable.Dispose();
-                    visualtable = null;
+                    readcmds = null;
                 }
             }
         }
-        private void OnValueInfoStoreChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-                foreach (ValueStore vstore in e.NewItems)
-                {
-                    MonitorElement element = new MonitorElement(visualtable, vstore);
-                    vstore.Visual = element;
-                    elements.Add(element);
-                }
-            if (e.OldItems != null)
-                foreach (ValueStore vstore in e.OldItems)
-                {
-                    elements.Remove(vstore.Visual);
-                    vstore.Visual = null;
-                }
-            if (!IsActive) Arrange(); else Pause();
-        }
-
+        
         private MonitorTable visualtable;
+        /*
         private ObservableCollection<MonitorElement> elements;
         public IList<MonitorElement> Elements { get { return this.elements; } }
         public event NotifyCollectionChangedEventHandler ElementChanged = delegate { };
@@ -143,12 +110,12 @@ namespace SamSoarII.Core.Communication
                 foreach (MonitorElement element in e.OldItems)
                     element.Store.Post -= OnReceiveValueStoreEvent;
         }
-
+        */
         #endregion
 
         #region Commands
 
-        private ObservableCollection<ICommunicationCommand> readcmds;
+        private IList<GeneralReadCommand> readcmds;
         private Queue<ICommunicationCommand> writecmds;
 
         #endregion
@@ -188,17 +155,18 @@ namespace SamSoarII.Core.Communication
             if (current == null)
             {
                 if (writecmds.Count() > 0)
+                {
                     current = writecmds.Dequeue();
+                }
                 else
                 {
-                    if (readcmds.Count() == 0)
-                        current = null;
-                    else
+                    if (readindex >= readcmds.Count())
                     {
-                        if (readindex >= readcmds.Count())
-                            readindex = 0;
-                        current = readcmds[readindex++];
+                        ValueManager.ReadMonitorData();
+                        readcmds = ValueManager.GetReadCommands().ToArray();
+                        readindex = 0;   
                     }
+                    current = readcmds.Count() == 0 ? null : readcmds[readindex++];
                 }
             }
             bool hassend = false;
@@ -256,24 +224,24 @@ namespace SamSoarII.Core.Communication
         {
             if (cmd.IsSuccess)
             {
-                cmd.UpdataValues();
+                //cmd.UpdataValues();
+                if (cmd is GeneralReadCommand)
+                    ValueManager.AnalyzeReadCommand((GeneralReadCommand)cmd);
             }
         }
 
         private void OnThreadPaused(object sender, RoutedEventArgs e)
         {
-            Arrange();
             Start();
         }
 
         public void AbortAll()
         {
             Abort();
-            mngCurrent.Abort();
             while (IsAlive) Thread.Sleep(10);
+            mngCurrent.Abort();
         }
-
-
+        
         #endregion
 
         #region Download
@@ -375,7 +343,7 @@ namespace SamSoarII.Core.Communication
         #endregion
 
         #region Arrange
-
+        /*
         public void Arrange()
         {
             readcmds.Clear();
@@ -536,7 +504,7 @@ namespace SamSoarII.Core.Communication
             AddrSegment iseg = new AddrSegment(element, true);
             return new IntraSegment(bseg, iseg);
         }
-
+        */
         #endregion
 
         #region Event Handler
@@ -550,7 +518,7 @@ namespace SamSoarII.Core.Communication
         private void OnReceiveValueStoreEvent(object sender, ValueStoreWriteEventArgs e)
         {
             ValueStore vstore = (ValueStore)sender;
-            MonitorElement element = vstore.Visual;
+            //MonitorElement element = new MonitorElement(visualtable, vstore);
             if (e.IsWrite)
             {
                 byte[] data = null;
@@ -590,30 +558,25 @@ namespace SamSoarII.Core.Communication
                         break;
 
                 }
-                if (element.IsIntrasegment)
+                if (vstore.Intra != ValueModel.Bases.NULL)
                 {
-                    IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, element);
-                    command.RefElement = element;
+                    IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, vstore);
                     writecmds.Enqueue(command);
                 }
                 else
                 {
-                    GeneralWriteCommand command = new GeneralWriteCommand(data, element);
-                    command.RefElements_A.Add(element);
+                    GeneralWriteCommand command = new GeneralWriteCommand(data, vstore);
                     writecmds.Enqueue(command);
                 }
             }
             if (e.Unlock)
             {
-                element.SetValue = "";
-                ForceCancelCommand command = new ForceCancelCommand(false, element);
+                ForceCancelCommand command = new ForceCancelCommand(false, vstore);
                 writecmds.Enqueue(command);
             }
             if (e.UnlockAll)
             {
-                foreach (MonitorElement _element in elements)
-                    _element.SetValue = "";
-                ForceCancelCommand command = new ForceCancelCommand(true, element);
+                ForceCancelCommand command = new ForceCancelCommand(true, vstore);
                 writecmds.Enqueue(command);
             }
         }

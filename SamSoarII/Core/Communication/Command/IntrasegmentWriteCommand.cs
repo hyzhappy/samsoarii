@@ -43,24 +43,21 @@ namespace SamSoarII.Core.Communication
             get { return 3; }
             set { }
         }
-        public MonitorElement RefElement { get; set; }
-        public IntrasegmentWriteCommand(byte[] data, MonitorElement RefElement)
+        //public MonitorElement RefElement { get; set; }
+        public IntrasegmentWriteCommand(byte[] data, ValueStore vstore)
         {
             this.data = data;
-            this.RefElement = RefElement;
-            InitializeCommandByElement();
+            //this.RefElement = RefElement;
+            InitializeCommandByElement(vstore);
             GenerateCommand();
         }
-        private void InitializeCommandByElement()
+        private void InitializeCommandByElement(ValueStore vstore)
         {
-            addrType2 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType),RefElement.IntrasegmentType),(uint)(RefElement.IntrasegmentAddr));
-            startLowAddr2 = (byte)RefElement.IntrasegmentAddr;
-            addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), RefElement.AddrType), (uint)(RefElement.StartAddr));
-            if (RefElement.ByteCount == 4 && !(RefElement.AddrType == "CV" && RefElement.StartAddr >= 200))
-                length = 0x02;
-            else
-                length = 0x01;
-            byte[] startaddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr);
+            addrType2 = (byte)CommandHelper.GetAddrType(vstore.Intra,(uint)(vstore.IntraOffset));
+            startLowAddr2 = (byte)vstore.IntraOffset;
+            addrType1 = (byte)CommandHelper.GetAddrType(vstore.Base, (uint)(vstore.Offset));
+            length = (byte)(vstore.ByteCount == 4 ? 0x02 : 0x01);
+            byte[] startaddr = ValueConverter.GetBytes((ushort)vstore.Offset);
             startLowAddr1 = startaddr[1];
             startHighAddr = startaddr[0];
         }

@@ -192,6 +192,7 @@ namespace SamSoarII.Shell.Models
                     Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
                         if (Core == null) return;
+                        UpdateCenterCanvas();
                         if (LadderMode == LadderModes.Edit)
                         {
                             if (Core.Children.Count >= 1) ValueTextBlock.Text = Core.Children[0].Text;
@@ -232,7 +233,6 @@ namespace SamSoarII.Shell.Models
                                         Core.Children[1].Text,
                                         !MNGComu.IsAlive ? "???" : Core.Children[1].Value);
                             }
-                            UpdateCenterCanvas();
                         }
                     });
                     break;

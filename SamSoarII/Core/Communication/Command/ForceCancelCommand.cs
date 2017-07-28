@@ -16,28 +16,28 @@ namespace SamSoarII.Core.Communication
         private byte[] command;
         private bool isAll = false;
         public bool IsAll { get { return this.isAll; } }
-        public MonitorElement RefElement { get; set; }
-        public ForceCancelCommand(bool isAll, MonitorElement RefElement)
+        //public MonitorElement RefElement { get; set; }
+        public ForceCancelCommand(bool isAll, ValueStore vstore)
         {
             this.isAll = isAll;
-            this.RefElement = RefElement;
-            InitializeCommandByElement();
+            //this.RefElement = RefElement;
+            InitializeCommandByElement(vstore);
             //GenerateCommand();
         }
         public int RecvDataLen
         {
             get { return 2; } set { }
         }
-        public void InitializeCommandByElement()
+        public void InitializeCommandByElement(ValueStore vstore)
         {
-            addrType = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), RefElement.AddrType), (uint)(RefElement.StartAddr));
+            addrType = (byte)CommandHelper.GetAddrType(vstore.Base, (uint)vstore.Offset);
             if (isAll)
             {
                 startLowAddr = 0xFF;
             }
             else
             {
-                startLowAddr = ValueConverter.GetBytes((ushort)RefElement.StartAddr)[1];
+                startLowAddr = ValueConverter.GetBytes((uint)vstore.Offset)[1];
             }
         }
         private void GenerateCommand()

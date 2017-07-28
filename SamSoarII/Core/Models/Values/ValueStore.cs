@@ -40,6 +40,10 @@ namespace SamSoarII.Core.Models
             PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
 
+        public ValueModel.Bases Base { get { return parent.Prototype.Base; } }
+
+        public int Offset { get { return parent.Prototype.Offset; } }
+
         protected ValueModel.Bases ibs;
         public ValueModel.Bases Intra { get { return this.ibs; } }
 
@@ -123,21 +127,13 @@ namespace SamSoarII.Core.Models
             get { return this.refnum; }
             set { this.refnum = value; }
         }
-
-        private MonitorElement visual;
-        public MonitorElement Visual
-        {
-            get { return this.visual; }
-            set { this.visual = value; }
-        }
-
+        
         public event ValueStoreWriteEventHandler Post = delegate { };
-        public void Write(object value, bool tolock = false, bool unsigned = false)
+        public void Write(object value, bool tolock = false)
         {
             Post(this, new ValueStoreWriteEventArgs(this, value,
                 ValueStoreWriteEventArgs.FLAGS_ISWRITE |
-                (tolock ? ValueStoreWriteEventArgs.FLAGS_TOLOCK : 0) |
-                (unsigned ? ValueStoreWriteEventArgs.FLAGS_UNSIGNED : 0)));
+                (tolock ? ValueStoreWriteEventArgs.FLAGS_TOLOCK : 0)));
         }
         public void Unlock(bool all = false)
         {
@@ -155,14 +151,12 @@ namespace SamSoarII.Core.Models
         public const int FLAGS_TOLOCK = 0x02;
         public const int FLAGS_UNLOCK = 0x04;
         public const int FLAGS_UNLOCKALL = 0x08;
-        public const int FLAGS_UNSIGNED = 0x10;
         private int flags;
         public int Flags { get { return this.flags; } }
         public bool IsWrite { get { return (flags & FLAGS_ISWRITE) != 0; } }
         public bool ToLock { get { return (flags & FLAGS_TOLOCK) != 0; } }
         public bool Unlock { get { return (flags & FLAGS_UNLOCK) != 0; } }
         public bool UnlockAll { get { return (flags & FLAGS_UNLOCKALL) != 0; } }
-        public bool Unsigned { get { return (flags & FLAGS_UNSIGNED) != 0; } }
 
         private object tovalue;
         public object ToValue { get { return this.tovalue; } }

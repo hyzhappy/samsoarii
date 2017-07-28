@@ -48,29 +48,20 @@ namespace SamSoarII.Core.Communication
         }
         public bool IsComplete { get; set; }
         public bool IsSuccess { get; set; }
-        public List<MonitorElement> RefElements_A { get; set; } = new List<MonitorElement>();
-        public List<MonitorElement> RefElements_B { get; set; } = new List<MonitorElement>();
-        public GeneralWriteCommand(byte[] data, MonitorElement RefElement)
+        //public List<MonitorElement> RefElements_A { get; set; } = new List<MonitorElement>();
+        //public List<MonitorElement> RefElements_B { get; set; } = new List<MonitorElement>();
+        public GeneralWriteCommand(byte[] data, ValueStore vstore)
         {
             data1 = data;
-            RefElements_A.Add(RefElement);
-            InitializeCommandByElement();
+            InitializeCommandByElement(vstore);
             GenerateCommand();
         }
-        private void InitializeCommandByElement()
+        private void InitializeCommandByElement(ValueStore vstore)
         {
-            MonitorElement element = RefElements_A.First();
             addrTypeNum = 0x01;
-            addrType1 = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType),element.AddrType),(uint)(element.StartAddr));
-            if (element.ByteCount == 4 && !(element.AddrType == "CV" && element.StartAddr >= 200))
-            {
-                length1 = 0x02;
-            }
-            else
-            {
-                length1 = 0x01;
-            }
-            byte[] startaddr = ValueConverter.GetBytes((ushort)element.StartAddr);
+            addrType1 = (byte)CommandHelper.GetAddrType(vstore.Base, (uint)(vstore.Offset));
+            length1 = (byte)(vstore.ByteCount == 4 ? 0x02 : 0x01);
+            byte[] startaddr = ValueConverter.GetBytes((ushort)vstore.Offset);
             startLowAddr1 = startaddr[1];
             startHighAddr1 = startaddr[0];
         }
