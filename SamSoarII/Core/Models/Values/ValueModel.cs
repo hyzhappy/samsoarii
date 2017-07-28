@@ -134,9 +134,15 @@ namespace SamSoarII.Core.Models
             }
             set
             {
-                if (store != null) store.PropertyChanged -= OnStorePropertyChanged;
+                if (store != null)
+                {
+                    store.PropertyChanged -= OnStorePropertyChanged;
+                }
                 this.store = value;
-                if (store != null) store.PropertyChanged += OnStorePropertyChanged;
+                if (store != null)
+                {
+                    store.PropertyChanged += OnStorePropertyChanged;
+                }
             }
         }
         public object Value { get { return store?.Value != null ? store.Value : 0; } }

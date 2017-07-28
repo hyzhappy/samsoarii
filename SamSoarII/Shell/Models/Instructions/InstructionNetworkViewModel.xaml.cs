@@ -215,6 +215,7 @@ namespace SamSoarII.Shell.Models
                     tberr.Text = "";
                 }
             });
+            DynamicDispose();
             DynamicUpdate();
         }
 

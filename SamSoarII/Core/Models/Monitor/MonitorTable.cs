@@ -81,7 +81,17 @@ namespace SamSoarII.Core.Models
             set
             {
                 if (view == value) return;
+                MonitorWindow _view = view;
+                this.view = null;
+                if (_view != null)
+                {
+
+                }
                 this.view = value;
+                if (view != null)
+                {
+
+                }
             }
         }
         IViewModel IModel.View { get { return this.View; } set { this.View = (MonitorWindow)value; } }

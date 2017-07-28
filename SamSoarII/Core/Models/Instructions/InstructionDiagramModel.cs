@@ -119,7 +119,7 @@ namespace SamSoarII.Core.Models
             int forcount = 0;
             Dictionary<string, PLCOriginInst> lbdict = new Dictionary<string, PLCOriginInst>();
             Match match = null;
-
+            
             foreach (InstructionNetworkModel invmodel in Children.Where(inv => !inv.Parent.IsMasked))
             {
                 if (invmodel.IsModify) invmodel.Update();

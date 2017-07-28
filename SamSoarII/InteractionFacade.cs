@@ -519,7 +519,9 @@ namespace SamSoarII
                     mngSimu.IsEnable = true;
                     return true;
                 default:
-                    OnProjectPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+                    PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                        MainWindowEventArgs.TYPE_TOGGLE_UP
+                      | MainWindowEventArgs.FLAG_SIMULATE));
                     PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                         UnderBarStatus.Error, Properties.Resources.Simulate_Error));
                     LocalizedMessageBox.Show(Properties.Resources.Simulate_Error, LocalizedMessageIcon.Error);
@@ -541,7 +543,9 @@ namespace SamSoarII
             mngComu.IsEnable = true;
             if (!mngComu.CheckLink())
             {
-                OnProjectPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+                PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                    MainWindowEventArgs.TYPE_TOGGLE_UP
+                  | MainWindowEventArgs.FLAG_MONITOR));
                 PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                     UnderBarStatus.Error, Properties.Resources.MessageBox_Communication_Failed));
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);

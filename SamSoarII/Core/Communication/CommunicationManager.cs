@@ -83,20 +83,20 @@ namespace SamSoarII.Core.Communication
                     ValueManager.PostValueStoreEvent += OnReceiveValueStoreEvent;
                     PARACom.PropertyChanged += OnCommunicationParamsChanged;
                     OnCommunicationParamsChanged(this, null);
-                    visualtable = new MonitorTable(MDMoni, "Visual");
+                    //visualtable = new MonitorTable(MDMoni, "Visual");
                     readcmds = ValueManager.GetReadCommands().ToArray();
                 }
                 else
                 {
                     ValueManager.PostValueStoreEvent -= OnReceiveValueStoreEvent;
                     PARACom.PropertyChanged -= OnCommunicationParamsChanged;
-                    visualtable.Dispose();
+                    //visualtable.Dispose();
                     readcmds = null;
                 }
             }
         }
         
-        private MonitorTable visualtable;
+        //private MonitorTable visualtable;
         /*
         private ObservableCollection<MonitorElement> elements;
         public IList<MonitorElement> Elements { get { return this.elements; } }

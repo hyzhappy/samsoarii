@@ -112,13 +112,19 @@ namespace SamSoarII.Core.Models
                 Stores.Add(vstore);
             }
             vstore.RefNum++;
+            vstore.VisualRefNum += value.Parent.View != null ? 1 : 0;
             value.Store = vstore;
         }
         public void Remove(ValueModel value)
         {
             Values.Remove(value);
-            if (value.Store != null && --value.Store.RefNum == 0)
-                Stores.Remove(value.Store);
+            if (value.Store?.Parent != null)
+            {
+                value.Store.RefNum--;
+                value.Store.VisualRefNum -= value.Parent.View != null ? 1 : 0;
+                if (value.Store.RefNum == 0)
+                    Stores.Remove(value.Store);
+            }
             value.Store = null;
         }
 
