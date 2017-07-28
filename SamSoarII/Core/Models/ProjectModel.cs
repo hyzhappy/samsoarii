@@ -76,10 +76,7 @@ namespace SamSoarII.Core.Models
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
         #region Numbers
 
         private InteractionFacade parent;

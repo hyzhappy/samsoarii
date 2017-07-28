@@ -259,7 +259,6 @@ namespace SamSoarII
             wndMoni.Core = mdProj.Monitor;
             wndMain.LACProj.Show();
             mdProj.IsLoaded = true;
-            mdProj.OnPropertyChanged("Device");
         }
         
         public void CreateProject(string name, string filename = null)
