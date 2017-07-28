@@ -165,7 +165,10 @@ namespace SamSoarII.Shell.Windows
                     project.PropertyChanged += OnProjectPropertyChanged;
                     project.Modified += OnProjectModified;
                     TB_Item4.Text = String.Format("{0:s}:{1:s}", Properties.Resources.Project, project.ProjName);
+                    TB_Item4.ToolTip = project.FileName;
                 }
+                else
+                    TB_Item4.ToolTip = null;
             }
         }
         
@@ -236,6 +239,7 @@ namespace SamSoarII.Shell.Windows
             TB_Item2.Text = "";
             TB_Item3.Text = "";
             TB_Item4.Text = "";
+            TB_Item4.ToolTip = null;
         }
 
         public void ResetMessage()
