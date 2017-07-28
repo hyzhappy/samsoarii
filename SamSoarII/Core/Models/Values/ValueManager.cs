@@ -559,6 +559,9 @@ namespace SamSoarII.Core.Models
                 dataused[i] = false;
             for (int i = 0; i < infos.Count(); i++)
             {
+                IEnumerable<ValueStore> visibles = infos[i].Stores.ToArray();
+                //IEnumerable<ValueStore> visibles = infos[i].Stores.Where(vs => vs.VisualRefNum > 0);
+                //if (visibles.Count() > 0) visibles = visibles.ToArray();
                 switch (infos[i].Prototype.Base)
                 {
                     case ValueModel.Bases.V:
@@ -567,14 +570,14 @@ namespace SamSoarII.Core.Models
                         dataused[infos[i].DataAddr + 1] = true;
                         break;
                     default:
-                        if (infos[i].Stores.Count() == 0) continue;
-                        int maxbyte = infos[i].Stores.Max(vs => vs.ByteCount);
+                        if (visibles.Count() == 0) continue;
+                        int maxbyte = visibles.Max(vs => vs.ByteCount);
                         for (int j = infos[i].DataAddr; j < infos[i].DataAddr + maxbyte; j++)
                             dataused[j] = true;
                         break;
                 }
-                IEnumerable<ValueStore> intras = infos[i].Stores.Where(vs => vs.Intra != ValueModel.Bases.NULL);
-                if (intras.Count() > 0) intras = intras.ToArray();
+                IEnumerable<ValueStore> intras = visibles.Where(vs => vs.Intra != ValueModel.Bases.NULL);
+                //if (intras.Count() > 0) intras = intras.ToArray();
                 foreach (ValueStore vstore in intras)
                 {
                     int dataaddr = infos[i].DataAddr;
