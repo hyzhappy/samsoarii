@@ -559,8 +559,8 @@ namespace SamSoarII.Core.Models
                 dataused[i] = false;
             for (int i = 0; i < infos.Count(); i++)
             {
-                IEnumerable<ValueStore> visibles = infos[i].Stores.ToArray();
-                //IEnumerable<ValueStore> visibles = infos[i].Stores.Where(vs => vs.VisualRefNum > 0);
+                //IEnumerable<ValueStore> visibles = infos[i].Stores.ToArray();
+                IEnumerable<ValueStore> visibles = infos[i].Stores.Where(vs => vs.VisualRefNum > 0);
                 //if (visibles.Count() > 0) visibles = visibles.ToArray();
                 switch (infos[i].Prototype.Base)
                 {
