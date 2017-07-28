@@ -83,7 +83,12 @@ namespace SamSoarII.Core.Models
         public InteractionFacade Parent { get { return this.parent; } }
         IModel IModel.Parent { get { return null; } }
         public ValueManager ValueManager { get { return parent.MNGValue; } }
-
+        private bool isLoaded = false;
+        public bool IsLoaded
+        {
+            get { return isLoaded; }
+            set { isLoaded = value; }
+        }
         private string projname;
         public string ProjName { get { return this.projname; } }
 
@@ -122,6 +127,7 @@ namespace SamSoarII.Core.Models
         public event RoutedEventHandler Modified = delegate { };
         public void InvokeModify(IModel source, bool undo = false)
         {
+            if (!isLoaded) return;
             if (source is LadderDiagramModel)
             {
                 LadderDiagramModel diagram = (LadderDiagramModel)source;
@@ -351,6 +357,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnDiagramPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "LadderMode" || e.PropertyName == "IsExpand") return;
             InvokeModify(this);
         }
 
@@ -369,6 +376,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnFuncBlockPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "LadderMode") return;
             InvokeModify(this);
         }
 

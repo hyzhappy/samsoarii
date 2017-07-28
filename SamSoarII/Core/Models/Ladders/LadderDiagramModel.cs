@@ -84,6 +84,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "IsExpand" || e.PropertyName == "LadderMode") return;
             parent.InvokeModify((LadderNetworkModel)sender);
         }
 

@@ -423,6 +423,7 @@ namespace SamSoarII.Shell.Models
             }
             TextChanged(this, new RoutedEventArgs());
             InvokePropertyChanged("Caret");
+            core.Parent.InvokeModify(core);
         }
         /// <summary>
         /// 当用户键入字符后发生
@@ -505,6 +506,7 @@ namespace SamSoarII.Shell.Models
                         break;
                 }
             }
+            core.Parent.InvokeModify(core);
         }
         /// <summary>
         /// 当文本光标移动后发生

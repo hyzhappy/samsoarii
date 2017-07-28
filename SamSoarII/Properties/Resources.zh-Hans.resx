@@ -154,7 +154,7 @@
     <value>最近工程(_F)</value>
   </data>
   <data name="MainWindow_Close_Proj" xml:space="preserve">
-    <value>关闭当前工程(_C)</value>
+    <value>关闭当前工程</value>
   </data>
   <data name="MainWindow_Exit" xml:space="preserve">
     <value>退出(_X)</value>
@@ -2125,7 +2125,7 @@
     <value>选项</value>
   </data>
   <data name="Close_Proj" xml:space="preserve">
-    <value>关闭当前工程</value>
+    <value>关闭当前工程(_C)</value>
   </data>
   <data name="Message_OutOfXRange" xml:space="preserve">
     <value>X寄存器的索引超出了设备型号的范围！</value>
