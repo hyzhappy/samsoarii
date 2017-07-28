@@ -42,13 +42,6 @@
                      SelectionChanged="LB_Range_SelectionChanged">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate>
-                                    <TextBlock Text="{Binding Text}" Margin="4,1"/>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
                         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="LBI_MouseLeftButtonDown"></EventSetter>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
