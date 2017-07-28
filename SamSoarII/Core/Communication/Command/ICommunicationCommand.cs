@@ -22,28 +22,10 @@ namespace SamSoarII.Core.Communication
                 return (((uint)AddrHigh) << 8) | AddrLow;
             }
         }
+        public int DataAddr { get; set; }
         #endregion
         public MonitorElement Model { get; set; }
         public AddrSegment() { }
-        public AddrSegment(MonitorElement model,bool isIntra = false)
-        {
-            Model = model;
-            if (isIntra)
-            {
-                Type = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), model.IntrasegmentType), (uint)(model.IntrasegmentAddr));
-                AddrLow = (byte)model.IntrasegmentAddr;
-                AddrHigh = 0;
-                Length = 1;
-            }
-            else
-            {
-                Type = (byte)CommandHelper.GetAddrType((ElementAddressType)Enum.Parse(typeof(ElementAddressType), model.AddrType), (uint)(model.StartAddr));
-                byte[] startaddr = ValueConverter.GetBytes((ushort)model.StartAddr);
-                AddrLow = startaddr[1];
-                AddrHigh = startaddr[0];
-                Length = (byte)model.ByteCount;
-            }
-        }
     }
 
     public class IntraSegment

@@ -24,9 +24,8 @@ namespace SamSoarII.Core.Communication
             mngPort = new SerialPortManager(this);
             mngUSB = new USBManager(this);
             mngCurrent = null;
-            elements = new ObservableCollection<MonitorElement>();
-            elements.CollectionChanged += OnElementCollectionChanged;
-            readcmds = new ObservableCollection<ICommunicationCommand>();
+            //elements = new ObservableCollection<MonitorElement>();
+            //elements.CollectionChanged += OnElementCollectionChanged;
             writecmds = new Queue<ICommunicationCommand>();
             Paused += OnThreadPaused;
             //PARACom.PropertyChanged += OnCommunicationParamsChanged;
@@ -37,8 +36,8 @@ namespace SamSoarII.Core.Communication
         private InteractionFacade ifParent;
         public InteractionFacade IFParent { get { return this.ifParent; } }
         public ValueManager ValueManager { get { return ifParent.MNGValue; } }
-        public CommunicationParams PARACom { get { return ifParent.MDProj.PARAProj.PARACom; } }
-        public MonitorModel MDMoni { get { return ifParent.MDProj.Monitor; } }
+        public CommunicationParams PARACom { get { return ifParent.MDProj?.PARAProj?.PARACom; } }
+        public MonitorModel MDMoni { get { return ifParent.MDProj?.Monitor; } }
 
         #region Port & USB
 
@@ -79,58 +78,26 @@ namespace SamSoarII.Core.Communication
             {
                 if (isenable == value) return;
                 this.isenable = value;
-                foreach (MonitorElement element in elements)
-                {
-                    element.Store.Post -= OnReceiveValueStoreEvent;
-                    element.Dispose();
-                }
-                elements.Clear();
                 if (isenable)
                 {
+                    ValueManager.PostValueStoreEvent += OnReceiveValueStoreEvent;
                     PARACom.PropertyChanged += OnCommunicationParamsChanged;
                     OnCommunicationParamsChanged(this, null);
                     visualtable = new MonitorTable(MDMoni, "Visual");
-                    foreach (ValueInfo vinfo in ValueManager)
-                    {
-                        vinfo.StoresChanged += OnValueInfoStoreChanged;
-                        foreach (ValueStore vstore in vinfo.Stores)
-                        {
-                            MonitorElement element = new MonitorElement(visualtable, vstore);
-                            vstore.Visual = element;
-                            elements.Add(element);
-                        }
-                    }
-                    Arrange();
+                    readcmds = ValueManager.GetReadCommands().ToArray();
                 }
                 else
                 {
+                    ValueManager.PostValueStoreEvent -= OnReceiveValueStoreEvent;
                     PARACom.PropertyChanged -= OnCommunicationParamsChanged;
-                    foreach (ValueInfo vinfo in ValueManager)
-                        vinfo.StoresChanged -= OnValueInfoStoreChanged;
                     visualtable.Dispose();
-                    visualtable = null;
+                    readcmds = null;
                 }
             }
         }
-        private void OnValueInfoStoreChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-                foreach (ValueStore vstore in e.NewItems)
-                {
-                    MonitorElement element = new MonitorElement(visualtable, vstore);
-                    vstore.Visual = element;
-                    elements.Add(element);
-                }
-            if (e.OldItems != null)
-                foreach (ValueStore vstore in e.OldItems)
-                {
-                    elements.Remove(vstore.Visual);
-                    vstore.Visual = null;
-                }
-            if (!IsActive) Arrange(); else Pause();
-        }
-
+        
         private MonitorTable visualtable;
+        /*
         private ObservableCollection<MonitorElement> elements;
         public IList<MonitorElement> Elements { get { return this.elements; } }
         public event NotifyCollectionChangedEventHandler ElementChanged = delegate { };
@@ -143,12 +110,12 @@ namespace SamSoarII.Core.Communication
                 foreach (MonitorElement element in e.NewItems)
                     element.Store.Post -= OnReceiveValueStoreEvent;
         }
-
+        */
         #endregion
 
         #region Commands
 
-        private ObservableCollection<ICommunicationCommand> readcmds;
+        private IList<GeneralReadCommand> readcmds;
         private Queue<ICommunicationCommand> writecmds;
 
         #endregion
@@ -188,17 +155,18 @@ namespace SamSoarII.Core.Communication
             if (current == null)
             {
                 if (writecmds.Count() > 0)
+                {
                     current = writecmds.Dequeue();
+                }
                 else
                 {
-                    if (readcmds.Count() == 0)
-                        current = null;
-                    else
+                    if (readindex >= readcmds.Count())
                     {
-                        if (readindex >= readcmds.Count())
-                            readindex = 0;
-                        current = readcmds[readindex++];
+                        ValueManager.ReadMonitorData();
+                        readcmds = ValueManager.GetReadCommands().ToArray();
+                        readindex = 0;   
                     }
+                    current = readcmds.Count() == 0 ? null : readcmds[readindex++];
                 }
             }
             bool hassend = false;
@@ -256,24 +224,24 @@ namespace SamSoarII.Core.Communication
         {
             if (cmd.IsSuccess)
             {
-                cmd.UpdataValues();
+                //cmd.UpdataValues();
+                if (cmd is GeneralReadCommand)
+                    ValueManager.AnalyzeReadCommand((GeneralReadCommand)cmd);
             }
         }
 
         private void OnThreadPaused(object sender, RoutedEventArgs e)
         {
-            Arrange();
             Start();
         }
 
         public void AbortAll()
         {
             Abort();
-            mngCurrent.Abort();
             while (IsAlive) Thread.Sleep(10);
+            mngCurrent.Abort();
         }
-
-
+        
         #endregion
 
         #region Download
@@ -373,171 +341,7 @@ namespace SamSoarII.Core.Communication
         #region Upload
 
         #endregion
-
-        #region Arrange
-
-        public void Arrange()
-        {
-            readcmds.Clear();
-            Queue<string> tempQueue_Base = new Queue<string>();
-            foreach (var ele in elements)
-                if (!tempQueue_Base.Contains(ele.AddrType))
-                    tempQueue_Base.Enqueue(ele.AddrType);
-            string addrType;
-            int gIndex = 0;
-            bool gisFirst = true, iisFirst = true;
-            int gstart = 0, istart = 0;
-            MonitorElement gstartele = null, istartele = null;
-            GeneralReadCommand gcmd = new GeneralReadCommand();
-            gcmd.SegmentsGroup[gIndex] = new List<AddrSegment>();
-            IntrasegmentReadCommand icmd = new IntrasegmentReadCommand();
-            while (tempQueue_Base.Count > 0)
-            {
-                addrType = tempQueue_Base.Dequeue();
-                List<MonitorElement> _elements = elements.Where(x => { return x.AddrType == addrType; }).OrderBy(x => { return x.StartAddr; }).ToList();
-                if (_elements.Count > 0)
-                {
-                    for (int i = 0; i < _elements.Count; i++)
-                    {
-                        if ((iisFirst && _elements[i].IsIntrasegment) || (gisFirst && !_elements[i].IsIntrasegment))
-                        {
-                            if (_elements[i].IsIntrasegment)
-                            {
-                                if (!iisFirst)
-                                {
-                                    readcmds.Add(icmd);
-                                    icmd = new IntrasegmentReadCommand();
-                                }
-                                else iisFirst = false;
-                                icmd.Segments.Add(GenerateIntraSegmentByElement(_elements[i]));
-                                istart = _elements[i].StartAddr;
-                                istartele = _elements[i];
-                            }
-                            else
-                            {
-                                gstart = _elements[i].StartAddr;
-                                gstartele = _elements[i];
-                                if (gisFirst)
-                                {
-                                    gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(_elements[i]));
-                                    gisFirst = false;
-                                }
-                                else ArrangeCmd(ref gcmd, ref gIndex, _elements[i]);
-                            }
-                        }
-                        else if (!_elements[i].IsIntrasegment && GetAddrSpan(_elements[i], gstart) < GetMaxRange(gstartele))
-                        {
-                            if (_elements[i].AddrType == gstartele.AddrType)
-                            {
-                                gcmd.SegmentsGroup[gIndex].Add(GenerateAddrSegmentByElement(_elements[i]));
-                            }
-                            else
-                            {
-                                gstart = _elements[i].StartAddr;
-                                gstartele = _elements[i];
-                                ArrangeCmd(ref gcmd, ref gIndex, _elements[i]);
-                            }
-                        }
-                        else if (_elements[i].IsIntrasegment && GetAddrSpan(_elements[i], istart) < GetMaxRange(istartele) && IsSameIntraBase(istartele, _elements[i]))
-                        {
-                            if (_elements[i].AddrType == istartele.AddrType)
-                            {
-                                icmd.Segments.Add(GenerateIntraSegmentByElement(_elements[i]));
-                            }
-                            else
-                            {
-                                readcmds.Add(icmd);
-                                icmd = new IntrasegmentReadCommand();
-                                icmd.Segments.Add(GenerateIntraSegmentByElement(_elements[i]));
-                                istart = _elements[i].StartAddr;
-                                istartele = _elements[i];
-                            }
-                        }
-                        else
-                        {
-                            if (_elements[i].IsIntrasegment)
-                            {
-                                readcmds.Add(icmd);
-                                icmd = new IntrasegmentReadCommand();
-                                icmd.Segments.Add(GenerateIntraSegmentByElement(_elements[i]));
-                                istart = _elements[i].StartAddr;
-                                istartele = _elements[i];
-                            }
-                            else
-                            {
-                                gstart = _elements[i].StartAddr;
-                                gstartele = _elements[i];
-                                ArrangeCmd(ref gcmd, ref gIndex, _elements[i]);
-                            }
-                        }
-                    }
-                }
-            }
-            //添加剩余命令
-            if (!gisFirst) readcmds.Add(gcmd);
-            if (!iisFirst) readcmds.Add(icmd);
-        }
-        /// <summary>
-        /// 对命令进行分组
-        /// </summary>
-        /// <param name="command">当前命令</param>
-        /// <param name="index">当前命令片段的索引</param>
-        /// <param name="element">需添加的元素</param>
-        private void ArrangeCmd(ref GeneralReadCommand command, ref int index, MonitorElement element)
-        {
-            if (index < CommunicationDataDefine.MAX_ADDRESS_TYPE - 1) index++;
-            else
-            {
-                index = 0;
-                readcmds.Add(command);
-                command = new GeneralReadCommand();
-            }
-            command.SegmentsGroup[index] = new List<AddrSegment>();
-            command.SegmentsGroup[index].Add(GenerateAddrSegmentByElement(element));
-        }
-        private bool IsSameIntraBase(MonitorElement one, MonitorElement two)
-        {
-            return one.IntrasegmentAddr == two.IntrasegmentAddr && one.IntrasegmentType == two.IntrasegmentType;
-        }
-        public int GetMaxRange(MonitorElement ele)
-        {
-            if (ele == null)
-            {
-                return 32;
-            }
-            if (ele.AddrType == "CV" && ele.StartAddr >= 200)
-            {
-                return 16;
-            }
-            else
-            {
-                return 32;
-            }
-        }
-        private int GetAddrSpan(MonitorElement element, int startAddr)
-        {
-            if (element.ByteCount == 4 && !(element.AddrType == "CV" && element.StartAddr >= 200))
-            {
-                return (int)(element.StartAddr - startAddr + 1);
-            }
-            else
-            {
-                return (int)(element.StartAddr - startAddr);
-            }
-        }
-        private AddrSegment GenerateAddrSegmentByElement(MonitorElement element)
-        {
-            return new AddrSegment(element);
-        }
-        private IntraSegment GenerateIntraSegmentByElement(MonitorElement element)
-        {
-            AddrSegment bseg = new AddrSegment(element);
-            AddrSegment iseg = new AddrSegment(element, true);
-            return new IntraSegment(bseg, iseg);
-        }
-
-        #endregion
-
+        
         #region Event Handler
         
         private void OnCommunicationParamsChanged(object sender, PropertyChangedEventArgs e)
@@ -549,7 +353,7 @@ namespace SamSoarII.Core.Communication
         private void OnReceiveValueStoreEvent(object sender, ValueStoreWriteEventArgs e)
         {
             ValueStore vstore = (ValueStore)sender;
-            MonitorElement element = vstore.Visual;
+            //MonitorElement element = new MonitorElement(visualtable, vstore);
             if (e.IsWrite)
             {
                 byte[] data = null;
@@ -589,30 +393,25 @@ namespace SamSoarII.Core.Communication
                         break;
 
                 }
-                if (element.IsIntrasegment)
+                if (vstore.Intra != ValueModel.Bases.NULL)
                 {
-                    IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, element);
-                    command.RefElement = element;
+                    IntrasegmentWriteCommand command = new IntrasegmentWriteCommand(data, vstore);
                     writecmds.Enqueue(command);
                 }
                 else
                 {
-                    GeneralWriteCommand command = new GeneralWriteCommand(data, element);
-                    command.RefElements_A.Add(element);
+                    GeneralWriteCommand command = new GeneralWriteCommand(data, vstore);
                     writecmds.Enqueue(command);
                 }
             }
             if (e.Unlock)
             {
-                element.SetValue = "";
-                ForceCancelCommand command = new ForceCancelCommand(false, element);
+                ForceCancelCommand command = new ForceCancelCommand(false, vstore);
                 writecmds.Enqueue(command);
             }
             if (e.UnlockAll)
             {
-                foreach (MonitorElement _element in elements)
-                    _element.SetValue = "";
-                ForceCancelCommand command = new ForceCancelCommand(true, element);
+                ForceCancelCommand command = new ForceCancelCommand(true, vstore);
                 writecmds.Enqueue(command);
             }
         }

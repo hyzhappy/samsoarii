@@ -10,7 +10,7 @@ namespace SamSoarII.Utility
     {
         public uint Start { get; set; }
         public uint End { get; set; }
-        public int Count { get { return (int)End - (int)Start + 1; } }
+        public int Count { get { return (int)End - (int)Start; } }
 
         public IntRange(uint start, uint end)
         {

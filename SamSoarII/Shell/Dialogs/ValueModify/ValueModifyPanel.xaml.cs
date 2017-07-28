@@ -160,24 +160,7 @@ namespace SamSoarII.Shell.Dialogs
             }
             if (sender == BT_Write)
             {
-                if (VMCore != null)
-                {
-                    switch (CB_Type.Text)
-                    {
-                        case "UWORD":
-                        case "UDWORD":
-                        case "BCD":
-                            Store.Write(TB_Value.Text, false, true);
-                            break;
-                        default:
-                            Store.Write(TB_Value.Text, false);
-                            break;
-                    }
-                }
-                if (MECore != null)
-                {
-                    Store.Write(TB_Value.Text, false);
-                }
+                Store.Write(TB_Value.Text, false);
             }
         }
 

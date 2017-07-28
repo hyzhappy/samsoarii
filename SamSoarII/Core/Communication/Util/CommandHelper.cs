@@ -97,29 +97,29 @@ namespace SamSoarII.Core.Communication
                     return FGs_ERR_CODE.FGs_ISNOTANERRCODE;
             }
         }
-        public static byte? GetAddrType(ElementAddressType type,uint offset)
+        public static byte? GetAddrType(ValueModel.Bases type,uint offset)
         {
             switch (type)
             {
-                case ElementAddressType.X:
+                case ValueModel.Bases.X:
                     return CommunicationDataDefine.ADDRESS_TYPE_X;
-                case ElementAddressType.Y:
+                case ValueModel.Bases.Y:
                     return CommunicationDataDefine.ADDRESS_TYPE_Y;
-                case ElementAddressType.M:
+                case ValueModel.Bases.M:
                     return CommunicationDataDefine.ADDRESS_TYPE_M;
-                case ElementAddressType.S:
+                case ValueModel.Bases.S:
                     return CommunicationDataDefine.ADDRESS_TYPE_S;
-                case ElementAddressType.C:
+                case ValueModel.Bases.C:
                     return CommunicationDataDefine.ADDRESS_TYPE_C;
-                case ElementAddressType.T:
+                case ValueModel.Bases.T:
                     return CommunicationDataDefine.ADDRESS_TYPE_T;
-                case ElementAddressType.D:
+                case ValueModel.Bases.D:
                     return CommunicationDataDefine.ADDRESS_TYPE_D;
-                case ElementAddressType.V:
+                case ValueModel.Bases.V:
                     return CommunicationDataDefine.ADDRESS_TYPE_V;
-                case ElementAddressType.Z:
+                case ValueModel.Bases.Z:
                     return CommunicationDataDefine.ADDRESS_TYPE_Z;
-                case ElementAddressType.CV:
+                case ValueModel.Bases.CV:
                     if (offset >= 200)
                     {
                         return CommunicationDataDefine.ADDRESS_TYPE_CV32;
@@ -128,11 +128,11 @@ namespace SamSoarII.Core.Communication
                     {
                         return CommunicationDataDefine.ADDRESS_TYPE_CV;
                     }
-                case ElementAddressType.TV:
+                case ValueModel.Bases.TV:
                     return CommunicationDataDefine.ADDRESS_TYPE_TV;
-                case ElementAddressType.AI:
+                case ValueModel.Bases.AI:
                     return CommunicationDataDefine.ADDRESS_TYPE_AI;
-                case ElementAddressType.AO:
+                case ValueModel.Bases.AO:
                     return CommunicationDataDefine.ADDRESS_TYPE_AO;
                 default:
                     return null;

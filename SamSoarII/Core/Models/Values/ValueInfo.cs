@@ -48,6 +48,11 @@ namespace SamSoarII.Core.Models
         
         public void Dispose()
         {
+            foreach (ValueStore store in stores)
+            {
+                store.Post -= OnReceiveValueStoreEvent;
+                store.Dispose();
+            }
             values.Clear();
             stores.Clear();
             values.CollectionChanged -= OnValueCollectionChanged;
@@ -66,6 +71,11 @@ namespace SamSoarII.Core.Models
 
         public void Initialize()
         {
+            foreach (ValueStore store in stores)
+            {
+                store.Post -= OnReceiveValueStoreEvent;
+                store.Dispose();
+            }
             if (comment != null) Comment = null;
             if (alias != null) Alias = null;
             values.Clear();
@@ -117,9 +127,18 @@ namespace SamSoarII.Core.Models
         public event NotifyCollectionChangedEventHandler StoresChanged = delegate { };
         private void OnStoreCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (e.NewItems != null)
+                foreach (ValueStore store in e.NewItems)
+                    store.Post += OnReceiveValueStoreEvent;
+            if (e.OldItems != null)
+                foreach (ValueStore store in e.OldItems)
+                {
+                    store.Post -= OnReceiveValueStoreEvent;
+                    store.Dispose();
+                }
             StoresChanged(this, e);
         }
-
+        
         private SortedList<LadderUnitModel, int> units;
         public IList<LadderUnitModel> Units { get { return units != null ? units.Keys : new LadderUnitModel[] { }; } }
         public IEnumerable<LadderUnitModel> UsedUnits { get { return Units.Where(u => u.IsUsed); } }
@@ -205,6 +224,17 @@ namespace SamSoarII.Core.Models
         public bool IsUsed
         {
             get { return comment != null || alias != null || initmodel != null; }
+        }
+
+        #endregion
+
+        #region Event Handler
+
+        public event ValueStoreWriteEventHandler PostValueStoreEvent = delegate { }; 
+
+        private void OnReceiveValueStoreEvent(object sender, ValueStoreWriteEventArgs e)
+        {
+            PostValueStoreEvent(sender, e);
         }
 
         #endregion

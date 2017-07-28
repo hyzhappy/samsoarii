@@ -13,6 +13,7 @@ using SamSoarII.Shell.Windows;
 using SamSoarII.Global;
 using SamSoarII.Core.Generate;
 using SamSoarII.Core.Communication;
+using SamSoarII.Utility;
 
 namespace SamSoarII.Core.Models
 {
@@ -127,7 +128,10 @@ namespace SamSoarII.Core.Models
             datas = new byte[dataaddr];
             dataused = new bool[dataaddr];
             for (int i = 0; i < infos.Length; i++)
+            {
                 infos[i].PropertyChanged += OnInfoPropertyChanged;
+                infos[i].PostValueStoreEvent += OnReceiveValueStoreEvent;
+            }
         }
         
         public void Dispose()
@@ -549,7 +553,7 @@ namespace SamSoarII.Core.Models
         private ValueStore[] storev;
         private ValueStore[] storez;
         
-        public IList<ICommunicationCommand> GetReadCommands()
+        public IList<GeneralReadCommand> GetReadCommands()
         {
             for (int i = 0; i < infos.Count(); i++)
                 dataused[i] = false;
@@ -584,52 +588,138 @@ namespace SamSoarII.Core.Models
                 }
             }
             List<AddrSegment> segs = new List<AddrSegment>();
+            AddrSegment seg = null;
             int start = -1;
             for (int i = 0; i < infos.Count(); i++)
             {
                 bool issplit = false;
-                if (dataused[infos[i].DataAddr])
+                if (dataused[infos[i].DataAddr] && start == -1) start = i;
+                if (start != -1)
                 {
-                    if (start == -1) start = i;
-                    if (start != -1)
-                    {
-                        issplit |= infos[i].Prototype.Base != infos[start].Prototype.Base;
-                        int maxrange = 32;
-                        if (infos[i].Prototype.Base == ValueModel.Bases.CV && infos[i].Prototype.Offset >= 200)
-                            maxrange = 16;
-                        issplit |= i - start + 1 > maxrange;
-                    }
-                }
-                else if (start != -1)
-                {
-                    issplit = true;
+                    issplit |= infos[i].Prototype.Base != infos[start].Prototype.Base;
+                    issplit |= infos[i].Prototype.Base == ValueModel.Bases.CV && infos[start].Prototype.Base == ValueModel.Bases.CV
+                        && infos[i].Prototype.Offset >= 200 && infos[start].Prototype.Offset < 200;
+                    int maxrange = 32;
+                    if (infos[i].Prototype.Base == ValueModel.Bases.CV && infos[i].Prototype.Offset >= 200)
+                        maxrange = 16;
+                    issplit |= i - start + 1 > maxrange;
                 }
                 if (issplit)
                 {
-                    segs.Add(CommandHelper.GetAddrSegment(
+                    seg = CommandHelper.GetAddrSegment(
                         infos[start].Prototype.Base,
                         infos[start].Prototype.Offset,
-                        i - start));
+                        i - start);
+                    seg.DataAddr = infos[start].DataAddr;
+                    segs.Add(seg);
                     start = dataused[infos[i].DataAddr] ? i : -1;
                 }
             }
             if (start != -1)
             {
-                segs.Add(CommandHelper.GetAddrSegment(
-                        infos[start].Prototype.Base,
-                        infos[start].Prototype.Offset,
-                        infos.Count() - start));
+                seg = CommandHelper.GetAddrSegment(
+                    infos[start].Prototype.Base,
+                    infos[start].Prototype.Offset,
+                    infos.Count() - start);
+                seg.DataAddr = infos[start].DataAddr;
+                segs.Add(seg);
             }
-            List<ICommunicationCommand> result = new List<ICommunicationCommand>();
-            
+            List<GeneralReadCommand> result = new List<GeneralReadCommand>();
+            GeneralReadCommand cmd = null;
+            int maxseg = CommunicationDataDefine.MAX_ADDRESS_TYPE;
+            int seglen = segs.Count() / maxseg;
+            int segrem = segs.Count() % maxseg;
+            for (int i = 0; i < seglen; i++)
+            {
+                cmd = new GeneralReadCommand();
+                for (int j = 0; j < maxseg; j++)
+                    cmd.Segments.Add(segs[i * maxseg + j]);
+                cmd.InitializeCommandByElement();
+                result.Add(cmd);
+            }
+            if (segrem > 0)
+            {
+                cmd = new GeneralReadCommand();
+                for (int j = 0; j < segrem; j++)
+                    cmd.Segments.Add(segs[seglen * maxseg + j]);
+                cmd.InitializeCommandByElement();
+                result.Add(cmd);
+            }
             return result;
         }
 
-        public void AnalyzeReadCommands(IEnumerable<ICommunicationCommand> cmds)
+        public void AnalyzeReadCommand(GeneralReadCommand cmd)
         {
-
+            List<byte[]> retdatas = cmd.GetRetData();
+            for (int i = 0; i < cmd.Segments.Count(); i++)
+            {
+                AddrSegment seg = cmd.Segments[i];
+                byte[] retdata = retdatas[i];
+                int typeLen = CommandHelper.GetLengthByAddrType(seg.Type);
+                if (typeLen == 1)
+                {
+                    for (int j = 0; j < seg.Length; j++)
+                    {
+                        int div = j / 8;
+                        int mod = j % 8;
+                        datas[seg.DataAddr + j] = (byte)((retdata[div] >> mod) & 1);
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < Math.Min(datas.Length - seg.DataAddr, retdata.Length); j++)
+                        datas[seg.DataAddr + j] = retdata[j];
+                }
+            }
         }
 
+        public void ReadMonitorData()
+        {
+            byte[] udata = new byte[4];
+            int dataaddr;
+            uint value;
+            for (int i = 0; i < infos.Count(); i++)
+            {
+                switch (infos[i].Prototype.Base)
+                {
+                    case ValueModel.Bases.V:
+                    case ValueModel.Bases.Z:
+                        dataaddr = infos[i].DataAddr;
+                        for (int j = dataaddr; j < Math.Min(datas.Length, dataaddr + 4); j++)
+                            udata[j - dataaddr] = datas[j];
+                        value = ValueConverter.GetValue(udata);
+                        if (infos[i].Prototype.Base == ValueModel.Bases.V)
+                            storev[infos[i].Prototype.Offset].Value = (int)(short)value;
+                        if (infos[i].Prototype.Base == ValueModel.Bases.Z)
+                            storez[infos[i].Prototype.Offset].Value = (int)(short)value;
+                        break;
+                }
+                if (infos[i].Stores.Count() == 0) continue;
+                foreach (ValueStore vstore in infos[i].Stores.ToArray())
+                {
+                    dataaddr = infos[i].DataAddr;
+                    switch (vstore.Intra)
+                    {
+                        case ValueModel.Bases.V: dataaddr += (int)(storev[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+                        case ValueModel.Bases.Z: dataaddr += (int)(storez[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+                    }
+                    for (int j = dataaddr; j < Math.Min(datas.Length, dataaddr + 4); j++)
+                        udata[j - dataaddr] = datas[j];
+                    value = ValueConverter.GetValue(udata);
+                    switch (vstore.Type)
+                    {
+                        case ValueModel.Types.BOOL: vstore.Value = (int)(udata[0] & 1); break;
+                        case ValueModel.Types.WORD: vstore.Value = (short)value; break;
+                        case ValueModel.Types.UWORD: vstore.Value = (ushort)value; break;
+                        case ValueModel.Types.BCD: vstore.Value = value > 9999 ? (object)"???" : ValueConverter.ToBCD((ushort)value); break;
+                        case ValueModel.Types.DWORD: vstore.Value = (int)value; break;
+                        case ValueModel.Types.UDWORD: vstore.Value = value; break;
+                        case ValueModel.Types.FLOAT: vstore.Value = ValueConverter.UIntToFloat(value); break;
+                    }
+                }
+            }
+        }
+        
         #endregion
 
         #region Save & Load
@@ -682,6 +772,13 @@ namespace SamSoarII.Core.Models
                 parent.MDProj.InvokeModify(this);
         }
 
+        public event ValueStoreWriteEventHandler PostValueStoreEvent = delegate { };
+
+        private void OnReceiveValueStoreEvent(object sender, ValueStoreWriteEventArgs e)
+        {
+            PostValueStoreEvent(sender, e);
+        }
+        
         #endregion
     }
 
