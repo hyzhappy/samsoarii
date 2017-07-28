@@ -140,7 +140,7 @@ namespace SamSoarII.Core.Communication
                 foreach (MonitorElement element in e.NewItems)
                     element.Store.Post += OnReceiveValueStoreEvent;
             if (e.OldItems != null)
-                foreach (MonitorElement element in e.NewItems)
+                foreach (MonitorElement element in e.OldItems)
                     element.Store.Post -= OnReceiveValueStoreEvent;
         }
 
@@ -516,7 +516,8 @@ namespace SamSoarII.Core.Communication
         }
         private int GetAddrSpan(MonitorElement element, int startAddr)
         {
-            if (element.ByteCount == 4 && !(element.AddrType == "CV" && element.StartAddr >= 200))
+            //不管是不是双字，最后一个寄存器都要读到它的下一位
+            if (!(element.AddrType == "CV" && element.StartAddr >= 200))
             {
                 return (int)(element.StartAddr - startAddr + 1);
             }
