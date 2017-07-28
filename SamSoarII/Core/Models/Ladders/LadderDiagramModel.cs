@@ -126,7 +126,7 @@ namespace SamSoarII.Core.Models
         public bool IsInterruptLadder
         { 
             get { return this.isitpr; }
-            set { this.isitpr = value; PropertyChanged(this, new PropertyChangedEventArgs("IsInterruptLadder")); }
+            set { this.isitpr = value;}
         }
 
         private LadderModes laddermode;

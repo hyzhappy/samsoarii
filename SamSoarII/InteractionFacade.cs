@@ -728,7 +728,6 @@ namespace SamSoarII
                     break;
                 }
             }
-            mdProj.ChangeModify(false);
             handle.Completed = true;
             return result;
         }

@@ -763,7 +763,8 @@ namespace SamSoarII.Core.Generate
         }
         private static void RemoveEmptyLines(LadderNetworkModel ladderNetwork)
         {
-            ladderNetwork.RowCount = ladderNetwork.GetMaxY() + 1;
+            if(ladderNetwork.RowCount != ladderNetwork.GetMaxY() + 1)
+                ladderNetwork.RowCount = ladderNetwork.GetMaxY() + 1;
         }
     }
 }
