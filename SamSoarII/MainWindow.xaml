@@ -466,7 +466,7 @@
                 </ComboBox>
                 <ComboBox x:Name="TBCB_ProjectName" SelectedIndex="0" Margin="0, -12, 0, 0" Width="150" Height="24" 
                           HorizontalAlignment="Left" HorizontalContentAlignment="Left">
-                    <TextBlock Text="{Binding MDProj.ProjName}"/>
+                    <TextBlock Text="{Binding ProjectName}"/>
                 </ComboBox>
             </ToolBar>
         </ToolBarTray>
