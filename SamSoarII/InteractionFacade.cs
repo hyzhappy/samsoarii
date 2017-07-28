@@ -30,7 +30,7 @@ using System.Collections.Specialized;
 
 namespace SamSoarII
 {
-    public class InteractionFacade : IDisposable, IWindow
+    public class InteractionFacade : IDisposable, IWindow,INotifyPropertyChanged
     {
         #region IWindow
 
@@ -171,6 +171,7 @@ namespace SamSoarII
         #endregion
 
         #region Project
+        public PLCDevice.Device Device { get { return mdProj?.Device; } }
         public string ProjectName { get { return mdProj?.ProjName; } }
         private ProjectModel mdProj;
         public ProjectModel MDProj { get { return this.mdProj; } }
@@ -260,6 +261,7 @@ namespace SamSoarII
             wndMain.LACProj.Show();
             mdProj.IsLoaded = true;
             PropertyChanged(this, new PropertyChangedEventArgs("ProjectName"));
+            PropertyChanged(this, new PropertyChangedEventArgs("Device"));
         }
         
         public void CreateProject(string name, string filename = null)
@@ -428,7 +430,14 @@ namespace SamSoarII
                     {
                         dialog2.EnsureButtonClick += (sender1, e1) =>
                         {
-                            dialog2.Save();
+                            if(mdProj.LadderMode != LadderModes.Edit)
+                            {
+                                LocalizedMessageBox.Show(Properties.Resources.Modify_Project, LocalizedMessageIcon.Warning);
+                            }
+                            else
+                            {
+                                dialog2.Save();
+                            }
                             dialog2.Close();
                         };
                         dialog2.ShowDialog();
@@ -1319,7 +1328,14 @@ namespace SamSoarII
                 {
                     try
                     {
-                        dialog.Save();
+                        if (mdProj.LadderMode != LadderModes.Edit)
+                        {
+                            LocalizedMessageBox.Show(Properties.Resources.Modify_Project, LocalizedMessageIcon.Warning);
+                        }
+                        else
+                        {
+                            dialog.Save();
+                        }
                         dialog.Close();
                     }
                     catch (Exception exce2)
@@ -1480,6 +1496,22 @@ namespace SamSoarII
         #endregion
 
         #region Modify
+        public void ReturnToEdit()
+        {
+            switch (mdProj.LadderMode)
+            {
+                case LadderModes.Edit:
+                    LocalizedMessageBox.Show(Properties.Resources.In_Edit_Mode,LocalizedMessageIcon.Information);
+                    break;
+                case LadderModes.Simulate:
+                case LadderModes.Monitor:
+                    mdProj.LadderMode = LadderModes.Edit;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public void ZoomChanged(bool isZoomIn)
         {
             if (isZoomIn)
@@ -1539,6 +1571,7 @@ namespace SamSoarII
         #region Event Handler
 
         public event IWindowEventHandler PostIWindowEvent = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnReceiveIWindowEvent(IWindow sender, IWindowEventArgs e)
         {
@@ -1787,6 +1820,7 @@ namespace SamSoarII
             {
                 case "Device":
                     PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.DeviceModified, sender, sender));
+                    PropertyChanged(this, new PropertyChangedEventArgs("Device"));
                     break;
                 case "LadderMode":
                     switch (mdProj.LadderMode)

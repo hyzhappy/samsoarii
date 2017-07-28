@@ -38,7 +38,7 @@ namespace SamSoarII
             InitializeComponent();
             ifParent = new InteractionFacade(this);
             RecentFileMenu.DataContext = ProjectFileManager.projectShowMessage;
-            TBCB_Device.DataContext = PLCDeviceManager.GetPLCDeviceManager();
+            TBCB_Device.DataContext = ifParent;
             TBCB_ProjectName.DataContext = ifParent;
             ifParent.PostIWindowEvent += OnReceiveIWindowEvent;
             InitializeAvalonDock();
@@ -545,15 +545,16 @@ namespace SamSoarII
                         {
                             case LocalizedMessageResult.Yes:
                                 ifParent.SaveProject();
-                                ifParent.LoadProject(projectMessage.Value.Item2);
-                                LACProj.Show();
                                 break;
                             case LocalizedMessageResult.No:
-                                ifParent.LoadProject(projectMessage.Value.Item2);
-                                LACProj.Show();
                                 break;
+                            case LocalizedMessageResult.Cancel:
+                            default:
+                                return;
                         }
                     }
+                    ifParent.LoadProject(projectMessage.Value.Item2);
+                    LACProj.Show();
                 }
             }
             e.Handled = true;
@@ -751,6 +752,8 @@ namespace SamSoarII
                 ifParent.MNGSimu.JumpOut();
             if (e.Command == GlobalCommand.BrpoNowCommand)
                 ifParent.NavigateToBreakpointCursor();
+            if (e.Command == GlobalCommand.EditCommand)
+                ifParent.ReturnToEdit();
         }
 
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)

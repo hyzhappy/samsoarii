@@ -1753,6 +1753,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Is already in edit mode! 的本地化字符串。
+        /// </summary>
+        public static string In_Edit_Mode {
+            get {
+                return ResourceManager.GetString("In_Edit_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Information 的本地化字符串。
         /// </summary>
         public static string Information {
@@ -4044,6 +4053,15 @@ namespace SamSoarII.Properties {
         public static string Modify {
             get {
                 return ResourceManager.GetString("Modify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Unable to modify the project in non edit mode! 的本地化字符串。
+        /// </summary>
+        public static string Modify_Project {
+            get {
+                return ResourceManager.GetString("Modify_Project", resourceCulture);
             }
         }
         

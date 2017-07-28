@@ -2136,4 +2136,10 @@
   <data name="Statement" xml:space="preserve">
     <value>Statement</value>
   </data>
+  <data name="Modify_Project" xml:space="preserve">
+    <value>Unable to modify the project in non edit mode!</value>
+  </data>
+  <data name="In_Edit_Mode" xml:space="preserve">
+    <value>Is already in edit mode!</value>
+  </data>
 </root>

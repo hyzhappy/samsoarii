@@ -2130,10 +2130,16 @@
   <data name="Message_OutOfXRange" xml:space="preserve">
     <value>X寄存器的索引超出了设备型号的范围！</value>
   </data>
-  <data name="Message_OutOFYRange" xml:space="preserve">
-    <value>Y寄存器的索引超出了设备型号的范围！</value>
-  </data>
   <data name="Statement" xml:space="preserve">
     <value>语句</value>
+  </data>
+  <data name="Modify_Project" xml:space="preserve">
+    <value>非编辑模式下无法修改工程！</value>
+  </data>
+  <data name="Message_OutOfYRange" xml:space="preserve">
+    <value>Y寄存器的索引超出了设备型号的范围！</value>
+  </data>
+  <data name="In_Edit_Mode" xml:space="preserve">
+    <value>已处于编辑模式！</value>
   </data>
 </root>
