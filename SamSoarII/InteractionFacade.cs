@@ -173,24 +173,7 @@ namespace SamSoarII
         #region Project
 
         private ProjectModel mdProj;
-        public ProjectModel MDProj
-        {
-            get
-            {
-                return this.mdProj;
-            }
-            set
-            {
-                if(mdProj != null)
-                    mdProj.PropertyChanged -= wndEList.MDProj_PropertyChanged;
-                mdProj = value;
-                if(mdProj != null)
-                {
-                    mdProj.PropertyChanged += wndEList.MDProj_PropertyChanged;
-                    PropertyChanged(this, new PropertyChangedEventArgs("MDProj"));
-                }
-            }
-        }
+        public ProjectModel MDProj { get { return this.mdProj; } }
         
         private ProjectViewModel vmdProj;
         public ProjectViewModel VMDProj { get { return this.vmdProj; } }
@@ -262,6 +245,7 @@ namespace SamSoarII
 
         private void InitializeProject()
         {
+            mdProj.PropertyChanged += OnProjectPropertyChanged;
             mdProj.Modified += OnProjectModified;
             vmdProj = new ProjectViewModel(mdProj);
             vmdProj.PropertyChanged += OnViewPropertyChanged;
@@ -287,7 +271,7 @@ namespace SamSoarII
 
         private void _CreateProject(string name, string filename)
         {
-            MDProj = new ProjectModel(this, name);
+            mdProj = new ProjectModel(this, name);
             InitializeProject();
             if (filename != null) SaveAsProject(filename);
         }
@@ -312,7 +296,7 @@ namespace SamSoarII
         {
             try
             {
-                MDProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
+                mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
                 ProjectFileManager.Update(filename, filename);
                 InitializeProject();
             }
@@ -320,7 +304,7 @@ namespace SamSoarII
             {
                 handle.Completed = true;
                 handle.Abort();
-                MDProj = null;
+                mdProj = null;
                 LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
             }
         }
@@ -383,6 +367,7 @@ namespace SamSoarII
         {
             if (mdProj == null) return;
             WaitForThreadAbort();
+            mdProj.PropertyChanged -= OnProjectPropertyChanged;
             mdProj.Modified -= OnProjectModified;
             wndMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndMain.HideAllDock(); });
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
@@ -393,7 +378,7 @@ namespace SamSoarII
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); });
             mdProj.Dispose();
             vmdProj = null;
-            MDProj = null;
+            mdProj = null;
             mngValue.Initialize();
             //GC.Collect();
         }
@@ -1844,6 +1829,12 @@ namespace SamSoarII
             }
         }
 
+        private void OnProjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Device"))
+                PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.DeviceModified, sender, sender));
+        }
+
         private void OnProjectModified(object sender, RoutedEventArgs e)
         {
             if (sender is LadderDiagramModel || sender is LadderNetworkModel || sender is LadderUnitModel)
@@ -1905,7 +1896,7 @@ namespace SamSoarII
 
     public class InteractionFacadeEventArgs : IWindowEventArgs
     {
-        public enum Types { DiagramModified, FuncBlockModified }
+        public enum Types { DiagramModified, FuncBlockModified, DeviceModified }
         private Types flags;
         public Types Flags { get { return this.flags; } }
         int IWindowEventArgs.Flags { get { return (int)Flags; } }

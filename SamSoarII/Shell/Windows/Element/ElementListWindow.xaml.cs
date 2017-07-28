@@ -47,17 +47,7 @@ namespace SamSoarII.Shell.Windows
             rangeitems[11] = new RangeItem(this, ValueModel.Bases.V);
             rangeitems[12] = new RangeItem(this, ValueModel.Bases.Z);
         }
-
-        public void MDProj_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Device")
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
-                RecreateRangeItems();
-                PropertyChanged(this, new PropertyChangedEventArgs("RangeListCollection"));
-            }
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Number
@@ -137,6 +127,11 @@ namespace SamSoarII.Shell.Windows
                 {
                     case InteractionFacadeEventArgs.Types.DiagramModified:
                         PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
+                        break;
+                    case InteractionFacadeEventArgs.Types.DeviceModified:
+                        PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
+                        RecreateRangeItems();
+                        PropertyChanged(this, new PropertyChangedEventArgs("RangeListCollection"));
                         break;
                 }
             }
@@ -264,7 +259,7 @@ namespace SamSoarII.Shell.Windows
         {
             parent = null;
         }
-
+        
         public override string ToString()
         {
             switch (type)
@@ -292,7 +287,7 @@ namespace SamSoarII.Shell.Windows
 
         private ValueModel.Bases type;
         public ValueModel.Bases Type { get { return this.type; } }
-
+        
         #endregion 
 
     }
