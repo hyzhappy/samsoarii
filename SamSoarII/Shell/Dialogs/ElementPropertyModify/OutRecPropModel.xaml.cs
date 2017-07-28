@@ -24,6 +24,7 @@ namespace SamSoarII.Shell.Dialogs
         public OutRecPropModel(LadderUnitModel _core) : base(_core)
         {
             InitializeComponent();
+            TopTextBlock.Text = Core.InstName;
             Count = base.Count;
             for (int i = 0; i < Core.Children.Count; i++)
             {
