@@ -357,6 +357,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnDiagramPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "LadderMode") return;
             InvokeModify(this);
         }
 
@@ -375,6 +376,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnFuncBlockPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "LadderMode") return;
             InvokeModify(this);
         }
 
