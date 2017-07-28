@@ -538,8 +538,22 @@ namespace SamSoarII
                     LocalizedMessageBox.Show(string.Format("{0}", Properties.Resources.Message_Project_Loaded), LocalizedMessageIcon.Information);
                 else
                 {
-                    ifParent.LoadProject(projectMessage.Value.Item2);
-                    LACProj.Show();
+                    if (Project?.IsModified == true)
+                    {
+                        LocalizedMessageResult mbret = ifParent.ShowSaveYesNoCancelDialog();
+                        switch (mbret)
+                        {
+                            case LocalizedMessageResult.Yes:
+                                ifParent.SaveProject();
+                                ifParent.LoadProject(projectMessage.Value.Item2);
+                                LACProj.Show();
+                                break;
+                            case LocalizedMessageResult.No:
+                                ifParent.LoadProject(projectMessage.Value.Item2);
+                                LACProj.Show();
+                                break;
+                        }
+                    }
                 }
             }
             e.Handled = true;

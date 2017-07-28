@@ -38,7 +38,7 @@ namespace SamSoarII.Core.Models
             }
             else
             {
-                device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+                Device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
                 maindiagram = new LadderDiagramModel(this, "Main");
                 maindiagram.IsMainLadder = true;
                 diagrams.Add(maindiagram);
@@ -76,7 +76,10 @@ namespace SamSoarII.Core.Models
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
         #region Numbers
 
         private InteractionFacade parent;
@@ -310,7 +313,7 @@ namespace SamSoarII.Core.Models
         {
             projname = xele.Attribute("Name").Value;
             PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType((PLCDeviceType)Enum.Parse(typeof(PLCDeviceType), xele.Attribute("DeviceType").Value));
-            device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+            Device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             foreach (XElement xele_f in xele.Elements("FuncBlock"))
             {
                 FuncBlockModel funcblock = new FuncBlockModel(this, xele_f.Attribute("Name").Value, xele_f.Value);
