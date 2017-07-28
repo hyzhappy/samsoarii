@@ -85,12 +85,14 @@ namespace SamSoarII.Core.Models
                 this.view = null;
                 if (_view != null)
                 {
-
+                    foreach (MonitorElement element in children.Where(e => e.Store != null))
+                        element.Store.VisualRefNum--;
                 }
                 this.view = value;
                 if (view != null)
                 {
-
+                    foreach (MonitorElement element in children.Where(e => e.Store != null))
+                        element.Store.VisualRefNum++;
                 }
             }
         }

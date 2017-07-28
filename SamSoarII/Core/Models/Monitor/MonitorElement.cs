@@ -63,6 +63,7 @@ namespace SamSoarII.Core.Models
                 if (_store != null)
                 {
                     _store.RefNum--;
+                    _store.VisualRefNum -= Parent.View != null ? 1 : 0;
                     _store.PropertyChanged -= OnStorePropertyChanged;
                     IFParent.MNGSimu.Started -= OnSimulateStarted;
                     IFParent.MNGSimu.Aborted -= OnSimulateAborted;
@@ -73,6 +74,7 @@ namespace SamSoarII.Core.Models
                 if (store != null)
                 {
                     store.RefNum++;
+                    _store.VisualRefNum += Parent.View != null ? 1 : 0;
                     store.PropertyChanged += OnStorePropertyChanged;
                     IFParent.MNGSimu.Started += OnSimulateStarted;
                     IFParent.MNGSimu.Aborted += OnSimulateAborted;
