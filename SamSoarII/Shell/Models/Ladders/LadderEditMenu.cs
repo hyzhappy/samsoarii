@@ -31,6 +31,11 @@ namespace SamSoarII.Shell.Models
             miNetCut = new MenuItem();
             miNetCopy = new MenuItem();
             miNetShield = new MenuItem();
+            ExpandOrCollapsed = new MenuItem();
+            Expand = new MenuItem();
+            Collapsed = new MenuItem();
+            ExpandAll = new MenuItem();
+            CollapsedAll = new MenuItem();
             miZoomIn = new MenuItem();
             miZoomOut = new MenuItem();
             miRowInsert.Items.Add(miRowIBefore);
@@ -39,6 +44,15 @@ namespace SamSoarII.Shell.Models
             miNetInsert.Items.Add(miNetIBefore);
             miNetInsert.Items.Add(miNetIAfter);
             miNetInsert.Items.Add(miNetIEnd);
+            ExpandOrCollapsed.Items.Add(Expand);
+            ExpandOrCollapsed.Items.Add(Collapsed);
+            ExpandOrCollapsed.Items.Add(ExpandAll);
+            ExpandOrCollapsed.Items.Add(CollapsedAll);
+            ExpandOrCollapsed.Header = Properties.Resources.Expand_Collapsed;
+            Expand.Header = Properties.Resources.Expand;
+            Collapsed.Header = Properties.Resources.Collapsed;
+            ExpandAll.Header = Properties.Resources.Expand_All;
+            CollapsedAll.Header = Properties.Resources.Collapsed_All;
             miCut.Header = Properties.Resources.LadderNetwork_Element_Cut;
             miCopy.Header = Properties.Resources.LadderNetwork_Element_Copy;
             miPaste.Header = Properties.Resources.LadderNetwork_Element_Paste;
@@ -73,6 +87,10 @@ namespace SamSoarII.Shell.Models
             miNetCut.Click += OnMenuItemClicked;
             miNetCopy.Click += OnMenuItemClicked;
             miNetShield.Click += OnMenuItemClicked;
+            Expand.Click += OnMenuItemClicked;
+            Collapsed.Click += OnMenuItemClicked;
+            ExpandAll.Click += OnMenuItemClicked;
+            CollapsedAll.Click += OnMenuItemClicked;
             miZoomIn.Command = GlobalCommand.ZoomInCommand;
             miZoomOut.Command = GlobalCommand.ZoomOutCommand;
 
@@ -88,6 +106,7 @@ namespace SamSoarII.Shell.Models
             Items.Add(miNetCut);
             Items.Add(miNetCopy);
             Items.Add(new Separator());
+            Items.Add(ExpandOrCollapsed);
             Items.Add(miNetShield);
             Items.Add(new Separator());
             Items.Add(miZoomIn);
@@ -162,7 +181,11 @@ namespace SamSoarII.Shell.Models
         private MenuItem miNetShield;
         private MenuItem miZoomIn;
         private MenuItem miZoomOut;
-
+        private MenuItem ExpandOrCollapsed;
+        private MenuItem Expand;
+        private MenuItem Collapsed;
+        private MenuItem ExpandAll;
+        private MenuItem CollapsedAll;
         #endregion
 
         #region Event Handler
@@ -183,6 +206,10 @@ namespace SamSoarII.Shell.Models
             if (sender == miNetCut) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCut));
             if (sender == miNetCopy) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetCopy));
             if (sender == miNetShield) Post(this, new LadderEditEventArgs(LadderEditEventArgs.Types.NetShield));
+            if (sender == Expand) parent.ExpandOrCollapsed(true, false);
+            if (sender == ExpandAll) parent.ExpandOrCollapsed(true, true);
+            if (sender == Collapsed) parent.ExpandOrCollapsed(false, false);
+            if (sender == CollapsedAll) parent.ExpandOrCollapsed(false, true);
         }
         
         private void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -192,6 +219,7 @@ namespace SamSoarII.Shell.Models
                 case "IsMasked": miNetShield.IsChecked = parent.Core.IsMasked; break;
             }
         }
+
 
         #endregion
     }

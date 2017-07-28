@@ -466,6 +466,24 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Collapsed 的本地化字符串。
+        /// </summary>
+        public static string Collapsed {
+            get {
+                return ResourceManager.GetString("Collapsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Collapsed all 的本地化字符串。
+        /// </summary>
+        public static string Collapsed_All {
+            get {
+                return ResourceManager.GetString("Collapsed_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 The current command is not executable! 的本地化字符串。
         /// </summary>
         public static string Command_Not_Execute {
@@ -1371,6 +1389,33 @@ namespace SamSoarII.Properties {
         public static string EXP_Operation {
             get {
                 return ResourceManager.GetString("EXP_Operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Expand 的本地化字符串。
+        /// </summary>
+        public static string Expand {
+            get {
+                return ResourceManager.GetString("Expand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Expand all 的本地化字符串。
+        /// </summary>
+        public static string Expand_All {
+            get {
+                return ResourceManager.GetString("Expand_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Expand/Collapsed 的本地化字符串。
+        /// </summary>
+        public static string Expand_Collapsed {
+            get {
+                return ResourceManager.GetString("Expand_Collapsed", resourceCulture);
             }
         }
         

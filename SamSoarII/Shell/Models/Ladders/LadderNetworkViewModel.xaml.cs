@@ -519,7 +519,21 @@ namespace SamSoarII.Shell.Models
                 Core.IsExpand = value;
             }
         }
-
+        public void ExpandOrCollapsed(bool isExpand,bool isAll)
+        {
+            if (isAll)
+            {
+                foreach (var net in core.Parent.Children)
+                {
+                    net.View.IsExpand = isExpand;
+                }
+                core.Parent.View.IsExpand = isExpand;
+            }
+            else
+            {
+                IsExpand = isExpand;
+            }
+        }
         private Canvas tipcanvas = null;
         private ToolTip GenerateToolTipByLadder()
         {

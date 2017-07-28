@@ -147,10 +147,6 @@ namespace SamSoarII.Core.Models
             IsModified = true;
             Modified(window, new RoutedEventArgs());
         }
-        public void ChangeModify(bool isModify)
-        {
-            ismodified = isModify;
-        }
         private LadderModes laddermode;
         public LadderModes LadderMode
         {
@@ -376,7 +372,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnFuncBlockPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "LadderMode") return;
+            if (e.PropertyName == "LadderMode" || e.PropertyName == "Funcs") return;
             InvokeModify(this);
         }
 
