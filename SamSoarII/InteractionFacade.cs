@@ -30,7 +30,7 @@ using System.Collections.Specialized;
 
 namespace SamSoarII
 {
-    public class InteractionFacade : IDisposable, INotifyPropertyChanged, IWindow
+    public class InteractionFacade : IDisposable, IWindow
     {
         #region IWindow
 
@@ -508,24 +508,9 @@ namespace SamSoarII
                 case SimulateDllModel.LOADDLL_OK:
                     vmdProj.LadderMode = LadderModes.Simulate;
                     mngSimu.IsEnable = true;
-                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
-                        MainWindowEventArgs.TYPE_HIDE 
-                      | MainWindowEventArgs.FLAG_EDIT));
-                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
-                        MainWindowEventArgs.TYPE_SHOW
-                      | MainWindowEventArgs.FLAG_SIMULATE));
-                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
-                        MainWindowEventArgs.TYPE_TOGGLE_DOWN
-                      | MainWindowEventArgs.FLAG_SIMULATE));
-                    PostIWindowEvent(this, new UnderBarEventArgs(barStatus, 
-                        UnderBarStatus.Simulate, Properties.Resources.MainWindow_Simulation));
-                    wndMain.LAReplace.Hide();
-                    wndMain.LACMonitor.Show();
                     return true;
                 default:
-                    PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
-                        MainWindowEventArgs.TYPE_TOGGLE_UP
-                      | MainWindowEventArgs.FLAG_SIMULATE));
+                    OnProjectPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
                     PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                         UnderBarStatus.Error, Properties.Resources.Simulate_Error));
                     LocalizedMessageBox.Show(Properties.Resources.Simulate_Error, LocalizedMessageIcon.Error);
@@ -547,26 +532,14 @@ namespace SamSoarII
             mngComu.IsEnable = true;
             if (!mngComu.CheckLink())
             {
+                OnProjectPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
                 PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                     UnderBarStatus.Error, Properties.Resources.MessageBox_Communication_Failed));
                 LocalizedMessageBox.Show(Properties.Resources.MessageBox_Communication_Failed, LocalizedMessageIcon.Information);
-                PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
-                    MainWindowEventArgs.TYPE_TOGGLE_UP
-                  | MainWindowEventArgs.FLAG_MONITOR));
                 mngComu.IsEnable = false;
                 return false;
             }
             vmdProj.LadderMode = LadderModes.Monitor;
-            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
-                MainWindowEventArgs.TYPE_HIDE
-              | MainWindowEventArgs.FLAG_EDIT));
-            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
-                MainWindowEventArgs.TYPE_TOGGLE_DOWN
-              | MainWindowEventArgs.FLAG_MONITOR));
-            PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
-                UnderBarStatus.Monitor, Properties.Resources.MainWindow_Monitor));
-            wndMain.LAReplace.Hide();
-            wndMain.LACMonitor.Show();
             return true;
         }
         
@@ -601,17 +574,6 @@ namespace SamSoarII
                 handle.Abort();
             });
             while (!handle.Completed) Thread.Sleep(10);
-            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
-                MainWindowEventArgs.TYPE_SHOW
-              | MainWindowEventArgs.FLAG_EDIT));
-            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
-                MainWindowEventArgs.TYPE_HIDE
-              | MainWindowEventArgs.FLAG_SIMULATE));
-            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
-                MainWindowEventArgs.TYPE_TOGGLE_UP
-              | MainWindowEventArgs.FLAG_SIMULATE));
-            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
-                UnderBarStatus.Normal, Properties.Resources.Ready));
         }
 
         private void _CloseMonitor()
@@ -630,14 +592,6 @@ namespace SamSoarII
                 handle.Abort();
             });
             while (!handle.Completed) Thread.Sleep(10);
-            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
-                MainWindowEventArgs.TYPE_SHOW
-              | MainWindowEventArgs.FLAG_EDIT));
-            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
-                MainWindowEventArgs.TYPE_TOGGLE_UP
-              | MainWindowEventArgs.FLAG_MONITOR));
-            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
-                UnderBarStatus.Normal, Properties.Resources.Ready));
         }
         
         #endregion
@@ -1585,7 +1539,6 @@ namespace SamSoarII
         #region Event Handler
 
         public event IWindowEventHandler PostIWindowEvent = delegate { };
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnReceiveIWindowEvent(IWindow sender, IWindowEventArgs e)
         {
@@ -1735,7 +1688,7 @@ namespace SamSoarII
                 }
             }
         }
-
+        
         public bool CanExecute(CanExecuteRoutedEventArgs e)
         {
             bool ret = true;
@@ -1818,7 +1771,6 @@ namespace SamSoarII
         {
             switch (e.PropertyName)
             {
-                case "LadderMode": break;
                 case "IsCommentMode":
                     PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
                         (vmdProj.IsCommentMode
@@ -1831,8 +1783,65 @@ namespace SamSoarII
 
         private void OnProjectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals("Device"))
-                PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.DeviceModified, sender, sender));
+            switch (e.PropertyName)
+            {
+                case "Device":
+                    PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.DeviceModified, sender, sender));
+                    break;
+                case "LadderMode":
+                    switch (mdProj.LadderMode)
+                    {
+                        case LadderModes.Edit:
+                            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_SHOW
+                              | MainWindowEventArgs.FLAG_EDIT));
+                            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_HIDE
+                              | MainWindowEventArgs.FLAG_SIMULATE));
+                            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_TOGGLE_UP
+                              | MainWindowEventArgs.FLAG_SIMULATE
+                              | MainWindowEventArgs.FLAG_MONITOR));
+                            PostIWindowEvent(null, new UnderBarEventArgs(barStatus,
+                                UnderBarStatus.Normal, Properties.Resources.Ready));
+                            wndMain.LAMonitor.Hide();
+                            break;
+                        case LadderModes.Simulate:
+                            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_HIDE
+                              | MainWindowEventArgs.FLAG_EDIT));
+                            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_SHOW
+                              | MainWindowEventArgs.FLAG_SIMULATE));
+                            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_TOGGLE_UP
+                              | MainWindowEventArgs.FLAG_MONITOR));
+                            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_TOGGLE_DOWN
+                              | MainWindowEventArgs.FLAG_SIMULATE));
+                            PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
+                                UnderBarStatus.Simulate, Properties.Resources.MainWindow_Simulation));
+                            wndMain.LAReplace.Hide();
+                            wndMain.LACMonitor.Show();
+                            break;
+                        case LadderModes.Monitor:
+                            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_HIDE
+                              | MainWindowEventArgs.FLAG_EDIT));
+                            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_TOGGLE_UP
+                              | MainWindowEventArgs.FLAG_SIMULATE));
+                            PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
+                                MainWindowEventArgs.TYPE_TOGGLE_DOWN
+                              | MainWindowEventArgs.FLAG_MONITOR));
+                            PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
+                                UnderBarStatus.Monitor, Properties.Resources.MainWindow_Monitor));
+                            wndMain.LAReplace.Hide();
+                            wndMain.LACMonitor.Show();
+                            break;
+                    }
+                    break;
+            }
         }
 
         private void OnProjectModified(object sender, RoutedEventArgs e)
