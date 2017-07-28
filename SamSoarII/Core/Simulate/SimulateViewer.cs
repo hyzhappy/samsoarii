@@ -47,7 +47,7 @@ namespace SamSoarII.Core.Simulate
             if (e.OldItems != null)
                 foreach (ValueStore vstore in e.OldItems)
                 {
-                    DllModel.Unlock(vstore.Name);
+                    //DllModel.Unlock(vstore.Name);
                     vstore.PropertyChanged -= OnStorePropertyChanged;
                 }
 
