@@ -245,6 +245,7 @@ namespace SamSoarII
 
         private void InitializeProject()
         {
+            mdProj.PropertyChanged += OnProjectPropertyChanged;
             mdProj.Modified += OnProjectModified;
             vmdProj = new ProjectViewModel(mdProj);
             vmdProj.PropertyChanged += OnViewPropertyChanged;
@@ -365,6 +366,7 @@ namespace SamSoarII
         {
             if (mdProj == null) return;
             WaitForThreadAbort();
+            mdProj.PropertyChanged -= OnProjectPropertyChanged;
             mdProj.Modified -= OnProjectModified;
             wndMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndMain.HideAllDock(); });
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
@@ -1826,6 +1828,12 @@ namespace SamSoarII
             }
         }
 
+        private void OnProjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Device"))
+                PostIWindowEvent(this, new InteractionFacadeEventArgs(InteractionFacadeEventArgs.Types.DeviceModified, sender, sender));
+        }
+
         private void OnProjectModified(object sender, RoutedEventArgs e)
         {
             if (sender is LadderDiagramModel || sender is LadderNetworkModel || sender is LadderUnitModel)
@@ -1887,7 +1895,7 @@ namespace SamSoarII
 
     public class InteractionFacadeEventArgs : IWindowEventArgs
     {
-        public enum Types { DiagramModified, FuncBlockModified }
+        public enum Types { DiagramModified, FuncBlockModified, DeviceModified }
         private Types flags;
         public Types Flags { get { return this.flags; } }
         int IWindowEventArgs.Flags { get { return (int)Flags; } }

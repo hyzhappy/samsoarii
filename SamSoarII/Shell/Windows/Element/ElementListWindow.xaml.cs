@@ -107,6 +107,12 @@ namespace SamSoarII.Shell.Windows
                     case InteractionFacadeEventArgs.Types.DiagramModified:
                         PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
                         break;
+                    case InteractionFacadeEventArgs.Types.DeviceModified:
+                        PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
+                        PropertyChanged(this, new PropertyChangedEventArgs("RangeListCollection"));
+                        foreach (RangeItem item in RangeListCollection)
+                            item.InvokePropertyChanged("Text");
+                        break;
                 }
             }
         }
@@ -221,7 +227,7 @@ namespace SamSoarII.Shell.Windows
         
     }
 
-    public class RangeItem : IDisposable
+    public class RangeItem : IDisposable, INotifyPropertyChanged
     {
         public RangeItem(ElementListWindow _parent, ValueModel.Bases _type)
         {
@@ -234,33 +240,43 @@ namespace SamSoarII.Shell.Windows
             parent = null;
         }
 
-        public override string ToString()
-        {
-            switch (type)
-            {
-                case ValueModel.Bases.X: return String.Format("X(Bit) - ({0} {1})", parent.Device.XRange.Start, parent.Device.XRange.End - 1);
-                case ValueModel.Bases.Y: return String.Format("Y(Bit) - ({0} {1})", parent.Device.YRange.Start, parent.Device.YRange.End - 1);
-                case ValueModel.Bases.S: return String.Format("S(Bit) - ({0} {1})", parent.Device.SRange.Start, parent.Device.SRange.End - 1);
-                case ValueModel.Bases.M: return String.Format("M(Bit) - ({0} {1})", parent.Device.MRange.Start, parent.Device.MRange.End - 1);
-                case ValueModel.Bases.C: return String.Format("C(Bit) - ({0} {1})", parent.Device.CRange.Start, parent.Device.CRange.End - 1);
-                case ValueModel.Bases.T: return String.Format("T(Bit) - ({0} {1})", parent.Device.TRange.Start, parent.Device.TRange.End - 1);
-                case ValueModel.Bases.D: return String.Format("D(Word) - ({0} {1})", parent.Device.DRange.Start, parent.Device.DRange.End - 1);
-                case ValueModel.Bases.CV: return String.Format("CV(Word) - ({0} {1})", parent.Device.CVRange.Start, parent.Device.CVRange.End - 1);
-                case ValueModel.Bases.TV: return String.Format("TV(Word) - ({0} {1})", parent.Device.TVRange.Start, parent.Device.TVRange.End - 1);
-                case ValueModel.Bases.AI: return String.Format("AI(Word) - ({0} {1})", parent.Device.AIRange.Start, parent.Device.AIRange.End - 1);
-                case ValueModel.Bases.AO: return String.Format("AO(Word) - ({0} {1})", parent.Device.AORange.Start, parent.Device.AORange.End - 1);
-                case ValueModel.Bases.V: return String.Format("V(Word) - ({0} {1})", parent.Device.VRange.Start, parent.Device.VRange.End - 1);
-                case ValueModel.Bases.Z: return String.Format("Z(Word) - ({0} {1})", parent.Device.ZRange.Start, parent.Device.ZRange.End - 1);
-                default: return String.Empty;
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        public void InvokePropertyChanged(string propertyname)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
+        }
+        
         #region Number
 
         private ElementListWindow parent;
 
         private ValueModel.Bases type;
         public ValueModel.Bases Type { get { return this.type; } }
+        
+        public string Text
+        {
+            get
+            {
+                switch (type)
+                {
+                    case ValueModel.Bases.X: return String.Format("X(Bit) - ({0} {1})", parent.Device.XRange.Start, parent.Device.XRange.End - 1);
+                    case ValueModel.Bases.Y: return String.Format("Y(Bit) - ({0} {1})", parent.Device.YRange.Start, parent.Device.YRange.End - 1);
+                    case ValueModel.Bases.S: return String.Format("S(Bit) - ({0} {1})", parent.Device.SRange.Start, parent.Device.SRange.End - 1);
+                    case ValueModel.Bases.M: return String.Format("M(Bit) - ({0} {1})", parent.Device.MRange.Start, parent.Device.MRange.End - 1);
+                    case ValueModel.Bases.C: return String.Format("C(Bit) - ({0} {1})", parent.Device.CRange.Start, parent.Device.CRange.End - 1);
+                    case ValueModel.Bases.T: return String.Format("T(Bit) - ({0} {1})", parent.Device.TRange.Start, parent.Device.TRange.End - 1);
+                    case ValueModel.Bases.D: return String.Format("D(Word) - ({0} {1})", parent.Device.DRange.Start, parent.Device.DRange.End - 1);
+                    case ValueModel.Bases.CV: return String.Format("CV(Word) - ({0} {1})", parent.Device.CVRange.Start, parent.Device.CVRange.End - 1);
+                    case ValueModel.Bases.TV: return String.Format("TV(Word) - ({0} {1})", parent.Device.TVRange.Start, parent.Device.TVRange.End - 1);
+                    case ValueModel.Bases.AI: return String.Format("AI(Word) - ({0} {1})", parent.Device.AIRange.Start, parent.Device.AIRange.End - 1);
+                    case ValueModel.Bases.AO: return String.Format("AO(Word) - ({0} {1})", parent.Device.AORange.Start, parent.Device.AORange.End - 1);
+                    case ValueModel.Bases.V: return String.Format("V(Word) - ({0} {1})", parent.Device.VRange.Start, parent.Device.VRange.End - 1);
+                    case ValueModel.Bases.Z: return String.Format("Z(Word) - ({0} {1})", parent.Device.ZRange.Start, parent.Device.ZRange.End - 1);
+                    default: return String.Empty;
+                }
+            }
+        }
 
         #endregion 
 
