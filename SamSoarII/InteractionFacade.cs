@@ -173,7 +173,24 @@ namespace SamSoarII
         #region Project
 
         private ProjectModel mdProj;
-        public ProjectModel MDProj { get { return this.mdProj; } set { mdProj = value; PropertyChanged(this, new PropertyChangedEventArgs("MDProj")); } }
+        public ProjectModel MDProj
+        {
+            get
+            {
+                return this.mdProj;
+            }
+            set
+            {
+                if(mdProj != null)
+                    mdProj.PropertyChanged -= wndEList.MDProj_PropertyChanged;
+                mdProj = value;
+                if(mdProj != null)
+                {
+                    mdProj.PropertyChanged += wndEList.MDProj_PropertyChanged;
+                    PropertyChanged(this, new PropertyChangedEventArgs("MDProj"));
+                }
+            }
+        }
         
         private ProjectViewModel vmdProj;
         public ProjectViewModel VMDProj { get { return this.vmdProj; } }
@@ -302,7 +319,7 @@ namespace SamSoarII
             {
                 handle.Completed = true;
                 handle.Abort();
-                mdProj = null;
+                MDProj = null;
                 LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
             }
         }
@@ -375,7 +392,7 @@ namespace SamSoarII
             vmdProj.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { vmdProj.Dispose(); });
             mdProj.Dispose();
             vmdProj = null;
-            mdProj = null;
+            MDProj = null;
             mngValue.Initialize();
             //GC.Collect();
         }
