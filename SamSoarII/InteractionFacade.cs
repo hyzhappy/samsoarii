@@ -171,7 +171,7 @@ namespace SamSoarII
         #endregion
 
         #region Project
-
+        public string ProjectName { get { return mdProj?.ProjName; } }
         private ProjectModel mdProj;
         public ProjectModel MDProj { get { return this.mdProj; } }
         
@@ -259,6 +259,7 @@ namespace SamSoarII
             wndMoni.Core = mdProj.Monitor;
             wndMain.LACProj.Show();
             mdProj.IsLoaded = true;
+            PropertyChanged(this, new PropertyChangedEventArgs("ProjectName"));
         }
         
         public void CreateProject(string name, string filename = null)
