@@ -59,7 +59,7 @@ namespace SamSoarII.Core.Models
             set
             {
                 ValueStore _store = store;
-                this.store = value;
+                this.store = null;
                 if (_store != null)
                 {
                     _store.RefNum--;
@@ -69,6 +69,7 @@ namespace SamSoarII.Core.Models
                     IFParent.MNGComu.Started -= OnMonitorStarted;
                     IFParent.MNGComu.Aborted -= OnMonitorAborted;
                 }
+                this.store = value;
                 if (store != null)
                 {
                     store.RefNum++;
