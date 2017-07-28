@@ -1193,9 +1193,19 @@ namespace SamSoarII.Core.Models
                 if (view == value) return;
                 LadderUnitViewModel _view = view;
                 this.view = null;
-                if (_view != null && _view.Core != null) _view.Core = null;
+                if (_view != null)
+                {
+                    foreach (ValueStore vstore in children.Where(vm => vm.Store?.Parent != null).Select(vm => vm.Store))
+                        vstore.VisualRefNum--;
+                    if (_view.Core != null) _view.Core = null;
+                }
                 this.view = value;
-                if (view != null && view.Core != this) view.Core = this;
+                if (view != null)
+                {
+                    foreach (ValueStore vstore in children.Where(vm => vm.Store?.Parent != null).Select(vm => vm.Store))
+                        vstore.VisualRefNum++;
+                    if (view.Core != this) view.Core = this;
+                }
             }
         }
         IViewModel IModel.View

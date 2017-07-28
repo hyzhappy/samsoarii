@@ -52,6 +52,7 @@ namespace SamSoarII.Core.Models
                     table.Dispose();
             ChildrenChanged(this, e);
         }
+
         #endregion
 
         #region View

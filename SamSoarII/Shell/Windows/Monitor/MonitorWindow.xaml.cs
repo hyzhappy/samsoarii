@@ -107,13 +107,14 @@ namespace SamSoarII.Shell.Windows
             {
                 if (selectedtable == value) return;
                 MonitorTable _selectedtable = selectedtable;
-                this.selectedtable = value;
+                this.selectedtable = null;
                 if (_selectedtable != null)
                 {
                     textbox.Text = "";
                     _selectedtable.ChildrenChanged -= OnTableChildrenChanged;
                     if (_selectedtable.View != null) _selectedtable.View = null;
                 }
+                this.selectedtable = value;
                 if (selectedtable != null)
                 {
                     textbox.Text = selectedtable.Name;

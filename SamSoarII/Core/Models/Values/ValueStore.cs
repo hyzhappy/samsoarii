@@ -127,6 +127,13 @@ namespace SamSoarII.Core.Models
             get { return this.refnum; }
             set { this.refnum = value; }
         }
+
+        private int visualrefnum;
+        public int VisualRefNum
+        {
+            get { return this.visualrefnum; }
+            set { this.visualrefnum = value; }
+        }
         
         public event ValueStoreWriteEventHandler Post = delegate { };
         public void Write(object value, bool tolock = false)
