@@ -412,7 +412,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Close Project 的本地化字符串。
+        ///   查找类似 Close Project(_C) 的本地化字符串。
         /// </summary>
         public static string Close_Proj {
             get {
@@ -2491,7 +2491,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Close Project(_C) 的本地化字符串。
+        ///   查找类似 Close Project 的本地化字符串。
         /// </summary>
         public static string MainWindow_Close_Proj {
             get {

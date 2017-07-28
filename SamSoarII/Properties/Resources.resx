@@ -154,7 +154,7 @@
     <value>Recent Project(_F)</value>
   </data>
   <data name="MainWindow_Close_Proj" xml:space="preserve">
-    <value>Close Project(_C)</value>
+    <value>Close Project</value>
   </data>
   <data name="MainWindow_Exit" xml:space="preserve">
     <value>Exit(_X)</value>
@@ -2125,7 +2125,7 @@
     <value>Option</value>
   </data>
   <data name="Close_Proj" xml:space="preserve">
-    <value>Close Project</value>
+    <value>Close Project(_C)</value>
   </data>
   <data name="Message_OutOfXRange" xml:space="preserve">
     <value>X register is out of allowed range of device</value>

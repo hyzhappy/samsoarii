@@ -357,7 +357,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnDiagramPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "LadderMode") return;
+            if (e.PropertyName == "LadderMode" || e.PropertyName == "IsExpand") return;
             InvokeModify(this);
         }
 
