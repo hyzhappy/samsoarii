@@ -38,8 +38,6 @@ namespace SamSoarII.Core.Communication
             byte[] crc = CRC16.GetCRC(ret);
             return ret.Concat(crc).ToArray();
         }
-
-        public void UpdataValues() { }
         
     }
 }

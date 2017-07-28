@@ -35,11 +35,7 @@ namespace SamSoarII.Core.Communication
         {
             return bytes;
         }
-
-        public void UpdataValues()
-        {
-        }
-
+        
         public Download80Command(int id, byte[] data)
         {
             Encrypt(id, data);

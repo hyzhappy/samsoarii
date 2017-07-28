@@ -201,6 +201,8 @@ namespace SamSoarII.Core.Models
                     Store = new ValueStore(null, Type);
                     Store.Value = int.Parse(match.Groups[2].Value, System.Globalization.NumberStyles.AllowHexSpecifier);
                     break;
+                case Bases.NULL:
+                    break;
                 default:
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;

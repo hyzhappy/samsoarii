@@ -14,42 +14,6 @@ namespace SamSoarII.Core.Communication
 {
     public class CommandHelper
     {
-        public static bool checkAddrRange(byte addrType, byte length,ushort startAddr)
-        {
-            switch (addrType)
-            {
-                case CommunicationDataDefine.ADDRESS_TYPE_X:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.XRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.XRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_Y:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.YRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.YRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_M:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.MRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.MRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_S:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.SRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.SRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_C:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_T:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_AI:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AIRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AIRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_AO:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AORange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.AORange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_D:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.DRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.DRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_V:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.VRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.VRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_Z:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.ZRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.ZRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_CV:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV16Range.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV16Range.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_TV:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TVRange.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.TVRange.AssertValue((uint)(startAddr + length - 1));
-                case CommunicationDataDefine.ADDRESS_TYPE_CV32:
-                    return PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV32Range.AssertValue(startAddr) && PLCDeviceManager.GetPLCDeviceManager().SelectDevice.CV32Range.AssertValue((uint)(startAddr + length - 1));
-                default:
-                    return false;
-            }
-        }
         public static int GetLengthByAddrType(byte addrType)
         {
             switch (addrType)
@@ -161,80 +125,6 @@ namespace SamSoarII.Core.Communication
                 case ValueModel.Bases.Z: ret.Type = CommunicationDataDefine.ADDRESS_TYPE_Z; break;
             }
             return ret;
-        }
-        public static void UpdateElements(List<AddrSegment> Segments,byte[] data)
-        {
-            byte addrType = Segments.First().Type;
-            AddrSegment firstseg = Segments.Where(s => s.Model?.Store != null).OrderBy(x => x.Model.StartAddr).FirstOrDefault();
-            if (firstseg == null) return;
-            int startAddr = firstseg.Model.StartAddr;
-            int typeLen = GetLengthByAddrType(addrType);
-            foreach (var segment in Segments)
-            {
-                int span = segment.Model.StartAddr - startAddr;
-                if (typeLen == 1)
-                {
-                    int index = (int)span / 8;
-                    int offset = (int)span % 8;
-                    if (((data[index] >> offset) & 0x01) == 0x00)
-                    {
-                        segment.Model.CurrentValue = 0;
-                    }
-                    else
-                    {
-                        segment.Model.CurrentValue = 1;
-                    }
-                }
-                else
-                {
-                    WordType type = (WordType)Enum.ToObject(typeof(WordType), segment.Model.DataType);
-                    byte[] value = new byte[segment.Model.ByteCount];
-                    for (int i = 0; i < segment.Model.ByteCount; i++)
-                    {
-                        value[i] = data[typeLen * span + i];
-                    }
-                    uint showValue = ValueConverter.GetValue(value);
-                    switch (type)
-                    {
-                        case WordType.INT16:
-                            segment.Model.CurrentValue = (short)showValue;
-                            break;
-                        case WordType.POS_INT16:
-                            segment.Model.CurrentValue = (ushort)showValue;
-                            break;
-                        case WordType.INT32:
-                            segment.Model.CurrentValue = (int)showValue;
-                            break;
-                        case WordType.POS_INT32:
-                            segment.Model.CurrentValue = (uint)showValue;
-                            break;
-                        case WordType.BCD:
-                            if (showValue > 9999)
-                            {
-                                segment.Model.CurrentValue = string.Format("???");
-                            }
-                            else
-                            {
-                                segment.Model.CurrentValue = ValueConverter.ToBCD((ushort)showValue);
-                            }
-                            break;
-                        case WordType.FLOAT:
-                            segment.Model.CurrentValue = ValueConverter.UIntToFloat(showValue);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-        public static void UpdateElementsByIntra(List<IntraSegment> Segments, byte[] data)
-        {
-            List<AddrSegment> segments = new List<AddrSegment>();
-            foreach (var segment in Segments)
-            {
-                segments.Add(segment.Base);
-            }
-            UpdateElements(segments,data);
         }
     }
 }

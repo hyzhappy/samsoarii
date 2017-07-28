@@ -48,7 +48,25 @@ namespace SamSoarII.Core.Models
         public MonitorTable Parent { get { return this.parent; } }
         public ValueManager ValueManager { get { return parent.ValueManager; } }
         public InteractionFacade IFParent { get { return parent?.Parent?.Parent?.Parent; } }
-        
+
+        private bool isvisible;
+        public bool IsVisible
+        {
+            get
+            {
+                return this.isvisible;
+            }
+            set
+            {
+                if (store != null)
+                {
+                    if (!isvisible && value) store.VisualRefNum++;
+                    if (isvisible && !value) store.VisualRefNum--;
+                }
+                this.isvisible = value;
+            }
+        }
+
         private ValueStore store;
         public ValueStore Store
         {
@@ -63,7 +81,7 @@ namespace SamSoarII.Core.Models
                 if (_store != null)
                 {
                     _store.RefNum--;
-                    _store.VisualRefNum -= Parent.View != null ? 1 : 0;
+                    _store.VisualRefNum -= isvisible ? 1 : 0;
                     _store.PropertyChanged -= OnStorePropertyChanged;
                     IFParent.MNGSimu.Started -= OnSimulateStarted;
                     IFParent.MNGSimu.Aborted -= OnSimulateAborted;
@@ -74,7 +92,7 @@ namespace SamSoarII.Core.Models
                 if (store != null)
                 {
                     store.RefNum++;
-                    store.VisualRefNum += Parent.View != null ? 1 : 0;
+                    store.VisualRefNum += isvisible ? 1 : 0;
                     store.PropertyChanged += OnStorePropertyChanged;
                     IFParent.MNGSimu.Started += OnSimulateStarted;
                     IFParent.MNGSimu.Aborted += OnSimulateAborted;

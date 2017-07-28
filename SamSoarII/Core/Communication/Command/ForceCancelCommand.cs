@@ -86,10 +86,6 @@ namespace SamSoarII.Core.Communication
         {
             IsSuccess = true;
         }
-
-        public void UpdataValues()
-        {
-            //to do nothing
-        }
+        
     }
 }

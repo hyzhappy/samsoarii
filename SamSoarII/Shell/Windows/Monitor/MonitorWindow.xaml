@@ -122,6 +122,12 @@
                         <Setter Property="Template" Value="{StaticResource HeaderTemplate}"></Setter>
                     </Style>
                 </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="Loaded" Handler="DataGridRow_Loaded"></EventSetter>
+                        <EventSetter Event="Unloaded" Handler="DataGridRow_Unloaded"></EventSetter>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="ElementName" CanUserSort="False" Width="*" MinWidth="60" IsReadOnly="True" Header="{x:Static properties:Resources.Element}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Binding="{Binding ShowName}">
                     </DataGridTextColumn>

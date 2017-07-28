@@ -44,14 +44,6 @@ namespace SamSoarII.Core.Communication
             command = new byte[4 * addrTypeNum + 5];
             GenerateCommand();
         }
-        public void UpdataValues()
-        {
-            List<byte[]> retData = GetRetData();
-            for (int i = 0; i < retData.Count; i++)
-            {
-                CommandHelper.UpdateElements(new List<AddrSegment>() { Segments[i] },retData[i]);
-            }
-        }
         private void GenerateCommand()
         {
             command[0] = slaveNum;

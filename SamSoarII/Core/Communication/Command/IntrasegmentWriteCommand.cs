@@ -117,10 +117,6 @@ namespace SamSoarII.Core.Communication
                 return;
             }
         }
-
-        public void UpdataValues()
-        {
-            //to do nothing
-        }
+        
     }
 }

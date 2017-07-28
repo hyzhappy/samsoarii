@@ -19,7 +19,6 @@ namespace SamSoarII.Core.Communication
         private byte startHighAddr1;
         private byte[] data1; 
         
-
         //private byte addrType2 = 0;
         //private byte length2 = 0;
         //private byte startLowAddr2 = 0;
@@ -119,10 +118,6 @@ namespace SamSoarII.Core.Communication
                 return;
             }
         }
-
-        public void UpdataValues()
-        {
-            //to do nothing
-        }
+        
     }
 }

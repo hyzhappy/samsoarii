@@ -28,6 +28,7 @@ namespace SamSoarII.Shell.Windows
     {
         public MonitorWindow(InteractionFacade _ifParent)
         {
+            tabledict = new Dictionary<DataGridRow, MonitorElement>();
             InitializeComponent();
             DataContext = this;
             ifParent = _ifParent;
@@ -38,6 +39,8 @@ namespace SamSoarII.Shell.Windows
         {
             ifParent = null;
             Core = null;
+            tabledict.Clear();
+            tabledict = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -141,7 +144,7 @@ namespace SamSoarII.Shell.Windows
 
         public ProjectViewModel ViewParent { get { return Core.Parent.View; } }
         IViewModel IViewModel.ViewParent { get { return this.ViewParent; } }
-
+        
         #endregion
 
         #region Elements
@@ -425,8 +428,27 @@ namespace SamSoarII.Shell.Windows
             }
         }
 
+        private Dictionary<DataGridRow, MonitorElement> tabledict;
+        private void DataGridRow_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataGridRow dgrow = (DataGridRow)sender;
+            MonitorElement element = (MonitorElement)(dgrow.DataContext);
+            if (!tabledict.ContainsKey(dgrow)) tabledict.Add(dgrow, element);
+            element.IsVisible = true;
+        }
+        
+        private void DataGridRow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            DataGridRow dgrow = (DataGridRow)sender;
+            MonitorElement element = tabledict[dgrow];
+            tabledict.Remove(dgrow);
+            element.IsVisible = false;
+        }
+        
+
         #endregion
 
         #endregion
+
     }
 }

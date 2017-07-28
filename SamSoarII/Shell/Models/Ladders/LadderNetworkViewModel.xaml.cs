@@ -1037,7 +1037,7 @@ namespace SamSoarII.Shell.Models
                 if (ptvitem.RelativeObject is LadderUnitModel.Types)
                 {
                     LadderUnitModel.Types type = (LadderUnitModel.Types)(ptvitem.RelativeObject);
-                    Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
+                    //Core.Parent.QuickInsertElement(type, ViewParent.SelectionRect.Core, false);
                     if (IFParent.ShowElementPropertyDialog(type, ViewParent.SelectionRect.Core, false))
                         core.Parent.View.SelectRectRight();
                 }

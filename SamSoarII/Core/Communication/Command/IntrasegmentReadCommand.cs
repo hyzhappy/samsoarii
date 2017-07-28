@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SamSoarII.Core.Communication
 {
+    /*
     public class IntrasegmentReadCommand : ICommunicationCommand
     {
         private byte[] command;
@@ -141,4 +142,5 @@ namespace SamSoarII.Core.Communication
             return data;
         }
     }
+    */
 }

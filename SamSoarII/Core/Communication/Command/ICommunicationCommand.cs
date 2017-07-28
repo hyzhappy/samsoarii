@@ -51,7 +51,6 @@ namespace SamSoarII.Core.Communication
         bool IsComplete { get; set; }
         bool IsSuccess { get; set; }
         byte[] GetBytes();
-        void UpdataValues();
         int RecvDataLen { get; set; }
     }
 
