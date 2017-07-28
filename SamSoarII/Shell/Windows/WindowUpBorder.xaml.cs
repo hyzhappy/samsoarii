@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace SamSoarII.Shell.Windows
 {
@@ -99,10 +100,24 @@ namespace SamSoarII.Shell.Windows
         {
             ChangeWindowState();
         }
-
         private void OnInformWindow(object sender, RoutedEventArgs e)
         {
-            window.LACInform.Show();
+            var model = (LayoutAnchorable)window.LACInform.Model;
+            if (model.IsActive)
+            {
+                window.LACInform.Hide();
+                if (model.IsDock || model.IsFloat)
+                    model.Hide();
+            }
+            else
+            {
+                window.LACInform.Show();
+            }
+            if(!model.IsHidden && !model.IsAutoHidden && !model.IsActive)
+            {
+                window.LACInform.Hide();
+                model.Hide();
+            }
         }
     }
 }
