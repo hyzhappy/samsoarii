@@ -47,7 +47,17 @@ namespace SamSoarII.Shell.Windows
             rangeitems[11] = new RangeItem(this, ValueModel.Bases.V);
             rangeitems[12] = new RangeItem(this, ValueModel.Bases.Z);
         }
-        
+
+        public void MDProj_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Device")
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("ElementCollection"));
+                RecreateRangeItems();
+                PropertyChanged(this, new PropertyChangedEventArgs("RangeListCollection"));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Number
@@ -88,9 +98,30 @@ namespace SamSoarII.Shell.Windows
         {
             get { return this.rangeitems; }
         }
-
+        private void RecreateRangeItems()
+        {
+            foreach (var item in rangeitems)
+            {
+                item.Dispose();
+            }
+            RangeItem[] new_rangeitems = new RangeItem[13];
+            new_rangeitems[0] = new RangeItem(this, ValueModel.Bases.X);
+            new_rangeitems[1] = new RangeItem(this, ValueModel.Bases.Y);
+            new_rangeitems[2] = new RangeItem(this, ValueModel.Bases.M);
+            new_rangeitems[3] = new RangeItem(this, ValueModel.Bases.C);
+            new_rangeitems[4] = new RangeItem(this, ValueModel.Bases.T);
+            new_rangeitems[5] = new RangeItem(this, ValueModel.Bases.S);
+            new_rangeitems[6] = new RangeItem(this, ValueModel.Bases.D);
+            new_rangeitems[7] = new RangeItem(this, ValueModel.Bases.CV);
+            new_rangeitems[8] = new RangeItem(this, ValueModel.Bases.TV);
+            new_rangeitems[9] = new RangeItem(this, ValueModel.Bases.AI);
+            new_rangeitems[10] = new RangeItem(this, ValueModel.Bases.AO);
+            new_rangeitems[11] = new RangeItem(this, ValueModel.Bases.V);
+            new_rangeitems[12] = new RangeItem(this, ValueModel.Bases.Z);
+            rangeitems = new_rangeitems;
+        }
         #endregion
-        
+
         #endregion
 
         #region Event Handler
