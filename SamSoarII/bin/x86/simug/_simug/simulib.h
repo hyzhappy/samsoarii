@@ -293,14 +293,9 @@ void _mvdblk(int64_t* source, int64_t* dest, int32_t* enable, int32_t len);
 void _fmovw(int32_t source, int32_t* dest, int32_t* enable, int32_t size);
 // set a series of 32-bit memeory to the targeted value
 void _fmovd(int64_t source, int64_t* dest, int32_t* enable, int32_t size);
-/*
-double asinf(double d);
 
-double acosf(double d);
+void _set_wbit(int16_t* src, int16_t loc, int32_t size);
 
-double atanf(double d);
+int16_t _get_wbit(int16_t* src, int16_t 
 
-double log10(double d);
 
-double logf(double d);
-*/
