@@ -563,7 +563,7 @@ namespace SamSoarII
 
         private void About(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show(string.Format("Version : 2.0.2"), LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show(string.Format("Version : 2.0.3"), LocalizedMessageIcon.Information);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
