@@ -717,3 +717,15 @@ void _fmovd(int32_t source, int32_t* dest, int16_t size)
 	while (--size >= 0)
 		dest[size] = source;
 }
+
+void _imyset(int32_t Yn, int32_t size)
+{
+	while (--size >= 0)
+		OutputIm_Y(Yn + size, 1);
+}
+
+void _imyrst(int32_t Yn, int32_t size)
+{
+	while (--size >= 0)
+		OutputIm_Y(Yn + size, 0);
+}

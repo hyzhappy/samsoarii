@@ -1857,6 +1857,7 @@ namespace SamSoarII
                             PostIWindowEvent(this, new MainWindowEventArgs(wndMain,
                                 MainWindowEventArgs.TYPE_TOGGLE_DOWN
                               | MainWindowEventArgs.FLAG_SIMULATE));
+                            OnSimulateAborted(this, new RoutedEventArgs());
                             PostIWindowEvent(this, new UnderBarEventArgs(barStatus,
                                 UnderBarStatus.Simulate, Properties.Resources.MainWindow_Simulation));
                             wndMain.LAReplace.Hide();
@@ -1898,9 +1899,19 @@ namespace SamSoarII
                 MainWindowEventArgs.TYPE_TOGGLE_DOWN
               | MainWindowEventArgs.FLAG_START));
             PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_START));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
                 MainWindowEventArgs.TYPE_TOGGLE_UP
               | MainWindowEventArgs.FLAG_STOP
               | MainWindowEventArgs.FLAG_PAUSE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_ENABLE
+              | MainWindowEventArgs.FLAG_STOP
+              | MainWindowEventArgs.FLAG_PAUSE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_BRPO));
         }
 
         private void OnSimulatePaused(object sender, RoutedEventArgs e)
@@ -1909,9 +1920,19 @@ namespace SamSoarII
                 MainWindowEventArgs.TYPE_TOGGLE_DOWN
               | MainWindowEventArgs.FLAG_PAUSE));
             PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_PAUSE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
                 MainWindowEventArgs.TYPE_TOGGLE_UP
               | MainWindowEventArgs.FLAG_STOP
               | MainWindowEventArgs.FLAG_START));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_ENABLE
+              | MainWindowEventArgs.FLAG_STOP
+              | MainWindowEventArgs.FLAG_START));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_BRPO));
         }
 
         private void OnSimulateAborted(object sender, RoutedEventArgs e)
@@ -1920,19 +1941,44 @@ namespace SamSoarII
                 MainWindowEventArgs.TYPE_TOGGLE_DOWN
               | MainWindowEventArgs.FLAG_STOP));
             PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_STOP
+              | MainWindowEventArgs.FLAG_PAUSE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
                 MainWindowEventArgs.TYPE_TOGGLE_UP
               | MainWindowEventArgs.FLAG_START
               | MainWindowEventArgs.FLAG_PAUSE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_ENABLE
+              | MainWindowEventArgs.FLAG_START));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_BRPO));
         }
 
         private void OnBreakpointPaused(object sender, BreakpointPauseEventArgs e)
         {
             NavigateToBreakpointCursor();
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_PAUSE));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_ENABLE
+              | MainWindowEventArgs.FLAG_STOP
+              | MainWindowEventArgs.FLAG_START
+              | MainWindowEventArgs.FLAG_BRPO));
         }
 
         private void OnBreakpointResumed(object sender, BreakpointPauseEventArgs e)
         {
-
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_DISABLE
+              | MainWindowEventArgs.FLAG_START
+              | MainWindowEventArgs.FLAG_BRPO));
+            PostIWindowEvent(null, new MainWindowEventArgs(wndMain,
+                MainWindowEventArgs.TYPE_ENABLE
+              | MainWindowEventArgs.FLAG_STOP
+              | MainWindowEventArgs.FLAG_PAUSE));
         }
         
         #endregion

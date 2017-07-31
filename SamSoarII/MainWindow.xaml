@@ -58,13 +58,13 @@
         <CommandBinding Command="{x:Static gb:GlobalCommand.LadderModeToggleCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.InstModeToggleCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.SimulateCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.SimuStartCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.SimuPauseCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.SimuStopCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoNowCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoStepCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoCallCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
-        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoOutCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.SimuStartCommand}" Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.SimuPauseCommand}" Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.SimuStopCommand}" Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoNowCommand}" Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoStepCommand}" Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoCallCommand}" Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.BrpoOutCommand}" Executed="CommandBinding_Executed"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.ChangeToChineseCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.ChangeToEnglishCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.ShowHelpDocumentCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>

@@ -23,6 +23,7 @@ namespace SamSoarII.Core.Models
 
         public void Dispose()
         {
+            Root.Dispose();
             Root = null;
         }
         
@@ -256,6 +257,7 @@ namespace SamSoarII.Core.Models
 
         public void BuildAll(string code)
         {
+            Root?.Dispose();
             Root = new FuncBlock_Root(this, code);
             this.current = new LinkedListNode<FuncBlock>(Root);
             //Root.Build(text);   

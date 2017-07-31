@@ -12,7 +12,7 @@ namespace SamSoarII.Core.Models
     /// <summary>
     /// 所有元素模型的超级抽象类
     /// </summary>
-    abstract public class FuncBlock
+    abstract public class FuncBlock : IDisposable
     {
         /// <summary>
         /// 初始化构造函数
@@ -24,6 +24,16 @@ namespace SamSoarII.Core.Models
             childrens = new LinkedList<FuncBlock>();
             Current = null;
             Namespace = String.Empty;
+        }
+
+        public virtual void Dispose()
+        {
+            model = null;
+            foreach (FuncBlock fblock in childrens)
+                fblock.Dispose();
+            childrens.Clear();
+            childrens = null;
+            Current = null;
         }
         
         #region Numbers
@@ -615,7 +625,6 @@ namespace SamSoarII.Core.Models
                     foreach (LinkedListNode<FuncBlock> removenode in removenodes)
                     {
                         FuncBlock fb = removenode.Value;
-
                         // 需要删除变量赋值语句的信息
                         if (fb is FuncBlock_Assignment)
                         {
@@ -638,6 +647,7 @@ namespace SamSoarII.Core.Models
                             }
                         }
                         childrens.Remove(removenode);
+                        removenode.Value.Dispose();
                     }
                 }
             }
@@ -1061,6 +1071,20 @@ namespace SamSoarII.Core.Models
             ID = ++IDCount;
         }
         /// <summary>
+        /// 析构函数
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+            header = null;
+            if (virtualassigns != null)
+            {
+                virtualassigns.Clear();
+                virtualassigns = null;
+            }
+        }
+
+        /// <summary>
         /// 区域ID
         /// </summary>
         protected int id;
@@ -1179,6 +1203,14 @@ namespace SamSoarII.Core.Models
             Parent = _parent;
             Namespace = Parent.Namespace;
             AnalyzeText(text);
+        }
+        /// <summary>
+        /// 析构函数
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+            Comment = null;
         }
         /// <summary>
         /// 分析对应的代码文本，获得声明变量的信息
@@ -1367,6 +1399,15 @@ namespace SamSoarII.Core.Models
         {
 
         }
+        /// <summary>
+        /// 析构函数
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+            defines.Clear();
+            defines = null;
+        }
 
         public void ClearDefines()
         {
@@ -1478,6 +1519,16 @@ namespace SamSoarII.Core.Models
             Model.InvokePropertyChanged("Funcs");
         }
         /// <summary>
+        /// 析构函数
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+            FuncModel = null;
+            Comment = null;
+            Block = null;
+        }
+        /// <summary>
         /// 转换为字符串的方法
         /// </summary>
         /// <returns></returns>
@@ -1520,6 +1571,14 @@ namespace SamSoarII.Core.Models
         {
         }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+            Start = null;
+            Cond = null;
+            Next = null;
+        }
+
     }
 
     /// <summary>
@@ -1531,6 +1590,12 @@ namespace SamSoarII.Core.Models
 
         public FuncBlock_WhileHeader(FuncBlockModel _model) : base(_model)
         {
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Cond = null;
         }
     }
 
@@ -1544,6 +1609,12 @@ namespace SamSoarII.Core.Models
         public FuncBlock_WhileEnd(FuncBlockModel _model) : base(_model)
         {
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Cond = null;
+        }
     }
 
     /// <summary>
@@ -1555,6 +1626,11 @@ namespace SamSoarII.Core.Models
 
         public FuncBlock_IfHeader(FuncBlockModel _model) : base(_model)
         {
+        }
+        public override void Dispose()
+        {
+            base.Dispose();
+            Cond = null;
         }
     }
 

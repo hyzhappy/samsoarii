@@ -200,14 +200,30 @@ void _mvdblk(int32_t* source, int32_t* dest, int16_t len);
 // set a series of 32-bit memeory to the targeted value
 void _fmovw(int16_t source, int16_t* dest, int16_t size);
 // set a series of 32-bit memeory to the targeted value
-void _fmovd(int32_t source, int32_t* dest, int16_t size);
-// PLC interface : TON
-extern void CI_TON(uint8_t en, uint16_t Tnum, uint32_t SetValue);
-// PLC interface : DPLSF
+void _fmovd(int32_t source, int32_t* dest, int16_t size);extern void CI_TON(uint8_t en, uint16_t Tnum, uint32_t SetValue);
+
 extern void CI_DPLSF(uint8_t en, uint32_t freq, uint16_t Yn, uint16_t use_id);
-// PLC interface : DPWM
 extern void CI_DPWM(uint8_t en, uint32_t freq, uint32_t dutycycle, uint16_t Yn, uint16_t use_id);
-// PLC interface : DPLSY
 extern void CI_DPLSY(uint8_t en, uint32_t freq, uint32_t pulsenum, uint16_t Yn, uint16_t use_id);
-// PLC interface : HCNT
-extern void CI_HCNT(uint8_t en, uint16_t hcntIndex, uint32_t SetValue);
+extern void CI_HCNT(uint8_t en, uint16_t hcntIndex, uint32_t setValue);
+
+extern void OutputIm_Y(uint16_t Yn, uint8_t state); // Yn:所指定的Y输出端口,state:=0表示拉低该输出口,=1表示拉高,注意调用该函数时需刷新相应的YBit[Yn]位
+extern uint8_t ScanIm_X(uint16_t Xn);	// Xn:所指定的X输入端口,返回值为0表示读到低电平,为1表示读到高电平,注意该函数返回值需用来刷新相应的XBit[Xn]位
+extern void CI_TON(uint8_t en, uint16_t Tnum, uint32_t SetValue);
+extern void CI_TONR(uint8_t en, uint16_t Tnum, uint32_t SetValue);
+extern void CI_TOF(uint8_t en, uint16_t Tnum, uint32_t SetValue);
+extern void CI_RTC_RDRTC(uint8_t en, uint16_t *dst);//读时钟
+extern void CI_RTC_SETRTC(uint8_t en, uint16_t *src);//写时钟
+extern void CI_DPLSR(uint8_t en, uint32_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t use_id);
+extern void CI_DPLSRD(uint8_t en, uint32_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t dir, uint16_t use_id);
+extern void CI_PLSNEXT(uint8_t en, uint16_t Yn);
+extern void CI_STOP(uint8_t en, uint16_t Yn);
+extern void CI_DZRN(uint8_t en, uint32_t crawl_freq, uint32_t regress_freq, uint32_t near_point, uint16_t Yn, uint16_t use_id);
+extern void CI_DZRND(uint8_t en, uint32_t crawl_freq, uint32_t regress_freq, uint32_t near_point, uint16_t Yn, uint16_t dir, uint16_t use_id);
+extern void CI_PTO(uint8_t en, uint32_t *plsParam, uint16_t Yn, uint16_t dir, uint16_t use_id);
+extern void CI_DDRVI(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, uint16_t dir, uint16_t use_id);
+extern void CI_DDRVA(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, uint16_t dir, uint16_t use_id);
+extern void CI_DPLSA(uint8_t en, uint32_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t dir, uint16_t use_id);
+
+void _imyset(int32_t Yn, int32_t size);
+void _imyrst(int32_t Yn, int32_t size);
