@@ -275,7 +275,7 @@ float PI = 3.1415926;
 // sin a 32-bit float (radian)
 float _sin(float ia)
 {
-	float ic = sin(ia * PI / 180);
+	float ic = sinf(ia * PI / 180);
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return ic;
@@ -284,7 +284,7 @@ float _sin(float ia)
 // cos a 32-bit float
 float _cos(float ia)
 {
-	float ic = cos(ia * PI / 180);
+	float ic = cosf(ia * PI / 180);
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return ic;
@@ -293,7 +293,7 @@ float _cos(float ia)
 // tan a 32-bit float
 float _tan(float ia)
 {
-	float ic = tan(ia * PI / 180);
+	float ic = tanf(ia * PI / 180);
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return ic;
@@ -302,7 +302,7 @@ float _tan(float ia)
 // ln a 32-bit float
 float _ln(float ia)
 {
-	float ic = log(ia) / log(exp(1.0));
+	float ic = logf(ia) / logf(exp(1.0));
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return ic;
@@ -311,7 +311,7 @@ float _ln(float ia)
 // exp a 32-bit float
 float _exp(float ia)
 {
-	double ic = exp(ia);
+	double ic = expf(ia);
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return (float)(ic);
@@ -594,7 +594,7 @@ int32_t _fact(int16_t ia)
 // Calculate the squarter of 32-bit float
 float _sqrt(float ia)
 {
-	return sqrt(ia);
+	return sqrtf(ia);
 }
 
 
