@@ -210,7 +210,7 @@ namespace SamSoarII.Core.Models
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
                                 inst.Message = String.Format(Properties.Resources.Message_STL_Over);
                             }
-                            if (outcount > 0)
+                            if (outcount > 1)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
                                 inst.Message = String.Format(Properties.Resources.Message_STL_OnlyOne);
@@ -228,7 +228,7 @@ namespace SamSoarII.Core.Models
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
                                 inst.Message = String.Format(Properties.Resources.Message_STLE_Over);
                             }
-                            if (outcount > 0)
+                            if (outcount > 1)
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
                                 inst.Message = String.Format(Properties.Resources.Message_STLE_OnlyOne);

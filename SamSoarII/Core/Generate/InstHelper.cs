@@ -192,9 +192,9 @@ namespace SamSoarII.Core.Generate
             //sw.Write("static uint16_t _mstack[256];\n");        // 辅助栈
             //sw.Write("static uint16_t _mstacktop;\n");          // 辅助栈的栈顶
             user_id = 0;
-            sw.Write("static int32_t _global[{0:d}];\n", globalTotal); // 全局变量
-            if (simumode)
-                sw.Write("static int32_t _signal;\n");
+            sw.Write("static int8_t _global[{0:d}];\n", globalTotal); // 全局变量
+            // 仿真模式下计算当前信号
+            if (simumode) sw.Write("static int8_t _signal;\n");
             // 先声明所有的子函数
             foreach (PLCInstruction inst in insts)
             {
@@ -204,18 +204,14 @@ namespace SamSoarII.Core.Generate
             // 建立扫描的主函数
             bool ismain = true;
             sw.Write("void RunLadder()\n{\n");
-            //if (simumode)
-            //    sw.Write("callinto();\n");
-            sw.Write("_itr_invoke();\n");
+            if (simumode) sw.Write("_itr_invoke();\n");
+            // STL取消标志
+            sw.Write("uint8_t _stlrst;\n");
             // 建立局部的栈和辅助栈
             for (int i = 1; i <= stackTotal; i++)
-            {
-                sw.Write("uint32_t _stack_{0:d};\n", i);
-            }
+                sw.Write("uint8_t _stack_{0:d};\n", i);
             for (int i = 1; i <= mstackTotal; i++)
-            {
-                sw.Write("uint32_t _mstack_{0:d};\n", i);
-            }
+                sw.Write("uint8_t _mstack_{0:d};\n", i);
             // 生成PLC对应的内容
             // 初始化栈顶
             stackTop = 0;
@@ -234,15 +230,13 @@ namespace SamSoarII.Core.Generate
                         sw.Write("{\n");
                         if (simumode)
                             sw.Write("callinto();\n");
+                        // STL取消标志
+                        sw.Write("uint8_t _stlrst;\n");
                         // 建立局部的栈和辅助栈
                         for (int i = 1; i <= stackTotal; i++)
-                        {
-                            sw.Write("uint16_t _stack_{0:d};\n", i);
-                        }
+                            sw.Write("uint8_t _stack_{0:d};\n", i);
                         for (int i = 1; i <= mstackTotal; i++)
-                        {
-                            sw.Write("uint16_t _mstack_{0:d};\n", i);
-                        }
+                            sw.Write("uint8_t _mstack_{0:d};\n", i);
                         // 初始化栈顶
                         stackTop = 0;
                         mstackTop = 0;
@@ -296,8 +290,10 @@ namespace SamSoarII.Core.Generate
                 // STL状态切换
                 case "STL":
                     stlvalue = inst[1];
+                    sw.Write("_stlrst = 0;\n");
                     break;
                 case "STLE":
+                    sw.Write("if (_stlrst) {0:s} = 0;\n", stlvalue);
                     stlvalue = null;
                     break;
                 // 一般的入栈和逻算
@@ -510,14 +506,20 @@ namespace SamSoarII.Core.Generate
                 case "SET":
                 case "SETIM":
                     if (simumode)
-                        sw.Write("if ({0:s}) _bitset(&{1:s}, &{3:s}, {2:s});\n",
+                        sw.Write("if ({0:s}) {{_bitset(&{1:s}, &{3:s}, {2:s});\n",
                             cond, inst[1], inst[2], inst.EnBit);
                     else if (inst[0].Equals("SETIM") && inst[1][0] == 'Y')
-                        sw.Write("if ({0:s}) _imyset({1:s}, {2:s});\n",
+                        sw.Write("if ({0:s}) {{_imyset({1:s}, {2:s});\n",
                             cond, inst[3], inst[2]);
                     else
-                        sw.Write("if ({0:s}) _bitset(&{1:s}, {2:s});\n",
+                        sw.Write("if ({0:s}) {{_bitset(&{1:s}, {2:s});\n",
                             cond, inst[1], inst[2]);
+                    /*
+                     * 在STL状态下，执行SET指令后，需要在扫描周期后将当前状态复位
+                     */
+                    if (stlvalue != null)
+                        sw.Write("_stlrst = 1;\n");
+                    sw.Write("}\n");
                     break;
                 case "RST":
                 case "RSTIM":
@@ -730,6 +732,8 @@ namespace SamSoarII.Core.Generate
                     // 第二回指令判断
                     switch (inst.Type)
                     {
+                        // 状态转移
+                        case "ST": sw.Write("{0:s} = 1;\n", inst[1]); break;
                         // 数据格式的转化指令
                         case "WTOD": sw.Write("{1:s} = _WORD_to_DWORD({0:s});\n", inst[1], inst[2]); break;
                         case "DTOW": sw.Write("{1:s} = _DWORD_to_WORD({0:s});\n", inst[1], inst[2]); break;
@@ -984,7 +988,7 @@ namespace SamSoarII.Core.Generate
                 sw.Write("}\n");
             }
             // 进入条件断点的循环
-            if (simumode && inst.ProtoType != null && !inst[0].Equals("LBL") && !inst[0].Equals("NEXT"))
+            if (simumode && inst.ProtoType != null && !LadderUnitModel.LabelTypes.Contains(inst.ProtoType.Type))
             {
                 _CalcSignal(sw, true);
                 sw.Write("cpcycle({0}, _signal);\n", bp);
