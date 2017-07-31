@@ -152,12 +152,6 @@ namespace SamSoarII.Core.Generate
                     case "LDI":
                     case "ANDI":
                     case "ORI":
-                    case "LDIM":
-                    case "ANDIM":
-                    case "ORIM":
-                    case "LDIIM":
-                    case "ANDIIM":
-                    case "ORIIM":
                     case "LDP":
                     case "ANDP":
                     case "ORP":
@@ -166,14 +160,28 @@ namespace SamSoarII.Core.Generate
                     case "ORF":
                         args[1] = ToCStyle(args[1], "r", "BIT");
                         break;
+                    case "LDIM":
+                    case "ANDIM":
+                    case "ORIM":
+                    case "LDIIM":
+                    case "ANDIIM":
+                    case "ORIIM":
+                        args = new string[] { args[0], args[1], "" };
+                        args[1] = ToCStyle(args[1], "r", "BIT");
+                        args[2] = ToCIndex(args[1], "r", "BIT");
+                        break;
                     // (wB)
                     case "OUT":
-                    case "OUTIM":
                     case "ALT":
                     case "ALTP":
                     case "PLSNEXT":
                     case "PLSSTOP":
                         args[1] = ToCStyle(args[1], "w", "BIT");
+                        break;
+                    case "OUTIM":
+                        args = new string[] { args[0], args[1], "" };
+                        args[1] = ToCStyle(args[1], "w", "BIT");
+                        args[2] = ToCIndex(args[1], "w", "BIT");
                         break;
                     // (rW)
                     case "DTCH":
@@ -186,11 +194,16 @@ namespace SamSoarII.Core.Generate
                         break;
                     // (wB, rW)
                     case "SET":
-                    case "SETIM":
                     case "RST":
-                    case "RSTIM":
                         args[1] = ToCStyle(args[1], "w", "BIT");
                         args[2] = ToCStyle(args[2], "r", "WORD");
+                        break;
+                    case "SETIM":
+                    case "RSTIM":
+                        args = new string[] { args[0], args[1], args[2], "" };
+                        args[1] = ToCStyle(args[1], "w", "BIT");
+                        args[2] = ToCStyle(args[2], "r", "WORD");
+                        args[3] = ToCIndex(args[1], "w", "BIT");
                         break;
                     // (rW, rW)
                     case "LDWEQ":
@@ -529,23 +542,36 @@ namespace SamSoarII.Core.Generate
                     case "PLSY":
                     case "PLSR":
                     case "ZRN":
-                    case "DRVI":
                         args[1] = ToCStyle(args[1], "r", "WORD");
                         args[2] = ToCStyle(args[2], "r", "WORD");
                         args[3] = ToCIndex(args[3], "w", "BIT");
+                        break;
+                    case "DRVI":
+                    case "DRVA":
+                        args[1] = ToCStyle(args[1], "r", "WORD");
+                        args[2] = ToCStyle(args[2], "r", "WORD");
+                        args[3] = ToCIndex(args[3], "w", "BIT");
+                        args[4] = ToCIndex(args[4], "w", "BIT");
                         break;
                     // (rD, rD, wB)
                     case "DPWM":
                     case "DPLSY":
                     case "DPLSR":
                     case "DZRN":
-                    case "DDRVI":
                         args[1] = ToCStyle(args[1], "r", "DWORD");
                         args[2] = ToCStyle(args[2], "r", "DWORD");
                         args[3] = ToCIndex(args[3], "w", "BIT");
                         break;
+                    case "DDRVI":
+                    case "DDRVA":
+                        args[1] = ToCStyle(args[1], "r", "DWORD");
+                        args[2] = ToCStyle(args[2], "r", "DWORD");
+                        args[3] = ToCIndex(args[3], "w", "BIT");
+                        args[4] = ToCIndex(args[4], "w", "BIT");
+                        break;
                     // (rW, rW, wB, wB)
                     case "PLSRD":
+                    case "PLSA":
                         args[1] = ToCStyle(args[1], "r", "WORD");
                         args[2] = ToCStyle(args[2], "r", "WORD");
                         args[3] = ToCIndex(args[3], "w", "BIT");
@@ -553,6 +579,7 @@ namespace SamSoarII.Core.Generate
                         break;
                     // (rD, rD, wB, wB)
                     case "DPLSRD":
+                    case "DPLSA":
                         args[1] = ToCStyle(args[1], "r", "DWORD");
                         args[2] = ToCStyle(args[2], "r", "DWORD");
                         args[3] = ToCIndex(args[3], "w", "BIT");

@@ -1066,7 +1066,7 @@
         Text_1="[单字]脉冲频率(K/H/D)"
         Text_2="[单字]脉冲数(K/H/D)"
         Text_3="[位]输出脉冲(Y)"
-        Text_4=""
+        Text_4="[位]输出方向(Y)"
         Text_5=""
     />
   <DDRVI CatalogID="1616"
@@ -1075,7 +1075,7 @@
         Text_1="[双字]脉冲频率(K/H/D)"
         Text_2="[双字]脉冲数(K/H/D)"
         Text_3="[位]输出脉冲(Y)"
-        Text_4=""
+        Text_4="[位]输出方向(Y)"
         Text_5=""
     />
   <HCNT CatalogID="1700"

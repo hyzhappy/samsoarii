@@ -66,10 +66,10 @@ namespace SamSoarII.Shell.Windows
                 }
             }
         }
-        public string ActiveInfo { get { return parent.IsActive ? "启用" : "禁用"; } }
-        public Brush ActiveBrush { get { return parent.IsActive ? Brushes.Red : Brushes.Gray; } }
-        public string ProgramName { get { return parent.Parent.Parent.Parent.Name; } }
-        public string Instruction { get { return parent.Parent.ToInstString(); } }
+        public string ActiveInfo { get { return parent != null && parent.IsActive ? "启用" : "禁用"; } }
+        public Brush ActiveBrush { get { return parent != null && parent.IsActive ? Brushes.Red : Brushes.Gray; } }
+        public string ProgramName { get { return parent?.Parent.Parent.Parent.Name; } }
+        public string Instruction { get { return parent?.Parent.ToInstString(); } }
         public int SelectedIndex
         {
             get { return parent.ConditionIndex; }

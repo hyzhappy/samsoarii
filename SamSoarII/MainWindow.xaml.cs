@@ -519,6 +519,7 @@ namespace SamSoarII
         #endregion
 
         #region Event Handler
+
         private int GetMenuItemIndex(string item)
         {
             return RecentFileMenu.Items.IndexOf(item);
@@ -656,6 +657,36 @@ namespace SamSoarII
                                 TB_Simu.Visibility = Visibility.Collapsed;                            
                             if ((e1.Flags & MainWindowEventArgs.FLAG_EDIT) != 0)                            
                                 TB_Edit.Visibility = Visibility.Collapsed;                            
+                            break;
+                        case MainWindowEventArgs.TYPE_ENABLE:
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_START) != 0)
+                                TB_Start.IsEnabled = true;
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_PAUSE) != 0)
+                                TB_Pause.IsEnabled = true;
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_STOP) != 0)
+                                TB_Stop.IsEnabled = true;
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_BRPO) != 0)
+                            {
+                                BrpoNowButton.IsEnabled = true;
+                                BrpoCallButton.IsEnabled = true;
+                                BrpoStepButton.IsEnabled = true;
+                                BropOutButton.IsEnabled = true;
+                            }
+                            break;
+                        case MainWindowEventArgs.TYPE_DISABLE:
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_START) != 0)
+                                TB_Start.IsEnabled = false;
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_PAUSE) != 0)
+                                TB_Pause.IsEnabled = false;
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_STOP) != 0)
+                                TB_Stop.IsEnabled = false;
+                            if ((e1.Flags & MainWindowEventArgs.FLAG_BRPO) != 0)
+                            {
+                                BrpoNowButton.IsEnabled = false;
+                                BrpoCallButton.IsEnabled = false;
+                                BrpoStepButton.IsEnabled = false;
+                                BropOutButton.IsEnabled = false;
+                            }
                             break;
                     }
                 });
@@ -852,6 +883,8 @@ namespace SamSoarII
         public const int TYPE_TOGGLE_UP = 0x0002;
         public const int TYPE_SHOW = 0x0003;
         public const int TYPE_HIDE = 0x0004;
+        public const int TYPE_ENABLE = 0x0005;
+        public const int TYPE_DISABLE = 0x0006;
 
         public const int FLAG_LADDER = 0x0010;
         public const int FLAG_INST = 0x0020;
@@ -862,6 +895,7 @@ namespace SamSoarII
         public const int FLAG_STOP = 0x0400;
         public const int FLAG_MONITOR = 0x0800;
         public const int FLAG_EDIT = 0x1000;
+        public const int FLAG_BRPO = 0x2000;
 
         public MainWindowEventArgs(MainWindow _wndMain, int _flags)
         {

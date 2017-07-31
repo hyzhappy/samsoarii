@@ -440,6 +440,7 @@ namespace SamSoarII.Shell.Windows
         private void DataGridRow_Unloaded(object sender, RoutedEventArgs e)
         {
             DataGridRow dgrow = (DataGridRow)sender;
+            if (!tabledict.ContainsKey(dgrow)) return;
             MonitorElement element = tabledict[dgrow];
             tabledict.Remove(dgrow);
             element.IsVisible = false;

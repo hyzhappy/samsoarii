@@ -288,12 +288,60 @@ namespace SamSoarII.Core.Generate
             switch (inst.Type)
             {
                 // 一般的入栈和逻算
-                case "LD": case "LDIM": sw.Write("_stack_{0:d} = {1:s};\n", ++stackTop, inst[1]); break;
-                case "AND": case "ANDIM": sw.Write("_stack_{0:d} &= {1:s};\n", stackTop, inst[1]); break;
-                case "OR": case "ORIM": sw.Write("_stack_{0:d} |= {1:s};\n", stackTop, inst[1]); break;
-                case "LDI": case "LDIIM": sw.Write("_stack_{0:d} = !{1:s};\n", ++stackTop, inst[1]); break;
-                case "ANDI": case "ANDIIM": sw.Write("_stack_{0:d} &= !{1:s};\n", stackTop, inst[1]); break;
-                case "ORI": case "ORIIM": sw.Write("_stack_{0:d} |= !{1:s};\n", stackTop, inst[1]); break;
+                case "LD":
+                    sw.Write("_stack_{0:d} = {1:s};\n", ++stackTop, inst[1]);
+                    break;
+                case "LDIM":
+                    if (!simumode && inst[1][0] == 'X')
+                        sw.Write("_stack_{0:d} = ScanIm_X({1:s});\n", ++stackTop, inst[2]);
+                    else
+                        sw.Write("_stack_{0:d} = {1:s};\n", ++stackTop, inst[1]);
+                    break;
+                case "AND":
+                    sw.Write("_stack_{0:d} &= {1:s};\n", stackTop, inst[1]);
+                    break;
+                case "ANDIM":
+                    if (!simumode && inst[1][0] == 'X')
+                        sw.Write("_stack_{0:d} &= ScanIm_X({1:s});\n", stackTop, inst[2]);
+                    else
+                        sw.Write("_stack_{0:d} &= {1:s};\n", stackTop, inst[1]);
+                    break;
+                case "OR":
+                    sw.Write("_stack_{0:d} |= {1:s};\n", stackTop, inst[1]);
+                    break;
+                case "ORIM":
+                    if (!simumode && inst[1][0] == 'X')
+                        sw.Write("_stack_{0:d} |= ScanIm_X({1:s});\n", stackTop, inst[2]);
+                    else
+                        sw.Write("_stack_{0:d} |= {1:s};\n", stackTop, inst[1]);
+                    break;
+                case "LDI":
+                    sw.Write("_stack_{0:d} = !{1:s};\n", ++stackTop, inst[1]);
+                    break;
+                case "LDIIM":
+                    if (!simumode && inst[1][0] == 'X')
+                        sw.Write("_stack_{0:d} = !ScanIm_X({1:s});\n", ++stackTop, inst[2]);
+                    else
+                        sw.Write("_stack_{0:d} = !{1:s};\n", ++stackTop, inst[1]);
+                    break;
+                case "ANDI":
+                    sw.Write("_stack_{0:d} &= !{1:s};\n", stackTop, inst[1]);
+                    break;
+                case "ANDIIM":
+                    if (!simumode && inst[1][0] == 'X')
+                        sw.Write("_stack_{0:d} &= !ScanIm_X({1:s});\n", stackTop, inst[2]);
+                    else
+                        sw.Write("_stack_{0:d} &= !{1:s};\n", stackTop, inst[1]);
+                    break;
+                case "ORI":
+                    sw.Write("_stack_{0:d} |= !{1:s};\n", stackTop, inst[1]);
+                    break;
+                case "ORIIM":
+                    if (!simumode && inst[1][0] == 'X')
+                        sw.Write("_stack_{0:d} |= !ScanIm_X({1:s});\n", stackTop, inst[2]);
+                    else
+                        sw.Write("_stack_{0:d} |= !{1:s};\n", stackTop, inst[1]);
+                    break;
                 // 上升沿和下降沿
                 /*
                  * 这里需要将上一次扫描的当前值记录下来，保存到全局变量中
@@ -434,8 +482,14 @@ namespace SamSoarII.Core.Generate
                  * 将当前栈顶的值赋值给线圈
                  */
                 case "OUT":
+                    sw.Write("{0:s} = _stack_{1:d};\n", inst[1], stackTop);
+                    break;
                 case "OUTIM":
-                    sw.Write("{0:s} = _stack_{1:d};\n", inst[1], stackTop); break;
+                    if (!simumode && inst[1][0] == 'Y')
+                        sw.Write("OutputIm_Y({0:s}, _stack_{1:d});\n", inst[2], stackTop);
+                    else
+                        sw.Write("{0:s} = _stack_{1:d};\n", inst[1], stackTop);
+                    break;
                 // 置位和复位
                 /*
                  * 需要用if来判断栈顶是否为1
@@ -445,6 +499,9 @@ namespace SamSoarII.Core.Generate
                     if (simumode)
                         sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, &{3:s}, {2:s});\n",
                             stackTop, inst[1], inst[2], inst.EnBit);
+                    else if (inst[0].Equals("SETIM") && inst[1][0] == 'Y')
+                        sw.Write("if (_stack_{0:d}) _imyset({1:s}, {2:s});\n",
+                            stackTop, inst[3], inst[2]);
                     else
                         sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, {2:s});\n",
                             stackTop, inst[1], inst[2]);
@@ -454,6 +511,9 @@ namespace SamSoarII.Core.Generate
                     if (simumode)
                         sw.Write("if (_stack_{0:d}) {{\n_bitrst(&{1:s}, &{3:s}, {2:s});\n",
                             stackTop, inst[1], inst[2], inst.EnBit);
+                    else if (inst[0].Equals("RSTIM") && inst[1][0] == 'Y')
+                        sw.Write("if (_stack_{0:d}) {{\n_imyrst({1:s}, {2:s});\n",
+                            stackTop, inst[3], inst[2]);
                     else
                         sw.Write("if (_stack_{0:d}) {{\n_bitrst(&{1:s}, {2:s});\n",
                             stackTop, inst[1], inst[2]);
@@ -468,7 +528,7 @@ namespace SamSoarII.Core.Generate
                         int begin = int.Parse(inst[3]);
                         int end = begin + int.Parse(inst[4]);
                         for (int i = begin; i < end; i++)
-                            sw.Write("CVWord[{0:d}] = {1:d};", i, ctsv[i]);
+                            sw.Write("CVWord[{0:d}] = {1:d};\n", i, ctsv[i]);
                     }
                     sw.Write("}\n");
                     break;
@@ -495,7 +555,7 @@ namespace SamSoarII.Core.Generate
                         sw.Write("_ton(!_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
                             stackTop, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("CI_TON(!_stack_{0:d}, {1:s}, {2:s});\n",
+                        sw.Write("CI_TOF(_stack_{0:d}, {1:s}, {2:s});\n",
                             stackTop, inst[1], inst[2]);
                     globalCount += 1;
                     break;
@@ -505,7 +565,7 @@ namespace SamSoarII.Core.Generate
                         sw.Write("_tonr(_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
                             stackTop, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("CI_TON(_stack_{0:d}, {1:s}, {2:s});\n",
+                        sw.Write("CI_TONR(_stack_{0:d}, {1:s}, {2:s});\n",
                             stackTop, inst[1], inst[2]);
                     globalCount += 1;
                     break;
@@ -578,10 +638,78 @@ namespace SamSoarII.Core.Generate
                         sw.Write("CI_DPLSY((uint8_t)(_stack_{0:d}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
                             stackTop, inst[1], inst[2], inst[3], user_id);
                     break;
+                case "PLSR":
+                case "DPLSR":
+                    if (!simumode)
+                        sw.Write("CI_DPLSR((uint8_t)(_stack_{0:d}), &{1:s}, {2:s}, {3:s}, {4:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], user_id);
+                    break;
+                case "PLSRD":
+                case "DPLSRD":
+                    if (!simumode)
+                        sw.Write("CI_DPLSRD((uint8_t)(_stack_{0:d}), &{1:s}, {2:s}, {3:s}, {4:s}, {5:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], inst[4], user_id);
+                    break;
                 case "HCNT":
                     if (!simumode)
                         sw.Write("CI_HCNT((uint8_t)(_stack_{0:d}),{1:s},{2:s});\n",
                              stackTop, inst[1], inst[2]);
+                    break;
+                case "PLSNEXT":
+                    if (!simumode)
+                        sw.Write("CI_PLSNEXT((uint8_t)(_stack_{0:d}),{1:s});\n",
+                            stackTop, inst[1]);
+                    break;
+                case "PLSSTOP":
+                    if (!simumode)
+                        sw.Write("CI_STOP((uint8_t)(_stack_{0:d}),{1:s});\n",
+                            stackTop, inst[1]);
+                    break;
+                case "ZRN":
+                case "DZRN":
+                    if (!simumode)
+                        sw.Write("CI_DZRN((uint8_t)(_stack_{0:d}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], inst[4], user_id);
+                    break;
+                case "ZRND":
+                case "DZRND":
+                    if (!simumode)
+                        sw.Write("CI_DZRN((uint8_t)(_stack_{0:d}),{1:s},{2:s},{3:s},{4:s},{5:s},{6:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], inst[4], inst[5], user_id);
+                    break;
+                case "PTO":
+                    if (!simumode)
+                        sw.Write("CI_PTO((uint8_t)(_stack_{0:d}),&{1:s},{2:s},{3:s},{4:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], user_id);
+                    break;
+                case "DRVI":
+                case "DDRVI":
+                    if (!simumode)
+                        sw.Write("CI_DDRVI((uint8_t)(_stack_{0:d}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            stackTop, inst[2], inst[1], inst[3], inst[4], user_id);
+                    break;
+                case "DRVA":
+                case "DDRVA":
+                    if (!simumode)
+                        sw.Write("CI_DDRVA((uint8_t)(_stack_{0:d)},{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            stackTop, inst[2], inst[1], inst[3], inst[4], user_id);
+                    break;
+                case "PLSA":
+                case "DPLSA":
+                    if (!simumode)
+                        sw.Write("CI_DPLSA((uint8_t)(_stack_{0:d}),&{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            stackTop, inst[1], inst[2], inst[3], inst[4], user_id);
+                    break;
+                // 实时时钟
+                case "TRD":
+                    if (!simumode)
+                        sw.Write("CI_RTC_RDRTC((uint8_t)(_stack_{0:d}),&{1:s});\n",
+                            stackTop, inst[1]);
+                    break;
+                case "TWR":
+                    if (!simumode)
+                        sw.Write("CI_RTC_SETRTC((uint8_t)(_stack_{0:d}),&{1:s});\n",
+                            stackTop, inst[1]);
                     break;
                 // 默认的其他情况，一般之前要先判断栈顶
                 default:
@@ -729,12 +857,14 @@ namespace SamSoarII.Core.Generate
                             sw.Write("_di();\n");
                             break;
                         // 实时时钟
+                        /*
                         case "TRD":
                             sw.Write("_trd(&{0:s});\n", inst[1]);
                             break;
                         case "TWR":
                             sw.Write("_twr(&{0:s});\n", inst[1]);
                             break;
+                        */
                         // 通信
                         case "MBUS":
                             sw.Write("_mbus({0:s}, NULL, 0, &{1:s});\n", inst[1], inst[3]);
@@ -746,6 +876,7 @@ namespace SamSoarII.Core.Generate
                             sw.Write("_rev({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
                             break;
                         // 脉冲
+                        /*
                         case "PLSF":
                             sw.Write("_plsf({0:s}, &{1:s});\n", inst[1], inst[2]);
                             break;
@@ -800,16 +931,13 @@ namespace SamSoarII.Core.Generate
                         case "HCNT":
                             sw.Write("_hcnt(&{0:s}, {1:s});\n", inst[1], inst[2]);
                             break;
+                        */
                         // 移位操作
                         default: throw new ArgumentException(String.Format("unidentified PLC command : {0:s}", inst.Type));
                     }
                     sw.Write("}\n");
-                    // 注意栈顶为0时重置一般的计时器
-                    if (inst.Type.Equals("TON"))
-                    {
-                        sw.Write("else\n{{\n{0:s}=0;\n}}\n", inst[1]);
-                    }
                     // 注意部分脉冲指令当栈顶为0时需要立即停止
+                    /*
                     switch (inst.Type)
                     {
                         case "PLSF":
@@ -834,6 +962,7 @@ namespace SamSoarII.Core.Generate
                             sw.Write("else\n{{\n_plsstop(&{0:s});\n}}\n", inst[4]);
                             break;
                     }
+                    */
                     break;
             }
             // 如果是仿真模式需要对写入使能条件判断语句结尾
