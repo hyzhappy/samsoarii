@@ -2157,4 +2157,13 @@
   <data name="Expand_All" xml:space="preserve">
     <value>全部展开</value>
   </data>
+  <data name="Bit" xml:space="preserve">
+    <value>位</value>
+  </data>
+  <data name="Word" xml:space="preserve">
+    <value>单字</value>
+  </data>
+  <data name="DWord" xml:space="preserve">
+    <value>双字</value>
+  </data>
 </root>

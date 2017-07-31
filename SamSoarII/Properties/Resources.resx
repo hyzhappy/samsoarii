@@ -2157,4 +2157,13 @@
   <data name="Expand_All" xml:space="preserve">
     <value>Expand all</value>
   </data>
+  <data name="Bit" xml:space="preserve">
+    <value>Bit</value>
+  </data>
+  <data name="Word" xml:space="preserve">
+    <value>Word</value>
+  </data>
+  <data name="DWord" xml:space="preserve">
+    <value>DWord</value>
+  </data>
 </root>

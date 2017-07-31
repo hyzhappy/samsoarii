@@ -301,13 +301,13 @@ namespace SamSoarII.Shell.Dialogs
                                 switch (argtype)
                                 {
                                     case "BIT":
-                                        _tempList.Add(String.Format("[位]{0:s}(X/Y/M/C/T/S)", argname));
+                                        _tempList.Add(String.Format("[{0}]{1:s}(X/Y/M/C/T/S)",Properties.Resources.Bit ,argname));
                                         break;
                                     case "WORD":
-                                        _tempList.Add(String.Format("[单字]{0:s}(D/CV/TV)", argname));
+                                        _tempList.Add(String.Format("[{0}]{1:s}(D/CV/TV)", Properties.Resources.Word, argname));
                                         break;
                                     case "DWORD":
-                                        _tempList.Add(String.Format("[双字]{0:s}(D)", argname));
+                                        _tempList.Add(String.Format("[{0}]{1:s}(D)", Properties.Resources.DWord, argname));
                                         break;
                                     default:
                                         _tempList.Add(String.Format("[{1:s}]{0:s}", argname, argtype));
