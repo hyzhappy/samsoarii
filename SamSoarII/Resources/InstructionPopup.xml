@@ -841,7 +841,7 @@
         Describe="中断释放"
         Detail="指令将解除中断事件（EVENT）与中断子程序号码（INT）之间的关联，并禁用中断事件。"
         Text_1="[单字]中断事件(K0-K7)"
-        Text_2="[单字]子程序ID(K)"
+        Text_2=""
         Text_3=""
         Text_4=""
         Text_5=""/>
