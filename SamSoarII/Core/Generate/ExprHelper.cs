@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -368,7 +369,7 @@ namespace SamSoarII.Core.Generate
              * 要注意一些特殊的标志指令，这些指令不涉及到栈的操作
              */
             if ((flag & FLAG_CALAND) == 0 && (flag & FLAG_CALOR) == 0
-             && insts.Count() > 0 && !insts.Last().Type.Equals("LBL") && !insts.Last().Type.Equals("NEXT"))
+             && insts.Count() > 0 && !LadderUnitModel.LabelTypes.Contains(LadderUnitModel.TypeOfNames[insts.Last().Type]))
             {
                 InstHelper.AddInst(insts, "POP");
             }

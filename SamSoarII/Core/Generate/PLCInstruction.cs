@@ -591,7 +591,12 @@ namespace SamSoarII.Core.Generate
                         args[2] = ToCIndex(args[2], "w", "BIT");
                         args[3] = ToCIndex(args[3], "w", "BIT");
                         break;
-
+                    case "STL":
+                        args[1] = ToCStyle(args[1], "r", "BIT");
+                        break;
+                    case "ST":
+                        args[1] = ToCStyle(args[1], "w", "BIT");
+                        break;
                 }
                 /*
                  * 注意如果是复位(RST)了计数器的位(C)的话

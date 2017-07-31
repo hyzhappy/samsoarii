@@ -130,6 +130,10 @@ namespace SamSoarII.Shell.Models
             miNetCut.Click -= OnMenuItemClicked;
             miNetCopy.Click -= OnMenuItemClicked;
             miNetShield.Click -= OnMenuItemClicked;
+            Expand.Click -= OnMenuItemClicked;
+            Collapsed.Click -= OnMenuItemClicked;
+            ExpandAll.Click -= OnMenuItemClicked;
+            CollapsedAll.Click -= OnMenuItemClicked;
             miZoomIn.Command = null;
             miZoomOut.Command = null;
         }
@@ -216,7 +220,21 @@ namespace SamSoarII.Shell.Models
         {
             switch (e.PropertyName)
             {
-                case "IsMasked": miNetShield.IsChecked = parent.Core.IsMasked; break;
+                case "IsMasked":
+                    miNetShield.IsChecked = parent.IsMasked;
+                    miCut.IsEnabled = !parent.IsMasked;
+                    miCopy.IsEnabled = !parent.IsMasked;
+                    miPaste.IsEnabled = !parent.IsMasked;
+                    miDelete.IsEnabled = !parent.IsMasked;
+                    miRowInsert.IsEnabled = !parent.IsMasked;
+                    miRowIBefore.IsEnabled = !parent.IsMasked;
+                    miRowIAfter.IsEnabled = !parent.IsMasked;
+                    miRowIEnd.IsEnabled = !parent.IsMasked;
+                    miRowDelete.IsEnabled = !parent.IsMasked;
+                    miNetRemove.IsEnabled = !parent.IsMasked;
+                    miNetCut.IsEnabled = !parent.IsMasked;
+                    miNetCopy.IsEnabled = !parent.IsMasked;
+                    break;
             }
         }
 
