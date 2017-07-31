@@ -39,6 +39,8 @@ namespace SamSoarII.Core.Generate
         static private int[] ctsv = new int[256];
         /// <summary>栈中元素与前一元素的合并方式（INV，MEP，MEF）</summary>
         static private string[] stackcalcs = new string[256];
+        /// <summary>STL状态</summary>
+        static private string stlvalue = null;
         /// <summary>表示PLC的NETWORK channel的类型结构</summary>
         public class PLCInstNetwork
         {
@@ -263,7 +265,11 @@ namespace SamSoarII.Core.Generate
         static private int user_id = 0;
         static public void InstToCCode(StreamWriter sw, PLCInstruction inst, bool simumode = false)
         {
+            // 断点
             int bp = 0;
+            // 输出类指令的条件
+            string cond = String.Format("_stack_{0:d}", stackTop);
+            if (stlvalue != null) cond = String.Format("({0:s}&&{1:s})", cond, stlvalue);
             // 如果是仿真模式
             if (simumode)
             {
@@ -287,6 +293,13 @@ namespace SamSoarII.Core.Generate
             // 第一次判断指令类型
             switch (inst.Type)
             {
+                // STL状态切换
+                case "STL":
+                    stlvalue = inst[1];
+                    break;
+                case "STLE":
+                    stlvalue = null;
+                    break;
                 // 一般的入栈和逻算
                 case "LD":
                     sw.Write("_stack_{0:d} = {1:s};\n", ++stackTop, inst[1]);
@@ -482,13 +495,13 @@ namespace SamSoarII.Core.Generate
                  * 将当前栈顶的值赋值给线圈
                  */
                 case "OUT":
-                    sw.Write("{0:s} = _stack_{1:d};\n", inst[1], stackTop);
+                    sw.Write("{0:s} = {1:s};\n", inst[1], cond);
                     break;
                 case "OUTIM":
                     if (!simumode && inst[1][0] == 'Y')
-                        sw.Write("OutputIm_Y({0:s}, _stack_{1:d});\n", inst[2], stackTop);
+                        sw.Write("OutputIm_Y({0:s}, {1:s});\n", inst[2], cond);
                     else
-                        sw.Write("{0:s} = _stack_{1:d};\n", inst[1], stackTop);
+                        sw.Write("{0:s} = {1:s};\n", inst[1], cond);
                     break;
                 // 置位和复位
                 /*
@@ -497,26 +510,26 @@ namespace SamSoarII.Core.Generate
                 case "SET":
                 case "SETIM":
                     if (simumode)
-                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, &{3:s}, {2:s});\n",
-                            stackTop, inst[1], inst[2], inst.EnBit);
+                        sw.Write("if ({0:s}) _bitset(&{1:s}, &{3:s}, {2:s});\n",
+                            cond, inst[1], inst[2], inst.EnBit);
                     else if (inst[0].Equals("SETIM") && inst[1][0] == 'Y')
-                        sw.Write("if (_stack_{0:d}) _imyset({1:s}, {2:s});\n",
-                            stackTop, inst[3], inst[2]);
+                        sw.Write("if ({0:s}) _imyset({1:s}, {2:s});\n",
+                            cond, inst[3], inst[2]);
                     else
-                        sw.Write("if (_stack_{0:d}) _bitset(&{1:s}, {2:s});\n",
-                            stackTop, inst[1], inst[2]);
+                        sw.Write("if ({0:s}) _bitset(&{1:s}, {2:s});\n",
+                            cond, inst[1], inst[2]);
                     break;
                 case "RST":
                 case "RSTIM":
                     if (simumode)
-                        sw.Write("if (_stack_{0:d}) {{\n_bitrst(&{1:s}, &{3:s}, {2:s});\n",
-                            stackTop, inst[1], inst[2], inst.EnBit);
+                        sw.Write("if ({0:s}) {{\n_bitrst(&{1:s}, &{3:s}, {2:s});\n",
+                            cond, inst[1], inst[2], inst.EnBit);
                     else if (inst[0].Equals("RSTIM") && inst[1][0] == 'Y')
-                        sw.Write("if (_stack_{0:d}) {{\n_imyrst({1:s}, {2:s});\n",
-                            stackTop, inst[3], inst[2]);
+                        sw.Write("if ({0:s}) {{\n_imyrst({1:s}, {2:s});\n",
+                            cond, inst[3], inst[2]);
                     else
-                        sw.Write("if (_stack_{0:d}) {{\n_bitrst(&{1:s}, {2:s});\n",
-                            stackTop, inst[1], inst[2]);
+                        sw.Write("if ({0:s}) {{\n_bitrst(&{1:s}, {2:s});\n",
+                            cond, inst[1], inst[2]);
                     /*
                      * 注意如果复位的是计数器位，那么计数器值也要跟着复原
                      * 考虑到向下计数器(CTD)复原时需要载入预设值
@@ -533,58 +546,58 @@ namespace SamSoarII.Core.Generate
                     sw.Write("}\n");
                     break;
                 // 交替
-                case "ALT": sw.Write("if (_stack_{0:d}) {1:s}=({1:s} ? 0 : 1);\n", stackTop, inst[1]); break;
+                case "ALT": sw.Write("if ({0:s}) {1:s}=({1:s} ? 0 : 1);\n", cond, inst[1]); break;
                 // 上升沿交替
                 case "ALTP":
-                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1) {2:s}=({2:s} ? 0 : 1);\n", globalCount, stackTop, inst[1]);
+                    sw.Write("if ({3:s} && _global[{0:d}]==0 && _stack_{1:d}==1) {2:s}=({2:s} ? 0 : 1);\n", globalCount, stackTop, inst[1], cond);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 当栈顶为1时运行的计时器
                 case "TON":
                     if (simumode)
-                        sw.Write("_ton(_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
-                            stackTop, inst[1], inst[2], globalCount);
+                        sw.Write("_ton({0:s}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                            cond, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("CI_TON(_stack_{0:d}, {1:s}, {2:s});\n",
-                            stackTop, inst[1], inst[2]);
+                        sw.Write("CI_TON({0:s}, {1:s}, {2:s});\n",
+                            cond, inst[1], inst[2]);
                     globalCount += 1;
                     break;
                 // 当栈顶为0时运行的计时器
                 case "TOF":
                     if (simumode)
-                        sw.Write("_ton(!_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
-                            stackTop, inst[1], inst[2], globalCount);
+                        sw.Write("_ton(!{0:s}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                            cond, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("CI_TOF(_stack_{0:d}, {1:s}, {2:s});\n",
-                            stackTop, inst[1], inst[2]);
+                        sw.Write("CI_TOF({0:s}, {1:s}, {2:s});\n",
+                            cond, inst[1], inst[2]);
                     globalCount += 1;
                     break;
                 // 当栈顶为1时运行，为0时保留当前计时的计时器
                 case "TONR":
                     if (simumode)
-                        sw.Write("_tonr(_stack_{0:d}, {1:s}, {2:s}, &_global[{3:d}]);\n",
-                            stackTop, inst[1], inst[2], globalCount);
+                        sw.Write("_tonr({0:s}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                            cond, inst[1], inst[2], globalCount);
                     else
-                        sw.Write("CI_TONR(_stack_{0:d}, {1:s}, {2:s});\n",
-                            stackTop, inst[1], inst[2]);
+                        sw.Write("CI_TONR({0:s}, {1:s}, {2:s});\n",
+                            cond, inst[1], inst[2]);
                     globalCount += 1;
                     break;
                 // 向上计数器，每次栈顶上升跳变时加1
                 // 当计数到达目标后计数开关设为1
                 case "CTU":
-                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3]);
+                    sw.Write("if ({3:s} && _global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3], cond);
                     sw.Write("if (++{0:s}>={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 向下计数器
                 case "CTD":
-                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3]);
+                    sw.Write("if ({3:s} && _global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3], cond);
                     sw.Write("if (--{0:s}<={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
                 // 向上向下计数器，当当前计数小于目标则加1，大于目标则减1
                 case "CTUD":
-                    sw.Write("if (_global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3]);
+                    sw.Write("if ({3:s} && _global[{0:d}]==0 && _stack_{1:d}==1 && !{2:s})\n", globalCount, stackTop, inst[3], cond);
                     sw.Write("if (({0:s}<{1:s}?++{0:s}:--{0:s})=={1:s}) {2:s} = 1;\n", inst[1], inst[2], inst[3]);
                     sw.Write("_global[{0:d}] = _stack_{1:d};\n", globalCount++, stackTop);
                     break;
@@ -595,7 +608,7 @@ namespace SamSoarII.Core.Generate
                  * 不难发现，这里的for后面多了一个左括号，这是专门为了后面的NEXT指令准备的
                  */
                 case "FOR":
-                    sw.Write("if (_stack_{0:d}) \n", stackTop);
+                    sw.Write("if ({0:s}) \n", cond);
                     sw.Write("for (_global[{0:d}]=0;_global[{0:d}]<{1:s};_global[{0:d}]++) {{\n", globalCount++, inst[1]);
                     break;
                 // NEXT指令，结束前面的FOR循环
@@ -608,7 +621,7 @@ namespace SamSoarII.Core.Generate
                  * 因为这里跳转是用c语言对应的goto功能来实现的
                  */
                 case "JMP":
-                    sw.Write("if (_stack_{0:d}) \n", stackTop);
+                    sw.Write("if ({0:s}) \n", cond);
                     sw.Write("goto LABEL_{0:s};\n", globalCount++, inst[1]);
                     break;
                 // LBL指令，设置跳转标签
@@ -623,97 +636,97 @@ namespace SamSoarII.Core.Generate
                 case "PLSF":
                 case "DPLSF":
                     if (!simumode)
-                        sw.Write("CI_DPLSF((uint8_t)(_stack_{0:d}),(uint32_t)({1:s}),{2:s}, {3:d});\n",
-                            stackTop, inst[1], inst[2], user_id);
+                        sw.Write("CI_DPLSF((uint8_t)({0:s}),(uint32_t)({1:s}),{2:s}, {3:d});\n",
+                            cond, inst[1], inst[2], user_id);
                     break;
                 case "PWM":
                 case "DPWM":
                     if (!simumode)
-                        sw.Write("CI_DPWM((uint8_t)(_stack_{0:d}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], user_id);
+                        sw.Write("CI_DPWM((uint8_t)({0:s}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
+                            cond, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "PLSY":
                 case "DPLSY":
                     if (!simumode)
-                        sw.Write("CI_DPLSY((uint8_t)(_stack_{0:d}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], user_id);
+                        sw.Write("CI_DPLSY((uint8_t)({0:s}),(uint32_t)({1:s}),(uint32_t)({2:s}),{3:s},{4:d});\n",
+                            cond, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "PLSR":
                 case "DPLSR":
                     if (!simumode)
-                        sw.Write("CI_DPLSR((uint8_t)(_stack_{0:d}), &{1:s}, {2:s}, {3:s}, {4:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], user_id);
+                        sw.Write("CI_DPLSR((uint8_t)({0:s}), &{1:s}, {2:s}, {3:s}, {4:d});\n",
+                            cond, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "PLSRD":
                 case "DPLSRD":
                     if (!simumode)
-                        sw.Write("CI_DPLSRD((uint8_t)(_stack_{0:d}), &{1:s}, {2:s}, {3:s}, {4:s}, {5:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], inst[4], user_id);
+                        sw.Write("CI_DPLSRD((uint8_t)({0:s}), &{1:s}, {2:s}, {3:s}, {4:s}, {5:d});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
                     break;
                 case "HCNT":
                     if (!simumode)
-                        sw.Write("CI_HCNT((uint8_t)(_stack_{0:d}),{1:s},{2:s});\n",
-                             stackTop, inst[1], inst[2]);
+                        sw.Write("CI_HCNT((uint8_t)({0:s}),{1:s},{2:s});\n",
+                             cond, inst[1], inst[2]);
                     break;
                 case "PLSNEXT":
                     if (!simumode)
-                        sw.Write("CI_PLSNEXT((uint8_t)(_stack_{0:d}),{1:s});\n",
-                            stackTop, inst[1]);
+                        sw.Write("CI_PLSNEXT((uint8_t)({0:s}),{1:s});\n",
+                            cond, inst[1]);
                     break;
                 case "PLSSTOP":
                     if (!simumode)
-                        sw.Write("CI_STOP((uint8_t)(_stack_{0:d}),{1:s});\n",
-                            stackTop, inst[1]);
+                        sw.Write("CI_STOP((uint8_t)({0:s}),{1:s});\n",
+                            cond, inst[1]);
                     break;
                 case "ZRN":
                 case "DZRN":
                     if (!simumode)
-                        sw.Write("CI_DZRN((uint8_t)(_stack_{0:d}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], inst[4], user_id);
+                        sw.Write("CI_DZRN((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
                     break;
                 case "ZRND":
                 case "DZRND":
                     if (!simumode)
-                        sw.Write("CI_DZRN((uint8_t)(_stack_{0:d}),{1:s},{2:s},{3:s},{4:s},{5:s},{6:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], inst[4], inst[5], user_id);
+                        sw.Write("CI_DZRN((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:s},{6:d});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4], inst[5], user_id);
                     break;
                 case "PTO":
                     if (!simumode)
-                        sw.Write("CI_PTO((uint8_t)(_stack_{0:d}),&{1:s},{2:s},{3:s},{4:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], user_id);
+                        sw.Write("CI_PTO((uint8_t)({0:s}),&{1:s},{2:s},{3:s},{4:d});\n",
+                            cond, inst[1], inst[2], inst[3], user_id);
                     break;
                 case "DRVI":
                 case "DDRVI":
                     if (!simumode)
-                        sw.Write("CI_DDRVI((uint8_t)(_stack_{0:d}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            stackTop, inst[2], inst[1], inst[3], inst[4], user_id);
+                        sw.Write("CI_DDRVI((uint8_t)({0:s}),{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            cond, inst[2], inst[1], inst[3], inst[4], user_id);
                     break;
                 case "DRVA":
                 case "DDRVA":
                     if (!simumode)
-                        sw.Write("CI_DDRVA((uint8_t)(_stack_{0:d)},{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            stackTop, inst[2], inst[1], inst[3], inst[4], user_id);
+                        sw.Write("CI_DDRVA((uint8_t)({0:s)},{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            cond, inst[2], inst[1], inst[3], inst[4], user_id);
                     break;
                 case "PLSA":
                 case "DPLSA":
                     if (!simumode)
-                        sw.Write("CI_DPLSA((uint8_t)(_stack_{0:d}),&{1:s},{2:s},{3:s},{4:s},{5:d});\n",
-                            stackTop, inst[1], inst[2], inst[3], inst[4], user_id);
+                        sw.Write("CI_DPLSA((uint8_t)({0:s}),&{1:s},{2:s},{3:s},{4:s},{5:d});\n",
+                            cond, inst[1], inst[2], inst[3], inst[4], user_id);
                     break;
                 // 实时时钟
                 case "TRD":
                     if (!simumode)
-                        sw.Write("CI_RTC_RDRTC((uint8_t)(_stack_{0:d}),&{1:s});\n",
-                            stackTop, inst[1]);
+                        sw.Write("CI_RTC_RDRTC((uint8_t)({0:s}),&{1:s});\n",
+                            cond, inst[1]);
                     break;
                 case "TWR":
                     if (!simumode)
-                        sw.Write("CI_RTC_SETRTC((uint8_t)(_stack_{0:d}),&{1:s});\n",
-                            stackTop, inst[1]);
+                        sw.Write("CI_RTC_SETRTC((uint8_t)({0:s}),&{1:s});\n",
+                            cond, inst[1]);
                     break;
                 // 默认的其他情况，一般之前要先判断栈顶
                 default:
-                    sw.Write("if (_stack_{0:d}) {{\n", stackTop);
+                    sw.Write("if ({0:s}) {{\n", cond);
                     // 第二回指令判断
                     switch (inst.Type)
                     {

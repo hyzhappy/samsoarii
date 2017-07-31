@@ -58,7 +58,7 @@ namespace SamSoarII.Core.Models
             ADD, ADDD, SUB, SUBD, MUL, MULW, MULD, DIV, DIVW, DIVD, INC, INCD, DEC, DECD,
             TON, TOF, TONR,
             CTU, CTD, CTUD,
-            FOR, NEXT, JMP, LBL, CALL, CALLM,
+            FOR, NEXT, JMP, LBL, CALL, CALLM, STL, STLE, ST,
             SHL, SHLD, SHR, SHRD, ROL, ROLD, ROR, RORD, SHLB, SHRB,
             ATCH, DTCH, EI, DI,
             TRD, TWR,
@@ -78,6 +78,7 @@ namespace SamSoarII.Core.Models
         static public Shapes[] ShapeOfTypes { get; private set; }
         static public Outlines[] OutlineOfTypes { get; private set; }
         static public ValueFormat[][] Formats { get; private set; }
+        static public Types[] LabelTypes { get; private set; }
 
         static LadderUnitModel()
         {
@@ -173,6 +174,9 @@ namespace SamSoarII.Core.Models
             NameOfTypes[(int)Types.LBL] = "LBL";
             NameOfTypes[(int)Types.CALL] = "CALL";
             NameOfTypes[(int)Types.CALLM] = "CALLM";
+            NameOfTypes[(int)Types.STL] = "STL";
+            NameOfTypes[(int)Types.STLE] = "STLE";
+            NameOfTypes[(int)Types.ST] = "ST";
             NameOfTypes[(int)Types.SHL] = "SHL";
             NameOfTypes[(int)Types.SHLD] = "SHLD";
             NameOfTypes[(int)Types.SHR] = "SHR";
@@ -331,6 +335,9 @@ namespace SamSoarII.Core.Models
             ShapeOfTypes[(int)Types.LBL] = Shapes.OutputRect;
             ShapeOfTypes[(int)Types.CALL] = Shapes.OutputRect;
             ShapeOfTypes[(int)Types.CALLM] = Shapes.OutputRect;
+            ShapeOfTypes[(int)Types.STL] = Shapes.OutputRect;
+            ShapeOfTypes[(int)Types.STLE] = Shapes.OutputRect;
+            ShapeOfTypes[(int)Types.ST] = Shapes.OutputRect;
             ShapeOfTypes[(int)Types.SHL] = Shapes.OutputRect;
             ShapeOfTypes[(int)Types.SHLD] = Shapes.OutputRect;
             ShapeOfTypes[(int)Types.SHR] = Shapes.OutputRect;
@@ -483,6 +490,9 @@ namespace SamSoarII.Core.Models
             OutlineOfTypes[(int)Types.LBL] = Outlines.ProgramControl;
             OutlineOfTypes[(int)Types.CALL] = Outlines.ProgramControl;
             OutlineOfTypes[(int)Types.CALLM] = Outlines.ProgramControl;
+            OutlineOfTypes[(int)Types.STL] = Outlines.ProgramControl;
+            OutlineOfTypes[(int)Types.STLE] = Outlines.ProgramControl;
+            OutlineOfTypes[(int)Types.ST] = Outlines.ProgramControl;
             OutlineOfTypes[(int)Types.SHL] = Outlines.Shift;
             OutlineOfTypes[(int)Types.SHLD] = Outlines.Shift;
             OutlineOfTypes[(int)Types.SHR] = Outlines.Shift;
@@ -727,6 +737,14 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.CALLM] =
                 new ValueFormat[] {
                     new ValueFormat("SUB", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.FuncNameRegex }) };
+            Formats[(int)Types.STL] =
+                new ValueFormat[] {
+                    new ValueFormat("L", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }) };
+            Formats[(int)Types.STLE] =
+                new ValueFormat[] { };
+            Formats[(int)Types.ST] =
+                new ValueFormat[] {
+                    new ValueFormat("S", ValueModel.Types.BOOL, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }) };
             Formats[(int)Types.SHLB] =
             Formats[(int)Types.SHRB] =
                 new ValueFormat[] {
@@ -922,7 +940,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("TV", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}),
                     new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
-            
+            LabelTypes = new Types[] { Types.LBL, Types.NEXT, Types.STL, Types.STLE };
         }
         
         #endregion
@@ -1369,7 +1387,7 @@ namespace SamSoarII.Core.Models
                     return NextElements.All(x => { return x.Type == Types.NULL || x.Shape == Shapes.Special || x.Shape == Shapes.Input; }) && NextElements.Count > 0;
                 case Shapes.Output:
                 case Shapes.OutputRect:
-                    if (Type == Types.NEXT || Type == Types.LBL) return true;
+                    if (LabelTypes.Contains(Type)) return true;
                     return NextElements.All(x => { return x.Shape == Shapes.Input || x.Shape == Shapes.Special; }) && NextElements.Count > 0;
                 case Shapes.Special:
                     return NextElements.All(x => { return x.Shape == Shapes.Special || x.Shape == Shapes.Input; }) && NextElements.Count > 0;

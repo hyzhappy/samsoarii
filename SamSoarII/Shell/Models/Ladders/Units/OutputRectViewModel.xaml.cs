@@ -141,6 +141,24 @@ namespace SamSoarII.Shell.Models
                   && mainCanvas.Children.Contains(bottomvalues[i]))
                     mainCanvas.Children.Remove(bottomvalues[i]);
             }
+            switch (Core.Type)
+            {
+                case LadderUnitModel.Types.TON:
+                case LadderUnitModel.Types.TONR:
+                case LadderUnitModel.Types.TOF:
+                    if (bottomvalues[0] == null)
+                    {
+                        bottomvalues[0] = new TextBlock();
+                        Canvas.SetLeft(bottomvalues[0], 60);
+                        Canvas.SetTop(bottomvalues[0], 250);
+                        bottomvalues[0].TextAlignment = TextAlignment.Left;
+                    }
+                    bottomvalues[0].Text = "100 ms";
+                    if (!mainCanvas.Children.Contains(bottomvalues[0]))
+                        mainCanvas.Children.Add(bottomvalues[0]);
+                    break;
+            }
+            
             CommentArea.Children.Clear();
             for (int i = 0; i < maxcount; i++)
             {

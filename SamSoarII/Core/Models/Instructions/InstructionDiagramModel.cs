@@ -117,6 +117,7 @@ namespace SamSoarII.Core.Models
             int stkcount = 0;
             int outcount = 0;
             int forcount = 0;
+            int stlcount = 0;
             Dictionary<string, PLCOriginInst> lbdict = new Dictionary<string, PLCOriginInst>();
             Match match = null;
             
@@ -196,6 +197,49 @@ namespace SamSoarII.Core.Models
                             {
                                 inst.Status = PLCOriginInst.STATUS_ERROR;
                                 inst.Message = String.Format("{0}{1:s}{2}", Properties.Resources.Jump_Mark, inst[1], Properties.Resources.Message_Has_Been_Used);
+                            }
+                            break;
+                        case "STL":
+                            if (stkcount > 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format(Properties.Resources.Message_STL);
+                            }
+                            if (stlcount > 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format(Properties.Resources.Message_STL_Over);
+                            }
+                            if (outcount > 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format(Properties.Resources.Message_STL_OnlyOne);
+                            }
+                            stlcount++;
+                            break;
+                        case "STLE":
+                            if (stkcount > 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format(Properties.Resources.Message_STLE);
+                            }
+                            if (stlcount == 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format(Properties.Resources.Message_STLE_Over);
+                            }
+                            if (outcount > 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format(Properties.Resources.Message_STLE_OnlyOne);
+                            }
+                            stlcount--;
+                            break;
+                        case "ST":
+                            if (stlcount == 0)
+                            {
+                                inst.Status = PLCOriginInst.STATUS_ERROR;
+                                inst.Message = String.Format(Properties.Resources.Message_ST);
                             }
                             break;
                         case "CTU":
@@ -307,6 +351,8 @@ namespace SamSoarII.Core.Models
                     {
                         case "NEXT":
                         case "LBL":
+                        case "STL":
+                        case "STLE":
                             break;
                         default:
                             if (stkcount == 0)

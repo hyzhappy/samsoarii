@@ -2157,4 +2157,25 @@
   <data name="Expand_All" xml:space="preserve">
     <value>全部展开</value>
   </data>
+  <data name="Message_ST" xml:space="preserve">
+    <value>只能在STL-STLE块中使用ST指令。</value>
+  </data>
+  <data name="Message_STL" xml:space="preserve">
+    <value>STL指令不能带条件。</value>
+  </data>
+  <data name="Message_STLE" xml:space="preserve">
+    <value>STLE指令不能带条件。</value>
+  </data>
+  <data name="Message_STLE_Over" xml:space="preserve">
+    <value>前面不存在未结束的STL指令。</value>
+  </data>
+  <data name="Message_STL_Over" xml:space="preserve">
+    <value>前面存在未结束的STL指令。</value>
+  </data>
+  <data name="Message_STLE_OnlyOne" xml:space="preserve">
+    <value>STLE指令不能和别的输出指令在同一个网络下使用。</value>
+  </data>
+  <data name="Message_STL_OnlyOne" xml:space="preserve">
+    <value>STL指令不能和别的输出指令在同一个网络下使用。</value>
+  </data>
 </root>

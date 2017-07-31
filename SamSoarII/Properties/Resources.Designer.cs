@@ -3796,11 +3796,74 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 It&apos;s only allowed to use ST instruction between a STL and a STLE instruction.  的本地化字符串。
+        /// </summary>
+        public static string Message_ST {
+            get {
+                return ResourceManager.GetString("Message_ST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 The stack top value is missing as a condition. 的本地化字符串。
         /// </summary>
         public static string Message_Stack {
             get {
                 return ResourceManager.GetString("Message_Stack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The STL instruction cannot be conditional. 的本地化字符串。
+        /// </summary>
+        public static string Message_STL {
+            get {
+                return ResourceManager.GetString("Message_STL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The STL instruction can not be used in the same network with another output instruction. 的本地化字符串。
+        /// </summary>
+        public static string Message_STL_OnlyOne {
+            get {
+                return ResourceManager.GetString("Message_STL_OnlyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 It already had a STL instruction above here. 的本地化字符串。
+        /// </summary>
+        public static string Message_STL_Over {
+            get {
+                return ResourceManager.GetString("Message_STL_Over", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The SHLE instruction cannot be conditional. 的本地化字符串。
+        /// </summary>
+        public static string Message_STLE {
+            get {
+                return ResourceManager.GetString("Message_STLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The STLE instruction can not be used in the same network with another output instruction. 的本地化字符串。
+        /// </summary>
+        public static string Message_STLE_OnlyOne {
+            get {
+                return ResourceManager.GetString("Message_STLE_OnlyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cannot found a STL instruction corrosponded with it. 的本地化字符串。
+        /// </summary>
+        public static string Message_STLE_Over {
+            get {
+                return ResourceManager.GetString("Message_STLE_Over", resourceCulture);
             }
         }
         
