@@ -624,6 +624,8 @@ namespace SamSoarII
                     Thread.Sleep(10);
                 result = _CheckLadder(handle, showreport);
                 thmngCore.MNGInst.Start();
+                handle.Completed = true;
+                handle.Abort();
             });
             while (!handle.Completed) Thread.Sleep(10);
             if (!showreport)
@@ -728,7 +730,6 @@ namespace SamSoarII
                     break;
                 }
             }
-            handle.Completed = true;
             return result;
         }
 

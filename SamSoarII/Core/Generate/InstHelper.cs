@@ -918,7 +918,7 @@ namespace SamSoarII.Core.Generate
                         case "NEGD": sw.Write("{1:s} = _negd({0:s});\n", inst[1], inst[2]); break;
                         case "XCH": sw.Write("_xch(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
                         case "BWXCH":
-                            if (inst.ProtoType.Children[0].isBitWord)
+                            if (inst.ProtoType.Children[0].IsBitWord)
                                 sw.Write("_xch_bword_to_word({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(1), inst.ToCEnable(1), inst[2], inst.ToCEnable(2));
                             else
                                 sw.Write("_xch_bword_to_word({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(2), inst.ToCEnable(2), inst[1], inst.ToCEnable(1));
@@ -928,7 +928,7 @@ namespace SamSoarII.Core.Generate
                             break;
                         case "XCHD": sw.Write("_xchd(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
                         case "BDXCHD":
-                            if (inst.ProtoType.Children[0].isBitWord)
+                            if (inst.ProtoType.Children[0].IsBitDoubleWord)
                                 sw.Write("_xchd_bdword_to_dword({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(1), inst.ToCEnable(1), inst[2], inst.ToCEnable(2));
                             else
                                 sw.Write("_xchd_bdword_to_dword({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(2), inst.ToCEnable(2), inst[1], inst.ToCEnable(1));

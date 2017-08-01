@@ -206,6 +206,8 @@ namespace SamSoarII.Core.Models
                     case 4: return "UDWORD";
                     case 5: return "BCD";
                     case 6: return "FLOAT";
+                    case 7: return "HEX";
+                    case 8: return "DHEX";
                     default: return "null";
                 }
             }
@@ -220,6 +222,8 @@ namespace SamSoarII.Core.Models
                     case "UDWORD": DataType = 4; break;
                     case "BCD": DataType = 5; break;
                     case "FLOAT": DataType = 6; break;
+                    case "HEX": DataType = 7; break;
+                    case "DHEX": DataType = 8; break;
                 }
             }
         }
@@ -238,27 +242,6 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("DataType"));
                 PropertyChanged(this, new PropertyChangedEventArgs("ShowType"));
                 PropertyChanged(this, new PropertyChangedEventArgs("SelectIndex"));
-            }
-        }
-        
-        public int ByteCount
-        {
-            get
-            {
-                switch (DataType)
-                {
-                    case 1:
-                    case 2:
-                    case 5:
-                        return 2;
-                    case 3:
-                    case 4:
-                        return 4;
-                    case 6:
-                        return 4;
-                    default:
-                        return 1;
-                }
             }
         }
         

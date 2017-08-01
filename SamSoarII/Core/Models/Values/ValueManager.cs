@@ -72,7 +72,9 @@ namespace SamSoarII.Core.Models
             parent = _parent;
             infos = new ValueInfo[InfoCount];
             emptyinfo = new ValueInfo(new ValuePrototype(ValueModel.Bases.NULL, 0), -1);
-            tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.AnyNameRegex }));
+            tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.VarRegex }));
+            wbitmodel = new ValueModel(null, new ValueFormat("WBIT", ValueModel.Types.BOOL, false, false, 0, new Regex[] { ValueModel.WordBitRegex }));
+            bdwordmodel = new ValueModel(null, new ValueFormat("BDW", ValueModel.Types.DWORD, false, false, 0, new Regex[] { ValueModel.BitDoubleWordRegex }));
             for (int i = 0; i < MaxRange.XRange.Count; i++)
                 infos[i + XOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, i), i + XOffset);
             for (int i = 0; i < MaxRange.YRange.Count; i++)
@@ -167,7 +169,9 @@ namespace SamSoarII.Core.Models
         private ValueInfo emptyinfo;
         public ValueInfo EmptyInfo { get { return this.emptyinfo; } }
         private ValueModel tempmodel;
-
+        private ValueModel wbitmodel;
+        private ValueModel bdwordmodel;
+       
         #endregion
 
         #region Shell
@@ -358,8 +362,34 @@ namespace SamSoarII.Core.Models
         {
             get
             {
-                tempmodel.Text = text;
-                return this[tempmodel];
+                try
+                {
+                    tempmodel.Text = text;
+                    if (tempmodel.Base != ValueModel.Bases.NULL)
+                        return this[tempmodel];
+                }
+                catch (ValueParseException)
+                {
+                }
+                try
+                {
+                    wbitmodel.Text = text;
+                    if (wbitmodel.Base != ValueModel.Bases.NULL)
+                        return this[wbitmodel];
+                }
+                catch (ValueParseException)
+                {
+                }
+                try
+                {
+                    bdwordmodel.Text = text;
+                    if (bdwordmodel.Base != ValueModel.Bases.NULL)
+                        return this[bdwordmodel];
+                }
+                catch (ValueParseException)
+                {
+                }
+                return emptyinfo;
             }
         }
 
@@ -711,15 +741,36 @@ namespace SamSoarII.Core.Models
                     for (int j = dataaddr; j < Math.Min(datas.Length, dataaddr + 4); j++)
                         udata[j - dataaddr] = datas[j];
                     value = ValueConverter.GetValue(udata);
-                    switch (vstore.Type)
+                    if (vstore.IsWordBit)
                     {
-                        case ValueModel.Types.BOOL: vstore.Value = (int)(udata[0] & 1); break;
-                        case ValueModel.Types.WORD: vstore.Value = (short)value; break;
-                        case ValueModel.Types.UWORD: vstore.Value = (ushort)value; break;
-                        case ValueModel.Types.BCD: vstore.Value = value > 9999 ? (object)"???" : ValueConverter.ToBCD((ushort)value); break;
-                        case ValueModel.Types.DWORD: vstore.Value = (int)value; break;
-                        case ValueModel.Types.UDWORD: vstore.Value = value; break;
-                        case ValueModel.Types.FLOAT: vstore.Value = ValueConverter.UIntToFloat(value); break;
+                        vstore.Value = (int)((value >> vstore.Flag) & 1);
+                    }
+                    else if (vstore.IsBitWord || vstore.IsBitDoubleWord)
+                    {
+                        value = (uint)(udata[0] & 1);
+                        for (int _addr = dataaddr + 1; _addr < dataaddr + vstore.Flag; _addr++)
+                        {
+                            value = (value << 1) + (uint)(datas[_addr]);
+                        }
+                        if (vstore.IsBitWord)
+                            vstore.Value = (short)value;
+                        else
+                            vstore.Value = (int)value;
+                    }
+                    else
+                    {
+                        switch (vstore.Type)
+                        {
+                            case ValueModel.Types.BOOL: vstore.Value = (int)(udata[0] & 1); break;
+                            case ValueModel.Types.WORD:
+                            case ValueModel.Types.HEX: 
+                            case ValueModel.Types.UWORD: 
+                            case ValueModel.Types.BCD: vstore.Value = (short)value; break;
+                            case ValueModel.Types.DWORD:
+                            case ValueModel.Types.DHEX: 
+                            case ValueModel.Types.UDWORD: vstore.Value = (int)value; break;
+                            case ValueModel.Types.FLOAT: vstore.Value = ValueConverter.UIntToFloat(value); break;
+                        }
                     }
                 }
             }
