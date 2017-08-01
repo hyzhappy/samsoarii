@@ -100,7 +100,7 @@ namespace SamSoarII.Shell.Models
         {
             get
             {
-                return Core.Children;
+                return Core?.Children;
             }
         }
 
@@ -399,9 +399,9 @@ namespace SamSoarII.Shell.Models
             B_RemoveModel.IsEnabled = (Current != null);
             B_RenameModel.IsEnabled = (Current != null);
             B_ModelUp.IsEnabled = (Current != null && LB_Tables.SelectedIndex > 0);
-            B_ModelDown.IsEnabled = (Current != null && LB_Tables.SelectedIndex < ListItems.Count() - 1);
+            B_ModelDown.IsEnabled = (Current != null && LB_Tables.SelectedIndex < ListItems?.Count() - 1);
             B_ModelTop.IsEnabled = (Current != null && LB_Tables.SelectedIndex > 0);
-            B_ModelDown.IsEnabled = (Current != null && LB_Tables.SelectedIndex < ListItems.Count() - 1);
+            B_ModelDown.IsEnabled = (Current != null && LB_Tables.SelectedIndex < ListItems?.Count() - 1);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
