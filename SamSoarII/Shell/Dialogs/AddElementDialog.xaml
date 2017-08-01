@@ -28,9 +28,10 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock x:Name="Themetextblock" Margin="20,20,0,0" Text="{x:Static properties:Resources.Add_Element}"></TextBlock>
-        <Grid Grid.Row="1" Grid.RowSpan="2" Margin="0,5,0,0">
+        <Grid Grid.Row="1" Margin="0,4,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -47,7 +48,17 @@
                 <ComboBox x:Name="DataTypeCombox" HorizontalAlignment="Left" Height="20" Width="100" ItemsSource="{Binding DataTypes}" SelectedIndex="0"></ComboBox>
             </StackPanel>
         </Grid>
-        <Grid x:Name="stackpanel1" Grid.Row="2" Margin="0,5,0,0">
+        <Grid Grid.Row="2" Margin="0,4,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="SP_Flag" Orientation="Vertical" Visibility="Hidden">
+                <TextBlock x:Name="TBL_Flag" Margin="32,0,0,0"/>
+                <TextBox x:Name="TBO_Flag" Text="0" Width="80" Height="21" Margin="18,-2,0,0" TextChanged="OnFlagTextChanged"/>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="stackpanel1" Grid.Row="3" Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -65,7 +76,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <Grid x:Name="stackpanel" Grid.Row="3" Margin="0,5,0,0">
+        <Grid x:Name="stackpanel" Grid.Row="4" Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -80,7 +91,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <StackPanel Orientation="Horizontal" Grid.Row="4">
+        <StackPanel Orientation="Horizontal" Grid.Row="5">
             <Button x:Name="EnsureButton" Content="{x:Static properties:Resources.Ensure}" Height="20" Width="60" Margin="30,0,0,0"></Button>
             <Button x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="20" Width="60" Margin="180,0,0,0"></Button>
         </StackPanel>

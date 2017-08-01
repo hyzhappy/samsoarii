@@ -32,6 +32,7 @@ namespace SamSoarII.Shell.Dialogs
         public string IntrasegmentType { get; set; } = string.Empty;
         public uint IntrasegmentAddr { get; set; } = 0;
         public int AddNums { get; set; }
+        public int Flag { get; set; }
         public event RoutedEventHandler EnsureButtonClick;
         public string[] DataTypes
         {
@@ -173,6 +174,15 @@ namespace SamSoarII.Shell.Dialogs
                 isTypeChanged = false;
                 DataTypeCombox.SelectedIndex = 0;
             }
+        }
+        private void OnFlagTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TBO_Flag.Text.Length == 0)
+            {
+                TBO_Flag.Background = Brushes.White;
+                return;
+            }
+            
         }
     }
 }

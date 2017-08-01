@@ -215,7 +215,7 @@ namespace SamSoarII.Core.Models
                     {
                         case Types.WORD:
                         case Types.DWORD:
-                            if (match.Groups.Count > 3)
+                            if (match.Groups.Count > 4)
                             {
                                 siz = int.Parse(match.Groups[2].Value);
                                 if (siz <= 0 || siz > (format.Type == Types.WORD ? 16 : 32))
@@ -230,7 +230,9 @@ namespace SamSoarII.Core.Models
                             else
                             {
                                 Store = new ValueStore(null, Type);
-                                Store.Value = int.Parse(match.Groups[2].Value);
+                                Store.Value = format.Type == Types.WORD
+                                    ? short.Parse(match.Groups[2].Value)
+                                    : int.Parse(match.Groups[2].Value);
                             }
                             break;
                         case Types.FLOAT:
