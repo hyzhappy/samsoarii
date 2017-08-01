@@ -96,10 +96,10 @@ namespace SamSoarII.Core.Generate
             {
                 return ErrorType.HybridLink;
             }
-            if (!CheckSpecialModel(ladderNetwork))
-            {
-                return ErrorType.Special;
-            }
+            //if (!CheckSpecialModel(ladderNetwork))
+            //{
+            //    return ErrorType.Special;
+            //}
             return ErrorType.None;
         }
         private static bool IsLadderGraphShort(LadderNetworkModel ladderNetwork)

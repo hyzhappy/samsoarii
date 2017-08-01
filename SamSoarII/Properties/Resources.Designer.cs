@@ -259,6 +259,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Bit 的本地化字符串。
+        /// </summary>
+        public static string Bit {
+            get {
+                return ResourceManager.GetString("Bit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Breakpoint List(_B) 的本地化字符串。
         /// </summary>
         public static string Breakpoint_List {
@@ -939,6 +948,15 @@ namespace SamSoarII.Properties {
         public static string DTCH_Inst {
             get {
                 return ResourceManager.GetString("DTCH_Inst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DWord 的本地化字符串。
+        /// </summary>
+        public static string DWord {
+            get {
+                return ResourceManager.GetString("DWord", resourceCulture);
             }
         }
         
@@ -5934,6 +5952,15 @@ namespace SamSoarII.Properties {
         public static string View_Help {
             get {
                 return ResourceManager.GetString("View_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Word 的本地化字符串。
+        /// </summary>
+        public static string Word {
+            get {
+                return ResourceManager.GetString("Word", resourceCulture);
             }
         }
         

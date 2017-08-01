@@ -2157,25 +2157,13 @@
   <data name="Expand_All" xml:space="preserve">
     <value>Expand all</value>
   </data>
-  <data name="Message_ST" xml:space="preserve">
-    <value>It's only allowed to use ST instruction between a STL and a STLE instruction. </value>
+  <data name="Bit" xml:space="preserve">
+    <value>Bit</value>
   </data>
-  <data name="Message_STL" xml:space="preserve">
-    <value>The STL instruction cannot be conditional.</value>
+  <data name="Word" xml:space="preserve">
+    <value>Word</value>
   </data>
-  <data name="Message_STLE" xml:space="preserve">
-    <value>The SHLE instruction cannot be conditional.</value>
-  </data>
-  <data name="Message_STLE_Over" xml:space="preserve">
-    <value>Cannot found a STL instruction corrosponded with it.</value>
-  </data>
-  <data name="Message_STL_Over" xml:space="preserve">
-    <value>It already had a STL instruction above here.</value>
-  </data>
-  <data name="Message_STLE_OnlyOne" xml:space="preserve">
-    <value>The STLE instruction can not be used in the same network with another output instruction.</value>
-  </data>
-  <data name="Message_STL_OnlyOne" xml:space="preserve">
-    <value>The STL instruction can not be used in the same network with another output instruction.</value>
+  <data name="DWord" xml:space="preserve">
+    <value>DWord</value>
   </data>
 </root>

@@ -50,7 +50,7 @@ namespace SamSoarII.Core.Generate
                 var tempVLines = ladderLogicModule.LadderVerticalLines.Where(x => { return x.CountLevel == level; }).ToList();
                 if (tempVLines.Count() != 0)
                 {
-                    Movement(ladderLogicModule, tempVLines);
+                    Movement(ladderLogicModule, tempVLines.OrderBy(v => { return v.Y; }).ToList());
                 }
             }
             MoveResidueEle(ladderLogicModule);
@@ -333,17 +333,8 @@ namespace SamSoarII.Core.Generate
         {
             //移动之前先移动此层级和上一层级之间的元素
             MoveElements(ladderLogicModule, VLines[0].CountLevel);
-            //为确保相同层级的VLine的X坐标相同，计算同一层级中前面所需的最大元素间隔数量
-            int cnt = GetCount(ladderLogicModule, VLines[0]);
-            for (int i = 1; i < VLines.Count; i++)
-            {
-                int temp = GetCount(ladderLogicModule, VLines[i]);
-                if (cnt < temp)
-                {
-                    cnt = temp;
-                }
-            }
-            MoveVerticalLines(ladderLogicModule, VLines, cnt);
+            
+            MoveVerticalLines(ladderLogicModule, VLines);
         }
         //检查VLine周边元素的分布
         private static DirectionStatus CheckVLine(LadderLogicModule ladderLogicModule, LadderUnitModel VLine)
@@ -393,10 +384,10 @@ namespace SamSoarII.Core.Generate
                 return DirectionStatus.Down_Inc;
             }
             /*
-             * Down_d:    
-             * direction:         <--     
+             * Down_d:
+             * direction:         <--
                                 
-                               |   -->        |    
+                               |   -->        |
                      __________|          ____|
              */
             if (ladderLogicModule.LadderElements.Exists(x => { return x.X == p1.X && x.Y == p1.Y; }) && !ladderLogicModule.LadderElements.Exists(x => { return x.X == p2.X && x.Y == p2.Y; }))
@@ -405,64 +396,46 @@ namespace SamSoarII.Core.Generate
             }
             return DirectionStatus.None;
         }
-        private static void MoveVerticalLines(LadderLogicModule ladderLogicModule, List<LadderUnitModel> VLines, int cnt)
+        private static void MoveVerticalLines(LadderLogicModule ladderLogicModule, List<LadderUnitModel> VLines)
         {
+            int cnt = 0;
+            Dictionary<int, int> tempdic = new Dictionary<int, int>();
             for (int j = 0; j < VLines.Count(); j++)
             {
-                var tempVLine = VLines.ElementAt(j);
-                if (tempVLine.X != cnt - 1)
+                cnt = GetCount(ladderLogicModule, VLines[j]);
+                if(j > 0 && (cnt == 0 || IsLinked(VLines[j - 1],VLines[j])))
+                    cnt = tempdic[j - 1];
+                tempdic.Add(j, cnt);
+                MoveVerticalLine(ladderLogicModule, VLines[j], cnt);
+            }
+        }
+        private static bool IsLinked(LadderUnitModel vline1, LadderUnitModel vline2)
+        {
+            return (vline1.Y == vline2.Y - 1) && (vline1.X == vline2.X);
+        }
+        private static void MoveVerticalLine(LadderLogicModule ladderLogicModule, LadderUnitModel vLine, int cnt)
+        {
+            if (vLine.X != cnt - 1)
+            {
+                IntPoint point = new IntPoint();
+                //大于cnt - 1则表示向前移，小于则向后移
+                if (vLine.X > cnt - 1)
                 {
-                    IntPoint point = new IntPoint();
-                    //大于cnt - 1则表示向前移，小于则向后移
-                    if (tempVLine.X > cnt - 1)
+                    //检查VLine周围元素的分布关系，判断是否在移动时需要添加或减少HLine
+                    DirectionStatus status = CheckVLine(ladderLogicModule, vLine);
+                    if (status == DirectionStatus.Down_Inc || status == DirectionStatus.Up_Inc)
                     {
-                        //检查VLine周围元素的分布关系，判断是否在移动时需要添加或减少HLine
-                        DirectionStatus status = CheckVLine(ladderLogicModule, tempVLine);
-                        if (status == DirectionStatus.Down_Inc || status == DirectionStatus.Up_Inc)
+                        if (status == DirectionStatus.Down_Inc)
                         {
-                            if (status == DirectionStatus.Down_Inc)
-                            {
-                                point.Y = tempVLine.Y + 1;
-                            }
-                            else if (status == DirectionStatus.Up_Inc)
-                            {
-                                point.Y = tempVLine.Y;
-                            }
-                            for (int k = cnt; k <= tempVLine.X; k++)
-                            {
-                                point.X = k;
-                                if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == point.X && x.Y == point.Y; }))
-                                {
-                                    LadderUnitModel HLine = new LadderUnitModel(null, LadderUnitModel.Types.HLINE);
-                                    HLine.X = point.X;
-                                    HLine.Y = point.Y;
-                                    ladderLogicModule.ReplaceElement(HLine);
-                                }
-                            }
+                            point.Y = vLine.Y + 1;
                         }
-                        if (status == DirectionStatus.Down_Dec || status == DirectionStatus.Up_Dec)
+                        else if (status == DirectionStatus.Up_Inc)
                         {
-                            if (status == DirectionStatus.Down_Dec)
-                            {
-                                point.Y = tempVLine.Y + 1;
-                            }
-                            else
-                            {
-                                point.Y = tempVLine.Y;
-                            }
-                            for (int k = cnt; k <= tempVLine.X; k++)
-                            {
-                                point.X = k;
-                                ladderLogicModule.RemoveElement(point.X,point.Y);
-                            }
+                            point.Y = vLine.Y;
                         }
-                    }
-                    else
-                    {
-                        for (int k = tempVLine.X + 1; k <= cnt - 1; k++)
+                        for (int k = cnt; k <= vLine.X; k++)
                         {
                             point.X = k;
-                            point.Y = tempVLine.Y + 1;
                             if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == point.X && x.Y == point.Y; }))
                             {
                                 LadderUnitModel HLine = new LadderUnitModel(null, LadderUnitModel.Types.HLINE);
@@ -472,10 +445,41 @@ namespace SamSoarII.Core.Generate
                             }
                         }
                     }
-                    ladderLogicModule.RemoveVerticalLine(tempVLine.X,tempVLine.Y);
-                    tempVLine.X = cnt - 1;
-                    ladderLogicModule.ReplaceVerticalLine(tempVLine);
+                    if (status == DirectionStatus.Down_Dec || status == DirectionStatus.Up_Dec)
+                    {
+                        if (status == DirectionStatus.Down_Dec)
+                        {
+                            point.Y = vLine.Y + 1;
+                        }
+                        else
+                        {
+                            point.Y = vLine.Y;
+                        }
+                        for (int k = cnt; k <= vLine.X; k++)
+                        {
+                            point.X = k;
+                            ladderLogicModule.RemoveElement(point.X, point.Y);
+                        }
+                    }
                 }
+                else
+                {
+                    for (int k = vLine.X + 1; k <= cnt - 1; k++)
+                    {
+                        point.X = k;
+                        point.Y = vLine.Y + 1;
+                        if (!ladderLogicModule.LadderElements.Exists(x => { return x.X == point.X && x.Y == point.Y; }))
+                        {
+                            LadderUnitModel HLine = new LadderUnitModel(null, LadderUnitModel.Types.HLINE);
+                            HLine.X = point.X;
+                            HLine.Y = point.Y;
+                            ladderLogicModule.ReplaceElement(HLine);
+                        }
+                    }
+                }
+                ladderLogicModule.RemoveVerticalLine(vLine.X, vLine.Y);
+                vLine.X = cnt - 1;
+                ladderLogicModule.ReplaceVerticalLine(vLine);
             }
         }
         //移动相应层级之前的元素
@@ -716,49 +720,59 @@ namespace SamSoarII.Core.Generate
         }
         private static int GetCount(LadderLogicModule ladderLogicModule, LadderUnitModel VLine)
         {
-            int cnt;
-            var tempEle = ladderLogicModule.LadderElements.Where(x => 
+            int cnt = 0, tempCnt = 0;
+            var tempEle = ladderLogicModule.LadderElements.Where(x =>
                 { return x.Shape != LadderUnitModel.Shapes.Output && x.Shape != LadderUnitModel.Shapes.OutputRect && x.Shape != LadderUnitModel.Shapes.HLine; });
-            //前一层级的VLine有三个方向，上，同一层，下
-            var tempList1 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y - 1 && x.CountLevel < VLine.CountLevel; });
-            var tempList2 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y && x.CountLevel < VLine.CountLevel; });
-            var tempList3 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y + 1 && x.CountLevel < VLine.CountLevel; });
+            var templist = ladderLogicModule.LadderVerticalLines.Where(x => { return x.CountLevel < VLine.CountLevel; });
             cnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X; }).Count();
-            int tempCnt = 0;
             tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; }).Count();
-            cnt = Math.Max(cnt,tempCnt);
+            cnt = Math.Max(tempCnt, cnt);
+            //前一层级的VLine有三个方向，上，同一层，下
+            var tempList1 = templist.Where(x => { return x.Y == VLine.Y - 1; });
+            var tempList2 = templist.Where(x => { return x.Y == VLine.Y; });
+            var tempList3 = templist.Where(x => { return x.Y == VLine.Y + 1; });
+            bool isSuccess = false;
             if (tempList1.Count() != 0)
             {
                 var tempVLine1 = tempList1.OrderBy(x => { return x.CountLevel; }).Last();
-                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X && x.X > tempVLine1.X; }).Count() + tempVLine1.X + 1;
-                if (cnt < tempCnt)
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X && x.X > tempVLine1.X; }).Count();
+                if (tempCnt > 0)
                 {
-                    cnt = tempCnt;
+                    cnt = Math.Max(tempCnt + tempVLine1.X + 1, cnt);
+                    isSuccess = true;
                 }
             }
             if (tempList2.Count() != 0)
             {
                 var tempVLine2 = tempList2.OrderBy(x => { return x.CountLevel; }).Last();
-                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X && x.X > tempVLine2.X; }).Count() + tempVLine2.X + 1;
-                if (cnt < tempCnt)
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X && x.X > tempVLine2.X; }).Count();
+                if (tempCnt > 0)
                 {
-                    cnt = tempCnt;
+                    cnt = Math.Max(tempCnt + tempVLine2.X + 1, cnt);
+                    isSuccess = true;
                 }
-                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine2.X; }).Count() + tempVLine2.X + 1;
-                if (cnt < tempCnt)
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine2.X; }).Count();
+                if (tempCnt > 0)
                 {
-                    cnt = tempCnt;
+                    cnt = Math.Max(tempCnt + tempVLine2.X + 1, cnt);
+                    isSuccess = true;
                 }
             }
             if (tempList3.Count() != 0)
             {
                 var tempVLine3 = tempList3.OrderBy(x => { return x.CountLevel; }).Last();
-                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine3.X; }).Count() + tempVLine3.X + 1;
-                if (cnt < tempCnt)
+                tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine3.X; }).Count();
+                if (tempCnt > 0)
                 {
-                    cnt = tempCnt;
+                    cnt = Math.Max(tempCnt + tempVLine3.X + 1, cnt);
+                    isSuccess = true;
                 }
             }
+            if (cnt == 0 && VLine.Y == ladderLogicModule.startY)
+            {
+                cnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X; }).Count();
+            }
+            if (!isSuccess && templist.Count() > 0) cnt = 0;
             return cnt;
         }
         private static void RemoveEmptyLines(LadderNetworkModel ladderNetwork)
