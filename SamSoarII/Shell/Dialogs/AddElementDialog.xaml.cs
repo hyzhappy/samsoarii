@@ -33,6 +33,7 @@ namespace SamSoarII.Shell.Dialogs
         public uint IntrasegmentAddr { get; set; } = 0;
         public int AddNums { get; set; }
         public int Flag { get; set; }
+        private bool flaglegal;
         public event RoutedEventHandler EnsureButtonClick;
         public string[] DataTypes
         {
@@ -44,17 +45,19 @@ namespace SamSoarII.Shell.Dialogs
                     case 1:
                     case 2:
                     case 3:
+                        return new string[] { "BOOL", "WORD", "DWORD" };
                     case 4:
                     case 5:
                         return new string[] { "BOOL" };
                     case 6:
                     case 7:
                     case 8:
+                        return new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX", "BOOL" };
                     case 9:
                     case 10:
                     case 11:
                     case 12:
-                        return new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT" };
+                        return new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX"};
                     default:
                         return null;
                 }
@@ -89,6 +92,11 @@ namespace SamSoarII.Shell.Dialogs
         }
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!flaglegal)
+            {
+                LocalizedMessageBox.Show(String.Format("{0:s}{1:s}", TBL_Flag.Text, Properties.Resources.is_illegal), LocalizedMessageIcon.Warning);
+                return;
+            }
             ElementAddressType Type = (ElementAddressType)Enum.ToObject(typeof(ElementAddressType), comboBox.SelectedIndex);
             Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (Type == ElementAddressType.H || Type == ElementAddressType.K)
@@ -162,6 +170,41 @@ namespace SamSoarII.Shell.Dialogs
                     stackpanel1.Visibility = Visibility.Visible;
                 }
             }
+            UpdateFlagWidget();
+        }
+        private void OnDataTypeChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateFlagWidget();
+        }
+        private void UpdateFlagWidget()
+        {
+            TBO_Flag.Text = "";
+            SP_Flag.Visibility = Visibility.Hidden;
+            flaglegal = true;
+            switch (comboBox.Text)
+            {
+                case "X":
+                case "Y":
+                case "S":
+                case "M":
+                    if (DataTypeCombox.Text.Equals("WORD") || DataTypeCombox.Text.Equals("DWORD"))
+                    {
+                        TBL_Flag.Text = Properties.Resources.Length;
+                        SP_Flag.Visibility = Visibility.Visible;
+                        flaglegal = false;
+                    }
+                    break;
+                case "D":
+                case "V":
+                case "Z":
+                    if (DataTypeCombox.Text.Equals("BOOL"))
+                    {
+                        TBL_Flag.Text = Properties.Resources.Data_Bit;
+                        SP_Flag.Visibility = Visibility.Visible;
+                        flaglegal = false;
+                    }
+                    break;
+            }
         }
         public void Dispose()
         {
@@ -177,12 +220,37 @@ namespace SamSoarII.Shell.Dialogs
         }
         private void OnFlagTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TBO_Flag.Text.Length == 0)
+            flaglegal = true;
+            switch (comboBox.Text)
             {
-                TBO_Flag.Background = Brushes.White;
-                return;
+                case "X": case "Y": case "S": case "M":
+                    if (DataTypeCombox.Text.Equals("WORD") || DataTypeCombox.Text.Equals("DWORD"))
+                    {
+                        try { StartAddr = uint.Parse(textBox.Text); Flag = int.Parse(TBO_Flag.Text); }
+                        catch (Exception) { flaglegal &= false; }
+                        flaglegal &= Flag > 0;
+                        flaglegal &= Flag <= (DataTypeCombox.Text.Equals("WORD") ? 16 : 32);
+                        Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+                        switch (comboBox.Text)
+                        {
+                            case "X": flaglegal &= StartAddr + Flag <= device.XRange.End; break;
+                            case "Y": flaglegal &= StartAddr + Flag <= device.YRange.End; break;
+                            case "S": flaglegal &= StartAddr + Flag <= device.SRange.End; break;
+                            case "M": flaglegal &= StartAddr + Flag <= device.MRange.End; break;
+                        }
+                    }
+                    break;
+                case "D": case "V": case "Z":
+                    if (DataTypeCombox.Text.Equals("BOOL"))
+                    {
+                        try { Flag = int.Parse(TBO_Flag.Text, System.Globalization.NumberStyles.HexNumber); }
+                        catch (Exception) { flaglegal &= false; }
+                        flaglegal &= TBO_Flag.Text.Length != 1;
+                    }
+                    break;
             }
-            
+            TBO_Flag.Background = TBO_Flag.Text.Length > 0 && !flaglegal
+                ? Brushes.Red : Brushes.White;
         }
     }
 }

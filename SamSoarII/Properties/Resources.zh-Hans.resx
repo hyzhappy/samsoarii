@@ -2166,4 +2166,25 @@
   <data name="DWord" xml:space="preserve">
     <value>双字</value>
   </data>
+  <data name="Message_ST" xml:space="preserve">
+    <value>ST指令不能在STL范围外使用。</value>
+  </data>
+  <data name="Message_STL" xml:space="preserve">
+    <value>STL指令不能带条件。</value>
+  </data>
+  <data name="Message_STLE" xml:space="preserve">
+    <value>STLE指令不能带条件。</value>
+  </data>
+  <data name="Message_STLE_OnlyOne" xml:space="preserve">
+    <value>STLE指令不能和别的输出指令在同一个网络下使用。</value>
+  </data>
+  <data name="Message_STLE_Over" xml:space="preserve">
+    <value>不存在未结束的STL指令。</value>
+  </data>
+  <data name="Message_STL_OnlyOne" xml:space="preserve">
+    <value>STL指令不能和别的输出指令在同一个网络下使用。</value>
+  </data>
+  <data name="Message_STL_Over" xml:space="preserve">
+    <value>已存在未结束的STL指令。</value>
+  </data>
 </root>

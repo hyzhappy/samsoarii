@@ -2166,4 +2166,25 @@
   <data name="DWord" xml:space="preserve">
     <value>DWord</value>
   </data>
+  <data name="Message_ST" xml:space="preserve">
+    <value>Cannot used ST instruction outside the range of STL</value>
+  </data>
+  <data name="Message_STL" xml:space="preserve">
+    <value>Cannot used STL instruction with logical condition.</value>
+  </data>
+  <data name="Message_STLE" xml:space="preserve">
+    <value>Cannot used STLE instruction with logical condition.</value>
+  </data>
+  <data name="Message_STLE_OnlyOne" xml:space="preserve">
+    <value>The STLE instruction can not be used in the same network with another output instruction.</value>
+  </data>
+  <data name="Message_STLE_Over" xml:space="preserve">
+    <value>Cannot found STL instruction above.</value>
+  </data>
+  <data name="Message_STL_OnlyOne" xml:space="preserve">
+    <value>The STL instruction can not be used in the same network with another output instruction.</value>
+  </data>
+  <data name="Message_STL_Over" xml:space="preserve">
+    <value>It already had a STL instruction above.</value>
+  </data>
 </root>

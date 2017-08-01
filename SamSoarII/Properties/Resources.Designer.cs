@@ -3814,7 +3814,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 It&apos;s only allowed to use ST instruction between a STL and a STLE instruction.  的本地化字符串。
+        ///   查找类似 Cannot used ST instruction outside the range of STL 的本地化字符串。
         /// </summary>
         public static string Message_ST {
             get {
@@ -3832,7 +3832,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 The STL instruction cannot be conditional. 的本地化字符串。
+        ///   查找类似 Cannot used STL instruction with logical condition. 的本地化字符串。
         /// </summary>
         public static string Message_STL {
             get {
@@ -3850,7 +3850,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 It already had a STL instruction above here. 的本地化字符串。
+        ///   查找类似 It already had a STL instruction above. 的本地化字符串。
         /// </summary>
         public static string Message_STL_Over {
             get {
@@ -3859,7 +3859,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 The SHLE instruction cannot be conditional. 的本地化字符串。
+        ///   查找类似 Cannot used STLE instruction with logical condition. 的本地化字符串。
         /// </summary>
         public static string Message_STLE {
             get {
@@ -3877,7 +3877,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Cannot found a STL instruction corrosponded with it. 的本地化字符串。
+        ///   查找类似 Cannot found STL instruction above. 的本地化字符串。
         /// </summary>
         public static string Message_STLE_Over {
             get {
