@@ -24,19 +24,21 @@ namespace SamSoarII.Shell.Dialogs
         {
             InitializeComponent();
             core = _core;
-            TB_Name.Text = Store.Name;
+            TB_Name.Text = String.Format("{0:s} = ", Store.Name);
             TB_Value.Text = Store.ShowValue;
-            switch (Store.Parent.Prototype.Base)
+            switch (Store.Type)
             {
-                case ValueModel.Bases.X:
-                case ValueModel.Bases.Y:
-                    InitializeForce();
-                    break;
-                case ValueModel.Bases.M:
-                case ValueModel.Bases.S:
-                case ValueModel.Bases.C:
-                case ValueModel.Bases.T:
-                    InitializeBit();
+                case ValueModel.Types.BOOL:
+                    switch (Store.Base)
+                    {
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                            InitializeForce();
+                            break;
+                        default:
+                            InitializeBit();
+                            break;
+                    }
                     break;
                 default:
                     InitializeWord();
@@ -95,13 +97,16 @@ namespace SamSoarII.Shell.Dialogs
                 switch (VMCore.Type)
                 {
                     case ValueModel.Types.WORD:
+                    case ValueModel.Types.BCD:
                         CB_Type.Items.Add("WORD");
                         CB_Type.Items.Add("UWORD");
                         CB_Type.Items.Add("BCD");
+                        CB_Type.Items.Add("HEX");
                         break;
                     case ValueModel.Types.DWORD:
                         CB_Type.Items.Add("DWORD");
                         CB_Type.Items.Add("UDWORD");
+                        CB_Type.Items.Add("DHEX");
                         break;
                     case ValueModel.Types.FLOAT:
                         CB_Type.Items.Add("FLOAT");
@@ -117,6 +122,8 @@ namespace SamSoarII.Shell.Dialogs
                 CB_Type.Items.Add("UDWORD");
                 CB_Type.Items.Add("BCD");
                 CB_Type.Items.Add("FLOAT");
+                CB_Type.Items.Add("HEX");
+                CB_Type.Items.Add("DHEX");
                 CB_Type.SelectedIndex = MECore.SelectIndex;
             }
             BT_Write.Visibility = Visibility.Visible;
@@ -160,7 +167,7 @@ namespace SamSoarII.Shell.Dialogs
             }
             if (sender == BT_Write)
             {
-                Store.Write(TB_Value.Text, false);
+                Store.Write(TB_Value.Text, false, ValueModel.TypeOfNames[CB_Type.Text]);
             }
         }
 
@@ -233,6 +240,18 @@ namespace SamSoarII.Shell.Dialogs
                         break;
                     case "FLOAT":
                         float.Parse(TB_Value.Text);
+                        break;
+                    case "HEX":
+                        if (TB_Value.Text.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                            UInt16.Parse(TB_Value.Text.Substring(2), System.Globalization.NumberStyles.HexNumber);
+                        else
+                            UInt16.Parse(TB_Value.Text, System.Globalization.NumberStyles.HexNumber);
+                        break;
+                    case "DHEX":
+                        if (TB_Value.Text.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                            UInt32.Parse(TB_Value.Text.Substring(2), System.Globalization.NumberStyles.HexNumber);
+                        else
+                            UInt32.Parse(TB_Value.Text, System.Globalization.NumberStyles.HexNumber);
                         break;
                 }
                 TB_Value.Background = Brushes.White;

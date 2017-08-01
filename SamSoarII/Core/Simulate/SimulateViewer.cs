@@ -21,8 +21,6 @@ namespace SamSoarII.Core.Simulate
             DllModel.SimulateException += OnSimulateException;
             parent.Aborted += OnSimulateAborted;
             TimeSpan = 100;
-            stores = new ObservableCollection<ValueStore>();
-            stores.CollectionChanged += OnStoresChanged;
             cursor = new BreakpointCursor(this);
         }
         
@@ -32,26 +30,6 @@ namespace SamSoarII.Core.Simulate
         public SimulateManager Parent { get { return this.parent; } }
         public ValueManager ValueManager { get { return parent.IFParent.MNGValue; } }
         public SimulateDllModel DllModel { get { return parent.DllModel; } }
-
-        private ObservableCollection<ValueStore> stores;
-        public IList<ValueStore> Stores { get { return this.stores; } }
-        private void OnStoresChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-                foreach (ValueStore vstore in e.NewItems)
-                {
-                    if (vstore.IsLocked) DllModel.Lock(vstore.Name);
-                    if (!vstore.IsLocked) DllModel.Unlock(vstore.Name);
-                    vstore.PropertyChanged += OnStorePropertyChanged;
-                }
-            if (e.OldItems != null)
-                foreach (ValueStore vstore in e.OldItems)
-                {
-                    //DllModel.Unlock(vstore.Name);
-                    vstore.PropertyChanged -= OnStorePropertyChanged;
-                }
-
-        }
         
         private bool isenable;
         public bool IsEnable
@@ -64,39 +42,11 @@ namespace SamSoarII.Core.Simulate
             {
                 if (isenable == value) return;
                 this.isenable = value;
-                foreach (ValueStore vstore in stores)
-                {
-                    vstore.PropertyChanged -= OnStorePropertyChanged;
-                }
-                stores.Clear();
                 if (isenable)
-                {
                     ValueManager.PostValueStoreEvent += OnReceiveValueStoreEvent;
-                    foreach (ValueInfo vinfo in ValueManager)
-                    {
-                        vinfo.StoresChanged += OnValueInfoStoresChanged;
-                        foreach (ValueStore vstore in vinfo.Stores)
-                            stores.Add(vstore);
-                    }
-                }
                 else
-                {
                     ValueManager.PostValueStoreEvent -= OnReceiveValueStoreEvent;
-                    foreach (ValueInfo vinfo in ValueManager)
-                    {
-                        vinfo.StoresChanged -= OnValueInfoStoresChanged;
-                    }
-                }
             }
-        }
-        private void OnValueInfoStoresChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-                foreach (ValueStore vstore in e.NewItems)
-                    stores.Add(vstore);
-            if (e.OldItems != null)
-                foreach (ValueStore vstore in e.OldItems)
-                    stores.Remove(vstore);
         }
 
         #endregion
@@ -105,19 +55,39 @@ namespace SamSoarII.Core.Simulate
         
         protected override void Handle()
         {
-            foreach (ValueStore vstore in stores)
-            {
-                switch (vstore.Type)
+            foreach (ValueInfo vinfo in ValueManager)
+                foreach (ValueStore vstore in vinfo.Stores)
                 {
-                    case ValueModel.Types.BOOL: vstore.Value = DllModel.GetValue_Bit(vstore.Name); break;
-                    case ValueModel.Types.WORD: vstore.Value = (Int16)DllModel.GetValue_Word(vstore.Name); break;
-                    case ValueModel.Types.UWORD: vstore.Value = (UInt16)DllModel.GetValue_Word(vstore.Name); break;
-                    case ValueModel.Types.DWORD: vstore.Value = (Int32)DllModel.GetValue_DWord(vstore.Name); break;
-                    case ValueModel.Types.UDWORD: vstore.Value = (UInt32)DllModel.GetValue_DWord(vstore.Name); break;
-                    case ValueModel.Types.FLOAT: vstore.Value = (float)DllModel.GetValue_Float(vstore.Name); break;
-                    case ValueModel.Types.BCD: vstore.Value = (Int16)DllModel.GetValue_Word(vstore.Name); break;
+                    if (vstore.Parent == null || vstore.VisualRefNum == 0) continue;
+                    if (vstore.IsWordBit)
+                    {
+                        int value = DllModel.GetValue_Word(vstore.Parent.Name);
+                        vstore.Value = ((value >> vstore.Flag) & 1);
+                    }
+                    else if (vstore.IsBitWord || vstore.IsBitDoubleWord)
+                    {
+                        int[] values = DllModel.GetValue_Bit(vstore.Parent.Name, vstore.Flag);
+                        int value = 0;
+                        for (int i = vstore.Flag - 1; i >= 0; i--)
+                            value = (value << 1) + (values[i] & 1);
+                        vstore.Value = vstore.IsBitWord ? (short)value : (int)value;
+                    }
+                    else
+                    {
+                        switch (vstore.Type)
+                        {
+                            case ValueModel.Types.BOOL: vstore.Value = DllModel.GetValue_Bit(vstore.Name); break;
+                            case ValueModel.Types.WORD: vstore.Value = (short)DllModel.GetValue_Word(vstore.Name); break;
+                            case ValueModel.Types.UWORD:
+                            case ValueModel.Types.BCD:
+                            case ValueModel.Types.HEX: vstore.Value = (short)DllModel.GetValue_Word(vstore.Name); break;
+                            case ValueModel.Types.DWORD:
+                            case ValueModel.Types.UDWORD:
+                            case ValueModel.Types.DHEX: vstore.Value = (int)DllModel.GetValue_DWord(vstore.Name); break;
+                            case ValueModel.Types.FLOAT: vstore.Value = (float)DllModel.GetValue_Float(vstore.Name); break;
+                        }
+                    }
                 }
-            }
             // 若检查到暂停状态的改变则进行处理
             if (SimulateDllModel.GetBPPause() > 0 && cursor.Address < 0)
             {
@@ -182,36 +152,61 @@ namespace SamSoarII.Core.Simulate
         {
             ValueStore store = (ValueStore)sender;
             if (e.ToLock)
-            {
-                DllModel.Lock(store.Name);
+            {   
+                DllModel.Lock(store.Parent.Name, store.IsBitWord || store.IsBitDoubleWord ? store.Flag : 1);
                 store.IsLocked = true;
             }
             if (e.Unlock)
             {
-                DllModel.Unlock(store.Name);
+                DllModel.Unlock(store.Parent.Name, store.IsBitWord || store.IsBitDoubleWord ? store.Flag : 1);
                 store.IsLocked = false;
             }
             if (e.UnlockAll)
             {
-                foreach (ValueStore vstore in stores)
-                    if (vstore.IsLocked) vstore.Unlock();
+                foreach (ValueInfo vinfo in ValueManager)
+                    foreach (ValueStore vstore in vinfo.Stores)
+                        if (vstore.IsLocked) vstore.Unlock();
             }
             if (e.IsWrite)
             {
-                switch (store.Type)
+                if (store.IsWordBit)
                 {
-                    case ValueModel.Types.BOOL:
-                        DllModel.SetValue_Bit(store.Name, e.ToValue.ToString().Equals("ON") ? 1 : 0); break;
-                    case ValueModel.Types.WORD:
-                    case ValueModel.Types.UWORD:
-                        DllModel.SetValue_Word(store.Name, Int32.Parse(e.ToValue.ToString())); break;
-                    case ValueModel.Types.BCD:
-                        DllModel.SetValue_Word(store.Name, (Int32)(ValueConverter.ToBCD(UInt16.Parse(e.ToValue.ToString())))); break;
-                    case ValueModel.Types.DWORD:
-                    case ValueModel.Types.UDWORD:
-                        DllModel.SetValue_DWord(store.Name, Int64.Parse(e.ToValue.ToString())); break;
-                    case ValueModel.Types.FLOAT:
-                        DllModel.SetValue_Float(store.Name, double.Parse(e.ToValue.ToString())); break;
+                    int value = DllModel.GetValue_Word(store.Parent.Name);
+                    if (e.ToValue.ToString().Equals("ON"))
+                        value |=  (1 << store.Flag);
+                    else
+                        value &= ~(1 << store.Flag);
+                    DllModel.SetValue_Word(store.Parent.Name, value);
+                }
+                else if (store.IsBitWord || store.IsBitDoubleWord)
+                {
+                    int[] bits = DllModel.GetValue_Bit(store.Parent.Name, store.Flag);
+                    int value = int.Parse(e.ToValue.ToString());
+                    for (int i = 0; i < bits.Length; i++)
+                    {
+                        bits[i] = value & 1;
+                        value >>= 1;
+                    }
+                    DllModel.SetValue_Bit(store.Parent.Name, store.Flag, bits);
+                }
+                else
+                {
+                    switch (store.Type)
+                    {
+                        case ValueModel.Types.BOOL:
+                            DllModel.SetValue_Bit(store.Name, e.ToValue.ToString().Equals("ON") ? 1 : 0);
+                            break;
+                        case ValueModel.Types.WORD:
+                        case ValueModel.Types.UWORD:
+                            DllModel.SetValue_Word(store.Name, Int32.Parse(e.ToValue.ToString())); break;
+                        case ValueModel.Types.BCD:
+                            DllModel.SetValue_Word(store.Name, (Int32)(ValueConverter.ToBCD(UInt16.Parse(e.ToValue.ToString())))); break;
+                        case ValueModel.Types.DWORD:
+                        case ValueModel.Types.UDWORD:
+                            DllModel.SetValue_DWord(store.Name, Int64.Parse(e.ToValue.ToString())); break;
+                        case ValueModel.Types.FLOAT:
+                            DllModel.SetValue_Float(store.Name, double.Parse(e.ToValue.ToString())); break;
+                    }
                 }
             }
         }

@@ -170,8 +170,20 @@ namespace SamSoarII.Shell.Windows
                 {
                     for (int i = 0,j = 0; j < dialog.AddNums; j++)
                     {
-                        MonitorElement element = new MonitorElement(table, 
-                            dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr + i), dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr));
+                        MonitorElement element = null;
+                        if (dialog.IsWordBit)
+                        {
+                            int addr = dialog.Flag + i;
+                            element = new MonitorElement(table,
+                                dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr + (addr>>4)), 
+                                dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr), addr&15);
+                        }
+                        else
+                        {
+                            element = new MonitorElement(table,
+                                dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr + i), 
+                                dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr), dialog.Flag);
+                        }
                         if(!table.Contains(element))
                             table.Children.Add(element);
                         i += GetSpan(element);
@@ -215,7 +227,7 @@ namespace SamSoarII.Shell.Windows
                                     table.Children.Add(ele1);
                                     if (value.Intra != ValueModel.Bases.NULL)
                                     {
-                                        MonitorElement ele = new MonitorElement(table,1,value.Intra.ToString(),value.IntraOffset,string.Empty,0);
+                                        MonitorElement ele = new MonitorElement(table,1,value.Intra.ToString(),value.IntraOffset,string.Empty,0,1);
                                         if (!table.Contains(ele)) table.Children.Add(ele); else ele.Dispose();
                                     }
                                 }
@@ -248,7 +260,8 @@ namespace SamSoarII.Shell.Windows
                     if (!IsElementAdded(dialog, element))
                     {
                         MonitorElement newelement = new MonitorElement(SelectedTable,
-                               dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr), dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr));
+                               dialog.DataType, dialog.AddrType, (int)(dialog.StartAddr), 
+                               dialog.IntrasegmentType, (int)(dialog.IntrasegmentAddr), dialog.Flag);
                         int id = TableElements.IndexOf(element);
                         TableElements[id] = newelement;
                         dialog.Close();

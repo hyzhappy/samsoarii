@@ -225,5 +225,44 @@ extern void CI_DDRVI(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, 
 extern void CI_DDRVA(uint8_t en, uint32_t pulsenum, uint32_t freq, uint16_t Yn, uint16_t dir, uint16_t use_id);
 extern void CI_DPLSA(uint8_t en, uint32_t *plsParam, uint32_t timechange, uint16_t Yn, uint16_t dir, uint16_t use_id);
 
-void _imyset(int32_t Yn, int32_t size);
-void _imyrst(int32_t Yn, int32_t size);
+void _imyset(int16_t Yn, int16_t size);
+
+void _imyrst(int16_t Yn, int16_t size);
+
+void _set_wbit(int16_t* src, int16_t loc, int16_t size, int16_t value);
+
+int32_t _get_wbit(int16_t* src, int16_t loc);
+
+void _mov_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int16_t size);
+
+void _mov_wbit_to_bit(int16_t* src, int16_t sloc, int32_t* dst, int16_t size);
+
+void _mov_bit_to_wbit(int32_t* src, int16_t* dst, int16_t dloc, int16_t size);
+
+void _shl_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int16_t size, int16_t move);
+
+void _shl_wbit_to_bit(int16_t* src, int16_t sloc, int32_t* dst, int16_t size, int16_t move);
+
+void _shl_bit_to_wbit(int32_t* src, int16_t* dst, int16_t dloc, int16_t size, int16_t move);
+
+void _shr_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int16_t size, int16_t move);
+
+void _shr_wbit_to_bit(int16_t* src, int16_t sloc, int32_t* dst, int16_t size, int16_t move);
+
+void _shr_bit_to_wbit(int32_t* src, int16_t* dst, int16_t dloc, int16_t size, int16_t move);
+
+void _set_bword(int32_t* src, int16_t size, int16_t value);
+
+int16_t _get_bword(int32_t* src, int16_t size);
+
+void _set_bdword(int32_t* src, int16_t size, int32_t value);
+
+int32_t _get_bdword(int32_t* src, int16_t size);
+
+void _xch_bword_to_word(int32_t* bit, int16_t size, int16_t* word);
+
+void _xch_bword_to_bword(int32_t* bit1, int32_t size1, int32_t* bit2, int32_t size2);
+
+void _xchd_bdword_to_dword(int32_t* bit, int32_t size, int32_t* dword);
+
+void _xchd_bdword_to_bdword(int32_t* bit1, int32_t size1, int32_t* bit2, int32_t size2);

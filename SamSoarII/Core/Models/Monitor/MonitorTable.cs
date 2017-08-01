@@ -63,7 +63,7 @@ namespace SamSoarII.Core.Models
             {
                 if (child.AddrType == element.AddrType && child.StartAddr == element.StartAddr
                     && child.IsIntrasegment == element.IsIntrasegment && child.IntrasegmentAddr == element.IntrasegmentAddr
-                    && child.IntrasegmentType == element.IntrasegmentType) return true;
+                    && child.IntrasegmentType == element.IntrasegmentType && child.Store.Flag == element.Store.Flag) return true;
             }
             return false;
         }

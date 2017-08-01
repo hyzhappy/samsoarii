@@ -59,11 +59,14 @@ namespace SamSoarII.Core.Models
         {
             get
             {
+                string name = IsWordBit ? String.Format("{0:s}.{1:X}", parent.Name, flag)
+                    : IsBitWord || IsBitDoubleWord ? String.Format("K{1:d}{0:s}", parent.Name, flag)
+                    : parent.Name;
                 switch (ibs)
                 {
-                    case ValueModel.Bases.V: return String.Format("{0:s}V{1:d}", parent.Name, ifs);
-                    case ValueModel.Bases.Z: return String.Format("{0:s}Z{1:d}", parent.Name, ifs);
-                    default: return parent.Name;
+                    case ValueModel.Bases.V: return String.Format("{0:s}V{1:d}", name, ifs);
+                    case ValueModel.Bases.Z: return String.Format("{0:s}Z{1:d}", name, ifs);
+                    default: return name;
                 }
             }
         }
@@ -149,7 +152,7 @@ namespace SamSoarII.Core.Models
                     case ValueModel.Types.DHEX:
                         return String.Format("0x{0:x8}", (int)value);
                     case ValueModel.Types.BCD:
-                        return (ushort)value > 9999 ? "???" : ValueConverter.ToBCD((ushort)value).ToString(); break;
+                        return (ushort)value > 9999 ? "???" : ValueConverter.ToBCD((ushort)value).ToString();
                     default:
                         return value.ToString();
                 }
@@ -177,11 +180,12 @@ namespace SamSoarII.Core.Models
         }
         
         public event ValueStoreWriteEventHandler Post = delegate { };
-        public void Write(object value, bool tolock = false)
+        public void Write(object value, bool tolock = false, ValueModel.Types _type = ValueModel.Types.NULL)
         {
             Post(this, new ValueStoreWriteEventArgs(this, value,
                 ValueStoreWriteEventArgs.FLAGS_ISWRITE |
-                (tolock ? ValueStoreWriteEventArgs.FLAGS_TOLOCK : 0)));
+                (tolock ? ValueStoreWriteEventArgs.FLAGS_TOLOCK : 0),
+                _type != ValueModel.Types.NULL ? _type : type));
         }
         public void Unlock(bool all = false)
         {
@@ -208,12 +212,15 @@ namespace SamSoarII.Core.Models
 
         private object tovalue;
         public object ToValue { get { return this.tovalue; } }
+        private ValueModel.Types type;
+        public ValueModel.Types Type { get { return this.type; } }
         
-        public ValueStoreWriteEventArgs(ValueStore _store, object _tovalue, int _flags)
+        public ValueStoreWriteEventArgs(ValueStore _store, object _tovalue, int _flags, ValueModel.Types _type = ValueModel.Types.NULL)
         {
             store = _store;
             flags = _flags;
             tovalue = _tovalue;
+            type = _type;
         }
     }
 
