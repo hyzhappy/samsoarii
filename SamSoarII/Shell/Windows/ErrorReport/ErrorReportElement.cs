@@ -67,7 +67,7 @@ namespace SamSoarII.Shell.Windows
 
         public string InstText
         {
-            get { return inst.Inst.Text; }
+            get { return inst.ToString(); }
         }
 
         public string Network

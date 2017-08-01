@@ -38,7 +38,7 @@ namespace SamSoarII.Threads
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
             }
         }

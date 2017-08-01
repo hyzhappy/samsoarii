@@ -561,7 +561,7 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.LDP] =
             Formats[(int)Types.LDF] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.BOOL, true, false, 0, new Regex[]{ ValueModel.VerifyBitRegex1}) };
+                    new ValueFormat("IN", ValueModel.Types.BOOL, true, false, 0, new Regex[]{ ValueModel.VerifyBitRegex1, ValueModel.WordBitRegex}) };
             Formats[(int)Types.MEP] =
             Formats[(int)Types.MEF] =
             Formats[(int)Types.INV] =
@@ -577,13 +577,13 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.ALT] =
             Formats[(int)Types.ALTP] =
                 new ValueFormat[] {
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex3}) };
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
             Formats[(int)Types.SET] =
             Formats[(int)Types.SETIM] =
             Formats[(int)Types.RST] =
             Formats[(int)Types.RSTIM] =
                 new ValueFormat[] {
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex3}),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[]{ ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}),
                     new ValueFormat("CT", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
             Formats[(int)Types.LDWEQ] =
             Formats[(int)Types.LDWNE] =
@@ -592,8 +592,8 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.LDWL] =
             Formats[(int)Types.LDWG] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.LDDEQ] =
             Formats[(int)Types.LDDNE] =
             Formats[(int)Types.LDDLE] =
@@ -601,8 +601,8 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.LDDL] =
             Formats[(int)Types.LDDG] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) };
             Formats[(int)Types.LDFEQ] =
             Formats[(int)Types.LDFNE] =
             Formats[(int)Types.LDFLE] =
@@ -614,15 +614,15 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}) };
             Formats[(int)Types.WTOD] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2}) };
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.DTOW] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2}) };
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}) };
             Formats[(int)Types.DTOF] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
                     new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}) };
             Formats[(int)Types.BIN] =
             Formats[(int)Types.BCD] =
@@ -631,15 +631,15 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.INC] =
             Formats[(int)Types.DEC] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2}) };
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}) };
             Formats[(int)Types.INVD] =
             Formats[(int)Types.MOVD] =
             Formats[(int)Types.INCD] =
             Formats[(int)Types.DECD] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2}) };
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.MOVF] =
             Formats[(int)Types.EXP] =
             Formats[(int)Types.LN] =
@@ -653,19 +653,19 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("OUT", ValueModel.Types.FLOAT, false, true, -1, new Regex[] { ValueModel.VerifyFloatRegex}) };
             Formats[(int)Types.MVBLK] =
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1}),
-                    new ValueFormat("D", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex2}),
-                    new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.BitWordRegex}),
+                    new ValueFormat("D", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}),
+                    new ValueFormat("N", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.MVDBLK] =
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("D", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("N", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("S", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("D", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("N", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex }) };
             Formats[(int)Types.TRUNC] =
             Formats[(int)Types.ROUND] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.FLOAT, true, false, 0, new Regex[] {ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] {ValueModel.VerifyDoubleWordRegex2}) };
+                    new ValueFormat("IN", ValueModel.Types.FLOAT, true, false, 0, new Regex[] {ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.ANDW] =
             Formats[(int)Types.ORW] =
             Formats[(int)Types.XORW] =
@@ -678,9 +678,9 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.ROL] =
             Formats[(int)Types.ROR] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2}) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}) };
             Formats[(int)Types.ANDD] =
             Formats[(int)Types.ORD] =
             Formats[(int)Types.XORD] =
@@ -693,9 +693,9 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.ROLD] =
             Formats[(int)Types.RORD] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2}) };
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.ADDF] =
             Formats[(int)Types.SUBF] =
             Formats[(int)Types.MULF] =
@@ -708,29 +708,29 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.MUL] =
             Formats[(int)Types.DIV] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2}) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.TON] =
             Formats[(int)Types.TOF] =
             Formats[(int)Types.TONR] =
                 new ValueFormat[] {
                     new ValueFormat("T", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex4}),
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.CTU] =
             Formats[(int)Types.CTD] =
             Formats[(int)Types.CTUD] =
             Formats[(int)Types.HCNT] =
                 new ValueFormat[] {
                     new ValueFormat("C", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.FOR] =
                 new ValueFormat[] {
-                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.JMP] =
             Formats[(int)Types.LBL] =
                 new ValueFormat[] {
-                    new ValueFormat("LBL", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("LBL", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) };
             Formats[(int)Types.CALL] =
                 new ValueFormat[] {
                     new ValueFormat("FUNC", ValueModel.Types.STRING, true, false, 0, new Regex[] { ValueModel.AnyNameRegex }) };
@@ -748,13 +748,13 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.SHLB] =
             Formats[(int)Types.SHRB] =
                 new ValueFormat[] {
-                    new ValueFormat("S", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex1 }),
-                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 1, new Regex[] { ValueModel.VerifyBitRegex2 }),
-                    new ValueFormat("N1", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex,  }),
-                    new ValueFormat("N2", ValueModel.Types.WORD, true, false, 3, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex,  }), };
+                    new ValueFormat("S", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex1, ValueModel.WordBitRegex}),
+                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 1, new Regex[] { ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}),
+                    new ValueFormat("N1", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("N2", ValueModel.Types.WORD, true, false, 3, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}), };
             Formats[(int)Types.ATCH] =
                 new ValueFormat[] {
-                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex,  }),
+                    new ValueFormat("INT", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
                     new ValueFormat("EVENT", ValueModel.Types.STRING, true, false, 1, new Regex[] {ValueModel.AnyNameRegex}) };
             Formats[(int)Types.DTCH] =
                 new ValueFormat[] {
@@ -870,45 +870,45 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}) };
             Formats[(int)Types.CMP] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3}) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
             Formats[(int)Types.CMPD] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3}) };
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
             Formats[(int)Types.CMPF] =
                 new ValueFormat[] {
                     new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
                     new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3}) };
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
             Formats[(int)Types.ZCP] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN3", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3}) };
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN3", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
             Formats[(int)Types.ZCPD] =
                 new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("IN3", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3}) };
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN3", ValueModel.Types.DWORD, true, false, 2, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
             Formats[(int)Types.ZCPF] =
                 new ValueFormat[] {
                     new ValueFormat("IN1", ValueModel.Types.FLOAT, true, false, 0, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
                     new ValueFormat("IN2", ValueModel.Types.FLOAT, true, false, 1, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
                     new ValueFormat("IN3", ValueModel.Types.FLOAT, true, false, 2, new Regex[] { ValueModel.VerifyFloatRegex, ValueModel.VerifyFloatKValueRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3}) };
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}) };
             Formats[(int)Types.XCH] =
                 new ValueFormat[] {
-                    new ValueFormat("L", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex1}),
-                    new ValueFormat("R", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex1}) };
+                    new ValueFormat("L", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.BitWordRegex}),
+                    new ValueFormat("R", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.BitWordRegex}) };
             Formats[(int)Types.XCHD] =
                 new ValueFormat[] {
-                    new ValueFormat("L", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1}),
-                    new ValueFormat("R", ValueModel.Types.DWORD, true, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}) };
+                    new ValueFormat("L", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("R", ValueModel.Types.DWORD, true, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.XCHF] =
                 new ValueFormat[] {
                     new ValueFormat("L", ValueModel.Types.FLOAT, true, true, 0, new Regex[] { ValueModel.VerifyFloatRegex}),
@@ -916,30 +916,30 @@ namespace SamSoarII.Core.Models
             Formats[(int)Types.NEG] =
             Formats[(int)Types.CML] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex1}) };
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.BitWordRegex}) };
             Formats[(int)Types.NEGD] =
             Formats[(int)Types.CMLD] =
                 new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}) };
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.SMOV] =
                 new ValueFormat[] {
                     new ValueFormat("SV", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1}),
-                    new ValueFormat("SS", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("SC", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("SS", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
+                    new ValueFormat("SC", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}),
                     new ValueFormat("DV", ValueModel.Types.WORD, false, true, -2, new Regex[] { ValueModel.VerifyWordRegex1}),
-                    new ValueFormat("DS", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("DS", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) };
             Formats[(int)Types.FMOV] =
                 new ValueFormat[] {
                     new ValueFormat("SV", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("TV", ValueModel.Types.WORD, false, true, 1, new Regex[] { ValueModel.VerifyWordRegex1}),
-                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.FMOVD] =
                 new ValueFormat[] {
                     new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("TV", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}),
-                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }) };
+                    new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             LabelTypes = new Types[] { Types.LBL, Types.NEXT, Types.STL, Types.STLE };
         }
         
@@ -1339,7 +1339,8 @@ namespace SamSoarII.Core.Models
                 catch (Exception e)
                 {
                     for (int j = 0; j < children.Length; j++)
-                        children[j].Text = oldtexts[j];
+                        if (oldtexts[j] != null)
+                            children[j].Text = oldtexts[j];
                     if (updatevmg && ValueManager != null) ValueManager.Add(this);
                     throw new ValueParseException(e.Message,
                         (e is ValueParseException) ? ((ValueParseException)e).Format : null);

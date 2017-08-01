@@ -133,9 +133,9 @@ namespace SamSoarII.Core.Generate
             switch (Prototype.Shape)
             {
                 case LadderUnitModel.Shapes.Input:
-                    return String.Format("{0:s}{1:s}", profix, Prototype.ToInstString());
+                    return String.Format("{0:s}{1:s}", profix, Prototype.InstName);
                 default:
-                    return Prototype.ToInstString();
+                    return Prototype.InstName;
             }
         }
         
@@ -149,9 +149,8 @@ namespace SamSoarII.Core.Generate
                 profix = "A";
             if ((flag & 0x08) != 0)
                 profix = "OR";
-            PLCInstruction inst = new PLCInstruction(ToShowString(profix));
+            PLCInstruction inst = new PLCInstruction(ToShowString(profix), Prototype);
             inst.PrototypeID = id;
-            inst.ProtoType = Prototype;
             insts.Add(inst);
         }
         

@@ -12,27 +12,31 @@ namespace SamSoarII.Core.Generate
         /// <summary> 私有成员 </summary>
         protected LadderUnitModel prototype;
         protected int prototypeid;
-        protected string text;
-        protected string type;
-        //protected string[] oargs;
         protected string[] args;
+        protected string oldinstname;
         protected string enbit = String.Empty;
         protected string stackcalc = String.Empty;
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="text">指令文本</param>
-        public PLCInstruction(string text)
+        public PLCInstruction(string _text)
         {
-            Text = text;
+            ProtoType = null;
+            args = _text.Split(' ');
+            oldinstname = args[0];
         }
         /// <summary>
-        /// 转为字符串格式
+        /// 构造函数
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
+        /// <param name="instname">指令名称</param>
+        /// <param name="prototype">指令原型</param>
+        public PLCInstruction(string _instname, LadderUnitModel _prototype)
         {
-            return Text;
+            ProtoType = _prototype;
+            oldinstname = _instname;
+            args = new string[] { _instname };
+            Analyze();
         }
         /// <summary>
         /// 原型
@@ -86,30 +90,8 @@ namespace SamSoarII.Core.Generate
                     origin.Inst = this;
             }
         }
+        public string OldInstname { get { return this.oldinstname; } }
 
-        /// <summary>
-        /// 一个单字(WORD)所占的空间
-        /// </summary>
-        private int wordsize = 16;
-        /// <summary>
-        /// 一个单字(WORD)所占的空间
-        /// </summary>
-        public int WordSize
-        {
-            get
-            {
-                return this.wordsize;
-            }
-            set
-            {
-                this.wordsize = value;
-                if (hasconvert) Text = Text;
-            }
-        }
-        /// <summary>
-        /// 是否存在转换操作
-        /// </summary>
-        private bool hasconvert = false;
         /// <summary>
         /// 当这个指令把元素加入栈中时（LD类指令），需要知道这个元素是如何与上一个元素计算合并的
         /// 已知的合并方式有三种，分别为ANDB，ORB和POP
@@ -121,45 +103,17 @@ namespace SamSoarII.Core.Generate
             set { this.stackcalc = value; }
         }
         /// <summary>
-        /// 指令文本
+        /// 根据已知条件，重新分析该指令
         /// </summary>
-        public string Text
+        public void Analyze()
         {
-            get { return this.text; }
-            set
+            enbit = "";
+            // 根据指令类型的参数结构来分类，并转化参数的格式
+            if (prototype != null)
             {
-                hasconvert = false;
-                // 解析给定的文本，生成类型和四个参数
-                this.text = value.ToUpper();
-                args = text.Split(' ');
-                this.type = args[0];
-                this.enbit = "";
-                //oargs = args.ToArray();
-                // 根据指令类型的参数结构来分类，并转化参数的格式
-                /*
-                 * 参数分为位(B)，字(W)，双字(D)和浮点(F)这四种数据类型
-                 * 按照读写权限分为只读(r)，只写(w)和读写(rw)三种
-                 * 将指令所有参数的类型和读写的简称括号起来表示
-                 * 例如(rB,rW,rwD)表示第一个参数为只读位，第二个为只写字，第三个读写双字
-                 * 如果参数包括可写项，则附带支持仿真的写入使能
-                 */
-                switch (this.type)
+                args = args.Concat(new string[prototype.Children.Count]).ToArray();
+                switch (args[0])
                 {
-                    // (rB)
-                    case "LD":
-                    case "AND":
-                    case "OR":
-                    case "LDI":
-                    case "ANDI":
-                    case "ORI":
-                    case "LDP":
-                    case "ANDP":
-                    case "ORP":
-                    case "LDF":
-                    case "ANDF":
-                    case "ORF":
-                        args[1] = ToCStyle(args[1], "r", "BIT");
-                        break;
                     case "LDIM":
                     case "ANDIM":
                     case "ORIM":
@@ -167,459 +121,85 @@ namespace SamSoarII.Core.Generate
                     case "ANDIIM":
                     case "ORIIM":
                         args = new string[] { args[0], args[1], "" };
-                        args[1] = ToCStyle(args[1], "r", "BIT");
-                        args[2] = ToCIndex(args[1], "r", "BIT");
+                        args[2] = ToCIndex(prototype.Children[0]);
                         break;
-                    // (wB)
-                    case "OUT":
-                    case "ALT":
-                    case "ALTP":
                     case "PLSNEXT":
                     case "PLSSTOP":
-                        args[1] = ToCStyle(args[1], "w", "BIT");
+                        args[1] = ToCIndex(prototype.Children[0]);
                         break;
                     case "OUTIM":
                         args = new string[] { args[0], args[1], "" };
-                        args[1] = ToCStyle(args[1], "w", "BIT");
-                        args[2] = ToCIndex(args[1], "w", "BIT");
-                        break;
-                    // (rW)
-                    case "DTCH":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        break;
-                    // (rwW)
-                    case "TRD":
-                    case "TWR":
-                        args[1] = ToCStyle(args[1], "rw", "WORD");
-                        break;
-                    // (wB, rW)
-                    case "SET":
-                    case "RST":
-                        args[1] = ToCStyle(args[1], "w", "BIT");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
+                        args[2] = ToCIndex(prototype.Children[0]);
                         break;
                     case "SETIM":
                     case "RSTIM":
                         args = new string[] { args[0], args[1], args[2], "" };
-                        args[1] = ToCStyle(args[1], "w", "BIT");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCIndex(args[1], "w", "BIT");
+                        args[3] = ToCIndex(prototype.Children[0]);
                         break;
-                    // (rW, rW)
-                    case "LDWEQ":
-                    case "LDWNE":
-                    case "LDWGE":
-                    case "LDWLE":
-                    case "LDWG":
-                    case "LDWL":
-                    case "AWEQ":
-                    case "AWNE":
-                    case "AWGE":
-                    case "AWLE":
-                    case "AWG":
-                    case "AWL":
-                    case "ORWEQ":
-                    case "ORWNE":
-                    case "ORWGE":
-                    case "ORWLE":
-                    case "ORWG":
-                    case "ORWL":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        break;
-                    // (rD, rD)
-                    case "LDDEQ":
-                    case "LDDNE":
-                    case "LDDGE":
-                    case "LDDLE":
-                    case "LDDG":
-                    case "LDDL":
-                    case "ADEQ":
-                    case "ADNE":
-                    case "ADGE":
-                    case "ADLE":
-                    case "ADG":
-                    case "ADL":
-                    case "ORDEQ":
-                    case "ORDNE":
-                    case "ORDGE":
-                    case "ORDLE":
-                    case "ORDG":
-                    case "ORDL":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
-                        break;
-                    // (rF, rF)
-                    case "LDFEQ":
-                    case "LDFNE":
-                    case "LDFGE":
-                    case "LDFLE":
-                    case "LDFG":
-                    case "LDFL":
-                    case "AFEQ":
-                    case "AFNE":
-                    case "AFGE":
-                    case "AFLE":
-                    case "AFG":
-                    case "AFL":
-                    case "ORFEQ":
-                    case "ORFNE":
-                    case "ORFGE":
-                    case "ORFLE":
-                    case "ORFG":
-                    case "ORFL":
-                        args[1] = ToCStyle(args[1], "r", "FLOAT");
-                        args[2] = ToCStyle(args[2], "r", "FLOAT");
-                        break;
-                    // (rW, wD)
-                    case "WTOD":
-                    case "FACT":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "w", "DWORD");
-                        break;
-                    // (rD, wF)
-                    case "DTOW":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "w", "WORD");
-                        break;
-                    // (rD, wF)
-                    case "DTOF":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "w", "FLOAT");
-                        break;
-                    // (rD, wD)
-                    /*
-                    case "BIN": case "BCD":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "w", "DWORD");
-                        break;
-                    */
-                    // (rF, wD)
-                    case "ROUND":
-                    case "TRUNC":
-                        args[1] = ToCStyle(args[1], "r", "FLOAT");
-                        args[2] = ToCStyle(args[2], "w", "DWORD");
-                        break;
-                    // (rW, wW)
-                    case "BIN":
-                    case "BCD":
-                    case "INVW":
-                    case "MOV":
-                    case "INC":
-                    case "DEC":
-                    case "NEG":
-                    case "CML":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "w", "WORD");
-                        break;
-                    // (rD, wD)
-                    case "INVD":
-                    case "MOVD":
-                    case "INCD":
-                    case "DECD":
-                    case "NEGD":
-                    case "CMLD":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "w", "DWORD");
-                        break;
-                    // (rF, wF)
-                    case "MOVF":
-                    case "SQRT":
-                    case "SIN":
-                    case "COS":
-                    case "TAN":
-                    case "LN":
-                    case "EXP":
-                    case "LOG":
-                        args[1] = ToCStyle(args[1], "r", "FLOAT");
-                        args[2] = ToCStyle(args[2], "w", "FLOAT");
-                        break;
-                    // (rwW, rwW)
-                    case "XCH":
-                        args[1] = ToCStyle(args[1], "rw", "WORD");
-                        args[2] = ToCStyle(args[2], "rw", "WORD");
-                        break;
-                    // (rwD, rwD)
-                    case "XCHD":
-                        args[1] = ToCStyle(args[1], "rw", "DWORD");
-                        args[2] = ToCStyle(args[2], "rw", "DWORD");
-                        break;
-                    // (rwF, rwF)
-                    case "XCHF":
-                        args[1] = ToCStyle(args[1], "rw", "FLOAT");
-                        args[2] = ToCStyle(args[2], "rw", "FLOAT");
-                        break;
-                    // (rW, rW, wW)
-                    case "ADD":
-                    case "SUB":
-                    case "MULW":
-                    case "DIVW":
-                    case "ANDW":
-                    case "ORW":
-                    case "XORW":
-                    case "SHL":
-                    case "SHR":
-                    case "ROL":
-                    case "ROR":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCStyle(args[3], "w", "WORD");
-                        break;
-                    // (rD, rD, wD)
-                    case "ADDD":
-                    case "SUBD":
-                    case "MULD":
-                    case "DIVD":
-                    case "ANDD":
-                    case "ORD":
-                    case "XORD":
-                    case "SHLD":
-                    case "SHRD":
-                    case "ROLD":
-                    case "RORD":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
-                        args[3] = ToCStyle(args[3], "w", "DWORD");
-                        break;
-                    // (rW, rW, wD)
-                    case "MUL":
-                    case "DIV":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCStyle(args[3], "w", "DWORD");
-                        break;
-                    // (rF, rF, wF)
-                    case "ADDF":
-                    case "SUBF":
-                    case "MULF":
-                    case "DIVF":
-                    case "POW":
-                        args[1] = ToCStyle(args[1], "r", "FLOAT");
-                        args[2] = ToCStyle(args[2], "r", "FLOAT");
-                        args[3] = ToCStyle(args[3], "w", "FLOAT");
-                        break;
-                    // (rW, wW, rW)
-                    case "MVBLK":
-                    case "FMOV":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "w", "WORD");
-                        args[3] = ToCStyle(args[3], "r", "WORD");
-                        break;
-                    // (rD, wD, rD)
-                    case "MVDBLK":
-                    case "FMOVD":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "w", "DWORD");
-                        args[3] = ToCStyle(args[3], "r", "DWORD");
-                        break;
-                    // (rW, rW, wB)
-                    case "CMP":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCStyle(args[3], "w", "BIT");
-                        break;
-                    // (rD, rD, wB)
-                    case "CMPD":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
-                        args[3] = ToCStyle(args[3], "w", "BIT");
-                        break;
-                    // (rF, rF, wB)
-                    case "CMPF":
-                        args[1] = ToCStyle(args[1], "r", "FLOAT");
-                        args[2] = ToCStyle(args[2], "r", "FLOAT");
-                        args[3] = ToCStyle(args[3], "w", "BIT");
-                        break;
-                    // (rW, rW, rW, wB)
-                    case "ZCP":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCStyle(args[3], "r", "WORD");
-                        args[4] = ToCStyle(args[4], "w", "BIT");
-                        break;
-                    // (rD, rD, rD, wB)
-                    case "ZCPD":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
-                        args[3] = ToCStyle(args[3], "r", "DWORD");
-                        args[4] = ToCStyle(args[4], "w", "BIT");
-                        break;
-                    // (rF, rF, rF, wB)
-                    case "ZCPF":
-                        args[1] = ToCStyle(args[1], "r", "FLOAT");
-                        args[2] = ToCStyle(args[2], "r", "FLOAT");
-                        args[3] = ToCStyle(args[3], "r", "FLOAT");
-                        args[4] = ToCStyle(args[4], "w", "BIT");
-                        break;
-                    // (rB, wB, rW, rW)
-                    case "SHLB":
-                    case "SHRB":
-                        args[1] = ToCStyle(args[1], "r", "BIT");
-                        args[2] = ToCStyle(args[2], "w", "BIT");
-                        args[3] = ToCStyle(args[3], "r", "WORD");
-                        args[4] = ToCStyle(args[4], "r", "WORD");
-                        break;
-                    // (rwW, rW, rwB)
                     case "TON":
                     case "TONR":
                     case "TOF":
                     case "HCNT":
-                        args[1] = ToCIndex(args[1], "rw", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
+                        args[1] = ToCIndex(prototype.Children[0]);
                         break;
                     case "CTU":
                     case "CTD":
                     case "CTUD":
-                        args[1] = ToCStyle(args[1], "rw", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        // T/C + 地址
-                        args[3] = ToCStyle(args[1][0] + args[1].Substring(2), "rw", "BIT");
-                        break;
-                    // (rW)
-                    case "FOR":
-                    case "JMP":
-                    case "LBL":
-                    case "CALL":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        break;
-                    // ()
-                    case "NEXT":
-                    case "EI":
-                    case "DI":
-                        break;
-                    // (rS, rwW, rwB)
-                    /*
-                     * 调用c程序比较特殊，因为要指定c程序的名称和参数类型
-                     * 所以第一个参数为名称，剩下的为c程序的参数
-                     */
-                    case "CALLM":
-                        args[1] = args[1];
-                        for (int i = 2; i < args.Length; i++)
-                            args[i] = ToCStylePointer(args[i]);
-                        break;
-                    // (rW, rS)
-                    case "ATCH":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = args[2];
-                        break;
-                    // (rW, rW, rW, wW, rW)
-                    case "SMOV":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCStyle(args[3], "r", "WORD");
-                        args[4] = ToCStyle(args[4], "w", "WORD");
-                        args[5] = ToCStyle(args[5], "r", "WORD");
-                        break;
-                    // (rS)
-                    case "FUNC":
-                        args[1] = args[1];
-                        break;
-                    // (rW, rS, rwW)
-                    case "MBUS":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = args[2];
-                        args[3] = ToCStyle(args[3], "rw", "WORD");
-                        break;
-                    // (rW, rW, rW)
-                    case "SEND":
-                    case "REV":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCStyle(args[3], "r", "WORD");
+                        args = new string[] { args[0], args[1], args[2], "" };
+                        // C + 地址
+                        args[3] = String.Format("CBit[{0:s}]", ToCIndex(prototype.Children[0]));
                         break;
                     // (rW, wB)
                     case "PLSF":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCIndex(args[2], "w", "BIT");
-                        break;
-                    // (rD, wB)
                     case "DPLSF":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCIndex(args[2], "w", "BIT");
+                        args[2] = ToCIndex(prototype.Children[1]);
                         break;
                     // (rW, rW, wB)
                     case "PWM":
                     case "PLSY":
                     case "PLSR":
                     case "ZRN":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCIndex(args[3], "w", "BIT");
-                        break;
-                    case "DRVI":
-                    case "DRVA":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCIndex(args[3], "w", "BIT");
-                        args[4] = ToCIndex(args[4], "w", "BIT");
-                        break;
-                    // (rD, rD, wB)
                     case "DPWM":
                     case "DPLSY":
                     case "DPLSR":
                     case "DZRN":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
-                        args[3] = ToCIndex(args[3], "w", "BIT");
+                        args[3] = ToCIndex(prototype.Children[2]);
                         break;
+                    case "DRVI":
+                    case "DRVA":
                     case "DDRVI":
                     case "DDRVA":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
-                        args[3] = ToCIndex(args[3], "w", "BIT");
-                        args[4] = ToCIndex(args[4], "w", "BIT");
-                        break;
-                    // (rW, rW, wB, wB)
                     case "PLSRD":
                     case "PLSA":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCStyle(args[2], "r", "WORD");
-                        args[3] = ToCIndex(args[3], "w", "BIT");
-                        args[4] = ToCIndex(args[4], "w", "BIT");
-                        break;
-                    // (rD, rD, wB, wB)
                     case "DPLSRD":
                     case "DPLSA":
-                        args[1] = ToCStyle(args[1], "r", "DWORD");
-                        args[2] = ToCStyle(args[2], "r", "DWORD");
-                        args[3] = ToCIndex(args[3], "w", "BIT");
-                        args[4] = ToCIndex(args[4], "w", "BIT");
+                        args[3] = ToCIndex(prototype.Children[2]);
+                        args[4] = ToCIndex(prototype.Children[3]);
                         break;
-                    // (rW, wB, wB)
                     case "PTO":
-                        args[1] = ToCStyle(args[1], "r", "WORD");
-                        args[2] = ToCIndex(args[2], "w", "BIT");
-                        args[3] = ToCIndex(args[3], "w", "BIT");
-                        break;
-                    case "STL":
-                        args[1] = ToCStyle(args[1], "r", "BIT");
-                        break;
-                    case "ST":
-                        args[1] = ToCStyle(args[1], "w", "BIT");
+                        args[2] = ToCIndex(prototype.Children[1]);
+                        args[3] = ToCIndex(prototype.Children[2]);
                         break;
                 }
+                for (int i = 1; i <= prototype.Children.Count; i++)
+                    if (args[i] == null)
+                        args[i] = ToCStyle(prototype.Children[i - 1]);
                 /*
                  * 注意如果是复位(RST)了计数器的位(C)的话
                  * 会影响对应标号的计数器值
                  * 所以标号需要记录到另外的参数
                  */
-                if (Type.Length > 2 && Type.Substring(0, 3).Equals("RST") && args[1][0] == 'C')
+                if (args[0].Length > 2 && args[0].Substring(0, 3).Equals("RST") && args[1][0] == 'C')
                 {
-                    args = args.Concat(new string[]{ args[1].Substring(1)}).ToArray();
+                    args = args.Concat(new string[] { args[1].Substring(1) }).ToArray();
                 }
-                if (Type.Length > 2 && Type.Substring(0, 2).Equals("CT"))
+                if (args[0].Length > 2 && args[0].Substring(0, 2).Equals("CT"))
                 {
                     args = args.Concat(new string[] { args[1].Substring(2) }).ToArray();
                 }
             }
         }
-        /// <summary>
-        /// 指令类型
-        /// </summary>
-        public string Type
-        {
-            get { return this.type; }
-        }
+        
         /// <summary>
         /// 指令参数数量
         /// </summary>
@@ -650,199 +230,170 @@ namespace SamSoarII.Core.Generate
         /// <param name="mode">访问变量的权限（r：读，w：写，rw：读写）</param>
         /// <param name="ctype">要转换成的c语言类型</param>
         /// <returns>c语言格式</returns>
-        private string ToCStyle(string var, string mode = "rw", string ctype = "WORD")
+        private string ToCStyle(ValueModel vmodel)
         {
-            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
-            Match m2 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)(V|Z)(\d+)$");
-            string name = null;
-            int addrn = 0;
-            string addr = null;
-            if (m1.Success)
-            {
-                name = m1.Groups[1].Value;
-                addrn = int.Parse(m1.Groups[2].Value);
-                if (name.Equals("CV") && addrn >= 200)
-                {
-                    name = "CV32"; addrn -= 200;
-                }
-                addr = addrn.ToString();
-            }
-            else if (m2.Success)
-            {
-                name = m2.Groups[1].Value;
-                addrn = int.Parse(m2.Groups[2].Value);
-                if (name.Equals("CV") && addrn >= 200)
-                {
-                    name = "CV32"; addrn -= 200;
-                }
-                addr = String.Format("{0:d}+{1:s}Word[{2:s}]",
-                    addrn, m2.Groups[3].Value, m2.Groups[4].Value);
-            }
-            else
-            {
-                return var;
-            }
+            ValueFormat vformat = vmodel.Format;
             // 如果该参数可写，需要附带写入使能
-            if (mode.Equals("w") || mode.Equals("rw"))
+            if (vformat.CanWrite)
             {
-                if (this.enbit.Equals(String.Empty))
-                {
-                    this.enbit = String.Format("{0:s}Enable[{1:s}]", name, addr);
-                }
-                else
-                {
-                    this.enbit += "||" + String.Format("{0:s}Enable[{1:s}]", name, addr);
-                }
+                string _enbit = ToCEnable(vmodel);
+                enbit = (enbit.Length == 0) ? _enbit : enbit + "||" + _enbit;
             }
-            switch (name)
+            switch (vmodel.Type)
             {
-                case "X":
-                case "Y":
-                case "M":
-                case "C":
-                case "T":
-                case "S":
-                    switch (ctype)
+                case ValueModel.Types.BOOL:
+                    switch (vmodel.Base)
                     {
-                        case "BIT": return String.Format("{0:s}Bit[{1:s}]", name, addr);
-                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                        case ValueModel.Bases.S:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.C:
+                        case ValueModel.Bases.T:
+                            return String.Format("{0:s}Bit[{1:s}]", 
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                            if (vformat.CanWrite) args[0] = "WB" + args[0];
+                            return String.Format(
+                                vformat.CanWrite 
+                                    ? "_set_wbit({0:s}Word+({1:s}>>4), {1:s}&15,"
+                                    : "_get_wbit({0:s}Word+({1:s}>>4), {1:s}&15)",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
                     }
-                case "D":
-                case "TV":
-                case "AI":
-                case "AO":
-                case "V":
-                case "Z":
-                    /*
-                     * 若要类型转换需要得到地址，所以要分为三个步骤
-                     * 1. 获得这个变量的地址Word+addr
-                     * 2. 将这个地址的指针转换成需要的类型的指正(type*)(Word+addr)
-                     * 3. 最后再根据转换后的指针来取值*(type*)(Word)
-                     */
-                    switch (ctype)
+                    break;
+                case ValueModel.Types.WORD:
+                    switch (vmodel.Base)
                     {
-                        case "WORD":
-                            return String.Format("{0:s}Word[{1:s}]", name, addr);
-                        case "DWORD":
-                            hasconvert = true;
-                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "int32_t" : "int64_t");
-                        case "FLOAT":
-                            hasconvert = true;
-                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "float" : "double");
-                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("{0:s}Word[{1:s}]",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("CVWord[{0:s}]", ToCIndex(vmodel))
+                                : String.Format("*((_WORD*)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.S:
+                            if (vformat.CanWrite) args[0] = "BW" + args[0];
+                            return String.Format(
+                                vformat.CanWrite
+                                    ? "_set_bword({0:s}Bit+{1:s}, {2:d},"
+                                    : "_get_bword({0:s}Bit+{1:s}, {2:d})",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
                     }
-                case "CV":
-                    switch (ctype)
+                    break;
+                case ValueModel.Types.DWORD:
+                    switch (vmodel.Base)
                     {
-                        case "WORD":
-                            return String.Format("{0:s}Word[{1:s}]", name, addr);
-                        case "DWORD":
-                            hasconvert = true;
-                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "int32_t" : "int64_t");
-                        case "FLOAT":
-                            hasconvert = true;
-                            return String.Format("(*(({2:s}*)({0:s}Word+{1:s})))", name, addr, wordsize <= 16 ? "float" : "double");
-                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("*((D_WORD*)(&{0:s}Word[{1:s}]))",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("*((D_WORD*)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                : String.Format("CVDoubleWord[{0:s}-200]", ToCIndex(vmodel));
+                        case ValueModel.Bases.X:
+                        case ValueModel.Bases.Y:
+                        case ValueModel.Bases.M:
+                        case ValueModel.Bases.S:
+                            if (vformat.CanWrite) args[0] = "BD" + args[0];
+                            return String.Format(
+                                vformat.CanWrite
+                                    ? "_set_bdword({0:s}Bit+{1:s}, {2:d},"
+                                    : "_get_bdword({0:s}Bit+{1:s}, {2:d})",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
                     }
-                case "CV32":
-                    switch (ctype)
+                    break;
+                case ValueModel.Types.FLOAT:
+                    switch (vmodel.Base)
                     {
-                        case "WORD":
-                            hasconvert = true;
-                            return String.Format("(*(({2:s}*)({0:s}DoubleWord+{1:s})))", name, addr, wordsize <= 16 ? "int16_t" : "int32_t");
-                        case "DWORD":
-                            return String.Format("{0:s}DoubleWords[{1:s}]", name, addr);
-                        case "FLOAT":
-                            hasconvert = true;
-                            return String.Format("(*(({2:s}*)({0:s}DoubleWord+{1:s})))", name, addr, wordsize <= 16 ? "float" : "double");
-                        default: throw new ArgumentException(String.Format("Invalid variable {0:s} for type {1:s}", name, ctype));
+                        case ValueModel.Bases.D:
+                        case ValueModel.Bases.AI:
+                        case ValueModel.Bases.AO:
+                        case ValueModel.Bases.V:
+                        case ValueModel.Bases.Z:
+                        case ValueModel.Bases.TV:
+                            return String.Format("*((_FLOAT*)(&{0:s}Word[{1:s}]))",
+                                ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+                        case ValueModel.Bases.CV:
+                            return vmodel.Offset < 200
+                                ? String.Format("*((_FLOAT*)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                : String.Format("*((_FLOAT*)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                        case ValueModel.Bases.K:
+                        case ValueModel.Bases.H:
+                            return vmodel.Store.Value.ToString();
                     }
-                case "K":
-                case "F":
-                    if (mode.Equals("r"))
-                        return addr.ToString();
-                    else
-                        throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
-                case "H":
-                    if (mode.Equals("r"))
-                        return "0x" + addr.ToString();
-                    else
-                        throw new ArgumentException(String.Format("{0:s} cannot be wrote.\n", var));
-                default:
-                    return var;
+                    break;
             }
+            return vmodel.Text;
         }
 
-        private string ToCIndex(string var, string mode = "rw", string type = "WORD")
+        private string ToCIndex(ValueModel vmodel)
         {
-            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
-            Match m2 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)(V|Z)(\d+)$");
-            if (m1.Success)
+            int intratime = vmodel.IsWordBit ? 16 : 1;
+            switch (vmodel.Intra)
             {
-                return m1.Groups[2].Value;
-            }
-            else if (m2.Success)
-            {
-                return String.Format("{0}+{1}Word[{2}]",
-                    m1.Groups[2].Value, m1.Groups[3].Value, m1.Groups[4].Value);
-            }
-            else
-            {
-                return "0";
+                case ValueModel.Bases.V: return String.Format("({0:d}+VWord[{1:d}]*{2:d})", vmodel.Offset, vmodel.IntraOffset, intratime);
+                case ValueModel.Bases.Z: return String.Format("({0:d}+ZWord[{1:d}]*{2:d})", vmodel.Offset, vmodel.IntraOffset, intratime);
+                default: return String.Format("({0:d})", vmodel.Offset);
             }
         }
-        /// <summary>
-        /// 将变量名称转变为c语言指针
-        /// </summary>
-        /// <param name="var">变量名称</param>
-        /// <returns></returns>
-        private string ToCStylePointer(string var)
+        
+        private string ToCAddr(ValueModel vmodel)
         {
-            Match m1 = Regex.Match(var, @"^([a-zA-Z]+)(\d+)$");
-            if (!m1.Success) return var;
-            if (var.Equals(String.Empty))
-                return String.Empty;
-            // 找到最后一个字母
-            int i = 0;
-            while (i < var.Length && Char.IsLetter(var[i])) i++;
-            // 确定前面的类型名称和后面的数值
-            string name = var.Substring(0, i);
-            int addr = int.Parse(var.Substring(i));
-            switch (name)
-            {
-                // 位线圈
-                case "X":
-                case "Y":
-                case "M":
-                case "C":
-                case "T":
-                case "S":
-                    return String.Format("&{0:s}Bit[{1:d}]", name, addr);
-                // 16位寄存器
-                case "D":
-                case "TV":
-                    return String.Format("&{0:s}Word[{1:d}]", name, addr);
-                // 32位寄存器
-                case "CV":
-                    if (addr < 200)
-                    {
-                        return String.Format("&{0:s}Word[{1:d}]", name, addr);
-                    }
-                    else
-                    {
-                        return String.Format("&{0:s}DoubleWord[{1:d}]", name, addr);
-                    }
-                default:
-                    throw new ArgumentException("{0:s} cannot be converted to pointer.\n", var);
-            }
+            return vmodel.IsWordBit
+                ? String.Format("({0:s}>>4)", ToCIndex(vmodel))
+                : ToCIndex(vmodel);
         }
-        /// <summary>
-        /// 转换成原型指令
-        /// </summary>
-        /// <returns></returns>
+
+        private string ToCEnable(ValueModel vmodel)
+        {
+            return String.Format("{0:s}Enable[{1:s}]", ValueModel.NameOfBases[(int)(vmodel.Base)], ToCAddr(vmodel));
+        }
+        
+        public string ToCEnable(int id)
+        {
+            ValueModel vmodel = prototype.Children[id - 1];
+            return ToCEnable(vmodel);
+        }
+
+        public string ToCParas(int id)
+        {
+            ValueModel vmodel = prototype.Children[id-1];
+            ValueFormat vformat = vmodel.Format;
+            if (vmodel.IsWordBit)
+                return String.Format(
+                    "{0:s}Word+({1:d}>>4), {1:d}&15",
+                    ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
+            if (vmodel.isBitWord || vmodel.isBitDoubleWord)
+                return String.Format(
+                    "{0:s}Bit+{1:d}, {2:d}",
+                    ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
+            return ToCStyle(vmodel);
+        }
+        
         public PLCOriginInst ToOrigin()
         {
-           return new PLCOriginInst(this, text);
+           return new PLCOriginInst(this);
         }
     }
 }

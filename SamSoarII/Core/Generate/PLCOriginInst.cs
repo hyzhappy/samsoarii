@@ -8,10 +8,9 @@ namespace SamSoarII.Core.Generate
 {
     public class PLCOriginInst
     {
-        public PLCOriginInst(PLCInstruction _inst, string _text)
+        public PLCOriginInst(PLCInstruction _inst)
         {
             Inst = _inst;
-            args = _text.Split();
         }
 
         private PLCInstruction inst;
@@ -33,8 +32,15 @@ namespace SamSoarII.Core.Generate
                     inst.Origin = this;
             }
         }
-        private string[] args;
-        public string this[int id] { get { return id < args.Length ? args[id] : ""; } }
+
+        public string this[int id]
+        {
+            get
+            {
+                if (inst.ProtoType == null) return id < inst.Count ? inst[id] : "";
+                return id == 0 ? inst.OldInstname : id-1 < inst.ProtoType.Children.Count ? inst.ProtoType.Children[id - 1].Text : "";
+            }
+        }
 
         public const int STATUS_ACCEPT = 0x00;
         public const int STATUS_WARNING = 0x01;

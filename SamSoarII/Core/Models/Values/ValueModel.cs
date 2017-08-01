@@ -38,15 +38,18 @@ namespace SamSoarII.Core.Models
         public readonly static Regex VerifyBitRegex4 = new Regex(@"^(Y)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex VerifyBitRegex5 = new Regex(@"^(X|M)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex VerifyBitRegex6 = new Regex(@"^(S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static Regex WordBitRegex = new Regex(@"^(D|V|Z)([0-9]+)\.([0-9A-F])((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public readonly static Regex VerifyWordRegex1 = new Regex(@"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex VerifyWordRegex2 = new Regex(@"^(D|CV|TV|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex VerifyWordRegex3 = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex VerifyWordRegex4 = new Regex(@"^(TV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
+        public readonly static Regex BitWordRegex = new Regex(@"(K)([0-9]+)(X|Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        
         public readonly static Regex VerifyDoubleWordRegex1 = new Regex(@"^(D|CV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex VerifyDoubleWordRegex2 = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex VerifyDoubleWordRegex3 = new Regex(@"^(CV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static Regex BitDoubleWordRegex = new Regex(@"(K)([0-9]+)(X|Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public readonly static Regex VerifyFloatRegex = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -119,12 +122,30 @@ namespace SamSoarII.Core.Models
 
         protected int ofs;
         public int Offset { get { return this.ofs; } }
+
+        protected int siz;
+        public int Size { get { return this.siz; } }
         
         protected Bases ibs;
         public Bases Intra { get { return this.ibs; } }
 
         protected int ifs;
         public int IntraOffset { get { return this.ifs; } }
+        
+        public bool IsWordBit
+        {
+            get { return Type == Types.BOOL && (Base == Bases.D || Base == Bases.V || Base == Bases.Z); }
+        }
+
+        public bool isBitWord
+        {
+            get { return Type == Types.WORD && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
+        }
+        
+        public bool isBitDoubleWord
+        {
+            get { return Type == Types.DWORD && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
+        }
 
         protected ValueStore store;
         public ValueStore Store
@@ -179,6 +200,7 @@ namespace SamSoarII.Core.Models
                 return;
             }
             Match match = format.Match(text);
+            Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (match == null)
                 throw new ValueParseException("Unexpected input.", format);
             //if (ValueManager != null) ValueManager.Remove(this);
@@ -188,6 +210,26 @@ namespace SamSoarII.Core.Models
                 case Bases.K:
                     switch (format.Type)
                     {
+                        case Types.WORD:
+                        case Types.DWORD:
+                            if (match.Groups.Count > 3)
+                            {
+                                siz = int.Parse(match.Groups[2].Value);
+                                if (siz <= 0 || siz > (format.Type == Types.WORD ? 16 : 32))
+                                    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                                bas = ParseBase(match.Groups[3].Value);
+                                ofs = int.Parse(match.Groups[4].Value);
+                                if (ofs < 0 || ofs + siz > device.GetRange(bas).Count)
+                                    throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                                ibs = match.Groups.Count > 6 && match.Groups[6].Value.Length > 0 ? ParseBase(match.Groups[6].Value) : Bases.NULL;
+                                ifs = match.Groups.Count > 7 && match.Groups[7].Value.Length > 0 ? int.Parse(match.Groups[7].Value) : 0;
+                            }
+                            else
+                            {
+                                Store = new ValueStore(null, Type);
+                                Store.Value = int.Parse(match.Groups[2].Value);
+                            }
+                            break;
                         case Types.FLOAT:
                             Store = new ValueStore(null, Type);
                             Store.Value = float.Parse(match.Groups[2].Value);
@@ -205,10 +247,23 @@ namespace SamSoarII.Core.Models
                 case Bases.NULL:
                     break;
                 default:
+                    if (Type == Types.BOOL)
+                    {
+                        if (bas == Bases.D || bas == Bases.V || bas == Bases.Z)
+                        {
+                            ofs = int.Parse(match.Groups[2].Value);
+                            if (ofs < 0 || ofs >= device.GetRange(bas).Count)
+                                throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                            ofs <<= 4;
+                            ofs += int.Parse(match.Groups[3].Value, System.Globalization.NumberStyles.HexNumber);
+                            ibs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? ParseBase(match.Groups[5].Value) : Bases.NULL;
+                            ifs = match.Groups.Count > 6 && match.Groups[6].Value.Length > 0 ? int.Parse(match.Groups[6].Value) : 0;
+                            break;
+                        }
+                    }
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
-                    Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
                     if (ofs < 0 || ofs >= device.GetRange(bas).Count)
                         throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                     break;
@@ -240,7 +295,7 @@ namespace SamSoarII.Core.Models
         }
 
         #endregion
-
+        
         #region Save & Load (Not used)
 
         public void Load(XElement xele)

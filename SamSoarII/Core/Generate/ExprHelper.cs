@@ -368,8 +368,8 @@ namespace SamSoarII.Core.Generate
              * 前面没有与运算和或运算的链接，这时需要将栈顶弹出
              * 要注意一些特殊的标志指令，这些指令不涉及到栈的操作
              */
-            if ((flag & FLAG_CALAND) == 0 && (flag & FLAG_CALOR) == 0
-             && insts.Count() > 0 && !LadderUnitModel.LabelTypes.Contains(LadderUnitModel.TypeOfNames[insts.Last().Type]))
+            if ((flag & FLAG_CALAND) == 0 && (flag & FLAG_CALOR) == 0 && insts.Count() > 0 
+             && (!LadderUnitModel.TypeOfNames.ContainsKey(insts.Last()[0]) || !LadderUnitModel.LabelTypes.Contains(LadderUnitModel.TypeOfNames[insts.Last()[0]])))
             {
                 InstHelper.AddInst(insts, "POP");
             }
@@ -617,11 +617,11 @@ namespace SamSoarII.Core.Generate
             for (int i = 0; i < insts.Count; i++)
             {
                 // 这个指令是LD类的，栈顶加1元素
-                if (insts[i].Text.Substring(0, 2).Equals("LD"))
+                if (insts[i][0].Substring(0, 2).Equals("LD"))
                     instStackCount[i] = lastStackCount + 1;
                 // 这个指令是对栈顶两元素进行或合并或者与合并，栈顶减1元素
-                else if (insts[i].Text.Substring(0, 3).Equals("ORB") ||
-                         insts[i].Text.Substring(0, 3).Equals("ANB"))
+                else if (insts[i][0].Substring(0, 3).Equals("ORB") ||
+                         insts[i][0].Substring(0, 3).Equals("ANB"))
                     instStackCount[i] = lastStackCount - 1;
                 // 其他指令不涉及到栈的改变
                 else
@@ -656,7 +656,7 @@ namespace SamSoarII.Core.Generate
             {
                 suffix = InstHelper.ToExpr(insts[right]);
                 // 或运算加括号
-                if (insts[right].Text.Substring(0, 2).Equals("OR"))
+                if (insts[right][0].Substring(0, 2).Equals("OR"))
                 {
                     profix = profix + "(";
                     suffix = ")" + suffix;
@@ -681,10 +681,10 @@ namespace SamSoarII.Core.Generate
             string lexpr = _InstToExpr(left, mid, stackTop);
             string rexpr = _InstToExpr(mid + 1, right - 1, stackTop + 1);
             // 栈顶合并运算是或运算时，可以保证优先级最后
-            if (insts[right].Text.Substring(0, 3).Equals("ORB"))
+            if (insts[right][0].Substring(0, 3).Equals("ORB"))
                 return profix + lexpr + "||" + rexpr + suffix;
             // 与运算需要左右加括号确保优先级
-            if (insts[right].Text.Substring(0, 3).Equals("ANB"))
+            if (insts[right][0].Substring(0, 3).Equals("ANB"))
                 return profix + "(" + lexpr + ")&&(" + rexpr + ")" + suffix;
             // 不是合并运算？
             throw new ArgumentException();
