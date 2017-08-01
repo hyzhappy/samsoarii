@@ -41,8 +41,8 @@ namespace SamSoarII.Core.Generate
         {
             LadderElements.Add(model);
             var movedele = Parent.Children[model.X, model.Y];
-            Parent.Add(model);
             LadderElements.Remove(movedele);
+            Parent.Add(model);
             return movedele;
         }
         public void RemoveElement(int _x,int _y)

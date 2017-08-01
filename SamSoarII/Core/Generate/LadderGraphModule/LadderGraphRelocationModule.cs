@@ -265,7 +265,7 @@ namespace SamSoarII.Core.Generate
         {
             var allElements = new List<LadderUnitModel>(ladderLogicModule.LadderElements);
             allElements.AddRange(ladderLogicModule.LadderVerticalLines);
-            foreach (var ele in allElements)
+            foreach (var ele in allElements.OrderBy(x => { return x.Y; }))
             {
                 if (ele.Shape == LadderUnitModel.Shapes.VLine)
                 {
