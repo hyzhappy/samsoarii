@@ -403,13 +403,16 @@ namespace SamSoarII.Core.Generate
             for (int j = 0; j < VLines.Count(); j++)
             {
                 cnt = GetCount(ladderLogicModule, VLines[j]);
-                if(cnt == 0)
+                if(j > 0 && (cnt == 0 || IsLinked(VLines[j - 1],VLines[j])))
                     cnt = tempdic[j - 1];
                 tempdic.Add(j, cnt);
                 MoveVerticalLine(ladderLogicModule, VLines[j], cnt);
             }
         }
-
+        private static bool IsLinked(LadderUnitModel vline1, LadderUnitModel vline2)
+        {
+            return (vline1.Y == vline2.Y - 1) && (vline1.X == vline2.X);
+        }
         private static void MoveVerticalLine(LadderLogicModule ladderLogicModule, LadderUnitModel vLine, int cnt)
         {
             if (vLine.X != cnt - 1)
@@ -720,17 +723,23 @@ namespace SamSoarII.Core.Generate
             int cnt = 0, tempCnt = 0;
             var tempEle = ladderLogicModule.LadderElements.Where(x =>
                 { return x.Shape != LadderUnitModel.Shapes.Output && x.Shape != LadderUnitModel.Shapes.OutputRect && x.Shape != LadderUnitModel.Shapes.HLine; });
+            var templist = ladderLogicModule.LadderVerticalLines.Where(x => { return x.CountLevel < VLine.CountLevel; });
+            cnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X; }).Count();
+            tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X; }).Count();
+            cnt = Math.Max(tempCnt, cnt);
             //前一层级的VLine有三个方向，上，同一层，下
-            var tempList1 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y - 1 && x.CountLevel < VLine.CountLevel; });
-            var tempList2 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y && x.CountLevel < VLine.CountLevel; });
-            var tempList3 = ladderLogicModule.LadderVerticalLines.Where(x => { return x.Y == VLine.Y + 1 && x.CountLevel < VLine.CountLevel; });
+            var tempList1 = templist.Where(x => { return x.Y == VLine.Y - 1; });
+            var tempList2 = templist.Where(x => { return x.Y == VLine.Y; });
+            var tempList3 = templist.Where(x => { return x.Y == VLine.Y + 1; });
+            bool isSuccess = false;
             if (tempList1.Count() != 0)
             {
                 var tempVLine1 = tempList1.OrderBy(x => { return x.CountLevel; }).Last();
                 tempCnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X && x.X > tempVLine1.X; }).Count();
                 if (tempCnt > 0)
                 {
-                    cnt = Math.Max(tempCnt + tempVLine1.X + 1,cnt);
+                    cnt = Math.Max(tempCnt + tempVLine1.X + 1, cnt);
+                    isSuccess = true;
                 }
             }
             if (tempList2.Count() != 0)
@@ -740,26 +749,30 @@ namespace SamSoarII.Core.Generate
                 if (tempCnt > 0)
                 {
                     cnt = Math.Max(tempCnt + tempVLine2.X + 1, cnt);
+                    isSuccess = true;
                 }
                 tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine2.X; }).Count();
                 if (tempCnt > 0)
                 {
                     cnt = Math.Max(tempCnt + tempVLine2.X + 1, cnt);
+                    isSuccess = true;
                 }
             }
             if (tempList3.Count() != 0)
             {
                 var tempVLine3 = tempList3.OrderBy(x => { return x.CountLevel; }).Last();
                 tempCnt = tempEle.Where(x => { return x.Y == VLine.Y + 1 && x.X <= VLine.X && x.X > tempVLine3.X; }).Count();
-                if (tempCnt  > 0)
+                if (tempCnt > 0)
                 {
                     cnt = Math.Max(tempCnt + tempVLine3.X + 1, cnt);
+                    isSuccess = true;
                 }
             }
             if (cnt == 0 && VLine.Y == ladderLogicModule.startY)
             {
                 cnt = tempEle.Where(x => { return x.Y == VLine.Y && x.X <= VLine.X; }).Count();
             }
+            if (!isSuccess && templist.Count() > 0) cnt = 0;
             return cnt;
         }
         private static void RemoveEmptyLines(LadderNetworkModel ladderNetwork)
