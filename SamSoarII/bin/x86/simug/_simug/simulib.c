@@ -2191,9 +2191,9 @@ void _set_wbit(int32_t* src, int32_t loc, int32_t* en, int32_t size, int32_t val
 		if (!en[0])
 		{			
 			if (value)
-				src[0] |=  ((1<<size)-1) << loc);
+				src[0] |=  (((1<<size)-1) << loc);
 			else
-				src[0] &= ~((1<<size)-1) << loc);	
+				src[0] &= ~(((1<<size)-1) << loc);	
 		}
 		return;
 	}
@@ -2202,16 +2202,16 @@ void _set_wbit(int32_t* src, int32_t loc, int32_t* en, int32_t size, int32_t val
 	if (!en[0])
 	{	
 		if (value)
-			src[0] |=  ((1<<lrem)-1) << loc);
+			src[0] |=  (((1<<lrem)-1) << loc);
 		else
-			src[0] &= ~((1<<lrem)-1) << loc);
+			src[0] &= ~(((1<<lrem)-1) << loc);
 	}
 	for (i = 1; i <= bcnt; i++)
 		if (!en[i]) src[i] = value ? 0x0000ffff : 0x00000000;
 	if (rrem && !en[bcnt+1])
 	{
 		if (value)
-			src[bcnt+1] |= (1<<rrem)-1;
+			src[bcnt+1] |=  ((1<<rrem)-1);
 		else
 			src[bcnt+1] &= ~((1<<rrem)-1);
 	}
@@ -2315,8 +2315,8 @@ void _mov_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, i
 				}
 				if (!en[bcnt+1])
 				{
-					dst[bcnt+1] &= ~((1<<(rem-delta))-1);
-					dst[bcnt+1] |= (((src[bcnt+1]>>delta) & ((1<<(rem-delta))-1)));
+					dst[bcnt+1] &= ~((1<<(rrem-delta))-1);
+					dst[bcnt+1] |= (((src[bcnt+1]>>delta) & ((1<<(rrem-delta))-1)));
 				}
 			}
 		}
@@ -2339,8 +2339,8 @@ void _mov_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int
 	int i, loc, bid;
 	for (i = 0 ; i < size; i++)
 	{
-		bid = (sloc+i)>>4;
-		loc = (sloc+i)&15;
+		bid = (dloc+i)>>4;
+		loc = (dloc+i)&15;
 		if (!en[bid]) 
 		{
 			dst[bid] &= ~(1<<loc);
@@ -2358,7 +2358,7 @@ void _shl_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, i
 		bid2 = (dloc+size+move)>>4;
 		loc1 = (dloc+size)&15;
 		loc2 = (dloc+size+move)&15;
-		if (!en[bid2]) _set_wbit(dst+bid2, loc2, _get_wbit(dst+bid1, loc1));
+		if (!en[bid2]) _set_wbit(dst+bid2, loc2, en+bid2, 1, _get_wbit(dst+bid1, loc1));
 	}
 	_mov_wbit_to_wbit(src, sloc, dst, dloc, en, move);
 }
@@ -2381,7 +2381,7 @@ void _shl_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int
 		bid2 = (dloc+size+move)>>4;
 		loc1 = (dloc+size)&15;
 		loc2 = (dloc+size+move)&15;
-		if (!en[bid2]) _set_wbit(dst+bid2, loc2, _get_wbit(dst+bid1, loc1));
+		if (!en[bid2]) _set_wbit(dst+bid2, loc2, en+bid2, 1, _get_wbit(dst+bid1, loc1));
 	}
 	_mov_bit_to_wbit(src, dst, dloc, en, move);
 	
@@ -2397,7 +2397,7 @@ void _shr_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, i
 		bid2 = (dloc+i+move)>>4;
 		loc1 = (dloc+i)&15;
 		loc2 = (dloc+i+move)&15;
-		if (!en[bid1]) _set_wbit(dst+bid1, loc1, 1, _get_wbit(dst+bid2, loc2));
+		if (!en[bid1]) _set_wbit(dst+bid1, loc1, en+bid1, 1, _get_wbit(dst+bid2, loc2));
 		i++;
 	}
 	bid1 = (dloc+size-move)>>4;
@@ -2412,7 +2412,7 @@ void _shr_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int
 	{
 		if (!en[i]) dst[i] = dst[i + move];
 	}
-	_move_wbit_to_bit(src, sloc, dst+(size-move), en+(size-move), move);
+	_mov_wbit_to_bit(src, sloc, dst+(size-move), en+(size-move), move);
 }
 
 void _shr_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move)
@@ -2425,11 +2425,11 @@ void _shr_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int
 		bid2 = (dloc+i+move)>>4;
 		loc1 = (dloc+i)&15;
 		loc2 = (dloc+i+move)&15;
-		if (!en[bid1]) _set_wbit(dst+bid1, loc1, 1, _get_wbit(dst+bid2, loc2));
+		if (!en[bid1]) _set_wbit(dst+bid1, loc1, en+bid1, 1, _get_wbit(dst+bid2, loc2));
 	}
 	bid1 = (dloc+size-move)>>4;
 	loc1 = (dloc+size-move)&15;
-	_mov_wbit_to_wbit(src, dst+bid1, loc1, en+bid1, move);
+	_mov_bit_to_wbit(src, dst+bid1, loc1, en+bid1, move);
 }
 
 void _set_bword(int32_t* src, int32_t size, int32_t* en, int32_t value)
@@ -2450,7 +2450,7 @@ int32_t _get_bword(int32_t* src, int32_t size)
 	return ret;
 }
 
-void _set_bdword(int32_t* src, int32_t* en, int32_t size, int64_t value)
+void _set_bdword(int32_t* src, int32_t size, int32_t* en, int64_t value)
 {
 	while (--size >= 0)
 	{
@@ -2475,21 +2475,21 @@ void _xch_bword_to_word(int32_t* bit, int32_t size, int32_t* en, int32_t* word)
 	_set_bword(bit, size, en, tmp);
 }
 
-void _xch_bword_to_bword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t* size2, int32_t* en2)
+void _xch_bword_to_bword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t size2, int32_t* en2)
 {
 	int32_t tmp = _get_bword(bit1, size1);
 	_set_bword(bit1, size1, en1, _get_bword(bit2, size2));
 	_set_bword(bit2, size2, en2, tmp);
 }
 
-void _xchd_bdword_to_dword(int32_t* bit, int32_t size, int32_t* en, int64_t* word)
+void _xchd_bdword_to_dword(int32_t* bit, int32_t size, int32_t* en, int64_t* dword)
 {
-	int64_t tmp = *word;
-	*word = _get_bdword(bit, size);
+	int64_t tmp = *dword;
+	*dword = _get_bdword(bit, size);
 	_set_bdword(bit, size, en, tmp);
 }
 
-void _xchd_bdword_to_bdword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t* size2, int32_t* en2)
+void _xchd_bdword_to_bdword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t size2, int32_t* en2)
 {
 	int64_t tmp = _get_bdword(bit1, size1);
 	_set_bdword(bit1, size1, en1, _get_bword(bit2, size2));

@@ -33,10 +33,9 @@ namespace SamSoarII.Core.Generate
         /// <param name="prototype">指令原型</param>
         public PLCInstruction(string _instname, LadderUnitModel _prototype)
         {
-            ProtoType = _prototype;
             oldinstname = _instname;
             args = new string[] { _instname };
-            Analyze();
+            ProtoType = _prototype;
         }
         /// <summary>
         /// 原型
@@ -55,8 +54,13 @@ namespace SamSoarII.Core.Generate
                 if (_prototype != null && _prototype.Inst != null)
                     _prototype.Inst = null;
                 this.prototype = value;
-                if (prototype != null && prototype.Inst != this)
-                    prototype.Inst = this;
+                if (prototype != null)
+                {
+                    if (prototype.Inst != this)
+                        prototype.Inst = this;
+                    Analyze();
+                }
+                
             }
         }
         /// <summary>
@@ -111,6 +115,7 @@ namespace SamSoarII.Core.Generate
             // 根据指令类型的参数结构来分类，并转化参数的格式
             if (prototype != null)
             {
+                args = new string[] { oldinstname };
                 args = args.Concat(new string[prototype.Children.Count]).ToArray();
                 switch (args[0])
                 {
@@ -190,13 +195,9 @@ namespace SamSoarII.Core.Generate
                  * 所以标号需要记录到另外的参数
                  */
                 if (args[0].Length > 2 && args[0].Substring(0, 3).Equals("RST") && args[1][0] == 'C')
-                {
                     args = args.Concat(new string[] { args[1].Substring(1) }).ToArray();
-                }
                 if (args[0].Length > 2 && args[0].Substring(0, 2).Equals("CT"))
-                {
                     args = args.Concat(new string[] { args[1].Substring(2) }).ToArray();
-                }
             }
         }
         

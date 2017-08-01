@@ -978,8 +978,9 @@ namespace SamSoarII.Core.Models
         public LadderUnitModel(LadderNetworkModel _parent, XElement xele)
         {
             children = new ValueModel[] { };
-            InitializeStructure(_parent);
-            try { Load(xele); } catch (ValueParseException) { }
+            try { Load(xele); }
+            catch (ValueParseException) { }
+            finally { InitializeStructure(_parent); }
         }
 
         private void InitializeStructure(LadderNetworkModel _parent)

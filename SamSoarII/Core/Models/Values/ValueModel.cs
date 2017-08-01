@@ -247,19 +247,16 @@ namespace SamSoarII.Core.Models
                 case Bases.NULL:
                     break;
                 default:
-                    if (Type == Types.BOOL)
+                    if (IsWordBit)
                     {
-                        if (bas == Bases.D || bas == Bases.V || bas == Bases.Z)
-                        {
-                            ofs = int.Parse(match.Groups[2].Value);
-                            if (ofs < 0 || ofs >= device.GetRange(bas).Count)
-                                throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
-                            ofs <<= 4;
-                            ofs += int.Parse(match.Groups[3].Value, System.Globalization.NumberStyles.HexNumber);
-                            ibs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? ParseBase(match.Groups[5].Value) : Bases.NULL;
-                            ifs = match.Groups.Count > 6 && match.Groups[6].Value.Length > 0 ? int.Parse(match.Groups[6].Value) : 0;
-                            break;
-                        }
+                        ofs = int.Parse(match.Groups[2].Value);
+                        if (ofs < 0 || ofs >= device.GetRange(bas).Count)
+                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                        ofs <<= 4;
+                        ofs += int.Parse(match.Groups[3].Value, System.Globalization.NumberStyles.HexNumber);
+                        ibs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? ParseBase(match.Groups[5].Value) : Bases.NULL;
+                        ifs = match.Groups.Count > 6 && match.Groups[6].Value.Length > 0 ? int.Parse(match.Groups[6].Value) : 0;
+                        break;
                     }
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;

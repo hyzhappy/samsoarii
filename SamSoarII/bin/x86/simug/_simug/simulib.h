@@ -308,14 +308,26 @@ void _shl_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, i
 
 void _shl_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size, int32_t move);
 
-void _shl_bit_to_wbit(int32_t* src, int32_t* dst, int32_t* dloc, int32_t* en, int32_t size, int32_t move);
+void _shl_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move);
 
 void _shr_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move);
 
 void _shr_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size, int32_t move);
 
-void _shr_bit_to_wbit(int32_t* src, int32_t* dst, int32_t* dloc, int32_t* en, int32_t size, int32_t move);
+void _shr_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move);
 
-void _set_bword(int32_t* src, int32_t* en, int32_t size, int32_t value);
+void _set_bword(int32_t* src, int32_t size, int32_t* en, int32_t value);
 
 int32_t _get_bword(int32_t* src, int32_t size);
+
+void _set_bdword(int32_t* src, int32_t size, int32_t* en, int64_t value);
+
+int64_t _get_bdword(int32_t* src, int32_t size);
+
+void _xch_bword_to_word(int32_t* bit, int32_t size, int32_t* en, int32_t* word);
+
+void _xch_bword_to_bword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t size2, int32_t* en2);
+
+void _xchd_bdword_to_dword(int32_t* bit, int32_t size, int32_t* en, int64_t* dword);
+
+void _xchd_bdword_to_bdword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t size2, int32_t* en2);
