@@ -40,21 +40,13 @@ namespace SamSoarII.Threads
                 current = parent.CurrentLadder;
                 if (current != null)
                 {
-                    try
+                    current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        oldscrolloffset = current.Scroll.VerticalOffset;
-                        oldinstoffset = current.Core.Inst.View.Scroll.VerticalOffset;
-                        oldoutlineoffset = current.Outline.Scroll.VerticalOffset;
-                        for (int i = 0; i < current.Core.Children.Count; i++)
-                        {
-                            current.Core.Children[i].View.DynamicUpdate();
-                            current.Core.Children[i].Inst.View.DynamicUpdate();
-                        }
-                        current.Outline.DynamicUpdate();
-                    }
-                    catch (Exception)
-                    {
-                    }
+                        if (!current.IsLoaded)
+                            current.Loaded += OnCurrentLoaded;
+                        else
+                            GenerateCurrent();
+                    });
                 }
             }
             if (current == null)
@@ -101,10 +93,9 @@ namespace SamSoarII.Threads
             }
             catch (Exception)
             {
-
             }
         }
-
+        
         private void DestoryCurrent()
         {
             try
@@ -114,12 +105,39 @@ namespace SamSoarII.Threads
                     current.Core.Children[i].View.DynamicDispose();
                     current.Core.Children[i].Inst.View.DynamicDispose();
                 }
+                current.Outline.DynamicDispose();
             }
             catch (Exception)
             {
             }
         }
-        
+
+        private void GenerateCurrent()
+        {
+            try
+            {
+                oldscrolloffset = current.Scroll.VerticalOffset;
+                oldinstoffset = current.Core.Inst.View.Scroll.VerticalOffset;
+                oldoutlineoffset = current.Outline.Scroll.VerticalOffset;
+                for (int i = 0; i < current.Core.Children.Count; i++)
+                {
+                    current.Core.Children[i].View.DynamicUpdate();
+                    current.Core.Children[i].Inst.View.DynamicUpdate();
+                }
+                current.Outline.DynamicUpdate();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+
+        private void OnCurrentLoaded(object sender, RoutedEventArgs e)
+        {
+            current.Loaded -= OnCurrentLoaded;
+            GenerateCurrent();
+        }
+
         private void OnAborted(object sender, RoutedEventArgs e)
         {
         }
