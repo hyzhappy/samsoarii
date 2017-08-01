@@ -638,8 +638,8 @@ namespace SamSoarII.Shell.Models
             {
                 int _loadedrowstart = 0; 
                 int _loadedrowend = RowCount - 1;
-                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (HeightUnit * scaleY)) - 3);
-                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (HeightUnit * scaleY)) + 3);
+                _loadedrowstart = Math.Max(_loadedrowstart, (int)(-p.Y / (HeightUnit * scaleY)) - 1);
+                _loadedrowend = Math.Min(_loadedrowend, (int)((-p.Y + scroll.ViewportHeight) / (HeightUnit * scaleY)) + 1);
                 if (_loadedrowstart > _loadedrowend)
                 {
                     if (loadedrowstart <= loadedrowend)
