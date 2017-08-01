@@ -72,7 +72,7 @@ namespace SamSoarII.Core.Models
             parent = _parent;
             infos = new ValueInfo[InfoCount];
             emptyinfo = new ValueInfo(new ValuePrototype(ValueModel.Bases.NULL, 0), -1);
-            tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.VarRegex }));
+            tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.AnyNameRegex }));
             for (int i = 0; i < MaxRange.XRange.Count; i++)
                 infos[i + XOffset] = new ValueInfo(new ValuePrototype(ValueModel.Bases.X, i), i + XOffset);
             for (int i = 0; i < MaxRange.YRange.Count; i++)
@@ -244,6 +244,8 @@ namespace SamSoarII.Core.Models
         
         public int IndexOf(ValueModel value)
         {
+            if (value.IsWordBit)
+                return value.Offset < Device.GetRange(value.Base).Count ? GetOffset(value.Base) + (value.Offset>>4) : -1;
             return value.Offset < Device.GetRange(value.Base).Count ? GetOffset(value.Base) + value.Offset : -1;
         }
 

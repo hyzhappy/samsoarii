@@ -294,8 +294,28 @@ void _fmovw(int32_t source, int32_t* dest, int32_t* enable, int32_t size);
 // set a series of 32-bit memeory to the targeted value
 void _fmovd(int64_t source, int64_t* dest, int32_t* enable, int32_t size);
 
-void _set_wbit(int16_t* src, int16_t loc, int32_t size);
+void _set_wbit(int32_t* src, int32_t loc, int32_t* en, int32_t size, int32_t value);
 
-int16_t _get_wbit(int16_t* src, int16_t 
+int32_t _get_wbit(int32_t* src, int32_t loc);
 
+void _mov_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, int32_t* en, int32_t size);
 
+void _mov_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size);
+
+void _mov_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int32_t size);
+
+void _shl_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move);
+
+void _shl_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size, int32_t move);
+
+void _shl_bit_to_wbit(int32_t* src, int32_t* dst, int32_t* dloc, int32_t* en, int32_t size, int32_t move);
+
+void _shr_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move);
+
+void _shr_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size, int32_t move);
+
+void _shr_bit_to_wbit(int32_t* src, int32_t* dst, int32_t* dloc, int32_t* en, int32_t size, int32_t move);
+
+void _set_bword(int32_t* src, int32_t* en, int32_t size, int32_t value);
+
+int32_t _get_bword(int32_t* src, int32_t size);

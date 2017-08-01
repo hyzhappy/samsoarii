@@ -60,13 +60,6 @@ namespace SamSoarII.Core.Generate
         /// <param name="networks">PLC代码的NETWORK集</param>
         static public void InstToSimuCode(StreamWriter sw, PLCInstNetwork[] networks)
         {
-            foreach (PLCInstNetwork net in networks)
-            {
-                foreach (PLCInstruction inst in net.Insts)
-                {
-                    inst.WordSize = 32;
-                }
-            }
             sw.Write("#include <stdint.h>\r\n");
             sw.Write("#include \"simulib.h\"\r\n");
             sw.Write("#include \"simuf.h\"\r\n");
@@ -80,13 +73,6 @@ namespace SamSoarII.Core.Generate
         /// <param name="networks">PLC代码的NETWORK集</param>
         static public void InstToDownCode(StreamWriter sw, PLCInstNetwork[] networks)
         {
-            foreach (PLCInstNetwork net in networks)
-            {
-                foreach (PLCInstruction inst in net.Insts)
-                {
-                    inst.WordSize = 16;
-                }
-            }
             sw.Write("#include <stdint.h>\r\n");
             sw.Write("#include \"downlib.h\"\n");
             sw.Write("#include \"downf.h\"\r\n");
@@ -133,20 +119,20 @@ namespace SamSoarII.Core.Generate
             foreach (PLCInstruction inst in insts)
             {
                 // 计算普通栈和辅助栈的栈顶
-                if (inst.Type.Length > 1 && inst.Type.Substring(0, 2) == "LD")
+                if (inst[0].Length > 1 && inst[0].Substring(0, 2) == "LD")
                 {
                     stackTop++;
                     stackinsts.Push(inst);
                 }
-                if (inst.Type.Equals("ANDB") || inst.Type.Equals("ORB") || inst.Type.Equals("POP"))
+                if (inst[0].Equals("ANDB") || inst[0].Equals("ORB") || inst[0].Equals("POP"))
                 {
                     stackTop--;
                     PLCInstruction topinst = stackinsts.Pop();
-                    topinst.StackCalc = inst.Type;
+                    topinst.StackCalc = inst[0];
                 }
-                if (inst.Type.Equals("MPS"))
+                if (inst[0].Equals("MPS"))
                     mstackTop++;
-                if (inst.Type.Equals("MPP"))
+                if (inst[0].Equals("MPP"))
                     mstackTop--;
                 // 记录两个栈到达的最大高度
                 if (stackTop > stackTotal)
@@ -154,7 +140,7 @@ namespace SamSoarII.Core.Generate
                 if (mstackTop > mstackTotal)
                     mstackTotal = mstackTop;
                 // 统计所有需要全局变量的指令的总数
-                switch (inst.Type)
+                switch (inst[0])
                 {
                     case "LDP":
                     case "LDF":
@@ -179,7 +165,7 @@ namespace SamSoarII.Core.Generate
                         break;
                 }
                 // 找到所有计数器的预设值
-                if (inst.Type.Length >= 2 && inst.Type.Substring(0, 2).Equals("CT"))
+                if (inst[0].Length >= 2 && inst[0].Substring(0, 2).Equals("CT"))
                 {
                     ctsv[int.Parse(inst[4])] = int.Parse(inst[2]);
                 }
@@ -198,7 +184,7 @@ namespace SamSoarII.Core.Generate
             // 先声明所有的子函数
             foreach (PLCInstruction inst in insts)
             {
-                if (inst.Type.Equals("FUNC"))
+                if (inst[0].Equals("FUNC"))
                     sw.Write("void _SBR_{0:s}();\n", inst[1]);
             }
             // 建立扫描的主函数
@@ -218,7 +204,7 @@ namespace SamSoarII.Core.Generate
             mstackTop = 0;
             foreach (PLCInstruction inst in insts)
             {
-                switch (inst.Type)
+                switch (inst[0])
                 {
                     // 函数头部
                     case "FUNC":
@@ -285,7 +271,7 @@ namespace SamSoarII.Core.Generate
                 stackcalcs[stackTop] = inst.StackCalc;
             }
             // 第一次判断指令类型
-            switch (inst.Type)
+            switch (inst[0])
             {
                 // STL状态切换
                 case "STL":
@@ -493,6 +479,13 @@ namespace SamSoarII.Core.Generate
                 case "OUT":
                     sw.Write("{0:s} = {1:s};\n", inst[1], cond);
                     break;
+                case "WBOUT":
+                case "WBOUTIM":
+                    if (simumode)
+                        sw.Write("{0:s} &{2:s}, 1, {1:s});", inst[1], cond, inst.EnBit);
+                    else
+                        sw.Write("{0:s} 1, {1:s}", inst[1], cond);
+                    break;
                 case "OUTIM":
                     if (!simumode && inst[1][0] == 'Y')
                         sw.Write("OutputIm_Y({0:s}, {1:s});\n", inst[2], cond);
@@ -515,11 +508,18 @@ namespace SamSoarII.Core.Generate
                         sw.Write("if ({0:s}) {{_bitset(&{1:s}, {2:s});\n",
                             cond, inst[1], inst[2]);
                     /*
-                     * 在STL状态下，执行SET指令后，需要在扫描周期后将当前状态复位
+                     * 在STL状态下，执行对状态的SET指令后，需要在扫描周期后将当前状态复位
                      */
-                    if (stlvalue != null)
+                    if (stlvalue != null && inst[1][0] == 'S')
                         sw.Write("_stlrst = 1;\n");
                     sw.Write("}\n");
+                    break;
+                case "WBSET":
+                case "WBSETIM":
+                    if (simumode)
+                        sw.Write("if ({0:s}) {1:s} &{3:s}, {2:s}, 1);", cond, inst[1], inst[2], inst.EnBit);
+                    else
+                        sw.Write("if ({0:s}) {1:s} {2:s}, 1);", cond, inst[1], inst[2]);
                     break;
                 case "RST":
                 case "RSTIM":
@@ -546,6 +546,13 @@ namespace SamSoarII.Core.Generate
                             sw.Write("CVWord[{0:d}] = {1:d};\n", i, ctsv[i]);
                     }
                     sw.Write("}\n");
+                    break;
+                case "WBRST":
+                case "WBRSTIM":
+                    if (simumode)
+                        sw.Write("if ({0:s}) {1:s} &{3:s}, {2:s}, 0);", cond, inst[1], inst[2], inst.EnBit);
+                    else
+                        sw.Write("if ({0:s}) {1:s} {2:s}, 0);", cond, inst[1], inst[2]);
                     break;
                 // 交替
                 case "ALT": sw.Write("if ({0:s}) {1:s}=({1:s} ? 0 : 1);\n", cond, inst[1]); break;
@@ -730,25 +737,34 @@ namespace SamSoarII.Core.Generate
                 default:
                     sw.Write("if ({0:s}) {{\n", cond);
                     // 第二回指令判断
-                    switch (inst.Type)
+                    switch (inst[0])
                     {
                         // 状态转移
                         case "ST": sw.Write("{0:s} = 1;\n", inst[1]); break;
                         // 数据格式的转化指令
                         case "WTOD": sw.Write("{1:s} = _WORD_to_DWORD({0:s});\n", inst[1], inst[2]); break;
+                        case "BDWTOD": sw.Write("{1:s} _WORD_to_DWORD({0:s});\n", inst[1], inst[2]); break;
                         case "DTOW": sw.Write("{1:s} = _DWORD_to_WORD({0:s});\n", inst[1], inst[2]); break;
+                        case "BWDTOW": sw.Write("{1:s} _DWORD_to_WORD({0:s}));\n", inst[1], inst[2]); break;
                         case "DTOF": sw.Write("{1:s} = _DWORD_to_FLOAT({0:s});\n", inst[1], inst[2]); break;
                         case "BIN": sw.Write("{1:s} = _BCD_to_WORD({0:s});\n", inst[1], inst[2]); break;
+                        case "BWBIN": sw.Write("{1:s} _BCD_to_WORD({0:s}));\n", inst[1], inst[2]); break;
                         case "BCD": sw.Write("{1:s} = _WORD_to_BCD({0:s});\n", inst[1], inst[2]); break;
+                        case "WBBCD": sw.Write("{1:s} _WORD_to_BCD({0:s}));\n", inst[1], inst[2]); break;
                         case "ROUND": sw.Write("{1:s} = _FLOAT_to_ROUND({0:s});\n", inst[1], inst[2]); break;
                         case "TRUNC": sw.Write("{1:s} = _FLOAT_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
                         // 位运算指令
                         case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]); break;
+                        case "BWINVW": case "BDINVD": sw.Write("{1:s}, ~{0:s});", inst[1], inst[2]); break;
                         case "ANDW": case "ANDD": sw.Write("{2:s} = {0:s}&{1:s}", inst[1], inst[2], inst[3]); break;
+                        case "BWANDW": case "BDANDD": sw.Write("{2:s}, {0:s}&{1:s});", inst[1], inst[2], inst[3]); break;
                         case "ORW": case "ORD": sw.Write("{2:s} = {0:s}|{1:s}", inst[1], inst[2], inst[3]); break;
+                        case "BWORW": case "BDORD": sw.Write("{2:s}, {0:s}|{1:s});", inst[1], inst[2], inst[3]); break;
                         case "XORW": case "XORD": sw.Write("{2:s} = {0:s}^{1:s}", inst[1], inst[2], inst[3]); break;
+                        case "BWXORW": case "BDXORD": sw.Write("{2:s}, {0:s}^{1:s});", inst[1], inst[2], inst[3]); break;
                         // 寄存器移动指令
                         case "MOV": case "MOVD": case "MOVF": sw.Write("{1:s} = {0:s};\n", inst[1], inst[2]); break;
+                        case "BWMOV": case "BDMOVD": sw.Write("{1:s} {0:s});", inst[1], inst[2]); break;
                         case "MVBLK":
                             if (simumode)
                                 sw.Write("_mvwblk(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
@@ -763,23 +779,37 @@ namespace SamSoarII.Core.Generate
                             break;
                         // 数学运算指令
                         case "ADD": sw.Write("{2:s} = _addw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWADD": sw.Write("{2:s} _addw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ADDD": sw.Write("{2:s} = _addd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDADDD": sw.Write("{2:s} _addd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ADDF": sw.Write("{2:s} = _addf({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "SUB": sw.Write("{2:s} = _subw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWSUB": sw.Write("{2:s} _subw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SUBD": sw.Write("{2:s} = _subd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDSUBD": sw.Write("{2:s} _subd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SUBF": sw.Write("{2:s} = _subf({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "MUL": sw.Write("{2:s} = _mulwd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDMUL": sw.Write("{2:s} _mulwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MULW": sw.Write("{2:s} = _mulww({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWMULW": sw.Write("{2:s} _mulww({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MULD": sw.Write("{2:s} = _muldd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDMULD": sw.Write("{2:s} _muldd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "MULF": sw.Write("{2:s} = _mulff({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "DIV": sw.Write("{2:s} = _divwd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDDIV": sw.Write("{2:s} _divwd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIVW": sw.Write("{2:s} = _divww({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWDIVW": sw.Write("{2:s} _divww({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIVD": sw.Write("{2:s} = _divdd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDDIVD": sw.Write("{2:s} _divdd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "DIVF": sw.Write("{2:s} = _divff({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
                         case "INC": sw.Write("{1:s} = _incw({0:s});\n", inst[1], inst[2]); break;
+                        case "BWINC": sw.Write("{1:s} _incw({0:s}));\n", inst[1], inst[2]); break;
                         case "INCD": sw.Write("{1:s} = _incd({0:s});\n", inst[1], inst[2]); break;
+                        case "BDINCD": sw.Write("{1:s} _incd({0:s}));\n", inst[1], inst[2]); break;
                         case "DEC": sw.Write("{1:s} = _decw({0:s});\n", inst[1], inst[2]); break;
-                        case "DECD": sw.Write("{1:s} = _decw({0:s});\n", inst[1], inst[2]); break;
+                        case "BWDEC": sw.Write("{1:s} _decw({0:s}));\n", inst[1], inst[2]); break;
+                        case "DECD": sw.Write("{1:s} = _decd({0:s});\n", inst[1], inst[2]); break;
+                        case "BDDECD": sw.Write("{1:s} _decd({0:s}));\n", inst[1], inst[2]); break;
                         case "SIN": sw.Write("{1:s} = _sin({0:s});\n", inst[1], inst[2]); break;
                         case "COS": sw.Write("{1:s} = _cos({0:s});\n", inst[1], inst[2]); break;
                         case "TAN": sw.Write("{1:s} = _tan({0:s});\n", inst[1], inst[2]); break;
@@ -787,24 +817,84 @@ namespace SamSoarII.Core.Generate
                         case "EXP": sw.Write("{1:s} = _exp({0:s});\n", inst[1], inst[2]); break;
                         // 移位指令
                         case "SHL": sw.Write("{2:s} = _shlw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWSHL": sw.Write("{2:s} _shlw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHLD": sw.Write("{2:s} = _shld({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDSHLD": sw.Write("{2:s} _shld({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHR": sw.Write("{2:s} = _shrw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWSHR": sw.Write("{2:s} _shrw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHRD": sw.Write("{2:s} = _shrd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDSHRD": sw.Write("{2:s} _shrd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ROL": sw.Write("{2:s} = _rolw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWROL": sw.Write("{2:s} _rolw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ROR": sw.Write("{2:s} = _rorw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BWROR": sw.Write("{2:s} _rolw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ROLD": sw.Write("{2:s} = _rold({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDROLD": sw.Write("{2:s} _rold({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "RORD": sw.Write("{2:s} = _rord({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "BDRORD": sw.Write("{2:s} _rord({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "SHLB":
-                            if (simumode)
-                                sw.Write("_bitshl(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                            if (inst.ProtoType.Children[0].IsWordBit)
+                            {
+                                if (simumode)
+                                    sw.Write("_shl_wbit_to_bit({0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});", inst.ToCParas(1), inst[2], inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_shl_wbit_to_bit({0:s}, &{1:s}, {2:s}, {3:s});", inst.ToCParas(1), inst[2], inst[3], inst[4]);
+                            }
                             else
-                                sw.Write("_bitshl(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
+                            {
+                                if (simumode)
+                                    sw.Write("_bitshl(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_bitshl(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
+                            }
+                            break;
+                        case "WBSHLB":
+                            if (inst.ProtoType.Children[0].IsWordBit)
+                            {
+                                if (simumode)
+                                    sw.Write("_shl_wbit_to_wbit({0:s}, {1:s}, &{4:s}, {2:s}, {3:s});", inst.ToCParas(1), inst.ToCParas(2), inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_shl_wbit_to_wbit({0:s}, {1:s}, {2:s}, {3:s});", inst.ToCParas(1), inst.ToCParas(2), inst[3], inst[4]);
+                            }
+                            else
+                            {
+                                if (simumode)
+                                    sw.Write("_shl_bit_to_wbit(&{0:s}, {1:s}, &{4:s}, {2:s}, {3:s});", inst[1], inst.ToCParas(2), inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_shl_bit_to_wbit(&{0:s}, {1:s}, {2:s}, {3:s});", inst[1], inst.ToCParas(2), inst[3], inst[4]);
+                            }
                             break;
                         case "SHRB":
-                            if (simumode)
-                                sw.Write("_bitshr(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                            if (inst.ProtoType.Children[0].IsWordBit)
+                            {
+                                if (simumode)
+                                    sw.Write("_shr_wbit_to_bit({0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_shr_wbit_to_bit({0:s}, &{1:s}, {2:s}, {3:s});", inst[1], inst[2], inst[3], inst[4]);
+                            }
                             else
-                                sw.Write("_bitshr(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
+                            {
+                                if (simumode)
+                                    sw.Write("_bitshr(&{0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_bitshr(&{0:s}, &{1:s}, {2:s}, {3:s});\n", inst[1], inst[2], inst[3], inst[4]);
+                            }
+                            break;
+                        case "WBSHRB":
+                            if (inst.ProtoType.Children[0].IsWordBit)
+                            {
+                                if (simumode)
+                                    sw.Write("_shr_wbit_to_wbit({0:s}, {1:s}, &{4:s}, {2:s}, {3:s});", inst.ToCParas(1), inst.ToCParas(2), inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_shr_wbit_to_wbit({0:s}, {1:s}, {2:s}, {3:s});", inst.ToCParas(1), inst.ToCParas(2), inst[3], inst[4]);
+                            }
+                            else
+                            {
+                                if (simumode)
+                                    sw.Write("_shr_bit_to_wbit(&{0:s}, {1:s}, &{4:s}, {2:s}, {3:s});", inst[1], inst.ToCParas(2), inst[3], inst[4], inst.EnBit);
+                                else
+                                    sw.Write("_shr_bit_to_wbit(&{0:s}, {1:s}, {2:s}, {3:s});", inst[1], inst.ToCParas(2), inst[3], inst[4]);
+                            }
                             break;
                         // 辅助功能
                         case "LOG": sw.Write("{1:s} = _log({0:s});\n", inst[1], inst[2]); break;
@@ -812,31 +902,60 @@ namespace SamSoarII.Core.Generate
                         case "FACT": sw.Write("{1:s} = _fact({0:s});\n", inst[1], inst[2]); break;
                         case "SQRT": sw.Write("{1:s} = _sqrt({0:s});\n", inst[1], inst[2]); break;
                         case "CMP": sw.Write("{2:s} = _cmpw({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "WBCMP": sw.Write("{2:s} _cmpw({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "CMPD": sw.Write("{2:s} = _cmpd({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "WBCMPD": sw.Write("{2:s} _cmpd({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "CMPF": sw.Write("{2:s} = _cmpf({0:s}, {1:s});\n", inst[1], inst[2], inst[3]); break;
+                        case "WBCMPF": sw.Write("{2:s} _cmpf({0:s}, {1:s}));\n", inst[1], inst[2], inst[3]); break;
                         case "ZCP": sw.Write("{3:s} = _zcpw({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "WBZCP": sw.Write("{3:s} _zcpw({0:s}, {1:s}, {2:s}));\n", inst[1], inst[2], inst[3], inst[4]); break;
                         case "ZCPD": sw.Write("{3:s} = _zcpd({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "WBZCPD": sw.Write("{3:s} _zcpd({0:s}, {1:s}, {2:s}));\n", inst[1], inst[2], inst[3], inst[4]); break;
                         case "ZCPF": sw.Write("{3:s} = _zcpf({0:s}, {1:s}, {2:s});\n", inst[1], inst[2], inst[3], inst[4]); break;
+                        case "WBZCPF": sw.Write("{3:s} _zcpf({0:s}, {1:s}, {2:s}));\n", inst[1], inst[2], inst[3], inst[4]); break;
                         case "NEG": sw.Write("{1:s} = _negw({0:s});\n", inst[1], inst[2]); break;
+                        case "BWNEG": sw.Write("{1:s} _negw({0:s}));\n", inst[1], inst[2]); break;
                         case "NEGD": sw.Write("{1:s} = _negd({0:s});\n", inst[1], inst[2]); break;
                         case "XCH": sw.Write("_xch(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
+                        case "BWXCH":
+                            if (inst.ProtoType.Children[0].isBitWord)
+                                sw.Write("_xch_bword_to_word({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(1), inst.ToCEnable(1), inst[2], inst.ToCEnable(2));
+                            else
+                                sw.Write("_xch_bword_to_word({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(2), inst.ToCEnable(2), inst[1], inst.ToCEnable(1));
+                            break;
+                        case "BWBWXCH":
+                            sw.Write("_xch_bword_to_bword({0:s}, &{1:s}, {2:s}, &{3:s});\n", inst.ToCParas(1), inst.ToCEnable(1), inst.ToCParas(2), inst.ToCEnable(2));
+                            break;
                         case "XCHD": sw.Write("_xchd(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
+                        case "BDXCHD":
+                            if (inst.ProtoType.Children[0].isBitWord)
+                                sw.Write("_xchd_bdword_to_dword({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(1), inst.ToCEnable(1), inst[2], inst.ToCEnable(2));
+                            else
+                                sw.Write("_xchd_bdword_to_dword({0:s}, &{1:s}, &{2:s}, &{3:s});\n", inst.ToCParas(2), inst.ToCEnable(2), inst[1], inst.ToCEnable(1));
+                            break;
+                        case "BDBDXCHD":
+                            sw.Write("_xchd_bdword_to_bdword({0:s}, &{1:s}, {2:s}, &{3:s});\n", inst.ToCParas(1), inst.ToCEnable(1), inst.ToCParas(2), inst.ToCEnable(2));
+                            break;
                         case "XCHF": sw.Write("_xchf(&{0:s}, &{1:s});\n", inst[1], inst[2]); break;
                         case "CML": sw.Write("{1:s} = _cmlw({0:s});\n", inst[1], inst[2]); break;
+                        case "BWCML": sw.Write("{1:s} _cmlw({0:s}));\n", inst[1], inst[2]); break;
                         case "CMLD": sw.Write("{1:s} = _cmld({0:s});\n", inst[1], inst[2]); break;
+                        case "BDCMLD": sw.Write("{1:s} _cmld({0:s}));\n", inst[1], inst[2]); break;
                         case "FMOV":
                             if (simumode)
-                                sw.Write("_fmovw({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
+                                sw.Write("_fmovw(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
                             else
-                                sw.Write("_fmovw({0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
+                                sw.Write("_fmovw(&{0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
                             break;
                         case "FMOVD":
                             if (simumode)
-                                sw.Write("_fmovd({0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
+                                sw.Write("_fmovd(&{0:s}, &{1:s}, &{3:s}, {2:s});\n", inst[1], inst[2], inst[3], inst.EnBit);
                             else
-                                sw.Write("_fmovd({0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
+                                sw.Write("_fmovd(&{0:s}, &{1:s}, {2:s});\n", inst[1], inst[2], inst[3]);
                             break;
-                        case "SMOV": sw.Write("_smov({0:s}, {1:s}, {2:s}, &{3:s}, {4:s});\n", inst[1], inst[2], inst[3], inst[4], inst[5]); break;
+                        case "SMOV":
+                            sw.Write("_smov({0:s}, {1:s}, {2:s}, &{3:s}, {4:s});\n", inst[1], inst[2], inst[3], inst[4], inst[5]);
+                            break;
                         // CALL指令，调用子函数
                         case "CALL":
                             sw.Write("_SBR_{0:s}();\n", inst[1]);
@@ -950,7 +1069,7 @@ namespace SamSoarII.Core.Generate
                             break;
                         */
                         // 移位操作
-                        default: throw new ArgumentException(String.Format("unidentified PLC command : {0:s}", inst.Type));
+                        default: throw new ArgumentException(String.Format("unidentified PLC command : {0:s}", inst[0]));
                     }
                     sw.Write("}\n");
                     // 注意部分脉冲指令当栈顶为0时需要立即停止

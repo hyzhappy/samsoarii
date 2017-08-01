@@ -519,23 +519,23 @@ namespace SamSoarII.Core.Models
                     cmd.Network.RemoveR(y1, y2);
                 }
             }
+            if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
+            {
+                cmd.Unit.InstArgs = cmd.OldProperties.ToArray();
+                area.Update(cmd.Unit);
+            }
             if ((cmd.Type & CMDTYPE_ChangeComments) != 0)
             {
-                for (i1 = 0; i1 < cmd.OldProperties.Count; i1++)
+                for (i1 = 0; i1 < cmd.Unit.Children.Count; i1++)
                 {
                     try
                     {
-                        ValueManager[cmd.OldProperties[i1]].Comment = cmd.OldComments[i1];
+                        ValueManager[cmd.Unit.Children[i1]].Comment = cmd.OldComments[i1];
                     }
                     catch (ValueParseException)
                     {
                     }
                 }
-            }
-            if ((cmd.Type & CMDTYPE_ChangeProperty) != 0)
-            {
-                cmd.Unit.InstArgs = cmd.OldProperties.ToArray();
-                area.Update(cmd.Unit);
             }
             if (View != null && View.IsNavigatable 
              && (cmd.Type & CMDTYPE_MoveUnit) != 0)
@@ -572,11 +572,11 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_ChangeComments) != 0)
             {
-                for (i1 = 0; i1 < cmd.NewProperties.Count; i1++)
+                for (i1 = 0; i1 < cmd.Unit.Children.Count; i1++)
                 {
                     try
                     {
-                        ValueManager[cmd.NewProperties[i1]].Comment = cmd.NewComments[i1];
+                        ValueManager[cmd.Unit.Children[i1]].Comment = cmd.NewComments[i1];
                     }
                     catch (ValueParseException)
                     {
