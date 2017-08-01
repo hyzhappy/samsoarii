@@ -52,8 +52,8 @@ namespace SamSoarII
             if (!GlobalSetting.LoadLadderScaleSuccess())
             {
                 ILayoutPositionableElementWithActualSize _maintab = ifParent.TCMain;
-                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 4340;
-                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 4340;
+                GlobalSetting.LadderOriginScaleX = _maintab.ActualWidth / 4400;
+                GlobalSetting.LadderOriginScaleY = _maintab.ActualWidth / 4400;
             }
             Loaded -= OnMainWindowLoaded;
             LACProj.Show();
@@ -563,7 +563,7 @@ namespace SamSoarII
 
         private void About(object sender, RoutedEventArgs e)
         {
-            LocalizedMessageBox.Show(string.Format("Version : 2.0.3"), LocalizedMessageIcon.Information);
+            LocalizedMessageBox.Show(string.Format("Version : 2.0.4"), LocalizedMessageIcon.Information);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

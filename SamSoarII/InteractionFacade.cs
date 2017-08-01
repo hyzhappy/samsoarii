@@ -1016,12 +1016,13 @@ namespace SamSoarII
                 int y = int.Parse(m.Groups[4].Value);
                 LadderDiagramModel diagram = mdProj.Diagrams.Where(d => d.Name.Equals(diagramname)).FirstOrDefault();
                 LadderNetworkModel network = diagram?.Children[networkid];
-                Navigate(network, x, y);    
+                Navigate(network, x, y);
             }
         }
 
         public void Navigate(LadderUnitModel unit)
         {
+            if (unit == null) return;
             Navigate(unit.Parent, unit.X, unit.Y);
         }
 

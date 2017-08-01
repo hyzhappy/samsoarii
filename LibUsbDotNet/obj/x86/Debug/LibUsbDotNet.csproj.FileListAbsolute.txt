@@ -22,4 +22,3 @@ C:\vsworkspace\samsoarii_simple\samsoarii2\LibUsbDotNet\bin\x86\Debug\LibUsbDotN
 C:\vsworkspace\samsoarii_simple\samsoarii2\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.csprojResolveAssemblyReference.cache
 C:\vsworkspace\samsoarii_simple\samsoarii2\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.dll
 C:\vsworkspace\samsoarii_simple\samsoarii2\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.pdb
-Y:\Projects\SamSoarII-NEW\LibUsbDotNet\obj\x86\Debug\LibUsbDotNet.csprojResolveAssemblyReference.cache
