@@ -72,7 +72,7 @@ namespace SamSoarII.Core.Models
             parent = _parent;
             infos = new ValueInfo[InfoCount];
             emptyinfo = new ValueInfo(new ValuePrototype(ValueModel.Bases.NULL, 0), -1);
-            tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.VarRegex }));
+            tempmodel = new ValueModel(null, new ValueFormat("TEMP", ValueModel.Types.NULL, false, false, 0, new Regex[] { ValueModel.VarRegex, ValueModel.IntKValueRegex, ValueModel.IntHValueRegex}));
             wbitmodel = new ValueModel(null, new ValueFormat("WBIT", ValueModel.Types.BOOL, false, false, 0, new Regex[] { ValueModel.WordBitRegex }));
             bdwordmodel = new ValueModel(null, new ValueFormat("BDW", ValueModel.Types.DWORD, false, false, 0, new Regex[] { ValueModel.BitDoubleWordRegex }));
             for (int i = 0; i < MaxRange.XRange.Count; i++)
