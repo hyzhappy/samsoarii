@@ -8,11 +8,11 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
-    <Grid x:Uid="Grid_1">
+    <Grid>
         <Grid.Resources>
-            <ObjectDataProvider x:Uid="ObjectDataProvider_1" x:Key="ModuleTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+            <ObjectDataProvider x:Key="ModuleTypeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type x:Uid="x:Type_1" TypeName="local:ModuleType"></x:Type>
+                    <x:Type TypeName="local:ModuleType"></x:Type>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <Style x:Uid="Style_1" TargetType="Label">
