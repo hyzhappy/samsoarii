@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamSoarII.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,7 +11,7 @@ namespace SamSoarII.Core.Models
 {
     public class ValueStore : INotifyPropertyChanged, IDisposable
     {
-        public ValueStore(ValueInfo _parent, ValueModel.Types _type, ValueModel.Bases _ibs = ValueModel.Bases.NULL, int _ifs = 0)
+        public ValueStore(ValueInfo _parent, ValueModel.Types _type, ValueModel.Bases _ibs = ValueModel.Bases.NULL, int _ifs = 0, int _flag = 1)
         {
             parent = _parent;
             if (parent != null)
@@ -18,6 +19,7 @@ namespace SamSoarII.Core.Models
             type = _type;
             ibs = _ibs;
             ifs = _ifs;
+            flag = _flag;
             value = 0;
         }
         
@@ -44,6 +46,9 @@ namespace SamSoarII.Core.Models
 
         public int Offset { get { return parent.Prototype.Offset; } }
 
+        public int flag;
+        public int Flag { get { return this.flag; } }
+        
         protected ValueModel.Bases ibs;
         public ValueModel.Bases Intra { get { return this.ibs; } }
 
@@ -68,10 +73,34 @@ namespace SamSoarII.Core.Models
         {
             get { return this.type; }
         }
+
+        public bool IsWordBit
+        {
+            get { return Type == ValueModel.Types.BOOL 
+                    && (Base == ValueModel.Bases.D || Base == ValueModel.Bases.V || Base == ValueModel.Bases.Z); }
+        }
+
+        public bool IsBitWord
+        {
+            get { return (Type == ValueModel.Types.WORD || Type == ValueModel.Types.UWORD || Type == ValueModel.Types.BCD || Type == ValueModel.Types.HEX) 
+                    && (Base == ValueModel.Bases.X || Base == ValueModel.Bases.Y || Base == ValueModel.Bases.M || Base == ValueModel.Bases.S); }
+        }
+
+
+        public bool IsBitDoubleWord
+        {
+            get { return (Type == ValueModel.Types.DWORD || Type == ValueModel.Types.UDWORD || Type == ValueModel.Types.DHEX) 
+                    && (Base == ValueModel.Bases.X || Base == ValueModel.Bases.Y || Base == ValueModel.Bases.M || Base == ValueModel.Bases.S); }
+        }
+
         public int ByteCount
         {
             get
             {
+                if (IsWordBit)
+                    return 2;
+                if (IsBitWord || IsBitDoubleWord)
+                    return flag;
                 switch (type)
                 {
                     case ValueModel.Types.BOOL:
@@ -79,17 +108,19 @@ namespace SamSoarII.Core.Models
                     case ValueModel.Types.WORD:
                     case ValueModel.Types.UWORD:
                     case ValueModel.Types.BCD:
+                    case ValueModel.Types.HEX:
                         return 2;
                     case ValueModel.Types.DWORD:
                     case ValueModel.Types.UDWORD:
                     case ValueModel.Types.FLOAT:
+                    case ValueModel.Types.DHEX:
                         return 4;
                     default:
                         return 0;
                 }
             }
         }
-
+        
         private object value;
         public object Value
         {
@@ -109,6 +140,16 @@ namespace SamSoarII.Core.Models
                 {
                     case ValueModel.Types.BOOL:
                         return (int)value == 1 ? "ON" : "OFF";
+                    case ValueModel.Types.UWORD:
+                        return ((ushort)value).ToString();
+                    case ValueModel.Types.UDWORD:
+                        return ((uint)value).ToString();
+                    case ValueModel.Types.HEX:
+                        return String.Format("0x{0:x4}", (short)value);
+                    case ValueModel.Types.DHEX:
+                        return String.Format("0x{0:x8}", (int)value);
+                    case ValueModel.Types.BCD:
+                        return (ushort)value > 9999 ? "???" : ValueConverter.ToBCD((ushort)value).ToString(); break;
                     default:
                         return value.ToString();
                 }

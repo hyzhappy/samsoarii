@@ -15,10 +15,10 @@ namespace SamSoarII.Core.Models
     {
         #region Resources
 
-        public enum Types { BOOL, WORD, UWORD, DWORD, UDWORD, BCD, FLOAT, STRING, NULL};
+        public enum Types { BOOL, WORD, UWORD, DWORD, UDWORD, BCD, FLOAT, HEX, DHEX, STRING, NULL };
         public enum Bases { X, Y, S, M, C, T, D, CV, TV, AI, AO, V, Z, K, H, NULL};
 
-        public readonly static string[] NameOfTypes = { "BOOL", "WORD", "UWORD", "DWORD", "UDWORD", "FLOAT", "BCD", "STRING", "NULL" };
+        public readonly static string[] NameOfTypes = { "BOOL", "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX", "STRING", "NULL" };
         public readonly static string[] NameOfBases = { "X", "Y", "S", "M", "C", "T", "D", "CV", "TV", "AI", "AO", "V", "Z", "K", "H", "NULL" }; 
         
         public readonly static Regex VarRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -134,17 +134,20 @@ namespace SamSoarII.Core.Models
         
         public bool IsWordBit
         {
-            get { return Type == Types.BOOL && (Base == Bases.D || Base == Bases.V || Base == Bases.Z); }
+            get { return Type == Types.BOOL 
+                    && (Base == Bases.D || Base == Bases.V || Base == Bases.Z); }
         }
 
-        public bool isBitWord
+        public bool IsBitWord
         {
-            get { return Type == Types.WORD && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
+            get { return (Type == Types.WORD || Type == Types.UWORD || Type == Types.BCD || Type == Types.HEX) 
+                    && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
         }
         
-        public bool isBitDoubleWord
+        public bool IsBitDoubleWord
         {
-            get { return Type == Types.DWORD && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
+            get { return (Type == Types.DWORD || Type == Types.UDWORD || Type == Types.DHEX) 
+                    && (Base == Bases.X || Base == Bases.Y || Base == Bases.M || Base == Bases.S); }
         }
 
         protected ValueStore store;

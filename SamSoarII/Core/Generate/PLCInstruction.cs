@@ -385,7 +385,7 @@ namespace SamSoarII.Core.Generate
                 return String.Format(
                     "{0:s}Word+({1:d}>>4), {1:d}&15",
                     ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
-            if (vmodel.isBitWord || vmodel.isBitDoubleWord)
+            if (vmodel.IsBitWord || vmodel.IsBitDoubleWord)
                 return String.Format(
                     "{0:s}Bit+{1:d}, {2:d}",
                     ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel), vmodel.Size);
