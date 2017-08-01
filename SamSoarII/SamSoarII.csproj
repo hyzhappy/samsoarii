@@ -262,8 +262,12 @@
     <Compile Include="Shell\Dialogs\CommunicationSettingDialog.xaml.cs">
       <DependentUpon>CommunicationSettingDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Dialogs\Enums\ModuleType.cs" />
     <Compile Include="Shell\Dialogs\LanaEnsureDialog.xaml.cs">
       <DependentUpon>LanaEnsureDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ProjectPropertyModify\ExpansionUnitModule.xaml.cs">
+      <DependentUpon>ExpansionUnitModule.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\QuickAddElementDialog.xaml.cs">
       <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
@@ -759,6 +763,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\LanaEnsureDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ProjectPropertyModify\ExpansionUnitModule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

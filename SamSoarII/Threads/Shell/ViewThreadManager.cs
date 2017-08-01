@@ -117,7 +117,6 @@ namespace SamSoarII.Threads
             }
             catch (Exception)
             {
-                DestoryCurrent();
             }
         }
         

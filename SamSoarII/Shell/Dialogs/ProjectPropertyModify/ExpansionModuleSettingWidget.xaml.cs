@@ -15,13 +15,7 @@ using SamSoarII.Core.Models;
 
 namespace SamSoarII.Shell.Dialogs
 {
-    public enum ModuleType
-    {
-        input_IO,
-        output_IO,
-        input_AD,
-        output_DA
-    }
+    
     /// <summary>
     /// ExpansionModuleSettingWidget.xaml 的交互逻辑
     /// </summary>
