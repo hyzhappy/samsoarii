@@ -144,20 +144,9 @@ namespace SamSoarII.Core.Simulate
             foreach (IBreakpoint ibrpo in items)
                 ibrpo.PropertyChanged -= OnBrpoPropertyChanged;
             items.Clear();
-            if (IFParent.MDProj == null)
-            {
-                enableitems.Clear();
-                activeitems.Clear();
-                return;
-            }
-            //enableitemcache = enableitems.ToArray();
-            //activeitemcache = activeitems.ToArray();
             enableitems.Clear();
             activeitems.Clear();
-            //foreach (IBreakpoint ibrpo in enableitemcache)
-            //    ibrpo.IsEnable = true;
-            //foreach (IBreakpoint ibrpo in activeitemcache)
-            //    ibrpo.IsActive = true;
+            if (IFParent.MDProj == null) return;
             foreach (LadderDiagramModel diagram in IFParent.MDProj.Diagrams)
                 foreach (LadderNetworkModel network in diagram.Children)
                     foreach (LadderUnitModel unit in network.Children)
@@ -183,9 +172,9 @@ namespace SamSoarII.Core.Simulate
 
         private void Initialize(FuncBlock fblock)
         {
-            if (fblock is FuncBlock_Statement 
-             || ((fblock is FuncBlock_Assignment || fblock is FuncBlock_AssignmentSeries) 
-                && !(fblock.Parent is FuncBlock_Root)))
+            if (fblock is FuncBlock_Statement
+                 || ((fblock is FuncBlock_Assignment || fblock is FuncBlock_AssignmentSeries)
+                    && !(fblock.Parent is FuncBlock_Root)))
             {
                 fblock.Breakpoint = new FuncBrpoModel(fblock);
                 items.Add(fblock.Breakpoint);
@@ -194,7 +183,7 @@ namespace SamSoarII.Core.Simulate
             foreach (FuncBlock sub in fblock.Childrens)
                 Initialize(sub);
         }
-
+        
         #endregion
 
         #region Event Handler

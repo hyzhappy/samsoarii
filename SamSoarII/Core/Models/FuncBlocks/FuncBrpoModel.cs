@@ -17,6 +17,8 @@ namespace SamSoarII.Core.Models
 
         public void Dispose()
         {
+            IsActive = false;
+            IsEnable = false;
             parent = null;
         }
 

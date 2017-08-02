@@ -28,9 +28,14 @@ namespace SamSoarII.Core.Models
 
         public virtual void Dispose()
         {
-            model = null;
             foreach (FuncBlock fblock in childrens)
                 fblock.Dispose();
+            model = null;
+            if (Breakpoint != null)
+            {
+                Breakpoint.Dispose();
+                Breakpoint = null;
+            }
             childrens.Clear();
             childrens = null;
             Current = null;
