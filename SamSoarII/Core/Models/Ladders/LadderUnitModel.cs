@@ -73,7 +73,7 @@ namespace SamSoarII.Core.Models
             Input, Output, OutputRect, Special, HLine, VLine, Null
         }
         
-        static public string[] NameOfTypes { get; private set; }
+        static public string[] NameOfTypes { get; private set; } 
         static public Dictionary<string, Types> TypeOfNames { get; private set; }
         static public Shapes[] ShapeOfTypes { get; private set; }
         static public Outlines[] OutlineOfTypes { get; private set; }
