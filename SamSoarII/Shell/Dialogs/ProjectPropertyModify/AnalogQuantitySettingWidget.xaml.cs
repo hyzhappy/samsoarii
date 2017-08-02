@@ -39,115 +39,24 @@ namespace SamSoarII.Shell.Dialogs
         private AnalogQuantityParams core;
         public AnalogQuantityParams Core { get { return this.core; } }
 
-        private int oldvalue;
-        private int newvalue;
-
         #endregion
-        
-        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            int oldvalue;
-            if ((sender as TextBox).Text != string.Empty)
-            {
-                oldvalue = int.Parse((sender as TextBox).Text);
-            }
-            else
-            {
-                oldvalue = 0;
-            }
-            if (KeyInputHelper.CanInputAssert(e.Key))
-            {
-                if (KeyInputHelper.NumAssert(e.Key))
-                {
-                    int newvalue = 10 * oldvalue + KeyInputHelper.GetKeyValue(e.Key);
-                    if (!AssertWholeRange((sender as TextBox), newvalue))
-                    {
-                        e.Handled = true;
-                    }
-                }
-            }
-            else
-            {
-                e.Handled = true;
-            }
-        }
-        private bool AssertWholeRange(TextBox textbox, int value)
-        {
-            int anothervalue;
-            if (textbox == InputTextbox1)
-            {
-                return value <= 8191 && value >= 0;
-            }
-            else if (textbox == InputTextbox2)
-            {
-                anothervalue = int.Parse(InputTextbox3.Text);
-                return value >= 0 && value < anothervalue;
-            }
-            else if (textbox == InputTextbox3)
-            {
-                return value <= 65535;
-            }
-            else if (textbox == OutputTextBox1)
-            {
-                anothervalue = int.Parse(OutputTextBox2.Text);
-                return value >= 0 && value < anothervalue;
-            }
-            else
-            {
-                return value <= 65535;
-            }
-        }
 
-        private void OnGotFocus(object sender, RoutedEventArgs e)
+        private void IP_Channel_Changed(object sender, SelectionChangedEventArgs e)
         {
-            oldvalue = int.Parse((sender as TextBox).Text);
-        }
-        private void OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textbox = sender as TextBox;
-            if (textbox.Text == string.Empty)
+            switch (IP_Channel.SelectedIndex)
             {
-                textbox.Text = oldvalue.ToString();
-            }
-            else
-            {
-                int anothervalue = -1;
-                newvalue = int.Parse(textbox.Text);
-                if (textbox == InputTextbox3)
-                {
-                    anothervalue = int.Parse(InputTextbox2.Text);
-                }
-                else if (textbox == OutputTextBox2)
-                {
-                    anothervalue = int.Parse(OutputTextBox1.Text);
-                }
-                if (newvalue <= anothervalue)
-                {
-                    textbox.Text = GetDefaultValue(textbox).ToString();
-                }
-            }
-        }
-        private int GetDefaultValue(TextBox textbox)
-        {
-            if (textbox == InputTextbox1)
-            {
-                return 1000;
-            }
-            else if (textbox == InputTextbox2)
-            {
-                return 0;
-            }
-            else if (textbox == InputTextbox3)
-            {
-                return 65535;
-            }
-            else if (textbox == OutputTextBox1)
-            {
-                return 0;
-            }
-            else
-            {
-                return 65535;
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    IP_SP.Visibility = Visibility.Visible;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    IP_SP.Visibility = Visibility.Hidden;
+                    break;
             }
         }
     }

@@ -1,61 +1,43 @@
-﻿using SamSoarII.Utility;
+﻿using SamSoarII.Shell.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace SamSoarII.Core.Models
 {
-    public class AnalogQuantityParams : IParams
+    public class ExpansionUnitModuleParams : IParams
     {
-        public AnalogQuantityParams(ProjectPropertyParams _parent)
+        public ExpansionUnitModuleParams(ExpansionModuleParams _parent,int id)
         {
             parent = _parent;
+            ID = id;
+            _moduleTypeIndex = 0;
             _IP_Channel_Index = 0;
             _OP_Channel_Index = 0;
+            _useModule = false;
             IP_Channel_CB_Enabled1 = false;
             IP_Channel_CB_Enabled2 = false;
             IP_Channel_CB_Enabled3 = false;
             IP_Channel_CB_Enabled4 = false;
-            IP_Channel_CB_Enabled5 = false;
-            IP_Channel_CB_Enabled6 = false;
-            IP_Channel_CB_Enabled7 = false;
-            IP_Channel_CB_Enabled8 = false;
             OP_Channel_CB_Enabled1 = false;
             OP_Channel_CB_Enabled2 = false;
-            OP_Channel_CB_Enabled3 = false;
-            OP_Channel_CB_Enabled4 = false;
             IP_Mode_Index1 = 0;
             IP_Mode_Index2 = 0;
             IP_Mode_Index3 = 0;
             IP_Mode_Index4 = 0;
-            IP_Mode_Index5 = 0;
-            IP_Mode_Index6 = 0;
-            IP_Mode_Index7 = 0;
-            IP_Mode_Index8 = 0;
             OP_Mode_Index1 = 0;
             OP_Mode_Index2 = 0;
-            OP_Mode_Index3 = 0;
-            OP_Mode_Index4 = 0;
             IP_SampleTime_Index1 = 0;
             IP_SampleTime_Index2 = 0;
             IP_SampleTime_Index3 = 0;
             IP_SampleTime_Index4 = 0;
-            IP_SampleTime_Index5 = 0;
-            IP_SampleTime_Index6 = 0;
-            IP_SampleTime_Index7 = 0;
-            IP_SampleTime_Index8 = 0;
             SampleValue1 = "1000";
             SampleValue2 = "1000";
             SampleValue3 = "1000";
             SampleValue4 = "1000";
-            SampleValue5 = "1000";
-            SampleValue6 = "1000";
-            SampleValue7 = "1000";
-            SampleValue8 = "1000";
             IP_StartRange1 = 0;
             IP_EndRange1 = 65535;
             IP_StartRange2 = 0;
@@ -68,38 +50,105 @@ namespace SamSoarII.Core.Models
             OP_EndRange1 = 65535;
             OP_StartRange2 = 0;
             OP_EndRange2 = 65535;
-            OP_StartRange3 = 0;
-            OP_EndRange3 = 65535;
-            OP_StartRange4 = 0;
-            OP_EndRange4 = 65535;
-        }
-
-        public void Dispose()
-        {
-            parent = null;
-            PropertyChanged = null;
+            _filterTime_Index = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Number
-        private int _IP_Channel_Index;
-        public int IP_Channel_Index
+        public int ID;
+        private int _moduleTypeIndex;
+        public int ModuleTypeIndex
         {
             get
             {
-                return _IP_Channel_Index;
+                return _moduleTypeIndex;
             }
             set
             {
-                if (value >= 0)
-                    _IP_Channel_Index = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("IP_Channel_CB_Enabled"));
-                PropertyChanged(this, new PropertyChangedEventArgs("IP_Mode_Index"));
-                PropertyChanged(this, new PropertyChangedEventArgs("SampleValue"));
-                PropertyChanged(this, new PropertyChangedEventArgs("IP_SampleTime_Index"));
-                PropertyChanged(this, new PropertyChangedEventArgs("IP_StartRange"));
-                PropertyChanged(this, new PropertyChangedEventArgs("IP_EndRange"));
+                _moduleTypeIndex = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("ModuleTypeIndex"));
+                PropertyChanged(this, new PropertyChangedEventArgs("ShowName"));
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_Channel"));
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_Mode"));
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_Channel_Index"));
+            }
+        }
+        public ModuleType ModuleType
+        {
+            get
+            {
+                switch (_moduleTypeIndex)
+                {
+                    case 0: return ModuleType.FGs_E4AI;
+                    case 1: return ModuleType.FGs_E8R;
+                    case 2: return ModuleType.FGs_E8T;
+                    case 3: return ModuleType.FGs_E8X;
+                    case 4: return ModuleType.FGs_E8X8T;
+                    case 5: return ModuleType.FGs_E16R;
+                    case 6: return ModuleType.FGs_E16T;
+                    case 7: return ModuleType.FGs_E2AO;
+                    case 8: return ModuleType.FGs_E4AI2AO;
+                    case 9: return ModuleType.FGs_E4TC;
+                    case 10: return ModuleType.FGs_E8X8R;
+                    case 11: return ModuleType.FGs_E16X;
+                    case 12: return ModuleType.FGs_E16X16T;
+                    case 13: return ModuleType.FGs_E16X16R;
+                    default:
+                        return ModuleType.FGs_E4AI;
+                }
+            }
+        }
+        private bool _useModule;
+        public bool UseModule
+        {
+            get
+            {
+                return _useModule;
+            }
+            set
+            {
+                _useModule = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("UseModule"));
+                PropertyChanged(this, new PropertyChangedEventArgs("ShowName"));
+            }
+        }
+        public string ShowName
+        {
+            get
+            {
+                if (_useModule)
+                {
+                    return string.Format("#{0} {1}", ID, ModuleType);
+                }
+                return string.Format("#{0} {1}", ID, Properties.Resources.Not_Enabled);
+            }
+        }
+        public string[] IP_Mode
+        {
+            get
+            {
+                switch (ModuleType)
+                {
+                    case ModuleType.FGs_E4AI:
+                    case ModuleType.FGs_E4AI2AO:
+                        return new string[] { "4-20mA", "0-5V", "0-10V" };
+                    case ModuleType.FGs_E4TC:
+                        return new string[] { Properties.Resources.Thermocouple, "PT100" };
+                    case ModuleType.FGs_E8R:
+                    case ModuleType.FGs_E8T:
+                    case ModuleType.FGs_E8X:
+                    case ModuleType.FGs_E8X8T:
+                    case ModuleType.FGs_E16R:
+                    case ModuleType.FGs_E16T:
+                    case ModuleType.FGs_E2AO:
+                    case ModuleType.FGs_E8X8R:
+                    case ModuleType.FGs_E16X:
+                    case ModuleType.FGs_E16X16T:
+                    case ModuleType.FGs_E16X16R:
+                    default:
+                        return new string[] { };
+                }
             }
         }
         public int IP_Mode_Index
@@ -112,10 +161,6 @@ namespace SamSoarII.Core.Models
                     case 1: return IP_Mode_Index2;
                     case 2: return IP_Mode_Index3;
                     case 3: return IP_Mode_Index4;
-                    case 4: return IP_Mode_Index5;
-                    case 5: return IP_Mode_Index6;
-                    case 6: return IP_Mode_Index7;
-                    case 7: return IP_Mode_Index8;
                     default:
                         return 0;
                 }
@@ -137,18 +182,6 @@ namespace SamSoarII.Core.Models
                     case 3:
                         IP_Mode_Index4 = value;
                         break;
-                    case 4:
-                        IP_Mode_Index5 = value;
-                        break;
-                    case 5:
-                        IP_Mode_Index6 = value;
-                        break;
-                    case 6:
-                        IP_Mode_Index7 = value;
-                        break;
-                    case 7:
-                        IP_Mode_Index8 = value;
-                        break;
                 }
             }
         }
@@ -156,11 +189,32 @@ namespace SamSoarII.Core.Models
         private int IP_Mode_Index2;
         private int IP_Mode_Index3;
         private int IP_Mode_Index4;
-        private int IP_Mode_Index5;
-        private int IP_Mode_Index6;
-        private int IP_Mode_Index7;
-        private int IP_Mode_Index8;
-
+        public string[] IP_Channel
+        {
+            get
+            {
+                return new string[] { "AI0", "AI1", "AI2", "AI3" };
+            }
+        }
+        private int _IP_Channel_Index;
+        public int IP_Channel_Index
+        {
+            get
+            {
+                return _IP_Channel_Index;
+            }
+            set
+            {
+                if(value >= 0)
+                    _IP_Channel_Index = value;
+                PropertyChanged(this,new PropertyChangedEventArgs("IP_Channel_CB_Enabled"));
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_Mode_Index"));
+                PropertyChanged(this, new PropertyChangedEventArgs("SampleValue"));
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_SampleTime_Index"));
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_StartRange"));
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_EndRange"));
+            }
+        }
         public bool IP_Channel_CB_Enabled
         {
             get
@@ -171,10 +225,6 @@ namespace SamSoarII.Core.Models
                     case 1: return IP_Channel_CB_Enabled2;
                     case 2: return IP_Channel_CB_Enabled3;
                     case 3: return IP_Channel_CB_Enabled4;
-                    case 4: return IP_Channel_CB_Enabled5;
-                    case 5: return IP_Channel_CB_Enabled6;
-                    case 6: return IP_Channel_CB_Enabled7;
-                    case 7: return IP_Channel_CB_Enabled8;
                     default:
                         return false;
                 }
@@ -195,18 +245,6 @@ namespace SamSoarII.Core.Models
                     case 3:
                         IP_Channel_CB_Enabled4 = value;
                         break;
-                    case 4:
-                        IP_Channel_CB_Enabled5 = value;
-                        break;
-                    case 5:
-                        IP_Channel_CB_Enabled6 = value;
-                        break;
-                    case 6:
-                        IP_Channel_CB_Enabled7 = value;
-                        break;
-                    case 7:
-                        IP_Channel_CB_Enabled8 = value;
-                        break;
                 }
             }
         }
@@ -214,10 +252,14 @@ namespace SamSoarII.Core.Models
         private bool IP_Channel_CB_Enabled2;
         private bool IP_Channel_CB_Enabled3;
         private bool IP_Channel_CB_Enabled4;
-        private bool IP_Channel_CB_Enabled5;
-        private bool IP_Channel_CB_Enabled6;
-        private bool IP_Channel_CB_Enabled7;
-        private bool IP_Channel_CB_Enabled8;
+
+        public string[] IP_SampleTime
+        {
+            get
+            {
+                return new string[] {"4","8","16","32" };
+            }
+        }
 
         public int IP_SampleTime_Index
         {
@@ -229,10 +271,6 @@ namespace SamSoarII.Core.Models
                     case 1: return IP_SampleTime_Index2;
                     case 2: return IP_SampleTime_Index3;
                     case 3: return IP_SampleTime_Index4;
-                    case 4: return IP_SampleTime_Index5;
-                    case 5: return IP_SampleTime_Index6;
-                    case 6: return IP_SampleTime_Index7;
-                    case 7: return IP_SampleTime_Index8;
                     default:
                         return 0;
                 }
@@ -254,18 +292,6 @@ namespace SamSoarII.Core.Models
                     case 3:
                         IP_SampleTime_Index4 = value;
                         break;
-                    case 4:
-                        IP_SampleTime_Index5 = value;
-                        break;
-                    case 5:
-                        IP_SampleTime_Index6 = value;
-                        break;
-                    case 6:
-                        IP_SampleTime_Index7 = value;
-                        break;
-                    case 7:
-                        IP_SampleTime_Index8 = value;
-                        break;
                 }
             }
         }
@@ -273,19 +299,11 @@ namespace SamSoarII.Core.Models
         private int IP_SampleTime_Index2;
         private int IP_SampleTime_Index3;
         private int IP_SampleTime_Index4;
-        private int IP_SampleTime_Index5;
-        private int IP_SampleTime_Index6;
-        private int IP_SampleTime_Index7;
-        private int IP_SampleTime_Index8;
 
         private string SampleValue1;
         private string SampleValue2;
         private string SampleValue3;
         private string SampleValue4;
-        private string SampleValue5;
-        private string SampleValue6;
-        private string SampleValue7;
-        private string SampleValue8;
         public string SampleValue
         {
             get
@@ -296,10 +314,6 @@ namespace SamSoarII.Core.Models
                     case 1: return SampleValue2;
                     case 2: return SampleValue3;
                     case 3: return SampleValue4;
-                    case 4: return SampleValue5;
-                    case 5: return SampleValue6;
-                    case 6: return SampleValue7;
-                    case 7: return SampleValue8;
                     default:
                         return 1000.ToString();
                 }
@@ -320,22 +334,9 @@ namespace SamSoarII.Core.Models
                     case 3:
                         SampleValue4 = value;
                         break;
-                    case 4:
-                        SampleValue5 = value;
-                        break;
-                    case 5:
-                        SampleValue6 = value;
-                        break;
-                    case 6:
-                        SampleValue7 = value;
-                        break;
-                    case 7:
-                        SampleValue8 = value;
-                        break;
                 }
             }
         }
-
         private int IP_StartRange1;
         private int IP_StartRange2;
         private int IP_StartRange3;
@@ -411,6 +412,15 @@ namespace SamSoarII.Core.Models
             }
         }
 
+
+        public string[] OP_Channel
+        {
+            get
+            {
+                return new string[] { "AO0","AO1"};
+            }
+        }
+
         private int _OP_Channel_Index;
         public int OP_Channel_Index
         {
@@ -437,8 +447,6 @@ namespace SamSoarII.Core.Models
                 {
                     case 0: return OP_Channel_CB_Enabled1;
                     case 1: return OP_Channel_CB_Enabled2;
-                    case 2: return OP_Channel_CB_Enabled3;
-                    case 3: return OP_Channel_CB_Enabled4;
                     default:
                         return false;
                 }
@@ -453,19 +461,19 @@ namespace SamSoarII.Core.Models
                     case 1:
                         OP_Channel_CB_Enabled2 = value;
                         break;
-                    case 2:
-                        OP_Channel_CB_Enabled3 = value;
-                        break;
-                    case 3:
-                        OP_Channel_CB_Enabled4 = value;
-                        break;
                 }
             }
         }
         private bool OP_Channel_CB_Enabled1;
         private bool OP_Channel_CB_Enabled2;
-        private bool OP_Channel_CB_Enabled3;
-        private bool OP_Channel_CB_Enabled4;
+
+        public string[] OP_Mode
+        {
+            get
+            {
+                return new string[] { "4-20mA", "0-5V", "0-10V" };
+            }
+        }
 
         public int OP_Mode_Index
         {
@@ -475,8 +483,6 @@ namespace SamSoarII.Core.Models
                 {
                     case 0: return OP_Mode_Index1;
                     case 1: return OP_Mode_Index2;
-                    case 2: return OP_Mode_Index3;
-                    case 3: return OP_Mode_Index4;
                     default:
                         return 0;
                 }
@@ -492,24 +498,14 @@ namespace SamSoarII.Core.Models
                     case 1:
                         OP_Mode_Index2 = value;
                         break;
-                    case 2:
-                        OP_Mode_Index3 = value;
-                        break;
-                    case 3:
-                        OP_Mode_Index4 = value;
-                        break;
                 }
             }
         }
         private int OP_Mode_Index1;
         private int OP_Mode_Index2;
-        private int OP_Mode_Index3;
-        private int OP_Mode_Index4;
 
         private int OP_StartRange1;
         private int OP_StartRange2;
-        private int OP_StartRange3;
-        private int OP_StartRange4;
         public int OP_StartRange
         {
             get
@@ -518,8 +514,6 @@ namespace SamSoarII.Core.Models
                 {
                     case 0: return OP_StartRange1;
                     case 1: return OP_StartRange2;
-                    case 2: return OP_StartRange3;
-                    case 3: return OP_StartRange4;
                     default:
                         return 0;
                 }
@@ -534,19 +528,11 @@ namespace SamSoarII.Core.Models
                     case 1:
                         OP_StartRange2 = value;
                         break;
-                    case 2:
-                        OP_StartRange3 = value;
-                        break;
-                    case 3:
-                        OP_StartRange4 = value;
-                        break;
                 }
             }
         }
         private int OP_EndRange1;
         private int OP_EndRange2;
-        private int OP_EndRange3;
-        private int OP_EndRange4;
         public int OP_EndRange
         {
             get
@@ -555,8 +541,6 @@ namespace SamSoarII.Core.Models
                 {
                     case 0: return OP_EndRange1;
                     case 1: return OP_EndRange2;
-                    case 2: return OP_EndRange3;
-                    case 3: return OP_EndRange4;
                     default:
                         return 65535;
                 }
@@ -571,140 +555,89 @@ namespace SamSoarII.Core.Models
                     case 1:
                         OP_EndRange2 = value;
                         break;
-                    case 2:
-                        OP_EndRange3 = value;
-                        break;
-                    case 3:
-                        OP_EndRange4 = value;
-                        break;
                 }
             }
         }
 
+        public string[] FT_CB
+        {
+            get
+            {
+                return new string[] {"0.00","0.20","0.40","0.80","1.60","3.20","6.40","12.80","25.60","51.20" };
+            }
+        }
+        private int _filterTime_Index;
+        public int FilterTime_Index
+        {
+            get
+            {
+                return _filterTime_Index;
+            }
+            set
+            {
+                _filterTime_Index = value;
+            }
+        }
 
-        private ProjectPropertyParams parent;
-        public ProjectPropertyParams Parent { get { return this.parent; } }
 
-        
+        private ExpansionModuleParams parent;
+        public ExpansionModuleParams Parent { get { return this.parent; } }
+
 
         #endregion
 
-        #region Save & Load
-
-        public void Save(XElement xele)
+        public IParams Clone()
         {
-            XElement inputele = new XElement("Input");
-            inputele.Add(new XElement("IP_Channel_Index", IP_Channel_Index));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled1", IP_Channel_CB_Enabled1));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled2", IP_Channel_CB_Enabled2));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled3", IP_Channel_CB_Enabled3));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled4", IP_Channel_CB_Enabled4));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled5", IP_Channel_CB_Enabled5));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled6", IP_Channel_CB_Enabled6));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled7", IP_Channel_CB_Enabled7));
-            inputele.Add(new XElement("IP_Channel_CB_Enabled8", IP_Channel_CB_Enabled8));
-            inputele.Add(new XElement("IP_Mode_Index1", IP_Mode_Index1));
-            inputele.Add(new XElement("IP_Mode_Index2", IP_Mode_Index2));
-            inputele.Add(new XElement("IP_Mode_Index3", IP_Mode_Index3));
-            inputele.Add(new XElement("IP_Mode_Index4", IP_Mode_Index4));
-            inputele.Add(new XElement("IP_Mode_Index5", IP_Mode_Index5));
-            inputele.Add(new XElement("IP_Mode_Index6", IP_Mode_Index6));
-            inputele.Add(new XElement("IP_Mode_Index7", IP_Mode_Index7));
-            inputele.Add(new XElement("IP_Mode_Index8", IP_Mode_Index8));
-            inputele.Add(new XElement("IP_SampleTime_Index1", IP_SampleTime_Index1));
-            inputele.Add(new XElement("IP_SampleTime_Index2", IP_SampleTime_Index2));
-            inputele.Add(new XElement("IP_SampleTime_Index3", IP_SampleTime_Index3));
-            inputele.Add(new XElement("IP_SampleTime_Index4", IP_SampleTime_Index4));
-            inputele.Add(new XElement("IP_SampleTime_Index5", IP_SampleTime_Index5));
-            inputele.Add(new XElement("IP_SampleTime_Index6", IP_SampleTime_Index6));
-            inputele.Add(new XElement("IP_SampleTime_Index7", IP_SampleTime_Index7));
-            inputele.Add(new XElement("IP_SampleTime_Index8", IP_SampleTime_Index8));
-            inputele.Add(new XElement("SampleValue1", SampleValue1));
-            inputele.Add(new XElement("SampleValue2", SampleValue2));
-            inputele.Add(new XElement("SampleValue3", SampleValue3));
-            inputele.Add(new XElement("SampleValue4", SampleValue4));
-            inputele.Add(new XElement("SampleValue5", SampleValue5));
-            inputele.Add(new XElement("SampleValue6", SampleValue6));
-            inputele.Add(new XElement("SampleValue7", SampleValue7));
-            inputele.Add(new XElement("SampleValue8", SampleValue8));
-            inputele.Add(new XElement("IP_StartRange1", IP_StartRange1));
-            inputele.Add(new XElement("IP_StartRange2", IP_StartRange2));
-            inputele.Add(new XElement("IP_StartRange3", IP_StartRange3));
-            inputele.Add(new XElement("IP_StartRange4", IP_StartRange4));
-            inputele.Add(new XElement("IP_EndRange1", IP_EndRange1));
-            inputele.Add(new XElement("IP_EndRange2", IP_EndRange2));
-            inputele.Add(new XElement("IP_EndRange3", IP_EndRange3));
-            inputele.Add(new XElement("IP_EndRange4", IP_EndRange4));
-            XElement outputele = new XElement("Output");
-            outputele.Add(new XElement("OP_Channel_Index", OP_Channel_Index));
-            outputele.Add(new XElement("OP_Channel_CB_Enabled1", OP_Channel_CB_Enabled1));
-            outputele.Add(new XElement("OP_Channel_CB_Enabled2", OP_Channel_CB_Enabled2));
-            outputele.Add(new XElement("OP_Channel_CB_Enabled3", OP_Channel_CB_Enabled3));
-            outputele.Add(new XElement("OP_Channel_CB_Enabled4", OP_Channel_CB_Enabled4));
-            outputele.Add(new XElement("OP_Mode_Index1", OP_Mode_Index1));
-            outputele.Add(new XElement("OP_Mode_Index2", OP_Mode_Index2));
-            outputele.Add(new XElement("OP_Mode_Index3", OP_Mode_Index3));
-            outputele.Add(new XElement("OP_Mode_Index4", OP_Mode_Index4));
-            outputele.Add(new XElement("OP_StartRange1", OP_StartRange1));
-            outputele.Add(new XElement("OP_StartRange2", OP_StartRange2));
-            outputele.Add(new XElement("OP_StartRange3", OP_StartRange3));
-            outputele.Add(new XElement("OP_StartRange4", OP_StartRange4));
-            outputele.Add(new XElement("OP_EndRange1", OP_EndRange1));
-            outputele.Add(new XElement("OP_EndRange2", OP_EndRange2));
-            outputele.Add(new XElement("OP_EndRange3", OP_EndRange3));
-            outputele.Add(new XElement("OP_EndRange4", OP_EndRange4));
-            xele.Add(inputele);
-            xele.Add(outputele);
+            return Clone(null);
+        }
+        public ExpansionUnitModuleParams Clone(ExpansionModuleParams parent)
+        {
+            ExpansionUnitModuleParams that = new ExpansionUnitModuleParams(parent,ID);
+            that.Load(this);
+            return that;
+        }
+        public void Dispose()
+        {
+            parent = null;
+            PropertyChanged = null;
+        }
+
+        public void Load(IParams that)
+        {
+            
         }
 
         public void Load(XElement xele)
         {
             try
             {
+                ModuleTypeIndex = int.Parse(xele.Element("ModuleTypeIndex").Value);
+                UseModule = bool.Parse(xele.Element("UseModule").Value);
                 XElement inputele = xele.Element("Input");
                 XElement outputele = xele.Element("Output");
+                XElement filtertime = xele.Element("FilterTime");
                 IP_Channel_Index = int.Parse(inputele.Element("IP_Channel_Index").Value);
                 OP_Channel_Index = int.Parse(outputele.Element("OP_Channel_Index").Value);
                 IP_Channel_CB_Enabled1 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled1").Value);
                 IP_Channel_CB_Enabled2 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled2").Value);
                 IP_Channel_CB_Enabled3 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled3").Value);
                 IP_Channel_CB_Enabled4 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled4").Value);
-                IP_Channel_CB_Enabled5 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled5").Value);
-                IP_Channel_CB_Enabled6 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled6").Value);
-                IP_Channel_CB_Enabled7 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled7").Value);
-                IP_Channel_CB_Enabled8 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled8").Value);
                 OP_Channel_CB_Enabled1 = bool.Parse(outputele.Element("OP_Channel_CB_Enabled1").Value);
                 OP_Channel_CB_Enabled2 = bool.Parse(outputele.Element("OP_Channel_CB_Enabled2").Value);
-                OP_Channel_CB_Enabled3 = bool.Parse(outputele.Element("OP_Channel_CB_Enabled3").Value);
-                OP_Channel_CB_Enabled4 = bool.Parse(outputele.Element("OP_Channel_CB_Enabled4").Value);
                 IP_Mode_Index1 = int.Parse(inputele.Element("IP_Mode_Index1").Value);
                 IP_Mode_Index2 = int.Parse(inputele.Element("IP_Mode_Index2").Value);
                 IP_Mode_Index3 = int.Parse(inputele.Element("IP_Mode_Index3").Value);
                 IP_Mode_Index4 = int.Parse(inputele.Element("IP_Mode_Index4").Value);
-                IP_Mode_Index5 = int.Parse(inputele.Element("IP_Mode_Index5").Value);
-                IP_Mode_Index6 = int.Parse(inputele.Element("IP_Mode_Index6").Value);
-                IP_Mode_Index7 = int.Parse(inputele.Element("IP_Mode_Index7").Value);
-                IP_Mode_Index8 = int.Parse(inputele.Element("IP_Mode_Index8").Value);
                 OP_Mode_Index1 = int.Parse(outputele.Element("OP_Mode_Index1").Value);
                 OP_Mode_Index2 = int.Parse(outputele.Element("OP_Mode_Index2").Value);
-                OP_Mode_Index3 = int.Parse(outputele.Element("OP_Mode_Index3").Value);
-                OP_Mode_Index4 = int.Parse(outputele.Element("OP_Mode_Index4").Value);
                 IP_SampleTime_Index1 = int.Parse(inputele.Element("IP_SampleTime_Index1").Value);
                 IP_SampleTime_Index2 = int.Parse(inputele.Element("IP_SampleTime_Index2").Value);
                 IP_SampleTime_Index3 = int.Parse(inputele.Element("IP_SampleTime_Index3").Value);
                 IP_SampleTime_Index4 = int.Parse(inputele.Element("IP_SampleTime_Index4").Value);
-                IP_SampleTime_Index5 = int.Parse(inputele.Element("IP_SampleTime_Index5").Value);
-                IP_SampleTime_Index6 = int.Parse(inputele.Element("IP_SampleTime_Index6").Value);
-                IP_SampleTime_Index7 = int.Parse(inputele.Element("IP_SampleTime_Index7").Value);
-                IP_SampleTime_Index8 = int.Parse(inputele.Element("IP_SampleTime_Index8").Value);
                 SampleValue1 = inputele.Element("SampleValue1").Value;
                 SampleValue2 = inputele.Element("SampleValue2").Value;
                 SampleValue3 = inputele.Element("SampleValue3").Value;
                 SampleValue4 = inputele.Element("SampleValue4").Value;
-                SampleValue5 = inputele.Element("SampleValue5").Value;
-                SampleValue6 = inputele.Element("SampleValue6").Value;
-                SampleValue7 = inputele.Element("SampleValue7").Value;
-                SampleValue8 = inputele.Element("SampleValue8").Value;
                 IP_StartRange1 = int.Parse(inputele.Element("IP_StartRange1").Value);
                 IP_EndRange1 = int.Parse(inputele.Element("IP_EndRange1").Value);
                 IP_StartRange2 = int.Parse(inputele.Element("IP_StartRange2").Value);
@@ -717,10 +650,7 @@ namespace SamSoarII.Core.Models
                 OP_EndRange1 = int.Parse(outputele.Element("OP_EndRange1").Value);
                 OP_StartRange2 = int.Parse(outputele.Element("OP_StartRange2").Value);
                 OP_EndRange2 = int.Parse(outputele.Element("OP_EndRange2").Value);
-                OP_StartRange3 = int.Parse(outputele.Element("OP_StartRange3").Value);
-                OP_EndRange3 = int.Parse(outputele.Element("OP_EndRange3").Value);
-                OP_StartRange4 = int.Parse(outputele.Element("OP_StartRange4").Value);
-                OP_EndRange4 = int.Parse(outputele.Element("OP_EndRange4").Value);
+                FilterTime_Index = int.Parse(filtertime.Element("FilterTime_Index").Value);
             }
             catch (Exception)
             {
@@ -728,28 +658,51 @@ namespace SamSoarII.Core.Models
             }
         }
 
-        public IParams Clone()
+        public void Save(XElement xele)
         {
-            return Clone(null);
+            xele.Add(new XElement("ModuleTypeIndex", ModuleTypeIndex));
+            xele.Add(new XElement("UseModule", UseModule));
+            XElement inputele = new XElement("Input");
+            inputele.Add(new XElement("IP_Channel_Index", IP_Channel_Index));
+            inputele.Add(new XElement("IP_Channel_CB_Enabled1", IP_Channel_CB_Enabled1));
+            inputele.Add(new XElement("IP_Channel_CB_Enabled2", IP_Channel_CB_Enabled2));
+            inputele.Add(new XElement("IP_Channel_CB_Enabled3", IP_Channel_CB_Enabled3));
+            inputele.Add(new XElement("IP_Channel_CB_Enabled4", IP_Channel_CB_Enabled4));
+            inputele.Add(new XElement("IP_Mode_Index1", IP_Mode_Index1));
+            inputele.Add(new XElement("IP_Mode_Index2", IP_Mode_Index2));
+            inputele.Add(new XElement("IP_Mode_Index3", IP_Mode_Index3));
+            inputele.Add(new XElement("IP_Mode_Index4", IP_Mode_Index4));
+            inputele.Add(new XElement("IP_SampleTime_Index1", IP_SampleTime_Index1));
+            inputele.Add(new XElement("IP_SampleTime_Index2", IP_SampleTime_Index2));
+            inputele.Add(new XElement("IP_SampleTime_Index3", IP_SampleTime_Index3));
+            inputele.Add(new XElement("IP_SampleTime_Index4", IP_SampleTime_Index4));
+            inputele.Add(new XElement("SampleValue1", SampleValue1));
+            inputele.Add(new XElement("SampleValue2", SampleValue2));
+            inputele.Add(new XElement("SampleValue3", SampleValue3));
+            inputele.Add(new XElement("SampleValue4", SampleValue4));
+            inputele.Add(new XElement("IP_StartRange1", IP_StartRange1));
+            inputele.Add(new XElement("IP_StartRange2", IP_StartRange2));
+            inputele.Add(new XElement("IP_StartRange3", IP_StartRange3));
+            inputele.Add(new XElement("IP_StartRange4", IP_StartRange4));
+            inputele.Add(new XElement("IP_EndRange1", IP_EndRange1));
+            inputele.Add(new XElement("IP_EndRange2", IP_EndRange2));
+            inputele.Add(new XElement("IP_EndRange3", IP_EndRange3));
+            inputele.Add(new XElement("IP_EndRange4", IP_EndRange4));
+            XElement outputele = new XElement("Output");
+            outputele.Add(new XElement("OP_Channel_Index", OP_Channel_Index));
+            outputele.Add(new XElement("OP_Channel_CB_Enabled1", OP_Channel_CB_Enabled1));
+            outputele.Add(new XElement("OP_Channel_CB_Enabled2", OP_Channel_CB_Enabled2));
+            outputele.Add(new XElement("OP_Mode_Index1", OP_Mode_Index1));
+            outputele.Add(new XElement("OP_Mode_Index2", OP_Mode_Index2));
+            outputele.Add(new XElement("OP_StartRange1", OP_StartRange1));
+            outputele.Add(new XElement("OP_StartRange2", OP_StartRange2));
+            outputele.Add(new XElement("OP_EndRange1", OP_EndRange1));
+            outputele.Add(new XElement("OP_EndRange2", OP_EndRange2));
+            XElement filtertime = new XElement("FilterTime");
+            filtertime.Add(new XElement("FilterTime_Index", FilterTime_Index));
+            xele.Add(inputele);
+            xele.Add(outputele);
+            xele.Add(filtertime);
         }
-
-        public AnalogQuantityParams Clone(ProjectPropertyParams parent)
-        {
-            AnalogQuantityParams that = new AnalogQuantityParams(parent);
-            that.Load(this);
-            return that;
-        }
-
-        public void Load(IParams iparams)
-        {
-            if (iparams is AnalogQuantityParams)
-            {
-                AnalogQuantityParams that = (AnalogQuantityParams)iparams;
-                
-            }
-        }
-
-        #endregion
-
     }
 }

@@ -26,13 +26,25 @@ namespace SamSoarII.Shell.Dialogs
             InitializeComponent();
             core = _core;
             DataContext = core;
-            oldindex = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                _widget.Add(new ExpansionUnitModule(core.ExpansionUnitParams[i]));
+            }
+            for (int i = 0; i < Modules.Items.Count; i++)
+            {
+                ((ListBoxItem)Modules.Items[i]).DataContext = core.ExpansionUnitParams[i];
+            }
+            ContentGrid.Children.Add(_widget[0]);
         }
 
         public void Dispose()
         {
             core = null;
             DataContext = null;
+            for (int i = 0; i < Modules.Items.Count; i++)
+            {
+                ((ListBoxItem)Modules.Items[i]).DataContext = null;
+            }
         }
 
         #region Number
@@ -40,120 +52,15 @@ namespace SamSoarII.Shell.Dialogs
         private ExpansionModuleParams core;
         public ExpansionModuleParams Core { get { return this.core; } }
 
-        private int oldindex;
-
+        private List<UserControl> _widget = new List<UserControl>();
         #endregion
-        
-        private void SetZIndex(int index, bool isUp)
-        {
-            switch (index)
-            {
-                case 0:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox0, 11);
-                        Panel.SetZIndex(combox1, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox0, 10);
-                        Panel.SetZIndex(combox1, 10);
-                    }
-                    break;
-                case 1:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox1, 11);
-                        Panel.SetZIndex(combox2, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox1, 10);
-                        Panel.SetZIndex(combox2, 10);
-                    }
-                    break;
-                case 2:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox2, 11);
-                        Panel.SetZIndex(combox3, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox2, 10);
-                        Panel.SetZIndex(combox3, 10);
-                    }
-                    break;
-                case 3:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox3, 11);
-                        Panel.SetZIndex(combox4, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox3, 10);
-                        Panel.SetZIndex(combox4, 10);
-                    }
-                    break;
-                case 4:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox4, 11);
-                        Panel.SetZIndex(combox5, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox4, 10);
-                        Panel.SetZIndex(combox5, 10);
-                    }
-                    break;
-                case 5:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox5, 11);
-                        Panel.SetZIndex(combox6, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox5, 10);
-                        Panel.SetZIndex(combox6, 10);
-                    }
-                    break;
-                case 6:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox6, 11);
-                        Panel.SetZIndex(combox7, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox6, 10);
-                        Panel.SetZIndex(combox7, 10);
-                    }
-                    break;
-                case 7:
-                    if (isUp)
-                    {
-                        Panel.SetZIndex(checkbox7, 11);
-                        Panel.SetZIndex(combox8, 11);
-                    }
-                    else
-                    {
-                        Panel.SetZIndex(checkbox7, 10);
-                        Panel.SetZIndex(combox8, 10);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
 
-        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ShowModule(object sender, SelectionChangedEventArgs e)
         {
-            SetZIndex(oldindex, false);
-            oldindex = combox.SelectedIndex;
-            SetZIndex(oldindex, true);
+            ContentGrid?.Children.Clear();
+            ContentGrid?.Children.Add(_widget[Modules.SelectedIndex]);
+            if(TB_Message != null)
+                TB_Message.Text = string.Format("AI{0} - AI{1}",8 + Modules.SelectedIndex * 4, 11 + Modules.SelectedIndex * 4);
         }
     }
 }

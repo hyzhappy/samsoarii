@@ -40,7 +40,10 @@ namespace SamSoarII.Shell.Windows
                     if (!AssertRange(value))
                         Background = Brushes.OrangeRed;
                     else
+                    {
+                        oldvalue = value;
                         Background = Brushes.Transparent;
+                    }
                 }
                 catch (Exception)
                 {
@@ -51,10 +54,7 @@ namespace SamSoarII.Shell.Windows
 
         private void OnlyNumsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (Text == string.Empty && IsNumsOnly)
-            {
-                Text = oldvalue.ToString();
-            }
+            Text = oldvalue.ToString();
         }
         private void OnlyNumsTextBox_GotFocus(object sender, RoutedEventArgs e)
         {

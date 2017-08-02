@@ -1501,6 +1501,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Filter Time 的本地化字符串。
+        /// </summary>
+        public static string Filter_Time {
+            get {
+                return ResourceManager.GetString("Filter_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Float add 的本地化字符串。
         /// </summary>
         public static string Float_Add {
@@ -3814,7 +3823,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 It&apos;s only allowed to use ST instruction between a STL and a STLE instruction.  的本地化字符串。
+        ///   查找类似 Cannot used ST instruction outside the range of STL 的本地化字符串。
         /// </summary>
         public static string Message_ST {
             get {
@@ -3832,7 +3841,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 The STL instruction cannot be conditional. 的本地化字符串。
+        ///   查找类似 Cannot used STL instruction with logical condition. 的本地化字符串。
         /// </summary>
         public static string Message_STL {
             get {
@@ -3850,7 +3859,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 It already had a STL instruction above here. 的本地化字符串。
+        ///   查找类似 It already had a STL instruction above. 的本地化字符串。
         /// </summary>
         public static string Message_STL_Over {
             get {
@@ -3859,7 +3868,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 The SHLE instruction cannot be conditional. 的本地化字符串。
+        ///   查找类似 Cannot used STLE instruction with logical condition. 的本地化字符串。
         /// </summary>
         public static string Message_STLE {
             get {
@@ -3877,7 +3886,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Cannot found a STL instruction corrosponded with it. 的本地化字符串。
+        ///   查找类似 Cannot found STL instruction. 的本地化字符串。
         /// </summary>
         public static string Message_STLE_Over {
             get {
@@ -4539,6 +4548,15 @@ namespace SamSoarII.Properties {
         public static string Not_Command {
             get {
                 return ResourceManager.GetString("Not_Command", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Not Enabled 的本地化字符串。
+        /// </summary>
+        public static string Not_Enabled {
+            get {
+                return ResourceManager.GetString("Not_Enabled", resourceCulture);
             }
         }
         
@@ -5731,6 +5749,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Thermocouple 的本地化字符串。
+        /// </summary>
+        public static string Thermocouple {
+            get {
+                return ResourceManager.GetString("Thermocouple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Timed Save 的本地化字符串。
         /// </summary>
         public static string Timed_Save {
@@ -5898,6 +5925,15 @@ namespace SamSoarII.Properties {
         public static string Upload_Encryption {
             get {
                 return ResourceManager.GetString("Upload_Encryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Use the expansion module 的本地化字符串。
+        /// </summary>
+        public static string Use_Expansion_Module {
+            get {
+                return ResourceManager.GetString("Use_Expansion_Module", resourceCulture);
             }
         }
         

@@ -210,6 +210,7 @@
     <Compile Include="Core\Models\Monitor\MonitorModel.cs" />
     <Compile Include="Core\Models\ProjectModel.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\CommunicationParams.cs" />
+    <Compile Include="Core\Models\ProjectPropertyParams\ExpansionUnitModuleParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\ProjectPropertyParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\AnalogQuantityParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\CommunicationInterfaceParams.cs" />

@@ -2166,4 +2166,37 @@
   <data name="DWord" xml:space="preserve">
     <value>DWord</value>
   </data>
+  <data name="Use_Expansion_Module" xml:space="preserve">
+    <value>Use the expansion module</value>
+  </data>
+  <data name="Message_ST" xml:space="preserve">
+    <value>Cannot used ST instruction outside the range of STL</value>
+  </data>
+  <data name="Message_STL" xml:space="preserve">
+    <value>Cannot used STL instruction with logical condition.</value>
+  </data>
+  <data name="Message_STL_OnlyOne" xml:space="preserve">
+    <value>The STL instruction can not be used in the same network with another output instruction.</value>
+  </data>
+  <data name="Message_STL_Over" xml:space="preserve">
+    <value>It already had a STL instruction above.</value>
+  </data>
+  <data name="Message_STLE" xml:space="preserve">
+    <value>Cannot used STLE instruction with logical condition.</value>
+  </data>
+  <data name="Message_STLE_OnlyOne" xml:space="preserve">
+    <value>The STLE instruction can not be used in the same network with another output instruction.</value>
+  </data>
+  <data name="Message_STLE_Over" xml:space="preserve">
+    <value>Cannot found STL instruction.</value>
+  </data>
+  <data name="Not_Enabled" xml:space="preserve">
+    <value>Not Enabled</value>
+  </data>
+  <data name="Filter_Time" xml:space="preserve">
+    <value>Filter Time</value>
+  </data>
+  <data name="Thermocouple" xml:space="preserve">
+    <value>Thermocouple</value>
+  </data>
 </root>
