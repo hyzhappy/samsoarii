@@ -772,6 +772,20 @@ namespace SamSoarII.Core.Models
             }
         }
         
+        public uint ReadMonitorData(ValueStore vstore)
+        {
+            int dataaddr = vstore.Parent.DataAddr;
+            switch (vstore.Intra)
+            {
+                case ValueModel.Bases.V: dataaddr += (int)(storev[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+                case ValueModel.Bases.Z: dataaddr += (int)(storez[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+            }
+            byte[] udata = new byte[4];
+            for (int i = dataaddr; i < Math.Min(datas.Length, dataaddr + 4); i++)
+                udata[i - dataaddr] = datas[i];
+            return ValueConverter.GetValue(udata);
+        }
+        
         #endregion
 
         #region Save & Load

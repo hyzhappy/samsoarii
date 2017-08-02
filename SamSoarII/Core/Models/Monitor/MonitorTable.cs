@@ -61,7 +61,7 @@ namespace SamSoarII.Core.Models
         {
             foreach (var child in Children)
             {
-                if (child.AddrType == element.AddrType && child.StartAddr == element.StartAddr
+                if (child.AddrType == element.AddrType && child.StartAddr == element.StartAddr && child.DataType == element.DataType
                     && child.IsIntrasegment == element.IsIntrasegment && child.IntrasegmentAddr == element.IntrasegmentAddr
                     && child.IntrasegmentType == element.IntrasegmentType && child.Store.Flag == element.Store.Flag) return true;
             }

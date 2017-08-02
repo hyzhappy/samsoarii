@@ -192,12 +192,12 @@ namespace SamSoarII.Core.Generate
             sw.Write("void RunLadder()\n{\n");
             if (simumode) sw.Write("_itr_invoke();\n");
             // STL取消标志
-            sw.Write("uint8_t _stlrst;\n");
+            sw.Write("int8_t _stlrst;\n");
             // 建立局部的栈和辅助栈
             for (int i = 1; i <= stackTotal; i++)
-                sw.Write("uint8_t _stack_{0:d};\n", i);
+                sw.Write("int8_t _stack_{0:d};\n", i);
             for (int i = 1; i <= mstackTotal; i++)
-                sw.Write("uint8_t _mstack_{0:d};\n", i);
+                sw.Write("int8_t _mstack_{0:d};\n", i);
             // 生成PLC对应的内容
             // 初始化栈顶
             stackTop = 0;
@@ -217,12 +217,12 @@ namespace SamSoarII.Core.Generate
                         if (simumode)
                             sw.Write("callinto();\n");
                         // STL取消标志
-                        sw.Write("uint8_t _stlrst;\n");
+                        sw.Write("int8_t _stlrst;\n");
                         // 建立局部的栈和辅助栈
                         for (int i = 1; i <= stackTotal; i++)
-                            sw.Write("uint8_t _stack_{0:d};\n", i);
+                            sw.Write("int8_t _stack_{0:d};\n", i);
                         for (int i = 1; i <= mstackTotal; i++)
-                            sw.Write("uint8_t _mstack_{0:d};\n", i);
+                            sw.Write("int8_t _mstack_{0:d};\n", i);
                         // 初始化栈顶
                         stackTop = 0;
                         mstackTop = 0;
@@ -484,7 +484,7 @@ namespace SamSoarII.Core.Generate
                     if (simumode)
                         sw.Write("{0:s} &{2:s}, 1, {1:s});", inst[1], cond, inst.EnBit);
                     else
-                        sw.Write("{0:s} 1, {1:s}", inst[1], cond);
+                        sw.Write("{0:s} 1, {1:s})", inst[1], cond);
                     break;
                 case "OUTIM":
                     if (!simumode && inst[1][0] == 'Y')
@@ -743,7 +743,7 @@ namespace SamSoarII.Core.Generate
                         case "ST": sw.Write("{0:s} = 1;\n", inst[1]); break;
                         // 数据格式的转化指令
                         case "WTOD": sw.Write("{1:s} = _WORD_to_DWORD({0:s});\n", inst[1], inst[2]); break;
-                        case "BDWTOD": sw.Write("{1:s} _WORD_to_DWORD({0:s});\n", inst[1], inst[2]); break;
+                        case "BDWTOD": sw.Write("{1:s} _WORD_to_DWORD({0:s}));\n", inst[1], inst[2]); break;
                         case "DTOW": sw.Write("{1:s} = _DWORD_to_WORD({0:s});\n", inst[1], inst[2]); break;
                         case "BWDTOW": sw.Write("{1:s} _DWORD_to_WORD({0:s}));\n", inst[1], inst[2]); break;
                         case "DTOF": sw.Write("{1:s} = _DWORD_to_FLOAT({0:s});\n", inst[1], inst[2]); break;
@@ -752,7 +752,9 @@ namespace SamSoarII.Core.Generate
                         case "BCD": sw.Write("{1:s} = _WORD_to_BCD({0:s});\n", inst[1], inst[2]); break;
                         case "WBBCD": sw.Write("{1:s} _WORD_to_BCD({0:s}));\n", inst[1], inst[2]); break;
                         case "ROUND": sw.Write("{1:s} = _FLOAT_to_ROUND({0:s});\n", inst[1], inst[2]); break;
+                        case "BDROUND": sw.Write("{1:s} _FLOAT_to_ROUND({0:s}));\n", inst[1], inst[2]); break;
                         case "TRUNC": sw.Write("{1:s} = _FLOAT_to_TRUNC({0:s});\n", inst[1], inst[2]); break;
+                        case "BDTRUNC": sw.Write("{1:s} _FLOAT_to_TRUNC({0:s}));\n", inst[1], inst[2]); break;
                         // 位运算指令
                         case "INVW": case "INVD": sw.Write("{1:s} = ~{0:s};\n", inst[1], inst[2]); break;
                         case "BWINVW": case "BDINVD": sw.Write("{1:s}, ~{0:s});", inst[1], inst[2]); break;
@@ -868,9 +870,9 @@ namespace SamSoarII.Core.Generate
                             if (inst.ProtoType.Children[0].IsWordBit)
                             {
                                 if (simumode)
-                                    sw.Write("_shr_wbit_to_bit({0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});", inst[1], inst[2], inst[3], inst[4], inst.EnBit);
+                                    sw.Write("_shr_wbit_to_bit({0:s}, &{1:s}, &{4:s}, {2:s}, {3:s});", inst.ToCParas(1), inst[2], inst[3], inst[4], inst.EnBit);
                                 else
-                                    sw.Write("_shr_wbit_to_bit({0:s}, &{1:s}, {2:s}, {3:s});", inst[1], inst[2], inst[3], inst[4]);
+                                    sw.Write("_shr_wbit_to_bit({0:s}, &{1:s}, {2:s}, {3:s});", inst.ToCParas(1), inst[2], inst[3], inst[4]);
                             }
                             else
                             {
@@ -970,11 +972,11 @@ namespace SamSoarII.Core.Generate
                             // 至少存在一个参数
                             else
                             {
-                                sw.Write("{0:s}({1:s}", inst[1], inst[2]);
+                                sw.Write("{0:s}(&{1:s}", inst[1], inst[2]);
                                 for (int i = 3; i < inst.Count; i++)
                                 {
                                     if (inst[i].Equals(String.Empty)) break;
-                                    sw.Write(",{0:s}", inst[i]);
+                                    sw.Write(",&{0:s}", inst[i]);
                                 }
                                 sw.Write(");\n");
                             }

@@ -75,27 +75,27 @@ namespace SamSoarII.Core.Helpers
                                 varname, imodel.ShowValue.Equals("ON") ? 1 : 0);
                             break;
                         case 1:
-                            sw.Write("*((int32_t*)(&{0:s})) = {1:s};\r\n",
+                            sw.Write("*((_WORD*)(&{0:s})) = {1:s};\r\n",
                                 varname, imodel.ShowValue);
                             break;
                         case 2:
-                            sw.Write("*((uint32_t*)(&{0:s})) = {1:s};\r\n",
+                            sw.Write("*((U_WORD*)(&{0:s})) = {1:s};\r\n",
                                 varname, imodel.ShowValue);
                             break;
                         case 3:
-                            sw.Write("*((int64_t*)(&{0:s})) = {1:s};\r\n",
+                            sw.Write("*((D_WORD*)(&{0:s})) = {1:s};\r\n",
                                 varname, imodel.ShowValue);
                             break;
                         case 4:
-                            sw.Write("*((uint64_t*)(&{0:s})) = {1:s};\r\n",
+                            sw.Write("*((UD_WORD*)(&{0:s})) = {1:s};\r\n",
                                 varname, imodel.ShowValue);
                             break;
                         case 5:
-                            sw.Write("{0:s} = _BCD_to_WORD({1:s});\r\n",
+                            sw.Write("*((_WORD*)(&{0:s})) = _BCD_to_WORD({1:s});\r\n",
                                 varname, imodel.ShowValue);
                             break;
                         case 6:
-                            sw.Write("*((double*)(&{0:s})) = {1:s};\r\n",
+                            sw.Write("*((_FLOAT*)(&{0:s})) = {1:s};\r\n",
                                 varname, imodel.ShowValue);
                             break;
                     }
@@ -106,10 +106,12 @@ namespace SamSoarII.Core.Helpers
             // 生成用户函数的c语言头
             sw = new StreamWriter(funcBlockHFile);
             sw.Write("#include<stdint.h>\r\n");
-            sw.Write("typedef int32_t _BIT;\r\n");
-            sw.Write("typedef int32_t _WORD;\r\n");
-            sw.Write("typedef int64_t D_WORD;\r\n");
-            sw.Write("typedef double _FLOAT;\r\n");
+            sw.Write("typedef int8_t _BIT;\r\n");
+            sw.Write("typedef int16_t _WORD;\r\n");
+            sw.Write("typedef uint16_t U_WORD;\r\n");
+            sw.Write("typedef int32_t D_WORD;\r\n");
+            sw.Write("typedef uint32_t UD_WORD;\r\n");
+            sw.Write("typedef float _FLOAT;\r\n");
             sw.Write("extern void callinfo();\r\n");
             sw.Write("extern void callleave();\r\n");
             sw.Write("extern void bpcycle(int addr);\r\n");
@@ -120,6 +122,20 @@ namespace SamSoarII.Core.Helpers
             sw = new StreamWriter(funcBlockCFile);
             sw.Write("#include <math.h>\r\n");
             sw.Write("#include \"simuf.h\"\r\n");
+            sw.Write("extern _BIT* XBit;\r\n");
+            sw.Write("extern _BIT* YBit;\r\n");
+            sw.Write("extern _BIT* SBit;\r\n");
+            sw.Write("extern _BIT* MBit;\r\n");
+            sw.Write("extern _BIT* CBit;\r\n");
+            sw.Write("extern _BIT* TBit;\r\n");
+            sw.Write("extern _WORD* DWord;\r\n");
+            sw.Write("extern _WORD* TVWord;\r\n");
+            sw.Write("extern _WORD* CVWord;\r\n");
+            sw.Write("extern _WORD* VWord;\r\n");
+            sw.Write("extern _WORD* ZWord;\r\n");
+            sw.Write("extern _WORD* AIWord;\r\n");
+            sw.Write("extern _WORD* AOWord;\r\n");
+            sw.Write("extern D_WORD* CV32DoubleWord;\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
                 GenerateCCode(fbmodel, sw, true);
             sw.Close();
@@ -180,7 +196,9 @@ namespace SamSoarII.Core.Helpers
             sw.Write("#include <stdint.h>\n");
             sw.Write("typedef int32_t _BIT;\n");
             sw.Write("typedef int16_t _WORD;\n");
+            sw.Write("typedef uint16_t U_WORD;\n");
             sw.Write("typedef int32_t D_WORD;\n");
+            sw.Write("typedef uint32_t UD_WORD;\n");
             sw.Write("typedef float _FLOAT;\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
             {
@@ -191,6 +209,20 @@ namespace SamSoarII.Core.Helpers
             sw = new StreamWriter(funcBlockCFile);
             sw.Write("#include \"downf.h\"\n");
             sw.Write("#include <math.h>\n");
+            sw.Write("extern _BIT* XBit;\r\n");
+            sw.Write("extern _BIT* YBit;\r\n");
+            sw.Write("extern _BIT* SBit;\r\n");
+            sw.Write("extern _BIT* MBit;\r\n");
+            sw.Write("extern _BIT* CBit;\r\n");
+            sw.Write("extern _BIT* TBit;\r\n");
+            sw.Write("extern _WORD* DWord;\r\n");
+            sw.Write("extern _WORD* TVWord;\r\n");
+            sw.Write("extern _WORD* CVWord;\r\n");
+            sw.Write("extern _WORD* VWord;\r\n");
+            sw.Write("extern _WORD* ZWord;\r\n");
+            sw.Write("extern _WORD* AIWord;\r\n");
+            sw.Write("extern _WORD* AOWord;\r\n");
+            sw.Write("extern D_WORD* CV32DoubleWord;\r\n");
             foreach (FuncBlockModel fbmodel in project.FuncBlocks)
             {
                 GenerateCCode(fbmodel, sw);

@@ -522,41 +522,107 @@ namespace SamSoarII.Core.Communication
             if (e.IsWrite)
             {
                 byte[] data = null;
-                switch (vstore.Type)
+                int value = 0;
+                ValueModel.Types type = e.Type != ValueModel.Types.NULL ? e.Type : vstore.Type;
+                string vstr = e.ToValue.ToString();
+                if (vstore.IsWordBit)
                 {
-                    case ValueModel.Types.BOOL:
-                        data = new byte[] { (byte)(e.ToValue.ToString().Equals("ON") ? 1 : 0) };
-                        break;
-                    case ValueModel.Types.WORD:
-                        data = ValueConverter.GetBytes(
-                            (UInt16)(Int16.Parse(e.ToValue.ToString())));
-                        break;
-                    case ValueModel.Types.UWORD:
-                        data = ValueConverter.GetBytes(
-                            UInt16.Parse(e.ToValue.ToString()));
-                        break;
-                    case ValueModel.Types.BCD:
-                        data = ValueConverter.GetBytes(
-                            ValueConverter.ToBCD(
-                                UInt16.Parse(e.ToValue.ToString())));
-                        break;
-                    case ValueModel.Types.DWORD:
-                        data = ValueConverter.GetBytes(
-                            (UInt32)(Int32.Parse(e.ToValue.ToString())));
-                        break;
-                    case ValueModel.Types.UDWORD:
-                        data = ValueConverter.GetBytes(
-                            UInt32.Parse(e.ToValue.ToString()));
-                        break;
-                    case ValueModel.Types.FLOAT:
-                        data = ValueConverter.GetBytes(
-                            ValueConverter.FloatToUInt(
-                                float.Parse(e.ToValue.ToString())));
-                        break;
-                    default:
-                        data = new byte[0];
-                        break;
-
+                    value = (int)(ValueManager.ReadMonitorData(vstore));
+                    if (vstr.Equals("ON"))
+                        value |=  (1 << vstore.Flag);
+                    else
+                        value &= ~(1 << vstore.Flag);
+                    data = ValueConverter.GetBytes((UInt16)value);
+                }
+                else if (vstore.IsBitWord || vstore.IsBitDoubleWord)
+                {
+                    data = new byte[vstore.Flag];
+                    switch (vstore.Type)
+                    {
+                        case ValueModel.Types.WORD:
+                            value = (int)(Int16.Parse(vstr));
+                            break;
+                        case ValueModel.Types.UWORD:
+                            value = (int)(UInt16.Parse(vstr));
+                            break;
+                        case ValueModel.Types.BCD:
+                            value = (int)ValueConverter.ToBCD(
+                                UInt16.Parse(vstr));
+                            break;
+                        case ValueModel.Types.DWORD:
+                            value = Int32.Parse(vstr);
+                            break;
+                        case ValueModel.Types.UDWORD:
+                            value = (int)(UInt32.Parse(vstr));
+                            break;
+                        case ValueModel.Types.HEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                value = (int)(UInt16.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                            else
+                                value = (int)(UInt16.Parse(vstr, System.Globalization.NumberStyles.HexNumber));
+                            break;
+                        case ValueModel.Types.DHEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                value = (int)(UInt32.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                            else
+                                value = (int)(UInt32.Parse(vstr, System.Globalization.NumberStyles.HexNumber));
+                            break;
+                    }
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        data[i] = (byte)(value & 1);
+                        value >>= 1;
+                    }
+                }
+                else
+                {
+                    switch (vstore.Type)
+                    {
+                        case ValueModel.Types.BOOL:
+                            data = new byte[] { (byte)(vstr.Equals("ON") ? 1 : 0) };
+                            break;
+                        case ValueModel.Types.WORD:
+                            data = ValueConverter.GetBytes(
+                                (UInt16)(Int16.Parse(vstr)));
+                            break;
+                        case ValueModel.Types.UWORD:
+                            data = ValueConverter.GetBytes(
+                                UInt16.Parse(vstr));
+                            break;
+                        case ValueModel.Types.BCD:
+                            data = ValueConverter.GetBytes(
+                                ValueConverter.ToBCD(
+                                    UInt16.Parse(vstr)));
+                            break;
+                        case ValueModel.Types.DWORD:
+                            data = ValueConverter.GetBytes(
+                                (UInt32)(Int32.Parse(vstr)));
+                            break;
+                        case ValueModel.Types.UDWORD:
+                            data = ValueConverter.GetBytes(
+                                UInt32.Parse(vstr));
+                            break;
+                        case ValueModel.Types.FLOAT:
+                            data = ValueConverter.GetBytes(
+                                ValueConverter.FloatToUInt(
+                                    float.Parse(vstr)));
+                            break;
+                        case ValueModel.Types.HEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                data = ValueConverter.GetBytes(UInt16.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                            else
+                                data = ValueConverter.GetBytes(UInt16.Parse(vstr, System.Globalization.NumberStyles.HexNumber));
+                            break;
+                        case ValueModel.Types.DHEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                data = ValueConverter.GetBytes(UInt32.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                            else
+                                data = ValueConverter.GetBytes(UInt32.Parse(vstr, System.Globalization.NumberStyles.HexNumber));
+                            break;
+                        default:
+                            data = new byte[0];
+                            break;
+                    }
                 }
                 if (vstore.Intra != ValueModel.Bases.NULL)
                 {

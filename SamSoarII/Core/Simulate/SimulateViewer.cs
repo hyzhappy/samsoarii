@@ -61,12 +61,12 @@ namespace SamSoarII.Core.Simulate
                     if (vstore.Parent == null || vstore.VisualRefNum == 0) continue;
                     if (vstore.IsWordBit)
                     {
-                        int value = DllModel.GetValue_Word(vstore.Parent.Name);
+                        int value = DllModel.GetValue_Word(vstore.BaseName);
                         vstore.Value = ((value >> vstore.Flag) & 1);
                     }
                     else if (vstore.IsBitWord || vstore.IsBitDoubleWord)
                     {
-                        int[] values = DllModel.GetValue_Bit(vstore.Parent.Name, vstore.Flag);
+                        byte[] values = DllModel.GetValue_Bit(vstore.BaseName, vstore.Flag);
                         int value = 0;
                         for (int i = vstore.Flag - 1; i >= 0; i--)
                             value = (value << 1) + (values[i] & 1);
@@ -80,10 +80,10 @@ namespace SamSoarII.Core.Simulate
                             case ValueModel.Types.WORD: vstore.Value = (short)DllModel.GetValue_Word(vstore.Name); break;
                             case ValueModel.Types.UWORD:
                             case ValueModel.Types.BCD:
-                            case ValueModel.Types.HEX: vstore.Value = (short)DllModel.GetValue_Word(vstore.Name); break;
-                            case ValueModel.Types.DWORD:
+                            case ValueModel.Types.HEX: vstore.Value = (ushort)DllModel.GetValue_Word(vstore.Name); break;
+                            case ValueModel.Types.DWORD: vstore.Value = (int)DllModel.GetValue_DWord(vstore.Name); break;
                             case ValueModel.Types.UDWORD:
-                            case ValueModel.Types.DHEX: vstore.Value = (int)DllModel.GetValue_DWord(vstore.Name); break;
+                            case ValueModel.Types.DHEX: vstore.Value = (uint)DllModel.GetValue_DWord(vstore.Name); break;
                             case ValueModel.Types.FLOAT: vstore.Value = (float)DllModel.GetValue_Float(vstore.Name); break;
                         }
                     }
@@ -169,43 +169,90 @@ namespace SamSoarII.Core.Simulate
             }
             if (e.IsWrite)
             {
+                ValueModel.Types type = e.Type != ValueModel.Types.NULL ? e.Type : store.Type;
+                string vstr = e.ToValue.ToString();
+                int value = 0;
                 if (store.IsWordBit)
                 {
-                    int value = DllModel.GetValue_Word(store.Parent.Name);
-                    if (e.ToValue.ToString().Equals("ON"))
+                    value = DllModel.GetValue_Word(store.Parent.Name);
+                    if (vstr.Equals("ON"))
                         value |=  (1 << store.Flag);
                     else
                         value &= ~(1 << store.Flag);
-                    DllModel.SetValue_Word(store.Parent.Name, value);
+                    DllModel.SetValue_Word(store.Parent.Name, (short)value);
                 }
                 else if (store.IsBitWord || store.IsBitDoubleWord)
                 {
-                    int[] bits = DllModel.GetValue_Bit(store.Parent.Name, store.Flag);
-                    int value = int.Parse(e.ToValue.ToString());
+                    byte[] bits = DllModel.GetValue_Bit(store.Parent.Name, store.Flag);
+                    switch (type)
+                    {
+                        case ValueModel.Types.WORD:
+                            value = (int)(Int16.Parse(vstr));
+                            break;
+                        case ValueModel.Types.UWORD:
+                            value = (int)(UInt16.Parse(vstr));
+                            break;
+                        case ValueModel.Types.BCD:
+                            value = (int)ValueConverter.ToBCD(
+                                UInt16.Parse(vstr));
+                            break;
+                        case ValueModel.Types.DWORD:
+                            value = Int32.Parse(vstr);
+                            break;
+                        case ValueModel.Types.UDWORD:
+                            value = (int)(UInt32.Parse(vstr));
+                            break;
+                        case ValueModel.Types.HEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                value = (int)(UInt16.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                            else
+                                value = (int)(UInt16.Parse(vstr, System.Globalization.NumberStyles.HexNumber));
+                            break;
+                        case ValueModel.Types.DHEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                value = (int)(UInt32.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber));
+                            else
+                                value = (int)(UInt32.Parse(vstr, System.Globalization.NumberStyles.HexNumber));
+                            break;
+                    }
                     for (int i = 0; i < bits.Length; i++)
                     {
-                        bits[i] = value & 1;
+                        bits[i] = (byte)(value & 1);
                         value >>= 1;
                     }
                     DllModel.SetValue_Bit(store.Parent.Name, store.Flag, bits);
                 }
                 else
                 {
-                    switch (store.Type)
+                    switch (type)
                     {
                         case ValueModel.Types.BOOL:
-                            DllModel.SetValue_Bit(store.Name, e.ToValue.ToString().Equals("ON") ? 1 : 0);
+                            DllModel.SetValue_Bit(store.Name, (byte)(vstr.Equals("ON") ? 1 : 0));
                             break;
                         case ValueModel.Types.WORD:
+                            DllModel.SetValue_Word(store.Name, short.Parse(vstr)); break;
                         case ValueModel.Types.UWORD:
-                            DllModel.SetValue_Word(store.Name, Int32.Parse(e.ToValue.ToString())); break;
+                            DllModel.SetValue_Word(store.Name, (short)(ushort.Parse(vstr))); break;
                         case ValueModel.Types.BCD:
-                            DllModel.SetValue_Word(store.Name, (Int32)(ValueConverter.ToBCD(UInt16.Parse(e.ToValue.ToString())))); break;
+                            DllModel.SetValue_Word(store.Name, (short)(ValueConverter.ToBCD(UInt16.Parse(vstr)))); break;
                         case ValueModel.Types.DWORD:
+                            DllModel.SetValue_DWord(store.Name, int.Parse(vstr)); break;
                         case ValueModel.Types.UDWORD:
-                            DllModel.SetValue_DWord(store.Name, Int64.Parse(e.ToValue.ToString())); break;
+                            DllModel.SetValue_DWord(store.Name, (int)(uint.Parse(vstr))); break;
                         case ValueModel.Types.FLOAT:
-                            DllModel.SetValue_Float(store.Name, double.Parse(e.ToValue.ToString())); break;
+                            DllModel.SetValue_Float(store.Name, float.Parse(vstr)); break;
+                        case ValueModel.Types.HEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                DllModel.SetValue_Word(store.Name, (short)(ushort.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber)));
+                            else
+                                DllModel.SetValue_Word(store.Name, (short)(ushort.Parse(vstr, System.Globalization.NumberStyles.HexNumber)));
+                            break;
+                        case ValueModel.Types.DHEX:
+                            if (vstr.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase))
+                                DllModel.SetValue_DWord(store.Name, (int)(uint.Parse(vstr.Substring(2), System.Globalization.NumberStyles.HexNumber)));
+                            else
+                                DllModel.SetValue_DWord(store.Name, (int)(uint.Parse(vstr, System.Globalization.NumberStyles.HexNumber)));
+                            break;
                     }
                 }
             }

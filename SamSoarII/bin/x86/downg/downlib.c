@@ -98,10 +98,10 @@ int32_t _mulwd(int16_t ia, int16_t ib)
 int16_t _mulww(int16_t ia, int16_t ib)
 {
 	int16_t ic = ia * ib;
-	uint32_t _ia = (uint32_t)(ia < 0 ? -ia : ia);
-	uint32_t _ib = (uint32_t)(ib < 0 ? -ib : ib);
+	uint16_t _ia = (uint16_t)(ia < 0 ? -ia : ia);
+	uint16_t _ib = (uint16_t)(ib < 0 ? -ib : ib);
 	// get the maximum number in 64-bit integer
-	uint32_t max = 0x00003fff;
+	uint16_t max = 0x3fff;
 	MBit[8169] = (ia ? ((max / _ia) < _ib) : 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
@@ -205,7 +205,6 @@ int32_t _divdd(int32_t ia, int32_t ib)
 	}
 }
 
-
 // get a result (32-bit float) by div a couple of 32-bit float
 float _divff(float ia, float ib)
 {
@@ -227,7 +226,6 @@ float _divff(float ia, float ib)
 		return ic;
 	}
 }
-
 
 // increase a 16-bit integer by 1
 int16_t _incw(int16_t ia)
@@ -730,3 +728,261 @@ void _imyrst(int16_t Yn, int16_t size)
 		OutputIm_Y(Yn + size, 0);
 }
 
+void _set_wbit(int16_t* src, int16_t loc, int16_t size, int16_t value)
+{
+	int i;
+	int lrem = 16 - loc;
+	if (size < lrem)
+	{
+		if (value)
+			src[0] |=  (((1<<size)-1) << loc);
+		else
+			src[0] &= ~(((1<<size)-1) << loc);
+		return;
+	}
+	int bcnt = ((size - lrem) >> 4);
+	int rrem = (size - lrem - (bcnt<<4));
+	if (value)
+		src[0] |=  (((1<<lrem)-1) << loc);
+	else
+		src[0] &= ~(((1<<lrem)-1) << loc);
+	for (i = 1; i <= bcnt; i++)
+		src[i] = value ? 0x0000ffff : 0x00000000;
+	if (rrem)
+	{
+		if (value)
+			src[bcnt+1] |=  ((1<<rrem)-1);
+		else
+			src[bcnt+1] &= ~((1<<rrem)-1);
+	}
+}
+
+int32_t _get_wbit(int16_t* src, int16_t loc)
+{
+	return (*src>>loc) & 1;
+}
+
+void _mov_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int16_t size)
+{
+	int i;
+	int slrem = 16 - sloc;
+	int dlrem = 16 - dloc;
+	if (size < slrem && size < dlrem)
+	{
+		dst[0] &= ~(((1<<size)-1) << dloc);
+		dst[0] |= (((src[0]>>sloc) & ((1<<size)-1)) << dloc);
+		return;
+	}
+	int lrem = slrem < dlrem ? slrem : dlrem;
+	int delta = slrem + dlrem - (lrem<<1);
+	int bcnt = ((size - lrem) >> 4);
+	int rrem = (size - lrem - (bcnt<<4));
+	dst[0] &= ~(((1<<lrem)-1) << dloc);
+	dst[0] |= (((src[0]>>sloc) & ((1<<lrem)-1)) << dloc);
+	for (i = 1; i < bcnt; i++)
+	{
+		if (slrem < dlrem)
+		{
+			dst[i-1] &= ~(((1<<delta)-1) << (16-delta));
+			dst[i-1] |= ((src[i] & ((1<<delta)-1)) << (16-delta));
+			dst[i] &= ~((1<<(16-delta))-1);
+			dst[i] |= ((src[i]>>delta) & ((1<<(16-delta))-1));	
+		}
+		else
+		{				
+			dst[i] = (src[i] & ((1<<(16-delta))-1));
+			dst[i] <<= delta;
+			dst[i] = ((src[i-1]>>(16-delta)) & ((1<<delta)-1));
+		}
+	}
+	if (rrem)
+	{
+		if (slrem < dlrem)
+		{
+			if (delta >= rrem)
+			{						
+				dst[bcnt] &= ~(((1<<rrem)-1) << (16-delta));
+				dst[bcnt] |= ((src[bcnt+1] & ((1<<rrem)-1)) << (16-delta));
+			}
+			else
+			{
+				dst[bcnt] &= ~(((1<<delta)-1) << (16-delta));
+				dst[bcnt] |= ((src[bcnt+1] & ((1<<delta)-1)) << (16-delta));
+				dst[bcnt+1] &= ~((1<<(rrem-delta))-1);
+				dst[bcnt+1] |= (((src[bcnt+1]>>delta) & ((1<<(rrem-delta))-1))); 
+			}
+		}
+		else
+		{
+			if (delta >= rrem)
+			{
+				dst[bcnt] &= ~(((1<<rrem)-1) << (16-delta));
+				dst[bcnt] |= ((src[bcnt+1] & ((1<<rrem)-1)) << (16-delta));
+			}
+			else
+			{
+				dst[bcnt] &= ~(((1<<delta)-1) << (16-delta));
+				dst[bcnt] |= ((src[bcnt+1] & ((1<<delta)-1)) << (16-delta));
+				dst[bcnt+1] &= ~((1<<(rrem-delta))-1);
+				dst[bcnt+1] |= (((src[bcnt+1]>>delta) & ((1<<(rrem-delta))-1)));
+			}
+		}
+	}
+}
+
+void _mov_wbit_to_bit(int16_t* src, int16_t sloc, int32_t* dst, int16_t size)
+{
+	int i, loc, bid;
+	for (i = 0 ; i < size ; i++)
+	{
+		bid = ((sloc+i)>>4);
+		loc = ((sloc+i)&15);
+		dst[i] = ((src[bid]>>loc)&1);
+	}
+}
+
+void _mov_bit_to_wbit(int32_t* src, int16_t* dst, int16_t dloc, int16_t size)
+{
+	int i, loc, bid;
+	for (i = 0 ; i < size; i++)
+	{
+		bid = ((dloc+i)>>4);
+		loc = ((dloc+i)&15);
+		dst[bid] &= ~(1<<loc);
+		dst[bid] |= (src[i]<<loc);
+	}
+}
+
+void _shl_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int16_t size, int16_t move)
+{	
+	int bid1, bid2, loc1, loc2;
+	while (--size >= move)
+	{
+		bid1 = ((dloc+size)>>4);
+		bid2 = ((dloc+size-move)>>4);
+		loc1 = ((dloc+size)&15);
+		loc2 = ((dloc+size-move)&15);
+		_set_wbit(dst+bid1, loc1, 1, _get_wbit(dst+bid2, loc2));
+	}
+	_mov_wbit_to_wbit(src, sloc, dst, dloc, move);
+}
+
+void _shl_wbit_to_bit(int16_t* src, int16_t sloc, int32_t* dst, int16_t size, int16_t move)
+{
+	while (--size >= move)
+		dst[size] = dst[size - move];
+	_mov_wbit_to_bit(src, sloc, dst, move);
+}
+
+void _shl_bit_to_wbit(int32_t* src, int16_t* dst, int16_t dloc, int16_t size, int16_t move)
+{
+	int bid1, bid2, loc1, loc2;
+	while (--size >= move)
+	{
+		bid1 = ((dloc+size)>>4);
+		bid2 = ((dloc+size-move)>>4);
+		loc1 = ((dloc+size)&15);
+		loc2 = ((dloc+size-move)&15);
+		_set_wbit(dst+bid1, loc1, 1, _get_wbit(dst+bid2, loc2));
+	}
+	_mov_bit_to_wbit(src, dst, dloc, move);
+}
+
+void _shr_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int16_t size, int16_t move)
+{
+	int i = -1;
+	int bid1, bid2, loc1, loc2;
+	while (++i < size - move)
+	{
+		bid1 = ((dloc+i)>>4);
+		bid2 = ((dloc+i+move)>>4);
+		loc1 = ((dloc+i)&15);
+		loc2 = ((dloc+i+move)&15);
+		_set_wbit(dst+bid1, loc1, 1, _get_wbit(dst+bid2, loc2));
+		i++;
+	}
+	bid1 = ((dloc+size-move)>>4);
+	loc1 = ((dloc+size-move)&15);
+	_mov_wbit_to_wbit(src, sloc, dst+bid1, loc1, move);
+}
+
+void _shr_wbit_to_bit(int16_t* src, int16_t sloc, int32_t* dst, int16_t size, int16_t move)
+{
+	int i = 0;
+	while (i++ < size - move)
+		dst[i] = dst[i + move];
+	_mov_wbit_to_bit(src, sloc, dst+(size-move), move);
+}
+
+void _shr_bit_to_wbit(int32_t* src, int16_t* dst, int16_t dloc, int16_t size, int16_t move)
+{
+	int i = -1;
+	int bid1, bid2, loc1, loc2;
+	while (++i < size - move)
+	{
+		bid1 = ((dloc+i)>>4);
+		bid2 = ((dloc+i+move)>>4);
+		loc1 = ((dloc+i)&15);
+		loc2 = ((dloc+i+move)&15);
+		_set_wbit(dst+bid1, loc1, 1, _get_wbit(dst+bid2, loc2));
+	}
+	bid1 = ((dloc+size-move)>>4);
+	loc1 = ((dloc+size-move)&15);
+	_mov_bit_to_wbit(src, dst+bid1, loc1, move);
+}
+
+void _set_bword(int32_t* src, int16_t size, int16_t value)
+{
+	while (--size >= 0)
+		src[size] = ((value>>size)&1);
+}
+
+int16_t _get_bword(int32_t* src, int16_t size)
+{
+	int16_t ret = 0;
+	while (--size >= 0)
+		ret = (ret<<1) + (src[size]&1);
+	return ret;
+}
+
+void _set_bdword(int32_t* src, int16_t size, int32_t value)
+{
+	while (--size >= 0)
+		src[size] = ((value>>size)&1);
+}
+
+int32_t _get_bdword(int32_t* src, int16_t size)
+{
+	int32_t ret = 0;
+	while (--size >= 0)
+		ret = (ret<<1) + (src[size]&1);
+	return ret;
+}
+
+void _xch_bword_to_word(int32_t* bit, int16_t size, int16_t* word)
+{
+	int16_t tmp = *word;
+	*word = _get_bword(bit, size);
+	_set_bword(bit, size, tmp);
+}
+
+void _xch_bword_to_bword(int32_t* bit1, int32_t size1, int32_t* bit2, int32_t size2)
+{
+	int16_t tmp = _get_bword(bit1, size1);
+	_set_bword(bit1, size1, _get_bword(bit2, size2));
+	_set_bword(bit2, size2, tmp);
+}
+
+void _xchd_bdword_to_dword(int32_t* bit, int32_t size, int32_t* dword)
+{
+	int32_t tmp = *dword;
+	*dword = _get_bdword(bit, size);
+	_set_bdword(bit, size, tmp);
+}
+
+void _xchd_bdword_to_bdword(int32_t* bit1, int32_t size1, int32_t* bit2, int32_t size2)
+{
+	int32_t tmp = _get_bdword(bit1, size1);
+	_set_bdword(bit1, size1, _get_bword(bit2, size2));
+	_set_bdword(bit2, size2, tmp);
+}

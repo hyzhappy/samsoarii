@@ -55,42 +55,6 @@ namespace SamSoarII.Core.Simulate
         public const int LOADDLL_OK = 0x00;
         /// <summary> LoadDll返回结果：没找到dll</summary>
         public const int LOADDLL_CANNOT_FOUND_DLLFILE = 0x01;
-        /// <summary> LoadDll返回结果：没找到RunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_RUNLADDER = 0x02;
-        /// <summary> LoadDll返回结果：没找到GetBit的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETBIT = 0x03;
-        /// <summary> LoadDll返回结果：没找到GetWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETWORD = 0x04;
-        /// <summary> LoadDll返回结果：没找到GetDWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETDWORD = 0x05;
-        /// <summary> LoadDll返回结果：没找到GetFloat的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETFLOAT = 0x06;
-        /// <summary> LoadDll返回结果：没找到GetFeq的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_GETFEQ = 0x07;
-        /// <summary> LoadDll返回结果：没找到SetBit的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETBIT = 0x08;
-        /// <summary> LoadDll返回结果：没找到SetWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETWORD = 0x09;
-        /// <summary> LoadDll返回结果：没找到SetDWord的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETDWORD = 0x0A;
-        /// <summary> LoadDll返回结果：没找到SetFloat的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETFLOAT = 0x0B;
-        /// <summary> LoadDll返回结果：没找到SetFeq的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETFEQ = 0x0C;
-        /// <summary> LoadDll返回结果：没找到SetEnable的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETENABLE = 0x0D;
-        /// <summary> LoadDll返回结果：没找到BeforeRunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_BEFORERUNLADDER = 0x0E;
-        /// <summary> LoadDll返回结果：没找到AfterRunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_AFTERRUNLADDER = 0x0F;
-        /// <summary> LoadDll返回结果：没找到InitRunLadder的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_INITRUNLADDER = 0x10;
-        /// <summary> LoadDll返回结果：没找到InitClock的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_INITCLOCK = 0x11;
-        /// <summary> LoadDll返回结果：没找到GetClock的入口</summary>
-        public const int LOADDLL_CANNNT_FOUND_GETCLOCK = 0x12;
-        /// <summary> LoadDll返回结果：没找到SetClockRate的入口</summary>
-        public const int LOADDLL_CANNOT_FOUND_SETCLOCKRATE = 0x13;
 
         /// <summary>
         /// 动态库接口：dll是否存在？
@@ -136,7 +100,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            Int32[] output
+            byte[] output
         );
 
         /// <summary>
@@ -152,7 +116,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            Int32[] output
+            short[] output
         );
         
         /// <summary>
@@ -168,7 +132,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            Int64[] output
+            int[] output
         );
         
         /// <summary>
@@ -184,7 +148,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            double[] output
+            float[] output
         );
 
         /// <summary>
@@ -198,7 +162,7 @@ namespace SamSoarII.Core.Simulate
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             [MarshalAs(UnmanagedType.LPArray)]
-            Int64[] output
+            int[] output
         );
         
         /// <summary>
@@ -214,7 +178,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            Int32[] input
+            byte[] input
         );
         
         /// <summary>
@@ -230,7 +194,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            Int32[] input
+            short[] input
         );
 
         /// <summary>
@@ -246,7 +210,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            Int64[] input
+            int[] input
         );
 
         /// <summary>
@@ -262,7 +226,7 @@ namespace SamSoarII.Core.Simulate
             string name,
             int size,
             [MarshalAs(UnmanagedType.LPArray)]
-            double[] input
+            float[] input
         );
 
         /// <summary>
@@ -277,7 +241,7 @@ namespace SamSoarII.Core.Simulate
             [MarshalAs(UnmanagedType.LPStr)]
             string name,
             int size,
-            int value
+            byte value
         );
 
         /// <summary>
@@ -323,9 +287,10 @@ namespace SamSoarII.Core.Simulate
         /// 设置位数
         /// </summary>
         /// <param name="basebit">位数</param>
+        /*
         [DllImport(@"simug\simu.dll", EntryPoint = "SetBaseBit")]
         private static extern void SetBaseBit(int basebit);
-
+        */
         /// <summary>
         /// 得到子函数调用的次数
         /// </summary>
@@ -346,7 +311,7 @@ namespace SamSoarII.Core.Simulate
         /// <param name="bpaddr">断点地址</param>
         /// <param name="islock">设置(1)或取消(0)</param>
         [DllImport(@"simug\simu.dll", EntryPoint = "SetBPAddr")]
-        public static extern void SetBPAddr(int bpaddr, int islock);
+        public static extern void SetBPAddr(int bpaddr, byte islock);
 
         /// <summary>
         /// 设置断点的运行次数
@@ -369,21 +334,21 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         /// <returns></returns>
         [DllImport(@"simug\simu.dll", EntryPoint = "GetBPPause")]
-        public static extern int GetBPPause();
+        public static extern byte GetBPPause();
 
         /// <summary>
         /// 设置当前断点状态（可以继续运行）
         /// </summary>
         /// <param name="bppause"></param>
         [DllImport(@"simug\simu.dll", EntryPoint = "SetBPPause")]
-        public static extern void SetBPPause(int bppause);
+        public static extern void SetBPPause(byte bppause);
         
         /// <summary>
         /// 设置断点使能
         /// </summary>
         /// <param name="bpenable"></param>
         [DllImport(@"simug\simu.dll", EntryPoint = "SetBPEnable")]
-        public static extern void SetBPEnable(int bpenable);
+        public static extern void SetBPEnable(byte bpenable);
         
         /// <summary>
         /// 获得当前栈地址
@@ -449,8 +414,8 @@ namespace SamSoarII.Core.Simulate
         protected override void Before()
         {
             base.Before();
-            PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
-            SetBaseBit(device.BitNumber);
+            //PLCDevice.Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+            //SetBaseBit(device.BitNumber);
             SetBPEnable(1);
             SetClockRate(1);
             try
@@ -487,13 +452,13 @@ namespace SamSoarII.Core.Simulate
         /// <summary>
         /// 位变量缓存区
         /// </summary>
-        private Int32[] bbuf = new Int32[1];
+        private byte[] bbuf = new byte[1];
         /// <summary>
         /// 获取一个位变量的值
         /// </summary>
         /// <param name="var">名称</param>
         /// <returns>获取的值</returns>
-        public Int32 GetValue_Bit(string var)
+        public byte GetValue_Bit(string var)
         {
             //var = var.ToUpper();
             GetBit(var, 1, bbuf);
@@ -505,10 +470,10 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">长度</param>
         /// <returns>获取的值的数组</returns>
-        public Int32[] GetValue_Bit(string var, int size)
+        public byte[] GetValue_Bit(string var, int size)
         {
             //var = var.ToUpper();
-            Int32[] ret = new Int32[size];
+            byte[] ret = new byte[size];
             GetBit(var, size, ret);
             return ret;
         }
@@ -516,17 +481,17 @@ namespace SamSoarII.Core.Simulate
         /// <summary>
         /// 字变量缓存区
         /// </summary>
-        private Int32[] wbuf = new Int32[1];
+        private short[] wbuf = new short[1];
         /// <summary>
         /// 获取一个字变量的值
         /// </summary>
         /// <param name="var">名称</param>
         /// <returns>获取的值</returns>
-        public Int32 GetValue_Word(string var)
+        public short GetValue_Word(string var)
         {
             //var = var.ToUpper();
-            GetWord(var, 1, bbuf);
-            return bbuf[0];
+            GetWord(var, 1, wbuf);
+            return wbuf[0];
         }
         /// <summary>
         /// 获取一段字变量的值
@@ -534,10 +499,10 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">长度</param>
         /// <returns>获取的值的数组</returns>
-        public Int32[] GetValue_Word(string var, int size)
+        public short[] GetValue_Word(string var, int size)
         {
             //var = var.ToUpper();
-            Int32[] ret = new Int32[size];
+            short[] ret = new short[size];
             GetWord(var, size, ret);
             return ret;
         }
@@ -546,13 +511,13 @@ namespace SamSoarII.Core.Simulate
         /// <summary>
         /// 双字变量缓存区
         /// </summary>
-        private Int64[] dbuf = new Int64[1];
+        private int[] dbuf = new int[1];
         /// <summary>
         /// 获取一个双字变量的值
         /// </summary>
         /// <param name="var">名称</param>
         /// <returns>获取的值</returns>
-        public Int64 GetValue_DWord(string var)
+        public int GetValue_DWord(string var)
         {
             //var = var.ToUpper();
             GetDoubleWord(var, 1, dbuf);
@@ -564,10 +529,10 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">长度</param>
         /// <returns>获取的值的数组</returns>
-        public Int64[] GetValue_DWord(string var, int size)
+        public int[] GetValue_DWord(string var, int size)
         {
             //var = var.ToUpper();
-            Int64[] ret = new Int64[size];
+            int[] ret = new int[size];
             GetDoubleWord(var, size, ret);
             return ret;
         }
@@ -575,13 +540,13 @@ namespace SamSoarII.Core.Simulate
         /// <summary>
         /// 浮点变量缓存区
         /// </summary>
-        private double[] fbuf = new double[1];
+        private float[] fbuf = new float[1];
         /// <summary>
         /// 获取一个浮点变量的值
         /// </summary>
         /// <param name="var">名称</param>
         /// <returns>获取的值</returns>
-        public double GetValue_Float(string var)
+        public float GetValue_Float(string var)
         {
             //var = var.ToUpper();
             GetFloat(var, 1, fbuf);
@@ -593,10 +558,10 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">长度</param>
         /// <returns>获取的值的数组</returns>
-        public double[] GetValue_Float(string var, int size)
+        public float[] GetValue_Float(string var, int size)
         {
             //var = var.ToUpper();
-            double[] ret = new double[size];
+            float[] ret = new float[size];
             GetFloat(var, size, ret);
             return ret;
         }
@@ -606,12 +571,11 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         /// <param name="var">脉冲输出口</param>
         /// <returns></returns>
-        public Int64 GetFeq(string var)
+        public int GetFeq(string var)
         {
             //var = var.ToUpper();
-            Int64[] ret = new Int64[1];
-            GetFeq(var, ret);
-            return ret[0];
+            GetFeq(var, dbuf);
+            return dbuf[0];
         }
 
 
@@ -620,7 +584,7 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         /// <param name="var">名称</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Bit(string var, Int32 input)
+        public void SetValue_Bit(string var, byte input)
         {
             //var = var.ToUpper();
             bbuf[0] = input;
@@ -632,7 +596,7 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">大小</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Bit(string var, int size, Int32[] input)
+        public void SetValue_Bit(string var, int size, byte[] input)
         {
             //var = var.ToUpper();
             SetBit(var, size, input);
@@ -643,7 +607,7 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         /// <param name="var">名称</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Word(string var, Int32 input)
+        public void SetValue_Word(string var, short input)
         {
             //var = var.ToUpper();
             wbuf[0] = input;
@@ -655,7 +619,7 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">大小</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Word(string var, int size, Int32[] input)
+        public void SetValue_Word(string var, int size, short[] input)
         {
             var = var.ToUpper();
             SetWord(var, size, input);
@@ -666,7 +630,7 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         /// <param name="var">名称</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_DWord(string var, Int64 input)
+        public void SetValue_DWord(string var, int input)
         {
             //var = var.ToUpper();
             dbuf[0] = input;
@@ -678,7 +642,7 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">大小</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_DWord(string var, int size, Int64[] input)
+        public void SetValue_DWord(string var, int size, int[] input)
         {
             //var = var.ToUpper();
             SetDoubleWord(var, size, input);
@@ -689,7 +653,7 @@ namespace SamSoarII.Core.Simulate
         /// </summary>
         /// <param name="var">名称</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Float(string var, double input)
+        public void SetValue_Float(string var, float input)
         {
             //var = var.ToUpper();
             fbuf[0] = input;
@@ -701,7 +665,7 @@ namespace SamSoarII.Core.Simulate
         /// <param name="var">名称</param>
         /// <param name="size">大小</param>
         /// <param name="input">输入的值</param>
-        public void SetValue_Float(string var, int size, double[] input)
+        public void SetValue_Float(string var, int size, float[] input)
         {
             //var = var.ToUpper();
             SetFloat(var, size, input);
