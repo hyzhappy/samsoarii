@@ -207,6 +207,7 @@
     <Compile Include="Core\Models\Ladders\Modbus\ModbusItem.cs" />
     <Compile Include="Core\Models\Ladders\Modbus\ModbusModel.cs" />
     <Compile Include="Core\Models\Ladders\Modbus\ModbusTableModel.cs" />
+    <Compile Include="Core\Models\Ladders\LadderUnitFormat.cs" />
     <Compile Include="Core\Models\Monitor\MonitorModel.cs" />
     <Compile Include="Core\Models\ProjectModel.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\CommunicationParams.cs" />
