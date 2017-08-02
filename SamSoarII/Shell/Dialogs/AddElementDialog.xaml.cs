@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SamSoarII.Core.Helpers;
+using SamSoarII.Core.Models;
 
 namespace SamSoarII.Shell.Dialogs
 {
@@ -33,6 +34,7 @@ namespace SamSoarII.Shell.Dialogs
         public uint IntrasegmentAddr { get; set; } = 0;
         public int AddNums { get; set; }
         public int Flag { get; set; }
+        private bool flaglegal;
         public event RoutedEventHandler EnsureButtonClick;
         public string[] DataTypes
         {
@@ -44,17 +46,19 @@ namespace SamSoarII.Shell.Dialogs
                     case 1:
                     case 2:
                     case 3:
+                        return new string[] { "BOOL", "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "HEX", "DHEX" };
                     case 4:
                     case 5:
                         return new string[] { "BOOL" };
                     case 6:
                     case 7:
                     case 8:
+                        return new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX", "BOOL" };
                     case 9:
                     case 10:
                     case 11:
                     case 12:
-                        return new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT" };
+                        return new string[] { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX"};
                     default:
                         return null;
                 }
@@ -89,6 +93,11 @@ namespace SamSoarII.Shell.Dialogs
         }
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!flaglegal)
+            {
+                LocalizedMessageBox.Show(String.Format("{0:s}{1:s}", TBL_Flag.Text, Properties.Resources.is_illegal), LocalizedMessageIcon.Warning);
+                return;
+            }
             ElementAddressType Type = (ElementAddressType)Enum.ToObject(typeof(ElementAddressType), comboBox.SelectedIndex);
             Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             if (Type == ElementAddressType.H || Type == ElementAddressType.K)
@@ -116,14 +125,7 @@ namespace SamSoarII.Shell.Dialogs
                             IntrasegmentType = ElementAddressHelper.GetIntrasegmentAddrType(comboBox1.SelectedIndex).ToString();
                             IntrasegmentAddr = uint.Parse(textBox1.Text);
                         }
-                        if (ElementAddressHelper.IsBitAddr(Type))
-                        {
-                            DataType = 0;
-                        }
-                        else
-                        {
-                            DataType = DataTypeCombox.SelectedIndex + 1;
-                        }
+                        DataType = (int)ValueModel.TypeOfNames[DataTypeCombox.Text];
                         if ((bool)checkbox.IsChecked)
                         {
                             AddNums = int.Parse(rangeTextBox.GetTextBox().Text);
@@ -162,6 +164,35 @@ namespace SamSoarII.Shell.Dialogs
                     stackpanel1.Visibility = Visibility.Visible;
                 }
             }
+            if (e.AddedItems != null && e.AddedItems.Count > 0)
+                comboBox.Text = e.AddedItems[0].ToString();
+            UpdateFlagWidget();
+        }
+        private void OnDataTypeChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems != null && e.AddedItems.Count > 0)
+                DataTypeCombox.Text = e.AddedItems[0].ToString();
+            UpdateFlagWidget();
+        }
+        private void UpdateFlagWidget()
+        {
+            if (!IsLoaded) return;
+            Flag = 1;
+            TBO_Flag.Text = "";
+            SP_Flag.Visibility = Visibility.Hidden;
+            flaglegal = true;
+            if (IsBitWord || IsBitDoubleWord)
+            {
+                TBL_Flag.Text = Properties.Resources.Length;
+                SP_Flag.Visibility = Visibility.Visible;
+                flaglegal = false;
+            }
+            if (IsWordBit)
+            {
+                TBL_Flag.Text = Properties.Resources.Data_Bit;
+                SP_Flag.Visibility = Visibility.Visible;
+                flaglegal = false;
+            }
         }
         public void Dispose()
         {
@@ -175,14 +206,103 @@ namespace SamSoarII.Shell.Dialogs
                 DataTypeCombox.SelectedIndex = 0;
             }
         }
+        public bool IsWord
+        {
+            get
+            {
+                switch (DataTypeCombox.Text)
+                {
+                    case "WORD": case "UWORD": case "BCD": case "HEX":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+        public bool IsDoubleWord
+        {
+            get
+            {
+                switch (DataTypeCombox.Text)
+                {
+                    case "DWORD": case "UDWORD": case "DHEX":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool IsWordBit
+        {
+            get
+            {
+
+                switch (comboBox.Text)
+                {
+                    case "D": case "V": case "Z":
+                        return DataTypeCombox.Text.Equals("BOOL");
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool IsBitWord
+        {
+            get
+            {
+                switch (comboBox.Text)
+                {
+                    case "X": case "Y": case "S": case "M":
+                        return IsWord;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+
+        public bool IsBitDoubleWord
+        {
+            get
+            {
+                switch (comboBox.Text)
+                {
+                    case "X": case "Y": case "S": case "M":
+                        return IsDoubleWord;
+                    default:
+                        return false;
+                }
+            }
+        }
+
         private void OnFlagTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TBO_Flag.Text.Length == 0)
+            flaglegal = true;
+            if (IsBitWord || IsBitDoubleWord)
             {
-                TBO_Flag.Background = Brushes.White;
-                return;
+                try { StartAddr = uint.Parse(textBox.Text); Flag = int.Parse(TBO_Flag.Text); }
+                catch (Exception) { flaglegal &= false; }
+                flaglegal &= Flag > 0;
+                flaglegal &= Flag <= (IsBitWord ? 16 : 32);
+                Device device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
+                switch (comboBox.Text)
+                {
+                    case "X": flaglegal &= StartAddr + Flag <= device.XRange.End; break;
+                    case "Y": flaglegal &= StartAddr + Flag <= device.YRange.End; break;
+                    case "S": flaglegal &= StartAddr + Flag <= device.SRange.End; break;
+                    case "M": flaglegal &= StartAddr + Flag <= device.MRange.End; break;
+                }
             }
-            
+            if (IsWordBit)
+            {
+                try { Flag = int.Parse(TBO_Flag.Text, System.Globalization.NumberStyles.HexNumber); }
+                catch (Exception) { flaglegal &= false; }
+                flaglegal &= TBO_Flag.Text.Length == 1;
+            }
+            TBO_Flag.Background = TBO_Flag.Text.Length > 0 && !flaglegal
+                ? Brushes.Red : Brushes.White;
         }
     }
 }

@@ -19,8 +19,10 @@ namespace SamSoarII.Core.Models
         public enum Bases { X, Y, S, M, C, T, D, CV, TV, AI, AO, V, Z, K, H, NULL};
 
         public readonly static string[] NameOfTypes = { "BOOL", "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX", "STRING", "NULL" };
-        public readonly static string[] NameOfBases = { "X", "Y", "S", "M", "C", "T", "D", "CV", "TV", "AI", "AO", "V", "Z", "K", "H", "NULL" }; 
-        
+        public readonly static string[] NameOfBases = { "X", "Y", "S", "M", "C", "T", "D", "CV", "TV", "AI", "AO", "V", "Z", "K", "H", "NULL" };
+        public readonly static Dictionary<string, Types> TypeOfNames = new Dictionary<string, Types>();
+        public readonly static Dictionary<string, Bases> BaseOfNames = new Dictionary<string, Bases>();
+
         public readonly static Regex VarRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex BitRegex = new Regex(@"^(X|Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static Regex WordRegex = new Regex(@"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -60,6 +62,14 @@ namespace SamSoarII.Core.Models
 
         public readonly static Regex FuncNameRegex = new Regex(@"^([a-zA-Z_]\w*)$", RegexOptions.Compiled);
         public readonly static Regex AnyNameRegex = new Regex(@"^.*$", RegexOptions.Compiled);
+
+        static ValueModel()
+        {
+            for (int i = 0; i < NameOfTypes.Length; i++)
+                TypeOfNames.Add(NameOfTypes[i], (Types)i);
+            for (int i = 0; i < NameOfBases.Length; i++)
+                BaseOfNames.Add(NameOfBases[i], (Bases)i);
+        }
 
         #endregion
 

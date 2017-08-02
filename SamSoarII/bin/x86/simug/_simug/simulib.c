@@ -7,41 +7,38 @@
 
 #include "simulib.h"
 
-// externed from simuc.h
-// Bit number of WORD
-int basebit;
 // Register Memorys
-int32_t XBit[128];
-int32_t YBit[128];
-int32_t MBit[256 << 5];
-int32_t CBit[256];
-int32_t TBit[256];
-int32_t SBit[32 << 5];
-int32_t DWord[8192];
-int32_t CVWord[200];
-int64_t CV32DoubleWord[56];
-int32_t TVWord[256];
-int32_t AIWord[32];
-int32_t AOWord[32];
-int32_t VWord[8];
-int32_t ZWord[8];
+int8_t XBit[128];
+int8_t YBit[128];
+int8_t MBit[256 << 5];
+int8_t CBit[256];
+int8_t TBit[256];
+int8_t SBit[32 << 5];
+int16_t DWord[8192];
+int16_t CVWord[200];
+int32_t CV32DoubleWord[56];
+int16_t TVWord[256];
+int16_t AIWord[32];
+int16_t AOWord[32];
+int16_t VWord[8];
+int16_t ZWord[8];
 // Register writeable
 // Set 1 if you want to modify the value of register
 // othervise, Set 0 to lock the register and make it constant
-int32_t XEnable[128];
-int32_t YEnable[128];
-int32_t MEnable[256 << 5];
-int32_t CEnable[256];
-int32_t TEnable[256];
-int32_t SEnable[32 << 5];
-int32_t DEnable[8192];
-int32_t CVEnable[256];
-int32_t CV32Enable[56];
-int32_t TVEnable[256];
-int32_t AIEnable[32];
-int32_t AOEnable[32];
-int32_t VEnable[8];
-int32_t ZEnable[8];
+int8_t XEnable[128];
+int8_t YEnable[128];
+int8_t MEnable[256 << 5];
+int8_t CEnable[256];
+int8_t TEnable[256];
+int8_t SEnable[32 << 5];
+int8_t DEnable[8192];
+int8_t CVEnable[256];
+int8_t CV32Enable[56];
+int8_t TVEnable[256];
+int8_t AIEnable[32];
+int8_t AOEnable[32];
+int8_t VEnable[8];
+int8_t ZEnable[8];
 // counttime
 static int currenttime;
 static int beforetime;
@@ -53,14 +50,14 @@ static int timerate = 1;
 static double innertimerate = 1.0;
 static int scanperiod = 1000;
 // temporary variable
-static int32_t _tempw;
-static int64_t _tempd;
+static int16_t _tempw;
+static int32_t _tempd;
 static double _tempf;
 // interrupt
-static int32_t itr_enable;
+static int8_t itr_enable;
 static vfun itr_funcs[8];
-static int32_t itr_times[2];
-static int32_t itr_oldXBit[2];
+static int itr_times[2];
+static int8_t itr_oldXBit[2];
 // real timer
 static struct tm *rtimer;
 static struct tm _rtimer;
@@ -68,17 +65,17 @@ static time_t _time_t;
 static time_t _time_t_old;
 static time_t _time_t_new;
 // pulse
-int64_t YFeq[4];
-static int32_t YTime[4];
+int YFeq[4];
+static int YTime[4];
 static double YCount[4];
 static uint64_t YTarget[4];
-static int32_t YITime[4];
-static int32_t YZStatus[4];
-static int32_t YZTime[4];
-static int64_t YZFeq[4];
-static int64_t YPTarget[4];
-static int64_t YDTime[4];
-static uint64_t YDFeq[4];
+static int YITime[4];
+static int16_t YZStatus[4];
+static int16_t YZTime[4];
+static int32_t YZFeq[4];
+static int32_t YPTarget[4];
+static int32_t YDTime[4];
+static uint32_t YDFeq[4];
 
 int _Assert(
 	char* name, int size, 
@@ -165,47 +162,47 @@ int _Assert(
 			switch (name[0])
 			{
 				case 'X': 
-					*addr = XBit;
+					*addr = (int32_t*)(&XBit[0]);
 					if (*offset < 0 || *offset + size > 128)
 						return 4;
 					break;
 				case 'Y': 
-					*addr = YBit; 
+					*addr = (int32_t*)(&YBit[0]); 
 					if (*offset < 0 || *offset + size > 128)
 						return 4;
 					break;
 				case 'C': 
-					*addr = CBit; 
+					*addr = (int32_t*)(&CBit[0]); 
 					if (*offset < 0 || *offset + size > 256)
 						return 4;
 					break;
 				case 'T': 
-					*addr = TBit; 
+					*addr = (int32_t*)(&TBit[0]); 
 					if (*offset < 0 || *offset + size > 256)
 						return 4;
 					break;
 				case 'S': 
-					*addr = SBit; 
+					*addr = (int32_t*)(&SBit[0]); 
 					if (*offset < 0 || *offset + size > 1024)
 						return 4;
 					break;
 				case 'M': 
-					*addr = MBit; 
+					*addr = (int32_t*)(&MBit[0]); 
 					if (*offset < 0 || *offset + size > 8192)
 						return 4;
 					break;
 				case 'D': 
-					*addr = DWord; 
+					*addr = (int32_t*)(&DWord[0]); 
 					if (*offset < 0 || *offset + size > 8192)
 						return 4;
 					break;
 				case 'V': 
-					*addr = VWord; 
+					*addr = (int32_t*)(&VWord[0]); 
 					if (*offset < 0 || *offset + size > 8)
 						return 4;
 					break;
 				case 'Z': 
-					*addr = ZWord; 
+					*addr = (int32_t*)(&ZWord[0]); 
 					if (*offset < 0 || *offset + size > 8)
 						return 4;
 					break;
@@ -216,15 +213,14 @@ int _Assert(
 		case 2:
 			if (name[0] == 'C' && name[1] == 'V')
 			{
-				if (*offset >= 0 && *offset < 200)
+				if (*offset >= 0 && *offset + size < 200)
 				{
-					*addr = CVWord;
+					*addr = (int32_t*)(&CVWord[0]);
 				}
 				else if (*offset >= 200 || *offset + size/2 < 256)
 				{
 					*addr = (int32_t*)(&CV32DoubleWord[0]);
 					*offset -= 200;
-					*offset *= 2;
 				}
 				else
 				{
@@ -233,19 +229,19 @@ int _Assert(
 			}
 			if (name[0] == 'T' && name[1] == 'V')
 			{
-				*addr = TVWord;
+				*addr = (int32_t*)(&TVWord[0]);
 				if (*offset < 0 || *offset + size > 256)
 					return 4;
 			}
 			if (name[0] == 'A' && name[1] == 'I')
 			{
-				*addr = AIWord;
+				*addr = (int32_t*)(&AIWord[0]);
 				if (*offset < 0 || *offset + size > 32)
 					return 4;
 			}
 			if (name[0] == 'A' && name[1] == 'O')
 			{
-				*addr = AOWord;
+				*addr = (int32_t*)(&AOWord[0]);
 				if (*offset < 0 || *offset + size > 32)
 					return 4;
 			}
@@ -256,157 +252,153 @@ int _Assert(
 	return 0;
 }
 // Get the BIT value from targeted bit register (X/Y/M/C/T/S) 
-EXPORT int GetBit(char* name, int size, uint32_t* output)
+EXPORT int GetBit(char* name, int size, int8_t* output)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	memcpy(output, addr + offset, size * sizeof(uint32_t));
+	while (size--) output[size] = *((int8_t*)(addr+offset+size));
 	return 0;
 }
 // Get the WORD value from targeted register (D/CV/TV)
-EXPORT int GetWord(char* name, int size, uint32_t* output)
+EXPORT int GetWord(char* name, int size, int16_t* output)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	memcpy(output, addr + offset, size * sizeof(uint32_t));
+	while (size--) output[size] = *((int16_t*)(addr+offset+size));
 	return 0;
 }
 // Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
-EXPORT int GetDoubleWord(char* name, int size, uint64_t* output)
+EXPORT int GetDoubleWord(char* name, int size, int32_t* output)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	memcpy(output, addr + offset, size * sizeof(uint64_t));
+	while (size--) output[size] = *((int32_t*)(addr+offset+size));
 	return 0;
 }
 // Get the FLOAT value from targeted register (D)
-EXPORT int GetFloat(char* name, int size, double* output)
+EXPORT int GetFloat(char* name, int size, float* output)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	memcpy(output, addr + offset, size * sizeof(double));
+	while (size--) output[size] = *((float*)(addr+offset+size));
 	return 0;
 }
 // Get the signal frequency
-EXPORT int GetFeq(char* name, uint64_t* output)
+EXPORT int GetFeq(char* name, uint32_t* output)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, 1, &addr, &offset);
 	if (ret) return ret;
-	if (offset > 4) return 4;
 	*output = YFeq[offset];
 	return 0;
 }
 // Set the signal frequency
-EXPORT int SetFeq(char* name, uint64_t input)
+EXPORT int SetFeq(char* name, uint32_t input)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, 1, &addr, &offset);
 	if (ret) return ret;
-	if (offset > 4) return 4;
 	YFeq[offset] = input;
 	return 0;
 }
 // Set the Bit value to targeted bit register (X/Y/M/C/T/S)
-EXPORT int SetBit(char* name, int size, uint32_t* input)
+EXPORT int SetBit(char* name, int size, int8_t* input)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	memcpy(addr + offset, input, size * sizeof(uint32_t));
+	while (size--) *((int8_t*)(addr+offset+size)) = input[size];
 	return 0;
 }
 // Set the WORD value to targeted register (D/CV/TV)
-EXPORT int SetWord(char* name, int size, uint32_t* input)
+EXPORT int SetWord(char* name, int size, int16_t* input)
 {
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	memcpy(addr + offset, input, size * sizeof(uint32_t));
+	while (size--) *((int16_t*)(addr+offset+size)) = input[size];
 	return 0;
 }
 // Set the DWORD value to targeted register (D)
-EXPORT int SetDoubleWord(char* name, int size, uint64_t* input)
+EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 {
-	int32_t* addr; int offset;
+	int8_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	memcpy(addr + offset, input, size * sizeof(uint64_t));
+	while (size--) *((int32_t*)(addr+offset+size)) = input[size];
 	return 0;
 }
 // Set the FLOAT value to targeted register (D)
-EXPORT int SetFloat(char* name, int size, double* input)
+EXPORT int SetFloat(char* name, int size, float* input)
 {
-	int32_t* addr; int offset;
+	int8_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	memcpy(addr + offset, input, size * sizeof(double));
+	while (size--) *((float*)(addr+offset+size)) = input[size];
 	return 0;
 }
 // Set the writeable enable value of targeted register
-EXPORT void SetEnable(char* name, int size, int value)
+EXPORT int SetEnable(char* name, int size, int8_t value)
 {
-	int addr = 0;
+	int8_t* addr; int offset;
+	int ret = _Assert(name, size*2, &addr, &offset);
+	if (ret) return ret;
 	switch (name[0])
 	{
 	case 'X':
-		sscanf(name + 1, "%d", &addr);
-		while (size--) XEnable[addr + size] = value;
+		while (size--) XEnable[offset + size] = value;
 		break;
 	case 'Y':
-		sscanf(name + 1, "%d", &addr);
-		while (size--) YEnable[addr + size] = value;
+		while (size--) YEnable[offset + size] = value;
 		break;
 	case 'M':
-		sscanf(name + 1, "%d", &addr);
-		while (size--) MEnable[addr + size] = value;
+		while (size--) MEnable[offset + size] = value;
 		break;
 	case 'S':
-		sscanf(name + 1, "%d", &addr);
-		while (size--) SEnable[addr + size] = value;
+		while (size--) SEnable[offset + size] = value;
 		break;
 	case 'D':
-		sscanf(name + 1, "%d", &addr);
-		while (size--) DEnable[addr + size] = value;
+		while (size--) DEnable[offset + size] = value;
 		break;
 	case 'V':
-		sscanf(name + 1, "%d", &addr);
-		while (size--) VEnable[addr + size] = value;
+		while (size--) VEnable[offset + size] = value;
 		break;
 	case 'Z':
-		sscanf(name + 1, "%d", &addr);
-		while (size--) ZEnable[addr + size] = value;
+		while (size--) ZEnable[offset + size] = value;
 		break;
 	case 'A':
 		switch (name[1])
 		{
 		case 'I':
-			sscanf(name + 2, "%d", &addr);
-			while (size--) AIEnable[addr + size] = value;
+			while (size--) AIEnable[(offset>>1) + size] = value;
 			break;
 		case 'O':
-			sscanf(name + 2, "%d", &addr);
-			while (size--) AOEnable[addr + size] = value;
+			while (size--) AOEnable[(offset>>1) + size] = value;
 			break;
 		}
 	case 'C':
 		switch (name[1])
 		{
 		case 'V':
-			sscanf(name + 2, "%d", &addr);
-			while (size--) 
+			if (addr == (int8_t*)(&CVWord[0]))
 			{
-				CVEnable[addr + size] = value;
-				if (addr + size >= 200) CV32Enable[addr + size - 200] = value;
+				while (size--) CVEnable[(offset>>1) + size] = value;
+			}
+			if (addr == (int8_t*)(&CV32DoubleWord[0]))
+			{
+				while (size--)
+				{
+					CVEnable[(offset>>2) + size] = value;
+					CV32Enable[(offset>>2) + size - 200] = value;
+				}
 			}
 			break;
 		default:
-			sscanf(name + 1, "%d", &addr);
-			while (size--) CEnable[addr + size] = value;
+			while (size--) CEnable[offset + size] = value;
 			break;
 		}
 		break;
@@ -414,21 +406,14 @@ EXPORT void SetEnable(char* name, int size, int value)
 		switch (name[1])
 		{
 		case 'V':
-			sscanf(name + 2, "%d", &addr);
-			while (size--) TVEnable[addr + size] = value;
+			while (size--) TVEnable[(offset>>1) + size] = value;
 			break;
 		default:
-			sscanf(name + 1, "%d", &addr);
-			while (size--) TEnable[addr + size] = value;
+			while (size--) TEnable[offset + size] = value;
 			break;
 		}
 		break;
 	}
-}
-
-EXPORT void SetBaseBit(int _basebit)
-{
-	basebit = _basebit;
 }
 
 EXPORT void InitClock(int _counttimems)
@@ -454,20 +439,20 @@ EXPORT void SetClockRate(int _timerate)
 	timerate = _timerate;
 }
 
-int32_t bpenable = 1;
+int8_t bpenable = 1;
 int32_t bpdatas[1<<13];
 int32_t bpcount[1<<16];
 int32_t bpmaxcount[1<<16];
 int32_t bpaddr;
-int32_t bpstep = 0;
+int8_t bpstep = 0;
 int32_t bpjump = -1;
-int32_t bpostep = 0;
-int32_t bpcstep = 0;
-int32_t bppause = 0;
+int8_t bpostep = 0;
+int8_t bpcstep = 0;
+int8_t bppause = 0;
+int8_t cpenable;
 int32_t cpdatas[1<<16];
-int32_t cpstack[1<<8];
+int8_t cpstack[1<<8];
 int32_t cpsttop = 0;
-int32_t cpenable;
 int32_t callcount = 0;
 int32_t rbpstack[1<<10];
 int32_t rbpsttop = 0;
@@ -519,13 +504,13 @@ void bpcycle(int32_t _bpaddr)
 	}
 }
 
-void cpcycle(int32_t _bpaddr, int32_t value)
+void cpcycle(int32_t _bpaddr, int8_t value)
 {
 	if (!bpenable || !cpenable) return;
 	bpaddr = _bpaddr;
 	int32_t cpmsg = ((cpdatas[bpaddr>>3]>>((bpaddr&7)<<2)) & 15);
 	if (cpmsg == 0) return;
-	int32_t prevalue = cpstack[cpsttop];
+	int8_t prevalue = cpstack[cpsttop];
 	int32_t cond = 0;
 	if (cpmsg & 0x01)
 		cond |= (value == 0);
@@ -548,17 +533,17 @@ void cpcycle(int32_t _bpaddr, int32_t value)
 	cpstack[cpsttop++] = value;
 }
 
-EXPORT int GetCallCount()
+EXPORT int32_t GetCallCount()
 {
 	return callcount;
 }
 
-EXPORT int GetBPAddr()
+EXPORT int32_t GetBPAddr()
 {
 	return bpaddr;
 }
 
-EXPORT void SetBPAddr(int32_t _bpaddr, int32_t islock)
+EXPORT void SetBPAddr(int32_t _bpaddr, int8_t islock)
 {
 	if (islock)
 		bpdatas[_bpaddr>>5] |= (1<<(_bpaddr&31));
@@ -572,17 +557,17 @@ EXPORT void SetBPCount(int32_t _bpaddr, int32_t maxcount)
 	bpmaxcount[bpaddr] = maxcount;
 }
 
-EXPORT void SetBPEnable(int _bpenable)
+EXPORT void SetBPEnable(int8_t _bpenable)
 {
 	bpenable = _bpenable;
 }
 	
-EXPORT int GetBPPause()
+EXPORT int8_t GetBPPause()
 {
 	return bppause;
 }
 
-EXPORT void SetBPPause(int _bppause)
+EXPORT void SetBPPause(int8_t _bppause)
 {
 	bppause = _bppause;
 }
@@ -599,7 +584,7 @@ EXPORT void CallStep()
 	bppause = 0;
 }
 
-EXPORT void JumpTo(int _bpaddr)
+EXPORT void JumpTo(int32_t _bpaddr)
 {
 	bpjump = _bpaddr;
 }
@@ -622,7 +607,7 @@ EXPORT void* GetRBP()
 	return ((rbpsttop > 0) ? (void*)(rbpstack[rbpsttop-1]) : NULL);
 }
 
-EXPORT int GetBackTrace(int* data)
+EXPORT int32_t GetBackTrace(int32_t* data)
 {
 	memcpy(data, rbpstack, rbpsttop);
 	return rbpsttop;
@@ -639,7 +624,27 @@ void InitRegisters()
 	memset(DWord, 0, sizeof(DWord));
 	memset(CVWord, 0, sizeof(CVWord));
 	memset(TVWord, 0, sizeof(TVWord));
+	memset(AIWord, 0, sizeof(AIWord));
+	memset(AOWord, 0, sizeof(AOWord));
+	memset(VWord, 0, sizeof(VWord));
+	memset(ZWord, 0, sizeof(ZWord));
 	memset(CV32DoubleWord, 0, sizeof(CV32DoubleWord));
+	
+	
+	memset(XEnable, 0, sizeof(XEnable));
+	memset(YEnable, 0, sizeof(YEnable));
+	memset(SEnable, 0, sizeof(SEnable));
+	memset(MEnable, 0, sizeof(MEnable));
+	memset(TEnable, 0, sizeof(TEnable));
+	memset(CEnable, 0, sizeof(CEnable));
+	memset(DEnable, 0, sizeof(DEnable));
+	memset(CVEnable, 0, sizeof(CVEnable));
+	memset(TVEnable, 0, sizeof(TVEnable));
+	memset(AIEnable, 0, sizeof(AIEnable));
+	memset(AOEnable, 0, sizeof(AOEnable));
+	memset(VEnable, 0, sizeof(VEnable));
+	memset(ZEnable, 0, sizeof(ZEnable));
+	memset(CV32Enable, 0, sizeof(CV32Enable));
 	
 	MBit[8151] = 0;
 	MBit[8152] = 1;
@@ -683,13 +688,11 @@ EXPORT void InitRunLadder()
 	MBit[8152] = 0;
 }
 
-// get a result (32-bit integer) by add a couple of 32-bit integers
-int32_t _addw(int32_t ia, int32_t ib)
+// get a result (16-bit integer) by add a couple of 16-bit integers
+int16_t _addw(int16_t ia, int16_t ib)
 {
 	// calculate the result
-	int32_t ic = ia + ib;
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
+	int16_t ic = ia + ib;
 	// M8169 : is overflowed
 	MBit[8169] = (ia < 0 && ib < 0 && ic > 0);
 	MBit[8169] |= (ia > 0 && ib > 0 && ic < 0);
@@ -700,12 +703,10 @@ int32_t _addw(int32_t ia, int32_t ib)
 	return ic;
 }
 
-// get a result (64-bit integer) by add a couple of 64-bit integers
-int64_t _addd(int64_t ia, int64_t ib)
+// get a result (32-bit integer) by add a couple of 32-bit integers
+int32_t _addd(int32_t ia, int32_t ib)
 {
-	int64_t ic = ia + ib;
-	ic <<= 64 - basebit * 2;
-	ic >>= 64 - basebit * 2;
+	int32_t ic = ia + ib;
 	MBit[8169] = (ia < 0 && ib < 0 && ic > 0);
 	MBit[8169] |= (ia > 0 && ib > 0 && ic < 0);
 	MBit[8170] = (ic < 0);
@@ -713,21 +714,30 @@ int64_t _addd(int64_t ia, int64_t ib)
 	return ic;
 }
 
-// get a result (64-bit float) by add a couple of 64-bit floats
-double _addf(double ia, double ib)
+// get a result (32-bit float) by add a couple of 32-bit floats
+float _addf(float ia, float ib)
 {
-	double ic = (ia + ib);
+	float ic = (ia + ib);
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
+	return ic;
+}
+
+// get a result (16-bit integer) by sub a couple of 16-bit integers
+int16_t _subw(int16_t ia, int16_t ib)
+{
+	int16_t ic = ia - ib;
+	MBit[8169] = (ia > 0 && ib < 0 && ic < 0);
+	MBit[8169] |= (ia < 0 && ib > 0 && ic > 0);
+	MBit[8170] = (ic < 0);
+	MBit[8171] = (ic == 0);
 	return ic;
 }
 
 // get a result (32-bit integer) by sub a couple of 32-bit integers
-int32_t _subw(int32_t ia, int32_t ib)
+int32_t _subd(int32_t ia, int32_t ib)
 {
 	int32_t ic = ia - ib;
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
 	MBit[8169] = (ia > 0 && ib < 0 && ic < 0);
 	MBit[8169] |= (ia < 0 && ib > 0 && ic > 0);
 	MBit[8170] = (ic < 0);
@@ -735,55 +745,45 @@ int32_t _subw(int32_t ia, int32_t ib)
 	return ic;
 }
 
-// get a result (64-bit integer) by sub a couple of 64-bit integers
-int64_t _subd(int64_t ia, int64_t ib)
+// get a result (32-bit float) by sub a couple of 32-bit floats
+float _subf(float ia, float ib)
 {
-	int64_t ic = ia - ib;
-	ic <<= 64 - basebit * 2;
-	ic >>= 64 - basebit * 2;
-	MBit[8169] = (ia > 0 && ib < 0 && ic < 0);
-	MBit[8169] |= (ia < 0 && ib > 0 && ic > 0);
-	MBit[8170] = (ic < 0);
-	MBit[8171] = (ic == 0);
-	return ic;
-}
-
-// get a result (64-bit float) by sub a couple of 64-bit floats
-double _subf(double ia, double ib)
-{
-	double ic = ia - ib;
+	float ic = ia - ib;
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return ic;
 }
 
-// get a result (64-bit integer) by mul a couple of 32-bit integers
-int64_t _mulwd(int32_t ia, int32_t ib)
+// get a result (32-bit integer) by mul a couple of 16-bit integers
+int32_t _mulwd(int16_t ia, int16_t ib)
 {
-	int64_t _ia = (int64_t)(ia);
-	int64_t _ib = (int64_t)(ib);
-	int64_t ic = _ia * _ib;
-	int32_t ich = (ic >> 32);
-	int32_t icl = (ic & 0xffffffff);
-	ich <<= 32 - basebit;
-	ich >>= 32 - basebit;
-	icl <<= 32 - basebit;
-	icl >>= 32 - basebit;
-	ic = ((((int64_t)(ich)) << 32) | icl);
+	int32_t ic = (int32_t)ia * (int32_t)ib;
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
 	return ic;
 }
 
-// get a result (32-bit integer) by mul a couple of 32-bit integers
-int32_t _mulww(int32_t ia, int32_t ib)
+// get a result (16-bit integer) by mul a couple of 16-bit integers
+int16_t _mulww(int16_t ia, int16_t ib)
+{
+	int16_t ic = ia * ib;
+	uint16_t _ia = (uint16_t)(ia < 0 ? -ia : ia);
+	uint16_t _ib = (uint16_t)(ib < 0 ? -ib : ib);
+	// get the maximum number in 16-bit integer
+	uint16_t max = 0x3fff;
+	MBit[8169] = (ia ? (max / _ia < _ib) : 0);
+	MBit[8170] = (ic < 0);
+	MBit[8171] = (ic == 0);
+	return ic;
+}
+
+// get a result (32-bit integer) by mul a couple of 16-bit integers
+int32_t _muldd(int32_t ia, int32_t ib)
 {
 	int32_t ic = ia * ib;
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
 	uint32_t _ia = (uint32_t)(ia < 0 ? -ia : ia);
 	uint32_t _ib = (uint32_t)(ib < 0 ? -ib : ib);
-	// get the maximum number in 64-bit integer
+	// get the maximum number in 32-bit integer
 	uint32_t max = 0x3fffffff;
 	MBit[8169] = (ia ? (max / _ia < _ib) : 0);
 	MBit[8170] = (ic < 0);
@@ -791,34 +791,18 @@ int32_t _mulww(int32_t ia, int32_t ib)
 	return ic;
 }
 
-// get a result (64-bit integer) by mul a couple of 64-bit integers
-int64_t _muldd(int64_t ia, int64_t ib)
+// get a result (32-bit float) by mul a couple of 32-bit floats
+float _mulff(float ia, float ib)
 {
-	int64_t ic = ia * ib;
-	ic <<= 64 - basebit * 2;
-	ic >>= 64 - basebit * 2;
-	uint64_t _ia = (uint32_t)(ia < 0 ? -ia : ia);
-	uint64_t _ib = (uint32_t)(ib < 0 ? -ib : ib);
-	// get the maximum number in 64-bit integer
-	uint64_t max = 0x3fffffffffffffffL;
-	MBit[8169] = (ia ? (max / _ia < _ib) : 0);
-	MBit[8170] = (ic < 0);
-	MBit[8171] = (ic == 0);
-	return ic;
-}
-
-// get a result (64-bit float) by mul a couple of 64-bit floats
-double _mulff(double ia, double ib)
-{
-	double ic = ia * ib;
+	float ic = ia * ib;
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return ic;
 }
 
-// get a result data structure (store in 64-bit integer) by div a couple of 32-bit integers
-// low 32-bit store the div result when high one store mod result.
-int64_t _divwd(int32_t ia, int32_t ib)
+// get a result data structure (store in 32-bit integer) by div a couple of 16-bit integers
+// low 16-bit store the div result when high one store mod result.
+int32_t _divwd(int16_t ia, int16_t ib)
 {
 	// if the one to divide is 0
 	if (ib == 0)
@@ -832,15 +816,11 @@ int64_t _divwd(int32_t ia, int32_t ib)
 	}
 	else
 	{
-		int64_t ic = 0;
-		int32_t div = ia / ib;
-		int32_t mod = ia % ib;
-		div <<= 32 - basebit;
-		div >>= 32 - basebit;
-		mod <<= 32 - basebit;
-		mod >>= 32 - basebit;
+		int32_t ic = 0;
+		int16_t div = ia / ib;
+		int16_t mod = ia % ib;
 		ic = mod;
-		ic <<= 32;
+		ic <<= 16;
 		ic |= div;
 		MBit[8169] = 0;
 		MBit[8170] = (div < 0);
@@ -850,8 +830,30 @@ int64_t _divwd(int32_t ia, int32_t ib)
 	}
 }
 
+// get a result (16-bit integer) by div a couple of 16-bit integers
+int16_t _divww(int16_t ia, int16_t ib)
+{
+	if (ib == 0)
+	{
+		MBit[8169] = 1;
+		MBit[8170] = 0;
+		MBit[8171] = 0;
+		MBit[8172] = 1;
+		return 0;
+	}
+	else
+	{
+		int16_t ic = ia / ib;
+		MBit[8169] = 0;
+		MBit[8170] = (ic < 0);
+		MBit[8171] = (ic == 0);
+		MBit[8172] = 0;
+		return ic;
+	}
+}
+
 // get a result (32-bit integer) by div a couple of 32-bit integers
-int32_t _divww(int32_t ia, int32_t ib)
+int32_t _divdd(int32_t ia, int32_t ib)
 {
 	if (ib == 0)
 	{
@@ -864,8 +866,6 @@ int32_t _divww(int32_t ia, int32_t ib)
 	else
 	{
 		int32_t ic = ia / ib;
-		ic <<= 32 - basebit;
-		ic >>= 32 - basebit;
 		MBit[8169] = 0;
 		MBit[8170] = (ic < 0);
 		MBit[8171] = (ic == 0);
@@ -874,8 +874,8 @@ int32_t _divww(int32_t ia, int32_t ib)
 	}
 }
 
-// get a result (64-bit integer) by div a couple of 64-bit integers
-int64_t _divdd(int64_t ia, int64_t ib)
+// get a result (32-bit float) by div a couple of 32-bit float
+float _divff(float ia, float ib)
 {
 	if (ib == 0)
 	{
@@ -887,9 +887,7 @@ int64_t _divdd(int64_t ia, int64_t ib)
 	}
 	else
 	{
-		int64_t ic = ia / ib;
-		ic <<= 64 - basebit * 2;
-		ic >>= 64 - basebit * 2;
+		float ic = ia / ib;
 		MBit[8169] = 0;
 		MBit[8170] = (ic < 0);
 		MBit[8171] = (ic == 0);
@@ -898,70 +896,40 @@ int64_t _divdd(int64_t ia, int64_t ib)
 	}
 }
 
-// get a result (64-bit float) by div a couple of 64-bit float
-double _divff(double ia, double ib)
+// increase a 16-bit integer by 1
+int16_t _incw(int16_t ia)
 {
-	if (ib == 0)
-	{
-		MBit[8169] = 1;
-		MBit[8170] = 0;
-		MBit[8171] = 0;
-		MBit[8172] = 1;
-		return 0;
-	}
-	else
-	{
-		double ic = ia / ib;
-		MBit[8169] = 0;
-		MBit[8170] = (ic < 0);
-		MBit[8171] = (ic == 0);
-		MBit[8172] = 0;
-		return ic;
-	}
+	int16_t ic = ia + 1;
+	MBit[8169] = (ia > 0 && ic < 0);
+	MBit[8170] = (ic < 0);
+	MBit[8171] = (ic == 0);
+	return ic;
 }
 
 // increase a 32-bit integer by 1
-int32_t _incw(int32_t ia)
+int32_t _incd(int32_t ia)
 {
 	int32_t ic = ia + 1;
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
 	MBit[8169] = (ia > 0 && ic < 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
 	return ic;
 }
 
-// increase a 64-bit integer by 1
-int64_t _incd(int64_t ia)
+// decrease a 16-bit integer by 1
+int16_t _decw(int16_t ia)
 {
-	int64_t ic = ia + 1;
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
-	MBit[8169] = (ia > 0 && ic < 0);
-	MBit[8170] = (ic < 0);
-	MBit[8171] = (ic == 0);
-	return ic;
-}
-
-// decrease a 32-bit integer by 1
-int32_t _decw(int32_t ia)
-{
-	int32_t ic = ia - 1;
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
+	int16_t ic = ia - 1;
 	MBit[8169] = (ia < 0 && ic > 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
 	return ic;
 }
 
-// decrease a 64-bit integer by 1
-int64_t _decd(int64_t ia)
+// decrease a 32-bit integer by 1
+int32_t _decd(int32_t ia)
 {
-	int64_t ic = ia - 1;
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
+	int32_t ic = ia - 1;
 	MBit[8169] = (ia < 0 && ic > 0);
 	MBit[8170] = (ic < 0);
 	MBit[8171] = (ic == 0);
@@ -969,225 +937,196 @@ int64_t _decd(int64_t ia)
 }
 
 // PI (The rate between radios and perimeter)
-double PI = 3.1415926; 
+float PI = 3.1415926; 
 
-// sin a 64-bit float (radian)
-double _sin(double ia)
+// sin a 32-bit float (radian)
+float _sin(float ia)
 {
-	double ic = sin(ia * PI / 180);
+	double ic = sin((double)(ia * PI / 180));
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
-	return ic;
+	return (float)ic;
 }
 
-// cos a 64-bit float
-double _cos(double ia)
+// cos a 32-bit float
+float _cos(float ia)
 {
-	double ic = cos(ia * PI / 180);
+	double ic = cos((double)(ia * PI / 180));
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
-	return ic;
+	return (float)ic;
 }
 
 // tan a 64-bit float
-double _tan(double ia)
+float _tan(float ia)
 {
-	double ic = tan(ia * PI / 180);
+	double ic = tan((double)(ia * PI / 180));
+	MBit[8170] = (ic < 0.0);
+	MBit[8171] = (ic == 0.0);
+	return (float)ic;
+}
+
+// ln a 32-bit float
+float _ln(float ia)
+{
+	double ic = log((double)ia) / log(exp((double)(1.0)));
+	MBit[8170] = (ic < 0.0);
+	MBit[8171] = (ic == 0.0);
+	return (float)ic;
+}
+
+// exp a 32-bit float
+float _exp(float ia)
+{
+	double ic = exp((double)ia);
 	MBit[8170] = (ic < 0.0);
 	MBit[8171] = (ic == 0.0);
 	return ic;
 }
 
-// ln a 64-bit float
-double _ln(double ia)
+// Convert 32-Bit integer to 16-Bit integer 
+int16_t _DWORD_to_WORD(int32_t ia)
 {
-	double ic = log(ia) / log(exp(1.0));
-	MBit[8170] = (ic < 0.0);
-	MBit[8171] = (ic == 0.0);
+	int16_t ic = (int16_t)(ia);
+	MBit[8170] = ((ia >> 16) != 0);
 	return ic;
 }
 
-// exp a 64-bit float
-double _exp(double ia)
-{
-	double ic = exp(ia);
-	MBit[8170] = (ic < 0.0);
-	MBit[8171] = (ic == 0.0);
-	return ic;
-}
-
-// Convert 64-Bit integer to 32-Bit integer 
-int32_t _DWORD_to_WORD(int64_t ia)
+// Convert 16-Bit integer to 32-Bit integer 
+int32_t _WORD_to_DWORD(int16_t ia)
 {
 	int32_t ic = (int32_t)(ia);
-	ic <<= 32 - basebit;
-	ic >>= 32 - basebit;
-	MBit[8170] = ((ia >> 32) != 0);
 	return ic;
 }
 
-// Convert 32-Bit integer to 64-Bit integer 
-int64_t _WORD_to_DWORD(int32_t ia)
+// Convert 32-Bit integer to 32-Bit float
+float _DWORD_to_FLOAT(int32_t ia)
 {
-	int64_t ic = (int64_t)(ia);
-	ic <<= 64 - basebit * 2;
-	ic >>= 64 - basebit * 2;
+	float ic = (float)(ia);
 	return ic;
 }
 
-// Convert 64-Bit integer to 64-Bit float
-double _DWORD_to_FLOAT(int64_t ia)
+int32_t _round(float d)
 {
-	double ic = (double)(ia);
-	return ic;
-}
-
-int64_t _round(double d)
-{
-	int64_t i = (int64_t)(d);
+	int32_t i = (int32_t)(d);
 	if (d - i > 0.5) i++;
 	return i;
 }
 
-// Convert 64-Bit float to 64-Bit integer by ROUND strategy
-int64_t _FLOAT_to_ROUND(double ia)
+// Convert 32-Bit float to 32-Bit integer by ROUND strategy
+int32_t _FLOAT_to_ROUND(float ia)
 {
-	int64_t ic = _round(ia);
-	ic <<= 64 - basebit * 2;
-	ic >>= 64 - basebit * 2;
+	int32_t ic = _round(ia);
 	return ic;
 }
 
 // Convert 64-Bit float to 64-Bit integer by TRUNC strategy
-int64_t _FLOAT_to_TRUNC(double ia)
+int32_t _FLOAT_to_TRUNC(float ia)
 {
-	int64_t ic = (int64_t)(ia);
-	ic <<= 64 - basebit * 2;
-	ic >>= 64 - basebit * 2;
+	int32_t ic = (int32_t)(ia);
 	return ic;
 }
 
-// Convert 32-Bit integer to BCD code
-int32_t _WORD_to_BCD(int32_t itg)
+// Convert 16-Bit integer to BCD code
+int16_t _WORD_to_BCD(int16_t itg)
 {
 	// M8168 : BCD converting error
 	MBit[8168] = (itg < 0 || itg > 9999);
-	int32_t ret = (itg % 10) | ((itg / 10 % 10) << 4) | ((itg / 100 % 10) << 8) | ((itg / 1000 % 10) << 12);
-	ret <<= 32 - basebit;
-	ret >>= 32 - basebit;
+	int16_t ret = (itg % 10) | ((itg / 10 % 10) << 4) | ((itg / 100 % 10) << 8) | ((itg / 1000 % 10) << 12);
 	return ret;
 }
 
-// Convert BCD code to 32-Bit integer
-int32_t _BCD_to_WORD(int32_t BCD)
+// Convert BCD code to 16-Bit integer
+int16_t _BCD_to_WORD(int16_t BCD)
 {
 	MBit[8168] = 0;
 	MBit[8168] |= (((BCD >> 12) & 15) > 9);
 	MBit[8168] |= (((BCD >> 8) & 15) > 9);
 	MBit[8168] |= (((BCD >> 4) & 15) > 9);
 	MBit[8168] |= ((BCD & 15) > 9);
-	int32_t ret = ((BCD >> 12) & 15) * 1000 + ((BCD >> 8) & 15) * 100 + ((BCD >> 4) & 15) * 10 + (BCD & 15);
-	ret <<= 32 - basebit;
-	ret >>= 32 - basebit;
+	int16_t ret = ((BCD >> 12) & 15) * 1000 + ((BCD >> 8) & 15) * 100 + ((BCD >> 4) & 15) * 10 + (BCD & 15);
 	return ret;
 }
 
-// shift 32-Bit integer to right
-uint32_t _shrw(uint32_t ia, uint32_t ib)
+// shift 16-Bit integer to right
+uint16_t _shrw(uint16_t ia, uint16_t ib)
 {
-	uint32_t ic = (ia >> ib);
-	if (basebit < 32)
-		ic &= (1 << basebit) - 1;
+	uint16_t ic = (ia >> ib);
 	// M8166 : over bit 
 	MBit[8166] = ib <= 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
 	return ic;
 }
 
-// shift 64-Bit integer to right
-uint64_t _shrd(uint64_t ia, uint64_t ib)
+// shift 32-Bit integer to right
+uint32_t _shrd(uint32_t ia, uint32_t ib)
 {
-	uint64_t ic = (ia >> ib);
-	if (basebit < 32)
-		ic &= (1L << (basebit*2)) - 1;
+	uint32_t ic = (ia >> ib);
 	MBit[8166] = ib <= 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
 	return ic;
 }
 
-// shift 32-Bit integer to left
-uint32_t _shlw(uint32_t ia, uint32_t ib)
+// shift 16-Bit integer to left
+uint16_t _shlw(uint16_t ia, uint16_t ib)
 {
-	uint32_t ic = (ia << ib);
-	if (basebit < 32)
-		ic &= (1 << basebit) - 1;
-	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) >> (basebit-1)) & 1);
+	uint16_t ic = (ia << ib);
+	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) & 0x8000) >> 15);
 	MBit[8167] = (ic == 0);
 	return ic;
 }
 
-// shift 64-Bit integer to left
-uint64_t _shld(uint64_t ia, uint64_t ib)
+// shift 32-Bit integer to left
+uint32_t _shld(uint32_t ia, uint32_t ib)
 {
-	uint64_t ic = (ia << ib);
-	if (basebit < 32)
-		ic &= (1L << (basebit*2)) - 1;
-	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) >> (basebit*2-1)) & 1);
+	uint32_t ic = (ia << ib);
+	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) & 0x80000000) >> 31);
+	MBit[8167] = (ic == 0);
+	return ic;
+}
+
+// rotate shift 16-bit integer to right
+uint16_t _rorw(uint16_t ia, uint16_t ib)
+{
+	ib %= 16;
+	uint16_t ic = (ia >> ib) | (ia << (16 - ib));
+	MBit[8166] = ib == 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
 	return ic;
 }
 
 // rotate shift 32-bit integer to right
-uint32_t _rorw(uint32_t ia, uint32_t ib)
+uint32_t _rord(uint32_t ia, uint32_t ib)
 {
 	ib %= 32;
-	uint32_t ic = (ia >> ib) | (ia << (basebit - ib));
-	if (basebit < 32)
-		ic &= (1 << basebit) - 1;
+	uint32_t ic = (ia >> ib) | (ia << (32 - ib));
 	MBit[8166] = ib == 0 ? 0 : ((ia >> (ib - 1)) & 1);
 	MBit[8167] = (ic == 0);
 	return ic;
 }
 
-
-// rotate shift 64-bit integer to right
-uint64_t _rord(uint64_t ia, uint64_t ib)
+// rotate shift 16-bit integer to left
+uint16_t _rolw(uint16_t ia, uint16_t ib)
 {
-	ib %= 64;
-	uint64_t ic = (ia >> ib) | (ia << (basebit*2 - ib));
-	if (basebit < 32)
-		ic &= (1L << (basebit*2)) - 1;
-	MBit[8166] = ib == 0 ? 0 : ((ia >> (ib - 1)) & 1);
+	ib %= 16;
+	uint16_t ic = (ia << ib) | (ia >> (16 - ib));
+	MBit[8166] = ib == 0 ? 0 : (((ia << (ib - 1)) & 0x8000) >> 15);
 	MBit[8167] = (ic == 0);
 	return ic;
 }
 
-// rotate shift 32-bit integer to left
-uint32_t _rolw(uint32_t ia, uint32_t ib)
+// rotate shift 32-bit integer to right
+uint32_t _rold(uint32_t ia, uint32_t ib)
 {
 	ib %= 32;
-	uint32_t ic = (ia << ib) | (ia >> (basebit - ib));
-	if (basebit < 32)
-		ic &= (1 << basebit) - 1;
-	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) >> (basebit-1)) & 1);
-	MBit[8167] = (ic == 0);
-	return ic;
-}
-
-// rotate shift 64-bit integer to right
-uint64_t _rold(uint64_t ia, uint64_t ib)
-{
-	ib %= 32;
-	uint64_t ic = (ia << ib) | (ia >> (basebit*2 - ib));
-	if (basebit < 32)
-		ic &= (1L << (basebit*2)) - 1;
-	MBit[8166] = ib <= 0 ? 0 : (((ia << (ib - 1)) >> (basebit*2-1)) & 1);
+	uint32_t ic = (ia << ib) | (ia >> (32 - ib));
+	MBit[8166] = ib == 0 ? 0 : (((ia << (ib - 1)) & 0x80000000) >> 31);
 	MBit[8167] = (ic == 0);
 	return ic;
 }
 
 // shift a series of BITs to left, and fill the blank block from input BITs (keep order)
-void _bitshl(int32_t* input, int32_t* addr, int32_t* enable, int32_t size, int32_t move)
+void _bitshl(int8_t* input, int8_t* addr, int8_t* enable, int16_t size, int16_t move)
 {
 	while (--size >= move)
 	{
@@ -1201,7 +1140,7 @@ void _bitshl(int32_t* input, int32_t* addr, int32_t* enable, int32_t size, int32
 }
 
 // shift a series of BITs to right, and fill the blank block from input BITs (keep order)
-void _bitshr(int32_t* input, int32_t* addr, int32_t* enable, int32_t size, int32_t move)
+void _bitshr(int8_t* input, int8_t* addr, int8_t* enable, int16_t size, int16_t move)
 {
 	int i = 0;
 	while (i++ < size - move)
@@ -1220,12 +1159,10 @@ void _bitshr(int32_t* input, int32_t* addr, int32_t* enable, int32_t size, int32
 	addr : base address
 	size : series size
 */
-void _bitset(int32_t* addr, int32_t* enable, int32_t size)
+void _bitset(int8_t* addr, int8_t* enable, int16_t size)
 {
 	while (--size >= 0)
-	{
 		if (!enable[size]) addr[size] = 1;
-	}
 }
 
 /*
@@ -1233,7 +1170,7 @@ void _bitset(int32_t* addr, int32_t* enable, int32_t size)
 	addr : base address
 	size : series size
 */
-void _bitrst(int32_t* addr, int32_t* enable, int32_t size)
+void _bitrst(int8_t* addr, int8_t* enable, int16_t size)
 {
 	while (--size >= 0)
 	{
@@ -1248,7 +1185,7 @@ void _bitrst(int32_t* addr, int32_t* enable, int32_t size)
 	target_addr : the base address of the targeted datas
 	size : series size
 */
-void _bitcpy(int32_t* source_addr, int32_t* target_addr, int32_t* enable, int32_t size)
+void _bitcpy(int8_t* source_addr, int8_t* target_addr, int8_t* enable, int16_t size)
 {
 	while (--size >= 0)
 	{
@@ -1263,7 +1200,7 @@ void _bitcpy(int32_t* source_addr, int32_t* target_addr, int32_t* enable, int32_
 // cod  : input condition
 // sv   : reserve value
 // otim : old time(ms)
-void _ton(int32_t en, int32_t id, int32_t sv, int32_t* otim)
+void _ton(int8_t en, int16_t id, int16_t sv, int32_t* otim)
 {
 	// if condition is TRUE
 	if (en)
@@ -1301,7 +1238,7 @@ void _ton(int32_t en, int32_t id, int32_t sv, int32_t* otim)
 // cod  : input condition
 // sv   : reserve value
 // otim : old time(ms)
-void _tonr(int32_t en, int32_t id, int32_t sv, int32_t* otim)
+void _tonr(int8_t en, int16_t id, int16_t sv, int32_t* otim)
 {
 	// if condition is TRUE
 	if (en)
@@ -1419,7 +1356,7 @@ void _itr_invoke()
 }
 
 // Get the system real time
-void _trd(int32_t* d)
+void _trd(int16_t* d)
 {
 	// get time_t
 	_time_t = time(NULL);
@@ -1439,7 +1376,7 @@ void _trd(int32_t* d)
 }
 
 // Set the system real time
-void _twr(int32_t* d)
+void _twr(int16_t* d)
 {
 	// create a new struct tm
 	rtimer = &_rtimer;
@@ -1456,32 +1393,32 @@ void _twr(int32_t* d)
 }
 
 // commuticate in COMPort and process the commands in Modbus table
-void _mbus(uint32_t com_id, struct ModbusTable* table, int tlen, uint32_t* wr){}
+void _mbus(uint32_t com_id, struct ModbusTable* table, int tlen, int16_t* wr){}
 
 // commuticate in COMPort and send a series of memory to another
-void _send(uint32_t com_id, int32_t* addr, int32_t len){}
+void _send(uint32_t com_id, int16_t* addr, int16_t len){}
 
 // commuticate in COMPort and reseive a series of memory from another
-void _rev(uint32_t com_id, int32_t* addr, int32_t len){}
+void _rev(uint32_t com_id, int16_t* addr, int16_t len){}
 
-// Create a pulse signal by the giving fequency parameter(in 32-bit integer)
-void _plsf(uint32_t feq, int32_t* out)
+// Create a pulse signal by the giving fequency parameter(in 16-bit integer)
+void _plsf(uint16_t feq, int8_t* out)
 {
-	_dplsf((uint64_t)(feq), out);
+	_dplsf((uint32_t)(feq), out);
 }
 
-// Create a pulse signal by the giving fequency parameter(in 64-bit integer)
-void _dplsf(uint64_t feq, int32_t* out)
+// Create a pulse signal by the giving fequency parameter(in 32-bit integer)
+void _dplsf(uint32_t feq, int8_t* out)
 {
 	// get the Y-base offset from program address
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	// signal zone (Y000 ~ Y003)
 	if (id < 4)
 	{
 		// overflow flag
-		uint32_t* _of = (&MBit[8118 + id]);
+		uint8_t* _of = (&MBit[8118 + id]);
 		// pulse number counter
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
 		// if signal culculous time recorder is not used
 		if (YTime[id] == 0)
 		{
@@ -1498,15 +1435,15 @@ void _dplsf(uint64_t feq, int32_t* out)
 			// set the current fequency
 			YFeq[id] = feq;
 			// get the culculous time inteval
-			uint64_t _td = counttimems - YTime[id];
+			uint32_t _td = counttimems - YTime[id];
 			// get the inteval value delta
 			double _pn = ((double)(_td) * feq) / 1000;
 			// get the changed value (in float)
 			double _yc = YCount[id] + _pn;
-			// check if it overflow 64-bit integer dimension 
-			*_of = (_yc > (~((uint64_t)(0))));
+			// check if it overflow 32-bit integer dimension 
+			*_of = (_yc > (~((uint32_t)(0))));
 			// convert to integer and set it if it not overflow
-			if (!*_of) *_ct = (uint64_t)(_yc);
+			if (!*_of) *_ct = (uint32_t)(_yc);
 			// over the inteval time
 			if (counttimems - YTime[id] >= 10)
 			{
@@ -1518,52 +1455,52 @@ void _dplsf(uint64_t feq, int32_t* out)
 	}
 }
 
-// Extra message : Duty cycle (32-bit integer)
-void _pwm(uint32_t feq, uint32_t dc, int32_t* out)
+// Extra message : Duty cycle (16-bit integer)
+void _pwm(uint16_t feq, uint16_t dc, int8_t* out)
 {
 	_plsf(feq, out);
 }
 
-// Extra message : Duty cycle (64-bit integer)
-void _dpwm(uint64_t feq, uint64_t dc, int32_t* out)
+// Extra message : Duty cycle (32-bit integer)
+void _dpwm(uint32_t feq, uint32_t dc, int8_t* out)
 {
 	_dplsf(feq, out);
 }
 
-// Extra message : Pulse number to output (32-bit integer)
-void _plsy(uint32_t feq, uint32_t* pn, int32_t* out)
+// Extra message : Pulse number to output (16-bit integer)
+void _plsy(uint16_t feq, uint16_t* pn, int8_t* out)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		// create the signal
 		_plsf(feq, out);
 		// set the pulse number
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
-		*pn = (uint32_t)(*_ct);
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
+		*pn = (uint16_t)(*_ct);
 	}
 }
 
-// Extra message : Pulse number to output (64-bit integer)
-void _dplsy(uint64_t feq, uint64_t* pn, int32_t* out)
+// Extra message : Pulse number to output (32-bit integer)
+void _dplsy(uint32_t feq, uint32_t* pn, int8_t* out)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		_dplsf(feq, out);
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
 		*pn = *_ct;
 	}
 }
 
-static uint64_t _plsrmsgbuff[8196];
+static uint32_t _plsrmsgbuff[8196];
 // Create a segment-divided and linear-faded pulse by 32-bit parameter
-void _plsr(uint32_t* msg, int32_t it, int32_t* out)
+void _plsr(uint16_t* msg, int16_t it, int8_t* out)
 {
 	int i = 0;
 	while (msg[i] != 0)
 	{
-		_plsrmsgbuff[i] = (uint64_t)(msg[i]);
+		_plsrmsgbuff[i] = (uint32_t)(msg[i]);
 	}
 	_dplsr(_plsrmsgbuff, it, out);
 }
@@ -1573,35 +1510,35 @@ void _plsr(uint32_t* msg, int32_t it, int32_t* out)
 // msg : message array
 // it : inteval time to fade the fequency
 // out : the port to output the generated pulse signal
-void _dplsr(uint64_t* msg, int64_t it, int32_t* out)
+void _dplsr(uint32_t* msg, int32_t it, int8_t* out)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		// overflow flag
-		uint32_t* _of = &MBit[8118 + id];
+		uint8_t* _of = &MBit[8118 + id];
 		// counter
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
 		// active flag
-		uint32_t* _active = &MBit[8134 + id];
+		uint8_t* _active = &MBit[8134 + id];
 		// ignore error flag
-		uint32_t* _igerr = &MBit[8070 + id];
+		uint8_t* _igerr = &MBit[8070 + id];
 		// error flag
-		uint32_t* _iserr = &MBit[8086 + id];
+		uint8_t* _iserr = &MBit[8086 + id];
 		// error code flag
-		uint32_t* _err = &DWord[8176];
+		uint16_t* _err = &DWord[8176];
 		// current index flag
-		uint32_t* _YIndex = &DWord[8124 + id];
+		uint16_t* _YIndex = &DWord[8124 + id];
 		// error index flag
-		uint32_t* _errid = &DWord[8108 + id];
+		uint16_t* _errid = &DWord[8108 + id];
 		// previous fequency
-		int64_t _feq_old;
+		int32_t _feq_old;
 		// current fequency
-		int64_t _feq_new;
+		int32_t _feq_new;
 		// inteval pulse number
-		int64_t _pn_itv;
+		int32_t _pn_itv;
 		// the all of pulse number in this segment
-		int64_t _pn;
+		int32_t _pn;
 		// check and initialize it if not active
 		if (!*_active)
 		{
@@ -1700,29 +1637,29 @@ void _dplsr(uint64_t* msg, int64_t it, int32_t* out)
 }
 
 // Create a segment-divided, linear-faded and oriented pulse by 32-bit parameter
-void _plsrd(uint32_t* msg, int32_t ct, int32_t* out, int32_t* dir)
+void _plsrd(uint16_t* msg, int16_t ct, int8_t* out, int8_t* dir)
 {
 	_plsr(msg, ct, out);
 }
 
 // Create a segment-divided, linear-faded and oriented pulse by 64-bit parameter
-void _dplsrd(uint64_t* msg, int64_t ct, int32_t* out, int32_t* dir)
+void _dplsrd(uint32_t* msg, int32_t ct, int8_t* out, int8_t* dir)
 {
 	_dplsr(msg, ct, out);
 }
 
 // Move to next segment
-void _plsnext(int32_t* out)
+void _plsnext(int8_t* out)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		// active flag
-		uint32_t* _active = &MBit[8134 + id];
+		uint8_t* _active = &MBit[8134 + id];
 		// current index
-		uint32_t* _YIndex = &DWord[8124 + id];
+		uint16_t* _YIndex = &DWord[8124 + id];
 		// counter
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
 		// move it when active
 		if (*_active)
 		{
@@ -1734,17 +1671,17 @@ void _plsnext(int32_t* out)
 }
 
 // Stop generating signal
-void _plsstop(int32_t* out)
+void _plsstop(int8_t* out)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		// set the active flag to 0
-		uint32_t *_active = &MBit[8134 + id];
+		uint8_t *_active = &MBit[8134 + id];
 		// counter
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
 		// overflow flag
-		uint32_t* _of = &MBit[8118 + id];
+		uint8_t* _of = &MBit[8118 + id];
 		*_active = 0;
 		*_ct = 0;
 		*_of = 0;
@@ -1754,25 +1691,25 @@ void _plsstop(int32_t* out)
 }
 
 // Pulse signal mountain (32-bit)
-void _zrn(uint32_t bv, uint32_t cv, int32_t sg, int32_t* out)
+void _zrn(uint16_t bv, uint16_t cv, int8_t sg, int8_t* out)
 {
-	_dzrn((uint64_t)(bv), (uint64_t)(cv), sg, out);
+	_dzrn((uint32_t)(bv), (uint32_t)(cv), sg, out);
 }
 
 // Pulse signal mountain (64-bit)
-void _dzrn(uint64_t cv, uint64_t bv, int32_t sg, int32_t* out)
+void _dzrn(uint32_t cv, uint32_t bv, int8_t sg, int8_t* out)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		// active flag
-		uint32_t* _active = &MBit[8134 + id];
+		uint8_t* _active = &MBit[8134 + id];
 		// zrn inteval time
-		uint32_t* _zt = &DWord[8076 + id];
+		uint16_t* _zt = &DWord[8076 + id];
 		// old fequency 
-		int64_t _feq_old;
+		int32_t _feq_old;
 		// new fequency
-		int64_t _feq_new;
+		int32_t _feq_new;
 		// initialize
 		if (!*_active)
 		{
@@ -1825,23 +1762,23 @@ void _dzrn(uint64_t cv, uint64_t bv, int32_t sg, int32_t* out)
 }
 
 // Create a segment-divided pulse signal, with the linear fequency in the segment (64-bit)
-void _pto(uint64_t* msg, int32_t* out, int32_t* dir)
+void _pto(uint32_t* msg, int8_t* out, int8_t* dir)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		// counter
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
 		// active flag
-		uint32_t* _active = &MBit[8134 + id];
+		uint8_t* _active = &MBit[8134 + id];
 		// direction
-		uint32_t* _dir = &DWord[8102 + id];
+		uint16_t* _dir = &DWord[8102 + id];
 		// current segment index
-		uint32_t* _YIndex = &DWord[8124 + id];
+		uint16_t* _YIndex = &DWord[8124 + id];
 		// error segment index
-		uint32_t* _errid = &DWord[8108 + id];
+		uint16_t* _errid = &DWord[8108 + id];
 		// messages count
-		uint64_t msgct = msg[0];
+		uint32_t msgct = msg[0];
 		// check and initialize
 		if (!*_active) 
 		{
@@ -1874,11 +1811,11 @@ void _pto(uint64_t* msg, int32_t* out, int32_t* dir)
 			return;
 		}
 		// start fequency
-		int64_t _feq_old = msg[*_YIndex * 3 - 2];
+		int32_t _feq_old = msg[*_YIndex * 3 - 2];
 		// end fequency
-		int64_t _feq_new = msg[*_YIndex * 3 - 1];
+		int32_t _feq_new = msg[*_YIndex * 3 - 1];
 		// pulse number
-		int64_t _pn = msg[*_YIndex * 3];
+		int32_t _pn = msg[*_YIndex * 3];
 		// unarrive at the target?
 		if (*_ct < YPTarget[id])
 		{
@@ -1896,37 +1833,37 @@ void _pto(uint64_t* msg, int32_t* out, int32_t* dir)
 }
 
 // Set an unique segment, fade the current fequency to it and fulfill its pulse number (32-bit)
-void _drvi(uint32_t feq, uint32_t pn, int32_t* out)
+void _drvi(uint16_t feq, uint16_t pn, int8_t* out)
 {
-	_ddrvi((uint64_t)(feq), (uint64_t)(pn), out);
+	_ddrvi((uint32_t)(feq), (uint32_t)(pn), out);
 }
 
 // Set an unique segment, fade the current fequency to it and fulfill its pulse number (64-bit)
-void _ddrvi(uint64_t feq, uint64_t pn, int32_t* out)
+void _ddrvi(uint32_t feq, uint32_t pn, int8_t* out)
 {
-	int id = (int)(out - &YBit[0]) / sizeof(int32_t);
+	int id = (int)(out - &YBit[0]) / sizeof(int8_t);
 	if (id < 4)
 	{
 		// counter
-		uint64_t* _ct = ((uint64_t*)(&DWord[8140])) + id;
+		uint32_t* _ct = ((uint32_t*)(&DWord[8140])) + id;
 		// active flag
-		uint32_t* _active = &MBit[8134 + id];
+		uint8_t* _active = &MBit[8134 + id];
 		// error flag
-		uint32_t* _iserr = &MBit[8086 + id];
+		uint8_t* _iserr = &MBit[8086 + id];
 		// ignore error flag
-		uint32_t* _igerr = &MBit[8070 + id];
+		uint8_t* _igerr = &MBit[8070 + id];
 		// error code
-		uint32_t* _err = &DWord[8176];
+		uint16_t* _err = &DWord[8176];
 		// interval time
-		int32_t* _it = &DWord[8092 + id];
+		int16_t* _it = &DWord[8092 + id];
 		// old fequency
-		int64_t _feq_old;
+		int32_t _feq_old;
 		// new fequency
-		int64_t _feq_new;
+		int32_t _feq_new;
 		// pulse number
-		int64_t _pn;
+		int32_t _pn;
 		// interval pulse number
-		int64_t _pn_itv;
+		int32_t _pn_itv;
 		// check and initialize
 		if (!*_active)
 		{
@@ -1986,30 +1923,30 @@ void _ddrvi(uint64_t feq, uint64_t pn, int32_t* out)
 }
 
 // High counter
-void _hcnt(int64_t* cv, int64_t sv){}
+void _hcnt(int32_t* cv, int32_t sv){}
 
 // Calculate the log10
-double _log(double ia)
+float _log(float ia)
 {
-	return log(ia) / log(10.0);
+	return (float)(log((double)ia) / log((double)10.0));
 }
 
 // Calculate the power
-double _pow(double ia, double ib)
+float _pow(float ia, float ib)
 {
-	return pow(ia, ib);
+	return (float)pow(ia, ib);
 }
 
 // Calculate the squarter of 64-bit float
-double _sqrt(double ia)
+float _sqrt(float ia)
 {
-	return sqrt(ia);
+	return (float)sqrt(ia);
 }
 
 // Calculate the factorial of 32-bit integer
-int64_t _fact(int32_t itg)
+int32_t _fact(int16_t itg)
 {
-	int64_t ret = 1;
+	int32_t ret = 1;
 	while (itg > 1)
 	{
 		ret *= itg;
@@ -2018,11 +1955,11 @@ int64_t _fact(int32_t itg)
 	return ret;
 }
 
-// Compare a couple of 32-bit integers(named as ia and ib)
+// Compare a couple of 16-bit integers(named as ia and ib)
 // return 0 if ia == ib
 // return -1 if ia < ib
 // return 1 if ia > ib
-void _cmpw(int32_t ia, int32_t ib, int32_t* output)
+void _cmpw(int16_t ia, int16_t ib, int8_t* output)
 {
 	// compare
 	output[0] = (ia == ib);
@@ -2030,44 +1967,44 @@ void _cmpw(int32_t ia, int32_t ib, int32_t* output)
 	output[2] = (ia > ib);
 }
 
-// compare a couple of 64-bit integers(named as ia and ib)
+// compare a couple of 32-bit integers(named as ia and ib)
 // return 0 if ia == ib
 // return -1 if ia < ib
 // return 1 if ia > ib
-void _cmpd(int64_t ia, int64_t ib, int32_t* output)
+void _cmpd(int32_t ia, int32_t ib, int8_t* output)
 {
 	output[0] = (ia == ib);
 	output[1] = (ia < ib);
 	output[2] = (ia > ib);
 }
 
-// compare a couple of 64-bit float(named as ia and ib)
+// compare a couple of 32-bit float(named as ia and ib)
 // return 0 if ia == ib
 // return -1 if ia < ib
 // return 1 if ia > ib
-void _cmpf(double ia, double ib, int32_t* output)
+void _cmpf(float ia, float ib, int8_t* output)
 {
 	output[0] = (ia == ib);
 	output[1] = (ia < ib);
 	output[2] = (ia > ib);
 }
 
-// check it if the targeted 32-bit integer is inside the range [il, ir] (16-bit)
+// check it if the targeted 16-bit integer is inside the range [il, ir] (16-bit)
 // return 0 if the range indeedly include it
 // return -1 if it is less than left border
 // return 1 if it is more than right border
-void _zcpw(int32_t ia, int32_t il, int32_t ir, int32_t* output)
+void _zcpw(int16_t ia, int16_t il, int16_t ir, int8_t* output)
 {
 	output[0] = (ia >= il && ia <= ir);
 	output[1] = (ia < il);
 	output[2] = (ia > ir);
 }
 
-// check it if the targeted 64-bit integer is inside the range [il, ir] (32-bit)
+// check it if the targeted 32-bit integer is inside the range [il, ir] (32-bit)
 // return 0 if the range indeedly include it
 // return -1 if it is less than left border
 // return 1 if it is more than right border
-void _zcpd(int64_t ia, int64_t il, int64_t ir, int32_t* output)
+void _zcpd(int32_t ia, int32_t il, int32_t ir, int8_t* output)
 {
 	output[0] = (ia >= il && ia <= ir);
 	output[1] = (ia < il);
@@ -2078,27 +2015,27 @@ void _zcpd(int64_t ia, int64_t il, int64_t ir, int32_t* output)
 // return 0 if the range indeedly include it
 // return -1 if it is less than left border
 // return 1 if it is more than right border
-void _zcpf(double ia, double il, double ir, int32_t* output)
+void _zcpf(float ia, float il, float ir, int8_t* output)
 {
 	output[0] = (ia >= il && ia <= ir);
 	output[1] = (ia < il);
 	output[2] = (ia > ir);
 }
 
-// make 32-bit integer ia negative 
-int32_t _negw(int32_t ia)
+// make 16-bit integer ia negative 
+int16_t _negw(int16_t ia)
 {
 	return -ia;
 }
 
-// make 64-bit integer ia negative
-int64_t _negd(int64_t ia)
+// make 32-bit integer ia negative
+int32_t _negd(int32_t ia)
 {
 	return -ia;
 }
 
 // swap a couple of 16-bit integers
-void _xchw(int32_t* pa, int32_t* pb)
+void _xchw(int16_t* pa, int16_t* pb)
 {
 	_tempw = *pa;
 	*pa = *pb;
@@ -2106,7 +2043,7 @@ void _xchw(int32_t* pa, int32_t* pb)
 }
 
 // swap a couple of 32-bit integer
-void _xchd(int64_t* pa, int64_t* pb)
+void _xchd(int32_t* pa, int32_t* pb)
 {
 	_tempd = *pa;
 	*pa = *pb;
@@ -2114,26 +2051,36 @@ void _xchd(int64_t* pa, int64_t* pb)
 }
 
 // swap a couple of 32-bit float
-void _xchf(double* pa, double* pb)
+void _xchf(float* pa, float* pb)
 {
 	_tempf = *pa;
 	*pa = *pb;
 	*pb = _tempf;
 }
 
-// binary reserve 32-bit integer ia 
-int32_t _cmlw(int32_t ia) 
+// binary reserve 16-bit integer ia 
+int16_t _cmlw(int16_t ia) 
 {
 	return ~ia;
 }
 
-// binary reserve 64-bit integer ia
-int64_t _cmld(int64_t ia)
+// binary reserve 32-bit integer ia
+int32_t _cmld(int32_t ia)
 {
 	return ~ia;
 }
+// copy a series of 16-bit memory
+void _mvwblk(int16_t* source, int16_t* dest, int8_t* enable, int16_t size)
+{
+	while (--size >= 0)
+	{
+		if (!enable[size])
+			dest[size] = source[size];
+	}
+}
+
 // copy a series of 32-bit memory
-void _mvwblk(int32_t* source, int32_t* dest, int32_t* enable, int32_t size)
+void _mvdblk(int32_t* source, int32_t* dest, int8_t* enable, int16_t size)
 {
 	while (--size >= 0)
 	{
@@ -2142,18 +2089,8 @@ void _mvwblk(int32_t* source, int32_t* dest, int32_t* enable, int32_t size)
 	}
 }
 
-// copy a series of 64-bit memory
-void _mvdblk(int64_t* source, int64_t* dest, int32_t* enable, int32_t size)
-{
-	while (--size >= 0)
-	{
-		if (!enable[size])
-			dest[size] = source[size];
-	}
-}
-
-// set a series of 32-bit memeory to the targeted value
-void _fmovw(int32_t source, int32_t* dest, int32_t* enable, int32_t size)
+// set a series of 16-bit memeory to the targeted value
+void _fmovw(int16_t source, int16_t* dest, int8_t* enable, int16_t size)
 {
 	while (--size >= 0)
 	{
@@ -2163,7 +2100,7 @@ void _fmovw(int32_t source, int32_t* dest, int32_t* enable, int32_t size)
 }
 
 // set a series of 32-bit memeory to the targeted value
-void _fmovd(int64_t source, int64_t* dest, int32_t* enable, int32_t size)
+void _fmovd(int32_t source, int32_t* dest, int8_t* enable, int16_t size)
 {
 	while (--size >= 0)
 	{
@@ -2173,7 +2110,7 @@ void _fmovd(int64_t source, int64_t* dest, int32_t* enable, int32_t size)
 }
 
 // move the fragment of a BCD code to anothor at the targeted position.
-void _smov(int32_t source, int32_t sb1, int32_t sb2, int32_t* target, int32_t tb1)
+void _smov(int16_t source, int16_t sb1, int16_t sb2, int16_t* target, int16_t tb1)
 {
 	source = _WORD_to_BCD(source);
 	*target = _WORD_to_BCD(*target);
@@ -2182,7 +2119,7 @@ void _smov(int32_t source, int32_t sb1, int32_t sb2, int32_t* target, int32_t tb
 	*target = _BCD_to_WORD(*target);
 }
 
-void _set_wbit(int32_t* src, int32_t loc, int32_t* en, int32_t size, int32_t value)
+void _set_wbit(int16_t* src, int16_t loc, int8_t* en, int16_t size, int8_t value)
 {
 	int i;
 	int lrem = 16 - loc;
@@ -2217,12 +2154,12 @@ void _set_wbit(int32_t* src, int32_t loc, int32_t* en, int32_t size, int32_t val
 	}
 }
 
-int32_t _get_wbit(int32_t* src, int32_t loc)
+int8_t _get_wbit(int16_t* src, int16_t loc)
 {
 	return (*src>>loc) & 1;
 }
 
-void _mov_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, int32_t* en, int32_t size)
+void _mov_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int8_t* en, int16_t size)
 {
 	int i;
 	int slrem = 16 - sloc;
@@ -2323,24 +2260,24 @@ void _mov_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, i
 	}
 }
 
-void _mov_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size)
+void _mov_wbit_to_bit(int16_t* src, int16_t sloc, int8_t* dst, int8_t* en, int16_t size)
 {
-	int i, loc, bid;
+	int16_t i, loc, bid;
 	for (i = 0 ; i < size ; i++)
 	{
-		bid = (sloc+i)>>4;
-		loc = (sloc+i)&15;
+		bid = ((sloc+i)>>4);
+		loc = ((sloc+i)&15);
 		if (!en[i]) dst[i] = ((src[bid]>>loc)&1);
 	}
 }
 
-void _mov_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int32_t size)
+void _mov_bit_to_wbit(int8_t* src, int16_t* dst, int16_t dloc, int8_t* en, int16_t size)
 {
-	int i, loc, bid;
+	int16_t i, loc, bid;
 	for (i = 0 ; i < size; i++)
 	{
-		bid = (dloc+i)>>4;
-		loc = (dloc+i)&15;
+		bid = ((dloc+i)>>4);
+		loc = ((dloc+i)&15);
 		if (!en[bid]) 
 		{
 			dst[bid] &= ~(1<<loc);
@@ -2349,149 +2286,137 @@ void _mov_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int
 	}
 }
 
-void _shl_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move)
+void _shl_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int8_t* en, int16_t size, int16_t move)
 {	
-	int32_t bid1, bid2, loc1, loc2;
+	int16_t bid1, bid2, loc1, loc2;
 	while (--size >= move)
 	{
-		bid1 = (dloc+size)>>4;
-		bid2 = (dloc+size+move)>>4;
-		loc1 = (dloc+size)&15;
-		loc2 = (dloc+size+move)&15;
-		if (!en[bid2]) _set_wbit(dst+bid2, loc2, en+bid2, 1, _get_wbit(dst+bid1, loc1));
+		bid1 = ((dloc+size)>>4);
+		bid2 = ((dloc+size-move)>>4);
+		loc1 = ((dloc+size)&15);
+		loc2 = ((dloc+size-move)&15);
+		if (!en[bid2]) _set_wbit(dst+bid1, loc1, en+bid1, 1, _get_wbit(dst+bid2, loc2));
 	}
 	_mov_wbit_to_wbit(src, sloc, dst, dloc, en, move);
 }
 
-void _shl_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size, int32_t move)
+void _shl_wbit_to_bit(int16_t* src, int16_t sloc, int8_t* dst, int8_t* en, int16_t size, int16_t move)
 {
 	while (--size >= move)
-	{
-		if (!en[size]) dst[size + move] = dst[size];
-	}
+		if (!en[size]) dst[size] = dst[size - move];
 	_mov_wbit_to_bit(src, sloc, dst, en, move);
 }
 
-void _shl_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move)
+void _shl_bit_to_wbit(int8_t* src, int16_t* dst, int16_t dloc, int8_t* en, int16_t size, int16_t move)
 {
-	int32_t bid1, bid2, loc1, loc2;
+	int16_t bid1, bid2, loc1, loc2;
 	while (--size >= move)
 	{
-		bid1 = (dloc+size)>>4;
-		bid2 = (dloc+size+move)>>4;
-		loc1 = (dloc+size)&15;
-		loc2 = (dloc+size+move)&15;
-		if (!en[bid2]) _set_wbit(dst+bid2, loc2, en+bid2, 1, _get_wbit(dst+bid1, loc1));
+		bid1 = ((dloc+size)>>4);
+		bid2 = ((dloc+size-move)>>4);
+		loc1 = ((dloc+size)&15);
+		loc2 = ((dloc+size-move)&15);
+		if (!en[bid2]) _set_wbit(dst+bid1, loc1, en+bid1, 1, _get_wbit(dst+bid2, loc2));
 	}
 	_mov_bit_to_wbit(src, dst, dloc, en, move);
 	
 }
 
-void _shr_wbit_to_wbit(int32_t* src, int32_t sloc, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move)
+void _shr_wbit_to_wbit(int16_t* src, int16_t sloc, int16_t* dst, int16_t dloc, int8_t* en, int16_t size, int16_t move)
 {
-	int i = -1;
-	int32_t bid1, bid2, loc1, loc2;
+	int16_t i = -1;
+	int16_t bid1, bid2, loc1, loc2;
 	while (++i < size - move)
 	{
-		bid1 = (dloc+i)>>4;
-		bid2 = (dloc+i+move)>>4;
-		loc1 = (dloc+i)&15;
-		loc2 = (dloc+i+move)&15;
+		bid1 = ((dloc+i)>>4);
+		bid2 = ((dloc+i+move)>>4);
+		loc1 = ((dloc+i)&15);
+		loc2 = ((dloc+i+move)&15);
 		if (!en[bid1]) _set_wbit(dst+bid1, loc1, en+bid1, 1, _get_wbit(dst+bid2, loc2));
 		i++;
 	}
-	bid1 = (dloc+size-move)>>4;
-	loc1 = (dloc+size-move)&15;
+	bid1 = ((dloc+size-move)>>4);
+	loc1 = ((dloc+size-move)&15);
 	_mov_wbit_to_wbit(src, sloc, dst+bid1, loc1, en+bid1, move);
 }
 
-void _shr_wbit_to_bit(int32_t* src, int32_t sloc, int32_t* dst, int32_t* en, int32_t size, int32_t move)
+void _shr_wbit_to_bit(int16_t* src, int16_t sloc, int8_t* dst, int8_t* en, int16_t size, int16_t move)
 {
-	int i = 0;
+	int16_t i = 0;
 	while (i++ < size - move)
-	{
 		if (!en[i]) dst[i] = dst[i + move];
-	}
 	_mov_wbit_to_bit(src, sloc, dst+(size-move), en+(size-move), move);
 }
 
-void _shr_bit_to_wbit(int32_t* src, int32_t* dst, int32_t dloc, int32_t* en, int32_t size, int32_t move)
+void _shr_bit_to_wbit(int8_t* src, int16_t* dst, int16_t dloc, int8_t* en, int16_t size, int16_t move)
 {
-	int i = -1;
-	int32_t bid1, bid2, loc1, loc2;
+	int16_t i = -1;
+	int16_t bid1, bid2, loc1, loc2;
 	while (++i < size - move)
 	{
-		bid1 = (dloc+i)>>4;
-		bid2 = (dloc+i+move)>>4;
-		loc1 = (dloc+i)&15;
-		loc2 = (dloc+i+move)&15;
+		bid1 = ((dloc+i)>>4);
+		bid2 = ((dloc+i+move)>>4);
+		loc1 = ((dloc+i)&15);
+		loc2 = ((dloc+i+move)&15);
 		if (!en[bid1]) _set_wbit(dst+bid1, loc1, en+bid1, 1, _get_wbit(dst+bid2, loc2));
 	}
-	bid1 = (dloc+size-move)>>4;
-	loc1 = (dloc+size-move)&15;
+	bid1 = ((dloc+size-move)>>4);
+	loc1 = ((dloc+size-move)&15);
 	_mov_bit_to_wbit(src, dst+bid1, loc1, en+bid1, move);
 }
 
-void _set_bword(int32_t* src, int32_t size, int32_t* en, int32_t value)
+void _set_bword(int8_t* src, int16_t size, int8_t* en, int16_t value)
 {
 	while (--size >= 0)
-	{
 		if (!en[size]) src[size] = ((value>>size)&1);
-	}
 }
 
-int32_t _get_bword(int32_t* src, int32_t size)
+int16_t _get_bword(int8_t* src, int16_t size)
+{
+	int16_t ret = 0;
+	while (--size >= 0)
+		ret = (ret<<1) + (src[size]&1);
+	return ret;
+}
+
+void _set_bdword(int8_t* src, int16_t size, int8_t* en, int32_t value)
+{
+	while (--size >= 0)
+		if (!en[size]) src[size] = ((value>>size)&1);
+}
+
+int32_t _get_bdword(int8_t* src, int16_t size)
 {
 	int32_t ret = 0;
 	while (--size >= 0)
-	{
 		ret = (ret<<1) + (src[size]&1);
-	}
 	return ret;
 }
 
-void _set_bdword(int32_t* src, int32_t size, int32_t* en, int64_t value)
+void _xch_bword_to_word(int8_t* bit, int16_t size, int8_t* en, int16_t* word)
 {
-	while (--size >= 0)
-	{
-		if (!en[size]) src[size] = ((value>>size)&1);
-	}
-}
-
-int64_t _get_bdword(int32_t* src, int32_t size)
-{
-	int64_t ret = 0;
-	while (--size >= 0)
-	{
-		ret = (ret<<1) + (src[size]&1);
-	}
-	return ret;
-}
-
-void _xch_bword_to_word(int32_t* bit, int32_t size, int32_t* en, int32_t* word)
-{
-	int32_t tmp = *word;
+	int16_t tmp = *word;
 	*word = _get_bword(bit, size);
 	_set_bword(bit, size, en, tmp);
 }
 
-void _xch_bword_to_bword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t size2, int32_t* en2)
+void _xch_bword_to_bword(int8_t* bit1, int16_t size1, int8_t* en1, int8_t* bit2, int16_t size2, int8_t* en2)
 {
-	int32_t tmp = _get_bword(bit1, size1);
+	int16_t tmp = _get_bword(bit1, size1);
 	_set_bword(bit1, size1, en1, _get_bword(bit2, size2));
 	_set_bword(bit2, size2, en2, tmp);
 }
 
-void _xchd_bdword_to_dword(int32_t* bit, int32_t size, int32_t* en, int64_t* dword)
+void _xchd_bdword_to_dword(int8_t* bit, int16_t size, int8_t* en, int32_t* dword)
 {
-	int64_t tmp = *dword;
+	int32_t tmp = *dword;
 	*dword = _get_bdword(bit, size);
 	_set_bdword(bit, size, en, tmp);
 }
 
-void _xchd_bdword_to_bdword(int32_t* bit1, int32_t size1, int32_t* en1, int32_t* bit2, int32_t size2, int32_t* en2)
+void _xchd_bdword_to_bdword(int8_t* bit1, int16_t size1, int8_t* en1, int8_t* bit2, int16_t size2, int8_t* en2)
 {
-	int64_t tmp = _get_bdword(bit1, size1);
+	int32_t tmp = _get_bdword(bit1, size1);
 	_set_bdword(bit1, size1, en1, _get_bword(bit2, size2));
 	_set_bdword(bit2, size2, en2, tmp);
 }

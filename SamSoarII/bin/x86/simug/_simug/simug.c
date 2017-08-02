@@ -18,21 +18,20 @@
 
 typedef void(*vDllfun)(void);
 typedef void(*viDllfun)(int);
+typedef void(*vv8Dllfun)(int8_t);
 typedef void(*viiDllfun)(int, int);
-typedef int(*isii32Dllfun)(char*, int, int32_t*);
-typedef int(*isii64Dllfun)(char*, int, int64_t*);
-typedef int(*isi64Dllfun)(char*, int64_t*);
-typedef int(*isiv64Dllfun)(char*, int64_t);
-typedef int(*isif64Dllfun)(char*, int, double*);
-typedef int(*isiiv32Dllfun)(char*, int, int32_t);
-typedef int(*isiiv64Dllfun)(char*, int, int64_t);
-typedef int(*isifv64Dllfun)(char*, int, double);
-typedef void(*vsiiDllfun)(char*, int, int);
-typedef void(*vsiDllfun)(char*, int);
-typedef void(*vsDllfun)(char*);
-typedef int(*iDllfun)(void);
+typedef void(*viv8Dllfun)(int, int8_t);
 typedef void*(*pDllfun)(void);
+typedef int8_t(*v8Dllfun)(void);
+typedef int(*iDllfun)(void);
 typedef int(*ipDllfun)(int*);
+typedef int(*isi32Dllfun)(char*, int32_t*);
+typedef int(*isv32Dllfun)(char*, int32_t);
+typedef int(*isii8Dllfun)(char*, int, int8_t*);
+typedef int(*isii16Dllfun)(char*, int, int16_t*);
+typedef int(*isii32Dllfun)(char*, int, int32_t*);
+typedef int(*isif32Dllfun)(char*, int, float*);
+typedef int(*isiv8Dllfun)(char*, int, int8_t);
 
 static char edata[65536];
 static char cmd[1024];
@@ -42,29 +41,28 @@ static vDllfun dfBeforeRunLadder;
 static vDllfun dfRunLadder;
 static vDllfun dfAfterRunLadder;
 static vDllfun dfInitRunLadder;
-static isii32Dllfun dfSetBit;
-static isii32Dllfun dfSetWord;
-static isii64Dllfun dfSetDWord;
-static isif64Dllfun dfSetFloat;
-static isii32Dllfun dfGetBit;
-static isii32Dllfun dfGetWord;
-static isii64Dllfun dfGetDWord;
-static isif64Dllfun dfGetFloat;
-static isi64Dllfun dfGetFeq;
-static isiv64Dllfun dfSetFeq;
-static vsiiDllfun dfSetEnable;
+static isii8Dllfun dfSetBit;
+static isii16Dllfun dfSetWord;
+static isii32Dllfun dfSetDWord;
+static isif32Dllfun dfSetFloat;
+static isii8Dllfun dfGetBit;
+static isii16Dllfun dfGetWord;
+static isii32Dllfun dfGetDWord;
+static isif32Dllfun dfGetFloat;
+static isi32Dllfun dfGetFeq;
+static isv32Dllfun dfSetFeq;
+static isiv8Dllfun dfSetEnable;
 static viDllfun dfInitClock;
 static iDllfun dfGetClock;
 static viDllfun dfSetClockRate;
-static viDllfun dfSetBaseBit;
 static iDllfun dfGetCallCount;
 static iDllfun dfGetBPAddr;
-static viiDllfun dfSetBPAddr;
+static viv8Dllfun dfSetBPAddr;
 static viiDllfun dfSetBPCount;
 static viiDllfun dfSetCPAddr;
-static viDllfun dfSetBPEnable;
-static iDllfun dfGetBPPause;
-static viDllfun dfSetBPPause;
+static vv8Dllfun dfSetBPEnable;
+static v8Dllfun dfGetBPPause;
+static vv8Dllfun dfSetBPPause;
 static pDllfun dfGetRBP;
 static ipDllfun dfGetBackTrace;
 static vDllfun dfMoveStep;
@@ -119,67 +117,67 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 2;
 	}
-	dfGetBit = (isii32Dllfun)GetProcAddress(hdll, "_GetBit@12");
+	dfGetBit = (isii8Dllfun)GetProcAddress(hdll, "_GetBit@12");
 	if (dfGetBit == NULL)
 	{
 		FreeDll();
 		return 3;
 	}
-	dfGetWord = (isii32Dllfun)GetProcAddress(hdll, "_GetWord@12");
+	dfGetWord = (isii16Dllfun)GetProcAddress(hdll, "_GetWord@12");
 	if (dfGetWord == NULL)
 	{
 		FreeDll();
 		return 4;
 	}
-	dfGetDWord = (isii64Dllfun)GetProcAddress(hdll, "_GetDoubleWord@12");
+	dfGetDWord = (isii32Dllfun)GetProcAddress(hdll, "_GetDoubleWord@12");
 	if (dfGetDWord == NULL)
 	{
 		FreeDll();
 		return 5;
 	}
-	dfGetFloat = (isif64Dllfun)GetProcAddress(hdll, "_GetFloat@12");
+	dfGetFloat = (isif32Dllfun)GetProcAddress(hdll, "_GetFloat@12");
 	if (dfGetFloat == NULL)
 	{
 		FreeDll();
 		return 6;
 	}
-	dfGetFeq = (isi64Dllfun)GetProcAddress(hdll, "_GetFeq@8");
+	dfGetFeq = (isi32Dllfun)GetProcAddress(hdll, "_GetFeq@8");
 	if (dfGetFeq == NULL)
 	{
 		FreeDll();
 		return 7;
 	}
-	dfSetBit = (isii32Dllfun)GetProcAddress(hdll, "_SetBit@12");
+	dfSetBit = (isii8Dllfun)GetProcAddress(hdll, "_SetBit@12");
 	if (dfSetBit == NULL)
 	{
 		FreeDll();
 		return 8;
 	}
-	dfSetWord = (isii32Dllfun)GetProcAddress(hdll, "_SetWord@12");
+	dfSetWord = (isii16Dllfun)GetProcAddress(hdll, "_SetWord@12");
 	if (dfSetWord == NULL)
 	{
 		FreeDll();
 		return 9;
 	}
-	dfSetDWord = (isii64Dllfun)GetProcAddress(hdll, "_SetDoubleWord@12");
+	dfSetDWord = (isii32Dllfun)GetProcAddress(hdll, "_SetDoubleWord@12");
 	if (dfSetDWord == NULL)
 	{
 		FreeDll();
 		return 10;
 	}
-	dfSetFloat = (isif64Dllfun)GetProcAddress(hdll, "_SetFloat@12");
+	dfSetFloat = (isif32Dllfun)GetProcAddress(hdll, "_SetFloat@12");
 	if (dfGetFloat == NULL)
 	{
 		FreeDll();
 		return 11;
 	}
-	dfSetFeq = (isiv64Dllfun)GetProcAddress(hdll, "_SetFeq@12");
+	dfSetFeq = (isv32Dllfun)GetProcAddress(hdll, "_SetFeq@8");
 	if (dfSetFeq == NULL)
 	{
 		FreeDll();
 		return 12;
 	}
-	dfSetEnable = (vsiiDllfun)GetProcAddress(hdll, "_SetEnable@12");
+	dfSetEnable = (isiv8Dllfun)GetProcAddress(hdll, "_SetEnable@12");
 	if (dfSetEnable == NULL)
 	{
 		FreeDll();
@@ -221,12 +219,6 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 19;
 	}
-	dfSetBaseBit = (viDllfun)GetProcAddress(hdll, "_SetBaseBit@4");
-	if (dfSetBaseBit == NULL)
-	{
-		FreeDll();
-		return 20;
-	}
 	dfGetCallCount = (iDllfun)GetProcAddress(hdll, "_GetCallCount@0");
 	if (dfGetCallCount == NULL)
 	{
@@ -239,7 +231,7 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 22;
 	}
-	dfSetBPAddr = (viiDllfun)GetProcAddress(hdll, "_SetBPAddr@8");
+	dfSetBPAddr = (viv8Dllfun)GetProcAddress(hdll, "_SetBPAddr@8");
 	if (dfSetBPAddr == NULL)
 	{
 		FreeDll();
@@ -251,13 +243,13 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 24;
 	}
-	dfGetBPPause = (iDllfun)GetProcAddress(hdll, "_GetBPPause@0");
+	dfGetBPPause = (v8Dllfun)GetProcAddress(hdll, "_GetBPPause@0");
 	if (dfGetBPPause == NULL)
 	{
 		FreeDll();
 		return 25;
 	}
-	dfSetBPPause = (viDllfun)GetProcAddress(hdll, "_SetBPPause@4");
+	dfSetBPPause = (vv8Dllfun)GetProcAddress(hdll, "_SetBPPause@4");
 	if (dfSetBPPause == NULL)
 	{
 		FreeDll();
@@ -287,7 +279,7 @@ EXPORT int LoadDll(char* simudllPath)
 		FreeDll();
 		return 30;
 	}
-	dfSetBPEnable = (viDllfun)GetProcAddress(hdll, "_SetBPEnable@4");
+	dfSetBPEnable = (vv8Dllfun)GetProcAddress(hdll, "_SetBPEnable@4");
 	if (dfSetBPEnable == NULL)
 	{
 		FreeDll();
@@ -334,57 +326,57 @@ EXPORT void AfterRunLadder()
 	dfAfterRunLadder();
 }
 
-EXPORT int GetBit(char* name, int size, uint32_t* output)
+EXPORT int GetBit(char* name, int size, int8_t* output)
 {
 	return dfGetBit(name, size, output);
 }
 
-EXPORT int GetWord(char* name, int size, uint32_t* output)
+EXPORT int GetWord(char* name, int size, int16_t* output)
 {
 	return dfGetWord(name, size, output);
 }
 
-EXPORT int GetDoubleWord(char* name, int size, uint64_t* output)
+EXPORT int GetDoubleWord(char* name, int size, int32_t* output)
 {
 	return dfGetDWord(name, size, output);
 }
 
-EXPORT int GetFloat(char* name, int size, double* output)
+EXPORT int GetFloat(char* name, int size, float* output)
 {
 	return dfGetFloat(name, size, output);
 }
 
-EXPORT int GetFeq(char* name, uint64_t* output)
+EXPORT int GetFeq(char* name, int32_t* output)
 {
 	return dfGetFeq(name, output);
 }
 
-EXPORT int SetFeq(char* name, int64_t input)
+EXPORT int SetFeq(char* name, int32_t input)
 {
 	return dfSetFeq(name, input);
 }
 
-EXPORT int SetBit(char* name, int size, uint32_t* input)
+EXPORT int SetBit(char* name, int size, int8_t* input)
 {
 	return dfSetBit(name, size, input);
 }
 
-EXPORT int SetWord(char* name, int size, uint32_t* input)
+EXPORT int SetWord(char* name, int size, int16_t* input)
 {
 	return dfSetWord(name, size, input);
 }
 
-EXPORT int SetDoubleWord(char* name, int size, uint64_t* input)
+EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 {
 	return dfSetDWord(name, size, input);
 }
 
-EXPORT int SetFloat(char* name, int size, double* input)
+EXPORT int SetFloat(char* name, int size, float* input)
 {
 	return dfSetFloat(name, size, input);
 }
 
-EXPORT void SetEnable(char* name, int size, int value)
+EXPORT void SetEnable(char* name, int size, int8_t value)
 {
 	dfSetEnable(name, size, value);
 }
@@ -404,11 +396,6 @@ EXPORT void SetClockRate(int _rate)
 	dfSetClockRate(_rate);
 }
 
-EXPORT void SetBaseBit(int _basebit)
-{
-	dfSetBaseBit(_basebit);
-}
-
 EXPORT int GetCallCount()
 {
 	return dfGetCallCount();
@@ -419,7 +406,7 @@ EXPORT int GetBPAddr()
 	return dfGetBPAddr();
 }
 
-EXPORT void SetBPAddr(int bpaddr, int islock)
+EXPORT void SetBPAddr(int bpaddr, int8_t islock)
 {
 	dfSetBPAddr(bpaddr, islock);
 }
@@ -434,17 +421,17 @@ EXPORT void SetCPAddr(int cpaddr, int cpmsg)
 	dfSetCPAddr(cpaddr, cpmsg);
 }
 
-EXPORT void SetBPEnable(int bpenable)
+EXPORT void SetBPEnable(int8_t bpenable)
 {
 	dfSetBPEnable(bpenable);
 }
 
-EXPORT int GetBPPause()
+EXPORT int8_t GetBPPause()
 {
 	return dfGetBPPause();
 }
 
-EXPORT void SetBPPause(int bppause)
+EXPORT void SetBPPause(int8_t bppause)
 {
 	dfSetBPPause(bppause);
 }

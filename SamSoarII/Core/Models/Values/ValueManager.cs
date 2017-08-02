@@ -591,9 +591,7 @@ namespace SamSoarII.Core.Models
                 dataused[i] = false;
             for (int i = 0; i < infos.Count(); i++)
             {
-                //IEnumerable<ValueStore> visibles = infos[i].Stores.ToArray();
                 IEnumerable<ValueStore> visibles = infos[i].Stores.Where(vs => vs.VisualRefNum > 0);
-                //if (visibles.Count() > 0) visibles = visibles.ToArray();
                 switch (infos[i].Prototype.Base)
                 {
                     case ValueModel.Bases.V:
@@ -609,7 +607,6 @@ namespace SamSoarII.Core.Models
                         break;
                 }
                 IEnumerable<ValueStore> intras = visibles.Where(vs => vs.Intra != ValueModel.Bases.NULL);
-                //if (intras.Count() > 0) intras = intras.ToArray();
                 foreach (ValueStore vstore in intras)
                 {
                     int dataaddr = infos[i].DataAddr;
@@ -730,8 +727,9 @@ namespace SamSoarII.Core.Models
                         break;
                 }
                 if (infos[i].Stores.Count() == 0) continue;
-                foreach (ValueStore vstore in infos[i].Stores.ToArray())
+                foreach (ValueStore vstore in infos[i].Stores)
                 {
+                    if (vstore.VisualRefNum == 0) continue;
                     dataaddr = infos[i].DataAddr;
                     switch (vstore.Intra)
                     {
@@ -747,11 +745,9 @@ namespace SamSoarII.Core.Models
                     }
                     else if (vstore.IsBitWord || vstore.IsBitDoubleWord)
                     {
-                        value = (uint)(udata[0] & 1);
-                        for (int _addr = dataaddr + 1; _addr < dataaddr + vstore.Flag; _addr++)
-                        {
+                        value = 0;
+                        for (int _addr = dataaddr + vstore.Flag - 1; _addr >= dataaddr; _addr--)
                             value = (value << 1) + (uint)(datas[_addr]);
-                        }
                         if (vstore.IsBitWord)
                             vstore.Value = (short)value;
                         else
@@ -774,6 +770,20 @@ namespace SamSoarII.Core.Models
                     }
                 }
             }
+        }
+        
+        public uint ReadMonitorData(ValueStore vstore)
+        {
+            int dataaddr = vstore.Parent.DataAddr;
+            switch (vstore.Intra)
+            {
+                case ValueModel.Bases.V: dataaddr += (int)(storev[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+                case ValueModel.Bases.Z: dataaddr += (int)(storez[vstore.IntraOffset].Value) * vstore.ByteCount; break;
+            }
+            byte[] udata = new byte[4];
+            for (int i = dataaddr; i < Math.Min(datas.Length, dataaddr + 4); i++)
+                udata[i - dataaddr] = datas[i];
+            return ValueConverter.GetValue(udata);
         }
         
         #endregion

@@ -56,7 +56,12 @@ namespace SamSoarII.Core.Communication
             addrType2 = (byte)CommandHelper.GetAddrType(vstore.Intra,(uint)(vstore.IntraOffset));
             startLowAddr2 = (byte)vstore.IntraOffset;
             addrType1 = (byte)CommandHelper.GetAddrType(vstore.Base, (uint)(vstore.Offset));
-            length = (byte)(vstore.ByteCount == 4 ? 0x02 : 0x01);
+            if (vstore.IsWordBit)
+                length = 1;
+            else if (vstore.IsBitWord || vstore.IsBitDoubleWord)
+                length = (byte)(vstore.Flag);
+            else
+                length = (byte)(vstore.ByteCount == 4 ? 0x02 : 0x01);
             byte[] startaddr = ValueConverter.GetBytes((ushort)vstore.Offset);
             startLowAddr1 = startaddr[1];
             startHighAddr = startaddr[0];

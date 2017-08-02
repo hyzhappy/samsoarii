@@ -79,7 +79,7 @@ namespace SamSoarII.Shell.Models
 
         public void DynamicUpdate()
         {
-            if (core?.View == null) return;
+            if (Core?.View == null) return;
             double scaleY = 0;
             Point p = new Point();
             double newscrolloffset = 0;
@@ -143,6 +143,7 @@ namespace SamSoarII.Shell.Models
         
         public void DynamicDispose()
         {
+            if (Core?.View == null) return;
             if (loadedrowstart <= loadedrowend)
             {
                 DisposeRange(loadedrowstart, loadedrowend);
@@ -179,6 +180,7 @@ namespace SamSoarII.Shell.Models
             {
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
+                    if (Core == null) return;
                     IEnumerable<LadderUnitModel> units = Core.Children.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y);
                     units = units.Concat(Core.VLines.SelectRange(0, GlobalSetting.LadderXCapacity - 1, y, y));
                     foreach (LadderUnitModel unit in units)

@@ -19,13 +19,13 @@ namespace SamSoarII.Core.Models
             Store = _store;
         }
 
-        public MonitorElement(MonitorTable _parent, int _datatype, string _addrtype, int _startaddr, string _intratype, int _intraaddr)
+        public MonitorElement(MonitorTable _parent, int _datatype, string _addrtype, int _startaddr, string _intratype, int _intraaddr, int _flag)
         {
             parent = _parent;
             datatype = _datatype;
             string name = String.Format("{0:s}{1:d}", _addrtype, _startaddr);
             ValueInfo vinfo = ValueManager[name];
-            Store = _FindStore(vinfo, _intratype, _intraaddr);
+            Store = _FindStore(vinfo, _intratype, _intraaddr, _flag);
         }
         
         public MonitorElement(MonitorTable _parent, XElement xele)
@@ -106,7 +106,7 @@ namespace SamSoarII.Core.Models
             }
         }
         
-        private ValueStore _FindStore(ValueInfo vinfo, string _intratype, int _intraaddr)
+        private ValueStore _FindStore(ValueInfo vinfo, string _intratype, int _intraaddr, int _flag)
         {
             ValueModel.Types type = ValueModel.Types.NULL;
             ValueModel.Bases ibase = ValueModel.Bases.NULL;
@@ -116,10 +116,10 @@ namespace SamSoarII.Core.Models
                 case "Z": ibase = ValueModel.Bases.Z; break;
             }
             type = (ValueModel.Types)(datatype);
-            ValueStore _store = vinfo.Stores.Where(vs => vs.Type == type && vs.Intra == ibase && vs.IntraOffset == _intraaddr).FirstOrDefault();
+            ValueStore _store = vinfo.Stores.Where(vs => vs.Type == type && vs.Intra == ibase && vs.IntraOffset == _intraaddr && vs.Flag == _flag).FirstOrDefault();
             if (_store == null)
             {
-                _store = new ValueStore(vinfo, type, ibase, _intraaddr);
+                _store = new ValueStore(vinfo, type, ibase, _intraaddr, _flag);
                 vinfo.Stores.Add(_store);
             }
             return _store;
@@ -131,20 +131,6 @@ namespace SamSoarII.Core.Models
         public string IntrasegmentType { get { return store.Intra == ValueModel.Bases.NULL ? String.Empty : store.Intra.ToString(); } }
         public int IntrasegmentAddr { get { return store.IntraOffset; } }
         public string ShowName { get { return store.Name; } }
-        public string FlagName
-        {
-            get
-            {
-                if (!IsIntrasegment)
-                {
-                    return String.Format("{0}_{1}_{2}", AddrType, StartAddr, DataType);
-                }
-                else
-                {
-                    return String.Format("{0}_{1}{2}_{3}_{4}", AddrType, IntrasegmentType, IntrasegmentAddr, StartAddr, DataType);
-                }
-            }
-        }
 
         private bool unknown = false;
         public object CurrentValue
@@ -184,7 +170,7 @@ namespace SamSoarII.Core.Models
         }
 
         static private string[] bool_Showtypes = { "BOOL" };
-        static private string[] word_ShowTypes = { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT" };
+        static private string[] word_ShowTypes = { "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX"};
         public string[] ShowTypes
         {
             get
@@ -238,7 +224,7 @@ namespace SamSoarII.Core.Models
             set
             {
                 this.datatype = value;
-                Store = _FindStore(store.Parent, IntrasegmentType, IntrasegmentAddr);
+                Store = _FindStore(store.Parent, IntrasegmentType, IntrasegmentAddr, store.Flag);
                 PropertyChanged(this, new PropertyChangedEventArgs("DataType"));
                 PropertyChanged(this, new PropertyChangedEventArgs("ShowType"));
                 PropertyChanged(this, new PropertyChangedEventArgs("SelectIndex"));
@@ -281,7 +267,8 @@ namespace SamSoarII.Core.Models
             ValueInfo vinfo = ValueManager[name];
             string intratype = xele.Attribute("IntraType").Value;
             int intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
-            Store = _FindStore(vinfo, intratype, intraaddr);
+            int flag = int.Parse(xele.Attribute("Flag").Value);
+            Store = _FindStore(vinfo, intratype, intraaddr, flag);
         }
 
         public void Save(XElement xele)
@@ -290,6 +277,7 @@ namespace SamSoarII.Core.Models
             xele.SetAttributeValue("DataType", DataType);
             xele.SetAttributeValue("IntraType", IntrasegmentType);
             xele.SetAttributeValue("IntraAddr", IntrasegmentAddr);
+            xele.SetAttributeValue("Flag", store.Flag);
         }
 
         #endregion
