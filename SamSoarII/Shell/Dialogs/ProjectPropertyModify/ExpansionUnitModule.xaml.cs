@@ -34,8 +34,10 @@ namespace SamSoarII.Shell.Dialogs
         {
             core = null;
             DataContext = null;
+            ModuleTypeChangedHandle = null;
         }
         #region event
+        public event RoutedEventHandler ModuleTypeChangedHandle = delegate { };
         private void ModuleTypeChanged(object sender, SelectionChangedEventArgs e)
         {
             switch (core.ModuleType)
@@ -77,6 +79,7 @@ namespace SamSoarII.Shell.Dialogs
                 default:
                     break;
             }
+            ModuleTypeChangedHandle(this,new RoutedEventArgs());
         }
         #endregion
     }

@@ -75,7 +75,7 @@ namespace SamSoarII.Core.Models
         {
             try
             {
-                _useExpansionModule = bool.Parse(xele.Attribute("CanUseExpansion").Value);
+                UseExpansionModule = bool.Parse(xele.Attribute("CanUseExpansion").Value);
                 foreach (var param in ExpansionUnitParams)
                 {
                     param.Load(xele.Element(string.Format("ExpansionUnitParams{0}", param.ID)));
@@ -104,6 +104,7 @@ namespace SamSoarII.Core.Models
             if (iparams is ExpansionModuleParams)
             {
                 ExpansionModuleParams that = (ExpansionModuleParams)iparams;
+                this.UseExpansionModule = that.UseExpansionModule;
                 for (int i = 0; i < ExpansionUnitParams.Count; i++)
                 {
                     ExpansionUnitParams[i].Load(that.ExpansionUnitParams[i]);

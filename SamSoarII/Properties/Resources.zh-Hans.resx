@@ -2187,4 +2187,16 @@
   <data name="Message_STL_Over" xml:space="preserve">
     <value>已存在未结束的STL指令。</value>
   </data>
+  <data name="Not_Enabled" xml:space="preserve">
+    <value>未启用</value>
+  </data>
+  <data name="Thermocouple" xml:space="preserve">
+    <value>热电偶</value>
+  </data>
+  <data name="Filter_Time" xml:space="preserve">
+    <value>滤波时间</value>
+  </data>
+  <data name="Use_Expansion_Module" xml:space="preserve">
+    <value>使用拓展模块</value>
+  </data>
 </root>

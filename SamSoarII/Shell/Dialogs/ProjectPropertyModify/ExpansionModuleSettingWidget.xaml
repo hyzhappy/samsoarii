@@ -20,7 +20,7 @@
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox x:Name="checkbox" VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Use_Expansion_Module}" IsThreeState="False" IsChecked="{Binding UseExpansionModule,Mode=TwoWay}"/>
+                <CheckBox x:Name="checkbox" VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Use_Expansion_Module}" IsThreeState="False" IsChecked="{Binding UseExpansionModule}"/>
                 <ListBox x:Name="Modules" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectionChanged="ShowModule" BorderBrush="AliceBlue" BorderThickness="1" Grid.Row="1" SelectedIndex="0">
                     <ListBox.Resources>
                         <Style TargetType="ListBoxItem">
@@ -38,7 +38,7 @@
                     <ListBoxItem x:Name="Module8"/>
                 </ListBox>
                 <Grid x:Name="ContentGrid" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"/>
-                <TextBlock x:Name="TB_Message" Grid.Row="2" Grid.Column="1" Width="120" HorizontalAlignment="Right" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock x:Name="TB_Message" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" FontSize="16" VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
     </Grid>
