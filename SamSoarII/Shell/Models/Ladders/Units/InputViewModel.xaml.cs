@@ -39,8 +39,6 @@ namespace SamSoarII.Shell.Models
             recreating = true;
             ReinitializeComponent();
             DataContext = this;
-            if (Core?.Parent?.View != null)
-                IsCommentMode = Core.Parent.View.IsCommentMode;
             recreating = false;
         }
 
@@ -49,6 +47,7 @@ namespace SamSoarII.Shell.Models
         public InputViewModel(LadderUnitModel _core)
         {
             InitializeComponent();
+            lines = new Line[3];
             comments = new TextBlock[2];
             if (_core != null) Recreate(_core);
         }
@@ -56,8 +55,6 @@ namespace SamSoarII.Shell.Models
         private void ReinitializeComponent()
         {
             // 开始绘图
-            CenterCanvas.Children.Clear();
-            Line line = null;
             switch (Core.InstName)
             {
                 case "LDWEQ":
@@ -118,119 +115,50 @@ namespace SamSoarII.Shell.Models
                     CenterTextBlock.Text = "";
                     break;
             }
-            // 画个-[/]-表示【取反】
+            for (int i = 0; i < lines.Length; i++)
+                HideLine(i);
             switch (Core.InstName)
             {
+                // 画个-[/]-表示【取反】
                 case "LDI":
-                case "LDIIM":
-                    line = new Line();
-                    line.X1 = 75;
-                    line.X2 = 25;
-                    line.Y1 = 0;
-                    line.Y2 = 100;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
+                    ShowLine(0, 75, 25, 0, 100);
                     break;
-                default:
-                    break;
-            }
-            // 画个-[|]-表示【立即】
-            switch (Core.InstName)
-            {
+                // 画个-[|]-表示【立即】
                 case "LDIM":
+                    ShowLine(0, 50, 50, 0, 100);
+                    break;
+                // 二者皆有
                 case "LDIIM":
-                    line = new Line();
-                    line.X1 = 50;
-                    line.X2 = 50;
-                    line.Y1 = 0;
-                    line.Y2 = 100;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
+                    ShowLine(0, 75, 25, 0, 100);
+                    ShowLine(1, 50, 50, 0, 100);
                     break;
-            }
-            // 画个-[↑]-表示【上升沿】
-            switch (Core.InstName)
-            {
+                // 画个-[↑]-表示【上升沿】
                 case "LDP":
-                    line = new Line();
-                    line.X1 = 50;
-                    line.X2 = 70;
-                    line.Y1 = 0;
-                    line.Y2 = 20;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
-
-                    line = new Line();
-                    line.X1 = 50;
-                    line.X2 = 30;
-                    line.Y1 = 0;
-                    line.Y2 = 20;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
-
-                    line = new Line();
-                    line.X1 = 50;
-                    line.X2 = 50;
-                    line.Y1 = 0;
-                    line.Y2 = 100;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
+                    ShowLine(0, 50, 70, 0, 20);
+                    ShowLine(1, 50, 30, 0, 20);
+                    ShowLine(2, 50, 50, 0, 100);
                     break;
-                default:
-                    break;
-            }
-            // 画个-[↓]-表示【下降沿】
-            switch (Core.InstName)
-            {
+                // 画个-[↓]-表示【下降沿】
                 case "LDF":
-                    line = new Line();
-                    line.X1 = 50;
-                    line.X2 = 50;
-                    line.Y1 = 0;
-                    line.Y2 = 100;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
-
-                    line = new Line();
-                    line.X1 = 50;
-                    line.X2 = 70;
-                    line.Y1 = 100;
-                    line.Y2 = 80;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
-
-                    line = new Line();
-                    line.X1 = 50;
-                    line.X2 = 30;
-                    line.Y1 = 100;
-                    line.Y2 = 80;
-                    line.StrokeThickness = 4;
-                    line.Stroke = Brushes.Black;
-                    CenterCanvas.Children.Add(line);
+                    ShowLine(0, 50, 50, 0, 100);
+                    ShowLine(1, 50, 70, 100, 80);
+                    ShowLine(2, 50, 30, 100, 80);
                     break;
                 default:
                     break;
             }
             ValueTextBlock.Visibility = Core.Children.Count >= 1
-                ? Visibility.Visible
-                : Visibility.Hidden;
+                ? Visibility.Visible : Visibility.Hidden;
             Value2TextBlock.Visibility = Core.Children.Count >= 2
-                ? Visibility.Visible
-                : Visibility.Hidden;
-            CenterCanvas.Children.Add(CenterTextBlock);
-            CommentArea.Children.Clear();
-            for (int i = 0; i < Core.Children.Count; i++)
+                ? Visibility.Visible : Visibility.Hidden;
+            CommentArea.Visibility = IsCommentMode 
+                ? Visibility.Visible : Visibility.Hidden;
+            for (int i = 0; i < comments.Length; i++)
             {
-                if (comments[i] == null)
-                    comments[i] = new TextBlock();
-                CommentArea.Children.Add(comments[i]);
+                if (i < Core.Children.Count)
+                    ShowComment(i);
+                else
+                    HideComment(i);
             }
             Update();
         }
@@ -250,18 +178,52 @@ namespace SamSoarII.Shell.Models
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         #region Shell
-        
-        private TextBlock[] comments;
 
-        public override bool IsCommentMode
+        private Line[] lines;
+        public void ShowLine(int id, int x1, int x2, int y1, int y2)
         {
-            set
+            if (lines[id] == null)
             {
-                base.IsCommentMode = value;
-                CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
+                lines[id] = new Line();
+                lines[id].StrokeThickness = 4;
+                lines[id].Stroke = Brushes.Black;
+                CenterCanvas.Children.Add(lines[id]);
             }
+            lines[id].X1 = x1;
+            lines[id].X2 = x2;
+            lines[id].Y1 = y1;
+            lines[id].Y2 = y2;
+            lines[id].Visibility = Visibility.Visible;
         }
-        
+        public void HideLine(int id)
+        {
+            if (lines[id] == null) return;
+            lines[id].Visibility = Visibility.Hidden;
+        }
+
+        private TextBlock[] comments;
+        public void ShowComment(int id)
+        {
+            if (comments[id] == null)
+            {
+                comments[id] = new TextBlock();
+                CommentArea.Children.Add(comments[id]);
+            }
+            comments[id].Visibility = Visibility.Visible;
+        }
+        public void HideComment(int id)
+        {
+            if (comments[id] == null) return;
+            comments[id].Visibility = Visibility.Hidden;
+        }
+
+        protected override void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnCorePropertyChanged(sender, e);
+            if (e.PropertyName.Equals("IsCommentMode"))
+                CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
+        }
+
         public override void Update(int flags = UPDATE_ALL)
         {
             FontData fdata = null;

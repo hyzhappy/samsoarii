@@ -56,10 +56,6 @@ namespace SamSoarII.Shell.Models
             ladderExpander.expandButton.IsExpandChanged += OnExpandChanged;
             ladderExpander.IsExpand = IsExpand;
             CommentAreaGrid.Children.Remove(ThumbnailButton);
-            if (ViewParent != null)
-                IsCommentMode = ViewParent.IsCommentMode;
-            else
-                core.Parent.View = new LadderDiagramViewModel(core.Parent);
             loadedrowstart = 0;
             loadedrowend = -1;
             Update();
@@ -94,6 +90,7 @@ namespace SamSoarII.Shell.Models
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
+                    _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     _core.ChildrenChanged -= OnCoreChildrenChanged;
                     if (_core.View != null) _core.View = null;
                 }
@@ -101,6 +98,7 @@ namespace SamSoarII.Shell.Models
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    core.ViewPropertyChanged += OnCorePropertyChanged;
                     core.ChildrenChanged += OnCoreChildrenChanged;
                     if (core.View != this) core.View = this;
                 }
@@ -159,6 +157,7 @@ namespace SamSoarII.Shell.Models
                     }
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
+                    ViewParent.IsViewModified = true;
                     break;
                 case "IsMasked":
                     if (IsMasked)
@@ -180,6 +179,16 @@ namespace SamSoarII.Shell.Models
                         LadderCanvas.Background = Brushes.Transparent;
                     }
                     PropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
+                    break;
+                case "IsCommentMode":
+                    LadderCanvas.Height = HeightUnit * RowCount;
+                    if (IsSelectAreaMode || IsSelectAllMode)
+                    {
+                        SelectAreaFirstX = SelectAreaFirstX;
+                        SelectAreaFirstY = SelectAreaFirstY;
+                        SelectAreaSecondX = SelectAreaSecondX;
+                        SelectAreaSecondY = SelectAreaSecondY;
+                    }
                     break;
                 case "ID":
                     NetworkNumberLabel.Content = NetworkNumber;
@@ -752,9 +761,11 @@ namespace SamSoarII.Shell.Models
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
             OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
+            OnCorePropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
+        public bool IsCommentMode { get { return core.IsCommentMode; } }
 
         public LadderEditMenu CMEdit
         {
@@ -804,30 +815,6 @@ namespace SamSoarII.Shell.Models
             }
         }
         
-        private bool iscommentmode;
-        public bool IsCommentMode
-        {
-            get
-            {
-                return this.iscommentmode;
-            }
-            set
-            {
-                this.iscommentmode = value;
-                foreach (LadderUnitModel unit in Core.Children.Concat(Core.VLines))
-                    if (unit.View != null) unit.View.IsCommentMode = iscommentmode;
-                LadderCanvas.Height = HeightUnit * RowCount;
-                if (IsSelectAreaMode || IsSelectAllMode)
-                {
-                    SelectAreaFirstX = SelectAreaFirstX;
-                    SelectAreaFirstY = SelectAreaFirstY;
-                    SelectAreaSecondX = SelectAreaSecondX;
-                    SelectAreaSecondY = SelectAreaSecondY;
-                }
-            }
-        }
-
-        //private bool ismasked;
         public bool IsMasked
         {
             get { return Core.IsMasked; }
@@ -897,6 +884,12 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            if (ViewParent != null) ViewParent.IsViewModified = true;
+        }
 
         private void OnLadderNetworkEdit(object sender, LadderEditEventArgs e)
         {

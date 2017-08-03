@@ -147,23 +147,6 @@ namespace SamSoarII.Core.Models
             IsModified = true;
             Modified(window, new RoutedEventArgs());
         }
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                foreach (LadderDiagramModel diagram in Diagrams)
-                    diagram.LadderMode = laddermode;
-                foreach (FuncBlockModel funcblock in FuncBlocks)
-                    funcblock.LadderMode = laddermode;
-                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
-            }
-        }
         
         #region Models
 
@@ -236,8 +219,45 @@ namespace SamSoarII.Core.Models
             set { this.ptvitem = value; }
         }
 
+        public PropertyChangedEventHandler ViewPropertyChanged = delegate { };
+
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (LadderDiagramModel diagram in Diagrams)
+                    diagram.LadderMode = laddermode;
+                foreach (FuncBlockModel funcblock in FuncBlocks)
+                    funcblock.LadderMode = laddermode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                foreach (LadderDiagramModel diagram in Diagrams)
+                    diagram.IsCommentMode = iscommentmode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
+
+            }
+        }
+
         #endregion
-        
+
         #region Save & Load
 
         public void Save(XElement xele)
@@ -353,7 +373,6 @@ namespace SamSoarII.Core.Models
         }
         private void OnDiagramPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "LadderMode" || e.PropertyName == "IsExpand") return;
             InvokeModify(this);
         }
 
@@ -372,7 +391,7 @@ namespace SamSoarII.Core.Models
         }
         private void OnFuncBlockPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "LadderMode" || e.PropertyName == "Funcs") return;
+            if (e.PropertyName == "Funcs") return;
             InvokeModify(this);
         }
 

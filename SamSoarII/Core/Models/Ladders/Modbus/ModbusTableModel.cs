@@ -67,7 +67,17 @@ namespace SamSoarII.Core.Models
         }
         private void OnChildrenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            parent.InvokeModify((ModbusModel)sender);
+            ModbusModel mmodel = (ModbusModel)sender;
+            parent.InvokeModify(mmodel);
+            if (e.PropertyName.Equals("Name"))
+            {
+                childrenChangedInvokeable = false;
+                int id = children.IndexOf(mmodel);
+                children.Remove(mmodel);
+                children.Insert(id, mmodel);
+                childrenChangedInvokeable = true;
+                ChildrenChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
         }
 
         public void ChildrenSwap(int id1, int id2)

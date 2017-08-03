@@ -54,8 +54,6 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             DataContext = this;
             Core = _core;
-            if (Core.Parent.View != null)
-                IsCommentMode = Core.Parent.View.IsCommentMode;
             _selectRect = new SelectRect();
             outline = new NetworkOutlineViewModel();
             cmEdit = new LadderEditMenu();
@@ -98,6 +96,7 @@ namespace SamSoarII.Shell.Models
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
+                    _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     _core.ChildrenChanged -= OnCoreChildrenChanged;
                     if (_core.View != null) _core.View = null;
                 }
@@ -105,6 +104,7 @@ namespace SamSoarII.Shell.Models
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    core.ViewPropertyChanged += OnCorePropertyChanged;
                     core.ChildrenChanged += OnCoreChildrenChanged;
                     if (core.View != this) core.View = this;
                     Update();
@@ -183,7 +183,7 @@ namespace SamSoarII.Shell.Models
                             SelectRectDown();
                         }
                     }
-                    else if (LadderUnitModel.Formats[(int)type].Length == 0)
+                    else if (LadderUnitModel.Formats[(int)type].Formats.Count == 0)
                     {
                         Core.QuickInsertElement(type, _selectRect.Core);
                         SelectRectRight();
@@ -1943,7 +1943,18 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-        
+
+        #region Dynamic
+
+        private bool isviewmodified;
+        public bool IsViewModified
+        {
+            get { return this.isviewmodified; }
+            set { this.isviewmodified = value; }
+        }
+
+        #endregion
+
         #region network drag(only not IsExpand)
 
         private LadderNetworkViewModel dragItem;
@@ -2087,25 +2098,7 @@ namespace SamSoarII.Shell.Models
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
-        
-        private bool iscommentmode;
-        public bool IsCommentMode
-        {
-            get
-            {
-                return this.iscommentmode;
-            }
-            set
-            {
-                this.iscommentmode = value;
-                if (_selectRect != null) _selectRect.IsCommentMode = iscommentmode;
-                if (Inst != null) Inst.IsCommentMode = value;
-                foreach (LadderNetworkModel net in Core.Children)
-                {
-                    if (net.View != null) net.View.IsCommentMode = iscommentmode;
-                }
-            }
-        }
+        public bool IsCommentMode { get { return core.IsCommentMode; } }
         
         private int WidthUnit { get { return GlobalSetting.LadderWidthUnit; } }
         private int HeightUnit { get { return IsCommentMode ? GlobalSetting.LadderCommentModeHeightUnit : GlobalSetting.LadderHeightUnit; } }
@@ -2115,6 +2108,17 @@ namespace SamSoarII.Shell.Models
         #region Event Handler
 
         public event RoutedEventHandler SelectionChanged = delegate { };
+        
+        private void MainScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            isviewmodified = true;
+        }
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            isviewmodified = true;
+        }
 
         #region Expander
 
@@ -2798,6 +2802,6 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #endregion
-
+        
     }
 }

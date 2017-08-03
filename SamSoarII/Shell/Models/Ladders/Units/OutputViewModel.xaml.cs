@@ -38,8 +38,6 @@ namespace SamSoarII.Shell.Models
             recreating = true;
             ReinitializeComponent();
             DataContext = this;
-            if (Core?.Parent?.View != null)
-                IsCommentMode = Core.Parent.View.IsCommentMode;
             recreating = false;
         }
 
@@ -77,17 +75,17 @@ namespace SamSoarII.Shell.Models
                 default: CenterTextBlock.Text = ""; break;
             }
             ValueTextBlock.Visibility = Core.Children.Count >= 1
-                ? Visibility.Visible
-                : Visibility.Hidden;
+                ? Visibility.Visible : Visibility.Hidden;
             CountTextBlock.Visibility = Core.Children.Count >= 2
-                ? Visibility.Visible
-                : Visibility.Hidden;
-            CommentArea.Children.Clear();
-            for (int i = 0; i < Core.Children.Count; i++)
+                ? Visibility.Visible : Visibility.Hidden;
+            CommentArea.Visibility = IsCommentMode 
+                ? Visibility.Visible : Visibility.Hidden;
+            for (int i = 0; i < comments.Length; i++)
             {
-                if (comments[i] == null)
-                    comments[i] = new TextBlock();
-                CommentArea.Children.Add(comments[i]);
+                if (i < Core.Children.Count)
+                    ShowComment(i);
+                else
+                    HideComment(i);
             }
             Update();
         }
@@ -97,6 +95,20 @@ namespace SamSoarII.Shell.Models
         #region Shell
 
         private TextBlock[] comments;
+        public void ShowComment(int id)
+        {
+            if (comments[id] == null)
+            {
+                comments[id] = new TextBlock();
+                CommentArea.Children.Add(comments[id]);
+            }
+            comments[id].Visibility = Visibility.Visible;
+        }
+        public void HideComment(int id)
+        {
+            if (comments[id] == null) return;
+            comments[id].Visibility = Visibility.Hidden;
+        }
 
         public string ValueText
         {
@@ -130,14 +142,12 @@ namespace SamSoarII.Shell.Models
                 return "";
             }
         }
-        
-        public override bool IsCommentMode
+
+        protected override void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            set
-            {
-                base.IsCommentMode = value;
+            base.OnCorePropertyChanged(sender, e);
+            if (e.PropertyName.Equals("IsCommentMode"))
                 CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
-            }
         }
 
         public override void Update(int flags = UPDATE_ALL)

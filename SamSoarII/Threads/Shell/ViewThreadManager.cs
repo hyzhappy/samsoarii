@@ -18,7 +18,7 @@ namespace SamSoarII.Threads
             Aborted += OnAborted;
             oldscrolloffset = 0;
             current = null;
-            TimeSpan = 20;
+            TimeSpan = 50;
         }
         
         #region Number
@@ -42,7 +42,7 @@ namespace SamSoarII.Threads
                 {
                     current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        if (!current.IsLoaded)
+                        if (!current.Scroll.IsLoaded)
                             current.Loaded += OnCurrentLoaded;
                         else
                             GenerateCurrent();
@@ -59,26 +59,31 @@ namespace SamSoarII.Threads
             try
             {
                 double newscrolloffset = current.Scroll.VerticalOffset;
-                if (newscrolloffset - oldscrolloffset > 2.0)
+                if (current.IsViewModified || newscrolloffset - oldscrolloffset > 5.0)
                 {
-                    for (int i = 0; i < current.Core.Children.Count; i++)
-                        current.Core.Children[i].View.DynamicUpdate();
-                    oldscrolloffset = newscrolloffset;
+                    do
+                    {
+                        current.IsViewModified = false;
+                        for (int i = 0; i < current.Core.Children.Count; i++)
+                            current.Core.Children[i].View.DynamicUpdate();
+                        oldscrolloffset = newscrolloffset;
+                    } while (current.IsViewModified);
                 }
-                else if (oldscrolloffset - newscrolloffset > 2.0)
+                else if (oldscrolloffset - newscrolloffset > 5.0)
                 {
                     for (int i = current.Core.Children.Count - 1; i >= 0; i--)
                         current.Core.Children[i].View.DynamicUpdate();
                     oldscrolloffset = newscrolloffset;
                 }
+
                 double newinstoffset = current.Core.Inst.View.Scroll.VerticalOffset;
-                if (newinstoffset - oldinstoffset > 2.0)
+                if (newinstoffset - oldinstoffset > 5.0)
                 {
                     for (int i = 0; i < current.Core.Children.Count; i++)
                         current.Core.Children[i].Inst.View.DynamicUpdate();
                     oldinstoffset = newinstoffset;
                 }
-                else if (oldinstoffset - newinstoffset > 2.0)
+                else if (oldinstoffset - newinstoffset > 5.0)
                 {
                     for (int i = current.Core.Children.Count - 1; i >= 0; i--)
                         current.Core.Children[i].Inst.View.DynamicUpdate();

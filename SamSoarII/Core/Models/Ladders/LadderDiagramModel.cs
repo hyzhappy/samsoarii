@@ -128,25 +128,7 @@ namespace SamSoarII.Core.Models
             get { return this.isitpr; }
             set { this.isitpr = value;}
         }
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                if (Inst != null) Inst.LadderMode = laddermode;
-                foreach (LadderNetworkModel network in Children)
-                    network.LadderMode = laddermode;
-                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
-            }
-        }
         
-
         #endregion
 
         #region Inst
@@ -207,6 +189,43 @@ namespace SamSoarII.Core.Models
         {
             get { return this.tab; }
             set { this.tab = value; }
+        }
+
+        public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
+
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                if (Inst != null) Inst.LadderMode = laddermode;
+                foreach (LadderNetworkModel network in Children)
+                    network.LadderMode = laddermode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                if (Inst != null) Inst.IsCommentMode = iscommentmode;
+                foreach (LadderNetworkModel network in Children)
+                    network.IsCommentMode = iscommentmode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+
+            }
         }
 
         #endregion
@@ -622,23 +641,42 @@ namespace SamSoarII.Core.Models
             }
             if ((cmd.Type & CMDTYPE_MoveUnit) != 0)
             {
-                cmd.Network.Move(cmd.MoveUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY);
-                cmd.Network.MoveV(cmd.MoveUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY);
+                List<LadderUnitModel> olds = new List<LadderUnitModel>();
+                olds.AddRange(cmd.Network.Move(cmd.MoveUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY));
+                olds.AddRange(cmd.Network.MoveV(cmd.MoveUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }), cmd.MoveX, cmd.MoveY));
+                if (olds.Count() > 0)
+                {
+                    if ((cmd.Type & CMDTYPE_ReplaceUnit) == 0)
+                    {
+                        cmd.Type |= CMDTYPE_ReplaceUnit;
+                        cmd.OldUnits = olds.Where(u => u != null).ToArray();
+                        cmd.NewUnits = new LadderUnitModel[] { };
+                    }
+                    else
+                    {
+                        cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
+                    }
+                }
             }
             if ((cmd.Type & CMDTYPE_ReplaceUnit) != 0)
             {
+                List<LadderUnitModel> olds = new List<LadderUnitModel>();
                 if (cmd.NewUnits.Where(u => u.OldParent != null && u.OldParent != cmd.Network).Count() > 0)
                 {
                     foreach (LadderNetworkModel network in children)
                     {
-                        network.Add(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                        network.AddV(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                        olds.AddRange(network.Add(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                        olds.AddRange(network.AddV(cmd.NewUnits.Where((_unit) => { return (_unit.OldParent == network || _unit.OldParent == null && network == cmd.Network) && _unit.Shape == LadderUnitModel.Shapes.VLine; })));
                     }
                 }
                 else
                 {
-                    cmd.Network.Add(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; }));
-                    cmd.Network.AddV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; }));
+                    olds.AddRange(cmd.Network.Add(cmd.NewUnits.Where((_unit) => { return _unit.Shape != LadderUnitModel.Shapes.VLine; })));
+                    olds.AddRange(cmd.Network.AddV(cmd.NewUnits.Where((_unit) => { return _unit.Shape == LadderUnitModel.Shapes.VLine; })));
+                }
+                if (olds.Count() > 0)
+                {
+                    cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
                 }
                 area.Update(cmd.NewUnits);
             }
@@ -972,7 +1010,7 @@ namespace SamSoarII.Core.Models
                     throw new ValueParseException(Properties.Resources.Message_Func_Name_Required, null);
                 IEnumerable<FuncModel> fit = Parent.Funcs.Where(_func => _func.Name.Equals(items[1]));
                 if (fit.Count() == 0)
-                    throw new ValueParseException(String.Format("{0}{1:s}", Properties.Resources.Message_CFunc_Not_Found, items[1]), LadderUnitModel.Formats[(int)type][0]);
+                    throw new ValueParseException(String.Format("{0}{1:s}", Properties.Resources.Message_CFunc_Not_Found, items[1]), LadderUnitModel.Formats[(int)type].Formats[0]);
                 FuncModel func = fit.First();
                 newunit = new LadderUnitModel(null, func);
             }

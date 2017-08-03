@@ -59,7 +59,7 @@ namespace SamSoarII.Core.Models
         private string comment;
         public string Comment
         {
-            get { return this.name; }
+            get { return this.comment; }
             set { this.comment = value; PropertyChanged(this, new PropertyChangedEventArgs("Comment")); }
         }
 

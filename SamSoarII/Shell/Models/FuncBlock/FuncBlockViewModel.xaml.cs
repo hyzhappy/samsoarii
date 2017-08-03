@@ -141,15 +141,18 @@ namespace SamSoarII.Shell.Models
             {
                 if (core == value) return;
                 FuncBlockModel _core = core;
-                this.core = value;
+                this.core = null;
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
+                    _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     if (_core.View != null) _core.View = null;
                 }
+                this.core = value;
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    core.ViewPropertyChanged += OnCorePropertyChanged;
                     CodeTextBox.Text = core.Code;
                     if (core.View != this) core.View = this;
                     OnCorePropertyChanged(this, new PropertyChangedEventArgs("Name"));

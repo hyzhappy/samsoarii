@@ -262,20 +262,14 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
-            try
-            {
-                datatype = int.Parse(xele.Attribute("DataType").Value);
-                string name = xele.Attribute("Name").Value;
-                ValueInfo vinfo = ValueManager[name];
-                string intratype = xele.Attribute("IntraType").Value;
-                int intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
-                int flag = int.Parse(xele.Attribute("Flag").Value);
-                Store = _FindStore(vinfo, intratype, intraaddr, flag);
-            }
-            catch (Exception)
-            {
-                if (Store == null) Store = new ValueStore(ValueManager.EmptyInfo, ValueModel.Types.NULL);
-            }
+            datatype = int.Parse(xele.Attribute("DataType").Value);
+            string name = xele.Attribute("Name").Value;
+            ValueInfo vinfo = ValueManager[name];
+            string intratype = xele.Attribute("IntraType").Value;
+            int intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
+            XAttribute xatt = xele.Attribute("Flag");
+            int flag = xatt != null ? int.Parse(xatt.Value) : 1;
+            Store = _FindStore(vinfo, intratype, intraaddr, flag);
         }
 
         public void Save(XElement xele)

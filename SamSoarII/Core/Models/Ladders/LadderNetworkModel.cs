@@ -118,29 +118,6 @@ namespace SamSoarII.Core.Models
             }
         }
 
-        private bool isexpand;
-        public bool IsExpand
-        {
-            get { return this.isexpand; }
-            set { this.isexpand = value; PropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
-        }
-        
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                foreach (LadderUnitModel unit in Children.Concat(VLines))
-                    unit.LadderMode = laddermode;
-                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
-            }
-        }
-
         #endregion
 
         #region Inst
@@ -195,6 +172,49 @@ namespace SamSoarII.Core.Models
             get { return this.ptvitem; }
             set { this.ptvitem = value; }
         }
+
+        public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
+
+        private bool isexpand;
+        public bool IsExpand
+        {
+            get { return this.isexpand; }
+            set { this.isexpand = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
+        }
+
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (LadderUnitModel unit in Children.Concat(VLines))
+                    unit.LadderMode = laddermode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                foreach (LadderUnitModel unit in Children.Concat(VLines))
+                    unit.IsCommentMode = iscommentmode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
+            }
+        }
+
+
 
         #endregion
 
@@ -275,7 +295,7 @@ namespace SamSoarII.Core.Models
 
         #region Unit Modify
 
-        public void Add(LadderUnitModel lumodel)
+        public LadderUnitModel Add(LadderUnitModel lumodel)
         {
             if (lumodel.X < 0 || lumodel.Y < 0)
                 throw new LadderUnitChangedEventException(LadderUnitAction.ADD, Properties.Resources.LadderUnit_LocationError);
@@ -298,11 +318,13 @@ namespace SamSoarII.Core.Models
             children[lumodel.X, lumodel.Y] = lumodel;
             lumodel.Parent = this;
             lumodel.Invoke(LadderUnitAction.ADD);
+            return _lumodel;
         }
         
-        public void Add(IEnumerable<LadderUnitModel> lumodels)
+        public IEnumerable<LadderUnitModel> Add(IEnumerable<LadderUnitModel> lumodels)
         {
-            foreach (LadderUnitModel lumodel in lumodels) Add(lumodel);
+            foreach (LadderUnitModel lumodel in lumodels)
+                yield return Add(lumodel);
         }
 
         public void Remove(LadderUnitModel lumodel)
@@ -316,15 +338,19 @@ namespace SamSoarII.Core.Models
             foreach (LadderUnitModel lumodel in lumodels) Remove(lumodel);
         }
 
-        public void Move(LadderUnitModel lumodel, int dx, int dy)
+        public LadderUnitModel Move(LadderUnitModel lumodel, int dx, int dy)
         {
             children[lumodel.X, lumodel.Y] = null;
             lumodel.X += dx;
             lumodel.Y += dy;
+            LadderUnitModel _lumodel = children[lumodel.X, lumodel.Y];
+            if (_lumodel != null) Remove(_lumodel);
             children[lumodel.X, lumodel.Y] = lumodel;
             lumodel.Invoke(LadderUnitAction.MOVE);
+            return _lumodel;
         }
-        public void Move(IEnumerable<LadderUnitModel> lumodels, int dx, int dy)
+
+        public IEnumerable<LadderUnitModel> Move(IEnumerable<LadderUnitModel> lumodels, int dx, int dy)
         {
             foreach (LadderUnitModel lumodel in lumodels)
             {
@@ -334,8 +360,11 @@ namespace SamSoarII.Core.Models
             }
             foreach (LadderUnitModel lumodel in lumodels)
             {
+                LadderUnitModel _lumodel = children[lumodel.X, lumodel.Y];
+                if (_lumodel != null) Remove(_lumodel);
                 children[lumodel.X, lumodel.Y] = lumodel;
                 lumodel.Invoke(LadderUnitAction.MOVE);
+                yield return _lumodel;
             }
         }
 
@@ -343,17 +372,19 @@ namespace SamSoarII.Core.Models
 
         #region VLine Modify
 
-        public void AddV(LadderUnitModel lumodel)
+        public LadderUnitModel AddV(LadderUnitModel lumodel)
         {
             LadderUnitModel _lumodel = vlines[lumodel.X, lumodel.Y];
             if (_lumodel != null) Remove(_lumodel);
             vlines[lumodel.X, lumodel.Y] = lumodel;
             lumodel.Parent = this;
             lumodel.Invoke(LadderUnitAction.ADD);
+            return _lumodel;
         }
-        public void AddV(IEnumerable<LadderUnitModel> lumodels)
+        public IEnumerable<LadderUnitModel> AddV(IEnumerable<LadderUnitModel> lumodels)
         {
-            foreach (LadderUnitModel lumodel in lumodels) AddV(lumodel);
+            foreach (LadderUnitModel lumodel in lumodels)
+                yield return AddV(lumodel);
         }
 
         public void RemoveV(LadderUnitModel lumodel)
@@ -367,15 +398,18 @@ namespace SamSoarII.Core.Models
             foreach (LadderUnitModel lumodel in lumodels) RemoveV(lumodel);
         }
 
-        public void MoveV(LadderUnitModel lumodel, int dx, int dy)
+        public LadderUnitModel MoveV(LadderUnitModel lumodel, int dx, int dy)
         {
             vlines[lumodel.X, lumodel.Y] = null;
             lumodel.X += dx;
             lumodel.Y += dy;
+            LadderUnitModel _lumodel = vlines[lumodel.X, lumodel.Y];
+            if (_lumodel != null) RemoveV(_lumodel);
             vlines[lumodel.X, lumodel.Y] = lumodel;
             lumodel.Invoke(LadderUnitAction.MOVE);
+            return _lumodel;
         }
-        public void MoveV(IEnumerable<LadderUnitModel> lumodels, int dx, int dy)
+        public IEnumerable<LadderUnitModel> MoveV(IEnumerable<LadderUnitModel> lumodels, int dx, int dy)
         {
             foreach (LadderUnitModel lumodel in lumodels)
             {
@@ -385,8 +419,11 @@ namespace SamSoarII.Core.Models
             }
             foreach (LadderUnitModel lumodel in lumodels)
             {
+                LadderUnitModel _lumodel = vlines[lumodel.X, lumodel.Y];
+                if (_lumodel != null) RemoveV(_lumodel);
                 vlines[lumodel.X, lumodel.Y] = lumodel;
                 lumodel.Invoke(LadderUnitAction.MOVE);
+                yield return _lumodel;
             }
         }
 

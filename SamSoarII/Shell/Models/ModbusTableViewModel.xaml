@@ -21,7 +21,7 @@
             <ListBox x:Uid="LB_Tables" x:Name="LB_Tables"
                      Grid.Row="0" Grid.Column="0"
                      ItemsSource="{Binding ListItems}"
-                     SelectionChanged="LB_Tables_SelectionChanged">
+                     SelectedItem="{Binding Current, Mode=TwoWay}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Style.Triggers>
