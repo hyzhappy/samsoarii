@@ -969,7 +969,7 @@ namespace SamSoarII.Core.Models
                     throw new ValueParseException(Properties.Resources.Message_Func_Name_Required, null);
                 IEnumerable<FuncModel> fit = Parent.Funcs.Where(_func => _func.Name.Equals(items[1]));
                 if (fit.Count() == 0)
-                    throw new ValueParseException(String.Format("{0}{1:s}", Properties.Resources.Message_CFunc_Not_Found, items[1]), LadderUnitModel.Formats[(int)type][0]);
+                    throw new ValueParseException(String.Format("{0}{1:s}", Properties.Resources.Message_CFunc_Not_Found, items[1]), LadderUnitModel.Formats[(int)type].Formats[0]);
                 FuncModel func = fit.First();
                 newunit = new LadderUnitModel(null, func);
             }

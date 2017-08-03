@@ -1501,6 +1501,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Filter Time 的本地化字符串。
+        /// </summary>
+        public static string Filter_Time {
+            get {
+                return ResourceManager.GetString("Filter_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Float add 的本地化字符串。
         /// </summary>
         public static string Float_Add {
@@ -4543,6 +4552,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Not Enabled 的本地化字符串。
+        /// </summary>
+        public static string Not_Enabled {
+            get {
+                return ResourceManager.GetString("Not_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Number Lock 的本地化字符串。
         /// </summary>
         public static string Number_Lock {
@@ -5731,6 +5749,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Thermocouple 的本地化字符串。
+        /// </summary>
+        public static string Thermocouple {
+            get {
+                return ResourceManager.GetString("Thermocouple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Timed Save 的本地化字符串。
         /// </summary>
         public static string Timed_Save {
@@ -5898,6 +5925,15 @@ namespace SamSoarII.Properties {
         public static string Upload_Encryption {
             get {
                 return ResourceManager.GetString("Upload_Encryption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Use expansion module 的本地化字符串。
+        /// </summary>
+        public static string Use_Expansion_Module {
+            get {
+                return ResourceManager.GetString("Use_Expansion_Module", resourceCulture);
             }
         }
         

@@ -778,7 +778,7 @@ namespace SamSoarII.Shell.Windows
                             // 第一个参数必须为指令名称
                             else if (i == 0)
                             {
-                                if (LadderUnitModel.NameOfTypes.Contains(args[i].Text))
+                                if (LadderUnitModel.Formats.Where(f => f.Name.Equals(args[i].Text)).Count() > 0)
                                 {
                                     args[i].Type = ARG_INSTRUCTION;
                                 }

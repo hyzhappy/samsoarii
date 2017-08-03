@@ -25,7 +25,6 @@
                        Canvas.Top="0" Canvas.Left="0" Height="50" Width="300" TextAlignment="Center">
             </TextBlock>
             <Canvas x:Name="CenterCanvas" Canvas.Top="50" Canvas.Left="100" Width="100" Height="100">
-                <Rectangle Width="60" Height="60" Canvas.Top="20" Canvas.Left="20" Fill="Blue" Visibility="Hidden" Opacity="0.5"></Rectangle>
                 <TextBlock x:Name="CenterTextBlock"
                            Canvas.Top="20" Width="100" TextAlignment="Center"
                            FontSize="36" FontFamily="Courier New" FontWeight="Heavy">

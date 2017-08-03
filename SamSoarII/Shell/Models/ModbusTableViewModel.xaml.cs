@@ -82,6 +82,7 @@ namespace SamSoarII.Shell.Models
         private void OnCoreChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             InvokePropertyChanged("ListItems");
+            if (e.NewItems != null) Current = (ModbusModel)(e.NewItems[0]);
             UpdateButtonEnable();
         }
 
@@ -98,22 +99,27 @@ namespace SamSoarII.Shell.Models
 
         public IList<ModbusModel> ListItems
         {
-            get
-            {
-                return Core?.Children;
-            }
+            get { return Core?.Children; }
         }
 
-        private ModbusModel oldcurrent = null;
+        private ModbusModel current = null;
         public ModbusModel Current
         {
             get
             {
-                return LB_Tables.SelectedItem != null ? (ModbusModel)(LB_Tables.SelectedItem) : null;
+                return this.current;
             }
             set
             {
-                LB_Tables.SelectedItem = value;
+                if (current == value) return;
+                if (current != null)
+                    current.ChildrenChanged -= OnModelChildrenChanged;
+                this.current = value;
+                if (current != null)
+                    current.ChildrenChanged += OnModelChildrenChanged;
+                UpdateButtonEnable();
+                InvokePropertyChanged("GridItems");
+                Invoke(TabAction.ACTIVE);
             }
         }
 
@@ -361,20 +367,7 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-
-        private void LB_Tables_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Invoke(TabAction.ACTIVE);
-            UpdateButtonEnable();
-            if (oldcurrent != null)
-                oldcurrent.ChildrenChanged -= OnModelChildrenChanged;
-            ModbusModel newcurrent = e.AddedItems != null && e.AddedItems.Count > 0 ? (ModbusModel)e.AddedItems[0] : null;
-            if (newcurrent != null)
-                newcurrent.ChildrenChanged += OnModelChildrenChanged;
-            oldcurrent = newcurrent;
-            InvokePropertyChanged("GridItems");
-        }
-
+        
         private void OnModelChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             InvokePropertyChanged("GridItems");

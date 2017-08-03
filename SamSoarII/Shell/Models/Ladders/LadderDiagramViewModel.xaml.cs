@@ -183,7 +183,7 @@ namespace SamSoarII.Shell.Models
                             SelectRectDown();
                         }
                     }
-                    else if (LadderUnitModel.Formats[(int)type].Length == 0)
+                    else if (LadderUnitModel.Formats[(int)type].Formats.Count == 0)
                     {
                         Core.QuickInsertElement(type, _selectRect.Core);
                         SelectRectRight();
@@ -1943,7 +1943,18 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
-        
+
+        #region Dynamic
+
+        private bool isviewmodified;
+        public bool IsViewModified
+        {
+            get { return this.isviewmodified; }
+            set { this.isviewmodified = value; }
+        }
+
+        #endregion
+
         #region network drag(only not IsExpand)
 
         private LadderNetworkViewModel dragItem;
@@ -2115,6 +2126,17 @@ namespace SamSoarII.Shell.Models
         #region Event Handler
 
         public event RoutedEventHandler SelectionChanged = delegate { };
+        
+        private void MainScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            isviewmodified = true;
+        }
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            isviewmodified = true;
+        }
 
         #region Expander
 
@@ -2798,6 +2820,6 @@ namespace SamSoarII.Shell.Models
         #endregion
 
         #endregion
-
+        
     }
 }

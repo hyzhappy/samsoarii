@@ -2187,4 +2187,16 @@
   <data name="Message_STL_Over" xml:space="preserve">
     <value>It already had a STL instruction above.</value>
   </data>
+  <data name="Filter_Time" xml:space="preserve">
+    <value>Filter Time</value>
+  </data>
+  <data name="Not_Enabled" xml:space="preserve">
+    <value>Not Enabled</value>
+  </data>
+  <data name="Thermocouple" xml:space="preserve">
+    <value>Thermocouple</value>
+  </data>
+  <data name="Use_Expansion_Module" xml:space="preserve">
+    <value>Use expansion module</value>
+  </data>
 </root>

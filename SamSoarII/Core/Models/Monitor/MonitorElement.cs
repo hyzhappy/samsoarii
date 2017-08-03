@@ -267,7 +267,8 @@ namespace SamSoarII.Core.Models
             ValueInfo vinfo = ValueManager[name];
             string intratype = xele.Attribute("IntraType").Value;
             int intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
-            int flag = int.Parse(xele.Attribute("Flag").Value);
+            XAttribute xatt = xele.Attribute("Flag");
+            int flag = xatt != null ? int.Parse(xatt.Value) : 1;
             Store = _FindStore(vinfo, intratype, intraaddr, flag);
         }
 

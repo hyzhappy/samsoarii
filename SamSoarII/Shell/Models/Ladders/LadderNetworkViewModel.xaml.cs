@@ -159,6 +159,7 @@ namespace SamSoarII.Shell.Models
                     }
                     PropertyChanged(this, new PropertyChangedEventArgs("RowCount"));
                     PropertyChanged(this, new PropertyChangedEventArgs("IsExpand"));
+                    ViewParent.IsViewModified = true;
                     break;
                 case "IsMasked":
                     if (IsMasked)
@@ -897,6 +898,12 @@ namespace SamSoarII.Shell.Models
         }
 
         #endregion
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            if (ViewParent != null) ViewParent.IsViewModified = true;
+        }
 
         private void OnLadderNetworkEdit(object sender, LadderEditEventArgs e)
         {
