@@ -108,6 +108,13 @@ namespace SamSoarII.Core.Models
             get { return this.path; }
         }
         
+        private bool isexpand;
+        public bool IsExpand
+        {
+            get { return this.isexpand; }
+            set { this.isexpand = value; PropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
+        }
+
         private bool ismain;
         public bool IsMainLadder
         {
@@ -183,16 +190,9 @@ namespace SamSoarII.Core.Models
             get { return this.tab; }
             set { this.tab = value; }
         }
-        
+
         public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
 
-        private bool isexpand;
-        public bool IsExpand
-        {
-            get { return this.isexpand; }
-            set { this.isexpand = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
-        }
-        
         private LadderModes laddermode;
         public LadderModes LadderMode
         {
@@ -223,10 +223,11 @@ namespace SamSoarII.Core.Models
                 if (Inst != null) Inst.IsCommentMode = iscommentmode;
                 foreach (LadderNetworkModel network in Children)
                     network.IsCommentMode = iscommentmode;
-                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+
             }
         }
-        
+
         #endregion
 
         #region Load & Save
@@ -648,12 +649,12 @@ namespace SamSoarII.Core.Models
                     if ((cmd.Type & CMDTYPE_ReplaceUnit) == 0)
                     {
                         cmd.Type |= CMDTYPE_ReplaceUnit;
-                        cmd.OldUnits = olds.ToArray();
+                        cmd.OldUnits = olds.Where(u => u != null).ToArray();
                         cmd.NewUnits = new LadderUnitModel[] { };
                     }
                     else
                     {
-                        cmd.OldUnits = cmd.OldUnits.Union(olds).ToArray();
+                        cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
                     }
                 }
             }
@@ -675,7 +676,7 @@ namespace SamSoarII.Core.Models
                 }
                 if (olds.Count() > 0)
                 {
-                    cmd.OldUnits = cmd.OldUnits.Union(olds).ToArray();
+                    cmd.OldUnits = cmd.OldUnits.Union(olds.Where(u => u != null)).ToArray();
                 }
                 area.Update(cmd.NewUnits);
             }

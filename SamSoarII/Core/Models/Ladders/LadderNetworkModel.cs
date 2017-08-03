@@ -117,7 +117,6 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
             }
         }
-        
 
         #endregion
 
@@ -173,7 +172,7 @@ namespace SamSoarII.Core.Models
             get { return this.ptvitem; }
             set { this.ptvitem = value; }
         }
-        
+
         public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
 
         private bool isexpand;
@@ -214,6 +213,8 @@ namespace SamSoarII.Core.Models
                 ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             }
         }
+
+
 
         #endregion
 
