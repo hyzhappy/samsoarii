@@ -183,6 +183,7 @@ namespace SamSoarII.Core.Models
                         IP_Mode_Index4 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_Mode_Index"));
             }
         }
         private int IP_Mode_Index1;
@@ -207,6 +208,7 @@ namespace SamSoarII.Core.Models
             {
                 if(value >= 0)
                     _IP_Channel_Index = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_Channel_Index"));
                 PropertyChanged(this,new PropertyChangedEventArgs("IP_Channel_CB_Enabled"));
                 PropertyChanged(this, new PropertyChangedEventArgs("IP_Mode_Index"));
                 PropertyChanged(this, new PropertyChangedEventArgs("SampleValue"));
@@ -246,6 +248,7 @@ namespace SamSoarII.Core.Models
                         IP_Channel_CB_Enabled4 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_Channel_CB_Enabled"));
             }
         }
         private bool IP_Channel_CB_Enabled1;
@@ -293,6 +296,7 @@ namespace SamSoarII.Core.Models
                         IP_SampleTime_Index4 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_SampleTime_Index"));
             }
         }
         private int IP_SampleTime_Index1;
@@ -335,6 +339,7 @@ namespace SamSoarII.Core.Models
                         SampleValue4 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("SampleValue"));
             }
         }
         private int IP_StartRange1;
@@ -372,6 +377,7 @@ namespace SamSoarII.Core.Models
                         IP_StartRange4 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_StartRange"));
             }
         }
         private int IP_EndRange1;
@@ -409,6 +415,7 @@ namespace SamSoarII.Core.Models
                         IP_EndRange4 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("IP_EndRange"));
             }
         }
 
@@ -432,6 +439,7 @@ namespace SamSoarII.Core.Models
             {
                 if (value >= 0)
                     _OP_Channel_Index = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("OP_Channel_Index"));
                 PropertyChanged(this, new PropertyChangedEventArgs("OP_Channel_CB_Enabled"));
                 PropertyChanged(this, new PropertyChangedEventArgs("OP_Mode_Index"));
                 PropertyChanged(this, new PropertyChangedEventArgs("OP_StartRange"));
@@ -462,6 +470,7 @@ namespace SamSoarII.Core.Models
                         OP_Channel_CB_Enabled2 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("OP_Channel_CB_Enabled"));
             }
         }
         private bool OP_Channel_CB_Enabled1;
@@ -499,6 +508,7 @@ namespace SamSoarII.Core.Models
                         OP_Mode_Index2 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("OP_Mode_Index"));
             }
         }
         private int OP_Mode_Index1;
@@ -529,6 +539,7 @@ namespace SamSoarII.Core.Models
                         OP_StartRange2 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("OP_StartRange"));
             }
         }
         private int OP_EndRange1;
@@ -556,6 +567,7 @@ namespace SamSoarII.Core.Models
                         OP_EndRange2 = value;
                         break;
                 }
+                PropertyChanged(this, new PropertyChangedEventArgs("OP_EndRange"));
             }
         }
 
@@ -576,6 +588,7 @@ namespace SamSoarII.Core.Models
             set
             {
                 _filterTime_Index = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("FilterTime_Index"));
             }
         }
 
@@ -602,9 +615,49 @@ namespace SamSoarII.Core.Models
             PropertyChanged = null;
         }
 
-        public void Load(IParams that)
+        public void Load(IParams iparams)
         {
-            
+            if (iparams is ExpansionUnitModuleParams)
+            {
+                ExpansionUnitModuleParams that = (ExpansionUnitModuleParams)iparams;
+                ModuleTypeIndex = that.ModuleTypeIndex;
+                IP_Channel_Index = that.IP_Channel_Index;
+                OP_Channel_Index = that.OP_Channel_Index;
+                UseModule = that.UseModule;
+                IP_Channel_CB_Enabled1 = that.IP_Channel_CB_Enabled1;
+                IP_Channel_CB_Enabled2 = that.IP_Channel_CB_Enabled2;
+                IP_Channel_CB_Enabled3 = that.IP_Channel_CB_Enabled3;
+                IP_Channel_CB_Enabled4 = that.IP_Channel_CB_Enabled4;
+                OP_Channel_CB_Enabled1 = that.OP_Channel_CB_Enabled1;
+                OP_Channel_CB_Enabled2 = that.OP_Channel_CB_Enabled2;
+                IP_Mode_Index1 = that.IP_Mode_Index1;
+                IP_Mode_Index2 = that.IP_Mode_Index2;
+                IP_Mode_Index3 = that.IP_Mode_Index3;
+                IP_Mode_Index4 = that.IP_Mode_Index4;
+                OP_Mode_Index1 = that.OP_Mode_Index1;
+                OP_Mode_Index2 = that.OP_Mode_Index2;
+                IP_SampleTime_Index1 = that.IP_SampleTime_Index1;
+                IP_SampleTime_Index2 = that.IP_SampleTime_Index2;
+                IP_SampleTime_Index3 = that.IP_SampleTime_Index3;
+                IP_SampleTime_Index4 = that.IP_SampleTime_Index4;
+                SampleValue1 = that.SampleValue1;
+                SampleValue2 = that.SampleValue2;
+                SampleValue3 = that.SampleValue3;
+                SampleValue4 = that.SampleValue4;
+                IP_StartRange1 = that.IP_StartRange1;
+                IP_EndRange1 = that.IP_EndRange1;
+                IP_StartRange2 = that.IP_StartRange2;
+                IP_EndRange2 = that.IP_EndRange2;
+                IP_StartRange3 = that.IP_StartRange3;
+                IP_EndRange3 = that.IP_EndRange3;
+                IP_StartRange4 = that.IP_StartRange4;
+                IP_EndRange4 = that.IP_EndRange4;
+                OP_StartRange1 = that.OP_StartRange1;
+                OP_EndRange1 = that.OP_EndRange1;
+                OP_StartRange2 = that.OP_StartRange2;
+                OP_EndRange2 = that.OP_EndRange2;
+                FilterTime_Index = that.FilterTime_Index;
+            }
         }
 
         public void Load(XElement xele)

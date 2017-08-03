@@ -5929,7 +5929,7 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Use expansion module 的本地化字符串。
+        ///   查找类似 Use Expansion Module 的本地化字符串。
         /// </summary>
         public static string Use_Expansion_Module {
             get {

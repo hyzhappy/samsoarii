@@ -26,33 +26,33 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <TextBlock Height="24" Text="{x:Static properties:Resources.Module_Type}"/>
-            <ComboBox Margin="10,0,0,0" Width="120" FontSize="13" Height="24" ItemsSource="{Binding Source={StaticResource ModuleTypeProvider}}" SelectedIndex="{Binding ModuleTypeIndex,Mode=TwoWay}" SelectionChanged="ModuleTypeChanged"/>
-            <CheckBox Height="24" Margin="60,0,0,0" VerticalContentAlignment="Center" FontSize="16" Content="{x:Static properties:Resources.Enabled}" IsThreeState="False" IsChecked="{Binding UseModule,Mode=TwoWay}"/>
+            <ComboBox Margin="10,0,0,0" Width="120" FontSize="13" Height="24" ItemsSource="{Binding Source={StaticResource ModuleTypeProvider}}" SelectedIndex="{Binding ModuleTypeIndex}" SelectionChanged="ModuleTypeChanged"/>
+            <CheckBox Height="24" Margin="60,0,0,0" VerticalContentAlignment="Center" FontSize="16" Content="{x:Static properties:Resources.Enabled}" IsThreeState="False" IsChecked="{Binding UseModule}"/>
         </StackPanel>
         <StackPanel Grid.Row="1">
             <GroupBox x:Name="GP_Input" FontSize="16" Header="{x:Static properties:Resources.Input}">
                 <StackPanel>
                     <StackPanel Margin="0,20,0,20" Orientation="Horizontal">
                         <TextBlock Text="{x:Static properties:Resources.Channel}"/>
-                        <ComboBox Margin="10,0,0,0" Height="24" x:Name="IP_Channel" SelectedIndex="{Binding IP_Channel_Index,Mode=TwoWay}" Width="70" ItemsSource="{Binding IP_Channel}"/>
-                        <CheckBox VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Enabled}" x:Name="IP_Channel_CB" Margin="20,-3,0,0" Height="24" IsChecked="{Binding IP_Channel_CB_Enabled,Mode=TwoWay}"/>
+                        <ComboBox Margin="10,0,0,0" Height="24" x:Name="IP_Channel" SelectedIndex="{Binding IP_Channel_Index}" Width="70" ItemsSource="{Binding IP_Channel}"/>
+                        <CheckBox VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Enabled}" x:Name="IP_Channel_CB" Margin="20,-3,0,0" Height="24" IsChecked="{Binding IP_Channel_CB_Enabled}"/>
                         <TextBlock Margin="20,0,0,0" Text="{x:Static properties:Resources.Mode}"/>
-                        <ComboBox Margin="10,0,0,0" Height="24" x:Name="IP_Mode" SelectedIndex="{Binding IP_Mode_Index,Mode=TwoWay}" Width="100" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}" ItemsSource="{Binding IP_Mode}"/>
+                        <ComboBox Margin="10,0,0,0" Height="24" x:Name="IP_Mode" SelectedIndex="{Binding IP_Mode_Index}" Width="100" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}" ItemsSource="{Binding IP_Mode}"/>
                     </StackPanel>
                     <StackPanel Margin="0,0,0,20" Orientation="Horizontal">
                         <TextBlock Text="{x:Static properties:Resources.Average_Number_Of_Samples}"/>
-                        <ComboBox Margin="10,0,0,0" Height="24" SelectedIndex="{Binding IP_SampleTime_Index,Mode=TwoWay}" x:Name="IP_SampleTime" Width="50" ItemsSource="{Binding IP_SampleTime}" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"/>
+                        <ComboBox Margin="10,0,0,0" Height="24" SelectedIndex="{Binding IP_SampleTime_Index}" x:Name="IP_SampleTime" Width="50" ItemsSource="{Binding IP_SampleTime}" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"/>
                     </StackPanel>
                     <StackPanel Margin="0,0,0,20" Orientation="Horizontal">
                         <TextBlock Text="{x:Static properties:Resources.Current_Value_Of_Samples}"/>
                         <TextBox Margin="10,0,0,0" Width="20" IsReadOnly="True">D</TextBox>
-                        <win:OnlyNumsTextBox x:Name="IP_TB_Sample" Width="70" Margin="5,0,0,0" LowRange="0" TopRange="8191" IsNumsOnly="True" Text="{Binding SampleValue,Mode=TwoWay}" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"/>
+                        <win:OnlyNumsTextBox x:Name="IP_TB_Sample" Width="70" Margin="5,0,0,0" LowRange="0" TopRange="8191" IsNumsOnly="True" Text="{Binding SampleValue}" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{x:Static properties:Resources.Digital_Quantity_Range}"/>
-                        <win:OnlyNumsTextBox Text="{Binding IP_StartRange,Mode=TwoWay}" LowRange="0" TopRange="65535" IsNumsOnly="True" Margin="10,0,0,0" x:Name="IP_TB_Start" Width="70" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"></win:OnlyNumsTextBox>
+                        <win:OnlyNumsTextBox Text="{Binding IP_StartRange}" LowRange="0" TopRange="65535" IsNumsOnly="True" Margin="10,0,0,0" x:Name="IP_TB_Start" Width="70" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"></win:OnlyNumsTextBox>
                         <TextBlock Margin="10,0,10,0">—</TextBlock>
-                        <win:OnlyNumsTextBox Text="{Binding IP_EndRange,Mode=TwoWay}" x:Name="IP_TB_End" LowRange="0" TopRange="65535" IsNumsOnly="True" Width="70" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"></win:OnlyNumsTextBox>
+                        <win:OnlyNumsTextBox Text="{Binding IP_EndRange}" x:Name="IP_TB_End" LowRange="0" TopRange="65535" IsNumsOnly="True" Width="70" IsEnabled="{Binding ElementName=IP_Channel_CB,Path=IsChecked}"></win:OnlyNumsTextBox>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
@@ -60,22 +60,22 @@
                 <StackPanel>
                     <StackPanel Margin="0,20,0,20" Orientation="Horizontal">
                         <TextBlock Text="{x:Static properties:Resources.Channel}"/>
-                        <ComboBox Margin="10,0,0,0" SelectedIndex="{Binding OP_Channel_Index,Mode=TwoWay}" ItemsSource="{Binding OP_Channel}" Height="24" Width="70" x:Name="OP_Channel"/>
-                        <CheckBox VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Enabled}" x:Name="OP_Channel_CB" Margin="20,-3,0,0" Height="24" IsChecked="{Binding OP_Channel_CB_Enabled,Mode=TwoWay}"></CheckBox>
+                        <ComboBox Margin="10,0,0,0" SelectedIndex="{Binding OP_Channel_Index}" ItemsSource="{Binding OP_Channel}" Height="24" Width="70" x:Name="OP_Channel"/>
+                        <CheckBox VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Enabled}" x:Name="OP_Channel_CB" Margin="20,-3,0,0" Height="24" IsChecked="{Binding OP_Channel_CB_Enabled}"></CheckBox>
                         <TextBlock Margin="40,0,0,0" Text="{x:Static properties:Resources.Mode}"/>
-                        <ComboBox Margin="10,0,0,0" SelectedIndex="{Binding OP_Mode_Index,Mode=TwoWay}" Height="24" Width="100" x:Name="OP_Mode" ItemsSource="{Binding OP_Mode}" IsEnabled="{Binding ElementName=OP_Channel_CB,Path=IsChecked}"/>
+                        <ComboBox Margin="10,0,0,0" SelectedIndex="{Binding OP_Mode_Index}" Height="24" Width="100" x:Name="OP_Mode" ItemsSource="{Binding OP_Mode}" IsEnabled="{Binding ElementName=OP_Channel_CB,Path=IsChecked}"/>
                     </StackPanel>
                     <StackPanel IsEnabled="{Binding ElementName=OP_Channel_CB,Path=IsChecked}" Orientation="Horizontal">
                         <TextBlock Text="{x:Static properties:Resources.Digital_Quantity_Range}"/>
-                        <win:OnlyNumsTextBox Text="{Binding OP_StartRange,Mode=TwoWay}" LowRange="0" TopRange="65535" IsNumsOnly="True" Margin="10,0,0,0" x:Name="OP_TB_Start" Width="70"></win:OnlyNumsTextBox>
+                        <win:OnlyNumsTextBox Text="{Binding OP_StartRange}" LowRange="0" TopRange="65535" IsNumsOnly="True" Margin="10,0,0,0" x:Name="OP_TB_Start" Width="70"></win:OnlyNumsTextBox>
                         <TextBlock Margin="10,0,10,0">—</TextBlock>
-                        <win:OnlyNumsTextBox Text="{Binding OP_EndRange,Mode=TwoWay}" LowRange="0" TopRange="65535" IsNumsOnly="True" x:Name="OP_TB_End" Width="70"></win:OnlyNumsTextBox>
+                        <win:OnlyNumsTextBox Text="{Binding OP_EndRange}" LowRange="0" TopRange="65535" IsNumsOnly="True" x:Name="OP_TB_End" Width="70"></win:OnlyNumsTextBox>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
             <GroupBox Margin="0,20,0,0" x:Name="GP_Time" FontSize="16" Header="{x:Static properties:Resources.Filter_Time}">
                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                    <ComboBox x:Name="FT_CB" SelectedIndex="{Binding FilterTime_Index,Mode=TwoWay}" ItemsSource="{Binding FT_CB}" Width="100" Height="24" HorizontalAlignment="Left"/>
+                    <ComboBox x:Name="FT_CB" SelectedIndex="{Binding FilterTime_Index}" ItemsSource="{Binding FT_CB}" Width="100" Height="24" HorizontalAlignment="Left"/>
                     <TextBlock Text="ms"/>
                 </StackPanel>
             </GroupBox>

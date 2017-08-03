@@ -222,6 +222,8 @@ namespace SamSoarII.Core.Models
             ismain = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("Path");
             path = xatt == null ? null : xatt.Value;
+            xatt = xele.Attribute("Brief");
+            brief = xatt == null ? string.Empty : xatt.Value ;
             foreach (LadderNetworkModel network in children)
             {
                 network.PropertyChanged -= OnChildrenPropertyChanged;
@@ -241,6 +243,7 @@ namespace SamSoarII.Core.Models
             xele.SetAttributeValue("Name", name);
             xele.SetAttributeValue("IsExpand", isexpand);
             xele.SetAttributeValue("IsMain", ismain);
+            xele.SetAttributeValue("Brief", Brief);
             path = ptvitem == null ? null : ptvitem.Path;
             if (path != null) xele.SetAttributeValue("Path", path);
             foreach (LadderNetworkModel lnmodel in children)
