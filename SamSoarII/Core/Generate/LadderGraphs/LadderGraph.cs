@@ -301,10 +301,6 @@ namespace SamSoarII.Core.Generate
             for (int i = 0; i < lge.FlagCount; i++)
                 if (id <= ((i + 1) << 5))
                     return ((lge[i] >> (id - ((i << 5) + 1))) & 1) != 0;
-            //if (id <= 32) return ((lge[1] >> (id - 1)) & 1) != 0;
-            //if (id <= 64) return ((lge[2] >> (id - 33)) & 1) != 0;
-            //if (id <= 96) return ((lge[3] >> (id - 65)) & 1) != 0;
-            //if (id <= 128) return ((lge[4] >> (id - 97)) & 1) != 0;
             throw new IndexOutOfRangeException();
         }
         /// <summary>
@@ -317,11 +313,7 @@ namespace SamSoarII.Core.Generate
         {
             for (int i = 0; i < lge.FlagCount; i++)
                 if (id <= ((i + 1) << 5))
-                    return lge[i] |= 1 << (id - ((i << 5) + 1));        
-            //if (id <= 32) return lge[1] |= (1 << (id - 1));
-            //if (id <= 64) return lge[2] |= (1 << (id - 33));
-            //if (id <= 96) return lge[3] |= (1 << (id - 65));
-            //if (id <= 128) return lge[4] |= (1 << (id - 97));
+                    return lge[i] |= 1 << (id - ((i << 5) + 1));   
             throw new IndexOutOfRangeException();
         }
         /// <summary>

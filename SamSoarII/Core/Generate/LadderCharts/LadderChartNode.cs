@@ -96,34 +96,34 @@ namespace SamSoarII.Core.Generate
             {
                 switch (Type)
                 {
-                    case "LD": return String.Format("[{0:d}]{1:s}", id, this[1]);
-                    case "LDI": return String.Format("[{0:d}]!{1:s}", id, this[1]);
-                    case "LDIM": return String.Format("[{0:d}]im{1:s}", id, this[1]);
-                    case "LDIIM": return String.Format("[{0:d}]!im{1:s}", id, this[1]);
-                    case "LDP": return String.Format("[{0:d}]ue{1:s}", id, this[1]);
-                    case "LDF": return String.Format("[{0:d}]de{1:s}", id, this[1]);
-                    case "MEP": return String.Format("[{0:d}]ue", id);
-                    case "MEF": return String.Format("[{0:d}]de", id);
-                    case "INV": return String.Format("[{0:d}]!", id);
-                    case "LDWEQ": return String.Format("[{0:d}]{1:s}w={2:s}", id, this[1], this[2]);
-                    case "LDDEQ": return String.Format("[{0:d}]{1:s}d={2:s}", id, this[1], this[2]);
-                    case "LDFEQ": return String.Format("[{0:d}]{1:s}f={2:s}", id, this[1], this[2]);
-                    case "LDWNE": return String.Format("[{0:d}]{1:s}w<>{2:s}", id, this[1], this[2]);
-                    case "LDDNE": return String.Format("[{0:d}]{1:s}d<>{2:s}", id, this[1], this[2]);
-                    case "LDFNE": return String.Format("[{0:d}]{1:s}f<>{2:s}", id, this[1], this[2]);
-                    case "LDWGE": return String.Format("[{0:d}]{1:s}w>={2:s}", id, this[1], this[2]);
-                    case "LDDGE": return String.Format("[{0:d}]{1:s}d>={2:s}", id, this[1], this[2]);
-                    case "LDFGE": return String.Format("[{0:d}]{1:s}f>={2:s}", id, this[1], this[2]);
-                    case "LDWLE": return String.Format("[{0:d}]{1:s}w<={2:s}", id, this[1], this[2]);
-                    case "LDDLE": return String.Format("[{0:d}]{1:s}d<={2:s}", id, this[1], this[2]);
-                    case "LDFLE": return String.Format("[{0:d}]{1:s}f<={2:s}", id, this[1], this[2]);
-                    case "LDWG": return String.Format("[{0:d}]{1:s}w>{2:s}", id, this[1], this[2]);
-                    case "LDDG": return String.Format("[{0:d}]{1:s}d>{2:s}", id, this[1], this[2]);
-                    case "LDFG": return String.Format("[{0:d}]{1:s}f>{2:s}", id, this[1], this[2]);
-                    case "LDWL": return String.Format("[{0:d}]{1:s}w<{2:s}", id, this[1], this[2]);
-                    case "LDDL": return String.Format("[{0:d}]{1:s}d<{2:s}", id, this[1], this[2]);
-                    case "LDFL": return String.Format("[{0:d}]{1:s}f<{2:s}", id, this[1], this[2]);
-                    default: return String.Format("[{0:d}]1", id);
+                    case "LD": return String.Format("[{0:x4}]{1:s}", id, this[1]);
+                    case "LDI": return String.Format("[{0:x4}]!{1:s}", id, this[1]);
+                    case "LDIM": return String.Format("[{0:x4}]im{1:s}", id, this[1]);
+                    case "LDIIM": return String.Format("[{0:x4}]!im{1:s}", id, this[1]);
+                    case "LDP": return String.Format("[{0:x4}]ue{1:s}", id, this[1]);
+                    case "LDF": return String.Format("[{0:x4}]de{1:s}", id, this[1]);
+                    case "MEP": return String.Format("[{0:x4}]ue", id);
+                    case "MEF": return String.Format("[{0:x4}]de", id);
+                    case "INV": return String.Format("[{0:x4}]!", id);
+                    case "LDWEQ": return String.Format("[{0:x4}]{1:s}w={2:s}", id, this[1], this[2]);
+                    case "LDDEQ": return String.Format("[{0:x4}]{1:s}d={2:s}", id, this[1], this[2]);
+                    case "LDFEQ": return String.Format("[{0:x4}]{1:s}f={2:s}", id, this[1], this[2]);
+                    case "LDWNE": return String.Format("[{0:x4}]{1:s}w<>{2:s}", id, this[1], this[2]);
+                    case "LDDNE": return String.Format("[{0:x4}]{1:s}d<>{2:s}", id, this[1], this[2]);
+                    case "LDFNE": return String.Format("[{0:x4}]{1:s}f<>{2:s}", id, this[1], this[2]);
+                    case "LDWGE": return String.Format("[{0:x4}]{1:s}w>={2:s}", id, this[1], this[2]);
+                    case "LDDGE": return String.Format("[{0:x4}]{1:s}d>={2:s}", id, this[1], this[2]);
+                    case "LDFGE": return String.Format("[{0:x4}]{1:s}f>={2:s}", id, this[1], this[2]);
+                    case "LDWLE": return String.Format("[{0:x4}]{1:s}w<={2:s}", id, this[1], this[2]);
+                    case "LDDLE": return String.Format("[{0:x4}]{1:s}d<={2:s}", id, this[1], this[2]);
+                    case "LDFLE": return String.Format("[{0:x4}]{1:s}f<={2:s}", id, this[1], this[2]);
+                    case "LDWG": return String.Format("[{0:x4}]{1:s}w>{2:s}", id, this[1], this[2]);
+                    case "LDDG": return String.Format("[{0:x4}]{1:s}d>{2:s}", id, this[1], this[2]);
+                    case "LDFG": return String.Format("[{0:x4}]{1:s}f>{2:s}", id, this[1], this[2]);
+                    case "LDWL": return String.Format("[{0:x4}]{1:s}w<{2:s}", id, this[1], this[2]);
+                    case "LDDL": return String.Format("[{0:x4}]{1:s}d<{2:s}", id, this[1], this[2]);
+                    case "LDFL": return String.Format("[{0:x4}]{1:s}f<{2:s}", id, this[1], this[2]);
+                    default: return String.Format("[{0:x4}]1", id);
                 }
             }
         }

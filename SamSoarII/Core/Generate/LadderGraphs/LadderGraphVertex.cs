@@ -140,7 +140,7 @@ namespace SamSoarII.Core.Generate
                 // 表达式合并
                 bool hasor = false;
                 expr = ExprHelper.Merge(subexprs, 0, subexprs.Count - 1, ref hasor);
-                if (hasor) expr = "(" + expr + ")";
+                if (hasor) expr = String.Format("[{0:x4}]({1:s})", ExprHelper.GetMinID(expr), expr);
             }
             // 如果存在前向边
             else if (BackEdges.Count > 0)
