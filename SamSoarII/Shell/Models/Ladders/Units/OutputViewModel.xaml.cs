@@ -82,12 +82,12 @@ namespace SamSoarII.Shell.Models
             CountTextBlock.Visibility = Core.Children.Count >= 2
                 ? Visibility.Visible
                 : Visibility.Hidden;
-            CommentArea.Children.Clear();
-            for (int i = 0; i < Core.Children.Count; i++)
+            for (int i = 0; i < comments.Length; i++)
             {
-                if (comments[i] == null)
-                    comments[i] = new TextBlock();
-                CommentArea.Children.Add(comments[i]);
+                if (i < Core.Children.Count)
+                    ShowComment(i);
+                else
+                    HideComment(i);
             }
             Update();
         }
@@ -97,6 +97,20 @@ namespace SamSoarII.Shell.Models
         #region Shell
 
         private TextBlock[] comments;
+        public void ShowComment(int id)
+        {
+            if (comments[id] == null)
+            {
+                comments[id] = new TextBlock();
+                CommentArea.Children.Add(comments[id]);
+            }
+            comments[id].Visibility = Visibility.Visible;
+        }
+        public void HideComment(int id)
+        {
+            if (comments[id] == null) return;
+            comments[id].Visibility = Visibility.Hidden;
+        }
 
         public string ValueText
         {

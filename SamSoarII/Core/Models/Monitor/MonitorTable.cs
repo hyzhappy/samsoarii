@@ -128,8 +128,14 @@ namespace SamSoarII.Core.Models
             children.Clear();
             foreach (XElement xele_e in xele.Elements("Element"))
             {
-                MonitorElement element = new MonitorElement(this, xele_e);
-                children.Add(element);
+                try
+                {
+                    MonitorElement element = new MonitorElement(this, xele_e);
+                    children.Add(element);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 

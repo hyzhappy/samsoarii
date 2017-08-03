@@ -67,103 +67,30 @@ namespace SamSoarII.Shell.Models
 
         private void ReinitializeComponent()
         {
-            bool[] middleused = { false, false, false, false, false };
-            bool[] bottomused = { false, false };
-            int maxcount = Core.Children.Count;
             TopTextBlock.Text = Core.InstName;
-            if (Core.Type == LadderUnitModel.Types.CALLM)
-            {
-                maxcount = 5;
-                for (int i = 0; i < maxcount; i++)
-                {
-                    if (middlevalues[i] == null)
-                    {
-                        middlevalues[i] = new TextBlock();
-                        Canvas.SetLeft(middlevalues[i], 25);
-                        Canvas.SetTop(middlevalues[i], 120 + i * 30);
-                        middlevalues[i].TextAlignment = TextAlignment.Left;
-                        //middlevalues[i].Style = (Style)Resources["LadderFontStyle"];
-                    }
-                    if (!mainCanvas.Children.Contains(middlevalues[i]))
-                        mainCanvas.Children.Add(middlevalues[i]);
-                }
-                for (int i = 0; i < 2; i++)
-                {
-                    if (bottomvalues[i] != null && mainCanvas.Children.Contains(bottomvalues[i]))
-                        mainCanvas.Children.Remove(bottomvalues[i]);
-                }
-            }
+            for (int i = -2; i < 5; i++)
+                HideValue(i);
             for (int i = 0; i < Core.Children.Count; i++)
             {
                 ValueModel vmodel = Core.Children[i];
                 ValueFormat vformat = vmodel.Format;
-                int id = 0;
-                if (vformat.Position >= 0)
-                {
-                    id = vformat.Position;
-                    middleused[id] = true;
-                    if (middlevalues[id] == null)
-                    {
-                        middlevalues[id] = new TextBlock();
-                        Canvas.SetLeft(middlevalues[id], 25);
-                        Canvas.SetTop(middlevalues[id], 120 + id * 30);
-                        middlevalues[id].TextAlignment = TextAlignment.Left;
-                        //middlevalues[id].Style = (Style)Resources["LadderFontStyle"];
-                    }
-                    if (!mainCanvas.Children.Contains(middlevalues[id]))
-                        mainCanvas.Children.Add(middlevalues[id]);
-                }
-                else
-                {
-                    id = -vformat.Position - 1;
-                    bottomused[id] = true; 
-                    if (bottomvalues[id] == null)
-                    {
-                        bottomvalues[id] = new TextBlock();
-                        Canvas.SetLeft(bottomvalues[id], 25);
-                        Canvas.SetTop(bottomvalues[id], 250 - id * 30);
-                        bottomvalues[id].TextAlignment = TextAlignment.Right;
-                        //bottomvalues[id].Style = (Style)Resources["LadderFontStyle"];
-                    }
-                    if (!mainCanvas.Children.Contains(bottomvalues[id]))
-                        mainCanvas.Children.Add(bottomvalues[id]);
-                }
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                if (!middleused[i] && middlevalues[i] != null
-                  && mainCanvas.Children.Contains(middlevalues[i]))
-                    mainCanvas.Children.Remove(middlevalues[i]);
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                if (!bottomused[i] && bottomvalues[i] != null 
-                  && mainCanvas.Children.Contains(bottomvalues[i]))
-                    mainCanvas.Children.Remove(bottomvalues[i]);
+                ShowValue(vformat.Position);
             }
             switch (Core.Type)
             {
                 case LadderUnitModel.Types.TON:
                 case LadderUnitModel.Types.TONR:
                 case LadderUnitModel.Types.TOF:
-                    if (bottomvalues[0] == null)
-                    {
-                        bottomvalues[0] = new TextBlock();
-                        Canvas.SetLeft(bottomvalues[0], 60);
-                        Canvas.SetTop(bottomvalues[0], 250);
-                        bottomvalues[0].TextAlignment = TextAlignment.Left;
-                    }
+                    ShowValue(-1);
                     bottomvalues[0].Text = "100 ms";
-                    if (!mainCanvas.Children.Contains(bottomvalues[0]))
-                        mainCanvas.Children.Add(bottomvalues[0]);
                     break;
             }
-            
-            CommentArea.Children.Clear();
-            for (int i = 0; i < maxcount; i++)
+            for (int i = 0; i < comments.Length; i++)
             {
-                if (comments[i] == null) comments[i] = new TextBlock();
-                CommentArea.Children.Add(comments[i]);
+                if (i < Core.Children.Count)
+                    ShowComment(i);
+                else
+                    HideComment(i);
             }
             Update();
         }
@@ -172,8 +99,64 @@ namespace SamSoarII.Shell.Models
 
         private TextBlock[] middlevalues;
         private TextBlock[] bottomvalues;
-        private TextBlock[] comments;
+        public void ShowValue(int id)
+        {
+            if (id >= 0)
+            {
+                if (middlevalues[id] == null)
+                {
+                    middlevalues[id] = new TextBlock();
+                    Canvas.SetLeft(middlevalues[id], 25);
+                    Canvas.SetTop(middlevalues[id], 120 + id * 30);
+                    middlevalues[id].TextAlignment = TextAlignment.Left;
+                    mainCanvas.Children.Add(middlevalues[id]);
+                }
+                middlevalues[id].Visibility = Visibility.Visible;
+            }
+            else
+            {
+                id = -id - 1;
+                if (bottomvalues[id] == null)
+                {
+                    bottomvalues[id] = new TextBlock();
+                    Canvas.SetLeft(bottomvalues[id], 25);
+                    Canvas.SetTop(bottomvalues[id], 250 - id * 30);
+                    bottomvalues[id].TextAlignment = TextAlignment.Right;
+                    mainCanvas.Children.Add(bottomvalues[id]);
+                }
+                bottomvalues[id].Visibility = Visibility.Visible;
+            }
+        }
+        public void HideValue(int id)
+        {
+            if (id >= 0)
+            {
+                if (middlevalues[id] == null) return;
+                middlevalues[id].Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                id = -id - 1;
+                if (bottomvalues[id] == null) return;
+                bottomvalues[id].Visibility = Visibility.Hidden;
+            }
+        }
 
+        private TextBlock[] comments;
+        public void ShowComment(int id)
+        {
+            if (comments[id] == null)
+            {
+                comments[id] = new TextBlock();
+                CommentArea.Children.Add(comments[id]);
+            }
+            comments[id].Visibility = Visibility.Visible;
+        }
+        public void HideComment(int id)
+        {
+            if (comments[id] == null) return;
+            comments[id].Visibility = Visibility.Hidden;
+        }
         public override bool IsCommentMode
         {
             set
