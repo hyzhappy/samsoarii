@@ -879,44 +879,51 @@ namespace SamSoarII.Shell.Windows
                 LadderNetworkModel lnmodel_new = null;
                 LadderDiagramModel ldmodel_old = lnmodel_old.Parent;
                 LadderDiagramModel ldmodel_new = null;
+                int netid_old = lnmodel_old.ID;
+                int netid_new = 0;
                 if (lnmodel_old.View != null)
                 {
                     lnmodel_old.View.ReleaseSelectRect();
                     lnmodel_old.View.IsSelectAreaMode = false;
                 }
-                XElement xele = new XElement("Network");
-                lnmodel_old.Save(xele);
+                //XElement xele = new XElement("Network");
+                //lnmodel_old.Save(xele);
                 switch (CurrentItem.Flags & 0xf)
                 {
                     case ProjectTreeViewItem.TYPE_ROUTINE:
                         ldmodel_new = (LadderDiagramModel)(CurrentItem.RelativeObject);
-                        lnmodel_new = new LadderNetworkModel(null, 0);
-                        lnmodel_new.Load(xele);
-                        lnmodel_new.ID = 0;
+                        netid_new = 0;
                         break;
                     case ProjectTreeViewItem.TYPE_NETWORK:
                         LadderNetworkModel prev = (LadderNetworkModel)(CurrentItem.RelativeObject);
                         ldmodel_new = prev.Parent;
-                        lnmodel_new = new LadderNetworkModel(null, 0);
-                        lnmodel_new.Load(xele);
-                        lnmodel_new.ID = prev.ID + 1;
+                        netid_new = prev.ID + 1;
                         break;
                     default:
                         DragItem = null;
                         return;
                 }
-                ProjectTreeViewEventArgs _e = null;
-                if (ldmodel_new == ldmodel_old)
+                if (ldmodel_new != null)
                 {
-                    ldmodel_old.ReplaceN(
-                        new LadderNetworkModel[] { lnmodel_old },
-                        new LadderNetworkModel[] { lnmodel_old },
-                        new int[] { lnmodel_new.ID - (lnmodel_new.ID > lnmodel_old.ID ? 1 : 0)});
-                }
-                else
-                {
-                    ldmodel_old.RemoveN(lnmodel_old.ID, lnmodel_old);
-                    ldmodel_new.AddN(lnmodel_new.ID, lnmodel_new);
+                    ProjectTreeViewEventArgs _e = null;
+                    if (ldmodel_new == ldmodel_old)
+                    {
+                        lnmodel_new = lnmodel_old;
+                        ldmodel_old.ReplaceN(
+                            new LadderNetworkModel[] { lnmodel_old },
+                            new LadderNetworkModel[] { lnmodel_new },
+                            new int[] { netid_new - (netid_new > netid_old ? 1 : 0) });
+                    }
+                    else
+                    {
+                        lnmodel_new = new LadderNetworkModel(ldmodel_new, netid_new);
+                        XElement xele = new XElement("Network");
+                        lnmodel_old.Save(xele);
+                        lnmodel_new.Load(xele);
+                        lnmodel_new.ID = netid_new;
+                        ldmodel_old.RemoveN(lnmodel_old.ID, lnmodel_old);
+                        ldmodel_new.AddN(lnmodel_new.ID, lnmodel_new);
+                    }
                 }
             }
             else

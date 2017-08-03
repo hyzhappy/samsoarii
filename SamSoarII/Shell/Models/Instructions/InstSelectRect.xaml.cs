@@ -138,9 +138,9 @@ namespace SamSoarII.Shell.Models
                     ScrollViewer scroll = idvmodel.Scroll;
                     Point p = invmodel.CV_Inst.TranslatePoint(new Point(0, 0), scroll);
                     if (p.Y + row * 20 < 0)
-                        scroll.ScrollToVerticalOffset(scroll.VerticalOffset - (p.Y + row * 20));
-                    if (p.Y + (row + 1) * 20 > scroll.Height)
-                        scroll.ScrollToVerticalOffset(scroll.VerticalOffset - (p.Y + (row + 1) * 20));
+                        scroll.ScrollToVerticalOffset(scroll.VerticalOffset + (p.Y + row * 20));
+                    if (p.Y + (row + 1) * 20 > scroll.ViewportHeight)
+                        scroll.ScrollToVerticalOffset(scroll.VerticalOffset + (p.Y + (row + 1) * 20) - scroll.ViewportHeight);
                 }
                 PropertyChanged(this, new PropertyChangedEventArgs("Row"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Current"));

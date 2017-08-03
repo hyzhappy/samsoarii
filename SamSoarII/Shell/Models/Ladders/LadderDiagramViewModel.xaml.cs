@@ -2114,6 +2114,11 @@ namespace SamSoarII.Shell.Models
             isviewmodified = true;
         }
 
+        private void MainScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            isviewmodified = true;
+        }
+
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
