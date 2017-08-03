@@ -596,7 +596,7 @@ namespace SamSoarII.Core.Models
         private ExpansionModuleParams parent;
         public ExpansionModuleParams Parent { get { return this.parent; } }
 
-
+        public bool LoadSuccess { get; set; }
         #endregion
 
         public IParams Clone()
@@ -644,6 +644,13 @@ namespace SamSoarII.Core.Models
                 SampleValue2 = that.SampleValue2;
                 SampleValue3 = that.SampleValue3;
                 SampleValue4 = that.SampleValue4;
+                if (that.IP_StartRange1 > that.IP_EndRange1 || that.IP_StartRange2 > that.IP_EndRange2
+                    || that.IP_StartRange3 > that.IP_EndRange3 || that.IP_StartRange4 > that.IP_EndRange4)
+                {
+                    LoadSuccess = false;
+                    LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
+                    return;
+                }
                 IP_StartRange1 = that.IP_StartRange1;
                 IP_EndRange1 = that.IP_EndRange1;
                 IP_StartRange2 = that.IP_StartRange2;
@@ -652,12 +659,20 @@ namespace SamSoarII.Core.Models
                 IP_EndRange3 = that.IP_EndRange3;
                 IP_StartRange4 = that.IP_StartRange4;
                 IP_EndRange4 = that.IP_EndRange4;
+
+                if (that.OP_StartRange1 > that.OP_EndRange1 || that.OP_StartRange2 > that.OP_EndRange2)
+                {
+                    LoadSuccess = false;
+                    LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
+                    return;
+                }
                 OP_StartRange1 = that.OP_StartRange1;
                 OP_EndRange1 = that.OP_EndRange1;
                 OP_StartRange2 = that.OP_StartRange2;
                 OP_EndRange2 = that.OP_EndRange2;
                 FilterTime_Index = that.FilterTime_Index;
             }
+            LoadSuccess = true;
         }
 
         public void Load(XElement xele)

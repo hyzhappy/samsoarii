@@ -86,14 +86,14 @@ namespace SamSoarII.Shell.Dialogs
 
         #endregion
         
-        public void Save()
+        public bool Save()
         {
             wgDevice.Save();
             wgCommunication.Save();
             wgPassword.Save();
             wgHolding.Save();
-
             oldParams.Load(newParams);
+            return oldParams.LoadSuccess;
         }
 
         private void ShowWidget(int index)

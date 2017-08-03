@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Core.Models;
+using SamSoarII.Shell.Windows;
 using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,8 @@ namespace SamSoarII.Shell.Dialogs
                     IP_SP.Visibility = Visibility.Hidden;
                     break;
             }
+            if (IP_Mode.Items.Count > 0)
+                IP_Mode.SelectedItem = IP_Mode.Items[IP_Mode.SelectedIndex];
         }
     }
 }

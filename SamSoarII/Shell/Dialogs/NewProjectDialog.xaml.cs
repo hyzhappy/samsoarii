@@ -107,7 +107,7 @@ namespace SamSoarII.Shell.Dialogs
 
         private void EnsureButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsSettingChecked && File.Exists(PathContent + @"\" + NameContent + "." + FileHelper.ExtensionName))
+            if (IsSettingChecked && File.Exists(PathContent + @"\" + NameContent + "." + FileHelper.NewFileExtension))
             {
                 string title = Properties.Resources.Message_Is_Override;
                 string text = String.Format("{2:s} {1},{0}?",Properties.Resources.Message_Is_Override, Properties.Resources.Message_Already_Exist, NameContent);

@@ -69,7 +69,11 @@ namespace SamSoarII
             {
                 if (App.AutoOpenFileFullPath != string.Empty)
                 {
-                    ifParent.LoadProject(App.AutoOpenFileFullPath);
+                    if (App.AutoOpenFileFullPath.EndsWith(FileHelper.OldFileExtension))
+                    {
+                        LocalizedMessageBox.Show(Properties.Resources.File_Type_Not_Supported, LocalizedMessageIcon.Information);
+                    }
+                    else ifParent.LoadProject(App.AutoOpenFileFullPath);
                 }
             });
         }
@@ -417,6 +421,14 @@ namespace SamSoarII
                     hotKey = new GlobalThreeHotKey(this, command, keyPart);
                     ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
                     hotKey.ShowMessage = string.Format("(Ctrl+Q,E)\t{0}", Properties.Resources.Close_Proj);
+                    continue;
+                }
+                if (command == GlobalCommand.FileConvertCommand)
+                {
+                    keyPart = new KeyPartTwo(ModifierKeys.Control, Key.T, Key.H);
+                    hotKey = new GlobalThreeHotKey(this, command, keyPart);
+                    ThreeHotKeyManager.AddHotKey(keyPart, hotKey);
+                    hotKey.ShowMessage = string.Format("(Ctrl+T,H)\t{0}", Properties.Resources.File_Converter);
                     continue;
                 }
             }
@@ -785,6 +797,8 @@ namespace SamSoarII
                 ifParent.NavigateToBreakpointCursor();
             if (e.Command == GlobalCommand.EditCommand)
                 ifParent.ReturnToEdit();
+            if (e.Command == GlobalCommand.FileConvertCommand)
+                ifParent.ShowFileConvertDialog();
         }
 
         private void CommandBinding_Executed_SaveHint(object sender, ExecutedRoutedEventArgs e)

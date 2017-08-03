@@ -1,4 +1,5 @@
 ﻿using SamSoarII.Core.Models;
+using SamSoarII.Shell.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,7 @@ namespace SamSoarII.Shell.Dialogs
         public event RoutedEventHandler ModuleTypeChangedHandle = delegate { };
         private void ModuleTypeChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (core == null) return;
             switch (core.ModuleType)
             {
                 case ModuleType.FGs_E4AI:
@@ -80,7 +82,11 @@ namespace SamSoarII.Shell.Dialogs
                     break;
             }
             ModuleTypeChangedHandle(this,new RoutedEventArgs());
+            if(IP_Mode.Items.Count > 0)
+                IP_Mode.SelectedItem = IP_Mode.Items[Math.Min(IP_Mode.SelectedIndex, IP_Mode.Items.Count - 1)];
         }
+        
         #endregion
+        
     }
 }

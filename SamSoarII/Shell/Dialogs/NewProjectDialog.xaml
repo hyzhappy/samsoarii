@@ -31,7 +31,7 @@
                 </Canvas>
             </Canvas>
         </GroupBox>
-        <Button x:Uid="EnsureButton" x:Name="EnsureButton" Content="{x:Static properties:Resources.Ensure}" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
-        <Button x:Uid="CancelButton" x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
+        <Button x:Name="EnsureButton" Content="{x:Static properties:Resources.Ensure}" Height="25" Width="80" Canvas.Left="147" Canvas.Top="259"></Button>
+        <Button x:Name="CancelButton" Content="{x:Static properties:Resources.Cancel}" Height="25" Width="80" Canvas.Left="361" Canvas.Top="259"></Button>
     </Canvas>
 </Window>

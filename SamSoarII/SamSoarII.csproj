@@ -265,6 +265,9 @@
       <DependentUpon>CommunicationSettingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\Enums\ModuleType.cs" />
+    <Compile Include="Shell\Dialogs\FileConvert\FileConvertDialog.xaml.cs">
+      <DependentUpon>FileConvertDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Dialogs\LanaEnsureDialog.xaml.cs">
       <DependentUpon>LanaEnsureDialog.xaml</DependentUpon>
     </Compile>
@@ -764,6 +767,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Shell\Dialogs\FileConvert\FileConvertDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell\Dialogs\LanaEnsureDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1083,6 +1090,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\Inform.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\RArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

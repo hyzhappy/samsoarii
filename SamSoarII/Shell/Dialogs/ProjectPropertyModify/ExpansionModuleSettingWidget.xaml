@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-        <GroupBox Grid.RowSpan="3" Grid.ColumnSpan="2" FontSize="16" Header="{x:Static properties:Resources.Expand_Module_Settings}">
+        <GroupBox Grid.RowSpan="3" Grid.ColumnSpan="2" FontSize="14" Header="{x:Static properties:Resources.Expand_Module_Settings}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
@@ -17,10 +17,10 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox x:Name="checkbox" VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Use_Expansion_Module}" IsThreeState="False" IsChecked="{Binding UseExpansionModule}"/>
+                <CheckBox x:Name="checkbox" FontSize="12" VerticalContentAlignment="Center" Content="{x:Static properties:Resources.Use_Expansion_Module}" IsThreeState="False" IsChecked="{Binding UseExpansionModule}"/>
                 <ListBox x:Name="Modules" IsEnabled="{Binding ElementName=checkbox,Path=IsChecked}" SelectionChanged="ShowModule" BorderBrush="AliceBlue" BorderThickness="1" Grid.Row="1" SelectedIndex="0">
                     <ListBox.Resources>
                         <Style TargetType="ListBoxItem">

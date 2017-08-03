@@ -98,7 +98,21 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-
+        public bool LoadSuccess
+        {
+            get
+            {
+                bool ret = true;
+                foreach (var param in ExpansionUnitParams)
+                {
+                    ret = ret && param.LoadSuccess;
+                }
+                return ret;
+            }
+            set
+            {
+            }
+        }
         public void Load(IParams iparams)
         {
             if (iparams is ExpansionModuleParams)

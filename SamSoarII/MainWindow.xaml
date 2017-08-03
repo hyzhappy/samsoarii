@@ -69,6 +69,7 @@
         <CommandBinding Command="{x:Static gb:GlobalCommand.ChangeToEnglishCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.ShowHelpDocumentCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
         <CommandBinding Command="{x:Static gb:GlobalCommand.OnlineHelpCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
+        <CommandBinding Command="{x:Static gb:GlobalCommand.FileConvertCommand}" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Gesture="Alt+F4" Command="ApplicationCommands.Close"/>
@@ -263,7 +264,9 @@
                     <MenuItem Header="{x:Static properties:Resources.MainWindow_Ladder_Check}" Command="{x:Static gb:GlobalCommand.CheckNetworkErrorCommand}" InputGestureText="Ctrl+T,N"></MenuItem>
                     <MenuItem Header="{x:Static properties:Resources.MainWindow_Funcblock_Check}" Command="{x:Static gb:GlobalCommand.CheckFuncBlockCommand}" InputGestureText="Ctrl+T,F"></MenuItem>
                 </MenuItem>
-                <Separator ></Separator>
+                <Separator/>
+                <MenuItem Header="{x:Static properties:Resources.MainWindow_File_Converter}" Command="{x:Static gb:GlobalCommand.FileConvertCommand}" InputGestureText="Ctrl+T,H"/>
+                <Separator/>
                 <MenuItem Header="{x:Static properties:Resources.MainWindow_Option}" Command="{x:Static gb:GlobalCommand.ShowOptionDialogCommand}" InputGestureText="Ctrl+F6,O">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Image/Config.png" Style="{StaticResource ResourceKey=ImageEnable}" Width="16" Height="16"/>

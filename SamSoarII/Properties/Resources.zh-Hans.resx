@@ -2199,4 +2199,34 @@
   <data name="Use_Expansion_Module" xml:space="preserve">
     <value>使用拓展模块</value>
   </data>
+  <data name="Range_Error" xml:space="preserve">
+    <value>输入有误，最大值必须大于最小值！</value>
+  </data>
+  <data name="File_Type_Not_Supported" xml:space="preserve">
+    <value>暂不支持此文件类型！</value>
+  </data>
+  <data name="Project_File" xml:space="preserve">
+    <value>工程文件</value>
+  </data>
+  <data name="MainWindow_File_Converter" xml:space="preserve">
+    <value>文件转换(_F)</value>
+  </data>
+  <data name="File_Converter" xml:space="preserve">
+    <value>文件转换</value>
+  </data>
+  <data name="Convert" xml:space="preserve">
+    <value>转换</value>
+  </data>
+  <data name="File_Select" xml:space="preserve">
+    <value>选择文件</value>
+  </data>
+  <data name="Generated_Path" xml:space="preserve">
+    <value>文件生成路径</value>
+  </data>
+  <data name="Max_Number_File" xml:space="preserve">
+    <value>最大文件数量为</value>
+  </data>
+  <data name="Required_File_Path" xml:space="preserve">
+    <value>请选择生成的文件路径！</value>
+  </data>
 </root>

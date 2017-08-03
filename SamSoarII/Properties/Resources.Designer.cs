@@ -592,6 +592,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Convert 的本地化字符串。
+        /// </summary>
+        public static string Convert {
+            get {
+                return ResourceManager.GetString("Convert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Coordinate 的本地化字符串。
         /// </summary>
         public static string Coordinate {
@@ -1483,11 +1492,38 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 File conversion 的本地化字符串。
+        /// </summary>
+        public static string File_Converter {
+            get {
+                return ResourceManager.GetString("File_Converter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 File Name 的本地化字符串。
         /// </summary>
         public static string File_Name {
             get {
                 return ResourceManager.GetString("File_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 File select 的本地化字符串。
+        /// </summary>
+        public static string File_Select {
+            get {
+                return ResourceManager.GetString("File_Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 This file type is not supported at this time! 的本地化字符串。
+        /// </summary>
+        public static string File_Type_Not_Supported {
+            get {
+                return ResourceManager.GetString("File_Type_Not_Supported", resourceCulture);
             }
         }
         
@@ -1758,6 +1794,15 @@ namespace SamSoarII.Properties {
         public static string Function_Block_Correct {
             get {
                 return ResourceManager.GetString("Function_Block_Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Generated file path 的本地化字符串。
+        /// </summary>
+        public static string Generated_Path {
+            get {
+                return ResourceManager.GetString("Generated_Path", resourceCulture);
             }
         }
         
@@ -2725,6 +2770,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 File conversion(_F) 的本地化字符串。
+        /// </summary>
+        public static string MainWindow_File_Converter {
+            get {
+                return ResourceManager.GetString("MainWindow_File_Converter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 FuncBlock Check(_F) 的本地化字符串。
         /// </summary>
         public static string MainWindow_Funcblock_Check {
@@ -3234,6 +3288,15 @@ namespace SamSoarII.Properties {
         public static string Manual {
             get {
                 return ResourceManager.GetString("Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Maximum number of files is 的本地化字符串。
+        /// </summary>
+        public static string Max_Number_File {
+            get {
+                return ResourceManager.GetString("Max_Number_File", resourceCulture);
             }
         }
         
@@ -4939,6 +5002,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Project file 的本地化字符串。
+        /// </summary>
+        public static string Project_File {
+            get {
+                return ResourceManager.GetString("Project_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Project Loading ... 的本地化字符串。
         /// </summary>
         public static string Project_Load {
@@ -5119,6 +5191,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Input error!Max value must be bigger than min value! 的本地化字符串。
+        /// </summary>
+        public static string Range_Error {
+            get {
+                return ResourceManager.GetString("Range_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Read Bit 的本地化字符串。
         /// </summary>
         public static string Read_Bit {
@@ -5232,6 +5313,15 @@ namespace SamSoarII.Properties {
         public static string Report_Generate {
             get {
                 return ResourceManager.GetString("Report_Generate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Please select the generated file path! 的本地化字符串。
+        /// </summary>
+        public static string Required_File_Path {
+            get {
+                return ResourceManager.GetString("Required_File_Path", resourceCulture);
             }
         }
         

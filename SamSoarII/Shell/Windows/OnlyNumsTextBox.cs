@@ -28,6 +28,7 @@ namespace SamSoarII.Shell.Windows
             GotFocus += OnlyNumsTextBox_GotFocus;
             LostFocus += OnlyNumsTextBox_LostFocus;
             TextChanged += OnlyNumsTextBox_TextChanged;
+            AllowDrop = false;
         }
 
         private void OnlyNumsTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -58,7 +59,15 @@ namespace SamSoarII.Shell.Windows
         }
         private void OnlyNumsTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            oldvalue = int.Parse((sender as OnlyNumsTextBox).Text);
+            int value = 0;
+            try
+            {
+                value = int.Parse((sender as OnlyNumsTextBox).Text);
+                if(AssertRange(value)) oldvalue = value;
+            }
+            catch (Exception)
+            {
+            }
         }
         private bool AssertRange(int value)
         {

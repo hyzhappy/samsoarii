@@ -1527,6 +1527,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A4212EEF28D940C58A17505169ABF236"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A57E6EB280AD417594DC511F0AAB908B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -3662,6 +3668,11 @@
             "AssemblyAsmDisplayName" = "8:ICSharpCode.AvalonEdit, Version=4.3.1.9429, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
+                    "_217B5E841FD287EF8824D215BB84BA30"
+                    {
+                    "Name" = "8:ICSharpCode.AvalonEdit.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:ICSharpCode.AvalonEdit.dll"
             "TargetName" = "8:"
@@ -4439,6 +4450,11 @@
             "AssemblyAsmDisplayName" = "8:Xceed.Wpf.AvalonDock, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
+                    "_39835CF5C61EE8B3F704D6D7DC2A7AC3"
+                    {
+                    "Name" = "8:Xceed.Wpf.AvalonDock.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Xceed.Wpf.AvalonDock.dll"
             "TargetName" = "8:"
@@ -4985,6 +5001,11 @@
             "AssemblyAsmDisplayName" = "8:SamSoarII.HelpDocument, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
+                    "_49A1E4EE559AB389FAF6F883BD39AB42"
+                    {
+                    "Name" = "8:SamSoarII.HelpDocument.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:SamSoarII.HelpDocument.dll"
             "TargetName" = "8:"
@@ -7681,6 +7702,26 @@
             "TargetName" = "8:makefile"
             "Tag" = "8:"
             "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A4212EEF28D940C58A17505169ABF236"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Resources\\Image\\ssp.ico"
+            "TargetName" = "8:ssp.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_3A836C3787C34399A78F2251C65E46F3"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10495,6 +10536,11 @@
             "AssemblyAsmDisplayName" = "8:ColorPicker, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
+                    "_F5120B36D20006FE203E2869E6892981"
+                    {
+                    "Name" = "8:ColorPicker.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:ColorPicker.dll"
             "TargetName" = "8:"
@@ -10852,6 +10898,29 @@
                 "Verbs"
                 {
                     "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_BE7E5BAF5F4F4E3CACA5E15FFD48AB83"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_A63578FB18A449F986572D67CE7FAA32"
+            {
+            "Name" = "8:SamSoar"
+            "Description" = "8:ssp FileType"
+            "Extensions" = "8:ssp"
+            "MIME" = "8:"
+            "Icon" = "8:_A4212EEF28D940C58A17505169ABF236"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_BB7F166FC28A41D1829CB505B3B263A0"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_0C0D797E41F04D92B58ED95116A47515"
                     {
                     "Command" = "8:&Open"
                     "Verb" = "8:open"

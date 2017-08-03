@@ -1,4 +1,5 @@
-﻿using SamSoarII.Utility;
+﻿using SamSoarII.Shell.Dialogs;
+using SamSoarII.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -768,7 +769,7 @@ namespace SamSoarII.Core.Models
         {
             return Clone(null);
         }
-
+        public bool LoadSuccess { get; set; }
         public AnalogQuantityParams Clone(ProjectPropertyParams parent)
         {
             AnalogQuantityParams that = new AnalogQuantityParams(parent);
@@ -783,6 +784,7 @@ namespace SamSoarII.Core.Models
                 AnalogQuantityParams that = (AnalogQuantityParams)iparams;
                 IP_Channel_Index = that.IP_Channel_Index;
                 OP_Channel_Index = that.OP_Channel_Index;
+
                 IP_Channel_CB_Enabled1 = that.IP_Channel_CB_Enabled1;
                 IP_Channel_CB_Enabled2 = that.IP_Channel_CB_Enabled2;
                 IP_Channel_CB_Enabled3 = that.IP_Channel_CB_Enabled3;
@@ -791,10 +793,12 @@ namespace SamSoarII.Core.Models
                 IP_Channel_CB_Enabled6 = that.IP_Channel_CB_Enabled6;
                 IP_Channel_CB_Enabled7 = that.IP_Channel_CB_Enabled7;
                 IP_Channel_CB_Enabled8 = that.IP_Channel_CB_Enabled8;
+
                 OP_Channel_CB_Enabled1 = that.OP_Channel_CB_Enabled1;
                 OP_Channel_CB_Enabled2 = that.OP_Channel_CB_Enabled2;
                 OP_Channel_CB_Enabled3 = that.OP_Channel_CB_Enabled3;
                 OP_Channel_CB_Enabled4 = that.OP_Channel_CB_Enabled4;
+
                 IP_Mode_Index1 = that.IP_Mode_Index1;
                 IP_Mode_Index2 = that.IP_Mode_Index2;
                 IP_Mode_Index3 = that.IP_Mode_Index3;
@@ -803,10 +807,12 @@ namespace SamSoarII.Core.Models
                 IP_Mode_Index6 = that.IP_Mode_Index6;
                 IP_Mode_Index7 = that.IP_Mode_Index7;
                 IP_Mode_Index8 = that.IP_Mode_Index8;
+
                 OP_Mode_Index1 = that.OP_Mode_Index1;
                 OP_Mode_Index2 = that.OP_Mode_Index2;
                 OP_Mode_Index3 = that.OP_Mode_Index3;
                 OP_Mode_Index4 = that.OP_Mode_Index4;
+
                 IP_SampleTime_Index1 = that.IP_SampleTime_Index1;
                 IP_SampleTime_Index2 = that.IP_SampleTime_Index2;
                 IP_SampleTime_Index3 = that.IP_SampleTime_Index3;
@@ -815,6 +821,7 @@ namespace SamSoarII.Core.Models
                 IP_SampleTime_Index6 = that.IP_SampleTime_Index6;
                 IP_SampleTime_Index7 = that.IP_SampleTime_Index7;
                 IP_SampleTime_Index8 = that.IP_SampleTime_Index8;
+
                 SampleValue1 = that.SampleValue1;
                 SampleValue2 = that.SampleValue2;
                 SampleValue3 = that.SampleValue3;
@@ -823,6 +830,14 @@ namespace SamSoarII.Core.Models
                 SampleValue6 = that.SampleValue6;
                 SampleValue7 = that.SampleValue7;
                 SampleValue8 = that.SampleValue8;
+                
+                if(that.IP_StartRange1 > that.IP_EndRange1 || that.IP_StartRange2 > that.IP_EndRange2
+                    || that.IP_StartRange3 > that.IP_EndRange3 || that.IP_StartRange4 > that.IP_EndRange4)
+                {
+                    LoadSuccess = false;
+                    LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
+                    return;
+                }
                 IP_StartRange1 = that.IP_StartRange1;
                 IP_EndRange1 = that.IP_EndRange1;
                 IP_StartRange2 = that.IP_StartRange2;
@@ -831,6 +846,15 @@ namespace SamSoarII.Core.Models
                 IP_EndRange3 = that.IP_EndRange3;
                 IP_StartRange4 = that.IP_StartRange4;
                 IP_EndRange4 = that.IP_EndRange4;
+
+                if (that.OP_StartRange1 > that.OP_EndRange1 || that.OP_StartRange2 > that.OP_EndRange2
+                    || that.OP_StartRange3 > that.OP_EndRange3 || that.OP_StartRange4 > that.OP_EndRange4)
+                {
+                    LoadSuccess = false;
+                    LocalizedMessageBox.Show(Properties.Resources.Range_Error, LocalizedMessageIcon.Error);
+                    return;
+                }
+
                 OP_StartRange1 = that.OP_StartRange1;
                 OP_EndRange1 = that.OP_EndRange1;
                 OP_StartRange2 = that.OP_StartRange2;
@@ -840,9 +864,8 @@ namespace SamSoarII.Core.Models
                 OP_StartRange4 = that.OP_StartRange4;
                 OP_EndRange4 = that.OP_EndRange4;
             }
+            LoadSuccess = true;
         }
-
         #endregion
-
     }
 }

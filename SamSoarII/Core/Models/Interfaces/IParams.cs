@@ -13,5 +13,6 @@ namespace SamSoarII.Core.Models
         void Load(XElement xele);
         IParams Clone();
         void Load(IParams that);
+        bool LoadSuccess { get; set; }
     }
 }

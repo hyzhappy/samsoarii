@@ -53,6 +53,7 @@ namespace SamSoarII.Global
         public static RoutedUICommand ShowHelpDocumentCommand { get; set; }
         public static RoutedUICommand OnlineHelpCommand { get; set; }
         public static RoutedUICommand ShowAboutCommand { get; set; }
+        public static RoutedUICommand FileConvertCommand { get; set; }
         
         static GlobalCommand()
         {
@@ -139,6 +140,8 @@ namespace SamSoarII.Global
             commands.Add(OnlineHelpCommand);
             ShowAboutCommand = new RoutedUICommand();
             commands.Add(ShowAboutCommand);
+            FileConvertCommand = new RoutedUICommand();
+            commands.Add(FileConvertCommand);
         }
     }
 }

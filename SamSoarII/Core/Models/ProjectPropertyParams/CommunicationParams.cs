@@ -150,7 +150,7 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-
+        public bool LoadSuccess { get; set; }
         public void Load(IParams iparams)
         {
             if (iparams is CommunicationParams)
@@ -166,6 +166,7 @@ namespace SamSoarII.Core.Models
                 this.IsAutoCheck = that.IsAutoCheck;
                 this.DownloadOption = that.DownloadOption;
             }
+            LoadSuccess = true;
         }
 
         #endregion

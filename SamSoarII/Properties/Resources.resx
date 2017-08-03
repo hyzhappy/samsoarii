@@ -2199,4 +2199,34 @@
   <data name="Use_Expansion_Module" xml:space="preserve">
     <value>Use Expansion Module</value>
   </data>
+  <data name="Range_Error" xml:space="preserve">
+    <value>Input error!Max value must be bigger than min value!</value>
+  </data>
+  <data name="File_Type_Not_Supported" xml:space="preserve">
+    <value>This file type is not supported at this time!</value>
+  </data>
+  <data name="Project_File" xml:space="preserve">
+    <value>Project file</value>
+  </data>
+  <data name="MainWindow_File_Converter" xml:space="preserve">
+    <value>File conversion(_F)</value>
+  </data>
+  <data name="File_Converter" xml:space="preserve">
+    <value>File conversion</value>
+  </data>
+  <data name="Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="File_Select" xml:space="preserve">
+    <value>File select</value>
+  </data>
+  <data name="Generated_Path" xml:space="preserve">
+    <value>Generated file path</value>
+  </data>
+  <data name="Max_Number_File" xml:space="preserve">
+    <value>Maximum number of files is</value>
+  </data>
+  <data name="Required_File_Path" xml:space="preserve">
+    <value>Please select the generated file path!</value>
+  </data>
 </root>

@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SamSoarII.Core.Models;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace SamSoarII.Shell.Dialogs
 {
@@ -50,10 +52,17 @@ namespace SamSoarII.Shell.Dialogs
         {
             core = null;
             DataContext = null;
+            foreach (ExpansionUnitModule item in _widget)
+            {
+                item.ModuleTypeChangedHandle -= ExpansionModuleSettingWidget_ModuleTypeChangedHandle;
+                item.Dispose();
+            }
             for (int i = 0; i < Modules.Items.Count; i++)
             {
                 ((ListBoxItem)Modules.Items[i]).DataContext = null;
             }
+            _widget.Clear();
+            _widget = null;
         }
 
         #region Number
@@ -94,7 +103,7 @@ namespace SamSoarII.Shell.Dialogs
                         break;
                     case ModuleType.FGs_E16R:
                     case ModuleType.FGs_E16T:
-                        message = string.Format("Y{0} - Y{1}", 900 + 100 * unitModule.Core.ID, 917 + 100 * unitModule.Core.ID);
+                        message = string.Format("Y{0} - Y{1}", 900 + 100 * unitModule.Core.ID, 915 + 100 * unitModule.Core.ID);
                         break;
                     case ModuleType.FGs_E2AO:
                         message = string.Format("AO{0} - AO{1}", 4 * unitModule.Core.ID, 1 + 4 * unitModule.Core.ID);
@@ -106,11 +115,11 @@ namespace SamSoarII.Shell.Dialogs
                         message = string.Format("AI{0} - AI{1}", 4 + 4 * unitModule.Core.ID, 7 + 4 * unitModule.Core.ID);
                         break;
                     case ModuleType.FGs_E16X:
-                        message = string.Format("X{0} - X{1}", 900 + 100 * unitModule.Core.ID, 917 + 100 * unitModule.Core.ID);
+                        message = string.Format("X{0} - X{1}", 900 + 100 * unitModule.Core.ID, 915 + 100 * unitModule.Core.ID);
                         break;
                     case ModuleType.FGs_E16X16T:
                     case ModuleType.FGs_E16X16R:
-                        message = string.Format("X{0} - X{1},Y{0} - Y{1}", 900 + 100 * unitModule.Core.ID, 917 + 100 * unitModule.Core.ID);
+                        message = string.Format("X{0} - X{1},Y{0} - Y{1}", 900 + 100 * unitModule.Core.ID, 915 + 100 * unitModule.Core.ID);
                         break;
                     default:
                         break;

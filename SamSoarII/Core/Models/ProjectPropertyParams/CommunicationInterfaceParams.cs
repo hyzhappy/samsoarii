@@ -134,7 +134,7 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-
+        public bool LoadSuccess { get; set; }
         public void Load(IParams iparams)
         {
             if (iparams is CommunicationInterfaceParams)
@@ -148,6 +148,7 @@ namespace SamSoarII.Core.Models
                 this.StationNumber = that.StationNumber;
                 this.Timeout = that.Timeout;
             }
+            LoadSuccess = true;
         }
         #endregion
         

@@ -147,7 +147,7 @@ namespace SamSoarII.Core.Models
             that.Load(this);
             return that;
         }
-
+        public bool LoadSuccess { get; set; }
         public void Load(IParams iparams)
         {
             if (iparams is HoldingSectionParams)
@@ -163,6 +163,7 @@ namespace SamSoarII.Core.Models
                 this.CVLength = that.CVLength;
                 this.NotClear = that.NotClear;
             }
+            LoadSuccess = true;
         }
 
         #endregion

@@ -13,11 +13,19 @@ namespace SamSoarII.Utility
         /// <summary>
         /// SamSoarII的文件类型
         /// </summary>
-        public static string ExtensionName
+        public static string NewFileExtension
         {
             get
             {
                 return "ssr";
+            }
+        }
+
+        public static string OldFileExtension
+        {
+            get
+            {
+                return "ssp";
             }
         }
         /// <summary>

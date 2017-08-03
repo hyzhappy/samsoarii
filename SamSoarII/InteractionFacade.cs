@@ -430,15 +430,17 @@ namespace SamSoarII
                     {
                         dialog2.EnsureButtonClick += (sender1, e1) =>
                         {
+                            bool ret = true;
                             if(mdProj.LadderMode != LadderModes.Edit)
                             {
                                 LocalizedMessageBox.Show(Properties.Resources.Modify_Project, LocalizedMessageIcon.Warning);
                             }
                             else
                             {
-                                dialog2.Save();
+                                ret = dialog2.Save();
                             }
-                            dialog2.Close();
+                            if(ret)
+                                dialog2.Close();
                         };
                         dialog2.ShowDialog();
                     }
@@ -1168,7 +1170,7 @@ namespace SamSoarII
                             LocalizedMessageBox.Show(Properties.Resources.Message_File_Name, LocalizedMessageIcon.Information);
                             return;
                         }
-                        string fullFileName = string.Format(@"{0}\{1}.{2}", dir, name, FileHelper.ExtensionName, LocalizedMessageIcon.Information);
+                        string fullFileName = string.Format(@"{0}\{1}.{2}", dir, name, FileHelper.NewFileExtension, LocalizedMessageIcon.Information);
                         if (File.Exists(fullFileName))
                         {
                             LocalizedMessageBox.Show(Properties.Resources.Message_File_Exist, LocalizedMessageIcon.Information);
@@ -1189,7 +1191,7 @@ namespace SamSoarII
         public void ShowOpenProjectDialog()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
+            openFileDialog.Filter = string.Format("{0}|*.{1};*.{2}",Properties.Resources.Project_File, FileHelper.NewFileExtension, FileHelper.OldFileExtension);
             if (openFileDialog.ShowDialog() == true)
             {
                 if (mdProj != null && mdProj.ProjName.Equals(openFileDialog.FileName))
@@ -1197,7 +1199,11 @@ namespace SamSoarII
                     LocalizedMessageBox.Show(Properties.Resources.Message_Project_Loaded, LocalizedMessageIcon.Information);
                     return;
                 }
-                LoadProject(openFileDialog.FileName);
+                if (openFileDialog.FileName.EndsWith(FileHelper.OldFileExtension))
+                {
+                    LocalizedMessageBox.Show(Properties.Resources.File_Type_Not_Supported, LocalizedMessageIcon.Information);
+                }
+                else LoadProject(openFileDialog.FileName);
             }
         }
 
@@ -1209,7 +1215,7 @@ namespace SamSoarII
                 return;
             }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.ExtensionName);
+            saveFileDialog.Filter = string.Format("{0}文件|*.{0}", FileHelper.NewFileExtension);
             if (saveFileDialog.ShowDialog() == true)
             {
                 SaveAsProject(saveFileDialog.FileName);
@@ -1333,15 +1339,17 @@ namespace SamSoarII
                 {
                     try
                     {
+                        bool ret = true;
                         if (mdProj.LadderMode != LadderModes.Edit)
                         {
                             LocalizedMessageBox.Show(Properties.Resources.Modify_Project, LocalizedMessageIcon.Warning);
                         }
                         else
                         {
-                            dialog.Save();
+                            ret = dialog.Save();
                         }
-                        dialog.Close();
+                        if(ret)
+                            dialog.Close();
                     }
                     catch (Exception exce2)
                     {
@@ -1479,6 +1487,11 @@ namespace SamSoarII
             }
         }
 
+        public void ShowFileConvertDialog()
+        {
+            FileConvertDialog dialog = new FileConvertDialog();
+            dialog.ShowDialog();
+        }
         #endregion
         
         #region HotKey System
@@ -1575,7 +1588,7 @@ namespace SamSoarII
         #endregion
 
         #region Event Handler
-
+        
         public event IWindowEventHandler PostIWindowEvent = delegate { };
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -1747,7 +1760,8 @@ namespace SamSoarII
              && e.Command != GlobalCommand.ChangeToEnglishCommand
              && e.Command != GlobalCommand.ShowHelpDocumentCommand
              && e.Command != GlobalCommand.OnlineHelpCommand
-             && e.Command != GlobalCommand.ShowAboutCommand)
+             && e.Command != GlobalCommand.ShowAboutCommand
+             && e.Command != GlobalCommand.FileConvertCommand)
             {
                 ret &= mdProj != null && vmdProj != null;
                 if (!ret) return ret;

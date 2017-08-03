@@ -92,9 +92,9 @@
                 </StackPanel>
                 <StackPanel IsEnabled="{Binding ElementName=OP_Channel_CB,Path=IsChecked}">
                     <TextBlock Text="{x:Static properties:Resources.Digital_Quantity_Range}"/>
-                    <win:OnlyNumsTextBox Text="{Binding OP_StartRange}" x:Name="OP_TB_Start" LowRange="0" TopRange="65535" IsNumsOnly="True" Width="70"></win:OnlyNumsTextBox>
+                    <win:OnlyNumsTextBox Text="{Binding OP_StartRange}" x:Name="OP_TB_Start" LowRange="0" TopRange="65535" IsNumsOnly="True" Width="70"/>
                     <TextBlock Margin="10,0,10,0">—</TextBlock>
-                    <win:OnlyNumsTextBox Text="{Binding OP_EndRange}" x:Name="OP_TB_End" LowRange="0" TopRange="65535" IsNumsOnly="True" Width="70"></win:OnlyNumsTextBox>
+                    <win:OnlyNumsTextBox Text="{Binding OP_EndRange}" x:Name="OP_TB_End" LowRange="0" TopRange="65535" IsNumsOnly="True" Width="70"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
