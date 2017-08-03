@@ -117,29 +117,7 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("IsMasked"));
             }
         }
-
-        private bool isexpand;
-        public bool IsExpand
-        {
-            get { return this.isexpand; }
-            set { this.isexpand = value; PropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
-        }
         
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                foreach (LadderUnitModel unit in Children.Concat(VLines))
-                    unit.LadderMode = laddermode;
-                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
-            }
-        }
 
         #endregion
 
@@ -194,6 +172,47 @@ namespace SamSoarII.Core.Models
         {
             get { return this.ptvitem; }
             set { this.ptvitem = value; }
+        }
+        
+        public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
+
+        private bool isexpand;
+        public bool IsExpand
+        {
+            get { return this.isexpand; }
+            set { this.isexpand = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
+        }
+
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (LadderUnitModel unit in Children.Concat(VLines))
+                    unit.LadderMode = laddermode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                foreach (LadderUnitModel unit in Children.Concat(VLines))
+                    unit.IsCommentMode = iscommentmode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
+            }
         }
 
         #endregion

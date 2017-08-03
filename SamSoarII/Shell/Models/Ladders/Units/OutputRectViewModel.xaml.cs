@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace SamSoarII.Shell.Models
 {
@@ -37,8 +38,6 @@ namespace SamSoarII.Shell.Models
             recreating = true;
             ReinitializeComponent();
             DataContext = this;
-            if (Core?.Parent?.View != null)
-                IsCommentMode = Core.Parent.View.IsCommentMode;
             recreating = false;
         }
         
@@ -85,6 +84,8 @@ namespace SamSoarII.Shell.Models
                     bottomvalues[0].Text = "100 ms";
                     break;
             }
+            CommentArea.Visibility = IsCommentMode 
+                ? Visibility.Visible : Visibility.Hidden;
             for (int i = 0; i < comments.Length; i++)
             {
                 if (i < Core.Children.Count)
@@ -157,13 +158,11 @@ namespace SamSoarII.Shell.Models
             if (comments[id] == null) return;
             comments[id].Visibility = Visibility.Hidden;
         }
-        public override bool IsCommentMode
+
+        protected override void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            set
-            {
-                base.IsCommentMode = value;
-                CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
-            }
+            base.OnCorePropertyChanged(sender, e);
+            CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
         }
 
         public override void Update(int flags = 255)

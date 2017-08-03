@@ -1328,13 +1328,6 @@ namespace SamSoarII.Core.Models
             }
         }
         
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get { return this.laddermode; }
-            set { this.laddermode = value; PropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
-        }
-
         #region Breakpoint
 
         private LadderBrpoModel breakpoint;
@@ -1433,6 +1426,22 @@ namespace SamSoarII.Core.Models
         {
             get { return this.ptvitem; }
             set { this.ptvitem = value; }
+        }
+
+        public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
+
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get { return this.laddermode; }
+            set { this.laddermode = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
+        }
+        
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get { return this.iscommentmode; }
+            set { this.iscommentmode = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode")); }
         }
 
         #endregion

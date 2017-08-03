@@ -39,8 +39,6 @@ namespace SamSoarII.Shell.Models
             recreating = true;
             ReinitializeComponent();
             DataContext = this;
-            if (Core?.Parent?.View != null)
-                IsCommentMode = Core.Parent.View.IsCommentMode;
             recreating = false;
         }
 
@@ -153,6 +151,8 @@ namespace SamSoarII.Shell.Models
                 ? Visibility.Visible : Visibility.Hidden;
             Value2TextBlock.Visibility = Core.Children.Count >= 2
                 ? Visibility.Visible : Visibility.Hidden;
+            CommentArea.Visibility = IsCommentMode 
+                ? Visibility.Visible : Visibility.Hidden;
             for (int i = 0; i < comments.Length; i++)
             {
                 if (i < Core.Children.Count)
@@ -216,15 +216,14 @@ namespace SamSoarII.Shell.Models
             if (comments[id] == null) return;
             comments[id].Visibility = Visibility.Hidden;
         }
-        public override bool IsCommentMode
+
+        protected override void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            set
-            {
-                base.IsCommentMode = value;
+            base.OnCorePropertyChanged(sender, e);
+            if (e.PropertyName.Equals("IsCommentMode"))
                 CommentArea.Visibility = IsCommentMode ? Visibility.Visible : Visibility.Hidden;
-            }
         }
-        
+
         public override void Update(int flags = UPDATE_ALL)
         {
             FontData fdata = null;

@@ -108,13 +108,6 @@ namespace SamSoarII.Core.Models
             get { return this.path; }
         }
         
-        private bool isexpand;
-        public bool IsExpand
-        {
-            get { return this.isexpand; }
-            set { this.isexpand = value; PropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
-        }
-
         private bool ismain;
         public bool IsMainLadder
         {
@@ -128,25 +121,7 @@ namespace SamSoarII.Core.Models
             get { return this.isitpr; }
             set { this.isitpr = value;}
         }
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                if (Inst != null) Inst.LadderMode = laddermode;
-                foreach (LadderNetworkModel network in Children)
-                    network.LadderMode = laddermode;
-                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
-            }
-        }
         
-
         #endregion
 
         #region Inst
@@ -208,7 +183,50 @@ namespace SamSoarII.Core.Models
             get { return this.tab; }
             set { this.tab = value; }
         }
+        
+        public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
 
+        private bool isexpand;
+        public bool IsExpand
+        {
+            get { return this.isexpand; }
+            set { this.isexpand = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("IsExpand")); }
+        }
+        
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                if (Inst != null) Inst.LadderMode = laddermode;
+                foreach (LadderNetworkModel network in Children)
+                    network.LadderMode = laddermode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                if (Inst != null) Inst.IsCommentMode = iscommentmode;
+                foreach (LadderNetworkModel network in Children)
+                    network.IsCommentMode = iscommentmode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
+            }
+        }
+        
         #endregion
 
         #region Load & Save

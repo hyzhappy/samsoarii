@@ -33,8 +33,6 @@ namespace SamSoarII.Shell.Models
             base.Recreate(args);
             recreating = true;
             DataContext = this;
-            if (Core?.Parent?.View != null)
-                IsCommentMode = Core.Parent.View.IsCommentMode;
             Update();
             recreating = false;
         }

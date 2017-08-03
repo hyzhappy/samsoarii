@@ -58,23 +58,7 @@ namespace SamSoarII.Core.Models
         public ValueManager ValueManager { get { return parent?.Parent?.Parent?.MNGValue; } }
 
         public IEnumerable<InstructionNetworkModel> Children { get { return parent?.Children.Select(n => n.Inst); } }
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get
-            {
-                return this.laddermode;
-            }
-            set
-            {
-                this.laddermode = value;
-                foreach (InstructionNetworkModel netinst in Children)
-                    netinst.LadderMode = laddermode;
-                PropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
-            }
-        }
-
+        
         #endregion
 
         #region Shell
@@ -106,6 +90,40 @@ namespace SamSoarII.Core.Models
         {
             get { return this.ptvitem; }
             set { this.ptvitem = value; }
+        }
+        
+        public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
+
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get
+            {
+                return this.laddermode;
+            }
+            set
+            {
+                this.laddermode = value;
+                foreach (InstructionNetworkModel netinst in Children)
+                    netinst.LadderMode = laddermode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode"));
+            }
+        }
+
+        private bool iscommentmode;
+        public bool IsCommentMode
+        {
+            get
+            {
+                return this.iscommentmode;
+            }
+            set
+            {
+                this.iscommentmode = value;
+                foreach (InstructionNetworkModel netinst in Children)
+                    netinst.IsCommentMode = iscommentmode;
+                ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
+            }
         }
 
         #endregion
