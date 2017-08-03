@@ -59,12 +59,14 @@ namespace SamSoarII.Shell.Models
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
+                    _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     _core.ChildrenChanged -= OnCoreChildrenChanged;
                     if (_core.View != null) _core.View = null;
                 }
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    core.ViewPropertyChanged += OnCorePropertyChanged;
                     core.ChildrenChanged += OnCoreChildrenChanged;
                     if (core.View != this) core.View = this;
                 }
@@ -108,7 +110,6 @@ namespace SamSoarII.Shell.Models
                     Update();
                     break;
             }
-            IsCommentMode = iscommentmode;
         }
 
         #endregion
@@ -130,23 +131,7 @@ namespace SamSoarII.Shell.Models
         }
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
-
-        private bool iscommentmode;
-        public bool IsCommentMode
-        {
-            get
-            {
-                return this.iscommentmode;
-            }
-            set
-            {
-                this.iscommentmode = value;
-                foreach (InstructionNetworkViewModel invmodel in MainStack.Children)
-                {
-                    invmodel.IsCommentMode = value;
-                }
-            }
-        }
+        public bool IsCommentMode { get { return core.IsCommentMode; } }
 
         #region Select
 

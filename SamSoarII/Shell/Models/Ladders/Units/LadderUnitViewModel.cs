@@ -124,6 +124,7 @@ namespace SamSoarII.Shell.Models
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
+                    _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     _core.Changed -= OnCoreChanged;
                     if (_core.View != null) _core.View = null;
                 }
@@ -131,6 +132,7 @@ namespace SamSoarII.Shell.Models
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    core.ViewPropertyChanged += OnCorePropertyChanged;
                     core.Changed += OnCoreChanged;
                     if (core.View != this) core.View = this;
                 }
@@ -145,12 +147,13 @@ namespace SamSoarII.Shell.Models
             set { Core = (LadderUnitModel)value; }
         }
 
-        private void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected virtual void OnCorePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case "X": Update(UPDATE_LEFT); break;
                 case "Y": Update(UPDATE_TOP); break;
+                case "IsCommentMode": Update(UPDATE_TOP | UPDATE_HEIGHT); break;
                 case "LadderMode":
                     if (oldladdermode != LadderModes.Edit)
                     {
@@ -230,19 +233,7 @@ namespace SamSoarII.Shell.Models
         private LadderModes oldladdermode;
         public LadderModes LadderMode { get { return core.LadderMode; } }
         
-        private bool iscommentmode;
-        public virtual bool IsCommentMode
-        {
-            get
-            {
-                return this.iscommentmode;
-            }
-            set
-            {
-                this.iscommentmode = value;
-                Update(UPDATE_TOP | UPDATE_HEIGHT);
-            }
-        }
+        public bool IsCommentMode { get { return core.IsCommentMode; } }
 
         public const int UPDATE_ALL = 0xff;
         public const int UPDATE_TOP = 0x01;
@@ -259,7 +250,7 @@ namespace SamSoarII.Shell.Models
                 case 0:
                     break;
                 case UPDATE_TOP:
-                    Canvas.SetTop(this, Y * (iscommentmode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit));
+                    Canvas.SetTop(this, Y * (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit));
                     break;
                 case UPDATE_LEFT:
                     Canvas.SetLeft(this, X * Global.GlobalSetting.LadderWidthUnit);
@@ -268,7 +259,7 @@ namespace SamSoarII.Shell.Models
                     Width = Global.GlobalSetting.LadderWidthUnit;
                     break;
                 case UPDATE_HEIGHT:
-                    Height = (iscommentmode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit);
+                    Height = (IsCommentMode ? Global.GlobalSetting.LadderCommentModeHeightUnit : Global.GlobalSetting.LadderHeightUnit);
                     break;
                 case UPDATE_PROPERTY:
                     break;

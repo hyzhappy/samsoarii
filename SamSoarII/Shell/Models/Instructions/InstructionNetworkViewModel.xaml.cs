@@ -80,11 +80,13 @@ namespace SamSoarII.Shell.Models
                 if (_core != null)
                 {
                     _core.PropertyChanged -= OnCorePropertyChanged;
+                    _core.ViewPropertyChanged -= OnCorePropertyChanged;
                     if (_core.View != null) _core.View = null;
                 }
                 if (core != null)
                 {
                     core.PropertyChanged += OnCorePropertyChanged;
+                    core.ViewPropertyChanged += OnCorePropertyChanged;
                     if (core.View != this) core.View = this;
                 }
             }
@@ -103,6 +105,11 @@ namespace SamSoarII.Shell.Models
             {
                 case "ID": PropertyChanged(this, new PropertyChangedEventArgs("Header")); break;
                 case "IsMasked": BaseUpdate(); break;
+                case "IsCommentMode":
+                    foreach (InstructionRowViewModel row in children)
+                        row.TextBlocks[7].Visibility = IsCommentMode
+                            ? Visibility.Visible : Visibility.Hidden;
+                    break;
             }
         }
         
@@ -165,7 +172,7 @@ namespace SamSoarII.Shell.Models
                         SetPosition(row.TextBlocks[i], row.ID, i);
                         CV_Inst.Children.Add(row.TextBlocks[i]);
                     }
-                    row.TextBlocks[7].Visibility = iscommentmode
+                    row.TextBlocks[7].Visibility = IsCommentMode
                         ? Visibility.Visible : Visibility.Hidden;
                 }
             if (e.OldItems != null)
@@ -301,23 +308,7 @@ namespace SamSoarII.Shell.Models
         #endregion
         
         public LadderModes LadderMode { get { return core.LadderMode; } }
-
-        private bool iscommentmode;
-        public bool IsCommentMode
-        {
-            get
-            {
-                return this.iscommentmode;
-            }
-            set
-            {
-                this.iscommentmode = value;
-
-                foreach (InstructionRowViewModel row in children)
-                    row.TextBlocks[7].Visibility = iscommentmode
-                        ? Visibility.Visible : Visibility.Hidden;
-            }
-        }
+        public bool IsCommentMode { get { return core.IsCommentMode; } }
 
         #endregion
 

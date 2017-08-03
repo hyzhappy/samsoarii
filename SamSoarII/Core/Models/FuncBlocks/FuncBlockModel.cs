@@ -62,14 +62,7 @@ namespace SamSoarII.Core.Models
 
         private bool islibrary;
         public bool IsLibrary { get { return this.islibrary; } }
-
-        private LadderModes laddermode;
-        public LadderModes LadderMode
-        {
-            get { return this.laddermode; }
-            set { this.laddermode = value; PropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
-        }
-
+        
         public IEnumerable<FuncModel> Funcs
         {
             get
@@ -302,8 +295,9 @@ namespace SamSoarII.Core.Models
             {
                 if (view == value) return;
                 FuncBlockViewModel _view = view;
-                this.view = value;
+                this.view = null;
                 if (_view != null && _view.Core != null) _view.Core = null;
+                this.view = value;
                 if (view != null && view.Core != this) view.Core = this;
             }
         }
@@ -318,6 +312,15 @@ namespace SamSoarII.Core.Models
         {
             get { return this.ptvitem; }
             set { this.ptvitem = value; }
+        }
+
+        public event PropertyChangedEventHandler ViewPropertyChanged = delegate { };
+
+        private LadderModes laddermode;
+        public LadderModes LadderMode
+        {
+            get { return this.laddermode; }
+            set { this.laddermode = value; ViewPropertyChanged(this, new PropertyChangedEventArgs("LadderMode")); }
         }
 
         #endregion

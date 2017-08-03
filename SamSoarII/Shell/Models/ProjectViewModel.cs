@@ -56,13 +56,14 @@ namespace SamSoarII.Shell.Models
             set
             {
                 ProjectModel _core = core;
-                this.core = value;
+                this.core = null;
                 if (_core != null)
                 {
                     _core.DiagramChanged -= OnCoreDiagramChanged;
                     _core.FuncBlockChanged -= OnCoreFuncBlockChanged;
                     if (_core.View != null) _core.View = null;
                 }
+                this.core = value;
                 if (core != null)
                 {
                     core.DiagramChanged += OnCoreDiagramChanged;
@@ -92,26 +93,13 @@ namespace SamSoarII.Shell.Models
             get { return core.LadderMode; }
             set { core.LadderMode = value; }
         }
-
-        private bool iscommentmode;
+        
         public bool IsCommentMode
         {
-            get
-            {
-                return this.iscommentmode;
-            }
-            set
-            {
-                this.iscommentmode = value;
-                foreach (LadderDiagramModel ldmodel in Core.Diagrams)
-                {
-                    if (ldmodel.View != null)
-                        ldmodel.View.IsCommentMode = iscommentmode;
-                }
-                PropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
-            }
+            get { return core.IsCommentMode; }
+            set { core.IsCommentMode = value; }
         }
-        
+
         public void UpdateUnit(int flags)
         {
             foreach (LadderDiagramModel diagram in core.Diagrams)
