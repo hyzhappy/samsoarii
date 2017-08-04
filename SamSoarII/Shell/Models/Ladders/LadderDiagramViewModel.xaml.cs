@@ -2626,15 +2626,12 @@ namespace SamSoarII.Shell.Models
                 if (xmltext != null)
                 {
                     XElement xele = XElement.Parse(xmltext);
-                    //xele = xele.Element("Root");
-                    //SelectStatus selectstatus = (SelectStatus)int.Parse(xele.Attribute("SelectionStatus").Value);
-                    //CrossNetworkState crossstate = (CrossNetworkState)int.Parse(xele.Attribute("CrossNetworkState").Value);
                     XElement xele_c = xele.Element("Current");
                     XElement xele_us = xele.Element("Units");
                     XElement xele_ns = xele.Element("Networks");
                     if (xele_c != null)
                     {
-                        LadderUnitModel unit = new LadderUnitModel(null, xele_c);
+                        LadderUnitModel unit = new LadderUnitModel(SelectRectOwner, xele_c);
                         unit.X = _selectRect.X;
                         unit.Y = _selectRect.Y;
                         Core.AddSingleUnit(unit, SelectRectOwner, false);
@@ -2650,7 +2647,7 @@ namespace SamSoarII.Shell.Models
                         int _yHeight = _yEnd - _yBegin + 1;
                         foreach (XElement xele_u in xele_us.Elements("Unit"))
                         {
-                            LadderUnitModel unit = new LadderUnitModel(null, xele_u);
+                            LadderUnitModel unit = new LadderUnitModel(SelectRectOwner, xele_u);
                             units.Add(unit);
                         }
                         bool containoutput = units.Where(u => u.Shape == LadderUnitModel.Shapes.Output || u.Shape == LadderUnitModel.Shapes.OutputRect).Count() > 0;
@@ -2683,7 +2680,7 @@ namespace SamSoarII.Shell.Models
                         int nEnd = nStart - 1;
                         foreach (XElement xele_n in xele_ns.Elements("Network"))
                         {
-                            LadderNetworkModel net = new LadderNetworkModel(null, 0);
+                            LadderNetworkModel net = new LadderNetworkModel(Core, 0);
                             net.Load(xele_n);
                             net.ID = ++nEnd;
                             nets.Add(net);
