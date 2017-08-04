@@ -16,9 +16,15 @@ namespace SamSoarII.Core.Helpers
         {
             List<InstHelper.PLCInstNetwork> nets =
                 new List<InstHelper.PLCInstNetwork>();
+            project.MainDiagram.CName = "RunLadder";
+            int diagramid = 0;
+            foreach (LadderDiagramModel diagram in project.Diagrams)
+                if (!diagram.IsMainLadder)
+                    diagram.CName = String.Format("_SBR_{0:d}", diagramid++);
             Generate(project.MainDiagram, nets);
             foreach (LadderDiagramModel diagram in project.Diagrams)
-                if (!diagram.IsMainLadder) Generate(diagram, nets);
+                if (!diagram.IsMainLadder)
+                    Generate(diagram, nets);
             // 建立仿真的c环境的路径
             string currentPath = Utility.FileHelper.AppRootPath;
             string ladderHFile = String.Format(@"{0:s}\simug\simuc.h", currentPath);
@@ -168,11 +174,15 @@ namespace SamSoarII.Core.Helpers
         {
             List<InstHelper.PLCInstNetwork> nets =
                 new List<InstHelper.PLCInstNetwork>();
+            project.MainDiagram.CName = "RunLadder";
+            int diagramid = 0;
+            foreach (LadderDiagramModel diagram in project.Diagrams)
+                if (!diagram.IsMainLadder)
+                    diagram.CName = String.Format("_SBR_{0:d}", diagramid++);
             Generate(project.MainDiagram, nets);
             foreach (LadderDiagramModel diagram in project.Diagrams)
-            {
-                if (!diagram.IsMainLadder) Generate(diagram, nets);
-            }
+                if (!diagram.IsMainLadder)
+                    Generate(diagram, nets);
             // 建立仿真的c环境的路径
             string currentPath = Utility.FileHelper.AppRootPath;
             string ladderHFile = String.Format(@"{0:s}\downg\downc.h", currentPath);
@@ -254,18 +264,33 @@ namespace SamSoarII.Core.Helpers
             List<InstHelper.PLCInstNetwork> nets)
         {
             foreach (LadderNetworkModel network in diagram.Children.Where(n => !n.IsMasked))
-            {
                 Generate(network, nets);
-            }
         }
 
         private static void Generate(
             LadderNetworkModel network,
             List<InstHelper.PLCInstNetwork> nets)
         {
+            ProjectModel project = network.Parent.Parent;
+            PLCInstruction[] insts = network.Inst.Insts.Select(i => i.Inst).ToArray();
+            foreach (PLCInstruction inst in insts)
+            {
+                string dianame = null;
+                if (inst[0].Equals("CALL"))
+                    dianame = inst[1];
+                if (inst[0].Equals("ATCH"))
+                    dianame = inst[2];
+                if (dianame != null)
+                {
+                    LadderDiagramModel diagram = project.Diagrams.Where(d => d.Name.Equals(dianame)).FirstOrDefault();
+                    if (inst[0].Equals("CALL"))
+                        inst[1] = diagram.CName;
+                    if (inst[0].Equals("ATCH"))
+                        inst[2] = diagram.CName;
+                }
+            }
             InstHelper.PLCInstNetwork net = new InstHelper.PLCInstNetwork(
-                network.Parent.Name,
-                network.Inst.Insts.Select(i => i.Inst).ToArray());
+                network.Parent.CName, insts);
             nets.Add(net);
         }
 

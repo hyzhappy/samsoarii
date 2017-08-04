@@ -659,12 +659,14 @@ namespace SamSoarII.Shell.Windows
             }
             if (ptvitem.RelativeObject is LadderDiagramModel)
             {
+                /*
                 Match m = Regex.Match(ptvitem.Text, @"^[a-zA-Z_]\w*$");
                 if (!m.Success)
                 {
                     ptvitem.Rename(Properties.Resources.Message_Name_Format_illegal);
                     return;
                 }
+                */
                 LadderDiagramModel ldmodel = (LadderDiagramModel)(ptvitem.RelativeObject);
                 foreach (LadderDiagramModel _ldmodel in ldmodel.Parent.Diagrams)
                 {

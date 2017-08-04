@@ -95,6 +95,13 @@ namespace SamSoarII.Core.Models
             set { this.name = value; PropertyChanged(this, new PropertyChangedEventArgs("Name")); }
         }
 
+        private string cname;
+        public string CName
+        {
+            get { return this.cname; }
+            set { this.cname = value; }
+        }
+
         private string brief;
         public string Brief
         {

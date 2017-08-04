@@ -302,9 +302,9 @@ namespace SamSoarII.Core.Models
         {
             switch (e.PropertyName)
             {
-                case "IsEnable": Model.InvokeBreakpointPropertyChanged(this, "BPEnable"); break;
-                case "IsActive": Model.InvokeBreakpointPropertyChanged(this, "BPActive"); break;
-                case "Cursor": Model.InvokeBreakpointPropertyChanged(this, "BPCursor"); break;
+                case "IsEnable": Model?.InvokeBreakpointPropertyChanged(this, "BPEnable"); break;
+                case "IsActive": Model?.InvokeBreakpointPropertyChanged(this, "BPActive"); break;
+                case "Cursor": Model?.InvokeBreakpointPropertyChanged(this, "BPCursor"); break;
             }
         }
         

@@ -247,6 +247,7 @@ namespace SamSoarII
         private void InitializeProject()
         {
             mdProj.PropertyChanged += OnProjectPropertyChanged;
+            mdProj.ViewPropertyChanged += OnProjectPropertyChanged;
             mdProj.Modified += OnProjectModified;
             vmdProj = new ProjectViewModel(mdProj);
             vmdProj.PropertyChanged += OnViewPropertyChanged;
@@ -370,6 +371,7 @@ namespace SamSoarII
             if (mdProj == null) return;
             WaitForThreadAbort();
             mdProj.PropertyChanged -= OnProjectPropertyChanged;
+            mdProj.ViewPropertyChanged -= OnProjectPropertyChanged;
             mdProj.Modified -= OnProjectModified;
             wndMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { wndMain.HideAllDock(); });
             tcMain.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate () { tcMain.Reset(); });
