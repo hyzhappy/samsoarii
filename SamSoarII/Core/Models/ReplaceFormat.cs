@@ -116,7 +116,6 @@ namespace SamSoarII.Core.Models
                     return false;
             }
         }
-        /*
         public ReplaceCommand Replace(LadderUnitModel unit, ReplaceFormat origin)
         {
             StringBuilder newargs = new StringBuilder();
@@ -133,40 +132,60 @@ namespace SamSoarII.Core.Models
                         ValueRange newrange = i < Ranges.Count ? Ranges[i] : null;
                         
                     }
-                    break;
+                    return null;
                 case Modes.Unit:
-                    break;
+                    return null;
                 default:
                     return null;
             }
              
         }
-        */
-        /*
-        private string ReplaceValue(ValueModel value, ValueRange oldrange, ValueRange newrange)
+
+        private void ReplaceValue(StringBuilder newargs, ValueModel value, ValueRange oldrange, ValueRange newrange)
         {
             if (newrange != null)
             {
                 newargs.Append(" ");
                 int offset = 0;
-                if (oldrange == null || oldrange.IsAny)
+                if (newrange.IsAny)
+                    newargs.Append(value.Text);
+                else if (oldrange == null || oldrange.IsAny)
                     newargs.Append(newrange.Base.Text);
                 else if (newrange.Base.IsWordBit)
                 {
                     offset = (newrange.Base.Offset >> 4);
-                    if (value.IsWordBit && oldrange)
-                            }
+                    if (value.IsWordBit && oldrange.Base.IsWordBit && newrange.OffsetCount > 1)
+                        offset += (value.Offset >> 4) - (oldrange.Base.Offset >> 4);
+                    newargs.Append(String.Format("{0:s}{1:d}",
+                        ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));
+                    offset = (newrange.Base.Offset & 15);
+                    if (value.IsWordBit && oldrange.Base.IsWordBit && newrange.FlagCount > 1)
+                        offset += (value.Offset & 15) - (oldrange.Base.Offset & 15);
+                    offset &= 15;
+                    newargs.Append(String.Format(".{1:x}", offset));
+                }
                 else if (newrange.Base.IsBitWord || newrange.Base.IsBitDoubleWord)
                 {
-
-                }
-                else
-                {
-
+                    offset = newrange.Base.Size;
+                    if ((value.IsBitWord || value.IsBitDoubleWord)
+                     && (oldrange.Base.IsBitWord || oldrange.Base.IsBitDoubleWord)
+                     && newrange.FlagCount > 1)
+                    {
+                        offset += value.Size - oldrange.Base.Size;
+                    }
+                    newargs.Append(String.Format("K{0:d}", offset));
+                    offset = newrange.Base.Offset;
+                    if ((value.IsBitWord || value.IsBitDoubleWord)
+                     && (oldrange.Base.IsBitWord || oldrange.Base.IsBitDoubleWord)
+                     && newrange.OffsetCount > 1)
+                    {
+                        offset += value.Size - oldrange.Base.Size;
+                    }
+                    newargs.Append(String.Format("{0:s}{1:d}",
+                        ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));                  
                 }
             }
         }
-        */
         #endregion
 
     }

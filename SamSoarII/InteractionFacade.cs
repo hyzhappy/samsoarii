@@ -305,10 +305,10 @@ namespace SamSoarII
             }
             catch (Exception e)
             {
-                handle.Completed = true;
-                handle.Abort();
-                mdProj = null;
-                LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
+               handle.Completed = true;
+               handle.Abort();
+               mdProj = null;
+               LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
             }
         }
         

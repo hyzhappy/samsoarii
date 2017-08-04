@@ -42,6 +42,7 @@ namespace SamSoarII.Core.Models
             Shift, Interrupt,
             RealTime, Communication,
             Pulse, HighCount, Auxiliar,
+            PID,
             NULL
         }
         public enum Types
@@ -63,9 +64,10 @@ namespace SamSoarII.Core.Models
             ATCH, DTCH, EI, DI,
             TRD, TWR,
             MBUS, SEND, REV,
-            PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSNEXT, PLSSTOP, ZRN, DZRN, PTO, DRVI, DDRVI,
+            PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSA, DPLSA, PLSNEXT, PLSSTOP, ZRN, DZRN, DZRND, PTO, DRVI, DDRVI, DRVA, DDRVA,
             HCNT,
             LOG, POW, FACT, CMP, CMPD, CMPF, ZCP, ZCPD, ZCPF, NEG, NEGD, XCH, XCHD, XCHF, CML, CMLD, SMOV, FMOV, FMOVD,
+            PID,
             VLINE, HLINE, NULL
         }
         public enum Shapes
@@ -445,8 +447,8 @@ namespace SamSoarII.Core.Models
                 "Round-up the 32-bit float IN and assign to OUT.",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.BitWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.BitWordRegex}),
                     new ValueFormat("OUT", ValueModel.Types.WORD, false, true, -1, new Regex[] { ValueModel.VerifyWordRegex2, ValueModel.BitWordRegex}) };
             Formats[(int)Types.ANDW] = new LadderUnitFormat(502, "ANDW", Types.ANDW, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.Word_And,
@@ -848,6 +850,15 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            Formats[(int)Types.DRVA] = new LadderUnitFormat(1617, "DRVA", Types.DRVA, Outlines.Pulse, Shapes.OutputRect,
+                Properties.Resources.DRVI_Inst,
+                "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
+                "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
+                new ValueFormat[] {
+                    new ValueFormat("F", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("P", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
             Formats[(int)Types.DPLSY] = new LadderUnitFormat(1605, "DPLSY", Types.DPLSY, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPLSY_Inst,
                 "当栈顶为1时，往输出位输出指定频率和脉冲数的脉冲信号。",
@@ -857,6 +868,15 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
             Formats[(int)Types.DDRVI] = new LadderUnitFormat(1618, "DDRVI", Types.DDRVI, Outlines.Pulse, Shapes.OutputRect,                
+                Properties.Resources.DDRVI_Inst,
+                "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
+                "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
+                new ValueFormat[] {
+                    new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            Formats[(int)Types.DDRVA] = new LadderUnitFormat(1618, "DDRVA", Types.DDRVA, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DDRVI_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
@@ -917,6 +937,11 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
                     new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            vformats = new ValueFormat[] {
+                    new ValueFormat("D", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
+                    new ValueFormat("V", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}),
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
             Formats[(int)Types.PLSRD] = new LadderUnitFormat(1608, "PLSRD", Types.PLSRD, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PLSRD_Inst,
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
@@ -925,11 +950,21 @@ namespace SamSoarII.Core.Models
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
                 "段内按照给定频率（D2n）和脉冲数（D2n+1)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
                 "若给定D0为基地址，则D0表示第一段的脉冲数，D1表示第一段的频率，D2表示第二段的脉冲数，D3表示第二段的频率。以此类推。\r\n",
-                new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
-                    new ValueFormat("V", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                vformats);
+            Formats[(int)Types.PLSA] = new LadderUnitFormat(1608, "PLSA", Types.PLSA, Outlines.Pulse, Shapes.OutputRect,
+                "绝对位置多段脉冲输出",
+                "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
+                "段内按照给定频率（D2n）和脉冲数（D2n+1)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
+                "若给定D0为基地址，则D0表示第一段的脉冲数，D1表示第一段的频率，D2表示第二段的脉冲数，D3表示第二段的频率。以此类推。\r\n",
+                "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
+                "段内按照给定频率（D2n）和脉冲数（D2n+1)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
+                "若给定D0为基地址，则D0表示第一段的脉冲数，D1表示第一段的频率，D2表示第二段的脉冲数，D3表示第二段的频率。以此类推。\r\n",
+                vformats);
+            vformats = new ValueFormat[] {
+                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
+                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
             Formats[(int)Types.DPLSRD] = new LadderUnitFormat(1609, "DPLSRD", Types.DPLSRD, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DPLSRD_Inst,
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
@@ -938,11 +973,16 @@ namespace SamSoarII.Core.Models
                 "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
                 "段内按照给定频率（D4n）和脉冲数（D4n+2)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
                 "若给定D0为基地址，则D0表示第一段的脉冲数，D2表示第一段的频率，D4表示第二段的脉冲数，D6表示第二段的频率。以此类推。\r\n",
-                new ValueFormat[] {
-                    new ValueFormat("D", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("V", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}),
-                    new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                vformats);
+            Formats[(int)Types.DPLSA] = new LadderUnitFormat(1609, "DPLSA", Types.DPLSA, Outlines.Pulse, Shapes.OutputRect,
+                "绝对位置多段脉冲输出",
+                "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
+                "段内按照给定频率（D4n）和脉冲数（D4n+2)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
+                "若给定D0为基地址，则D0表示第一段的脉冲数，D2表示第一段的频率，D4表示第二段的脉冲数，D6表示第二段的频率。以此类推。\r\n",
+                "当栈顶为1时，输出分段变频段间频率匀速渐变的脉冲信号。\r\n" +
+                "段内按照给定频率（D4n）和脉冲数（D4n+2)产生一段脉冲，段之间的频率按给定时间（T)内直线变化。\r\n" +
+                "若给定D0为基地址，则D0表示第一段的脉冲数，D2表示第一段的频率，D4表示第二段的脉冲数，D6表示第二段的频率。以此类推。\r\n",
+                vformats);
             vformats = new ValueFormat[] {
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
             Formats[(int)Types.PLSNEXT] = new LadderUnitFormat(1612, "PLSNEXT", Types.PLSNEXT, Outlines.Pulse, Shapes.OutputRect,
@@ -964,15 +1004,21 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            vformats = new ValueFormat[] {
+                    new ValueFormat("DV", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
+                    new ValueFormat("CV", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) };
             Formats[(int)Types.DZRN] = new LadderUnitFormat(1615, "DZRN", Types.DZRN, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DZRN_Inst,
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
                 "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
-                new ValueFormat[] {
-                    new ValueFormat("DV", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
-                    new ValueFormat("CV", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
-                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
-                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+                vformats);
+            Formats[(int)Types.DZRND] = new LadderUnitFormat(1615, "DZRND", Types.DZRND, Outlines.Pulse, Shapes.OutputRect,
+                Properties.Resources.DZRN_Inst,
+                "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
+                "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
+                vformats);
             Formats[(int)Types.PTO] = new LadderUnitFormat(1616, "PTO", Types.PTO, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.PTO_Inst,
                 "当栈顶为1时，输出分段变频段内频率匀速渐变的脉冲信号。\r\n" +
@@ -1132,6 +1178,15 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("TV", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}),
                     new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) });
+            Formats[(int)Types.PID] = new LadderUnitFormat(1900, "PID", Types.PID, Outlines.PID, Shapes.OutputRect,
+                "", "", "",
+                new ValueFormat[] {
+                    new ValueFormat("LOOP", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex }),
+                    new ValueFormat("AUTO", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyIntKValueRegex }),
+                    new ValueFormat("TEMP", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3 }),
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, -2, new Regex[] {ValueModel.VerifyBitRegex5 }),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }),
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }) });
             LabelTypes = new Types[] { Types.LBL, Types.NEXT, Types.STL, Types.STLE };
             TypeOfNames = new Dictionary<string, Types>();
             for (int i = 0; i < Formats.Length; i++)
