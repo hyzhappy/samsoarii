@@ -153,7 +153,7 @@ namespace SamSoarII.Shell.Windows
                     ProjectTreeViewItem.TYPE_LADDERS,
                     PTVIH_Insts[i]);
             }
-            for (int i = 0; i < (int)(LadderUnitModel.Types.VLINE); i++)
+            for (int i = 0; i < (int)(LadderUnitModel.Types.PID); i++)
             {
                 int id = (int)(LadderUnitModel.Formats[i].Outline);
                 CreatePTVItem(PTVI_Insts[id], ProjectTreeViewItem.TYPE_INSTRUCTION, (LadderUnitModel.Types)i, false);

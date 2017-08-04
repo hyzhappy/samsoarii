@@ -48,7 +48,7 @@ namespace SamSoarII.Shell.Models
             InitializeComponent();
             middlevalues = new TextBlock[5];
             bottomvalues = new TextBlock[2];
-            comments = new TextBlock[5];
+            comments = new TextBlock[6];
             if (_core != null) Recreate(_core);
         }
 

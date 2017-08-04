@@ -42,6 +42,7 @@ namespace SamSoarII.Core.Models
             Shift, Interrupt,
             RealTime, Communication,
             Pulse, HighCount, Auxiliar,
+            PID,
             NULL
         }
         public enum Types
@@ -66,6 +67,7 @@ namespace SamSoarII.Core.Models
             PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSA, DPLSA, PLSNEXT, PLSSTOP, ZRN, DZRN, DZRND, PTO, DRVI, DDRVI, DRVA, DDRVA,
             HCNT,
             LOG, POW, FACT, CMP, CMPD, CMPF, ZCP, ZCPD, ZCPF, NEG, NEGD, XCH, XCHD, XCHF, CML, CMLD, SMOV, FMOV, FMOVD,
+            PID,
             VLINE, HLINE, NULL
         }
         public enum Shapes
@@ -1176,6 +1178,15 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("TV", ValueModel.Types.DWORD, false, true, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1}),
                     new ValueFormat("CNT", ValueModel.Types.WORD, true, false, 2, new Regex[] { ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) });
+            Formats[(int)Types.PID] = new LadderUnitFormat(1900, "PID", Types.PID, Outlines.PID, Shapes.OutputRect,
+                "", "", "",
+                new ValueFormat[] {
+                    new ValueFormat("LOOP", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex }),
+                    new ValueFormat("AUTO", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyIntKValueRegex }),
+                    new ValueFormat("TEMP", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3 }),
+                    new ValueFormat("IN", ValueModel.Types.WORD, true, false, -2, new Regex[] {ValueModel.VerifyBitRegex5 }),
+                    new ValueFormat("OUT", ValueModel.Types.WORD, true, false, -1, new Regex[] {ValueModel.VerifyBitRegex6 }),
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }) });
             LabelTypes = new Types[] { Types.LBL, Types.NEXT, Types.STL, Types.STLE };
             TypeOfNames = new Dictionary<string, Types>();
             for (int i = 0; i < Formats.Length; i++)
