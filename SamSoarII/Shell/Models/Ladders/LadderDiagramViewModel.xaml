@@ -31,7 +31,7 @@
         <util:MutiConverter x:Key="converter1"></util:MutiConverter>
         <util:BoolToVisibilityConverter2 x:Key="converter2"></util:BoolToVisibilityConverter2>
     </UserControl.Resources>
-    <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="MainScrollViewer_SizeChanged">
+    <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="MainScrollViewer_SizeChanged" ScrollChanged="MainScrollViewer_ScrollChanged">
         <StackPanel x:Name="mainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="Transparent" LayoutTransform="{x:Static gb:GlobalSetting.LadderScaleTransform}"
                     PreviewMouseDown="OnLadderDiagramMouseDown" MouseMove="OnLadderDiagramMouseMove">
             <StackPanel.Resources>

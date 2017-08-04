@@ -234,18 +234,11 @@ namespace SamSoarII.Shell.Models
                         if (Core == null) return;
                         if (LadderMode == LadderModes.Edit)
                         {
-                            if (Core.Type == LadderUnitModel.Types.CALLM)
-                            {
-                                for (int i = 0; i < 5; i++)
-                                {
-                                    middlevalues[i].Text = "";
-                                    comments[i].Text = "";
-                                }
-                            }
                             for (int i = 0; i < Core.Children.Count; i++)
                             {
                                 ValueModel vmodel = Core.Children[i];
                                 ValueFormat vformat = vmodel.Format;
+                                ShowValue(vformat.Position);
                                 string text = String.Format("{0:s}:{1:s}",
                                     vformat.Name, vmodel.Text);
                                 TextBlock textblock = null;
@@ -254,10 +247,14 @@ namespace SamSoarII.Shell.Models
                                 else
                                     textblock = bottomvalues[-vformat.Position - 1];
                                 textblock.Text = text;
-                                if (!mainCanvas.Children.Contains(textblock))
-                                    mainCanvas.Children.Add(textblock);
+                                ShowComment(i);
                                 comments[i].Text = String.Format("{0:s}:{1:s}",
                                     vmodel.Text, vmodel.Comment);
+                            }
+                            for (int i = Core.Children.Count; i < 5; i++)
+                            {
+                                HideValue(i);
+                                HideComment(i);
                             }
                         }
                         else if (!Core.IsUsed)

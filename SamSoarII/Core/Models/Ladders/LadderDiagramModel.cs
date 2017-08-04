@@ -559,9 +559,12 @@ namespace SamSoarII.Core.Models
                     }
                 }
             }
-            if (View != null && View.IsNavigatable 
-             && (cmd.Type & CMDTYPE_MoveUnit) != 0)
-                area.Select(IFParent);
+            if (View != null)
+            {
+                View.IsViewModified = true;
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) != 0)
+                    area.Select(IFParent);
+            }
             redos.Push(cmd);
             Parent.InvokeModify(this, true);
         }
@@ -720,9 +723,12 @@ namespace SamSoarII.Core.Models
                 }
                 area.Update(cmd.NewNetworks);
             }
-            if (View != null && View.IsNavigatable
-             && (cmd.Type & CMDTYPE_MoveUnit) != 0)
-                area.Select(IFParent);
+            if (View != null)
+            {
+                View.IsViewModified = true;
+                if (View.IsNavigatable && (cmd.Type & CMDTYPE_MoveUnit) != 0)
+                    area.Select(IFParent);
+            }
             undos.Push(cmd);
             Parent.InvokeModify(this);
         }

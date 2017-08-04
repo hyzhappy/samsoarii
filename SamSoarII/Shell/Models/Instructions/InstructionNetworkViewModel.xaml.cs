@@ -324,6 +324,12 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            ViewParent.IsViewModified = true;
+        }
+
         #endregion
     }
 }

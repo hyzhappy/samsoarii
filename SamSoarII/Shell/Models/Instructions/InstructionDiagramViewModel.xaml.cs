@@ -133,6 +133,13 @@ namespace SamSoarII.Shell.Models
         public LadderModes LadderMode { get { return core.LadderMode; } }
         public bool IsCommentMode { get { return core.IsCommentMode; } }
 
+        private bool isviewmodified;
+        public bool IsViewModified
+        {
+            get { return this.isviewmodified; }
+            set { this.isviewmodified = value; }
+        }
+
         #region Select
 
         private InstSelectRect cursor;
@@ -182,6 +189,18 @@ namespace SamSoarII.Shell.Models
             }
         }
 
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            isviewmodified = true;
+        }
+
+        private void Scroll_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            isviewmodified = true;
+        }
+
         #endregion
+
     }
 }

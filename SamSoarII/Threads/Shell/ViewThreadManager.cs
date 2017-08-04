@@ -18,7 +18,7 @@ namespace SamSoarII.Threads
             Aborted += OnAborted;
             oldscrolloffset = 0;
             current = null;
-            TimeSpan = 50;
+            TimeSpan = 20;
         }
         
         #region Number
@@ -61,13 +61,13 @@ namespace SamSoarII.Threads
                 double newscrolloffset = current.Scroll.VerticalOffset;
                 if (current.IsViewModified || newscrolloffset - oldscrolloffset > 5.0)
                 {
-                    do
-                    {
+                    //do
+                    //{
                         current.IsViewModified = false;
                         for (int i = 0; i < current.Core.Children.Count; i++)
                             current.Core.Children[i].View.DynamicUpdate();
                         oldscrolloffset = newscrolloffset;
-                    } while (current.IsViewModified);
+                    //} while (current.IsViewModified);
                 }
                 else if (oldscrolloffset - newscrolloffset > 5.0)
                 {
@@ -77,8 +77,9 @@ namespace SamSoarII.Threads
                 }
 
                 double newinstoffset = current.Core.Inst.View.Scroll.VerticalOffset;
-                if (newinstoffset - oldinstoffset > 5.0)
+                if (current.Core.Inst.View.IsViewModified || newinstoffset - oldinstoffset > 5.0)
                 {
+                    current.Core.Inst.View.IsViewModified = false;
                     for (int i = 0; i < current.Core.Children.Count; i++)
                         current.Core.Children[i].Inst.View.DynamicUpdate();
                     oldinstoffset = newinstoffset;

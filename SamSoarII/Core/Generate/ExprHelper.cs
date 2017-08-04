@@ -47,6 +47,28 @@ namespace SamSoarII.Core.Generate
         /// </summary>
         public const int FLAG_CALAND = 0x08;
         /// <summary>
+        /// 获得表达式中的最小标记
+        /// </summary>
+        /// <param name="expr">表达式</param>
+        /// <returns>最小标记</returns>
+        static public int GetMinID(string expr)
+        {
+            int ret = 0xffff;
+            int bracket = 0;
+            int left = 0;
+            for (int i = 0; i < expr.Length; i++)
+            {
+                switch (expr[i])
+                {
+                    case '(': bracket++; break;
+                    case ')': bracket--; break;
+                    case '[': if (bracket == 0) left = i; break;
+                    case ']': if (bracket == 0) ret = Math.Min(ret, int.Parse(expr.Substring(left + 1, i - left - 1), System.Globalization.NumberStyles.HexNumber)); break;
+                }
+            }
+            return ret;
+        }
+        /// <summary>
         /// 将区间内的多个表达式进行逻辑或合并
         /// </summary>
         /// <param name="exprs">要合并的表达式列表</param>
@@ -107,10 +129,12 @@ namespace SamSoarII.Core.Generate
             }
             // CASE 2 : 找到新的公共前缀时，按照分配律，剩下的部分用括号括起来
             expr.Append(exprs[left].Substring(old_padding, padding - old_padding + 1));
+            string sub = String.Format("{0:s}||{1:s}", 
+                Merge(exprs, left, difpoint - 1, ref _hasor, padding + 1), 
+                Merge(exprs, difpoint, right, ref _hasor, padding + 1));
+            expr.Append(String.Format("[{0:x4}]", GetMinID(sub)));
             expr.Append("(");
-            expr.Append(Merge(exprs, left, difpoint - 1, ref _hasor, padding + 1));
-            expr.Append("||");
-            expr.Append(Merge(exprs, difpoint, right, ref _hasor, padding + 1));
+            expr.Append(sub);
             expr.Append(")");
             return expr.ToString();
         }
@@ -458,9 +482,9 @@ namespace SamSoarII.Core.Generate
             }
             // CASE 3：当前为单一单元
             // 当前表达式被括号包围时拆掉括号
-            if (expr[start] == '(' && expr[end] == ')')
+            if (expr[start] == '[' && expr[end] == ')')
             {
-                _GenInst(insts, expr, start + 1, end - 1);
+                _GenInst(insts, expr, start + 7, end - 1);
                 // 前面要或运算，所以要用栈的或合并
                 if ((flag & FLAG_CALOR) != 0)
                     InstHelper.AddInst(insts, "ORB");
@@ -480,7 +504,7 @@ namespace SamSoarII.Core.Generate
             // 识别开始的元件ID标记
             int idend = start + 1;
             while (expr[idend] != ']') idend++;
-            int id = int.Parse(expr.Substring(start + 1, idend - start - 1));
+            int id = int.Parse(expr.Substring(start + 1, idend - start - 1), System.Globalization.NumberStyles.HexNumber);
             start = idend + 1;
             // 识别开始的非符号
             if (expr[start] == '!')
