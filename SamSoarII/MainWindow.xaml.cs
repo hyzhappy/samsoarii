@@ -71,7 +71,8 @@ namespace SamSoarII
                 {
                     if (App.AutoOpenFileFullPath.EndsWith(FileHelper.OldFileExtension))
                     {
-                        LocalizedMessageBox.Show(Properties.Resources.File_Type_Not_Supported, LocalizedMessageIcon.Information);
+                        //LocalizedMessageBox.Show(Properties.Resources.File_Type_Not_Supported, LocalizedMessageIcon.Information);
+                        ifParent.ShowFileConvertDialog(App.AutoOpenFileFullPath);
                     }
                     else ifParent.LoadProject(App.AutoOpenFileFullPath);
                 }

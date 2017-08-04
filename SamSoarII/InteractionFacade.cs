@@ -1201,7 +1201,8 @@ namespace SamSoarII
                 }
                 if (openFileDialog.FileName.EndsWith(FileHelper.OldFileExtension))
                 {
-                    LocalizedMessageBox.Show(Properties.Resources.File_Type_Not_Supported, LocalizedMessageIcon.Information);
+                    //LocalizedMessageBox.Show(Properties.Resources.File_Type_Not_Supported, LocalizedMessageIcon.Information);
+                    ShowFileConvertDialog(openFileDialog.FileName);
                 }
                 else LoadProject(openFileDialog.FileName);
             }
@@ -1492,8 +1493,13 @@ namespace SamSoarII
             FileConvertDialog dialog = new FileConvertDialog();
             dialog.ShowDialog();
         }
+        public void ShowFileConvertDialog(string filename)
+        {
+            FileConvertDialog dialog = new FileConvertDialog(filename);
+            dialog.ShowDialog();
+        }
         #endregion
-        
+
         #region HotKey System
 
         /// <summary>
