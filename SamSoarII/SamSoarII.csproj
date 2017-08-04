@@ -219,7 +219,7 @@
     <Compile Include="Core\Models\ProjectPropertyParams\FilterParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\HoldingSectionParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\PasswordParams.cs" />
-    <Compile Include="Core\Models\ReplaceFormat.cs" />
+    <Compile Include="Core\Models\Values\FindReplace\ReplaceFormat.cs" />
     <Compile Include="Core\Models\Values\FindReplace\ReplaceCommand.cs" />
     <Compile Include="Core\Models\Values\FindReplace\ReplaceCommandGroup.cs" />
     <Compile Include="Core\Models\Values\ValueRange.cs" />

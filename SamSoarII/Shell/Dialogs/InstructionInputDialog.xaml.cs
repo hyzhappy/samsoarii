@@ -31,7 +31,7 @@ namespace SamSoarII.Shell.Dialogs
         {
             InitializeComponent();
             project = _project;
-            instructionNames = GlobalSetting.InstrutionNameAndToolTips.Keys.ToList();
+            instructionNames = LadderUnitModel.Formats.Select(f => f.Name).ToList();
             subdiagramNames = project.Diagrams.Select(
                 (diagram) => { return diagram.Name; }).ToList();
             modbusNames = project.Modbus.Children.Select(
@@ -281,43 +281,18 @@ namespace SamSoarII.Shell.Dialogs
                 List<string> InstructionInput = currentText.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
                 if (InstructionInput.Count() > 0 && CheckInstructionName(InstructionInput[0].ToUpper()))
                 {
-                    List<string> tempList = new List<string>();
-                    GlobalSetting.InstrutionNameAndToolTips.TryGetValue(InstructionInput[0].ToUpper(), out tempList);
+                    LadderUnitFormat format = LadderUnitModel.Formats.Where(f => f.Name.Equals(InstructionInput[0].ToUpper())).First();
                     if (InstructionInput[0].ToUpper().Equals("CALLM") && InstructionInput.Count() > 1)
                     {
-                        IEnumerable<string[]> fit = functionMessages.Where(
-                            (string[] msgs) => { return msgs[1].Equals(InstructionInput[1]); });
-                        if (fit.Count() > 0)
+                        FuncModel fmodel = project.Funcs.Where(f => f.Name.Equals(InstructionInput[1])).FirstOrDefault();
+                        if (fmodel != null && fmodel.CanCALLM())
                         {
-                            //_tempList.Add(tempList[1]);
-                            string[] msgs = fit.First();
-                            List<string> _tempList = new List<string>();
-                            _tempList.Add(tempList[0]);
-                            _tempList.Add(msgs[2]);
-                            for (int i = 0; i < (msgs.Length - 3) / 2; i++)
-                            {
-                                string argtype = msgs[i * 2 + 3];
-                                string argname = msgs[i * 2 + 4];
-                                switch (argtype)
-                                {
-                                    case "BIT":
-                                        _tempList.Add(String.Format("[{0}]{1:s}(X/Y/M/C/T/S)",Properties.Resources.Bit ,argname));
-                                        break;
-                                    case "WORD":
-                                        _tempList.Add(String.Format("[{0}]{1:s}(D/CV/TV)", Properties.Resources.Word, argname));
-                                        break;
-                                    case "DWORD":
-                                        _tempList.Add(String.Format("[{0}]{1:s}(D)", Properties.Resources.DWord, argname));
-                                        break;
-                                    default:
-                                        _tempList.Add(String.Format("[{1:s}]{0:s}", argname, argtype));
-                                        break;
-                                }
-                            }
-                            while (_tempList.Count() < 6)
-                                _tempList.Add(String.Empty);
-                            _tempList.Add(tempList[6]);
-                            tempList = _tempList;
+                            IList<ValueModel> values = fmodel.GetValueModels(null);
+                            format = new LadderUnitFormat(format.CatalogID, "CALLM", LadderUnitModel.Types.CALLM,
+                                LadderUnitModel.Outlines.ProgramControl, LadderUnitModel.Shapes.OutputRect,
+                                format.Describe, format.Detail, format.Detail,
+                                new ValueFormat[] { new ValueFormat("F", ValueModel.Types.STRING, true, false, 0, new ValueRegex[] { ValueModel.AnyNameRegex }, fmodel.Comment) }
+                                .Concat(values.Select(v => v.Format)).ToArray());
                         }
                     }
                     if (InstructionInput.Count() > 5)
@@ -326,22 +301,12 @@ namespace SamSoarII.Shell.Dialogs
                     }
                     for (int i = 0; i < 6; i++)
                     {
-                        if (i < InstructionInput.Count())
-                        {
-                            TB_Args[i].Text = InstructionInput[i];
-                        }
-                        else
-                        {
-                            TB_Args[i].Text = String.Empty;
-                        }
-                        if (i < tempList.Count())
-                        {
-                            TBD_Args[i].Text = tempList[i];
-                        }
-                        else
-                        {
-                            TBD_Args[i].Text = String.Empty;
-                        }
+                        TB_Args[i].Text = i < InstructionInput.Count()
+                            ? InstructionInput[i] : "";
+                        TBD_Args[i].Text = i == 0 
+                            ? format.Describe
+                            : i <= format.Formats.Count 
+                                ? format.Formats[i - 1].Detail : "";
                         if (TB_Args[i].Text.Length > 0 && TBD_Args[i].Text.Length == 0)
                         {
                             TextBoxPopup.IsOpen = false;
@@ -356,8 +321,8 @@ namespace SamSoarII.Shell.Dialogs
                             TB_Args[i].FontWeight = FontWeights.Light;
                             TBD_Args[i].FontWeight = FontWeights.Light;
                         }
-                        TB_Detail.Text = tempList[6];
                     }
+                    TB_Detail.Text = format.Detail;
                     if (!TextBoxPopup.IsOpen)
                     {
                         //TextBoxPopup.VerticalOffset = -29;

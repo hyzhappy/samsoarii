@@ -446,7 +446,7 @@ namespace SamSoarII.Core.Models
         private string detail;
         public string Detail { get { return this.detail; } }
 
-        public ValueFormat(string _name, ValueModel.Types _type, bool _canread, bool _canwrite, int _position, IEnumerable<Regex> _regexs)
+        public ValueFormat(string _name, ValueModel.Types _type, bool _canread, bool _canwrite, int _position, IEnumerable<Regex> _regexs, string _detail = null)
         {
             name = _name;
             type = _type;
@@ -461,7 +461,7 @@ namespace SamSoarII.Core.Models
                 ValueRegex vregex = (ValueRegex)regex;
                 supports = supports.Union(vregex.Supports);
             }
-            detail = String.Format("[{0:s}]{1:s}({2:s})",
+            detail = _detail != null ? _detail : String.Format("[{0:s}]{1:s}({2:s})",
                 ValueModel.NameOfTypes[(int)type], name,
                 String.Join("/", supports));
         }

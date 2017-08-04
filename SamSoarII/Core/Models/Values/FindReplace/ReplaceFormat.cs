@@ -128,17 +128,24 @@ namespace SamSoarII.Core.Models
                     for (int i = 0; i < unit.Children.Count; i++)
                     {
                         ValueModel value = unit.Children[i];
+                        ValueRange oldrange = origin.Ranges[0];
+                        ValueRange newrange = Ranges[0];
+                        ReplaceValue(newargs, value, oldrange, newrange);
+                    }
+                    return new ReplaceCommand(unit, newargs.ToString());
+                case Modes.Unit:
+                    newargs.Append(isanyinst ? unit.InstName : instname);
+                    for (int i = 0; i < unit.Children.Count; i++)
+                    {
+                        ValueModel value = unit.Children[i];
                         ValueRange oldrange = i <= origin.Ranges.Count ? origin.Ranges[i] : null;
                         ValueRange newrange = i < Ranges.Count ? Ranges[i] : null;
-                        
+                        ReplaceValue(newargs, value, oldrange, newrange);
                     }
-                    return null;
-                case Modes.Unit:
-                    return null;
+                    return new ReplaceCommand(unit, newargs.ToString());
                 default:
                     return null;
             }
-             
         }
 
         private void ReplaceValue(StringBuilder newargs, ValueModel value, ValueRange oldrange, ValueRange newrange)
@@ -151,6 +158,8 @@ namespace SamSoarII.Core.Models
                     newargs.Append(value.Text);
                 else if (oldrange == null || oldrange.IsAny)
                     newargs.Append(newrange.Base.Text);
+                else if (!oldrange.Contains(value))
+                    newargs.Append(value.Text);
                 else if (newrange.Base.IsWordBit)
                 {
                     offset = (newrange.Base.Offset >> 4);
@@ -164,16 +173,19 @@ namespace SamSoarII.Core.Models
                     offset &= 15;
                     newargs.Append(String.Format(".{1:x}", offset));
                 }
-                else if (newrange.Base.IsBitWord || newrange.Base.IsBitDoubleWord)
+                else
                 {
-                    offset = newrange.Base.Size;
-                    if ((value.IsBitWord || value.IsBitDoubleWord)
-                     && (oldrange.Base.IsBitWord || oldrange.Base.IsBitDoubleWord)
-                     && newrange.FlagCount > 1)
+                    if (newrange.Base.IsBitWord || newrange.Base.IsBitDoubleWord)
                     {
-                        offset += value.Size - oldrange.Base.Size;
+                        offset = newrange.Base.Size;
+                        if ((value.IsBitWord || value.IsBitDoubleWord)
+                         && (oldrange.Base.IsBitWord || oldrange.Base.IsBitDoubleWord)
+                         && newrange.FlagCount > 1)
+                        {
+                            offset += value.Size - oldrange.Base.Size;
+                        }
+                        newargs.Append(String.Format("K{0:d}", offset));
                     }
-                    newargs.Append(String.Format("K{0:d}", offset));
                     offset = newrange.Base.Offset;
                     if ((value.IsBitWord || value.IsBitDoubleWord)
                      && (oldrange.Base.IsBitWord || oldrange.Base.IsBitDoubleWord)
@@ -182,7 +194,19 @@ namespace SamSoarII.Core.Models
                         offset += value.Size - oldrange.Base.Size;
                     }
                     newargs.Append(String.Format("{0:s}{1:d}",
-                        ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));                  
+                        ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));
+                }
+                if (newrange.Base.Intra != ValueModel.Bases.NULL)
+                {
+                    offset = newrange.Base.IntraOffset;
+                    if (value.Intra == newrange.Base.Intra
+                     && oldrange.Base.Intra == newrange.Base.Intra
+                     && newrange.IntraCount > 1)
+                    {
+                        offset += value.IntraOffset - oldrange.Base.IntraOffset;
+                    }
+                    newargs.Append(String.Format("{0:s}{1:d}",
+                        ValueModel.NameOfBases[(int)(newrange.Base.Intra)], offset));
                 }
             }
         }
