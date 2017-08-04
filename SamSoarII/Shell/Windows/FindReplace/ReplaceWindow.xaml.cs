@@ -642,9 +642,11 @@ namespace SamSoarII.Shell.Windows
         /// <param name="id">标号</param>
         /// <returns></returns>
         public ReplaceFormatArg GetArgs(int id) { return args[id]; }
+
         #endregion
 
         #region Regex
+        
         /// <summary> 识别（X0）的正则符 </summary>
         private static Regex VRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -663,7 +665,8 @@ namespace SamSoarII.Shell.Windows
         /// <summary> 识别（X[0..9]V[0..3]）的正则符 </summary>
         private static Regex AARegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)\[([0-9]+)\.\.([0-9]+)\](V|Z)\[([0-9]+)\.\.([0-9]+)\]$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        #endregion
+        
+        # endregion
 
         /// <summary> 文本 </summary>
         private string text;

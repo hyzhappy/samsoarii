@@ -1,0 +1,173 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SamSoarII.Core.Models
+{
+    public class ReplaceFormat
+    {
+        public ReplaceFormat(string text)
+        {
+            if (text.Length == 0)
+            {
+                mode = Modes.Error;
+                return;
+            }
+            string[] args = text.Split(' ');
+            if (args.Length == 1)
+            {
+                if (args[0].Equals("*"))
+                {
+                    mode = Modes.Unit;
+                    isanyinst = true;
+                }
+                else if (LadderUnitModel.Formats.Where(f => f.Name.Equals(args[0])).Count() > 0)
+                {
+                    mode = Modes.Unit;
+                    isanyinst = false;
+                    instname = args[0];
+                    AppendAnyRanges();
+                }
+                else
+                {
+                    mode = Modes.Value;
+                    ranges = new List<ValueRange> { new ValueRange(args[0]) };
+                }
+                return;
+            }
+            if (args[0].Equals("*"))
+            {
+                isanyinst = true;
+            }
+            else if (LadderUnitModel.Formats.Where(f => f.Name.Equals(args[0])).Count() > 0)
+            {
+                isanyinst = false;
+                instname = args[0];
+            }
+            else
+            {
+                mode = Modes.Error;
+                return;
+            }
+            mode = Modes.Unit;
+            ranges = new List<ValueRange>();
+            for (int i = 1; i < args.Length; i++)
+            {
+                switch (args[i])
+                {
+                    case "*":
+                        ranges.Add(new ValueRange("*", true));
+                        break;
+                    case ".": 
+                        if (i < args.Length - 1)
+                            mode = Modes.Error;
+                        else 
+                            AppendAnyRanges();
+                        return;
+                    default:
+                        ranges.Add(new ValueRange(args[i]));
+                        break;
+                }
+            }
+        }
+
+        #region Number
+        
+        public enum Modes { Error, Unit, Value };
+        private Modes mode;
+        public Modes Mode { get { return this.mode; } }
+
+        private bool isanyinst;
+        public string instname;
+
+        private List<ValueRange> ranges;
+        public IList<ValueRange> Ranges { get { return this.ranges; } }
+        public void AppendAnyRanges()
+        {
+            if (ranges == null) ranges = new List<ValueRange>();
+            ranges.AddRange(new ValueRange[5 - ranges.Count()]);
+            for (int i = 4; i >= 0; i--)
+                if (ranges[i] == null) ranges[i] = new ValueRange("*", true);
+        }
+
+        #endregion
+
+        #region Method
+
+        public bool Match(LadderUnitModel unit)
+        {
+            switch (mode)
+            {
+                case Modes.Error:
+                    return false;
+                case Modes.Value:
+                    foreach (ValueModel vmodel in unit.Children)
+                        if (ranges[0].Contains(vmodel)) return true;
+                    return false;
+                case Modes.Unit:
+                    if (!isanyinst && !unit.InstName.Equals(instname))
+                        return false;
+                    for (int i = 0; i < unit.Children.Count; i++)
+                        if (i >= ranges.Count() || !ranges[i].Contains(unit.Children[i]))
+                            return false;
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        /*
+        public ReplaceCommand Replace(LadderUnitModel unit, ReplaceFormat origin)
+        {
+            StringBuilder newargs = new StringBuilder();
+            switch (mode)
+            {
+                case Modes.Error:
+                    return null;
+                case Modes.Value:
+                    newargs.Append(unit.InstName);
+                    for (int i = 0; i < unit.Children.Count; i++)
+                    {
+                        ValueModel value = unit.Children[i];
+                        ValueRange oldrange = i <= origin.Ranges.Count ? origin.Ranges[i] : null;
+                        ValueRange newrange = i < Ranges.Count ? Ranges[i] : null;
+                        
+                    }
+                    break;
+                case Modes.Unit:
+                    break;
+                default:
+                    return null;
+            }
+             
+        }
+        */
+        /*
+        private string ReplaceValue(ValueModel value, ValueRange oldrange, ValueRange newrange)
+        {
+            if (newrange != null)
+            {
+                newargs.Append(" ");
+                int offset = 0;
+                if (oldrange == null || oldrange.IsAny)
+                    newargs.Append(newrange.Base.Text);
+                else if (newrange.Base.IsWordBit)
+                {
+                    offset = (newrange.Base.Offset >> 4);
+                    if (value.IsWordBit && oldrange)
+                            }
+                else if (newrange.Base.IsBitWord || newrange.Base.IsBitDoubleWord)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+        }
+        */
+        #endregion
+
+    }
+}

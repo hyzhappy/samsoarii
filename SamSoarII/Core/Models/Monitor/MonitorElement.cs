@@ -301,15 +301,15 @@ namespace SamSoarII.Core.Models
                 ValueModel analyzer = null;
                 switch (DataType)
                 {
-                    case 0: analyzer = analyzer_bit; break;
+                    case 0: analyzer = ValueModel.Analyzer_Bit; break;
                     case 1:
                     case 2:
                     case 5:
-                    case 7: analyzer = analyzer_word; break;
+                    case 7: analyzer = ValueModel.Analyzer_Word; break;
                     case 3:
                     case 4:
-                    case 8: analyzer = analyzer_dword; break;
-                    case 6: analyzer = analyzer_float; break;
+                    case 8: analyzer = ValueModel.Analyzer_DWord; break;
+                    case 6: analyzer = ValueModel.Analyzer_Float; break;
                 }
                 analyzer.Text = name;
                 intratype = analyzer.Intra != ValueModel.Bases.NULL ? ValueModel.NameOfBases[(int)analyzer.Intra] : "";

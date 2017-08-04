@@ -117,7 +117,7 @@ namespace SamSoarII.Core.Models
             new string[] { "H" });
         //public readonly static Regex VerifyIntKHValueRegex = new Regex(@"^(H)([0-9A-F]+)|(K)([-+]?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         public readonly static ValueRegex VerifyFloatKValueRegex = new ValueRegex(
-            @"^(K)([-+]?([0-9]*[.])?[0-9]+)$", 
+            @"^(K)([-+]?([0-9]*[.])?[0-9]+(e[-+]?[0-9]+)?)$", 
             new string[] { "K" });
 
         public readonly static ValueRegex FuncNameRegex = new ValueRegex(
@@ -126,6 +126,17 @@ namespace SamSoarII.Core.Models
         public readonly static ValueRegex AnyNameRegex = new ValueRegex(
             @"^.*$", 
             new string[] { });
+
+        public readonly static ValueModel Analyzer_Bit = new ValueModel(null, new ValueFormat("ANA", Types.BOOL, false, false, 0,
+                new Regex[] { ValueModel.BitRegex, ValueModel.WordBitRegex }));
+        public readonly static ValueModel Analyzer_Word = new ValueModel(null, new ValueFormat("ANA", Types.WORD, false, false, 0,
+                new Regex[] { ValueModel.WordRegex, ValueModel.BitWordRegex }));
+        public readonly static ValueModel Analyzer_DWord = new ValueModel(null, new ValueFormat("ANA", Types.DWORD, false, false, 0,
+                new Regex[] { ValueModel.DoubleWordRegex, ValueModel.BitDoubleWordRegex }));
+        public readonly static ValueModel Analyzer_Float = new ValueModel(null, new ValueFormat("ANA", Types.FLOAT, false, false, 0,
+                new Regex[] { ValueModel.FloatRegex }));
+        public readonly static ValueModel Analyzer_String = new ValueModel(null, new ValueFormat("ANA", Types.STRING, false, false, 0,
+                new Regex[] { ValueModel.AnyNameRegex}));
 
         static ValueModel()
         {
@@ -382,6 +393,13 @@ namespace SamSoarII.Core.Models
         public void Save(XElement xele)
         {
             throw new NotImplementedException();
+        }
+
+        public ValueModel Clone()
+        {
+            ValueModel vmodel = new ValueModel(parent, format);
+            vmodel.Parse(Text);
+            return vmodel;
         }
 
         #endregion
