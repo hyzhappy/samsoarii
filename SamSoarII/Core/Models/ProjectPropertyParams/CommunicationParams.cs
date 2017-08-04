@@ -128,6 +128,7 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
+            if (xele == null) return;
             serialportindex = int.Parse(xele.Element("SerialPortIndex").Value);
             baudrateindex = int.Parse(xele.Element("BaudRateIndex").Value);
             databitindex = int.Parse(xele.Element("DataBitIndex").Value);

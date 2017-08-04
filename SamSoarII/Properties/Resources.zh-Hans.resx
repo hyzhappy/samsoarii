@@ -2196,9 +2196,6 @@
   <data name="Thermocouple" xml:space="preserve">
     <value>热电偶</value>
   </data>
-  <data name="Filter_Time" xml:space="preserve">
-    <value>滤波时间</value>
-  </data>
   <data name="Use_Expansion_Module" xml:space="preserve">
     <value>使用拓展模块</value>
   </data>
@@ -2231,5 +2228,8 @@
   </data>
   <data name="Required_File_Path" xml:space="preserve">
     <value>请选择生成的文件路径！</value>
+  </data>
+  <data name="File_Override" xml:space="preserve">
+    <value>输出路径已存在该文件，是否覆盖？</value>
   </data>
 </root>

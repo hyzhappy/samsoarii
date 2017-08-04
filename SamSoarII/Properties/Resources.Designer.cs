@@ -1510,6 +1510,15 @@ namespace SamSoarII.Properties {
         }
         
         /// <summary>
+        ///   查找类似 File is already in the output path, is it overwritten? 的本地化字符串。
+        /// </summary>
+        public static string File_Override {
+            get {
+                return ResourceManager.GetString("File_Override", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 File select 的本地化字符串。
         /// </summary>
         public static string File_Select {

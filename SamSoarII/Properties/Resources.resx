@@ -2229,4 +2229,7 @@
   <data name="Required_File_Path" xml:space="preserve">
     <value>Please select the generated file path!</value>
   </data>
+  <data name="File_Override" xml:space="preserve">
+    <value>File is already in the output path, is it overwritten?</value>
+  </data>
 </root>

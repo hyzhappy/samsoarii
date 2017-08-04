@@ -31,11 +31,32 @@
             </Style>
         </Grid.Resources>
         <GroupBox Header="ssp">
-            <ListBox x:Name="LB_Old"/>
+            <ListBox x:Name="LB_Old">
+                <ListBox.Resources>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="FontWeight" Value="Heavy"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Resources>
+            </ListBox>
         </GroupBox>
         <Image Grid.Column="1" Source="/Resources/Image/RArrow.png"/>
         <GroupBox Header="ssr" Grid.Column="2">
-            <ListBox x:Name="LB_New"/>
+            <ListBox x:Name="LB_New">
+                <ListBox.Resources>
+                    <Style TargetType="ListBoxItem">
+                        <EventSetter Event="MouseDoubleClick" Handler="FileOpen"></EventSetter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="FontWeight" Value="Heavy"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Resources>
+            </ListBox>
         </GroupBox>
         <Canvas Background="AliceBlue" Grid.ColumnSpan="3" Grid.Row="1">
             <Button x:Name="FileSelect" Content="{x:Static properties:Resources.File_Select}" Width="80" Canvas.Top="4" Canvas.Left="40"/>

@@ -325,7 +325,15 @@ namespace SamSoarII.Core.Models
         public void Load(XElement xele)
         {
             projname = xele.Attribute("Name").Value;
-            PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType((PLCDeviceType)Enum.Parse(typeof(PLCDeviceType), xele.Attribute("DeviceType").Value));
+            try
+            {
+                PLCDeviceType deviceType = (PLCDeviceType)Enum.Parse(typeof(PLCDeviceType), xele.Attribute("DeviceType").Value);
+                PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(deviceType);
+            }
+            catch (Exception)
+            {
+                PLCDeviceManager.GetPLCDeviceManager().SetSelectDeviceType(PLCDeviceType.FGs_16MR_A);
+            }
             Device = PLCDeviceManager.GetPLCDeviceManager().SelectDevice;
             foreach (XElement xele_f in xele.Elements("FuncBlock"))
             {

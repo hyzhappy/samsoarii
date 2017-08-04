@@ -1490,12 +1490,12 @@ namespace SamSoarII
 
         public void ShowFileConvertDialog()
         {
-            FileConvertDialog dialog = new FileConvertDialog();
+            FileConvertDialog dialog = new FileConvertDialog(this);
             dialog.ShowDialog();
         }
         public void ShowFileConvertDialog(string filename)
         {
-            FileConvertDialog dialog = new FileConvertDialog(filename);
+            FileConvertDialog dialog = new FileConvertDialog(this,filename);
             dialog.ShowDialog();
         }
         #endregion

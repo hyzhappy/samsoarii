@@ -228,7 +228,7 @@ namespace SamSoarII.Core.Models
             ismasked = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("IsExpand");
             isexpand = xatt == null ? true : bool.Parse(xatt.Value);
-            brief = xele.Element("Brief").Value;
+            brief = xele.Element("Brief")?.Value;
             description = xele.Element("Description").Value;
             XElement xele_lc = xele.Element("LadderContent");
             children.Clear();

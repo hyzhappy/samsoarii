@@ -684,8 +684,16 @@ namespace SamSoarII.Core.Models
                 XElement inputele = xele.Element("Input");
                 XElement outputele = xele.Element("Output");
                 XElement filtertime = xele.Element("FilterTime");
-                IP_Channel_Index = int.Parse(inputele.Element("IP_Channel_Index").Value);
-                OP_Channel_Index = int.Parse(outputele.Element("OP_Channel_Index").Value);
+                try
+                {
+                    IP_Channel_Index = int.Parse(inputele.Element("IP_Channel_Index").Value);
+                    OP_Channel_Index = int.Parse(outputele.Element("OP_Channel_Index").Value);
+                }
+                catch (Exception)
+                {
+                    IP_Channel_Index = 0;
+                    OP_Channel_Index = 0;
+                }
                 IP_Channel_CB_Enabled1 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled1").Value);
                 IP_Channel_CB_Enabled2 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled2").Value);
                 IP_Channel_CB_Enabled3 = bool.Parse(inputele.Element("IP_Channel_CB_Enabled3").Value);

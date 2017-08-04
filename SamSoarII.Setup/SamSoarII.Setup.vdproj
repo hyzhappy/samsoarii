@@ -93,6 +93,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_06E3EB2BA89343BAB208E2364E83DDF5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_07394D06BC284C1789D74BE837AA0F47"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -118,6 +124,12 @@
         "Entry"
         {
         "MsmKey" = "8:_0A708CD9641145B9B3A1E8A6A95857D9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0AE9749E71D64ECE935DFE1277127548"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -201,7 +213,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_10D37BB38D9F404BAD36BA5B73A91DAB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_12298EEDFE604177998798CD16496A5A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_13777E450A1646A4BFB1FEC4714B38A8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -255,6 +279,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_19B3ABD78F824E6C884D61292BCE4BEA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_19C2875FC17743EFA2AF2E910CBE4411"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -280,6 +310,12 @@
         "Entry"
         {
         "MsmKey" = "8:_1B0B8C59879A4CDC8317E2CD242CCE48"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1B434E087180435B8207449B08AB1FDE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -334,6 +370,12 @@
         "Entry"
         {
         "MsmKey" = "8:_23CD264BBB9B4E30AD8E1C8700EB5457"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_23D72D63C4BB49829492FA12153890F4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -489,6 +531,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2EA64324A35141D2933C6909E4D28391"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3271CC18D90A40B4B6B885D44FC7C0E5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -502,6 +550,12 @@
         "Entry"
         {
         "MsmKey" = "8:_33281ADA27F7464BAE684BA6876C692C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_334237F2B8704CC2809BA0328FBB8682"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -538,6 +592,12 @@
         "Entry"
         {
         "MsmKey" = "8:_38015E25AA4F450093232DE2196EBFE6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_38567E870CB1401A8BA6EDE7E94D1766"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -681,6 +741,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_45FB5B4A7C014135AAE6570C85812168"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_46580280D81F4B81BF2DED83BB6CD12C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_472BF278E95D4B719354A472DBD8F4BD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -712,6 +784,12 @@
         "Entry"
         {
         "MsmKey" = "8:_48555441092D4A88AD45FA29574EDAB4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_49100C9EA196430DAD8983F1CE7A2F25"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -831,6 +909,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_55B91CC478874A219641CD23CA556B17"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_569C3AC02C18483C980D7AEE893567D3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -843,7 +927,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5700CA6DD5B74CEAAF38021AEF1B7C4F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_57F3C79701AE4265B15C1CEB8C2A2810"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_57FBD2A98E09420FB290258384412D63"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -969,6 +1065,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_65B5258F85EB48B9856DBA016645AC35"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_66F61E7E830F4DDEBDDAF104AACA189A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6746AFE1B18144CCA38F4B041D229CF5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_67A8E7F592334B2BA0E9B5B9577BF259"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1041,6 +1155,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7103DB0ECCB04B5B99795BDB7C4F1DF6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_71197616096B4C679DB1767957642BBE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1048,6 +1168,12 @@
         "Entry"
         {
         "MsmKey" = "8:_7153DF7E43574615B22BEE22A49FDF1F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_71F77D03F67F42B3A18535A44ACC1655"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1102,6 +1228,12 @@
         "Entry"
         {
         "MsmKey" = "8:_77AC95821C4A40058BDE524E6A5018F7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_77DEBC9BB9154739955172500BDEB75C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1179,6 +1311,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7E48086E822C4759A86F41A05820A572"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7E614F0087A441E7919C036C0791C5FE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1191,7 +1329,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7EC17E4EF09348CFB0D00D6DB768C974"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7F312827AD1A4D529E10D2C3CD749382"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7F901AB0AAD64BD48DB94630F4E8883C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_801BD885DAD84E5590CAC20EC4780094"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1240,6 +1396,12 @@
         "Entry"
         {
         "MsmKey" = "8:_84B2B8F59B394B20BFF00A5289021E62"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_84EC5213E3654390AA3A3D96219DB1E7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1317,6 +1479,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8E1849DC687D4B55B9A0FA2B28F5F4B2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8E40BAB5D704433B8891397C41EBAE56"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1341,7 +1509,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8FD8863EA9DA45E28A85B0411D22E244"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9195B0123C734A04A12AC8ADFFB8C309"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_91CC8746A92D48019C49B964CFF493F4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1354,6 +1534,12 @@
         "Entry"
         {
         "MsmKey" = "8:_91E4F601D64F4146B82DE4D974BA96C5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_91EEABA16020493594AD4FADB9D0179C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1372,6 +1558,12 @@
         "Entry"
         {
         "MsmKey" = "8:_9414F26A8A114A98B2F7BA5DB7087B52"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9483DF03AA5844E0A1BCD664C193D37F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1414,6 +1606,12 @@
         "Entry"
         {
         "MsmKey" = "8:_992438CFBA174803B60F4158450EFD39"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9A7160DAC5F84CEEBE38E5FBE41D1E25"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1527,6 +1725,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A40A99D81E6F4EF9870242E881F96E14"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A4212EEF28D940C58A17505169ABF236"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1534,6 +1738,12 @@
         "Entry"
         {
         "MsmKey" = "8:_A57E6EB280AD417594DC511F0AAB908B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5C95B47282248FEACAA0C7B611AB351"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1587,6 +1797,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A96384C89A7749FB97D95D3EC4A195CF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A978F58B03534A62902C38255609FCA7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1623,6 +1839,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_AD681F97B8E54ECB99A0D674742338ED"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AF81255DFD59454AAEAF7562D59917AE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B095B736B53343138CBF79791A730163"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1636,6 +1864,12 @@
         "Entry"
         {
         "MsmKey" = "8:_B11D7F2FED234E6CA016ECBE47F6BEDB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B13F731D13264572A45A47E578E9EF31"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1689,6 +1923,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B76A853BAD034D048F038D9552AEF18F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B7E8695932AF4F7083DC6CA2C7180FE1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1731,6 +1971,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BA67CA484D094111B594B79905BDE91C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BAC003472DEF4D52B8BBDAFEC264287B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1738,6 +1984,12 @@
         "Entry"
         {
         "MsmKey" = "8:_BB67464DF2EC4694992162EA0CD5718F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BB67A534ADC94C59A48EB06428C9B447"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1785,6 +2037,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BE2F8B33FD6C4002859CA68569C706D2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BED2552E409846E882B8FEF1EF835548"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1804,6 +2062,12 @@
         "Entry"
         {
         "MsmKey" = "8:_C13F2905106E4D5FBA4C2E7694B3AD6E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C1EAA937C7A742A39EBCBC18805DBF80"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1881,6 +2145,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C6F6374CE0C9419EA7FF78821D309ED3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C726FC99CF214E8E89F6178E5CC92814"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1929,6 +2199,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C944098AEC24417A9196F1995EE9B7A5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C9ED84730C52402BA18CE3B76BEBDA9B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1948,6 +2224,12 @@
         "Entry"
         {
         "MsmKey" = "8:_CBDB8BD57655486080A8004D76F269BB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CC10AC2312D44647950BD102DA8128EF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2055,6 +2337,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D54F1C59F57F4F149891555F5EC14D96"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D5D18EBE59BF47D490871A2B1F8C3700"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2128,6 +2416,12 @@
         "Entry"
         {
         "MsmKey" = "8:_DC9D1D90C6D04CB1AAA614D0185BC348"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DEF843D2183B45AF89D1FABC7796A47D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2218,6 +2512,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E75A2FA5B030414C82728D4C9113306D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E7AE2BEE7E714A77BE16BC6EAA384E00"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2331,6 +2631,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F2EEDB38D2D84872B2528EE78084D9E1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F324A86915AA4EA4BBF3C340820413E7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2433,7 +2739,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FCF3EDB7597B4D51A66E872696DDDE78"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FE0DFE8383AE41BD9A5E868F30453578"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FE2239DAA6054A478B0DE8F8A049FDDF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2921,6 +3239,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_06E3EB2BA89343BAB208E2364E83DDF5"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqjpegd4.a"
+            "TargetName" = "8:libqjpegd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_07394D06BC284C1789D74BE837AA0F47"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\simug\\simuc.o"
@@ -3007,6 +3345,26 @@
             "TargetName" = "8:iq80310.specs"
             "Tag" = "8:"
             "Folder" = "8:_BFAEDD7AD96A45FCABE3BFD97E35FFE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0AE9749E71D64ECE935DFE1277127548"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqcncodecs4.a"
+            "TargetName" = "8:libqcncodecs4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3281,12 +3639,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_10D37BB38D9F404BAD36BA5B73A91DAB"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\iconengines\\libqsvgicond4.a"
+            "TargetName" = "8:libqsvgicond4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_1DC64CA74F424B0B99570C7EADA26D00"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12298EEDFE604177998798CD16496A5A"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\errno.h"
             "TargetName" = "8:errno.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_13777E450A1646A4BFB1FEC4714B38A8"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqgifd4.a"
+            "TargetName" = "8:libqgifd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3461,6 +3859,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_19B3ABD78F824E6C884D61292BCE4BEA"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqtiffd4.a"
+            "TargetName" = "8:libqtiffd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_19C2875FC17743EFA2AF2E910CBE4411"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\io.h"
@@ -3547,6 +3965,26 @@
             "TargetName" = "8:ssr.ico"
             "Tag" = "8:"
             "Folder" = "8:_3A836C3787C34399A78F2251C65E46F3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1B434E087180435B8207449B08AB1FDE"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\mingwm10.dll"
+            "TargetName" = "8:mingwm10.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3738,6 +4176,26 @@
             "TargetName" = "8:rdpmon.specs"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23D72D63C4BB49829492FA12153890F4"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\QtXml4.dll"
+            "TargetName" = "8:QtXml4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4223,6 +4681,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2EA64324A35141D2933C6909E4D28391"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqtwcodecsd4.a"
+            "TargetName" = "8:libqtwcodecsd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3271CC18D90A40B4B6B885D44FC7C0E5"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\machine\\malloc.h"
@@ -4269,6 +4747,26 @@
             "TargetName" = "8:libnosys.a"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_334237F2B8704CC2809BA0328FBB8682"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqjpeg4.a"
+            "TargetName" = "8:libqjpeg4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4389,6 +4887,26 @@
             "TargetName" = "8:param.h"
             "Tag" = "8:"
             "Folder" = "8:_F0750E8F30234C79A130AF03A8811067"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_38567E870CB1401A8BA6EDE7E94D1766"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\iconengines\\libqsvgicon4.a"
+            "TargetName" = "8:libqsvgicon4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_1DC64CA74F424B0B99570C7EADA26D00"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4874,6 +5392,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_45FB5B4A7C014135AAE6570C85812168"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\iconengines\\qsvgicond4.dll"
+            "TargetName" = "8:qsvgicond4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_1DC64CA74F424B0B99570C7EADA26D00"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_46580280D81F4B81BF2DED83BB6CD12C"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qkrcodecsd4.dll"
+            "TargetName" = "8:qkrcodecsd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_472BF278E95D4B719354A472DBD8F4BD"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include\\arm_neon.h"
@@ -4980,6 +5538,26 @@
             "TargetName" = "8:threads.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_49100C9EA196430DAD8983F1CE7A2F25"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqgif4.a"
+            "TargetName" = "8:libqgif4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5396,6 +5974,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55B91CC478874A219641CD23CA556B17"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqtwcodecs4.a"
+            "TargetName" = "8:libqtwcodecs4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_569C3AC02C18483C980D7AEE893567D3"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\cpio.h"
@@ -5436,12 +6034,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5700CA6DD5B74CEAAF38021AEF1B7C4F"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qsvgd4.dll"
+            "TargetName" = "8:qsvgd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_57F3C79701AE4265B15C1CEB8C2A2810"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\pid.specs"
             "TargetName" = "8:pid.specs"
             "Tag" = "8:"
             "Folder" = "8:_BFAEDD7AD96A45FCABE3BFD97E35FFE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_57FBD2A98E09420FB290258384412D63"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qjpcodecsd4.dll"
+            "TargetName" = "8:qjpcodecsd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5856,6 +6494,66 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_65B5258F85EB48B9856DBA016645AC35"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqicod4.a"
+            "TargetName" = "8:libqicod4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_66F61E7E830F4DDEBDDAF104AACA189A"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qcncodecs4.dll"
+            "TargetName" = "8:qcncodecs4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6746AFE1B18144CCA38F4B041D229CF5"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqjpcodecsd4.a"
+            "TargetName" = "8:libqjpcodecsd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_67A8E7F592334B2BA0E9B5B9577BF259"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\stddef.h"
@@ -6096,6 +6794,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7103DB0ECCB04B5B99795BDB7C4F1DF6"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qkrcodecs4.dll"
+            "TargetName" = "8:qkrcodecs4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_71197616096B4C679DB1767957642BBE"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.WK3"
@@ -6122,6 +6840,26 @@
             "TargetName" = "8:param.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_71F77D03F67F42B3A18535A44ACC1655"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qico4.dll"
+            "TargetName" = "8:qico4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6302,6 +7040,26 @@
             "TargetName" = "8:winerror.h"
             "Tag" = "8:"
             "Folder" = "8:_8DE0C4D68AF349F197764C754921A1FB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_77DEBC9BB9154739955172500BDEB75C"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qtiff4.dll"
+            "TargetName" = "8:qtiff4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6556,6 +7314,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E48086E822C4759A86F41A05820A572"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qtwcodecsd4.dll"
+            "TargetName" = "8:qtwcodecsd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E614F0087A441E7919C036C0791C5FE"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\include-fixed\\limits.h"
@@ -6596,12 +7374,72 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7EC17E4EF09348CFB0D00D6DB768C974"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\QtGui4.dll"
+            "TargetName" = "8:QtGui4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F312827AD1A4D529E10D2C3CD749382"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\libnosys.a"
             "TargetName" = "8:libnosys.a"
             "Tag" = "8:"
             "Folder" = "8:_21514AE21E7D49C8AF9729962E496BF3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F901AB0AAD64BD48DB94630F4E8883C"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\iconengines\\qsvgicon4.dll"
+            "TargetName" = "8:qsvgicon4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_1DC64CA74F424B0B99570C7EADA26D00"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_801BD885DAD84E5590CAC20EC4780094"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qjpeg4.dll"
+            "TargetName" = "8:qjpeg4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6762,6 +7600,26 @@
             "TargetName" = "8:libnosys.a"
             "Tag" = "8:"
             "Folder" = "8:_BFAEDD7AD96A45FCABE3BFD97E35FFE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_84EC5213E3654390AA3A3D96219DB1E7"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqsvg4.a"
+            "TargetName" = "8:libqsvg4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7016,6 +7874,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8E1849DC687D4B55B9A0FA2B28F5F4B2"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qtwcodecs4.dll"
+            "TargetName" = "8:qtwcodecs4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8E40BAB5D704433B8891397C41EBAE56"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\winapi\\reason.h"
@@ -7096,12 +7974,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8FD8863EA9DA45E28A85B0411D22E244"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqsvgd4.a"
+            "TargetName" = "8:libqsvgd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9195B0123C734A04A12AC8ADFFB8C309"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\locale.h"
             "TargetName" = "8:locale.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_91CC8746A92D48019C49B964CFF493F4"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qjpcodecs4.dll"
+            "TargetName" = "8:qjpcodecs4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7142,6 +8060,26 @@
             "TargetName" = "8:librdimon_nano.a"
             "Tag" = "8:"
             "Folder" = "8:_21514AE21E7D49C8AF9729962E496BF3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_91EEABA16020493594AD4FADB9D0179C"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqkrcodecs4.a"
+            "TargetName" = "8:libqkrcodecs4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7202,6 +8140,26 @@
             "TargetName" = "8:pshpack2.h"
             "Tag" = "8:"
             "Folder" = "8:_8DE0C4D68AF349F197764C754921A1FB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9483DF03AA5844E0A1BCD664C193D37F"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qgif4.dll"
+            "TargetName" = "8:qgif4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7342,6 +8300,26 @@
             "TargetName" = "8:mem.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9A7160DAC5F84CEEBE38E5FBE41D1E25"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\strTest.dll"
+            "TargetName" = "8:strTest.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7716,6 +8694,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A40A99D81E6F4EF9870242E881F96E14"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqjpcodecs4.a"
+            "TargetName" = "8:libqjpcodecs4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A4212EEF28D940C58A17505169ABF236"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Resources\\Image\\ssp.ico"
@@ -7742,6 +8740,26 @@
             "TargetName" = "8:stdatomic.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5C95B47282248FEACAA0C7B611AB351"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\Converter.exe"
+            "TargetName" = "8:Converter.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7916,6 +8934,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A96384C89A7749FB97D95D3EC4A195CF"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qgifd4.dll"
+            "TargetName" = "8:qgifd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A978F58B03534A62902C38255609FCA7"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7-m\\libg.a"
@@ -8036,6 +9074,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AD681F97B8E54ECB99A0D674742338ED"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\QtCore4.dll"
+            "TargetName" = "8:QtCore4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AF81255DFD59454AAEAF7562D59917AE"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qmngd4.dll"
+            "TargetName" = "8:qmngd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B095B736B53343138CBF79791A730163"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\fcntl.h"
@@ -8082,6 +9160,26 @@
             "TargetName" = "8:tree.h"
             "Tag" = "8:"
             "Folder" = "8:_F0750E8F30234C79A130AF03A8811067"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B13F731D13264572A45A47E578E9EF31"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqmngd4.a"
+            "TargetName" = "8:libqmngd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8267,6 +9365,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B76A853BAD034D048F038D9552AEF18F"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqtiff4.a"
+            "TargetName" = "8:libqtiff4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7E8695932AF4F7083DC6CA2C7180FE1"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\lib\\armv7e-m\\rdimon.specs"
@@ -8407,6 +9525,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BA67CA484D094111B594B79905BDE91C"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqico4.a"
+            "TargetName" = "8:libqico4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BAC003472DEF4D52B8BBDAFEC264287B"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\lib\\gcc\\arm-none-eabi\\5.4.1\\armv7e-m\\libgcov.a"
@@ -8433,6 +9571,26 @@
             "TargetName" = "8:redboot-crt0.o"
             "Tag" = "8:"
             "Folder" = "8:_BFAEDD7AD96A45FCABE3BFD97E35FFE5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BB67A534ADC94C59A48EB06428C9B447"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\LibDxfRW.dll"
+            "TargetName" = "8:LibDxfRW.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8567,6 +9725,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BE2F8B33FD6C4002859CA68569C706D2"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qmng4.dll"
+            "TargetName" = "8:qmng4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BED2552E409846E882B8FEF1EF835548"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downlib.h"
@@ -8633,6 +9811,26 @@
             "TargetName" = "8:mem.ld"
             "Tag" = "8:"
             "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C1EAA937C7A742A39EBCBC18805DBF80"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\qcncodecsd4.dll"
+            "TargetName" = "8:qcncodecsd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8887,6 +10085,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C6F6374CE0C9419EA7FF78821D309ED3"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\libqmng4.a"
+            "TargetName" = "8:libqmng4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C726FC99CF214E8E89F6178E5CC92814"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\F103PLCTest.PS"
@@ -9058,6 +10276,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C944098AEC24417A9196F1995EE9B7A5"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qtiffd4.dll"
+            "TargetName" = "8:qtiffd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C9ED84730C52402BA18CE3B76BEBDA9B"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\sys\\reent.h"
@@ -9124,6 +10362,26 @@
             "TargetName" = "8:paths.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CC10AC2312D44647950BD102DA8128EF"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qjpegd4.dll"
+            "TargetName" = "8:qjpegd4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9489,6 +10747,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D54F1C59F57F4F149891555F5EC14D96"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qsvg4.dll"
+            "TargetName" = "8:qsvg4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D5D18EBE59BF47D490871A2B1F8C3700"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\winapi\\windows.h"
@@ -9735,6 +11013,26 @@
             "TargetName" = "8:_syslist.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DEF843D2183B45AF89D1FABC7796A47D"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqkrcodecsd4.a"
+            "TargetName" = "8:libqkrcodecsd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10035,6 +11333,26 @@
             "TargetName" = "8:rdimon-crt0.o"
             "Tag" = "8:"
             "Folder" = "8:_D30023B37AA943F9A90F99669E1EA9DC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E7AE2BEE7E714A77BE16BC6EAA384E00"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\libgcc_s_dw2-1.dll"
+            "TargetName" = "8:libgcc_s_dw2-1.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10409,6 +11727,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F2EEDB38D2D84872B2528EE78084D9E1"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\codecs\\libqcncodecsd4.a"
+            "TargetName" = "8:libqcncodecsd4.a"
+            "Tag" = "8:"
+            "Folder" = "8:_FDE5B50EEDBF44F792A03313FAF45DD4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F324A86915AA4EA4BBF3C340820413E7"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downc.h"
@@ -10760,12 +12098,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FCF3EDB7597B4D51A66E872696DDDE78"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\imageformats\\qicod4.dll"
+            "TargetName" = "8:qicod4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FE0DFE8383AE41BD9A5E868F30453578"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\tcc\\include\\share.h"
             "TargetName" = "8:share.h"
             "Tag" = "8:"
             "Folder" = "8:_975F26474D5644BF94321D19EE065033"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FE2239DAA6054A478B0DE8F8A049FDDF"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Converter\\qrencode.dll"
+            "TargetName" = "8:qrencode.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_7DA434C08A8F4BF2AEDF70247D62A72A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11017,6 +12395,50 @@
                     "Property" = "8:_516016EA77FB47B1A5A88821D236766F"
                         "Folders"
                         {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_7DA434C08A8F4BF2AEDF70247D62A72A"
+                    {
+                    "Name" = "8:Converter"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_9262EF6C98654C7099DE7231B25CA327"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_0B1787892AEE48B7AA0FEB6BA303F0CF"
+                            {
+                            "Name" = "8:imageformats"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_0403CD06651B43599CA26738B66ED9B6"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_1DC64CA74F424B0B99570C7EADA26D00"
+                            {
+                            "Name" = "8:iconengines"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_CCD440BA7B86400E8E317842695F07A3"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_FDE5B50EEDBF44F792A03313FAF45DD4"
+                            {
+                            "Name" = "8:codecs"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_23D645E07BCA4A51BF6C3444BF73404C"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_B212A9A5B4A24199BB6308EA926D3C28"

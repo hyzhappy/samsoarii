@@ -132,7 +132,14 @@ namespace SamSoarII.Core.Models
             sLength = int.Parse(xele.Element("SLength").Value);
             cvStartAddr = int.Parse(xele.Element("CVStartAddr").Value);
             cvLength = int.Parse(xele.Element("CVLength").Value);
-            notclear = bool.Parse(xele.Element("NotClear").Value);
+            try
+            {
+                notclear = bool.Parse(xele.Element("NotClear").Value);
+            }
+            catch (Exception)
+            {
+                notclear = int.Parse(xele.Element("NotClear").Value) == 0 ? true : false;
+            }
         }
 
 
