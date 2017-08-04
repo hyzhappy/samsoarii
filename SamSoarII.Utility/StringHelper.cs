@@ -154,5 +154,14 @@ namespace SamSoarII.Utility
                 return Encoding.Default.GetString(decryptdata);
             }
         }
+
+        public static string RemoveSysytemSeparator(string path)
+        {
+            if (path.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                return path.Substring(0,path.Length - 1);
+            }
+            return path;
+        }
     }
 }

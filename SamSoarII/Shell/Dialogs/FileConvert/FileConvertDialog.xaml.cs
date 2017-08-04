@@ -99,6 +99,7 @@ namespace SamSoarII.Shell.Dialogs
                 worker.ReportProgress(cnt);
                 string currentPath = FileHelper.AppRootPath;
                 string outPath = TB_Path.Text;
+                outPath = StringHelper.RemoveSysytemSeparator(outPath);
                 foreach (string item in LB_Old.Items)
                 {
                     string filename = FileHelper.GetFileName(item);
@@ -125,7 +126,7 @@ namespace SamSoarII.Shell.Dialogs
                     try
                     {
                         cmd.Start();
-                        cmd.WaitForExit(100);
+                        cmd.WaitForExit();
                         Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
                         {
                             LB_New.Items.Add(outFilename);
@@ -133,7 +134,6 @@ namespace SamSoarII.Shell.Dialogs
                         });
                         cnt++;
                         worker.ReportProgress(cnt);
-                        cmd.Kill();
                     }
                     catch (Exception)
                     {
