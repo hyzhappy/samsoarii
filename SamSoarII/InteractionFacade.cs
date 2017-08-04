@@ -297,19 +297,19 @@ namespace SamSoarII
 
         private void _LoadProject(string filename, LoadingWindowHandle handle)
         {
-            /*try
-            {*/
+            try
+            {
                 mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
                 ProjectFileManager.Update(filename, filename);
                 InitializeProject();
-            /*}
+            }
             catch (Exception e)
             {
                handle.Completed = true;
                handle.Abort();
                mdProj = null;
                LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
-            }*/
+            }
         }
         
         public void SaveProject()

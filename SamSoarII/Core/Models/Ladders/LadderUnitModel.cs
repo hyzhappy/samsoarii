@@ -78,7 +78,7 @@ namespace SamSoarII.Core.Models
         static readonly public LadderUnitFormat[] Formats;
         static readonly public Dictionary<string, Types> TypeOfNames;
         static readonly public Types[] LabelTypes;
-
+        
         static LadderUnitModel()
         {
             Formats = new LadderUnitFormat[(int)Types.NULL + 1];
@@ -639,7 +639,7 @@ namespace SamSoarII.Core.Models
                 vformats);
             vformats = new ValueFormat[] {
                     new ValueFormat("C", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
-                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.CTU] = new LadderUnitFormat(1000, "CTU", Types.CTU, Outlines.Counter, Shapes.OutputRect,
                 Properties.Resources.CTU_Inst,
                 "每次向上计数输入能流从关闭向打开转换时，向上计数（CTU）指令从当前值向上计数。\r\n" +
@@ -685,7 +685,9 @@ namespace SamSoarII.Core.Models
                 "每次输入能流(X0-X7)从关闭向打开转换时，高速计数（HCNT）指令从当前值计数。\r\n" +
                 "当前值（CVxxx）到达预设值（SV）时，计数器位（Cxxx）打开。\r\n" +
                 "不同的高速计数器(CV235-CV255)对不同的输入能流(X0-X7)有不同的计数策略（向上，向下，保留），具体请查阅帮助文档。\r\n",
-                vformats);
+                new ValueFormat[] {
+                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
+                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}) });
             Formats[(int)Types.FOR] = new LadderUnitFormat(1100, "FOR", Types.FOR, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.FOR_Inst,
                 "如果指令前条件导通，则执行此条指令。此条指令必须和NEXT指令配合使用，FOR和NEXT指令允许了一个程序的区域指定。\r\n" +
@@ -1596,6 +1598,39 @@ namespace SamSoarII.Core.Models
                 }
                 catch (Exception e)
                 {
+                    if (Format.Outline == Outlines.Counter)
+                    {
+                        bool issuccess = true;
+                        for (i = 0; i < children.Length; i++)
+                        {
+                            children[i].Type = children[i].Type == ValueModel.Types.WORD
+                                ? ValueModel.Types.DWORD
+                                : ValueModel.Types.WORD;
+                            try
+                            {
+                                children[i].Text = _args[i];
+                            }
+                            catch (Exception e2)
+                            {
+                                issuccess = false;
+                            }
+                        }
+                        if (issuccess)
+                        {
+                            if (updatevmg && ValueManager != null) ValueManager.Add(this);
+                            Invoke(LadderUnitAction.UPDATE);
+                            return;
+                        }
+                        else
+                        {
+                            for (i = 0; i < children.Length; i++)
+                            {
+                                children[i].Type = children[i].Type == ValueModel.Types.WORD
+                                    ? ValueModel.Types.DWORD
+                                    : ValueModel.Types.WORD;
+                            }
+                        }
+                    }
                     for (int j = 0; j < children.Length; j++)
                         if (oldtexts[j] != null)
                             children[j].Text = oldtexts[j];

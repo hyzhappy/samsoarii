@@ -198,8 +198,12 @@ namespace SamSoarII.Core.Models
 
         private ValueFormat format;
         public ValueFormat Format { get { return this.format; } }
-        public Types Type { get { return format != null ? format.Type : Types.NULL; } }
-
+        public Types Type
+        {
+            get { return format != null ? format.Type : Types.NULL; }
+            set { if (format != null) format = new ValueFormat(format.Name, value, format.CanRead, format.CanWrite, format.Position, format.Regexs); }
+        }
+        
         protected string text;
         public string Text
         {
@@ -367,6 +371,13 @@ namespace SamSoarII.Core.Models
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
+                    if (bas == Bases.CV)
+                    {
+                        if (Type == Types.WORD && ofs >= 200)
+                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                        if (Type == Types.DWORD && ofs < 200)
+                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                    }
                     if (ofs < 0 || ofs >= device.GetRange(bas).Count)
                         throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                     break;
@@ -439,6 +450,8 @@ namespace SamSoarII.Core.Models
         public ValueModel.Types Type { get { return this.type; } }
 
         private IEnumerable<Regex> regexs;
+        public IEnumerable<Regex> Regexs { get { return this.regexs; } }
+
         public Match Match(string text)
         {
             foreach (Regex regex in regexs)
