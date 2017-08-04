@@ -213,9 +213,7 @@ namespace SamSoarII.Core.Models
                 ViewPropertyChanged(this, new PropertyChangedEventArgs("IsCommentMode"));
             }
         }
-
-
-
+        
         #endregion
 
         #region Load & Save
@@ -228,8 +226,10 @@ namespace SamSoarII.Core.Models
             ismasked = xatt == null ? false : bool.Parse(xatt.Value);
             xatt = xele.Attribute("IsExpand");
             isexpand = xatt == null ? true : bool.Parse(xatt.Value);
-            brief = xele.Element("Brief")?.Value;
-            description = xele.Element("Description").Value;
+            XElement xele_b = xele.Element("Brief");
+            brief = xele_b != null ? xele_b.Value : "";
+            XElement xele_d = xele.Element("Description");
+            description = xele_d != null ? xele_d.Value : "";
             XElement xele_lc = xele.Element("LadderContent");
             children.Clear();
             foreach (XElement xele_unit in xele_lc.Elements("InstEle"))

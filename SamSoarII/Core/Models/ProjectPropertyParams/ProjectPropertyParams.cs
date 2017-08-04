@@ -118,6 +118,7 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
+            if (xele == null) return;
             paraCom232.Load(xele.Element("CommunicationInterfaceParams232"));
             paraCom485.Load(xele.Element("CommunicationInterfaceParams485"));
             paraPassword.Load(xele.Element("PasswordParams"));

@@ -16,52 +16,116 @@ namespace SamSoarII.Core.Models
         #region Resources
 
         public enum Types { BOOL, WORD, UWORD, DWORD, UDWORD, BCD, FLOAT, HEX, DHEX, STRING, NULL };
-        public enum Bases { X, Y, S, M, C, T, D, CV, TV, AI, AO, V, Z, K, H, NULL};
+        public enum Bases { X, Y, S, M, C, T, D, CV, TV, AI, AO, V, Z, K, H, NULL };
 
         public readonly static string[] NameOfTypes = { "BOOL", "WORD", "UWORD", "DWORD", "UDWORD", "BCD", "FLOAT", "HEX", "DHEX", "STRING", "NULL" };
         public readonly static string[] NameOfBases = { "X", "Y", "S", "M", "C", "T", "D", "CV", "TV", "AI", "AO", "V", "Z", "K", "H", "NULL" };
         public readonly static Dictionary<string, Types> TypeOfNames = new Dictionary<string, Types>();
         public readonly static Dictionary<string, Bases> BaseOfNames = new Dictionary<string, Bases>();
 
-        public readonly static Regex VarRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex BitRegex = new Regex(@"^(X|Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex WordRegex = new Regex(@"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex DoubleWordRegex = new Regex(@"^(D|CV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex FloatRegex = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VarWordRegex = new Regex(@"^(V|Z)([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex IntKValueRegex = new Regex(@"^(K)([-+]?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex IntHValueRegex = new Regex(@"^(H)([0-9A-F]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex FloatKValueRegex = new Regex(@"^(K)([-+]?([0-9]*[.])?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VariableRegex = new Regex(@"^{([0-9a-zA-Z]+)}$", RegexOptions.Compiled);
+        public readonly static ValueRegex VarRegex = new ValueRegex(
+            @"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "X", "Y", "M", "C", "T", "S", "D", "V", "Z", "CV", "TV", "AI", "AO" });
+        public readonly static ValueRegex BitRegex = new ValueRegex(
+            @"^(X|Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "X", "Y", "M", "C", "T", "S" });
+        public readonly static ValueRegex WordRegex = new ValueRegex(
+            @"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "D", "CV", "TV", "AI", "AO" });
+        public readonly static ValueRegex DoubleWordRegex = new ValueRegex(
+            @"^(D|CV)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "D", "CV" });
+        public readonly static ValueRegex FloatRegex = new ValueRegex(
+            @"^(D)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "D" });
+        public readonly static ValueRegex VarWordRegex = new ValueRegex(
+            @"^(V|Z)([0-9]+)$",
+            new string[] { "V", "Z" });
+        public readonly static ValueRegex IntKValueRegex = new ValueRegex(
+            @"^(K)([-+]?[0-9]+)$",
+            new string[] { "K" });
+        public readonly static ValueRegex IntHValueRegex = new ValueRegex(
+            @"^(H)([0-9A-F]+)$",
+            new string[] { "H" });
+        public readonly static ValueRegex FloatKValueRegex = new ValueRegex(
+            @"^(K)([-+]?([0-9]*[.])?[0-9]+)$",
+            new string[] { "K" });
+        public readonly static ValueRegex VariableRegex = new ValueRegex(
+            @"^{([0-9a-zA-Z]+)}$",
+            new string[] { });
 
-        public readonly static Regex VerifyBitRegex1 = new Regex(@"^(X|Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyBitRegex2 = new Regex(@"^(Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyBitRegex3 = new Regex(@"^(Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyBitRegex4 = new Regex(@"^(Y)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyBitRegex5 = new Regex(@"^(X|M)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyBitRegex6 = new Regex(@"^(S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex WordBitRegex = new Regex(@"^(D|V|Z)([0-9]+)\.([0-9A-F])((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static ValueRegex VerifyBitRegex1 = new ValueRegex(
+            @"^(X|Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "X", "Y", "M", "C", "T", "S" });
+        public readonly static ValueRegex VerifyBitRegex2 = new ValueRegex(
+            @"^(Y|M|C|T|S)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "Y", "M", "C", "T", "S" });
+        public readonly static ValueRegex VerifyBitRegex3 = new ValueRegex(
+            @"^(Y|M|S)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "Y", "M", "S" });
+        public readonly static ValueRegex VerifyBitRegex4 = new ValueRegex(
+            @"^(Y)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] {"Y"});
+        public readonly static ValueRegex VerifyBitRegex5 = new ValueRegex(
+            @"^(X|M)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "X", "M" });
+        public readonly static ValueRegex VerifyBitRegex6 = new ValueRegex(
+            @"^(S)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "S" });
+        public readonly static ValueRegex WordBitRegex = new ValueRegex(
+            @"^(D|V|Z)([0-9]+)\.([0-9A-F])((V|Z)([0-9]+))?$", 
+            new string[] { "Dm.n" });
 
-        public readonly static Regex VerifyWordRegex1 = new Regex(@"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyWordRegex2 = new Regex(@"^(D|CV|TV|AO)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyWordRegex3 = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyWordRegex4 = new Regex(@"^(TV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex BitWordRegex = new Regex(@"(K)([0-9]+)(X|Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static ValueRegex VerifyWordRegex1 = new ValueRegex(
+            @"^(D|CV|TV|AI|AO)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "D", "CV", "TV", "AI", "AO" });
+        public readonly static ValueRegex VerifyWordRegex2 = new ValueRegex(
+            @"^(D|CV|TV|AO)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "D", "CV", "TV", "AO" });
+        public readonly static ValueRegex VerifyWordRegex3 = new ValueRegex(
+            @"^(D)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "D" });
+        public readonly static ValueRegex VerifyWordRegex4 = new ValueRegex(
+            @"^(TV)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "TV" });
+        public readonly static ValueRegex BitWordRegex = new ValueRegex(
+            @"(K)([0-9]+)(X|Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "KnMm" });
         
-        public readonly static Regex VerifyDoubleWordRegex1 = new Regex(@"^(D|CV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyDoubleWordRegex2 = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyDoubleWordRegex3 = new Regex(@"^(CV)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex BitDoubleWordRegex = new Regex(@"(K)([0-9]+)(X|Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static ValueRegex VerifyDoubleWordRegex1 = new ValueRegex(
+            @"^(D|CV)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "D", "CV" });
+        public readonly static ValueRegex VerifyDoubleWordRegex2 = new ValueRegex(
+            @"^(D)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "D" });
+        public readonly static ValueRegex VerifyDoubleWordRegex3 = new ValueRegex(
+            @"^(CV)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "CV" });
+        public readonly static ValueRegex BitDoubleWordRegex = new ValueRegex(
+            @"(K)([0-9]+)(X|Y|M|S)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "KnMm" });
 
-        public readonly static Regex VerifyFloatRegex = new Regex(@"^(D)([0-9]+)((V|Z)([0-9]+))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static ValueRegex VerifyFloatRegex = new ValueRegex(
+            @"^(D)([0-9]+)((V|Z)([0-9]+))?$", 
+            new string[] { "D" });
 
-        public readonly static Regex VerifyIntKValueRegex = new Regex(@"^(K)([-+]?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyIntHValueRegex = new Regex(@"^(H)([0-9A-F]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static ValueRegex VerifyIntKValueRegex = new ValueRegex(
+            @"^(K)([-+]?[0-9]+)$", 
+            new string[] { "K" });
+        public readonly static ValueRegex VerifyIntHValueRegex = new ValueRegex(
+            @"^(H)([0-9A-F]+)$", 
+            new string[] { "H" });
         //public readonly static Regex VerifyIntKHValueRegex = new Regex(@"^(H)([0-9A-F]+)|(K)([-+]?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        public readonly static Regex VerifyFloatKValueRegex = new Regex(@"^(K)([-+]?([0-9]*[.])?[0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public readonly static ValueRegex VerifyFloatKValueRegex = new ValueRegex(
+            @"^(K)([-+]?([0-9]*[.])?[0-9]+)$", 
+            new string[] { "K" });
 
-        public readonly static Regex FuncNameRegex = new Regex(@"^([a-zA-Z_]\w*)$", RegexOptions.Compiled);
-        public readonly static Regex AnyNameRegex = new Regex(@"^.*$", RegexOptions.Compiled);
+        public readonly static ValueRegex FuncNameRegex = new ValueRegex(
+            @"^([a-zA-Z_]\w*)$", 
+            new string[] { });
+        public readonly static ValueRegex AnyNameRegex = new ValueRegex(
+            @"^.*$", 
+            new string[] { });
 
         static ValueModel()
         {
@@ -354,6 +418,9 @@ namespace SamSoarII.Core.Models
             return null;
         }
 
+        private string detail;
+        public string Detail { get { return this.detail; } }
+
         public ValueFormat(string _name, ValueModel.Types _type, bool _canread, bool _canwrite, int _position, IEnumerable<Regex> _regexs)
         {
             name = _name;
@@ -362,6 +429,16 @@ namespace SamSoarII.Core.Models
             canwrite = _canwrite;
             position = _position;
             regexs = _regexs;
+            IEnumerable<string> supports = new string[] { };
+            foreach (Regex regex in regexs)
+            {
+                if (!(regex is ValueRegex)) continue;
+                ValueRegex vregex = (ValueRegex)regex;
+                supports = supports.Union(vregex.Supports);
+            }
+            detail = String.Format("[{0:s}]{1:s}({2:s})",
+                ValueModel.NameOfTypes[(int)type], name,
+                String.Join("/", supports));
         }
     }
 

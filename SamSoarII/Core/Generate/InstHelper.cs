@@ -185,7 +185,7 @@ namespace SamSoarII.Core.Generate
             foreach (PLCInstruction inst in insts)
             {
                 if (inst[0].Equals("FUNC"))
-                    sw.Write("void _SBR_{0:s}();\n", inst[1]);
+                    sw.Write("void {0:s}();\n", inst[1]);
             }
             // 建立扫描的主函数
             bool ismain = true;
@@ -212,7 +212,7 @@ namespace SamSoarII.Core.Generate
                             sw.Write("callleave();\n");
                         sw.Write("}\n\n");
                         ismain = false;
-                        sw.Write("void _SBR_{0:s}()", inst[1]);
+                        sw.Write("void {0:s}()", inst[1]);
                         sw.Write("{\n");
                         if (simumode)
                             sw.Write("callinto();\n");
@@ -960,7 +960,7 @@ namespace SamSoarII.Core.Generate
                             break;
                         // CALL指令，调用子函数
                         case "CALL":
-                            sw.Write("_SBR_{0:s}();\n", inst[1]);
+                            sw.Write("{0:s}();\n", inst[1]);
                             break;
                         // CALLM指令，调用用户实现的c语言宏指令，根据参数数量的不同表现为不同的格式
                         case "CALLM":
@@ -983,10 +983,10 @@ namespace SamSoarII.Core.Generate
                             break;
                         // 中断
                         case "ATCH":
-                            sw.Write("_atch({0:s}, _SBR_{1:s});\n", inst[1], inst[2]);
+                            sw.Write("_atch({0:s}, {1:s});\n", inst[1], inst[2]);
                             break;
                         case "DTCH":
-                            sw.Write("_dtch({0:s}, _SBR_{1:s});\n", inst[1], inst[2]);
+                            sw.Write("_dtch({0:s});\n", inst[1]);
                             break;
                         case "EI":
                             sw.Write("_ei();\n");

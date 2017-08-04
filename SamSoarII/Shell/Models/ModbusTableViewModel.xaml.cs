@@ -118,7 +118,7 @@ namespace SamSoarII.Shell.Models
                 if (current != null)
                     current.ChildrenChanged += OnModelChildrenChanged;
                 UpdateButtonEnable();
-                InvokePropertyChanged("GridItems");
+                InvokePropertyChanged("Current");
                 Invoke(TabAction.ACTIVE);
             }
         }
@@ -345,8 +345,10 @@ namespace SamSoarII.Shell.Models
                         LocalizedMessageBox.Show(Properties.Resources.Message_Table_Exist, LocalizedMessageIcon.Warning);
                     else
                     {
-                        Current.Name = name;
-                        Current.Comment = comment;
+                        ModbusModel _current = Current;
+                        _current.Name = name;
+                        _current.Comment = comment;
+                        Current = _current;
                         dialog.Close();
                     }
                     break;

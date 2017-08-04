@@ -219,6 +219,7 @@
     <Compile Include="Core\Models\ProjectPropertyParams\FilterParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\HoldingSectionParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\PasswordParams.cs" />
+    <Compile Include="Core\Models\ValueRegex.cs" />
     <Compile Include="Core\Models\Values\BitElementModel.cs" />
     <Compile Include="Core\Models\Values\SpecialValueManager.cs" />
     <Compile Include="Core\Models\Values\ValueInfo.cs" />

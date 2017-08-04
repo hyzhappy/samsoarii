@@ -216,6 +216,7 @@ namespace SamSoarII.Core.Generate
         public string this[int id]
         {
             get { return args[id]; }
+            set { args[id] = value; }
         }
         /// <summary>
         /// 输出写入使能（仿真模式下使用）

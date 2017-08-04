@@ -486,7 +486,11 @@ namespace SamSoarII.Shell.Windows
                             if (ldmodel.Name.Equals("# New"))
                             {
                                 isnew = true;
-                                ldmodel.Name = Properties.Resources.New_Routine;
+                                string newname = Properties.Resources.New_Routine;
+                                int newnameid = 0;
+                                while (Project.Diagrams.Where(d => d.Name.Equals(newname)).Count() > 0)
+                                    newname = String.Format("{0:s}_{1:d}", Properties.Resources.New_Routine, newnameid++);
+                                ldmodel.Name = newname;
                             }
                             ptvitem = CreatePTVItem(
                                 ptvparent,
@@ -515,7 +519,11 @@ namespace SamSoarII.Shell.Windows
                             if (fbmodel.Name.Equals("# New"))
                             {
                                 isnew = true;
-                                fbmodel.Name = Properties.Resources.New_FuncBlock;
+                                string newname = Properties.Resources.New_FuncBlock;
+                                int newnameid = 0;
+                                while (Project.FuncBlocks.Where(d => d.Name.Equals(newname)).Count() > 0)
+                                    newname = String.Format("{0:s}_{1:d}", Properties.Resources.New_FuncBlock, newnameid++);
+                                fbmodel.Name = newname;
                             }
                             ptvitem = CreatePTVItem(
                                 ptvparent,
@@ -560,12 +568,16 @@ namespace SamSoarII.Shell.Windows
             switch (pmitem.Flags)
             {
                 case ProjectTreeViewItem.FLAG_CREATEFOLDER:
+                    string newname = Properties.Resources.New_Folder;
+                    int newnameid = 0;
+                    while (ptvitem.Items.Cast<ProjectTreeViewItem>().Where(i => i.Text.Equals(newname)).Count() > 0)
+                        newname = String.Format("{0:s}_{1:d}", Properties.Resources.New_Folder, newnameid++);
                     newitem = CreatePTVItem(
                         ptvitem,
                         ptvitem.Flags
                       | ProjectTreeViewItem.FLAG_RENAME
                       | ProjectTreeViewItem.FLAG_REMOVE,
-                        Properties.Resources.New_Folder, false, true);
+                        newname, false, true);
                     ptvitem.IsExpanded = true;
                     newitem.Loaded += OnPTVILoaded;
                     break;
@@ -659,12 +671,6 @@ namespace SamSoarII.Shell.Windows
             }
             if (ptvitem.RelativeObject is LadderDiagramModel)
             {
-                Match m = Regex.Match(ptvitem.Text, @"^[a-zA-Z_]\w*$");
-                if (!m.Success)
-                {
-                    ptvitem.Rename(Properties.Resources.Message_Name_Format_illegal);
-                    return;
-                }
                 LadderDiagramModel ldmodel = (LadderDiagramModel)(ptvitem.RelativeObject);
                 foreach (LadderDiagramModel _ldmodel in ldmodel.Parent.Diagrams)
                 {

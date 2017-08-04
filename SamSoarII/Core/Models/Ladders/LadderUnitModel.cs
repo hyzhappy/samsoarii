@@ -174,7 +174,7 @@ namespace SamSoarII.Core.Models
                 "Alterminately changed the targeted register between 1(ON) and 0(OFF) when the conditon encounter the rising edge.（OFF -- ON）",
                 vformats);
             vformats = new ValueFormat[] {
-                new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex3, ValueModel.WordBitRegex}),
+                new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex2, ValueModel.WordBitRegex}),
                 new ValueFormat("CT", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex}) };
             Formats[(int)Types.SET] = new LadderUnitFormat(211, "SET", Types.SET, Outlines.BitOperation, Shapes.Output,
                 Properties.Resources.Set_Coil,
@@ -506,7 +506,7 @@ namespace SamSoarII.Core.Models
             vformats = new ValueFormat[] {
                     new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
                     new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyFloatKValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.ANDD] = new LadderUnitFormat(503, "ANDD", Types.ANDD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_And,
                 "对双字IN1和IN2执行与操作，并将结果载入输出到OUT。",
@@ -594,7 +594,7 @@ namespace SamSoarII.Core.Models
             vformats = new ValueFormat[] {
                     new ValueFormat("IN1", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
                     new ValueFormat("IN2", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyFloatKValueRegex, ValueModel.BitWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.MUL] = new LadderUnitFormat(804, "MUL", Types.MUL, Outlines.IntegerCalculation, Shapes.OutputRect,
                 Properties.Resources.Multiply,
                 "将单字IN1和单字IN2相乘（IN1*IN2），产生的双字结果保存到双字OUT。",

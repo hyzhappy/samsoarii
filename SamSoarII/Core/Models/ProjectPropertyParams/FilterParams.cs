@@ -57,11 +57,10 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
-            ischecked = bool.Parse(xele.Element("IsChecked").Value);
-            filtertimeindex = int.Parse(xele.Element("FilterTimeIndex").Value);
+            try { ischecked = bool.Parse(xele.Element("IsChecked").Value); } catch (Exception) { }
+            try { filtertimeindex = int.Parse(xele.Element("FilterTimeIndex").Value); } catch (Exception) { }
         }
-
-
+            
         public IParams Clone()
         {
             return Clone(null);

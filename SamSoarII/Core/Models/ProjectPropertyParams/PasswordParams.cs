@@ -97,12 +97,30 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
-            pwenUpload = bool.Parse(xele.Element("IsUploadProtection").Value);
-            pwUpload = StringHelper.Decrypt(xele.Element("UploadPassword").Value);
-            pwenDownload = bool.Parse(xele.Element("IsDownloadProtection").Value);
-            pwDownload = StringHelper.Decrypt(xele.Element("DownloadPassword").Value);
-            pwenMonitor = bool.Parse(xele.Element("IsMonitorProtection").Value);
-            pwMonitor = StringHelper.Decrypt(xele.Element("MonitorPassword").Value);
+            try
+            {
+                pwenUpload = bool.Parse(xele.Element("IsUploadProtection").Value);
+                pwUpload = StringHelper.Decrypt(xele.Element("UploadPassword").Value);
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                pwenDownload = bool.Parse(xele.Element("IsDownloadProtection").Value);
+                pwDownload = StringHelper.Decrypt(xele.Element("DownloadPassword").Value);
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                pwenMonitor = bool.Parse(xele.Element("IsMonitorProtection").Value);
+                pwMonitor = StringHelper.Decrypt(xele.Element("MonitorPassword").Value);
+            }
+            catch (Exception)
+            {
+            }
         }
 
 

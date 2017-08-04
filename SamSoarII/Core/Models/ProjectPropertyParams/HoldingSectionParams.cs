@@ -124,21 +124,20 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
-            mStartAddr = int.Parse(xele.Element("MStartAddr").Value);
-            mLength = int.Parse(xele.Element("MLength").Value);
-            dStartAddr = int.Parse(xele.Element("DStartAddr").Value);
-            dLength = int.Parse(xele.Element("DLength").Value);
-            sStartAddr = int.Parse(xele.Element("SStartAddr").Value);
-            sLength = int.Parse(xele.Element("SLength").Value);
-            cvStartAddr = int.Parse(xele.Element("CVStartAddr").Value);
-            cvLength = int.Parse(xele.Element("CVLength").Value);
             try
             {
+                mStartAddr = int.Parse(xele.Element("MStartAddr").Value);
+                mLength = int.Parse(xele.Element("MLength").Value);
+                dStartAddr = int.Parse(xele.Element("DStartAddr").Value);
+                dLength = int.Parse(xele.Element("DLength").Value);
+                sStartAddr = int.Parse(xele.Element("SStartAddr").Value);
+                sLength = int.Parse(xele.Element("SLength").Value);
+                cvStartAddr = int.Parse(xele.Element("CVStartAddr").Value);
+                cvLength = int.Parse(xele.Element("CVLength").Value);
                 notclear = bool.Parse(xele.Element("NotClear").Value);
             }
             catch (Exception)
             {
-                notclear = int.Parse(xele.Element("NotClear").Value) == 0 ? true : false;
             }
         }
 

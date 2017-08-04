@@ -114,13 +114,14 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
-            baudrateindex = int.Parse(xele.Element("BaudRateIndex").Value);
-            databitindex = int.Parse(xele.Element("DataBitIndex").Value);
-            stopbitindex = int.Parse(xele.Element("StopBitIndex").Value);
-            checkcodeindex = int.Parse(xele.Element("CheckCodeIndex").Value);
-            bufferbitindex = int.Parse(xele.Element("BufferBitIndex").Value);
-            timeout = int.Parse(xele.Element("Timeout").Value);
-            comtype = (ComTypes)(int.Parse(xele.Element("ComType").Value));
+            try { baudrateindex = int.Parse(xele.Element("BaudRateIndex").Value); } catch (Exception) { }
+            try { databitindex = int.Parse(xele.Element("DataBitIndex").Value); } catch (Exception) { }
+            try { stopbitindex = int.Parse(xele.Element("StopBitIndex").Value); } catch (Exception) { }
+            try { checkcodeindex = int.Parse(xele.Element("CheckCodeIndex").Value); } catch (Exception) { }
+            try { bufferbitindex = int.Parse(xele.Element("BufferBitIndex").Value); } catch (Exception) { }
+            try { stationnumber = int.Parse(xele.Element("StationNumber").Value); } catch (Exception) { }
+            try { timeout = int.Parse(xele.Element("Timeout").Value); } catch (Exception) { }
+            try { comtype = (ComTypes)(int.Parse(xele.Element("ComType").Value)); } catch (Exception) { }
         }
 
         public IParams Clone()
