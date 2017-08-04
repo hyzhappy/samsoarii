@@ -31,7 +31,10 @@ namespace SamSoarII.Shell.Dialogs
             BrowseButton.Click += BrowseButton_Click;
             KeyDown += FileConvertDialog_KeyDown;
         }
-
+        public FileConvertDialog(string filename):this()
+        {
+            LB_Old.Items.Add(filename);
+        }
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -80,9 +83,10 @@ namespace SamSoarII.Shell.Dialogs
             openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
-                foreach (var item in openFileDialog.FileNames)
+                foreach (var filename in openFileDialog.FileNames)
                 {
-                    LB_Old.Items.Add(item);
+                    if(!LB_Old.Items.Contains(filename))
+                        LB_Old.Items.Add(filename);
                 }
             }
         }
