@@ -31,7 +31,12 @@ namespace SamSoarII.Shell.Dialogs
 
             core = _core;
             ProjectModel project = _core.Parent.Parent.Parent;
-            Details = GlobalSetting.InstrutionNameAndToolTips[Core.InstName];
+            LadderUnitFormat format = core.Format;
+            details = new string[7];
+            details[0] = format.Describe;
+            for (int i = 1; i <= 5; i++)
+                details[i] = i <= format.Formats.Count ? format.Formats[i - 1].Detail : "";
+            details[6] = format.Detail;
             switch (Core.InstName)
             {
                 case "CALL":
