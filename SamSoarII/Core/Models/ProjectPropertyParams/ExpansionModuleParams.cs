@@ -57,7 +57,6 @@ namespace SamSoarII.Core.Models
         }
         #endregion
 
-
         #region Save & Load
 
         public void Save(XElement xele)
@@ -73,17 +72,10 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
-            try
+            try { UseExpansionModule = bool.Parse(xele.Attribute("CanUseExpansion").Value); } catch (Exception) { }
+            foreach (var param in ExpansionUnitParams)
             {
-                UseExpansionModule = bool.Parse(xele.Attribute("CanUseExpansion").Value);
-                foreach (var param in ExpansionUnitParams)
-                {
-                    param.Load(xele.Element(string.Format("ExpansionUnitParams{0}", param.ID)));
-                }
-            }
-            catch (Exception)
-            {
-                
+                try { param.Load(xele.Element(string.Format("ExpansionUnitParams{0}", param.ID))); } catch (Exception) { }
             }
         }
 

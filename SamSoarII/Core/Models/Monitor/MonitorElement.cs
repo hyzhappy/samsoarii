@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -12,6 +13,27 @@ namespace SamSoarII.Core.Models
 {
     public class MonitorElement : IDisposable, INotifyPropertyChanged
     {
+        #region Resource
+
+        private static ValueModel analyzer_bit;
+        private static ValueModel analyzer_word;
+        private static ValueModel analyzer_dword;
+        private static ValueModel analyzer_float;
+
+        static MonitorElement()
+        {
+            analyzer_bit = new ValueModel(null, new ValueFormat("ANA", ValueModel.Types.BOOL, false, false, 0,
+                new Regex[] { ValueModel.BitRegex, ValueModel.WordBitRegex}));
+            analyzer_word = new ValueModel(null, new ValueFormat("ANA", ValueModel.Types.WORD, false, false, 0,
+                new Regex[] { ValueModel.WordRegex, ValueModel.BitWordRegex }));
+            analyzer_dword = new ValueModel(null, new ValueFormat("ANA", ValueModel.Types.DWORD, false, false, 0,
+                new Regex[] { ValueModel.DoubleWordRegex, ValueModel.BitDoubleWordRegex }));
+            analyzer_float = new ValueModel(null, new ValueFormat("ANA", ValueModel.Types.FLOAT, false, false, 0,
+                new Regex[] { ValueModel.FloatRegex}));
+        }
+
+        #endregion
+
         public MonitorElement(MonitorTable _parent, ValueStore _store)
         {
             parent = _parent;
@@ -265,10 +287,35 @@ namespace SamSoarII.Core.Models
             datatype = int.Parse(xele.Attribute("DataType").Value);
             string name = xele.Attribute("Name").Value;
             ValueInfo vinfo = ValueManager[name];
-            string intratype = xele.Attribute("IntraType").Value;
-            int intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
-            XAttribute xatt = xele.Attribute("Flag");
-            int flag = xatt != null ? int.Parse(xatt.Value) : 1;
+            string intratype = "";
+            int intraaddr = 0;
+            int flag = 1;
+            try
+            {
+                intratype = xele.Attribute("IntraType").Value;
+                intraaddr = int.Parse(xele.Attribute("IntraAddr").Value);
+                flag = int.Parse(xele.Attribute("Flag").Value);
+            }
+            catch (Exception)
+            {
+                ValueModel analyzer = null;
+                switch (DataType)
+                {
+                    case 0: analyzer = analyzer_bit; break;
+                    case 1:
+                    case 2:
+                    case 5:
+                    case 7: analyzer = analyzer_word; break;
+                    case 3:
+                    case 4:
+                    case 8: analyzer = analyzer_dword; break;
+                    case 6: analyzer = analyzer_float; break;
+                }
+                analyzer.Text = name;
+                intratype = analyzer.Intra != ValueModel.Bases.NULL ? ValueModel.NameOfBases[(int)analyzer.Intra] : "";
+                intraaddr = analyzer.IntraOffset;
+                flag = analyzer.IsWordBit ? (analyzer.Offset & 15) : (analyzer.IsBitWord || analyzer.IsBitDoubleWord) ? analyzer.Size : 1;
+            }
             Store = _FindStore(vinfo, intratype, intraaddr, flag);
         }
 

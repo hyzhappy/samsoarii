@@ -134,6 +134,7 @@ namespace SamSoarII.Core.Models
                 modbus.Dispose();
             }
             children.Clear();
+            if (xele == null) return;
             foreach (XElement xele_m in xele.Elements("Table"))
             {
                 ModbusModel mmodel = new ModbusModel(this, "# New");

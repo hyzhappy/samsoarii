@@ -128,15 +128,15 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
-            serialportindex = int.Parse(xele.Element("SerialPortIndex").Value);
-            baudrateindex = int.Parse(xele.Element("BaudRateIndex").Value);
-            databitindex = int.Parse(xele.Element("DataBitIndex").Value);
-            stopbitindex = int.Parse(xele.Element("StopBitIndex").Value);
-            checkcodeindex = int.Parse(xele.Element("CheckCodeIndex").Value);
-            timeout = int.Parse(xele.Element("Timeout").Value);
-            iscomlinked = bool.Parse(xele.Element("IsCOMLinked").Value);
-            isautocheck = bool.Parse(xele.Element("IsAutoCheck").Value);
-            downloadoption = int.Parse(xele.Element("DownloadOption").Value);
+            try {serialportindex = int.Parse(xele.Element("SerialPortIndex").Value);} catch (Exception) {}
+            try {baudrateindex = int.Parse(xele.Element("BaudRateIndex").Value);} catch (Exception) {}
+            try {databitindex = int.Parse(xele.Element("DataBitIndex").Value);} catch (Exception) {}
+            try {stopbitindex = int.Parse(xele.Element("StopBitIndex").Value);} catch (Exception) {}
+            try {checkcodeindex = int.Parse(xele.Element("CheckCodeIndex").Value);} catch (Exception) {}
+            try {timeout = int.Parse(xele.Element("Timeout").Value);} catch (Exception) {}
+            try {iscomlinked = bool.Parse(xele.Element("IsCOMLinked").Value);} catch (Exception) {}
+            try {isautocheck = bool.Parse(xele.Element("IsAutoCheck").Value);} catch (Exception) {}
+            try {downloadoption = int.Parse(xele.Element("DownloadOption").Value);} catch (Exception) {}
         }
 
         public IParams Clone()
