@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -64,10 +65,6 @@ namespace SamSoarII.Shell.Dialogs
             {
                 LocalizedMessageBox.Show(Properties.Resources.Message_File_Requried,LocalizedMessageIcon.Warning);
             }
-            else if(LB_Old.Items.Count > 10)
-            {
-                LocalizedMessageBox.Show(string.Format("{0} 10", Properties.Resources.Max_Number_File), LocalizedMessageIcon.Warning);
-            }
             else if (TB_Path.Text == string.Empty)
             {
                 LocalizedMessageBox.Show(Properties.Resources.Required_File_Path, LocalizedMessageIcon.Warning);
@@ -82,13 +79,31 @@ namespace SamSoarII.Shell.Dialogs
                 worker = new BackgroundWorker();
                 worker.WorkerReportsProgress = true;
                 worker.DoWork += Worker_DoWork;
-                worker.ProgressChanged += Worker_ProgressChanged;
+                //worker.ProgressChanged += Worker_ProgressChanged;
                 worker.RunWorkerAsync();
+                //progressBar = new ProgressBar();
+                //progressBar.PG_Bar.Minimum = 0;
+                //progressBar.PG_Bar.Maximum = LB_Old.Items.Count;
+                //progressBar.ShowDialog();
             }
         }
         private BackgroundWorker worker;
+        private ProgressBar progressBar;
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            Dispatcher.Invoke(DispatcherPriority.Background,(ThreadStart)delegate() 
+            {
+                StartAnimation(progressBar.PG_Bar.Value, e.ProgressPercentage * 3.0 / 20.0);
+            });
+        }
+
+        private void StartAnimation(double from,double to)
+        {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = from;
+            animation.To = to;
+            animation.Duration = TimeSpan.FromSeconds(0.5);
+            progressBar.PG_Bar.BeginAnimation(RangeBase.ValueProperty, animation);
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
@@ -96,7 +111,7 @@ namespace SamSoarII.Shell.Dialogs
             Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate () 
             {
                 int cnt = 0,covered = 0;
-                worker.ReportProgress(cnt);
+                worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
                 string currentPath = FileHelper.AppRootPath;
                 string outPath = TB_Path.Text;
                 outPath = StringHelper.RemoveSysytemSeparator(outPath);
@@ -110,7 +125,7 @@ namespace SamSoarII.Shell.Dialogs
                         if(ret != LocalizedMessageResult.Yes)
                         {
                             cnt++;
-                            worker.ReportProgress(cnt);
+                            worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
                             continue;
                         }
                         else covered++;
@@ -133,7 +148,8 @@ namespace SamSoarII.Shell.Dialogs
                             Thread.Sleep(10);
                         });
                         cnt++;
-                        worker.ReportProgress(cnt);
+                        worker.ReportProgress((int)(((double)cnt / LB_Old.Items.Count) * 100));
+                        Thread.Sleep(100);
                     }
                     catch (Exception)
                     {
@@ -143,7 +159,8 @@ namespace SamSoarII.Shell.Dialogs
                         }
                     }
                 }
-                if(App.CultureIsZH_CH())
+                //progressBar.Close();
+                if (App.CultureIsZH_CH())
                     LocalizedMessageBox.Show(string.Format("成功{0}{1}，失败{2}！", LB_New.Items.Count, covered == 0 ? string.Empty : string.Format("(覆盖{0})",covered) , LB_Old.Items.Count - cnt),LocalizedMessageIcon.Information);
                 else
                     LocalizedMessageBox.Show(string.Format("{0} successful{1}, {2} failed!", LB_New.Items.Count, covered == 0 ? string.Empty : string.Format("({0} is covered)", covered), LB_Old.Items.Count - cnt), LocalizedMessageIcon.Information);

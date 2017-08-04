@@ -1175,7 +1175,10 @@ namespace SamSoarII.Core.Models
             children = new ValueModel[] { };
             Parent = _parent;
             try { Load(xele); }
-            catch (ValueParseException) { }
+            catch (ValueParseException)
+            {
+                throw new Exception(xele.Attribute("Type").Value);
+            }
             finally { InitializeStructure(_parent); }
         }
 

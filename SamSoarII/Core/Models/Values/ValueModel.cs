@@ -315,9 +315,18 @@ namespace SamSoarII.Core.Models
                             else
                             {
                                 Store = new ValueStore(null, Type);
-                                Store.Value = format.Type == Types.WORD
-                                    ? short.Parse(match.Groups[2].Value)
-                                    : int.Parse(match.Groups[2].Value);
+                                try
+                                {
+                                    Store.Value = format.Type == Types.WORD
+                                        ? short.Parse(match.Groups[2].Value)
+                                        : int.Parse(match.Groups[2].Value);
+                                }
+                                catch (Exception)
+                                {
+                                    Store.Value = format.Type == Types.WORD
+                                        ? ushort.Parse(match.Groups[2].Value)
+                                        : uint.Parse(match.Groups[2].Value);
+                                }
                             }
                             break;
                         case Types.FLOAT:
