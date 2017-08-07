@@ -135,7 +135,7 @@ namespace SamSoarII.Core.Models
             @"^([a-zA-Z_]\w*)$", 
             new string[] { });
         public readonly static ValueRegex AnyNameRegex = new ValueRegex(
-            @"^.*$", 
+            @"^[\w\t]*$", 
             new string[] { });
 
         public readonly static ValueModel Analyzer_Bit = new ValueModel(null, new ValueFormat("ANA", Types.BOOL, false, false, 0,

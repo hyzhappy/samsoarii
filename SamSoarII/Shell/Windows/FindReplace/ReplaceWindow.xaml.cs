@@ -401,10 +401,10 @@ namespace SamSoarII.Shell.Windows
             RF_Change = new ReplaceFormat(TB_Change.Text);
             switch (RF_Change.Mode)
             {
-                case ReplaceFormat.Modes.Unit:
+                case ReplaceFormat.Modes.Value:
                 case ReplaceFormat.Modes.Base:
                     // 输入和替换的格式均为相同格式才合法
-                    if (RF_Input.Mode == ReplaceFormat.Modes.Unit
+                    if (RF_Input.Mode == ReplaceFormat.Modes.Value
                      || RF_Input.Mode == ReplaceFormat.Modes.Base)
                         TB_Change.Background = Brushes.LightGreen;
                     // 输入为空时涂白色
@@ -414,7 +414,7 @@ namespace SamSoarII.Shell.Windows
                     else
                         TB_Change.Background = Brushes.Red;
                     break;
-                case ReplaceFormat.Modes.Value:
+                case ReplaceFormat.Modes.Unit:
                     // 梯形图格式合法
                     TB_Change.Background = Brushes.LightGreen;
                     break;

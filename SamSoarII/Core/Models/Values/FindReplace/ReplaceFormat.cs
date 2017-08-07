@@ -43,7 +43,7 @@ namespace SamSoarII.Core.Models
                             throw new ValueParseException("cannot be string.", ranges[0].Base.Format);
                         }
                     }
-                    catch (ValueParseException)
+                    catch (Exception)
                     {
                         mode = Modes.Error;
                         ranges = null;
@@ -56,7 +56,7 @@ namespace SamSoarII.Core.Models
                         mode = Modes.Value;
                         ranges = new List<ValueRange> { new ValueRange(args[0]) };
                     }
-                    catch (ValueParseException)
+                    catch (Exception)
                     {
                         mode = Modes.Error;
                         ranges = null;
@@ -94,7 +94,15 @@ namespace SamSoarII.Core.Models
                             AppendAnyRanges();
                         return;
                     default:
-                        ranges.Add(new ValueRange(args[i]));
+                        try
+                        {
+                            ranges.Add(new ValueRange(args[i]));
+                        }
+                        catch (Exception)
+                        {
+                            mode = Modes.Error;
+                            return;
+                        }
                         break;
                 }
             }
@@ -130,15 +138,15 @@ namespace SamSoarII.Core.Models
                 case Modes.Error:
                     return false;
                 case Modes.Value:
+                case Modes.Base:
                     foreach (ValueModel vmodel in unit.Children)
                         if (ranges[0].Contains(vmodel)) return true;
                     return false;
                 case Modes.Unit:
-                case Modes.Base:
                     if (!isanyinst && !unit.InstName.Equals(instname))
                         return false;
-                    for (int i = 0; i < unit.Children.Count; i++)
-                        if (i >= ranges.Count() || !ranges[i].Contains(unit.Children[i]))
+                    for (int i = 0; i < ranges.Count(); i++)
+                        if (!ranges[i].IsAny && (i >= unit.Children.Count || !ranges[i].Contains(unit.Children[i])))
                             return false;
                     return true;
                 default:
@@ -153,6 +161,7 @@ namespace SamSoarII.Core.Models
                 case Modes.Error:
                     return null;
                 case Modes.Value:
+                case Modes.Base:
                     newargs.Append(unit.InstName);
                     for (int i = 0; i < unit.Children.Count; i++)
                     {
@@ -163,7 +172,6 @@ namespace SamSoarII.Core.Models
                     }
                     return new ReplaceCommand(unit, newargs.ToString());
                 case Modes.Unit:
-                case Modes.Base:
                     newargs.Append(isanyinst ? unit.InstName : instname);
                     for (int i = 0; i < unit.Children.Count; i++)
                     {
@@ -201,7 +209,7 @@ namespace SamSoarII.Core.Models
                     if (!oldrange.IsAny && value.IsWordBit && oldrange.Base.IsWordBit && newrange.FlagCount > 1)
                         offset += (value.Offset & 15) - (oldrange.Base.Offset & 15);
                     offset &= 15;
-                    newargs.Append(String.Format(".{1:x}", offset));
+                    newargs.Append(String.Format(".{0:x}", offset));
                 }
                 else if (Mode == Modes.Base && value.IsWordBit)
                 {
@@ -216,7 +224,7 @@ namespace SamSoarII.Core.Models
                     newargs.Append(String.Format("{0:s}{1:d}",
                         ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));
                     offset = value.Offset & 15;
-                    newargs.Append(String.Format(".{1:x}", offset));
+                    newargs.Append(String.Format(".{0:x}", offset));
                 }
                 else
                 {
@@ -267,7 +275,7 @@ namespace SamSoarII.Core.Models
                         offset += value.IntraOffset - oldrange.Base.IntraOffset;
                     }
                     newargs.Append(String.Format("{0:s}{1:d}",
-                        ValueModel.NameOfBases[(int)(newrange.Base.Intra)], offset));
+                        ValueModel.NameOfBases[(int)(value.Intra)], offset));
                 }
             }
         }

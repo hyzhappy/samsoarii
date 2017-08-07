@@ -15,7 +15,7 @@ namespace SamSoarII.Core.Models
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static Regex WordBitRegex = new Regex(
-            @"^(D|V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))(\.)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
+            @"^(D|V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))(\.)((\[([0-9A-F])\.\.([0-9A-F])\])|([0-9A-F]))((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static Regex BitWordRegex = new Regex(
@@ -42,7 +42,7 @@ namespace SamSoarII.Core.Models
                 if (m.Success)
                 {
                     Build(basetext, m.Groups, 1, ref oct);
-                    Build(basetext, m.Groups, 7, ref fct);
+                    BuildHex(basetext, m.Groups, 7, ref fct);
                     if (m.Groups[13].Value.Length > 0)
                         Build(basetext, m.Groups, 14, ref ict);
                 }
@@ -107,14 +107,8 @@ namespace SamSoarII.Core.Models
             }
             if (bas == null)
             {
-                try
-                {
-                    ValueModel.Analyzer_String.Text = basetext.ToString();
-                    bas = ValueModel.Analyzer_String.Clone();
-                }
-                catch (ValueParseException)
-                {
-                }
+                ValueModel.Analyzer_String.Text = basetext.ToString();
+                bas = ValueModel.Analyzer_String.Clone();
             }
         }
         
@@ -129,6 +123,21 @@ namespace SamSoarII.Core.Models
             else
             {
                 basetext.Append(groups[id+5].Value);
+                count = 1;
+            }
+        }
+
+        private void BuildHex(StringBuilder basetext, GroupCollection groups, int id, ref int count)
+        {
+            basetext.Append(groups[id].Value);
+            if (groups[id + 2].Value.Length > 0)
+            {
+                basetext.Append(groups[id + 3].Value);
+                count = int.Parse(groups[id + 4].Value, System.Globalization.NumberStyles.HexNumber) - int.Parse(groups[id + 3].Value, System.Globalization.NumberStyles.HexNumber) + 1;
+            }
+            else
+            {
+                basetext.Append(groups[id + 5].Value);
                 count = 1;
             }
         }
@@ -158,10 +167,11 @@ namespace SamSoarII.Core.Models
 
         public bool Contains(ValueModel vmodel)
         {
+            if (IsAny) return true;
             bool ret = true;
             //ret &= bas.Type == bas.Type;
             ret &= bas.Base == vmodel.Base;
-            ret &= bas.Intra == vmodel.Intra;
+            ret &= bas.Intra == ValueModel.Bases.NULL || bas.Intra == vmodel.Intra;
             ret &= bas.Intra == ValueModel.Bases.NULL || (bas.IntraOffset <= vmodel.IntraOffset && vmodel.IntraOffset < bas.IntraOffset + ict);
             if (bas.IsWordBit)
             {
@@ -171,7 +181,10 @@ namespace SamSoarII.Core.Models
             }
             else  
             {
-                ret &= bas.Offset <= vmodel.Offset && vmodel.Offset < bas.Offset + oct;
+                if (vmodel.IsWordBit)
+                    ret &= bas.Offset <= (vmodel.Offset >> 4) && (vmodel.Offset >> 4) < bas.Offset + oct;
+                else
+                    ret &= bas.Offset <= vmodel.Offset && vmodel.Offset < bas.Offset + oct;
                 if (bas.IsBitWord || bas.IsBitDoubleWord)
                 {
                     ret &= !(bas.IsBitWord ^ vmodel.IsBitWord);
