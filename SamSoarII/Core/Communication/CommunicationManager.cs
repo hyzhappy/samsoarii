@@ -11,6 +11,7 @@ using System.Threading;
 using SamSoarII.Utility;
 using System.IO;
 using System.ComponentModel;
+using SamSoarII.Core.Helpers;
 
 namespace SamSoarII.Core.Communication
 {
@@ -245,8 +246,27 @@ namespace SamSoarII.Core.Communication
         #endregion
 
         #region Download
+        //下载一包数据的最大长度
+        public int DOWNLOAD_MAX_DATALEN
+        {
+            get
+            {
+                switch (PortType)
+                {
+                    case PortTypes.SerialPort:
+                        return CommunicationDataDefine.SERIAL_DOWNLOAD_LEN;
+                    case PortTypes.USB:
+                        return CommunicationDataDefine.USB_DOWNLOAD_LEN;
+                    default:
+                        return CommunicationDataDefine.SERIAL_DOWNLOAD_LEN;
+                }
+            }
+        }
 
         private List<byte> execdata;
+
+        public List<byte> ExecData { get { return execdata; } }
+
         public int ExecLen { get { return execdata.Count(); } }
 
         public void LoadExecute()
@@ -270,42 +290,12 @@ namespace SamSoarII.Core.Communication
             br.Close();
         }
 
-        public bool DownloadExecute()
+        public DownloadError DownloadExecute()
         {
-            DownloadFBCommand dFBCmd = new DownloadFBCommand();
-            DownloadFCCommand dFCCmd = new DownloadFCCommand();
-            Download80Command d80Cmd = null;
-            Download81Command d81Cmd = new Download81Command();
-            if (!DownloadHandle(dFBCmd)) return false;
-            int time = 0;
-            while (time < 20 && !DownloadHandle(dFCCmd)) time++;
-            if (time >= 20) return false;
-            byte[] data = execdata.ToArray();
-            byte[] pack = new byte[1024];
-            int len = data.Length / 1024;
-            int rem = data.Length % 1024;
-            for (int i = 0; i < len; i++)
-            {
-                for (int j = 0; j < 1024; j++)
-                    pack[j] = data[i * 1024 + j];
-                d80Cmd = new Download80Command(i, pack);
-                for (time = 0; time < 3 && !DownloadHandle(d80Cmd);) time++;
-                if (time >= 3) return false;
-            }
-            if (rem > 0)
-            {
-                pack = new byte[rem];
-                for (int j = 0; j < rem; j++)
-                    pack[j] = data[len * 1024 + j];
-                d80Cmd = new Download80Command(len, pack);
-                for (time = 0; time < 3 && !DownloadHandle(d80Cmd);) time++;
-                if (time >= 3) return false;
-            }
-            if (!DownloadHandle(d81Cmd)) return false;
-            return true;
+            return new DownloadHelper(this).DownloadExecute();
         }
 
-        public bool DownloadHandle(ICommunicationCommand cmd, int waittime = 10)
+        public bool DownloadHandle(ICommunicationCommand cmd, bool hasRecvData = true, int waittime = 10)
         {
             bool hassend = false;
             bool hasrecv = false;
@@ -322,8 +312,8 @@ namespace SamSoarII.Core.Communication
             }
             if (!hassend) return false;
             Thread.Sleep(waittime);
-            if (cmd.RecvDataLen == 0) return true;
-            while (recvtime < 100)
+            if (!hasRecvData && cmd.RecvDataLen == 0) return true;
+            while (recvtime < 10)
             {
                 if (mngCurrent.Read(cmd) == 0)
                 {
@@ -512,7 +502,7 @@ namespace SamSoarII.Core.Communication
         private void OnCommunicationParamsChanged(object sender, PropertyChangedEventArgs e)
         {
             PortType = PARACom.IsComLinked ? PortTypes.SerialPort : PortTypes.USB;
-            mngPort.InitializePort();
+            //mngPort.InitializePort();
         }
 
         private void OnReceiveValueStoreEvent(object sender, ValueStoreWriteEventArgs e)

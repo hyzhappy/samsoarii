@@ -2232,4 +2232,10 @@
   <data name="File_Override" xml:space="preserve">
     <value>File is already in the output path, is it overwritten?</value>
   </data>
+  <data name="File_Convert" xml:space="preserve">
+    <value>File being converted...</value>
+  </data>
+  <data name="PLC_Status_To_Stop" xml:space="preserve">
+    <value>The current PLC is running, if you continue to download, will automatically set to Stop.</value>
+  </data>
 </root>

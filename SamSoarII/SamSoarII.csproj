@@ -138,16 +138,22 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Communication\Command\Download80Command.cs" />
-    <Compile Include="Core\Communication\Command\Download81Command.cs" />
-    <Compile Include="Core\Communication\Command\DownloadFBCommand.cs" />
-    <Compile Include="Core\Communication\Command\DownloadFCCommand.cs" />
-    <Compile Include="Core\Communication\Command\ForceCancelCommand.cs" />
-    <Compile Include="Core\Communication\Command\GeneralReadCommand.cs" />
-    <Compile Include="Core\Communication\Command\GeneralWriteCommand.cs" />
+    <Compile Include="Core\Communication\Command\Download\BinFinishedCommand.cs" />
+    <Compile Include="Core\Communication\Command\Download\CommunicationTestCommand.cs" />
+    <Compile Include="Core\Communication\Command\Download\DownloadTypeData.cs" />
+    <Compile Include="Core\Communication\Command\Download\DownloadTypeOver.cs" />
+    <Compile Include="Core\Communication\Command\Download\DownloadTypeStart.cs" />
+    <Compile Include="Core\Communication\Command\Download\IAPDESKEYCommand.cs" />
+    <Compile Include="Core\Communication\Command\Download\PLCMessage.cs" />
+    <Compile Include="Core\Communication\Command\Download\SwitchPLCStatusCommand.cs" />
+    <Compile Include="Core\Communication\Command\Download\SwitchToIAPCommand.cs" />
+    <Compile Include="Core\Communication\Command\Download\TransportBinCommand.cs" />
+    <Compile Include="Core\Communication\Command\Monitor\ForceCancelCommand.cs" />
+    <Compile Include="Core\Communication\Command\Monitor\GeneralReadCommand.cs" />
+    <Compile Include="Core\Communication\Command\Monitor\GeneralWriteCommand.cs" />
     <Compile Include="Core\Communication\Command\ICommunicationCommand.cs" />
-    <Compile Include="Core\Communication\Command\IntrasegmentReadCommand.cs" />
-    <Compile Include="Core\Communication\Command\IntrasegmentWriteCommand.cs" />
+    <Compile Include="Core\Communication\Command\Monitor\IntrasegmentReadCommand.cs" />
+    <Compile Include="Core\Communication\Command\Monitor\IntrasegmentWriteCommand.cs" />
     <Compile Include="Core\Communication\CommunicationManager.cs" />
     <Compile Include="Core\Communication\IPortManager.cs" />
     <Compile Include="Core\Communication\SerialPortManager.cs" />
@@ -1081,6 +1087,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\Communication\Command\Upload\" />
     <Folder Include="Core\Models\Ladders\Commands\" />
     <Folder Include="Shell\Helper\" />
   </ItemGroup>

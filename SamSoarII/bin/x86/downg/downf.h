@@ -1,7 +1,9 @@
 #include <stdint.h>
 typedef int32_t _BIT;
 typedef int16_t _WORD;
+typedef uint16_t U_WORD;
 typedef int32_t D_WORD;
+typedef uint32_t UD_WORD;
 typedef float _FLOAT;
 void CACI(_WORD* in,_FLOAT* out);
 void RPCI(_WORD* in,_FLOAT* out);
@@ -26,3 +28,4 @@ void MDPF(_FLOAT* in,_WORD* ct,_FLOAT* out);
 void CRCC(_WORD* in,_WORD* ct,_WORD* out);
 void DDO(_WORD* in,_WORD* ct);
 void DSL(_WORD* in,_WORD* ct);
+void TEST();

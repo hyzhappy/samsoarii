@@ -33,5 +33,18 @@ namespace SamSoarII.Core.Communication
             byte[] TestCode = GetCRC(data);
             return TestCode[0] == CRCCode[0] && TestCode[1] == CRCCode[1];
         }
+
+        public static bool CheckCRC(ICommunicationCommand command)
+        {
+            byte[] commandCache = new byte[command.RetData.Length - 2];
+            byte[] CRCCode = new byte[2];
+            for (int i = 0; i < commandCache.Length; i++)
+            {
+                commandCache[i] = command.RetData[i];
+            }
+            CRCCode[0] = command.RetData[command.RetData.Length - 2];
+            CRCCode[1] = command.RetData[command.RetData.Length - 1];
+            return CheckCRC(commandCache, CRCCode);
+        }
     }
 }

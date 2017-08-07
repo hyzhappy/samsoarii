@@ -20,7 +20,9 @@ namespace SamSoarII.Utility
                 return "ssr";
             }
         }
-
+        /// <summary>
+        /// 第一版文件类型
+        /// </summary>
         public static string OldFileExtension
         {
             get
@@ -90,6 +92,17 @@ namespace SamSoarII.Utility
             string tempstr = fullFileName.Substring(fullFileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
             tempstr = tempstr.Substring(0, tempstr.LastIndexOf('.'));
             return tempstr;
+        }
+        /// <summary>
+        /// 得到相应的文件大小（以字节为单位）
+        /// </summary>
+        /// <param name="fullFileName">文件的完整路径(包括文件名与后缀)</param>
+        /// <returns></returns>
+        public static long GetFileLength(string fullFileName)
+        {
+            if (File.Exists(fullFileName))
+                return new FileInfo(fullFileName).Length;
+            else return 0L;
         }
     }
 }

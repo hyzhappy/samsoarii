@@ -12,6 +12,6 @@
             <RowDefinition Height="1.5*"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Margin="0,10,0,0" FontSize="12" Text="{Binding Message}" TextWrapping="Wrap" HorizontalAlignment="Center" Width="580" x:Name="TB_Message"/>
-        <ProgressBar Background="White" Grid.Row="1" Minimum="0" Maximum="1" Value="{Binding Percentage}" HorizontalAlignment="Center" Width="580" x:Name="PG_Bar" Height="18" VerticalAlignment="Center"></ProgressBar>
+        <ProgressBar Background="White" Grid.Row="1" HorizontalAlignment="Center" Width="580" x:Name="PG_Bar" Height="18" VerticalAlignment="Center"/>
     </Grid>
 </Window>
