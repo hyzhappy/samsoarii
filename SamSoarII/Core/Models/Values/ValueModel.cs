@@ -89,10 +89,10 @@ namespace SamSoarII.Core.Models
             @"^(TV)([0-9]+)((V|Z)([0-9]+))?$", 
             new string[] { "TV" });
         public readonly static ValueRegex VerifyWordRegex5 = new ValueRegex(
-            @"^(AI)([0-9]+)((V|Z)([0-9]+))?$",
+            @"^(D|AI)([0-9]+)((V|Z)([0-9]+))?$",
             new string[] { "AI" });
         public readonly static ValueRegex VerifyWordRegex6 = new ValueRegex(
-            @"^(AO)([0-9]+)((V|Z)([0-9]+))?$",
+            @"^(D|AO)([0-9]+)((V|Z)([0-9]+))?$",
             new string[] { "AO" });
 
         public readonly static ValueRegex BitWordRegex = new ValueRegex(

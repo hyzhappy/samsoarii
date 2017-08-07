@@ -29,10 +29,31 @@ namespace SamSoarII.Core.Models
                     instname = args[0];
                     AppendAnyRanges();
                 }
+                else if (args[0][0] == '$')
+                {
+                    try
+                    {
+                        mode = Modes.Base;
+                        ranges = new List<ValueRange> { new ValueRange(args[0].Substring(1)) };
+                    }
+                    catch (ValueParseException)
+                    {
+                        mode = Modes.Error;
+                        ranges = null;
+                    }
+                }
                 else
                 {
-                    mode = Modes.Value;
-                    ranges = new List<ValueRange> { new ValueRange(args[0]) };
+                    try
+                    {
+                        mode = Modes.Value;
+                        ranges = new List<ValueRange> { new ValueRange(args[0]) };
+                    }
+                    catch (ValueParseException)
+                    {
+                        mode = Modes.Error;
+                        ranges = null;
+                    }
                 }
                 return;
             }
@@ -74,7 +95,7 @@ namespace SamSoarII.Core.Models
 
         #region Number
         
-        public enum Modes { Error, Unit, Value };
+        public enum Modes { Error, Unit, Value, Base };
         private Modes mode;
         public Modes Mode { get { return this.mode; } }
 
