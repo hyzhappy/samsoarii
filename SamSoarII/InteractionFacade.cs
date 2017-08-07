@@ -786,7 +786,7 @@ namespace SamSoarII
             PostIWindowEvent(null, new UnderBarEventArgs(barStatus, UnderBarStatus.Loading, Properties.Resources.Funcblock_Check));
             LoadingWindowHandle handle = new LoadingWindowHandle(Properties.Resources.Funcblock_Check);
             wndMain.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate ()
-            {
+                {
                 handle.Start();
                 result = _CheckFuncBlock(handle, showreport);
             });
@@ -806,8 +806,8 @@ namespace SamSoarII
             List<string> cfiles = new List<string>();
             List<string> ofiles = new List<string>();
             Process cmd = null;
-            string stdout = null;
-            string stderr = null;
+            //StringBuilder stdout = null;
+            StringBuilder stderr = null;
             Match m1 = null;
             Match m2 = null;
             string message = null;
@@ -825,10 +825,12 @@ namespace SamSoarII
                 ofiles.Add(ofile);
                 StreamWriter cw = new StreamWriter(cfile);
                 cw.Write("#include <math.h>\n");
-                cw.Write("typedef int BIT;\n");
-                cw.Write("typedef int WORD;\n");
-                cw.Write("typedef long DWORD;\n");
-                cw.Write("typedef double FLOAT;\n");
+                cw.Write("typedef int* BIT;\r\n");
+                cw.Write("typedef short* WORD;\r\n");
+                cw.Write("typedef short* UWORD;\r\n");
+                cw.Write("typedef int* DWORD;\r\n");
+                cw.Write("typedef int* UDWORD;\r\n");
+                cw.Write("typedef float* FLOAT;\r\n");
                 if (fbmodel.IsLibrary)
                 {
                     cw.Write("double asin(double a) {}");
@@ -862,14 +864,19 @@ namespace SamSoarII
                 cmd.StartInfo.Arguments = string.Format("-c {0} -o {1}", cfile, ofile);
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;
-                cmd.StartInfo.RedirectStandardOutput = true;
+                //cmd.StartInfo.RedirectStandardOutput = true;
                 cmd.StartInfo.RedirectStandardError = true;
                 cmd.Start();
-                cmd.WaitForExit();
-                stdout = cmd.StandardOutput.ReadToEnd();
-                stderr = cmd.StandardError.ReadToEnd();
-                m1 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): error: (.+)\r\n");
-                m2 = Regex.Match(stderr, @"[^\s](.+):(.+):(.+): warning: (.+)\r\n");
+                //stdout = new StringBuilder();
+                stderr = new StringBuilder();
+                while (!cmd.HasExited)
+                {
+                    //stdout.Append(cmd.StandardOutput.ReadToEnd());
+                    stderr.Append(cmd.StandardError.ReadToEnd());
+                    Thread.Sleep(50);
+                }
+                m1 = Regex.Match(stderr.ToString(), @"[^\s](.+):(.+):(.+): error: (.+)\r\n");
+                m2 = Regex.Match(stderr.ToString(), @"[^\s](.+):(.+):(.+): warning: (.+)\r\n");
                 while (m1 != null && m1.Success)
                 {
                     message = m1.Groups[4].Value;
@@ -916,13 +923,18 @@ namespace SamSoarII
             }
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.RedirectStandardOutput = true;
+            //cmd.StartInfo.RedirectStandardOutput = true;
             cmd.StartInfo.RedirectStandardError = true;
             cmd.Start();
-            cmd.WaitForExit();
-            stdout = cmd.StandardOutput.ReadToEnd();
-            stderr = cmd.StandardError.ReadToEnd();
-            m1 = Regex.Match(stderr, @"\s(.+):\((.+)\): (.+)\r\n");
+            //stdout = new StringBuilder();
+            stderr = new StringBuilder();
+            while (!cmd.HasExited)
+            {
+                //stdout.Append(cmd.StandardOutput.ReadToEnd());
+                stderr.Append(cmd.StandardError.ReadToEnd());
+                Thread.Sleep(50);
+            }
+            m1 = Regex.Match(stderr.ToString(), @"\s(.+):\((.+)\): (.+)\r\n");
             while (m1 != null && m1.Success)
             {
                 message = m1.Groups[3].Value;

@@ -11,20 +11,15 @@ namespace SamSoarII.Core.Models
         #region Resources
 
         private static Regex NormalRegex = new Regex(
-            @"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))
-            ((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
+            @"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static Regex WordBitRegex = new Regex(
-            @"^(D|V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))
-            (\.)((\[([0-9]+)\.\.([0-9]+)\])|([0-9])+))
-            ((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
+            @"^(D|V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))(\.)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static Regex BitWordRegex = new Regex(
-            @"^(K)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))
-            (X|Y|S|M)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))
-            ((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
+            @"^(K)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))(X|Y|S|M)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+))((V|Z)((\[([0-9]+)\.\.([0-9]+)\])|([0-9]+)))?$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         #endregion

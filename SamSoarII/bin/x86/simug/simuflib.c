@@ -1,31 +1,31 @@
 #define PI 3.1415926
 
 // 整数半径的圆的面积
-void CACI(WORD* in, FLOAT* out)
+void CACI(WORD in, FLOAT out)
 {
 	*out = (*in) * (*in) * PI;
 }
 
 // 整数半径的圆的周长
-void RPCI(WORD* in, FLOAT* out)
+void RPCI(WORD in, FLOAT out)
 {
 	*out = (*in) * 2 * PI;
 }
 
 // 浮点半径的圆的面积
-void CACF(FLOAT* in, FLOAT* out)
+void CACF(FLOAT in, FLOAT out)
 {
 	*out = (*in) * (*in) * PI;
 }
 
 // 浮点半径的圆的周长
-void RPCF(FLOAT* in, FLOAT* out)
+void RPCF(FLOAT in, FLOAT out)
 {
 	*out = (*in) * 2 * PI;
 }
 
 // 反三角函数
-void ITF(FLOAT* in, FLOAT* out)
+void ITF(FLOAT in, FLOAT out)
 {
 	out[0] = asin(in[0]);
 	out[1] = acos(in[1]);
@@ -33,10 +33,10 @@ void ITF(FLOAT* in, FLOAT* out)
 }
 
 // 求阶乘
-void FAC(WORD* in, WORD* out)
+void FAC(WORD in, WORD out)
 {
-	WORD _in = *in;
-	WORD ans = _in;
+	short _in = *in;
+	short ans = _in;
 	while (--_in)
 	{
 		ans *= _in;
@@ -45,11 +45,11 @@ void FAC(WORD* in, WORD* out)
 }
 
 // 整数底(d)整数幂(e)的幂运算
-void PCI(WORD* d, WORD* e, WORD* out)
+void PCI(WORD d, WORD e, WORD out)
 {
-	WORD ans = 1;
-	WORD _d = *d;
-	WORD _e = *e;
+	short ans = 1;
+	short _d = *d;
+	short _e = *e;
 	while (_e)
 	{
 		if (_e&1) ans *= _d;
@@ -60,11 +60,11 @@ void PCI(WORD* d, WORD* e, WORD* out)
 }
 
 // 浮点底(d)整数幂(e)的幂运算
-void PCF(FLOAT* d, WORD* e, FLOAT* out)
+void PCF(FLOAT d, WORD e, FLOAT out)
 {
-	FLOAT ans = 1.0;
-	WORD _d = *d;
-	WORD _e = *e;
+	float ans = 1.0;
+	short _d = *d;
+	short _e = *e;
 	while (_e)
 	{
 		if (_e&1) ans *= _d;
@@ -75,72 +75,72 @@ void PCF(FLOAT* d, WORD* e, FLOAT* out)
 }
 
 // 以10为底的对数
-void NL10(FLOAT* in, FLOAT* out)
+void NL10(FLOAT in, FLOAT out)
 {
 	*out = log10(*in);
 }
 
 // 以e为底的对数
-void NLO(FLOAT* in, FLOAT* out)
+void NLO(FLOAT in, FLOAT out)
 {
 	*out = log(*in);
 }
 
 // 求直角三角形的斜边
-void ASSH(FLOAT* in1, FLOAT* in2, FLOAT* out)
+void ASSH(FLOAT in1, FLOAT in2, FLOAT out)
 {
 	*out = sqrt((*in1) * (*in1) + (*in2) * (*in2));
 }
 
 // 求直角三角形的直角边
-void FAAS(FLOAT* in1, FLOAT* in2, FLOAT* out)
+void FAAS(FLOAT in1, FLOAT in2, FLOAT out)
 {
 	*out = sqrt((*in2) * (*in2) - (*in1) * (*in1));
 }
 
 // 求浮点一元二次方程
-void QEF(FLOAT* in, FLOAT* out)
+void QEF(FLOAT in, FLOAT out)
 {
-	FLOAT a = in[0];
-	FLOAT b = in[1];
-	FLOAT c = in[2];
-	FLOAT x = in[3];
+	float a = in[0];
+	float b = in[1];
+	float c = in[2];
+	float x = in[3];
 	*out = a * x * x + b * x + c;
 }
 
 // 求整数一元二次方程
-void QEI(WORD* in, WORD* out)
+void QEI(WORD in, WORD out)
 {
-	WORD a = in[0];
-	WORD b = in[1];
-	WORD c = in[2];
-	WORD x = in[3];
+	short a = in[0];
+	short b = in[1];
+	short c = in[2];
+	short x = in[3];
 	*out = a * x * x + b * x + c;
 }
 
 // 求浮点一元一次方程
-void EIOF(FLOAT* in, FLOAT* out)
+void EIOF(FLOAT in, FLOAT out)
 {
-	FLOAT b = in[0];
-	FLOAT c = in[1];
-	FLOAT x = in[2];
+	float b = in[0];
+	float c = in[1];
+	float x = in[2];
 	*out = b * x + c;
 }
 
 // 求整数一元一次方程
-void EIOI(WORD* in, WORD* out)
+void EIOI(WORD in, WORD out)
 {
-	WORD b = in[0];
-	WORD c = in[1];
-	WORD x = in[2];
+	short b = in[0];
+	short c = in[1];
+	short x = in[2];
 	*out = b * x + c;
 }
 
 // 求多个整数的和
-void SUMI16(WORD* in, WORD* ct, WORD* out)
+void SUMI16(WORD in, WORD ct, WORD out)
 {
 	*out = 0;
-	int i = 0;
+	short i = 0;
 	for ( ; i < *ct ; i++)
 	{
 		*out += in[i];
@@ -148,10 +148,10 @@ void SUMI16(WORD* in, WORD* ct, WORD* out)
 }
 
 // 求多个浮点的和
-void DSF32(FLOAT* in, WORD* ct, FLOAT* out)
+void DSF32(FLOAT in, WORD ct, FLOAT out)
 {
 	*out = 0;
-	int i = 0; 
+	short i = 0; 
 	for ( ; i < *ct ; i++)
 	{
 		*out += in[i];
@@ -159,10 +159,10 @@ void DSF32(FLOAT* in, WORD* ct, FLOAT* out)
 }
 
 // 求多个整数的乘积
-void MULI(WORD* in, WORD* ct, WORD* out)
+void MULI(WORD in, WORD ct, WORD out)
 {
 	*out = 1;
-	int i = 0;
+	short i = 0;
 	for ( ; i < *ct ; i++)
 	{
 		*out *= in[i];
@@ -170,10 +170,10 @@ void MULI(WORD* in, WORD* ct, WORD* out)
 }
 
 // 求多个浮点的乘积
-void MDPF(FLOAT* in, WORD* ct, FLOAT* out)
+void MDPF(FLOAT in, WORD ct, FLOAT out)
 {
 	*out = 1;
-	int i = 0; 
+	short i = 0; 
 	for ( ; i < *ct ; i++)
 	{
 		*out *= in[i];
@@ -181,7 +181,7 @@ void MDPF(FLOAT* in, WORD* ct, FLOAT* out)
 }
 
 // CRC校验生成
-void CRCC(WORD* in, WORD* ct, WORD* out)
+void CRCC(WORD in, WORD ct)
 {
 	int i, j, m, n;
 	unsigned int crc_reg = 0xffff, k = 0;
@@ -205,11 +205,11 @@ void CRCC(WORD* in, WORD* ct, WORD* out)
 }
 
 // 从大到小排序
-void DDO(WORD* in, WORD* ct)
+void DDO(WORD in, WORD ct)
 {
-	WORD l = 0, r = *ct - 1;
-	WORD mid = in[*ct>>1];
-	WORD tmp = 0;
+	short l = 0, r = *ct - 1;
+	short mid = in[*ct>>1];
+	short tmp = 0;
 	while (l <= r)
 	{
 		while (in[l] > mid) l++;
@@ -222,7 +222,7 @@ void DDO(WORD* in, WORD* ct)
 			l++; r--;
 		}
 	}
-	WORD _ct = 0;
+	short _ct = 0;
 	if (l < *ct - 1)
 	{
 		_ct = *ct - l;
@@ -236,11 +236,11 @@ void DDO(WORD* in, WORD* ct)
 }
 
 // 从小到大排序
-void DSL(WORD* in, WORD* ct)
+void DSL(WORD in, WORD ct)
 {
-	WORD l = 0, r = *ct - 1;
-	WORD mid = in[*ct>>1];
-	WORD tmp = 0;
+	short l = 0, r = *ct - 1;
+	short mid = in[*ct>>1];
+	short tmp = 0;
 	while (l <= r)
 	{
 		while (in[l] < mid) l++;
@@ -253,7 +253,7 @@ void DSL(WORD* in, WORD* ct)
 			l++; r--;
 		}
 	}
-	WORD _ct = 0;
+	short _ct = 0;
 	if (l < *ct - 1)
 	{
 		_ct = *ct - l;
