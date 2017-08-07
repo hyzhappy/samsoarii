@@ -352,8 +352,8 @@ namespace SamSoarII.Core.Models
                 "Decrease one to 16-bit word IN (IN - 1) and assign to OUT",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.INVD] = new LadderUnitFormat(501, "INVD", Types.INVD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_Reverse,
                 "对IN执行取反操作，并将结果载入输出到OUT。",
@@ -506,8 +506,8 @@ namespace SamSoarII.Core.Models
                 "指令将单字（IN1）数值向右移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最左侧。",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
                     new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.ANDD] = new LadderUnitFormat(503, "ANDD", Types.ANDD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_And,
@@ -1188,7 +1188,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("TEMP", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3 }),
                     new ValueFormat("IN", ValueModel.Types.WORD, true, false, -2, new Regex[] {ValueModel.VerifyWordRegex5 }),
                     new ValueFormat("OUT", ValueModel.Types.WORD, true, false, -1, new Regex[] {ValueModel.VerifyWordRegex6 }),
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }) });
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }) });
             LabelTypes = new Types[] { Types.LBL, Types.NEXT, Types.STL, Types.STLE };
             TypeOfNames = new Dictionary<string, Types>();
             for (int i = 0; i < Formats.Length; i++)
@@ -1551,8 +1551,23 @@ namespace SamSoarII.Core.Models
             {
                 _children = children;
                 FuncModel func = Project.Funcs.Where(f => f.Name.Equals(_args[0])).FirstOrDefault();
-                if (func == null) throw new ValueParseException(
-                    String.Format(App.CultureIsZH_CH() ? "找不到函数{0:s}" : "Cannot found function {0:s}", _args[0]), Format.Formats[0]);
+                if (func == null)
+                {
+                    try
+                    {
+                        ValueModel.Analyzer_DWord.Text = _args[0];
+                        int id = (int)(ValueModel.Analyzer_DWord.Store.Value);
+                        FuncBlockModel fbmodel = Project.FuncBlocks[id];
+                        fbmodel.Translate();
+                        func = fbmodel.Funcs.FirstOrDefault();
+                        _args[0] = func.Name;
+                    }
+                    catch (Exception)
+                    {
+                        throw new ValueParseException(
+                            String.Format(App.CultureIsZH_CH() ? "找不到函数{0:s}" : "Cannot found function {0:s}", _args[0]), Format.Formats[0]);
+                    }
+                }
                 if (updatevmg && ValueManager != null) ValueManager.Remove(this);
                 children = new ValueModel[1];
                 children[0] = new ValueModel(this, Format.Formats[0]);

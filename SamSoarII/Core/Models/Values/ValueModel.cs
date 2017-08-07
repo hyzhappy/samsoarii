@@ -72,6 +72,10 @@ namespace SamSoarII.Core.Models
         public readonly static ValueRegex VerifyBitRegex6 = new ValueRegex(
             @"^(S)([0-9]+)((V|Z)([0-9]+))?$", 
             new string[] { "S" });
+        public readonly static ValueRegex VerifyBitRegex7 = new ValueRegex(
+            @"^(Y|M)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "Y", "M" });
+
         public readonly static ValueRegex WordBitRegex = new ValueRegex(
             @"^(D|V|Z)([0-9]+)\.([0-9A-F])((V|Z)([0-9]+))?$", 
             new string[] { "Dm.n" });
@@ -137,11 +141,11 @@ namespace SamSoarII.Core.Models
         public readonly static ValueModel Analyzer_Bit = new ValueModel(null, new ValueFormat("ANA", Types.BOOL, false, false, 0,
                 new Regex[] { ValueModel.BitRegex, ValueModel.WordBitRegex }));
         public readonly static ValueModel Analyzer_Word = new ValueModel(null, new ValueFormat("ANA", Types.WORD, false, false, 0,
-                new Regex[] { ValueModel.WordRegex, ValueModel.BitWordRegex }));
+                new Regex[] { ValueModel.WordRegex, ValueModel.BitWordRegex, ValueModel.IntKValueRegex, ValueModel.IntHValueRegex }));
         public readonly static ValueModel Analyzer_DWord = new ValueModel(null, new ValueFormat("ANA", Types.DWORD, false, false, 0,
-                new Regex[] { ValueModel.DoubleWordRegex, ValueModel.BitDoubleWordRegex }));
+                new Regex[] { ValueModel.DoubleWordRegex, ValueModel.BitDoubleWordRegex, ValueModel.IntKValueRegex, ValueModel.IntHValueRegex}));
         public readonly static ValueModel Analyzer_Float = new ValueModel(null, new ValueFormat("ANA", Types.FLOAT, false, false, 0,
-                new Regex[] { ValueModel.FloatRegex }));
+                new Regex[] { ValueModel.FloatRegex, ValueModel.FloatKValueRegex }));
         public readonly static ValueModel Analyzer_String = new ValueModel(null, new ValueFormat("ANA", Types.STRING, false, false, 0,
                 new Regex[] { ValueModel.AnyNameRegex}));
 
@@ -207,8 +211,17 @@ namespace SamSoarII.Core.Models
         protected string text;
         public string Text
         {
-            get { return this.text; }
-            set { value = value.ToUpper(); Parse(value); this.text = value; }
+            get
+            {
+                return this.text;
+            }
+            set
+            {
+                if (Type != Types.STRING)
+                    value = value.ToUpper();
+                Parse(value);
+                this.text = value;
+            }
         }
 
         public string Comment { get { return ValueManager != null ? ValueManager[this].Comment : ""; } }

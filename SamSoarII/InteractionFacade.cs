@@ -297,21 +297,25 @@ namespace SamSoarII
 
         private void _LoadProject(string filename, LoadingWindowHandle handle)
         {
-            /*try
-            {*/
+#if RELEASE
+            try
+            {
+#endif
                 mdProj = new ProjectModel(this, FileHelper.GetFileName(filename), filename);
                 ProjectFileManager.Update(filename, filename);
                 InitializeProject();
-            /*}
+#if RELEASE
+            }
             catch (Exception e)
             {
                handle.Completed = true;
                handle.Abort();
                mdProj = null;
                LocalizedMessageBox.Show(Properties.Resources.Message_Project_Error, LocalizedMessageIcon.Information);
-            }*/
+            }
+#endif
         }
-        
+
         public void SaveProject()
         {
             if (mdProj.FileName == null)
@@ -981,7 +985,7 @@ namespace SamSoarII
             return result;
         }
         
-        #endregion
+#endregion
 
         #region View Mode
 
@@ -1234,17 +1238,21 @@ namespace SamSoarII
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.EnsureButtonClick += (sender, e) =>
                 {
+#if RELEASE
                     try
                     {
+#endif
                         core.Parent.Parent.AddSingleUnit(dialog.InstructionInput, core, core.Parent);
                         if (core.X < GlobalSetting.LadderXCapacity - 1) core.X++;
                         core.Parent.Parent.View.NavigateByInstructionInputDialog();
                         dialog.Close();
+#if RELEASE
                     }
                     catch (Exception exce2)
                     {
                         LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
                     }
+#endif
                 };
                 dialog.ShowDialog();
             }
@@ -1252,21 +1260,26 @@ namespace SamSoarII
 
         public void ShowElementPropertyDialog(LadderUnitModel current)
         {
+            if (current.Type == LadderUnitModel.Types.PID) return;
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.Ensure += (sender, e) =>
                 {
+#if RELEASE
                     try
                     {
+#endif
                         current.Parent.Parent.UpdateUC(current, dialog.PropertyStrings);
                         current.Parent.Parent.View.NavigateByInstructionInputDialog();
                         dialog.Close();
+#if RELEASE
                     }
                     catch (Exception exce2)
                     {
                         LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
                     }
+#endif
                 };
                 dialog.ShowDialog();
             }
