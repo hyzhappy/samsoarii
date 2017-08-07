@@ -279,7 +279,7 @@ namespace SamSoarII.Core.Generate
                         case ValueModel.Bases.CV:
                             return vmodel.Offset < 200
                                 ? String.Format("CVWord[{0:s}]", ToCIndex(vmodel))
-                                : String.Format("*((_WORD*)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                                : String.Format("*((_WORD)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
                         case ValueModel.Bases.X:
                         case ValueModel.Bases.Y:
                         case ValueModel.Bases.M:
@@ -304,11 +304,11 @@ namespace SamSoarII.Core.Generate
                         case ValueModel.Bases.V:
                         case ValueModel.Bases.Z:
                         case ValueModel.Bases.TV:
-                            return String.Format("*((D_WORD*)(&{0:s}Word[{1:s}]))",
+                            return String.Format("*((D_WORD)(&{0:s}Word[{1:s}]))",
                                 ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
                         case ValueModel.Bases.CV:
                             return vmodel.Offset < 200
-                                ? String.Format("*((D_WORD*)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                ? String.Format("*((D_WORD)(&CVWord[{0:s}]))", ToCIndex(vmodel))
                                 : String.Format("CVDoubleWord[{0:s}-200]", ToCIndex(vmodel));
                         case ValueModel.Bases.X:
                         case ValueModel.Bases.Y:
@@ -334,12 +334,12 @@ namespace SamSoarII.Core.Generate
                         case ValueModel.Bases.V:
                         case ValueModel.Bases.Z:
                         case ValueModel.Bases.TV:
-                            return String.Format("*((_FLOAT*)(&{0:s}Word[{1:s}]))",
+                            return String.Format("*((_FLOAT)(&{0:s}Word[{1:s}]))",
                                 ValueModel.NameOfBases[(int)(vmodel.Base)], ToCIndex(vmodel));
                         case ValueModel.Bases.CV:
                             return vmodel.Offset < 200
-                                ? String.Format("*((_FLOAT*)(&CVWord[{0:s}]))", ToCIndex(vmodel))
-                                : String.Format("*((_FLOAT*)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
+                                ? String.Format("*((_FLOAT)(&CVWord[{0:s}]))", ToCIndex(vmodel))
+                                : String.Format("*((_FLOAT)(&CVDoubleWord[{0:s}-200]))", ToCIndex(vmodel));
                         case ValueModel.Bases.K:
                         case ValueModel.Bases.H:
                             return vmodel.Store.Value.ToString();

@@ -70,7 +70,7 @@ namespace SamSoarII.Shell.Windows
             }
         }
         /// <summary> 用户的输入信息，经过整理后得到的格式类 </summary>
-        private ReplaceFormat RF_Input = new ReplaceFormat();
+        private ReplaceFormat RF_Input = new ReplaceFormat("");
 
         #endregion
         
@@ -85,7 +85,7 @@ namespace SamSoarII.Shell.Windows
         {
             Initialize();
             // 输入信息非法则不执行
-            if (RF_Input.Type == ReplaceFormat.TYPE_INVALID) return;
+            if (RF_Input.Mode == ReplaceFormat.Modes.Error) return;
             switch (Mode)
             {
                 // 查找当前程序
@@ -122,7 +122,7 @@ namespace SamSoarII.Shell.Windows
                             break;
                         // 检查元件
                         default:
-                            if (RF_Input.Match(unit.ToInstString()))
+                            if (RF_Input.Match(unit))
                                 items.Add(new FindElement(this, unit));
                             break;
                     }
@@ -178,12 +178,12 @@ namespace SamSoarII.Shell.Windows
         private void TB_Input_TextChanged(object sender, TextChangedEventArgs e)
         {
             // 检查输入格式
-            RF_Input.Text = TB_Input.Text;
-            switch (RF_Input.Type)
+            RF_Input = new ReplaceFormat(TB_Input.Text);
+            switch (RF_Input.Mode)
             {
-                case ReplaceFormat.TYPE_INVALID:
+                case ReplaceFormat.Modes.Error:
                     // 输入为空时涂白色
-                    if (RF_Input.Text.Length == 0)
+                    if (TB_Input.Text.Length == 0)
                         TB_Input.Background = Brushes.White;
                     // 非法时，将输入框涂红
                     else
@@ -239,15 +239,7 @@ namespace SamSoarII.Shell.Windows
 
         #endregion
     }
-
-    /// <summary>
-    /// 输入信息的格式，继承于替换模块
-    /// </summary>
-    public class FindFormat : ReplaceFormat
-    {
-
-    }
-
+    
     /// <summary>
     /// 查找的元素，继承于替换模块
     /// </summary>

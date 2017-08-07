@@ -64,7 +64,8 @@ namespace SamSoarII.Core.Models
             ATCH, DTCH, EI, DI,
             TRD, TWR,
             MBUS, SEND, REV,
-            PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSA, DPLSA, PLSNEXT, PLSSTOP, ZRN, DZRN, DZRND, PTO, DRVI, DDRVI, DRVA, DDRVA,
+            PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSA, DPLSA, PLSNEXT, PLSSTOP, ZRN, ZRND, DZRN, DZRND, PTO, DRVI, DDRVI, DRVA, DDRVA,
+            TBL, POLYLINEF, POLYLINEI, LINEF, LINEI, ARCF, ARCI, BLOCK, HMIBLOCK, PAUSE,
             HCNT,
             LOG, POW, FACT, CMP, CMPD, CMPF, ZCP, ZCPD, ZCPF, NEG, NEGD, XCH, XCHD, XCHF, CML, CMLD, SMOV, FMOV, FMOVD,
             PID,
@@ -352,8 +353,8 @@ namespace SamSoarII.Core.Models
                 "Decrease one to 16-bit word IN (IN - 1) and assign to OUT",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.BitDoubleWordRegex}) };
+                    new ValueFormat("IN", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.INVD] = new LadderUnitFormat(501, "INVD", Types.INVD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_Reverse,
                 "对IN执行取反操作，并将结果载入输出到OUT。",
@@ -506,8 +507,8 @@ namespace SamSoarII.Core.Models
                 "指令将单字（IN1）数值向右移动（IN2）位，并将结果载入单字（OUT）。移出位按原次序补到最左侧。",
                 vformats);
             vformats = new ValueFormat[] {
-                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
-                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN1", ValueModel.Types.DWORD, true, false, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
+                    new ValueFormat("IN2", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}),
                     new ValueFormat("OUT", ValueModel.Types.DWORD, false, true, -1, new Regex[] { ValueModel.VerifyDoubleWordRegex1, ValueModel.BitDoubleWordRegex}) };
             Formats[(int)Types.ANDD] = new LadderUnitFormat(503, "ANDD", Types.ANDD, Outlines.LogicOperation, Shapes.OutputRect,
                 Properties.Resources.DWord_And,
@@ -620,8 +621,8 @@ namespace SamSoarII.Core.Models
                 "启用输入端为（断开）时，接通延时定时器自动复位，即定时器位（Tx）为OFF，当前值（TVx）为0；\r\n",
                 vformats);
             Formats[(int)Types.TOF] = new LadderUnitFormat(901, "TOF", Types.TOF, Outlines.Timer, Shapes.OutputRect,
-                Properties.Resources.TOF_Inst, 
-                "用于在输入关闭后，延迟固定的一段时间再关闭输出。\r\n" + 
+                Properties.Resources.TOF_Inst,
+                "用于在输入关闭后，延迟固定的一段时间再关闭输出。\r\n" +
                 "启用输入打开时，定时器位立即打开，当前值被设为0。输入关闭时，定时器继续计时，直到消逝的时间达到预设时间。\r\n" +
                 "达到预设值后，定时器位关闭，当前值停止计时。如果输入关闭的时间短于预设数值，则定时器位仍保持在打开状态。\r\n" +
                 "TOF指令必须遇到从（闭合）至（断开）的转换才开始计时。\r\n",
@@ -639,7 +640,7 @@ namespace SamSoarII.Core.Models
                 vformats);
             vformats = new ValueFormat[] {
                     new ValueFormat("C", ValueModel.Types.WORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
-                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 1, new Regex[] { ValueModel.VerifyWordRegex1, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitWordRegex}) };
             Formats[(int)Types.CTU] = new LadderUnitFormat(1000, "CTU", Types.CTU, Outlines.Counter, Shapes.OutputRect,
                 Properties.Resources.CTU_Inst,
                 "每次向上计数输入能流从关闭向打开转换时，向上计数（CTU）指令从当前值向上计数。\r\n" +
@@ -685,7 +686,9 @@ namespace SamSoarII.Core.Models
                 "每次输入能流(X0-X7)从关闭向打开转换时，高速计数（HCNT）指令从当前值计数。\r\n" +
                 "当前值（CVxxx）到达预设值（SV）时，计数器位（Cxxx）打开。\r\n" +
                 "不同的高速计数器(CV235-CV255)对不同的输入能流(X0-X7)有不同的计数策略（向上，向下，保留），具体请查阅帮助文档。\r\n",
-                vformats);
+                new ValueFormat[] {
+                    new ValueFormat("C", ValueModel.Types.DWORD, true, true, 0, new Regex[] { ValueModel.VerifyDoubleWordRegex3}),
+                    new ValueFormat("SV", ValueModel.Types.DWORD, true, false, 1, new Regex[] { ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, ValueModel.BitDoubleWordRegex}) });
             Formats[(int)Types.FOR] = new LadderUnitFormat(1100, "FOR", Types.FOR, Outlines.ProgramControl, Shapes.OutputRect,
                 Properties.Resources.FOR_Inst,
                 "如果指令前条件导通，则执行此条指令。此条指令必须和NEXT指令配合使用，FOR和NEXT指令允许了一个程序的区域指定。\r\n" +
@@ -867,7 +870,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("F", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("P", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
-            Formats[(int)Types.DDRVI] = new LadderUnitFormat(1618, "DDRVI", Types.DDRVI, Outlines.Pulse, Shapes.OutputRect,                
+            Formats[(int)Types.DDRVI] = new LadderUnitFormat(1618, "DDRVI", Types.DDRVI, Outlines.Pulse, Shapes.OutputRect,
                 Properties.Resources.DDRVI_Inst,
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
                 "当栈顶为1时，输出一段给定频率和脉冲数的脉冲信号。",
@@ -1004,6 +1007,15 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
                     new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            Formats[(int)Types.ZRND] = new LadderUnitFormat(1614, "ZRND", Types.ZRND, Outlines.Pulse, Shapes.OutputRect,
+                Properties.Resources.ZRN_Inst,
+                "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
+                "脉冲先以爬行速度的速度前进，当近点信号置位的时候，立即从爬行速度以设定的时间减速到回归速度，当近点信号复位时，停止脉冲发送。",
+                new ValueFormat[] {
+                    new ValueFormat("DV", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
+                    new ValueFormat("CV", ValueModel.Types.WORD, true, false, 1, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
+                    new ValueFormat("SIG", ValueModel.Types.BOOL, true, false, 2, new Regex[] {ValueModel.VerifyBitRegex5}),
+                    new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}) });
             vformats = new ValueFormat[] {
                     new ValueFormat("DV", ValueModel.Types.DWORD, true, false, 0, new Regex[] {ValueModel.VerifyDoubleWordRegex2}),
                     new ValueFormat("CV", ValueModel.Types.DWORD, true, false, 1, new Regex[] {ValueModel.VerifyDoubleWordRegex2, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex, }),
@@ -1031,6 +1043,41 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("D", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            Formats[(int)Types.TBL] = new LadderUnitFormat(1617, "TBL", Types.TBL, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "",
+                new ValueFormat[] {
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3 }),
+                    new ValueFormat("P", ValueModel.Types.BOOL, false, true, 1, new Regex[] {ValueModel.VerifyBitRegex4 }),
+                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 2, new Regex[] {ValueModel.VerifyBitRegex4 }) });
+            vformats = new ValueFormat[] {
+                new ValueFormat("ID", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyIntKValueRegex}),
+                new ValueFormat("S", ValueModel.Types.WORD, true, true, 1, new Regex[] { ValueModel.VerifyWordRegex3}),
+                new ValueFormat("NUM", ValueModel.Types.WORD, true, false, -1, new Regex[] { ValueModel.VerifyIntKValueRegex}) };
+            Formats[(int)Types.POLYLINEF] = new LadderUnitFormat(1618, "POLYLINEF", Types.POLYLINEF, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "", vformats);
+            Formats[(int)Types.POLYLINEI] = new LadderUnitFormat(1619, "POLYLINEI", Types.POLYLINEI, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "", vformats);
+            Formats[(int)Types.LINEF] = new LadderUnitFormat(1620, "LINEF", Types.LINEF, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "", vformats);
+            Formats[(int)Types.LINEI] = new LadderUnitFormat(1621, "LINEI", Types.LINEI, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "", vformats);
+            Formats[(int)Types.ARCF] = new LadderUnitFormat(1622, "ARCF", Types.ARCF, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "", vformats);
+            Formats[(int)Types.ARCI] = new LadderUnitFormat(1623, "ARCI", Types.ARCI, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "", vformats);
+            Formats[(int)Types.BLOCK] = new LadderUnitFormat(1624, "BLOCK", Types.BLOCK, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "",
+                new ValueFormat[] {
+                    new ValueFormat("NAME", ValueModel.Types.STRING, true, false, 0, new Regex[] {ValueModel.AnyNameRegex }),
+                    new ValueFormat("S", ValueModel.Types.BOOL, false, true, 1, new Regex[] { ValueModel.VerifyBitRegex7}) });
+            Formats[(int)Types.HMIBLOCK] = new LadderUnitFormat(1625, "HMIBLOCK", Types.HMIBLOCK, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "",
+                new ValueFormat[] {
+                    new ValueFormat("S", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}) });
+            Formats[(int)Types.PAUSE] = new LadderUnitFormat(1626, "PAUSE", Types.PAUSE, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "",
+                new ValueFormat[] {
+                    new ValueFormat("ID", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyIntKValueRegex}) });
             Formats[(int)Types.FACT] = new LadderUnitFormat(1802, "FACT", Types.FACT, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.FACT_Inst,
                 "计算寄存器（IN）值的阶乘，N的最大值为12，将结果传送到寄存器（OUT）。",
@@ -1186,7 +1233,7 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("TEMP", ValueModel.Types.WORD, true, false, 2, new Regex[] {ValueModel.VerifyWordRegex3 }),
                     new ValueFormat("IN", ValueModel.Types.WORD, true, false, -2, new Regex[] {ValueModel.VerifyWordRegex5 }),
                     new ValueFormat("OUT", ValueModel.Types.WORD, true, false, -1, new Regex[] {ValueModel.VerifyWordRegex6 }),
-                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex }) });
+                    new ValueFormat("SV", ValueModel.Types.WORD, true, false, 3, new Regex[] {ValueModel.VerifyWordRegex3, ValueModel.VerifyIntKValueRegex, ValueModel.VerifyIntHValueRegex }) });
             LabelTypes = new Types[] { Types.LBL, Types.NEXT, Types.STL, Types.STLE };
             TypeOfNames = new Dictionary<string, Types>();
             for (int i = 0; i < Formats.Length; i++)
@@ -1549,8 +1596,11 @@ namespace SamSoarII.Core.Models
             {
                 _children = children;
                 FuncModel func = Project.Funcs.Where(f => f.Name.Equals(_args[0])).FirstOrDefault();
-                if (func == null) throw new ValueParseException(
-                    String.Format(App.CultureIsZH_CH() ? "找不到函数{0:s}" : "Cannot found function {0:s}", _args[0]), Format.Formats[0]);
+                if (func == null)
+                {
+                    throw new ValueParseException(
+                        String.Format(App.CultureIsZH_CH() ? "找不到函数{0:s}" : "Cannot found function {0:s}", _args[0]), Format.Formats[0]);
+                }
                 if (updatevmg && ValueManager != null) ValueManager.Remove(this);
                 children = new ValueModel[1];
                 children[0] = new ValueModel(this, Format.Formats[0]);
@@ -1596,6 +1646,39 @@ namespace SamSoarII.Core.Models
                 }
                 catch (Exception e)
                 {
+                    if (Format.Outline == Outlines.Counter)
+                    {
+                        bool issuccess = true;
+                        for (i = 0; i < children.Length; i++)
+                        {
+                            children[i].Type = children[i].Type == ValueModel.Types.WORD
+                                ? ValueModel.Types.DWORD
+                                : ValueModel.Types.WORD;
+                            try
+                            {
+                                children[i].Text = _args[i];
+                            }
+                            catch (Exception e2)
+                            {
+                                issuccess = false;
+                            }
+                        }
+                        if (issuccess)
+                        {
+                            if (updatevmg && ValueManager != null) ValueManager.Add(this);
+                            Invoke(LadderUnitAction.UPDATE);
+                            return;
+                        }
+                        else
+                        {
+                            for (i = 0; i < children.Length; i++)
+                            {
+                                children[i].Type = children[i].Type == ValueModel.Types.WORD
+                                    ? ValueModel.Types.DWORD
+                                    : ValueModel.Types.WORD;
+                            }
+                        }
+                    }
                     for (int j = 0; j < children.Length; j++)
                         if (oldtexts[j] != null)
                             children[j].Text = oldtexts[j];

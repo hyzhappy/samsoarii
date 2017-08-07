@@ -18,6 +18,7 @@ namespace SamSoarII.Core.Models
             name = _name;
             code = _code;
             islibrary = _islibrary;
+            istranslated = false;
             BuildAll(code);
         }
 
@@ -39,7 +40,7 @@ namespace SamSoarII.Core.Models
         private ProjectModel parent;
         public ProjectModel Parent { get { return this.parent; } }
         IModel IModel.Parent { get { return Parent; } }
-
+        
         private string name;
         public string Name
         {
@@ -76,6 +77,22 @@ namespace SamSoarII.Core.Models
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Translate
+
+        private bool istranslated;
+        public bool IsTranslated { get { return this.istranslated; } }
+
+        public void Translate()
+        {
+            if (istranslated) return;
+            istranslated = true;
+            code = code.Replace("WORD", "WORD*");
+            code = code.Replace("BIT", "BIT*");
+            BuildAll(code);
         }
 
         #endregion

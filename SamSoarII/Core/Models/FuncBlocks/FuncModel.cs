@@ -110,19 +110,19 @@ namespace SamSoarII.Core.Models
             {
                 switch (GetArgType(i))
                 {
-                    case "BIT*":
+                    case "BIT":
                         vmodels[i] = new ValueModel(_parent, new ValueFormat(
                             GetArgName(i), ValueModel.Types.BOOL, true, true, i + 1, BitRegexs));
                         break;
-                    case "WORD*":
+                    case "WORD":
                         vmodels[i] = new ValueModel(_parent, new ValueFormat(
                             GetArgName(i), ValueModel.Types.WORD, true, true, i + 1, WordRegexs));
                         break;
-                    case "DWORD*":
+                    case "DWORD":
                         vmodels[i] = new ValueModel(_parent, new ValueFormat(
                             GetArgName(i), ValueModel.Types.DWORD, true, true, i + 1, DoubleWordRegexs));
                         break;
-                    case "FLOAT*":
+                    case "FLOAT":
                         vmodels[i] = new ValueModel(_parent, new ValueFormat(
                             GetArgName(i), ValueModel.Types.FLOAT, true, true, i + 1, FloatRegexs));
                         break;

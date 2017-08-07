@@ -107,9 +107,9 @@ namespace SamSoarII.Shell.Windows
             }
         }
         /// <summary> 用户的输入信息，经过整理后得到的格式类 </summary>
-        private ReplaceFormat RF_Input { get; set; } = new ReplaceFormat();
+        private ReplaceFormat RF_Input = new ReplaceFormat("");
         /// <summary> 用户要替换的信息，经过整理后得到的格式类 </summary>
-        private ReplaceFormat RF_Change { get; set; } = new ReplaceFormat();
+        private ReplaceFormat RF_Change = new ReplaceFormat("");
 
         #endregion
 
@@ -166,7 +166,7 @@ namespace SamSoarII.Shell.Windows
         {
             Initialize(false);
             // 输入信息非法则不执行
-            if (RF_Input.Type == ReplaceFormat.TYPE_INVALID) return;
+            if (RF_Input.Mode == ReplaceFormat.Modes.Error) return;
             switch (Mode)
             {
                 // 查找当前程序或者选择范围
@@ -225,7 +225,7 @@ namespace SamSoarII.Shell.Windows
                         break;
                     // 检查元件
                     default:
-                        if (RF_Input.Match(unit.ToInstString()))
+                        if (RF_Input.Match(unit))
                             items.Add(new ReplaceElement(this, unit));
                         break;
                 }
@@ -257,7 +257,7 @@ namespace SamSoarII.Shell.Windows
                 ReplaceCommand command = null;
                 try
                 {
-                    command = RF_Change.Replace(RF_Input, unit);
+                    command = RF_Change.Replace(unit, RF_Input);
                     command.Redo();
                     group.Add(command);
                     success++;
@@ -356,12 +356,12 @@ namespace SamSoarII.Shell.Windows
         private void TB_Input_TextChanged(object sender, TextChangedEventArgs e)
         {
             // 检查输入格式
-            RF_Input.Text = TB_Input.Text;
-            switch (RF_Input.Type)
+            RF_Input = new ReplaceFormat(TB_Input.Text);
+            switch (RF_Input.Mode)
             {
-                case ReplaceFormat.TYPE_INVALID:
+                case ReplaceFormat.Modes.Error:
                     // 输入为空时涂白色
-                    if (RF_Input.Text.Length == 0)
+                    if (TB_Input.Text.Length == 0)
                         TB_Input.Background = Brushes.White;
                     // 非法时，将输入框涂红
                     else
@@ -398,21 +398,23 @@ namespace SamSoarII.Shell.Windows
         private void TB_Change_TextChanged(object sender, TextChangedEventArgs e)
         {
             // 检查输入格式
-            RF_Change.Text = TB_Change.Text;
-            switch (RF_Change.Type)
+            RF_Change = new ReplaceFormat(TB_Change.Text);
+            switch (RF_Change.Mode)
             {
-                case ReplaceFormat.TYPE_REGISTER:
+                case ReplaceFormat.Modes.Value:
+                case ReplaceFormat.Modes.Base:
                     // 输入和替换的格式均为相同格式才合法
-                    if (RF_Input.Type == RF_Change.Type)
+                    if (RF_Input.Mode == ReplaceFormat.Modes.Value
+                     || RF_Input.Mode == ReplaceFormat.Modes.Base)
                         TB_Change.Background = Brushes.LightGreen;
                     // 输入为空时涂白色
-                    else if (RF_Change.Text.Length == 0)
+                    else if (TB_Change.Text.Length == 0)
                         TB_Change.Background = Brushes.White;
                     // 非法时，将输入框涂红
                     else
                         TB_Change.Background = Brushes.Red;
                     break;
-                case ReplaceFormat.TYPE_LADDER:
+                case ReplaceFormat.Modes.Unit:
                     // 梯形图格式合法
                     TB_Change.Background = Brushes.LightGreen;
                     break;
@@ -579,610 +581,6 @@ namespace SamSoarII.Shell.Windows
 
         #endregion
         
-    }
-    
-    /// <summary>
-    /// 输入信息的格式
-    /// </summary>
-    public class ReplaceFormat
-    {
-        #region Type
-        /// <summary> 格式类型：非法 </summary>
-        public const int TYPE_INVALID = 0x00;
-        /// <summary> 格式类型：梯形图指令 </summary>
-        public const int TYPE_LADDER = 0x01;
-        /// <summary> 格式类型：单个软元件 </summary>
-        public const int TYPE_REGISTER = 0x02;
-        /// <summary> 格式 </summary>
-        public int Type { get; private set; }
-        #endregion
-
-        #region Arg
-        /// <summary> 参数类型：非法 </summary>
-        public const int ARG_INVAILD = 0x00;
-        /// <summary> 参数类型：指令名称 </summary>
-        public const int ARG_INSTRUCTION = 0x01;
-        /// <summary> 参数类型：软元件 </summary>
-        public const int ARG_REGISTER = 0x02;
-        /// <summary> 参数类型：*（任意内容） </summary>
-        public const int ARG_ANYONE = 0x03;
-        /// <summary> 参数类型：.（任意后缀） </summary>
-        public const int ARG_ANYSUFFIX = 0x04;
-        /// <summary> 参数类型：函数名称 </summary>
-        public const int ARG_NAME = 0x05;
-        /// <summary> 参数类型：???（无参数）</summary>
-        public const int ARG_UNDEFINED = 0x06;
-        /// <summary> 参数格式 </summary>
-        public struct ReplaceFormatArg
-        {
-            /// <summary> 数据类型 </summary>
-            public int Type;
-            /// <summary> 文本 </summary>
-            public string Text;
-            /// <summary> 基地址名称 </summary>
-            public string Base;
-            /// <summary> 基地址左范围 </summary>
-            public int Low;
-            /// <summary> 基地址右范围 </summary>
-            public int High;
-            /// <summary> 偏移地址名称 </summary>
-            public string Offset;
-            /// <summary> 偏移地址左范围 </summary>
-            public int OLow;
-            /// <summary> 偏移地址右范围 </summary>
-            public int OHigh;
-        }
-        /// <summary> 所有参数 </summary>
-        private ReplaceFormatArg[] args = new ReplaceFormatArg[0];
-        /// <summary> 参数数量 </summary>
-        public int ArgsCount { get { return args.Length; } }
-        /// <summary>
-        /// 根据标号来获取参数
-        /// </summary>
-        /// <param name="id">标号</param>
-        /// <returns></returns>
-        public ReplaceFormatArg GetArgs(int id) { return args[id]; }
-
-        #endregion
-
-        #region Regex
-        
-        /// <summary> 识别（X0）的正则符 </summary>
-        private static Regex VRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)$",
-            RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        /// <summary> 识别（X[0..9]）的正则符 </summary>
-        private static Regex ARegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)\[([0-9]+)\.\.([0-9]+)\]$",
-            RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        /// <summary> 识别（X0V0）的正则符 </summary>
-        private static Regex VVRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)(V|Z)([0-9]+)$",
-            RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        /// <summary> 识别（X[0..9]V0）的正则符 </summary>
-        private static Regex AVRegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)\[([0-9]+)\.\.([0-9]+)\](V|Z)([0-9]+)$",
-            RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        /// <summary> 识别（X0V[0..3]）的正则符 </summary>
-        private static Regex VARegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)([0-9]+)(V|Z)\[([0-9]+)\.\.([0-9]+)\]$",
-            RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        /// <summary> 识别（X[0..9]V[0..3]）的正则符 </summary>
-        private static Regex AARegex = new Regex(@"^(X|Y|M|C|T|S|D|V|Z|CV|TV|AI|AO)\[([0-9]+)\.\.([0-9]+)\](V|Z)\[([0-9]+)\.\.([0-9]+)\]$",
-            RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        
-        # endregion
-
-        /// <summary> 文本 </summary>
-        private string text;
-        /// <summary> 文本 </summary>
-        public string Text
-        {
-            get
-            {
-                return this.text;
-            }
-            set
-            {
-                this.text = value;
-                // 空文本非法，参数个数为0
-                if (text.Equals(String.Empty))
-                {
-                    this.args = new ReplaceFormatArg[0];
-                    Type = TYPE_INVALID;
-                    return;
-                }
-                // 根据空格分隔参数
-                string[] sargs = text.Split(' ');
-                this.args = new ReplaceFormatArg[sargs.Length];
-                // 分析文本项，建立每个参数
-                for (int i = 0; i < args.Length; i++)
-                {
-                    // 初始化参数信息
-                    args[i].Text = sargs[i];
-                    args[i].Base = String.Empty;
-                    args[i].Low = args[i].High = 0;
-                    args[i].Offset = String.Empty;
-                    args[i].OLow = args[i].OHigh = 0;
-                    // 分析文本项
-                    switch (sargs[i])
-                    {
-                        // 指令的空参数
-                        case "?":
-                        case "???":
-                            args[i].Type = ARG_UNDEFINED;
-                            break;
-                        // 任意项匹配
-                        case "*":
-                            args[i].Type = ARG_ANYONE;
-                            break;
-                        // 任意后缀匹配
-                        case ".":
-                            args[i].Type = ARG_ANYSUFFIX;
-                            break;
-                        // 分析其他格式（寄存器，指令名称，函数名称）
-                        default:
-                            args[i].Type = ARG_REGISTER;
-                            Match m1 = VVRegex.Match(sargs[i]);
-                            Match m2 = AVRegex.Match(sargs[i]);
-                            Match m3 = VARegex.Match(sargs[i]);
-                            Match m4 = AARegex.Match(sargs[i]);
-                            Match m5 = VRegex.Match(sargs[i]);
-                            Match m6 = ARegex.Match(sargs[i]);
-                            // 寄存器格式：X0V0
-                            if (m1.Success)
-                            {
-                                args[i].Base = m1.Groups[1].Value;
-                                args[i].Low = int.Parse(m1.Groups[2].Value);
-                                args[i].High = args[i].Low;
-                                args[i].Offset = m1.Groups[3].Value;
-                                args[i].OLow = int.Parse(m1.Groups[4].Value);
-                                args[i].OHigh = args[i].OLow;
-                            }
-                            // 寄存器格式：X[0..9]V0
-                            else if (m2.Success)
-                            {
-                                args[i].Base = m2.Groups[1].Value;
-                                args[i].Low = int.Parse(m2.Groups[2].Value);
-                                args[i].High = int.Parse(m2.Groups[3].Value);
-                                args[i].Offset = m2.Groups[4].Value;
-                                args[i].OLow = int.Parse(m2.Groups[5].Value);
-                                args[i].OHigh = args[i].OLow;
-                            }
-                            // 寄存器格式：X0V[0..3]
-                            else if (m3.Success)
-                            {
-                                args[i].Base = m3.Groups[1].Value;
-                                args[i].Low = int.Parse(m3.Groups[2].Value);
-                                args[i].High = args[i].Low;
-                                args[i].Offset = m3.Groups[3].Value;
-                                args[i].OLow = int.Parse(m3.Groups[4].Value);
-                                args[i].OHigh = int.Parse(m3.Groups[5].Value);
-                            }
-                            // 寄存器格式：X[0..9]V[0..3]
-                            else if (m4.Success)
-                            {
-                                args[i].Base = m4.Groups[1].Value;
-                                args[i].Low = int.Parse(m4.Groups[2].Value);
-                                args[i].High = int.Parse(m4.Groups[3].Value);
-                                args[i].Offset = m4.Groups[4].Value;
-                                args[i].OLow = int.Parse(m4.Groups[5].Value);
-                                args[i].OHigh = int.Parse(m4.Groups[6].Value);
-                            }
-                            // 寄存器格式：X0
-                            else if (m5.Success)
-                            {
-                                args[i].Base = m5.Groups[1].Value;
-                                args[i].Low = int.Parse(m5.Groups[2].Value);
-                                args[i].High = args[i].Low;
-                            }
-                            // 寄存器格式：X[0..9]
-                            else if (m6.Success)
-                            {
-                                args[i].Base = m6.Groups[1].Value;
-                                args[i].Low = int.Parse(m6.Groups[2].Value);
-                                args[i].High = int.Parse(m6.Groups[3].Value);
-                            }
-                            // 第一个参数必须为指令名称
-                            else if (i == 0)
-                            {
-                                if (LadderUnitModel.Formats.Where(f => f.Name.Equals(args[i].Text)).Count() > 0)
-                                {
-                                    args[i].Type = ARG_INSTRUCTION;
-                                }
-                                else
-                                {
-                                    args[i].Type = ARG_INVAILD;
-                                }
-                            }
-                            // 其他位置可能是函数名称
-                            else
-                            {
-                                args[i].Type = ARG_NAME;
-                            }
-                            break;
-                    }
-                    // 根据参数格式来确定信息格式
-                    switch (args[i].Type)
-                    {
-                        // 格式非法
-                        case ARG_INVAILD:
-                            Type = TYPE_INVALID;
-                            return;
-                        // 指令名称出现在不正确的位置
-                        case ARG_INSTRUCTION:
-                            if (i > 0)
-                            {
-                                Type = TYPE_INVALID;
-                                return;
-                            }
-                            break;
-                        // 指令参数
-                        case ARG_REGISTER:
-                        case ARG_NAME:
-                        case ARG_UNDEFINED:
-                            // 多参数并且位置非法
-                            if (i == 0 && sargs.Length > 1)
-                            {
-                                Type = TYPE_INVALID;
-                                return;
-                            }
-                            // 单独出现的寄存器格式
-                            if (i == 0)
-                            {
-                                Type = TYPE_REGISTER;
-                                return;
-                            }
-                            break;
-                        // 任意项匹配
-                        case ARG_ANYONE:
-                            break;
-                        // 任意后缀匹配，保证出现在末尾
-                        case ARG_ANYSUFFIX:
-                            if (i < sargs.Length - 1)
-                            {
-                                Type = TYPE_INVALID;
-                                return;
-                            }
-                            break;
-                    }
-                }
-                Type = TYPE_LADDER;
-            }
-        }
-        /// <summary> 构造函数 </summary>
-        public ReplaceFormat()
-        {
-            Text = String.Empty;
-        }
-        /// <summary> 构造函数 </summary>
-        /// <param name="_text">文本</param>
-        public ReplaceFormat(string _text)
-        {
-            Text = _text;
-        }
-        /// <summary> 对指令文本进行匹配检查 </summary>
-        public bool Match(string input)
-        {
-            // 格式化指令文本
-            ReplaceFormat iformat = new ReplaceFormat(input);
-            switch (Type)
-            {
-                // 非法格式不能匹配
-                case TYPE_INVALID:
-                    return false;
-                // 指令格式逐个匹配
-                case TYPE_LADDER:
-                    for (int i = 0; i < ArgsCount; i++)
-                    {
-                        // 【任意后缀】参数，匹配成功
-                        if (GetArgs(i).Type == ARG_ANYSUFFIX)
-                            return true;
-                        // 超过了指令文本的参数个数，匹配失败
-                        if (iformat.ArgsCount <= i)
-                            return false;
-                        // 该项匹配失败
-                        if (!Match(GetArgs(i), iformat.GetArgs(i)))
-                            return false;
-                    }
-                    // 通过所有检查，匹配成功
-                    return true;
-                // 寄存器格式需要查找
-                case TYPE_REGISTER:
-                    // 指令无参数
-                    if (iformat.ArgsCount < 2)
-                    {
-                        return false;
-                    }
-                    // 查找是否存在符合匹配的指令参数
-                    for (int i = 1; i < iformat.ArgsCount; i++)
-                    {
-                        if (Match(GetArgs(0), iformat.GetArgs(i)))
-                            return true;
-                    }
-                    // 未找到，匹配失败
-                    return false;
-                // 其他格式不能匹配
-                default:
-                    return false;
-            }
-        }
-        /// <summary>
-        /// 检查两个参数项是否匹配
-        /// </summary>
-        /// <param name="arg1">参数项1</param>
-        /// <param name="arg2">参数项2</param>
-        /// <returns>匹配结果</returns>
-        private bool Match(ReplaceFormatArg arg1, ReplaceFormatArg arg2)
-        {
-            // 根据项1的格式
-            switch (arg1.Type)
-            {
-                // 非法格式，匹配失败
-                case ARG_INVAILD:
-                    return false;
-                // 指令名称，是否相同
-                case ARG_INSTRUCTION:
-                    return (arg2.Type == ARG_INSTRUCTION && arg2.Text.Equals(arg1.Text));
-                // 任意匹配，一定成功
-                case ARG_ANYONE:
-                    return true;
-                case ARG_ANYSUFFIX:
-                    return true;
-                // 寄存器格式
-                case ARG_REGISTER:
-                    // 基地址是否相同
-                    if (!arg1.Base.Equals(arg2.Base))
-                        return false;
-                    // 范围是否相交
-                    if (arg2.High < arg1.Low)
-                        return false;
-                    if (arg2.Low > arg1.High)
-                        return false;
-                    // 若存在偏移地址则同理
-                    if (!arg1.Offset.Equals(String.Empty))
-                    {
-                        if (!arg1.Offset.Equals(arg2.Offset))
-                            return false;
-                        if (arg2.OHigh < arg1.OLow)
-                            return false;
-                        if (arg2.OLow > arg1.OHigh)
-                            return false;
-                    }
-                    return true;
-                // 名称格式，是否相同
-                case ARG_NAME:
-                    return arg2.Type == ARG_NAME ? arg1.Text.Equals(arg2.Text) : false;
-                // 是否都为未定义的参数
-                case ARG_UNDEFINED:
-                    return (arg2.Type == ARG_UNDEFINED);
-                // 格式未知，匹配失败
-                default:
-                    return false;
-            }
-        }
-        /// <summary>
-        /// 根据该格式进行替换操作，生成替换命令
-        /// </summary>
-        /// <param name="prototype">查找格式</param>
-        /// <param name="unit">要替换的元件</param>
-        /// <returns>替换命令</returns>
-        public ReplaceCommand Replace(ReplaceFormat prototype, LadderUnitModel unit)
-        {
-            string input = unit.ToInstString();
-            // 将指令文本转为正则格式
-            ReplaceFormat iformat = new ReplaceFormat(input);
-            // 要匹配的参数项
-            ReplaceFormatArg arg;
-            arg.Type = ARG_INVAILD;
-            arg.Low = arg.High = arg.OLow = arg.OHigh = 0;
-            arg.Offset = arg.Base = arg.Text = String.Empty;
-            // 替换后的指令文本
-            string output = String.Empty;
-            // 检查原指令的每个参数
-            for (int i = 0; i < iformat.ArgsCount; i++)
-            {
-                // 替换格式为寄存器格式
-                if (prototype.Type == TYPE_REGISTER)
-                {
-                    // 查找格式也为寄存器格式，并且不匹配
-                    if (Type == TYPE_REGISTER
-                     && !Match(prototype.GetArgs(0), iformat.GetArgs(i)))
-                    {
-                        // 保留原样
-                        output += iformat.GetArgs(i).Text + " ";
-                    }
-                    else
-                    {
-                        arg.Type = ARG_INVAILD;
-                        // 寄存器格式只读第一个参数
-                        if (Type == TYPE_REGISTER)
-                        {
-                            arg = GetArgs(0);
-                        }
-                        // 指令格式读相应位置的参数
-                        else if (i <= ArgsCount)
-                        {
-                            arg = GetArgs(i);
-                        }
-                        // 当前的参数格式
-                        switch (arg.Type)
-                        {
-                            // 指令名称
-                            case ARG_INSTRUCTION:
-                                // 对应位置不是指令时保留原样
-                                if (iformat.GetArgs(i).Type != ARG_INSTRUCTION)
-                                {
-                                    output += iformat.GetArgs(i).Text + " ";
-                                    break;
-                                }
-                                // 替换对应的指令名称
-                                output += arg.Text + " ";
-                                break;
-                            // 寄存器
-                            case ARG_REGISTER:
-                                // 对应位置不是寄存器时保留原样
-                                if (iformat.GetArgs(i).Type != ARG_REGISTER
-                                 && iformat.GetArgs(i).Type != ARG_UNDEFINED)
-                                {
-                                    output += iformat.GetArgs(i).Text + " ";
-                                    break;
-                                }
-                                // 判断查找模型的这个参数是否制定唯一的寄存器
-                                bool isunique = false;
-                                isunique = (!prototype.GetArgs(0).Base.Equals(arg.Base));
-                                isunique |= (prototype.GetArgs(0).Low == prototype.GetArgs(0).High);
-                                isunique |= (arg.Low == arg.High);
-                                int baseid = arg.Low;
-                                // 不是唯一的情况下需要地址转移
-                                if (!isunique)
-                                    baseid += iformat.GetArgs(i).Low - prototype.GetArgs(0).Low;
-                                // 得到对应的转换后的寄存器的文本
-                                output += String.Format("{0:s}{1:d}",
-                                        arg.Base, baseid);
-                                if (!arg.Offset.Equals(String.Empty))
-                                    output += String.Format("{0:s}{1:d}",
-                                        arg.Offset, arg.OLow);
-                                output += " ";
-                                break;
-                            // 其他格式
-                            default:
-                                output += iformat.GetArgs(i).Text + " ";
-                                break;
-                        }
-                    }
-                    continue;
-                }
-                // 超出的部分保留原样
-                if (i >= ArgsCount)
-                {
-                    output += iformat.GetArgs(i).Text + " ";
-                    continue;
-                }
-                // 根据当前参数的格式
-                switch (GetArgs(i).Type)
-                {
-                    // 指令名称
-                    case ARG_INSTRUCTION:
-                        output += GetArgs(i).Text + " ";
-                        break;
-                    // 寄存器
-                    case ARG_REGISTER:
-                        // 策略和上面一致
-                        bool isunique = false;
-                        isunique |= (i >= prototype.ArgsCount);
-                        if (!isunique)
-                        {
-                            isunique = (prototype.GetArgs(i).Low == prototype.GetArgs(i).High);
-                            isunique |= (GetArgs(i).Low == GetArgs(i).High);
-                        }
-                        int baseid = GetArgs(i).Low;
-                        if (!isunique)
-                            baseid += iformat.GetArgs(i).Low - prototype.GetArgs(i).Low;
-                        output += String.Format("{0:s}{1:d}",
-                                GetArgs(i).Base, baseid);
-                        if (!GetArgs(i).Offset.Equals(String.Empty))
-                            output += String.Format("{0:s}{1:d}",
-                                GetArgs(i).Offset, GetArgs(i).OLow);
-                        output += " ";
-                        break;
-                    // 其他格式
-                    default:
-                        output += iformat.GetArgs(i).Text + " ";
-                        break;
-                }
-            }
-            // 建立命令并返回
-            return new ReplaceCommand(unit, output);
-        }
-    }
-    /// <summary> 替换命令 </summary>
-    public class ReplaceCommand : IDisposable
-    {
-        public ReplaceCommand(LadderUnitModel _unit, string _output)
-        {
-            oldunit = _unit;
-            network = oldunit.Parent;
-            string[] _newtexts = _output.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            LadderUnitModel.Types newtype = LadderUnitModel.TypeOfNames[_newtexts[0]];
-            string[] newargs = new string[_newtexts.Length - 1];
-            Array.Copy(_newtexts, 1, newargs, 0, newargs.Length);
-            newunit = new LadderUnitModel(null, newtype) { X = oldunit.X, Y = oldunit.Y };
-            newunit.Parse(newargs);
-        }
-
-        public void Dispose()
-        {
-            oldunit = null;
-            newunit = null;
-        }
-
-        #region Number
-
-        private LadderNetworkModel network;
-        private LadderUnitModel oldunit;
-        private LadderUnitModel newunit;
-
-        #endregion
-
-        #region Undo & Redo
-        
-        public void Redo()
-        {
-            network.Remove(oldunit);
-            try
-            {
-                network.Add(newunit);
-            }
-            catch (LadderUnitChangedEventException exce)
-            {
-                network.Add(oldunit);
-                throw exce;
-            }
-        }
-
-        public void Undo()
-        {
-            network.Remove(newunit);
-            try
-            {
-                network.Add(oldunit);
-            }
-            catch (LadderUnitChangedEventException exce)
-            {
-                network.Add(newunit);
-                throw exce;
-            }
-        }
-
-        #endregion
-    }
-    /// <summary> 替换命令的集合 </summary>
-    public class ReplaceCommandGroup : IDisposable
-    {
-        public ReplaceCommandGroup()
-        {
-            commands = new List<ReplaceCommand>();
-        }
-
-        public void Dispose()
-        {
-            foreach (ReplaceCommand cmd in commands) cmd.Dispose();
-            commands.Clear();
-        }
-
-        private List<ReplaceCommand> commands;
-
-        public void Add(ReplaceCommand cmd)
-        {
-            commands.Add(cmd);
-        }
-
-        public void Undo()
-        {
-            foreach (ReplaceCommand cmd in commands) cmd.Undo();
-        }
-        
-        public void Redo()
-        {
-            foreach (ReplaceCommand cmd in commands) cmd.Redo();
-        }
-
     }
     /// <summary> 要替换的元素 </summary>
     public class ReplaceElement : INotifyPropertyChanged, IDisposable

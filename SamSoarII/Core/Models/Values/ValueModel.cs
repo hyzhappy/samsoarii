@@ -72,6 +72,10 @@ namespace SamSoarII.Core.Models
         public readonly static ValueRegex VerifyBitRegex6 = new ValueRegex(
             @"^(S)([0-9]+)((V|Z)([0-9]+))?$", 
             new string[] { "S" });
+        public readonly static ValueRegex VerifyBitRegex7 = new ValueRegex(
+            @"^(Y|M)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "Y", "M" });
+
         public readonly static ValueRegex WordBitRegex = new ValueRegex(
             @"^(D|V|Z)([0-9]+)\.([0-9A-F])((V|Z)([0-9]+))?$", 
             new string[] { "Dm.n" });
@@ -89,10 +93,10 @@ namespace SamSoarII.Core.Models
             @"^(TV)([0-9]+)((V|Z)([0-9]+))?$", 
             new string[] { "TV" });
         public readonly static ValueRegex VerifyWordRegex5 = new ValueRegex(
-            @"^(AI)([0-9]+)((V|Z)([0-9]+))?$",
+            @"^(D|AI)([0-9]+)((V|Z)([0-9]+))?$",
             new string[] { "AI" });
         public readonly static ValueRegex VerifyWordRegex6 = new ValueRegex(
-            @"^(AO)([0-9]+)((V|Z)([0-9]+))?$",
+            @"^(D|AO)([0-9]+)((V|Z)([0-9]+))?$",
             new string[] { "AO" });
 
         public readonly static ValueRegex BitWordRegex = new ValueRegex(
@@ -131,17 +135,17 @@ namespace SamSoarII.Core.Models
             @"^([a-zA-Z_]\w*)$", 
             new string[] { });
         public readonly static ValueRegex AnyNameRegex = new ValueRegex(
-            @"^.*$", 
+            @"^[\w\t]*$", 
             new string[] { });
 
         public readonly static ValueModel Analyzer_Bit = new ValueModel(null, new ValueFormat("ANA", Types.BOOL, false, false, 0,
                 new Regex[] { ValueModel.BitRegex, ValueModel.WordBitRegex }));
         public readonly static ValueModel Analyzer_Word = new ValueModel(null, new ValueFormat("ANA", Types.WORD, false, false, 0,
-                new Regex[] { ValueModel.WordRegex, ValueModel.BitWordRegex }));
+                new Regex[] { ValueModel.WordRegex, ValueModel.BitWordRegex, ValueModel.IntKValueRegex, ValueModel.IntHValueRegex }));
         public readonly static ValueModel Analyzer_DWord = new ValueModel(null, new ValueFormat("ANA", Types.DWORD, false, false, 0,
-                new Regex[] { ValueModel.DoubleWordRegex, ValueModel.BitDoubleWordRegex }));
+                new Regex[] { ValueModel.DoubleWordRegex, ValueModel.BitDoubleWordRegex, ValueModel.IntKValueRegex, ValueModel.IntHValueRegex}));
         public readonly static ValueModel Analyzer_Float = new ValueModel(null, new ValueFormat("ANA", Types.FLOAT, false, false, 0,
-                new Regex[] { ValueModel.FloatRegex }));
+                new Regex[] { ValueModel.FloatRegex, ValueModel.FloatKValueRegex }));
         public readonly static ValueModel Analyzer_String = new ValueModel(null, new ValueFormat("ANA", Types.STRING, false, false, 0,
                 new Regex[] { ValueModel.AnyNameRegex}));
 
@@ -198,13 +202,26 @@ namespace SamSoarII.Core.Models
 
         private ValueFormat format;
         public ValueFormat Format { get { return this.format; } }
-        public Types Type { get { return format != null ? format.Type : Types.NULL; } }
-
+        public Types Type
+        {
+            get { return format != null ? format.Type : Types.NULL; }
+            set { if (format != null) format = new ValueFormat(format.Name, value, format.CanRead, format.CanWrite, format.Position, format.Regexs); }
+        }
+        
         protected string text;
         public string Text
         {
-            get { return this.text; }
-            set { value = value.ToUpper(); Parse(value); this.text = value; }
+            get
+            {
+                return this.text;
+            }
+            set
+            {
+                if (Type != Types.STRING)
+                    value = value.ToUpper();
+                Parse(value);
+                this.text = value;
+            }
         }
 
         public string Comment { get { return ValueManager != null ? ValueManager[this].Comment : ""; } }
@@ -367,6 +384,13 @@ namespace SamSoarII.Core.Models
                     ofs = match.Groups.Count > 2 ? int.Parse(match.Groups[2].Value) : 0;
                     ibs = match.Groups.Count > 4 && match.Groups[4].Value.Length > 0 ? ParseBase(match.Groups[4].Value) : Bases.NULL;
                     ifs = match.Groups.Count > 5 && match.Groups[5].Value.Length > 0 ? int.Parse(match.Groups[5].Value) : 0;
+                    if (bas == Bases.CV)
+                    {
+                        if (Type == Types.WORD && ofs >= 200)
+                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                        if (Type == Types.DWORD && ofs < 200)
+                            throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
+                    }
                     if (ofs < 0 || ofs >= device.GetRange(bas).Count)
                         throw new ValueParseException(Properties.Resources.Message_Over_Max_Len, format);
                     break;
@@ -439,6 +463,8 @@ namespace SamSoarII.Core.Models
         public ValueModel.Types Type { get { return this.type; } }
 
         private IEnumerable<Regex> regexs;
+        public IEnumerable<Regex> Regexs { get { return this.regexs; } }
+
         public Match Match(string text)
         {
             foreach (Regex regex in regexs)

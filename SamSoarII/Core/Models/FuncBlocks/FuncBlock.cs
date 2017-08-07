@@ -935,6 +935,7 @@ namespace SamSoarII.Core.Models
                         {
                             if (i > 0 && text[i - 1] == '*')
                             {
+                                dividelabel = i;
                                 commentend = i;
                                 comment.IndexStart = commentstart;
                                 comment.IndexEnd = commentend;
@@ -966,6 +967,7 @@ namespace SamSoarII.Core.Models
                         if (comment != null &&
                             !(comment is FuncBlock_CommentParagraph))
                         {
+                            dividelabel = i;
                             commentend = i;
                             comment.IndexStart = commentstart;
                             comment.IndexEnd = commentend;
