@@ -1238,21 +1238,17 @@ namespace SamSoarII
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.EnsureButtonClick += (sender, e) =>
                 {
-#if RELEASE
                     try
                     {
-#endif
                         core.Parent.Parent.AddSingleUnit(dialog.InstructionInput, core, core.Parent);
                         if (core.X < GlobalSetting.LadderXCapacity - 1) core.X++;
                         core.Parent.Parent.View.NavigateByInstructionInputDialog();
                         dialog.Close();
-#if RELEASE
                     }
                     catch (Exception exce2)
                     {
                         LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
                     }
-#endif
                 };
                 dialog.ShowDialog();
             }
@@ -1266,20 +1262,16 @@ namespace SamSoarII
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.Ensure += (sender, e) =>
                 {
-#if RELEASE
                     try
                     {
-#endif
                         current.Parent.Parent.UpdateUC(current, dialog.PropertyStrings);
                         current.Parent.Parent.View.NavigateByInstructionInputDialog();
                         dialog.Close();
-#if RELEASE
                     }
                     catch (Exception exce2)
                     {
                         LocalizedMessageBox.Show(string.Format(exce2.Message), LocalizedMessageIcon.Error);
                     }
-#endif
                 };
                 dialog.ShowDialog();
             }

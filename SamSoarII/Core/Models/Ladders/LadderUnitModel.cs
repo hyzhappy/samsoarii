@@ -65,6 +65,7 @@ namespace SamSoarII.Core.Models
             TRD, TWR,
             MBUS, SEND, REV,
             PLSF, DPLSF, PWM, DPWM, PLSY, DPLSY, PLSR, DPLSR, PLSRD, DPLSRD, PLSA, DPLSA, PLSNEXT, PLSSTOP, ZRN, DZRN, DZRND, PTO, DRVI, DDRVI, DRVA, DDRVA,
+            TBL,
             HCNT,
             LOG, POW, FACT, CMP, CMPD, CMPF, ZCP, ZCPD, ZCPF, NEG, NEGD, XCH, XCHD, XCHF, CML, CMLD, SMOV, FMOV, FMOVD,
             PID,
@@ -1033,6 +1034,12 @@ namespace SamSoarII.Core.Models
                     new ValueFormat("D", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3}),
                     new ValueFormat("OUT", ValueModel.Types.BOOL, false, true, -1, new Regex[] {ValueModel.VerifyBitRegex4}),
                     new ValueFormat("DIR", ValueModel.Types.BOOL, false, true, -2, new Regex[] {ValueModel.VerifyBitRegex4}) });
+            Formats[(int)Types.TBL] = new LadderUnitFormat(1617, "TBL", Types.TBL, Outlines.Pulse, Shapes.OutputRect,
+                "", "", "",
+                new ValueFormat[] {
+                    new ValueFormat("SADDR", ValueModel.Types.WORD, true, false, 0, new Regex[] {ValueModel.VerifyWordRegex3 }),
+                    new ValueFormat("P", ValueModel.Types.BOOL, false, true, 1, new Regex[] {ValueModel.VerifyBitRegex4 }),
+                    new ValueFormat("D", ValueModel.Types.BOOL, false, true, 2, new Regex[] {ValueModel.VerifyBitRegex4 }) });
             Formats[(int)Types.FACT] = new LadderUnitFormat(1802, "FACT", Types.FACT, Outlines.Auxiliar, Shapes.OutputRect,
                 Properties.Resources.FACT_Inst,
                 "计算寄存器（IN）值的阶乘，N的最大值为12，将结果传送到寄存器（OUT）。",

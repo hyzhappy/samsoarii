@@ -35,6 +35,13 @@ namespace SamSoarII.Core.Models
                     {
                         mode = Modes.Base;
                         ranges = new List<ValueRange> { new ValueRange(args[0].Substring(1)) };
+                        if (ranges[0].Base.Type == ValueModel.Types.STRING
+                         || ranges[0].Base.IsWordBit
+                         || ranges[0].Base.IsBitWord
+                         || ranges[0].Base.IsBitDoubleWord)
+                        {
+                            throw new ValueParseException("cannot be string.", ranges[0].Base.Format);
+                        }
                     }
                     catch (ValueParseException)
                     {
@@ -127,6 +134,7 @@ namespace SamSoarII.Core.Models
                         if (ranges[0].Contains(vmodel)) return true;
                     return false;
                 case Modes.Unit:
+                case Modes.Base:
                     if (!isanyinst && !unit.InstName.Equals(instname))
                         return false;
                     for (int i = 0; i < unit.Children.Count; i++)
@@ -155,6 +163,7 @@ namespace SamSoarII.Core.Models
                     }
                     return new ReplaceCommand(unit, newargs.ToString());
                 case Modes.Unit:
+                case Modes.Base:
                     newargs.Append(isanyinst ? unit.InstName : instname);
                     for (int i = 0; i < unit.Children.Count; i++)
                     {
@@ -184,14 +193,29 @@ namespace SamSoarII.Core.Models
                 else if (newrange.Base.IsWordBit)
                 {
                     offset = (newrange.Base.Offset >> 4);
-                    if (value.IsWordBit && oldrange.Base.IsWordBit && newrange.OffsetCount > 1)
+                    if (!oldrange.IsAny && value.IsWordBit && oldrange.Base.IsWordBit && newrange.OffsetCount > 1)
                         offset += (value.Offset >> 4) - (oldrange.Base.Offset >> 4);
                     newargs.Append(String.Format("{0:s}{1:d}",
                         ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));
                     offset = (newrange.Base.Offset & 15);
-                    if (value.IsWordBit && oldrange.Base.IsWordBit && newrange.FlagCount > 1)
+                    if (!oldrange.IsAny && value.IsWordBit && oldrange.Base.IsWordBit && newrange.FlagCount > 1)
                         offset += (value.Offset & 15) - (oldrange.Base.Offset & 15);
                     offset &= 15;
+                    newargs.Append(String.Format(".{1:x}", offset));
+                }
+                else if (Mode == Modes.Base && value.IsWordBit)
+                {
+                    offset = newrange.Base.Offset;
+                    if (!oldrange.IsAny && newrange.OffsetCount > 1)
+                    {
+                        if (oldrange.Base.IsWordBit)
+                            offset += (value.Offset >> 4) - (oldrange.Base.Offset >> 4);
+                        else
+                            offset += (value.Offset >> 4) - oldrange.Base.Offset;
+                    }
+                    newargs.Append(String.Format("{0:s}{1:d}",
+                        ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));
+                    offset = value.Offset & 15;
                     newargs.Append(String.Format(".{1:x}", offset));
                 }
                 else
@@ -199,7 +223,8 @@ namespace SamSoarII.Core.Models
                     if (newrange.Base.IsBitWord || newrange.Base.IsBitDoubleWord)
                     {
                         offset = newrange.Base.Size;
-                        if ((value.IsBitWord || value.IsBitDoubleWord)
+                        if (!oldrange.IsAny
+                         && (value.IsBitWord || value.IsBitDoubleWord)
                          && (oldrange.Base.IsBitWord || oldrange.Base.IsBitDoubleWord)
                          && newrange.FlagCount > 1)
                         {
@@ -207,20 +232,35 @@ namespace SamSoarII.Core.Models
                         }
                         newargs.Append(String.Format("K{0:d}", offset));
                     }
-                    offset = newrange.Base.Offset;
-                    if ((value.IsBitWord || value.IsBitDoubleWord)
-                     && (oldrange.Base.IsBitWord || oldrange.Base.IsBitDoubleWord)
-                     && newrange.OffsetCount > 1)
+                    else if (Mode == Modes.Base && (value.IsBitWord || value.IsBitDoubleWord))
                     {
-                        offset += value.Size - oldrange.Base.Size;
+                        offset = value.Size;
+                        newargs.Append(String.Format("K{0:d}", offset));
                     }
+                    offset = newrange.Base.Offset;
+                    if (!oldrange.IsAny && newrange.OffsetCount > 1)
+                        offset += value.Offset - oldrange.Base.Offset;
                     newargs.Append(String.Format("{0:s}{1:d}",
                         ValueModel.NameOfBases[(int)(newrange.Base.Base)], offset));
                 }
                 if (newrange.Base.Intra != ValueModel.Bases.NULL)
                 {
                     offset = newrange.Base.IntraOffset;
-                    if (value.Intra == newrange.Base.Intra
+                    if (!oldrange.IsAny 
+                     && value.Intra == newrange.Base.Intra
+                     && oldrange.Base.Intra == newrange.Base.Intra
+                     && newrange.IntraCount > 1)
+                    {
+                        offset += value.IntraOffset - oldrange.Base.IntraOffset;
+                    }
+                    newargs.Append(String.Format("{0:s}{1:d}",
+                        ValueModel.NameOfBases[(int)(newrange.Base.Intra)], offset));
+                }
+                else if (Mode == Modes.Base && value.Intra != ValueModel.Bases.NULL)
+                {
+                    offset = value.IntraOffset;
+                    if (!oldrange.IsAny
+                     && value.Intra == newrange.Base.Intra
                      && oldrange.Base.Intra == newrange.Base.Intra
                      && newrange.IntraCount > 1)
                     {

@@ -1038,7 +1038,7 @@ namespace SamSoarII.Core.Models
             }
             string[] instargs = new string[newunit.Children.Count];
             Array.Copy(items, 1, instargs, 0, items.Length - 1);
-            for (int i = items.Length; i < instargs.Length; i++)
+            for (int i = items.Length - 1; i < instargs.Length; i++)
                 instargs[i] = "???";
             try
             {
