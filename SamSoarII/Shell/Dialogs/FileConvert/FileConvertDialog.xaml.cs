@@ -85,10 +85,10 @@ namespace SamSoarII.Shell.Dialogs
         }
         private BackgroundWorker worker;
         ProgressBarHandle handle;
-        private long currentFileLen;
+        private long currentFileLen = 0;
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            handle.PG_Bar?.Dispatcher.Invoke(DispatcherPriority.Normal,(ThreadStart)delegate() 
+            handle.PG_Bar?.Dispatcher.Invoke(DispatcherPriority.Background, (ThreadStart)delegate() 
             {
                 handle.StartAnimation(handle.PG_Bar.PG_Bar.Value, e.ProgressPercentage * 3.0 / 20.0, currentFileLen / (160.0 * 1024));
             });

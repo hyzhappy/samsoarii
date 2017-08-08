@@ -42,7 +42,7 @@ namespace SamSoarII.Core.Communication
         {
             byte[] command = new byte[4];
             command[0] = CommunicationDataDefine.CMD_DOWNLOAD_FLAG;
-            byte[] len = ValueConverter.GetLengthByInt(command.Length + 2);
+            byte[] len = ValueConverter.GetBytes((ushort)(command.Length + 2),true);
             command[1] = len[0];
             command[2] = len[1];
             command[3] = CommunicationDataDefine.CMD_IAP_FINISH;

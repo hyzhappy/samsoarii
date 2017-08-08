@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using SamSoarII.Core.Communication;
 
 namespace SamSoarII.Shell.Dialogs
 {
@@ -98,15 +99,15 @@ namespace SamSoarII.Shell.Dialogs
             communicationParams.IsAutoCheck = (bool)baseSetting.checkbox.IsChecked;
             int dopt = 0;
             if (baseSetting.CB_Program.IsChecked.Value)
-                dopt |= CommunicationParams.OPTION_PROGRAM;
+                dopt |= CommunicationDataDefine.OPTION_PROGRAM;
             if (baseSetting.CB_Comment.IsChecked.Value)
-                dopt |= CommunicationParams.OPTION_COMMENT;
+                dopt |= CommunicationDataDefine.OPTION_COMMENT;
             if (baseSetting.CB_Initialize.IsChecked.Value)
-                dopt |= CommunicationParams.OPTION_INITIALIZE;
+                dopt |= CommunicationDataDefine.OPTION_INITIALIZE;
             if (baseSetting.CB_Monitor.IsChecked.Value)
-                dopt |= CommunicationParams.OPTION_MONITOR;
+                dopt |= CommunicationDataDefine.OPTION_MONITOR;
             if (baseSetting.CB_Setting.IsChecked.Value)
-                dopt |= CommunicationParams.OPTION_SETTING;
+                dopt |= CommunicationDataDefine.OPTION_SETTING;
             communicationParams.DownloadOption = dopt;
         }
     }

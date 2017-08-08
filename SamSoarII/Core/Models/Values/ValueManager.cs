@@ -809,6 +809,7 @@ namespace SamSoarII.Core.Models
 
         public void Load(XElement xele)
         {
+            if (xele == null) return;
             foreach (XElement xele_i in xele.Elements("ValueInfo"))
             {
                 string name = xele_i.Attribute("Name").Value;

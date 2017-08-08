@@ -34,18 +34,13 @@ namespace SamSoarII.Utility
             BCDValue += value;
             return BCDValue;
         }
-        public static byte[] GetBytes(ushort value)
+        public static byte[] GetBytes(ushort value, bool isLowHead = false)
         {
             byte byte1 = (byte)(value & 0x00FF);
             byte byte2 = (byte)((value & 0xFF00) >> 8);
-            return new byte[] {byte2,byte1 };
-        }
-
-        public static byte[] GetLengthByInt(int length)
-        {
-            byte byte1 = (byte)(length & 0x00FF);
-            byte byte2 = (byte)((length & 0xFF00) >> 8);
-            return new byte[] { byte1, byte2 };//低位在前
+            if(!isLowHead)
+                return new byte[] {byte2,byte1 };
+            return new byte[] { byte1, byte2 };
         }
 
         public static int GetValueByBytes(params byte[] value)
@@ -53,13 +48,15 @@ namespace SamSoarII.Utility
             return (value[1] << 8) + value[0];
         }
 
-        public static byte[] GetBytes(uint value)
+        public static byte[] GetBytes(uint value,bool isLowHead = false)
         {
             byte byte1 = (byte)(value & 0x000000FF);
             byte byte2 = (byte)((value & 0x0000FF00) >> 8);
             byte byte3 = (byte)((value & 0x00FF0000) >> 16);
             byte byte4 = (byte)((value & 0xFF000000) >> 24);
-            return new byte[] {byte2,byte1,byte4,byte3 };
+            if(!isLowHead)
+                return new byte[] {byte2,byte1,byte4,byte3 };
+            return new byte[] { byte1, byte2, byte3, byte4 };
         }
         public static uint GetValue(byte[] data)
         {

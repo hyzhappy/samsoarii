@@ -21,12 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_00B8EFC190324FBB9E79672CFE70149B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_00BB68A5ECE24A1DB0F280394782BA0B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -160,6 +154,12 @@
         "Entry"
         {
         "MsmKey" = "8:_0CCA8ECCB72946B4A20D7F187EB58C6D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0D9E5BE3B85B476CA51BC956754492BA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -682,12 +682,6 @@
         "Entry"
         {
         "MsmKey" = "8:_3EFAE42A1D0C4473B7860B8D909929E6"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3FF01D138B13477D8CB3DA736C320F0A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2079,12 +2073,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C2F98955D8E44F6D948E433E57FA486E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C34EA656F2EE4321B669FCDC3CEBDDA5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2092,12 +2080,6 @@
         "Entry"
         {
         "MsmKey" = "8:_C397EABB0D994906AF03520847E1DB60"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C498A06BEF9E429E8304D5A0BB368531"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2223,6 +2205,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_CB1BCAFB1520432AAFACB4606BD53F21"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CBDB8BD57655486080A8004D76F269BB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2301,7 +2289,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D23A4DC091804D3AA271606C8AEE71F6"
+        "MsmKey" = "8:_D23C19AE4C444A19A8C005620010830F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2500,6 +2488,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E684410A547B4119A40BA00A7019A510"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E6A2946EBDC74B29ADDB170397FA24E3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2963,26 +2957,6 @@
             "TargetName" = "8:nano.specs"
             "Tag" = "8:"
             "Folder" = "8:_BFAEDD7AD96A45FCABE3BFD97E35FFE5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00B8EFC190324FBB9E79672CFE70149B"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\Rar.exe"
-            "TargetName" = "8:Rar.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3465,6 +3439,26 @@
             "TargetName" = "8:file.h"
             "Tag" = "8:"
             "Folder" = "8:_5E1EF26C340049E7BBDFC3E86A0A228F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D9E5BE3B85B476CA51BC956754492BA"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\lang\\HaoZipLang_chs.dll"
+            "TargetName" = "8:HaoZipLang_chs.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_778344678C7A40C78E2BCCF8E4BBBA85"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5198,26 +5192,6 @@
             "TargetName" = "8:envlock.h"
             "Tag" = "8:"
             "Folder" = "8:_7B2000542FDF413796E3954E9628A246"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3FF01D138B13477D8CB3DA736C320F0A"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\downg\\downc.bin"
-            "TargetName" = "8:downc.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_1DCEE0DB047F4AC99BA4AB3498DC6A79"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -9865,26 +9839,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2F98955D8E44F6D948E433E57FA486E"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\UNACEV2.DLL"
-            "TargetName" = "8:UNACEV2.DLL"
-            "Tag" = "8:"
-            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C34EA656F2EE4321B669FCDC3CEBDDA5"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\newlib-nano\\newlib.h"
@@ -9911,26 +9865,6 @@
             "TargetName" = "8:cmake.check_cache"
             "Tag" = "8:"
             "Folder" = "8:_4B3818D7594745E7BDD75C21DD51E55E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C498A06BEF9E429E8304D5A0BB368531"
-            {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\UnRAR.exe"
-            "TargetName" = "8:UnRAR.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -10356,6 +10290,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB1BCAFB1520432AAFACB4606BD53F21"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZip.dll"
+            "TargetName" = "8:HaoZip.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CBDB8BD57655486080A8004D76F269BB"
             {
             "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\Compiler\\arm\\arm-none-eabi\\include\\paths.h"
@@ -10627,10 +10581,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D23A4DC091804D3AA271606C8AEE71F6"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D23C19AE4C444A19A8C005620010830F"
             {
-            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\7zxa.dll"
-            "TargetName" = "8:7zxa.dll"
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZipFormats.dll"
+            "TargetName" = "8:HaoZipFormats.dll"
             "Tag" = "8:"
             "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
@@ -11293,6 +11247,26 @@
             "TargetName" = "8:time.h"
             "Tag" = "8:"
             "Folder" = "8:_D2FD382201D8457EADC637C80F6E4C32"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E6A2946EBDC74B29ADDB170397FA24E3"
+            {
+            "SourcePath" = "8:..\\SamSoarII\\bin\\x86\\rar\\HaoZipC.exe"
+            "TargetName" = "8:HaoZipC.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_2E2B35B5B7AA4853BF394EA2549D8206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -12384,6 +12358,28 @@
                     "Property" = "8:_4BD223DEC0954EB4BA375283C0BF0511"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_21B4B10173BA4BB0979D29C544EA38CD"
+                            {
+                            "Name" = "8:temp"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_3732EAC9815C46D7A61187E88A185014"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_778344678C7A40C78E2BCCF8E4BBBA85"
+                            {
+                            "Name" = "8:lang"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_E1EF1AA53AB445779565119B1976E05A"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_77D2BA8A605E49748863172D6E299C40"

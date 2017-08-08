@@ -100,6 +100,7 @@ namespace SamSoarII.Core.Models
             foreach (MonitorTable table in children)
                 table.Dispose();
             children.Clear();
+            if (xele == null) return;
             foreach (XElement xele_t in xele.Elements("Table"))
             {
                 MonitorTable table = new MonitorTable(this, "# New");
