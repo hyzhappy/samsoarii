@@ -10,7 +10,7 @@ extern int32_t* TBit;
 extern int32_t* SBit;
 extern int16_t* DWord;
 extern int16_t* CVWord;
-extern int32_t* CVDoubleWord;
+extern int32_t* CV32DoubleWord;
 extern int16_t* TVWord;
 extern int16_t* AIWord;
 extern int16_t* AOWord;
