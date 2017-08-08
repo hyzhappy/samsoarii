@@ -75,6 +75,10 @@ namespace SamSoarII.Core.Models
         public readonly static ValueRegex VerifyBitRegex7 = new ValueRegex(
             @"^(Y|M)([0-9]+)((V|Z)([0-9]+))?$",
             new string[] { "Y", "M" });
+        public readonly static ValueRegex VerifyBitRegex8 = new ValueRegex(
+            @"^(X)([0-9]+)((V|Z)([0-9]+))?$",
+            new string[] { "X" });
+
 
         public readonly static ValueRegex WordBitRegex = new ValueRegex(
             @"^(D|V|Z)([0-9]+)\.([0-9A-F])((V|Z)([0-9]+))?$", 
@@ -269,14 +273,10 @@ namespace SamSoarII.Core.Models
             set
             {
                 if (store != null)
-                {
                     store.PropertyChanged -= OnStorePropertyChanged;
-                }
                 this.store = value;
                 if (store != null)
-                {
                     store.PropertyChanged += OnStorePropertyChanged;
-                }
             }
         }
         public object Value { get { return store?.Value != null ? store.Value : 0; } }
@@ -478,6 +478,9 @@ namespace SamSoarII.Core.Models
             return null;
         }
 
+        private string supports;
+        public string Supports { get { return this.supports; } }
+
         private string detail;
         public string Detail { get { return this.detail; } }
 
@@ -489,16 +492,16 @@ namespace SamSoarII.Core.Models
             canwrite = _canwrite;
             position = _position;
             regexs = _regexs;
-            IEnumerable<string> supports = new string[] { };
+            IEnumerable<string> _supports = new string[] { };
             foreach (Regex regex in regexs)
             {
                 if (!(regex is ValueRegex)) continue;
                 ValueRegex vregex = (ValueRegex)regex;
-                supports = supports.Union(vregex.Supports);
+                _supports = _supports.Union(vregex.Supports);
             }
+            supports = String.Join("/", _supports);
             detail = _detail != null ? _detail : String.Format("[{0:s}]{1:s}({2:s})",
-                ValueModel.NameOfTypes[(int)type], name,
-                String.Join("/", supports));
+                ValueModel.NameOfTypes[(int)type], name, supports);
         }
     }
 

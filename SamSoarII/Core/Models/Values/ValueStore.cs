@@ -13,9 +13,7 @@ namespace SamSoarII.Core.Models
     {
         public ValueStore(ValueInfo _parent, ValueModel.Types _type, ValueModel.Bases _ibs = ValueModel.Bases.NULL, int _ifs = 0, int _flag = 1)
         {
-            parent = _parent;
-            if (parent != null)
-                parent.PropertyChanged += OnParentPropertyChanged;
+            Parent = _parent;
             type = _type;
             ibs = _ibs;
             ifs = _ifs;
@@ -26,17 +24,36 @@ namespace SamSoarII.Core.Models
         
         public void Dispose()
         {
-            if (parent != null)
-                parent.PropertyChanged -= OnParentPropertyChanged;
-            parent = null;
+            Parent = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        private int id;
+        public int ID
+        {
+            get { return this.id; }
+            set { this.id = value; }
+        }
+
         private ValueInfo parent;
         public ValueInfo Parent
         {
-            get { return this.parent; }
+            get
+            {
+                return this.parent;
+            }
+            set
+            {
+                if (parent == value) return;
+                ValueInfo _parent = parent;
+                this.parent = null;
+                if (_parent != null) 
+                    _parent.PropertyChanged -= OnParentPropertyChanged;
+                this.parent = value;
+                if (parent != null)
+                    parent.PropertyChanged += OnParentPropertyChanged;
+            }
         }
         private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -102,8 +119,7 @@ namespace SamSoarII.Core.Models
             get { return (Type == ValueModel.Types.WORD || Type == ValueModel.Types.UWORD || Type == ValueModel.Types.BCD || Type == ValueModel.Types.HEX) 
                     && (Base == ValueModel.Bases.X || Base == ValueModel.Bases.Y || Base == ValueModel.Bases.M || Base == ValueModel.Bases.S); }
         }
-
-
+        
         public bool IsBitDoubleWord
         {
             get { return (Type == ValueModel.Types.DWORD || Type == ValueModel.Types.UDWORD || Type == ValueModel.Types.DHEX) 

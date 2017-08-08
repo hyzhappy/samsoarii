@@ -1268,6 +1268,20 @@ namespace SamSoarII
 
         public void ShowElementPropertyDialog(LadderUnitModel current)
         {
+            if (current is POLYLINEModel)
+            {
+                using (PolylinePropertyDialog dialog = new PolylinePropertyDialog(((POLYLINEModel)current).Clone()))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        current.Parent.Parent.AddSingleUnit(dialog.Core, current.Parent);
+                        dialog.Close();
+                    };
+                    dialog.ShowDialog();
+                }
+                return;
+            }
             if (current.Type == LadderUnitModel.Types.PID) return;
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
@@ -1292,26 +1306,43 @@ namespace SamSoarII
         public bool ShowElementPropertyDialog(LadderUnitModel.Types type, SelectRectCore core, bool cover = true)
         {
             bool ret;
-            LadderUnitModel current = new LadderUnitModel(core.Parent, type) { X = core.X, Y = core.Y };
+            LadderUnitModel current = LadderUnitModel.Create(core.Parent, type);
+            current.X = core.X;
+            current.Y = core.Y;
             ret = ShowImmediateElementPropertyDialog(current, cover);
             return ret;
         }
         
-        public void ShowElementPropertyDialog(FuncModel func, SelectRectCore core)
+        public bool ShowElementPropertyDialog(FuncModel func, SelectRectCore core)
         {
             LadderUnitModel current = new LadderUnitModel(core.Parent, func) { X = core.X, Y = core.Y };
-            ShowImmediateElementPropertyDialog(current, false);
+            return ShowImmediateElementPropertyDialog(current, false);
         }
 
-        public void ShowElementPropertyDialog(ModbusModel modbus, SelectRectCore core)
+        public bool ShowElementPropertyDialog(ModbusModel modbus, SelectRectCore core)
         {
             LadderUnitModel current = new LadderUnitModel(core.Parent, modbus) { X = core.X, Y = core.Y };
-            ShowImmediateElementPropertyDialog(current, false);
+            return ShowImmediateElementPropertyDialog(current, false);
         }
 
         private bool ShowImmediateElementPropertyDialog(LadderUnitModel current, bool cover = true)
         {
             bool ret = false;
+            if (current is POLYLINEModel)
+            {
+                using (PolylinePropertyDialog dialog = new PolylinePropertyDialog(((POLYLINEModel)current).Clone()))
+                {
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    dialog.Ensure += (sender, e) =>
+                    {
+                        current.Parent.Parent.AddSingleUnit(dialog.Core, current.Parent);
+                        ret = true;
+                        dialog.Close();
+                    };
+                    dialog.ShowDialog();
+                }
+                return ret;
+            }
             using (ElementPropertyDialog dialog = new ElementPropertyDialog(current))
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -1331,7 +1362,6 @@ namespace SamSoarII
                             }
                             catch (ValueParseException)
                             {
-
                             }
                         }
                         current.InstArgs = instargs.ToArray();
@@ -1368,8 +1398,7 @@ namespace SamSoarII
                         {
                             ret = dialog.Save();
                         }
-                        if(ret)
-                            dialog.Close();
+                        if (ret) dialog.Close();
                     }
                     catch (Exception exce2)
                     {

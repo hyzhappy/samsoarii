@@ -400,20 +400,20 @@ namespace SamSoarII.Core.Models
         public void Add(ValueModel value)
         {
             ValueInfo vinfo = this[value];
-            if (vinfo != emptyinfo)
-            {
+            //if (vinfo != emptyinfo)
+            //{
                 vinfo.Add(value);
                 vinfo.Add(value.Parent);   
-            }
+            //}
         }
         public void Remove(ValueModel value)
         {
             ValueInfo vinfo = this[value];
-            if (vinfo != emptyinfo)
-            {
+            //if (vinfo != emptyinfo)
+            //{
                 vinfo.Remove(value);
                 vinfo.Remove(value.Parent);
-            }
+            //}
         }
         public void Add(LadderUnitModel unit)
         {

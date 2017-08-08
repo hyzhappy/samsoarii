@@ -1029,7 +1029,7 @@ namespace SamSoarII.Core.Models
             }
             else
             {
-                newunit = new LadderUnitModel(null, type);
+                newunit = LadderUnitModel.Create(null, type);
             }
             if (newunit.Children.Count < items.Length - 1)
             {

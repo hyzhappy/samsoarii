@@ -1252,6 +1252,20 @@ namespace SamSoarII.Core.Models
             InitializeStructure(_parent);
         }
 
+        static public LadderUnitModel Create(LadderNetworkModel _parent, Types _type)
+        {
+            switch (_type)
+            {
+                case Types.POLYLINEF: return new POLYLINEFModel(_parent);
+                case Types.POLYLINEI: return new POLYLINEIModel(_parent);
+                case Types.LINEF: return new LINEFModel(_parent);
+                case Types.LINEI: return new LINEIModel(_parent);
+                case Types.ARCF: return new ARCHFModel(_parent);
+                case Types.ARCI: return new ARCHIModel(_parent);
+                default: return new LadderUnitModel(_parent, _type);
+            }
+        }
+
         public LadderUnitModel(LadderNetworkModel _parent, FuncModel func)
         {
             type = Types.CALLM;
@@ -1290,6 +1304,20 @@ namespace SamSoarII.Core.Models
             }
         }
 
+        static public LadderUnitModel Create(LadderNetworkModel _parent, XElement xele)
+        {
+            switch (xele.Attribute("Type").Value)
+            {
+                case "POLYLINEF": return new POLYLINEFModel(_parent, xele);
+                case "POLYLINEI": return new POLYLINEIModel(_parent, xele);
+                case "LINEF": return new LINEFModel(_parent, xele);
+                case "LINEI": return new LINEIModel(_parent, xele);
+                case "ARCF": return new ARCHFModel(_parent, xele);
+                case "ARCI": return new ARCHIModel(_parent, xele);
+                default: return new LadderUnitModel(_parent, xele);
+            }
+        }
+
         private void InitializeStructure(LadderNetworkModel _parent)
         {
             Parent = _parent;
@@ -1298,7 +1326,7 @@ namespace SamSoarII.Core.Models
                 Breakpoint = new LadderBrpoModel(this);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             foreach (ValueModel vmodel in children)
             {
@@ -1340,6 +1368,11 @@ namespace SamSoarII.Core.Models
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        protected void InvokePropertyChanged(string propertyname)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
+        }
 
         #region Number
 

@@ -187,9 +187,7 @@
     <Compile Include="Core\Helpers\ElementAddressHelper.cs" />
     <Compile Include="Core\Helpers\GenerateHelper.cs" />
     <Compile Include="Core\Helpers\Interfaces\IHelper.cs" />
-    <Compile Include="Core\Helpers\ProjectHelper.cs" />
     <Compile Include="Core\Helpers\SimulateHelper.cs" />
-    <Compile Include="Core\Helpers\UIHelper.cs" />
     <Compile Include="Core\Helpers\UploadHelper.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncBlock.cs" />
     <Compile Include="Core\Models\FuncBlocks\FuncBlockModel.cs" />
@@ -208,6 +206,13 @@
     <Compile Include="Core\Models\Ladders\Modbus\ModbusModel.cs" />
     <Compile Include="Core\Models\Ladders\Modbus\ModbusTableModel.cs" />
     <Compile Include="Core\Models\Ladders\LadderUnitFormat.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\ARCHFModel.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\ARCHIModel.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\LINEFModel.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\LINEIModel.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEFModel.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEIModel.cs" />
+    <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEModel.cs" />
     <Compile Include="Core\Models\Monitor\MonitorModel.cs" />
     <Compile Include="Core\Models\ProjectModel.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\CommunicationParams.cs" />
@@ -258,7 +263,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Dialogs\AddElementDialog.xaml.cs">
+    <Compile Include="Shell\Dialogs\Monitor\AddElementDialog.xaml.cs">
       <DependentUpon>AddElementDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\ComBaseSetting.xaml.cs">
@@ -277,13 +282,19 @@
     <Compile Include="Shell\Dialogs\LanaEnsureDialog.xaml.cs">
       <DependentUpon>LanaEnsureDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\LinePropModel.xaml.cs">
+      <DependentUpon>LinePropModel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\ElementPropertyModify\PolylinePropertyDialog.xaml.cs">
+      <DependentUpon>PolylinePropertyDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shell\Dialogs\ProgressBar.xaml.cs">
       <DependentUpon>ProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\ProjectPropertyModify\ExpansionUnitModule.xaml.cs">
       <DependentUpon>ExpansionUnitModule.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shell\Dialogs\QuickAddElementDialog.xaml.cs">
+    <Compile Include="Shell\Dialogs\Monitor\QuickAddElementDialog.xaml.cs">
       <DependentUpon>QuickAddElementDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\SimulateExceptionDialog.xaml.cs">
@@ -760,7 +771,7 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="Shell\Dialogs\AddElementDialog.xaml">
+    <Page Include="Shell\Dialogs\Monitor\AddElementDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -784,6 +795,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\LinePropModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\ElementPropertyModify\PolylinePropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell\Dialogs\ProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -792,7 +811,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell\Dialogs\QuickAddElementDialog.xaml">
+    <Page Include="Shell\Dialogs\Monitor\QuickAddElementDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1083,6 +1102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Models\Ladders\Commands\" />
+    <Folder Include="Core\Models\Ladders\PLSBlock\" />
     <Folder Include="Shell\Helper\" />
   </ItemGroup>
   <ItemGroup>

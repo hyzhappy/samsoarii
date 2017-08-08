@@ -104,18 +104,27 @@ namespace SamSoarII.Core.Models
         public void Add(ValueModel value)
         {
             Values.Add(value);
-            int flag = value.IsWordBit ? (value.Offset & 15)
-                : value.IsBitWord || value.IsBitDoubleWord ? value.Size : 1;
-            IEnumerable<ValueStore> fits = Stores.Where(s => s.Name.Equals(value.Text) && s.Type == value.Type);
-            ValueStore vstore = fits.FirstOrDefault();
-            if (vstore == null)
+            if (value.Store != null)
             {
-                vstore = new ValueStore(this, value.Type, value.Intra, value.IntraOffset, flag);
-                Stores.Add(vstore);
+                value.Store.Parent = this;
+                value.Store.RefNum++;
+                Stores.Add(value.Store);
             }
-            vstore.RefNum++;
-            vstore.VisualRefNum += value.Parent.View != null ? 1 : 0;
-            value.Store = vstore;
+            else
+            {
+                int flag = value.IsWordBit ? (value.Offset & 15)
+                    : value.IsBitWord || value.IsBitDoubleWord ? value.Size : 1;
+                IEnumerable<ValueStore> fits = Stores.Where(s => s.Name.Equals(value.Text) && s.Type == value.Type);
+                ValueStore vstore = fits.FirstOrDefault();
+                if (vstore == null)
+                {
+                    vstore = new ValueStore(this, value.Type, value.Intra, value.IntraOffset, flag);
+                    Stores.Add(vstore);
+                }
+                vstore.RefNum++;
+                vstore.VisualRefNum += value.Parent.View != null ? 1 : 0;
+                value.Store = vstore;
+            }
         }
         public void Remove(ValueModel value)
         {

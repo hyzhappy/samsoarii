@@ -234,7 +234,7 @@ namespace SamSoarII.Core.Models
             children.Clear();
             foreach (XElement xele_unit in xele_lc.Elements("InstEle"))
             {
-                LadderUnitModel unit = new LadderUnitModel(this, xele_unit);
+                LadderUnitModel unit = LadderUnitModel.Create(this, xele_unit);
                 if (unit.Shape == LadderUnitModel.Shapes.VLine)
                     vlines[unit.X, unit.Y] = unit;
                 else
