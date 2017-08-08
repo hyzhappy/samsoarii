@@ -1,0 +1,76 @@
+﻿<Window x:Class="SamSoarII.Shell.Dialogs.PolylinePropertyDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+             xmlns:properties="clr-namespace:SamSoarII.Properties"
+             mc:Ignorable="d" 
+             Height="420" Width="500" FontSize="15">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="350*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="350*"/>
+            <RowDefinition Height="70*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ComboBox Grid.Row="0" Grid.Column="0" Margin="6,5,6,5" x:Name="CB_Sys">
+                <TextBlock Text="平面系统_1"/>
+                <TextBlock Text="平面系统_2"/>
+                <TextBlock Text="平面系统_3"/>
+                <TextBlock Text="平面系统_4"/>
+                <TextBlock Text="平面系统_5"/>
+            </ComboBox>
+            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="系统单位：" Margin="6,8,4,6"/>
+                <ComboBox x:Name="CB_Unit" Margin="3,5,3,5" Width="49">
+                    <TextBlock Text="pls"/>
+                </ComboBox>
+            </StackPanel>
+            <ListBox Grid.Row="2" Grid.Column="0" Margin="5,5,5,5" x:Name="LB_Lines" 
+                     ItemsSource="{Binding Collection}"
+                     SelectedItem="{Binding Current, Mode=TwoWay}">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="MI_AA" Header="添加圆弧" Click="OnMenuItemClick"/>
+                        <MenuItem x:Name="MI_AL" Header="添加直线" Click="OnMenuItemClick"/>
+                        <MenuItem x:Name="MI_IA" Header="插入圆弧" Click="OnMenuItemClick"/>
+                        <MenuItem x:Name="MI_IL" Header="插入直线" Click="OnMenuItemClick"/>
+                        <MenuItem x:Name="MI_DE" Header="删除" Click="OnMenuItemClick"/>
+                        <MenuItem x:Name="MI_MU" Header="上移" Click="OnMenuItemClick"/>
+                        <MenuItem x:Name="MI_MD" Header="下移" Click="OnMenuItemClick"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+        </Grid>
+        <local:LinePropModel Grid.Row="0" Grid.Column="1" x:Name="MainModel"/>
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.5*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="0" Grid.Column="0" Margin="2,2,2,2" Header="映射方式">
+                <ComboBox Grid.Row="0" Grid.Column="0" Margin="10,2,10,2" x:Name="CB_Ref">
+                    <TextBlock Text="不映射到D寄存器"/>
+                    <TextBlock Text="映射到D寄存器"/>
+                    <TextBlock Text="仅用D寄存器控制"/>
+                </ComboBox>
+            </GroupBox>
+            <GroupBox Grid.Row="0" Grid.Column="1" Margin="2,2,2,2" Header="映射地">
+                <TextBox Margin="0,3,0,3" x:Name="TB_Ref"></TextBox>
+            </GroupBox>
+            <Button Grid.Row="0" Grid.Column="2" Margin="10,25,10,10" 
+                    x:Name="BT_Ensure" Content="{x:Static properties:Resources.Ensure}"
+                    Click="OnEnsureButtonClick"/>
+        </Grid>
+    </Grid>
+</Window>

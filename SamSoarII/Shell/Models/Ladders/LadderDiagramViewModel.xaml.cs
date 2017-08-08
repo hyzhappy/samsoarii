@@ -2631,7 +2631,7 @@ namespace SamSoarII.Shell.Models
                     XElement xele_ns = xele.Element("Networks");
                     if (xele_c != null)
                     {
-                        LadderUnitModel unit = new LadderUnitModel(SelectRectOwner, xele_c);
+                        LadderUnitModel unit = LadderUnitModel.Create(SelectRectOwner, xele_c);
                         unit.X = _selectRect.X;
                         unit.Y = _selectRect.Y;
                         Core.AddSingleUnit(unit, SelectRectOwner, false);
@@ -2647,7 +2647,7 @@ namespace SamSoarII.Shell.Models
                         int _yHeight = _yEnd - _yBegin + 1;
                         foreach (XElement xele_u in xele_us.Elements("Unit"))
                         {
-                            LadderUnitModel unit = new LadderUnitModel(SelectRectOwner, xele_u);
+                            LadderUnitModel unit = LadderUnitModel.Create(SelectRectOwner, xele_u);
                             units.Add(unit);
                         }
                         bool containoutput = units.Where(u => u.Shape == LadderUnitModel.Shapes.Output || u.Shape == LadderUnitModel.Shapes.OutputRect).Count() > 0;

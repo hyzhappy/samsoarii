@@ -25,10 +25,24 @@ namespace SamSoarII.Core.Models
             string.Format("0x03({0})",Properties.Resources.Read_Word), string.Format("0x04({0})",Properties.Resources.Read_Word),
             string.Format("0x05({0})",Properties.Resources.Write_Bit), string.Format("0x06({0})",Properties.Resources.Write_Word),
             string.Format("0x0f({0})",Properties.Resources.Write_Bits),string.Format("0x10({0})",Properties.Resources.Write_Words) };
+        static private byte[] handlecodes = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x0f, 0x10 };
+        static private ValueModel[] analyzers = {
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, false, true, 0, new Regex[] { ValueModel.VerifyBitRegex8})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex1})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, false, true, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.BOOL, true, false, 0, new Regex[] { ValueModel.VerifyBitRegex2})),
+            new ValueModel(null, new ValueFormat("MASTE", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex2}))};
 
-        public IEnumerable<string> SelectedHandleCodes()
+        public IList<string> SelectedHandleCodes()
         {
             return selectedhandlecodes;
+        }
+        public IList<byte> HandleCodes
+        {
+            get { return handlecodes; }
         }
 
         #endregion
@@ -123,6 +137,29 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("MasteRegister"));
             }
         }
+        public int MasteRegisterAddress
+        {
+            get
+            {
+                if (!IsValid) return 0;
+                int id = SelectedHandleCodes().IndexOf(HandleCode);
+                analyzers[id].Text = MasteRegister;
+                switch (analyzers[id].Base)
+                {
+                    case ValueModel.Bases.X: return 0;
+                    case ValueModel.Bases.Y: return 10000;
+                    case ValueModel.Bases.M: return 30000;
+                    case ValueModel.Bases.T: return 60768;
+                    case ValueModel.Bases.C: return 60512;
+                    case ValueModel.Bases.D: return 40000;
+                    case ValueModel.Bases.TV: return 60256;
+                    case ValueModel.Bases.CV: return 60000;
+                    case ValueModel.Bases.AI: return 20000;
+                    case ValueModel.Bases.AO: return 20512;
+                    default: return 0;
+                }
+            }
+        }
 
         #endregion
         
@@ -203,32 +240,8 @@ namespace SamSoarII.Core.Models
             {
                 try
                 {
-                    Match match1 = WordFormat.Match(MasteRegister);
-                    Match match2 = BitFormat.Match(MasteRegister);
-                    bool check1 = match1 != null && match1.Success;
-                    bool check2 = match2 != null && match2.Success;
-                    if (HandleCode.Equals(selectedhandlecodes[0])
-                     || HandleCode.Equals(selectedhandlecodes[1])
-                     || HandleCode.Equals(selectedhandlecodes[4])
-                     || HandleCode.Equals(selectedhandlecodes[6]))
-                    {
-                        if (!check2)
-                        {
-                            throw new ValueParseException(Properties.Resources.Message_Bit_Required, BitFormat);
-                        }
-                    }
-                    else if (HandleCode.Equals(selectedhandlecodes[2])
-                          || HandleCode.Equals(selectedhandlecodes[3])
-                          || HandleCode.Equals(selectedhandlecodes[5])
-                          || HandleCode.Equals(selectedhandlecodes[7]))
-                    {
-                        if (!check1)
-                        {
-                            throw new ValueParseException(Properties.Resources.Message_Word_Requried, WordFormat);
-                        }
-                    }
-                    else
-                        return false;
+                    int id = SelectedHandleCodes().IndexOf(HandleCode);
+                    analyzers[id].Text = MasteRegister;
                     return true;
                 }
                 catch (Exception)

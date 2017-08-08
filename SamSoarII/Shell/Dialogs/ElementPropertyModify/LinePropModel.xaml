@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="SamSoarII.Shell.Dialogs.LinePropModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="350" FontSize="15">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="10,5,10,5"/>
+            </Style>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="10,4,10,4"/>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="10,4,10,4"/>
+            </Style>
+        </Grid.Resources>
+        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="TBL_X">x轴终点坐标：</TextBlock>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="TBO_X"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" x:Name="TBL_XU">pls</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="TBL_Y">y轴终点坐标：</TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="TBO_Y"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="TBL_YU">pls</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="0" x:Name="TBL_Type">坐标类型：</TextBlock>
+        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="TBO_Type">
+            <Label Content="相对坐标"/>
+            <Label Content="绝对坐标"/>
+        </ComboBox>
+        <TextBlock Grid.Row="3" Grid.Column="0" x:Name="TBL_AC">加速时间：</TextBlock>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="TBO_AC"/>
+        <TextBlock Grid.Row="3" Grid.Column="2" x:Name="TBL_ACU">ms</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="0" x:Name="TBL_DC">减速时间：</TextBlock>
+        <TextBox Grid.Row="4" Grid.Column="1" x:Name="TBO_DC"/>
+        <TextBlock Grid.Row="4" Grid.Column="2" x:Name="TBL_DCU">ms</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="0" x:Name="TBL_V">速度：</TextBlock>
+        <TextBox Grid.Row="5" Grid.Column="1" x:Name="TBO_V"/>
+        <TextBlock Grid.Row="5" Grid.Column="2" x:Name="TBL_VU">pls/s</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="0" x:Name="TBL_Arch">圆弧类：</TextBlock>
+        <ComboBox Grid.Row="6" Grid.Column="1" x:Name="TBO_Arch">
+            <Label Content="两点"/>
+            <Label Content="三点"/>
+        </ComboBox>
+        <TextBlock Grid.Row="7" Grid.Column="0" x:Name="TBL_R">圆弧半径：</TextBlock>
+        <TextBox Grid.Row="7" Grid.Column="1" x:Name="TBO_R"/>
+        <TextBlock Grid.Row="7" Grid.Column="2" x:Name="TBL_RU">pls</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="0" x:Name="TBL_Dir">顺/逆时针：</TextBlock>
+        <ComboBox Grid.Row="8" Grid.Column="1" x:Name="TBO_Dir">
+            <Label Content="顺时针"/>
+            <Label Content="逆时针"/>
+        </ComboBox>
+        <TextBlock Grid.Row="9" Grid.Column="0" x:Name="TBL_Qua">优/劣弧：</TextBlock>
+        <ComboBox Grid.Row="9" Grid.Column="1" x:Name="TBO_Qua">
+            <Label Content="优弧"/>
+            <Label Content="劣弧"/>
+        </ComboBox>
+    </Grid>
+</UserControl>

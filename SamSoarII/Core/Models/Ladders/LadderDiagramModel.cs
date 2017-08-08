@@ -58,6 +58,7 @@ namespace SamSoarII.Core.Models
             }
             set
             {
+                if (parent == value) return;
                 if (ValueManager != null) ValueManager.Remove(this);
                 this.parent = value;
                 if (ValueManager != null) ValueManager.Add(this);
@@ -1029,7 +1030,7 @@ namespace SamSoarII.Core.Models
             }
             else
             {
-                newunit = new LadderUnitModel(null, type);
+                newunit = LadderUnitModel.Create(null, type);
             }
             if (newunit.Children.Count < items.Length - 1)
             {

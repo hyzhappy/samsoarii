@@ -104,21 +104,34 @@ namespace SamSoarII.Core.Models
         public void Add(ValueModel value)
         {
             Values.Add(value);
-            int flag = value.IsWordBit ? (value.Offset & 15)
-                : value.IsBitWord || value.IsBitDoubleWord ? value.Size : 1;
-            IEnumerable<ValueStore> fits = Stores.Where(s => s.Name.Equals(value.Text) && s.Type == value.Type);
-            ValueStore vstore = fits.FirstOrDefault();
-            if (vstore == null)
+            if (value.Store != null)
             {
-                vstore = new ValueStore(this, value.Type, value.Intra, value.IntraOffset, flag);
-                Stores.Add(vstore);
+                value.Store.Parent = this;
+                value.Store.RefNum++;
+                Stores.Add(value.Store);
             }
-            vstore.RefNum++;
-            vstore.VisualRefNum += value.Parent.View != null ? 1 : 0;
-            value.Store = vstore;
+            else
+            {
+                int flag = value.IsWordBit ? (value.Offset & 15)
+                    : value.IsBitWord || value.IsBitDoubleWord ? value.Size : 1;
+                IEnumerable<ValueStore> fits = Stores.Where(s => s.Name.Equals(value.Text) && s.Type == value.Type);
+                ValueStore vstore = fits.FirstOrDefault();
+                if (vstore == null)
+                {
+                    vstore = new ValueStore(this, value.Type, value.Intra, value.IntraOffset, flag);
+                    Stores.Add(vstore);
+                }
+                vstore.RefNum++;
+                vstore.VisualRefNum += value.Parent.View != null ? 1 : 0;
+                value.Store = vstore;
+            }
         }
         public void Remove(ValueModel value)
         {
+            bool isvar = true;
+            isvar &= value.Store.Type != ValueModel.Types.STRING;
+            isvar &= value.Store.Base != ValueModel.Bases.K;
+            isvar &= value.Store.Base != ValueModel.Bases.H;
             Values.Remove(value);
             if (value.Store?.Parent != null)
             {
@@ -127,7 +140,7 @@ namespace SamSoarII.Core.Models
                 if (value.Store.RefNum == 0)
                     Stores.Remove(value.Store);
             }
-            value.Store = null;
+            if (isvar) value.Store = null;
         }
 
         private ObservableCollection<ValueStore> stores;

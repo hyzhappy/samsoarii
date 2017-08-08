@@ -165,46 +165,55 @@ int _Assert(
 					*addr = (int32_t*)(&XBit[0]);
 					if (*offset < 0 || *offset + size > 128)
 						return 4;
+					*offset *= 4;
 					break;
 				case 'Y': 
 					*addr = (int32_t*)(&YBit[0]); 
 					if (*offset < 0 || *offset + size > 128)
 						return 4;
+					*offset *= 4;
 					break;
 				case 'C': 
 					*addr = (int32_t*)(&CBit[0]); 
 					if (*offset < 0 || *offset + size > 256)
 						return 4;
+					*offset *= 4;
 					break;
 				case 'T': 
 					*addr = (int32_t*)(&TBit[0]); 
 					if (*offset < 0 || *offset + size > 256)
 						return 4;
+					*offset *= 4;
 					break;
 				case 'S': 
 					*addr = (int32_t*)(&SBit[0]); 
 					if (*offset < 0 || *offset + size > 1024)
 						return 4;
+					*offset *= 4;
 					break;
 				case 'M': 
 					*addr = (int32_t*)(&MBit[0]); 
 					if (*offset < 0 || *offset + size > 8192)
 						return 4;
+					*offset *= 4;
 					break;
 				case 'D': 
 					*addr = (int32_t*)(&DWord[0]); 
 					if (*offset < 0 || *offset + size > 8192)
 						return 4;
+					*offset *= 2;
 					break;
 				case 'V': 
 					*addr = (int32_t*)(&VWord[0]); 
 					if (*offset < 0 || *offset + size > 8)
 						return 4;
+					*offset *= 2;
 					break;
 				case 'Z': 
 					*addr = (int32_t*)(&ZWord[0]); 
 					if (*offset < 0 || *offset + size > 8)
 						return 4;
+					*offset *= 2;
 					break;
 				default: 
 					return 3;
@@ -216,6 +225,7 @@ int _Assert(
 				if (*offset >= 0 && *offset + size < 200)
 				{
 					*addr = (int32_t*)(&CVWord[0]);
+					*offset *= 2;
 				}
 				else if (*offset >= 200 || *offset + size/2 < 256)
 				{
@@ -232,18 +242,21 @@ int _Assert(
 				*addr = (int32_t*)(&TVWord[0]);
 				if (*offset < 0 || *offset + size > 256)
 					return 4;
+				*offset *= 2;
 			}
 			if (name[0] == 'A' && name[1] == 'I')
 			{
 				*addr = (int32_t*)(&AIWord[0]);
 				if (*offset < 0 || *offset + size > 32)
 					return 4;
+				*offset *= 2;
 			}
 			if (name[0] == 'A' && name[1] == 'O')
 			{
 				*addr = (int32_t*)(&AOWord[0]);
 				if (*offset < 0 || *offset + size > 32)
 					return 4;
+				*offset *= 2;
 			}
 			break;
 		default:
@@ -257,7 +270,7 @@ EXPORT int GetBit(char* name, int size, int8_t* output)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) output[size] = *((int8_t*)(addr+offset+size));
+	while (size--) output[size] = *(((int8_t*)addr)+offset+size*4);
 	return 0;
 }
 // Get the WORD value from targeted register (D/CV/TV)
@@ -266,7 +279,7 @@ EXPORT int GetWord(char* name, int size, int16_t* output)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) output[size] = *((int16_t*)(addr+offset+size));
+	while (size--) output[size] = *(((int16_t*)addr)+offset+size*2);
 	return 0;
 }
 // Get the DWORD (32 bit unsigned int) value from targeted register (D/CV32)
@@ -275,17 +288,18 @@ EXPORT int GetDoubleWord(char* name, int size, int32_t* output)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	while (size--) output[size] = *((int32_t*)(addr+offset+size));
+	while (size--) 
+	{
+		output[size] = *(((int16_t*)addr)+offset+size*2+2);
+		output[size] <<= 16;
+		output[size] |= *(((int16_t*)addr)+offset+size*2);
+	}
 	return 0;
 }
 // Get the FLOAT value from targeted register (D)
 EXPORT int GetFloat(char* name, int size, float* output)
 {
-	int32_t* addr; int offset;
-	int ret = _Assert(name, size*2, &addr, &offset);
-	if (ret) return ret;
-	while (size--) output[size] = *((float*)(addr+offset+size));
-	return 0;
+	return GetDoubleWord(name, size, (int32_t*)output);
 }
 // Get the signal frequency
 EXPORT int GetFeq(char* name, uint32_t* output)
@@ -311,7 +325,7 @@ EXPORT int SetBit(char* name, int size, int8_t* input)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) *((int8_t*)(addr+offset+size)) = input[size];
+	while (size--) *(((int8_t*)addr)+offset+size*4) = input[size];
 	return 0;
 }
 // Set the WORD value to targeted register (D/CV/TV)
@@ -320,55 +334,55 @@ EXPORT int SetWord(char* name, int size, int16_t* input)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size, &addr, &offset);
 	if (ret) return ret;
-	while (size--) *((int16_t*)(addr+offset+size)) = input[size];
+	while (size--) *(((int16_t*)addr)+offset+size*2) = input[size];
 	return 0;
 }
 // Set the DWORD value to targeted register (D)
 EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 {
-	int8_t* addr; int offset;
+	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	while (size--) *((int32_t*)(addr+offset+size)) = input[size];
+	while (size--) 
+	{
+		*(((int16_t*)addr)+offset+size*2+2) = (input[size]>>16);
+		*(((int16_t*)addr)+offset+size*2) = (input[size]&0xffff);
+	}
 	return 0;
 }
 // Set the FLOAT value to targeted register (D)
 EXPORT int SetFloat(char* name, int size, float* input)
 {
-	int8_t* addr; int offset;
-	int ret = _Assert(name, size*2, &addr, &offset);
-	if (ret) return ret;
-	while (size--) *((float*)(addr+offset+size)) = input[size];
-	return 0;
+	return SetDoubleWord(name, size, (int32_t*)input);
 }
 // Set the writeable enable value of targeted register
 EXPORT int SetEnable(char* name, int size, int8_t value)
 {
-	int8_t* addr; int offset;
+	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
 	switch (name[0])
 	{
 	case 'X':
-		while (size--) XEnable[offset + size] = value;
+		while (size--) XEnable[(offset>>2) + size] = value;
 		break;
 	case 'Y':
-		while (size--) YEnable[offset + size] = value;
+		while (size--) YEnable[(offset>>2) + size] = value;
 		break;
 	case 'M':
-		while (size--) MEnable[offset + size] = value;
+		while (size--) MEnable[(offset>>2) + size] = value;
 		break;
 	case 'S':
-		while (size--) SEnable[offset + size] = value;
+		while (size--) SEnable[(offset>>2) + size] = value;
 		break;
 	case 'D':
-		while (size--) DEnable[offset + size] = value;
+		while (size--) DEnable[(offset>>1) + size] = value;
 		break;
 	case 'V':
-		while (size--) VEnable[offset + size] = value;
+		while (size--) VEnable[(offset>>1) + size] = value;
 		break;
 	case 'Z':
-		while (size--) ZEnable[offset + size] = value;
+		while (size--) ZEnable[(offset>>1) + size] = value;
 		break;
 	case 'A':
 		switch (name[1])
@@ -384,21 +398,21 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 		switch (name[1])
 		{
 		case 'V':
-			if (addr == (int8_t*)(&CVWord[0]))
+			if (addr == (int32_t*)(&CVWord[0]))
 			{
 				while (size--) CVEnable[(offset>>1) + size] = value;
 			}
-			if (addr == (int8_t*)(&CV32DoubleWord[0]))
+			if (addr == (int32_t*)(&CV32DoubleWord[0]))
 			{
 				while (size--)
 				{
-					CVEnable[(offset>>2) + size] = value;
-					CV32Enable[(offset>>2) + size - 200] = value;
+					CVEnable[offset + size] = value;
+					CV32Enable[offset + size - 200] = value;
 				}
 			}
 			break;
 		default:
-			while (size--) CEnable[offset + size] = value;
+			while (size--) CEnable[(offset>>2) + size] = value;
 			break;
 		}
 		break;
@@ -409,7 +423,7 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 			while (size--) TVEnable[(offset>>1) + size] = value;
 			break;
 		default:
-			while (size--) TEnable[offset + size] = value;
+			while (size--) TEnable[(offset>>2) + size] = value;
 			break;
 		}
 		break;

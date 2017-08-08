@@ -52,6 +52,7 @@ namespace SamSoarII.Core.Models
             }
             set
             {
+                if (parent == value) return;
                 if (ValueManager != null) ValueManager.Remove(this);
                 this.parent = value;
                 if (ValueManager != null) ValueManager.Add(this);
@@ -234,7 +235,7 @@ namespace SamSoarII.Core.Models
             children.Clear();
             foreach (XElement xele_unit in xele_lc.Elements("InstEle"))
             {
-                LadderUnitModel unit = new LadderUnitModel(this, xele_unit);
+                LadderUnitModel unit = LadderUnitModel.Create(this, xele_unit);
                 if (unit.Shape == LadderUnitModel.Shapes.VLine)
                     vlines[unit.X, unit.Y] = unit;
                 else

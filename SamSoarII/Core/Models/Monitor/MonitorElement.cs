@@ -123,8 +123,11 @@ namespace SamSoarII.Core.Models
                     //datatype = (int)(store.Type);
                     if (!IFParent.MNGSimu.IsAlive && !IFParent.MNGComu.IsAlive)
                         CurrentValue = "???";
+                    else if (!store.IsNew)
+                        CurrentValue = store.ShowValue;
                 }
-                if (_store != null && _store.RefNum == 0) _store.Parent.Stores.Remove(_store);
+                if (_store != null && _store.RefNum == 0)
+                    _store.Parent.Stores.Remove(_store);
             }
         }
         

@@ -32,7 +32,6 @@ extern plc_w 	CVWord[200];
 extern plc_dw 	CVDoubleWord[56];
 plc_dw*	CV32DoubleWord = &CVDoubleWord[0];
 
-
 extern void CI_TON(uint8_t en, uint16_t Tnum, uint32_t SetValue);
 extern void CI_DPLSF(uint8_t en, uint32_t freq, uint16_t Yn, uint16_t use_id);
 extern void CI_DPWM(uint8_t en, uint32_t freq, uint32_t dutycycle, uint16_t Yn, uint16_t use_id);
