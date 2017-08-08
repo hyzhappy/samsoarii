@@ -128,6 +128,10 @@ namespace SamSoarII.Core.Models
         }
         public void Remove(ValueModel value)
         {
+            bool isvar = true;
+            isvar &= value.Store.Type != ValueModel.Types.STRING;
+            isvar &= value.Store.Base != ValueModel.Bases.K;
+            isvar &= value.Store.Base != ValueModel.Bases.H;
             Values.Remove(value);
             if (value.Store?.Parent != null)
             {
@@ -136,7 +140,7 @@ namespace SamSoarII.Core.Models
                 if (value.Store.RefNum == 0)
                     Stores.Remove(value.Store);
             }
-            value.Store = null;
+            if (isvar) value.Store = null;
         }
 
         private ObservableCollection<ValueStore> stores;

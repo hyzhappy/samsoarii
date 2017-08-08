@@ -13,17 +13,17 @@ namespace SamSoarII.Core.Models
     {
         public POLYLINEModel(LadderNetworkModel _parent, LadderUnitModel.Types _type) : base(_parent, _type)
         {
-            reflictlocation = new ValueModel(this, new ValueFormat("LOC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3 }));
+            //reflictlocation = new ValueModel(this, new ValueFormat("LOC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3 }));
         }
 
         public POLYLINEModel(LadderNetworkModel _parent, XElement xele) : base(_parent, xele)
         {
-            reflictlocation = new ValueModel(this, new ValueFormat("LOC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3 }));
+            //reflictlocation = new ValueModel(this, new ValueFormat("LOC", ValueModel.Types.WORD, true, false, 0, new Regex[] { ValueModel.VerifyWordRegex3 }));
         }
         
         public override void Dispose()
         {
-            reflictlocation.Dispose();
+            //reflictlocation.Dispose();
             base.Dispose();
         }
 
@@ -44,13 +44,13 @@ namespace SamSoarII.Core.Models
             get { return this.reflictmode; }
             set { this.reflictmode = value; InvokePropertyChanged("ReflictMode"); }
         }
-
+        /*
         private ValueModel reflictlocation;
         public ValueModel ReflictLocation
         {
             get { return this.reflictlocation; }
         }
-
+        */
         #endregion
 
         public virtual POLYLINEModel Clone()
@@ -74,7 +74,6 @@ namespace SamSoarII.Core.Models
                 that.Children[i].Text = this.Children[i].Text;
             that.SystemUnit = this.SystemUnit;
             that.ReflictMode = this.ReflictMode;
-            that.ReflictLocation.Text = this.ReflictLocation.Text;
             return that;
         }
     }

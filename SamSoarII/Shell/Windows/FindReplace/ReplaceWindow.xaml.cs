@@ -101,9 +101,10 @@ namespace SamSoarII.Shell.Windows
             }
             set
             {
+                if (mode == value) return;
                 this.mode = value;
+                if (IsLoaded && IsEnabled && Visibility == Visibility.Visible) Find();
                 PropertyChanged(this, new PropertyChangedEventArgs("Mode"));
-                Find();
             }
         }
         /// <summary> 用户的输入信息，经过整理后得到的格式类 </summary>

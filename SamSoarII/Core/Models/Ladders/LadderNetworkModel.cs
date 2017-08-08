@@ -52,6 +52,7 @@ namespace SamSoarII.Core.Models
             }
             set
             {
+                if (parent == value) return;
                 if (ValueManager != null) ValueManager.Remove(this);
                 this.parent = value;
                 if (ValueManager != null) ValueManager.Add(this);

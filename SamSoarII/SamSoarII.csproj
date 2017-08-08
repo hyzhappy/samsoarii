@@ -220,6 +220,8 @@
     <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEIModel.cs" />
     <Compile Include="Core\Models\Ladders\PLSTable\POLYLINEModel.cs" />
     <Compile Include="Core\Models\Monitor\MonitorModel.cs" />
+    <Compile Include="Core\Models\PolylineAxisModel.cs" />
+    <Compile Include="Core\Models\PolylineSystemModel.cs" />
     <Compile Include="Core\Models\ProjectModel.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\CommunicationParams.cs" />
     <Compile Include="Core\Models\ProjectPropertyParams\ExpansionUnitModuleParams.cs" />
@@ -293,6 +295,12 @@
     </Compile>
     <Compile Include="Shell\Dialogs\ElementPropertyModify\PolylinePropertyDialog.xaml.cs">
       <DependentUpon>PolylinePropertyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\PolylineAxisWidget.xaml.cs">
+      <DependentUpon>PolylineAxisWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell\Dialogs\PolylineSystemSettingDialog.xaml.cs">
+      <DependentUpon>PolylineSystemSettingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shell\Dialogs\ProgressBar.xaml.cs">
       <DependentUpon>ProgressBar.xaml</DependentUpon>
@@ -806,6 +814,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Shell\Dialogs\ElementPropertyModify\PolylinePropertyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\PolylineAxisWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell\Dialogs\PolylineSystemSettingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

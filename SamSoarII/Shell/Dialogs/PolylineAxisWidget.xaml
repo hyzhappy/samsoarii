@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="SamSoarII.Shell.Dialogs.PolylineAxisWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SamSoarII.Shell.Dialogs"
+             mc:Ignorable="d" 
+             d:DesignHeight="256" d:DesignWidth="220">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Height" Value="22"/>
+                <Setter Property="Margin" Value="5,0,5,0"/>
+            </Style>
+        </Grid.Resources>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="脉冲输出口"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="方向输出口"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="脉冲当量"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="正向极限位置"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="反向极限位置"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="传动间隙"/>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="TB_PLS"/>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="TB_DIR"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="TB_WEI"/>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="TB_LIM"/>
+        <TextBox Grid.Row="4" Grid.Column="1" x:Name="TB_CLM"/>
+        <TextBox Grid.Row="5" Grid.Column="1" x:Name="TB_ITV"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" x:Name="TBU_PLS"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="TBU_DIR"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" x:Name="TBU_WEI"/>
+        <TextBlock Grid.Row="3" Grid.Column="2" x:Name="TBU_LIM"/>
+        <TextBlock Grid.Row="4" Grid.Column="2" x:Name="TBU_CLM"/>
+        <TextBlock Grid.Row="5" Grid.Column="2" x:Name="TBU_ITV"/>
+    </Grid>
+</UserControl>

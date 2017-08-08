@@ -326,7 +326,7 @@ EXPORT int SetWord(char* name, int size, int16_t* input)
 // Set the DWORD value to targeted register (D)
 EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 {
-	int8_t* addr; int offset;
+	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
 	while (size--) *((int32_t*)(addr+offset+size)) = input[size];
@@ -335,7 +335,7 @@ EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 // Set the FLOAT value to targeted register (D)
 EXPORT int SetFloat(char* name, int size, float* input)
 {
-	int8_t* addr; int offset;
+	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
 	while (size--) *((float*)(addr+offset+size)) = input[size];
@@ -344,7 +344,7 @@ EXPORT int SetFloat(char* name, int size, float* input)
 // Set the writeable enable value of targeted register
 EXPORT int SetEnable(char* name, int size, int8_t value)
 {
-	int8_t* addr; int offset;
+	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
 	switch (name[0])
@@ -384,11 +384,11 @@ EXPORT int SetEnable(char* name, int size, int8_t value)
 		switch (name[1])
 		{
 		case 'V':
-			if (addr == (int8_t*)(&CVWord[0]))
+			if (addr == (int32_t*)(&CVWord[0]))
 			{
 				while (size--) CVEnable[(offset>>1) + size] = value;
 			}
-			if (addr == (int8_t*)(&CV32DoubleWord[0]))
+			if (addr == (int32_t*)(&CV32DoubleWord[0]))
 			{
 				while (size--)
 				{

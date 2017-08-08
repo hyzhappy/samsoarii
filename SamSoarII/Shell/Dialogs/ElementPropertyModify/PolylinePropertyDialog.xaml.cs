@@ -55,7 +55,7 @@ namespace SamSoarII.Shell.Dialogs
                 {
                     CB_Sys.SelectedIndex = int.Parse(core.Children[0].Store.Value.ToString()) - 1;
                     CB_Ref.SelectedIndex = (int)(core.ReflictMode);
-                    TB_Ref.Text = core.ReflictLocation.Text;
+                    TB_Ref.Text = core.Children[1].Base != ValueModel.Bases.D ? "D0" : core.Children[1].Text;
                 }
                 catch (Exception)
                 {
@@ -116,7 +116,7 @@ namespace SamSoarII.Shell.Dialogs
                 {
                     ValueFormat vformat = e.Format;
                     if (vformat != null)
-                        LocalizedMessageBox.Show(String.Format("{0:s}设置错误{1:s}！({2:s})", vformat.Name, vformat.Supports, e.Message), LocalizedMessageIcon.Error);
+                        LocalizedMessageBox.Show(String.Format("{0:s}设置错误({1:s})！({2:s})", vformat.Name, vformat.Supports, e.Message), LocalizedMessageIcon.Error);
                 }
                 PropertyChanged(this, new PropertyChangedEventArgs("Current"));
             }
@@ -133,19 +133,18 @@ namespace SamSoarII.Shell.Dialogs
             {
                 MainModel.Core = null;
                 core.Children[0].Text = String.Format("K{0:d}", CB_Sys.SelectedIndex + 1);
-                core.Children[1].Text = "D0";
+                core.Children[1].Text = TB_Ref.Text;
                 core.Children[2].Text = String.Format("K{0:d}",
                     (core is POLYLINEIModel) ? ((POLYLINEIModel)core).Polylines.Count :
                     (core is POLYLINEFModel) ? ((POLYLINEFModel)core).Polylines.Count : 0);
                 core.ReflictMode = (POLYLINEModel.ReflictModes)(CB_Ref.SelectedIndex);
-                core.ReflictLocation.Text = TB_Ref.Text;
                 Ensure(this, e);
             }
             catch (ValueParseException exce)
             {
                 ValueFormat vformat = exce.Format;
                 if (vformat != null)
-                    LocalizedMessageBox.Show(String.Format("{0:s}设置错误{1:s}！({2:s})", vformat.Name, vformat.Supports, exce.Message), LocalizedMessageIcon.Error);
+                    LocalizedMessageBox.Show(String.Format("{0:s}设置错误({1:s})！({2:s})", vformat.Name, vformat.Supports, exce.Message), LocalizedMessageIcon.Error);
             }
         }
 

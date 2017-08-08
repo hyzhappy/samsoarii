@@ -152,12 +152,16 @@ namespace SamSoarII.Core.Generate
                     case "CTU":
                     case "CTD":
                     case "CTUD":
-                    case "FOR":
                     case "INV":
+                        globalTotal++;
+                        break;
                     case "TON":
                     case "TOF":
                     case "TONR":
-                        globalTotal++;
+                        if (simumode) globalTotal += 4;
+                        break;
+                    case "FOR":
+                        globalTotal += 2;
                         break;
                     case "MEP":
                     case "MEF":
@@ -564,32 +568,38 @@ namespace SamSoarII.Core.Generate
                 // 当栈顶为1时运行的计时器
                 case "TON":
                     if (simumode)
-                        sw.Write("_ton({0:s}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                    {
+                        sw.Write("_ton({0:s}, {1:s}, {2:s}, (int32_t*)(&_global[{3:d}]));\n",
                             cond, inst[1], inst[2], globalCount);
+                        globalCount += 4;
+                    }
                     else
                         sw.Write("CI_TON({0:s}, {1:s}, {2:s});\n",
                             cond, inst[1], inst[2]);
-                    globalCount += 1;
                     break;
                 // 当栈顶为0时运行的计时器
                 case "TOF":
                     if (simumode)
-                        sw.Write("_ton(!{0:s}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                    {
+                        sw.Write("_ton(!{0:s}, {1:s}, {2:s},  (int32_t*)(&_global[{3:d}]));\n",
                             cond, inst[1], inst[2], globalCount);
+                        globalCount += 4;
+                    }
                     else
                         sw.Write("CI_TOF({0:s}, {1:s}, {2:s});\n",
                             cond, inst[1], inst[2]);
-                    globalCount += 1;
                     break;
                 // 当栈顶为1时运行，为0时保留当前计时的计时器
                 case "TONR":
                     if (simumode)
-                        sw.Write("_tonr({0:s}, {1:s}, {2:s}, &_global[{3:d}]);\n",
+                    {
+                        sw.Write("_tonr({0:s}, {1:s}, {2:s},  (int32_t*)(&_global[{3:d}]));\n",
                             cond, inst[1], inst[2], globalCount);
+                        globalCount += 4;
+                    }
                     else
                         sw.Write("CI_TONR({0:s}, {1:s}, {2:s});\n",
                             cond, inst[1], inst[2]);
-                    globalCount += 1;
                     break;
                 // 向上计数器，每次栈顶上升跳变时加1
                 // 当计数到达目标后计数开关设为1
@@ -618,7 +628,9 @@ namespace SamSoarII.Core.Generate
                  */
                 case "FOR":
                     sw.Write("if ({0:s}) \n", cond);
-                    sw.Write("for (_global[{0:d}]=0;_global[{0:d}]<{1:s};_global[{0:d}]++) {{\n", globalCount++, inst[1]);
+                    string iter = String.Format("(*((uint16_t*)(&_global[{0:d}])))", globalCount);
+                    globalCount += 2;
+                    sw.Write("for ({0:s}=0;{0:s}<{1:s};{0:s}++) {{\n", iter, inst[1]);
                     break;
                 // NEXT指令，结束前面的FOR循环
                 case "NEXT":
@@ -630,8 +642,7 @@ namespace SamSoarII.Core.Generate
                  * 因为这里跳转是用c语言对应的goto功能来实现的
                  */
                 case "JMP":
-                    sw.Write("if ({0:s}) \n", cond);
-                    sw.Write("goto LABEL_{0:s};\n", globalCount++, inst[1]);
+                    sw.Write("if ({0:s}) goto LABEL_{1:s};\n", cond, inst[1]);
                     break;
                 // LBL指令，设置跳转标签
                 case "LBL":
