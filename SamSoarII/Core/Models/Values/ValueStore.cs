@@ -155,6 +155,8 @@ namespace SamSoarII.Core.Models
         }
 
         private bool isnew;
+        public bool IsNew { get { return this.isnew; } }
+
         private object value;
         public object Value
         {
@@ -167,6 +169,7 @@ namespace SamSoarII.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("Value"));
             }
         }
+
         public string ShowValue
         {
             get
@@ -176,11 +179,11 @@ namespace SamSoarII.Core.Models
                     case ValueModel.Types.BOOL:
                         return byte.Parse(value.ToString()) == 1 ? "ON" : "OFF";
                     case ValueModel.Types.HEX:
-                        return String.Format("0x{0:x4}", ushort.Parse(value.ToString()));
+                        return String.Format("0x{0:x4}", (ushort)(value));
                     case ValueModel.Types.DHEX:
-                        return String.Format("0x{0:x8}", uint.Parse(value.ToString()));
+                        return String.Format("0x{0:x8}", (uint)(value));
                     case ValueModel.Types.BCD:
-                        return (ushort)value > 9999 ? "???" : ValueConverter.ToBCD(ushort.Parse(value.ToString())).ToString();
+                        return (ushort)(value) > 9999 ? "???" : ValueConverter.ToBCD((ushort)(value)).ToString();
                     default:
                         return value.ToString();
                 }

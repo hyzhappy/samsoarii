@@ -758,13 +758,13 @@ namespace SamSoarII.Core.Models
                         switch (vstore.Type)
                         {
                             case ValueModel.Types.BOOL: vstore.Value = (int)(udata[0] & 1); break;
-                            case ValueModel.Types.WORD:
+                            case ValueModel.Types.WORD: vstore.Value = (short)value; break;
                             case ValueModel.Types.HEX: 
                             case ValueModel.Types.UWORD: 
-                            case ValueModel.Types.BCD: vstore.Value = (short)value; break;
-                            case ValueModel.Types.DWORD:
-                            case ValueModel.Types.DHEX: 
-                            case ValueModel.Types.UDWORD: vstore.Value = (int)value; break;
+                            case ValueModel.Types.BCD: vstore.Value = (ushort)value; break;
+                            case ValueModel.Types.DWORD: vstore.Value = (int)value; break;
+                            case ValueModel.Types.DHEX:
+                            case ValueModel.Types.UDWORD: vstore.Value = (uint)value; break;
                             case ValueModel.Types.FLOAT: vstore.Value = ValueConverter.UIntToFloat(value); break;
                         }
                     }

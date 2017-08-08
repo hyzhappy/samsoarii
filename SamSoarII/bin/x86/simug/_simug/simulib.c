@@ -288,17 +288,18 @@ EXPORT int GetDoubleWord(char* name, int size, int32_t* output)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	while (size--) output[size] = *(((int32_t*)addr)+(offset>>1)+size);
+	while (size--) 
+	{
+		output[size] = *(((int16_t*)addr)+offset+size*2+2);
+		output[size] <<= 16;
+		output[size] |= *(((int16_t*)addr)+offset+size*2);
+	}
 	return 0;
 }
 // Get the FLOAT value from targeted register (D)
 EXPORT int GetFloat(char* name, int size, float* output)
 {
-	int32_t* addr; int offset;
-	int ret = _Assert(name, size*2, &addr, &offset);
-	if (ret) return ret;
-	while (size--) output[size] = *(((float*)addr)+(offset>>1)+size);
-	return 0;
+	return GetDoubleWord(name, size, (int32_t*)output);
 }
 // Get the signal frequency
 EXPORT int GetFeq(char* name, uint32_t* output)
@@ -342,17 +343,17 @@ EXPORT int SetDoubleWord(char* name, int size, int32_t* input)
 	int32_t* addr; int offset;
 	int ret = _Assert(name, size*2, &addr, &offset);
 	if (ret) return ret;
-	while (size--) *(((int32_t*)addr)+(offset>>1)+size) = input[size];
+	while (size--) 
+	{
+		*(((int16_t*)addr)+offset+size*2+2) = (input[size]>>16);
+		*(((int16_t*)addr)+offset+size*2) = (input[size]&0xffff);
+	}
 	return 0;
 }
 // Set the FLOAT value to targeted register (D)
 EXPORT int SetFloat(char* name, int size, float* input)
 {
-	int32_t* addr; int offset;
-	int ret = _Assert(name, size*2, &addr, &offset);
-	if (ret) return ret;
-	while (size--) *(((float*)addr)+(offset>>1)+size) = input[size];
-	return 0;
+	return SetDoubleWord(name, size, (int32_t*)input);
 }
 // Set the writeable enable value of targeted register
 EXPORT int SetEnable(char* name, int size, int8_t value)
